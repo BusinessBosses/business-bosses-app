@@ -76,7 +76,7 @@ class CoinPopup extends StatelessWidget {
                 Expanded(
                   child: Center(
                     child: Text(
-                      'You can earn Coins by winning challenges, inviting friends, selling your product or services, creating content. You can also buy Coins or become a premium users and get 100 Coins monthly.',
+                      'You can earn Coins by winning challenges, inviting friends, selling your product or services, creating content. You can also buy Coins or become a pro user and get 100 Coins monthly.',
                       style: bodyText2,
                       textAlign: TextAlign.start,
                     ),

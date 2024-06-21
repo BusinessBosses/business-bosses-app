@@ -123,7 +123,7 @@ class _PremiumScreenState extends State<PremiumScreen> {
         ),
         centerTitle: true,
         title: const Text(
-          'Become a premium member',
+          'Become a pro member',
           textAlign: TextAlign.center,
           style: TextStyle(fontSize: 20),
         ),
@@ -160,7 +160,7 @@ class _PremiumScreenState extends State<PremiumScreen> {
                             children: <InlineSpan>[
                               const TextSpan(
                                 text:
-                                    'Upgrade to a premium boss experience at only, ',
+                                    'Upgrade to a pro boss experience at only, ',
                                 style: TextStyle(
                                     color: Colors.black,
                                     fontSize: 15,

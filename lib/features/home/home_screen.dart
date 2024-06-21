@@ -176,42 +176,150 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
     super.dispose();
   }
 
-  @override
-  Widget build(BuildContext context) {
-    final List<Widget> widgetList = <Widget>[
-      Padding(
-        padding: const EdgeInsets.only(bottom: 8.0),
-        child: LayoutBuilder(
-          builder: (BuildContext context, BoxConstraints constraints) {
-            return BossOfWeekProfileTile(
-              onTileBuilt: () {
-                _checkScrollPosition();
-              },
-            );
+  Widget buildItem(BuildContext context, Map<String, dynamic> item) {
+    return LayoutBuilder(
+      builder: (BuildContext context, BoxConstraints constraints) {
+        return GestureDetector(
+          onTap: () async {
+            final Uri url = Uri.parse(item['url']);
+            if (!await launchUrl(url)) {
+              throw Exception('Could not launch $url');
+            }
           },
-        ),
-      ),
-      ...homeController.bossUp!.reversed
-          .toList()
-          .map((Map<String, dynamic> item) => GestureDetector(
-                onTap: () async {
-                  final Uri url = Uri.parse(item['companyUrl']);
-                  if (!await launchUrl(url)) {
-                    throw Exception('Could not launch $url');
-                  }
-                },
-                child: SizedBox(
-                  height: 280,
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: <Widget>[
-                      Text(item['companyName'].toString()),
-                    ],
+          child: Container(
+            width: MediaQuery.of(context).size.width / 3,
+            height: 180,
+            margin: EdgeInsets.only(left: 10.0),
+            decoration: BoxDecoration(
+              border: Border.all(
+                color: item['startColor'],
+                width: 1.0,
+              ),
+              gradient: LinearGradient(
+                colors: [item['startColor'], item['endColor']],
+                begin: Alignment.topRight,
+                end: Alignment.bottomLeft,
+              ),
+              borderRadius: BorderRadius.circular(15),
+            ),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.end,
+              children: [
+                Padding(
+                  padding: const EdgeInsets.symmetric(
+                      horizontal: 10.0, vertical: 10),
+                  child: Text(
+                    item['text'],
+                    textAlign: TextAlign.left,
+                    style: const TextStyle(
+                        color: Colors.white,
+                        fontSize: 16,
+                        fontWeight: FontWeight.w700),
                   ),
                 ),
-              ))
-          .toList(),
-    ];
+                Padding(
+                  padding: const EdgeInsets.only(bottom: 10),
+                  child: ElevatedButton(
+                    style: const ButtonStyle(
+                        backgroundColor:
+                            MaterialStatePropertyAll(Colors.white)),
+                    onPressed: () async {
+                      final Uri url = Uri.parse(item['url']);
+                      if (!await launchUrl(url)) {
+                        throw Exception('Could not launch $url');
+                      }
+                    },
+                    child: Text(
+                      'Learn more',
+                      style: TextStyle(color: item['endColor']),
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
+        );
+      },
+    );
+  }
+
+  List<Map<String, dynamic>> items = [
+    {
+      'text': 'Best AI Content Writer, Save 💰',
+      'buttonText': 'Get \$5 now',
+      'url': 'https://example.com',
+      'startColor': Colors.orange,
+      'endColor': Color(0xFF0F132D),
+    },
+    {
+      'text': 'Another Partner\'s tile',
+      'buttonText': 'Claim',
+      'url': 'https://example.com',
+      'startColor': Colors.blue,
+      'endColor': Color(0xFF0F132D),
+    },
+    {
+      'text': 'Another Partner\'s tile',
+      'buttonText': 'Opt-In',
+      'url': 'https://example.com',
+      'startColor': Colors.pink,
+      'endColor': Color(0xFF0F132D),
+    },
+    {
+      'text': 'Another Partner\'s tile',
+      'buttonText': 'Opt-In',
+      'url': 'https://example.com',
+      'startColor': Colors.green,
+      'endColor': Color(0xFF0F132D),
+    },
+    {
+      'text': 'Another Partner\'s tile',
+      'buttonText': 'Opt-In',
+      'url': 'https://example.com',
+      'startColor': Colors.indigo,
+      'endColor': Color(0xFF0F132D),
+    },
+  ];
+
+  @override
+  Widget build(BuildContext context) {
+    // final List<Widget> widgetList = <Widget>[
+
+    //   ...homeController.bossUp!.reversed
+    //       .toList()
+    //       .map((Map<String, dynamic> item) => GestureDetector(
+    //             onTap: () async {
+    //               final Uri url = Uri.parse(item['companyUrl']);
+    //               if (!await launchUrl(url)) {
+    //                 throw Exception('Could not launch $url');
+    //               }
+    //             },
+    //             child: SizedBox(
+    //               height: 280,
+    //               child: SingleChildScrollView(
+    //                 scrollDirection: Axis.horizontal,
+    //                 child: Row(
+    //                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+    //                   children: items
+    //                       .map((item) => buildItem(context, item))
+    //                       .toList(),
+    //                 ),
+    //               ),
+    //               // Column(
+    //               //   mainAxisAlignment: MainAxisAlignment.center,
+    //               //   children: <Widget>[
+    //               //     Container(
+    //               //         decoration:
+    //               //             BoxDecoration(
+    //               //               borderRadius: BorderRadius.circular(10),
+    //               //               border: Border.all(width: 2)),
+    //               //         child: Text(item['companyName'].toString())),
+    //               //   ],
+    //               // ),
+    //             ),
+    //           ))
+    //       .toList(),
+    // ];
     return WillPopScope(
       onWillPop: () async {
         showDialog(
@@ -399,27 +507,17 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
                                             if (index == 0) {
                                               return Column(
                                                 children: <Widget>[
-                                                  CarouselSlider(
-                                                    options: CarouselOptions(
-                                                      height: 280,
-                                                      autoPlay: true,
-                                                      enlargeCenterPage: true,
-                                                      autoPlayCurve:
-                                                          Curves.fastOutSlowIn,
-                                                      enableInfiniteScroll:
-                                                          true,
-                                                      autoPlayAnimationDuration:
-                                                          const Duration(
-                                                              milliseconds:
-                                                                  800),
-                                                      viewportFraction: 1,
-                                                    ),
-                                                    items: widgetList
-                                                        .map(
-                                                          (Widget widget) =>
-                                                              widget,
-                                                        )
-                                                        .toList(),
+                                                  LayoutBuilder(
+                                                    builder:
+                                                        (BuildContext context,
+                                                            BoxConstraints
+                                                                constraints) {
+                                                      return BossOfWeekProfileTile(
+                                                        onTileBuilt: () {
+                                                          _checkScrollPosition();
+                                                        },
+                                                      );
+                                                    },
                                                   ),
                                                   if (liveEventController
                                                       .ongoing.isNotEmpty)

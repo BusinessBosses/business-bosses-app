@@ -1,4 +1,4 @@
-import 'dart:io';
+import 'dart:math';
 
 import 'package:business_bosses_v2/common/models/api_response_model.dart';
 import 'package:business_bosses_v2/common/models/user_model.dart';
@@ -11,7 +11,6 @@ import 'package:url_launcher/url_launcher.dart';
 
 import '../../../action/action.dart';
 import '../../../common/widgets/network_image_with_placeholder.dart';
-import '../../../common/widgets/popup/bossup_challenge_popup.dart';
 import '../../../navigation/routes.dart';
 import '../../../services/api_service.dart';
 import '../../../utils/theme/theme.dart';
@@ -21,6 +20,8 @@ import '../../home/controller/home_controller.dart';
 // final GlobalKey<NavigatorState> connectbuttonkey = GlobalKey<NavigatorState>();
 
 /// BOSS OF THE WEEK HOMEPAGE TILE
+///
+///
 class BossOfWeekProfileTile extends StatefulWidget {
   final VoidCallback? onTileBuilt; // Add this line
 
@@ -37,6 +38,13 @@ class _BossOfWeekProfileTileState extends State<BossOfWeekProfileTile> {
   final ProfileController _profileController = Get.find();
   late UserModel? user;
   final HomeController homeController = Get.find();
+  late Color startColor;
+  final List<Color> startColors = [
+    Colors.green,
+    const Color.fromARGB(255, 0, 71, 129),
+    const Color.fromARGB(255, 255, 59, 219),
+    Colors.orange,
+  ];
 
   Future<void> onRefer(UserModel publicUser) async {
     showDialog(
@@ -75,6 +83,7 @@ class _BossOfWeekProfileTileState extends State<BossOfWeekProfileTile> {
   @override
   void initState() {
     super.initState();
+    startColor = startColors[0];
     user = _profileController.bossOfTheWeek;
   }
 
@@ -97,55 +106,58 @@ class _BossOfWeekProfileTileState extends State<BossOfWeekProfileTile> {
     return Container(
       width: double.infinity,
       color: backgroundcolorinterface,
-      padding:
-          const EdgeInsets.only(top: 0.0, bottom: 10.0, left: 15, right: 15),
+      padding: const EdgeInsets.only(top: 0.0, bottom: 0.0, left: 0, right: 0),
       child: user != null
           ? Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
                 Align(
                   alignment: Alignment.topLeft,
-                  child: Row(
-                    children: <Widget>[
-                      CircleAvatar(
-                        radius: 48 / 3,
-                        backgroundColor: primaryColorLT.withOpacity(0.1),
-                        child: SvgPicture.asset(
-                          'assets/app/app_icon_only.svg',
-                        ),
-                      ),
-                      const SizedBox(
-                        width: 10,
-                      ),
-                      const Text(
-                        'Boss of the week',
-                        style: TextStyle(
-                            fontWeight: FontWeight.w900,
-                            fontSize: 25,
-                            color: Color(0xff333333)),
-                      ),
-                      const Spacer(),
-                      GestureDetector(
-                        onTap: () {
-                          showDialog(
-                            context: context,
-                            builder: (BuildContext context) =>
-                                const BossUpChallangePopUpHome(),
-                          );
-                        },
-                        child: Container(
-                          color: Colors.transparent,
-                          width: 50,
-                          height: 50,
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 15.0, vertical: 5),
+                    child: Row(
+                      children: <Widget>[
+                        CircleAvatar(
+                          radius: 48 / 3,
+                          backgroundColor: primaryColorLT.withOpacity(0.1),
                           child: SvgPicture.asset(
-                            'assets/svgs/more.svg',
-                            height: 20,
-                            fit: BoxFit.none,
-                            alignment: Alignment.centerRight,
+                            'assets/app/app_icon_only.svg',
                           ),
                         ),
-                      )
-                    ],
+                        const SizedBox(
+                          width: 10,
+                        ),
+                        const Text(
+                          'Boss of the week',
+                          style: TextStyle(
+                              fontWeight: FontWeight.w900,
+                              fontSize: 25,
+                              color: Color(0xff333333)),
+                        ),
+                        const Spacer(),
+                        GestureDetector(
+                          onTap: () {
+                            showDialog(
+                              context: context,
+                              builder: (BuildContext context) =>
+                                  const BossUpChallangePopUpHome(),
+                            );
+                          },
+                          child: Container(
+                            color: Colors.transparent,
+                            width: 50,
+                            height: 50,
+                            child: SvgPicture.asset(
+                              'assets/svgs/more.svg',
+                              height: 20,
+                              fit: BoxFit.none,
+                              alignment: Alignment.centerRight,
+                            ),
+                          ),
+                        )
+                      ],
+                    ),
                   ),
                 ),
                 Align(
@@ -154,8 +166,7 @@ class _BossOfWeekProfileTileState extends State<BossOfWeekProfileTile> {
                       Get.toNamed(Routes.publicProfile, arguments: user);
                     },
                     child: Container(
-                      padding: const EdgeInsets.only(
-                          top: 3.0, bottom: 0, left: 0, right: 0),
+                      padding: const EdgeInsets.symmetric(horizontal: 15),
                       width: double.infinity,
                       decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(15),
@@ -259,13 +270,6 @@ class _BossOfWeekProfileTileState extends State<BossOfWeekProfileTile> {
                                           fontSize: 15,
                                           fontWeight: FontWeight.bold,
                                         )),
-                                if (user?.category != null)
-                                  Text(user!.category.toString(),
-                                      maxLines: 1,
-                                      overflow: TextOverflow.ellipsis,
-                                      style: const TextStyle(
-                                        fontSize: 14,
-                                      )),
                                 user?.bio == null
                                     ? Container()
                                     : Column(
@@ -302,128 +306,167 @@ class _BossOfWeekProfileTileState extends State<BossOfWeekProfileTile> {
                     ),
                   ),
                 ),
-                homeController.bossUp != null &&
-                        homeController.bossUp!.isNotEmpty
-                    ? GestureDetector(
-                        onTap: () {
-                          Get.to(() => const Bossuppartner());
-                        },
-                        child: Padding(
-                          padding: const EdgeInsets.only(right: 0, top: 5),
+                const SizedBox(
+                  height: 10,
+                ),
+                Container(
+                  height: 1,
+                  color: backgroundColor,
+                ),
+                ...homeController.bossUp!.reversed
+                    .toList()
+                    .map((Map<String, dynamic> item) => GestureDetector(
+                          onTap: () async {
+                            Get.to(const Bossuppartner());
+                          },
                           child: Container(
-                              height: 40,
-                              decoration: BoxDecoration(
-                                color: const Color(0xFFFFFFFF),
-                                borderRadius: BorderRadius.circular(10),
-                                boxShadow: <BoxShadow>[
-                                  BoxShadow(
-                                    color: Colors.grey.withOpacity(0.3),
-                                    spreadRadius: 20,
-                                    blurRadius: 500,
-                                    offset: const Offset(0, 3),
-                                  ),
-                                ],
-                              ),
-                              child: Row(
-                                children: <Widget>[
-                                  Padding(
-                                    padding: const EdgeInsets.only(
-                                      left: 10,
-                                    ),
-                                    child: GestureDetector(
-                                      onTap: () async {
-                                        if (await canLaunchUrl(Uri.parse(
-                                            homeController.bossUpLink))) {
-                                          await launchUrl(Uri.parse(
-                                              homeController.bossUpLink));
-                                        }
-                                      },
-                                      child: Center(
-                                        child: Padding(
-                                          padding: const EdgeInsets.all(2),
-                                          child: Text(
-                                            homeController.bossUpTitle
-                                                .toString(),
-                                            style:
-                                                const TextStyle(fontSize: 13),
-                                          ),
-                                        ),
+                            padding: EdgeInsets.symmetric(vertical: 15),
+                            color: Colors.white,
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Padding(
+                                  padding: const EdgeInsets.symmetric(
+                                      horizontal: 15.0),
+                                  child: Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      const Text(
+                                        'See more deals',
+                                        style: TextStyle(
+                                            fontWeight: FontWeight.w700,
+                                            fontSize: 18),
                                       ),
-                                    ),
+                                      SvgPicture.asset(
+                                        'assets/svgs/nexticon.svg',
+                                        color: textColor,
+                                        height: 10,
+                                      )
+                                    ],
                                   ),
-                                  const SizedBox(width: 10),
-                                  Platform.isIOS
-                                      ? Padding(
-                                          padding: const EdgeInsets.only(
-                                              left: 0.0, bottom: 4),
-                                          child: Text(
-                                            '|',
-                                            style: TextStyle(
-                                              fontSize: 20,
-                                              color: textColor.withOpacity(0.5),
+                                ),
+                                const SizedBox(
+                                  height: 10,
+                                ),
+                                SingleChildScrollView(
+                                  scrollDirection: Axis.horizontal,
+                                  child: Column(
+                                    children: homeController.bossUp!.reversed
+                                        .toList()
+                                        .map((Map<String, dynamic> item) {
+                                      startColors[
+                                          homeController.bossUp!.indexOf(item) %
+                                              startColors.length];
+                                      return LayoutBuilder(
+                                        builder: (BuildContext context,
+                                            BoxConstraints constraints) {
+                                          return GestureDetector(
+                                            onTap: () async {
+                                              final Uri companyUrl =
+                                                  Uri.parse(item['companyUrl']);
+                                              if (!await launchUrl(
+                                                  companyUrl)) {
+                                                throw Exception(
+                                                    'Could not launch $companyUrl');
+                                              }
+                                            },
+                                            child: Container(
+                                              width: MediaQuery.of(context)
+                                                      .size
+                                                      .width /
+                                                  3,
+                                              height: 150,
+                                              margin: const EdgeInsets.only(
+                                                  left: 15.0),
+                                              decoration: BoxDecoration(
+                                                border: Border.all(
+                                                  color: startColor,
+                                                  width: 1.0,
+                                                ),
+                                                gradient: LinearGradient(
+                                                  colors: [
+                                                    startColor,
+                                                    Color(0xFF0F132D)
+                                                  ],
+                                                  begin: Alignment.topRight,
+                                                  end: Alignment.bottomLeft,
+                                                ),
+                                                borderRadius:
+                                                    BorderRadius.circular(15),
+                                              ),
+                                              child: Column(
+                                                mainAxisAlignment:
+                                                    MainAxisAlignment.end,
+                                                children: [
+                                                  Padding(
+                                                    padding: const EdgeInsets
+                                                        .symmetric(
+                                                        horizontal: 10.0,
+                                                        vertical: 10),
+                                                    child: Text(
+                                                      item['companyName'],
+                                                      textAlign: TextAlign.left,
+                                                      style: const TextStyle(
+                                                          color: Colors.white,
+                                                          fontSize: 16,
+                                                          fontWeight:
+                                                              FontWeight.w700),
+                                                    ),
+                                                  ),
+                                                  Padding(
+                                                    padding:
+                                                        const EdgeInsets.only(
+                                                            bottom: 10,
+                                                            left: 12,
+                                                            right: 12),
+                                                    child: Container(
+                                                      width: double.infinity,
+                                                      child: ElevatedButton(
+                                                        style: const ButtonStyle(
+                                                            backgroundColor:
+                                                                MaterialStatePropertyAll(
+                                                                    Colors
+                                                                        .white)),
+                                                        onPressed: () async {
+                                                          final Uri url =
+                                                              Uri.parse(
+                                                                  item['url']);
+                                                          if (!await launchUrl(
+                                                              url)) {
+                                                            throw Exception(
+                                                                'Could not launch $url');
+                                                          }
+                                                        },
+                                                        child: const Text(
+                                                          'Learn more',
+                                                          style: TextStyle(
+                                                            fontSize: 12,
+                                                              color: Color(
+                                                                  0xFF0F132D)),
+                                                        ),
+                                                      ),
+                                                    ),
+                                                  ),
+                                                ],
+                                              ),
                                             ),
-                                          ),
-                                        )
-                                      : Text(
-                                          '|',
-                                          style: TextStyle(
-                                            fontSize: 20,
-                                            color: textColor.withOpacity(0.5),
-                                          ),
-                                        ),
-                                  const SizedBox(width: 10),
-                                  Platform.isIOS
-                                      ? Expanded(
-                                          child: Text(
-                                            homeController.bossUp != null &&
-                                                    homeController
-                                                        .bossUp!.isNotEmpty
-                                                ? homeController.bossUp!
-                                                        .last['companyName'] ??
-                                                    ''
-                                                : '',
-                                            style: const TextStyle(
-                                              fontSize: 15,
-                                              fontWeight: FontWeight.bold,
-                                            ),
-                                            overflow: TextOverflow.ellipsis,
-                                            maxLines: 1,
-                                          ),
-                                        )
-                                      : Expanded(
-                                          child: Text(
-                                            homeController.bossUp != null &&
-                                                    homeController
-                                                        .bossUp!.isNotEmpty
-                                                ? homeController.bossUp!
-                                                        .last['companyName'] ??
-                                                    ''
-                                                : '',
-                                            style: const TextStyle(
-                                              fontSize: 15,
-                                              fontWeight: FontWeight.bold,
-                                            ),
-                                            overflow: TextOverflow.ellipsis,
-                                            maxLines: 1,
-                                          ),
-                                        ),
-                                  const SizedBox(
-                                    width: 15,
+                                          );
+                                        },
+                                      );
+                                    }).toList(),
                                   ),
-                                  Padding(
-                                    padding: const EdgeInsets.only(
-                                      right: 10.0,
-                                    ),
-                                    child: SvgPicture.asset(
-                                      'assets/svgs/nexticon.svg',
-                                      color: textColor,
-                                    ),
-                                  )
-                                ],
-                              )),
-                        ),
-                      )
-                    : const SizedBox(),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ))
+                    .toList(),
+                Container(
+                  height: 7,
+                  color: backgroundColor,
+                ),
               ],
             )
           : qouteWidget(quotes),
