@@ -432,7 +432,7 @@ class _ForumItemState extends State<ForumItem> {
                               ),
                             )
                           : SizedBox(
-                              width: 60,
+                              width: 35,
                               // width: leadingWidth(widget.forum),
                               child: Row(
                                 mainAxisAlignment: MainAxisAlignment.start,
@@ -443,7 +443,8 @@ class _ForumItemState extends State<ForumItem> {
                                       ? MyPopupMenuButton(
                                           popupItems: myPopup,
                                           icon: const Icon(Icons.more_horiz,
-                                              size: 20),
+                                              size: 20,  color: Colors.black,
+                                              weight: 100),
                                           onSelected: (String val) {
                                             if (val == 'Edit') {
                                               Get.toNamed(Routes.createForum,

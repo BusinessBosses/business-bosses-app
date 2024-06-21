@@ -124,7 +124,7 @@ class _MyProfileScreenState extends State<MyProfileScreen> {
                             color: const Color(0xFFF9F9F9),
                             child: TabBar(
                               isScrollable:
-                                  calculateTabLength() == 2 ? false : true,
+                                  calculateTabLength() <= 4 ? false : true,
                               indicatorColor:
                                   primaryColorLT, // Replace primaryColorLT with the desired color
                               labelStyle:
@@ -403,8 +403,10 @@ class _MyProfileScreenState extends State<MyProfileScreen> {
                                                       physics:
                                                           const NeverScrollableScrollPhysics(),
                                                       shrinkWrap: true,
-                                                      itemCount: profileController
-                                                          .userresources.length,
+                                                      itemCount:
+                                                          profileController
+                                                              .userresources
+                                                              .length,
                                                       itemBuilder:
                                                           (BuildContext context,
                                                               int i) {
@@ -522,7 +524,8 @@ class _MyProfileScreenState extends State<MyProfileScreen> {
                                                   ),
                                                 ],
                                               )
-                                            : profileController.usercourses.isEmpty
+                                            : profileController
+                                                    .usercourses.isEmpty
                                                 ? Column(
                                                     mainAxisAlignment:
                                                         MainAxisAlignment
@@ -562,8 +565,9 @@ class _MyProfileScreenState extends State<MyProfileScreen> {
                                                         (BuildContext context,
                                                             int i) {
                                                       return CourseItem(
-                                                        course: profileController
-                                                            .usercourses[i],
+                                                        course:
+                                                            profileController
+                                                                .usercourses[i],
                                                       );
                                                     },
                                                   );
