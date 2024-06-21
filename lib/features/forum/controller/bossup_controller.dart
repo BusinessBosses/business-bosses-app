@@ -192,10 +192,14 @@ class BossUpController extends GetxController {
 
     searchedPosts.clear();
 
-    for (dynamic forum in forums) {
-      if (forum.description!.toLowerCase().contains(query.toLowerCase())) {
-        searchedPosts.add(forum);
-      }
+   for (ForumModel product in forums) {
+      if (product.description != null && product.description!.toLowerCase().contains(query.toLowerCase()) ||
+        product.title != null && product.title!.toLowerCase().contains(query.toLowerCase()) ||
+        product.user != null && 
+        (product.user!.name != null && product.user!.name!.toLowerCase().contains(query.toLowerCase()) ||
+         product.user!.username.toLowerCase().contains(query.toLowerCase()))) {
+      searchedPosts.add(product);
+    }
     }
 
     loadingPostSearch(false);
