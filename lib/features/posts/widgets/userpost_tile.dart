@@ -18,6 +18,7 @@ import 'package:business_bosses_v2/features/profile/controller/profile_controlle
 import 'package:business_bosses_v2/features/profile/widgets/premium_profile_tile.dart';
 import 'package:business_bosses_v2/functions/my_native_functions.dart';
 import 'package:business_bosses_v2/services/api_service.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:detectable_text_field/detector/sample_regular_expressions.dart';
 import 'package:detectable_text_field/widgets/detectable_text.dart';
 import 'package:flutter/material.dart';
@@ -643,6 +644,81 @@ class _PostTileState extends State<PostTile> {
                             const SizedBox(height: 10),
                           ],
                         ),
+                      if (widget.post.forum != null) ...<Widget>{
+                        Stack(
+                          children: [
+                            Container(
+                              width: double.infinity,
+                              height: 200,
+                              child: ClipRRect(
+                                borderRadius: BorderRadius.circular(15.0),
+                                child: FittedBox(
+                                  fit: BoxFit.fill,
+                                  child: CachedNetworkImage(
+                                    imageUrl:
+                                        'https://businessbosses.com.ng/learningImages/events.jpg',
+                                    memCacheHeight: 512,
+                                    memCacheWidth: 512,
+                                    placeholder:
+                                        (BuildContext context, String photo) =>
+                                            const CircularProgressIndicator(),
+                                    errorWidget: (BuildContext context,
+                                            String photo, Object error) =>
+                                        const Icon(Icons.error),
+                                  ),
+                                ),
+                              ),
+                            ),
+                            Positioned(
+                              left: 15,
+                              top: 15,
+                              child: Container(
+                                padding: EdgeInsets.symmetric(
+                                    horizontal: 10, vertical: 8),
+                                decoration: BoxDecoration(
+                                    color: Colors.white.withAlpha(70),
+                                    borderRadius: BorderRadius.circular(5)),
+                                child: Center(
+                                    child: Text('Industry name',
+                                        style: const TextStyle(
+                                          color: Colors.white,
+                                        ))),
+                              ),
+                            ),
+                            Padding(
+                              padding:
+                                  const EdgeInsets.symmetric(horizontal: 15.0),
+                              child: Column(
+                                children: [
+                                  SizedBox(
+                                    height: 80,
+                                  ),
+                                  Center(
+                                    child: Text(widget.post.forum!.title!,
+                                        maxLines: 2,
+                                        overflow: TextOverflow.ellipsis,
+                                        style: const TextStyle(
+                                            fontSize: 18,
+                                            color: Colors.white,
+                                            fontWeight: FontWeight.w700)),
+                                  ),
+                                  SizedBox(height: 10,),
+                                  Container(child: Container(
+                                    padding: EdgeInsets.symmetric(horizontal: 10, vertical:5),
+                                    decoration: BoxDecoration(
+                                       color: Colors.white.withAlpha(70),
+                                      borderRadius: BorderRadius.circular(50)
+                                    ),
+                                    child: Wrap(
+                                      crossAxisAlignment: WrapCrossAlignment.center,
+                                      children: [Text('View Post', style: TextStyle(color: Colors.white),),
+                                      SizedBox(width: 5,), SvgPicture.asset('assets/svgs/nexticon.svg', color: Colors.white,)])),)
+                                ],
+                              ),
+                            )
+                          ],
+                        )
+                      },
                       if (widget.post.livedata != null) ...<Widget>[
                         if (widget.post.livedata!
                             .toString()
@@ -994,9 +1070,6 @@ class _PostTileState extends State<PostTile> {
                             ),
                           ]),
                         ),
-                      },
-                      if (widget.post.forum != null) ...<Widget>{
-                        Text(widget.post.forum!.title!),
                       },
                       if (widget.post.images?.isNotEmpty ?? false)
                         PostImages(
