@@ -21,12 +21,14 @@ class PostonhomePopUp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return SafeArea(
-      child: Scaffold(
-        appBar: AppBar(
-          automaticallyImplyLeading: false,
-          actions: <Widget>[
-            Row(
+    return Scaffold(
+      backgroundColor: Colors.white,
+      appBar: AppBar(
+        automaticallyImplyLeading: false,
+        actions: <Widget>[
+          Padding(
+            padding: const EdgeInsets.only(right: 20.0),
+            child: Row(
               mainAxisAlignment: MainAxisAlignment.end,
               children: <Widget>[
                 GestureDetector(
@@ -48,88 +50,89 @@ class PostonhomePopUp extends StatelessWidget {
                 )
               ],
             ),
-          ],
-        ),
-        body: Center(
-          child: Container(
-            padding: const EdgeInsets.all(15),
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: <Widget>[
-                const SizedBox(
-                  height: 10,
-                ),
-                Text('Post Created Successfully',
-                    textAlign: TextAlign.center,
-                    style: bodyText1.copyWith(
-                        fontWeight: FontWeight.w700, color: textColor)),
-                const SizedBox(
-                  height: 20,
-                ),
-                Lottie.asset(
-                  'assets/anim/done.json',
-                  height: 120,
-                ),
-                // const SizedBox(
-                //   height: 20,
-                // ),
-                GestureDetector(
-                  onTap: () {
-                    Get.toNamed(
-                      Routes.createPost,
-                      arguments: <String, dynamic>{
-                        'sharemessage': 'Hey there! Check out this post',
-                        'title': forum.title,
-                        'forumdata': forum,
-                      },
-                    );
-                  },
-                  child: Container(
-                    margin: const EdgeInsets.all(20),
-                    width: double.infinity,
-                    height: 45,
-                    decoration: BoxDecoration(
-                        boxShadow: <BoxShadow>[
-                          BoxShadow(
-                            color: Colors.black.withOpacity(0.01),
-                            spreadRadius: 5,
-                            blurRadius: 7,
-                            offset: const Offset(
-                                0, 3), // changes position of shadow
+          ),
+        ],
+      ),
+      body: Center(
+        child: Container(
+          padding: const EdgeInsets.all(15),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: <Widget>[
+              const SizedBox(
+                height: 10,
+              ),
+              Text('Post Created Successfully',
+                  textAlign: TextAlign.center,
+                  style: bodyText1.copyWith(
+                      fontWeight: FontWeight.w700, color: textColor)),
+              const SizedBox(
+                height: 20,
+              ),
+              Lottie.asset(
+                'assets/anim/done.json',
+                height: 120,
+              ),
+              // const SizedBox(
+              //   height: 20,
+              // ),
+              GestureDetector(
+                onTap: () {
+                  Get.back();
+                  Get.toNamed(
+                    Routes.createPost,
+                    arguments: <String, dynamic>{
+                      'sharemessage': 'Hey there! Check out this post',
+                      'title': forum.title,
+                      'forumdata': forum,
+                    },
+                  );
+                },
+                child: Container(
+                  margin: const EdgeInsets.all(20),
+                  width: double.infinity,
+                  height: 45,
+                  decoration: BoxDecoration(
+                      boxShadow: <BoxShadow>[
+                        BoxShadow(
+                          color: Colors.black.withOpacity(0.01),
+                          spreadRadius: 5,
+                          blurRadius: 7,
+                          offset:
+                              const Offset(0, 3), // changes position of shadow
+                        ),
+                      ],
+                      borderRadius: BorderRadius.circular(10),
+                      color: backgroundColor),
+                  child: Center(
+                    child: Wrap(
+                        crossAxisAlignment: WrapCrossAlignment.center,
+                        children: <Widget>[
+                          const Text(
+                            'Share on homepage',
+                            style: TextStyle(
+                                color: Colors.black,
+                                fontSize: 16,
+                                fontWeight: FontWeight.w700),
                           ),
-                        ],
-                        borderRadius: BorderRadius.circular(10),
-                        color: backgroundColor),
-                    child: Center(
-                      child: Wrap(
-                          crossAxisAlignment: WrapCrossAlignment.center,
-                          children: <Widget>[
-                            const Text(
-                              'Share on homepage',
-                              style: TextStyle(
-                                  color: Colors.black,
-                                  fontSize: 16,
-                                  fontWeight: FontWeight.w700),
-                            ),
-                            const SizedBox(
-                              width: 10,
-                            ),
-                            SvgPicture.asset(
-                              'assets/svgs/nexticon.svg',
-                              color: Colors.black,
-                            )
-                          ]),
-                    ),
+                          const SizedBox(
+                            width: 10,
+                          ),
+                          SvgPicture.asset(
+                            'assets/svgs/nexticon.svg',
+                            color: Colors.black,
+                          )
+                        ]),
                   ),
                 ),
-                SizedBox(
-                  height: SizeConfig.safeBlockVertical * 3,
-                ),
-                SizedBox(
-                  height: SizeConfig.safeBlockHorizontal * 3,
-                ),
-              ],
-            ),
+              ),
+              SizedBox(
+                height: SizeConfig.safeBlockVertical * 3,
+              ),
+              SizedBox(
+                height: SizeConfig.safeBlockHorizontal * 3,
+              ),
+            ],
           ),
         ),
       ),
