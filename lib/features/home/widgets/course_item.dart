@@ -92,7 +92,7 @@ class _CourseItemState extends State<CourseItem> {
         setState(() {
           widget.course.setViews();
         });
-        homeController.updateCourseViews(
+        profileController.updateCourseViews(
             widget.course.id, widget.course.views + 1);
         Get.to(() => ExpandedCourseScreen(course: widget.course));
       },
@@ -145,7 +145,7 @@ class _CourseItemState extends State<CourseItem> {
                               setState(() {
                                 widget.course.setViews();
                               });
-                              homeController.updateCourseViews(
+                              profileController.updateCourseViews(
                                   widget.course.id, widget.course.views + 1);
                               Get.to(() =>
                                   ExpandedCourseScreen(course: widget.course));
@@ -297,7 +297,7 @@ class _CourseItemState extends State<CourseItem> {
                                   setState(() {
                                     widget.course.setViews();
                                   });
-                                  homeController.updateCourseViews(
+                                  profileController.updateCourseViews(
                                       widget.course.id,
                                       widget.course.views + 1);
                                   Get.to(() => ExpandedCourseScreen(
@@ -420,7 +420,7 @@ class _CourseItemState extends State<CourseItem> {
                             ),
                             GestureDetector(
                               onTap: () {
-                                Get.to(
+                                Get.to(() =>
                                     CourseReviewScreen(course: widget.course));
                               },
                               child: Container(
@@ -553,7 +553,7 @@ class _CourseItemState extends State<CourseItem> {
                                     ),
                                     TextButton(
                                       onPressed: () {
-                                        homeController
+                                        profileController
                                             .onDeleteCourse(widget.course.id);
                                         Get.back();
                                       },

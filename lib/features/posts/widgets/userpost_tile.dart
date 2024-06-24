@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'package:business_bosses_v2/common/widgets/network_image_with_placeholder.dart';
 import 'package:business_bosses_v2/features/donations/models/donations_model.dart';
 import 'package:business_bosses_v2/features/donations/presentation/expanded_donations_screen.dart';
+import 'package:business_bosses_v2/features/forum/presentation/expanded_forum_view.dart';
 import 'package:business_bosses_v2/features/home/controller/home_controller.dart';
 import 'package:business_bosses_v2/features/live_event/controller/live_event_controller.dart';
 import 'package:business_bosses_v2/features/live_event/models/events_model.dart';
@@ -18,6 +19,7 @@ import 'package:business_bosses_v2/features/profile/controller/profile_controlle
 import 'package:business_bosses_v2/features/profile/widgets/premium_profile_tile.dart';
 import 'package:business_bosses_v2/functions/my_native_functions.dart';
 import 'package:business_bosses_v2/services/api_service.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:detectable_text_field/detector/sample_regular_expressions.dart';
 import 'package:detectable_text_field/widgets/detectable_text.dart';
 import 'package:flutter/material.dart';
@@ -306,7 +308,7 @@ class _PostTileState extends State<PostTile> {
                   )
                 ],
                 ListTile(
-                  contentPadding: const EdgeInsets.only(left: 15, right: 0),
+                  contentPadding: const EdgeInsets.only(left: 15, right: 15),
                   leading: GestureDetector(
                     onTap: () {
                       if (profileController.myProfile.uid ==
@@ -428,7 +430,6 @@ class _PostTileState extends State<PostTile> {
                                 child: const RankingBadge(),
                               ),
                         Container(
-                          padding: const EdgeInsets.only(right: 15),
                           height: double.infinity,
                           color: Colors.white,
                           child: widget.post.user!.uid ==
@@ -644,6 +645,103 @@ class _PostTileState extends State<PostTile> {
                             const SizedBox(height: 10),
                           ],
                         ),
+                      if (widget.post.forum != null) ...<Widget>{
+                        Stack(
+                          children: <Widget>[
+                            SizedBox(
+                              width: double.infinity,
+                              height: 200,
+                              child: ClipRRect(
+                                borderRadius: BorderRadius.circular(15.0),
+                                child: FittedBox(
+                                  fit: BoxFit.fill,
+                                  child: CachedNetworkImage(
+                                    imageUrl:
+                                        'https://businessbosses.com.ng/learningImages/events.jpg',
+                                    memCacheHeight: 512,
+                                    memCacheWidth: 512,
+                                    placeholder:
+                                        (BuildContext context, String photo) =>
+                                            const CircularProgressIndicator(),
+                                    errorWidget: (BuildContext context,
+                                            String photo, Object error) =>
+                                        const Icon(Icons.error),
+                                  ),
+                                ),
+                              ),
+                            ),
+                            // Positioned(
+                            //   left: 10,
+                            //   top: 10,
+                            //   child: Container(
+                            //     padding: const EdgeInsets.symmetric(
+                            //         horizontal: 10, vertical: 8),
+                            //     decoration: BoxDecoration(
+                            //         color: Colors.white.withAlpha(70),
+                            //         borderRadius: BorderRadius.circular(5)),
+                            //     child: Center(
+                            //         child: Text('Industry name',
+                            //             style: const TextStyle(
+                            //               color: Colors.white,
+                            //             ))),
+                            //   ),
+                            // ),
+                            Padding(
+                              padding:
+                                  const EdgeInsets.symmetric(horizontal: 15.0),
+                              child: Column(
+                                children: <Widget>[
+                                  const SizedBox(
+                                    height: 80,
+                                  ),
+                                  Center(
+                                    child: Text(widget.post.forum!.title!,
+                                        maxLines: 2,
+                                        overflow: TextOverflow.ellipsis,
+                                        style: const TextStyle(
+                                            fontSize: 18,
+                                            color: Colors.white,
+                                            fontWeight: FontWeight.w700)),
+                                  ),
+                                  const SizedBox(
+                                    height: 10,
+                                  ),
+                                  Container(
+                                      padding: const EdgeInsets.symmetric(
+                                          horizontal: 10, vertical: 5),
+                                      decoration: BoxDecoration(
+                                          color: Colors.white.withAlpha(70),
+                                          borderRadius:
+                                              BorderRadius.circular(50)),
+                                      child: Wrap(
+                                          crossAxisAlignment:
+                                              WrapCrossAlignment.center,
+                                          children: <Widget>[
+                                            GestureDetector(
+                                              onTap: () {
+                                                Get.to(() => ExpandedForumView(
+                                                    forum: widget.post.forum!));
+                                              },
+                                              child: const Text(
+                                                'View Post',
+                                                style: TextStyle(
+                                                    color: Colors.white),
+                                              ),
+                                            ),
+                                            const SizedBox(
+                                              width: 5,
+                                            ),
+                                            SvgPicture.asset(
+                                              'assets/svgs/nexticon.svg',
+                                              color: Colors.white,
+                                            ),
+                                          ]))
+                                ],
+                              ),
+                            )
+                          ],
+                        )
+                      },
                       if (widget.post.livedata != null) ...<Widget>[
                         if (widget.post.livedata!
                             .toString()
@@ -962,32 +1060,34 @@ class _PostTileState extends State<PostTile> {
                                   const SizedBox(
                                     height: 10,
                                   ),
-                                  ElevatedButton(
-                                    onPressed: () async {
-                                      widget.post.donation!.setViews(
-                                          widget.post.donation!.views! + 1);
-                                      ApiService.put(
-                                          path:
-                                              'donation/approve/${widget.post.donation!.id}',
-                                          body: <String, dynamic>{
-                                            'views':
-                                                widget.post.donation!.views! +
-                                                    1,
-                                            'isActive': true,
-                                            'isApproved': true,
-                                          });
-                                      DonationModel donation = DonationModel
-                                          .fromMap(<String, dynamic>{
-                                        ...widget.post.donation!.toMap(),
-                                        'user': widget.post.user!.toMap(),
-                                        'likes': <String>[],
-                                        'comments': <CommentModel>[],
-                                      });
-                                      Get.to(() => ExpandedDonationScreen(
-                                          donation: donation));
-                                    },
-                                    child: const Text('Donate'),
-                                  ),
+                                  if (widget.post.donation!.amountRecieved <
+                                      widget.post.donation!.targetAmount!)
+                                    ElevatedButton(
+                                      onPressed: () async {
+                                        widget.post.donation!.setViews(
+                                            widget.post.donation!.views! + 1);
+                                        ApiService.put(
+                                            path:
+                                                'donation/approve/${widget.post.donation!.id}',
+                                            body: <String, dynamic>{
+                                              'views':
+                                                  widget.post.donation!.views! +
+                                                      1,
+                                              'isActive': true,
+                                              'isApproved': true,
+                                            });
+                                        DonationModel donation = DonationModel
+                                            .fromMap(<String, dynamic>{
+                                          ...widget.post.donation!.toMap(),
+                                          'user': widget.post.user!.toMap(),
+                                          'likes': <String>[],
+                                          'comments': <CommentModel>[],
+                                        });
+                                        Get.to(() => ExpandedDonationScreen(
+                                            donation: donation));
+                                      },
+                                      child: const Text('Donate'),
+                                    ),
                                 ],
                               ),
                             ),

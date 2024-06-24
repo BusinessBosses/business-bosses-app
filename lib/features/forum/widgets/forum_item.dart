@@ -432,7 +432,7 @@ class _ForumItemState extends State<ForumItem> {
                               ),
                             )
                           : SizedBox(
-                              width: 60,
+                              width: 35,
                               // width: leadingWidth(widget.forum),
                               child: Row(
                                 mainAxisAlignment: MainAxisAlignment.start,
@@ -443,7 +443,8 @@ class _ForumItemState extends State<ForumItem> {
                                       ? MyPopupMenuButton(
                                           popupItems: myPopup,
                                           icon: const Icon(Icons.more_horiz,
-                                              size: 20),
+                                              size: 20,  color: Colors.black,
+                                              weight: 100),
                                           onSelected: (String val) {
                                             if (val == 'Edit') {
                                               Get.toNamed(Routes.createForum,
@@ -790,7 +791,7 @@ class _ForumItemState extends State<ForumItem> {
                         ),
                         const SizedBox(width: 8.0),
                         GestureDetector(
-                          onTap: () => _sharePost(),
+                          onTap: () => showOptions(),
                           child: SvgPicture.asset(
                             'assets/svgs/share.svg',
                             height: 15.0,
@@ -822,15 +823,88 @@ class _ForumItemState extends State<ForumItem> {
           );
   }
 
-  void _sharePost() {
-    String message =
-        'Have a look at ${widget.forum.user?.username ?? 'Business Bosses'}\'s post on Business Bosses\n'
-        'https://businessbosses.onelink.me/xLWk/36a2ff16';
-    logEvent(widget.forum.forumId, 'forum');
-    socialShare(message);
+  void showOptions() {
+    showModalBottomSheet(
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+      context: context,
+      backgroundColor: Colors.white,
+      builder: (BuildContext context) => Padding(
+        padding: const EdgeInsets.all(15.0),
+        child: SizedBox(
+          height: 150,
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: <Widget>[
+              GestureDetector(
+                onTap: () => Get.toNamed(
+                  Routes.createPost,
+                  arguments: <String, dynamic>{
+                    'sharemessage': 'Hey there! Check out this post',
+                    'title': widget.forum.title,
+                    'forumdata': widget.forum,
+                  },
+                ),
+                child: Container(
+                  width: double.infinity,
+                  padding: const EdgeInsets.symmetric(vertical: 15),
+                  child: Row(
+                    children: <Widget>[
+                      SvgPicture.asset(
+                        'assets/svgs/text.svg',
+                        color: textColor,
+                      ),
+                      const SizedBox(
+                        width: 10,
+                      ),
+                      const Text(
+                        'Post on Business Bosses',
+                        style: TextStyle(
+                            fontWeight: FontWeight.bold, fontSize: 18),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+              Container(
+                height: 1,
+                color: backgroundColor,
+              ),
+              GestureDetector(
+                onTap: () {
+                  String message =
+                      'Have a look at ${widget.forum.user?.username ?? 'Business Bosses'}\'s donation post on Business Bosses\n'
+                      'https://businessbosses.onelink.me/xLWk/36a2ff16';
+                  logEvent(widget.forum.forumId, 'donation');
+                  socialShare(message);
+                },
+                child: Container(
+                  width: double.infinity,
+                  padding: const EdgeInsets.symmetric(vertical: 15),
+                  child: Row(
+                    children: <Widget>[
+                      SvgPicture.asset(
+                        'assets/svgs/share.svg',
+                        color: textColor,
+                        height: 16,
+                      ),
+                      const SizedBox(
+                        width: 10,
+                      ),
+                      const Text(
+                        'Share',
+                        style: TextStyle(
+                            fontWeight: FontWeight.bold, fontSize: 18),
+                      ),
+                    ],
+                  ),
+                ),
+              )
+            ],
+          ),
+        ),
+      ),
+    );
   }
-
-  leadingWidth(ForumModel? forum) {}
 
   void _showDialog(String forumId) {
     showDialog(
@@ -863,6 +937,7 @@ class _ForumItemState extends State<ForumItem> {
                     Get.find<BossUpController>()
                         .deleteForum(widget.forum.forumId);
                   }
+                  setState(() {});
                 },
                 child: const TextWidget(
                   text: 'Delete',

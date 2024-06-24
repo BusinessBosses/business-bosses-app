@@ -85,18 +85,15 @@ class MarketController extends GetxController {
     if (index != -1) {
       // Create an updated market model
       MarketModel updatedMarket = MarketModel.fromMap(data);
-      print(updatedMarket.isProduct);
       // Update in the main list
       markets[index] = MarketModel.fromMap(data);
 
       // Update in the products list if it's a product
       final int productIndex = products.indexWhere(
           (MarketModel element) => element.marketId == updatedMarket.marketId);
-      print(productIndex);
       if (productIndex != -1) {
         products[productIndex] = updatedMarket;
       }
-      print(updatedMarket.isProduct);
       // Update in the services list if it's a service
 
       final int serviceIndex = services.indexWhere(
@@ -117,8 +114,15 @@ class MarketController extends GetxController {
       // Increment the view count of the post by 1
       post.setViews(post.views! + 1);
       update();
-      HomeRepository.updatemarketViews(post.marketId, post.views!);
     }
+    final int promotedIndex = _homeController.promotedMarkets
+        .indexWhere((MarketModel element) => element.marketId == post.marketId);
+    if (postIndex != -1) {
+      // Increment the view count of the post by 1
+      _homeController.promotedMarkets[promotedIndex].setViews(post.views! + 1);
+      update();
+    }
+    HomeRepository.updatemarketViews(post.marketId, post.views!);
   }
 
   /// PROCESS RAW API DATA, MODELIZE AND SAVE TO STATE
@@ -314,6 +318,19 @@ class MarketController extends GetxController {
         markets[postIndex].likes!.add(userId);
       }
     }
+    final int promotedIndex = _homeController.promotedMarkets
+        .indexWhere((MarketModel element) => element.marketId == postId);
+    if (promotedIndex != -1) {
+      final bool checkLiked = _homeController
+          .promotedMarkets[promotedIndex].likes!
+          .contains(userId);
+      if (checkLiked) {
+        _homeController.promotedMarkets[promotedIndex].likes!
+            .removeWhere((String element) => element == userId);
+      } else {
+        _homeController.promotedMarkets[promotedIndex].likes!.add(userId);
+      }
+    }
     update();
     if (_profileController.myProfile.uid != receiverUid) {
       socket.emit('like', <String, String>{
@@ -347,13 +364,26 @@ class MarketController extends GetxController {
         profileController.updateCoinCount(-1);
         markets[postIndex].coins!.add(userId);
       }
-      socket.emit('coin', <String, String>{
-        'postId': postId,
-        'userId': userId,
-        'type': type,
-        'receiverUid': receiverUid,
-      });
     }
+    final int promotedIndex = _homeController.promotedMarkets
+        .indexWhere((MarketModel element) => element.marketId == postId);
+    if (promotedIndex != -1) {
+      final bool checkIfCoined = _homeController
+          .promotedMarkets[promotedIndex].coins!
+          .contains(userId);
+      if (checkIfCoined) {
+        _homeController.promotedMarkets[promotedIndex].coins!
+            .removeWhere((String element) => element == userId);
+      } else {
+        _homeController.promotedMarkets[promotedIndex].coins!.add(userId);
+      }
+    }
+    socket.emit('coin', <String, String>{
+      'postId': postId,
+      'userId': userId,
+      'type': type,
+      'receiverUid': receiverUid,
+    });
     update();
   }
 
@@ -363,6 +393,11 @@ class MarketController extends GetxController {
         markets.indexWhere((MarketModel element) => element.marketId == postId);
     if (postIndex != -1) {
       markets[postIndex].comments!.add(comment);
+    }
+    final int promotedIndex = _homeController.promotedMarkets
+        .indexWhere((MarketModel element) => element.marketId == postId);
+    if (promotedIndex != -1) {
+      _homeController.promotedMarkets[promotedIndex].comments!.add(comment);
     }
     update();
   }

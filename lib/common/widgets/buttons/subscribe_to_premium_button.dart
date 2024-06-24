@@ -16,7 +16,7 @@ Widget subscribetopremiumbutton() {
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
             const Text(
-              'Subscribe to Premium',
+              'Subscribe to Pro',
               style: TextStyle(
                 fontWeight: FontWeight.w700,
                 fontSize: 15,

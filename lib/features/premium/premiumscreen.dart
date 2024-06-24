@@ -123,7 +123,7 @@ class _PremiumScreenState extends State<PremiumScreen> {
         ),
         centerTitle: true,
         title: const Text(
-          'Become a premium member',
+          'Become a pro member',
           textAlign: TextAlign.center,
           style: TextStyle(fontSize: 20),
         ),
@@ -160,7 +160,7 @@ class _PremiumScreenState extends State<PremiumScreen> {
                             children: <InlineSpan>[
                               const TextSpan(
                                 text:
-                                    'Upgrade to a premium boss experience at only, ',
+                                    'Upgrade to a pro boss experience at only, ',
                                 style: TextStyle(
                                     color: Colors.black,
                                     fontSize: 15,
@@ -168,8 +168,8 @@ class _PremiumScreenState extends State<PremiumScreen> {
                               ),
                               TextSpan(
                                 text: _currentIndex == 0
-                                    ? '\$4.99/month'
-                                    : '\$49.99/year',
+                                    ? '\$9.99/month'
+                                    : '\$99.99/year',
                                 style: const TextStyle(
                                     color: primaryColorLT,
                                     fontSize: 16,
@@ -349,8 +349,8 @@ class _PremiumScreenState extends State<PremiumScreen> {
                               // isProcessing: _isProcessing,
                               margin: const EdgeInsets.all(2.0),
                               label: _currentIndex == 0
-                                  ? 'Subscribe at \$4.99'
-                                  : 'Subscribe at \$49.99',
+                                  ? 'Subscribe at \$9.99'
+                                  : 'Subscribe at \$99.99',
                               // onPressed: () async {
                               //   await makePayment();
                               // },

@@ -171,12 +171,12 @@ class DonationsController extends GetxController {
             .removeWhere((DonationModel donation) => donation.id == donationId);
         donationsNotApproved
             .removeWhere((DonationModel donation) => donation.id == donationId);
-        Get.snackbar('Success', 'Donation Deleted Successfully');
+        Get.snackbar('Success', 'Project Deleted Successfully');
       } else {
-        Get.snackbar('Error', 'Failed to Delete Donation');
+        Get.snackbar('Error', 'Failed to Delete Project');
       }
     } catch (e) {
-      Get.snackbar('Error', 'Failed to Delete Donation');
+      Get.snackbar('Error', 'Failed to Delete Project');
     }
     update();
   }
@@ -268,7 +268,7 @@ class DonationsController extends GetxController {
       }
       update();
       Get.back();
-      Get.snackbar('Success', 'Donation Updated Succesfully!');
+      Get.snackbar('Success', 'Project Updated Succesfully!');
     }
   }
 
@@ -429,8 +429,7 @@ class DonationsController extends GetxController {
       if (donationIndex != -1) {
         donations[donationIndex]
             .setRecievedAmount(int.tryParse(data['amount'])!);
-        profileController.myProfile
-            .incrementCoinsCount(-(int.tryParse(data['amount'])!));
+        profileController.updateCoinCount(-(int.tryParse(data['amount'])!));
         donations[donationIndex]
             .transactions!
             .add(DonationTransaction.fromMap(<String, dynamic>{
@@ -456,8 +455,7 @@ class DonationsController extends GetxController {
         });
     if (response.success) {
       donationModel.isCashoutApproved = true;
-      profileController.myProfile
-          .incrementCoinsCount(donationModel.amountRecieved);
+      profileController.updateCoinCount(donationModel.amountRecieved);
       showSnackbar(message: 'Withdrawal Successful!');
       Get.back();
     } else {

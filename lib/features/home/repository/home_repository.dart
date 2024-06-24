@@ -4,14 +4,25 @@ import 'package:business_bosses_v2/services/api_service.dart';
 class HomeRepository {
   /// GET INIT DATA
   static Future<ApiResponseModel> fetchData() async {
-    final ApiResponseModel response = await ApiService.get(path: 'init/');
+    final ApiResponseModel response = await ApiService.get(path: 'init/load');
     return response;
   }
 
   static Future<ApiResponseModel> fetchPosts(
       int page, int lastTimestamp) async {
     final ApiResponseModel response = await ApiService.get(
-        path: 'post/get-posts?page=$page&size=50&lastTimestamp=$lastTimestamp');
+        path: 'post/all-posts?page=$page&size=50&lastTimestamp=$lastTimestamp');
+    return response;
+  }
+
+  static Future<ApiResponseModel> fetchForums(String id, int page) async {
+    final ApiResponseModel response = await ApiService.get(
+        path: 'forum/user-industry-forums/$id?size=20&page=$page');
+    return response;
+  }
+
+  static Future<ApiResponseModel> fetchPromoted() async {
+    final ApiResponseModel response = await ApiService.get(path: 'promotion');
     return response;
   }
 

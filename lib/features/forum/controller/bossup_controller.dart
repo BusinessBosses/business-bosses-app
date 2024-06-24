@@ -4,6 +4,7 @@ import 'package:business_bosses_v2/common/models/user_model.dart';
 import 'package:business_bosses_v2/features/forum/models/forum_model.dart';
 import 'package:business_bosses_v2/features/forum/models/industry.dart';
 import 'package:business_bosses_v2/features/forum/repository/forum_repository.dart';
+import 'package:business_bosses_v2/features/forum/widgets/postonhomepopup.dart';
 import 'package:business_bosses_v2/features/home/controller/home_controller.dart';
 import 'package:business_bosses_v2/features/profile/controller/profile_controller.dart';
 import 'package:business_bosses_v2/services/api_service.dart';
@@ -114,10 +115,15 @@ class BossUpController extends GetxController {
     }
   }
 
-  void deleteForum(String forumId) {
-    final HomeController homeController = Get.find();
+  void deleteForum(String forumId) async {
     forums.removeWhere((ForumModel element) => element.forumId == forumId);
-    homeController.removeForum(forumId);
+    if (_profileController.userresources
+            .indexWhere((ForumModel element) => element.forumId == forumId) !=
+        -1) {
+      _profileController.userresources
+          .removeWhere((ForumModel element) => element.forumId == forumId);
+    }
+    await ForumRepository.deleteForum(forumId);
     ApiService.put(
       path: 'users/${_profileController.myProfile.uid}',
       body: <String, dynamic>{
@@ -186,10 +192,14 @@ class BossUpController extends GetxController {
 
     searchedPosts.clear();
 
-    for (dynamic forum in forums) {
-      if (forum.description!.toLowerCase().contains(query.toLowerCase())) {
-        searchedPosts.add(forum);
-      }
+   for (ForumModel product in forums) {
+      if (product.description != null && product.description!.toLowerCase().contains(query.toLowerCase()) ||
+        product.title != null && product.title!.toLowerCase().contains(query.toLowerCase()) ||
+        product.user != null && 
+        (product.user!.name != null && product.user!.name!.toLowerCase().contains(query.toLowerCase()) ||
+         product.user!.username.toLowerCase().contains(query.toLowerCase()))) {
+      searchedPosts.add(product);
+    }
     }
 
     loadingPostSearch(false);
@@ -325,6 +335,12 @@ class BossUpController extends GetxController {
     });
 
     forums.insert(0, modelizedNewPost);
+    _profileController.userresources.insert(0, modelizedNewPost);
+
+    Get.off(() => PostonhomePopUp(
+          forum: modelizedNewPost,
+          isBossUp: true,
+        ));
 
     update();
   }

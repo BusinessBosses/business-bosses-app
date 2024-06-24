@@ -28,7 +28,7 @@ const String defaultApplePay = '''{
   "provider": "apple_pay",
   "data": {
     "merchantIdentifier": "merchant.businessbosses",
-    "displayName": "Premium Subscription",
+    "displayName": "Pro Subscription",
     "merchantCapabilities": ["3DS", "debit", "credit"],
     "supportedNetworks": ["amex", "visa", "discover", "masterCard"],
     "countryCode": "US",

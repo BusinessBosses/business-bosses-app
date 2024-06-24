@@ -258,8 +258,8 @@ class _ReviewPaymentState extends State<ReviewPayment> {
                                   const Spacer(),
                                   Text(
                                     argument.toString().contains('annually')
-                                        ? '\$49.99'
-                                        : '\$4.99',
+                                        ? '\$99.99'
+                                        : '\$9.99',
                                     style: const TextStyle(
                                         fontSize: 23,
                                         fontWeight: FontWeight.w700),

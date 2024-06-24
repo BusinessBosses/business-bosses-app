@@ -72,7 +72,7 @@ class _CreateDonationScreenState extends State<CreateDonationScreen> {
         key: scaffoldKey,
         appBar: AppBar(
           title: Text(
-            widget.donation != null ? 'Update Donation' : 'Create a Donation',
+            widget.donation != null ? 'Update Project' : 'Create a Project',
           ),
           automaticallyImplyLeading: false,
           actions: <Widget>[
@@ -496,9 +496,9 @@ class _CreateDonationScreenState extends State<CreateDonationScreen> {
                       child: Text(
                         textAlign: TextAlign.center,
                         overflow: TextOverflow.ellipsis,
-                        maxLines: 2,
+                        maxLines: 3,
                         style: TextStyle(fontSize: 13, color: subtextColor),
-                        'Please note this donation MUST be for your business only. We do not currently support any charitable organisation donations. ',
+                        'Please note this crowdfunding MUST be for your business only. We do not currently support any charitable organisation crowdfunds. ',
                       ),
                     ),
                   ],

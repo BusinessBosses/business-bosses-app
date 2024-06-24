@@ -51,7 +51,7 @@ class _DonationsHistoryState extends State<DonationsHistory> {
           ),
           centerTitle: true,
           title: const Text(
-            'My Donations History',
+            'My Crowdfund History',
             textAlign: TextAlign.center,
             style: TextStyle(fontSize: 20),
           ),

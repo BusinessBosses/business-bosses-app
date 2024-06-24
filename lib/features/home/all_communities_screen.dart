@@ -157,7 +157,7 @@ class _AllCommunitiesScreenState extends State<AllCommunitiesScreen>
                                 tabs: const <Widget>[
                                   Tab(text: 'Challenge'),
                                   Tab(text: 'Learning'),
-                                  Tab(text: 'Donations'),
+                                  Tab(text: 'Crowdfund'),
                                 ],
                               )
                             : _isSearchingDonations

@@ -125,7 +125,7 @@ class BossuppartnerItem extends StatelessWidget {
                     GestureDetector(
                       onTap: () {
                         Navigator.of(context).push(
-                          MaterialPageRoute(
+                          MaterialPageRoute<dynamic>(
                             builder: (BuildContext context) =>
                                 ImagesViewerScreen(
                               urls: photos,
@@ -139,7 +139,7 @@ class BossuppartnerItem extends StatelessWidget {
                         alignment: Alignment.center,
                         child: companyPhoto != null
                             ? CachedNetworkImage(
-                                imageUrl: companyPhoto!,
+                                imageUrl: companyPhoto ?? '',
                                 memCacheWidth: 750,
                               )
                             : const SizedBox(),
