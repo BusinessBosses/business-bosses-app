@@ -15,6 +15,12 @@ class HomeRepository {
     return response;
   }
 
+  static Future<ApiResponseModel> fetchForums(String id, int page) async {
+    final ApiResponseModel response = await ApiService.get(
+        path: 'forum/user-industry-forums/$id?size=20&page=$page');
+    return response;
+  }
+
   static Future<ApiResponseModel> fetchPromoted() async {
     final ApiResponseModel response = await ApiService.get(path: 'promotion');
     return response;

@@ -65,6 +65,7 @@ class HomeController extends GetxController {
   Set<dynamic> itemsWithIncrementedViews = {};
   Map<String, String> votes = {};
   RxList<PostModel> posts = RxList<PostModel>(<PostModel>[]);
+  RxList<ForumModel> forums = RxList<ForumModel>(<ForumModel>[]);
   int totalPromoted = 0;
 
   void addIndustries(List<Industry> data) {
@@ -131,6 +132,24 @@ class HomeController extends GetxController {
             .toList(),
         'reposts': psts[i]['reposts']
             .map((dynamic repost) => repost['userId'].toString())
+            .toList(),
+        'coins': psts[i]['coins']
+            .map((dynamic coin) => coin['userId'].toString())
+            .toList()
+      }));
+    }
+    mixPostandPromoted();
+  }
+
+  /// PROCESS RAW API DATA, MODELIZE AND SAVE TO STATE
+  void processForumsToState(dynamic post) {
+    // print(post.length);
+    final List psts = post;
+    for (int i = 0; i < psts.length; i++) {
+      forums.add(ForumModel.fromMap({
+        ...psts[i],
+        'likes': psts[i]['likes']
+            .map((dynamic like) => like['userId'].toString())
             .toList(),
         'coins': psts[i]['coins']
             .map((dynamic coin) => coin['userId'].toString())
@@ -252,8 +271,9 @@ class HomeController extends GetxController {
     }
   }
 
-  void processPostsAndForumsData(dynamic data) {
+  void processPostsAndForumsData(dynamic data, dynamic forum) {
     processPostsToState(data['posts']['rows']);
+    processForumsToState(forum['rows']);
     update();
   }
 
@@ -288,6 +308,17 @@ class HomeController extends GetxController {
               .removeWhere((element) => element == userId);
         } else {
           sponsoredPosts[spIndex]['data'].likes!.add(userId);
+        }
+      }
+    } else if (type == 'forum') {
+      final int forumIndex =
+          forums.indexWhere((ForumModel forum) => forum.forumId == postId);
+      if (forumIndex != -1) {
+        final bool checkLiked = forums[forumIndex].likes!.contains(userId);
+        if (checkLiked) {
+          forums[forumIndex].likes?.remove(userId);
+        } else {
+          forums[forumIndex].likes?.add(userId);
         }
       }
     } else if (type == 'course') {
@@ -807,9 +838,12 @@ class HomeController extends GetxController {
     update();
     final ApiResponseModel response = await HomeRepository.fetchPosts(
         paginationPage.value, posts[posts.length - 1].timestamp);
+
+    final ApiResponseModel forum = await HomeRepository.fetchForums(
+        profileController.myProfile.uid, paginationPage.value);
     if (response.success) {
       paginationPage(paginationPage.value + 1);
-      processPostsAndForumsData(response.data);
+      processPostsAndForumsData(response.data, forum.data);
     } else {
       // showSnackbar(
       //     title: 'OOPS!',
@@ -922,12 +956,14 @@ class HomeController extends GetxController {
         error(true);
         update();
       }
+      final ApiResponseModel forums =
+          await HomeRepository.fetchForums(profileController.myProfile.uid, 0);
       if (promoted.success) {
         processPromotedPostsToState(promoted.data['promotedPosts']['rows']);
         processPromotedMarketsToState(promoted.data['promotedMarkets']['rows']);
         processPromotedCoursesToState(promoted.data['promotedCourses']['rows']);
-        if (posts.success) {
-          processPostsAndForumsData(posts.data);
+        if (posts.success && forums.success) {
+          processPostsAndForumsData(posts.data, forums.data);
         } else {
           error(true);
           update();
@@ -978,38 +1014,38 @@ class HomeController extends GetxController {
     update();
   }
 
-  /// LOAD POSTS FROM REMOTE SOURCE
-  Future<void> refreshData() async {
-    refreshing(true);
-    // error(false);
-    update();
-    final ApiResponseModel response = await HomeRepository.fetchRefreshData();
-    final ApiResponseModel partner = await HomeRepository.fetchPartner();
-    if (response.success) {
-      processPostsAndForumsData(response.data['posts']);
-      // profileController.processDataToState(
-      //     response.data['user'], response.data['interests']);
-      bossUp?.clear();
-      if (partner.data['count'] > 0) {
-        bossUp?.addAll(partner.data['rows'].cast<Map<String, dynamic>>());
-        // Find the item with id = 5
-        final Map<String, dynamic> getTitle =
-            bossUp!.firstWhere((Map<String, dynamic> item) => item['id'] == 5);
+  // /// LOAD POSTS FROM REMOTE SOURCE
+  // Future<void> refreshData() async {
+  //   refreshing(true);
+  //   // error(false);
+  //   update();
+  //   final ApiResponseModel response = await HomeRepository.fetchRefreshData();
+  //   final ApiResponseModel partner = await HomeRepository.fetchPartner();
+  //   if (response.success) {
+  //     processPostsAndForumsData(response.data['posts'], );
+  //     // profileController.processDataToState(
+  //     //     response.data['user'], response.data['interests']);
+  //     bossUp?.clear();
+  //     if (partner.data['count'] > 0) {
+  //       bossUp?.addAll(partner.data['rows'].cast<Map<String, dynamic>>());
+  //       // Find the item with id = 5
+  //       final Map<String, dynamic> getTitle =
+  //           bossUp!.firstWhere((Map<String, dynamic> item) => item['id'] == 5);
 
-        bossUpTitle = getTitle['companyName'];
-        bossUpLink = getTitle['companyUrl'];
-      }
-    } else {
-      error(true);
-      // showSnackbar(
-      //     title: 'OOPS!',
-      //     message: 'An error occurred, please try again!',
-      //     error: true);
-    }
+  //       bossUpTitle = getTitle['companyName'];
+  //       bossUpLink = getTitle['companyUrl'];
+  //     }
+  //   } else {
+  //     error(true);
+  //     // showSnackbar(
+  //     //     title: 'OOPS!',
+  //     //     message: 'An error occurred, please try again!',
+  //     //     error: true);
+  //   }
 
-    refreshing(false);
-    update();
-  }
+  //   refreshing(false);
+  //   update();
+  // }
 
   initSocket() {
     socket = IO.io(Constants.socketUrl, <String, dynamic>{

@@ -138,7 +138,7 @@ class _MarketplaceScreenState extends State<MarketplaceScreen>
                 ),
               )
             : Column(
-                children: [
+                children: <Widget>[
                   GestureDetector(
                     onTap: () {
                       _ismarketplaceSearching = !_ismarketplaceSearching;
@@ -166,7 +166,7 @@ class _MarketplaceScreenState extends State<MarketplaceScreen>
                             ),
                           ),
                           hintText: 'Search Marketplace',
-                          hintStyle: TextStyle(
+                          hintStyle: const TextStyle(
                               color: Colors.black45,
                               fontSize: 16,
                               fontWeight: FontWeight.w500),
@@ -213,7 +213,7 @@ class _MarketplaceScreenState extends State<MarketplaceScreen>
           : _ismarketplaceSearching
               ? TabBarView(
                   controller: _marketplacesearchTabController,
-                  children: [
+                  children: <Widget>[
                     Obx(
                       () {
                         final List<MarketModel> filteredMarkets =
@@ -239,16 +239,16 @@ class _MarketplaceScreenState extends State<MarketplaceScreen>
 
                         return Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
+                          children: <Widget>[
                             Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
+                              children: <Widget>[
                                 Container(
-                                    padding: EdgeInsets.only(left: 15),
+                                    padding: const EdgeInsets.only(left: 15),
                                     child: Row(
                                       mainAxisAlignment:
                                           MainAxisAlignment.spaceBetween,
-                                      children: [
+                                      children: <Widget>[
                                         const Text(
                                           'Filter results',
                                           style: TextStyle(
@@ -258,7 +258,7 @@ class _MarketplaceScreenState extends State<MarketplaceScreen>
                                         Wrap(
                                             crossAxisAlignment:
                                                 WrapCrossAlignment.center,
-                                            children: [
+                                            children: <Widget>[
                                               GestureDetector(
                                                 onTap: () {
                                                   setState(() {

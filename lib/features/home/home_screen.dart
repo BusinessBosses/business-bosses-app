@@ -6,6 +6,7 @@ import 'package:business_bosses_v2/features/forum/controller/challenge_controlle
 import 'package:business_bosses_v2/features/home/controller/commumities_controller.dart';
 import 'package:business_bosses_v2/features/home/widgets/bottom_bar.dart';
 import 'package:business_bosses_v2/features/home/widgets/floatingbutton.dart';
+import 'package:business_bosses_v2/features/home/widgets/forum_item.dart';
 import 'package:business_bosses_v2/features/live_event/controller/live_event_controller.dart';
 import 'package:business_bosses_v2/features/donations/controller/donations_controller.dart';
 import 'package:business_bosses_v2/features/live_event/presentation/live_event.dart';
@@ -359,7 +360,7 @@ class _HomeScreenState extends State<HomeScreen>
                                         },
                                         child: TabBarView(
                                           controller: _tabController,
-                                          children: [
+                                          children: <Widget>[
                                             ListView.builder(
                                               controller: _scrollController,
                                               shrinkWrap: true,
@@ -661,13 +662,26 @@ class _HomeScreenState extends State<HomeScreen>
                                                 }
                                               },
                                             ),
-                                            Text('Following Screen here')
+                                            ListView.builder(
+                                              controller: _scrollController,
+                                              shrinkWrap: true,
+                                              itemCount:
+                                                  controller.forums.length,
+                                              itemBuilder:
+                                                  (BuildContext context,
+                                                      int index) {
+                                                return ForumItem(
+                                                  forum:
+                                                      controller.forums[index],
+                                                  controller: homeController,
+                                                );
+                                              },
+                                            ),
                                           ],
                                         ),
                                       ),
                                     ),
                                   ),
-                                  const Padding(padding: EdgeInsets.all(100)),
                                   const BottomBar(
                                     activeIndex: 0,
                                   ),
