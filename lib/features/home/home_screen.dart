@@ -390,40 +390,48 @@ class _HomeScreenState extends State<HomeScreen>
                                             children: [
                                               Visibility(
                                                 visible: isTabVisible,
-                                                child: Material(
-                                                  elevation: 0.1,
-                                                  color: Colors.white,
-                                                  child: DefaultTabController(
-                                                    length: 2,
-                                                    child: TabBar(
-                                                      controller:
-                                                          _tabController,
-                                                      tabs: <Widget>[
-                                                        Tab(
-                                                          child: FittedBox(
-                                                            child: Text(
-                                                              'For you',
-                                                              style: Theme.of(
-                                                                      context)
-                                                                  .textTheme
-                                                                  .bodyLarge,
+                                                child: Column(
+                                                  children: [
+                                                    Material(
+                                                      elevation: 0.1,
+                                                      color: Colors.white,
+                                                      child: DefaultTabController(
+                                                        length: 2,
+                                                        child: TabBar(
+                                                          controller:
+                                                              _tabController,
+                                                          tabs: <Widget>[
+                                                            Tab(
+                                                              child: FittedBox(
+                                                                child: Text(
+                                                                  'For you',
+                                                                  style: Theme.of(
+                                                                          context)
+                                                                      .textTheme
+                                                                      .bodyLarge,
+                                                                ),
+                                                              ),
                                                             ),
-                                                          ),
-                                                        ),
-                                                        Tab(
-                                                          child: FittedBox(
-                                                            child: Text(
-                                                              'Following',
-                                                              style: Theme.of(
-                                                                      context)
-                                                                  .textTheme
-                                                                  .bodyLarge,
+                                                            Tab(
+                                                              child: FittedBox(
+                                                                child: Text(
+                                                                  'Following',
+                                                                  style: Theme.of(
+                                                                          context)
+                                                                      .textTheme
+                                                                      .bodyLarge,
+                                                                ),
+                                                              ),
                                                             ),
-                                                          ),
+                                                          ],
                                                         ),
-                                                      ],
+                                                      ),
                                                     ),
-                                                  ),
+                                                    Container(
+                                                      height: 1,
+                                                      color: backgroundColor,
+                                                    )
+                                                  ],
                                                 ),
                                               ),
                                               Expanded(

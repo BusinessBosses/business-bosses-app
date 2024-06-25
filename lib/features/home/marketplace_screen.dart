@@ -4,10 +4,12 @@ import 'package:business_bosses_v2/features/home/widgets/bottom_bar.dart';
 import 'package:business_bosses_v2/features/home/widgets/floatingbutton.dart';
 import 'package:business_bosses_v2/features/home/widgets/sellingpopup.dart';
 import 'package:business_bosses_v2/features/marketplace/models/market_model.dart';
+import 'package:business_bosses_v2/features/marketplace/presentation/add_supplier.dart';
 import 'package:business_bosses_v2/features/marketplace/presentation/filtermarketplaceposts.dart';
 import 'package:business_bosses_v2/features/marketplace/presentation/market_members.dart';
 import 'package:business_bosses_v2/features/marketplace/presentation/sell_screen.dart';
 import 'package:business_bosses_v2/features/marketplace/presentation/sell_services.dart';
+import 'package:business_bosses_v2/features/marketplace/presentation/supplierspage.dart';
 import 'package:business_bosses_v2/features/marketplace/widgets/marketplace_item.dart';
 
 import 'package:business_bosses_v2/features/marketplace/widgets/markets.dart';
@@ -67,6 +69,7 @@ class _MarketplaceScreenState extends State<MarketplaceScreen>
   void initState() {
     super.initState();
     _marketplacesearchTabController = TabController(length: 3, vsync: this);
+
     _scrollController.addListener(() {
       double percentageScrolled =
           _scrollController.offset / _scrollController.position.maxScrollExtent;
@@ -81,6 +84,10 @@ class _MarketplaceScreenState extends State<MarketplaceScreen>
         });
       }
     });
+  }
+
+  void _handleTabSelection() {
+    setState(() {});
   }
 
   String formatCount(int count) {
@@ -106,6 +113,7 @@ class _MarketplaceScreenState extends State<MarketplaceScreen>
   Widget build(BuildContext context) {
     int userCount = _marketController.users.length;
     String formattedUserCount = formatCount(userCount);
+    _marketplacesearchTabController.addListener(_handleTabSelection);
 
     return Scaffold(
       backgroundColor: backgroundcolorinterface,
@@ -116,7 +124,11 @@ class _MarketplaceScreenState extends State<MarketplaceScreen>
             ? SizedBox(
                 height: 42,
                 child: Searchbar(
-                  hintText: 'Search Marketplace',
+                  hintText: _marketplacesearchTabController.index == 0
+                      ? 'Search Products'
+                      : _marketplacesearchTabController.index == 1
+                          ? 'Search Services'
+                          : 'Find Suppliers for your Business',
                   onChange: (String query) {
                     if (query.isEmpty) {
                       _marketplacesearchTabController.index == 2
@@ -185,7 +197,7 @@ class _MarketplaceScreenState extends State<MarketplaceScreen>
                 tabs: const <Widget>[
                   Tab(text: 'Products'),
                   Tab(text: 'Services'),
-                  Tab(text: 'Sellers'),
+                  Tab(text: 'Suppliers'),
                 ],
               )
             : const PreferredSize(
@@ -494,7 +506,7 @@ class _MarketplaceScreenState extends State<MarketplaceScreen>
                             _marketController.loadingServicesSearch.value,
                       ),
                     ),
-                    Obx(() => FilterDonationsUsers(
+                    Obx(() => SuppliersPage(
                           members: _marketController.users,
                           filterItems: _marketController.searchedUsers,
                           isLoading: _marketController.loading.value ||
@@ -588,7 +600,7 @@ class _MarketplaceScreenState extends State<MarketplaceScreen>
                                                         builder: (BuildContext
                                                             context) {
                                                           return SizedBox(
-                                                            height: 200,
+                                                            height: 250,
                                                             child: Padding(
                                                               padding:
                                                                   const EdgeInsets
@@ -607,7 +619,7 @@ class _MarketplaceScreenState extends State<MarketplaceScreen>
                                                                     child: ListView
                                                                         .separated(
                                                                       itemCount:
-                                                                          2,
+                                                                          3,
                                                                       separatorBuilder:
                                                                           (BuildContext context, int index) =>
                                                                               const Divider(),
@@ -620,7 +632,9 @@ class _MarketplaceScreenState extends State<MarketplaceScreen>
                                                                             Navigator.pop(context);
                                                                             index == 0
                                                                                 ? Get.toNamed(Routes.sellscreen)
-                                                                                : Get.to(() => const CreateServiceScreen(isUpd: false));
+                                                                                : index == 1
+                                                                                    ? Get.to(() => const CreateServiceScreen(isUpd: false))
+                                                                                    : Get.to(() => const AddSupplierScreen(isUpd: false));
                                                                           },
                                                                           minVerticalPadding:
                                                                               0,
@@ -631,14 +645,9 @@ class _MarketplaceScreenState extends State<MarketplaceScreen>
                                                                           ),
                                                                           leading:
                                                                               SvgPicture.asset(
-                                                                            index == 0
-                                                                                ? 'assets/svgs/sellicon.svg'
-                                                                                : 'assets/svgs/sellicon.svg',
-                                                                            height: index == 0
-                                                                                ? 25
-                                                                                : index == 1
-                                                                                    ? 30
-                                                                                    : 22,
+                                                                            'assets/svgs/sellicon.svg',
+                                                                            height:
+                                                                                25,
                                                                             color:
                                                                                 textColor.withOpacity(1),
                                                                           ),
@@ -646,7 +655,9 @@ class _MarketplaceScreenState extends State<MarketplaceScreen>
                                                                               Text(
                                                                             index == 0
                                                                                 ? 'Sell your product'
-                                                                                : 'Sell your service',
+                                                                                : index == 1
+                                                                                    ? 'Sell your service'
+                                                                                    : 'Add a Supplier',
                                                                             style:
                                                                                 const TextStyle(fontSize: 18, fontWeight: FontWeight.w700),
                                                                           ),
