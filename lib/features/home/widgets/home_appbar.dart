@@ -202,36 +202,7 @@ class Homeappbar extends StatelessWidget {
               ),
             ],
           ),
-          Visibility(
-            visible: isTabVisible,
-            child: Material(
-              elevation: 0.1,
-              color: Colors.white,
-              child: DefaultTabController(
-                length: 2,
-                child: TabBar(
-                  tabs: <Widget>[
-                    Tab(
-                      child: FittedBox(
-                        child: Text(
-                          'For you',
-                          style: Theme.of(context).textTheme.bodyLarge,
-                        ),
-                      ),
-                    ),
-                    Tab(
-                      child: FittedBox(
-                        child: Text(
-                          'Following',
-                          style: Theme.of(context).textTheme.bodyLarge,
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-            ),
-          ),
+          
         ],
       ),
     );

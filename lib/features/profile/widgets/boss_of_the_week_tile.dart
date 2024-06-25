@@ -38,10 +38,10 @@ class _BossOfWeekProfileTileState extends State<BossOfWeekProfileTile> {
   final HomeController homeController = Get.find();
   late Color startColor;
   final List<Color> startColors = <Color>[
-    Colors.green,
-    const Color.fromARGB(255, 0, 71, 129),
-    const Color.fromARGB(255, 255, 59, 219),
     Colors.orange,
+    const Color.fromARGB(255, 0, 71, 129),
+    Colors.green,
+    const Color.fromARGB(255, 255, 59, 219),
   ];
 
   Future<void> onRefer(UserModel publicUser) async {
@@ -311,157 +311,144 @@ class _BossOfWeekProfileTileState extends State<BossOfWeekProfileTile> {
                   height: 1,
                   color: backgroundColor,
                 ),
-                ...homeController.bossUp!.reversed
-                    .toList()
-                    .map((Map<String, dynamic> item) => GestureDetector(
-                          onTap: () async {
-                            Get.to(() => const Bossuppartner());
-                          },
-                          child: Container(
-                            padding: const EdgeInsets.symmetric(vertical: 15),
-                            color: Colors.white,
-                            child: Column(
-                              mainAxisAlignment: MainAxisAlignment.start,
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: <Widget>[
-                                Padding(
-                                  padding: const EdgeInsets.symmetric(
-                                      horizontal: 15.0),
-                                  child: Row(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceBetween,
-                                    children: <Widget>[
-                                      const Text(
-                                        'See more deals',
-                                        style: TextStyle(
-                                            fontWeight: FontWeight.w700,
-                                            fontSize: 18),
+                GestureDetector(
+                  onTap: () {
+                    Get.to(const Bossuppartner());
+                  },
+                  child: Container(
+                    padding: const EdgeInsets.symmetric(vertical: 15),
+                    color: Colors.white,
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: <Widget>[
+                        Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 15.0),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: <Widget>[
+                              const Text(
+                                'See more deals',
+                                style: TextStyle(
+                                    fontWeight: FontWeight.w700, fontSize: 18),
+                              ),
+                              SvgPicture.asset(
+                                'assets/svgs/nexticon.svg',
+                                color: textColor,
+                                height: 10,
+                              ),
+                            ],
+                          ),
+                        ),
+                        const SizedBox(
+                          height: 10,
+                        ),
+                        SingleChildScrollView(
+                          scrollDirection: Axis.horizontal,
+                          child: Row(
+                            children: homeController.bossUp!.reversed
+                                .toList()
+                                .map((Map<String, dynamic> item) {
+                              final startColor = startColors[
+                                  homeController.bossUp!.indexOf(item) %
+                                      startColors.length];
+                              return LayoutBuilder(
+                                builder: (BuildContext context,
+                                    BoxConstraints constraints) {
+                                  return GestureDetector(
+                                    onTap: () async {
+                                      final Uri companyUrl =
+                                          Uri.parse(item['companyUrl']);
+                                      if (!await launchUrl(companyUrl)) {
+                                        throw Exception(
+                                            'Could not launch $companyUrl');
+                                      }
+                                    },
+                                    child: Container(
+                                      width:
+                                          MediaQuery.of(context).size.width / 3,
+                                      height: 150,
+                                      margin: const EdgeInsets.only(left: 15.0),
+                                      decoration: BoxDecoration(
+                                        border: Border.all(
+                                          color: startColor,
+                                          width: 1.0,
+                                        ),
+                                        gradient: LinearGradient(
+                                          colors: <Color>[
+                                            startColor,
+                                            const Color(0xFF0F132D)
+                                          ],
+                                          begin: Alignment.topRight,
+                                          end: Alignment.bottomLeft,
+                                        ),
+                                        borderRadius: BorderRadius.circular(15),
                                       ),
-                                      SvgPicture.asset(
-                                        'assets/svgs/nexticon.svg',
-                                        color: textColor,
-                                        height: 10,
-                                      )
-                                    ],
-                                  ),
-                                ),
-                                const SizedBox(
-                                  height: 10,
-                                ),
-                                SingleChildScrollView(
-                                  scrollDirection: Axis.horizontal,
-                                  child: Column(
-                                    children: homeController.bossUp!.reversed
-                                        .toList()
-                                        .map((Map<String, dynamic> item) {
-                                      startColors[
-                                          homeController.bossUp!.indexOf(item) %
-                                              startColors.length];
-                                      return LayoutBuilder(
-                                        builder: (BuildContext context,
-                                            BoxConstraints constraints) {
-                                          return GestureDetector(
-                                            onTap: () async {
-                                              final Uri companyUrl =
-                                                  Uri.parse(item['companyUrl']);
-                                              if (!await launchUrl(
-                                                  companyUrl)) {
-                                                throw Exception(
-                                                    'Could not launch $companyUrl');
-                                              }
-                                            },
-                                            child: Container(
-                                              width: MediaQuery.of(context)
-                                                      .size
-                                                      .width /
-                                                  3,
-                                              height: 150,
-                                              margin: const EdgeInsets.only(
-                                                  left: 15.0),
-                                              decoration: BoxDecoration(
-                                                border: Border.all(
-                                                  color: startColor,
-                                                  width: 1.0,
-                                                ),
-                                                gradient: LinearGradient(
-                                                  colors: <Color>[
-                                                    startColor,
-                                                    const Color(0xFF0F132D)
-                                                  ],
-                                                  begin: Alignment.topRight,
-                                                  end: Alignment.bottomLeft,
-                                                ),
-                                                borderRadius:
-                                                    BorderRadius.circular(15),
-                                              ),
-                                              child: Column(
-                                                mainAxisAlignment:
-                                                    MainAxisAlignment.end,
-                                                children: <Widget>[
-                                                  Padding(
-                                                    padding: const EdgeInsets
-                                                        .symmetric(
-                                                        horizontal: 10.0,
-                                                        vertical: 10),
-                                                    child: Text(
-                                                      item['companyName'],
-                                                      textAlign: TextAlign.left,
-                                                      style: const TextStyle(
-                                                          color: Colors.white,
-                                                          fontSize: 16,
-                                                          fontWeight:
-                                                              FontWeight.w700),
-                                                    ),
-                                                  ),
-                                                  Padding(
-                                                    padding:
-                                                        const EdgeInsets.only(
-                                                            bottom: 10,
-                                                            left: 12,
-                                                            right: 12),
-                                                    child: SizedBox(
-                                                      width: double.infinity,
-                                                      child: ElevatedButton(
-                                                        style: const ButtonStyle(
-                                                            backgroundColor:
-                                                                MaterialStatePropertyAll<
-                                                                        Color?>(
-                                                                    Colors
-                                                                        .white)),
-                                                        onPressed: () async {
-                                                          final Uri url =
-                                                              Uri.parse(
-                                                                  item['url']);
-                                                          if (!await launchUrl(
-                                                              url)) {
-                                                            throw Exception(
-                                                                'Could not launch $url');
-                                                          }
-                                                        },
-                                                        child: const Text(
-                                                          'Learn more',
-                                                          style: TextStyle(
-                                                              fontSize: 12,
-                                                              color: Color(
-                                                                  0xFF0F132D)),
-                                                        ),
+                                      child: Column(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.end,
+                                        children: <Widget>[
+                                          Padding(
+                                            padding: const EdgeInsets.symmetric(
+                                                horizontal: 10.0, vertical: 10),
+                                            child: Text(
+                                              item['companyName'],
+                                              textAlign: TextAlign.left,
+                                              style: const TextStyle(
+                                                  color: Colors.white,
+                                                  fontSize: 16,
+                                                  fontWeight: FontWeight.w700),
+                                            ),
+                                          ),
+                                          Padding(
+                                            padding: const EdgeInsets.all(10),
+                                            child: SizedBox(
+                                              width: double.infinity,
+                                              child: Wrap(
+                                                  crossAxisAlignment:
+                                                      WrapCrossAlignment.center,
+                                                  children: [
+                                                    Container(
+                                                      decoration:
+                                                          const BoxDecoration(
+                                                              color:
+                                                                  Colors.white,
+                                                              shape: BoxShape
+                                                                  .circle),
+                                                      padding:
+                                                          const EdgeInsets.all(
+                                                              6),
+                                                      child: SvgPicture.asset(
+                                                        'assets/svgs/upicon.svg',
+                                                        color:  const Color(0xFF0F132D),
+                                                        height: 12,
                                                       ),
                                                     ),
-                                                  ),
-                                                ],
-                                              ),
+                                                    const SizedBox(
+                                                      width: 8,
+                                                    ),
+                                                    const Text(
+                                                      'Learn more',
+                                                      style: TextStyle(
+                                                          fontSize: 12,
+                                                          color: Colors.white),
+                                                    ),
+                                                  ]),
                                             ),
-                                          );
-                                        },
-                                      );
-                                    }).toList(),
-                                  ),
-                                ),
-                              ],
-                            ),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                  );
+                                },
+                              );
+                            }).toList(),
                           ),
-                        ))
-                    .toList(),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
                 Container(
                   height: 7,
                   color: backgroundColor,
