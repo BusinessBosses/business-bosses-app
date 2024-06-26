@@ -402,7 +402,7 @@ class _ExpandedMarketplaceScreenState extends State<ExpandedMarketplaceScreen> {
                               child: const Padding(
                                 padding: EdgeInsets.all(15.0),
                                 child: Text(
-                                  'Message Seller',
+                                  'Place Order',
                                   style: TextStyle(
                                     color: Colors.white,
                                     fontWeight: FontWeight.w700,
