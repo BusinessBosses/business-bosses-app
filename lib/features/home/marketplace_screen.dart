@@ -983,7 +983,7 @@ class _MarketplaceScreenState extends State<MarketplaceScreen>
                                                                         10.0),
                                                                       child:
                                                                     Text(
-                                                                    'Find Suppliers & Manufactures ',
+                                                                    'Find Suppliers & Manufacturers',
                                                                     style: TextStyle(
                                                                       fontWeight:
                                                                           FontWeight.w700),
