@@ -197,7 +197,7 @@ class _MarketplaceScreenState extends State<MarketplaceScreen>
                 tabs: const <Widget>[
                   Tab(text: 'Products'),
                   Tab(text: 'Services'),
-                  Tab(text: 'Suppliers'),
+                  Tab(text: 'Users'),
                 ],
               )
             : const PreferredSize(
@@ -506,7 +506,7 @@ class _MarketplaceScreenState extends State<MarketplaceScreen>
                             _marketController.loadingServicesSearch.value,
                       ),
                     ),
-                    Obx(() => SuppliersPage(
+                    Obx(() => FilterDonationsUsers(
                           members: _marketController.users,
                           filterItems: _marketController.searchedUsers,
                           isLoading: _marketController.loading.value ||
@@ -931,7 +931,90 @@ class _MarketplaceScreenState extends State<MarketplaceScreen>
                                                         ),
                                                       ),
                                                       const SizedBox(
-                                                        height: 1,
+                                                        height: 10,
+                                                      ),
+                                                      GestureDetector(
+                                                        onTap: (){
+                                                          Get.to(SuppliersPage());
+                                                        },
+                                                        child: Padding(
+                                                          padding:
+                                                              const EdgeInsets
+                                                                  .only(
+                                                                  right: 15,
+                                                                  left: 15,
+                                                                  bottom: 10,
+                                                                  top: 10),
+                                                          child: Container(
+                                                              height: 40,
+                                                              decoration:
+                                                                  BoxDecoration(
+                                                                color: const Color(
+                                                                    0xFFFFFFFF),
+                                                                borderRadius:
+                                                                    BorderRadius
+                                                                        .circular(
+                                                                            10),
+                                                                boxShadow: <BoxShadow>[
+                                                                  BoxShadow(
+                                                                    color: Colors
+                                                                        .grey
+                                                                        .withOpacity(
+                                                                            0.3),
+                                                                    spreadRadius:
+                                                                        20,
+                                                                    blurRadius:
+                                                                        500,
+                                                                    offset:
+                                                                        const Offset(
+                                                                            0, 3),
+                                                                  ),
+                                                                ],
+                                                              ),
+                                                              child: Row(
+                                                                mainAxisAlignment:
+                                                                    MainAxisAlignment
+                                                                        .spaceBetween,
+                                                                children: <Widget>[
+                                                                  const Padding(
+                                                                      padding: EdgeInsets
+                                                                    .only(
+                                                                    left:
+                                                                        10.0),
+                                                                      child:
+                                                                    Text(
+                                                                    'Find Suppliers & Manufactures ',
+                                                                    style: TextStyle(
+                                                                      fontWeight:
+                                                                          FontWeight.w700),
+                                                                  ),
+                                                                    ),
+                                                                  GestureDetector(
+                                                                    onTap: () {},
+                                                                    child:
+                                                                        Padding(
+                                                                      padding:
+                                                                          const EdgeInsets
+                                                                              .only(
+                                                                        right:
+                                                                            10.0,
+                                                                      ),
+                                                                      child: Wrap(
+                                                                          crossAxisAlignment:
+                                                                              WrapCrossAlignment.center,
+                                                                          children: <Widget>[
+                                                                            SvgPicture
+                                                                                .asset(
+                                                                              'assets/svgs/nexticon.svg',
+                                                                              color:
+                                                                                  textColor,
+                                                                            ),
+                                                                          ]),
+                                                                    ),
+                                                                  )
+                                                                ],
+                                                              )),
+                                                        ),
                                                       ),
                                                     ],
                                                   )
