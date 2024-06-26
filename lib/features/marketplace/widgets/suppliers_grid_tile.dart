@@ -98,28 +98,34 @@ class _SuppliersGridTileState extends State<SuppliersGridTile> {
                     maxLines: 2,
                     overflow: TextOverflow.ellipsis,
                     textAlign: TextAlign.center,
-                    style: Theme.of(context).textTheme.bodyLarge,
+                    style: const TextStyle(
+                        fontWeight: FontWeight.w700,
+                        fontSize: 20,
+                        color: textColor),
                   ),
             Text(
               widget.supplier.name,
               maxLines: 2,
               overflow: TextOverflow.ellipsis,
               textAlign: TextAlign.center,
-              style: Theme.of(context).textTheme.bodyLarge,
+              style: TextStyle(
+                  fontWeight: FontWeight.w700,
+                  fontSize: 17,
+                  color: textColor.withAlpha(200)),
             ),
             Text(
               widget.supplier.description,
               maxLines: 2,
               overflow: TextOverflow.ellipsis,
               textAlign: TextAlign.center,
-              style: Theme.of(context).textTheme.bodyLarge,
+              style: Theme.of(context).textTheme.bodyMedium,
             ),
             Text(
               widget.supplier.location!,
               maxLines: 2,
               overflow: TextOverflow.ellipsis,
               textAlign: TextAlign.center,
-              style: Theme.of(context).textTheme.bodyLarge,
+              style: Theme.of(context).textTheme.bodySmall,
             ),
             const SizedBox(height: 12.0),
             Container(

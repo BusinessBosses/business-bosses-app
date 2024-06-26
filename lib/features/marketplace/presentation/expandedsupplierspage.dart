@@ -113,10 +113,28 @@ class _FilterUsersState extends State<ExpandedSuppliersPage> {
                   Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text('Location'),
-                      Text('Telephone number'),
-                      Text('Email'),
-                      Text('Website link'),
+                      Text(
+                        'Business name',
+                        style: const TextStyle(
+                            fontWeight: FontWeight.w700,
+                            fontSize: 20,
+                            color: textColor),
+                      ),
+                      Text(
+                        'Telephone number',
+                        style: TextStyle(
+                            fontWeight: FontWeight.w700,
+                            fontSize: 17,
+                            color: textColor.withAlpha(200)),
+                      ),
+                      Text('Email', style: TextStyle(
+                  fontWeight: FontWeight.w700,
+                  fontSize: 17,
+                  color: textColor.withAlpha(200)),),
+                      Text('Website link', style: TextStyle(
+                  fontWeight: FontWeight.w700,
+                  fontSize: 17,
+                  color: textColor.withAlpha(200)),),
                     ],
                   )
                 ],
@@ -124,7 +142,7 @@ class _FilterUsersState extends State<ExpandedSuppliersPage> {
               const SizedBox(
                 height: 30,
               ),
-              Text('Business name'),
+              Text('Location:'),
               Text('Category'),
               Text('Description'),
               const SizedBox(

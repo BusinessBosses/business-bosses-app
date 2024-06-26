@@ -366,8 +366,8 @@ class _BossOfWeekProfileTileState extends State<BossOfWeekProfileTile> {
                                     },
                                     child: Container(
                                       width:
-                                          MediaQuery.of(context).size.width / 3,
-                                      height: 150,
+                                          MediaQuery.of(context).size.width / 3.2,
+                                      height: 100,
                                       margin: const EdgeInsets.only(left: 15.0),
                                       decoration: BoxDecoration(
                                         border: Border.all(
@@ -396,7 +396,7 @@ class _BossOfWeekProfileTileState extends State<BossOfWeekProfileTile> {
                                               textAlign: TextAlign.left,
                                               style: const TextStyle(
                                                   color: Colors.white,
-                                                  fontSize: 16,
+                                                  fontSize: 14,
                                                   fontWeight: FontWeight.w700),
                                             ),
                                           ),
@@ -417,11 +417,11 @@ class _BossOfWeekProfileTileState extends State<BossOfWeekProfileTile> {
                                                                   .circle),
                                                       padding:
                                                           const EdgeInsets.all(
-                                                              6),
+                                                              4),
                                                       child: SvgPicture.asset(
                                                         'assets/svgs/upicon.svg',
                                                         color:  const Color(0xFF0F132D),
-                                                        height: 12,
+                                                        height: 10,
                                                       ),
                                                     ),
                                                     const SizedBox(
