@@ -1,17 +1,14 @@
+import 'package:business_bosses_v2/features/marketplace/controllers/supplier_controller.dart';
 import 'package:business_bosses_v2/features/marketplace/widgets/suppliers_grid_tile.dart';
 import 'package:business_bosses_v2/features/profile/controller/profile_controller.dart';
-import 'package:business_bosses_v2/navigation/routes.dart';
 import 'package:country_list_pick/country_list_pick.dart';
-import 'package:country_list_pick/support/code_country.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 
 import '../../../common/models/user_model.dart';
-import '../../../common/widgets/buttons/my_outlined_button.dart';
 import '../../../common/widgets/safety_model.dart';
-import '../../../common/widgets/user_avatar_with_badge.dart';
 import '../../../utils/theme/theme.dart';
 
 class SuppliersPage extends StatefulWidget {
@@ -36,20 +33,26 @@ class SuppliersPage extends StatefulWidget {
 }
 
 class _FilterUsersState extends State<SuppliersPage> {
-  final ScrollController _controller = ScrollController();
-  final ProfileController _profileController = Get.find();
+  final SupplierController supplierController = Get.put(SupplierController());
+  final ProfileController profileController = Get.find();
   final bool loadingNext = false;
   String? _selectedCategory;
   String? _selectedLocation;
   String? filterCode;
+
+  @override
+  void dispose() {
+    Get.delete<SupplierController>();
+    super.dispose();
+  }
+
   @override
   Widget build(
     BuildContext context,
   ) {
-    final ProfileController profileController = Get.find();
     return widget.filterItems.isEmpty
         ? Column(
-            children: [
+            children: <Widget>[
               Visibility(
                 visible: true,
                 child: SingleChildScrollView(
@@ -57,7 +60,7 @@ class _FilterUsersState extends State<SuppliersPage> {
                   child: Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 15.0),
                     child: Row(
-                      children: [
+                      children: <Widget>[
                         Container(
                           width: 250,
                           padding: const EdgeInsets.symmetric(
@@ -119,7 +122,7 @@ class _FilterUsersState extends State<SuppliersPage> {
                             ),
                           ),
                         ),
-                        Container(
+                        SizedBox(
                           width: 250,
                           child: CountryListPick(
                             appBar: AppBar(
@@ -195,29 +198,8 @@ class _FilterUsersState extends State<SuppliersPage> {
                 ),
               ),
               // SizedBox(height: 10,),
-              Expanded(
-                child: StaggeredGridView.countBuilder(
-                    staggeredTileBuilder: (int index) =>
-                        const StaggeredTile.fit(1),
-                    padding: const EdgeInsets.symmetric(horizontal: 15.0),
-                    crossAxisCount: 2,
-                    crossAxisSpacing: 8.0,
-                    mainAxisSpacing: 8.0,
-                    itemCount: 40,
-                    itemBuilder: (BuildContext context, int index) {
-                      return const SuppliersGridTile();
-                    }),
-              ),
-            ],
-          )
-        : Stack(
-            children: <Widget>[
-              NotificationListener<ScrollNotification>(
-                onNotification: (scrollNotification) {
-                  FocusScope.of(context).unfocus();
-                  return false;
-                },
-                child: Expanded(
+              Obx(
+                () => Expanded(
                   child: StaggeredGridView.countBuilder(
                       staggeredTileBuilder: (int index) =>
                           const StaggeredTile.fit(1),
@@ -225,10 +207,39 @@ class _FilterUsersState extends State<SuppliersPage> {
                       crossAxisCount: 2,
                       crossAxisSpacing: 8.0,
                       mainAxisSpacing: 8.0,
-                      itemCount: 40,
+                      itemCount: supplierController.suppliers.length,
                       itemBuilder: (BuildContext context, int index) {
-                        return const SuppliersGridTile();
+                        return SuppliersGridTile(
+                          supplier: supplierController.suppliers[index],
+                        );
                       }),
+                ),
+              ),
+            ],
+          )
+        : Stack(
+            children: <Widget>[
+              NotificationListener<ScrollNotification>(
+                onNotification: (ScrollNotification scrollNotification) {
+                  FocusScope.of(context).unfocus();
+                  return false;
+                },
+                child: Obx(
+                  () => Expanded(
+                    child: StaggeredGridView.countBuilder(
+                        staggeredTileBuilder: (int index) =>
+                            const StaggeredTile.fit(1),
+                        padding: const EdgeInsets.symmetric(horizontal: 15.0),
+                        crossAxisCount: 2,
+                        crossAxisSpacing: 8.0,
+                        mainAxisSpacing: 8.0,
+                        itemCount: supplierController.suppliers.length,
+                        itemBuilder: (BuildContext context, int index) {
+                          return SuppliersGridTile(
+                            supplier: supplierController.suppliers[index],
+                          );
+                        }),
+                  ),
                 ),
               ),
               if (loadingNext)
