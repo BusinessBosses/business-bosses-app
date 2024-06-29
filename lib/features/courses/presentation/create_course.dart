@@ -108,7 +108,6 @@ class _CreateCourseScreenState extends State<CreateCourseScreen> {
   List<String> selectedFileNames = <String>[];
   List<String> selectedFilePaths = <String>[];
 
-  bool _shouldPromote = false;
   bool _paidCourse = false;
   int? _courseprice;
   List<VideoLinkData> videoLinks = <VideoLinkData>[];

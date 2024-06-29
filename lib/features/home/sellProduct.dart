@@ -38,8 +38,7 @@ void sellProduct(BuildContext context) {
                             : index == 1
                                 ? Get.to(() =>
                                     const CreateServiceScreen(isUpd: false))
-                                : Get.to(() =>
-                                    const AddSupplierScreen(isUpd: false));
+                                : Get.to(() => const AddSupplierScreen());
                       },
                       minVerticalPadding: 0,
                       contentPadding: const EdgeInsets.only(left: 10),

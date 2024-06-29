@@ -6,12 +6,11 @@ import 'package:get/get.dart';
 class SupplierController extends GetxController {
   RxList<SuppliersModel> suppliers = RxList<SuppliersModel>(<SuppliersModel>[]);
   RxBool error = RxBool(false);
-  RxBool loading = RxBool(false);
+  RxBool loading = RxBool(true);
 
-  void initSuppliers() async {
+  Future<void> initSuppliers() async {
     loading(true);
-    error(false);
-    update();
+
     final ApiResponseModel response =
         await ApiService.get(path: 'suppliers/all');
     if (response.success) {
@@ -27,9 +26,9 @@ class SupplierController extends GetxController {
     update();
   }
 
-  @override
-  void onInit() {
-    initSuppliers();
-    super.onInit();
+  Future<ApiResponseModel> addSupplier(Map<String, dynamic> data) async {
+    final ApiResponseModel response =
+        await ApiService.post(path: 'suppliers', body: data);
+    return response;
   }
 }

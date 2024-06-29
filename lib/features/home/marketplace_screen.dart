@@ -52,7 +52,6 @@ class _MarketplaceScreenState extends State<MarketplaceScreen>
   final HomeController hmeController = Get.find();
   String? _selectedCategory;
   String? _selectedLocation;
-  final bool _isSearching = false;
   String? filterCode;
   String? filterLocation;
   String? filterCategory;
@@ -634,7 +633,7 @@ class _MarketplaceScreenState extends State<MarketplaceScreen>
                                                                                 ? Get.toNamed(Routes.sellscreen)
                                                                                 : index == 1
                                                                                     ? Get.to(() => const CreateServiceScreen(isUpd: false))
-                                                                                    : Get.to(() => const AddSupplierScreen(isUpd: false));
+                                                                                    : Get.to(() => const AddSupplierScreen());
                                                                           },
                                                                           minVerticalPadding:
                                                                               0,
@@ -934,8 +933,9 @@ class _MarketplaceScreenState extends State<MarketplaceScreen>
                                                         height: 10,
                                                       ),
                                                       GestureDetector(
-                                                        onTap: (){
-                                                          Get.to(SuppliersPage());
+                                                        onTap: () {
+                                                          Get.to(() =>
+                                                              const SuppliersPage());
                                                         },
                                                         child: Padding(
                                                           padding:
@@ -967,7 +967,8 @@ class _MarketplaceScreenState extends State<MarketplaceScreen>
                                                                         500,
                                                                     offset:
                                                                         const Offset(
-                                                                            0, 3),
+                                                                            0,
+                                                                            3),
                                                                   ),
                                                                 ],
                                                               ),
@@ -977,20 +978,20 @@ class _MarketplaceScreenState extends State<MarketplaceScreen>
                                                                         .spaceBetween,
                                                                 children: <Widget>[
                                                                   const Padding(
-                                                                      padding: EdgeInsets
-                                                                    .only(
-                                                                    left:
-                                                                        10.0),
-                                                                      child:
-                                                                    Text(
-                                                                    'Find Suppliers & Manufacturers',
-                                                                    style: TextStyle(
-                                                                      fontWeight:
-                                                                          FontWeight.w700),
-                                                                  ),
+                                                                    padding: EdgeInsets
+                                                                        .only(
+                                                                            left:
+                                                                                10.0),
+                                                                    child: Text(
+                                                                      'Find Suppliers & Manufacturers',
+                                                                      style: TextStyle(
+                                                                          fontWeight:
+                                                                              FontWeight.w700),
                                                                     ),
+                                                                  ),
                                                                   GestureDetector(
-                                                                    onTap: () {},
+                                                                    onTap:
+                                                                        () {},
                                                                     child:
                                                                         Padding(
                                                                       padding:
@@ -1003,11 +1004,9 @@ class _MarketplaceScreenState extends State<MarketplaceScreen>
                                                                           crossAxisAlignment:
                                                                               WrapCrossAlignment.center,
                                                                           children: <Widget>[
-                                                                            SvgPicture
-                                                                                .asset(
+                                                                            SvgPicture.asset(
                                                                               'assets/svgs/nexticon.svg',
-                                                                              color:
-                                                                                  textColor,
+                                                                              color: textColor,
                                                                             ),
                                                                           ]),
                                                                     ),

@@ -14,6 +14,7 @@ class SuppliersModel {
   bool isVerified;
   bool isApproved;
   String? url;
+  List<dynamic>? images;
   SuppliersModel({
     required this.id,
     this.category,
@@ -26,6 +27,7 @@ class SuppliersModel {
     this.isVerified = false,
     this.isApproved = false,
     required this.url,
+    this.images,
   });
 
   SuppliersModel copyWith({
@@ -40,6 +42,7 @@ class SuppliersModel {
     bool? isApproved,
     String? email,
     String? url,
+    List<dynamic>? images,
   }) {
     return SuppliersModel(
       description: description ?? this.description,
@@ -53,6 +56,7 @@ class SuppliersModel {
       isApproved: isApproved ?? this.isApproved,
       email: email ?? this.email,
       url: url ?? this.url,
+      images: images ?? this.images,
     );
   }
 
@@ -69,6 +73,7 @@ class SuppliersModel {
       'isApproved': isApproved,
       'email': email,
       'url': url,
+      'images': images,
     };
   }
 
@@ -87,6 +92,9 @@ class SuppliersModel {
       isApproved: map['isApproved'] as bool,
       email: map['email'] != null ? map['email'] as String : null,
       url: map['url'] != null ? map['url'] as String : null,
+      images: map['images'] != null
+          ? List<dynamic>.from((map['images'] as List<dynamic>))
+          : null,
     );
   }
 

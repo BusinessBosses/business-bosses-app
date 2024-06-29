@@ -34,7 +34,7 @@ class _SuppliersGridTileState extends State<SuppliersGridTile> {
     ProfileController profileController = Get.find();
     return InkWell(
       onTap: () {
-        Get.to(const ExpandedSuppliersPage());
+        Get.to(() => ExpandedSuppliersPage(supplier: widget.supplier));
       },
       borderRadius: BorderRadius.circular(radius),
       child: Ink(

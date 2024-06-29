@@ -1,38 +1,33 @@
+import 'dart:io';
+
+import 'package:business_bosses_v2/common/dialogs/snackbar.dart';
+import 'package:business_bosses_v2/common/models/api_response_model.dart';
 import 'package:business_bosses_v2/features/home/widgets/sellingpopup.dart';
-import 'package:business_bosses_v2/services/api_service.dart';
+import 'package:business_bosses_v2/features/marketplace/controllers/supplier_controller.dart';
+import 'package:business_bosses_v2/features/marketplace/models/suppliers_model.dart';
 import 'package:country_list_pick/country_list_pick.dart';
-import 'package:country_list_pick/support/code_country.dart';
 import 'package:detectable_text_field/detector/sample_regular_expressions.dart';
 import 'package:detectable_text_field/widgets/detectable_text_field.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
-import 'package:photo_manager/photo_manager.dart';
+import 'package:http/http.dart' as http;
+import 'dart:convert';
+import 'package:image_picker/image_picker.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../../../action/action.dart';
-import '../../../common/dialogs/snackbar.dart';
-import '../../../common/models/comment_model.dart';
 import '../../../common/widgets/buttons/my_outlined_button.dart';
-import '../../../common/widgets/gallery_screen.dart';
 import '../../../utils/theme/theme.dart';
 import '../../forum/widgets/field_container.dart';
-import '../../posts/widgets/preview.dart';
 import '../../profile/controller/profile_controller.dart';
-import '../controllers/create_market_controller.dart';
-import '../controllers/market_controller.dart';
-import '../models/market_model.dart';
 
 /// SELLING SCREEN MARKETPLACE
 class AddSupplierScreen extends StatefulWidget {
   /// SELLING SCREEN MARKETPLACE
-  const AddSupplierScreen({Key? key, this.market, required this.isUpd})
-      : super(key: key);
+  const AddSupplierScreen({Key? key, this.supplier}) : super(key: key);
 
-  /// String if to update;
-  final MarketModel? market;
-  final bool isUpd;
-  // AddSupplierScreen();
+  final SuppliersModel? supplier;
   @override
   // ignore: library_private_types_in_public_api
   _AddSupplierScreenState createState() => _AddSupplierScreenState();
@@ -40,21 +35,16 @@ class AddSupplierScreen extends StatefulWidget {
 
 class _AddSupplierScreenState extends State<AddSupplierScreen> {
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
-
-  // ignore: unused_field
   final ProfileController _profileController = Get.find();
-  // ignore: unused_field
-  final MarketController _marketController = Get.put(MarketController());
-  final CreateMarketController createMarketController =
-      Get.put(CreateMarketController());
-  List<bool>? _fileProcessing;
+  final SupplierController supplierController = Get.put(SupplierController());
+  List<XFile> _selectedImages = [];
 
-  List<MyAssetEntity> _myAssetsEntities = <MyAssetEntity>[];
-
-  MarketModel? _market;
+  SuppliersModel? _supplier;
 
   String? description;
-  String? price;
+  String? email;
+  String? name;
+  String? url;
   String? discount;
   String? _selectedCategory;
   String? _selectedLocation;
@@ -62,40 +52,34 @@ class _AddSupplierScreenState extends State<AddSupplierScreen> {
   String? filterLocation;
   String? filterCategory;
   bool _isProcessing = false;
-  bool? _isUpdating;
-  bool _shouldPromote = false;
   final TextEditingController descriptionController = TextEditingController();
-  final TextEditingController _priceController = TextEditingController();
+  final TextEditingController _emailController = TextEditingController();
+  final TextEditingController _nameController = TextEditingController();
+  final TextEditingController _urlController = TextEditingController();
+  final TextEditingController _phoneController = TextEditingController();
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
-    _isUpdating = widget.isUpd;
-    if (widget.isUpd) {
-      _market = widget.market;
-    }
-    descriptionController.text = _market?.description ?? '';
-    price = _market?.price ?? '';
-    _priceController.text = _market?.price ?? '';
-    _selectedCategory = _market?.category;
-    _selectedLocation = _market?.location;
-    _fileProcessing = <bool>[];
+    descriptionController.text = _supplier?.description ?? '';
+    email = _supplier?.email ?? '';
+    _emailController.text = _supplier?.email ?? '';
+    _selectedCategory = _supplier?.category;
+    _selectedLocation = _supplier?.location;
   }
 
   @override
   Widget build(BuildContext context) {
-    return GetBuilder<CreateMarketController>(
-        builder: (CreateMarketController controller) {
+    return GetBuilder<SupplierController>(
+        builder: (SupplierController controller) {
       return GestureDetector(
         onTap: () => unFocusKeyboard(context),
         child: Scaffold(
           backgroundColor: backgroundcolorinterface,
           key: _scaffoldKey,
           appBar: AppBar(
-            title: Text(widget.isUpd
-                ? 'Edit Service Listing'
-                : 'Add a Supplier Listing'),
+            title: Text(
+                widget.supplier != null ? 'Edit Supplier' : 'Add a Supplier'),
             automaticallyImplyLeading: false, // Used for removing back buttoon.
             actions: <Widget>[
               IconButton(
@@ -124,12 +108,11 @@ class _AddSupplierScreenState extends State<AddSupplierScreen> {
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 16.0),
                   child: TextFormField(
-                    controller: _priceController,
-                    onChanged: (String val) => price = val,
+                    controller: _nameController,
+                    onChanged: (String val) => name = val,
                     textInputAction: TextInputAction.next,
-                    keyboardType: TextInputType.number,
                     decoration: inputDecoration.copyWith(
-                      hintText: 'Enter Business Name',
+                      hintText: '* Enter Business Name',
                     ),
                   ),
                 ),
@@ -137,12 +120,12 @@ class _AddSupplierScreenState extends State<AddSupplierScreen> {
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 16.0),
                   child: TextFormField(
-                    controller: _priceController,
-                    onChanged: (String val) => price = val,
+                    controller: _emailController,
+                    onChanged: (String val) => email = val,
                     textInputAction: TextInputAction.next,
-                    keyboardType: TextInputType.number,
+                    keyboardType: TextInputType.emailAddress,
                     decoration: inputDecoration.copyWith(
-                      hintText: 'Enter Business Email',
+                      hintText: '* Enter Business Email',
                     ),
                   ),
                 ),
@@ -150,12 +133,12 @@ class _AddSupplierScreenState extends State<AddSupplierScreen> {
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 16.0),
                   child: TextFormField(
-                    controller: _priceController,
-                    onChanged: (String val) => price = val,
+                    controller: _phoneController,
+                    onChanged: (String val) => email = val,
                     textInputAction: TextInputAction.next,
-                    keyboardType: TextInputType.number,
+                    keyboardType: TextInputType.phone,
                     decoration: inputDecoration.copyWith(
-                      hintText: 'Enter Business Telephone',
+                      hintText: '* Enter Business Telephone',
                     ),
                   ),
                 ),
@@ -163,12 +146,11 @@ class _AddSupplierScreenState extends State<AddSupplierScreen> {
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 16.0),
                   child: TextFormField(
-                    controller: _priceController,
-                    onChanged: (String val) => price = val,
+                    controller: _urlController,
+                    onChanged: (String val) => url = val,
                     textInputAction: TextInputAction.next,
-                    keyboardType: TextInputType.number,
                     decoration: inputDecoration.copyWith(
-                      hintText: 'Business Webiste Link',
+                      hintText: '* Business Website Link',
                     ),
                   ),
                 ),
@@ -177,19 +159,16 @@ class _AddSupplierScreenState extends State<AddSupplierScreen> {
                   padding: const EdgeInsets.only(left: 16.0, right: 16),
                   child: DetectableTextField(
                     controller: descriptionController,
-
                     detectionRegExp: detectionRegExp(hashtag: false)!,
                     onDetectionTyped: (String text) {},
                     onDetectionFinished: () {},
                     keyboardType: TextInputType.multiline,
-                    // minLines: 5,
                     maxLength: 300,
                     maxLines: 5,
                     basicStyle: Theme.of(context).textTheme.bodyMedium,
                     onChanged: (String val) => description = val,
-
                     decoration: inputDecoration.copyWith(
-                      hintText: 'What do you supply or manufacture?',
+                      hintText: '* What do you supply or manufacture?',
                     ),
                   ),
                 ),
@@ -306,32 +285,25 @@ class _AddSupplierScreenState extends State<AddSupplierScreen> {
                 const SizedBox(
                   height: 12,
                 ),
-                widget.isUpd
+                widget.supplier != null
                     ? const SizedBox()
                     : Padding(
                         padding: const EdgeInsets.only(left: 16.0, right: 16),
                         child: GestureDetector(
-                          onTap: () {
-                            if (createMarketController.imageFileList.length <
-                                5) {
-                              createMarketController.onPickImage();
-                            } else {
-                              showSnackbar(
-                                  message:
-                                      'You can only upload up to 5 images.');
-                            }
-                          },
+                          onTap: _pickImages,
                           child: FieldContainer(
                             child: Row(
                               children: <Widget>[
                                 SvgPicture.asset('assets/svgs/file.svg'),
                                 const SizedBox(width: 16.0),
                                 Expanded(
-                                  child: Text('Add Attachment',
-                                      style: Theme.of(context)
-                                          .textTheme
-                                          .bodyMedium
-                                          ?.copyWith(color: hintColor)),
+                                  child: Text(
+                                    'Add Attachment',
+                                    style: Theme.of(context)
+                                        .textTheme
+                                        .bodyMedium
+                                        ?.copyWith(color: hintColor),
+                                  ),
                                 ),
                                 const SizedBox(width: 16.0),
                                 CircleAvatar(
@@ -348,10 +320,47 @@ class _AddSupplierScreenState extends State<AddSupplierScreen> {
                         ),
                       ),
                 Padding(
-                  padding: const EdgeInsets.all(12.0),
-                  child: widget.isUpd
-                      ? Container()
-                      : Preview(controller: createMarketController),
+                  padding: const EdgeInsets.only(
+                    left: 16.0,
+                    right: 16,
+                    bottom: 10,
+                  ),
+                  child: _selectedImages.isNotEmpty
+                      ? Wrap(
+                          spacing: 10.0,
+                          runSpacing: 10.0,
+                          children: _selectedImages.map((XFile image) {
+                            return Stack(
+                              children: <Widget>[
+                                ClipRRect(
+                                  borderRadius: BorderRadius.circular(8.0),
+                                  child: Image.file(
+                                    File(image.path),
+                                    width: 100,
+                                    height: 100,
+                                    fit: BoxFit.cover,
+                                  ),
+                                ),
+                                Positioned(
+                                  right: 0,
+                                  child: GestureDetector(
+                                    onTap: () {
+                                      _removeImage(
+                                          _selectedImages.indexOf(image));
+                                    },
+                                    child: const CircleAvatar(
+                                      radius: 12,
+                                      backgroundColor: Colors.red,
+                                      child: Icon(Icons.close,
+                                          size: 16, color: Colors.white),
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            );
+                          }).toList(),
+                        )
+                      : const SizedBox.shrink(),
                 ),
                 Padding(
                   padding: const EdgeInsets.only(left: 16.0, right: 16),
@@ -360,12 +369,23 @@ class _AddSupplierScreenState extends State<AddSupplierScreen> {
                       setState(() {
                         _isProcessing = true;
                       });
-                      if (descriptionController.text.isEmpty) {
-                        showSnackBar(
-                          context,
-                          message:
-                              'Please enter price and description to create a listing',
-                        );
+                      bool anError = false;
+
+                      if (descriptionController.text.isEmpty ||
+                          _emailController.text.isEmpty ||
+                          _nameController.text.isEmpty ||
+                          _urlController.text.isEmpty ||
+                          _phoneController.text.isEmpty ||
+                          _selectedCategory == null ||
+                          _selectedLocation == null) {
+                        anError = true;
+                      }
+
+                      if (anError) {
+                        showSnackbar(
+                            message: 'All fields are mandatory!',
+                            error: true,
+                            title: 'Error!');
                         setState(() {
                           _isProcessing = false;
                         });
@@ -377,7 +397,9 @@ class _AddSupplierScreenState extends State<AddSupplierScreen> {
                         _isProcessing = false;
                       });
                     },
-                    label: _isUpdating! ? 'Update' : 'Sell',
+                    label: widget.supplier != null
+                        ? 'Update Supplier'
+                        : 'Add Supplier',
                     isProcessing: _isProcessing,
                     buttonType: ButtonType.elevated,
                   ),
@@ -440,6 +462,16 @@ class _AddSupplierScreenState extends State<AddSupplierScreen> {
     });
   }
 
+  Future<void> _pickImages() async {
+    final ImagePicker picker = ImagePicker();
+    final List<XFile>? images = await picker.pickMultiImage();
+    if (images != null && images.isNotEmpty) {
+      setState(() {
+        _selectedImages.addAll(images);
+      });
+    }
+  }
+
   String? removeAfterHyphen(String? input) {
     // Find the index of the hyphen
     int hyphenIndex = input!.indexOf('-');
@@ -456,108 +488,58 @@ class _AddSupplierScreenState extends State<AddSupplierScreen> {
   }
 
   Future<void> _onChangeForum() async {
-    if (widget.isUpd == false) {
-      await createMarketController.createForum(<String, dynamic>{
-        'category': removeAfterHyphen(_selectedCategory),
-        'location': _selectedLocation,
-        'description': description,
-        'price': price,
-        'discount': discount,
-        'timestamp': DateTime.now().millisecondsSinceEpoch,
-        'isProduct': false,
-      }, _shouldPromote);
+    if (widget.supplier != null) {
     } else {
-      await _marketController.updatePost(<String, dynamic>{
-        'marketId': _market?.marketId,
+      final List<String> imageUrls = await _uploadImages(_selectedImages);
+      final ApiResponseModel response =
+          await supplierController.addSupplier(<String, dynamic>{
         'category': removeAfterHyphen(_selectedCategory),
         'location': _selectedLocation,
         'description': descriptionController.text,
-        'price': price,
-        'promote': _market?.promote,
-        'approved': _market?.approved,
-        'likes': _market?.likes,
-        'comments':
-            _market?.comments?.map((CommentModel x) => x.toMap()).toList(),
-        'coins': _market?.coins,
-        'images': _market?.images,
-        'userId': _market?.userId,
-        'user': _market?.user?.toMap(),
-        'isProduct': false,
+        'userId': _profileController.myProfile.uid,
+        'name': _nameController.text,
+        'email': _emailController.text,
+        'phone': _phoneController.text,
+        'url': _urlController.text,
+        'images': imageUrls,
       });
-      await ApiService.put(
-          path: 'markets/${_market?.marketId}',
-          body: <String, dynamic>{
-            'category': removeAfterHyphen(_selectedCategory),
-            'location': _selectedLocation,
-            'description': descriptionController.text,
-            'price': price,
-            'images': _market?.images,
-          });
-      Get.back();
+      if (response.success) {
+        Get.back();
+      } else {
+        showSnackbar(
+            message: 'Supplier not added!', title: 'Error!', error: true);
+      }
     }
   }
 
-  Future<void> _onImagePicker() async {
-    try {
-      PermissionState permissionState =
-          await PhotoManager.requestPermissionExtend();
-
-      if (permissionState.isAuth ||
-          permissionState == PermissionState.limited) {
-        var data = await Navigator.of(context).push(
-          MaterialPageRoute(
-            builder: (_) => GalleryPhotosScreen(
-              galleryType: GalleryType.images,
-              selectedMyAssetEntities: _myAssetsEntities,
-            ),
-          ),
-        );
-        if (data == null) return;
-        setState(() {
-          _myAssetsEntities = data;
-          _fileProcessing =
-              List.generate(_myAssetsEntities.length, (int index) => false);
-        });
-      } else if (permissionState == PermissionState.denied) {
-        final PermissionState ps = await PhotoManager.requestPermissionExtend();
-        if (!ps.isAuth) {
-          PhotoManager.openSetting();
-        }
-      }
-    } catch (e) {}
-  }
-
   void _removeImage(int index) {
-    List<MyAssetEntity> ae = _myAssetsEntities;
-
-    ae.removeAt(index);
     setState(() {
-      _myAssetsEntities = ae;
-      _fileProcessing?.removeAt(index);
+      _selectedImages.removeAt(index);
     });
   }
 
-  Widget _deleteImage(int index) {
-    return Positioned(
-      right: 5.0,
-      top: 5.0,
-      child: GestureDetector(
-        onTap: _isProcessing ? null : () => _removeImage(index),
-        child: Container(
-          height: 30.0,
-          width: 30.0,
-          alignment: Alignment.center,
-          decoration: BoxDecoration(
-            color: Colors.black54,
-            borderRadius: BorderRadius.circular(40.0),
-          ),
-          child: const Icon(
-            Icons.close,
-            size: 18.0,
-            color: Colors.white,
-          ),
-        ),
-      ),
-    );
+  Future<List<String>> _uploadImages(List<XFile> images) async {
+    final List<String> uploadedImageUrls = <String>[];
+    const String uploadUrl =
+        'https://businessbosses.com.ng/upload.php'; // Replace with your upload URL
+
+    for (final XFile image in images) {
+      final http.MultipartRequest request =
+          http.MultipartRequest('POST', Uri.parse(uploadUrl));
+
+      request.files.add(await http.MultipartFile.fromPath('file', image.path));
+
+      final http.StreamedResponse response = await request.send();
+
+      if (response.statusCode == 200) {
+        final String responseBody = await response.stream.bytesToString();
+        final Map<String, dynamic> responseJson = json.decode(responseBody);
+        final String imageUrl = responseJson['fileUrl'];
+        uploadedImageUrls.add(imageUrl);
+      } else {
+        throw Exception('Failed to upload image');
+      }
+    }
+    return uploadedImageUrls;
   }
 }
