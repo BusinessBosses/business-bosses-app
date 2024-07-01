@@ -33,6 +33,7 @@ class MarketController extends GetxController {
   RxBool isServiceSearch = RxBool(false);
   RxBool error = RxBool(false);
   String marketDescription = '';
+  String donationDescription = '';
   RxBool loading = RxBool(false);
   RxBool loadingMore = RxBool(false);
   RxBool isJoined = RxBool(false);
@@ -420,8 +421,13 @@ class MarketController extends GetxController {
           (dynamic entry) => entry['title'] == 'market',
           orElse: () => null,
         );
+        final Map<String, dynamic>? donationEntry = rows.firstWhere(
+          (dynamic entry) => entry['title'] == 'market',
+          orElse: () => null,
+        );
 
         marketDescription = marketEntry?['description'];
+        donationDescription = donationEntry?['description'];
       } else {
         marketDescription = '';
       }
