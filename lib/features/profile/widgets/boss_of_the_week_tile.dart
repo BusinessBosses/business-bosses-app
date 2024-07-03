@@ -365,8 +365,8 @@ class _BossOfWeekProfileTileState extends State<BossOfWeekProfileTile> {
                                       }
                                     },
                                     child: Container(
-                                      width:
-                                          MediaQuery.of(context).size.width / 3.2,
+                                      width: MediaQuery.of(context).size.width /
+                                          3.2,
                                       height: 100,
                                       margin: const EdgeInsets.only(left: 15.0),
                                       decoration: BoxDecoration(
@@ -396,7 +396,7 @@ class _BossOfWeekProfileTileState extends State<BossOfWeekProfileTile> {
                                               textAlign: TextAlign.left,
                                               style: const TextStyle(
                                                   color: Colors.white,
-                                                  fontSize: 14,
+                                                  fontSize: 13,
                                                   fontWeight: FontWeight.w700),
                                             ),
                                           ),
@@ -420,7 +420,8 @@ class _BossOfWeekProfileTileState extends State<BossOfWeekProfileTile> {
                                                               4),
                                                       child: SvgPicture.asset(
                                                         'assets/svgs/upicon.svg',
-                                                        color:  const Color(0xFF0F132D),
+                                                        color: const Color(
+                                                            0xFF0F132D),
                                                         height: 10,
                                                       ),
                                                     ),

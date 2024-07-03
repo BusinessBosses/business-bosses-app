@@ -62,12 +62,14 @@ class _MarketplaceScreenState extends State<MarketplaceScreen>
   bool showFloatingButton = false;
   bool _ismarketplaceSearching = false;
   late final TabController _marketplacesearchTabController;
+  late final TabController _marketplaceTabController;
   bool isfiltervisible = false;
 
   @override
   void initState() {
     super.initState();
     _marketplacesearchTabController = TabController(length: 3, vsync: this);
+    _marketplaceTabController = TabController(length: 3, vsync: this);
 
     _scrollController.addListener(() {
       double percentageScrolled =
@@ -113,11 +115,11 @@ class _MarketplaceScreenState extends State<MarketplaceScreen>
     int userCount = _marketController.users.length;
     String formattedUserCount = formatCount(userCount);
     _marketplacesearchTabController.addListener(_handleTabSelection);
+    _marketplaceTabController.addListener(_handleTabSelection);
 
     return Scaffold(
       backgroundColor: backgroundcolorinterface,
       appBar: AppBar(
-        backgroundColor: Colors.grey.withAlpha(0),
         automaticallyImplyLeading: false,
         title: _ismarketplaceSearching
             ? SizedBox(
@@ -148,45 +150,7 @@ class _MarketplaceScreenState extends State<MarketplaceScreen>
                   },
                 ),
               )
-            : Column(
-                children: <Widget>[
-                  GestureDetector(
-                    onTap: () {
-                      _ismarketplaceSearching = !_ismarketplaceSearching;
-                      setState(() {});
-                    },
-                    child: SizedBox(
-                      height: 42,
-                      width: double.infinity,
-                      child: TextFormField(
-                        // key: searchkey,
-                        style: const TextStyle(fontSize: 20),
-                        decoration: inputDecoration.copyWith(
-                          border: OutlineInputBorder(
-                            borderSide: BorderSide.none,
-                            borderRadius: BorderRadius.circular(10),
-                          ),
-                          fillColor: Colors.white,
-                          filled: true,
-                          enabled: false,
-                          prefixIcon: Container(
-                            padding: const EdgeInsets.symmetric(vertical: 10.0),
-                            child: SvgPicture.asset(
-                              'assets/svgs/search.svg',
-                              color: Colors.black45,
-                            ),
-                          ),
-                          hintText: 'Search Marketplace',
-                          hintStyle: const TextStyle(
-                              color: Colors.black45,
-                              fontSize: 16,
-                              fontWeight: FontWeight.w500),
-                        ),
-                      ),
-                    ),
-                  ),
-                ],
-              ),
+            : const Text('Marketplace'),
         bottom: _ismarketplaceSearching
             ? TabBar(
                 controller: _marketplacesearchTabController,
@@ -196,12 +160,19 @@ class _MarketplaceScreenState extends State<MarketplaceScreen>
                 tabs: const <Widget>[
                   Tab(text: 'Products'),
                   Tab(text: 'Services'),
-                  Tab(text: 'Users'),
+                  Tab(text: 'Suppliers'),
                 ],
               )
-            : const PreferredSize(
-                preferredSize: Size.fromHeight(0.0),
-                child: SizedBox(height: 0),
+            : TabBar(
+                controller: _marketplaceTabController,
+                labelStyle: const TextStyle(fontWeight: FontWeight.w500),
+                labelColor: Colors.black,
+                indicatorColor: primaryColorLT,
+                tabs: const <Widget>[
+                  Tab(text: 'Products'),
+                  Tab(text: 'Services'),
+                  Tab(text: 'Suppliers'),
+                ],
               ),
         actions: _ismarketplaceSearching
             ? <Widget>[
@@ -217,7 +188,20 @@ class _MarketplaceScreenState extends State<MarketplaceScreen>
                   },
                 ),
               ]
-            : null,
+            : <Widget>[
+                IconButton(
+                  icon: _ismarketplaceSearching
+                      ? const Icon(Icons.close)
+                      : SvgPicture.asset('assets/svgs/search.svg'),
+                  onPressed: () {
+                    _ismarketplaceSearching = !_ismarketplaceSearching;
+                    setState(() {});
+                    _marketController.searchedPosts.clear();
+                    _marketController.searchedServices.clear();
+                    _marketController.searchedUsers.clear();
+                  },
+                )
+              ],
       ),
       body: _marketController.isLoading
           ? const CircularProgressIndicator()
@@ -532,499 +516,7 @@ class _MarketplaceScreenState extends State<MarketplaceScreen>
                               SliverStickyHeader(
                                 sticky: false,
                                 header: Column(
-                                  children: <Widget>[
-                                    Container(
-                                      width: double.infinity,
-                                      color: backgroundcolorinterface,
-                                      child: Stack(
-                                        children: <Widget>[
-                                          Padding(
-                                            padding: const EdgeInsets.only(
-                                                left: 15, top: 25),
-                                            child: GestureDetector(
-                                              onTap: (() {
-                                                showDialog(
-                                                  context: context,
-                                                  builder:
-                                                      (BuildContext context) =>
-                                                          sellingGuide(context),
-                                                );
-                                              }),
-                                              child: Row(
-                                                children: <Widget>[
-                                                  const Text(
-                                                    'Guidelines ',
-                                                    style: TextStyle(
-                                                        fontSize: 12,
-                                                        fontWeight:
-                                                            FontWeight.w700),
-                                                  ),
-                                                  SvgPicture.asset(
-                                                    'assets/svgs/info.svg',
-                                                    height: 20,
-                                                  ),
-                                                ],
-                                              ),
-                                            ),
-                                          ),
-                                          Column(children: <Widget>[
-                                            const SizedBox(
-                                              height: 10,
-                                            ),
-                                            Align(
-                                              alignment: Alignment.centerRight,
-                                              child: Padding(
-                                                padding: const EdgeInsets.only(
-                                                  right: 15,
-                                                ),
-                                                child: ElevatedButton(
-                                                  style: ElevatedButton.styleFrom(
-                                                      minimumSize: const Size(
-                                                          150,
-                                                          45) // put the width and height you want
-                                                      ),
-                                                  onPressed: () {
-                                                    showModalBottomSheet(
-                                                        context: context,
-                                                        shape:
-                                                            const RoundedRectangleBorder(
-                                                          borderRadius:
-                                                              BorderRadius
-                                                                  .vertical(
-                                                            top:
-                                                                Radius.circular(
-                                                                    25.0),
-                                                          ),
-                                                        ),
-                                                        builder: (BuildContext
-                                                            context) {
-                                                          return SizedBox(
-                                                            height: 250,
-                                                            child: Padding(
-                                                              padding:
-                                                                  const EdgeInsets
-                                                                      .all(
-                                                                      15.0),
-                                                              child: Column(
-                                                                crossAxisAlignment:
-                                                                    CrossAxisAlignment
-                                                                        .start,
-                                                                mainAxisSize:
-                                                                    MainAxisSize
-                                                                        .min,
-                                                                children: <Widget>[
-                                                                  Expanded(
-                                                                    // Set a specific height
-                                                                    child: ListView
-                                                                        .separated(
-                                                                      itemCount:
-                                                                          3,
-                                                                      separatorBuilder:
-                                                                          (BuildContext context, int index) =>
-                                                                              const Divider(),
-                                                                      itemBuilder:
-                                                                          (BuildContext context,
-                                                                              int index) {
-                                                                        return ListTile(
-                                                                          onTap:
-                                                                              () {
-                                                                            Navigator.pop(context);
-                                                                            index == 0
-                                                                                ? Get.toNamed(Routes.sellscreen)
-                                                                                : index == 1
-                                                                                    ? Get.to(() => const CreateServiceScreen(isUpd: false))
-                                                                                    : Get.to(() => const AddSupplierScreen());
-                                                                          },
-                                                                          minVerticalPadding:
-                                                                              0,
-                                                                          contentPadding:
-                                                                              const EdgeInsets.only(
-                                                                            left:
-                                                                                10,
-                                                                          ),
-                                                                          leading:
-                                                                              SvgPicture.asset(
-                                                                            'assets/svgs/sellicon.svg',
-                                                                            height:
-                                                                                25,
-                                                                            color:
-                                                                                textColor.withOpacity(1),
-                                                                          ),
-                                                                          title:
-                                                                              Text(
-                                                                            index == 0
-                                                                                ? 'Sell your product'
-                                                                                : index == 1
-                                                                                    ? 'Sell your service'
-                                                                                    : 'Add a Supplier',
-                                                                            style:
-                                                                                const TextStyle(fontSize: 18, fontWeight: FontWeight.w700),
-                                                                          ),
-                                                                        );
-                                                                      },
-                                                                    ),
-                                                                  )
-                                                                ],
-                                                              ),
-                                                            ),
-                                                          );
-                                                        });
-                                                  },
-                                                  child: Row(
-                                                    mainAxisSize:
-                                                        MainAxisSize.min,
-                                                    children: <Widget>[
-                                                      const Text(
-                                                        'Sell',
-                                                        style: TextStyle(
-                                                            fontSize: 15,
-                                                            color: Colors.white,
-                                                            fontWeight:
-                                                                FontWeight
-                                                                    .w500),
-                                                      ),
-                                                      const SizedBox(
-                                                        width: 5,
-                                                      ),
-                                                      SvgPicture.asset(
-                                                          'assets/svgs/startatopic.svg')
-                                                    ],
-                                                  ),
-                                                ),
-                                              ),
-                                            ),
-                                            Container(
-                                              decoration: BoxDecoration(
-                                                boxShadow: <BoxShadow>[
-                                                  BoxShadow(
-                                                    color: Colors.black
-                                                        .withOpacity(0.09),
-                                                    blurRadius:
-                                                        100.0, // soften the shadow
-                                                    spreadRadius:
-                                                        5, //extend the shadow
-                                                  )
-                                                ],
-                                              ),
-                                              child: Stack(
-                                                children: <Widget>[
-                                                  Container(
-                                                    margin:
-                                                        const EdgeInsets.only(
-                                                            bottom: 10,
-                                                            top: 10,
-                                                            right: 15,
-                                                            left: 15),
-                                                    height: 150,
-                                                    width: double.infinity,
-                                                    child: ClipRRect(
-                                                      borderRadius:
-                                                          BorderRadius.circular(
-                                                              15.0),
-                                                      child: const ColoredBox(
-                                                          color: Colors.white),
-                                                    ),
-                                                  ),
-                                                  Column(
-                                                    children: <Widget>[
-                                                      Row(
-                                                        children: <Widget>[
-                                                          Container(
-                                                            margin:
-                                                                const EdgeInsets
-                                                                    .only(
-                                                                    top: 25,
-                                                                    right: 15,
-                                                                    left: 30),
-                                                            height: 86,
-                                                            width: 142,
-                                                            child: ClipRRect(
-                                                              borderRadius:
-                                                                  BorderRadius
-                                                                      .circular(
-                                                                          10.0),
-                                                              child: FittedBox(
-                                                                child:
-                                                                    CachedNetworkImage(
-                                                                  memCacheWidth:
-                                                                      256,
-                                                                  imageUrl:
-                                                                      'https://businessbosses.com.ng/learningImages/marketplace.jpg',
-                                                                  placeholder: (BuildContext
-                                                                              context,
-                                                                          String
-                                                                              photo) =>
-                                                                      const CircularProgressIndicator(),
-                                                                  errorWidget: (BuildContext context,
-                                                                          String
-                                                                              photo,
-                                                                          dynamic
-                                                                              error) =>
-                                                                      const Icon(
-                                                                          Icons
-                                                                              .error),
-                                                                ),
-                                                              ),
-                                                            ),
-                                                          ),
-                                                          Expanded(
-                                                            child: Padding(
-                                                              padding:
-                                                                  const EdgeInsets
-                                                                      .only(
-                                                                      right:
-                                                                          30),
-                                                              child: Text(
-                                                                _marketController
-                                                                    .marketDescription,
-                                                                style:
-                                                                    const TextStyle(
-                                                                  fontSize: 15,
-                                                                  fontWeight:
-                                                                      FontWeight
-                                                                          .w700,
-                                                                ),
-                                                                softWrap: true,
-                                                                maxLines: 5,
-                                                              ),
-                                                            ),
-                                                          ),
-                                                        ],
-                                                      ),
-                                                      Padding(
-                                                        padding:
-                                                            const EdgeInsets
-                                                                .only(
-                                                          left: 27,
-                                                          top: 0,
-                                                          right: 15,
-                                                        ),
-                                                        child: Row(
-                                                          children: <Widget>[
-                                                            Row(
-                                                              children: <Widget>[
-                                                                Padding(
-                                                                  padding:
-                                                                      const EdgeInsets
-                                                                          .only(
-                                                                          right:
-                                                                              2,
-                                                                          top:
-                                                                              5),
-                                                                  child:
-                                                                      SvgPicture
-                                                                          .asset(
-                                                                    'assets/svgs/members.svg',
-                                                                    height: 15,
-                                                                    color:
-                                                                        primaryColorLT,
-                                                                  ),
-                                                                ),
-                                                                GestureDetector(
-                                                                  onTap: () {
-                                                                    Get.to(() =>
-                                                                        MarketMembersScreen(
-                                                                          users:
-                                                                              _marketController.users,
-                                                                        ));
-                                                                  },
-                                                                  child:
-                                                                      Padding(
-                                                                    padding: const EdgeInsets
-                                                                        .only(
-                                                                        top:
-                                                                            5.0),
-                                                                    child:
-                                                                        RichText(
-                                                                      text:
-                                                                          TextSpan(
-                                                                        children: <InlineSpan>[
-                                                                          TextSpan(
-                                                                              text: 'Members ($formattedUserCount)',
-                                                                              style: const TextStyle(
-                                                                                fontSize: 12,
-                                                                                fontWeight: FontWeight.w600,
-                                                                                color: primaryColorLT,
-                                                                                decoration: TextDecoration.underline,
-                                                                              )),
-                                                                        ],
-                                                                      ),
-                                                                    ),
-                                                                  ),
-                                                                ),
-                                                              ],
-                                                            ),
-                                                            Row(
-                                                              children: <Widget>[
-                                                                Padding(
-                                                                  padding:
-                                                                      const EdgeInsets
-                                                                          .only(
-                                                                          left:
-                                                                              8,
-                                                                          top:
-                                                                              5,
-                                                                          right:
-                                                                              3),
-                                                                  child:
-                                                                      SvgPicture
-                                                                          .asset(
-                                                                    'assets/svgs/marketplace.svg',
-                                                                    color:
-                                                                        textColor,
-                                                                    height: 15,
-                                                                  ),
-                                                                ),
-                                                                Obx(
-                                                                  () {
-                                                                    int postCount =
-                                                                        _marketController
-                                                                            .markets
-                                                                            .length;
-                                                                    String
-                                                                        formattedpostCount =
-                                                                        formatCount(
-                                                                            postCount);
-                                                                    return Padding(
-                                                                      padding: const EdgeInsets
-                                                                          .only(
-                                                                          top:
-                                                                              5.0),
-                                                                      child:
-                                                                          RichText(
-                                                                        text:
-                                                                            TextSpan(
-                                                                          children: <InlineSpan>[
-                                                                            TextSpan(
-                                                                              text: 'Listings ($formattedpostCount)',
-                                                                              style: const TextStyle(
-                                                                                fontSize: 12,
-                                                                                color: textColor,
-                                                                                fontWeight: FontWeight.w600,
-                                                                              ),
-                                                                            ),
-                                                                          ],
-                                                                        ),
-                                                                      ),
-                                                                    );
-                                                                  },
-                                                                ),
-                                                              ],
-                                                            ),
-                                                            const Spacer(),
-                                                            Align(
-                                                                alignment: Alignment
-                                                                    .centerRight,
-                                                                child: Row(
-                                                                  crossAxisAlignment:
-                                                                      CrossAxisAlignment
-                                                                          .center,
-                                                                  mainAxisAlignment:
-                                                                      MainAxisAlignment
-                                                                          .end,
-                                                                  children: <Widget>[
-                                                                    joinedButton(),
-                                                                  ],
-                                                                ))
-                                                          ],
-                                                        ),
-                                                      ),
-                                                      const SizedBox(
-                                                        height: 10,
-                                                      ),
-                                                      GestureDetector(
-                                                        onTap: () {
-                                                          Get.to(() =>
-                                                              const SuppliersPage());
-                                                        },
-                                                        child: Padding(
-                                                          padding:
-                                                              const EdgeInsets
-                                                                  .only(
-                                                                  right: 15,
-                                                                  left: 15,
-                                                                  bottom: 10,
-                                                                  top: 10),
-                                                          child: Container(
-                                                              height: 40,
-                                                              decoration:
-                                                                  BoxDecoration(
-                                                                color: const Color(
-                                                                    0xFFFFFFFF),
-                                                                borderRadius:
-                                                                    BorderRadius
-                                                                        .circular(
-                                                                            10),
-                                                                boxShadow: <BoxShadow>[
-                                                                  BoxShadow(
-                                                                    color: Colors
-                                                                        .grey
-                                                                        .withOpacity(
-                                                                            0.3),
-                                                                    spreadRadius:
-                                                                        20,
-                                                                    blurRadius:
-                                                                        500,
-                                                                    offset:
-                                                                        const Offset(
-                                                                            0,
-                                                                            3),
-                                                                  ),
-                                                                ],
-                                                              ),
-                                                              child: Row(
-                                                                mainAxisAlignment:
-                                                                    MainAxisAlignment
-                                                                        .spaceBetween,
-                                                                children: <Widget>[
-                                                                  const Padding(
-                                                                    padding: EdgeInsets
-                                                                        .only(
-                                                                            left:
-                                                                                10.0),
-                                                                    child: Text(
-                                                                      'Find Suppliers & Manufacturers',
-                                                                      style: TextStyle(
-                                                                          fontWeight:
-                                                                              FontWeight.w700),
-                                                                    ),
-                                                                  ),
-                                                                  GestureDetector(
-                                                                    onTap:
-                                                                        () {},
-                                                                    child:
-                                                                        Padding(
-                                                                      padding:
-                                                                          const EdgeInsets
-                                                                              .only(
-                                                                        right:
-                                                                            10.0,
-                                                                      ),
-                                                                      child: Wrap(
-                                                                          crossAxisAlignment:
-                                                                              WrapCrossAlignment.center,
-                                                                          children: <Widget>[
-                                                                            SvgPicture.asset(
-                                                                              'assets/svgs/nexticon.svg',
-                                                                              color: textColor,
-                                                                            ),
-                                                                          ]),
-                                                                    ),
-                                                                  )
-                                                                ],
-                                                              )),
-                                                        ),
-                                                      ),
-                                                    ],
-                                                  )
-                                                ],
-                                              ),
-                                            ),
-                                          ]),
-                                        ],
-                                      ),
-                                    ),
-                                  ],
+                                  children: <Widget>[],
                                 ),
                               )
                             ];
@@ -1247,46 +739,20 @@ class _MarketplaceScreenState extends State<MarketplaceScreen>
                                                     },
                                                   ),
                                                 )
-                                              : DefaultTabController(
-                                                  length: 3, // Number of tabs
-                                                  child: Column(
-                                                    children: <Widget>[
-                                                      Container(
-                                                        constraints:
-                                                            const BoxConstraints
-                                                                .expand(
-                                                                height: 50),
-                                                        child: const TabBar(
-                                                          tabs: <Widget>[
-                                                            Tab(
-                                                              icon: Icon(Icons
-                                                                  .dashboard),
-                                                            ),
-                                                            Tab(
-                                                                text:
-                                                                    'Products'),
-                                                            Tab(
-                                                                text:
-                                                                    'Services'),
-                                                          ],
-                                                        ),
+                                              : Column(
+                                                  children: <Widget>[
+                                                    Expanded(
+                                                      child: TabBarView(
+                                                        controller:
+                                                            _marketplaceTabController,
+                                                        children: const <Widget>[
+                                                          ProductsPage(),
+                                                          ServicesPage(),
+                                                          SuppliersPage()
+                                                        ],
                                                       ),
-                                                      const Expanded(
-                                                        child: TabBarView(
-                                                          children: <Widget>[
-                                                            // Content of Tab 1
-                                                            MarketsPage(),
-
-                                                            // Content of Tab 2
-                                                            ProductsPage(),
-
-                                                            // Content of Tab 3
-                                                            ServicesPage()
-                                                          ],
-                                                        ),
-                                                      ),
-                                                    ],
-                                                  ),
+                                                    ),
+                                                  ],
                                                 ),
                                         );
                             }
@@ -1313,72 +779,5 @@ class _MarketplaceScreenState extends State<MarketplaceScreen>
 
   Future<void> refreshData() async {
     await loadData(); // Trigger data reload
-  }
-
-  Widget joinedButton() {
-    return GestureDetector(
-      onTap: () async {
-        final SharedPreferences prefs = await SharedPreferences.getInstance();
-        final String? userId = prefs.getString(Constants.USER_ID);
-
-        setState(() {
-          if (_marketController.isJoined.value) {
-            _marketController.users
-                .removeWhere((UserModel user) => user.uid == userId);
-          } else {
-            _marketController.users.add(_profileController.myProfile);
-          }
-          _marketController.isJoined.value = !_marketController.isJoined.value;
-        });
-        final Map<String, dynamic> marketData = <String, dynamic>{
-          'industryId': 'market_place_id',
-          'categoryId': Constants.MARKET_PLACE_CATEGORY_ID,
-          'description': '- Sell your products and services \n - Find Supplies',
-          'industry': 'Market Place',
-          'photo':
-              'https://businessbosses.com.ng/learningImages/marketplace.jpg',
-          'active': true,
-          'timestamp': DateTime.now().millisecondsSinceEpoch
-        };
-        _profileController.toggleInterests(Industry.toObject(marketData));
-        await ApiService.post(path: 'members', body: <String, dynamic>{
-          'type': 'marketplace',
-        });
-      },
-      child: Container(
-        padding: const EdgeInsets.symmetric(
-          horizontal: 12.0,
-        ),
-        alignment: Alignment.center,
-        child: SizedBox(
-          height: 38,
-          width: 75,
-          child: Obx(
-            () => !_marketController.isJoined.value
-                ? const MCustomButton(
-                    child: Text(
-                      'Join',
-                      style: TextStyle(
-                        fontSize: 13,
-                        fontWeight: FontWeight.w700,
-                        color: primaryColorLT,
-                      ),
-                    ),
-                  )
-                : const MCustomButton(
-                    buttonType: ButtonType.outlinegrey,
-                    child: Text(
-                      'Leave',
-                      style: TextStyle(
-                        fontSize: 13,
-                        fontWeight: FontWeight.w700,
-                        color: Color(0xFF777777),
-                      ),
-                    ),
-                  ),
-          ),
-        ),
-      ),
-    );
   }
 }
