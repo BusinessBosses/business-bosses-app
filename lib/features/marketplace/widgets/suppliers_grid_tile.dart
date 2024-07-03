@@ -100,7 +100,7 @@ class _SuppliersGridTileState extends State<SuppliersGridTile> {
                     textAlign: TextAlign.center,
                     style: const TextStyle(
                         fontWeight: FontWeight.w700,
-                        fontSize: 20,
+                        fontSize: 17,
                         color: textColor),
                   ),
             Text(
@@ -110,7 +110,7 @@ class _SuppliersGridTileState extends State<SuppliersGridTile> {
               textAlign: TextAlign.center,
               style: TextStyle(
                   fontWeight: FontWeight.w700,
-                  fontSize: 17,
+                  fontSize: 15,
                   color: textColor.withAlpha(200)),
             ),
             Text(
