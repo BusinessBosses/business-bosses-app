@@ -1,4 +1,5 @@
 import 'package:business_bosses_v2/features/home/widgets/sellingpopup.dart';
+import 'package:business_bosses_v2/features/home/widgets/supplierspopup.dart';
 import 'package:business_bosses_v2/features/marketplace/controllers/supplier_controller.dart';
 import 'package:business_bosses_v2/features/marketplace/presentation/add_supplier.dart';
 import 'package:business_bosses_v2/features/marketplace/presentation/sell_services.dart';
@@ -80,7 +81,7 @@ class _FilterUsersState extends State<SuppliersPage> {
                                 showDialog(
                                   context: context,
                                   builder: (BuildContext context) =>
-                                      sellingGuide(context),
+                                      suppliersGuide(context),
                                 );
                               },
                               child: Row(
