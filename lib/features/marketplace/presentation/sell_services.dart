@@ -402,6 +402,11 @@ class _CreateServiceScreenState extends State<CreateServiceScreen> {
                       setState(() {
                         _isProcessing = true;
                       });
+                      if (createMarketController.imageFileList.isEmpty) {
+                        showSnackBar(context,
+                            message: 'You must select an image to continue');
+                        return;
+                      }
                       if (descriptionController.text.isEmpty) {
                         showSnackBar(
                           context,

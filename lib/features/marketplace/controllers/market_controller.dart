@@ -118,7 +118,7 @@ class MarketController extends GetxController {
     }
     final int promotedIndex = _homeController.promotedMarkets
         .indexWhere((MarketModel element) => element.marketId == post.marketId);
-    if (postIndex != -1) {
+    if (promotedIndex != -1) {
       // Increment the view count of the post by 1
       _homeController.promotedMarkets[promotedIndex].setViews(post.views! + 1);
       update();
@@ -422,7 +422,7 @@ class MarketController extends GetxController {
           orElse: () => null,
         );
         final Map<String, dynamic>? donationEntry = rows.firstWhere(
-          (dynamic entry) => entry['title'] == 'market',
+          (dynamic entry) => entry['title'] == 'donation',
           orElse: () => null,
         );
 

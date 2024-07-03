@@ -744,6 +744,11 @@ class _CreateSellingitemScreenState extends State<CreateSellingitemScreen> {
                       setState(() {
                         _isProcessing = true;
                       });
+                      if (createMarketController.imageFileList.isEmpty) {
+                        showSnackBar(context,
+                            message: 'You must select an image to continue');
+                        return;
+                      }
                       if (descriptionController.text.isEmpty ||
                           _priceController.text.isEmpty) {
                         showSnackBar(

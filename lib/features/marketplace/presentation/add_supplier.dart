@@ -377,7 +377,8 @@ class _AddSupplierScreenState extends State<AddSupplierScreen> {
                           _urlController.text.isEmpty ||
                           _phoneController.text.isEmpty ||
                           _selectedCategory == null ||
-                          _selectedLocation == null) {
+                          _selectedLocation == null ||
+                          _selectedImages.isEmpty) {
                         anError = true;
                       }
 
@@ -464,8 +465,8 @@ class _AddSupplierScreenState extends State<AddSupplierScreen> {
 
   Future<void> _pickImages() async {
     final ImagePicker picker = ImagePicker();
-    final List<XFile>? images = await picker.pickMultiImage();
-    if (images != null && images.isNotEmpty) {
+    final List<XFile> images = await picker.pickMultiImage();
+    if (images.isNotEmpty) {
       setState(() {
         _selectedImages.addAll(images);
       });

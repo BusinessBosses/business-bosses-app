@@ -6,7 +6,6 @@ import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 
 import '../../../common/widgets/buttons/my_outlined_button.dart';
-import '../../../common/widgets/user_avatar_with_badge.dart';
 import '../../../utils/theme/theme.dart';
 
 class SuppliersGridTile extends StatefulWidget {
@@ -61,12 +60,23 @@ class _SuppliersGridTileState extends State<SuppliersGridTile> {
             const SizedBox(
               height: 10,
             ),
-            UserAvatarWithBadge(
-              user: widget.supplier.user,
-              height: 64.0,
-              width: 64.0,
-              radius: 64.0,
-              placeHolder: Icons.person,
+            ClipRRect(
+              borderRadius: BorderRadius.circular(64),
+              child: Image.network(
+                widget.supplier.images!.isNotEmpty
+                    ? widget.supplier.images![0]
+                    : '',
+                height: 64,
+                width: 64,
+                fit: BoxFit.cover,
+                errorBuilder: (BuildContext context, Object error,
+                    StackTrace? stackTrace) {
+                  return const Icon(
+                    Icons.shop_outlined,
+                    size: 64,
+                  );
+                },
+              ),
             ),
             const SizedBox(height: 8.0),
             widget.supplier.user != null &&
