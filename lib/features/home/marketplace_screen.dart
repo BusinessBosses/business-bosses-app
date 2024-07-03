@@ -1,8 +1,10 @@
 import 'package:business_bosses_v2/features/donations/presentation/filterdonationusers.dart';
+import 'package:business_bosses_v2/features/donations/presentation/filtersuppliers.dart';
 import 'package:business_bosses_v2/features/forum/models/industry.dart';
 import 'package:business_bosses_v2/features/home/widgets/bottom_bar.dart';
 import 'package:business_bosses_v2/features/home/widgets/floatingbutton.dart';
 import 'package:business_bosses_v2/features/home/widgets/sellingpopup.dart';
+import 'package:business_bosses_v2/features/marketplace/controllers/supplier_controller.dart';
 import 'package:business_bosses_v2/features/marketplace/models/market_model.dart';
 import 'package:business_bosses_v2/features/marketplace/presentation/add_supplier.dart';
 import 'package:business_bosses_v2/features/marketplace/presentation/filtermarketplaceposts.dart';
@@ -64,6 +66,8 @@ class _MarketplaceScreenState extends State<MarketplaceScreen>
   late final TabController _marketplacesearchTabController;
   late final TabController _marketplaceTabController;
   bool isfiltervisible = false;
+  bool databool = true;
+  final SupplierController supplierController = Get.put(SupplierController());
 
   @override
   void initState() {
@@ -112,14 +116,24 @@ class _MarketplaceScreenState extends State<MarketplaceScreen>
 
   @override
   Widget build(BuildContext context) {
+    setState(() {
+      _marketplaceTabController.addListener(() {
+        if (_marketplaceTabController.index == 2) {
+          setState(() {
+            databool = false;
+          });
+        }
+      });
+    });
+
     int userCount = _marketController.users.length;
     String formattedUserCount = formatCount(userCount);
     _marketplacesearchTabController.addListener(_handleTabSelection);
-    _marketplaceTabController.addListener(_handleTabSelection);
 
     return Scaffold(
       backgroundColor: backgroundcolorinterface,
       appBar: AppBar(
+        backgroundColor: Colors.white,
         automaticallyImplyLeading: false,
         title: _ismarketplaceSearching
             ? SizedBox(
@@ -133,7 +147,7 @@ class _MarketplaceScreenState extends State<MarketplaceScreen>
                   onChange: (String query) {
                     if (query.isEmpty) {
                       _marketplacesearchTabController.index == 2
-                          ? _marketController.clearUserSearch()
+                          ? supplierController.clearSupplierSearch()
                           : _marketplacesearchTabController.index == 1
                               ? _marketController.clearPostSearch()
                               : _marketController.clearServiceSearch();
@@ -141,7 +155,7 @@ class _MarketplaceScreenState extends State<MarketplaceScreen>
                     setState(() {});
                   },
                   onSubmit: (String query) {
-                    _marketController.searchUsers(query);
+                    supplierController.searchSuppliers(query);
                     _marketController.searchServices(query);
                     _marketController.searchPosts(
                       query,
@@ -163,16 +177,9 @@ class _MarketplaceScreenState extends State<MarketplaceScreen>
                   Tab(text: 'Suppliers'),
                 ],
               )
-            : TabBar(
-                controller: _marketplaceTabController,
-                labelStyle: const TextStyle(fontWeight: FontWeight.w500),
-                labelColor: Colors.black,
-                indicatorColor: primaryColorLT,
-                tabs: const <Widget>[
-                  Tab(text: 'Products'),
-                  Tab(text: 'Services'),
-                  Tab(text: 'Suppliers'),
-                ],
+            : const PreferredSize(
+                preferredSize: Size.fromHeight(0.0),
+                child: SizedBox(height: 0),
               ),
         actions: _ismarketplaceSearching
             ? <Widget>[
@@ -183,7 +190,7 @@ class _MarketplaceScreenState extends State<MarketplaceScreen>
                       _ismarketplaceSearching = !_ismarketplaceSearching;
                       _marketController.searchedPosts.clear();
                       _marketController.searchedServices.clear();
-                      _marketController.searchedUsers.clear();
+                      supplierController.suppliers.clear();
                     });
                   },
                 ),
@@ -198,7 +205,7 @@ class _MarketplaceScreenState extends State<MarketplaceScreen>
                     setState(() {});
                     _marketController.searchedPosts.clear();
                     _marketController.searchedServices.clear();
-                    _marketController.searchedUsers.clear();
+                    supplierController.suppliers.clear();
                   },
                 )
               ],
@@ -489,13 +496,11 @@ class _MarketplaceScreenState extends State<MarketplaceScreen>
                             _marketController.loadingServicesSearch.value,
                       ),
                     ),
-                    Obx(() => FilterDonationsUsers(
-                          members: _marketController.users,
-                          filterItems: _marketController.searchedUsers,
-                          isLoading: _marketController.loading.value ||
-                              _marketController.loadingSearch.value,
-                          onConnectionChange: _marketController.connectToUser,
-                          isSearch: _marketController.isUserSearch.value,
+                    Obx(() => FilterSuppliers(
+                          members: supplierController.suppliers,
+                          filterItems: supplierController.searchedSuppliers,
+                          isLoading: supplierController.loading.value ||
+                              supplierController.loadingSearch.value,
                         )),
                   ],
                 )
@@ -512,14 +517,7 @@ class _MarketplaceScreenState extends State<MarketplaceScreen>
                           controller: _scrollController,
                           headerSliverBuilder:
                               (BuildContext context, bool innerBoxIsScrolled) {
-                            return <Widget>[
-                              SliverStickyHeader(
-                                sticky: false,
-                                header: Column(
-                                  children: <Widget>[],
-                                ),
-                              )
-                            ];
+                            return <Widget>[];
                           },
                           body: Obx(() {
                             if (_marketController.loading.value) {
@@ -739,20 +737,50 @@ class _MarketplaceScreenState extends State<MarketplaceScreen>
                                                     },
                                                   ),
                                                 )
-                                              : Column(
-                                                  children: <Widget>[
-                                                    Expanded(
-                                                      child: TabBarView(
-                                                        controller:
-                                                            _marketplaceTabController,
-                                                        children: const <Widget>[
-                                                          ProductsPage(),
-                                                          ServicesPage(),
-                                                          SuppliersPage()
-                                                        ],
+                                              : DefaultTabController(
+                                                  length: 3, // Number of tabs
+                                                  child: Column(
+                                                    children: <Widget>[
+                                                      Container(
+                                                        constraints:
+                                                            const BoxConstraints
+                                                                .expand(
+                                                                height: 50),
+                                                        child: TabBar(
+                                                          controller:
+                                                              _marketplaceTabController,
+                                                          tabs: const <Widget>[
+                                                            Tab(
+                                                                text:
+                                                                    'Products'),
+                                                            Tab(
+                                                                text:
+                                                                    'Services'),
+                                                            Tab(
+                                                                text:
+                                                                    'Suppliers'),
+                                                          ],
+                                                        ),
                                                       ),
-                                                    ),
-                                                  ],
+                                                      Expanded(
+                                                        child: Column(
+                                                          children: [
+                                                            Expanded(
+                                                              child: TabBarView(
+                                                                controller:
+                                                                    _marketplaceTabController,
+                                                                children: const <Widget>[
+                                                                  ProductsPage(),
+                                                                  ServicesPage(),
+                                                                  SuppliersPage(),
+                                                                ],
+                                                              ),
+                                                            ),
+                                                          ],
+                                                        ),
+                                                      ),
+                                                    ],
+                                                  ),
                                                 ),
                                         );
                             }
@@ -779,5 +807,72 @@ class _MarketplaceScreenState extends State<MarketplaceScreen>
 
   Future<void> refreshData() async {
     await loadData(); // Trigger data reload
+  }
+
+  Widget joinedButton() {
+    return GestureDetector(
+      onTap: () async {
+        final SharedPreferences prefs = await SharedPreferences.getInstance();
+        final String? userId = prefs.getString(Constants.USER_ID);
+
+        setState(() {
+          if (_marketController.isJoined.value) {
+            _marketController.users
+                .removeWhere((UserModel user) => user.uid == userId);
+          } else {
+            _marketController.users.add(_profileController.myProfile);
+          }
+          _marketController.isJoined.value = !_marketController.isJoined.value;
+        });
+        final Map<String, dynamic> marketData = <String, dynamic>{
+          'industryId': 'market_place_id',
+          'categoryId': Constants.MARKET_PLACE_CATEGORY_ID,
+          'description': '- Sell your products and services \n - Find Supplies',
+          'industry': 'Market Place',
+          'photo':
+              'https://businessbosses.com.ng/learningImages/marketplace.jpg',
+          'active': true,
+          'timestamp': DateTime.now().millisecondsSinceEpoch
+        };
+        _profileController.toggleInterests(Industry.toObject(marketData));
+        await ApiService.post(path: 'members', body: <String, dynamic>{
+          'type': 'marketplace',
+        });
+      },
+      child: Container(
+        padding: const EdgeInsets.symmetric(
+          horizontal: 12.0,
+        ),
+        alignment: Alignment.center,
+        child: SizedBox(
+          height: 38,
+          width: 75,
+          child: Obx(
+            () => !_marketController.isJoined.value
+                ? const MCustomButton(
+                    child: Text(
+                      'Join',
+                      style: TextStyle(
+                        fontSize: 13,
+                        fontWeight: FontWeight.w700,
+                        color: primaryColorLT,
+                      ),
+                    ),
+                  )
+                : const MCustomButton(
+                    buttonType: ButtonType.outlinegrey,
+                    child: Text(
+                      'Leave',
+                      style: TextStyle(
+                        fontSize: 13,
+                        fontWeight: FontWeight.w700,
+                        color: Color(0xFF777777),
+                      ),
+                    ),
+                  ),
+          ),
+        ),
+      ),
+    );
   }
 }

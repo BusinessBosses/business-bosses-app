@@ -56,22 +56,22 @@ class _FilterUsersState extends State<ExpandedSuppliersPage> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[
-              Container(
-                decoration: BoxDecoration(
-                    color: Colors.red.withAlpha(20),
-                    borderRadius: BorderRadius.circular(8)),
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
-                child: Row(
-                  children: <Widget>[
-                    SvgPicture.asset(
-                      'assets/svgs/report.svg',
-                      // ignore: deprecated_member_use
-                      color: Colors.red,
-                      height: 26,
-                    ),
-                    const SizedBox(width: 8),
-                    if (!widget.supplier.isVerified)
+              if (!widget.supplier.isVerified)
+                Container(
+                  decoration: BoxDecoration(
+                      color: Colors.red.withAlpha(20),
+                      borderRadius: BorderRadius.circular(8)),
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
+                  child: Row(
+                    children: <Widget>[
+                      SvgPicture.asset(
+                        'assets/svgs/report.svg',
+                        // ignore: deprecated_member_use
+                        color: Colors.red,
+                        height: 26,
+                      ),
+                      const SizedBox(width: 8),
                       const Expanded(
                         child: Text(
                           'This supplier isn\'t verified by Business Bosses; we cannot guarantee a response',
@@ -80,12 +80,13 @@ class _FilterUsersState extends State<ExpandedSuppliersPage> {
                           overflow: TextOverflow.ellipsis,
                         ),
                       ),
-                  ],
+                    ],
+                  ),
                 ),
-              ),
-              const SizedBox(
-                height: 30,
-              ),
+              if (!widget.supplier.isVerified)
+                const SizedBox(
+                  height: 30,
+                ),
               Row(
                 children: <Widget>[
                   UserAvatarWithBadge(
@@ -140,9 +141,10 @@ class _FilterUsersState extends State<ExpandedSuppliersPage> {
               const SizedBox(
                 height: 30,
               ),
-              Text('Location: ${widget.supplier.location}'),
-              Text('Category: ${widget.supplier.category}'),
-              Text('Description: ${widget.supplier.description}'),
+              Text('Location - ${widget.supplier.location}'),
+              Text('Category - ${widget.supplier.category}'),
+              SizedBox(height: 20,),
+              Text('${widget.supplier.description}'),
               const SizedBox(
                 height: 10,
               ),

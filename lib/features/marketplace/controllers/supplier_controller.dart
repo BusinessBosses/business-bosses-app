@@ -5,8 +5,16 @@ import 'package:get/get.dart';
 
 class SupplierController extends GetxController {
   RxList<SuppliersModel> suppliers = RxList<SuppliersModel>(<SuppliersModel>[]);
+  List<SuppliersModel> searchedSuppliers = <SuppliersModel>[];
   RxBool error = RxBool(false);
   RxBool loading = RxBool(true);
+  RxBool loadingSearch = RxBool(false);
+  RxBool isSupplierSearch = RxBool(false);
+
+  void clearSupplierSearch() {
+    isSupplierSearch(false);
+    update();
+  }
 
   Future<void> initSuppliers() async {
     loading(true);
@@ -23,6 +31,23 @@ class SupplierController extends GetxController {
     }
     loading(false);
 
+    update();
+  }
+
+  Future<void> searchSuppliers(String query) async {
+    loadingSearch(true);
+    update();
+
+    searchedSuppliers.clear();
+
+    for (var user in suppliers) {
+      if (user.name.toLowerCase().contains(query.toLowerCase()) ||
+          user.name!.toLowerCase().contains(query.toLowerCase())) {
+        searchedSuppliers.add(user);
+        print(user);
+      }
+    }
+    loadingSearch(false);
     update();
   }
 
