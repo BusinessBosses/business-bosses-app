@@ -1,19 +1,11 @@
+import 'package:business_bosses_v2/common/widgets/safety_model.dart';
 import 'package:business_bosses_v2/features/marketplace/models/suppliers_model.dart';
 import 'package:business_bosses_v2/features/marketplace/widgets/suppliers_grid_tile.dart';
-import 'package:business_bosses_v2/features/profile/controller/profile_controller.dart';
-import 'package:business_bosses_v2/navigation/routes.dart';
+import 'package:business_bosses_v2/utils/theme/theme.dart';
 import 'package:country_list_pick/country_list_pick.dart';
-import 'package:country_list_pick/support/code_country.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:get/get.dart';
-
-import '../../../common/models/user_model.dart';
-import '../../../common/widgets/buttons/my_outlined_button.dart';
-import '../../../common/widgets/safety_model.dart';
-import '../../../common/widgets/user_avatar_with_badge.dart';
-import '../../../utils/theme/theme.dart';
 
 class FilterSuppliers extends StatefulWidget {
   final List<SuppliersModel> filterItems;
@@ -40,11 +32,24 @@ class _FilterUsersState extends State<FilterSuppliers> {
   String? _selectedCategory;
   String? _selectedLocation;
   String? filterCode;
+
   @override
-  Widget build(
-    BuildContext context,
-  ) {
-    return !widget.members.isEmpty
+  Widget build(BuildContext context) {
+    List<SuppliersModel> filteredItems = widget.filterItems;
+
+    if (_selectedCategory != null) {
+      filteredItems = filteredItems
+          .where((item) => item.category == _selectedCategory)
+          .toList();
+    }
+
+    if (_selectedLocation != null) {
+      filteredItems = filteredItems
+          .where((item) => item.location == _selectedLocation)
+          .toList();
+    }
+
+    return filteredItems.isEmpty
         ? SafetyModel(
             isLoading: widget.isLoading,
             icon: const Icon(
@@ -109,15 +114,13 @@ class _FilterUsersState extends State<FilterSuppliers> {
                                     child: value != null
                                         ? Text(
                                             value,
-                                            overflow: TextOverflow
-                                                .ellipsis, // Prevent text overflow
-                                            maxLines: 1, // Ensure single line
+                                            overflow: TextOverflow.ellipsis,
+                                            maxLines: 1,
                                           )
                                         : Text(
                                             'Select Category',
-                                            overflow: TextOverflow
-                                                .ellipsis, // Prevent text overflow
-                                            maxLines: 1, // Ensure single line
+                                            overflow: TextOverflow.ellipsis,
+                                            maxLines: 1,
                                             style: bodyText2.copyWith(
                                               color: hintColor,
                                             ),
@@ -167,10 +170,8 @@ class _FilterUsersState extends State<FilterSuppliers> {
                                                 style: bodyText2.copyWith(
                                                     color: textColor,
                                                     fontSize: 16),
-                                                overflow: TextOverflow
-                                                    .ellipsis, // Prevent text overflow
-                                                maxLines:
-                                                    1, // Ensure single line
+                                                overflow: TextOverflow.ellipsis,
+                                                maxLines: 1,
                                               ),
                                             )
                                           : Padding(
@@ -179,10 +180,8 @@ class _FilterUsersState extends State<FilterSuppliers> {
                                                       horizontal: 15),
                                               child: Text(
                                                 'Select Location',
-                                                overflow: TextOverflow
-                                                    .ellipsis, // Prevent text overflow
-                                                maxLines:
-                                                    1, // Ensure single line
+                                                overflow: TextOverflow.ellipsis,
+                                                maxLines: 1,
                                                 style: bodyText2.copyWith(
                                                   color: hintColor,
                                                 ),
@@ -221,10 +220,10 @@ class _FilterUsersState extends State<FilterSuppliers> {
                       mainAxisSpacing: 8.0,
                       controller: _controller,
                       shrinkWrap: true,
-                      itemCount: 3,
+                      itemCount: filteredItems.length,
                       itemBuilder: (BuildContext context, int index) {
                         return SuppliersGridTile(
-                          supplier: widget.filterItems[index],
+                          supplier: filteredItems[index],
                         );
                       },
                     ),

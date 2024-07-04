@@ -5,7 +5,8 @@ import 'package:get/get.dart';
 
 class SupplierController extends GetxController {
   RxList<SuppliersModel> suppliers = RxList<SuppliersModel>(<SuppliersModel>[]);
-  List<SuppliersModel> searchedSuppliers = <SuppliersModel>[];
+  RxList<SuppliersModel> searchedSuppliers =
+      RxList<SuppliersModel>(<SuppliersModel>[]);
   RxBool error = RxBool(false);
   RxBool loading = RxBool(true);
   RxBool loadingSearch = RxBool(false);
@@ -13,16 +14,19 @@ class SupplierController extends GetxController {
 
   void clearSupplierSearch() {
     isSupplierSearch(false);
+    searchedSuppliers.clear(); // Clear the search list
     update();
   }
 
   Future<void> initSuppliers() async {
     loading(true);
+    error(false);
 
     final ApiResponseModel response =
         await ApiService.get(path: 'suppliers/all');
     if (response.success) {
       final List<dynamic> psts = response.data['rows'];
+      suppliers.clear();
       for (int i = 0; i < psts.length; i++) {
         suppliers.add(SuppliersModel.fromMap(psts[i]));
       }
@@ -30,7 +34,6 @@ class SupplierController extends GetxController {
       error(true);
     }
     loading(false);
-
     update();
   }
 
@@ -39,15 +42,17 @@ class SupplierController extends GetxController {
     update();
 
     searchedSuppliers.clear();
-
+    String lowerCaseQuery = query.toLowerCase();
     for (var user in suppliers) {
-      if (user.name.toLowerCase().contains(query.toLowerCase()) ||
-          user.name!.toLowerCase().contains(query.toLowerCase())) {
+      String lowerCaseName = user.name.toLowerCase();
+      if (lowerCaseName.contains(lowerCaseQuery) ||
+          user.user!.name!.toLowerCase().contains(lowerCaseQuery) ||
+          user.user!.username.toLowerCase().contains(lowerCaseQuery)) {
         searchedSuppliers.add(user);
-        print(user);
-      }
+      } else {}
     }
     loadingSearch(false);
+    isSupplierSearch(true);
     update();
   }
 

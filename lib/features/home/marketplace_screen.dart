@@ -155,6 +155,7 @@ class _MarketplaceScreenState extends State<MarketplaceScreen>
                     setState(() {});
                   },
                   onSubmit: (String query) {
+                    supplierController.initSuppliers();
                     supplierController.searchSuppliers(query);
                     _marketController.searchServices(query);
                     _marketController.searchPosts(
