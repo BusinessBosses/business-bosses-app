@@ -1,9 +1,12 @@
 import 'package:business_bosses_v2/common/widgets/network_image_with_placeholder.dart';
 import 'package:business_bosses_v2/features/marketplace/models/suppliers_model.dart';
 import 'package:business_bosses_v2/features/posts/widgets/images_viewer_screen.dart';
+import 'package:detectable_text_field/detector/sample_regular_expressions.dart';
+import 'package:detectable_text_field/widgets/detectable_text.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 import '../../../common/models/user_model.dart';
 import '../../../common/widgets/user_avatar_with_badge.dart';
@@ -143,8 +146,40 @@ class _FilterUsersState extends State<ExpandedSuppliersPage> {
               ),
               Text('Location - ${widget.supplier.location}'),
               Text('Category - ${widget.supplier.category}'),
-              SizedBox(height: 20,),
-              Text('${widget.supplier.description}'),
+              const SizedBox(
+                height: 20,
+              ),
+              DetectableText(
+                text: widget.supplier.description,
+                detectionRegExp: detectionRegExp(hashtag: false)!,
+                detectedStyle: bodyText2.copyWith(
+                  color: Colors.blue,
+                ),
+                moreStyle: bodyText2.copyWith(
+                  color: Colors.redAccent,
+                ),
+                lessStyle: bodyText2.copyWith(
+                  color: Colors.redAccent,
+                ),
+                trimLength: 10000,
+                basicStyle: bodyText2.copyWith(color: textColor),
+                onTap: (String text) async {
+                  final Uri url = Uri.parse(text);
+                  if ((url.scheme == 'http' || url.scheme == 'https')) {
+                    if (!await launchUrl(url)) {
+                      throw Exception('Could not launch $url');
+                    }
+                  } else if (text.startsWith('wa.me')) {
+                    // Handle "wa.me" links
+                    final Uri whatsappUrl = Uri.parse('https://$text');
+                    if (await launchUrl(whatsappUrl)) {
+                      await launchUrl(whatsappUrl);
+                    } else {
+                      throw Exception('Could not launch $whatsappUrl');
+                    }
+                  }
+                },
+              ),
               const SizedBox(
                 height: 10,
               ),
