@@ -1,12 +1,8 @@
-import 'package:business_bosses_v2/features/home/widgets/sellingpopup.dart';
 import 'package:business_bosses_v2/features/home/widgets/supplierspopup.dart';
 import 'package:business_bosses_v2/features/marketplace/controllers/supplier_controller.dart';
 import 'package:business_bosses_v2/features/marketplace/presentation/add_supplier.dart';
-import 'package:business_bosses_v2/features/marketplace/presentation/sell_services.dart';
 import 'package:business_bosses_v2/features/marketplace/widgets/suppliers_grid_tile.dart';
 import 'package:business_bosses_v2/features/profile/controller/profile_controller.dart';
-import 'package:business_bosses_v2/navigation/routes.dart';
-import 'package:country_list_pick/country_list_pick.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:flutter_svg/svg.dart';
@@ -40,8 +36,6 @@ class _FilterUsersState extends State<SuppliersPage> {
   final SupplierController supplierController = Get.put(SupplierController());
   final ProfileController profileController = Get.find();
   final bool loadingNext = false;
-  String? _selectedCategory;
-  String? _selectedLocation;
   String? filterCode;
 
   @override
@@ -55,7 +49,7 @@ class _FilterUsersState extends State<SuppliersPage> {
       backgroundColor: backgroundColor,
       body: SingleChildScrollView(
         child: Column(
-          children: [
+          children: <Widget>[
             Obx(
               () => supplierController.loading.value
                   ? const Center(child: SafetyModel())
@@ -80,7 +74,7 @@ class _FilterUsersState extends State<SuppliersPage> {
                               child: Row(
                                 mainAxisAlignment:
                                     MainAxisAlignment.spaceBetween,
-                                children: [
+                                children: <Widget>[
                                   Wrap(
                                     crossAxisAlignment:
                                         WrapCrossAlignment.center,
@@ -159,7 +153,7 @@ class _FilterUsersState extends State<SuppliersPage> {
                             mainAxisSpacing: 8.0,
                             itemCount: supplierController.suppliers.length,
                             shrinkWrap: true,
-                            physics: NeverScrollableScrollPhysics(),
+                            physics: const NeverScrollableScrollPhysics(),
                             itemBuilder: (BuildContext context, int index) {
                               return SuppliersGridTile(
                                 supplier: supplierController.suppliers[index],
