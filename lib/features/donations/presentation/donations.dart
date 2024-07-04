@@ -1,5 +1,6 @@
 import 'package:business_bosses_v2/common/widgets/safety_model.dart';
 import 'package:business_bosses_v2/features/donations/controller/donations_controller.dart';
+import 'package:business_bosses_v2/features/marketplace/controllers/market_controller.dart';
 import 'package:business_bosses_v2/features/donations/presentation/donation_members.dart';
 import 'package:business_bosses_v2/features/donations/presentation/donationpopup.dart';
 import 'package:business_bosses_v2/features/donations/presentation/donations_history.dart';
@@ -24,6 +25,7 @@ class DonationsPage extends StatefulWidget {
 class _DonationsPageState extends State<DonationsPage> {
   final DonationsController donationsController =
       Get.put(DonationsController());
+  final MarketController marketController = Get.find();
   final ProfileController _myProfile = Get.find();
   final ScrollController scrollController = ScrollController();
 
@@ -205,14 +207,14 @@ class _DonationsPageState extends State<DonationsPage> {
                                               ),
                                             ),
                                           ),
-                                          const Expanded(
+                                          Expanded(
                                               child: Padding(
-                                            padding: EdgeInsets.only(
+                                            padding: const EdgeInsets.only(
                                                 top: 25, right: 30),
                                             child: Text(
-                                              // industry.description ??
-                                              'Donate to Support a Project',
-                                              style: TextStyle(
+                                              marketController
+                                                  .donationDescription,
+                                              style: const TextStyle(
                                                   fontSize: 15,
                                                   fontWeight: FontWeight.w700),
                                               softWrap: true,

@@ -33,6 +33,7 @@ class MarketController extends GetxController {
   RxBool isServiceSearch = RxBool(false);
   RxBool error = RxBool(false);
   String marketDescription = '';
+  String donationDescription = '';
   RxBool loading = RxBool(false);
   RxBool loadingMore = RxBool(false);
   RxBool isJoined = RxBool(false);
@@ -117,7 +118,7 @@ class MarketController extends GetxController {
     }
     final int promotedIndex = _homeController.promotedMarkets
         .indexWhere((MarketModel element) => element.marketId == post.marketId);
-    if (postIndex != -1) {
+    if (promotedIndex != -1) {
       // Increment the view count of the post by 1
       _homeController.promotedMarkets[promotedIndex].setViews(post.views! + 1);
       update();
@@ -420,8 +421,13 @@ class MarketController extends GetxController {
           (dynamic entry) => entry['title'] == 'market',
           orElse: () => null,
         );
+        final Map<String, dynamic>? donationEntry = rows.firstWhere(
+          (dynamic entry) => entry['title'] == 'donation',
+          orElse: () => null,
+        );
 
         marketDescription = marketEntry?['description'];
+        donationDescription = donationEntry?['description'];
       } else {
         marketDescription = '';
       }

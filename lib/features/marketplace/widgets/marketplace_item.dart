@@ -713,7 +713,7 @@ class _MarketTileState extends State<MarketTile> {
                                                       padding:
                                                           EdgeInsets.all(5.0),
                                                       child: Text(
-                                                        'Message Seller',
+                                                        'Place Order',
                                                         style: TextStyle(
                                                           color: primaryColorLT,
                                                           fontWeight:

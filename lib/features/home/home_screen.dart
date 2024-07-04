@@ -15,6 +15,7 @@ import 'package:business_bosses_v2/features/marketplace/widgets/marketplace_item
 import 'package:business_bosses_v2/features/marketplace/widgets/service_item.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_sticky_header/flutter_sticky_header.dart';
 import 'package:get/get.dart';
 import 'package:lottie/lottie.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -358,326 +359,415 @@ class _HomeScreenState extends State<HomeScreen>
 
                                           return true;
                                         },
-                                        child: TabBarView(
-                                          controller: _tabController,
-                                          children: <Widget>[
-                                            ListView.builder(
-                                              controller: _scrollController,
-                                              shrinkWrap: true,
-                                              itemCount:
-                                                  controller.mixedPosts.length,
-                                              itemBuilder:
-                                                  (BuildContext context,
-                                                      int index) {
-                                                if (index == 0) {
-                                                  return Column(
-                                                    children: <Widget>[
-                                                      LayoutBuilder(
-                                                        builder: (BuildContext
-                                                                context,
+                                        child: NestedScrollView(
+                                          controller: _scrollController,
+                                          headerSliverBuilder:
+                                              (BuildContext context,
+                                                  bool innerBoxIsScrolled) {
+                                            return <Widget>[
+                                              SliverStickyHeader(
+                                                sticky: false,
+                                                header: Container(
+                                                  color:
+                                                      backgroundcolorinterface,
+                                                  child: LayoutBuilder(
+                                                    builder:
+                                                        (BuildContext context,
                                                             BoxConstraints
                                                                 constraints) {
-                                                          return BossOfWeekProfileTile(
-                                                            onTileBuilt: () {
-                                                              _checkScrollPosition();
-                                                            },
+                                                      return BossOfWeekProfileTile(
+                                                        onTileBuilt: () {
+                                                          _checkScrollPosition();
+                                                        },
+                                                      );
+                                                    },
+                                                  ),
+                                                ),
+                                              ),
+                                            ];
+                                          },
+                                          body: Column(
+                                            children: [
+                                              Visibility(
+                                                visible: isTabVisible,
+                                                child: Column(
+                                                  children: [
+                                                    Material(
+                                                      elevation: 0.1,
+                                                      color: Colors.white,
+                                                      child: DefaultTabController(
+                                                        length: 2,
+                                                        child: TabBar(
+                                                          controller:
+                                                              _tabController,
+                                                          tabs: <Widget>[
+                                                            Tab(
+                                                              child: FittedBox(
+                                                                child: Text(
+                                                                  'For you',
+                                                                  style: Theme.of(
+                                                                          context)
+                                                                      .textTheme
+                                                                      .bodyLarge,
+                                                                ),
+                                                              ),
+                                                            ),
+                                                            Tab(
+                                                              child: FittedBox(
+                                                                child: Text(
+                                                                  'Following',
+                                                                  style: Theme.of(
+                                                                          context)
+                                                                      .textTheme
+                                                                      .bodyLarge,
+                                                                ),
+                                                              ),
+                                                            ),
+                                                          ],
+                                                        ),
+                                                      ),
+                                                    ),
+                                                    Container(
+                                                      height: 1,
+                                                      color: backgroundColor,
+                                                    )
+                                                  ],
+                                                ),
+                                              ),
+                                              Expanded(
+                                                child: TabBarView(
+                                                    controller: _tabController,
+                                                    children: [
+                                                      ListView.builder(
+                                                        shrinkWrap: true,
+                                                        itemCount: controller
+                                                            .mixedPosts.length,
+                                                        itemBuilder:
+                                                            (BuildContext
+                                                                    context,
+                                                                int index) {
+                                                          if (index == 0) {
+                                                            return Column(
+                                                              children: <Widget>[
+                                                                if (liveEventController
+                                                                    .ongoing
+                                                                    .isNotEmpty)
+                                                                  Container(
+                                                                    decoration:
+                                                                        const BoxDecoration(
+                                                                      color: Color.fromARGB(
+                                                                          255,
+                                                                          26,
+                                                                          26,
+                                                                          26),
+                                                                    ),
+                                                                    margin: const EdgeInsets
+                                                                        .only(
+                                                                        bottom:
+                                                                            6),
+                                                                    child: Row(
+                                                                      crossAxisAlignment:
+                                                                          CrossAxisAlignment
+                                                                              .center, // Adjust alignment as needed
+                                                                      children: <Widget>[
+                                                                        Padding(
+                                                                          padding: const EdgeInsets
+                                                                              .all(
+                                                                              15.0),
+                                                                          child:
+                                                                              Lottie.asset(
+                                                                            'assets/anim/liveevent.json',
+                                                                            height:
+                                                                                25,
+                                                                          ),
+                                                                        ),
+                                                                        const Expanded(
+                                                                          child:
+                                                                              TextScroll(
+                                                                            '     Live Events - Create or Start listening to live events from bosses.           ',
+                                                                            mode:
+                                                                                TextScrollMode.bouncing,
+                                                                            style:
+                                                                                TextStyle(color: Colors.white, fontSize: 15),
+                                                                            velocity:
+                                                                                Velocity(
+                                                                              pixelsPerSecond: Offset(30, 0),
+                                                                            ),
+                                                                          ),
+                                                                        ),
+                                                                        Padding(
+                                                                          padding: const EdgeInsets
+                                                                              .only(
+                                                                              right: 15.0),
+                                                                          child:
+                                                                              ElevatedButton(
+                                                                            style:
+                                                                                ButtonStyle(
+                                                                              backgroundColor: MaterialStateProperty.all<Color>(Colors.grey.shade300),
+                                                                            ),
+                                                                            onPressed: () =>
+                                                                                Get.to(() => const LiveEvent()),
+                                                                            child:
+                                                                                const Text(
+                                                                              'Live Events',
+                                                                              style: TextStyle(
+                                                                                fontWeight: FontWeight.bold,
+                                                                                color: Colors.black,
+                                                                              ),
+                                                                            ),
+                                                                          ),
+                                                                        ),
+                                                                      ],
+                                                                    ),
+                                                                  )
+                                                              ],
+                                                            );
+                                                          }
+
+                                                          final dynamic
+                                                              currentPost =
+                                                              controller
+                                                                      .mixedPosts[
+                                                                  index];
+                                                          if (currentPost[
+                                                                  'type'] ==
+                                                              'post') {
+                                                            final PostModel
+                                                                post =
+                                                                controller
+                                                                        .posts[
+                                                                    currentPost[
+                                                                        'index']];
+
+                                                            // Handle regular non-promoted PostModel
+                                                            final PostModel
+                                                                nonPromotedPostModel =
+                                                                post;
+                                                            final bool
+                                                                hasIncrementedView =
+                                                                controller
+                                                                    .itemsWithIncrementedViews
+                                                                    .contains(
+                                                                        nonPromotedPostModel
+                                                                            .postId);
+                                                            return VisibilityDetector(
+                                                              key: Key(index
+                                                                  .toString()),
+                                                              onVisibilityChanged:
+                                                                  (VisibilityInfo
+                                                                      info) {
+                                                                if (info.visibleFraction ==
+                                                                        1.0 &&
+                                                                    !hasIncrementedView) {
+                                                                  controller
+                                                                      .updateViews(
+                                                                          nonPromotedPostModel);
+                                                                  setState(() {
+                                                                    controller
+                                                                        .itemsWithIncrementedViews
+                                                                        .add(nonPromotedPostModel
+                                                                            .postId);
+                                                                  });
+                                                                }
+                                                              },
+                                                              child: PostTile(
+                                                                controller:
+                                                                    controller,
+                                                                post:
+                                                                    nonPromotedPostModel,
+                                                                onPageChange:
+                                                                    (int page) {
+                                                                  if (widget
+                                                                          .onPageChange !=
+                                                                      null) {
+                                                                    widget.onPageChange!(
+                                                                        page);
+                                                                  }
+                                                                },
+                                                              ),
+                                                            );
+                                                          } else if (currentPost[
+                                                                  'type'] ==
+                                                              'promotedPost') {
+                                                            final PostModel
+                                                                post =
+                                                                controller
+                                                                        .promotedPosts[
+                                                                    currentPost[
+                                                                        'index']];
+
+                                                            // Handle regular non-promoted PostModel
+                                                            final PostModel
+                                                                promotedPostModel =
+                                                                post;
+                                                            final bool
+                                                                hasIncrementedView =
+                                                                controller
+                                                                    .itemsWithIncrementedViews
+                                                                    .contains(
+                                                                        promotedPostModel
+                                                                            .postId);
+                                                            return VisibilityDetector(
+                                                              key: Key(index
+                                                                  .toString()),
+                                                              onVisibilityChanged:
+                                                                  (VisibilityInfo
+                                                                      info) {
+                                                                if (info.visibleFraction ==
+                                                                        1.0 &&
+                                                                    !hasIncrementedView) {
+                                                                  controller
+                                                                      .updateViews(
+                                                                          promotedPostModel);
+                                                                  setState(() {
+                                                                    controller
+                                                                        .itemsWithIncrementedViews
+                                                                        .add(promotedPostModel
+                                                                            .postId);
+                                                                  });
+                                                                }
+                                                              },
+                                                              child: PostTile(
+                                                                controller:
+                                                                    controller,
+                                                                post:
+                                                                    promotedPostModel,
+                                                                onPageChange:
+                                                                    (int page) {
+                                                                  if (widget
+                                                                          .onPageChange !=
+                                                                      null) {
+                                                                    widget.onPageChange!(
+                                                                        page);
+                                                                  }
+                                                                },
+                                                              ),
+                                                            );
+                                                          } else if (currentPost[
+                                                                  'type'] ==
+                                                              'market') {
+                                                            final MarketModel
+                                                                post =
+                                                                controller
+                                                                        .promotedMarkets[
+                                                                    currentPost[
+                                                                        'index']];
+
+                                                            // Handle regular non-promoted PostModel
+                                                            final MarketModel
+                                                                marketModel =
+                                                                post;
+                                                            final bool
+                                                                hasIncrementedView =
+                                                                controller
+                                                                    .itemsWithIncrementedViews
+                                                                    .contains(
+                                                                        marketModel
+                                                                            .marketId);
+                                                            return VisibilityDetector(
+                                                              key: Key(index
+                                                                  .toString()),
+                                                              onVisibilityChanged:
+                                                                  (VisibilityInfo
+                                                                      info) {
+                                                                if (info.visibleFraction ==
+                                                                        1.0 &&
+                                                                    !hasIncrementedView) {
+                                                                  marketController
+                                                                      .updatemarketViews(
+                                                                          marketModel);
+                                                                  setState(() {
+                                                                    controller
+                                                                        .itemsWithIncrementedViews
+                                                                        .add(marketModel
+                                                                            .marketId);
+                                                                  });
+                                                                }
+                                                              },
+                                                              child: marketModel
+                                                                      .isProduct
+                                                                  ? MarketTile(
+                                                                      controller:
+                                                                          controller,
+                                                                      post:
+                                                                          marketModel,
+                                                                    )
+                                                                  : ServiceTile(
+                                                                      controller:
+                                                                          controller,
+                                                                      post:
+                                                                          marketModel,
+                                                                    ),
+                                                            );
+                                                          } else if (currentPost[
+                                                                  'type'] ==
+                                                              'course') {
+                                                            final CourseModel
+                                                                post =
+                                                                controller
+                                                                        .promotedCourses[
+                                                                    currentPost[
+                                                                        'index']];
+
+                                                            // Handle regular non-promoted PostModel
+                                                            final CourseModel
+                                                                courseModel =
+                                                                post;
+                                                            return Column(
+                                                              mainAxisAlignment:
+                                                                  MainAxisAlignment
+                                                                      .start,
+                                                              crossAxisAlignment:
+                                                                  CrossAxisAlignment
+                                                                      .start,
+                                                              children: <Widget>[
+                                                                const Padding(
+                                                                  padding: EdgeInsets
+                                                                      .symmetric(
+                                                                          horizontal:
+                                                                              15,
+                                                                          vertical:
+                                                                              5),
+                                                                  child:
+                                                                      TextWidget(
+                                                                    text:
+                                                                        'Sponsored',
+                                                                    fontWeight:
+                                                                        FontWeight
+                                                                            .w700,
+                                                                    size: 10,
+                                                                  ),
+                                                                ),
+                                                                CourseItem(
+                                                                    course:
+                                                                        courseModel),
+                                                              ],
+                                                            );
+                                                          } else {
+                                                            return const SizedBox();
+                                                          }
+                                                        },
+                                                      ),
+                                                      ListView.builder(
+                                                        shrinkWrap: true,
+                                                        itemCount: controller
+                                                            .forums.length,
+                                                        itemBuilder:
+                                                            (BuildContext
+                                                                    context,
+                                                                int index) {
+                                                          return ForumItem(
+                                                            forum: controller
+                                                                .forums[index],
+                                                            controller:
+                                                                homeController,
                                                           );
                                                         },
                                                       ),
-                                                      if (liveEventController
-                                                          .ongoing.isNotEmpty)
-                                                        Container(
-                                                          decoration:
-                                                              const BoxDecoration(
-                                                            color:
-                                                                Color.fromARGB(
-                                                                    255,
-                                                                    26,
-                                                                    26,
-                                                                    26),
-                                                          ),
-                                                          margin:
-                                                              const EdgeInsets
-                                                                  .only(
-                                                                  bottom: 6),
-                                                          child: Row(
-                                                            crossAxisAlignment:
-                                                                CrossAxisAlignment
-                                                                    .center, // Adjust alignment as needed
-                                                            children: <Widget>[
-                                                              Padding(
-                                                                padding:
-                                                                    const EdgeInsets
-                                                                        .all(
-                                                                        15.0),
-                                                                child: Lottie
-                                                                    .asset(
-                                                                  'assets/anim/liveevent.json',
-                                                                  height: 25,
-                                                                ),
-                                                              ),
-                                                              const Expanded(
-                                                                child:
-                                                                    TextScroll(
-                                                                  '     Live Events - Create or Start listening to live events from bosses.           ',
-                                                                  mode: TextScrollMode
-                                                                      .bouncing,
-                                                                  style: TextStyle(
-                                                                      color: Colors
-                                                                          .white,
-                                                                      fontSize:
-                                                                          15),
-                                                                  velocity:
-                                                                      Velocity(
-                                                                    pixelsPerSecond:
-                                                                        Offset(
-                                                                            30,
-                                                                            0),
-                                                                  ),
-                                                                ),
-                                                              ),
-                                                              Padding(
-                                                                padding:
-                                                                    const EdgeInsets
-                                                                        .only(
-                                                                        right:
-                                                                            15.0),
-                                                                child:
-                                                                    ElevatedButton(
-                                                                  style:
-                                                                      ButtonStyle(
-                                                                    backgroundColor: MaterialStateProperty.all<
-                                                                            Color>(
-                                                                        Colors
-                                                                            .grey
-                                                                            .shade300),
-                                                                  ),
-                                                                  onPressed: () =>
-                                                                      Get.to(() =>
-                                                                          const LiveEvent()),
-                                                                  child:
-                                                                      const Text(
-                                                                    'Live Events',
-                                                                    style:
-                                                                        TextStyle(
-                                                                      fontWeight:
-                                                                          FontWeight
-                                                                              .bold,
-                                                                      color: Colors
-                                                                          .black,
-                                                                    ),
-                                                                  ),
-                                                                ),
-                                                              ),
-                                                            ],
-                                                          ),
-                                                        )
-                                                    ],
-                                                  );
-                                                }
-
-                                                final dynamic currentPost =
-                                                    controller
-                                                        .mixedPosts[index];
-                                                if (currentPost['type'] ==
-                                                    'post') {
-                                                  final PostModel post =
-                                                      controller.posts[
-                                                          currentPost['index']];
-
-                                                  // Handle regular non-promoted PostModel
-                                                  final PostModel
-                                                      nonPromotedPostModel =
-                                                      post;
-                                                  final bool
-                                                      hasIncrementedView =
-                                                      controller
-                                                          .itemsWithIncrementedViews
-                                                          .contains(
-                                                              nonPromotedPostModel
-                                                                  .postId);
-                                                  return VisibilityDetector(
-                                                    key: Key(index.toString()),
-                                                    onVisibilityChanged:
-                                                        (VisibilityInfo info) {
-                                                      if (info.visibleFraction ==
-                                                              1.0 &&
-                                                          !hasIncrementedView) {
-                                                        controller.updateViews(
-                                                            nonPromotedPostModel);
-                                                        setState(() {
-                                                          controller
-                                                              .itemsWithIncrementedViews
-                                                              .add(
-                                                                  nonPromotedPostModel
-                                                                      .postId);
-                                                        });
-                                                      }
-                                                    },
-                                                    child: PostTile(
-                                                      controller: controller,
-                                                      post:
-                                                          nonPromotedPostModel,
-                                                      onPageChange: (int page) {
-                                                        if (widget
-                                                                .onPageChange !=
-                                                            null) {
-                                                          widget.onPageChange!(
-                                                              page);
-                                                        }
-                                                      },
-                                                    ),
-                                                  );
-                                                } else if (currentPost[
-                                                        'type'] ==
-                                                    'promotedPost') {
-                                                  final PostModel post =
-                                                      controller.promotedPosts[
-                                                          currentPost['index']];
-
-                                                  // Handle regular non-promoted PostModel
-                                                  final PostModel
-                                                      promotedPostModel = post;
-                                                  final bool
-                                                      hasIncrementedView =
-                                                      controller
-                                                          .itemsWithIncrementedViews
-                                                          .contains(
-                                                              promotedPostModel
-                                                                  .postId);
-                                                  return VisibilityDetector(
-                                                    key: Key(index.toString()),
-                                                    onVisibilityChanged:
-                                                        (VisibilityInfo info) {
-                                                      if (info.visibleFraction ==
-                                                              1.0 &&
-                                                          !hasIncrementedView) {
-                                                        controller.updateViews(
-                                                            promotedPostModel);
-                                                        setState(() {
-                                                          controller
-                                                              .itemsWithIncrementedViews
-                                                              .add(
-                                                                  promotedPostModel
-                                                                      .postId);
-                                                        });
-                                                      }
-                                                    },
-                                                    child: PostTile(
-                                                      controller: controller,
-                                                      post: promotedPostModel,
-                                                      onPageChange: (int page) {
-                                                        if (widget
-                                                                .onPageChange !=
-                                                            null) {
-                                                          widget.onPageChange!(
-                                                              page);
-                                                        }
-                                                      },
-                                                    ),
-                                                  );
-                                                } else if (currentPost[
-                                                        'type'] ==
-                                                    'market') {
-                                                  final MarketModel post =
-                                                      controller
-                                                              .promotedMarkets[
-                                                          currentPost['index']];
-
-                                                  // Handle regular non-promoted PostModel
-                                                  final MarketModel
-                                                      marketModel = post;
-                                                  final bool
-                                                      hasIncrementedView =
-                                                      controller
-                                                          .itemsWithIncrementedViews
-                                                          .contains(marketModel
-                                                              .marketId);
-                                                  return VisibilityDetector(
-                                                    key: Key(index.toString()),
-                                                    onVisibilityChanged:
-                                                        (VisibilityInfo info) {
-                                                      if (info.visibleFraction ==
-                                                              1.0 &&
-                                                          !hasIncrementedView) {
-                                                        marketController
-                                                            .updatemarketViews(
-                                                                marketModel);
-                                                        setState(() {
-                                                          controller
-                                                              .itemsWithIncrementedViews
-                                                              .add(marketModel
-                                                                  .marketId);
-                                                        });
-                                                      }
-                                                    },
-                                                    child: marketModel.isProduct
-                                                        ? MarketTile(
-                                                            controller:
-                                                                controller,
-                                                            post: marketModel,
-                                                          )
-                                                        : ServiceTile(
-                                                            controller:
-                                                                controller,
-                                                            post: marketModel,
-                                                          ),
-                                                  );
-                                                } else if (currentPost[
-                                                        'type'] ==
-                                                    'course') {
-                                                  final CourseModel post =
-                                                      controller
-                                                              .promotedCourses[
-                                                          currentPost['index']];
-
-                                                  // Handle regular non-promoted PostModel
-                                                  final CourseModel
-                                                      courseModel = post;
-                                                  return Column(
-                                                    mainAxisAlignment:
-                                                        MainAxisAlignment.start,
-                                                    crossAxisAlignment:
-                                                        CrossAxisAlignment
-                                                            .start,
-                                                    children: <Widget>[
-                                                      const Padding(
-                                                        padding: EdgeInsets
-                                                            .symmetric(
-                                                                horizontal: 15,
-                                                                vertical: 5),
-                                                        child: TextWidget(
-                                                          text: 'Sponsored',
-                                                          fontWeight:
-                                                              FontWeight.w700,
-                                                          size: 10,
-                                                        ),
-                                                      ),
-                                                      CourseItem(
-                                                          course: courseModel),
-                                                    ],
-                                                  );
-                                                } else {
-                                                  return const SizedBox();
-                                                }
-                                              },
-                                            ),
-                                            ListView.builder(
-                                              controller: _scrollController,
-                                              shrinkWrap: true,
-                                              itemCount:
-                                                  controller.forums.length,
-                                              itemBuilder:
-                                                  (BuildContext context,
-                                                      int index) {
-                                                return ForumItem(
-                                                  forum:
-                                                      controller.forums[index],
-                                                  controller: homeController,
-                                                );
-                                              },
-                                            ),
-                                          ],
+                                                    ]),
+                                              ),
+                                            ],
+                                          ),
                                         ),
                                       ),
                                     ),
