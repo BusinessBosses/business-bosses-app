@@ -46,14 +46,7 @@ class _FilterUsersState extends State<SuppliersPage> {
 
   @override
   void initState() {
-    supplierController.initSuppliers();
     super.initState();
-  }
-
-  @override
-  void dispose() {
-    Get.delete<SupplierController>();
-    super.dispose();
   }
 
   @override
@@ -119,7 +112,8 @@ class _FilterUsersState extends State<SuppliersPage> {
                                           ),
                                         ),
                                         onPressed: () {
-                                          Get.to(() => const AddSupplierScreen());
+                                          Get.to(
+                                              () => const AddSupplierScreen());
                                         },
                                         child: Row(
                                           mainAxisSize: MainAxisSize.min,
