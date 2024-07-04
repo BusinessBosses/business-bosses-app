@@ -1,3 +1,4 @@
+import 'package:business_bosses_v2/features/marketplace/presentation/add_supplier.dart';
 import 'package:business_bosses_v2/features/marketplace/presentation/sell_services.dart';
 import 'package:business_bosses_v2/navigation/routes.dart';
 import 'package:business_bosses_v2/utils/theme/theme.dart';
@@ -15,7 +16,7 @@ void sellProduct(BuildContext context) {
     ),
     builder: (BuildContext context) {
       return SizedBox(
-        height: 200,
+        height: 250,
         child: Padding(
           padding: const EdgeInsets.all(15.0),
           child: Column(
@@ -25,7 +26,7 @@ void sellProduct(BuildContext context) {
               Expanded(
                 // Set a specific height
                 child: ListView.separated(
-                  itemCount: 2,
+                  itemCount: 3,
                   separatorBuilder: (BuildContext context, int index) =>
                       const Divider(),
                   itemBuilder: (BuildContext context, int index) {
@@ -34,24 +35,24 @@ void sellProduct(BuildContext context) {
                         Navigator.pop(context);
                         index == 0
                             ? Get.toNamed(Routes.sellscreen)
-                            : Get.to(
-                                () => const CreateServiceScreen(isUpd: false));
+                            : index == 1
+                                ? Get.to(() =>
+                                    const CreateServiceScreen(isUpd: false))
+                                : Get.to(() => const AddSupplierScreen());
                       },
                       minVerticalPadding: 0,
                       contentPadding: const EdgeInsets.only(left: 10),
                       leading: SvgPicture.asset(
-                        index == 0
-                            ? 'assets/svgs/sellicon.svg'
-                            : 'assets/svgs/sellicon.svg',
-                        height: index == 0
-                            ? 25
-                            : index == 1
-                                ? 30
-                                : 22,
+                        'assets/svgs/sellicon.svg',
+                        height: 25,
                         color: textColor.withOpacity(1),
                       ),
                       title: Text(
-                        index == 0 ? 'Sell your product' : 'Sell your service',
+                        index == 0
+                            ? 'Sell your product'
+                            : index == 1
+                                ? 'Sell your service'
+                                : 'Add a supplier',
                         style: const TextStyle(
                           fontSize: 18,
                           fontWeight: FontWeight.w700,

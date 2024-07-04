@@ -83,7 +83,7 @@ class CallRoom extends StatelessWidget {
                         },
                         child: RichText(
                           text: TextSpan(
-                            children: [
+                            children: <InlineSpan>[
                               TextSpan(
                                 text: '${message.user.name}: ',
                                 style: const TextStyle(
@@ -105,11 +105,11 @@ class CallRoom extends StatelessWidget {
                     );
                   },
                 )
-                ..hostSeatIndexes = [0]
-                ..topMenuBarConfig.buttons = [
+                ..hostSeatIndexes = <int>[0]
+                ..topMenuBarConfig.buttons = <ZegoLiveAudioRoomMenuBarButtonName>[
                   ZegoMenuBarButtonName.minimizingButton
                 ]
-                ..layoutConfig.rowConfigs = [
+                ..layoutConfig.rowConfigs = <ZegoLiveAudioRoomLayoutRowConfig>[
                   ZegoLiveAudioRoomLayoutRowConfig(
                       count: 1,
                       alignment: ZegoLiveAudioRoomLayoutAlignment.center),

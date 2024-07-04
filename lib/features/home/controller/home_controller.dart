@@ -6,6 +6,7 @@ import 'package:business_bosses_v2/common/models/comment_model.dart';
 import 'package:business_bosses_v2/common/models/user_model.dart';
 import 'package:business_bosses_v2/common/widgets/text_widget.dart';
 import 'package:business_bosses_v2/features/chat/controllers/chat_controller.dart';
+import 'package:business_bosses_v2/features/courses/models/course_model.dart';
 import 'package:business_bosses_v2/features/forum/models/forum_model.dart';
 import 'package:business_bosses_v2/features/forum/models/industry.dart';
 import 'package:business_bosses_v2/features/home/repository/home_repository.dart';
@@ -40,20 +41,21 @@ class HomeController extends GetxController {
   List<Industry> industries = [];
   List<UserModel> bossupMembers = [];
 
-  List<ForumModel> bossupForums = [];
-
   RxInt paginationPage = RxInt(1);
   RxBool loading = RxBool(false);
   RxBool loadingMore = RxBool(false);
   List<Map<String, dynamic>>? bossUp = [];
   RxBool refreshing = RxBool(false);
   List<Map<String, dynamic>> mixedPosts = [
-    {'isForum': false, 'data': {}, 'shouldCount': false, 'isSponsored': false}
+    {'type': 'notype'},
   ];
   List<Map<String, dynamic>> sponsoredPosts = [
     {'isForum': false, 'data': {}, 'shouldCount': false, 'isSponsored': true}
   ];
   List<String> blocked = [];
+  RxList<PostModel> promotedPosts = RxList<PostModel>(<PostModel>[]);
+  RxList<MarketModel> promotedMarkets = RxList<MarketModel>(<MarketModel>[]);
+  RxList<CourseModel> promotedCourses = RxList<CourseModel>(<CourseModel>[]);
   String bossUpTitle = 'Boss Up By';
   String bossUpLink = '';
   RxList<MarketModel> markets = RxList<MarketModel>(<MarketModel>[]);
@@ -61,13 +63,13 @@ class HomeController extends GetxController {
   RxList<EventModel> myEvents = RxList<EventModel>(<EventModel>[]);
   RxList<UserModel> marketMembers = RxList<UserModel>(<UserModel>[]);
   Set<dynamic> itemsWithIncrementedViews = {};
+  Map<String, String> votes = {};
+  RxList<PostModel> posts = RxList<PostModel>(<PostModel>[]);
+  RxList<ForumModel> forums = RxList<ForumModel>(<ForumModel>[]);
+  int totalPromoted = 0;
 
   void addIndustries(List<Industry> data) {
     industries = data;
-  }
-
-  void addBossupForums(List<ForumModel> data) {
-    bossupForums = data;
   }
 
   void addMarkets(RxList<MarketModel> data) {
@@ -95,12 +97,31 @@ class HomeController extends GetxController {
       'postId': post.postId,
       'selectedOption': selectedOption,
     });
+    votes[post.postId] = selectedOption;
+    update();
+  }
+
+  String? getSelectedVote(String postId) {
+    return votes[postId];
+  }
+
+  Future<void> attendEvent(EventModel event) async {
+    final ApiResponseModel response = await ApiService.put(
+        path: 'event/join-leave-event/${event.id}', body: <String, dynamic>{});
+    if (response.success) {
+      if (myEvents.any((EventModel eventt) => eventt.id == event.id)) {
+        myEvents.removeWhere((EventModel eventt) => eventt.id == event.id);
+        event.setAttendCount(event.totalAttendees! - 1);
+      } else {
+        myEvents.add(event);
+        event.setAttendCount(event.totalAttendees! + 1);
+      }
+    }
+    update();
   }
 
   /// PROCESS RAW API DATA, MODELIZE AND SAVE TO STATE
-  RxList<PostModel> processPostsToState(dynamic post) {
-    RxList<PostModel> posts = RxList<PostModel>(<PostModel>[]);
-
+  void processPostsToState(dynamic post) {
     // print(post.length);
     final List psts = post;
     for (int i = 0; i < psts.length; i++) {
@@ -117,156 +138,142 @@ class HomeController extends GetxController {
             .toList()
       }));
     }
-    return posts;
+    mixPostandPromoted();
   }
 
-  RxList<PostModel> processPromotedPostsToState(dynamic post) {
-    RxList<PostModel> promotedPosts = RxList<PostModel>(<PostModel>[]);
-
+  /// PROCESS RAW API DATA, MODELIZE AND SAVE TO STATE
+  void processForumsToState(dynamic post) {
     // print(post.length);
     final List psts = post;
     for (int i = 0; i < psts.length; i++) {
-      promotedPosts.add(PostModel.fromMap({
+      forums.add(ForumModel.fromMap({
         ...psts[i],
         'likes': psts[i]['likes']
             .map((dynamic like) => like['userId'].toString())
-            .toList(),
-        'reposts': psts[i]['reposts']
-            .map((dynamic repost) => repost['userId'].toString())
             .toList(),
         'coins': psts[i]['coins']
             .map((dynamic coin) => coin['userId'].toString())
             .toList()
       }));
     }
-    return promotedPosts;
+    mixPostandPromoted();
   }
 
-  /// PROCESS RAW API Forums, MODELIZE AND SAVE TO STATE
-  RxList<ForumModel> processForumsToState(dynamic forum) {
-    RxList<ForumModel> forums = RxList<ForumModel>(<ForumModel>[]);
-
-    final List frms = forum;
-    for (int i = 0; i < frms.length; i++) {
-      forums.add(ForumModel.fromMap({
-        ...frms[i],
-        'likes': frms[i]['likes']
-            .map((dynamic like) => like['userId'].toString())
-            .toList(),
-        'coins': frms[i]['coins']
-            .map((dynamic coin) => coin['userId'].toString())
-            .toList(),
-      }));
+  void processPromotedPostsToState(dynamic post) {
+    final List psts = post;
+    if (psts.isNotEmpty) {
+      for (int i = 0; i < psts.length; i++) {
+        promotedPosts.add(PostModel.fromMap({
+          ...psts[i],
+          'likes': psts[i]['likes']
+              .map((dynamic like) => like['userId'].toString())
+              .toList(),
+          'reposts': psts[i]['reposts']
+              .map((dynamic repost) => repost['userId'].toString())
+              .toList(),
+          'coins': psts[i]['coins']
+              .map((dynamic coin) => coin['userId'].toString())
+              .toList()
+        }));
+      }
     }
-    return forums;
   }
 
-  // void joinPostsAndForums(RxList<PostModel> posts, RxList<ForumModel> forums) {
-  //   List<Map<String, dynamic>> frms = [];
-  //   List<Map<String, dynamic>> psts = [];
-  //   for (int i = 0; i < forums.length; i++) {
-  //     frms.add({'isForum': true, 'data': forums[i], 'isSponsored': false});
-  //   }
-  //   for (int i = 0; i < posts.length; i++) {
-  //     psts.add({'isForum': false, 'data': posts[i], 'isSponsored': false});
-  //   }
-
-  //   final List<Map<String, dynamic>> joinedPosts = [...frms, ...psts]..sort(
-  //       (Map<String, dynamic> a, Map<String, dynamic> b) =>
-  //           b['data'].timestamp - a['data'].timestamp);
-
-  //   mixedPosts.addAll(joinedPosts);
-  // }
-
-  // void processPostsAndForumsData(dynamic data) {
-  //   final RxList<PostModel> posts = processPostsToState(data['posts']['rows']);
-  //   final RxList<ForumModel> forums =
-  //       processForumsToState(data['forums']['rows']);
-  //   joinPostsAndForums(posts, forums);
-  //   update();
-  // }
-
-  // void joinPostsAndForums(RxList<PostModel> posts,
-  //     RxList<PostModel> sponsoredPosts, RxList<ForumModel> forums) {
-  //   List<Map<String, dynamic>> frms = [];
-  //   List<Map<String, dynamic>> psts = [];
-  //   List<Map<String, dynamic>> promotedPst = [];
-  //   for (int i = 0; i < forums.length; i++) {
-  //     frms.add({'isForum': true, 'data': forums[i], 'isPromotedPost': false});
-  //   }
-
-  //   for (int i = 0; i < posts.length; i++) {
-  //     psts.add({'isForum': false, 'data': posts[i], 'isPromotedPost': false});
-  //   }
-
-  //   for (int i = 0; i < sponsoredPosts.length; i++) {
-  //     promotedPst.add({
-  //       'isForum': false,
-  //       'data': sponsoredPosts[i],
-  //       'isPromotedPost': true
-  //     });
-  //   }
-
-  //   final List<Map<String, dynamic>> joinedPosts = [...frms, ...psts]..sort(
-  //       (Map<String, dynamic> a, Map<String, dynamic> b) =>
-  //           b['data'].timestamp - a['data'].timestamp);
-
-  //   final List<Map<String, dynamic>> joinedPromotedPosts = [...promotedPst]
-  //     ..sort((Map<String, dynamic> a, Map<String, dynamic> b) =>
-  //         b['data'].timestamp - a['data'].timestamp);
-
-  //   mixedPosts.addAll(joinedPosts);
-  // }
-
-  void joinPostsAndForums(RxList<PostModel> posts,
-      RxList<PostModel> promotedPosts, RxList<ForumModel> forums) {
-    List<Map<String, dynamic>> frms = [];
-    List<Map<String, dynamic>> psts = [];
-    List<Map<String, dynamic>> sponsoredPst = [];
-
-    // Convert forum and regular posts into map entries
-    for (int i = 0; i < forums.length; i++) {
-      frms.add({'isForum': true, 'data': forums[i], 'isSponsored': false});
+  void processPromotedMarketsToState(dynamic post) {
+    final List psts = post;
+    if (psts.isNotEmpty) {
+      for (int i = 0; i < psts.length; i++) {
+        promotedMarkets.add(MarketModel.fromMap({
+          ...psts[i],
+          'likes': psts[i]['likes']
+              .map((dynamic like) => like['userId'].toString())
+              .toList(),
+          'coins': psts[i]['coins']
+              .map((dynamic coin) => coin['userId'].toString())
+              .toList()
+        }));
+      }
     }
+  }
 
-    // for (int i = 0; i < promotedPosts.length; i++) {
-    //   psts.add(
-    //       {'isForum': false, 'data': promotedPosts[i], 'isSponsored': true});
-    // }
+  void processPromotedCoursesToState(dynamic post) {
+    final List psts = post;
+    if (psts.isNotEmpty) {
+      for (int i = 0; i < psts.length; i++) {
+        promotedCourses.add(CourseModel.fromMap({
+          ...psts[i],
+          'likes': psts[i]['likes']
+              .map((dynamic like) => like['userId'].toString())
+              .toList(),
+          'coins': psts[i]['coins']
+              .map((dynamic coin) => coin['userId'].toString())
+              .toList()
+        }));
+      }
+    }
+  }
+
+  void mixPostandPromoted() {
+    mixedPosts.clear();
+    mixedPosts.add({'type': 'notype'});
+    int promotedPostIndex = 0;
+    int promotedMarketIndex = 0;
+    int promotedCourseIndex = 0;
+
+    // Add the first promoted post, if available
+    if (promotedPostIndex < promotedPosts.length) {
+      mixedPosts.add({
+        'type': 'promotedPost',
+        'index': promotedPostIndex,
+        'id': promotedPosts[promotedPostIndex].postId
+      });
+      promotedPostIndex++;
+    } else if (promotedMarketIndex < promotedMarkets.length) {
+      mixedPosts.add({'type': 'market', 'index': promotedMarketIndex});
+      promotedMarketIndex++;
+    } else if (promotedCourseIndex < promotedCourses.length) {
+      mixedPosts.add({'type': 'course', 'index': promotedCourseIndex});
+      promotedCourseIndex++;
+    }
 
     for (int i = 0; i < posts.length; i++) {
-      psts.add({'isForum': false, 'data': posts[i], 'isSponsored': false});
+      mixedPosts.add({'type': 'post', 'index': i, 'id': posts[i].postId});
+
+      // After every 2 posts, add a promoted item if available
+      if ((i + 1) % 2 == 0) {
+        if (promotedPostIndex < promotedPosts.length) {
+          mixedPosts.add({'type': 'promotedPost', 'index': promotedPostIndex});
+          promotedPostIndex++;
+        } else if (promotedMarketIndex < promotedMarkets.length) {
+          mixedPosts.add({'type': 'market', 'index': promotedMarketIndex});
+          promotedMarketIndex++;
+        } else if (promotedCourseIndex < promotedCourses.length) {
+          mixedPosts.add({'type': 'course', 'index': promotedCourseIndex});
+          promotedCourseIndex++;
+        }
+      }
     }
 
-    // for (int i = 0; i < promotedPosts.length; i++) {
-    //   psts.add(
-    //       {'isForum': false, 'data': promotedPosts[i], 'isSponsored': true});
-    // }
-
-    for (int i = 0; i < promotedPosts.length; i++) {
-      sponsoredPst.add(
-          {'isForum': false, 'data': promotedPosts[i], 'isSponsored': true});
+    // If there are remaining promoted posts or markets, add them
+    while (promotedPostIndex < promotedPosts.length) {
+      mixedPosts.add({'type': 'promotedPost', 'index': promotedPostIndex});
+      promotedPostIndex++;
     }
 
-    final List<Map<String, dynamic>> joinedPosts = [...frms, ...psts]..sort(
-        (Map<String, dynamic> a, Map<String, dynamic> b) =>
-            b['data'].timestamp - a['data'].timestamp);
+    while (promotedMarketIndex < promotedMarkets.length) {
+      mixedPosts.add({'type': 'market', 'index': promotedMarketIndex});
+      promotedMarketIndex++;
+    }
 
-    final List<Map<String, dynamic>> joinedSponsoredPosts = sponsoredPst
-      ..sort((Map<String, dynamic> a, Map<String, dynamic> b) =>
-          b['data'].timestamp - a['data'].timestamp);
-
-    mixedPosts.addAll(joinedPosts);
-    sponsoredPosts.addAll(joinedSponsoredPosts);
+    while (promotedCourseIndex < promotedCourses.length) {
+      mixedPosts.add({'type': 'course', 'index': promotedCourseIndex});
+      promotedCourseIndex++;
+    }
   }
 
-  void processPostsAndForumsData(dynamic data) {
-    final RxList<PostModel> posts = processPostsToState(data['posts']['rows']);
-    final RxList<PostModel> promotedPosts =
-        processPromotedPostsToState(data['promotedPosts']['rows']);
-    final RxList<ForumModel> forums =
-        processForumsToState(data['forums']['rows']);
-    joinPostsAndForums(posts, promotedPosts, forums);
+  void processPostsAndForumsData(dynamic data, dynamic forum) {
+    processPostsToState(data['posts']['rows']);
+    processForumsToState(forum['rows']);
     update();
   }
 
@@ -274,20 +281,14 @@ class HomeController extends GetxController {
   void postLike(String userId, String postId, String type, String receiverUid) {
     if (type == 'post') {
       //Non-sponsored posts
-      final int postIndex = mixedPosts.indexWhere((Map<String, dynamic> post) =>
-          post['shouldCount'] == null &&
-          !post['isForum'] &&
-          !post['isSponsored'] &&
-          post['data'].postId == postId);
+      final int postIndex =
+          posts.indexWhere((PostModel element) => element.postId == postId);
       if (postIndex != -1) {
-        final bool checkLiked =
-            mixedPosts[postIndex]['data'].likes!.contains(userId);
+        final bool checkLiked = posts[postIndex].likes!.contains(userId);
         if (checkLiked) {
-          mixedPosts[postIndex]['data']
-              .likes!
-              .removeWhere((element) => element == userId);
+          posts[postIndex].likes!.removeWhere((element) => element == userId);
         } else {
-          mixedPosts[postIndex]['data'].likes!.add(userId);
+          posts[postIndex].likes!.add(userId);
         }
       }
 
@@ -307,6 +308,29 @@ class HomeController extends GetxController {
               .removeWhere((element) => element == userId);
         } else {
           sponsoredPosts[spIndex]['data'].likes!.add(userId);
+        }
+      }
+    } else if (type == 'forum') {
+      final int forumIndex =
+          forums.indexWhere((ForumModel forum) => forum.forumId == postId);
+      if (forumIndex != -1) {
+        final bool checkLiked = forums[forumIndex].likes!.contains(userId);
+        if (checkLiked) {
+          forums[forumIndex].likes?.remove(userId);
+        } else {
+          forums[forumIndex].likes?.add(userId);
+        }
+      }
+    } else if (type == 'course') {
+      final int courseIndex = profileController.usercourses
+          .indexWhere((CourseModel course) => course.id == postId);
+      if (courseIndex != -1) {
+        final bool checkLiked =
+            profileController.usercourses[courseIndex].likes!.contains(userId);
+        if (checkLiked) {
+          profileController.usercourses[courseIndex].likes?.remove(userId);
+        } else {
+          profileController.usercourses[courseIndex].likes?.add(userId);
         }
       }
     } else {
@@ -351,11 +375,8 @@ class HomeController extends GetxController {
     int spIndex;
     if (type == 'post') {
       //non-sponsored posts
-      postIndex = mixedPosts.indexWhere((Map<String, dynamic> post) =>
-          post['shouldCount'] == null &&
-          !post['isForum'] &&
-          !post['isSponsored'] &&
-          post['data'].postId == postId);
+      postIndex =
+          posts.indexWhere((PostModel element) => element.postId == postId);
 
       //sponsored posts
       spIndex = sponsoredPosts.indexWhere((Map<String, dynamic> post) =>
@@ -365,11 +386,8 @@ class HomeController extends GetxController {
           post['data'].postId == postId);
     } else {
       //non-sponsored posts
-      postIndex = mixedPosts.indexWhere((Map<String, dynamic> post) =>
-          post['shouldCount'] == null &&
-          post['isForum'] &&
-          !post['isSponsored'] &&
-          post['data'].forumId == postId);
+      postIndex =
+          posts.indexWhere((PostModel element) => element.postId == postId);
 
       //sponsored posts
       spIndex = sponsoredPosts.indexWhere((Map<String, dynamic> post) =>
@@ -379,7 +397,7 @@ class HomeController extends GetxController {
           post['data'].forumId == postId);
     }
     if (postIndex != -1) {
-      mixedPosts[postIndex]['data'].comments!.add(comment);
+      posts[postIndex].comments!.add(comment);
     } else if (spIndex != -1) {
       sponsoredPosts[spIndex]['data'].comments!.add(comment);
     }
@@ -391,22 +409,18 @@ class HomeController extends GetxController {
       ProfileController profileController, String type, String receiverUid) {
     if (type == 'post') {
       //Non-sponsored Posts
-      final int postIndex = mixedPosts.indexWhere((Map<String, dynamic> item) =>
-          item['shouldCount'] == null &&
-          !item['isForum'] &&
-          !item['isSponsored'] &&
-          item['data'].postId == postId);
+      final int postIndex =
+          posts.indexWhere((PostModel element) => element.postId == postId);
       if (postIndex != -1) {
-        final bool checkIfCoined =
-            mixedPosts[postIndex]['data'].coins!.contains(userId);
+        final bool checkIfCoined = posts[postIndex].coins!.contains(userId);
         if (checkIfCoined) {
           profileController.updateCoinCount(1);
-          mixedPosts[postIndex]['data']
+          posts[postIndex]
               .coins!
               .removeWhere((String element) => element == userId);
         } else {
           profileController.updateCoinCount(-1);
-          mixedPosts[postIndex]['data'].coins!.add(userId);
+          posts[postIndex].coins!.add(userId);
         }
       }
 
@@ -469,103 +483,56 @@ class HomeController extends GetxController {
     }
   }
 
-  // /// REPOST AND UNDO REPOST FUNCTION
-  // Future<void> postRepost(String userId, String postId, String type,
-  //     int timestamp, String receiverUid) async {
-  //   if (type == 'post') {
-  //     //Non-sponsored posts
-  //     final int postIndex = mixedPosts.indexWhere((Map<String, dynamic> post) =>
-  //         post['shouldCount'] == null &&
-  //         !post['isForum'] &&
-  //         !post['isSponsored'] &&
-  //         post['data'].postId == postId);
-  //     if (postIndex != -1) {
-  //       final bool checkReposted =
-  //           mixedPosts[postIndex]['data'].reposts?.contains(userId);
+  /// BUY COURSE WITH COINS
+  void courseCoin(String userId, String courseId, String price,
+      ProfileController profileController, String type, String receiverUid) {
+    // final bool checkIfCoined =
+    //     mixedPosts[forumIndex]['data'].coins!.contains(userId);
+    // if (checkIfCoined) {
+    //   profileController.updateCoinCount(int.parse(price));
+    //   // mixedPosts[forumIndex]['data']
+    //   //     .coins!
+    //   //     .removeWhere((String element) => element == userId);
+    // } else {
+    //   profileController.updateCoinCount(-int.parse(price));
+    //   // mixedPosts[forumIndex]['data'].coins!.add(userId);
+    // }
 
-  //       if (checkReposted) {
-  //         mixedPosts[postIndex]['data']
-  //             .reposts!
-  //             .removeWhere((element) => element == userId);
-  //         // _createPostController.onDeletePost(postId);
-  //       } else {
-  //         mixedPosts[postIndex]['data'].reposts?.add(userId);
-  //         // mixedPosts[postIndex]['data']['timestamp'] =
-  //         //     DateTime.now().millisecondsSinceEpoch.toString();
-  //         // mixedPosts[postIndex]['data']['oldtimestamp'] = timestamp;
-  //       }
-  //     }
-  //         // profileController.addNewPost(response.data);
-
-  //     //Sponsored posts
-  //     final int spIndex = sponsoredPosts.indexWhere(
-  //         (Map<String, dynamic> post) =>
-  //             post['shouldCount'] == null &&
-  //             !post['isForum'] &&
-  //             post['isSponsored'] &&
-  //             post['data'].postId == postId);
-  //     if (spIndex != -1) {
-  //       final bool checkReposts =
-  //           sponsoredPosts[spIndex]['data'].reposts!.contains(userId);
-  //       if (checkReposts) {
-  //         sponsoredPosts[spIndex]['data']
-  //             .reposts!
-  //             .removeWhere((element) => element == userId);
-  //       } else {
-  //         sponsoredPosts[spIndex]['data'].reposts!.add(userId);
-  //         // mixedPosts[postIndex]['data']['timestamp'] =
-  //         //     DateTime.now().millisecondsSinceEpoch.toString();
-  //         // mixedPosts[postIndex]['data']['oldtimestamp'] = timestamp;
-  //       }
-  //     }
-  //   }
-  //   update();
-
-  //   // Prepare the data for the repost request
-  //   Map<String, dynamic> repostData = {
-  //     'postId': postId,
-  //     'oldtimestamp': timestamp,
-  //   };
-
-  //   try {
-  //     ApiResponseModel response =
-  //         await ApiService.post(path: 'post/create-repost', body: repostData);
-
-  //     // Handle the response if needed
-  //     if (response.success) {
-  //       print('Repost successful');
-  //     } else {
-  //       print('Repost failed with status code: $response');
-  //     }
-  //   } catch (e) {
-  //     print('Error during repost API request: $e');
-  //   }
-  // }
+    update();
+    if (profileController.myProfile.uid != receiverUid) {
+      socket.emit('coin', {
+        'postId': courseId,
+        'userId': userId,
+        'timestamp': DateTime.now().millisecondsSinceEpoch,
+        'receiverUid': receiverUid,
+      });
+    } else {
+      socket.emit('coin', {
+        'postId': courseId,
+        'userId': userId,
+        'timestamp': DateTime.now().millisecondsSinceEpoch,
+      });
+    }
+  }
 
   /// REPOST AND UNDO REPOST FUNCTION
   Future<void> postRepost(String userId, String postId, String type,
       int timestamp, String receiverUid, int? oldtimestamp) async {
     if (type == 'post') {
       //Non-sponsored posts
-      final int postIndex = mixedPosts.indexWhere((Map<String, dynamic> post) =>
-          post['shouldCount'] == null &&
-          !post['isForum'] &&
-          !post['isSponsored'] &&
-          post['data'].postId == postId);
+      final int postIndex =
+          posts.indexWhere((PostModel element) => element.postId == postId);
       if (postIndex != -1) {
-        final bool checkReposted =
-            mixedPosts[postIndex]['data'].reposts?.contains(userId);
+        final bool checkReposted = posts[postIndex].reposts!.contains(userId);
 
         if (checkReposted) {
-          mixedPosts[postIndex]['data']
-              .reposts!
-              .removeWhere((element) => element == userId);
+          posts[postIndex].reposts!.removeWhere((element) => element == userId);
           showSnackbar(
               title: 'Success!',
               message: 'Post successfully unreposted',
               error: false);
         } else {
-          mixedPosts[postIndex]['data'].reposts?.add(userId);
+          posts[postIndex].reposts?.add(userId);
           showSnackbar(
               title: 'Success!',
               message: 'Post successfully reposted',
@@ -628,8 +595,9 @@ class HomeController extends GetxController {
         var reposted = response.data['repost']['reposted'];
         if (reposted) {
           profileController.addRePost(response.data);
+          addNewRePost(response.data, profileController);
           final ApiResponseModel timeresponse = await ApiService.put(
-              path: 'post/update-post/${postId}',
+              path: 'post/update-post/$postId',
               body: oldtimestamp == 0 ? timestampData : timestampDataoldpost);
           if (timeresponse.success) {
             print('true');
@@ -637,7 +605,7 @@ class HomeController extends GetxController {
             print('false');
           }
         } else {
-          profileController.removePost(response.data["postId"]);
+          profileController.removePost(response.data['postId']);
         }
       } else {
         print('Repost failed with status code: $response');
@@ -664,8 +632,19 @@ class HomeController extends GetxController {
         'bio': profileController.myProfile.bio
       }
     });
-    mixedPosts.insert(
-        1, {'isForum': false, 'data': modelizedNewPost, 'isSponsored': false});
+    posts.insert(0, modelizedNewPost);
+    mixedPosts
+        .insert(1, {'type': 'post', 'index': 0, 'id': modelizedNewPost.postId});
+
+    for (int i = 2; i < mixedPosts.length; i++) {
+      if (mixedPosts[i]['type'] == 'post') {
+        mixedPosts[i] = {
+          'type': 'post',
+          'index': mixedPosts[i]['index'] + 1,
+          'id': mixedPosts[i]['id']
+        };
+      }
+    }
 
     // posts.insert(0, modelizedNewPost);
     update();
@@ -681,23 +660,47 @@ class HomeController extends GetxController {
     });
   }
 
+  void addNewRePost(
+      Map<String, dynamic> newPost, ProfileController profileController) async {
+    PostModel modelizedNewPost = PostModel.fromMap({
+      ...newPost,
+      'coins': <String>[],
+      'likes': <String>[],
+      'reposts': <String>[],
+      'comments': <CommentModel>[],
+    });
+    posts.insert(0, modelizedNewPost);
+    mixedPosts
+        .insert(1, {'type': 'post', 'index': 0, 'id': modelizedNewPost.postId});
+    for (int i = 2; i < mixedPosts.length; i++) {
+      if (mixedPosts[i]['type'] == 'post') {
+        mixedPosts[i] = {
+          'type': 'post',
+          'index': mixedPosts[i]['index'] + 1,
+          'id': mixedPosts[i]['id']
+        };
+      }
+    }
+
+    // posts.insert(0, modelizedNewPost);
+    update();
+    socket.emit('newPostEvent', {
+      'newPost': newPost,
+      'coins': <String>[],
+      'likes': <String>[],
+      'reposts': <String>[],
+      'comments': <CommentModel>[],
+    });
+  }
+
   void removePostsByUserId(String? userId) {
     ApiService.post(
       path: 'blockedpost',
       body: <String, dynamic>{'postId': userId},
     );
-    mixedPosts.removeWhere((Map<String, dynamic> post) =>
-        post['shouldCount'] == null && post['data'].user.uid == userId);
+    posts.removeWhere((PostModel post) => post.user?.uid == userId);
     update();
   }
-
-  // void loadBlocked() async {
-  //   final ApiResponseModel data = await HomeRepository.fetchBlocked();
-  //   var rows = data.data['rows'];
-  //   for (var row in rows) {
-  //     blocked.addAll(List<String>.from(row['postsId']));
-  //   }
-  // }
 
   /// SHOW WHEN ACCESS TOKEN EXPIRES
   void showAccessTokenDialog() {
@@ -834,13 +837,13 @@ class HomeController extends GetxController {
     }
     update();
     final ApiResponseModel response = await HomeRepository.fetchPosts(
-        fromBackground ? 0 : paginationPage.value,
-        fromBackground
-            ? DateTime.now().millisecondsSinceEpoch
-            : mixedPosts[mixedPosts.length - 1]['data'].timestamp);
+        paginationPage.value, posts[posts.length - 1].timestamp);
+
+    final ApiResponseModel forum = await HomeRepository.fetchForums(
+        profileController.myProfile.uid, paginationPage.value);
     if (response.success) {
       paginationPage(paginationPage.value + 1);
-      processPostsAndForumsData(response.data);
+      processPostsAndForumsData(response.data, forum.data);
     } else {
       // showSnackbar(
       //     title: 'OOPS!',
@@ -868,8 +871,9 @@ class HomeController extends GetxController {
         'comments': <CommentModel>[],
         'user': data['user']
       });
-      mixedPosts.insert(1,
-          {'isForum': false, 'data': modelizedNewPost, 'isSponsored': false});
+      posts.insert(1, modelizedNewPost);
+      mixedPosts.insert(
+          1, {'type': 'posts', 'index': 1, 'id': modelizedNewPost.postId});
 
       update();
     }
@@ -877,45 +881,29 @@ class HomeController extends GetxController {
 
   void removePost(String postId) {
     mixedPosts.removeWhere((Map<String, dynamic> element) =>
-        element['shouldCount'] == null &&
-        !element['isForum'] &&
-        element['data'].postId == postId);
-    update();
-  }
+        element['type'] == 'post' && element['id'] == postId);
+    posts.removeWhere((element) => element.postId == postId);
 
-  void removeForum(String forumId) {
-    mixedPosts.removeWhere((Map<String, dynamic> element) =>
-        element['shouldCount'] == null &&
-        element['isForum'] &&
-        element['data'].forumId == forumId);
-
-    bossupForums
-        .removeWhere((ForumModel element) => element.forumId == forumId);
+    profileController.removePost(postId);
     update();
   }
 
   void updatePost(PostModel post) {
-    final int postIndex = mixedPosts.indexWhere(
-        (Map<String, dynamic> element) =>
-            element['shouldCount'] == null &&
-            !element['isForum'] &&
-            element['data'].postId == post.postId);
+    final int postIndex =
+        posts.indexWhere((PostModel element) => element.postId == post.postId);
     if (postIndex != -1) {
-      mixedPosts[postIndex]['data'] = post;
+      posts[postIndex] = post;
       update();
     }
   }
 
   void updateViews(PostModel post) {
     HomeRepository.updateViews(post.postId, post.views! + 1);
-    final int postIndex = mixedPosts.indexWhere(
-        (Map<String, dynamic> element) =>
-            element['shouldCount'] == null &&
-            !element['isForum'] &&
-            element['data'].postId == post.postId);
+    final int postIndex =
+        posts.indexWhere((PostModel element) => element.postId == post.postId);
     if (postIndex != -1) {
       // Increment the view count of the post by 1
-      mixedPosts[postIndex]['data'].setViews(post.views! + 1);
+      posts[postIndex].setViews(post.views! + 1);
       update();
     }
   }
@@ -941,8 +929,10 @@ class HomeController extends GetxController {
     update();
     final ApiResponseModel response = await HomeRepository.fetchData();
     final ApiResponseModel partner = await HomeRepository.fetchPartner();
+    final ApiResponseModel promoted = await HomeRepository.fetchPromoted();
+    final ApiResponseModel posts = await HomeRepository.fetchPosts(
+        0, DateTime.now().millisecondsSinceEpoch);
     if (response.success) {
-      processPostsAndForumsData(response.data['posts']);
       profileController.processDataToState(
           {...response.data['user'], 'connecteds': response.data['connecteds']},
           response.data['interests'],
@@ -951,15 +941,34 @@ class HomeController extends GetxController {
           response.data['chats'], profileController.myProfile.uid);
       socket.emit('handshake', profileController.myProfile.uid);
       addCoinDaily();
-      if (partner.data['count'] > 0) {
-        bossUp?.addAll(partner.data['rows'].cast<Map<String, dynamic>>());
-        // Find the item with id = 5
-        final Map<String, dynamic> getTitle =
-            bossUp!.firstWhere((Map<String, dynamic> item) => item['id'] == 5);
+      if (partner.success) {
+        if (partner.data['count'] > 0) {
+          bossUp?.addAll(partner.data['rows'].cast<Map<String, dynamic>>());
+          // Find the item with id = 5
+          final Map<String, dynamic> getTitle = bossUp!
+              .firstWhere((Map<String, dynamic> item) => item['id'] == 5);
 
-        bossUpTitle = getTitle['companyName'];
-        bossUpLink = getTitle['companyUrl'];
-        bossUp?.removeWhere((Map<String, dynamic> item) => item['id'] == 5);
+          bossUpTitle = getTitle['companyName'];
+          bossUpLink = getTitle['companyUrl'];
+          bossUp?.removeWhere((Map<String, dynamic> item) => item['id'] == 5);
+        }
+      } else {
+        error(true);
+        update();
+      }
+      final ApiResponseModel forums =
+          await HomeRepository.fetchForums(profileController.myProfile.uid, 0);
+      if (promoted.success) {
+        processPromotedPostsToState(promoted.data['promotedPosts']['rows']);
+        processPromotedMarketsToState(promoted.data['promotedMarkets']['rows']);
+        processPromotedCoursesToState(promoted.data['promotedCourses']['rows']);
+        if (posts.success && forums.success) {
+          processPostsAndForumsData(posts.data, forums.data);
+        } else {
+          error(true);
+          update();
+        }
+        totalPromoted = promotedMarkets.length + promotedPosts.length;
       }
       FirebaseMessaging.instance.getToken().then((String? value) {
         Map<String, dynamic> data = <String, dynamic>{
@@ -1005,38 +1014,38 @@ class HomeController extends GetxController {
     update();
   }
 
-  /// LOAD POSTS FROM REMOTE SOURCE
-  Future<void> refreshData() async {
-    refreshing(true);
-    // error(false);
-    update();
-    final ApiResponseModel response = await HomeRepository.fetchRefreshData();
-    final ApiResponseModel partner = await HomeRepository.fetchPartner();
-    if (response.success) {
-      processPostsAndForumsData(response.data['posts']);
-      // profileController.processDataToState(
-      //     response.data['user'], response.data['interests']);
-      bossUp?.clear();
-      if (partner.data['count'] > 0) {
-        bossUp?.addAll(partner.data['rows'].cast<Map<String, dynamic>>());
-        // Find the item with id = 5
-        final Map<String, dynamic> getTitle =
-            bossUp!.firstWhere((Map<String, dynamic> item) => item['id'] == 5);
+  // /// LOAD POSTS FROM REMOTE SOURCE
+  // Future<void> refreshData() async {
+  //   refreshing(true);
+  //   // error(false);
+  //   update();
+  //   final ApiResponseModel response = await HomeRepository.fetchRefreshData();
+  //   final ApiResponseModel partner = await HomeRepository.fetchPartner();
+  //   if (response.success) {
+  //     processPostsAndForumsData(response.data['posts'], );
+  //     // profileController.processDataToState(
+  //     //     response.data['user'], response.data['interests']);
+  //     bossUp?.clear();
+  //     if (partner.data['count'] > 0) {
+  //       bossUp?.addAll(partner.data['rows'].cast<Map<String, dynamic>>());
+  //       // Find the item with id = 5
+  //       final Map<String, dynamic> getTitle =
+  //           bossUp!.firstWhere((Map<String, dynamic> item) => item['id'] == 5);
 
-        bossUpTitle = getTitle['companyName'];
-        bossUpLink = getTitle['companyUrl'];
-      }
-    } else {
-      error(true);
-      // showSnackbar(
-      //     title: 'OOPS!',
-      //     message: 'An error occurred, please try again!',
-      //     error: true);
-    }
+  //       bossUpTitle = getTitle['companyName'];
+  //       bossUpLink = getTitle['companyUrl'];
+  //     }
+  //   } else {
+  //     error(true);
+  //     // showSnackbar(
+  //     //     title: 'OOPS!',
+  //     //     message: 'An error occurred, please try again!',
+  //     //     error: true);
+  //   }
 
-    refreshing(false);
-    update();
-  }
+  //   refreshing(false);
+  //   update();
+  // }
 
   initSocket() {
     socket = IO.io(Constants.socketUrl, <String, dynamic>{

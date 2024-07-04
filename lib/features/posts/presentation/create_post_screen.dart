@@ -2,6 +2,8 @@ import 'package:business_bosses_v2/common/dialogs/snackbar.dart';
 import 'package:business_bosses_v2/common/widgets/buttons/custom_button.dart';
 import 'package:business_bosses_v2/common/widgets/gallery_screen.dart';
 import 'package:business_bosses_v2/common/widgets/text_widget.dart';
+import 'package:business_bosses_v2/features/donations/models/donations_model.dart';
+import 'package:business_bosses_v2/features/forum/models/forum_model.dart';
 import 'package:business_bosses_v2/features/posts/controllers/create_post_controller.dart';
 import 'package:business_bosses_v2/features/posts/widgets/preview.dart';
 import 'package:business_bosses_v2/features/posts/widgets/promote_section.dart';
@@ -47,6 +49,8 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
   String? sharemessage;
   String? title;
   String? livedata;
+  DonationModel? donationModel;
+  ForumModel? forumModel;
 
   void onDetectionFinished() {
     _overlayEntry?.remove();
@@ -66,6 +70,17 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
     sharemessage = arguments?['sharemessage'];
     title = arguments?['title'];
     livedata = arguments?['livedata'];
+
+    if (arguments?['donationdata'] != null) {
+      final dynamic donationData = arguments?['donationdata'];
+
+      donationModel = donationData;
+    }
+    if (arguments?['forumdata'] != null) {
+      final dynamic forumData = arguments?['forumdata'];
+
+      forumModel = forumData;
+    }
 
     if (widget.postId != null) {
       _titleCtrl.text = widget.post!;
@@ -141,9 +156,9 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
                         : Padding(
                             padding: const EdgeInsets.symmetric(horizontal: 20),
                             child: Column(
-                              children: [
+                              children: <Widget>[
                                 Row(
-                                  children: [
+                                  children: <Widget>[
                                     Container(
                                         decoration: BoxDecoration(
                                             color: backgroundColor,
@@ -316,14 +331,20 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
                           } else {
                             /// Otherwise, create the post
                             if (widget.postId == null) {
-                              // await controller.createPost(<String, dynamic>{
-                              //   'title': _titleCtrl.text.trim(),
-                              //   'ytUrl': _ytUrl,
-                              //   'timestamp':
-                              //       DateTime.now().millisecondsSinceEpoch,
-                              // }, _profileController);
                               await controller.createPost(<String, dynamic>{
                                 'livedata': livedata,
+                                'donationId': donationModel != null
+                                    ? donationModel!.id
+                                    : null,
+                                'donation': donationModel != null
+                                    ? donationModel!.toMap()
+                                    : null,
+                                'forumId': forumModel != null
+                                    ? forumModel!.forumId
+                                    : null,
+                                'forum': forumModel != null
+                                    ? forumModel!.toMap()
+                                    : null,
                                 'title': _titleCtrl.text.trim(),
                                 'ytUrl': _ytUrl,
                                 'images': _ytUrl != null && _ytUrl != ''

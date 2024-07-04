@@ -405,7 +405,7 @@ class _CreateSellingitemScreenState extends State<CreateSellingitemScreen> {
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
+                    children: <Widget>[
                       Expanded(
                         flex: 3,
                         child: TextFormField(
@@ -435,7 +435,7 @@ class _CreateSellingitemScreenState extends State<CreateSellingitemScreen> {
                       Expanded(
                         flex:
                             6, // Adjust the flex value to control the relative sizes
-                        child: Stack(children: [
+                        child: Stack(children: <Widget>[
                           TextFormField(
                             controller: _priceController,
                             onChanged: (String val) => price = val,
@@ -455,7 +455,7 @@ class _CreateSellingitemScreenState extends State<CreateSellingitemScreen> {
                         flex:
                             4, // Adjust the flex value to control the relative sizes
                         child: Stack(
-                          children: [
+                          children: <Widget>[
                             TextFormField(
                               controller: _discountController,
                               onChanged: (String val) => discount = val,
@@ -666,77 +666,77 @@ class _CreateSellingitemScreenState extends State<CreateSellingitemScreen> {
                       ? Container()
                       : Preview(controller: createMarketController),
                 ),
-                widget.isUpd
-                    ? Container()
-                    : Column(
-                        children: <Widget>[
-                          Align(
-                            alignment: Alignment.center,
-                            child: Container(
-                              child: Padding(
-                                padding: const EdgeInsets.only(
-                                    top: 10, bottom: 10, left: 16, right: 16),
-                                child: Row(
-                                  children: <Widget>[
-                                    SvgPicture.asset('assets/svgs/rocket.svg'),
-                                    const SizedBox(width: 15),
-                                    const Expanded(
-                                      child: Column(
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.start,
-                                        children: <Widget>[
-                                          Text(
-                                            'Boost this listing?',
-                                            style: TextStyle(
-                                              fontWeight: FontWeight.w600,
-                                              fontSize: 18,
-                                            ),
-                                          ),
-                                          Text(
-                                            'Reach a wider audience and get more views',
-                                            style: TextStyle(
-                                              fontWeight: FontWeight.w600,
-                                              fontSize: 11,
-                                              color: Color(0xFF777777),
-                                            ),
-                                          ),
-                                        ],
-                                      ),
-                                    ),
-                                    Row(
-                                      children: <Widget>[
-                                        const Text(
-                                          'No',
-                                          style: TextStyle(
-                                              fontSize: 8,
-                                              fontWeight: FontWeight.w700),
-                                        ),
-                                        Switch(
-                                          value: _shouldPromote,
-                                          onChanged: (bool value) {
-                                            setState(() {
-                                              _shouldPromote = value;
-                                            });
-                                          },
-                                        ),
-                                        const Text(
-                                          'Yes',
-                                          style: TextStyle(
-                                              fontSize: 8,
-                                              fontWeight: FontWeight.w700),
-                                        ),
-                                      ],
-                                    ),
-                                  ],
-                                ),
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
-                const SizedBox(
-                  height: 20,
-                ),
+                // widget.isUpd
+                //     ? Container()
+                //     : Column(
+                //         children: <Widget>[
+                //           Align(
+                //             alignment: Alignment.center,
+                //             child: Container(
+                //               child: Padding(
+                //                 padding: const EdgeInsets.only(
+                //                     top: 10, bottom: 10, left: 16, right: 16),
+                //                 child: Row(
+                //                   children: <Widget>[
+                //                     SvgPicture.asset('assets/svgs/rocket.svg'),
+                //                     const SizedBox(width: 15),
+                //                     const Expanded(
+                //                       child: Column(
+                //                         crossAxisAlignment:
+                //                             CrossAxisAlignment.start,
+                //                         children: <Widget>[
+                //                           Text(
+                //                             'Boost this listing?',
+                //                             style: TextStyle(
+                //                               fontWeight: FontWeight.w600,
+                //                               fontSize: 18,
+                //                             ),
+                //                           ),
+                //                           Text(
+                //                             'Reach a wider audience and get more views',
+                //                             style: TextStyle(
+                //                               fontWeight: FontWeight.w600,
+                //                               fontSize: 11,
+                //                               color: Color(0xFF777777),
+                //                             ),
+                //                           ),
+                //                         ],
+                //                       ),
+                //                     ),
+                //                     Row(
+                //                       children: <Widget>[
+                //                         const Text(
+                //                           'No',
+                //                           style: TextStyle(
+                //                               fontSize: 8,
+                //                               fontWeight: FontWeight.w700),
+                //                         ),
+                //                         Switch(
+                //                           value: _shouldPromote,
+                //                           onChanged: (bool value) {
+                //                             setState(() {
+                //                               _shouldPromote = value;
+                //                             });
+                //                           },
+                //                         ),
+                //                         const Text(
+                //                           'Yes',
+                //                           style: TextStyle(
+                //                               fontSize: 8,
+                //                               fontWeight: FontWeight.w700),
+                //                         ),
+                //                       ],
+                //                     ),
+                //                   ],
+                //                 ),
+                //               ),
+                //             ),
+                //           ),
+                //         ],
+                //       ),
+                // const SizedBox(
+                //   height: 20,
+                // ),
                 Padding(
                   padding: const EdgeInsets.only(left: 16.0, right: 16),
                   child: MCustomButton(
@@ -744,6 +744,11 @@ class _CreateSellingitemScreenState extends State<CreateSellingitemScreen> {
                       setState(() {
                         _isProcessing = true;
                       });
+                      if (createMarketController.imageFileList.isEmpty) {
+                        showSnackBar(context,
+                            message: 'You must select an image to continue');
+                        return;
+                      }
                       if (descriptionController.text.isEmpty ||
                           _priceController.text.isEmpty) {
                         showSnackBar(

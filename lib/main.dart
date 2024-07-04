@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:developer';
 import 'dart:io';
 
+import 'package:business_bosses_v2/features/chat/presentation/call_page.dart';
 import 'package:business_bosses_v2/navigation/navigation.dart';
 import 'package:business_bosses_v2/navigation/routes.dart';
 import 'package:business_bosses_v2/services/firebase_analytics.dart';
@@ -9,10 +10,11 @@ import 'package:business_bosses_v2/utils/constants/constants.dart';
 import 'package:business_bosses_v2/utils/theme/theme.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:flutter_downloader/flutter_downloader.dart';
+
 import 'package:flutter_native_splash/flutter_native_splash.dart';
 import 'package:flutter_stripe/flutter_stripe.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -22,8 +24,9 @@ import 'package:purchases_flutter/purchases_flutter.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:uni_links/uni_links.dart';
 
-final _configuration =
-   Platform.isIOS ? PurchasesConfiguration('appl_fpKOUqIrKWZpOCQbxcYdfiIMgjj') : PurchasesConfiguration('goog_qVanRlWurUpdIwIedERNnNDBVaE');
+final PurchasesConfiguration _configuration = Platform.isIOS
+    ? PurchasesConfiguration('appl_fpKOUqIrKWZpOCQbxcYdfiIMgjj')
+    : PurchasesConfiguration('goog_qVanRlWurUpdIwIedERNnNDBVaE');
 bool _initialURILinkHandled = false;
 final GlobalKey<NavigatorState> navigatorKey = GlobalKey();
 void main() async {
@@ -33,6 +36,8 @@ void main() async {
   await GetStorage.init();
   await dotenv.load();
   await Firebase.initializeApp();
+  await FlutterDownloader.initialize();
+
   // await firebaseInitUniLinks();
   AnalyticsServices();
   Stripe.publishableKey =
@@ -56,6 +61,19 @@ void main() async {
         Get.toNamed(
           Routes.chat,
         );
+      } else if (title != null && title.contains('Incoming Call')) {
+        // Extract custom data payload
+        String type = message.data['type'];
+        String callID = message.data['callId'];
+        String userId = message.data['userId'];
+        String username = message.data['username'];
+
+        // Check the type of message
+        if (type == 'incoming_call') {
+          // Display incoming call UI and join Zegocloud room using callId
+          Get.to(() =>
+              CallPage(callID: callID, userId: userId, username: username));
+        }
       } else {
         Get.toNamed(
           Routes.notifications,
@@ -74,6 +92,19 @@ void main() async {
         Get.toNamed(
           Routes.chat,
         );
+      } else if (title != null && title.contains('Incoming Call')) {
+        // Extract custom data payload
+        String type = message.data['type'];
+        String callID = message.data['callId'];
+        String userId = message.data['userId'];
+        String username = message.data['username'];
+
+        // Check the type of message
+        if (type == 'incoming_call') {
+          // Display incoming call UI and join Zegocloud room using callId
+          Get.to(() =>
+              CallPage(callID: callID, userId: userId, username: username));
+        }
       } else {
         Get.toNamed(
           Routes.notifications,

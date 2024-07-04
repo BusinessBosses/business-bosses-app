@@ -4,9 +4,11 @@ import 'package:business_bosses_v2/common/models/user_model.dart';
 import 'package:business_bosses_v2/features/forum/models/forum_model.dart';
 import 'package:business_bosses_v2/features/forum/models/industry.dart';
 import 'package:business_bosses_v2/features/forum/repository/forum_repository.dart';
+import 'package:business_bosses_v2/features/forum/widgets/postonhomepopup.dart';
 import 'package:business_bosses_v2/features/home/controller/home_controller.dart';
 import 'package:business_bosses_v2/features/home/repository/home_repository.dart';
 import 'package:business_bosses_v2/features/profile/controller/profile_controller.dart';
+import 'package:business_bosses_v2/services/api_service.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:socket_io_client/socket_io_client.dart' as IO;
@@ -26,7 +28,27 @@ class ForumController extends GetxController {
   RxBool loading = RxBool(false);
   RxBool error = RxBool(false);
   RxBool loadingMembers = RxBool(false);
+  RxBool loadingSearch = RxBool(false);
+  RxBool loadingPosts = RxBool(false);
   RxBool errorMembers = RxBool(false);
+  RxList<ForumModel> userresources = <ForumModel>[].obs;
+  List<UserModel> searchedUsers = <UserModel>[];
+  List<ForumModel> searchedPosts = <ForumModel>[];
+  RxBool isUserSearch = RxBool(false);
+  RxBool loadingPostSearch = RxBool(false);
+  RxBool isPostSearch = RxBool(false);
+  late List<String> connecteds =
+      _profileController.myProfile.connecteds ?? <String>[];
+
+  void clearUserSearch() {
+    isUserSearch(false);
+    update();
+  }
+
+  void clearPostSearch() {
+    isPostSearch(false);
+    update();
+  }
 
   void updateForum(int index, Map<String, dynamic> data) {
     if (index != -1) {
@@ -90,6 +112,36 @@ class ForumController extends GetxController {
     loading(false);
 
     update();
+  }
+
+  Future<void> fetchuserResources(String userId) async {
+    try {
+      loading(true); // Set loading to true before fetching data
+
+      ApiResponseModel response = await ApiService.get(
+          path: 'forum/get-user-forum/$userId?page=0&size=20');
+
+      if (response.success) {
+        userresources.clear();
+        for (int i = 0; i < response.data['rows'].length; i++) {
+          if (response.data['rows'] != null) {
+            ForumModel userresource = ForumModel.fromMap(<String, dynamic>{
+              ...response.data['rows'][i],
+              'likes': response.data['rows'][i]['likes']
+                  .map((dynamic like) => like['userId'].toString())
+                  .toList(),
+            });
+            userresources.add(userresource);
+          }
+        }
+      } else {
+        error(true); // Set error to true if there's an error
+      }
+    } catch (e) {
+      error(true); // Set error to true if there's an error
+    } finally {
+      loading(false); // Set loading back to false after fetching data
+    }
   }
 
   void updateForumViews(ForumModel post) {
@@ -164,6 +216,93 @@ class ForumController extends GetxController {
     }
   }
 
+  Future<void> searchUsers(String query, String industryid) async {
+    loadingSearch(true);
+    update();
+
+    searchedUsers.clear();
+
+    if (members.isEmpty) {
+      await fetchIndustryUsers(industryid);
+    }
+
+    for (var user in members) {
+      if (user.username.toLowerCase().contains(query.toLowerCase()) ||
+          user.name!.toLowerCase().contains(query.toLowerCase())) {
+        searchedUsers.add(user);
+      }
+    }
+
+    loadingSearch(false);
+    update();
+  }
+
+  Future<void> searchPosts(
+    String query,
+  ) async {
+    loadingPostSearch(true);
+    update();
+
+    searchedPosts.clear();
+
+    // Assuming products is the list of already fetched products
+    for (ForumModel product in forums) {
+      if (product.description != null && product.description!.toLowerCase().contains(query.toLowerCase()) ||
+        product.title != null && product.title!.toLowerCase().contains(query.toLowerCase()) ||
+        product.user != null && 
+        (product.user!.name != null && product.user!.name!.toLowerCase().contains(query.toLowerCase()) ||
+         product.user!.username.toLowerCase().contains(query.toLowerCase()))) {
+      searchedPosts.add(product);
+    }
+    }
+
+    loadingPostSearch(false);
+    update();
+  }
+
+  void connectToUser(UserModel user) async {
+    final int checkConnected =
+        connecteds.indexWhere((String element) => element == user.uid);
+    _profileController.updateConnections(user.uid);
+    update();
+    if (isUserSearch.value) {
+      final int checkConnectedSearch =
+          connecteds.indexWhere((String element) => element == user.uid);
+      if (checkConnectedSearch == -1) {
+        connecteds.add(user.uid);
+      } else {
+        connecteds.removeAt(checkConnectedSearch);
+      }
+    }
+    if (checkConnected == -1) {
+      connecteds.add(user.uid);
+      await connect(user.uid);
+    } else {
+      connecteds.removeAt(checkConnected);
+      await disconnect(user.uid);
+    }
+
+    update();
+  }
+
+  Future<void> connect(String userId) async {
+    await ApiService.post(path: '/connection/connect', body: <String, dynamic>{
+      'userId': _profileController.myProfile.uid,
+      'connectedId': userId,
+      'timestamp': DateTime.now().millisecondsSinceEpoch
+    });
+  }
+
+  Future<void> disconnect(String userId) async {
+    await ApiService.post(
+        path: '/connection/disconnect',
+        body: <String, dynamic>{
+          'userId': _profileController.myProfile.uid,
+          'connectedId': userId,
+          'timestamp': DateTime.now().millisecondsSinceEpoch
+        });
+  }
+
   void joinAndLeaveIndustry(String userId, String industryId) {
     socket.emit('join-leave-industry', <String, String>{
       'industryId': industryId,
@@ -219,7 +358,11 @@ class ForumController extends GetxController {
     });
 
     forums.insert(0, modelizedNewPost);
-
+    _profileController.userresources.insert(0, modelizedNewPost);
+    Get.off(() => PostonhomePopUp(
+          forum: modelizedNewPost,
+          isBossUp: false,
+        ));
     update();
   }
 

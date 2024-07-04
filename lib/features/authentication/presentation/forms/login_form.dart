@@ -1,17 +1,19 @@
-import 'dart:developer';
+import 'dart:convert';
 import 'dart:io';
+import 'dart:math';
 // import 'package:apple_sign_in_safety/apple_sign_in.dart';
 import 'package:business_bosses_v2/common/widgets/buttons/custom_button.dart';
 
 import 'package:business_bosses_v2/common/widgets/text_widget.dart'
     show TextWidget;
-import 'package:business_bosses_v2/features/authentication/controller/auth_controller.dart';
 import 'package:country_picker/country_picker.dart';
+import 'package:crypto/crypto.dart';
 import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import 'package:sign_in_with_apple/sign_in_with_apple.dart';
 
@@ -37,18 +39,126 @@ class _LoginFormState extends State<LoginForm> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   late AutovalidateMode _autoValidateMode = AutovalidateMode.disabled;
   bool isEmailAuth = true;
-  String? _authCred, _password;
   String? _email, _token;
   bool _invisiblePassword = true;
   String countryCode = '+447';
   final ApiService _apiService = ApiService();
   final GoogleSignIn _googleSignIn = GoogleSignIn();
+  String? _authCred, _password, _authusername;
+
+  static bool isValidEmail(String email) {
+    if (email.isEmpty) return false;
+    return RegExp(
+            r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+")
+        .hasMatch(email);
+  }
+
+  bool emailValidatorExists(String? val, {required bool isUnique}) {
+    if (!isValidEmail(val!)) {
+      return false;
+    } else {
+      return true;
+    }
+  }
 
   ///  COUNTRY CHANGE HANDLER
   void onChangeCountry(Country value) {
     List<String> spl = value.displayName.toString().split(' ');
     setState(() {
       countryCode = spl[spl.length - 1].toString().split('[')[1].split(']')[0];
+    });
+  }
+
+  /// CREATE NONCE
+  String generateNonce([int length = 32]) {
+    const String charset =
+        '0123456789ABCDEFGHIJKLMNOPQRSTUVXYZabcdefghijklmnopqrstuvwxyz-._';
+    final Random random = Random.secure();
+    return List<String>.generate(
+        length, (_) => charset[random.nextInt(charset.length)]).join();
+  }
+
+  /// Returns the sha256 hash of [input] in hex notation.
+  String sha256ofString(String input) {
+    final List<int> bytes = utf8.encode(input);
+    final Digest digest = sha256.convert(bytes);
+    return digest.toString();
+  }
+
+  Future<void> saveToSharedPreferences(String value, String key) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    prefs.setString(key, value);
+  }
+
+  Future<dynamic> _handleRegister() async {
+    if (emailValidatorExists(_authCred!, isUnique: false)) {
+      _handleAppleLogin();
+    } else {
+      dynamic user = await _apiService.register(
+          _authCred!,
+          _password ?? DateTime.now().millisecondsSinceEpoch.toString(),
+          _authusername!,
+          '');
+      return user;
+      // }
+    }
+  }
+
+  void _handleAppleSignIn() async {
+    setState(() {
+      _isProcessing = true;
+    });
+    final String rawNonce = generateNonce();
+    final String nonce = sha256ofString(rawNonce);
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+
+    try {
+      final AuthorizationCredentialAppleID appleCredential =
+          await SignInWithApple.getAppleIDCredential(
+        scopes: <AppleIDAuthorizationScopes>[
+          AppleIDAuthorizationScopes.email,
+          AppleIDAuthorizationScopes.fullName,
+        ],
+        nonce: nonce,
+      );
+
+      _authCred = appleCredential.email;
+      _authusername =
+          '${appleCredential.givenName} ${appleCredential.familyName}';
+      if (_authCred == null) {
+        _authCred = prefs.getString('_authCred');
+        _authusername = prefs.getString('_authusername');
+        await logEvents('login', 'Apple SignIn');
+        dynamic user = await _handleAppleLogin();
+        Get.offAndToNamed(Routes.home);
+        if (user['success'] == false) {
+          Get.snackbar('Error', user['error']);
+        } else {}
+      } else {
+        saveToSharedPreferences(_authCred!, '_authCred');
+        saveToSharedPreferences(_authusername!, '_authusername');
+        await _handleRegister();
+        Get.snackbar('Success', 'Authentication completed');
+        await logEvents('signup', 'email');
+        Get.toNamed(
+          Routes.updateProfile,
+          arguments: UserModel(
+            username: _authusername!,
+            email: _authCred!,
+          ),
+        );
+      }
+
+      print('${_authCred!} ${_authusername!}');
+    } catch (error) {
+      // Error occurred during sign in
+      // log('Here ->>>>>> $error');
+
+      showSnackBar(context, message: 'Opps!! Something went wrong. Try again');
+    }
+
+    setState(() {
+      _isProcessing = false;
     });
   }
 
@@ -70,7 +180,7 @@ class _LoginFormState extends State<LoginForm> {
           Get.snackbar('Error', user['error']);
           await _googleSignIn.disconnect();
         } else {
-          await logEvents('login', 'google');
+          await logEvents('login', 'apple');
           FirebaseMessaging.instance.getToken().then((String? value) async {
             Map<String, dynamic> data = <String, dynamic>{
               'deviceToken': value,
@@ -98,7 +208,7 @@ class _LoginFormState extends State<LoginForm> {
       }
     } catch (error) {
       // Error occurred during sign in
-      log('Here ->>>>>> $error');
+      // log('Here ->>>>>> $error');
 
       showSnackBar(context, message: 'Opps!! Something went wrong. Try again');
     }
@@ -293,9 +403,7 @@ class _LoginFormState extends State<LoginForm> {
                 height: 55,
                 child: SignInWithAppleButton(
                   height: 40,
-                  onPressed: () async {
-                    AuthController().appleAuthentication();
-                  },
+                  onPressed: _handleAppleSignIn,
                 ),
               )
           ],
@@ -331,6 +439,14 @@ class _LoginFormState extends State<LoginForm> {
     dynamic user = await _apiService.login(
       _authCred!,
       _password!,
+    );
+    return user;
+  }
+
+  Future<dynamic> _handleAppleLogin() async {
+    dynamic user = await _apiService.googleLogin(
+      _authCred!,
+      _password ?? DateTime.now().millisecondsSinceEpoch.toString(),
     );
     return user;
   }

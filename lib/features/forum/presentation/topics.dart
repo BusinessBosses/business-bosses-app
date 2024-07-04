@@ -5,10 +5,11 @@ import 'package:business_bosses_v2/features/forum/controller/forum_controller.da
 import 'package:business_bosses_v2/features/forum/models/industry.dart';
 import 'package:business_bosses_v2/features/forum/widgets/joinedbutton.dart';
 import 'package:business_bosses_v2/features/home/controller/home_controller.dart';
-import 'package:business_bosses_v2/features/home/widgets/forum_item.dart';
+import 'package:business_bosses_v2/features/forum/widgets/forum_item.dart';
 import 'package:business_bosses_v2/features/profile/controller/profile_controller.dart';
 import 'package:business_bosses_v2/navigation/routes.dart';
 import 'package:business_bosses_v2/utils/constants/constants.dart';
+import 'package:business_bosses_v2/features/courses/controller/course_controller.dart';
 import 'package:business_bosses_v2/utils/theme/theme.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/gestures.dart';
@@ -28,6 +29,7 @@ class TopicsPage extends StatefulWidget {
 class _TopicsPageState extends State<TopicsPage> {
   final ProfileController _myProfile = Get.find();
   final HomeController hmeController = Get.find();
+  final CourseController courseController = Get.find();
   final ScrollController scrollController = ScrollController();
   late Industry industry;
 
@@ -162,7 +164,7 @@ class _TopicsPageState extends State<TopicsPage> {
                                           Text(
                                             industry.categoryId!.toString() ==
                                                     Constants.LEARNINGID
-                                                ? 'Start a Topic'
+                                                ? 'Share Resources'
                                                 : 'Share Opportunities',
                                             style: const TextStyle(
                                                 fontSize: 15,
@@ -328,7 +330,7 @@ class _TopicsPageState extends State<TopicsPage> {
                                                                   .toString() ==
                                                               'd479f179-3f41-4d84-915d-33110cf5b4fb'
                                                           ? 'Topics ($formattedpostCount) '
-                                                          : 'Opport. ($formattedpostCount)',
+                                                          : 'Topics ($formattedpostCount)',
                                                       style: const TextStyle(
                                                         fontSize: 12,
                                                         color: textColor,
@@ -386,6 +388,7 @@ class _TopicsPageState extends State<TopicsPage> {
                     clickableText: 'Reload',
                     onTap: () async {
                       await controller.fetchForums();
+                      courseController.initCourses();
                     },
                   )
                 : !controller.loading.value &&

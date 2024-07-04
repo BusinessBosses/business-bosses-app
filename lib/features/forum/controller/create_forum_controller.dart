@@ -141,7 +141,8 @@ class CreateForumController extends GetxController {
   }
 
   /// CREATE POST CONTROLLER (REGISTER NEW POST TO REMOTE DATA SOURCE)
-  Future<void> createForum(Map<String, dynamic> body) async {
+  Future<void> createForum(
+      BuildContext context, Map<String, dynamic> body) async {
     if (validateCreatePostData(body)) {
       loading(true);
       update();
@@ -151,9 +152,7 @@ class CreateForumController extends GetxController {
 
         if (response.success) {
           _forumController.addNewForum(response.data);
-
-          Get.back();
-          Get.snackbar('Success', 'Post created successfully');
+          // Get.snackbar('Success', 'Post created successfully');
         }
       } else {
         if (imageFileList.isNotEmpty &&
@@ -174,9 +173,7 @@ class CreateForumController extends GetxController {
           if (response.success) {
             imageFileList.clear();
             _forumController.addNewForum(response.data);
-
-            Get.back();
-            Get.snackbar('Success', 'Post created successfully');
+            // Get.snackbar('Success', 'Post created successfully');
           }
         }
       }

@@ -20,10 +20,20 @@ class MarketController extends GetxController {
   RxList<MarketModel> services = RxList<MarketModel>(<MarketModel>[]);
   RxList<MarketModel> searchResult = RxList<MarketModel>(<MarketModel>[]);
   RxList<UserModel> users = RxList<UserModel>(<UserModel>[]);
+  List<UserModel> searchedUsers = <UserModel>[];
+  List<MarketModel> searchedPosts = <MarketModel>[];
+  List<MarketModel> searchedServices = <MarketModel>[];
+  RxBool loadingSearch = RxBool(false);
+  RxBool loadingPostSearch = RxBool(false);
+  RxBool loadingServicesSearch = RxBool(false);
   RxInt paginationPage = RxInt(1);
   final int postsSize = 20;
+  RxBool isUserSearch = RxBool(false);
+  RxBool isPostSearch = RxBool(false);
+  RxBool isServiceSearch = RxBool(false);
   RxBool error = RxBool(false);
   String marketDescription = '';
+  String donationDescription = '';
   RxBool loading = RxBool(false);
   RxBool loadingMore = RxBool(false);
   RxBool isJoined = RxBool(false);
@@ -31,6 +41,8 @@ class MarketController extends GetxController {
   RxBool isfiltered = RxBool(false);
   final HomeController _homeController = Get.find();
   final ProfileController _profileController = Get.find();
+  late List<String> connecteds =
+      _profileController.myProfile.connecteds ?? <String>[];
   void removeListing(String marketId) {
     ApiService.delete(path: 'markets/$marketId');
     final int marketIndex = markets
@@ -55,22 +67,34 @@ class MarketController extends GetxController {
     update();
   }
 
+  void clearUserSearch() {
+    isUserSearch(false);
+    update();
+  }
+
+  void clearPostSearch() {
+    isPostSearch(false);
+    update();
+  }
+
+  void clearServiceSearch() {
+    isServiceSearch(false);
+    update();
+  }
+
   void updateListing(int index, Map<String, dynamic> data) {
     if (index != -1) {
       // Create an updated market model
       MarketModel updatedMarket = MarketModel.fromMap(data);
-      print(updatedMarket.isProduct);
       // Update in the main list
       markets[index] = MarketModel.fromMap(data);
 
       // Update in the products list if it's a product
       final int productIndex = products.indexWhere(
           (MarketModel element) => element.marketId == updatedMarket.marketId);
-      print(productIndex);
       if (productIndex != -1) {
         products[productIndex] = updatedMarket;
       }
-      print(updatedMarket.isProduct);
       // Update in the services list if it's a service
 
       final int serviceIndex = services.indexWhere(
@@ -91,8 +115,15 @@ class MarketController extends GetxController {
       // Increment the view count of the post by 1
       post.setViews(post.views! + 1);
       update();
-      HomeRepository.updatemarketViews(post.marketId, post.views!);
     }
+    final int promotedIndex = _homeController.promotedMarkets
+        .indexWhere((MarketModel element) => element.marketId == post.marketId);
+    if (promotedIndex != -1) {
+      // Increment the view count of the post by 1
+      _homeController.promotedMarkets[promotedIndex].setViews(post.views! + 1);
+      update();
+    }
+    HomeRepository.updatemarketViews(post.marketId, post.views!);
   }
 
   /// PROCESS RAW API DATA, MODELIZE AND SAVE TO STATE
@@ -288,6 +319,19 @@ class MarketController extends GetxController {
         markets[postIndex].likes!.add(userId);
       }
     }
+    final int promotedIndex = _homeController.promotedMarkets
+        .indexWhere((MarketModel element) => element.marketId == postId);
+    if (promotedIndex != -1) {
+      final bool checkLiked = _homeController
+          .promotedMarkets[promotedIndex].likes!
+          .contains(userId);
+      if (checkLiked) {
+        _homeController.promotedMarkets[promotedIndex].likes!
+            .removeWhere((String element) => element == userId);
+      } else {
+        _homeController.promotedMarkets[promotedIndex].likes!.add(userId);
+      }
+    }
     update();
     if (_profileController.myProfile.uid != receiverUid) {
       socket.emit('like', <String, String>{
@@ -321,13 +365,26 @@ class MarketController extends GetxController {
         profileController.updateCoinCount(-1);
         markets[postIndex].coins!.add(userId);
       }
-      socket.emit('coin', <String, String>{
-        'postId': postId,
-        'userId': userId,
-        'type': type,
-        'receiverUid': receiverUid,
-      });
     }
+    final int promotedIndex = _homeController.promotedMarkets
+        .indexWhere((MarketModel element) => element.marketId == postId);
+    if (promotedIndex != -1) {
+      final bool checkIfCoined = _homeController
+          .promotedMarkets[promotedIndex].coins!
+          .contains(userId);
+      if (checkIfCoined) {
+        _homeController.promotedMarkets[promotedIndex].coins!
+            .removeWhere((String element) => element == userId);
+      } else {
+        _homeController.promotedMarkets[promotedIndex].coins!.add(userId);
+      }
+    }
+    socket.emit('coin', <String, String>{
+      'postId': postId,
+      'userId': userId,
+      'type': type,
+      'receiverUid': receiverUid,
+    });
     update();
   }
 
@@ -337,6 +394,11 @@ class MarketController extends GetxController {
         markets.indexWhere((MarketModel element) => element.marketId == postId);
     if (postIndex != -1) {
       markets[postIndex].comments!.add(comment);
+    }
+    final int promotedIndex = _homeController.promotedMarkets
+        .indexWhere((MarketModel element) => element.marketId == postId);
+    if (promotedIndex != -1) {
+      _homeController.promotedMarkets[promotedIndex].comments!.add(comment);
     }
     update();
   }
@@ -359,8 +421,13 @@ class MarketController extends GetxController {
           (dynamic entry) => entry['title'] == 'market',
           orElse: () => null,
         );
+        final Map<String, dynamic>? donationEntry = rows.firstWhere(
+          (dynamic entry) => entry['title'] == 'donation',
+          orElse: () => null,
+        );
 
         marketDescription = marketEntry?['description'];
+        donationDescription = donationEntry?['description'];
       } else {
         marketDescription = '';
       }
@@ -369,6 +436,99 @@ class MarketController extends GetxController {
     }
     loading(false);
 
+    update();
+  }
+
+  void connectToUser(UserModel user) async {
+    final int checkConnected =
+        connecteds.indexWhere((String element) => element == user.uid);
+    _profileController.updateConnections(user.uid);
+    update();
+    if (isUserSearch.value) {
+      final int checkConnectedSearch =
+          connecteds.indexWhere((String element) => element == user.uid);
+      if (checkConnectedSearch == -1) {
+        connecteds.add(user.uid);
+      } else {
+        connecteds.removeAt(checkConnectedSearch);
+      }
+    }
+    if (checkConnected == -1) {
+      connecteds.add(user.uid);
+      await connect(user.uid);
+    } else {
+      connecteds.removeAt(checkConnected);
+      await disconnect(user.uid);
+    }
+
+    update();
+  }
+
+  Future<void> connect(String userId) async {
+    await ApiService.post(path: '/connection/connect', body: <String, dynamic>{
+      'userId': _profileController.myProfile.uid,
+      'connectedId': userId,
+      'timestamp': DateTime.now().millisecondsSinceEpoch
+    });
+  }
+
+  Future<void> disconnect(String userId) async {
+    await ApiService.post(
+        path: '/connection/disconnect',
+        body: <String, dynamic>{
+          'userId': _profileController.myProfile.uid,
+          'connectedId': userId,
+          'timestamp': DateTime.now().millisecondsSinceEpoch
+        });
+  }
+
+  Future<void> searchUsers(String query) async {
+    loadingSearch(true);
+    update();
+
+    searchedUsers.clear();
+
+    for (var user in users) {
+      if (user.username.toLowerCase().contains(query.toLowerCase()) ||
+          user.name!.toLowerCase().contains(query.toLowerCase())) {
+        searchedUsers.add(user);
+      }
+    }
+    loadingSearch(false);
+    update();
+  }
+
+  Future<void> searchPosts(String query) async {
+    loadingPostSearch(true);
+    update();
+
+    searchedPosts.clear();
+
+    // Assuming products is the list of already fetched products
+    for (var product in products) {
+      if (product.description.toLowerCase().contains(query.toLowerCase())) {
+        searchedPosts.add(product);
+      }
+    }
+
+    loadingPostSearch(false);
+    update();
+  }
+
+  Future<void> searchServices(String query) async {
+    loadingServicesSearch(true);
+    update();
+
+    searchedServices.clear();
+
+    // Assuming products is the list of already fetched products
+    for (var service in services) {
+      if (service.description.toLowerCase().contains(query.toLowerCase())) {
+        searchedServices.add(service);
+      }
+    }
+
+    loadingServicesSearch(false);
     update();
   }
 

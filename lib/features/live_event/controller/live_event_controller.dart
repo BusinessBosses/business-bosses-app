@@ -66,7 +66,7 @@ class LiveController extends GetxController {
       }
       final ApiResponseModel responses =
           await ApiService.get(path: 'event/get-user-events');
-      List<dynamic> rowss = responses.data;
+      List<dynamic> rowss = responses.data['rows'];
       for (dynamic row in rowss) {
         EventModel joinedEvent = EventModel.fromMap(row);
         events.add(joinedEvent);
@@ -112,16 +112,19 @@ class LiveController extends GetxController {
     if (response.success) {
       if (joined.any((EventModel eventt) => eventt.id == event.id)) {
         joined.removeWhere((EventModel eventt) => eventt.id == event.id);
+        homeController.myEvents
+            .removeWhere((EventModel eventt) => eventt.id == event.id);
         event.setAttendCount(event.totalAttendees! - 1);
       } else {
         joined.add(event);
+        homeController.myEvents.add(event);
         event.setAttendCount(event.totalAttendees! + 1);
       }
     }
     update();
   }
 
-  Future<void> createEvent(Map<String, dynamic> data) async {
+  Future<dynamic> createEvent(Map<String, dynamic> data) async {
     final ApiResponseModel response =
         await ApiService.post(path: 'event', body: data);
     if (response.success) {
@@ -142,6 +145,7 @@ class LiveController extends GetxController {
         // Insert the new event at the correct position
         events.insert(index, newEvent);
       }
+      homeController.events.add(newEvent);
 
       DateTime now = DateTime.now();
       DateTime today = DateTime(now.year, now.month, now.day);
@@ -172,6 +176,7 @@ class LiveController extends GetxController {
           ongoing.insert(index, newEvent);
         }
       }
+      return response.data['id'];
     } else {
       showSnackbar(
         title: 'OOPS!',
@@ -200,7 +205,7 @@ class LiveController extends GetxController {
         events.add(updatedEvent);
 
         // Sort the events based on startAt
-        events.sort((a, b) => a.startAt!.compareTo(b.startAt!));
+        events.sort((EventModel a, EventModel b) => a.startAt!.compareTo(b.startAt!));
 
         DateTime now = DateTime.now();
         DateTime today = DateTime(now.year, now.month, now.day);
@@ -224,7 +229,7 @@ class LiveController extends GetxController {
           // Updated event has already started, it's not upcoming
           // Find the index where the updated event should be inserted based on startAt
           int index = ongoing.indexWhere(
-              (event) => event.startAt!.isAfter(updatedEvent.startAt!));
+              (EventModel event) => event.startAt!.isAfter(updatedEvent.startAt!));
 
           if (index == -1) {
             // If the index is -1, it means the updated event should be placed at the end

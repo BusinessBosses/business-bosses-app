@@ -1,6 +1,7 @@
 import 'package:business_bosses_v2/common/dialogs/snackbar.dart';
 import 'package:business_bosses_v2/common/widgets/typography/text_widget.dart';
 import 'package:business_bosses_v2/features/forum/models/forum_model.dart';
+import 'package:business_bosses_v2/features/forum/models/industry.dart';
 import 'package:business_bosses_v2/features/posts/widgets/preview.dart';
 import 'package:business_bosses_v2/features/profile/controller/profile_controller.dart';
 import 'package:detectable_text_field/detector/sample_regular_expressions.dart';
@@ -16,11 +17,13 @@ import '../controller/create_bossup_controller.dart';
 
 // ignore: public_member_api_docs
 class CreateBossUpScreen extends StatefulWidget {
+  final Industry industryModel;
   // ignore: public_member_api_docs
   static const String routeName = '/create-bossup-screen';
 
   // ignore: public_member_api_docs
-  const CreateBossUpScreen({Key? key}) : super(key: key);
+  const CreateBossUpScreen({Key? key, required this.industryModel})
+      : super(key: key);
 
   @override
   State<CreateBossUpScreen> createState() => _CreateBossUpScreenState();
@@ -69,7 +72,8 @@ class _CreateBossUpScreenState extends State<CreateBossUpScreen> {
             key: scaffoldKey,
             appBar: AppBar(
               title: //Text(Provider.of<AppCommunities>(context, listen: false).label(_industry.categoryId, isUpdating: _isUpdating)),
-                  const Text('Introduce Your Business'),
+                  Text(widget.industryModel.createTitle ??
+                      'Introduce Your Business'),
               automaticallyImplyLeading:
                   false, // Used for removing back buttoon.
               actions: <Widget>[
@@ -97,9 +101,8 @@ class _CreateBossUpScreenState extends State<CreateBossUpScreen> {
                     keyboardType: TextInputType.text,
                     maxLength: 50,
                     decoration: inputDecoration.copyWith(
-                      hintText: isbossup == true
-                          ? 'Enter Business name'
-                          : 'Enter Topic Title',
+                      hintText: widget.industryModel.createInfo ??
+                          'Enter Business name',
                     ),
                   ),
                   const SizedBox(height: 24.0),
@@ -119,14 +122,12 @@ class _CreateBossUpScreenState extends State<CreateBossUpScreen> {
                     },
 
                     decoration: inputDecoration.copyWith(
-                      hintText: isbossup == true
-                          ? 'Describe your Business'
-                          : 'Enter your Description',
-                    ),
+                        hintText: widget.industryModel.createDescription ??
+                            'Describe your Business'),
                   ),
                   const SizedBox(height: 12.0),
                   Row(
-                    children: [
+                    children: <Widget>[
                       Container(
                           decoration: BoxDecoration(
                               color: Colors.white,
@@ -177,7 +178,9 @@ class _CreateBossUpScreenState extends State<CreateBossUpScreen> {
                               borderRadius: BorderRadius.circular(50)),
                           child: Padding(
                             padding: const EdgeInsets.symmetric(
-                                horizontal: 8, vertical: 8),
+                              horizontal: 8,
+                              vertical: 8,
+                            ),
                             child: GestureDetector(
                               onTap: () {
                                 setState(() {
@@ -258,6 +261,7 @@ class _CreateBossUpScreenState extends State<CreateBossUpScreen> {
                   Preview(controller: controller),
                   const SizedBox(height: 24.0),
                   MCustomButton(
+                    buttonType: ButtonType.elevated,
                     onPressed: () async {
                       controller.createForum(<String, dynamic>{
                         'title': title.trim(),
@@ -269,7 +273,8 @@ class _CreateBossUpScreenState extends State<CreateBossUpScreen> {
                             ? 'https://api.businessbosses.co.uk/appfiles/1698854755_13_download_(1).png'
                             : null,
                       });
-                      if (isbossup == true) {
+                      if (widget.industryModel.industryId ==
+                          '-MsUOGcOT9oRXGakCcJv') {
                         Map<String, dynamic> updateData = <String, dynamic>{
                           'bossOfTheWeekTimeStamp':
                               DateTime.now().millisecondsSinceEpoch,
@@ -279,6 +284,24 @@ class _CreateBossUpScreenState extends State<CreateBossUpScreen> {
                           body: <String, dynamic>{
                             'bossOfTheWeekTimeStamp':
                                 DateTime.now().millisecondsSinceEpoch,
+                          },
+                        );
+                        _profileController.updateProfile(<String, dynamic>{
+                          ..._profileController.myProfile.toMap(),
+                          ...updateData
+                        });
+                      } else {
+                        _profileController.myProfile.postChallenges
+                            ?.add(widget.industryModel.industryId!);
+                        Map<String, dynamic> updateData = <String, dynamic>{
+                          'postChallenges':
+                              _profileController.myProfile.postChallenges,
+                        };
+                        await ApiService.put(
+                          path: 'users/${_profileController.myProfile.uid}',
+                          body: <String, dynamic>{
+                            'postChallenges':
+                                _profileController.myProfile.postChallenges,
                           },
                         );
                         _profileController.updateProfile(<String, dynamic>{

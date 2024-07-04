@@ -4,8 +4,11 @@ import 'package:business_bosses_v2/analytics/presentation/explorebusinessbosses_
 import 'package:business_bosses_v2/features/bottomnavigationscreen.dart';
 import 'package:business_bosses_v2/features/connects/controller/referrals_controller.dart';
 import 'package:business_bosses_v2/features/connects/presentation/referals_screen.dart';
-import 'package:business_bosses_v2/features/courses/presentation/createcourse.dart';
-import 'package:business_bosses_v2/features/forum/controller/bossup_controller.dart';
+import 'package:business_bosses_v2/features/courses/presentation/course_history.dart';
+import 'package:business_bosses_v2/features/courses/presentation/pdfscreen.dart';
+import 'package:business_bosses_v2/features/donations/presentation/create_donations.dart';
+import 'package:business_bosses_v2/features/donations/presentation/donations.dart';
+import 'package:business_bosses_v2/features/donations/presentation/donations_history.dart';
 import 'package:business_bosses_v2/features/home/all_communities_screen.dart';
 import 'package:business_bosses_v2/features/home/controller/commumities_controller.dart';
 import 'package:business_bosses_v2/features/home/controller/home_controller.dart';
@@ -15,6 +18,7 @@ import 'package:business_bosses_v2/features/live_event/presentation/confirm_crea
 import 'package:business_bosses_v2/features/live_event/presentation/create_event.dart';
 import 'package:business_bosses_v2/features/live_event/presentation/live_event.dart';
 import 'package:business_bosses_v2/features/marketplace/controllers/market_controller.dart';
+import 'package:business_bosses_v2/features/marketplace/presentation/expanded_market_screen.dart';
 import 'package:business_bosses_v2/features/marketplace/presentation/renewconfirmation.dart';
 import 'package:business_bosses_v2/features/marketplace/presentation/sell_screen.dart';
 import 'package:business_bosses_v2/features/marketplace/presentation/subscription_confirmation.dart';
@@ -28,7 +32,6 @@ import 'package:business_bosses_v2/features/authentication/presentation/login_sc
 import 'package:business_bosses_v2/features/authentication/presentation/register_screen.dart';
 import 'package:business_bosses_v2/features/chat/chat_screen.dart';
 import 'package:business_bosses_v2/features/connects/presentation/all_connections_screen.dart';
-import 'package:business_bosses_v2/features/forum/controller/create_bossup_controller.dart';
 import 'package:business_bosses_v2/features/forum/controller/create_forum_controller.dart';
 import 'package:business_bosses_v2/features/forum/controller/forum_controller.dart';
 import 'package:business_bosses_v2/features/forum/presentation/all_forum_screen.dart';
@@ -38,7 +41,6 @@ import 'package:business_bosses_v2/features/moreinfoscreens/bossuppartner.dart';
 import 'package:business_bosses_v2/features/notifications/controller/notification_controller.dart';
 import 'package:business_bosses_v2/features/notifications/notificationsscreen.dart';
 import 'package:business_bosses_v2/features/posts/presentation/create_post_screen.dart';
-import 'package:business_bosses_v2/features/posts/presentation/post_details_screen.dart';
 import 'package:business_bosses_v2/analytics/presentation/analysescreen.dart';
 import 'package:business_bosses_v2/features/profile/change_password_screen.dart';
 import 'package:business_bosses_v2/features/profile/presentation/myprofilescreen.dart';
@@ -50,12 +52,12 @@ import 'package:business_bosses_v2/features/search/controller/search_controller.
 import 'package:business_bosses_v2/features/search/presentation/complete_searching_screen.dart';
 import 'package:business_bosses_v2/features/settings/invite_a_friendscreen.dart';
 import 'package:business_bosses_v2/features/settings/settingsscreen.dart';
+import 'package:business_bosses_v2/features/withdrawal/presentation/coinhistoryscreen.dart';
 import 'package:business_bosses_v2/navigation/routes.dart';
 import 'package:business_bosses_v2/features/premium/premiumscreen.dart';
 import 'package:business_bosses_v2/features/premium/reviewpayment.dart';
 import 'package:get/get.dart';
 
-import '../features/forum/presentation/create_bossup_screen.dart';
 import '../features/settings/delete_account_screen.dart';
 
 ///NAV INITIALIZATIONS
@@ -66,7 +68,7 @@ var routes = [
   ),
   GetPage(
     name: Routes.registration,
-    page: () => RegisterScreen(),
+    page: () => const RegisterScreen(),
   ),
   GetPage(
     name: Routes.createPost,
@@ -156,7 +158,6 @@ var routes = [
     name: Routes.allCommunitiesScreen,
     page: () => const AllCommunitiesScreen(),
     bindings: [
-      BindingsBuilder.put(() => BossUpController()),
       BindingsBuilder.put(() => CommunitiesController()),
     ],
     // binding: BindingsBuilder.put(() => BossUpController()),
@@ -179,15 +180,15 @@ var routes = [
     page: () => const CreateForumScreen(),
     binding: BindingsBuilder.put(() => CreateForumController()),
   ),
-  GetPage(
-    name: Routes.createBossUp,
-    page: () => const CreateBossUpScreen(),
-    binding: BindingsBuilder.put(() => CreateBossUpController()),
-  ),
-  GetPage(
-    name: Routes.postDetails,
-    page: () => PostDetailsScreen(),
-  ),
+  // GetPage(
+  //   name: Routes.createBossUp,
+  //   page: () => const CreateBossUpScreen(industryModel: null,),
+  //   binding: BindingsBuilder.put(() => CreateBossUpController()),
+  // ),
+  // GetPage(
+  //   name: Routes.postDetails,
+  //   page: () => PostDetailsScreen(),
+  // ),
   GetPage(
     name: Routes.specificuserlistscreen,
     page: () => const SpecificUserListScreen(),
@@ -262,7 +263,30 @@ var routes = [
     page: () => const BottomNavigationScreen(),
   ),
   GetPage(
-    name: Routes.createcourse,
-    page: () => const CreateCourseScreen(),
+    name: Routes.CoinHistoryScreen,
+    page: () => const CoinHistoryScreen(),
+  ),
+  GetPage(
+    name: Routes.coursehistoryscreen,
+    page: () => const CourseHistory(),
+  ),
+  GetPage(
+    name: Routes.donationsscreen,
+    page: () => const DonationsPage(),
+  ),
+  GetPage(
+    name: Routes.createdonationsscreen,
+    page: () => const CreateDonationScreen(),
+  ),
+  GetPage(
+    name: Routes.donationshistoryscreen,
+    page: () => const DonationsHistory(),
+  ),
+  GetPage(
+    name: Routes.pdfscreen,
+    page: () => const PDFScreen(
+      url: '',
+      filename: '',
+    ),
   ),
 ];

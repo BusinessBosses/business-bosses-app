@@ -38,26 +38,27 @@ class _FilterUsersState extends State<FilterUsers> {
     BuildContext context,
   ) {
     final ProfileController profileController = Get.find();
-    return SingleChildScrollView(
+    return Container(
+      color: Colors.white,
+      height: double.infinity,
+      width: double.infinity,
       child: Column(
-        mainAxisAlignment: MainAxisAlignment.start,
-        crossAxisAlignment: CrossAxisAlignment.start,
+        mainAxisAlignment: MainAxisAlignment.center,
+        crossAxisAlignment: CrossAxisAlignment.center,
         children: <Widget>[
-          Container(
-            height: MediaQuery.of(context).size.height,
-            color: Colors.white,
-            child: widget.filterItems.isEmpty
-                ? SafetyModel(
-                    isLoading: widget.isLoading,
-                    icon: const Icon(
-                      Icons.person,
-                      size: 80.0,
-                      color: hintColor,
-                    ),
-                    title: 'There is no user',
-                    // subTitle: 'Be the first one to like!',
-                  )
-                : Stack(
+          widget.filterItems.isEmpty
+              ? SafetyModel(
+                  isLoading: widget.isLoading,
+                  icon: const Icon(
+                    Icons.person,
+                    size: 80.0,
+                    color: hintColor,
+                  ),
+                  title: 'There is no user',
+                  subTitle: 'Search by name or username',
+                )
+              : Expanded(
+                child: Stack(
                     children: <Widget>[
                       ListView.builder(
                         padding: const EdgeInsets.only(bottom: 48.0),
@@ -77,113 +78,133 @@ class _FilterUsersState extends State<FilterUsers> {
                                     )
                                   : -1;
                           // ignore: curly_braces_in_flow_control_structures
-                          if (!widget.isSearch) if (i == 0) {
-                            return Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: <Widget>[
-                                Container(
-                                  width: MediaQuery.of(context).size.width,
-                                  color: backgroundcolorinterface,
-                                  child: const Padding(
-                                    padding: EdgeInsets.only(
-                                        left: 20,
-                                        right: 20,
-                                        top: 10,
-                                        bottom: 10),
-                                    child: Text(
-                                      'Recommended Connections',
-                                      style: TextStyle(
-                                          fontWeight: FontWeight.w500,
-                                          fontSize: 16),
-                                    ),
-                                  ),
-                                ),
-                                ListTile(
-                                  onTap: () async {
-                                    Get.toNamed(Routes.publicProfile,
-                                        arguments:
-                                            profileController.bossOfTheWeek);
-                                  },
-                                  leading: UserAvatarWithBadge(
-                                    user: _profileController.bossOfTheWeek,
-                                    height: 48.0,
-                                    width: 48.0,
-                                    radius: 30.0,
-                                    placeHolder: Icons.person,
-                                  ),
-                                  trailing: MCustomButton(
-                                    width: 120,
-                                    height: 40,
-                                    buttonType: checkConnected != -1
-                                        ? ButtonType.outline
-                                        : ButtonType.elevated,
-                                    margin: const EdgeInsets.symmetric(
-                                        horizontal: 4.0),
-                                    child: FittedBox(
-                                      child: _profileController
-                                                      .myProfile.connecteds !=
-                                                  null &&
-                                              _profileController
-                                                  .myProfile.connecteds!
-                                                  .contains(
-                                                profileController
-                                                    .bossOfTheWeek?.uid,
-                                              )
-                                          ? const Text(
-                                              'Connected',
-                                              style: TextStyle(
-                                                  color: primaryColorLT),
-                                            )
-                                          : const Text(
-                                              'Connect',
-                                              style: TextStyle(
-                                                  color: Colors.white),
-                                            ),
-                                    ),
-                                    onPressed: () async {
-                                      if (widget.onConnectionChange != null) {
-                                        widget.onConnectionChange!(
-                                          profileController.bossOfTheWeek!,
-                                        );
-                                      }
-                                    },
-                                  ),
-                                  title: profileController
-                                              .bossOfTheWeek?.isSubscribed ==
-                                          true
-                                      ? Row(
-                                          children: <Widget>[
-                                            Text(profileController
-                                                    .bossOfTheWeek?.name ??
-                                                profileController
-                                                    .bossOfTheWeek?.username ??
-                                                ''),
-                                            const SizedBox(width: 5),
-                                            SvgPicture.asset(
-                                              'assets/svgs/premiumbadge.svg',
-                                              height: 9,
-                                              color: primaryColorLT,
-                                            )
-                                          ],
-                                        )
-                                      : Text(profileController
-                                              .bossOfTheWeek?.name ??
-                                          profileController
-                                              .bossOfTheWeek?.username ??
-                                          ''),
-                                  subtitle: Text(
-                                    profileController.bossOfTheWeek?.bio ??
-                                        profileController
-                                            .bossOfTheWeek?.category ??
-                                        '',
-                                    maxLines: 1,
-                                  ),
-                                ),
-                                const Divider(
-                                    height: 0.0, indent: 16.0, endIndent: 16.0),
-                              ],
-                            );
-                          }
+                          // if (!widget.isSearch) if (i == 0) {
+                          //   return Column(
+                          //     crossAxisAlignment: CrossAxisAlignment.start,
+                          //     children: <Widget>[
+                          //       Container(
+                          //         width: MediaQuery.of(context).size.width,
+                          //         color: backgroundcolorinterface,
+                          //         child: const Padding(
+                          //           padding: EdgeInsets.only(
+                          //               left: 20,
+                          //               right: 20,
+                          //               top: 10,
+                          //               bottom: 10),
+                          //           child: Text(
+                          //             'Recommended Connections',
+                          //             style: TextStyle(
+                          //                 fontWeight: FontWeight.w500,
+                          //                 fontSize: 16),
+                          //           ),
+                          //         ),
+                          //       ),
+                          //       ListTile(
+                          //         onTap: () async {
+                          //           Get.toNamed(Routes.publicProfile,
+                          //               arguments:
+                          //                   profileController.bossOfTheWeek);
+                          //         },
+                          //         leading: UserAvatarWithBadge(
+                          //           user: _profileController.bossOfTheWeek,
+                          //           height: 48.0,
+                          //           width: 48.0,
+                          //           radius: 30.0,
+                          //           placeHolder: Icons.person,
+                          //         ),
+                          //         trailing: MCustomButton(
+                          //           width: 120,
+                          //           height: 40,
+                          //           buttonType: checkConnected != -1
+                          //               ? ButtonType.outline
+                          //               : ButtonType.elevated,
+                          //           margin: const EdgeInsets.symmetric(
+                          //               horizontal: 4.0),
+                          //           child: FittedBox(
+                          //             child: _profileController
+                          //                             .myProfile.connecteds !=
+                          //                         null &&
+                          //                     _profileController
+                          //                         .myProfile.connecteds!
+                          //                         .contains(
+                          //                       profileController
+                          //                           .bossOfTheWeek?.uid,
+                          //                     )
+                          //                 ? const Text(
+                          //                     'Connected',
+                          //                     style: TextStyle(
+                          //                         color: primaryColorLT),
+                          //                   )
+                          //                 : const Text(
+                          //                     'Connect',
+                          //                     style: TextStyle(
+                          //                         color: Colors.white),
+                          //                   ),
+                          //           ),
+                          //           onPressed: () async {
+                          //             if (widget.onConnectionChange != null) {
+                          //               widget.onConnectionChange!(
+                          //                 profileController.bossOfTheWeek!,
+                          //               );
+                          //             }
+                          //           },
+                          //         ),
+                          //         title: profileController
+                          //                     .bossOfTheWeek?.isSubscribed ==
+                          //                 true
+                          //             ? Row(
+                          //                 children: <Widget>[
+                          //                   Text(profileController
+                          //                               .bossOfTheWeek!
+                          //                               .name!
+                          //                               .length <=
+                          //                           20
+                          //                       ? profileController
+                          //                               .bossOfTheWeek?.name ??
+                          //                           profileController
+                          //                               .bossOfTheWeek
+                          //                               ?.username ??
+                          //                           ''
+                          //                       : profileController
+                          //                                   .bossOfTheWeek!
+                          //                                   .name !=
+                          //                               null
+                          //                           ? '${profileController.bossOfTheWeek!.name!.substring(0, 12)}...}'
+                          //                           : '${profileController.bossOfTheWeek!.username.substring(0, 12)}...)}'),
+                          //                   const SizedBox(width: 5),
+                          //                   SvgPicture.asset(
+                          //                     'assets/svgs/premiumbadge.svg',
+                          //                     height: 9,
+                          //                     color: primaryColorLT,
+                          //                   )
+                          //                 ],
+                          //               )
+                          //             : Text(profileController.bossOfTheWeek!
+                          //                         .name!.length <=
+                          //                     20
+                          //                 ? profileController
+                          //                         .bossOfTheWeek?.name ??
+                          //                     profileController
+                          //                         .bossOfTheWeek?.username ??
+                          //                     ''
+                          //                 : profileController
+                          //                             .bossOfTheWeek!.name !=
+                          //                         null
+                          //                     ? '${profileController.bossOfTheWeek!.name!.substring(0, 12)}...}'
+                          //                     : '${profileController.bossOfTheWeek!.username.substring(0, 12)}...)}'),
+                          //         subtitle: Text(
+                          //           profileController.bossOfTheWeek?.bio ??
+                          //               profileController
+                          //                   .bossOfTheWeek?.category ??
+                          //               '',
+                          //           maxLines: 1,
+                          //         ),
+                          //       ),
+                          //       const Divider(
+                          //           height: 0.0, indent: 16.0, endIndent: 16.0),
+                          //     ],
+                          //   );
+                          // }
                           return widget.filterItems[i].isRanked == true
                               ? Container()
                               : Column(
@@ -251,7 +272,7 @@ class _FilterUsersState extends State<FilterUsers> {
                                                     : widget.filterItems[i]
                                                                 .name !=
                                                             null
-                                                        ? '${widget.filterItems[i].name!.substring(0, 20)}...'
+                                                        ? '${widget.filterItems[i].name!.substring(0, 15)}...'
                                                         : widget.filterItems[i]
                                                             .username),
                                                 const SizedBox(width: 5),
@@ -270,7 +291,7 @@ class _FilterUsersState extends State<FilterUsers> {
                                               ? widget.filterItems[i].name!
                                               : widget.filterItems[i].name !=
                                                       null
-                                                  ? '${widget.filterItems[i].name!.substring(0, 20)}...'
+                                                  ? '${widget.filterItems[i].name!.substring(0, 15)}...'
                                                   : widget
                                                       .filterItems[i].username),
                                       subtitle: Text(
@@ -297,7 +318,7 @@ class _FilterUsersState extends State<FilterUsers> {
                         ),
                     ],
                   ),
-          )
+              )
         ],
       ),
     );

@@ -41,7 +41,7 @@ class _CreatePollScreenState extends State<CreatePollScreen> {
   String? sharemessage;
   String? title;
   String? livedata;
-  List<String> optionsValues = <String>[''];
+  List<String> optionsValues = <String>[];
 
   void onDetectionFinished() {
     _overlayEntry?.remove();
@@ -66,8 +66,9 @@ class _CreatePollScreenState extends State<CreatePollScreen> {
         optionsValues.clear();
         for (int i = 0; i < widget.postDetail!.options!.length; i++) {
           optionsValues.add(widget.postDetail!.options![i]);
-
-          dynamicTextFields.add(_buildOptionRow(i));
+          if (i < optionsValues.length) {
+            dynamicTextFields.add(_buildOptionRow(i));
+          }
         }
 
         // Set the optionCode to the correct value
@@ -84,8 +85,11 @@ class _CreatePollScreenState extends State<CreatePollScreen> {
   }
 
   Widget _buildOptionRow(int index) {
+    if (index < 0 || index >= optionsValues.length) {
+      return const SizedBox(); // Return an empty widget if index is out of bounds
+    }
     return Row(
-      children: [
+      children: <Widget>[
         Expanded(
           child: Container(
             margin: const EdgeInsets.only(bottom: 9),
@@ -97,11 +101,13 @@ class _CreatePollScreenState extends State<CreatePollScreen> {
               ),
             ),
             child: TextFormField(
+              maxLength: 25,
               onChanged: (String value) {
                 optionsValues[index] = value;
               },
               initialValue: widget.postDetail?.options != null &&
-                      widget.postDetail!.options!.isNotEmpty
+                      widget.postDetail!.options!.isNotEmpty &&
+                      index < widget.postDetail!.options!.length
                   ? widget.postDetail!.options![index]
                   : '',
               decoration: InputDecoration(
@@ -190,7 +196,7 @@ class _CreatePollScreenState extends State<CreatePollScreen> {
                               child: Row(
                                   mainAxisAlignment:
                                       MainAxisAlignment.spaceBetween,
-                                  children: [
+                                  children: <Widget>[
                                     const Text(
                                       'Add Options',
                                       style: TextStyle(
@@ -235,14 +241,17 @@ class _CreatePollScreenState extends State<CreatePollScreen> {
                         onPressed: () async {
                           _formKey.currentState!.save();
                           if (!_formKey.currentState!.validate()) return;
-                          // print(optionsValues);
-                          // return;
 
                           /// Otherwise, create the po st
                           List<String> nonEmptyOptions = optionsValues
                               .where(
                                   (String option) => option.trim().isNotEmpty)
                               .toList();
+                          if (nonEmptyOptions.length <= 1) {
+                            Get.snackbar('Error',
+                                'You must add atleast 2 options to create a poll!');
+                            return;
+                          }
                           if (widget.postDetail == null) {
                             await controller.createPost(<String, dynamic>{
                               'isPolled': true,
@@ -283,7 +292,7 @@ class _CreatePollScreenState extends State<CreatePollScreen> {
         padding: const EdgeInsets.all(8),
         child: const Icon(
           Icons.close,
-          color: Colors.red,
+          color: Colors.red, //
         ),
       ),
     );
@@ -313,15 +322,13 @@ class _CreatePollScreenState extends State<CreatePollScreen> {
 
   void _addOption() {
     setState(() {
-      if (optionCode >= 4) {
+      if (optionsValues.length >= 4) {
         Get.snackbar('Error', 'You can only add 4 options!');
         return;
       }
-      optionCode++;
-      optionsValues.insert(
-          optionCode - 1, ''); // Insert an empty string at the correct index
+      optionsValues.add(''); // Add an empty string to optionsValues
       dynamicTextFields.add(
-        _buildOptionRow(optionCode - 1),
+        _buildOptionRow(optionsValues.length - 1),
       );
     });
   }

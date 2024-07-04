@@ -523,10 +523,7 @@ class _SellerReviewScreenState extends State<SellerReviewScreen> {
                           padding: const EdgeInsets.all(10),
                           decoration: BoxDecoration(
                             color: Colors.grey[200],
-                            borderRadius: const BorderRadius.only(
-                              topLeft: Radius.circular(12),
-                              topRight: Radius.circular(12),
-                            ),
+                            borderRadius: BorderRadius.circular(12),
                           ),
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -561,10 +558,7 @@ class _SellerReviewScreenState extends State<SellerReviewScreen> {
                           padding: const EdgeInsets.all(15),
                           decoration: BoxDecoration(
                             color: Colors.grey[200],
-                            borderRadius: const BorderRadius.only(
-                              topLeft: Radius.circular(12),
-                              topRight: Radius.circular(12),
-                            ),
+                            borderRadius: BorderRadius.circular(12),
                           ),
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.center,
@@ -647,10 +641,7 @@ class _SellerReviewScreenState extends State<SellerReviewScreen> {
                           width: MediaQuery.of(context).size.width * 0.9,
                           decoration: BoxDecoration(
                             color: Colors.grey[200],
-                            borderRadius: const BorderRadius.only(
-                              topLeft: Radius.circular(12),
-                              topRight: Radius.circular(12),
-                            ),
+                            borderRadius: BorderRadius.circular(12),
                           ),
                           child: TextField(
                             maxLines: 4,
@@ -765,10 +756,7 @@ class _SellerReviewScreenState extends State<SellerReviewScreen> {
                         padding: const EdgeInsets.all(10),
                         decoration: BoxDecoration(
                           color: Colors.grey[200],
-                          borderRadius: const BorderRadius.only(
-                            topLeft: Radius.circular(12),
-                            topRight: Radius.circular(12),
-                          ),
+                          borderRadius: BorderRadius.circular(12),
                         ),
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -803,10 +791,7 @@ class _SellerReviewScreenState extends State<SellerReviewScreen> {
                         padding: const EdgeInsets.all(15),
                         decoration: BoxDecoration(
                           color: Colors.grey[200],
-                          borderRadius: const BorderRadius.only(
-                            topLeft: Radius.circular(12),
-                            topRight: Radius.circular(12),
-                          ),
+                          borderRadius: BorderRadius.circular(12),
                         ),
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.center,
@@ -889,10 +874,7 @@ class _SellerReviewScreenState extends State<SellerReviewScreen> {
                         width: MediaQuery.of(context).size.width * 0.9,
                         decoration: BoxDecoration(
                           color: Colors.grey[200],
-                          borderRadius: const BorderRadius.only(
-                            topLeft: Radius.circular(12),
-                            topRight: Radius.circular(12),
-                          ),
+                          borderRadius: BorderRadius.circular(12),
                         ),
                         child: TextField(
                           controller: textEditingController,

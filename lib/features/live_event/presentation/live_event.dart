@@ -67,6 +67,7 @@ class _LiveEventState extends State<LiveEvent> {
   void initState() {
     tzdata.initializeTimeZones(); // Initialize time zones
     super.initState();
+    liveEventController.initEvents();
     scrollController.addListener(() {
       double percentageScrolled =
           scrollController.offset / scrollController.position.maxScrollExtent;
@@ -242,12 +243,12 @@ class _LiveEventState extends State<LiveEvent> {
             //         ),
             //     )
             //     : Container(),
-            body: liveController.loading.value
-                ? const Stack(children: [
-                    Center(child: CircularProgressIndicator()),
-                  ])
-                : Stack(children: [
-                    NestedScrollView(
+            body: Stack(children: <Widget>[
+              liveController.loading.value
+                  ? const Stack(children: <Widget>[
+                      Center(child: CircularProgressIndicator()),
+                    ])
+                  : NestedScrollView(
                       controller: scrollController,
                       headerSliverBuilder: (
                         BuildContext context,
@@ -376,11 +377,11 @@ class _LiveEventState extends State<LiveEvent> {
                         ),
                       ),
                     ),
-                    const BottomBar(
-                      activeIndex: 2,
-                    ),
-                    showFloatingButton ? const Floatingbutton() : Container(),
-                  ]));
+              const BottomBar(
+                activeIndex: 2,
+              ),
+              showFloatingButton ? const Floatingbutton() : Container(),
+            ]));
       },
     );
   }
@@ -567,7 +568,6 @@ class _LiveEventState extends State<LiveEvent> {
 
   @override
   void dispose() {
-    Get.delete<LiveController>();
     super.dispose();
   }
 

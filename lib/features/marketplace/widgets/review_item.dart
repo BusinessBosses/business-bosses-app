@@ -229,6 +229,7 @@ class _ReviewTileState extends State<ReviewTile> {
                             padding: const EdgeInsets.only(left: 3.0, top: 4),
                             child: DetectableText(
                               text: widget.post.reviewText ?? '',
+                              trimLength: 100,
                               detectionRegExp: detectionRegExp(hashtag: false)!,
                               detectedStyle: bodyText2.copyWith(
                                 color: Colors.blue,

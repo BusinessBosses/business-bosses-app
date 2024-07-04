@@ -864,7 +864,7 @@ class _ForumItemState extends State<ForumItem> {
           ),
           TextButton(
             onPressed: () {
-              widget.controller.removeForum(widget.forum.forumId);
+              // widget.controller.removeForum(widget.forum.forumId);
               if (Get.isRegistered<BossUpController>()) {
                 Get.find<BossUpController>().deleteForum(widget.forum.forumId);
               }

@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
@@ -14,6 +13,7 @@ class ExplorebusinessbossesScreen extends StatefulWidget {
   const ExplorebusinessbossesScreen({Key? key}) : super(key: key);
 
   @override
+  // ignore: library_private_types_in_public_api
   _ExplorebusinessbossesScreenState createState() =>
       _ExplorebusinessbossesScreenState();
 }
@@ -22,7 +22,7 @@ class _ExplorebusinessbossesScreenState
     extends State<ExplorebusinessbossesScreen> {
   String? description;
   bool isLoading = false;
-  String youtubeUrl = "https://www.youtube.com/watch?v=3gm6eBtWfi4";
+  String youtubeUrl = 'https://www.youtube.com/watch?v=3gm6eBtWfi4';
 
   @override
   void initState() {
@@ -41,13 +41,15 @@ class _ExplorebusinessbossesScreenState
       );
 
       if (response.statusCode == 200) {
-        final data = jsonDecode(response.body);
+        final dynamic data = jsonDecode(response.body);
 
         if (data != null &&
             data['data'] != null &&
             data['data']['rows'] != null) {
-          final rows = data['data']['rows'];
+          final dynamic rows = data['data']['rows'];
+          // ignore: always_specify_types
           final features = rows.firstWhere(
+            // ignore: always_specify_types
             (item) => item['title'] == 'features',
             orElse: () => null,
           );
@@ -61,7 +63,6 @@ class _ExplorebusinessbossesScreenState
       }
     } catch (error) {
       // Handle network or parsing errors
-      print('Error occurred while fetching data: $error');
     } finally {
       setState(() {
         isLoading = false;
@@ -89,7 +90,7 @@ class _ExplorebusinessbossesScreenState
       ),
       body: SingleChildScrollView(
         child: Column(
-          children: [
+          children: <Widget>[
             const SizedBox(
               width: double.infinity,
               height: 20,
@@ -102,6 +103,7 @@ class _ExplorebusinessbossesScreenState
                   GestureDetector(
                       onTap: () {
                         Navigator.of(context).push(
+                          // ignore: always_specify_types
                           MaterialPageRoute(
                             builder: (BuildContext context) => YoutubeVideo(
                               youtubeUrl,
@@ -131,7 +133,7 @@ class _ExplorebusinessbossesScreenState
                   Column(
                     mainAxisAlignment: MainAxisAlignment.start,
                     crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
+                    children: <Widget>[
                       const SizedBox(height: 50.0),
                       Text(
                         'Profile',

@@ -331,16 +331,16 @@ class PostImages extends StatelessWidget {
                     ),
                   );
                 }
-                if (!isYt) {
-                  Navigator.of(context).push(
-                    MaterialPageRoute(
-                      builder: (BuildContext context) => ImagesViewerScreen(
-                        urls: post.images,
-                        text: post.title,
-                      ),
-                    ),
-                  );
-                }
+                // if (!isYt) {
+                //   Navigator.of(context).push(
+                //     MaterialPageRoute(
+                //       builder: (BuildContext context) => ImagesViewerScreen(
+                //         urls: post.images,
+                //         text: post.title,
+                //       ),
+                //     ),
+                //   );
+                // }
               },
               child: isYt
                   ? YoutubeDisplay(post.ytUrl!)

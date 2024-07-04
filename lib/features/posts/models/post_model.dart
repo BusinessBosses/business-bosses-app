@@ -2,6 +2,8 @@
 
 import 'package:business_bosses_v2/common/models/comment_model.dart';
 import 'package:business_bosses_v2/common/models/user_model.dart';
+import 'package:business_bosses_v2/features/donations/models/donations_model.dart';
+import 'package:business_bosses_v2/features/forum/models/forum_model.dart';
 
 class PostModel {
   final String postId;
@@ -25,8 +27,12 @@ class PostModel {
   final bool? approved;
   final bool? isPolled;
   final List<dynamic>? options;
+  final DonationModel? donation;
+  final ForumModel? forum;
   final List<Map<String, dynamic>>? pollvotes;
   PostModel({
+    this.donation,
+    this.forum,
     required this.postId,
     required this.title,
     this.images,
@@ -51,29 +57,32 @@ class PostModel {
     this.pollvotes,
   });
 
-  PostModel copyWith(
-      {String? postId,
-      String? title,
-      List<String>? images,
-      int? timestamp,
-      int? oldtimestamp,
-      List<String>? likes,
-      List<String>? coins,
-      List<String>? reposts,
-      List<CommentModel>? comments,
-      UserModel? user,
-      String? videoUrl,
-      String? ytUrl,
-      String? livedata,
-      bool? isRanked,
-      int? views,
-      bool? promote,
-      dynamic promotionDuration,
-      String? plan,
-      bool? approved,
-      bool? isPolled,
-      List<dynamic>? options,
-      List<Map<String, dynamic>>? pollvotes}) {
+  PostModel copyWith({
+    String? postId,
+    String? title,
+    List<String>? images,
+    int? timestamp,
+    int? oldtimestamp,
+    List<String>? likes,
+    List<String>? coins,
+    List<String>? reposts,
+    List<CommentModel>? comments,
+    UserModel? user,
+    String? videoUrl,
+    String? ytUrl,
+    String? livedata,
+    bool? isRanked,
+    int? views,
+    bool? promote,
+    dynamic promotionDuration,
+    String? plan,
+    bool? approved,
+    bool? isPolled,
+    List<dynamic>? options,
+    List<Map<String, dynamic>>? pollvotes,
+    DonationModel? donation,
+    ForumModel? forum,
+  }) {
     return PostModel(
       postId: postId ?? this.postId,
       title: title ?? this.title,
@@ -97,6 +106,8 @@ class PostModel {
       isPolled: isPolled ?? this.isPolled,
       options: options ?? this.options,
       pollvotes: pollvotes ?? this.pollvotes,
+      donation: donation ?? this.donation,
+      forum: forum ?? this.forum,
     );
   }
 
@@ -124,6 +135,8 @@ class PostModel {
       'isPolled': isPolled,
       'options': options,
       'pollvotes': pollvotes,
+      'donation': donation,
+      'forum': forum,
     };
   }
 
@@ -154,6 +167,10 @@ class PostModel {
           ? UserModel.fromMap(map['user'] as Map<String, dynamic>)
           : null,
       videoUrl: map['videoUrl'] != null ? map['videoUrl'] as String : null,
+      donation: map['donation'] != null
+          ? DonationModel.fromMap(map['donation'])
+          : null,
+      forum: map['forum'] != null ? ForumModel.fromMap(map['forum']) : null,
       ytUrl: map['ytUrl'] != null ? map['ytUrl'] as String : null,
       livedata: map['livedata'] != null ? map['livedata'] as String : null,
       isRanked: map['isRanked'] as bool,

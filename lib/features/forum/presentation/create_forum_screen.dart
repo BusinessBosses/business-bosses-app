@@ -80,7 +80,7 @@ class _CreateForumScreenState extends State<CreateForumScreen> {
                 isbossup
                     ? 'Enter Challenge'
                     : categoryId == Constants.LEARNINGID
-                        ? 'Start a Topic'
+                        ? 'Share Resources'
                         : 'Share Opportunities',
               ),
               automaticallyImplyLeading: false,
@@ -112,7 +112,7 @@ class _CreateForumScreenState extends State<CreateForumScreen> {
                           hintText: isbossup
                               ? 'Enter Business name'
                               : categoryId == Constants.LEARNINGID
-                                  ? 'Enter Topic Title'
+                                  ? 'Enter Resource Title'
                                   : 'Enter Opportunity Title'),
                     ),
                   ),
@@ -225,7 +225,7 @@ class _CreateForumScreenState extends State<CreateForumScreen> {
                     // ),
 
                     child: Row(
-                      children: [
+                      children: <Widget>[
                         Container(
                             decoration: BoxDecoration(
                                 color: Colors.white,
@@ -383,6 +383,7 @@ class _CreateForumScreenState extends State<CreateForumScreen> {
                   Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 16.0),
                     child: MCustomButton(
+                      buttonType: ButtonType.elevated,
                       onPressed: () {
                         if (isUpdating) {
                           controller.editForum(<String, dynamic>{
@@ -392,7 +393,7 @@ class _CreateForumScreenState extends State<CreateForumScreen> {
                             'industryId': industryId,
                           }, isBossup: isbossup);
                         } else {
-                          controller.createForum(<String, dynamic>{
+                          controller.createForum(context, <String, dynamic>{
                             'title': title.trim(),
                             'description': description.trim(),
                             'timestamp': DateTime.now().millisecondsSinceEpoch,

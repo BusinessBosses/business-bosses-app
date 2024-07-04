@@ -60,4 +60,13 @@ class Routes {
   static const String sellscreen = '/sellscreen';
   static const String bottomnavscreen = '/bottomnavscreen';
   static const String createcourse = '/createcourse';
+  static const String expandedcoursescreen = '/expandedcoursescreen';
+  static const String expandedmarketscreen = '/expandedmarketscreen';
+  static const String CoinHistoryScreen = '/coinhistory-screen';
+  static const String coursehistoryscreen = '/coursehistory-screen';
+  static const String donationsscreen = '/donations-screen';
+  static const String createdonationsscreen = '/create-donations-screen';
+  static const String expandeddonationsscreen = '/expanded-donations-screen';
+  static const String donationshistoryscreen = '/donations-history-screen';
+  static const String pdfscreen = '/pdf-screen';
 }
