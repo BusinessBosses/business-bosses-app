@@ -46,35 +46,98 @@ class _BossuppartnerState extends State<Bossuppartner> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white,
+      backgroundColor: backgroundColor,
       appBar: AppBar(
+        actions: <Widget>[
+          IconButton(
+            onPressed: () {
+              
+            },
+            icon: SvgPicture.asset(
+              'assets/svgs/info.svg',
+              height: 24,
+            ),
+          )
+        ],
         leading: IconButton(
           onPressed: () {
             Navigator.pop(context);
           },
-          icon: SvgPicture.asset('assets/svgs/backbutton.svg'),
+          icon: SvgPicture.asset(
+            'assets/svgs/backbutton.svg',
+          ),
         ),
         centerTitle: true,
         title: const Text(
-          'Our Partners',
+          'Partners Deals',
           textAlign: TextAlign.center,
           style: TextStyle(fontSize: 20),
         ),
       ),
-      body: ListView.builder(
-        itemCount: homeController.bossUp?.length ?? 0,
-        itemBuilder: (BuildContext context, int index) {
-          Map<String, dynamic> partner =
-              homeController.bossUp!.reversed.toList()[index];
-          return BossuppartnerItem(
-            companyName: partner['companyName'],
-            companyDescription: partner['companyDescription'],
-            companyUrl: partner['companyUrl'],
-            companyPhoto: partner['companyPhoto'],
-            id: partner['id'],
-            showPartnerMessage: isLastItem(index),
-          );
-        },
+      body: Column(
+        children: [
+          Padding(
+            padding:
+                const EdgeInsets.only(left: 20, right: 20, top: 20, bottom: 20),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.end,
+              children: <Widget>[
+                const Expanded(
+                  child: Text(
+                    'Get your deal listed & get new customers',
+                    maxLines: 3,
+                    style: TextStyle(
+                      fontSize: 16,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                ),
+                const SizedBox(
+                  width: 20,
+                ),
+                Align(
+                  alignment: Alignment.centerRight,
+                  child: Container(
+                    height: 45,
+                    child: ElevatedButton(
+                      child: const Text(
+                        'Become a Partner',
+                        style: TextStyle(
+                          // fontWeight: FontWeight.w700,
+                          fontSize: 15,
+                        ),
+                      ),
+                      onPressed: () async {
+                        if (await canLaunchUrl(Uri.parse(
+                            'https://businessbosses.news/our-partners/'))) {
+                          await launchUrl(Uri.parse(
+                              'https://businessbosses.news/our-partners/'));
+                        }
+                      },
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
+          Expanded(
+            child: ListView.builder(
+              itemCount: homeController.bossUp?.length ?? 0,
+              itemBuilder: (BuildContext context, int index) {
+                Map<String, dynamic> partner =
+                    homeController.bossUp!.reversed.toList()[index];
+                return BossuppartnerItem(
+                  companyName: partner['companyName'],
+                  companyDescription: partner['companyDescription'],
+                  companyUrl: partner['companyUrl'],
+                  companyPhoto: partner['companyPhoto'],
+                  id: partner['id'],
+                  showPartnerMessage: isLastItem(index),
+                );
+              },
+            ),
+          ),
+        ],
       ),
     );
   }
@@ -101,168 +164,103 @@ class BossuppartnerItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     List<dynamic> photos = <dynamic>[companyPhoto];
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: <Widget>[
-        id != 5
-            ? const SizedBox(
-                width: double.infinity,
-                height: 20,
-                child: ColoredBox(color: backgroundcolorinterface),
-              )
-            : const SizedBox(),
-        id != 5
-            ? const SizedBox(
-                height: 35,
-              )
-            : const SizedBox(),
-        id != 5
-            ? Padding(
-                padding: const EdgeInsets.only(left: 20, right: 20),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: <Widget>[
-                    GestureDetector(
-                      onTap: () {
-                        Navigator.of(context).push(
-                          MaterialPageRoute<dynamic>(
-                            builder: (BuildContext context) =>
-                                ImagesViewerScreen(
-                              urls: photos,
-                              index: 0,
-                              text: companyName,
-                            ),
-                          ),
-                        );
-                      },
-                      child: Align(
-                        alignment: Alignment.center,
-                        child: companyPhoto != null
-                            ? CachedNetworkImage(
-                                imageUrl: companyPhoto ?? '',
-                                memCacheWidth: 750,
-                              )
-                            : const SizedBox(),
-                      ),
-                    ),
-                    Text(
-                      companyName,
-                      style: const TextStyle(
-                        fontSize: 18,
-                        color: textColor,
-                        fontWeight: FontWeight.w700,
-                      ),
-                    ),
-                    const SizedBox(height: 5),
-                    Padding(
-                      padding: const EdgeInsets.only(right: 20.0),
-                      child: Text(
-                        companyDescription,
-                        style: const TextStyle(
-                          fontSize: 15,
-                          fontWeight: FontWeight.w100,
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-              )
-            : const SizedBox(),
-        const SizedBox(height: 10),
-        id != 5
-            ? Padding(
-                padding: const EdgeInsets.only(
-                    left: 20, right: 20, top: 10, bottom: 10),
-                child: Container(
-                  height: 45,
-                  decoration: BoxDecoration(
-                    color: backgroundColor,
-                    borderRadius: BorderRadius.circular(10),
-                  ),
-                  child: Padding(
-                    padding: const EdgeInsets.only(left: 15, right: 20),
-                    child: Row(
-                      children: <Widget>[
-                        SvgPicture.asset(
-                          'assets/svgs/link.svg',
-                          height: 14.0,
-                          width: 15.0,
-                        ),
-                        const SizedBox(width: 4.0),
-                        Expanded(
-                          child: GestureDetector(
-                            onTap: () async {
-                              final Uri url = Uri.parse(companyUrl);
-                              if (!await launchUrl(url)) {
-                                throw Exception('Could not launch $url');
-                              }
-                            },
-                            child: Text(
-                              companyUrl,
-                              style: const TextStyle(
-                                decoration: TextDecoration.underline,
-                              ),
-                              overflow: TextOverflow.ellipsis,
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
-              )
-            : const SizedBox(),
-        id != 5
-            ? const SizedBox(
-                width: double.infinity,
-                height: 1,
-                child: ColoredBox(color: backgroundcolorinterface),
-              )
-            : const SizedBox(),
-        if (showPartnerMessage)
-          Padding(
-            padding:
-                const EdgeInsets.only(left: 20, right: 20, top: 5, bottom: 5),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.end,
+    return Padding(
+      padding: const EdgeInsets.only(left: 15.0, right: 15, bottom: 15),
+      child: Container(
+        padding: const EdgeInsets.all(15),
+        decoration: BoxDecoration(
+            color: Colors.white, borderRadius: BorderRadius.circular(12)),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: <Widget>[
+            Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[
-                const Text(
-                  'Want to be a Partner?',
-                  style: TextStyle(
-                    fontSize: 15,
-                    fontWeight: FontWeight.bold,
-                  ),
+                GestureDetector(
+                  onTap: () {
+                    Navigator.of(context).push(
+                      MaterialPageRoute<dynamic>(
+                        builder: (BuildContext context) => ImagesViewerScreen(
+                          urls: photos,
+                          index: 0,
+                          text: companyName,
+                        ),
+                      ),
+                    );
+                  },
+                  child: companyPhoto != null
+                      ? Container(
+                          decoration: BoxDecoration(
+                            border:
+                                Border.all(width: 0.5, color: Colors.black12),
+                            color: backgroundColor,
+                            borderRadius: BorderRadius.circular(10.0),
+                          ),
+                          child: ClipRRect(
+                            borderRadius: BorderRadius.circular(10.0),
+                            child: CachedNetworkImage(
+                              imageUrl: companyPhoto ?? '',
+                              width: 80.0,
+                              height: 80.0,
+                              fit: BoxFit.fill,
+                            ),
+                          ),
+                        )
+                      : const SizedBox(),
+                ),
+                const SizedBox(
+                  width: 10,
                 ),
                 Expanded(
-                  child: Align(
-                    alignment: Alignment.centerRight,
-                    child: OutlinedButton(
-                      child: const Text(
-                        'Message Us',
-                        style: TextStyle(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        companyName,
+                        softWrap: true,
+                        style: const TextStyle(
+                          fontSize: 18,
+                          color: textColor,
                           fontWeight: FontWeight.w700,
-                          fontSize: 15,
                         ),
                       ),
-                      onPressed: () async {
-                        if (await canLaunchUrl(Uri.parse(
-                            'https://businessbosses.news/our-partners/'))) {
-                          await launchUrl(Uri.parse(
-                              'https://businessbosses.news/our-partners/'));
-                        }
-                      },
-                    ),
+                      const SizedBox(height: 5),
+                      Padding(
+                        padding: const EdgeInsets.only(right: 20.0),
+                        child: Text(
+                          companyDescription,
+                          overflow: TextOverflow.ellipsis,
+                          maxLines: 4,
+                          softWrap: true,
+                          style: const TextStyle(
+                            fontSize: 15,
+                            fontWeight: FontWeight.w100,
+                          ),
+                        ),
+                      ),
+                    ],
                   ),
                 ),
               ],
             ),
-          ),
-        const SizedBox(
-          width: double.infinity,
-          height: 10,
-          child: ColoredBox(color: backgroundcolorinterface),
+            const SizedBox(
+              height: 15,
+            ),
+            Container(
+              width: double.infinity,
+              height: 45,
+              child: ElevatedButton(
+                  onPressed: () async {
+                    final Uri url = Uri.parse(companyUrl);
+                    if (!await launchUrl(url)) {
+                      throw Exception('Could not launch $url');
+                    }
+                  },
+                  child: Text('Get Deal')),
+            ),
+          ],
         ),
-      ],
+      ),
     );
   }
 
