@@ -381,7 +381,14 @@ class _AddSupplierScreenState extends State<AddSupplierScreen> {
                           _selectedImages.isEmpty) {
                         anError = true;
                       }
-
+                      if (!_isValidURL(url!)) {
+                        showSnackbar(
+                            message:
+                                'Please enter a valid business website link!',
+                            error: true,
+                            title: 'Error');
+                        return;
+                      }
                       if (anError) {
                         showSnackbar(
                             message: 'All fields are mandatory!',
@@ -511,6 +518,13 @@ class _AddSupplierScreenState extends State<AddSupplierScreen> {
             message: 'Supplier not added!', title: 'Error!', error: true);
       }
     }
+  }
+
+  bool _isValidURL(String url) {
+    final RegExp urlPattern = RegExp(
+      r'^(https?:\/\/)?([a-zA-Z0-9-]{1,63}\.){1,255}[a-zA-Z]{2,63}(:[0-9]{1,5})?(\/.*)?$',
+    );
+    return urlPattern.hasMatch(url);
   }
 
   void _removeImage(int index) {

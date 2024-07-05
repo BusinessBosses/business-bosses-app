@@ -17,6 +17,7 @@ import 'package:flutter_speed_dial/flutter_speed_dial.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
+import 'package:url_launcher/url_launcher.dart';
 import '../../../action/action.dart';
 // import 'package:add_2_calendar/add_2_calendar.dart';
 
@@ -358,23 +359,27 @@ class _EventItemState extends State<EventItem> {
                                 ),
                               ),
                               onPressed: () {
-                                if (widget.event.user?.uid ==
-                                    profileController.myProfile.uid) {
-                                  jumpToLivePage(
-                                    context,
-                                    title: widget.event.title!,
-                                    roomID: widget.event.roomId!,
-                                    isHost: true,
-                                    image: widget.event.image,
-                                  );
+                                if (widget.event.link != null) {
+                                  if (widget.event.user?.uid ==
+                                      profileController.myProfile.uid) {
+                                    jumpToLivePage(
+                                      context,
+                                      title: widget.event.title!,
+                                      roomID: widget.event.roomId!,
+                                      isHost: true,
+                                      image: widget.event.image,
+                                    );
+                                  } else {
+                                    jumpToLivePage(
+                                      context,
+                                      title: widget.event.title!,
+                                      roomID: widget.event.roomId!,
+                                      isHost: false,
+                                      image: widget.event.image,
+                                    );
+                                  }
                                 } else {
-                                  jumpToLivePage(
-                                    context,
-                                    title: widget.event.title!,
-                                    roomID: widget.event.roomId!,
-                                    isHost: false,
-                                    image: widget.event.image,
-                                  );
+                                  _showDialogWithLink(context);
                                 }
                               },
                               child: const Text(
@@ -517,6 +522,39 @@ class _EventItemState extends State<EventItem> {
         }
       },
     );
+  }
+
+  void _showDialogWithLink(BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: const Text('Event Details'),
+          content: Text(widget.event.description!),
+          actions: <Widget>[
+            TextButton(
+              onPressed: () => Get.back(),
+              child: const Text('Cancel'),
+            ),
+            TextButton(
+              onPressed: () {
+                _launchURL(widget.event.link!);
+                Get.back();
+              },
+              child: const Text('Goto Meeting'),
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  void _launchURL(String url) async {
+    if (await canLaunchUrl(Uri.parse(url))) {
+      await launchUrl(Uri.parse(url));
+    } else {
+      throw 'Could not launch $url';
+    }
   }
 
   void _showDeleteConfirmationDialog(BuildContext context, int id) {

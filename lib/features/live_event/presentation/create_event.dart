@@ -160,7 +160,7 @@ class _CreateEventState extends State<CreateEvent> {
                 child: TextField(
                   controller: linkController,
                   decoration: const InputDecoration(
-                    labelText: 'Add Meeting URL',
+                    labelText: 'Add Zoom or Google Meet Link',
                     labelStyle: TextStyle(fontWeight: FontWeight.w600),
                     border: InputBorder.none,
                   ),
@@ -370,10 +370,22 @@ class _CreateEventState extends State<CreateEvent> {
                   String formattedStartDateTime = dateFormat.format(startAtt);
                   String formattedStartTime = timeFormat.format(startAtt);
 
-                  if (titleController.text.isEmpty) {
+                  if (linkController.text.isNotEmpty &&
+                      !isValidMeetingLink(linkController.text)) {
                     showSnackBar(
                       context,
-                      message: 'Please enter a title',
+                      message: 'Please enter a valid Zoom or Google Meet link',
+                    );
+                    setState(() {
+                      isLoading = false;
+                    });
+                    return;
+                  }
+                  if (titleController.text.isEmpty ||
+                      descriptionController.text.isEmpty) {
+                    showSnackBar(
+                      context,
+                      message: 'Please enter a title and description!',
                     );
                     setState(() {
                       isLoading = false;
@@ -399,6 +411,7 @@ class _CreateEventState extends State<CreateEvent> {
                     });
                     return;
                   }
+
                   if (endAt.isAfter(startAt.add(const Duration(hours: 2)))) {
                     showSnackBar(context,
                         message: 'Event duration cannot be more than 2 hours');
@@ -479,6 +492,15 @@ class _CreateEventState extends State<CreateEvent> {
         ),
       ),
     );
+  }
+
+  bool isValidMeetingLink(String link) {
+    final RegExp zoomRegExp =
+        RegExp(r'^https://(www\.)?zoom\.us/j/[a-zA-Z0-9]+');
+    final RegExp googleMeetRegExp =
+        RegExp(r'^https://meet\.google\.com/[a-zA-Z0-9\-]+');
+
+    return zoomRegExp.hasMatch(link) || googleMeetRegExp.hasMatch(link);
   }
 
   void jumpToLivePage(BuildContext context,
