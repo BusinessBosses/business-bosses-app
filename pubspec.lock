@@ -1273,10 +1273,10 @@ packages:
     dependency: "direct main"
     description:
       name: photo_manager
-      sha256: aec3fb848e4bf3f0e36630de90d1bcafff57a059b39f429009fe561fdf9acb74
+      sha256: "68d6099d07ce5033170f8368af8128a4555cf1d590a97242f83669552de989b1"
       url: "https://pub.dev"
     source: hosted
-    version: "3.1.0"
+    version: "3.2.0"
   photo_view:
     dependency: transitive
     description:
@@ -1998,26 +1998,26 @@ packages:
     dependency: transitive
     description:
       name: zego_uikit
-      sha256: "01a1f13352aeeb4375e0629d21760b1916b98ea930ccd55083540b9d4c44e674"
+      sha256: "6be23f606d2c317143f71976121991e27b110789228e990a0fd14f19e470adde"
       url: "https://pub.dev"
     source: hosted
-    version: "2.22.2"
+    version: "2.21.0"
   zego_uikit_prebuilt_call:
     dependency: "direct main"
     description:
       name: zego_uikit_prebuilt_call
-      sha256: "7716441549d25cba5d0a09b5cc9199f1080ab4cfbf1225f5f825cdcc30f307a6"
+      sha256: "60f7694bf2e946e26617fc227c6142907a02da4b46e3b6f5489aacfaffb92fb8"
       url: "https://pub.dev"
     source: hosted
-    version: "4.9.0"
+    version: "4.7.0"
   zego_uikit_prebuilt_live_audio_room:
     dependency: "direct main"
     description:
       name: zego_uikit_prebuilt_live_audio_room
-      sha256: "75b273d366d9adab1b00b062c843c06878ae3dc213824cf042856922de67c89f"
+      sha256: c6e16776d490682c07bcd4ae64b610bd25d077e0f4a15d1c70792e2e529beb07
       url: "https://pub.dev"
     source: hosted
-    version: "3.6.7"
+    version: "2.16.0"
   zego_uikit_signaling_plugin:
     dependency: "direct main"
     description:
