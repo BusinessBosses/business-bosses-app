@@ -488,7 +488,7 @@ class MarketController extends GetxController {
 
     searchedUsers.clear();
 
-    for (var user in users) {
+    for (UserModel user in users) {
       if (user.username.toLowerCase().contains(query.toLowerCase()) ||
           user.name!.toLowerCase().contains(query.toLowerCase())) {
         searchedUsers.add(user);
@@ -505,7 +505,7 @@ class MarketController extends GetxController {
     searchedPosts.clear();
 
     // Assuming products is the list of already fetched products
-    for (var product in products) {
+    for (MarketModel product in products) {
       if (product.description.toLowerCase().contains(query.toLowerCase())) {
         searchedPosts.add(product);
       }
@@ -522,7 +522,7 @@ class MarketController extends GetxController {
     searchedServices.clear();
 
     // Assuming products is the list of already fetched products
-    for (var service in services) {
+    for (MarketModel service in services) {
       if (service.description.toLowerCase().contains(query.toLowerCase())) {
         searchedServices.add(service);
       }

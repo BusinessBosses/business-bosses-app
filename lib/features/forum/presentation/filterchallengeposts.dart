@@ -1,21 +1,12 @@
-import 'package:business_bosses_v2/features/donations/controller/donations_controller.dart';
-import 'package:business_bosses_v2/features/donations/models/donations_model.dart';
-import 'package:business_bosses_v2/features/donations/widgets/donation_item.dart';
 import 'package:business_bosses_v2/features/forum/controller/bossup_controller.dart';
-import 'package:business_bosses_v2/features/forum/controller/challenge_controller.dart';
 import 'package:business_bosses_v2/features/forum/models/forum_model.dart';
 import 'package:business_bosses_v2/features/forum/widgets/forum_item.dart';
-import 'package:business_bosses_v2/features/search/controller/search_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 import '../../../common/widgets/safety_model.dart';
-import '../../../navigation/routes.dart';
 import '../../../utils/theme/theme.dart';
 import '../../home/controller/home_controller.dart';
-import '../../posts/models/post_model.dart';
-import '../../posts/widgets/post_grid_item.dart';
-import '../../posts/widgets/userpost_tile.dart';
 
 class FilterChallengePosts extends StatelessWidget {
   final List<ForumModel> filterItems;

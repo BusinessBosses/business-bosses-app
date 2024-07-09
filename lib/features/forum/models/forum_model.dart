@@ -115,7 +115,7 @@ class ForumModel {
           ? List.from(map['comments'])
               .map((e) => CommentModel.fromMap(e as Map<String, dynamic>))
               .toList()
-          : [],
+          : <CommentModel>[],
       user: map['user'] != null
           ? UserModel.fromMap(map['user'] as Map<String, dynamic>)
           : null,

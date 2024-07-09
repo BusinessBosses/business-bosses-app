@@ -825,11 +825,11 @@ class _ChatRoomScreenState extends State<ChatRoomScreen> {
                                               .toString()
                                               .contains('ccaalliidd')
                                           ? Column(
-                                              children: [
+                                              children: <Widget>[
                                                 Row(
                                                   mainAxisAlignment:
                                                       MainAxisAlignment.center,
-                                                  children: [
+                                                  children: <Widget>[
                                                     Container(
                                                         padding:
                                                             const EdgeInsets
@@ -855,9 +855,9 @@ class _ChatRoomScreenState extends State<ChatRoomScreen> {
                                                                   .center,
                                                           alignment:
                                                               WrapAlignment.end,
-                                                          children: [
-                                                            Stack(children: [
-                                                              Container(
+                                                          children: <Widget>[
+                                                            Stack(children: <Widget>[
+                                                              const SizedBox(
                                                                 height: 50,
                                                                 width: 50,
                                                               ),
@@ -889,7 +889,7 @@ class _ChatRoomScreenState extends State<ChatRoomScreen> {
                                                                 ),
                                                               ),
                                                             ]),
-                                                            SizedBox(
+                                                            const SizedBox(
                                                               width: 10,
                                                             ),
                                                             Container(
@@ -1122,8 +1122,8 @@ class StartCallDialog extends StatelessWidget {
       {super.key, required this.callerId, required this.recipientId});
   @override
   Widget build(BuildContext context) {
-    final ProfileController _profileController = Get.find();
-    final ChatController _chatController = Get.find();
+    final ProfileController profileController = Get.find();
+    final ChatController chatController = Get.find();
     return AlertDialog(
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(20), // Set the corner radius here
@@ -1139,34 +1139,34 @@ class StartCallDialog extends StatelessWidget {
         }),
         builder: (BuildContext context, AsyncSnapshot<String> snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
-            return Container(
+            return const SizedBox(
               height: 40,
               child: Center(
                 child: CircularProgressIndicator(),
               ),
             );
           } else if (snapshot.hasError) {
-            return Text('Failed to start call: An Error Occured');
+            return const Text('Failed to start call: An Error Occured');
           } else {
             final String? callId = snapshot.data;
             return Column(
               mainAxisSize: MainAxisSize.min,
               children: <Widget>[
                 Text('Call ID: $callId'),
-                SizedBox(
+                const SizedBox(
                   height: 20,
                 ),
                 Row(
                   crossAxisAlignment: CrossAxisAlignment.center,
                   mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
+                  children: <Widget>[
                     GestureDetector(
                         onTap: () {
-                          _chatController.addNewChat(
+                          chatController.addNewChat(
                             <String, dynamic>{
-                              'senderUid': _profileController.myProfile.uid,
+                              'senderUid': profileController.myProfile.uid,
                               'receiverUid': chatargs.uid,
-                              'messageText': '$callId' + 'ccaalliidd'
+                              'messageText': '$callId' 'ccaalliidd'
                             },
                             chatargs,
                           );
@@ -1185,7 +1185,7 @@ class StartCallDialog extends StatelessWidget {
                                   color: Colors.white,
                                   fontWeight: FontWeight.w700),
                             ))),
-                    SizedBox(
+                    const SizedBox(
                       width: 10,
                     ),
                     Container(

@@ -349,7 +349,7 @@ class _BossOfWeekProfileTileState extends State<BossOfWeekProfileTile> {
                             children: homeController.bossUp!.reversed
                                 .toList()
                                 .map((Map<String, dynamic> item) {
-                              final startColor = startColors[
+                              final Color startColor = startColors[
                                   homeController.bossUp!.indexOf(item) %
                                       startColors.length];
                               return LayoutBuilder(
@@ -407,7 +407,7 @@ class _BossOfWeekProfileTileState extends State<BossOfWeekProfileTile> {
                                               child: Wrap(
                                                   crossAxisAlignment:
                                                       WrapCrossAlignment.center,
-                                                  children: [
+                                                  children: <Widget>[
                                                     Container(
                                                       decoration:
                                                           const BoxDecoration(

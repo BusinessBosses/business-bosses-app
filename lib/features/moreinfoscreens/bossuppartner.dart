@@ -75,7 +75,7 @@ class _BossuppartnerState extends State<Bossuppartner> {
         ),
       ),
       body: Column(
-        children: [
+        children: <Widget>[
           Padding(
             padding:
                 const EdgeInsets.only(left: 20, right: 20, top: 20, bottom: 20),
@@ -97,7 +97,7 @@ class _BossuppartnerState extends State<Bossuppartner> {
                 ),
                 Align(
                   alignment: Alignment.centerRight,
-                  child: Container(
+                  child: SizedBox(
                     height: 45,
                     child: ElevatedButton(
                       child: const Text(
@@ -214,7 +214,7 @@ class BossuppartnerItem extends StatelessWidget {
                 Expanded(
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
+                    children: <Widget>[
                       Text(
                         companyName,
                         softWrap: true,
@@ -246,7 +246,7 @@ class BossuppartnerItem extends StatelessWidget {
             const SizedBox(
               height: 15,
             ),
-            Container(
+            SizedBox(
               width: double.infinity,
               height: 45,
               child: ElevatedButton(
@@ -256,7 +256,7 @@ class BossuppartnerItem extends StatelessWidget {
                       throw Exception('Could not launch $url');
                     }
                   },
-                  child: Text('Get Deal')),
+                  child: const Text('Get Deal')),
             ),
           ],
         ),

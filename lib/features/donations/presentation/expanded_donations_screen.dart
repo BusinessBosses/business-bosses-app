@@ -4,7 +4,6 @@ import 'package:business_bosses_v2/common/widgets/network_image_with_placeholder
 import 'package:business_bosses_v2/common/widgets/typography/text_widget.dart';
 import 'package:business_bosses_v2/features/donations/controller/donations_controller.dart';
 import 'package:business_bosses_v2/features/donations/models/donations_model.dart';
-import 'package:business_bosses_v2/features/donations/presentation/boost_donations_screen.dart';
 import 'package:business_bosses_v2/features/donations/presentation/create_donations.dart';
 import 'package:business_bosses_v2/features/donations/widgets/donation_comment.dart';
 import 'package:business_bosses_v2/features/donations/widgets/supporteritem.dart';
@@ -1020,7 +1019,7 @@ class _ExpandedDonationScreenState extends State<ExpandedDonationScreen> {
                 height: 150,
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
+                  children: <Widget>[
                     GestureDetector(
                       onTap: () => Get.toNamed(
                         Routes.createPost,
@@ -1034,7 +1033,7 @@ class _ExpandedDonationScreenState extends State<ExpandedDonationScreen> {
                         width: double.infinity,
                         padding: const EdgeInsets.symmetric(vertical: 15),
                         child: Row(
-                          children: [
+                          children: <Widget>[
                             SvgPicture.asset(
                               'assets/svgs/text.svg',
                               color: textColor,
@@ -1067,13 +1066,13 @@ class _ExpandedDonationScreenState extends State<ExpandedDonationScreen> {
                         width: double.infinity,
                         padding: const EdgeInsets.symmetric(vertical: 15),
                         child: Row(
-                          children: [
+                          children: <Widget>[
                             SvgPicture.asset(
                               'assets/svgs/share.svg',
                               color: textColor,
                               height: 16,
                             ),
-                            SizedBox(
+                            const SizedBox(
                               width: 10,
                             ),
                             const Text(

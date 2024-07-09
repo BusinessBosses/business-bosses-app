@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:typed_data';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -27,7 +28,7 @@ class _PDFScreenState extends State<PDFScreen> {
     super.initState();
     _pdfDocument = _loadPdf(widget.url);
     _pdfController = PdfController(document: _pdfDocument);
-    Timer(Duration(seconds: 3), () {
+    Timer(const Duration(seconds: 3), () {
       setState(() {
         _isVisible = false;
       });
@@ -36,11 +37,11 @@ class _PDFScreenState extends State<PDFScreen> {
 
   Future<PdfDocument> _loadPdf(String url) async {
     try {
-      final pdfData = await InternetFile.get(url);
+      final Uint8List pdfData = await InternetFile.get(url);
       return PdfDocument.openData(pdfData);
     } catch (e) {
-      debugPrint("Failed to load PDF: $e");
-      throw Exception("Failed to load PDF");
+      debugPrint('Failed to load PDF: $e');
+      throw Exception('Failed to load PDF');
     }
   }
 
@@ -64,16 +65,16 @@ class _PDFScreenState extends State<PDFScreen> {
         title: Text(
           widget.filename,
           textAlign: TextAlign.center,
-          style: TextStyle(fontSize: 20),
+          style: const TextStyle(fontSize: 20),
         ),
       ),
-      body: Stack(children: [
+      body: Stack(children: <Widget>[
         Container(
           color: backgroundColor,
           height: double.infinity,
           child: FutureBuilder<PdfDocument>(
             future: _pdfDocument,
-            builder: (context, snapshot) {
+            builder: (BuildContext context, AsyncSnapshot<PdfDocument> snapshot) {
               if (snapshot.connectionState == ConnectionState.waiting) {
                 return const Center(
                   child: CircularProgressIndicator(
@@ -107,8 +108,8 @@ class _PDFScreenState extends State<PDFScreen> {
                       color: Colors.black12,
                       borderRadius: BorderRadius.circular(20),
                     ),
-                    padding: EdgeInsets.symmetric(horizontal: 10, vertical: 5),
-                    child: Text('Scroll down'),
+                    padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+                    child: const Text('Scroll down'),
                   ),
                 ),
               )

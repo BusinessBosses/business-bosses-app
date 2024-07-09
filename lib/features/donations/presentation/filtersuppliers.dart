@@ -39,13 +39,13 @@ class _FilterUsersState extends State<FilterSuppliers> {
 
     if (_selectedCategory != null) {
       filteredItems = filteredItems
-          .where((item) => item.category == _selectedCategory)
+          .where((SuppliersModel item) => item.category == _selectedCategory)
           .toList();
     }
 
     if (_selectedLocation != null) {
       filteredItems = filteredItems
-          .where((item) => item.location == _selectedLocation)
+          .where((SuppliersModel item) => item.location == _selectedLocation)
           .toList();
     }
 
@@ -63,7 +63,7 @@ class _FilterUsersState extends State<FilterSuppliers> {
         : Scaffold(
             body: SingleChildScrollView(
               child: Column(
-                children: [
+                children: <Widget>[
                   SingleChildScrollView(
                     scrollDirection: Axis.horizontal,
                     child: Padding(
@@ -205,7 +205,7 @@ class _FilterUsersState extends State<FilterSuppliers> {
                     ),
                   ),
                   NotificationListener<ScrollNotification>(
-                    onNotification: (scrollNotification) {
+                    onNotification: (ScrollNotification scrollNotification) {
                       FocusScope.of(context).unfocus();
                       return false;
                     },

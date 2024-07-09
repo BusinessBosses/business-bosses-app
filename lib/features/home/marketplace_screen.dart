@@ -1,28 +1,19 @@
-import 'package:business_bosses_v2/features/donations/presentation/filterdonationusers.dart';
 import 'package:business_bosses_v2/features/donations/presentation/filtersuppliers.dart';
 import 'package:business_bosses_v2/features/forum/models/industry.dart';
 import 'package:business_bosses_v2/features/home/widgets/bottom_bar.dart';
 import 'package:business_bosses_v2/features/home/widgets/floatingbutton.dart';
-import 'package:business_bosses_v2/features/home/widgets/sellingpopup.dart';
 import 'package:business_bosses_v2/features/marketplace/controllers/supplier_controller.dart';
 import 'package:business_bosses_v2/features/marketplace/models/market_model.dart';
-import 'package:business_bosses_v2/features/marketplace/presentation/add_supplier.dart';
 import 'package:business_bosses_v2/features/marketplace/presentation/filtermarketplaceposts.dart';
-import 'package:business_bosses_v2/features/marketplace/presentation/market_members.dart';
 import 'package:business_bosses_v2/features/marketplace/presentation/sell_screen.dart';
-import 'package:business_bosses_v2/features/marketplace/presentation/sell_services.dart';
 import 'package:business_bosses_v2/features/marketplace/presentation/supplierspage.dart';
 import 'package:business_bosses_v2/features/marketplace/widgets/marketplace_item.dart';
 
-import 'package:business_bosses_v2/features/marketplace/widgets/markets.dart';
 import 'package:business_bosses_v2/features/marketplace/widgets/products.dart';
 import 'package:business_bosses_v2/features/marketplace/widgets/service_item.dart';
 import 'package:business_bosses_v2/features/marketplace/widgets/services.dart';
 import 'package:business_bosses_v2/features/search/widgets/search_bar.dart';
-import 'package:business_bosses_v2/navigation/routes.dart';
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_sticky_header/flutter_sticky_header.dart';
 import 'package:country_list_pick/country_list_pick.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
@@ -301,10 +292,10 @@ class _MarketplaceScreenState extends State<MarketplaceScreen>
                                       padding: const EdgeInsets.symmetric(
                                           horizontal: 15.0),
                                       child: Row(
-                                        children: [
+                                        children: <Widget>[
                                           Container(
                                             width: 250,
-                                            padding: EdgeInsets.symmetric(
+                                            padding: const EdgeInsets.symmetric(
                                               horizontal: 15,
                                             ),
                                             decoration: BoxDecoration(
@@ -370,7 +361,7 @@ class _MarketplaceScreenState extends State<MarketplaceScreen>
                                               ),
                                             ),
                                           ),
-                                          Container(
+                                          SizedBox(
                                             width: 250,
                                             child: Padding(
                                               padding:
@@ -766,7 +757,7 @@ class _MarketplaceScreenState extends State<MarketplaceScreen>
                                                       ),
                                                       Expanded(
                                                         child: Column(
-                                                          children: [
+                                                          children: <Widget>[
                                                             Expanded(
                                                               child: TabBarView(
                                                                 controller:

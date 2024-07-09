@@ -139,7 +139,7 @@ class _AllForumScreenState extends State<AllForumScreen>
                             ),
                       onPressed: () {
                         _iscouseSearching
-                            ? {
+                            ? <void>{
                                 _iscouseSearching = !_iscouseSearching,
                                 setState(() {}),
                                 courseController.searchedPosts.clear(),
@@ -317,7 +317,7 @@ class _AllForumScreenState extends State<AllForumScreen>
           body: _isSearching
               ? TabBarView(
                   controller: _searchTabController,
-                  children: [
+                  children: <Widget>[
                     Obx(
                       () => FilterChallengePosts(
                         filterItems: controller.searchedPosts,
@@ -338,7 +338,7 @@ class _AllForumScreenState extends State<AllForumScreen>
               : _iscouseSearching
                   ? TabBarView(
                       controller: _coursesearchTabController,
-                      children: [
+                      children: <Widget>[
                         Obx(
                           () => FilterCoursesPosts(
                             filterItems: courseController.searchedPosts,

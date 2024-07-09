@@ -27,7 +27,7 @@ class CoursesPopup extends StatelessWidget {
             ),
             Center(
               child: Container(
-                padding: EdgeInsets.all(20),
+                padding: const EdgeInsets.all(20),
                 decoration: BoxDecoration(
                     color: backgroundColor,
                     borderRadius: BorderRadius.circular(15)),

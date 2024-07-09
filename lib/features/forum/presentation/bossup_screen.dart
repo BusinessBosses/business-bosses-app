@@ -152,7 +152,7 @@ class _BossUpSectionState extends State<BossUpSection>
                 textAlign: TextAlign.center,
                 style: const TextStyle(fontSize: 20),
               ),
-        actions: [
+        actions: <Widget>[
           IconButton(
             icon: _isSearching
                 ? const Icon(Icons.close)
@@ -189,7 +189,7 @@ class _BossUpSectionState extends State<BossUpSection>
       body: _isSearching
           ? TabBarView(
               controller: _searchTabController,
-              children: [
+              children: <Widget>[
                 Obx(
                   () => FilterChallengePosts(
                     filterItems: bossUpController.searchedPosts,

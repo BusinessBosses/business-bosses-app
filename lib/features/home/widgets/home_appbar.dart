@@ -28,7 +28,7 @@ class Homeappbar extends StatelessWidget {
   Widget build(BuildContext context) {
     return SingleChildScrollView(
       child: Column(
-        children: [
+        children: <Widget>[
           AppBar(
             backgroundColor: Colors.white,
             automaticallyImplyLeading: false,

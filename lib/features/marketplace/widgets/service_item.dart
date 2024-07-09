@@ -187,11 +187,11 @@ class _ServiceTileState extends State<ServiceTile> {
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.start,
                             crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
+                            children: <Widget>[
                               Column(
                                 mainAxisAlignment: MainAxisAlignment.start,
                                 crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
+                                children: <Widget>[
                                   SizedBox(
                                     height: 90,
                                     width: 160,
@@ -214,7 +214,7 @@ class _ServiceTileState extends State<ServiceTile> {
                                     height: 10,
                                   ),
                                   Row(
-                                    children: [
+                                    children: <Widget>[
                                       SizedBox(
                                         height: 20.0,
                                         width: 20.0,

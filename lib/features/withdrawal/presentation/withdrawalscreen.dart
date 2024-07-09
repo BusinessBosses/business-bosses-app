@@ -331,7 +331,7 @@ class _WithdrawalScreenState extends State<WithdrawalScreen> {
                         ),
                       ),
                     ),
-                    SizedBox(
+                    const SizedBox(
                       height: 5,
                     ),
                   ],

@@ -43,7 +43,7 @@ class SupplierController extends GetxController {
 
     searchedSuppliers.clear();
     String lowerCaseQuery = query.toLowerCase();
-    for (var user in suppliers) {
+    for (SuppliersModel user in suppliers) {
       String lowerCaseName = user.name.toLowerCase();
       if (lowerCaseName.contains(lowerCaseQuery) ||
           user.user!.name!.toLowerCase().contains(lowerCaseQuery) ||

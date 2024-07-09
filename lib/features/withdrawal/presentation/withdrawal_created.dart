@@ -30,7 +30,7 @@ class _WithdrawalCreatedState extends State<WithdrawalCreated> {
         mainAxisAlignment: MainAxisAlignment.center,
         crossAxisAlignment: CrossAxisAlignment.center,
         children: <Widget>[
-          Container(
+          SizedBox(
             width: 100,
             height: 100,
             child: SvgPicture.asset('assets/svgs/waiting.svg'),

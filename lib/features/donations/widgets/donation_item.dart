@@ -5,7 +5,6 @@ import 'package:business_bosses_v2/common/widgets/popup/my_popup_menu_button.dar
 import 'package:business_bosses_v2/common/widgets/typography/text_widget.dart';
 import 'package:business_bosses_v2/features/donations/controller/donations_controller.dart';
 import 'package:business_bosses_v2/features/donations/models/donations_model.dart';
-import 'package:business_bosses_v2/features/donations/presentation/boost_donations_screen.dart';
 import 'package:business_bosses_v2/features/donations/presentation/create_donations.dart';
 import 'package:business_bosses_v2/features/donations/presentation/expanded_donations_screen.dart';
 import 'package:business_bosses_v2/features/donations/widgets/donation_comment.dart';
@@ -122,17 +121,19 @@ class _DonationItemState extends State<DonationItem> {
     return GestureDetector(
       onTap: () {
         widget.donation.setViews(widget.donation.views! + 1);
-        ApiService.put(path: 'donation/approve/${widget.donation.id}', body: {
-          'views': widget.donation.views! + 1,
-          'isActive': true,
-          'isApproved': true,
-        });
+        ApiService.put(
+            path: 'donation/approve/${widget.donation.id}',
+            body: <String, dynamic>{
+              'views': widget.donation.views! + 1,
+              'isActive': true,
+              'isApproved': true,
+            });
         Get.to(() => ExpandedDonationScreen(donation: widget.donation));
       },
       child: Container(
         decoration: const BoxDecoration(color: Colors.white),
         child: Column(
-          children: [
+          children: <Widget>[
             Padding(
               padding: const EdgeInsets.only(
                   top: 15.0, left: 15, right: 15, bottom: 10),
@@ -140,13 +141,13 @@ class _DonationItemState extends State<DonationItem> {
                 mainAxisAlignment: MainAxisAlignment.start,
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: <Widget>[
-                  Stack(children: [
+                  Stack(children: <Widget>[
                     GestureDetector(
                       onTap: () {
                         widget.donation.setViews(widget.donation.views! + 1);
                         ApiService.put(
                             path: 'donation/approve/${widget.donation.id}',
-                            body: {
+                            body: <String, dynamic>{
                               'views': widget.donation.views! + 1,
                               'isActive': true,
                               'isApproved': true,
@@ -157,7 +158,7 @@ class _DonationItemState extends State<DonationItem> {
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.start,
                         crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
+                        children: <Widget>[
                           SizedBox(
                             height: 90,
                             width: 160,
@@ -189,7 +190,7 @@ class _DonationItemState extends State<DonationItem> {
                                   arguments: widget.donation.user);
                             },
                             child: Row(
-                              children: [
+                              children: <Widget>[
                                 SizedBox(
                                   height: 20.0,
                                   width: 20.0,
@@ -222,7 +223,7 @@ class _DonationItemState extends State<DonationItem> {
                                       fontWeight: FontWeight.w700),
                                 ),
                                 widget.donation.user?.isSubscribed == true
-                                    ? Wrap(children: [
+                                    ? Wrap(children: <Widget>[
                                         const SizedBox(width: 3),
                                         SvgPicture.asset(
                                           'assets/svgs/premiumbadge.svg',
@@ -244,7 +245,7 @@ class _DonationItemState extends State<DonationItem> {
                   Expanded(
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
+                      children: <Widget>[
                         Text(
                           overflow:
                               TextOverflow.ellipsis, // or TextOverflow.ellipsis
@@ -264,16 +265,16 @@ class _DonationItemState extends State<DonationItem> {
                         ),
                         Row(
                           mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
+                          children: <Widget>[
                             Expanded(
                               child: Column(
-                                children: [
+                                children: <Widget>[
                                   Row(
                                     mainAxisAlignment:
                                         MainAxisAlignment.spaceBetween,
-                                    children: [
+                                    children: <Widget>[
                                       Row(
-                                        children: [
+                                        children: <Widget>[
                                           Text(
                                             formatter.format(
                                                 widget.donation.amountRecieved),
@@ -322,11 +323,11 @@ class _DonationItemState extends State<DonationItem> {
                                         MainAxisAlignment.spaceBetween,
                                     crossAxisAlignment:
                                         CrossAxisAlignment.center,
-                                    children: [
+                                    children: <Widget>[
                                       Wrap(
                                         crossAxisAlignment:
                                             WrapCrossAlignment.center,
-                                        children: [
+                                        children: <Widget>[
                                           SvgPicture.asset(
                                             'assets/svgs/coin.svg',
                                             height: 12,
@@ -350,7 +351,7 @@ class _DonationItemState extends State<DonationItem> {
                                       Wrap(
                                         crossAxisAlignment:
                                             WrapCrossAlignment.center,
-                                        children: [
+                                        children: <Widget>[
                                           Text(
                                             formatter.format(widget
                                                 .donation.transactions!.length),
@@ -726,7 +727,7 @@ class _DonationItemState extends State<DonationItem> {
                       widget.donation.setViews(widget.donation.views! + 1);
                       ApiService.put(
                           path: 'donation/approve/${widget.donation.id}',
-                          body: {
+                          body: <String, dynamic>{
                             'views': widget.donation.views! + 1,
                             'isActive': true,
                             'isApproved': true,
@@ -813,7 +814,7 @@ class _DonationItemState extends State<DonationItem> {
                 height: 150,
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
+                  children: <Widget>[
                     GestureDetector(
                       onTap: () => Get.toNamed(
                         Routes.createPost,
@@ -827,7 +828,7 @@ class _DonationItemState extends State<DonationItem> {
                         width: double.infinity,
                         padding: const EdgeInsets.symmetric(vertical: 15),
                         child: Row(
-                          children: [
+                          children: <Widget>[
                             SvgPicture.asset(
                               'assets/svgs/text.svg',
                               color: textColor,
@@ -860,7 +861,7 @@ class _DonationItemState extends State<DonationItem> {
                         width: double.infinity,
                         padding: const EdgeInsets.symmetric(vertical: 15),
                         child: Row(
-                          children: [
+                          children: <Widget>[
                             SvgPicture.asset(
                               'assets/svgs/share.svg',
                               color: textColor,

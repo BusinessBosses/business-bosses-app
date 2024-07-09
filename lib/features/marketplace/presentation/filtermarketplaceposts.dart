@@ -43,7 +43,7 @@ class FilterMarketplacePosts extends StatelessWidget {
               isLoading: isLoading,
             )
           : NotificationListener<ScrollNotification>(
-              onNotification: (scrollNotification) {
+              onNotification: (ScrollNotification scrollNotification) {
                 FocusScope.of(context).unfocus();
                 return false;
               },

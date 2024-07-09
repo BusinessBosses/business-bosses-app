@@ -323,7 +323,7 @@ class CourseController extends GetxController {
 
     searchedUsers.clear();
 
-    for (var user in usersMembers) {
+    for (UserModel user in usersMembers) {
       if (user.username.toLowerCase().contains(query.toLowerCase()) ||
           user.name!.toLowerCase().contains(query.toLowerCase())) {
         searchedUsers.add(user);
@@ -342,7 +342,7 @@ class CourseController extends GetxController {
     searchedPosts.clear();
 
     // Assuming products is the list of already fetched products
-    for (var row in courses) {
+    for (CourseModel row in courses) {
       if (row.description!.toLowerCase().contains(query.toLowerCase()) ||
           row.title!.toLowerCase().contains(query.toLowerCase())) {
         searchedPosts.add(row);
