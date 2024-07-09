@@ -402,7 +402,9 @@ class _ExpandedMarketplaceScreenState extends State<ExpandedMarketplaceScreen> {
                               child: Padding(
                                 padding: const EdgeInsets.all(15.0),
                                 child: Text(
-                                  widget.market.location!.contains('delivery')
+                                  widget.market.location
+                                              ?.contains('delivery') ??
+                                          false
                                       ? 'Place Order'
                                       : 'Book Now',
                                   style: const TextStyle(
