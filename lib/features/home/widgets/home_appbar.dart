@@ -63,7 +63,7 @@ class Homeappbar extends StatelessWidget {
             ),
             leading: InkWell(
               onTap: () {
-                Get.toNamed(Routes.chat);
+                Get.toNamed(Routes.liveEvents);
               },
               child: SizedBox(
                 width: 55,
@@ -77,8 +77,11 @@ class Homeappbar extends StatelessWidget {
                       clipBehavior: Clip.none,
                       children: <Widget>[
                         Container(
-                          decoration: const BoxDecoration(
-                            boxShadow: <BoxShadow>[
+                          padding: EdgeInsets.all(12),
+                          decoration:  BoxDecoration(
+                            borderRadius: BorderRadius.circular(10),
+                            color: Colors.white,
+                            boxShadow: const <BoxShadow>[
                               BoxShadow(
                                 color: Color.fromRGBO(0, 0, 0, 0.08),
                                 spreadRadius: 0.05,
@@ -88,7 +91,8 @@ class Homeappbar extends StatelessWidget {
                             ],
                           ),
                           child: SvgPicture.asset(
-                            'assets/svgs/messagewithbackground.svg',
+                            'assets/svgs/liveevent.svg',
+                            height: 18,
                           ),
                         ),
                         if (hasBadge)

@@ -71,15 +71,15 @@ class BottomBar extends StatelessWidget {
                       Expanded(
                         flex: 10,
                         child: BottomTabButton(
-                          icon: 'assets/svgs/liveevent.svg',
-                          label: 'Events',
+                          icon: 'assets/svgs/messages.svg',
+                          label: 'Chats',
                           onTap: () {
                             if (activeIndex == 2) return;
 
                             if (activeIndex == 0) {
-                              Get.toNamed(Routes.liveEvents);
+                              Get.toNamed(Routes.chat);
                             } else {
-                              Get.offAndToNamed(Routes.liveEvents);
+                              Get.offAndToNamed(Routes.chat);
                             }
                           },
                           isActive: activeIndex == 2,

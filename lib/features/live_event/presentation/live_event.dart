@@ -93,7 +93,12 @@ class _LiveEventState extends State<LiveEvent> {
         return Scaffold(
             backgroundColor: Colors.white,
             appBar: AppBar(
-              automaticallyImplyLeading: false,
+              leading: IconButton(
+                onPressed: () {
+                  Navigator.pop(context);
+                },
+                icon: SvgPicture.asset('assets/svgs/backbutton.svg'),
+              ),
               title: _isSearching
                   ? Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -377,10 +382,9 @@ class _LiveEventState extends State<LiveEvent> {
                         ),
                       ),
                     ),
-              const BottomBar(
-                activeIndex: 2,
-              ),
-              showFloatingButton ? const Floatingbutton() : Container(),
+              showFloatingButton
+                  ? const Floatingbutton(isEventScreen: true)
+                  : Container(),
             ]));
       },
     );

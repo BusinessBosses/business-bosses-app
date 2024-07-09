@@ -322,13 +322,15 @@ class _ChatRoomScreenState extends State<ChatRoomScreen> {
               child: Stack(
                 children: <Widget>[
                   Container(
-                    child: controller
+                    child:
+                     controller
                             .extractConversations(
                               args.uid,
                               _profileController.myProfile.uid,
                             )
                             .isEmpty
-                        ? widget.frommarketplace
+                        ? 
+                        widget.frommarketplace
                             ? SizedBox(
                                 height: double.infinity,
                                 child: SingleChildScrollView(
