@@ -395,7 +395,8 @@ class _HomeScreenState extends State<HomeScreen>
                                                     Material(
                                                       elevation: 0.1,
                                                       color: Colors.white,
-                                                      child: DefaultTabController(
+                                                      child:
+                                                          DefaultTabController(
                                                         length: 2,
                                                         child: TabBar(
                                                           controller:

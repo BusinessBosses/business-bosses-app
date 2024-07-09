@@ -452,13 +452,12 @@ class _ChatRoomScreenState extends State<ChatRoomScreen> {
                                                                         width:
                                                                             3),
                                                                     Text(
-                                                                      widget.market?.category != null ?
-                                                                      widget.market!.category!.length >
-                                                                              40
-                                                                          ? '${widget.market!.category!.substring(0, 40)}...'
-                                                                          : widget
-                                                                              .market!
-                                                                              .category! : 'Other',
+                                                                      widget.market?.category !=
+                                                                              null
+                                                                          ? widget.market!.category!.length > 40
+                                                                              ? '${widget.market!.category!.substring(0, 40)}...'
+                                                                              : widget.market!.category!
+                                                                          : 'Other',
                                                                       style:
                                                                           const TextStyle(
                                                                         fontWeight:
@@ -1267,16 +1266,14 @@ class JoinCallDialog extends StatelessWidget {
         children: [
           Container(
             padding: const EdgeInsets.symmetric(horizontal: 15),
-                decoration: BoxDecoration(
-                  color: const Color.fromRGBO(
-                      244, 244, 244, 1), // Background color
-                  borderRadius: BorderRadius.circular(10.0), // Border radius
-                  border: Border.all(
-                    color:
-                        const Color.fromRGBO(224, 224, 224, 1), // Border color
-                    width: 1.0, // Border width
-                  ),
-                ),
+            decoration: BoxDecoration(
+              color: const Color.fromRGBO(244, 244, 244, 1), // Background color
+              borderRadius: BorderRadius.circular(10.0), // Border radius
+              border: Border.all(
+                color: const Color.fromRGBO(224, 224, 224, 1), // Border color
+                width: 1.0, // Border width
+              ),
+            ),
             child: TextField(
               controller: _callIdController,
               decoration: const InputDecoration(

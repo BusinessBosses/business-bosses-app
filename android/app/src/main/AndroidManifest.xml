@@ -21,7 +21,7 @@
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher"
         android:usesCleartextTraffic="true"
-        android:enableOnBackInvokedCallback="true">
+        android:enableOnBackInvokedCallback="false">
 
         <provider
             android:name="vn.hunghd.flutterdownloader.DownloadedFileProvider"

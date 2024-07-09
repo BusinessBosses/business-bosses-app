@@ -1,5 +1,3 @@
-// ignore_for_file: public_member_api_docs
-
 import 'dart:io';
 import 'dart:convert';
 import 'dart:math';
@@ -33,6 +31,8 @@ class CreateEvent extends StatefulWidget {
 
 class _CreateEventState extends State<CreateEvent> {
   TextEditingController titleController = TextEditingController();
+  TextEditingController descriptionController = TextEditingController();
+  TextEditingController linkController = TextEditingController();
   final ProfileController profileController = Get.find();
   DateTime startAt = DateTime.now();
   DateTime endAt = DateTime.now();
@@ -45,17 +45,24 @@ class _CreateEventState extends State<CreateEvent> {
   String? updateImage;
 
   @override
-  Widget build(BuildContext context) {
+  void initState() {
+    super.initState();
+
     if (widget.event != null) {
-      setState(() {
-        roomID = widget.event!.roomId;
-        updateImage = widget.event!.image;
-      });
+      roomID = widget.event!.roomId;
+      updateImage = widget.event!.image;
+      titleController.text = widget.event!.title!;
+      startAt = widget.event!.startAt!.toLocal();
+      endAt = widget.event!.endAt!.toLocal();
+      descriptionController.text = widget.event!.description ?? '';
+      linkController.text = widget.event!.link ?? '';
     } else {
-      setState(() {
-        roomID = generateRandomRoomID();
-      });
+      roomID = generateRandomRoomID();
     }
+  }
+
+  @override
+  Widget build(BuildContext context) {
     final DateFormat dateFormat = DateFormat('d MMM, y');
 
     // Format the date
@@ -100,6 +107,60 @@ class _CreateEventState extends State<CreateEvent> {
                   controller: titleController,
                   decoration: const InputDecoration(
                     labelText: 'Add Title',
+                    labelStyle: TextStyle(fontWeight: FontWeight.w600),
+                    border: InputBorder.none,
+                  ),
+                ),
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.all(15.0),
+              child: Container(
+                padding: const EdgeInsets.symmetric(horizontal: 15),
+                constraints: const BoxConstraints(
+                  minHeight: 150.0, // Set a minimum height for the container
+                ),
+                decoration: BoxDecoration(
+                  color: const Color.fromRGBO(
+                      244, 244, 244, 1), // Background color
+                  borderRadius: BorderRadius.circular(10.0), // Border radius
+                  border: Border.all(
+                    color:
+                        const Color.fromRGBO(224, 224, 224, 1), // Border color
+                    width: 1.0, // Border width
+                  ),
+                ),
+                child: TextField(
+                  controller: descriptionController,
+                  maxLines: null, // Allow the text field to expand vertically
+                  keyboardType:
+                      TextInputType.multiline, // Allow multiline input
+                  decoration: const InputDecoration(
+                    labelText: 'Add Description',
+                    labelStyle: TextStyle(fontWeight: FontWeight.w600),
+                    border: InputBorder.none,
+                  ),
+                ),
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.all(15.0),
+              child: Container(
+                padding: const EdgeInsets.symmetric(horizontal: 15),
+                decoration: BoxDecoration(
+                  color: const Color.fromRGBO(
+                      244, 244, 244, 1), // Background color
+                  borderRadius: BorderRadius.circular(10.0), // Border radius
+                  border: Border.all(
+                    color:
+                        const Color.fromRGBO(224, 224, 224, 1), // Border color
+                    width: 1.0, // Border width
+                  ),
+                ),
+                child: TextField(
+                  controller: linkController,
+                  decoration: const InputDecoration(
+                    labelText: 'Add Zoom or Google Meet Link',
                     labelStyle: TextStyle(fontWeight: FontWeight.w600),
                     border: InputBorder.none,
                   ),
@@ -309,10 +370,22 @@ class _CreateEventState extends State<CreateEvent> {
                   String formattedStartDateTime = dateFormat.format(startAtt);
                   String formattedStartTime = timeFormat.format(startAtt);
 
-                  if (titleController.text.isEmpty) {
+                  if (linkController.text.isNotEmpty &&
+                      !isValidMeetingLink(linkController.text)) {
                     showSnackBar(
                       context,
-                      message: 'Please enter a title',
+                      message: 'Please enter a valid Zoom or Google Meet link',
+                    );
+                    setState(() {
+                      isLoading = false;
+                    });
+                    return;
+                  }
+                  if (titleController.text.isEmpty ||
+                      descriptionController.text.isEmpty) {
+                    showSnackBar(
+                      context,
+                      message: 'Please enter a title and description!',
                     );
                     setState(() {
                       isLoading = false;
@@ -338,6 +411,7 @@ class _CreateEventState extends State<CreateEvent> {
                     });
                     return;
                   }
+
                   if (endAt.isAfter(startAt.add(const Duration(hours: 2)))) {
                     showSnackBar(context,
                         message: 'Event duration cannot be more than 2 hours');
@@ -364,6 +438,8 @@ class _CreateEventState extends State<CreateEvent> {
                     'startTime': '00:00:00',
                     'user': profileController.myProfile.toMap(),
                     'image': imageUrl,
+                    'link': widget.event!.link,
+                    'description': widget.event!.description,
                   };
 
                   Map<String, dynamic> dataa = <String, dynamic>{
@@ -377,6 +453,8 @@ class _CreateEventState extends State<CreateEvent> {
                     'photourl': profileController.myProfile.photoUrl,
                     'user': profileController.myProfile.toString(),
                     'image': imageUrl,
+                    'link': widget.event!.link,
+                    'description': widget.event!.description,
                   };
 
                   String? jsonData = jsonEncode(dataa);
@@ -414,6 +492,15 @@ class _CreateEventState extends State<CreateEvent> {
         ),
       ),
     );
+  }
+
+  bool isValidMeetingLink(String link) {
+    final RegExp zoomRegExp =
+        RegExp(r'^https://(www\.)?zoom\.us/j/[a-zA-Z0-9]+');
+    final RegExp googleMeetRegExp =
+        RegExp(r'^https://meet\.google\.com/[a-zA-Z0-9\-]+');
+
+    return zoomRegExp.hasMatch(link) || googleMeetRegExp.hasMatch(link);
   }
 
   void jumpToLivePage(BuildContext context,
@@ -454,18 +541,6 @@ class _CreateEventState extends State<CreateEvent> {
   void dispose() {
     titleController.dispose();
     super.dispose();
-  }
-
-  @override
-  void initState() {
-    super.initState();
-
-    // Check if widget.event is not null and populate the title
-    if (widget.event != null) {
-      titleController.text = widget.event!.title!;
-      startAt = widget.event!.startAt!.toLocal();
-      endAt = widget.event!.endAt!.toLocal();
-    }
   }
 
   Future<void> _pickImage(BuildContext context) async {
