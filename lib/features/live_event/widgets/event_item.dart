@@ -1,5 +1,3 @@
-// ignore_for_file: public_member_api_docs
-
 import 'dart:convert';
 
 import 'package:business_bosses_v2/common/widgets/network_image_with_placeholder.dart';
@@ -8,7 +6,6 @@ import 'package:business_bosses_v2/features/live_event/models/events_model.dart'
 import 'package:business_bosses_v2/features/live_event/presentation/attendance_list.dart';
 import 'package:business_bosses_v2/features/live_event/presentation/create_event.dart';
 import 'package:business_bosses_v2/features/live_event/widgets/attendeesitem.dart';
-import 'package:business_bosses_v2/features/live_event/widgets/call_room.dart';
 import 'package:business_bosses_v2/features/profile/controller/profile_controller.dart';
 import 'package:business_bosses_v2/navigation/routes.dart';
 import 'package:business_bosses_v2/utils/theme/theme.dart';
@@ -359,28 +356,28 @@ class _EventItemState extends State<EventItem> {
                                 ),
                               ),
                               onPressed: () {
-                                if (widget.event.link != null) {
-                                  if (widget.event.user?.uid ==
-                                      profileController.myProfile.uid) {
-                                    jumpToLivePage(
-                                      context,
-                                      title: widget.event.title!,
-                                      roomID: widget.event.roomId!,
-                                      isHost: true,
-                                      image: widget.event.image,
-                                    );
-                                  } else {
-                                    jumpToLivePage(
-                                      context,
-                                      title: widget.event.title!,
-                                      roomID: widget.event.roomId!,
-                                      isHost: false,
-                                      image: widget.event.image,
-                                    );
-                                  }
-                                } else {
-                                  _showDialogWithLink(context);
-                                }
+                                // if (widget.event.link != null) {
+                                //   if (widget.event.user?.uid ==
+                                //       profileController.myProfile.uid) {
+                                //     jumpToLivePage(
+                                //       context,
+                                //       title: widget.event.title!,
+                                //       roomID: widget.event.roomId!,
+                                //       isHost: true,
+                                //       image: widget.event.image,
+                                //     );
+                                //   } else {
+                                //     jumpToLivePage(
+                                //       context,
+                                //       title: widget.event.title!,
+                                //       roomID: widget.event.roomId!,
+                                //       isHost: false,
+                                //       image: widget.event.image,
+                                //     );
+                                //   }
+                                // } else {
+                                _showDialogWithLink(context);
+                                // }
                               },
                               child: const Text(
                                 'Join',
@@ -584,22 +581,22 @@ class _EventItemState extends State<EventItem> {
     );
   }
 
-  void jumpToLivePage(BuildContext context,
-      {required String roomID,
-      required bool isHost,
-      required String title,
-      String? image}) {
-    Navigator.push(
-      context,
-      // ignore: always_specify_types
-      MaterialPageRoute(
-        builder: (BuildContext context) => CallRoom(
-          roomID: roomID,
-          isHost: isHost,
-          title: title,
-          image: image,
-        ),
-      ),
-    );
-  }
+  // void jumpToLivePage(BuildContext context,
+  //     {required String roomID,
+  //     required bool isHost,
+  //     required String title,
+  //     String? image}) {
+  //   Navigator.push(
+  //     context,
+  //     // ignore: always_specify_types
+  //     MaterialPageRoute(
+  //       builder: (BuildContext context) => CallRoom(
+  //         roomID: roomID,
+  //         isHost: isHost,
+  //         title: title,
+  //         image: image,
+  //       ),
+  //     ),
+  //   );
+  // }
 }
