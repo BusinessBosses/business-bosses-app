@@ -4,8 +4,6 @@ import 'package:business_bosses_v2/common/models/api_response_model.dart';
 import 'package:business_bosses_v2/common/models/user_model.dart';
 // import 'package:flutter/foundation.dart' as foundation;
 import 'package:business_bosses_v2/features/chat/controllers/chat_controller.dart';
-import 'package:business_bosses_v2/features/chat/presentation/call_invitation_page.dart';
-import 'package:business_bosses_v2/features/chat/presentation/call_page.dart';
 import 'package:business_bosses_v2/features/home/controller/home_controller.dart';
 import 'package:business_bosses_v2/features/marketplace/presentation/seller_reviews.dart';
 import 'package:business_bosses_v2/features/profile/controller/profile_controller.dart';
@@ -129,93 +127,93 @@ class _ChatRoomScreenState extends State<ChatRoomScreen> {
                       width: 70,
                       child: Row(
                         children: <Widget>[
-                          IconButton(
-                              onPressed: () async {
-                                //   Get.to(CallPage(
-                                //       callID: "1234",
+                          // IconButton(
+                          //   onPressed: () async {
+                          //     //   Get.to(CallPage(
+                          //     //       callID: "1234",
 
-                                //       ///it was hardcoded
-                                //       userId: args.uid,
-                                //       username: args.username));
-                                showModalBottomSheet(
-                                    shape: RoundedRectangleBorder(
-                                        borderRadius:
-                                            BorderRadius.circular(20)),
-                                    backgroundColor: Colors.white,
-                                    context: context,
-                                    builder: (BuildContext context) {
-                                      return SizedBox(
-                                          height: 210,
-                                          child: Column(children: <Widget>[
-                                            SizedBox(
-                                              height: 10,
-                                            ),
-                                            Expanded(
-                                              child: ListView.separated(
-                                                itemCount: 2,
-                                                itemBuilder:
-                                                    (BuildContext context,
-                                                        int index) {
-                                                  return ListTile(
-                                                      onTap: () {
-                                                        Navigator.pop(context);
-                                                        index == 0
-                                                            ? showDialog(
-                                                                context:
-                                                                    context,
-                                                                builder: (_) =>
-                                                                    StartCallDialog(
-                                                                  callerId:
-                                                                      _profileController
-                                                                          .myProfile
-                                                                          .uid,
-                                                                  recipientId:
-                                                                      args.uid,
-                                                                ),
-                                                              )
-                                                            : showDialog(
-                                                                context:
-                                                                    context,
-                                                                builder: (_) =>
-                                                                    JoinCallDialog(
-                                                                  userId:
-                                                                      args.uid,
-                                                                  username: args
-                                                                      .username,
-                                                                ),
-                                                              );
+                          //     //       ///it was hardcoded
+                          //     //       userId: args.uid,
+                          //     //       username: args.username));
+                          //     showModalBottomSheet(
+                          //       shape: RoundedRectangleBorder(
+                          //           borderRadius: BorderRadius.circular(20)),
+                          //       backgroundColor: Colors.white,
+                          //       context: context,
+                          //       builder: (BuildContext context) {
+                          //         return SizedBox(
+                          //           height: 210,
+                          //           child: Column(
+                          //             children: <Widget>[
+                          //               SizedBox(
+                          //                 height: 10,
+                          //               ),
+                          //               Expanded(
+                          //                 child: ListView.separated(
+                          //                   itemCount: 2,
+                          //                   itemBuilder: (BuildContext context,
+                          //                       int index) {
+                          //                     return ListTile(
+                          //                         onTap: () {
+                          //                           Navigator.pop(context);
+                          //                           index == 0
+                          //                               ? showDialog(
+                          //                                   context: context,
+                          //                                   builder: (_) =>
+                          //                                       StartCallDialog(
+                          //                                     callerId:
+                          //                                         _profileController
+                          //                                             .myProfile
+                          //                                             .uid,
+                          //                                     recipientId:
+                          //                                         args.uid,
+                          //                                   ),
+                          //                                 )
+                          //                               : showDialog(
+                          //                                   context: context,
+                          //                                   builder: (_) =>
+                          //                                       JoinCallDialog(
+                          //                                     userId: args.uid,
+                          //                                     username:
+                          //                                         args.username,
+                          //                                   ),
+                          //                                 );
 
-                                                        ;
-                                                      },
-                                                      leading: Icon(
-                                                          Icons.call_rounded),
-                                                      title: Text(
-                                                        index == 0
-                                                            ? 'Start an Instant Meeting'
-                                                            : 'Join Meeting',
-                                                        style: const TextStyle(
-                                                          fontSize: 18,
-                                                          fontWeight:
-                                                              FontWeight.w700,
-                                                        ),
-                                                      ));
-                                                },
-                                                separatorBuilder:
-                                                    (BuildContext context,
-                                                            int index) =>
-                                                        const Divider(),
-                                              ),
-                                            ),
-                                          ]));
-                                    });
-                                // Get.to(() => CallInvitationPage(
-                                //       callerId:
-                                //           _profileController.myProfile.uid,
-                                //       recipientId: args.uid,
-                                //       username: args.username,
-                                //     ));
-                              },
-                              icon: SvgPicture.asset('assets/svgs/call.svg')),
+                          //                           ;
+                          //                         },
+                          //                         leading:
+                          //                             Icon(Icons.call_rounded),
+                          //                         title: Text(
+                          //                           index == 0
+                          //                               ? 'Start an Instant Meeting'
+                          //                               : 'Join Meeting',
+                          //                           style: const TextStyle(
+                          //                             fontSize: 18,
+                          //                             fontWeight:
+                          //                                 FontWeight.w700,
+                          //                           ),
+                          //                         ));
+                          //                   },
+                          //                   separatorBuilder:
+                          //                       (BuildContext context,
+                          //                               int index) =>
+                          //                           const Divider(),
+                          //                 ),
+                          //               ),
+                          //             ],
+                          //           ),
+                          //         );
+                          //       },
+                          //     );
+                          //     // Get.to(() => CallInvitationPage(
+                          //     //       callerId:
+                          //     //           _profileController.myProfile.uid,
+                          //     //       recipientId: args.uid,
+                          //     //       username: args.username,
+                          //     //     ));
+                          //   },
+                          //   icon: SvgPicture.asset('assets/svgs/call.svg'),
+                          // ),
                           SizedBox(
                             height: 22,
                             width: 22,
@@ -685,29 +683,29 @@ class _ChatRoomScreenState extends State<ChatRoomScreen> {
                                   children: <Widget>[
                                     InkWell(
                                       onTap: () {
-                                        message.messageText
-                                                .toString()
-                                                .contains('ccaalliidd')
-                                            ? Navigator.push(
-                                                context,
-                                                MaterialPageRoute(
-                                                  builder:
-                                                      (BuildContext context) =>
-                                                          CallPage(
-                                                    callID: message.messageText!
-                                                        .substring(
-                                                            0,
-                                                            message.messageText!
-                                                                .indexOf(
-                                                                    'ccaalliidd')),
-                                                    userId: _profileController
-                                                        .myProfile.uid,
-                                                    username: _profileController
-                                                        .myProfile.username,
-                                                  ),
-                                                ),
-                                              )
-                                            : null;
+                                        // message.messageText
+                                        //         .toString()
+                                        //         .contains('ccaalliidd')
+                                        //     ? Navigator.push(
+                                        //         context,
+                                        //         MaterialPageRoute(
+                                        //           builder:
+                                        //               (BuildContext context) =>
+                                        //                   CallPage(
+                                        //             callID: message.messageText!
+                                        //                 .substring(
+                                        //                     0,
+                                        //                     message.messageText!
+                                        //                         .indexOf(
+                                        //                             'ccaalliidd')),
+                                        //             userId: _profileController
+                                        //                 .myProfile.uid,
+                                        //             username: _profileController
+                                        //                 .myProfile.username,
+                                        //           ),
+                                        //         ),
+                                        //       )
+                                        //     : null;
                                       },
                                       onLongPress: () {
                                         if (message.messageText
@@ -1244,97 +1242,97 @@ class StartCallDialog extends StatelessWidget {
   }
 }
 
-class JoinCallDialog extends StatelessWidget {
-  final TextEditingController _callIdController = TextEditingController();
-  final String userId;
-  final String username;
+// class JoinCallDialog extends StatelessWidget {
+//   final TextEditingController _callIdController = TextEditingController();
+//   final String userId;
+//   final String username;
 
-  JoinCallDialog({super.key, required this.userId, required this.username});
+//   JoinCallDialog({super.key, required this.userId, required this.username});
 
-  @override
-  Widget build(BuildContext context) {
-    return AlertDialog(
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(20), // Set the corner radius here
-      ),
-      title: const Text(
-        'Join Call',
-        style: TextStyle(fontWeight: FontWeight.w700),
-      ),
-      content: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          Container(
-            padding: const EdgeInsets.symmetric(horizontal: 15),
-            decoration: BoxDecoration(
-              color: const Color.fromRGBO(244, 244, 244, 1), // Background color
-              borderRadius: BorderRadius.circular(10.0), // Border radius
-              border: Border.all(
-                color: const Color.fromRGBO(224, 224, 224, 1), // Border color
-                width: 1.0, // Border width
-              ),
-            ),
-            child: TextField(
-              controller: _callIdController,
-              decoration: const InputDecoration(
-                hintText: 'Enter Call ID',
-                border: InputBorder.none,
-              ),
-            ),
-          ),
-          SizedBox(
-            height: 20,
-          ),
-          Container(
-            child: Row(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                GestureDetector(
-                    onTap: () {
-                      final String callId = _callIdController.text.trim();
-                      // Navigate to the call page with the call ID
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (BuildContext context) => CallPage(
-                            callID: callId,
-                            userId: userId,
-                            username: username,
-                          ),
-                        ),
-                      );
-                    },
-                    child: Container(
-                        padding: const EdgeInsetsDirectional.symmetric(
-                            horizontal: 20, vertical: 14),
-                        decoration: BoxDecoration(
-                            color: primaryColorLT,
-                            borderRadius: BorderRadius.circular(10)),
-                        child: const Text(
-                          'Join',
-                          style: TextStyle(
-                              color: Colors.white, fontWeight: FontWeight.w700),
-                        ))),
-                SizedBox(
-                  width: 10,
-                ),
-                Container(
-                  decoration: BoxDecoration(
-                      color: backgroundColor,
-                      borderRadius: BorderRadius.circular(10)),
-                  child: IconButton(
-                    onPressed: () {
-                      Navigator.pop(context);
-                    },
-                    icon: const Icon(Icons.close),
-                  ),
-                ),
-              ],
-            ),
-          )
-        ],
-      ),
-    );
-  }
-}
+//   @override
+//   Widget build(BuildContext context) {
+//     return AlertDialog(
+//       shape: RoundedRectangleBorder(
+//         borderRadius: BorderRadius.circular(20), // Set the corner radius here
+//       ),
+//       title: const Text(
+//         'Join Call',
+//         style: TextStyle(fontWeight: FontWeight.w700),
+//       ),
+//       content: Column(
+//         mainAxisSize: MainAxisSize.min,
+//         children: [
+//           Container(
+//             padding: const EdgeInsets.symmetric(horizontal: 15),
+//             decoration: BoxDecoration(
+//               color: const Color.fromRGBO(244, 244, 244, 1), // Background color
+//               borderRadius: BorderRadius.circular(10.0), // Border radius
+//               border: Border.all(
+//                 color: const Color.fromRGBO(224, 224, 224, 1), // Border color
+//                 width: 1.0, // Border width
+//               ),
+//             ),
+//             child: TextField(
+//               controller: _callIdController,
+//               decoration: const InputDecoration(
+//                 hintText: 'Enter Call ID',
+//                 border: InputBorder.none,
+//               ),
+//             ),
+//           ),
+//           SizedBox(
+//             height: 20,
+//           ),
+//           Container(
+//             child: Row(
+//               crossAxisAlignment: CrossAxisAlignment.center,
+//               mainAxisAlignment: MainAxisAlignment.center,
+//               children: [
+//                 GestureDetector(
+//                     onTap: () {
+//                       final String callId = _callIdController.text.trim();
+//                       // Navigate to the call page with the call ID
+//                       Navigator.push(
+//                         context,
+//                         MaterialPageRoute(
+//                           builder: (BuildContext context) => CallPage(
+//                             callID: callId,
+//                             userId: userId,
+//                             username: username,
+//                           ),
+//                         ),
+//                       );
+//                     },
+//                     child: Container(
+//                         padding: const EdgeInsetsDirectional.symmetric(
+//                             horizontal: 20, vertical: 14),
+//                         decoration: BoxDecoration(
+//                             color: primaryColorLT,
+//                             borderRadius: BorderRadius.circular(10)),
+//                         child: const Text(
+//                           'Join',
+//                           style: TextStyle(
+//                               color: Colors.white, fontWeight: FontWeight.w700),
+//                         ))),
+//                 SizedBox(
+//                   width: 10,
+//                 ),
+//                 Container(
+//                   decoration: BoxDecoration(
+//                       color: backgroundColor,
+//                       borderRadius: BorderRadius.circular(10)),
+//                   child: IconButton(
+//                     onPressed: () {
+//                       Navigator.pop(context);
+//                     },
+//                     icon: const Icon(Icons.close),
+//                   ),
+//                 ),
+//               ],
+//             ),
+//           )
+//         ],
+//       ),
+//     );
+//   }
+// }

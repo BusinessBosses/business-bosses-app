@@ -19,7 +19,6 @@ import 'package:business_bosses_v2/common/widgets/typography/text_widget.dart';
 
 import '../../../common/widgets/buttons/custom_button.dart';
 import '../controller/live_event_controller.dart';
-import '../widgets/call_room.dart';
 
 class CreateEvent extends StatefulWidget {
   final EventModel? event;
@@ -503,20 +502,20 @@ class _CreateEventState extends State<CreateEvent> {
     return zoomRegExp.hasMatch(link) || googleMeetRegExp.hasMatch(link);
   }
 
-  void jumpToLivePage(BuildContext context,
-      {required String roomID, required bool isHost, required String title}) {
-    Navigator.push(
-      context,
-      // ignore: always_specify_types
-      MaterialPageRoute(
-        builder: (BuildContext context) => CallRoom(
-          roomID: roomID,
-          isHost: isHost,
-          title: title,
-        ),
-      ),
-    );
-  }
+  // void jumpToLivePage(BuildContext context,
+  //     {required String roomID, required bool isHost, required String title}) {
+  //   Navigator.push(
+  //     context,
+  //     // ignore: always_specify_types
+  //     MaterialPageRoute(
+  //       builder: (BuildContext context) => CallRoom(
+  //         roomID: roomID,
+  //         isHost: isHost,
+  //         title: title,
+  //       ),
+  //     ),
+  //   );
+  // }
 
   String formatTime(DateTime dateTime) {
     final String formattedTime = DateFormat('h:mm a').format(dateTime);

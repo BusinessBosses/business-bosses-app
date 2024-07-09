@@ -7,7 +7,6 @@ import 'package:business_bosses_v2/features/home/widgets/bottom_bar.dart';
 import 'package:business_bosses_v2/features/home/widgets/floatingbutton.dart';
 import 'package:business_bosses_v2/features/live_event/controller/live_event_controller.dart';
 import 'package:business_bosses_v2/features/live_event/models/events_model.dart';
-import 'package:business_bosses_v2/features/live_event/widgets/call_room.dart';
 import 'package:business_bosses_v2/features/live_event/widgets/event_call.dart';
 import 'package:business_bosses_v2/features/live_event/widgets/my_events.dart';
 import 'package:business_bosses_v2/features/profile/controller/profile_controller.dart';
@@ -19,6 +18,7 @@ import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:timezone/data/latest.dart' as tzdata;
+import 'package:url_launcher/url_launcher.dart';
 
 import '../../../action/action.dart';
 import 'create_event.dart';
@@ -386,24 +386,24 @@ class _LiveEventState extends State<LiveEvent> {
     );
   }
 
-  void jumpToLivePage(
-    BuildContext context, {
-    required String roomID,
-    required bool isHost,
-    required String title,
-  }) {
-    Navigator.push(
-      context,
-      // ignore: always_specify_types
-      MaterialPageRoute(
-        builder: (BuildContext context) => CallRoom(
-          title: title,
-          roomID: roomID,
-          isHost: isHost,
-        ),
-      ),
-    );
-  }
+  // void jumpToLivePage(
+  //   BuildContext context, {
+  //   required String roomID,
+  //   required bool isHost,
+  //   required String title,
+  // }) {
+  //   Navigator.push(
+  //     context,
+  //     // ignore: always_specify_types
+  //     MaterialPageRoute(
+  //       builder: (BuildContext context) => CallRoom(
+  //         title: title,
+  //         roomID: roomID,
+  //         isHost: isHost,
+  //       ),
+  //     ),
+  //   );
+  // }
 
   void joinLive(BuildContext context, String id) {
     final EventModel? event = liveEventController.getEventById(id);
@@ -489,23 +489,45 @@ class _LiveEventState extends State<LiveEvent> {
                     ElevatedButton(
                       child: const Text('Join'),
                       onPressed: () {
-                        final String enteredRoomID = event.roomId!;
-                        if (profileController.myProfile.uid !=
-                            event.user?.uid) {
-                          jumpToLivePage(
-                            context,
-                            title: event.title!,
-                            roomID: enteredRoomID,
-                            isHost: false,
-                          );
-                        } else {
-                          jumpToLivePage(
-                            context,
-                            title: event.title!,
-                            roomID: enteredRoomID,
-                            isHost: true,
-                          );
-                        }
+                        // final String enteredRoomID = event.roomId!;
+                        // if (profileController.myProfile.uid !=
+                        //     event.user?.uid) {
+                        //   jumpToLivePage(
+                        //     context,
+                        //     title: event.title!,
+                        //     roomID: enteredRoomID,
+                        //     isHost: false,
+                        //   );
+                        // } else {
+                        //   jumpToLivePage(
+                        //     context,
+                        //     title: event.title!,
+                        //     roomID: enteredRoomID,
+                        //     isHost: true,
+                        //   );
+                        // }
+                        showDialog(
+                          context: context,
+                          builder: (BuildContext context) {
+                            return AlertDialog(
+                              title: const Text('Event Details'),
+                              content: Text(event.description!),
+                              actions: <Widget>[
+                                TextButton(
+                                  onPressed: () => Get.back(),
+                                  child: const Text('Cancel'),
+                                ),
+                                TextButton(
+                                  onPressed: () {
+                                    _launchURL(event.link!);
+                                    Get.back();
+                                  },
+                                  child: const Text('Goto Meeting'),
+                                ),
+                              ],
+                            );
+                          },
+                        );
                       },
                     ),
                   ElevatedButton(
@@ -569,6 +591,14 @@ class _LiveEventState extends State<LiveEvent> {
   @override
   void dispose() {
     super.dispose();
+  }
+
+  void _launchURL(String url) async {
+    if (await canLaunchUrl(Uri.parse(url))) {
+      await launchUrl(Uri.parse(url));
+    } else {
+      throw 'Could not launch $url';
+    }
   }
 
   String formatTime(DateTime dateTime) {
