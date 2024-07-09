@@ -62,14 +62,24 @@ class _FilterUsersState extends State<ExpandedSuppliersPage> {
               children: <Widget>[
                 Column(
                   children: <Widget>[
-                    UserAvatarWithBadge(
-                      user: widget.supplier.user,
-                      height: 128.0,
-                      width: 128.0,
-                      radius: 64.0,
-                      placeHolder: Icons.person,
-                      iconSize: 80,
-                    ),
+                    (widget.supplier.images!.isEmpty)
+                        ? SizedBox(
+                            height: 128.0,
+                            width: 128.0,
+                            child: CircleAvatar(
+                              backgroundColor: Colors.grey.withOpacity(0.5),
+                              child: SvgPicture.asset('assets/svgs/person.svg'),
+                            ),
+                          )
+                        : NetworkImageWithPlaceHolder(
+                            imageUrl: widget.supplier.images![0],
+                            height: 128.0,
+                            width: 128.0,
+                            radius: 64.0,
+                            cacheHeight: 90,
+                            cacheWidth: 90,
+                            placeHolder: Icons.person,
+                          ),
                     const SizedBox(
                       height: 20,
                     ),
@@ -302,7 +312,7 @@ class _FilterUsersState extends State<ExpandedSuppliersPage> {
                           }
                         },
                       ),
-                      const SizedBox(height:20),
+                      const SizedBox(height: 20),
                       if (widget.supplier.images != null &&
                           widget.supplier.images!.isNotEmpty)
                         Container(
