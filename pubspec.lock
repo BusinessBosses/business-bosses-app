@@ -37,10 +37,10 @@ packages:
     dependency: transitive
     description:
       name: archive
-      sha256: ecf4273855368121b1caed0d10d4513c7241dfc813f7d3c8933b36622ae9b265
+      sha256: cb6a278ef2dbb298455e1a713bda08524a175630ec643a242c399c932a0a1f7d
       url: "https://pub.dev"
     source: hosted
-    version: "3.5.1"
+    version: "3.6.1"
   args:
     dependency: transitive
     description:
@@ -53,10 +53,10 @@ packages:
     dependency: transitive
     description:
       name: asn1lib
-      sha256: c9c85fedbe2188b95133cbe960e16f5f448860f7133330e272edbbca5893ddc6
+      sha256: "58082b3f0dca697204dbab0ef9ff208bfaea7767ea771076af9a343488428dda"
       url: "https://pub.dev"
     source: hosted
-    version: "1.5.2"
+    version: "1.5.3"
   async:
     dependency: transitive
     description:
@@ -429,10 +429,10 @@ packages:
     dependency: transitive
     description:
       name: firebase_core_platform_interface
-      sha256: c437ae5d17e6b5cc7981cf6fd458a5db4d12979905f9aafd1fea930428a9fe63
+      sha256: "1003a5a03a61fc9a22ef49f37cbcb9e46c86313a7b2e7029b9390cf8c6fc32cb"
       url: "https://pub.dev"
     source: hosted
-    version: "5.0.0"
+    version: "5.1.0"
   firebase_core_web:
     dependency: transitive
     description:
@@ -498,10 +498,10 @@ packages:
     dependency: transitive
     description:
       name: flutter_callkit_incoming_yoer
-      sha256: a2ec89c137f1def5964de5e713d605ea8e656282beba2023cce749fdfbcc6653
+      sha256: a0e08c9ddd4034d3a8b7f786bb8d417ffb9185e6711b9d3e5c1a01b3877f3156
       url: "https://pub.dev"
     source: hosted
-    version: "2.0.1+3"
+    version: "2.0.1+5"
   flutter_datetime_picker_plus:
     dependency: "direct main"
     description:
@@ -615,50 +615,50 @@ packages:
     dependency: "direct main"
     description:
       name: flutter_secure_storage
-      sha256: ffdbb60130e4665d2af814a0267c481bcf522c41ae2e43caf69fa0146876d685
+      sha256: "165164745e6afb5c0e3e3fcc72a012fb9e58496fb26ffb92cf22e16a821e85d0"
       url: "https://pub.dev"
     source: hosted
-    version: "9.0.0"
+    version: "9.2.2"
   flutter_secure_storage_linux:
     dependency: transitive
     description:
       name: flutter_secure_storage_linux
-      sha256: "3d5032e314774ee0e1a7d0a9f5e2793486f0dff2dd9ef5a23f4e3fb2a0ae6a9e"
+      sha256: "4d91bfc23047422cbcd73ac684bc169859ee766482517c22172c86596bf1464b"
       url: "https://pub.dev"
     source: hosted
-    version: "1.2.0"
+    version: "1.2.1"
   flutter_secure_storage_macos:
     dependency: transitive
     description:
       name: flutter_secure_storage_macos
-      sha256: bd33935b4b628abd0b86c8ca20655c5b36275c3a3f5194769a7b3f37c905369c
+      sha256: "1693ab11121a5f925bbea0be725abfcfbbcf36c1e29e571f84a0c0f436147a81"
       url: "https://pub.dev"
     source: hosted
-    version: "3.0.1"
+    version: "3.1.2"
   flutter_secure_storage_platform_interface:
     dependency: transitive
     description:
       name: flutter_secure_storage_platform_interface
-      sha256: "0d4d3a5dd4db28c96ae414d7ba3b8422fd735a8255642774803b2532c9a61d7e"
+      sha256: cf91ad32ce5adef6fba4d736a542baca9daf3beac4db2d04be350b87f69ac4a8
       url: "https://pub.dev"
     source: hosted
-    version: "1.0.2"
+    version: "1.1.2"
   flutter_secure_storage_web:
     dependency: transitive
     description:
       name: flutter_secure_storage_web
-      sha256: "30f84f102df9dcdaa2241866a958c2ec976902ebdaa8883fbfe525f1f2f3cf20"
+      sha256: f4ebff989b4f07b2656fb16b47852c0aab9fed9b4ec1c70103368337bc1886a9
       url: "https://pub.dev"
     source: hosted
-    version: "1.1.2"
+    version: "1.2.1"
   flutter_secure_storage_windows:
     dependency: transitive
     description:
       name: flutter_secure_storage_windows
-      sha256: "5809c66f9dd3b4b93b0a6e2e8561539405322ee767ac2f64d084e2ab5429d108"
+      sha256: b20b07cb5ed4ed74fc567b78a72936203f587eba460af1df11281c9326cd3709
       url: "https://pub.dev"
     source: hosted
-    version: "3.0.0"
+    version: "3.1.2"
   flutter_speed_dial:
     dependency: "direct main"
     description:
@@ -691,14 +691,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "9.5.0+1"
-  flutter_styled_toast:
-    dependency: transitive
-    description:
-      name: flutter_styled_toast
-      sha256: e667f13a665820eb0fa8506547e47eacbcddf1948d6d3036cfd3b089bd4b0516
-      url: "https://pub.dev"
-    source: hosted
-    version: "2.2.1"
   flutter_svg:
     dependency: "direct main"
     description:
@@ -753,10 +745,10 @@ packages:
     dependency: transitive
     description:
       name: freezed_annotation
-      sha256: c3fd9336eb55a38cc1bbd79ab17573113a8deccd0ecbbf926cca3c62803b5c2d
+      sha256: f9f6597ac43cc262fa7d7f2e65259a6060c23a560525d1f2631be374540f2a9b
       url: "https://pub.dev"
     source: hosted
-    version: "2.4.1"
+    version: "2.4.3"
   get:
     dependency: "direct main"
     description:
@@ -865,10 +857,10 @@ packages:
     dependency: transitive
     description:
       name: image
-      sha256: "4c68bfd5ae83e700b5204c1e74451e7bf3cf750e6843c6e158289cf56bda018e"
+      sha256: "2237616a36c0d69aef7549ab439b833fb7f9fb9fc861af2cc9ac3eedddd69ca8"
       url: "https://pub.dev"
     source: hosted
-    version: "4.1.7"
+    version: "4.2.0"
   image_picker:
     dependency: "direct main"
     description:
@@ -961,10 +953,10 @@ packages:
     dependency: "direct main"
     description:
       name: jiffy
-      sha256: b09b6aacc0ebe7d178d2fcbabfd73e7d3340594043fe949bb7e0814093b00201
+      sha256: "3497caaa36d36a29033e66803c9739ce6bccbc7e241ca46070f76ee9e6f6eb0c"
       url: "https://pub.dev"
     source: hosted
-    version: "6.3.0"
+    version: "6.3.1"
   js:
     dependency: transitive
     description:
@@ -1017,10 +1009,10 @@ packages:
     dependency: "direct main"
     description:
       name: mailer
-      sha256: d25d89555c1031abacb448f07b801d7c01b4c21d4558e944b12b64394c84a3cb
+      sha256: "0ba85aba6e1a3021e6d5b1f8035573a2240973b58c2158be26a3978681d1b6c6"
       url: "https://pub.dev"
     source: hosted
-    version: "6.1.0"
+    version: "6.1.1"
   matcher:
     dependency: transitive
     description:
@@ -1345,10 +1337,10 @@ packages:
     dependency: "direct main"
     description:
       name: purchases_flutter
-      sha256: "4ff3a62a685cd964590d2c8126be62c3ede3657a5421adf558fd95f01699643a"
+      sha256: "135a7e973deac49aa1e2b4f1d51cc90bd31085310b86710e9187b1b03822ff8a"
       url: "https://pub.dev"
     source: hosted
-    version: "6.29.0"
+    version: "6.30.0"
   rxdart:
     dependency: transitive
     description:
@@ -1614,10 +1606,10 @@ packages:
     dependency: "direct main"
     description:
       name: timezone
-      sha256: a6ccda4a69a442098b602c44e61a1e2b4bf6f5516e875bbf0f427d5df14745d5
+      sha256: "2236ec079a174ce07434e89fcd3fcda430025eb7692244139a9cf54fdcf1fc7d"
       url: "https://pub.dev"
     source: hosted
-    version: "0.9.3"
+    version: "0.9.4"
   typed_data:
     dependency: transitive
     description:
@@ -1718,10 +1710,10 @@ packages:
     dependency: transitive
     description:
       name: url_launcher_macos
-      sha256: b7244901ea3cf489c5335bdacda07264a6e960b1c1b1a9f91e4bc371d9e68234
+      sha256: "9a1a42d5d2d95400c795b2914c36fdcb525870c752569438e4ebb09a2b5d90de"
       url: "https://pub.dev"
     source: hosted
-    version: "3.1.0"
+    version: "3.2.0"
   url_launcher_platform_interface:
     dependency: transitive
     description:
@@ -1974,74 +1966,66 @@ packages:
     dependency: transitive
     description:
       name: zego_callkit
-      sha256: "02b090716fad750fb01b58e75b75e420e8dbf85e44a2c0ecc11f350f902ab689"
+      sha256: "89514ad7cd9a04e0bfd9810a1038352885b8f2bc744933dfe597b5aaff0a38e6"
       url: "https://pub.dev"
     source: hosted
-    version: "1.0.0+2"
+    version: "1.0.0+4"
   zego_express_engine:
-    dependency: "direct main"
+    dependency: transitive
     description:
       name: zego_express_engine
-      sha256: "783dd40032bc9903a05a94d9a18633214ac8d8b2bbafc84a62d40afd26c41904"
+      sha256: "6a22fa5f283180fbaa9dfae554fd78ae7c00731728f7bde01292bc74a5b65445"
       url: "https://pub.dev"
     source: hosted
-    version: "3.14.5+1"
+    version: "3.15.1+2"
   zego_plugin_adapter:
     dependency: transitive
     description:
       name: zego_plugin_adapter
-      sha256: "730e7c416d66c8b774c9477b859318c47f614311c2b81db6f2e366a43b871ed1"
+      sha256: "77b4694586ae955c38eb2621f47e27e12698c96681cd7c396622a182d7702924"
       url: "https://pub.dev"
     source: hosted
-    version: "2.11.5"
+    version: "2.12.1"
   zego_uikit:
     dependency: transitive
     description:
       name: zego_uikit
-      sha256: "6be23f606d2c317143f71976121991e27b110789228e990a0fd14f19e470adde"
+      sha256: "01a1f13352aeeb4375e0629d21760b1916b98ea930ccd55083540b9d4c44e674"
       url: "https://pub.dev"
     source: hosted
-    version: "2.21.0"
+    version: "2.22.2"
   zego_uikit_prebuilt_call:
     dependency: "direct main"
     description:
       name: zego_uikit_prebuilt_call
-      sha256: "60f7694bf2e946e26617fc227c6142907a02da4b46e3b6f5489aacfaffb92fb8"
+      sha256: "7716441549d25cba5d0a09b5cc9199f1080ab4cfbf1225f5f825cdcc30f307a6"
       url: "https://pub.dev"
     source: hosted
-    version: "4.7.0"
-  zego_uikit_prebuilt_live_audio_room:
-    dependency: "direct main"
-    description:
-      name: zego_uikit_prebuilt_live_audio_room
-      sha256: c6e16776d490682c07bcd4ae64b610bd25d077e0f4a15d1c70792e2e529beb07
-      url: "https://pub.dev"
-    source: hosted
-    version: "2.16.0"
+    version: "4.9.0"
   zego_uikit_signaling_plugin:
-    dependency: "direct main"
+    dependency: transitive
     description:
       name: zego_uikit_signaling_plugin
-      sha256: "2f6fb396b707971324558edb82bfcf9589dc7bd0480a5a33341d89239bc7702b"
+      sha256: "21e1683185bcbb488ec5a5b846cf367f63163e30ae7ffcc379248c04b371f496"
       url: "https://pub.dev"
     source: hosted
-    version: "2.7.6"
+    version: "2.8.1"
   zego_zim:
     dependency: transitive
     description:
       name: zego_zim
-      sha256: "37a0480b42e12b2e23ab839adba9084295ab4c407f6f4adb342a923c123ff607"
+      sha256: "99e297e8f4650c7cd0761d5853307993e29908943007fc509e079e0b18aed514"
       url: "https://pub.dev"
     source: hosted
-    version: "2.13.1"
+    version: "2.16.0+4"
   zego_zpns:
     dependency: transitive
     description:
       name: zego_zpns
-      sha256: "786f34fd5ad9de6c888770d3e6f8f4782d18fec1450c6152c378810d78638d23"
+      sha256: f77ae529724ea401812578850e9f957ed46f07093084f4a1a673a1ddd0de36e9
       url: "https://pub.dev"
     source: hosted
-    version: "2.6.0+2"
+    version: "2.6.0+3"
 sdks:
   dart: ">=3.1.0 <4.0.0"
   flutter: ">=3.13.0"

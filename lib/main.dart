@@ -2,7 +2,6 @@ import 'dart:async';
 import 'dart:developer';
 import 'dart:io';
 
-import 'package:business_bosses_v2/features/chat/presentation/call_page.dart';
 import 'package:business_bosses_v2/navigation/navigation.dart';
 import 'package:business_bosses_v2/navigation/routes.dart';
 import 'package:business_bosses_v2/services/firebase_analytics.dart';
@@ -61,24 +60,25 @@ void main() async {
         Get.toNamed(
           Routes.chat,
         );
-      } else if (title != null && title.contains('Incoming Call')) {
-        // Extract custom data payload
-        String type = message.data['type'];
-        String callID = message.data['callId'];
-        String userId = message.data['userId'];
-        String username = message.data['username'];
-
-        // Check the type of message
-        if (type == 'incoming_call') {
-          // Display incoming call UI and join Zegocloud room using callId
-          Get.to(() =>
-              CallPage(callID: callID, userId: userId, username: username));
-        }
       } else {
         Get.toNamed(
           Routes.notifications,
         );
       }
+      // else if (title != null && title.contains('Incoming Call')) {
+      //   // Extract custom data payload
+      //   String type = message.data['type'];
+      //   String callID = message.data['callId'];
+      //   String userId = message.data['userId'];
+      //   String username = message.data['username'];
+
+      //   // Check the type of message
+      //   if (type == 'incoming_call') {
+      //     // Display incoming call UI and join Zegocloud room using callId
+      //     Get.to(() =>
+      //         CallPage(callID: callID, userId: userId, username: username));
+      //   }
+      // }
     }
   });
 
@@ -92,24 +92,25 @@ void main() async {
         Get.toNamed(
           Routes.chat,
         );
-      } else if (title != null && title.contains('Incoming Call')) {
-        // Extract custom data payload
-        String type = message.data['type'];
-        String callID = message.data['callId'];
-        String userId = message.data['userId'];
-        String username = message.data['username'];
-
-        // Check the type of message
-        if (type == 'incoming_call') {
-          // Display incoming call UI and join Zegocloud room using callId
-          Get.to(() =>
-              CallPage(callID: callID, userId: userId, username: username));
-        }
       } else {
         Get.toNamed(
           Routes.notifications,
         );
       }
+      // else if (title != null && title.contains('Incoming Call')) {
+      //   // Extract custom data payload
+      //   String type = message.data['type'];
+      //   String callID = message.data['callId'];
+      //   String userId = message.data['userId'];
+      //   String username = message.data['username'];
+
+      //   // Check the type of message
+      //   if (type == 'incoming_call') {
+      //     // Display incoming call UI and join Zegocloud room using callId
+      //     Get.to(() =>
+      //         CallPage(callID: callID, userId: userId, username: username));
+      //   }
+      // }
     }
   });
 

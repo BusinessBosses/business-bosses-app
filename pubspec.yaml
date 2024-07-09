@@ -87,13 +87,13 @@ dependencies:
   visibility_detector: ^0.4.0+2
   webview_flutter: ^4.4.1
   youtube_player_flutter: ^8.1.2
-  zego_uikit_prebuilt_live_audio_room: 
+  # zego_uikit_prebuilt_live_audio_room: 
   flutter_speed_dial: ^7.0.0
   purchases_flutter: ^6.5.0
   # add_2_calendar: 
   # tutorial_coach_mark: ^1.2.11
-  zego_uikit_signaling_plugin: ^2.7.4
-  zego_express_engine: ^3.13.1
+  # zego_uikit_signaling_plugin: ^2.7.4
+  # zego_express_engine: ^3.13.1
   flutter_polls: ^0.1.6
   zego_uikit_prebuilt_call: ^4.5.1
   flutter_downloader: ^1.7.3

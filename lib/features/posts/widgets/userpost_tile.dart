@@ -7,7 +7,6 @@ import 'package:business_bosses_v2/features/home/controller/home_controller.dart
 import 'package:business_bosses_v2/features/live_event/controller/live_event_controller.dart';
 import 'package:business_bosses_v2/features/live_event/models/events_model.dart';
 import 'package:business_bosses_v2/features/live_event/presentation/create_event.dart';
-import 'package:business_bosses_v2/features/live_event/widgets/call_room.dart';
 import 'package:business_bosses_v2/features/live_event/presentation/attendance_list.dart';
 import 'package:business_bosses_v2/features/posts/controllers/create_post_controller.dart';
 import 'package:business_bosses_v2/features/posts/models/post_model.dart';
@@ -28,6 +27,7 @@ import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:lottie/lottie.dart';
+import 'package:url_launcher/url_launcher.dart';
 import 'package:url_launcher/url_launcher_string.dart';
 import '../../../action/action.dart';
 import '../../../common/models/api_response_model.dart';
@@ -141,7 +141,7 @@ class _PostTileState extends State<PostTile> {
 
   @override
   Widget build(BuildContext context) {
-    String? title, roomid, date, starttime, host, photourl, startat, endat;
+    String? title, roomid, date, starttime, host, photourl, startat, endat, link, description;
     int? eventId;
 
     // Get the vote counts for each option
@@ -172,6 +172,8 @@ class _PostTileState extends State<PostTile> {
           date = jsonData['date'];
           starttime = jsonData['starttime'];
           host = jsonData['host'];
+          link = jsonData['link'];
+          description = jsonData['description'];
           photourl = jsonData['photourl'];
           startat = jsonData['startat'];
           endat = jsonData['endat'];
@@ -1222,23 +1224,45 @@ class _PostTileState extends State<PostTile> {
                               padding: const EdgeInsets.only(right: 15),
                               child: ElevatedButton(
                                   onPressed: () {
-                                    final String enteredRoomID = event.roomId!;
-                                    if (profileController.myProfile.uid !=
-                                        event.user?.uid) {
-                                      jumpToLivePage(
-                                        context,
-                                        title: event.title!,
-                                        roomID: enteredRoomID,
-                                        isHost: false,
-                                      );
-                                    } else {
-                                      jumpToLivePage(
-                                        context,
-                                        title: event.title!,
-                                        roomID: enteredRoomID,
-                                        isHost: true,
-                                      );
-                                    }
+                                    // final String enteredRoomID = event.roomId!;
+                                    // if (profileController.myProfile.uid !=
+                                    //     event.user?.uid) {
+                                    //   jumpToLivePage(
+                                    //     context,
+                                    //     title: event.title!,
+                                    //     roomID: enteredRoomID,
+                                    //     isHost: false,
+                                    //   );
+                                    // } else {
+                                    //   jumpToLivePage(
+                                    //     context,
+                                    //     title: event.title!,
+                                    //     roomID: enteredRoomID,
+                                    //     isHost: true,
+                                    //   );
+                                    // }
+                                    showDialog(
+                                      context: context,
+                                      builder: (BuildContext context) {
+                                        return AlertDialog(
+                                          title: const Text('Event Details'),
+                                          content: Text(event.description!),
+                                          actions: <Widget>[
+                                            TextButton(
+                                              onPressed: () => Get.back(),
+                                              child: const Text('Cancel'),
+                                            ),
+                                            TextButton(
+                                              onPressed: () {
+                                                _launchURL(event.link!);
+                                                Get.back();
+                                              },
+                                              child: const Text('Goto Meeting'),
+                                            ),
+                                          ],
+                                        );
+                                      },
+                                    );
                                   },
                                   child: const Text('Join')),
                             ))
@@ -1645,23 +1669,30 @@ class _PostTileState extends State<PostTile> {
     );
   }
 
-  void jumpToLivePage(
-    BuildContext context, {
-    required String roomID,
-    required bool isHost,
-    required String title,
-  }) {
-    Navigator.push(
-      context,
-      // ignore: always_specify_types
-      MaterialPageRoute(
-        builder: (BuildContext context) => CallRoom(
-          title: title,
-          roomID: roomID,
-          isHost: isHost,
-        ),
-      ),
-    );
+  // void jumpToLivePage(
+  //   BuildContext context, {
+  //   required String roomID,
+  //   required bool isHost,
+  //   required String title,
+  // }) {
+  //   Navigator.push(
+  //     context,
+  //     // ignore: always_specify_types
+  //     MaterialPageRoute(
+  //       builder: (BuildContext context) => CallRoom(
+  //         title: title,
+  //         roomID: roomID,
+  //         isHost: isHost,
+  //       ),
+  //     ),
+  //   );
+  // }
+  void _launchURL(String url) async {
+    if (await canLaunchUrl(Uri.parse(url))) {
+      await launchUrl(Uri.parse(url));
+    } else {
+      throw 'Could not launch $url';
+    }
   }
 
   bool isJoinedEvent() {
