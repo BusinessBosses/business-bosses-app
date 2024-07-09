@@ -399,11 +399,13 @@ class _ExpandedMarketplaceScreenState extends State<ExpandedMarketplaceScreen> {
                                   arguments: widget.market.user,
                                 );
                               },
-                              child: const Padding(
-                                padding: EdgeInsets.all(15.0),
+                              child: Padding(
+                                padding: const EdgeInsets.all(15.0),
                                 child: Text(
-                                  'Place Order',
-                                  style: TextStyle(
+                                  widget.market.location!.contains('delivery')
+                                      ? 'Place Order'
+                                      : 'Book Now',
+                                  style: const TextStyle(
                                     color: Colors.white,
                                     fontWeight: FontWeight.w700,
                                     fontSize: 16,
@@ -424,9 +426,7 @@ class _ExpandedMarketplaceScreenState extends State<ExpandedMarketplaceScreen> {
                             Text(
                               'Price - ${widget.market.price.toString()}',
                               style: const TextStyle(
-                                fontWeight: FontWeight.w800,
-                                fontSize: 16
-                              ),
+                                  fontWeight: FontWeight.w800, fontSize: 16),
                             ),
                             const SizedBox(
                               width: 8,

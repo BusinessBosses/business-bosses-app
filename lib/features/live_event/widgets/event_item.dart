@@ -17,6 +17,7 @@ import 'package:flutter_speed_dial/flutter_speed_dial.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
+import 'package:url_launcher/url_launcher.dart';
 import '../../../action/action.dart';
 // import 'package:add_2_calendar/add_2_calendar.dart';
 
@@ -64,6 +65,8 @@ class _EventItemState extends State<EventItem> {
       'startat': widget.event.startAt.toString(),
       'endat': widget.event.endAt.toString(),
       'image': widget.event.image,
+      'link': widget.event.link,
+      'description': widget.event.description,
     };
 
     String? jsonData = jsonEncode(dataa);
@@ -209,7 +212,7 @@ class _EventItemState extends State<EventItem> {
                           ),
                         ),
                         Padding(
-                          padding: const EdgeInsets.only(right:15.0, top: 10),
+                          padding: const EdgeInsets.only(right: 15.0, top: 10),
                           child: GestureDetector(
                             onTap: () {
                               showModalBottomSheet(
@@ -220,14 +223,15 @@ class _EventItemState extends State<EventItem> {
                                       ));
                             },
                             child: Container(
-                              padding: EdgeInsets.symmetric(horizontal: 5, vertical: 5),
-                              decoration: BoxDecoration(color: Colors.grey, borderRadius: BorderRadius.circular(6)),
+                              padding: const EdgeInsets.symmetric(
+                                  horizontal: 5, vertical: 5),
+                              decoration: BoxDecoration(
+                                  color: Colors.grey,
+                                  borderRadius: BorderRadius.circular(6)),
                               child: Text(
                                 attendMessage,
                                 style: const TextStyle(
-                                  fontSize: 13,
-                                  color: Colors.white
-                                ),
+                                    fontSize: 13, color: Colors.white),
                               ),
                             ),
                           ),
@@ -237,7 +241,9 @@ class _EventItemState extends State<EventItem> {
                           _buildPopupMenuButton(context),
                       ],
                     ),
-                    const SizedBox(height: 5,),
+                    const SizedBox(
+                      height: 5,
+                    ),
                     Align(
                       alignment: Alignment.topLeft,
                       child: Text(
@@ -353,23 +359,27 @@ class _EventItemState extends State<EventItem> {
                                 ),
                               ),
                               onPressed: () {
-                                if (widget.event.user?.uid ==
-                                    profileController.myProfile.uid) {
-                                  jumpToLivePage(
-                                    context,
-                                    title: widget.event.title!,
-                                    roomID: widget.event.roomId!,
-                                    isHost: true,
-                                    image: widget.event.image,
-                                  );
+                                if (widget.event.link != null) {
+                                  if (widget.event.user?.uid ==
+                                      profileController.myProfile.uid) {
+                                    jumpToLivePage(
+                                      context,
+                                      title: widget.event.title!,
+                                      roomID: widget.event.roomId!,
+                                      isHost: true,
+                                      image: widget.event.image,
+                                    );
+                                  } else {
+                                    jumpToLivePage(
+                                      context,
+                                      title: widget.event.title!,
+                                      roomID: widget.event.roomId!,
+                                      isHost: false,
+                                      image: widget.event.image,
+                                    );
+                                  }
                                 } else {
-                                  jumpToLivePage(
-                                    context,
-                                    title: widget.event.title!,
-                                    roomID: widget.event.roomId!,
-                                    isHost: false,
-                                    image: widget.event.image,
-                                  );
+                                  _showDialogWithLink(context);
                                 }
                               },
                               child: const Text(
@@ -502,13 +512,9 @@ class _EventItemState extends State<EventItem> {
       ],
       onSelected: (String value) {
         if (value == 'edit') {
-          Navigator.push(
-            context,
-            // ignore: always_specify_types
-            MaterialPageRoute(
-              builder: (BuildContext context) => CreateEvent(
-                event: widget.event,
-              ),
+          Get.to(
+            () => CreateEvent(
+              event: widget.event,
             ),
           );
         } else if (value == 'delete') {
@@ -516,6 +522,39 @@ class _EventItemState extends State<EventItem> {
         }
       },
     );
+  }
+
+  void _showDialogWithLink(BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: const Text('Event Details'),
+          content: Text(widget.event.description!),
+          actions: <Widget>[
+            TextButton(
+              onPressed: () => Get.back(),
+              child: const Text('Cancel'),
+            ),
+            TextButton(
+              onPressed: () {
+                _launchURL(widget.event.link!);
+                Get.back();
+              },
+              child: const Text('Goto Meeting'),
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  void _launchURL(String url) async {
+    if (await canLaunchUrl(Uri.parse(url))) {
+      await launchUrl(Uri.parse(url));
+    } else {
+      throw 'Could not launch $url';
+    }
   }
 
   void _showDeleteConfirmationDialog(BuildContext context, int id) {
