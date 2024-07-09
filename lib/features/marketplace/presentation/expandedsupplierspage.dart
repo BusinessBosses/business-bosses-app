@@ -92,11 +92,20 @@ class _FilterUsersState extends State<ExpandedSuppliersPage> {
                 ),
               Row(
                 children: <Widget>[
-                  UserAvatarWithBadge(
-                    user: widget.supplier.user,
+                  // UserAvatarWithBadge(
+                  //   user: widget.supplier.images![0],
+                  //   height: 128.0,
+                  //   width: 128.0,
+                  //   radius: 64.0,
+                  //   placeHolder: Icons.person,
+                  // ),
+                  NetworkImageWithPlaceHolder(
+                    imageUrl: widget.supplier.images![0],
                     height: 128.0,
                     width: 128.0,
                     radius: 64.0,
+                    cacheHeight: 90,
+                    cacheWidth: 90,
                     placeHolder: Icons.person,
                   ),
                   const SizedBox(
