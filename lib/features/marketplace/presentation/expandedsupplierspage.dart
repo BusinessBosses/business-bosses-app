@@ -189,19 +189,25 @@ class _FilterUsersState extends State<ExpandedSuppliersPage> {
                                 const Column(
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
-                                    Text('Website'),
+                                    Text(
+                                      'Website',
+                                      style: TextStyle(fontSize: 12),
+                                    ),
                                     SizedBox(
                                       height: 5,
                                     ),
-                                    Text('Email'),
+                                    Text('Email',
+                                        style: TextStyle(fontSize: 12)),
                                     SizedBox(
                                       height: 5,
                                     ),
-                                    Text('Phone'),
+                                    Text('Phone',
+                                        style: TextStyle(fontSize: 12)),
                                     SizedBox(
                                       height: 5,
                                     ),
-                                    Text('Location'),
+                                    Text('Location',
+                                        style: TextStyle(fontSize: 12)),
                                   ],
                                 )
                               ]),
