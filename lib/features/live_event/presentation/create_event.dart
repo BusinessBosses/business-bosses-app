@@ -104,6 +104,7 @@ class _CreateEventState extends State<CreateEvent> {
                 ),
                 child: TextField(
                   controller: titleController,
+                  enabled: !isLoading,
                   decoration: const InputDecoration(
                     labelText: 'Add Title',
                     labelStyle: TextStyle(fontWeight: FontWeight.w600),
@@ -134,6 +135,7 @@ class _CreateEventState extends State<CreateEvent> {
                   maxLines: null, // Allow the text field to expand vertically
                   keyboardType:
                       TextInputType.multiline, // Allow multiline input
+                  enabled: !isLoading,
                   decoration: const InputDecoration(
                     labelText: 'Add Description',
                     labelStyle: TextStyle(fontWeight: FontWeight.w600),
@@ -158,6 +160,7 @@ class _CreateEventState extends State<CreateEvent> {
                 ),
                 child: TextField(
                   controller: linkController,
+                  enabled: !isLoading,
                   decoration: const InputDecoration(
                     labelText: 'Add Zoom or Google Meet Link',
                     labelStyle: TextStyle(fontWeight: FontWeight.w600),
