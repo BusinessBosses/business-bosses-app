@@ -141,7 +141,16 @@ class _PostTileState extends State<PostTile> {
 
   @override
   Widget build(BuildContext context) {
-    String? title, roomid, date, starttime, host, photourl, startat, endat, link, description;
+    String? title,
+        roomid,
+        date,
+        starttime,
+        host,
+        photourl,
+        startat,
+        endat,
+        link,
+        description;
     int? eventId;
 
     // Get the vote counts for each option
@@ -1246,7 +1255,7 @@ class _PostTileState extends State<PostTile> {
                                       builder: (BuildContext context) {
                                         return AlertDialog(
                                           title: const Text('Event Details'),
-                                          content: Text(event.description!),
+                                          content: Text(description!),
                                           actions: <Widget>[
                                             TextButton(
                                               onPressed: () => Get.back(),
@@ -1254,7 +1263,7 @@ class _PostTileState extends State<PostTile> {
                                             ),
                                             TextButton(
                                               onPressed: () {
-                                                _launchURL(event.link!);
+                                                _launchURL(link!);
                                                 Get.back();
                                               },
                                               child: const Text('Goto Meeting'),

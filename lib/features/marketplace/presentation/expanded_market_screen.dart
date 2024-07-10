@@ -4,11 +4,6 @@ import 'package:business_bosses_v2/common/widgets/network_image_with_placeholder
 import 'package:business_bosses_v2/common/widgets/typography/text_widget.dart';
 import 'package:business_bosses_v2/features/chat/chat_room_screen.dart';
 import 'package:business_bosses_v2/features/donations/controller/donations_controller.dart';
-import 'package:business_bosses_v2/features/donations/models/donations_model.dart';
-import 'package:business_bosses_v2/features/donations/presentation/boost_donations_screen.dart';
-import 'package:business_bosses_v2/features/donations/presentation/create_donations.dart';
-import 'package:business_bosses_v2/features/donations/widgets/donation_comment.dart';
-import 'package:business_bosses_v2/features/donations/widgets/supporteritem.dart';
 import 'package:business_bosses_v2/features/marketplace/controllers/market_controller.dart';
 import 'package:business_bosses_v2/features/marketplace/models/market_model.dart';
 import 'package:business_bosses_v2/features/marketplace/presentation/seller_reviews.dart';
@@ -18,7 +13,6 @@ import 'package:business_bosses_v2/features/posts/widgets/images_viewer_screen.d
 import 'package:business_bosses_v2/features/profile/controller/profile_controller.dart';
 import 'package:business_bosses_v2/navigation/routes.dart';
 import 'package:business_bosses_v2/utils/theme/theme.dart';
-import 'package:business_bosses_v2/utils/time_format.dart';
 import 'package:detectable_text_field/detector/sample_regular_expressions.dart';
 import 'package:detectable_text_field/widgets/detectable_text.dart';
 import 'package:flutter/material.dart';
@@ -365,7 +359,7 @@ class _ExpandedMarketplaceScreenState extends State<ExpandedMarketplaceScreen> {
                                       .ellipsis, // or TextOverflow.ellipsis
                                   maxLines: 1,
                                   widget.market.user?.name ??
-                                      widget.market.user!.username!,
+                                      widget.market.user!.username,
                                   style: const TextStyle(
                                       fontWeight: FontWeight.w700),
                                 ),
@@ -421,7 +415,7 @@ class _ExpandedMarketplaceScreenState extends State<ExpandedMarketplaceScreen> {
                     ),
 
                     Column(
-                      children: [
+                      children: <Widget>[
                         Row(
                           mainAxisAlignment: MainAxisAlignment.start,
                           children: <Widget>[
@@ -528,7 +522,7 @@ class _ExpandedMarketplaceScreenState extends State<ExpandedMarketplaceScreen> {
                                   borderRadius: BorderRadius.circular(20)),
                               padding: const EdgeInsets.symmetric(
                                   horizontal: 10, vertical: 5),
-                              child: Wrap(children: [
+                              child: Wrap(children: <Widget>[
                                 const Icon(
                                   Icons.star,
                                   color: Color.fromRGBO(255, 202, 40, 1),
@@ -756,7 +750,7 @@ class _ExpandedMarketplaceScreenState extends State<ExpandedMarketplaceScreen> {
                       ),
                     ),
                     const SizedBox(width: 10.0),
-                    Wrap(children: [
+                    Wrap(children: <Widget>[
                       GestureDetector(
                         onTap: () => _sharePost(),
                         child: SvgPicture.asset(
@@ -765,7 +759,7 @@ class _ExpandedMarketplaceScreenState extends State<ExpandedMarketplaceScreen> {
                           width: 18.0,
                         ),
                       ),
-                      SizedBox(
+                      const SizedBox(
                         width: 15,
                       )
                     ]),

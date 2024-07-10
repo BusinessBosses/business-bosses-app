@@ -226,7 +226,7 @@ class ForumController extends GetxController {
       await fetchIndustryUsers(industryid);
     }
 
-    for (var user in members) {
+    for (UserModel user in members) {
       if (user.username.toLowerCase().contains(query.toLowerCase()) ||
           user.name!.toLowerCase().contains(query.toLowerCase())) {
         searchedUsers.add(user);

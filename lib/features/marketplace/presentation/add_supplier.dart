@@ -37,7 +37,7 @@ class _AddSupplierScreenState extends State<AddSupplierScreen> {
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
   final ProfileController _profileController = Get.find();
   final SupplierController supplierController = Get.put(SupplierController());
-  List<XFile> _selectedImages = [];
+  final List<XFile> _selectedImages = <XFile>[];
 
   SuppliersModel? _supplier;
 

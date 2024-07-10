@@ -54,7 +54,7 @@ class _FilterUsersState extends State<FilterDonationsUsers> {
         : Stack(
             children: <Widget>[
               NotificationListener<ScrollNotification>(
-                onNotification: (scrollNotification) {
+                onNotification: (ScrollNotification scrollNotification) {
                   FocusScope.of(context).unfocus();
                   return false;
                 },

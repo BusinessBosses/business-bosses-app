@@ -175,11 +175,11 @@ class _MarketTileState extends State<MarketTile> {
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.start,
                             crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
+                            children: <Widget>[
                               Column(
                                 mainAxisAlignment: MainAxisAlignment.start,
                                 crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
+                                children: <Widget>[
                                   SizedBox(
                                     height: 90,
                                     width: 160,
@@ -202,7 +202,7 @@ class _MarketTileState extends State<MarketTile> {
                                     height: 10,
                                   ),
                                   Row(
-                                    children: [
+                                    children: <Widget>[
                                       SizedBox(
                                         height: 20.0,
                                         width: 20.0,
@@ -242,7 +242,7 @@ class _MarketTileState extends State<MarketTile> {
                                         ),
                                       ),
                                       widget.post.user?.isSubscribed == true
-                                          ? Wrap(children: [
+                                          ? Wrap(children: <Widget>[
                                               const SizedBox(width: 3),
                                               SvgPicture.asset(
                                                 'assets/svgs/premiumbadge.svg',
@@ -259,7 +259,7 @@ class _MarketTileState extends State<MarketTile> {
                                 child: Column(
                                   mainAxisAlignment: MainAxisAlignment.start,
                                   crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
+                                  children: <Widget>[
                                     Padding(
                                       padding: const EdgeInsets.only(
                                           left: 10.0, right: 0),

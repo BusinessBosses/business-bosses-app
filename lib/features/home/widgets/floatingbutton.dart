@@ -1,4 +1,5 @@
 import 'package:business_bosses_v2/features/home/sellProduct.dart';
+import 'package:business_bosses_v2/features/live_event/presentation/create_event.dart';
 import 'package:business_bosses_v2/features/posts/presentation/create_poll_screen.dart';
 import 'package:business_bosses_v2/features/profile/controller/profile_controller.dart';
 import 'package:flutter/material.dart';
@@ -8,8 +9,10 @@ import '../../../navigation/routes.dart';
 import '../../../utils/theme/theme.dart';
 
 class Floatingbutton extends StatelessWidget {
+  final bool? isEventScreen;
   const Floatingbutton({
     Key? key,
+    this.isEventScreen,
   }) : super(key: key);
 
   @override
@@ -21,96 +24,107 @@ class Floatingbutton extends StatelessWidget {
     int previousStamp = myProfile.myProfile.bossOfTheWeekTimeStamp ?? 0;
     return GestureDetector(
       onTap: () {
-        showModalBottomSheet(
-          context: context,
-          shape: const RoundedRectangleBorder(
-            borderRadius: BorderRadius.vertical(
-              top: Radius.circular(25.0),
-            ),
-          ),
-          builder: (BuildContext context) {
-            return SizedBox(
-              height: 310,
-              child: Padding(
-                padding: const EdgeInsets.all(15.0),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  mainAxisSize: MainAxisSize.min,
-                  children: <Widget>[
-                    Expanded(
-                      // Set a specific height
-                      child: ListView.separated(
-                        itemCount: 4,
-                        separatorBuilder: (BuildContext context, int index) =>
-                            const Divider(),
-                        itemBuilder: (BuildContext context, int index) {
-                          return ListTile(
-                            onTap: () {
-                              Navigator.pop(
-                                  context); // Close the drawer or navigate back
-                              if (index == 0) {
-                                Get.toNamed(Routes
-                                    .createPost); // Navigate to "createPost" route
-                              } else if (index == 1) {
-                                sellProduct(
-                                    context); // Call sellProduct function
-                              } else if (index == 2) {
-                                Get.toNamed(Routes
-                                    .createevent); // Navigate to "createevent" route
-                              } else if (index == 3) {
-                                Get.to(() =>
-                                    const CreatePollScreen()); // Navigate to "createPollSurvey" route
-                              }
-                            },
-                            minVerticalPadding: 0,
-                            contentPadding: const EdgeInsets.only(left: 10),
-                            leading: index == 3
-                                ? const Icon(
-                                    Icons.poll,
-                                    color: Colors.black,
-                                  )
-                                : SvgPicture.asset(
-                                    index == 0
-                                        ? 'assets/svgs/text.svg'
-                                        : index == 1
-                                            ? 'assets/svgs/sellicon.svg'
-                                            : 'assets/svgs/liveevent.svg', // Assuming you have a "polls.svg" asset
-                                    height: index == 0
-                                        ? 25
-                                        : index == 1
-                                            ? 30
-                                            : index == 2
-                                                ? 22
-                                                : 22, // Adjust the height as needed
-                                    // ignore: deprecated_member_use
-                                    color: textColor.withOpacity(1),
-                                  ),
-                            title: Text(
-                              index == 0
-                                  ? 'Create a Post'
-                                  : index == 1
-                                      ? 'Sell your product & service'
-                                      : index == 2
-                                          ? 'Create a Live Event'
-                                          : 'Create Polls & Surveys',
-                              style: const TextStyle(
-                                fontSize: 18,
-                                fontWeight: FontWeight.w700,
-                              ),
-                            ),
-                          );
-                        },
-                      ),
-                    )
-                  ],
+        isEventScreen == true
+            ? Navigator.push(
+                context,
+                // ignore: always_specify_types
+                MaterialPageRoute(
+                  builder: (BuildContext context) => const CreateEvent(),
                 ),
-              ),
-            );
-          },
-        );
+              )
+            : showModalBottomSheet(
+                context: context,
+                shape: const RoundedRectangleBorder(
+                  borderRadius: BorderRadius.vertical(
+                    top: Radius.circular(25.0),
+                  ),
+                ),
+                builder: (BuildContext context) {
+                  return SizedBox(
+                    height: 310,
+                    child: Padding(
+                      padding: const EdgeInsets.all(15.0),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        mainAxisSize: MainAxisSize.min,
+                        children: <Widget>[
+                          Expanded(
+                            // Set a specific height
+                            child: ListView.separated(
+                              itemCount: 4,
+                              separatorBuilder:
+                                  (BuildContext context, int index) =>
+                                      const Divider(),
+                              itemBuilder: (BuildContext context, int index) {
+                                return ListTile(
+                                  onTap: () {
+                                    Navigator.pop(
+                                        context); // Close the drawer or navigate back
+                                    if (index == 0) {
+                                      Get.toNamed(Routes
+                                          .createPost); // Navigate to "createPost" route
+                                    } else if (index == 1) {
+                                      sellProduct(
+                                          context); // Call sellProduct function
+                                    } else if (index == 2) {
+                                      Get.toNamed(Routes
+                                          .createevent); // Navigate to "createevent" route
+                                    } else if (index == 3) {
+                                      Get.to(() =>
+                                          const CreatePollScreen()); // Navigate to "createPollSurvey" route
+                                    }
+                                  },
+                                  minVerticalPadding: 0,
+                                  contentPadding:
+                                      const EdgeInsets.only(left: 10),
+                                  leading: index == 3
+                                      ? const Icon(
+                                          Icons.poll,
+                                          color: Colors.black,
+                                        )
+                                      : SvgPicture.asset(
+                                          index == 0
+                                              ? 'assets/svgs/text.svg'
+                                              : index == 1
+                                                  ? 'assets/svgs/sellicon.svg'
+                                                  : 'assets/svgs/liveevent.svg', // Assuming you have a "polls.svg" asset
+                                          height: index == 0
+                                              ? 25
+                                              : index == 1
+                                                  ? 30
+                                                  : index == 2
+                                                      ? 22
+                                                      : 22, // Adjust the height as needed
+                                          // ignore: deprecated_member_use
+                                          color: textColor.withOpacity(1),
+                                        ),
+                                  title: Text(
+                                    index == 0
+                                        ? 'Create a Post'
+                                        : index == 1
+                                            ? 'Sell your product & service'
+                                            : index == 2
+                                                ? 'Create a Live Event'
+                                                : 'Create Polls & Surveys',
+                                    style: const TextStyle(
+                                      fontSize: 18,
+                                      fontWeight: FontWeight.w700,
+                                    ),
+                                  ),
+                                );
+                              },
+                            ),
+                          )
+                        ],
+                      ),
+                    ),
+                  );
+                },
+              );
       },
       child: Padding(
-        padding: const EdgeInsets.only(bottom: 90, right: 15),
+        padding:
+            EdgeInsets.only(bottom: isEventScreen == true ? 15 : 90, right: 15),
         child: Align(
           alignment: Alignment.bottomRight,
           child: Container(

@@ -338,7 +338,7 @@ class _CreateSellingitemScreenState extends State<CreateSellingitemScreen> {
   String? filterCategory;
   bool _isProcessing = false;
   bool? _isUpdating;
-  bool _shouldPromote = false;
+  final bool _shouldPromote = false;
   final TextEditingController descriptionController = TextEditingController();
   final TextEditingController _priceController = TextEditingController();
   final TextEditingController _currencyController = TextEditingController();

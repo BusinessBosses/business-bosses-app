@@ -893,7 +893,7 @@ class _ExpandedCourseScreenState extends State<ExpandedCourseScreen> {
                                     ),
                                   ],
                                 ),
-                                if (widget.course.youtubeUrls != null) ...[
+                                if (widget.course.youtubeUrls != null) ...<Widget>[
                                   widget.course.youtubeUrls!.length > 1
                                       ? SizedBox(
                                           height: 90,
@@ -1042,10 +1042,10 @@ class _ExpandedCourseScreenState extends State<ExpandedCourseScreen> {
                                               }),
                                         )
                                       : Container(),
-                                ] else ...[
+                                ] else ...<Widget>[
                                   fileslist.length > 1
                                       ? Column(
-                                          children: [
+                                          children: <Widget>[
                                             SizedBox(
                                               height: 90,
                                               child: ListView.builder(

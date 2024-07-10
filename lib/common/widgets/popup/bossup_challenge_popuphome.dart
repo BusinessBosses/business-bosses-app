@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 
-import '../../../features/forum/models/industry.dart';
 import '../../../utils/size_config.dart';
 import '../../../utils/theme/theme.dart';
 

@@ -387,11 +387,11 @@ class _HomeScreenState extends State<HomeScreen>
                                             ];
                                           },
                                           body: Column(
-                                            children: [
+                                            children: <Widget>[
                                               Visibility(
                                                 visible: isTabVisible,
                                                 child: Column(
-                                                  children: [
+                                                  children: <Widget>[
                                                     Material(
                                                       elevation: 0.1,
                                                       color: Colors.white,
@@ -438,7 +438,7 @@ class _HomeScreenState extends State<HomeScreen>
                                               Expanded(
                                                 child: TabBarView(
                                                     controller: _tabController,
-                                                    children: [
+                                                    children: <Widget>[
                                                       ListView.builder(
                                                         shrinkWrap: true,
                                                         itemCount: controller

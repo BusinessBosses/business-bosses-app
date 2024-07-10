@@ -8,7 +8,6 @@ import 'package:business_bosses_v2/features/home/controller/commumities_controll
 import 'package:business_bosses_v2/features/home/widgets/bottom_bar.dart';
 import 'package:business_bosses_v2/features/home/widgets/industriessearch.dart';
 import 'package:business_bosses_v2/features/profile/controller/profile_controller.dart';
-import 'package:business_bosses_v2/features/search/widgets/filterusers.dart';
 import 'package:business_bosses_v2/utils/constants/constants.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
@@ -258,7 +257,7 @@ class _AllCommunitiesScreenState extends State<AllCommunitiesScreen>
                           : _isSearchingDonations
                               ? TabBarView(
                                   controller: _donationsearchTabController,
-                                  children: [
+                                  children: <Widget>[
                                     Obx(
                                       () => FilterDonationPosts(
                                         filterItems:

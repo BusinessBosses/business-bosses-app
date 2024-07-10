@@ -57,8 +57,8 @@ class DonationsController extends GetxController {
     update();
   }
 
-  Future<DonationModel> fetchaDonation(String id) async {
-    var donation;
+  Future<DonationModel?> fetchaDonation(String id) async {
+    DonationModel? donation;
     try {
       loading(true);
       update();
@@ -67,6 +67,8 @@ class DonationsController extends GetxController {
         donation = DonationModel.fromMap(<String, dynamic>{
           ...response.data,
         });
+      } else {
+        donation = null;
       }
       error(false);
     } catch (e) {

@@ -60,7 +60,7 @@ class _CreateServiceScreenState extends State<CreateServiceScreen> {
   String? filterCategory;
   bool _isProcessing = false;
   bool? _isUpdating;
-  bool _shouldPromote = false;
+  final bool _shouldPromote = false;
   final TextEditingController descriptionController = TextEditingController();
   final TextEditingController _priceController = TextEditingController();
 

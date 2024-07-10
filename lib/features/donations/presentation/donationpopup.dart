@@ -93,7 +93,7 @@ class DonationPopup extends StatelessWidget {
               children: <Widget>[
                 Expanded(
                   child: Text(
-                    '• Select \"Create Donation\" and provide details about your business project, fundraising goal, and timeline.',
+                    '• Select "Create Donation" and provide details about your business project, fundraising goal, and timeline.',
                     style: bodyText2,
                     textAlign: TextAlign.start,
                   ),

@@ -1,3 +1,4 @@
+import 'package:business_bosses_v2/common/models/user_model.dart';
 import 'package:business_bosses_v2/common/widgets/buttons/my_outlined_button.dart';
 import 'package:business_bosses_v2/features/forum/models/industry.dart';
 import 'package:business_bosses_v2/features/marketplace/controllers/market_controller.dart';
@@ -28,7 +29,7 @@ class _JoinedButtonState extends State<JoinedButton> {
 
         setState(() {
           if (_marketController.isJoined.value) {
-            _marketController.users.removeWhere((user) => user.uid == userId);
+            _marketController.users.removeWhere((UserModel user) => user.uid == userId);
           } else {
             _marketController.users.add(_profileController.myProfile);
           }

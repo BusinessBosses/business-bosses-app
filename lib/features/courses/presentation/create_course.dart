@@ -197,8 +197,8 @@ class _CreateCourseScreenState extends State<CreateCourseScreen> {
                             onChanged: (ContentType? value) {
                               setState(() {
                                 _selectedContentType = value!;
-                                selectedFileNames = [];
-                                selectedFilePaths = [];
+                                selectedFileNames = <String>[];
+                                selectedFilePaths = <String>[];
                               });
                             },
                           ),
