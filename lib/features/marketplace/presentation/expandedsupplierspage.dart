@@ -9,7 +9,6 @@ import 'package:get/get.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import '../../../common/models/user_model.dart';
-import '../../../common/widgets/user_avatar_with_badge.dart';
 import '../../../utils/theme/theme.dart';
 
 class ExpandedSuppliersPage extends StatefulWidget {
@@ -237,7 +236,7 @@ class _FilterUsersState extends State<ExpandedSuppliersPage> {
                                 height: 5,
                               ),
                               Text(
-                                widget.supplier.phone!,
+                                widget.supplier.phone,
                                 style: TextStyle(
                                   fontWeight: FontWeight.w700,
                                   fontSize: 15,
