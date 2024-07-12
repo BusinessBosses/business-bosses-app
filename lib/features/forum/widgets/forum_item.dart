@@ -1,6 +1,7 @@
 import 'package:business_bosses_v2/features/forum/controller/bossup_controller.dart';
 import 'package:business_bosses_v2/features/forum/controller/forum_controller.dart';
 import 'package:business_bosses_v2/features/forum/models/forum_model.dart';
+import 'package:business_bosses_v2/features/forum/presentation/boost_forum_screen.dart';
 import 'package:business_bosses_v2/features/forum/widgets/bossup_like_comment.dart';
 import 'package:business_bosses_v2/features/posts/widgets/all_forum_images.dart';
 import 'package:business_bosses_v2/functions/my_native_functions.dart';
@@ -53,6 +54,7 @@ class ForumItem extends StatefulWidget {
 class _ForumItemState extends State<ForumItem> {
   List<String> blocked = <String>[];
   final ProfileController profileController = Get.find();
+  late List<PopupMenuEntry<String>> myPopup;
 
   Future<void> connect(String userId) async {
     // ignore: unused_local_variable
@@ -106,25 +108,62 @@ class _ForumItemState extends State<ForumItem> {
     }
   }
 
-  final List<PopupMenuEntry<String>> myPopup = <PopupMenuEntry<String>>[
-    const PopupMenuItem<String>(
-      value: 'Edit',
-      child: Text(
-        'Edit',
-        style: bodyText2,
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    myPopup = _buildPopupMenu();
+  }
+
+  // final List<PopupMenuEntry<String>> myPopup = <PopupMenuEntry<String>>[
+  //   const PopupMenuItem<String>(
+  //     value: 'Edit',
+  //     child: Text(
+  //       'Edit',
+  //       style: bodyText2,
+  //     ),
+  //   ),
+  //   const PopupMenuDivider(
+  //     height: 0.0,
+  //   ),
+  //   const PopupMenuItem<String>(
+  //     value: 'Delete',
+  //     child: Text(
+  //       'Delete',
+  //       style: bodyText2,
+  //     ),
+  //   ),
+  // ];
+
+  List<PopupMenuEntry<String>> _buildPopupMenu() {
+    return <PopupMenuEntry<String>>[
+      const PopupMenuItem<String>(
+        value: 'Edit',
+        child: Text(
+          'Edit',
+          style: bodyText2,
+        ),
       ),
-    ),
-    const PopupMenuDivider(
-      height: 0.0,
-    ),
-    const PopupMenuItem<String>(
-      value: 'Delete',
-      child: Text(
-        'Delete',
-        style: bodyText2,
+      const PopupMenuDivider(
+        height: 0.0,
       ),
-    )
-  ];
+      const PopupMenuItem<String>(
+        value: 'Delete',
+        child: Text(
+          'Delete',
+          style: bodyText2,
+        ),
+      ),
+      if (widget.forum.promote == false)
+        const PopupMenuItem<String>(
+          value: 'Boost',
+          child: Text(
+            'Boost',
+            style: bodyText2,
+          ),
+        ),
+    ];
+  }
 
   String formatCount(int count) {
     if (count >= 1000) {
@@ -443,7 +482,8 @@ class _ForumItemState extends State<ForumItem> {
                                       ? MyPopupMenuButton(
                                           popupItems: myPopup,
                                           icon: const Icon(Icons.more_horiz,
-                                              size: 20,  color: Colors.black,
+                                              size: 20,
+                                              color: Colors.black,
                                               weight: 100),
                                           onSelected: (String val) {
                                             if (val == 'Edit') {
@@ -454,6 +494,12 @@ class _ForumItemState extends State<ForumItem> {
                                                   });
                                             } else if (val == 'Delete') {
                                               _showDialog(widget.forum.forumId);
+                                            } else if (val == 'Boost') {
+                                              Get.to(
+                                                () => BoostForumScreen(
+                                                  postId: widget.forum.forumId,
+                                                ),
+                                              );
                                             }
                                           },
                                         )
