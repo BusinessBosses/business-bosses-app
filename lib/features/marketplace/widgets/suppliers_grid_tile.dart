@@ -2,6 +2,7 @@ import 'package:business_bosses_v2/features/marketplace/models/suppliers_model.d
 import 'package:business_bosses_v2/features/marketplace/presentation/expandedsupplierspage.dart';
 import 'package:business_bosses_v2/features/profile/controller/profile_controller.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 
 import '../../../common/widgets/buttons/my_outlined_button.dart';
@@ -78,6 +79,40 @@ class _SuppliersGridTileState extends State<SuppliersGridTile> {
               ),
             ),
             const SizedBox(height: 8.0),
+            widget.supplier.user != null &&
+                    widget.supplier.user?.isSubscribed == true
+                ? Padding(
+                    padding: const EdgeInsets.only(top: 0.0),
+                    child: Row(
+                      children: <Widget>[
+                        Text(
+                          widget.supplier.user?.name ??
+                              widget.supplier.user!.username,
+                          maxLines: 2,
+                          overflow: TextOverflow.ellipsis,
+                          textAlign: TextAlign.center,
+                          style: Theme.of(context).textTheme.bodyLarge,
+                        ),
+                        const SizedBox(width: 5),
+                        SvgPicture.asset(
+                          'assets/svgs/premiumbadge.svg',
+                          height: 9,
+                          color: primaryColorLT,
+                        )
+                      ],
+                    ),
+                  )
+                : Text(
+                    widget.supplier.user?.name ??
+                        widget.supplier.user!.username,
+                    maxLines: 2,
+                    overflow: TextOverflow.ellipsis,
+                    textAlign: TextAlign.center,
+                    style: const TextStyle(
+                        fontWeight: FontWeight.w700,
+                        fontSize: 17,
+                        color: textColor),
+                  ),
             Text(
               widget.supplier.name,
               maxLines: 2,

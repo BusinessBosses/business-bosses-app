@@ -1,3 +1,4 @@
+
 import 'package:business_bosses_v2/features/marketplace/controllers/market_controller.dart';
 import 'package:business_bosses_v2/features/marketplace/models/market_model.dart';
 import 'package:business_bosses_v2/features/marketplace/widgets/marketplace_item.dart';
@@ -6,6 +7,7 @@ import 'package:get/get.dart';
 
 import '../../../common/widgets/safety_model.dart';
 import '../../../utils/theme/theme.dart';
+import '../../home/controller/home_controller.dart';
 
 class FilterMarketplacePosts extends StatelessWidget {
   final List<MarketModel> filterItems;
@@ -22,6 +24,7 @@ class FilterMarketplacePosts extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final HomeController homeController = Get.find();
     final MarketController controller = Get.find();
 
     return GestureDetector(
@@ -51,8 +54,7 @@ class FilterMarketplacePosts extends StatelessWidget {
                 itemCount: filterItems.length,
                 itemBuilder: (BuildContext context, int i) {
                   return MarketTile(
-                    post: filterItems[i],
-                    controller: controller,
+                    post: filterItems[i], controller: controller,
                   );
                 },
               ),

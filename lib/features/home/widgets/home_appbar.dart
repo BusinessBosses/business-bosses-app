@@ -77,7 +77,7 @@ class Homeappbar extends StatelessWidget {
                       clipBehavior: Clip.none,
                       children: <Widget>[
                         Container(
-                          padding: const EdgeInsets.all(12),
+                          padding: EdgeInsets.all(12),
                           decoration:  BoxDecoration(
                             borderRadius: BorderRadius.circular(10),
                             color: Colors.white,

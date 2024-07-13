@@ -85,7 +85,6 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
-    namespace 'xyz.codexia.businessbosses'
 }
 
 flutter {
