@@ -40,6 +40,7 @@ class _ExpandedMarketplaceScreenState extends State<ExpandedMarketplaceScreen> {
   bool isLoading = false;
   final DonationsController donationsController = Get.find();
   final ProfileController profileController = Get.find();
+  final TextEditingController _priceController = TextEditingController();
   final MarketController _marketController = Get.find();
 
   NumberFormat formatter = NumberFormat.compact();

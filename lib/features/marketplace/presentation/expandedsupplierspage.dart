@@ -9,6 +9,7 @@ import 'package:get/get.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import '../../../common/models/user_model.dart';
+import '../../../common/widgets/user_avatar_with_badge.dart';
 import '../../../utils/theme/theme.dart';
 
 class ExpandedSuppliersPage extends StatefulWidget {
@@ -137,9 +138,9 @@ class _FilterUsersState extends State<ExpandedSuppliersPage> {
                       borderRadius: BorderRadius.circular(10),
                       color: Colors.white),
                   child: Column(
-                    children: <Widget>[
+                    children: [
                       const Row(
-                        children: <Widget>[
+                        children: [
                           Text(
                             'Contact Information',
                             style: TextStyle(
@@ -154,12 +155,12 @@ class _FilterUsersState extends State<ExpandedSuppliersPage> {
                       ),
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: <Widget>[
+                        children: [
                           Wrap(
                               crossAxisAlignment: WrapCrossAlignment.center,
-                              children: <Widget>[
+                              children: [
                                 Column(
-                                  children: <Widget>[
+                                  children: [
                                     SvgPicture.asset('assets/svgs/website.svg'),
                                     const SizedBox(
                                       height: 8,
@@ -187,7 +188,7 @@ class _FilterUsersState extends State<ExpandedSuppliersPage> {
                                 ),
                                 const Column(
                                   crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: <Widget>[
+                                  children: [
                                     Text(
                                       'Website',
                                       style: TextStyle(fontSize: 12),
@@ -212,7 +213,7 @@ class _FilterUsersState extends State<ExpandedSuppliersPage> {
                               ]),
                           Column(
                             crossAxisAlignment: CrossAxisAlignment.end,
-                            children: <Widget>[
+                            children: [
                               Text(
                                 widget.supplier.url!,
                                 style: TextStyle(
@@ -236,7 +237,7 @@ class _FilterUsersState extends State<ExpandedSuppliersPage> {
                                 height: 5,
                               ),
                               Text(
-                                widget.supplier.phone,
+                                widget.supplier.phone!,
                                 style: TextStyle(
                                   fontWeight: FontWeight.w700,
                                   fontSize: 15,
@@ -268,10 +269,10 @@ class _FilterUsersState extends State<ExpandedSuppliersPage> {
                   decoration: BoxDecoration(
                       color: Colors.white,
                       borderRadius: BorderRadius.circular(15)),
-                  padding: const EdgeInsets.all(15),
+                  padding: EdgeInsets.all(15),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
-                    children: <Widget>[
+                    children: [
                       const Text(
                         'Description',
                         style: TextStyle(
@@ -320,7 +321,7 @@ class _FilterUsersState extends State<ExpandedSuppliersPage> {
                       const SizedBox(height: 20),
                       if (widget.supplier.images != null &&
                           widget.supplier.images!.isNotEmpty)
-                        SizedBox(
+                        Container(
                           height: 200,
                           child: ListView.builder(
                             scrollDirection: Axis.horizontal,
