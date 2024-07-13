@@ -129,6 +129,7 @@ Future<void> initUniLinks() async {
       processDeepLink(Uri.parse(initialLink));
       processPostDeeplink(Uri.parse(initialLink));
     }
+    // ignore: empty_catches
   } on PlatformException {}
 
   uriLinkStream.listen((Uri? uri) {
@@ -136,9 +137,7 @@ Future<void> initUniLinks() async {
       processDeepLink(uri);
       processPostDeeplink(uri);
     } else {}
-  }, onError: (err) {
-    print(err);
-  });
+  }, onError: (dynamic err) {});
 }
 
 /// PROCESS DEEPLINK
@@ -216,7 +215,7 @@ class _MyAppState extends State<MyApp> {
       ),
     );
 
-    return FutureBuilder(
+    return FutureBuilder<SharedPreferences>(
       future: SharedPreferences.getInstance(),
       builder:
           (BuildContext context, AsyncSnapshot<SharedPreferences> snapshot) {
