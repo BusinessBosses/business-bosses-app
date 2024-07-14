@@ -130,17 +130,34 @@ class _CreateEventState extends State<CreateEvent> {
                     width: 1.0, // Border width
                   ),
                 ),
-                child: TextField(
-                  controller: descriptionController,
-                  maxLines: null, // Allow the text field to expand vertically
-                  keyboardType:
-                      TextInputType.multiline, // Allow multiline input
-                  enabled: !isLoading,
-                  decoration: const InputDecoration(
-                    labelText: 'Add Description',
-                    labelStyle: TextStyle(fontWeight: FontWeight.w600),
-                    border: InputBorder.none,
-                  ),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.end,
+                  children: <Widget>[
+                    TextField(
+                      controller: descriptionController,
+                      maxLines:
+                          null, // Allow the text field to expand vertically
+                      keyboardType:
+                          TextInputType.multiline, // Allow multiline input
+                      enabled: !isLoading,
+                      decoration: const InputDecoration(
+                        labelText: 'Add Description',
+                        labelStyle: TextStyle(fontWeight: FontWeight.w600),
+                        border: InputBorder.none,
+                      ),
+                      onChanged: (String text) {
+                        setState(() {}); // Update UI to show character count
+                      },
+                    ),
+                    Text(
+                      '${descriptionController.text.length}/300',
+                      style: TextStyle(
+                        color: descriptionController.text.length > 300
+                            ? Colors.red
+                            : Colors.black,
+                      ),
+                    ),
+                  ],
                 ),
               ),
             ),
@@ -371,6 +388,21 @@ class _CreateEventState extends State<CreateEvent> {
                   // Format the UTC DateTime to the desired string format
                   String formattedStartDateTime = dateFormat.format(startAtt);
                   String formattedStartTime = timeFormat.format(startAtt);
+                  final String description = descriptionController.text.trim();
+
+                  if (description.length > 300) {
+                    ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+                      content: Text(
+                        'Description must not exceed 300 characters.',
+                        style: TextStyle(fontWeight: FontWeight.w600),
+                      ),
+                      backgroundColor: Colors.red,
+                    ));
+                    setState(() {
+                      isLoading = false;
+                    });
+                    return;
+                  }
 
                   if (linkController.text.isNotEmpty &&
                       !isValidMeetingLink(linkController.text)) {
@@ -440,8 +472,8 @@ class _CreateEventState extends State<CreateEvent> {
                     'startTime': '00:00:00',
                     'user': profileController.myProfile.toMap(),
                     'image': imageUrl,
-                    'link': widget.event!.link,
-                    'description': widget.event!.description,
+                    'link': linkController.text,
+                    'description': descriptionController.text,
                   };
 
                   Map<String, dynamic> dataa = <String, dynamic>{
@@ -455,8 +487,8 @@ class _CreateEventState extends State<CreateEvent> {
                     'photourl': profileController.myProfile.photoUrl,
                     'user': profileController.myProfile.toString(),
                     'image': imageUrl,
-                    'link': widget.event!.link,
-                    'description': widget.event!.description,
+                    'link': linkController.text,
+                    'description': descriptionController.text,
                   };
 
                   String? jsonData = jsonEncode(dataa);
