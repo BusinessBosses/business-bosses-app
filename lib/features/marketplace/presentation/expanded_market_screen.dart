@@ -399,8 +399,8 @@ class _ExpandedMarketplaceScreenState extends State<ExpandedMarketplaceScreen> {
                                   widget.market.location
                                               ?.contains('delivery') ??
                                           false
-                                      ? 'Place Order'
-                                      : 'Book Now',
+                                      ? 'Message Seller'
+                                      : 'Message Seller',
                                   style: const TextStyle(
                                     color: Colors.white,
                                     fontWeight: FontWeight.w700,

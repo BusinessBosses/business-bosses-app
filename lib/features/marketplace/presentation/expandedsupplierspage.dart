@@ -7,7 +7,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 import 'package:url_launcher/url_launcher.dart';
-
 import '../../../common/models/user_model.dart';
 import '../../../common/widgets/user_avatar_with_badge.dart';
 import '../../../utils/theme/theme.dart';
@@ -18,7 +17,6 @@ class ExpandedSuppliersPage extends StatefulWidget {
   final bool isSearch;
   final Function(UserModel)? onConnectionChange;
 
-  // ignore: public_member_api_docs
   const ExpandedSuppliersPage({
     Key? key,
     this.isLoading = false,
@@ -33,339 +31,262 @@ class ExpandedSuppliersPage extends StatefulWidget {
 
 class _FilterUsersState extends State<ExpandedSuppliersPage> {
   final bool loadingNext = false;
-  String? filterCode;
+
   @override
-  Widget build(
-    BuildContext context,
-  ) {
+  Widget build(BuildContext context) {
     return Scaffold(
-        backgroundColor: backgroundcolorinterface,
-        appBar: AppBar(
-          leading: IconButton(
-            onPressed: () {
-              Navigator.pop(context);
-            },
-            icon: SvgPicture.asset('assets/svgs/backbutton.svg'),
-          ),
-          centerTitle: true,
-          title: const Text(
-            'About Supplier',
-            textAlign: TextAlign.center,
-            style: TextStyle(fontSize: 20),
-          ),
+      backgroundColor: backgroundcolorinterface,
+      appBar: AppBar(
+        leading: IconButton(
+          onPressed: () => Navigator.pop(context),
+          icon: SvgPicture.asset('assets/svgs/backbutton.svg'),
         ),
-        body: SingleChildScrollView(
-          child: Padding(
-            padding: const EdgeInsets.all(15.0),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: <Widget>[
-                Column(
-                  children: <Widget>[
-                    (widget.supplier.images!.isEmpty)
-                        ? SizedBox(
-                            height: 128.0,
-                            width: 128.0,
-                            child: CircleAvatar(
-                              backgroundColor: Colors.grey.withOpacity(0.5),
-                              child: SvgPicture.asset('assets/svgs/person.svg'),
-                            ),
-                          )
-                        : NetworkImageWithPlaceHolder(
-                            imageUrl: widget.supplier.images![0],
-                            height: 128.0,
-                            width: 128.0,
-                            radius: 64.0,
-                            cacheHeight: 90,
-                            cacheWidth: 90,
-                            placeHolder: Icons.person,
-                          ),
-                    const SizedBox(
-                      height: 20,
-                    ),
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: <Widget>[
-                        Text(
-                          widget.supplier.name,
-                          style: const TextStyle(
-                            fontWeight: FontWeight.w700,
-                            fontSize: 20,
-                            color: textColor,
-                          ),
-                        ),
-                      ],
-                    )
-                  ],
-                ),
-                const SizedBox(
-                  height: 30,
-                ),
-                if (!widget.supplier.isVerified)
-                  Container(
-                    decoration: BoxDecoration(
-                        color: Colors.red.withAlpha(20),
-                        borderRadius: BorderRadius.circular(8)),
-                    padding: const EdgeInsets.symmetric(
-                        horizontal: 10, vertical: 10),
-                    child: Row(
-                      children: <Widget>[
-                        SvgPicture.asset(
-                          'assets/svgs/report.svg',
-                          // ignore: deprecated_member_use
-                          color: Colors.red,
-                          height: 26,
-                        ),
-                        const SizedBox(width: 8),
-                        const Expanded(
-                          child: Text(
-                            'This supplier isn\'t verified by Business Bosses; we cannot guarantee a response',
-                            style: TextStyle(color: Colors.red),
-                            maxLines: 2,
-                            overflow: TextOverflow.ellipsis,
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                if (!widget.supplier.isVerified)
-                  const SizedBox(
-                    height: 20,
-                  ),
-                Container(
-                  padding: const EdgeInsets.all(15),
-                  decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(10),
-                      color: Colors.white),
-                  child: Column(
-                    children: [
-                      const Row(
-                        children: [
-                          Text(
-                            'Contact Information',
-                            style: TextStyle(
-                                fontWeight: FontWeight.w700,
-                                fontSize: 18,
-                                color: textColor),
-                          ),
-                        ],
-                      ),
-                      const SizedBox(
-                        height: 20,
-                      ),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Wrap(
-                              crossAxisAlignment: WrapCrossAlignment.center,
-                              children: [
-                                Column(
-                                  children: [
-                                    SvgPicture.asset('assets/svgs/website.svg'),
-                                    const SizedBox(
-                                      height: 8,
-                                    ),
-                                    SvgPicture.asset(
-                                      'assets/svgs/email.svg',
-                                      height: 10,
-                                    ),
-                                    const SizedBox(
-                                      height: 8,
-                                    ),
-                                    SvgPicture.asset(
-                                      'assets/svgs/phonenumber.svg',
-                                      height: 11,
-                                    ),
-                                    const SizedBox(
-                                      height: 8,
-                                    ),
-                                    SvgPicture.asset(
-                                        'assets/svgs/locationicon.svg'),
-                                  ],
-                                ),
-                                const SizedBox(
-                                  width: 5,
-                                ),
-                                const Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Text(
-                                      'Website',
-                                      style: TextStyle(fontSize: 12),
-                                    ),
-                                    SizedBox(
-                                      height: 5,
-                                    ),
-                                    Text('Email',
-                                        style: TextStyle(fontSize: 12)),
-                                    SizedBox(
-                                      height: 5,
-                                    ),
-                                    Text('Phone',
-                                        style: TextStyle(fontSize: 12)),
-                                    SizedBox(
-                                      height: 5,
-                                    ),
-                                    Text('Location',
-                                        style: TextStyle(fontSize: 12)),
-                                  ],
-                                )
-                              ]),
-                          Column(
-                            crossAxisAlignment: CrossAxisAlignment.end,
-                            children: [
-                              Text(
-                                widget.supplier.url!,
-                                style: TextStyle(
-                                  fontWeight: FontWeight.w700,
-                                  fontSize: 15,
-                                  color: textColor.withAlpha(200),
-                                ),
-                              ),
-                              const SizedBox(
-                                height: 5,
-                              ),
-                              Text(
-                                widget.supplier.email!,
-                                style: TextStyle(
-                                  fontWeight: FontWeight.w700,
-                                  fontSize: 15,
-                                  color: textColor.withAlpha(200),
-                                ),
-                              ),
-                              const SizedBox(
-                                height: 5,
-                              ),
-                              Text(
-                                widget.supplier.phone!,
-                                style: TextStyle(
-                                  fontWeight: FontWeight.w700,
-                                  fontSize: 15,
-                                  color: textColor.withAlpha(200),
-                                ),
-                              ),
-                              const SizedBox(
-                                height: 5,
-                              ),
-                              Text(
-                                widget.supplier.location!,
-                                style: TextStyle(
-                                  fontWeight: FontWeight.w700,
-                                  fontSize: 15,
-                                  color: textColor.withAlpha(200),
-                                ),
-                              ),
-                            ],
-                          )
-                        ],
-                      ),
-                    ],
-                  ),
-                ),
-                const SizedBox(
-                  height: 20,
-                ),
-                Container(
-                  decoration: BoxDecoration(
-                      color: Colors.white,
-                      borderRadius: BorderRadius.circular(15)),
-                  padding: EdgeInsets.all(15),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      const Text(
-                        'Description',
-                        style: TextStyle(
-                            fontWeight: FontWeight.w700,
-                            fontSize: 18,
-                            color: textColor),
-                      ),
-                      const SizedBox(
-                        height: 20,
-                      ),
-                      Text('Category - ${widget.supplier.category}'),
-                      const SizedBox(
-                        height: 20,
-                      ),
-                      DetectableText(
-                        text: widget.supplier.description,
-                        detectionRegExp: detectionRegExp(hashtag: false)!,
-                        detectedStyle: bodyText2.copyWith(
-                          color: Colors.blue,
-                        ),
-                        moreStyle: bodyText2.copyWith(
-                          color: Colors.redAccent,
-                        ),
-                        lessStyle: bodyText2.copyWith(
-                          color: Colors.redAccent,
-                        ),
-                        trimLength: 10000,
-                        basicStyle: bodyText2.copyWith(color: textColor),
-                        onTap: (String text) async {
-                          final Uri url = Uri.parse(text);
-                          if ((url.scheme == 'http' || url.scheme == 'https')) {
-                            if (!await launchUrl(url)) {
-                              throw Exception('Could not launch $url');
-                            }
-                          } else if (text.startsWith('wa.me')) {
-                            // Handle "wa.me" links
-                            final Uri whatsappUrl = Uri.parse('https://$text');
-                            if (await launchUrl(whatsappUrl)) {
-                              await launchUrl(whatsappUrl);
-                            } else {
-                              throw Exception('Could not launch $whatsappUrl');
-                            }
-                          }
-                        },
-                      ),
-                      const SizedBox(height: 20),
-                      if (widget.supplier.images != null &&
-                          widget.supplier.images!.isNotEmpty)
-                        Container(
-                          height: 200,
-                          child: ListView.builder(
-                            scrollDirection: Axis.horizontal,
-                            itemCount: widget.supplier.images!.length,
-                            itemBuilder: (BuildContext context, int i) {
-                              return GestureDetector(
-                                onTap: () {
-                                  Get.to(
-                                    () => ImagesViewerScreen(
-                                      urls: widget.supplier.images,
-                                      text: widget.supplier.description,
-                                      index: i,
-                                    ),
-                                  );
-                                },
-                                child: Stack(
-                                  children: <Widget>[
-                                    Container(
-                                      padding: const EdgeInsets.only(
-                                          top: 10.0, right: 10),
-                                      child: NetworkImageWithPlaceHolder(
-                                        imageUrl: widget.supplier.images![i],
-                                        width: 200,
-                                        height: 200,
-                                        placeHolder: Icons.photo,
-                                        iconSize: 18.0,
-                                        radius: 10.0,
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              );
-                            },
-                          ),
-                        )
-                    ],
-                  ),
-                ),
-                const SizedBox(
-                  height: 10,
-                ),
-              ],
+        centerTitle: true,
+        title: const Text(
+          'About Supplier',
+          style: TextStyle(fontSize: 20),
+        ),
+      ),
+      body: SingleChildScrollView(
+        padding: const EdgeInsets.all(15.0),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            _buildSupplierImage(),
+            const SizedBox(height: 20),
+            Text(
+              widget.supplier.name,
+              style: const TextStyle(
+                fontWeight: FontWeight.w700,
+                fontSize: 20,
+                color: textColor,
+              ),
+            ),
+            const SizedBox(height: 30),
+            if (!widget.supplier.isVerified) _buildVerificationWarning(),
+            const SizedBox(height: 20),
+            _buildContactInfo(),
+            const SizedBox(height: 20),
+            _buildDescription(),
+            const SizedBox(height: 10),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildSupplierImage() {
+    return Column(
+      children: [
+        widget.supplier.images!.isEmpty
+            ? CircleAvatar(
+                backgroundColor: Colors.grey.withOpacity(0.5),
+                radius: 64.0,
+                child: SvgPicture.asset('assets/svgs/person.svg'),
+              )
+            : NetworkImageWithPlaceHolder(
+                imageUrl: widget.supplier.images![0],
+                height: 128.0,
+                width: 128.0,
+                radius: 64.0,
+                cacheHeight: 90,
+                cacheWidth: 90,
+                placeHolder: Icons.person,
+              ),
+        const SizedBox(height: 20),
+      ],
+    );
+  }
+
+  Widget _buildVerificationWarning() {
+    return Container(
+      decoration: BoxDecoration(
+        color: Colors.red.withAlpha(20),
+        borderRadius: BorderRadius.circular(8),
+      ),
+      padding: const EdgeInsets.all(10),
+      child: Row(
+        children: [
+          SvgPicture.asset(
+            'assets/svgs/report.svg',
+            color: Colors.red,
+            height: 26,
+          ),
+          const SizedBox(width: 8),
+          const Expanded(
+            child: Text(
+              'This supplier isn\'t verified by Business Bosses; we cannot guarantee a response',
+              style: TextStyle(color: Colors.red),
+              maxLines: 2,
+              overflow: TextOverflow.ellipsis,
             ),
           ),
-        ));
+        ],
+      ),
+    );
+  }
+
+  Widget _buildContactInfo() {
+    return Container(
+      padding: const EdgeInsets.all(15),
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(10),
+        color: Colors.white,
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          const Text(
+            'Contact Information',
+            style: TextStyle(
+              fontWeight: FontWeight.w700,
+              fontSize: 18,
+              color: textColor,
+            ),
+          ),
+          const SizedBox(height: 20),
+          _buildContactRow('assets/svgs/website.svg', 'Website',
+              widget.supplier.url, 'https://${widget.supplier.url}', 12),
+          _buildDivider(),
+          const SizedBox(height: 10),
+          _buildContactRow('assets/svgs/email.svg', 'Email',
+              widget.supplier.email, 'mailto:${widget.supplier.email}', 9),
+          _buildDivider(),
+          const SizedBox(height: 10),
+          _buildContactRow('assets/svgs/phone.svg', 'Phone',
+              widget.supplier.phone, 'tel:${widget.supplier.phone}', 11),
+          _buildDivider(),
+          const SizedBox(height: 10),
+          _buildContactRow('assets/svgs/locationicon.svg', 'Location',
+              widget.supplier.location, '', 13),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildContactRow(
+      String iconPath, String label, String? value, String url, double height) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Row(
+          children: [
+            SvgPicture.asset(
+              iconPath,
+              height: height,
+            ),
+            const SizedBox(width: 5),
+            Text(label, style: const TextStyle(fontSize: 12)),
+          ],
+        ),
+        const SizedBox(height: 5),
+        GestureDetector(
+          onTap: () async {
+            if (url.isNotEmpty && await canLaunch(url)) {
+              await launch(url);
+            }
+          },
+          child: Text(
+            value!,
+            style: TextStyle(
+              fontWeight: FontWeight.w700,
+              fontSize: 15,
+              color: textColor.withAlpha(200),
+            ),
+          ),
+        ),
+        const SizedBox(height: 5),
+      ],
+    );
+  }
+
+  Widget _buildDivider() {
+    return Container(color: Colors.black12, height: 0.5);
+  }
+
+  Widget _buildDescription() {
+    return Container(
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(15),
+      ),
+      padding: const EdgeInsets.all(15),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          const Text(
+            'Description',
+            style: TextStyle(
+              fontWeight: FontWeight.w700,
+              fontSize: 18,
+              color: textColor,
+            ),
+          ),
+          const SizedBox(height: 20),
+          Text('Category - ${widget.supplier.category}'),
+          const SizedBox(height: 20),
+          DetectableText(
+            text: widget.supplier.description,
+            detectionRegExp: detectionRegExp(hashtag: false)!,
+            detectedStyle: bodyText2.copyWith(color: Colors.blue),
+            moreStyle: bodyText2.copyWith(color: Colors.redAccent),
+            lessStyle: bodyText2.copyWith(color: Colors.redAccent),
+            trimLength: 10000,
+            basicStyle: bodyText2.copyWith(color: textColor),
+            onTap: (String text) async {
+              final Uri url = Uri.parse(text);
+              if ((url.scheme == 'http' || url.scheme == 'https')) {
+                if (!await launchUrl(url)) {
+                  throw Exception('Could not launch $url');
+                }
+              } else if (text.startsWith('wa.me')) {
+                final Uri whatsappUrl = Uri.parse('https://$text');
+                if (await launchUrl(whatsappUrl)) {
+                  await launchUrl(whatsappUrl);
+                } else {
+                  throw Exception('Could not launch $whatsappUrl');
+                }
+              }
+            },
+          ),
+          const SizedBox(height: 20),
+          if (widget.supplier.images != null &&
+              widget.supplier.images!.isNotEmpty)
+            _buildImageGallery(),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildImageGallery() {
+    return Container(
+      height: 200,
+      child: ListView.builder(
+        scrollDirection: Axis.horizontal,
+        itemCount: widget.supplier.images!.length,
+        itemBuilder: (context, i) {
+          return GestureDetector(
+            onTap: () => Get.to(
+              () => ImagesViewerScreen(
+                urls: widget.supplier.images,
+                text: widget.supplier.description,
+                index: i,
+              ),
+            ),
+            child: Container(
+              padding: const EdgeInsets.only(top: 10.0, right: 10),
+              child: NetworkImageWithPlaceHolder(
+                imageUrl: widget.supplier.images![i],
+                width: 200,
+                height: 200,
+                placeHolder: Icons.photo,
+                iconSize: 18.0,
+                radius: 10.0,
+              ),
+            ),
+          );
+        },
+      ),
+    );
   }
 }

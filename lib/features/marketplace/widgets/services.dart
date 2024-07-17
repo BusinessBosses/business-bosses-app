@@ -102,7 +102,7 @@ class _ServicesPageState extends State<ServicesPage> {
                               mainAxisSize: MainAxisSize.min,
                               children: <Widget>[
                                 const Text(
-                                  'Sell a Service',
+                                  'Sell',
                                   style: TextStyle(
                                       fontSize: 15,
                                       color: Colors.white,

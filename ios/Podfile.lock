@@ -5,6 +5,9 @@ PODS:
   - AppAuth/Core (1.7.5)
   - AppAuth/ExternalUserAgent (1.7.5):
     - AppAuth/Core
+  - audioplayers_darwin (0.0.1):
+    - Flutter
+  - CryptoSwift (1.8.2)
   - device_info_plus (0.0.1):
     - Flutter
   - DKImagePickerController/Core (4.3.9):
@@ -42,13 +45,13 @@ PODS:
     - FBAudienceNetwork (~> 6.15)
     - FBSDKCoreKit (~> 17.0)
     - Flutter
-  - FBAEMKit (17.0.1):
-    - FBSDKCoreKit_Basics (= 17.0.1)
-  - FBAudienceNetwork (6.15.0)
-  - FBSDKCoreKit (17.0.1):
-    - FBAEMKit (= 17.0.1)
-    - FBSDKCoreKit_Basics (= 17.0.1)
-  - FBSDKCoreKit_Basics (17.0.1)
+  - FBAEMKit (17.0.2):
+    - FBSDKCoreKit_Basics (= 17.0.2)
+  - FBAudienceNetwork (6.15.1)
+  - FBSDKCoreKit (17.0.2):
+    - FBAEMKit (= 17.0.2)
+    - FBSDKCoreKit_Basics (= 17.0.2)
+  - FBSDKCoreKit_Basics (17.0.2)
   - file_picker (0.0.1):
     - DKImagePickerController/PhotoGallery
     - Flutter
@@ -102,11 +105,11 @@ PODS:
     - FirebaseCoreInternal (~> 10.0)
     - GoogleUtilities/Environment (~> 7.12)
     - GoogleUtilities/Logger (~> 7.12)
-  - FirebaseCoreInternal (10.25.0):
+  - FirebaseCoreInternal (10.29.0):
     - "GoogleUtilities/NSData+zlib (~> 7.8)"
   - FirebaseDynamicLinks (10.18.0):
     - FirebaseCore (~> 10.0)
-  - FirebaseInstallations (10.25.0):
+  - FirebaseInstallations (10.29.0):
     - FirebaseCore (~> 10.0)
     - GoogleUtilities/Environment (~> 7.8)
     - GoogleUtilities/UserDefaults (~> 7.8)
@@ -121,6 +124,9 @@ PODS:
     - GoogleUtilities/UserDefaults (~> 7.8)
     - nanopb (< 2.30910.0, >= 2.30908.0)
   - Flutter (1.0.0)
+  - flutter_callkit_incoming_yoer (0.0.1):
+    - CryptoSwift
+    - Flutter
   - flutter_downloader (0.0.1):
     - Flutter
   - flutter_inappwebview (0.0.1):
@@ -130,11 +136,16 @@ PODS:
   - flutter_inappwebview/Core (0.0.1):
     - Flutter
     - OrderedSet (~> 5.0)
+  - flutter_logs (0.0.1):
+    - Flutter
+    - ZIPFoundation
   - flutter_native_splash (0.0.1):
     - Flutter
   - flutter_paystack (0.0.1):
     - Flutter
   - flutter_secure_storage (6.0.0):
+    - Flutter
+  - flutter_vibrate (0.0.1):
     - Flutter
   - fluttertoast (0.0.2):
     - Flutter
@@ -170,39 +181,41 @@ PODS:
     - AppAuth (< 2.0, >= 1.7.3)
     - GTMAppAuth (< 5.0, >= 4.1.1)
     - GTMSessionFetcher/Core (~> 3.3)
-  - GoogleUtilities/AppDelegateSwizzler (7.13.2):
+  - GoogleUtilities/AppDelegateSwizzler (7.13.3):
     - GoogleUtilities/Environment
     - GoogleUtilities/Logger
     - GoogleUtilities/Network
     - GoogleUtilities/Privacy
-  - GoogleUtilities/Environment (7.13.2):
+  - GoogleUtilities/Environment (7.13.3):
     - GoogleUtilities/Privacy
     - PromisesObjC (< 3.0, >= 1.2)
-  - GoogleUtilities/Logger (7.13.2):
+  - GoogleUtilities/Logger (7.13.3):
     - GoogleUtilities/Environment
     - GoogleUtilities/Privacy
-  - GoogleUtilities/MethodSwizzler (7.13.2):
+  - GoogleUtilities/MethodSwizzler (7.13.3):
     - GoogleUtilities/Logger
     - GoogleUtilities/Privacy
-  - GoogleUtilities/Network (7.13.2):
+  - GoogleUtilities/Network (7.13.3):
     - GoogleUtilities/Logger
     - "GoogleUtilities/NSData+zlib"
     - GoogleUtilities/Privacy
     - GoogleUtilities/Reachability
-  - "GoogleUtilities/NSData+zlib (7.13.2)":
+  - "GoogleUtilities/NSData+zlib (7.13.3)":
     - GoogleUtilities/Privacy
-  - GoogleUtilities/Privacy (7.13.2)
-  - GoogleUtilities/Reachability (7.13.2):
+  - GoogleUtilities/Privacy (7.13.3)
+  - GoogleUtilities/Reachability (7.13.3):
     - GoogleUtilities/Logger
     - GoogleUtilities/Privacy
-  - GoogleUtilities/UserDefaults (7.13.2):
+  - GoogleUtilities/UserDefaults (7.13.3):
     - GoogleUtilities/Logger
     - GoogleUtilities/Privacy
   - GTMAppAuth (4.1.1):
     - AppAuth/Core (~> 1.7)
     - GTMSessionFetcher/Core (< 4.0, >= 3.3)
-  - GTMSessionFetcher/Core (3.4.1)
+  - GTMSessionFetcher/Core (3.5.0)
   - image_picker_ios (0.0.1):
+    - Flutter
+  - is_lock_screen2 (2.0.1):
     - Flutter
   - libwebp (1.3.2):
     - libwebp/demux (= 1.3.2)
@@ -221,6 +234,8 @@ PODS:
     - nanopb/encode (= 2.30909.1)
   - nanopb/decode (2.30909.1)
   - nanopb/encode (2.30909.1)
+  - native_device_orientation (0.0.1):
+    - Flutter
   - OrderedSet (5.0.0)
   - package_info_plus (0.4.5):
     - Flutter
@@ -231,19 +246,21 @@ PODS:
     - Flutter
   - pdfx (1.0.0):
     - Flutter
+  - permission_handler_apple (9.1.1):
+    - Flutter
   - photo_manager (2.0.0):
     - Flutter
     - FlutterMacOS
   - PromisesObjC (2.4.0)
-  - purchases_flutter (6.29.0):
+  - purchases_flutter (6.30.0):
     - Flutter
-    - PurchasesHybridCommon (= 10.6.1)
-  - PurchasesHybridCommon (10.6.1):
-    - RevenueCat (= 4.41.2)
-  - RevenueCat (4.41.2)
-  - SDWebImage (5.19.1):
-    - SDWebImage/Core (= 5.19.1)
-  - SDWebImage/Core (5.19.1)
+    - PurchasesHybridCommon (= 11.1.0)
+  - PurchasesHybridCommon (11.1.0):
+    - RevenueCat (= 4.43.2)
+  - RevenueCat (4.43.2)
+  - SDWebImage (5.19.4):
+    - SDWebImage/Core (= 5.19.4)
+  - SDWebImage/Core (5.19.4)
   - shared_preferences_foundation (0.0.1):
     - Flutter
     - FlutterMacOS
@@ -306,8 +323,28 @@ PODS:
     - Flutter
   - webview_flutter_wkwebview (0.0.1):
     - Flutter
+  - zego_callkit (1.0.0):
+    - Flutter
+  - "zego_express_engine (3.15.1+2)":
+    - Flutter
+  - zego_uikit (0.0.1):
+    - Flutter
+  - zego_uikit_prebuilt_call (0.0.1):
+    - Flutter
+  - zego_uikit_signaling_plugin (0.0.1):
+    - Flutter
+  - zego_zim (2.16.0):
+    - Flutter
+    - ZIM (= 2.16.0)
+  - zego_zpns (2.6.0):
+    - Flutter
+    - ZPNs (= 2.6.0)
+  - ZIM (2.16.0)
+  - ZIPFoundation (0.9.19)
+  - ZPNs (2.6.0)
 
 DEPENDENCIES:
+  - audioplayers_darwin (from `.symlinks/plugins/audioplayers_darwin/ios`)
   - device_info_plus (from `.symlinks/plugins/device_info_plus/ios`)
   - facebook_app_events (from `.symlinks/plugins/facebook_app_events/ios`)
   - file_picker (from `.symlinks/plugins/file_picker/ios`)
@@ -316,18 +353,24 @@ DEPENDENCIES:
   - firebase_dynamic_links (from `.symlinks/plugins/firebase_dynamic_links/ios`)
   - firebase_messaging (from `.symlinks/plugins/firebase_messaging/ios`)
   - Flutter (from `Flutter`)
+  - flutter_callkit_incoming_yoer (from `.symlinks/plugins/flutter_callkit_incoming_yoer/ios`)
   - flutter_downloader (from `.symlinks/plugins/flutter_downloader/ios`)
   - flutter_inappwebview (from `.symlinks/plugins/flutter_inappwebview/ios`)
+  - flutter_logs (from `.symlinks/plugins/flutter_logs/ios`)
   - flutter_native_splash (from `.symlinks/plugins/flutter_native_splash/ios`)
   - flutter_paystack (from `.symlinks/plugins/flutter_paystack/ios`)
   - flutter_secure_storage (from `.symlinks/plugins/flutter_secure_storage/ios`)
+  - flutter_vibrate (from `.symlinks/plugins/flutter_vibrate/ios`)
   - fluttertoast (from `.symlinks/plugins/fluttertoast/ios`)
   - google_sign_in_ios (from `.symlinks/plugins/google_sign_in_ios/ios`)
   - image_picker_ios (from `.symlinks/plugins/image_picker_ios/ios`)
+  - is_lock_screen2 (from `.symlinks/plugins/is_lock_screen2/ios`)
+  - native_device_orientation (from `.symlinks/plugins/native_device_orientation/ios`)
   - package_info_plus (from `.symlinks/plugins/package_info_plus/ios`)
   - path_provider_foundation (from `.symlinks/plugins/path_provider_foundation/darwin`)
   - pay_ios (from `.symlinks/plugins/pay_ios/ios`)
   - pdfx (from `.symlinks/plugins/pdfx/ios`)
+  - permission_handler_apple (from `.symlinks/plugins/permission_handler_apple/ios`)
   - photo_manager (from `.symlinks/plugins/photo_manager/ios`)
   - purchases_flutter (from `.symlinks/plugins/purchases_flutter/ios`)
   - shared_preferences_foundation (from `.symlinks/plugins/shared_preferences_foundation/darwin`)
@@ -341,10 +384,18 @@ DEPENDENCIES:
   - video_thumbnail (from `.symlinks/plugins/video_thumbnail/ios`)
   - wakelock_plus (from `.symlinks/plugins/wakelock_plus/ios`)
   - webview_flutter_wkwebview (from `.symlinks/plugins/webview_flutter_wkwebview/ios`)
+  - zego_callkit (from `.symlinks/plugins/zego_callkit/ios`)
+  - zego_express_engine (from `.symlinks/plugins/zego_express_engine/ios`)
+  - zego_uikit (from `.symlinks/plugins/zego_uikit/ios`)
+  - zego_uikit_prebuilt_call (from `.symlinks/plugins/zego_uikit_prebuilt_call/ios`)
+  - zego_uikit_signaling_plugin (from `.symlinks/plugins/zego_uikit_signaling_plugin/ios`)
+  - zego_zim (from `.symlinks/plugins/zego_zim/ios`)
+  - zego_zpns (from `.symlinks/plugins/zego_zpns/ios`)
 
 SPEC REPOS:
   trunk:
     - AppAuth
+    - CryptoSwift
     - DKImagePickerController
     - DKPhotoGallery
     - FBAEMKit
@@ -381,8 +432,13 @@ SPEC REPOS:
     - StripeUICore
     - SwiftyGif
     - Toast
+    - ZIM
+    - ZIPFoundation
+    - ZPNs
 
 EXTERNAL SOURCES:
+  audioplayers_darwin:
+    :path: ".symlinks/plugins/audioplayers_darwin/ios"
   device_info_plus:
     :path: ".symlinks/plugins/device_info_plus/ios"
   facebook_app_events:
@@ -399,22 +455,32 @@ EXTERNAL SOURCES:
     :path: ".symlinks/plugins/firebase_messaging/ios"
   Flutter:
     :path: Flutter
+  flutter_callkit_incoming_yoer:
+    :path: ".symlinks/plugins/flutter_callkit_incoming_yoer/ios"
   flutter_downloader:
     :path: ".symlinks/plugins/flutter_downloader/ios"
   flutter_inappwebview:
     :path: ".symlinks/plugins/flutter_inappwebview/ios"
+  flutter_logs:
+    :path: ".symlinks/plugins/flutter_logs/ios"
   flutter_native_splash:
     :path: ".symlinks/plugins/flutter_native_splash/ios"
   flutter_paystack:
     :path: ".symlinks/plugins/flutter_paystack/ios"
   flutter_secure_storage:
     :path: ".symlinks/plugins/flutter_secure_storage/ios"
+  flutter_vibrate:
+    :path: ".symlinks/plugins/flutter_vibrate/ios"
   fluttertoast:
     :path: ".symlinks/plugins/fluttertoast/ios"
   google_sign_in_ios:
     :path: ".symlinks/plugins/google_sign_in_ios/ios"
   image_picker_ios:
     :path: ".symlinks/plugins/image_picker_ios/ios"
+  is_lock_screen2:
+    :path: ".symlinks/plugins/is_lock_screen2/ios"
+  native_device_orientation:
+    :path: ".symlinks/plugins/native_device_orientation/ios"
   package_info_plus:
     :path: ".symlinks/plugins/package_info_plus/ios"
   path_provider_foundation:
@@ -423,6 +489,8 @@ EXTERNAL SOURCES:
     :path: ".symlinks/plugins/pay_ios/ios"
   pdfx:
     :path: ".symlinks/plugins/pdfx/ios"
+  permission_handler_apple:
+    :path: ".symlinks/plugins/permission_handler_apple/ios"
   photo_manager:
     :path: ".symlinks/plugins/photo_manager/ios"
   purchases_flutter:
@@ -449,17 +517,33 @@ EXTERNAL SOURCES:
     :path: ".symlinks/plugins/wakelock_plus/ios"
   webview_flutter_wkwebview:
     :path: ".symlinks/plugins/webview_flutter_wkwebview/ios"
+  zego_callkit:
+    :path: ".symlinks/plugins/zego_callkit/ios"
+  zego_express_engine:
+    :path: ".symlinks/plugins/zego_express_engine/ios"
+  zego_uikit:
+    :path: ".symlinks/plugins/zego_uikit/ios"
+  zego_uikit_prebuilt_call:
+    :path: ".symlinks/plugins/zego_uikit_prebuilt_call/ios"
+  zego_uikit_signaling_plugin:
+    :path: ".symlinks/plugins/zego_uikit_signaling_plugin/ios"
+  zego_zim:
+    :path: ".symlinks/plugins/zego_zim/ios"
+  zego_zpns:
+    :path: ".symlinks/plugins/zego_zpns/ios"
 
 SPEC CHECKSUMS:
   AppAuth: 501c04eda8a8d11f179dbe8637b7a91bb7e5d2fa
+  audioplayers_darwin: 877d9a4d06331c5c374595e46e16453ac7eafa40
+  CryptoSwift: c63a805d8bb5e5538e88af4e44bb537776af11ea
   device_info_plus: c6fb39579d0f423935b0c9ce7ee2f44b71b9fce6
   DKImagePickerController: 946cec48c7873164274ecc4624d19e3da4c1ef3c
   DKPhotoGallery: b3834fecb755ee09a593d7c9e389d8b5d6deed60
   facebook_app_events: acb7c266406d3e3592bcf846d7184172ecfd6492
-  FBAEMKit: 97eaf41451b49691447df831f7f425229ae64b66
-  FBAudienceNetwork: 80a035aa69cc3a71c99e44cb5c2874e4cef9909f
-  FBSDKCoreKit: e34084567d11cfdd4787ace2b1a0255bedf34ade
-  FBSDKCoreKit_Basics: 3d78e5fe00504e5c1aed1c48de0654c3a1565d15
+  FBAEMKit: 619f96ea65427e8afca240d5b0f4703738dfdf5c
+  FBAudienceNetwork: 80871c3b3057e89ab36d9eb79344be20377e3994
+  FBSDKCoreKit: a5f384db2e9ee84e98494fed8f983d2bd79accff
+  FBSDKCoreKit_Basics: d35c775aaf243a2d731dfae7be3a74b1987285ab
   file_picker: 15fd9539e4eb735dc54bae8c0534a7a9511a03de
   Firebase: 414ad272f8d02dfbf12662a9d43f4bba9bec2a06
   firebase_analytics: b3d6dd14c61549a29abb10e9843446a4d8bb53eb
@@ -468,38 +552,44 @@ SPEC CHECKSUMS:
   firebase_messaging: 90e8a6db84b6e1e876cebce4f30f01dc495e7014
   FirebaseAnalytics: 4d310b35c48eaa4a058ddc04bdca6bdb5dc0fe80
   FirebaseCore: 2322423314d92f946219c8791674d2f3345b598f
-  FirebaseCoreInternal: 910a81992c33715fec9263ca7381d59ab3a750b7
+  FirebaseCoreInternal: df84dd300b561c27d5571684f389bf60b0a5c934
   FirebaseDynamicLinks: c37307441c53838d66a9650dabca9e0459502527
-  FirebaseInstallations: 91950fe859846fff0fbd296180909dd273103b09
+  FirebaseInstallations: 913cf60d0400ebd5d6b63a28b290372ab44590dd
   FirebaseMessaging: 9bc34a98d2e0237e1b121915120d4d48ddcf301e
   Flutter: f04841e97a9d0b0a8025694d0796dd46242b2854
+  flutter_callkit_incoming_yoer: a5936b9f065762a7b422594028d3a20901c88996
   flutter_downloader: b7301ae057deadd4b1650dc7c05375f10ff12c39
   flutter_inappwebview: 3d32228f1304635e7c028b0d4252937730bbc6cf
+  flutter_logs: 5d0dca26963e0f30b11a995a764744ef77d5d428
   flutter_native_splash: 52501b97d1c0a5f898d687f1646226c1f93c56ef
   flutter_paystack: 50021637b71e7712780744f69d2843e71b65175d
-  flutter_secure_storage: 23fc622d89d073675f2eaa109381aefbcf5a49be
+  flutter_secure_storage: d33dac7ae2ea08509be337e775f6b59f1ff45f12
+  flutter_vibrate: 9f4c2ab57008965f78969472367c329dd77eb801
   fluttertoast: 9f2f8e81bb5ce18facb9748d7855bf5a756fe3db
   google_sign_in_ios: 8115e3fbe097e6509beb819ed602d47369d9011f
   GoogleAppMeasurement: 70ce9aa438cff1cfb31ea3e660bcc67734cb716e
   GoogleDataTransport: 6c09b596d841063d76d4288cc2d2f42cc36e1e2a
   GoogleSignIn: d4281ab6cf21542b1cfaff85c191f230b399d2db
-  GoogleUtilities: c56430aef51a1aa57b25da78c3f8397e522c67b7
+  GoogleUtilities: ea963c370a38a8069cc5f7ba4ca849a60b6d7d15
   GTMAppAuth: f69bd07d68cd3b766125f7e072c45d7340dea0de
-  GTMSessionFetcher: 8000756fc1c19d2e5697b90311f7832d2e33f6cd
+  GTMSessionFetcher: 5aea5ba6bd522a239e236100971f10cb71b96ab6
   image_picker_ios: 99dfe1854b4fa34d0364e74a78448a0151025425
+  is_lock_screen2: 2bc16ada7d49434ba1a2b24f09aa49a87b154e79
   libwebp: 1786c9f4ff8a279e4dac1e8f385004d5fc253009
   nanopb: d4d75c12cd1316f4a64e3c6963f879ecd4b5e0d5
+  native_device_orientation: 3b4cfc9565a7b879cc4fde282b3e27745e852d0d
   OrderedSet: aaeb196f7fef5a9edf55d89760da9176ad40b93c
   package_info_plus: 115f4ad11e0698c8c1c5d8a689390df880f47e85
   path_provider_foundation: 3784922295ac71e43754bd15e0653ccfd36a147c
   pay_ios: 8c7beb9c61d885f3f51b61f75f8793023fc8843a
   pdfx: 7b876b09de8b7a0bf444a4f82b439ffcff4ee1ec
+  permission_handler_apple: e76247795d700c14ea09e3a2d8855d41ee80a2e6
   photo_manager: ff695c7a1dd5bc379974953a2b5c0a293f7c4c8a
   PromisesObjC: f5707f49cb48b9636751c5b2e7d227e43fba9f47
-  purchases_flutter: 6e9409fb76e1036871571042c7c5ee11525132e6
-  PurchasesHybridCommon: 465af21945a10dda051b725933a1fd7b7c2d2a07
-  RevenueCat: 0250867579677899de94f96ad9be342be865560f
-  SDWebImage: 40b0b4053e36c660a764958bff99eed16610acbb
+  purchases_flutter: cb5e74f8faccdb7608b4e57cb0b2146ae635019d
+  PurchasesHybridCommon: 4022d5944cb30ec44ba5159e42aa161fe0e30175
+  RevenueCat: 3d934653b7e8b09af88fd47e9e84cfaf5d0a89ba
+  SDWebImage: 066c47b573f408f18caa467d71deace7c0f8280d
   shared_preferences_foundation: b4c3b4cddf1c21f02770737f147a3f5da9d39695
   sign_in_with_apple: f3bf75217ea4c2c8b91823f225d70230119b8440
   social_share: 702a5e3842addd22db515aa9e1e00a4b80a0296d
@@ -521,6 +611,16 @@ SPEC CHECKSUMS:
   video_thumbnail: c4e2a3c539e247d4de13cd545344fd2d26ffafd1
   wakelock_plus: 8b09852c8876491e4b6d179e17dfe2a0b5f60d47
   webview_flutter_wkwebview: 4f3e50f7273d31e5500066ed267e3ae4309c5ae4
+  zego_callkit: 72593f46ed01779c4cee6bc65d2e0e1cde86b42c
+  zego_express_engine: 7ad6d778bbecece59c0dbf1abf6e150117f37da8
+  zego_uikit: 596cd6edd0e5162a9a1d1f7fec5a79fa8899fb7b
+  zego_uikit_prebuilt_call: 13173d7a3c6dcc1695cbdff15d19463acd1ca39c
+  zego_uikit_signaling_plugin: 7fdfcd9f796b591c9cb8770609f4fa85178aa40e
+  zego_zim: b3fc958423218074c920c5e87252ed756afd7f4b
+  zego_zpns: 282d9f9926ea5dff87efbafae8cf33fdada41f4f
+  ZIM: 689608cfd428d0ad6d6784c0c42f8d0bf7c29bc0
+  ZIPFoundation: b8c29ea7ae353b309bc810586181fd073cb3312c
+  ZPNs: 73bad0046a74e37315201053f9a0e7ac625d9436
 
 PODFILE CHECKSUM: f70a285fd8b33776a553c75657fa301fe0b21452
 

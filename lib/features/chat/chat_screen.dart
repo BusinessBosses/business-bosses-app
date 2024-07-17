@@ -5,7 +5,6 @@ import 'package:business_bosses_v2/features/chat/chat_room_screen.dart';
 import 'package:business_bosses_v2/features/chat/controllers/chat_controller.dart';
 import 'package:business_bosses_v2/features/chat/models/my_message.dart';
 import 'package:business_bosses_v2/features/home/controller/home_controller.dart';
-import 'package:business_bosses_v2/features/home/widgets/bottom_bar.dart';
 import 'package:business_bosses_v2/features/profile/controller/profile_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -63,7 +62,13 @@ class _ChatScreenState extends State<ChatScreen> {
                     },
                   )
                 : AppBar(
-                    automaticallyImplyLeading: false,
+                    leading: IconButton(
+                      onPressed: () {
+                        Navigator.pop(context);
+                      },
+                      icon: SvgPicture.asset('assets/svgs/backbutton.svg'),
+                    ),
+                    centerTitle: true,
                     title: const Text('Chats'),
                     actions: <Widget>[
                       IconButton(
@@ -124,10 +129,7 @@ class _ChatScreenState extends State<ChatScreen> {
                               );
                             },
                           ),
-                  ),
-                const BottomBar(
-                  activeIndex: 2,
-                ),
+                  )
               ],
             ),
           );

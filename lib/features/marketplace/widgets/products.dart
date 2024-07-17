@@ -103,7 +103,7 @@ class _ProductsPageState extends State<ProductsPage> {
                               mainAxisSize: MainAxisSize.min,
                               children: <Widget>[
                                 const Text(
-                                  'Sell a Product',
+                                  'Sell',
                                   style: TextStyle(
                                       fontSize: 15,
                                       color: Colors.white,
