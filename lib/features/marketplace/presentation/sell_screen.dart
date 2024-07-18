@@ -133,6 +133,21 @@ class _CreateSellingitemScreenState extends State<CreateSellingitemScreen> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[
                 Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 15),
+                  child: TextFormField(
+                    controller: _productnameController,
+                    onChanged: (String val) => title = val,
+                    textInputAction: TextInputAction.next,
+                    keyboardType: TextInputType.text,
+                    maxLength: 15,
+                    decoration: inputDecoration.copyWith(
+                      hintText: 'Enter Product Title',
+                    ),
+                  ),
+                ),
+                const SizedBox(height: 10.0),
+
+                Padding(
                   padding: const EdgeInsets.only(left: 16.0, right: 16),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.center,
@@ -218,20 +233,7 @@ class _CreateSellingitemScreenState extends State<CreateSellingitemScreen> {
                     ],
                   ),
                 ),
-                const SizedBox(height: 24.0),
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 15),
-                  child: TextFormField(
-                    controller: _productnameController,
-                    onChanged: (String val) => title = val,
-                    textInputAction: TextInputAction.next,
-                    keyboardType: TextInputType.text,
-                    maxLength: 15,
-                    decoration: inputDecoration.copyWith(
-                      hintText: 'Enter Product Title',
-                    ),
-                  ),
-                ),
+
                 const SizedBox(height: 24.0),
                 Padding(
                   padding: const EdgeInsets.only(left: 16.0, right: 16),
@@ -488,9 +490,6 @@ class _CreateSellingitemScreenState extends State<CreateSellingitemScreen> {
                   padding: const EdgeInsets.only(left: 16.0, right: 16),
                   child: MCustomButton(
                     onPressed: () async {
-                      setState(() {
-                        _isProcessing = true;
-                      });
                       if (createMarketController.imageFileList.isEmpty) {
                         showSnackBar(context,
                             message: 'You must select an image to continue');
@@ -508,6 +507,9 @@ class _CreateSellingitemScreenState extends State<CreateSellingitemScreen> {
                         });
                         return;
                       } else {
+                        setState(() {
+                          _isProcessing = true;
+                        });
                         await _onChangeForum();
                       }
                       setState(() {
