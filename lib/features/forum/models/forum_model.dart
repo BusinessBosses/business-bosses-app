@@ -11,6 +11,8 @@ class ForumModel {
   final String? title;
   final String? ytUrl;
   final List<String>? images;
+  bool promote;
+  bool approved;
   final int? timestamp;
   late final List<String>? likes;
   final List<String>? coins;
@@ -30,6 +32,8 @@ class ForumModel {
       this.views = 0,
       this.coins,
       this.comments,
+      this.promote = false,
+      this.approved = false,
       this.user,
       this.isRanked,
       this.ytUrl});
@@ -46,6 +50,8 @@ class ForumModel {
     List<String>? coins,
     List<CommentModel>? comments,
     UserModel? user,
+    bool? promote,
+    bool? approved,
     bool? isRanked,
     int? views,
     String? ytUrl,
@@ -62,6 +68,8 @@ class ForumModel {
       coins: coins ?? this.coins,
       comments: comments ?? this.comments,
       user: user ?? this.user,
+      promote: promote ?? this.promote,
+      approved: approved ?? this.approved,
       views: views ?? this.views,
       isRanked: isRanked ?? this.isRanked,
       ytUrl: ytUrl ?? this.ytUrl,
@@ -76,6 +84,8 @@ class ForumModel {
       'title': title,
       'industry': industry,
       'images': images,
+      'promote': promote,
+      'approved': approved,
       'timestamp': timestamp,
       'likes': likes,
       'coins': coins,
@@ -111,6 +121,8 @@ class ForumModel {
           : null,
       likes: map['likes'] != null ? List<String>.from((map['likes'])) : null,
       coins: map['coins'] != null ? List<String>.from((map['coins'])) : null,
+      promote: map['promote'] as bool,
+      approved: map['approved'] as bool,
       comments: map['comments'] != null
           ? List.from(map['comments'])
               .map((e) => CommentModel.fromMap(e as Map<String, dynamic>))
