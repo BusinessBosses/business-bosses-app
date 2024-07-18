@@ -122,18 +122,18 @@ class _MarketTileState extends State<MarketTile> {
             style: bodyText2,
           ),
         ),
-        // if (_post.promote == false)
-        //   const PopupMenuDivider(
-        //     height: 0.0,
-        //   ),
-        // if (_post.promote == false)
-        //   const PopupMenuItem<String>(
-        //     value: 'Boost',
-        //     child: Text(
-        //       'Boost',
-        //       style: bodyText2,
-        //     ),
-        //   ),
+        if (_post.promote == false)
+          const PopupMenuDivider(
+            height: 0.0,
+          ),
+        if (_post.promote == false)
+          const PopupMenuItem<String>(
+            value: 'Boost',
+            child: Text(
+              'Boost',
+              style: bodyText2,
+            ),
+          ),
       ];
 
       final List<PopupMenuEntry<String>> myPopup = <PopupMenuEntry<String>>[
@@ -414,9 +414,8 @@ class _MarketTileState extends State<MarketTile> {
                                       Text(
                                         _post.price.toString(),
                                         style: const TextStyle(
-                                          fontWeight: FontWeight.w800,
-                                          color: Colors.black54
-                                        ),
+                                            fontWeight: FontWeight.w800,
+                                            color: Colors.black54),
                                       ),
                                       const SizedBox(
                                         width: 8,

@@ -69,6 +69,7 @@ class _CreateServiceScreenState extends State<CreateServiceScreen> {
   final TextEditingController descriptionController = TextEditingController();
   final TextEditingController _priceController = TextEditingController();
   final TextEditingController _currencyController = TextEditingController();
+  final TextEditingController _discountController = TextEditingController();
 
   // Future<String?>? getCountryValue() async {
   //   SharedPreferences prefs = await SharedPreferences.getInstance();
@@ -90,6 +91,8 @@ class _CreateServiceScreenState extends State<CreateServiceScreen> {
     descriptionController.text = _market?.description ?? '';
     price = _market?.price ?? '';
     _priceController.text = _market?.price ?? '';
+    _discountController.text = _market?.discount.toString() ?? '';
+
     _selectedCategory = _market?.category;
     _selectedLocation = _market?.location;
     _fileProcessing = <bool>[];
@@ -133,64 +136,12 @@ class _CreateServiceScreenState extends State<CreateServiceScreen> {
                     keyboardType: TextInputType.text,
                     maxLength: 15,
                     decoration: inputDecoration.copyWith(
-                      hintText: 'Enter Service Title',
+                      hintText: 'Enter service title',
                     ),
                   ),
                 ),
-                const SizedBox(height: 24.0),
-                Padding(
-                  padding: const EdgeInsets.only(left: 16.0, right: 16),
-                  child: Container(
-                    decoration: BoxDecoration(
-                      color: Colors.white,
-                      borderRadius: BorderRadius.circular(radiusValue),
-                    ),
-                    padding: const EdgeInsets.only(
-                      left: 16.0,
-                      right: 16,
-                      top: 4,
-                      bottom: 5,
-                    ),
-                    child: DropdownButton<String>(
-                      underline: Container(),
-                      value: _selectedCategory,
-                      isExpanded: true,
-                      icon: const Icon(Icons.keyboard_arrow_right),
-                      iconSize: 24,
-                      elevation: 16,
-                      onChanged: (String? newValue) {
-                        setState(() {
-                          _selectedCategory = newValue;
-                        });
-                      },
-                      items: <String?>[
-                        null,
-                        'Write 1 Page Business Plan',
-                        'Build 1 Page Website',
-                        'Create Social Media AD',
-                        'Monthly Account Book Keeping',
-                        'Logo & Branding Guidelines',
-                        'Test, Review & Feedback',
-                        '1 to 1 Mentoring/Coaching',
-                        'Appointment',
-                        'Other Business Service',
-                      ].map<DropdownMenuItem<String>>((String? value) {
-                        return DropdownMenuItem<String>(
-                          value: value,
-                          child: value != null
-                              ? Text(value)
-                              : Text(
-                                  value ?? 'Select Service',
-                                  style: bodyText2.copyWith(
-                                    color: hintColor,
-                                  ),
-                                ),
-                        );
-                      }).toList(),
-                    ),
-                  ),
-                ),
-                const SizedBox(height: 24.0),
+
+                const SizedBox(height: 10.0),
                 Padding(
                   padding: const EdgeInsets.only(left: 16.0, right: 16),
                   child: Row(
@@ -238,6 +189,40 @@ class _CreateServiceScreenState extends State<CreateServiceScreen> {
                           ),
                         ),
                       ),
+                      SizedBox(
+                        width: 10,
+                      ),
+                      Expanded(
+                        flex:
+                            4, // Adjust the flex value to control the relative sizes
+                        child: Stack(
+                          children: <Widget>[
+                            TextFormField(
+                              controller: _discountController,
+                              onChanged: (String val) => discount = val,
+                              textInputAction: TextInputAction.next,
+                              keyboardType: TextInputType.number,
+                              maxLength: 3,
+                              decoration: inputDecoration.copyWith(
+                                hintText: 'Discount',
+                              ),
+                            ),
+                            const Positioned(
+                              right: 10,
+                              top: 0,
+                              bottom: 25,
+                              child: Align(
+                                alignment: Alignment
+                                    .centerRight, // Vertically centers the text
+                                child: Text(
+                                  '%',
+                                  style: TextStyle(fontWeight: FontWeight.w700),
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
                     ],
                   ),
                 ),
@@ -259,6 +244,59 @@ class _CreateServiceScreenState extends State<CreateServiceScreen> {
 
                     decoration: inputDecoration.copyWith(
                       hintText: 'Describe your Listing',
+                    ),
+                  ),
+                ),
+                const SizedBox(height: 10.0),
+                Padding(
+                  padding: const EdgeInsets.only(left: 16.0, right: 16),
+                  child: Container(
+                    decoration: BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.circular(radiusValue),
+                    ),
+                    padding: const EdgeInsets.only(
+                      left: 16.0,
+                      right: 16,
+                      top: 4,
+                      bottom: 5,
+                    ),
+                    child: DropdownButton<String>(
+                      underline: Container(),
+                      value: _selectedCategory,
+                      isExpanded: true,
+                      icon: const Icon(Icons.keyboard_arrow_right),
+                      iconSize: 24,
+                      elevation: 16,
+                      onChanged: (String? newValue) {
+                        setState(() {
+                          _selectedCategory = newValue;
+                        });
+                      },
+                      items: <String?>[
+                        null,
+                        'Write 1 Page Business Plan',
+                        'Build 1 Page Website',
+                        'Create Social Media AD',
+                        'Monthly Account Book Keeping',
+                        'Logo & Branding Guidelines',
+                        'Test, Review & Feedback',
+                        '1 to 1 Mentoring/Coaching',
+                        'Appointment',
+                        'Other Business Service',
+                      ].map<DropdownMenuItem<String>>((String? value) {
+                        return DropdownMenuItem<String>(
+                          value: value,
+                          child: value != null
+                              ? Text(value)
+                              : Text(
+                                  value ?? 'Select Category',
+                                  style: bodyText2.copyWith(
+                                    color: hintColor,
+                                  ),
+                                ),
+                        );
+                      }).toList(),
                     ),
                   ),
                 ),
@@ -446,9 +484,6 @@ class _CreateServiceScreenState extends State<CreateServiceScreen> {
                   padding: const EdgeInsets.only(left: 16.0, right: 16),
                   child: MCustomButton(
                     onPressed: () async {
-                      setState(() {
-                        _isProcessing = true;
-                      });
                       if (createMarketController.imageFileList.isEmpty) {
                         showSnackBar(context,
                             message: 'You must select an image to continue');
@@ -465,6 +500,9 @@ class _CreateServiceScreenState extends State<CreateServiceScreen> {
                         });
                         return;
                       } else {
+                        setState(() {
+                          _isProcessing = true;
+                        });
                         await _onChangeForum();
                       }
                       setState(() {
@@ -569,6 +607,7 @@ class _CreateServiceScreenState extends State<CreateServiceScreen> {
         'description': descriptionController.text,
         'title': _productnameController.text,
         'price': _currencyController.text + _priceController.text,
+        'discount': _discountController.text,
         'promote': _market?.promote,
         'approved': _market?.approved,
         'likes': _market?.likes,
@@ -589,6 +628,7 @@ class _CreateServiceScreenState extends State<CreateServiceScreen> {
             'description': descriptionController.text,
             'price': price,
             'images': _market?.images,
+            'discount': _discountController.text,
           });
       Get.back();
     }

@@ -250,22 +250,26 @@ class FilterMarketplacePosts extends StatelessWidget {
               if ((isPostssearch == true && i == 1) ||
                   (isPostssearch == false && i == 0)) {
                 return Visibility(
-                    visible:  filterItems.isEmpty,
-                    child: SafetyModel(
-                      icon: const Icon(
-                        Icons.search,
-                        size: 80.0,
-                        color: hintColor,
-                      ),
-                      title: 'No results found',
-                      subTitle: 'Your results will be displayed here!',
-                      isLoading: isLoading,
-                    ));
+                  visible: filterItems.isEmpty,
+                  child: SafetyModel(
+                    icon: const Icon(
+                      Icons.search,
+                      size: 80.0,
+                      color: hintColor,
+                    ),
+                    title: 'No results found',
+                    subTitle: 'Your results will be displayed here!',
+                    isLoading: isLoading,
+                  ),
+                );
+              } else if (i > 0 && i - 1 < filterItems.length) {
+                return MarketTile(
+                  post: filterItems[i - 1],
+                  controller: controller,
+                );
+              } else {
+                return SizedBox.shrink(); // Or any other placeholder widget
               }
-              return MarketTile(
-                post: filterItems[i - 1],
-                controller: controller,
-              );
             }),
       ),
     );
