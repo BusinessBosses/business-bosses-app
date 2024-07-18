@@ -50,9 +50,7 @@ class _BossuppartnerState extends State<Bossuppartner> {
       appBar: AppBar(
         actions: <Widget>[
           IconButton(
-            onPressed: () {
-              
-            },
+            onPressed: () {},
             icon: SvgPicture.asset(
               'assets/svgs/info.svg',
               height: 24,
@@ -193,7 +191,6 @@ class BossuppartnerItem extends StatelessWidget {
                           decoration: BoxDecoration(
                             border:
                                 Border.all(width: 0.5, color: Colors.black12),
-                            color: backgroundColor,
                             borderRadius: BorderRadius.circular(10.0),
                           ),
                           child: ClipRRect(
@@ -249,14 +246,18 @@ class BossuppartnerItem extends StatelessWidget {
             SizedBox(
               width: double.infinity,
               height: 45,
-              child: ElevatedButton(
+              child: OutlinedButton(
                   onPressed: () async {
                     final Uri url = Uri.parse(companyUrl);
                     if (!await launchUrl(url)) {
                       throw Exception('Could not launch $url');
                     }
                   },
-                  child: const Text('Get Deal')),
+                  child: const Text(
+                    'Get Deal',
+                    style: TextStyle(
+                        color: primaryColorLT, fontWeight: FontWeight.w700),
+                  )),
             ),
           ],
         ),

@@ -17,6 +17,35 @@ class PostImagesMarket extends StatelessWidget {
         ? const SizedBox()
         : Column(
             children: <Widget>[
+              Stack(
+                children: <Widget>[
+                  GestureDetector(
+                    onTap: () {
+                      Navigator.of(context).push(
+                        MaterialPageRoute(
+                          builder: (BuildContext context) => ImagesViewerScreen(
+                            urls: post.images,
+                            text: post.description,
+                          ),
+                        ),
+                      );
+                    },
+                    child: Padding(
+                      padding: const EdgeInsets.only(left: 0, right: 0),
+                      child: NetworkImageWithPlaceHolder(
+                        borderColor: Colors.black12,
+                        imageUrl: post.images?[0],
+                        width: double.infinity,
+                        height: 240.0,
+                        fit: BoxFit.cover,
+                        placeHolder: Icons.photo,
+                        iconSize: 50.0,
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+              // SizedBox(height: 4.0),
               post.images!.length == 1
                   ? Container()
                   : SizedBox(
@@ -50,6 +79,7 @@ class PostImagesMarket extends StatelessWidget {
                                                     top: 10.0, right: 10),
                                                 child:
                                                     NetworkImageWithPlaceHolder(
+                                                  borderColor: Colors.black12,
                                                   imageUrl: post.images![i - 1],
                                                   width: double.infinity,
                                                   height: double.infinity,

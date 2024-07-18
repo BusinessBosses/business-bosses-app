@@ -10,6 +10,7 @@ class MarketModel {
   String? category;
   String? location;
   String description;
+  String? title;
   String userId;
   List<dynamic>? images;
   String price;
@@ -29,6 +30,7 @@ class MarketModel {
     required this.userId,
     required this.price,
     required this.description,
+    this.title,
     this.location,
     this.images,
     this.timestamp,
@@ -48,6 +50,7 @@ class MarketModel {
     String? category,
     String? location,
     String? description,
+    String? title,
     String? userId,
     List<String>? images,
     String? price,
@@ -64,6 +67,7 @@ class MarketModel {
   }) {
     return MarketModel(
       description: description ?? this.description,
+      title: title ?? this.title,
       location: location ?? this.location,
       images: images ?? this.images,
       user: user ?? this.user,
@@ -86,6 +90,7 @@ class MarketModel {
   Map<String, dynamic> toMap() {
     return <String, dynamic>{
       'description': description,
+      'title': title,
       'location': location,
       'images': images,
       'user': user?.toMap(),
@@ -108,6 +113,7 @@ class MarketModel {
   factory MarketModel.fromMap(Map<String, dynamic> map) {
     return MarketModel(
       description: map['description'] as String,
+      title: map['title'] != null ? map['title'] as String : null,
       images: map['images'] != null
           ? List<dynamic>.from((map['images'] as List<dynamic>))
           : null,
@@ -145,6 +151,6 @@ class MarketModel {
 
   @override
   String toString() {
-    return 'MarketModel(description: $description, location: $location, images: $images, user: $user, category: $category, marketId: $marketId, price: $price, userId: $userId, promote: $promote, approved: $approved, timestamp: $timestamp)';
+    return 'MarketModel(description: $description, title: $title, location: $location, images: $images, user: $user, category: $category, marketId: $marketId, price: $price, userId: $userId, promote: $promote, approved: $approved, timestamp: $timestamp)';
   }
 }
