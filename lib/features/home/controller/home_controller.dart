@@ -292,6 +292,20 @@ class HomeController extends GetxController {
         }
       }
 
+      final int promotedPostIndex = promotedPosts
+          .indexWhere((PostModel element) => element.postId == postId);
+      if (promotedPostIndex != -1) {
+        final bool checkLiked =
+            promotedPosts[promotedPostIndex].likes!.contains(userId);
+        if (checkLiked) {
+          promotedPosts[promotedPostIndex]
+              .likes!
+              .removeWhere((element) => element == userId);
+        } else {
+          promotedPosts[promotedPostIndex].likes!.add(userId);
+        }
+      }
+
       //Sponsored posts
       final int spIndex = sponsoredPosts.indexWhere(
           (Map<String, dynamic> post) =>
@@ -421,6 +435,22 @@ class HomeController extends GetxController {
         } else {
           profileController.updateCoinCount(-1);
           posts[postIndex].coins!.add(userId);
+        }
+      }
+
+      final int promotedPostIndex = promotedPosts
+          .indexWhere((PostModel element) => element.postId == postId);
+      if (promotedPostIndex != -1) {
+        final bool checkIfCoined =
+            promotedPosts[promotedPostIndex].coins!.contains(userId);
+        if (checkIfCoined) {
+          profileController.updateCoinCount(1);
+          promotedPosts[promotedPostIndex]
+              .coins!
+              .removeWhere((String element) => element == userId);
+        } else {
+          profileController.updateCoinCount(-1);
+          promotedPosts[promotedPostIndex].coins!.add(userId);
         }
       }
 
