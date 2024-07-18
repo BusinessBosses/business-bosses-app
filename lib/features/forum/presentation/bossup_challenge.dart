@@ -133,9 +133,15 @@ class _BossupChallengeState extends State<BossupChallenge> {
                             Row(
                               mainAxisAlignment: MainAxisAlignment.start,
                               children: <Widget>[
-                                SizedBox(
+                                Container(
                                   height: 86,
                                   width: 142,
+                                  decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(9.9),
+                                      border: Border.all(
+                                        color: Colors.black12,
+                                        width: 0.5,
+                                      )),
                                   child: ClipRRect(
                                     borderRadius: BorderRadius.circular(10.0),
                                     child: FittedBox(

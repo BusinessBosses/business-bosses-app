@@ -49,7 +49,7 @@ class SupplierController extends GetxController {
           user.user!.name!.toLowerCase().contains(lowerCaseQuery) ||
           user.user!.username.toLowerCase().contains(lowerCaseQuery)) {
         searchedSuppliers.add(user);
-      } else {}
+      }
     }
     loadingSearch(false);
     isSupplierSearch(true);

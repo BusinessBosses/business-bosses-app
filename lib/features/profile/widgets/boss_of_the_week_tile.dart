@@ -37,12 +37,7 @@ class _BossOfWeekProfileTileState extends State<BossOfWeekProfileTile> {
   late UserModel? user;
   final HomeController homeController = Get.find();
   late Color startColor;
-  final List<Color> startColors = <Color>[
-    Colors.orange,
-    const Color.fromARGB(255, 0, 71, 129),
-    Colors.green,
-    const Color.fromARGB(255, 255, 59, 219),
-  ];
+  final List<Color> startColors = <Color>[backgroundColor];
 
   Future<void> onRefer(UserModel publicUser) async {
     showDialog(
@@ -325,17 +320,18 @@ class _BossOfWeekProfileTileState extends State<BossOfWeekProfileTile> {
                         Padding(
                           padding: const EdgeInsets.symmetric(horizontal: 15.0),
                           child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            
                             children: <Widget>[
                               const Text(
                                 'See more deals',
                                 style: TextStyle(
                                     fontWeight: FontWeight.w700, fontSize: 18),
                               ),
+                              const SizedBox(width: 8,),
                               SvgPicture.asset(
                                 'assets/svgs/nexticon.svg',
                                 color: textColor,
-                                height: 10,
+                                height: 8,
                               ),
                             ],
                           ),
@@ -367,7 +363,7 @@ class _BossOfWeekProfileTileState extends State<BossOfWeekProfileTile> {
                                     child: Container(
                                       width: MediaQuery.of(context).size.width /
                                           3.2,
-                                      height: 100,
+                                      height: 120,
                                       margin: const EdgeInsets.only(left: 15.0),
                                       decoration: BoxDecoration(
                                         border: Border.all(
@@ -377,7 +373,7 @@ class _BossOfWeekProfileTileState extends State<BossOfWeekProfileTile> {
                                         gradient: LinearGradient(
                                           colors: <Color>[
                                             startColor,
-                                            const Color(0xFF0F132D)
+                                            backgroundColor
                                           ],
                                           begin: Alignment.topRight,
                                           end: Alignment.bottomLeft,
@@ -385,21 +381,64 @@ class _BossOfWeekProfileTileState extends State<BossOfWeekProfileTile> {
                                         borderRadius: BorderRadius.circular(15),
                                       ),
                                       child: Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
                                         mainAxisAlignment:
-                                            MainAxisAlignment.end,
+                                            MainAxisAlignment.spaceBetween,
                                         children: <Widget>[
                                           Padding(
                                             padding: const EdgeInsets.symmetric(
-                                                horizontal: 10.0, vertical: 10),
-                                            child: Text(
-                                              item['companyName'],
-                                              textAlign: TextAlign.left,
-                                              style: const TextStyle(
-                                                  color: Colors.white,
-                                                  fontSize: 13,
-                                                  fontWeight: FontWeight.w700),
+                                              horizontal: 10.0,
+                                              vertical: 10
+                                            ),
+                                            child: SizedBox(
+                                              height: 25.0,
+                                              width: 25.0,
+                                              child: Container(
+                                                decoration: BoxDecoration(
+                                                  border: Border.all(
+                                                      width: 0.5,
+                                                      color: Colors.black12),
+                                                  color: backgroundColor,
+                                                  borderRadius:
+                                                      BorderRadius.circular(
+                                                          100.0),
+                                                ),
+                                                child:
+                                                    NetworkImageWithPlaceHolder(
+                                                  imageUrl:
+                                                      item['companyPhoto'] ??
+                                                          '',
+                                                  radius: 100,
+                                                  placeHolder: Icons.person,
+                                                  iconSize: 15.0,
+                                                  fit: BoxFit.cover,
+                                                ),
+                                              ),
                                             ),
                                           ),
+                                          Padding(
+                                              padding:
+                                                  const EdgeInsets.symmetric(
+                                                horizontal: 10.0,
+                                              ),
+                                              child: Column(
+                                                children: [
+                                                  Text(
+                                                    item['companyName'],
+                                                    textAlign: TextAlign.left,
+                                                    maxLines: 4,
+                                                    style: const TextStyle(
+                                                      color: textColor,
+                                                      fontSize: 13,
+                                                      fontWeight:
+                                                          FontWeight.w700,
+                                                    ),
+                                                    overflow: TextOverflow
+                                                        .ellipsis, // Add this line to handle overflow
+                                                  ),
+                                                ],
+                                              )),
                                           Padding(
                                             padding: const EdgeInsets.all(10),
                                             child: SizedBox(
@@ -432,7 +471,7 @@ class _BossOfWeekProfileTileState extends State<BossOfWeekProfileTile> {
                                                       'Learn more',
                                                       style: TextStyle(
                                                           fontSize: 12,
-                                                          color: Colors.white),
+                                                          color: textColor),
                                                     ),
                                                   ]),
                                             ),

@@ -28,7 +28,7 @@ class Homeappbar extends StatelessWidget {
   Widget build(BuildContext context) {
     return SingleChildScrollView(
       child: Column(
-        children: <Widget>[
+        children: [
           AppBar(
             backgroundColor: Colors.white,
             automaticallyImplyLeading: false,
@@ -63,7 +63,7 @@ class Homeappbar extends StatelessWidget {
             ),
             leading: InkWell(
               onTap: () {
-                Get.toNamed(Routes.liveEvents);
+                Get.toNamed(Routes.chat);
               },
               child: SizedBox(
                 width: 55,
@@ -77,11 +77,8 @@ class Homeappbar extends StatelessWidget {
                       clipBehavior: Clip.none,
                       children: <Widget>[
                         Container(
-                          padding: EdgeInsets.all(12),
-                          decoration:  BoxDecoration(
-                            borderRadius: BorderRadius.circular(10),
-                            color: Colors.white,
-                            boxShadow: const <BoxShadow>[
+                          decoration: const BoxDecoration(
+                            boxShadow: <BoxShadow>[
                               BoxShadow(
                                 color: Color.fromRGBO(0, 0, 0, 0.08),
                                 spreadRadius: 0.05,
@@ -91,8 +88,7 @@ class Homeappbar extends StatelessWidget {
                             ],
                           ),
                           child: SvgPicture.asset(
-                            'assets/svgs/liveevent.svg',
-                            height: 18,
+                            'assets/svgs/messagewithbackground.svg',
                           ),
                         ),
                         if (hasBadge)

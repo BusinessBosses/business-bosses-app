@@ -56,7 +56,7 @@ class _MarketplaceScreenState extends State<MarketplaceScreen>
   bool _ismarketplaceSearching = false;
   late final TabController _marketplacesearchTabController;
   late final TabController _marketplaceTabController;
-  bool isfiltervisible = false;
+  bool isfiltervisible = true;
   bool databool = true;
   final SupplierController supplierController = Get.put(SupplierController());
 
@@ -85,6 +85,21 @@ class _MarketplaceScreenState extends State<MarketplaceScreen>
 
   void _handleTabSelection() {
     setState(() {});
+  }
+
+  void selectedCategoryChanged(String? newValue) {
+    setState(() {
+      _selectedCategory = newValue;
+    });
+  }
+
+  void selectedLocationChanged(String? name, String? code) {
+    setState(
+      () {
+        _selectedLocation = name;
+        filterCode = code;
+      },
+    );
   }
 
   String formatCount(int count) {
@@ -232,258 +247,21 @@ class _MarketplaceScreenState extends State<MarketplaceScreen>
                           return matchesLocation && matchesCategory;
                         }).toList();
 
-                        return Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: <Widget>[
-                            Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: <Widget>[
-                                Container(
-                                    padding: const EdgeInsets.only(left: 15),
-                                    child: Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.spaceBetween,
-                                      children: <Widget>[
-                                        const Text(
-                                          'Filter results',
-                                          style: TextStyle(
-                                              fontSize: 18,
-                                              fontWeight: FontWeight.w700),
-                                        ),
-                                        Wrap(
-                                            crossAxisAlignment:
-                                                WrapCrossAlignment.center,
-                                            children: <Widget>[
-                                              GestureDetector(
-                                                onTap: () {
-                                                  setState(() {
-                                                    _selectedLocation = null;
-                                                    _selectedCategory = null;
-                                                  });
-                                                },
-                                                child: const Text(
-                                                  'Clear Filter',
-                                                  style: TextStyle(
-                                                      color: Colors.red,
-                                                      fontSize: 12,
-                                                      fontWeight:
-                                                          FontWeight.w700),
-                                                ),
-                                              ),
-                                              IconButton(
-                                                  onPressed: () {
-                                                    setState(() {
-                                                      isfiltervisible =
-                                                          !isfiltervisible;
-                                                    });
-                                                  },
-                                                  icon: Icon(isfiltervisible
-                                                      ? Icons.cancel
-                                                      : Icons
-                                                          .keyboard_arrow_down))
-                                            ]),
-                                      ],
-                                    )),
-                                Visibility(
-                                  visible: isfiltervisible,
-                                  child: SingleChildScrollView(
-                                    scrollDirection: Axis.horizontal,
-                                    child: Padding(
-                                      padding: const EdgeInsets.symmetric(
-                                          horizontal: 15.0),
-                                      child: Row(
-                                        children: <Widget>[
-                                          Container(
-                                            width: 250,
-                                            padding: const EdgeInsets.symmetric(
-                                              horizontal: 15,
-                                            ),
-                                            decoration: BoxDecoration(
-                                              color: Colors.white,
-                                              borderRadius:
-                                                  BorderRadius.circular(10),
-                                            ),
-                                            child: DropdownButtonHideUnderline(
-                                              child: DropdownButton<String>(
-                                                value: _selectedCategory,
-                                                isExpanded: true,
-                                                icon: const Icon(
-                                                  Icons.keyboard_arrow_down,
-                                                ),
-                                                iconSize: 24,
-                                                elevation: 16,
-                                                onChanged: (String? newValue) {
-                                                  setState(() {
-                                                    _selectedCategory =
-                                                        newValue!;
-                                                  });
-                                                },
-                                                items: <String?>[
-                                                  null,
-                                                  'Home, Garden & Outdoors',
-                                                  'Fashion & Beauty',
-                                                  'Sports & Entertainment',
-                                                  'Books & Education',
-                                                  'Jewellery & Timepieces',
-                                                  'Security, Safety & Equipment',
-                                                  'Video Games & Electronics',
-                                                  'Agriculture, Food, Beverage',
-                                                  'Construction & Real Estate',
-                                                  'Vehicle & Transportation',
-                                                  'Business Services & Events',
-                                                  'Other',
-                                                ].map<DropdownMenuItem<String>>(
-                                                    (String? value) {
-                                                  return DropdownMenuItem<
-                                                      String>(
-                                                    value: value,
-                                                    child: value != null
-                                                        ? Text(
-                                                            value,
-                                                            overflow: TextOverflow
-                                                                .ellipsis, // Prevent text overflow
-                                                            maxLines:
-                                                                1, // Ensure single line
-                                                          )
-                                                        : Text(
-                                                            'Select Category',
-                                                            overflow: TextOverflow
-                                                                .ellipsis, // Prevent text overflow
-                                                            maxLines:
-                                                                1, // Ensure single line
-                                                            style: bodyText2
-                                                                .copyWith(
-                                                              color: hintColor,
-                                                            ),
-                                                          ),
-                                                  );
-                                                }).toList(),
-                                              ),
-                                            ),
-                                          ),
-                                          SizedBox(
-                                            width: 250,
-                                            child: Padding(
-                                              padding:
-                                                  const EdgeInsets.symmetric(
-                                                      horizontal: 8.0),
-                                              child: CountryListPick(
-                                                appBar: AppBar(
-                                                  leading: IconButton(
-                                                    onPressed: () {
-                                                      Navigator.pop(context);
-                                                    },
-                                                    icon: SvgPicture.asset(
-                                                        'assets/svgs/backbutton.svg'),
-                                                  ),
-                                                  centerTitle: true,
-                                                  // ignore: prefer_const_constructors
-                                                  title: Text(
-                                                    'Select Location',
-                                                    textAlign: TextAlign.center,
-                                                    style: const TextStyle(
-                                                        fontSize: 20),
-                                                  ),
-                                                ),
-                                                initialSelection:
-                                                    filterCode ?? 'GB',
-                                                pickerBuilder: (BuildContext
-                                                        context,
-                                                    CountryCode? countryCode) {
-                                                  return Container(
-                                                      decoration: BoxDecoration(
-                                                        color: Colors.white,
-                                                        borderRadius:
-                                                            BorderRadius
-                                                                .circular(
-                                                                    radiusValue),
-                                                      ),
-                                                      child: DropdownMenuItem<
-                                                          String>(
-                                                        value:
-                                                            _selectedLocation,
-                                                        child:
-                                                            _selectedLocation !=
-                                                                    null
-                                                                ? Padding(
-                                                                    padding: const EdgeInsets
-                                                                        .symmetric(
-                                                                        horizontal:
-                                                                            15.0),
-                                                                    child: Text(
-                                                                      _selectedLocation!,
-                                                                      style: bodyText2.copyWith(
-                                                                          color:
-                                                                              textColor,
-                                                                          fontSize:
-                                                                              16),
-                                                                      overflow:
-                                                                          TextOverflow
-                                                                              .ellipsis, // Prevent text overflow
-                                                                      maxLines:
-                                                                          1, // Ensure single line
-                                                                    ),
-                                                                  )
-                                                                : Padding(
-                                                                    padding: const EdgeInsets
-                                                                        .symmetric(
-                                                                        horizontal:
-                                                                            15),
-                                                                    child: Text(
-                                                                      'Select Location',
-                                                                      overflow:
-                                                                          TextOverflow
-                                                                              .ellipsis, // Prevent text overflow
-                                                                      maxLines:
-                                                                          1, // Ensure single line
-                                                                      style: bodyText2
-                                                                          .copyWith(
-                                                                        color:
-                                                                            hintColor,
-                                                                      ),
-                                                                    ),
-                                                                  ),
-                                                      ));
-                                                },
-                                                onChanged: (CountryCode? code) {
-                                                  setState(
-                                                    () {
-                                                      _selectedLocation =
-                                                          code?.name;
-                                                      filterCode = code?.code;
-                                                    },
-                                                  );
-                                                },
-                                                useSafeArea: false,
-                                              ),
-                                            ),
-                                          ),
-                                        ],
-                                      ),
-                                    ),
-                                  ),
-                                ),
-                              ],
-                            ),
-                            Visibility(
-                              visible: isfiltervisible,
-                              child: const SizedBox(
-                                height: 10,
-                              ),
-                            ),
-                            Expanded(
-                              child: FilterMarketplacePosts(
-                                filterItems: filteredMarkets,
-                                isLoading: _marketController.loading.value ||
-                                    _marketController.loadingPostSearch.value,
-                              ),
-                            ),
-                          ],
+                        return FilterMarketplacePosts(
+                          isPostssearch: true,
+                          selectedLocation: _selectedLocation,
+                          selectedCategory: _selectedCategory,
+                          selectedCategoryChanged: selectedCategoryChanged,
+                          selectedLocationChanged: selectedLocationChanged,
+                          filterItems: filteredMarkets,
+                          isLoading: _marketController.loading.value ||
+                              _marketController.loadingPostSearch.value,
                         );
                       },
                     ),
                     Obx(
                       () => FilterMarketplacePosts(
+                        isPostssearch: false,
                         filterItems: _marketController.searchedServices,
                         isLoading: _marketController.loading.value ||
                             _marketController.loadingServicesSearch.value,
@@ -743,6 +521,9 @@ class _MarketplaceScreenState extends State<MarketplaceScreen>
                                                           controller:
                                                               _marketplaceTabController,
                                                           tabs: const <Widget>[
+                                                            // Tab(
+                                                            //     text:
+                                                            //         '•'),
                                                             Tab(
                                                                 text:
                                                                     'Products'),

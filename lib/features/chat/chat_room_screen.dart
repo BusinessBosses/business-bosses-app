@@ -98,6 +98,20 @@ class _ChatRoomScreenState extends State<ChatRoomScreen> {
           return Scaffold(
             backgroundColor: backgroundcolorinterface,
             appBar: AppBar(
+              actions: [
+                Container(
+                  decoration:
+                      BoxDecoration(borderRadius: BorderRadius.circular(3000)),
+                  padding: EdgeInsets.all(14),
+                  child: MyPopupMenuButton(
+                    popupItems: _popupItemForumMore,
+                    icon: const Icon(Icons.more_vert),
+                    onSelected: (String val) {
+                      deleteChat();
+                    },
+                  ),
+                ),
+              ],
               leading: previousScreen == '/bottomNavScreen'
                   ? Padding(
                       padding: const EdgeInsets.only(top: 20.0),
@@ -214,17 +228,6 @@ class _ChatRoomScreenState extends State<ChatRoomScreen> {
                           //   },
                           //   icon: SvgPicture.asset('assets/svgs/call.svg'),
                           // ),
-                          SizedBox(
-                            height: 22,
-                            width: 22,
-                            child: MyPopupMenuButton(
-                              popupItems: _popupItemForumMore,
-                              icon: const Icon(Icons.more_vert),
-                              onSelected: (String val) {
-                                deleteChat();
-                              },
-                            ),
-                          ),
                         ],
                       ),
                     ),
@@ -322,15 +325,13 @@ class _ChatRoomScreenState extends State<ChatRoomScreen> {
               child: Stack(
                 children: <Widget>[
                   Container(
-                    child:
-                     controller
+                    child: controller
                             .extractConversations(
                               args.uid,
                               _profileController.myProfile.uid,
                             )
                             .isEmpty
-                        ? 
-                        widget.frommarketplace
+                        ? widget.frommarketplace
                             ? SizedBox(
                                 height: double.infinity,
                                 child: SingleChildScrollView(
@@ -858,39 +859,46 @@ class _ChatRoomScreenState extends State<ChatRoomScreen> {
                                                           alignment:
                                                               WrapAlignment.end,
                                                           children: <Widget>[
-                                                            Stack(children: <Widget>[
-                                                              const SizedBox(
-                                                                height: 50,
-                                                                width: 50,
-                                                              ),
-                                                              UserAvatarWithBadge(
-                                                                user: args,
-                                                                height: 32.0,
-                                                                width: 32.0,
-                                                                radius: 50.0,
-                                                                placeHolder:
-                                                                    Icons
-                                                                        .person,
-                                                                iconSize: 36.0,
-                                                              ),
-                                                              Positioned(
-                                                                left: 15,
-                                                                top: 15,
-                                                                child:
-                                                                    UserAvatarWithBadge(
-                                                                  user: _profileController
-                                                                      .myProfile,
-                                                                  height: 32.0,
-                                                                  width: 32.0,
-                                                                  radius: 50.0,
-                                                                  placeHolder:
-                                                                      Icons
-                                                                          .person,
-                                                                  iconSize:
-                                                                      36.0,
-                                                                ),
-                                                              ),
-                                                            ]),
+                                                            Stack(
+                                                                children: <Widget>[
+                                                                  const SizedBox(
+                                                                    height: 50,
+                                                                    width: 50,
+                                                                  ),
+                                                                  UserAvatarWithBadge(
+                                                                    user: args,
+                                                                    height:
+                                                                        32.0,
+                                                                    width: 32.0,
+                                                                    radius:
+                                                                        50.0,
+                                                                    placeHolder:
+                                                                        Icons
+                                                                            .person,
+                                                                    iconSize:
+                                                                        36.0,
+                                                                  ),
+                                                                  Positioned(
+                                                                    left: 15,
+                                                                    top: 15,
+                                                                    child:
+                                                                        UserAvatarWithBadge(
+                                                                      user: _profileController
+                                                                          .myProfile,
+                                                                      height:
+                                                                          32.0,
+                                                                      width:
+                                                                          32.0,
+                                                                      radius:
+                                                                          50.0,
+                                                                      placeHolder:
+                                                                          Icons
+                                                                              .person,
+                                                                      iconSize:
+                                                                          36.0,
+                                                                    ),
+                                                                  ),
+                                                                ]),
                                                             const SizedBox(
                                                               width: 10,
                                                             ),

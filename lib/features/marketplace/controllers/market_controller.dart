@@ -506,7 +506,11 @@ class MarketController extends GetxController {
 
     // Assuming products is the list of already fetched products
     for (MarketModel product in products) {
-      if (product.description.toLowerCase().contains(query.toLowerCase())) {
+      bool titleMatches = product.title != null &&
+          product.title!.toLowerCase().contains(query.toLowerCase());
+
+      if (titleMatches ||
+          product.description.toLowerCase().contains(query.toLowerCase())) {
         searchedPosts.add(product);
       }
     }
@@ -521,9 +525,13 @@ class MarketController extends GetxController {
 
     searchedServices.clear();
 
-    // Assuming products is the list of already fetched products
+    // Assuming services is the list of already fetched services
     for (MarketModel service in services) {
-      if (service.description.toLowerCase().contains(query.toLowerCase())) {
+      bool titleMatches = service.title != null &&
+          service.title!.toLowerCase().contains(query.toLowerCase());
+
+      if (titleMatches ||
+          service.description.toLowerCase().contains(query.toLowerCase())) {
         searchedServices.add(service);
       }
     }

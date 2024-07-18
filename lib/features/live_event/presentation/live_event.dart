@@ -381,9 +381,10 @@ class _LiveEventState extends State<LiveEvent> {
                         ),
                       ),
                     ),
-              showFloatingButton
-                  ? const Floatingbutton(isEventScreen: true)
-                  : Container(),
+              const BottomBar(
+                activeIndex: 2,
+              ),
+              Floatingbutton(),
             ]));
       },
     );

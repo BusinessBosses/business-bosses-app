@@ -109,6 +109,7 @@ class ChatBox extends StatelessWidget {
                                                 )
                                               else
                                                 NetworkImageWithPlaceHolder(
+                                                  borderColor: Colors.black12,
                                                   imageUrl: message.image,
                                                   width: size.width * 0.6,
                                                   height: size.width * 0.6,
@@ -238,6 +239,7 @@ class ChatBox extends StatelessWidget {
                                                 )
                                               else
                                                 NetworkImageWithPlaceHolder(
+                                                  borderColor: Colors.black12,
                                                   imageUrl: message.image,
                                                   width: size.width * 0.6,
                                                   cacheHeight: 120,
