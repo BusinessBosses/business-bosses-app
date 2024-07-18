@@ -268,7 +268,7 @@ class FilterMarketplacePosts extends StatelessWidget {
                   controller: controller,
                 );
               } else {
-                return SizedBox.shrink(); // Or any other placeholder widget
+                return SizedBox.shrink();
               }
             }),
       ),
