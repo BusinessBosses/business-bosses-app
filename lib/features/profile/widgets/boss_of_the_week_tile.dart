@@ -320,14 +320,15 @@ class _BossOfWeekProfileTileState extends State<BossOfWeekProfileTile> {
                         Padding(
                           padding: const EdgeInsets.symmetric(horizontal: 15.0),
                           child: Row(
-                            
                             children: <Widget>[
                               const Text(
                                 'See more deals',
                                 style: TextStyle(
                                     fontWeight: FontWeight.w700, fontSize: 18),
                               ),
-                              const SizedBox(width: 8,),
+                              const SizedBox(
+                                width: 8,
+                              ),
                               SvgPicture.asset(
                                 'assets/svgs/nexticon.svg',
                                 color: textColor,
@@ -363,7 +364,7 @@ class _BossOfWeekProfileTileState extends State<BossOfWeekProfileTile> {
                                     child: Container(
                                       width: MediaQuery.of(context).size.width /
                                           3.2,
-                                      height: 120,
+                                      height: 125,
                                       margin: const EdgeInsets.only(left: 15.0),
                                       decoration: BoxDecoration(
                                         border: Border.all(
@@ -388,9 +389,7 @@ class _BossOfWeekProfileTileState extends State<BossOfWeekProfileTile> {
                                         children: <Widget>[
                                           Padding(
                                             padding: const EdgeInsets.symmetric(
-                                              horizontal: 10.0,
-                                              vertical: 10
-                                            ),
+                                                horizontal: 10.0, vertical: 10),
                                             child: SizedBox(
                                               height: 25.0,
                                               width: 25.0,
