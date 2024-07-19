@@ -490,11 +490,6 @@ class _CreateSellingitemScreenState extends State<CreateSellingitemScreen> {
                   padding: const EdgeInsets.only(left: 16.0, right: 16),
                   child: MCustomButton(
                     onPressed: () async {
-                      if (createMarketController.imageFileList.isEmpty) {
-                        showSnackBar(context,
-                            message: 'You must select an image to continue');
-                        return;
-                      }
                       if (descriptionController.text.isEmpty ||
                           _priceController.text.isEmpty) {
                         showSnackBar(

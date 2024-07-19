@@ -292,6 +292,20 @@ class HomeController extends GetxController {
         }
       }
 
+      final int promotedPostIndex = promotedPosts
+          .indexWhere((PostModel element) => element.postId == postId);
+      if (promotedPostIndex != -1) {
+        final bool checkLiked =
+            promotedPosts[promotedPostIndex].likes!.contains(userId);
+        if (checkLiked) {
+          promotedPosts[promotedPostIndex]
+              .likes!
+              .removeWhere((element) => element == userId);
+        } else {
+          promotedPosts[promotedPostIndex].likes!.add(userId);
+        }
+      }
+
       //Sponsored posts
       final int spIndex = sponsoredPosts.indexWhere(
           (Map<String, dynamic> post) =>
@@ -421,6 +435,22 @@ class HomeController extends GetxController {
         } else {
           profileController.updateCoinCount(-1);
           posts[postIndex].coins!.add(userId);
+        }
+      }
+
+      final int promotedPostIndex = promotedPosts
+          .indexWhere((PostModel element) => element.postId == postId);
+      if (promotedPostIndex != -1) {
+        final bool checkIfCoined =
+            promotedPosts[promotedPostIndex].coins!.contains(userId);
+        if (checkIfCoined) {
+          profileController.updateCoinCount(1);
+          promotedPosts[promotedPostIndex]
+              .coins!
+              .removeWhere((String element) => element == userId);
+        } else {
+          profileController.updateCoinCount(-1);
+          promotedPosts[promotedPostIndex].coins!.add(userId);
         }
       }
 
@@ -792,7 +822,7 @@ class HomeController extends GetxController {
   }
 
   /// DailyCoin
-  void addCoinDaily() {
+  void addCoinDaily() async {
     int currentTimestamp = DateTime.now().millisecondsSinceEpoch;
     int dataTime = profileController.myProfile.bossOfTheWeekUpTimeStamp ?? 0;
     int lastExecutionTimestamp = sandBox.read('lastExecutionTimestamp') ?? 0;
@@ -815,13 +845,23 @@ class HomeController extends GetxController {
           (currentTimestamp - dataTime >= 24 * 60 * 60 * 1000)) {
         // The action hasn't been executed today, save the current timestamp
         sandBox.write('lastExecutionTimestamp', currentTimestamp);
-        ApiService.put(
+        await ApiService.put(
           path: 'users/${profileController.myProfile.uid}',
           body: <String, dynamic>{
             'coinscount': profileController.myProfile.coinscount! + 1,
             'bossOfTheWeekUpTimeStamp': currentTimestamp,
           },
         );
+        ApiService.post(path: 'transaction-history', body: {
+          'userId': profileController.myProfile.uid,
+          'transactionType': 'credit',
+          'amount': 1,
+          'paymentMethod': 'bank',
+          'date': currentTimestamp,
+          'approved': true,
+          'status': 'Successful',
+          'description': 'Daily Coin',
+        });
         profileController.updateCoinCount(1);
         showCoinDialog();
       }
