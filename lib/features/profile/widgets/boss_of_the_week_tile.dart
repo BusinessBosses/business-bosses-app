@@ -370,7 +370,7 @@ class _BossOfWeekProfileTileState extends State<BossOfWeekProfileTile> {
                                     },
                                     child: Container(
                                       width: MediaQuery.of(context).size.width /
-                                         3.3,
+                                         3.58,
                                       margin: const EdgeInsets.only(left: 15.0),
                                       decoration: BoxDecoration(
                                         border: Border.all(
@@ -435,10 +435,10 @@ class _BossOfWeekProfileTileState extends State<BossOfWeekProfileTile> {
                                                   Text(
                                                     item['companyName'],
                                                     textAlign: TextAlign.left,
-                                                    maxLines: 4,
+                                                    maxLines: 2,
                                                     style: const TextStyle(
                                                       color: textColor,
-                                                      fontSize: 13,
+                                                      fontSize: 12,
                                                       fontWeight:
                                                           FontWeight.w700,
                                                     ),
