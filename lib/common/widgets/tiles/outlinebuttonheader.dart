@@ -86,8 +86,8 @@ Container OutlineButtonHeader(BuildContext context, UserModel myProfile) {
               children: <Widget>[
                 SvgPicture.asset(
                   'assets/svgs/helpicon.svg',
-                  height: 19,
-                  color: primaryColorLT,
+                  // height: 19,
+                  // color: primaryColorLT,
                 ),
                 const SizedBox(
                   width: 5,
