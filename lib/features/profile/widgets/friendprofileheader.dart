@@ -20,7 +20,7 @@ Widget FriendProfileHeader(UserModel publicUser) {
             Expanded(
               child: CustomChildButton(
                 value: publicUser.connectionCount ?? 0,
-                caption: 'Connections',
+                caption: 'Followers',
                 onPressed: () {
                   Get.toNamed(Routes.allconnectionsscreen,
                       arguments: <String, Object>{'uid': publicUser.uid, 'pageIndex': 0});
@@ -30,7 +30,7 @@ Widget FriendProfileHeader(UserModel publicUser) {
             Expanded(
                 child: CustomChildButton(
               value: publicUser.connectedCount ?? 0,
-              caption: 'Connected',
+              caption: 'Following',
               onPressed: () {
                 Get.toNamed(Routes.allconnectionsscreen,
                     arguments: <String, Object>{'uid': publicUser.uid, 'pageIndex': 1});

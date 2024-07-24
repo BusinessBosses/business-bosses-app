@@ -42,7 +42,7 @@ class MyProfileHeader extends StatelessWidget {
                         //   arguments: Params(arg1: myProfile),
                         // );
                       },
-                      caption: 'Connections',
+                      caption: 'Followers',
                       value: myProfile.connectionCount ?? 0,
                     )),
                     Expanded(
@@ -57,7 +57,7 @@ class MyProfileHeader extends StatelessWidget {
                         //   arguments: Params(arg1: myProfile, arg2: 1),
                         // );
                       },
-                      caption: 'Connected',
+                      caption: 'Following',
                       value: myProfile.connecteds?.length ?? 0,
                     )),
                     Expanded(

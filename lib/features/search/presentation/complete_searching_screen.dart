@@ -112,9 +112,10 @@ class _CompleteSearchingScreenState extends State<CompleteSearchingScreen>
                       controller: _tabController,
                       children: <Widget>[
                         FilterUsers(
-                          filterItems: controller.searchedUsers,
-                          isLoading: 
-                              controller.loadingSearch.value,
+                          filterItems: controller.isUserSearch.value
+                              ? controller.searchedUsers
+                              : controller.recommendedConnections,
+                          isLoading: controller.loading.value || controller.loadingSearch.value ,
                           onConnectionChange: controller.connectToUser,
                           isSearch: controller.isUserSearch.value,
                         ),
