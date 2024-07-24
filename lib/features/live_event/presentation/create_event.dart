@@ -32,12 +32,14 @@ class _CreateEventState extends State<CreateEvent> {
   TextEditingController titleController = TextEditingController();
   TextEditingController descriptionController = TextEditingController();
   TextEditingController linkController = TextEditingController();
+  TextEditingController addressController = TextEditingController();
   final ProfileController profileController = Get.find();
   DateTime startAt = DateTime.now();
   DateTime endAt = DateTime.now();
   DateTime selectedDateTime = DateTime.now();
   final LiveController liveEventController = Get.put(LiveController());
   bool isLoading = false;
+  bool isOnline = true;
 
   String? roomID;
   File? _selectedImage;
@@ -55,6 +57,7 @@ class _CreateEventState extends State<CreateEvent> {
       endAt = widget.event!.endAt!.toLocal();
       descriptionController.text = widget.event!.description ?? '';
       linkController.text = widget.event!.link ?? '';
+      addressController.text = widget.event!.address ?? '';
     } else {
       roomID = generateRandomRoomID();
     }
@@ -175,17 +178,83 @@ class _CreateEventState extends State<CreateEvent> {
                     width: 1.0, // Border width
                   ),
                 ),
-                child: TextField(
-                  controller: linkController,
-                  enabled: !isLoading,
+                child: DropdownButtonFormField<bool>(
+                  value: isOnline,
+                  items: const [
+                    DropdownMenuItem<bool>(
+                      value: true,
+                      child: Text('Online'),
+                    ),
+                    DropdownMenuItem<bool>(
+                      value: false,
+                      child: Text('Offline'),
+                    ),
+                  ],
+                  onChanged: (bool? value) {
+                    setState(() {
+                      isOnline = value ?? true;
+                    });
+                  },
                   decoration: const InputDecoration(
-                    labelText: 'Add Zoom or Google Meet Link',
+                    labelText: 'Event Type',
                     labelStyle: TextStyle(fontWeight: FontWeight.w600),
                     border: InputBorder.none,
                   ),
                 ),
               ),
             ),
+            if (isOnline)
+              Padding(
+                padding: const EdgeInsets.all(15.0),
+                child: Container(
+                  padding: const EdgeInsets.symmetric(horizontal: 15),
+                  decoration: BoxDecoration(
+                    color: const Color.fromRGBO(
+                        244, 244, 244, 1), // Background color
+                    borderRadius: BorderRadius.circular(10.0), // Border radius
+                    border: Border.all(
+                      color: const Color.fromRGBO(
+                          224, 224, 224, 1), // Border color
+                      width: 1.0, // Border width
+                    ),
+                  ),
+                  child: TextField(
+                    controller: linkController,
+                    enabled: !isLoading,
+                    decoration: const InputDecoration(
+                      labelText: 'Add Zoom or Google Meet Link',
+                      labelStyle: TextStyle(fontWeight: FontWeight.w600),
+                      border: InputBorder.none,
+                    ),
+                  ),
+                ),
+              )
+            else
+              Padding(
+                padding: const EdgeInsets.all(15.0),
+                child: Container(
+                  padding: const EdgeInsets.symmetric(horizontal: 15),
+                  decoration: BoxDecoration(
+                    color: const Color.fromRGBO(
+                        244, 244, 244, 1), // Background color
+                    borderRadius: BorderRadius.circular(10.0), // Border radius
+                    border: Border.all(
+                      color: const Color.fromRGBO(
+                          224, 224, 224, 1), // Border color
+                      width: 1.0, // Border width
+                    ),
+                  ),
+                  child: TextField(
+                    controller: addressController,
+                    enabled: !isLoading,
+                    decoration: const InputDecoration(
+                      labelText: 'Add Address',
+                      labelStyle: TextStyle(fontWeight: FontWeight.w600),
+                      border: InputBorder.none,
+                    ),
+                  ),
+                ),
+              ),
             Padding(
               padding: const EdgeInsets.all(15.0),
               child: Container(
@@ -404,11 +473,28 @@ class _CreateEventState extends State<CreateEvent> {
                     return;
                   }
 
-                  if (linkController.text.isNotEmpty &&
-                      !isValidMeetingLink(linkController.text)) {
-                    showSnackBar(
-                      context,
-                      message: 'Please enter a valid Zoom or Google Meet link',
+                  if (isOnline &&
+                      !isValidMeetingLink(linkController.text.trim())) {
+                    Get.snackbar(
+                      'Validation Error',
+                      'A valid Zoom or Google Meet link is required for online events',
+                      snackPosition: SnackPosition.BOTTOM,
+                      backgroundColor: Colors.red,
+                      colorText: Colors.white,
+                    );
+                    setState(() {
+                      isLoading = false;
+                    });
+                    return;
+                  }
+
+                  if (!isOnline && addressController.text.trim().isEmpty) {
+                    Get.snackbar(
+                      'Validation Error',
+                      'Address is required for offline events',
+                      snackPosition: SnackPosition.BOTTOM,
+                      backgroundColor: Colors.red,
+                      colorText: Colors.white,
                     );
                     setState(() {
                       isLoading = false;
@@ -472,7 +558,8 @@ class _CreateEventState extends State<CreateEvent> {
                     'startTime': '00:00:00',
                     'user': profileController.myProfile.toMap(),
                     'image': imageUrl,
-                    'link': linkController.text,
+                    'link': isOnline ? linkController.text.trim() : null,
+                    'address': !isOnline ? addressController.text.trim() : null,
                     'description': descriptionController.text,
                   };
 
@@ -487,7 +574,8 @@ class _CreateEventState extends State<CreateEvent> {
                     'photourl': profileController.myProfile.photoUrl,
                     'user': profileController.myProfile.toString(),
                     'image': imageUrl,
-                    'link': linkController.text,
+                    'link': isOnline ? linkController.text.trim() : null,
+                    'address': !isOnline ? addressController.text.trim() : null,
                     'description': descriptionController.text,
                   };
 

@@ -180,10 +180,12 @@ class CreatePostController extends GetxController {
           _homeController.addNewPost(<String, dynamic>{
             ...response.data,
             'donation': body['donation'],
+            'forum': body['forum'],
           }, profileController);
           profileController.addNewPost(<String, dynamic>{
             ...response.data,
             'donation': body['donation'],
+            'forum': body['forum'],
           });
 
           if (shouldPromote.value == true) {
