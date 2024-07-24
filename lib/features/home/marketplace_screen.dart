@@ -515,7 +515,7 @@ class _MarketplaceScreenState extends State<MarketplaceScreen>
                                                     children: <Widget>[
                                                       Container(
                                                         padding:
-                                                            EdgeInsets.only(
+                                                            const EdgeInsets.only(
                                                                 bottom: 10,
                                                                 left: 16),
                                                         constraints:
@@ -523,7 +523,7 @@ class _MarketplaceScreenState extends State<MarketplaceScreen>
                                                                 .expand(
                                                                 height: 40),
                                                         child: TabBar(
-                                                          labelStyle: TextStyle(
+                                                          labelStyle: const TextStyle(
                                                               fontWeight:
                                                                   FontWeight
                                                                       .w400),
@@ -545,22 +545,24 @@ class _MarketplaceScreenState extends State<MarketplaceScreen>
                                                           labelColor:
                                                               Colors.white,
                                                           labelPadding:
-                                                              EdgeInsets
+                                                              const EdgeInsets
                                                                   .symmetric(
                                                                       horizontal:
                                                                           20.0),
                                                           tabs: [
-                                                            Tab(
-                                                              icon: Icon(Icons
-                                                                  .dashboard, size: 15,),
+                                                            const Tab(
+                                                              icon: Icon(
+                                                                Icons.dashboard,
+                                                                size: 15,
+                                                              ),
                                                             ),
-                                                            Tab(
+                                                            const Tab(
                                                                 text:
                                                                     'Products'),
-                                                            Tab(
+                                                            const Tab(
                                                                 text:
                                                                     'Services'),
-                                                            Tab(
+                                                            const Tab(
                                                                 text:
                                                                     'Suppliers'),
                                                           ],

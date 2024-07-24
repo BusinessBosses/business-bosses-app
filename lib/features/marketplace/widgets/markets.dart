@@ -3,6 +3,7 @@ import 'package:business_bosses_v2/features/home/widgets/sellingpopup.dart';
 import 'package:business_bosses_v2/features/marketplace/controllers/market_controller.dart';
 import 'package:business_bosses_v2/features/marketplace/models/market_model.dart';
 import 'package:business_bosses_v2/features/marketplace/presentation/market_members.dart';
+import 'package:business_bosses_v2/features/marketplace/presentation/sell_services.dart';
 import 'package:business_bosses_v2/features/marketplace/widgets/marketplace_item.dart';
 import 'package:business_bosses_v2/features/marketplace/widgets/products.dart';
 import 'package:business_bosses_v2/features/marketplace/widgets/service_item.dart';
@@ -85,7 +86,76 @@ class _MarketsPageState extends State<MarketsPage> {
                                     45) // put the width and height you want
                                 ),
                             onPressed: () {
-                              Get.toNamed(Routes.sellscreen);
+                              showModalBottomSheet(
+                                  context: context,
+                                  shape: const RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.vertical(
+                                      top: Radius.circular(25.0),
+                                    ),
+                                  ),
+                                  builder: (BuildContext context) {
+                                    return SizedBox(
+                                      height: 200,
+                                      child: Padding(
+                                        padding: const EdgeInsets.all(15.0),
+                                        child: Column(
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
+                                          mainAxisSize: MainAxisSize.min,
+                                          children: <Widget>[
+                                            Expanded(
+                                              // Set a specific height
+                                              child: ListView.separated(
+                                                itemCount: 2,
+                                                separatorBuilder:
+                                                    (BuildContext context,
+                                                            int index) =>
+                                                        const Divider(),
+                                                itemBuilder:
+                                                    (BuildContext context,
+                                                        int index) {
+                                                  return ListTile(
+                                                    onTap: () {
+                                                      Navigator.pop(context);
+                                                      index == 0
+                                                          ? Get.toNamed(
+                                                              Routes.sellscreen)
+                                                          : Get.to(() =>
+                                                              const CreateServiceScreen(
+                                                                  isUpd:
+                                                                      false));
+                                                    },
+                                                    minVerticalPadding: 0,
+                                                    contentPadding:
+                                                        const EdgeInsets.only(
+                                                      left: 10,
+                                                    ),
+                                                    leading: SvgPicture.asset(
+                                                      index == 0
+                                                          ? 'assets/svgs/sellicon.svg'
+                                                          : 'assets/svgs/sellicon.svg',
+                                                      height: 25,
+                                                      color: textColor
+                                                          .withOpacity(1),
+                                                    ),
+                                                    title: Text(
+                                                      index == 0
+                                                          ? 'Sell your product'
+                                                          : 'Sell your service',
+                                                      style: const TextStyle(
+                                                          fontSize: 18,
+                                                          fontWeight:
+                                                              FontWeight.w700),
+                                                    ),
+                                                  );
+                                                },
+                                              ),
+                                            )
+                                          ],
+                                        ),
+                                      ),
+                                    );
+                                  });
                             },
                             child: Row(
                               mainAxisSize: MainAxisSize.min,
@@ -292,7 +362,7 @@ class _MarketsPageState extends State<MarketsPage> {
                   ],
                 ),
               );
-            }else if (index <
+            } else if (index <
                 (_marketController.isfiltered.value
                     ? _marketController.searchResult.length
                     : _marketController.markets.length)) {
@@ -306,8 +376,8 @@ class _MarketsPageState extends State<MarketsPage> {
                       .itemsWithIncrementedViews
                       .contains(_marketController.markets[index - 1].marketId);
                   if (info.visibleFraction == 1.0 && !hasIncrementedView) {
-                    _marketController
-                        .updatemarketViews(_marketController.markets[index - 1]);
+                    _marketController.updatemarketViews(
+                        _marketController.markets[index - 1]);
                     setState(() {
                       hmeController.itemsWithIncrementedViews.add(_marketController
                           .markets[index]
@@ -319,12 +389,14 @@ class _MarketsPageState extends State<MarketsPage> {
                     ? MarketTile(
                         post: market,
                         controller: _marketController,
-                        key: ValueKey(_marketController.markets[index].marketId),
+                        key:
+                            ValueKey(_marketController.markets[index].marketId),
                       )
                     : ServiceTile(
                         post: market,
                         controller: _marketController,
-                        key: ValueKey(_marketController.markets[index - 1].marketId),
+                        key: ValueKey(
+                            _marketController.markets[index - 1].marketId),
                       ),
               );
             } else {
