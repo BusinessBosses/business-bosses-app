@@ -320,20 +320,27 @@ class _BossOfWeekProfileTileState extends State<BossOfWeekProfileTile> {
                         Padding(
                           padding: const EdgeInsets.symmetric(horizontal: 15.0),
                           child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: <Widget>[
                               const Text(
-                                'See more deals',
+                                'Deals',
                                 style: TextStyle(
                                     fontWeight: FontWeight.w700, fontSize: 18),
                               ),
-                              const SizedBox(
-                                width: 8,
-                              ),
-                              SvgPicture.asset(
-                                'assets/svgs/nexticon.svg',
-                                color: textColor,
-                                height: 8,
-                              ),
+                              Wrap(
+                                  crossAxisAlignment: WrapCrossAlignment.center,
+                                  children: [
+                                    const Text(
+                                      'See all',
+                                      style: TextStyle(fontSize: 11),
+                                    ),
+                                    const SizedBox(width: 5.0),
+                                    SvgPicture.asset(
+                                      'assets/svgs/nexticon.svg',
+                                      color: textColor,
+                                      height: 8,
+                                    ),
+                                  ]),
                             ],
                           ),
                         ),
@@ -363,8 +370,7 @@ class _BossOfWeekProfileTileState extends State<BossOfWeekProfileTile> {
                                     },
                                     child: Container(
                                       width: MediaQuery.of(context).size.width /
-                                          3.2,
-                                      height: 125,
+                                         3.3,
                                       margin: const EdgeInsets.only(left: 15.0),
                                       decoration: BoxDecoration(
                                         border: Border.all(
@@ -388,11 +394,14 @@ class _BossOfWeekProfileTileState extends State<BossOfWeekProfileTile> {
                                             MainAxisAlignment.spaceBetween,
                                         children: <Widget>[
                                           Padding(
-                                            padding: const EdgeInsets.symmetric(
-                                                horizontal: 10.0, vertical: 10),
+                                            padding: const EdgeInsets.only(
+                                                left: 8.0,
+                                                right: 8,
+                                                top: 8,
+                                                bottom: 5),
                                             child: SizedBox(
-                                              height: 25.0,
-                                              width: 25.0,
+                                              height: 20.0,
+                                              width: 20.0,
                                               child: Container(
                                                 decoration: BoxDecoration(
                                                   border: Border.all(
@@ -419,7 +428,7 @@ class _BossOfWeekProfileTileState extends State<BossOfWeekProfileTile> {
                                           Padding(
                                               padding:
                                                   const EdgeInsets.symmetric(
-                                                horizontal: 10.0,
+                                                horizontal: 8.0,
                                               ),
                                               child: Column(
                                                 children: [
@@ -439,7 +448,7 @@ class _BossOfWeekProfileTileState extends State<BossOfWeekProfileTile> {
                                                 ],
                                               )),
                                           Padding(
-                                            padding: const EdgeInsets.all(10),
+                                            padding: const EdgeInsets.all(8),
                                             child: SizedBox(
                                               width: double.infinity,
                                               child: Wrap(
@@ -460,16 +469,16 @@ class _BossOfWeekProfileTileState extends State<BossOfWeekProfileTile> {
                                                         'assets/svgs/upicon.svg',
                                                         color: const Color(
                                                             0xFF0F132D),
-                                                        height: 10,
+                                                        height: 8,
                                                       ),
                                                     ),
                                                     const SizedBox(
-                                                      width: 8,
+                                                      width: 5,
                                                     ),
                                                     const Text(
                                                       'Learn more',
                                                       style: TextStyle(
-                                                          fontSize: 12,
+                                                          fontSize: 11,
                                                           color: textColor),
                                                     ),
                                                   ]),
@@ -571,8 +580,8 @@ class _BossOfWeekProfileTileState extends State<BossOfWeekProfileTile> {
               user?.connecteds != null &&
                       _profileController.myProfile.connecteds!
                           .contains(user!.uid)
-                  ? 'Connected'
-                  : 'Connect',
+                  ? 'Following'
+                  : 'Follow',
               style: const TextStyle(color: Colors.white),
             ),
           ),
