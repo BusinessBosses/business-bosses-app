@@ -163,7 +163,6 @@ class _MarketplaceScreenState extends State<MarketplaceScreen>
                     setState(() {});
                   },
                   onSubmit: (String query) {
-                    supplierController.initSuppliers();
                     supplierController.searchSuppliers(query);
                     _marketController.searchServices(query);
                     _marketController.searchPosts(
@@ -515,7 +514,8 @@ class _MarketplaceScreenState extends State<MarketplaceScreen>
                                                     children: <Widget>[
                                                       Container(
                                                         padding:
-                                                            const EdgeInsets.only(
+                                                            const EdgeInsets
+                                                                .only(
                                                                 bottom: 10,
                                                                 left: 16),
                                                         constraints:
@@ -523,10 +523,11 @@ class _MarketplaceScreenState extends State<MarketplaceScreen>
                                                                 .expand(
                                                                 height: 40),
                                                         child: TabBar(
-                                                          labelStyle: const TextStyle(
-                                                              fontWeight:
-                                                                  FontWeight
-                                                                      .w400),
+                                                          labelStyle:
+                                                              const TextStyle(
+                                                                  fontWeight:
+                                                                      FontWeight
+                                                                          .w400),
                                                           controller:
                                                               _marketplaceTabController,
                                                           isScrollable: true,
@@ -547,8 +548,8 @@ class _MarketplaceScreenState extends State<MarketplaceScreen>
                                                           labelPadding:
                                                               const EdgeInsets
                                                                   .symmetric(
-                                                                      horizontal:
-                                                                          20.0),
+                                                                  horizontal:
+                                                                      20.0),
                                                           tabs: [
                                                             const Tab(
                                                               icon: Icon(
