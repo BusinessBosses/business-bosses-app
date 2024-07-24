@@ -166,7 +166,10 @@ class _PostTileState extends State<PostTile> {
 
         return PollOption(
           id: option,
-          title: Text(option),
+          title: Text(
+            option,
+            style: const TextStyle(color: Colors.black),
+          ),
           votes: votes,
         );
       },
@@ -640,7 +643,7 @@ class _PostTileState extends State<PostTile> {
                                 ),
                                 hasVoted: hasVoted,
                                 userVotedOptionId: selectedVote,
-                                pollOptionsSplashColor: Colors.white,
+                                pollOptionsSplashColor: Colors.grey,
                                 votedProgressColor:
                                     Colors.grey.withOpacity(0.3),
                                 votedBackgroundColor:
