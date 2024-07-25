@@ -96,7 +96,7 @@ class _RelevantUsersScreenState extends State<RelevantUsersScreen> {
           ),
           centerTitle: true,
           title: const Text(
-            'Connect',
+            'Follow',
             textAlign: TextAlign.center,
             style: TextStyle(fontSize: 20),
           ),

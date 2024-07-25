@@ -105,16 +105,16 @@ class _SuppliersGridTileState extends State<SuppliersGridTile> {
             const SizedBox(height: 12.0),
             Container(
               decoration: BoxDecoration(
-                  color: primaryColorLT,
+                  color: Colors.white,
                   borderRadius: BorderRadius.circular(10)),
               child: MCustomButton(
-                buttonType: ButtonType.elevated,
+                buttonType: ButtonType.outline,
                 onPressed: widget.onChangeSuppliersStatus,
                 height: 36.0,
                 width: 120.0,
                 child: const Text(
                   'Contact',
-                  style: TextStyle(color: Colors.white),
+                  style: TextStyle(color: primaryColorLT),
                 ),
               ),
             ),

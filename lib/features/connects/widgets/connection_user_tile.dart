@@ -78,11 +78,11 @@ class ConnectionUserItem extends StatelessWidget {
                         width: 120.0,
                         child: status
                             ? const Text(
-                                'Connected',
+                                'Following',
                                 style: TextStyle(color: primaryColorLT),
                               )
                             : const Text(
-                                'Connect',
+                                'Follow',
                                 style: TextStyle(color: Colors.white),
                               ),
                       ),

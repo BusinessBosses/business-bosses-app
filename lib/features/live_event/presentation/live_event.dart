@@ -3,6 +3,8 @@
 import 'dart:math';
 
 import 'package:business_bosses_v2/common/widgets/network_image_with_placeholder.dart';
+import 'package:business_bosses_v2/features/home/widgets/bottom_bar.dart';
+import 'package:business_bosses_v2/features/home/widgets/floatingbutton.dart';
 import 'package:business_bosses_v2/features/live_event/controller/live_event_controller.dart';
 import 'package:business_bosses_v2/features/live_event/models/events_model.dart';
 import 'package:business_bosses_v2/features/live_event/widgets/event_call.dart';
@@ -91,12 +93,13 @@ class _LiveEventState extends State<LiveEvent> {
         return Scaffold(
             backgroundColor: Colors.white,
             appBar: AppBar(
-              leading: IconButton(
-                onPressed: () {
-                  Navigator.pop(context);
-                },
-                icon: SvgPicture.asset('assets/svgs/backbutton.svg'),
-              ),
+              automaticallyImplyLeading: false,
+              // leading: IconButton(
+              //   onPressed: () {
+              //     Navigator.pop(context);
+              //   },
+              //   icon: SvgPicture.asset('assets/svgs/backbutton.svg'),
+              // ),
               title: _isSearching
                   ? Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -380,6 +383,10 @@ class _LiveEventState extends State<LiveEvent> {
                         ),
                       ),
                     ),
+              const BottomBar(
+                activeIndex: 2,
+              ),
+              const Floatingbutton(),
             ]));
       },
     );

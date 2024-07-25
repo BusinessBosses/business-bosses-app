@@ -54,7 +54,7 @@ class AllConnectionsScreen extends StatelessWidget {
                       ),
                       centerTitle: true,
                       title: const Text(
-                        'Connections',
+                        'Followers',
                         textAlign: TextAlign.center,
                         style: TextStyle(fontSize: 20),
                       ),
@@ -81,7 +81,7 @@ class AllConnectionsScreen extends StatelessWidget {
                                   Tab(
                                     child: FittedBox(
                                       child: Text(
-                                        'Connections',
+                                        'Followers',
                                         style: Theme.of(context)
                                             .textTheme
                                             .bodyLarge,
@@ -91,7 +91,7 @@ class AllConnectionsScreen extends StatelessWidget {
                                   Tab(
                                     child: FittedBox(
                                       child: Text(
-                                        'Connected',
+                                        'Following',
                                         style: Theme.of(context)
                                             .textTheme
                                             .bodyLarge,

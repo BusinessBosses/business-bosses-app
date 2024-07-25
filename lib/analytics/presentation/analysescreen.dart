@@ -1,10 +1,12 @@
 import 'dart:core';
 
+import 'package:business_bosses_v2/common/dialogs/snackbar.dart';
 import 'package:business_bosses_v2/common/models/user_model.dart';
 import 'package:business_bosses_v2/common/widgets/buttons/subscribe_to_premium_button.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 import '../../common/params.dart';
 import '../../features/profile/controller/profile_controller.dart';
@@ -52,7 +54,7 @@ class _AnalyserScreenState extends State<AnalyserScreen> {
         ),
         centerTitle: true,
         title: const Text(
-          'Analyse',
+          'Help',
           textAlign: TextAlign.center,
           style: TextStyle(fontSize: 20),
         ),
@@ -164,7 +166,7 @@ class _AnalyserScreenState extends State<AnalyserScreen> {
           ListTile(
               leading: SvgPicture.asset('assets/svgs/connectrelevant.svg'),
               title: const Text(
-                'Connect me to relevant people',
+                'Follow relevant people',
                 style: TextStyle(
                     fontSize: 15,
                     fontWeight: FontWeight.w700,
@@ -201,7 +203,7 @@ class _AnalyserScreenState extends State<AnalyserScreen> {
           ListTile(
               leading: SvgPicture.asset('assets/svgs/explore.svg'),
               title: const Text(
-                'Explore Business Bosses',
+                'How to use Business Bosses App',
                 style: TextStyle(
                     fontSize: 15,
                     fontWeight: FontWeight.w700,
@@ -217,9 +219,57 @@ class _AnalyserScreenState extends State<AnalyserScreen> {
             height: 1.5,
             child: ColoredBox(color: backgroundcolorinterface),
           ),
+          ListTile(
+              leading: SvgPicture.asset('assets/svgs/mail.svg'),
+              title: const Text(
+                'Contact us',
+                style: TextStyle(
+                    fontSize: 15,
+                    fontWeight: FontWeight.w700,
+                    color: textColor),
+              ),
+              onTap: () {
+                _contactUs();
+              },
+              trailing: SvgPicture.asset('assets/svgs/nexticon.svg')),
+          const SizedBox(
+            width: double.infinity,
+            height: 1.5,
+            child: ColoredBox(color: backgroundcolorinterface),
+          ),
         ],
       ),
     );
+  }
+}
+
+Future<void> _contactUs() async {
+  String? encodeQueryParameters(Map<String, String> params) {
+    return params.entries
+        .map((MapEntry<String, String> e) =>
+            '${Uri.encodeComponent(e.key)}=${Uri.encodeComponent(e.value)}')
+        .join('&');
+  }
+
+  final Uri mailUrl = Uri(
+    scheme: 'mailto',
+    path: 'support@businessbosses.co.uk',
+    query: encodeQueryParameters(<String, String>{
+      'subject': 'Contact Business Bosses',
+    }),
+  );
+
+  try {
+    if (await canLaunchUrl(mailUrl)) {
+      await launchUrl(mailUrl);
+    } else {
+      throw 'Could not launch $mailUrl';
+    }
+  } catch (e) {
+    showSnackbar(
+        title: 'OOPS!',
+        message: 'An error occurred, please try again!',
+        error: true);
   }
 }
 

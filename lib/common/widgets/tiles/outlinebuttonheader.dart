@@ -26,20 +26,20 @@ Container OutlineButtonHeader(BuildContext context, UserModel myProfile) {
             child: Row(
               mainAxisSize: MainAxisSize.min,
               children: <Widget>[
+                SvgPicture.asset(
+                  'assets/svgs/edit.svg',
+                  height: 17,
+                  color: primaryColorLT,
+                ),
+                const SizedBox(
+                  width: 5,
+                ),
                 const Text(
                   'Edit',
                   style: TextStyle(
                       fontSize: 15,
                       color: primaryColorLT,
                       fontWeight: FontWeight.w500),
-                ),
-                const SizedBox(
-                  width: 5,
-                ),
-                SvgPicture.asset(
-                  'assets/svgs/edit.svg',
-                  height: 17,
-                  color: primaryColorLT,
                 ),
               ],
             ),
@@ -84,21 +84,21 @@ Container OutlineButtonHeader(BuildContext context, UserModel myProfile) {
             child: Row(
               mainAxisSize: MainAxisSize.min,
               children: <Widget>[
+                SvgPicture.asset(
+                  'assets/svgs/helpicon.svg',
+                  // height: 19,
+                  // color: primaryColorLT,
+                ),
+                const SizedBox(
+                  width: 5,
+                ),
                 const Text(
-                  'Analyse',
+                  'Help',
                   style: TextStyle(
                       fontSize: 15,
                       color: primaryColorLT,
                       fontWeight: FontWeight.w500),
                 ),
-                const SizedBox(
-                  width: 5,
-                ),
-                SvgPicture.asset(
-                  'assets/svgs/analyse.svg',
-                  height: 17,
-                  color: primaryColorLT,
-                )
               ],
             ),
           ),

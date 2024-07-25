@@ -83,7 +83,7 @@ class _ExplorebusinessbossesScreenState
         ),
         centerTitle: true,
         title: const Text(
-          'Explore Business Bosses',
+          'How to use Business Bosses App',
           textAlign: TextAlign.center,
           style: TextStyle(fontSize: 20),
         ),
