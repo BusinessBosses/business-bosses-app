@@ -14,7 +14,6 @@ import '../../../../common/widgets/user_avatar_with_badge.dart';
 import '../../../../utils/theme/theme.dart';
 import '../../../common/controllers/comment_controller.dart';
 import '../../../services/api_service.dart';
-import '../../home/controller/home_controller.dart';
 import '../../posts/widgets/comment_item.dart';
 import '../../posts/widgets/write_comment.dart';
 
@@ -39,7 +38,6 @@ class _DonationCommentItemState extends State<DonationCommentItem> {
   // ignore: unused_field
   final DonationsController _donationsController =
       Get.put(DonationsController());
-  final HomeController _homeController = Get.find();
   final ProfileController profileController = Get.find();
   final CommentController _commentController = Get.put(CommentController());
 
