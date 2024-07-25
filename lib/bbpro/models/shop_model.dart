@@ -37,7 +37,7 @@ class Shop {
     this.user,
   });
 
-  factory Shop.fromJson(Map<String, dynamic> json) {
+  factory Shop.fromMap(Map<String, dynamic> json) {
     return Shop(
       id: json['id'],
       name: json['name'],
@@ -59,7 +59,7 @@ class Shop {
     );
   }
 
-  Map<String, dynamic> toJson() {
+  Map<String, dynamic> toMap() {
     return <String, dynamic>{
       'id': id,
       'name': name,
