@@ -1,4 +1,3 @@
-import 'package:business_bosses_v2/features/forum/controller/bossup_controller.dart';
 import 'package:business_bosses_v2/features/forum/models/forum_model.dart';
 import 'package:business_bosses_v2/features/forum/widgets/forum_item.dart';
 import 'package:flutter/material.dart';
@@ -24,7 +23,6 @@ class FilterChallengePosts extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final HomeController homeController = Get.find();
-    final BossUpController controller = Get.find();
     // return controller.isClosed
     //     ? SingleChildScrollView(
     //         child: Column(

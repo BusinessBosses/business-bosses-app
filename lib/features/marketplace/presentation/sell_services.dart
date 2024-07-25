@@ -8,7 +8,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import 'package:photo_manager/photo_manager.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import '../../../action/action.dart';
 import '../../../common/dialogs/snackbar.dart';
 import '../../../common/models/comment_model.dart';

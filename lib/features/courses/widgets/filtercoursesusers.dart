@@ -39,7 +39,6 @@ class _FilterUsersState extends State<FilterCoursesUsers> {
   Widget build(
     BuildContext context,
   ) {
-    final ProfileController profileController = Get.find();
     return SingleChildScrollView(
       child: Column(
         mainAxisAlignment: MainAxisAlignment.start,
