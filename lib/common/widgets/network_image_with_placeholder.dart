@@ -30,7 +30,7 @@ class NetworkImageWithPlaceHolder extends StatelessWidget {
     this.cacheWidth = 900,
     this.radius = 10.0,
     this.color,
-    this.borderColor,
+    this.borderColor = Colors.black12,
     this.fit = BoxFit.cover,
     this.placeHolderType = PlaceHolderType.icon,
     this.progressCircleColor,

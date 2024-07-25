@@ -25,6 +25,7 @@ class MyUser {
   String productsandservices;
   List<MyRefers> refers;
   List<String> deviceTokens;
+  List<String> postChallenges;
   List<Disconnection> disconnections;
   bool active;
   bool deactivated;
@@ -80,6 +81,7 @@ class MyUser {
     required this.location,
     required this.achievements,
     required this.productsandservices,
+    this.postChallenges = const [],
     // this.connects = const [],
     this.refers = const [],
     this.deviceTokens = const [],
@@ -147,6 +149,7 @@ class MyUser {
       'location': location,
       'ageRange': ageRange,
       'gender': gender,
+      'postChallenges': postChallenges,
       'achievements': achievements,
       'productsandservices': productsandservices,
     };
@@ -190,6 +193,7 @@ class MyUser {
       category: map['category'],
       location: map['location'],
       achievements: map['achievements'],
+      postChallenges: map['postChallenges'],
       productsandservices: map['productsandservices'],
       active: map['active'],
       deactivated: map['deactivated'],
@@ -395,6 +399,7 @@ class MyUser {
       surname: map['surname'] as String,
       bio: map['bio'] as String,
       isRanked: map['isRanked'],
+      postChallenges: map['postChallenges'],
       achievements: '',
       active: true,
       ageRange: '',

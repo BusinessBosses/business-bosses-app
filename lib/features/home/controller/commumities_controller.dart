@@ -19,6 +19,8 @@ class CommunitiesController extends GetxController {
   RxBool loadingSearch = RxBool(false);
   RxBool error = RxBool(false);
   RxBool searchError = RxBool(false);
+  RxBool isIndustriesSearch = RxBool(false);
+  RxBool isIndustriesPostSearch = RxBool(false);
 
   List<Industry> getCategoryIndustries(String categoryId) {
     final List<Industry> filteredIndustries = industries
@@ -31,38 +33,85 @@ class CommunitiesController extends GetxController {
     return filteredIndustries;
   }
 
-  Future<void> onSearch(int index, String query) async {
-    if (index == 0) {
-      searchedIndustries = industries
-          .where((Industry element) =>
-              element.industry!.toLowerCase().contains(query.toLowerCase()) ||
-              element.description!.toLowerCase().contains(query.toLowerCase()))
-          .toList();
-    } else {
-      loadingSearch(true);
-      searchError(false);
-      update();
-      final ApiResponseModel response =
-          await HomeRepository.searchIndustries(query.trim());
-      if (response.success) {
-        for (int i = 0; i < response.data['rows'].length; i++) {
-          searchedForums.add(ForumModel.fromMap(<String, dynamic>{
-            ...response.data['rows'][i],
-            'likes': response.data['rows'][i]['likes']
-                .map((dynamic like) => like['userId'].toString())
-                .toList(),
-            'coins': response.data['rows'][i]['coins']
-                .map((dynamic coin) => coin['userId'].toString())
-                .toList()
-          }));
-        }
-      } else {
-        searchError(true);
+  void clearIIndustriesSearch() {
+    isIndustriesSearch(false);
+    update();
+  }
+
+  void clearIndustriesPostSearch() {
+    isIndustriesPostSearch(false);
+    update();
+  }
+
+  Future<void> onsearchPosts(String query) async {
+    loadingSearch(true);
+    searchError(false);
+    searchedForums.clear();
+    update();
+    final ApiResponseModel response =
+        await HomeRepository.searchIndustries(query.trim());
+    if (response.success) {
+      for (int i = 0; i < response.data['rows'].length; i++) {
+        searchedForums.add(ForumModel.fromMap(<String, dynamic>{
+          ...response.data['rows'][i],
+          'likes': response.data['rows'][i]['likes']
+              .map((dynamic like) => like['userId'].toString())
+              .toList(),
+          'coins': response.data['rows'][i]['coins']
+              .map((dynamic coin) => coin['userId'].toString())
+              .toList()
+        }));
       }
+    } else {
+      searchError(true);
     }
     loadingSearch(false);
     update();
   }
+
+  Future<void> onsearchIndustries(String query) async {
+    update();
+    searchedIndustries.clear();
+
+    searchedIndustries = industries
+        .where((Industry element) =>
+            element.industry!.toLowerCase().contains(query.toLowerCase()) ||
+            element.description!.toLowerCase().contains(query.toLowerCase()))
+        .toList();
+  }
+
+  // Future<void> onSearch(int index, String query) async {
+  //   if (index == 1) {
+  //     searchedIndustries = industries
+  //         .where((Industry element) =>
+  //             element.industry!.toLowerCase().contains(query.toLowerCase()) ||
+  //             element.description!.toLowerCase().contains(query.toLowerCase()))
+  //         .toList();
+  //   } else {
+  //     loadingSearch(true);
+  //     searchError(false);
+  //     update();
+  //     final ApiResponseModel response =
+  //         await HomeRepository.searchIndustries(query.trim());
+  //     if (response.success) {
+  //       for (int i = 0; i < response.data['rows'].length; i++) {
+  //         searchedForums.add(ForumModel.fromMap(<String, dynamic>{
+  //           ...response.data['rows'][i],
+  //           'likes': response.data['rows'][i]['likes']
+  //               .map((dynamic like) => like['userId'].toString())
+  //               .toList(),
+  //           'coins': response.data['rows'][i]['coins']
+  //               .map((dynamic coin) => coin['userId'].toString())
+  //               .toList()
+  //         }));
+  //       }
+  //     } else {
+  //       searchError(true);
+  //     }
+  //   }
+  //   loadingSearch(false);
+  //   update();
+  // }
 
   void clearSearch() {
     searchedForums.clear();

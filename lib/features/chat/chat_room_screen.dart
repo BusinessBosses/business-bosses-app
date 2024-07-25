@@ -1,4 +1,6 @@
 import 'dart:async';
+import 'dart:convert';
+import 'package:business_bosses_v2/common/models/api_response_model.dart';
 import 'package:business_bosses_v2/common/models/user_model.dart';
 // import 'package:flutter/foundation.dart' as foundation;
 import 'package:business_bosses_v2/features/chat/controllers/chat_controller.dart';
@@ -6,6 +8,7 @@ import 'package:business_bosses_v2/features/home/controller/home_controller.dart
 import 'package:business_bosses_v2/features/marketplace/presentation/seller_reviews.dart';
 import 'package:business_bosses_v2/features/profile/controller/profile_controller.dart';
 import 'package:business_bosses_v2/navigation/routes.dart';
+import 'package:business_bosses_v2/services/api_service.dart';
 import 'package:detectable_text_field/detector/sample_regular_expressions.dart';
 import 'package:detectable_text_field/widgets/detectable_text.dart';
 import 'package:flutter/material.dart';
@@ -23,6 +26,9 @@ import '../../utils/constants/constants.dart';
 import '../../utils/theme/theme.dart';
 import '../marketplace/models/market_model.dart';
 import 'models/my_message.dart';
+import 'package:http/http.dart' as http;
+
+UserModel chatargs = UserModel();
 
 class ChatRoomScreen extends StatefulWidget {
   static const String routeName = '/chat-room-screen';
@@ -68,6 +74,7 @@ class _ChatRoomScreenState extends State<ChatRoomScreen> {
     } else {
       _textEditingController = TextEditingController();
       args = Get.arguments;
+      chatargs = args;
       // print(widget.market!.toMap());
       // _chatController.seen(args.uid);
     }
@@ -91,6 +98,20 @@ class _ChatRoomScreenState extends State<ChatRoomScreen> {
           return Scaffold(
             backgroundColor: backgroundcolorinterface,
             appBar: AppBar(
+              actions: [
+                Container(
+                  decoration:
+                      BoxDecoration(borderRadius: BorderRadius.circular(3000)),
+                  padding: EdgeInsets.all(14),
+                  child: MyPopupMenuButton(
+                    popupItems: _popupItemForumMore,
+                    icon: const Icon(Icons.more_vert),
+                    onSelected: (String val) {
+                      deleteChat();
+                    },
+                  ),
+                ),
+              ],
               leading: previousScreen == '/bottomNavScreen'
                   ? Padding(
                       padding: const EdgeInsets.only(top: 20.0),
@@ -117,14 +138,97 @@ class _ChatRoomScreenState extends State<ChatRoomScreen> {
                       Get.toNamed(Routes.publicProfile, arguments: args);
                     },
                     trailing: SizedBox(
-                      height: 22,
-                      width: 22,
-                      child: MyPopupMenuButton(
-                        popupItems: _popupItemForumMore,
-                        icon: const Icon(Icons.more_vert),
-                        onSelected: (String val) {
-                          deleteChat();
-                        },
+                      width: 70,
+                      child: Row(
+                        children: <Widget>[
+                          // IconButton(
+                          //   onPressed: () async {
+                          //     //   Get.to(CallPage(
+                          //     //       callID: "1234",
+
+                          //     //       ///it was hardcoded
+                          //     //       userId: args.uid,
+                          //     //       username: args.username));
+                          //     showModalBottomSheet(
+                          //       shape: RoundedRectangleBorder(
+                          //           borderRadius: BorderRadius.circular(20)),
+                          //       backgroundColor: Colors.white,
+                          //       context: context,
+                          //       builder: (BuildContext context) {
+                          //         return SizedBox(
+                          //           height: 210,
+                          //           child: Column(
+                          //             children: <Widget>[
+                          //               SizedBox(
+                          //                 height: 10,
+                          //               ),
+                          //               Expanded(
+                          //                 child: ListView.separated(
+                          //                   itemCount: 2,
+                          //                   itemBuilder: (BuildContext context,
+                          //                       int index) {
+                          //                     return ListTile(
+                          //                         onTap: () {
+                          //                           Navigator.pop(context);
+                          //                           index == 0
+                          //                               ? showDialog(
+                          //                                   context: context,
+                          //                                   builder: (_) =>
+                          //                                       StartCallDialog(
+                          //                                     callerId:
+                          //                                         _profileController
+                          //                                             .myProfile
+                          //                                             .uid,
+                          //                                     recipientId:
+                          //                                         args.uid,
+                          //                                   ),
+                          //                                 )
+                          //                               : showDialog(
+                          //                                   context: context,
+                          //                                   builder: (_) =>
+                          //                                       JoinCallDialog(
+                          //                                     userId: args.uid,
+                          //                                     username:
+                          //                                         args.username,
+                          //                                   ),
+                          //                                 );
+
+                          //                           ;
+                          //                         },
+                          //                         leading:
+                          //                             Icon(Icons.call_rounded),
+                          //                         title: Text(
+                          //                           index == 0
+                          //                               ? 'Start an Instant Meeting'
+                          //                               : 'Join Meeting',
+                          //                           style: const TextStyle(
+                          //                             fontSize: 18,
+                          //                             fontWeight:
+                          //                                 FontWeight.w700,
+                          //                           ),
+                          //                         ));
+                          //                   },
+                          //                   separatorBuilder:
+                          //                       (BuildContext context,
+                          //                               int index) =>
+                          //                           const Divider(),
+                          //                 ),
+                          //               ),
+                          //             ],
+                          //           ),
+                          //         );
+                          //       },
+                          //     );
+                          //     // Get.to(() => CallInvitationPage(
+                          //     //       callerId:
+                          //     //           _profileController.myProfile.uid,
+                          //     //       recipientId: args.uid,
+                          //     //       username: args.username,
+                          //     //     ));
+                          //   },
+                          //   icon: SvgPicture.asset('assets/svgs/call.svg'),
+                          // ),
+                        ],
                       ),
                     ),
                     contentPadding: const EdgeInsets.only(left: 0),
@@ -349,12 +453,12 @@ class _ChatRoomScreenState extends State<ChatRoomScreen> {
                                                                         width:
                                                                             3),
                                                                     Text(
-                                                                      widget.market!.category!.length >
-                                                                              40
-                                                                          ? '${widget.market!.category!.substring(0, 40)}...'
-                                                                          : widget
-                                                                              .market!
-                                                                              .category!,
+                                                                      widget.market?.category !=
+                                                                              null
+                                                                          ? widget.market!.category!.length > 40
+                                                                              ? '${widget.market!.category!.substring(0, 40)}...'
+                                                                              : widget.market!.category!
+                                                                          : 'Other',
                                                                       style:
                                                                           const TextStyle(
                                                                         fontWeight:
@@ -581,119 +685,266 @@ class _ChatRoomScreenState extends State<ChatRoomScreen> {
                                 return Column(
                                   children: <Widget>[
                                     InkWell(
+                                      onTap: () {
+                                        // message.messageText
+                                        //         .toString()
+                                        //         .contains('ccaalliidd')
+                                        //     ? Navigator.push(
+                                        //         context,
+                                        //         MaterialPageRoute(
+                                        //           builder:
+                                        //               (BuildContext context) =>
+                                        //                   CallPage(
+                                        //             callID: message.messageText!
+                                        //                 .substring(
+                                        //                     0,
+                                        //                     message.messageText!
+                                        //                         .indexOf(
+                                        //                             'ccaalliidd')),
+                                        //             userId: _profileController
+                                        //                 .myProfile.uid,
+                                        //             username: _profileController
+                                        //                 .myProfile.username,
+                                        //           ),
+                                        //         ),
+                                        //       )
+                                        //     : null;
+                                      },
                                       onLongPress: () {
-                                        FocusScopeNode currentFocus =
-                                            FocusScope.of(context);
-                                        if (!currentFocus.hasPrimaryFocus) {
-                                          currentFocus.unfocus();
-                                        }
+                                        if (message.messageText
+                                            .toString()
+                                            .contains('ccaalliidd')) {
+                                          FocusScopeNode currentFocus =
+                                              FocusScope.of(context);
+                                          if (!currentFocus.hasPrimaryFocus) {
+                                            currentFocus.unfocus();
+                                          }
 
-                                        showDialog(
-                                          context: context,
-                                          builder: (BuildContext context) =>
-                                              AlertDialog(
-                                            content: Column(
-                                              mainAxisSize: MainAxisSize.min,
-                                              children: <Widget>[
-                                                ListTile(
-                                                  onTap: () async {
-                                                    navigateTo(context);
-                                                    await Clipboard.setData(
-                                                      ClipboardData(
-                                                        text: message
-                                                            .messageText!,
-                                                      ),
-                                                    );
-                                                    // ignore: use_build_context_synchronously
-                                                    showSnackBar(context,
-                                                        message:
-                                                            'Text Copied!');
-                                                  },
-                                                  contentPadding:
-                                                      EdgeInsets.zero,
-                                                  title: const TextWidget(
-                                                    text: 'Copy Text',
+                                          showDialog(
+                                            context: context,
+                                            builder: (BuildContext context) =>
+                                                AlertDialog(
+                                              content: Column(
+                                                mainAxisSize: MainAxisSize.min,
+                                                children: <Widget>[
+                                                  ListTile(
+                                                    onTap: () async {
+                                                      navigateTo(context);
+                                                      await Clipboard.setData(
+                                                        ClipboardData(
+                                                          text: message
+                                                              .messageText!,
+                                                        ),
+                                                      );
+                                                      // ignore: use_build_context_synchronously
+                                                      showSnackBar(context,
+                                                          message:
+                                                              'Text Copied!');
+                                                    },
+                                                    contentPadding:
+                                                        EdgeInsets.zero,
+                                                    title: const TextWidget(
+                                                      text: 'Copy Text',
+                                                    ),
                                                   ),
-                                                ),
-                                                ListTile(
-                                                  onTap: () {
-                                                    Navigator.of(context)
-                                                        .pop(context);
-                                                    showDialog(
-                                                      context: context,
-                                                      builder: (BuildContext
-                                                          context) {
-                                                        return AlertDialog(
-                                                          title: const TextWidget(
-                                                              text:
-                                                                  'Delete this Message'),
-                                                          actions: <Widget>[
-                                                            TextButton(
-                                                                onPressed: () {
-                                                                  Navigator.of(
-                                                                          context)
-                                                                      .pop();
-                                                                },
-                                                                child:
-                                                                    const TextWidget(
-                                                                  text:
-                                                                      'Cancel',
-                                                                )),
-                                                            TextButton(
-                                                                onPressed: () {
-                                                                  Navigator.of(
-                                                                          context)
-                                                                      .pop();
-                                                                  controller
-                                                                      .deleteMessage(
-                                                                          message
-                                                                              .messageId);
-                                                                },
-                                                                child:
-                                                                    const TextWidget(
-                                                                  text:
-                                                                      'Delete',
-                                                                  color:
-                                                                      primaryColorLT,
-                                                                ))
-                                                          ],
-                                                        );
-                                                      },
-                                                    );
-                                                    // optionsDialog(context, () {
-                                                    //   // _isLoading = true;
-                                                    //   print('sdf');
-                                                    //   Navigator.pop(context);
-                                                    //   controller.deleteMessage(
-                                                    //       message.messageId);
-                                                    //   // deleteMessage(
-                                                    //   //     _messages[reversedIndex],
-                                                    //   //     reversedIndex);
-                                                    //   // if (reversedIndex ==
-                                                    //   //     _messages.length - 1) {
-                                                    //   //   DeleteLastMessage(_messages[
-                                                    //   //       reversedIndex]);
-                                                    //   // }
-                                                    // });
-                                                  },
-                                                  contentPadding:
-                                                      EdgeInsets.zero,
-                                                  title: const TextWidget(
-                                                    text: 'Delete Message',
-                                                    color: Colors.red,
-                                                  ),
-                                                )
-                                              ],
+                                                  ListTile(
+                                                    onTap: () {
+                                                      Navigator.of(context)
+                                                          .pop(context);
+                                                      showDialog(
+                                                        context: context,
+                                                        builder: (BuildContext
+                                                            context) {
+                                                          return AlertDialog(
+                                                            title: const TextWidget(
+                                                                text:
+                                                                    'Delete this Message'),
+                                                            actions: <Widget>[
+                                                              TextButton(
+                                                                  onPressed:
+                                                                      () {
+                                                                    Navigator.of(
+                                                                            context)
+                                                                        .pop();
+                                                                  },
+                                                                  child:
+                                                                      const TextWidget(
+                                                                    text:
+                                                                        'Cancel',
+                                                                  )),
+                                                              TextButton(
+                                                                  onPressed:
+                                                                      () {
+                                                                    Navigator.of(
+                                                                            context)
+                                                                        .pop();
+                                                                    controller.deleteMessage(
+                                                                        message
+                                                                            .messageId);
+                                                                  },
+                                                                  child:
+                                                                      const TextWidget(
+                                                                    text:
+                                                                        'Delete',
+                                                                    color:
+                                                                        primaryColorLT,
+                                                                  ))
+                                                            ],
+                                                          );
+                                                        },
+                                                      );
+                                                      // optionsDialog(context, () {
+                                                      //   // _isLoading = true;
+                                                      //   print('sdf');
+                                                      //   Navigator.pop(context);
+                                                      //   controller.deleteMessage(
+                                                      //       message.messageId);
+                                                      //   // deleteMessage(
+                                                      //   //     _messages[reversedIndex],
+                                                      //   //     reversedIndex);
+                                                      //   // if (reversedIndex ==
+                                                      //   //     _messages.length - 1) {
+                                                      //   //   DeleteLastMessage(_messages[
+                                                      //   //       reversedIndex]);
+                                                      //   // }
+                                                      // });
+                                                    },
+                                                    contentPadding:
+                                                        EdgeInsets.zero,
+                                                    title: const TextWidget(
+                                                      text: 'Delete Message',
+                                                      color: Colors.red,
+                                                    ),
+                                                  )
+                                                ],
+                                              ),
                                             ),
-                                          ),
-                                        );
+                                          );
+                                        }
 
                                         // deleteMessage(_messages[reversedIndex]);
                                       },
-                                      child: ChatBox(
-                                        message,
-                                        myUid: _profileController.myProfile.uid,
-                                      ),
+                                      child: message.messageText
+                                              .toString()
+                                              .contains('ccaalliidd')
+                                          ? Column(
+                                              children: <Widget>[
+                                                Row(
+                                                  mainAxisAlignment:
+                                                      MainAxisAlignment.center,
+                                                  children: <Widget>[
+                                                    Container(
+                                                        padding:
+                                                            const EdgeInsets
+                                                                .symmetric(
+                                                                horizontal: 20,
+                                                                vertical: 10),
+                                                        decoration: BoxDecoration(
+                                                            border: Border.all(
+                                                                width: 4,
+                                                                color: Colors
+                                                                    .white),
+                                                            borderRadius:
+                                                                BorderRadius
+                                                                    .circular(
+                                                                        10),
+                                                            color: Colors
+                                                                .white70
+                                                                .withAlpha(
+                                                                    120)),
+                                                        child: Wrap(
+                                                          crossAxisAlignment:
+                                                              WrapCrossAlignment
+                                                                  .center,
+                                                          alignment:
+                                                              WrapAlignment.end,
+                                                          children: <Widget>[
+                                                            Stack(
+                                                                children: <Widget>[
+                                                                  const SizedBox(
+                                                                    height: 50,
+                                                                    width: 50,
+                                                                  ),
+                                                                  UserAvatarWithBadge(
+                                                                    user: args,
+                                                                    height:
+                                                                        32.0,
+                                                                    width: 32.0,
+                                                                    radius:
+                                                                        50.0,
+                                                                    placeHolder:
+                                                                        Icons
+                                                                            .person,
+                                                                    iconSize:
+                                                                        36.0,
+                                                                  ),
+                                                                  Positioned(
+                                                                    left: 15,
+                                                                    top: 15,
+                                                                    child:
+                                                                        UserAvatarWithBadge(
+                                                                      user: _profileController
+                                                                          .myProfile,
+                                                                      height:
+                                                                          32.0,
+                                                                      width:
+                                                                          32.0,
+                                                                      radius:
+                                                                          50.0,
+                                                                      placeHolder:
+                                                                          Icons
+                                                                              .person,
+                                                                      iconSize:
+                                                                          36.0,
+                                                                    ),
+                                                                  ),
+                                                                ]),
+                                                            const SizedBox(
+                                                              width: 10,
+                                                            ),
+                                                            Container(
+                                                              padding:
+                                                                  const EdgeInsets
+                                                                      .all(10),
+                                                              decoration: BoxDecoration(
+                                                                  color: Colors
+                                                                      .green
+                                                                      .withAlpha(
+                                                                          50),
+                                                                  borderRadius:
+                                                                      BorderRadius
+                                                                          .circular(
+                                                                              30)),
+                                                              child: const Icon(
+                                                                Icons.call,
+                                                                color: Colors
+                                                                    .green,
+                                                              ),
+                                                            ),
+                                                            const SizedBox(
+                                                              width: 10,
+                                                            ),
+                                                            const Text(
+                                                              'Join Call',
+                                                              style: TextStyle(
+                                                                  fontWeight:
+                                                                      FontWeight
+                                                                          .w700),
+                                                            ),
+                                                          ],
+                                                        )),
+                                                  ],
+                                                ),
+                                                const SizedBox(
+                                                  height: 10,
+                                                )
+                                              ],
+                                            )
+                                          : ChatBox(
+                                              message,
+                                              myUid: _profileController
+                                                  .myProfile.uid,
+                                            ),
                                     ),
                                   ],
                                 );
@@ -872,3 +1123,226 @@ Future optionsDialog(BuildContext context, Function() ontap) {
         );
       });
 }
+
+class StartCallDialog extends StatelessWidget {
+  final String callerId;
+  final String recipientId;
+
+  const StartCallDialog(
+      {super.key, required this.callerId, required this.recipientId});
+  @override
+  Widget build(BuildContext context) {
+    final ProfileController profileController = Get.find();
+    final ChatController chatController = Get.find();
+    return AlertDialog(
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(20), // Set the corner radius here
+      ),
+      title: const Text(
+        'Start Instant Call',
+        style: TextStyle(fontWeight: FontWeight.w700),
+      ),
+      content: FutureBuilder(
+        future: startCall(<String, dynamic>{
+          'callerId': callerId,
+          'recipientId': recipientId,
+        }),
+        builder: (BuildContext context, AsyncSnapshot<String> snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return const SizedBox(
+              height: 40,
+              child: Center(
+                child: CircularProgressIndicator(),
+              ),
+            );
+          } else if (snapshot.hasError) {
+            return const Text('Failed to start call: An Error Occured');
+          } else {
+            final String? callId = snapshot.data;
+            return Column(
+              mainAxisSize: MainAxisSize.min,
+              children: <Widget>[
+                Text('Call ID: $callId'),
+                const SizedBox(
+                  height: 20,
+                ),
+                Row(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: <Widget>[
+                    GestureDetector(
+                        onTap: () {
+                          chatController.addNewChat(
+                            <String, dynamic>{
+                              'senderUid': profileController.myProfile.uid,
+                              'receiverUid': chatargs.uid,
+                              'messageText': '$callId' 'ccaalliidd'
+                            },
+                            chatargs,
+                          );
+                          Get.back();
+                          // print(chatargs);
+                        },
+                        child: Container(
+                            padding: const EdgeInsetsDirectional.symmetric(
+                                horizontal: 20, vertical: 14),
+                            decoration: BoxDecoration(
+                                color: primaryColorLT,
+                                borderRadius: BorderRadius.circular(10)),
+                            child: const Text(
+                              'Send Call ID',
+                              style: TextStyle(
+                                  color: Colors.white,
+                                  fontWeight: FontWeight.w700),
+                            ))),
+                    const SizedBox(
+                      width: 10,
+                    ),
+                    Container(
+                      decoration: BoxDecoration(
+                          color: backgroundColor,
+                          borderRadius: BorderRadius.circular(10)),
+                      child: IconButton(
+                        onPressed: () {
+                          // Copy call ID to clipboard
+                          Clipboard.setData(ClipboardData(text: callId!));
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            const SnackBar(
+                              content: Text('Call ID copied to clipboard'),
+                              duration: Duration(seconds: 1),
+                            ),
+                          );
+                        },
+                        icon: const Icon(Icons.content_copy),
+                      ),
+                    ),
+                  ],
+                )
+              ],
+            );
+          }
+        },
+      ),
+    );
+  }
+
+  Future<String> startCall(Map<String, dynamic> data) async {
+    final String? token = sandBox.read(Constants.ACCESS_TOKEN);
+    // Call your backend API to start the call
+    final http.Response response = await http.post(
+      Uri.parse(
+          'https://orca-app-5dg8w.ondigitalocean.app/share/initiate-call'),
+      headers: <String, String>{
+        'Content-Type': 'application/json',
+        'Authorization': 'bearer $token',
+        'Accept': 'application/json',
+      },
+      body: json.encode(data),
+    );
+
+    if (response.statusCode == 200) {
+      // Parse the response to get the call ID
+      // final data = json.decode(response.body);
+      final ApiResponseModel data =
+          ApiResponseModel.fromMap(jsonDecode(response.body));
+      return data.data['callId'] as String;
+    } else {
+      throw Exception('Failed to start call');
+    }
+  }
+}
+
+// class JoinCallDialog extends StatelessWidget {
+//   final TextEditingController _callIdController = TextEditingController();
+//   final String userId;
+//   final String username;
+
+//   JoinCallDialog({super.key, required this.userId, required this.username});
+
+//   @override
+//   Widget build(BuildContext context) {
+//     return AlertDialog(
+//       shape: RoundedRectangleBorder(
+//         borderRadius: BorderRadius.circular(20), // Set the corner radius here
+//       ),
+//       title: const Text(
+//         'Join Call',
+//         style: TextStyle(fontWeight: FontWeight.w700),
+//       ),
+//       content: Column(
+//         mainAxisSize: MainAxisSize.min,
+//         children: [
+//           Container(
+//             padding: const EdgeInsets.symmetric(horizontal: 15),
+//             decoration: BoxDecoration(
+//               color: const Color.fromRGBO(244, 244, 244, 1), // Background color
+//               borderRadius: BorderRadius.circular(10.0), // Border radius
+//               border: Border.all(
+//                 color: const Color.fromRGBO(224, 224, 224, 1), // Border color
+//                 width: 1.0, // Border width
+//               ),
+//             ),
+//             child: TextField(
+//               controller: _callIdController,
+//               decoration: const InputDecoration(
+//                 hintText: 'Enter Call ID',
+//                 border: InputBorder.none,
+//               ),
+//             ),
+//           ),
+//           SizedBox(
+//             height: 20,
+//           ),
+//           Container(
+//             child: Row(
+//               crossAxisAlignment: CrossAxisAlignment.center,
+//               mainAxisAlignment: MainAxisAlignment.center,
+//               children: [
+//                 GestureDetector(
+//                     onTap: () {
+//                       final String callId = _callIdController.text.trim();
+//                       // Navigate to the call page with the call ID
+//                       Navigator.push(
+//                         context,
+//                         MaterialPageRoute(
+//                           builder: (BuildContext context) => CallPage(
+//                             callID: callId,
+//                             userId: userId,
+//                             username: username,
+//                           ),
+//                         ),
+//                       );
+//                     },
+//                     child: Container(
+//                         padding: const EdgeInsetsDirectional.symmetric(
+//                             horizontal: 20, vertical: 14),
+//                         decoration: BoxDecoration(
+//                             color: primaryColorLT,
+//                             borderRadius: BorderRadius.circular(10)),
+//                         child: const Text(
+//                           'Join',
+//                           style: TextStyle(
+//                               color: Colors.white, fontWeight: FontWeight.w700),
+//                         ))),
+//                 SizedBox(
+//                   width: 10,
+//                 ),
+//                 Container(
+//                   decoration: BoxDecoration(
+//                       color: backgroundColor,
+//                       borderRadius: BorderRadius.circular(10)),
+//                   child: IconButton(
+//                     onPressed: () {
+//                       Navigator.pop(context);
+//                     },
+//                     icon: const Icon(Icons.close),
+//                   ),
+//                 ),
+//               ],
+//             ),
+//           )
+//         ],
+//       ),
+//     );
+//   }
+// }

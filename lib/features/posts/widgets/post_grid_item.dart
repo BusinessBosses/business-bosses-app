@@ -1,6 +1,9 @@
+import 'package:business_bosses_v2/features/home/controller/home_controller.dart';
 import 'package:business_bosses_v2/features/posts/controllers/create_post_controller.dart';
 import 'package:business_bosses_v2/features/posts/models/post_model.dart';
 import 'package:business_bosses_v2/features/posts/presentation/boost_post_screen.dart';
+import 'package:business_bosses_v2/features/posts/presentation/create_poll_screen.dart';
+import 'package:business_bosses_v2/features/profile/controller/profile_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_linkify/flutter_linkify.dart';
 import 'package:get/get.dart';
@@ -21,6 +24,8 @@ class PostGridItem extends StatelessWidget {
   // final Function(String postId)? onDeletePost;
   final bool hasMore;
   final Function? onTap;
+  final ProfileController _profileController = Get.find();
+  final HomeController _homeController = Get.find();
 
   PostGridItem({
     Key? key,
@@ -31,7 +36,7 @@ class PostGridItem extends StatelessWidget {
   }) : super(key: key);
 
   List<PopupMenuEntry<String>> getPopupItems() {
-    List<PopupMenuEntry<String>> items = [];
+    List<PopupMenuEntry<String>> items = <PopupMenuEntry<String>>[];
 
     if (post.livedata == null) {
       items.add(
@@ -67,6 +72,35 @@ class PostGridItem extends StatelessWidget {
         ),
       ),
     );
+
+    return items;
+  }
+
+  List<PopupMenuEntry<String>> getRepostItems() {
+    List<PopupMenuEntry<String>> items = <PopupMenuEntry<String>>[];
+
+    items.add(
+      const PopupMenuItem<String>(
+        value: 'Share',
+        child: Text(
+          'Share Post',
+          style: bodyText2,
+        ),
+      ),
+    );
+    items.add(const PopupMenuDivider(height: 0.0));
+
+    items.add(
+      const PopupMenuItem<String>(
+        value: 'Undo',
+        child: Text(
+          'Undo Repost',
+          style: bodyText2,
+        ),
+      ),
+    );
+
+    // items.add(const PopupMenuDivider(height: 0.0));
 
     return items;
   }
@@ -169,7 +203,8 @@ class PostGridItem extends StatelessWidget {
                   ),
                 ),
               ),
-            if (hasMore)
+            if (hasMore &&
+                (_profileController.myProfile.uid == post.user?.uid)) ...<Widget>[
               Positioned(
                 top: 10.0,
                 right: 10.0,
@@ -189,12 +224,18 @@ class PostGridItem extends StatelessWidget {
                     ),
                     onSelected: (String val) {
                       if (val == 'Edit') {
-                        Get.to(() => CreatePostScreen(
-                              postId: post.postId,
-                              post: post.title,
-                              postDetail: post,
-                              images: post.images,
-                            ));
+                        if (post.isPolled != null && post.isPolled == true) {
+                          Get.to(() => CreatePollScreen(
+                                postDetail: post,
+                              ));
+                        } else {
+                          Get.to(() => CreatePostScreen(
+                                postId: post.postId,
+                                post: post.title,
+                                postDetail: post,
+                                images: post.images,
+                              ));
+                        }
                       } else if (val == 'Delete') {
                         _showDialog(context);
                       } else if (val == 'Boost') {
@@ -209,6 +250,35 @@ class PostGridItem extends StatelessWidget {
                   ),
                 ),
               )
+            ] else if (hasMore) ...<Widget>[
+              Positioned(
+                top: 10.0,
+                right: 10.0,
+                child: Container(
+                  decoration: BoxDecoration(
+                    color: Colors.black26,
+                    borderRadius: BorderRadius.circular(30.0),
+                  ),
+                  height: 26.0,
+                  width: 26.0,
+                  child: MyPopupMenuButton(
+                    popupItems: getRepostItems(),
+                    icon: const Icon(
+                      Icons.more_vert,
+                      color: Colors.white,
+                      size: 16.0,
+                    ),
+                    onSelected: (String val) {
+                      if (val == 'Share') {
+                        _sharePost();
+                      } else if (val == 'Undo') {
+                        _repost();
+                      }
+                    },
+                  ),
+                ),
+              )
+            ]
           ],
         ),
       ),
@@ -250,5 +320,18 @@ class PostGridItem extends StatelessWidget {
         ],
       ),
     );
+  }
+
+  Future<void> _repost() async {
+    _homeController.postRepost(_profileController.myProfile.uid, post.postId,
+        'post', post.timestamp, post.user!.uid, post.oldtimestamp);
+  }
+
+  void _sharePost() {
+    String message =
+        'Have a look at ${post.user!.username}\'s post on Business Bosses\n'
+        'https://vm.businessbosses.co.uk/share/post';
+    logEvent(post.postId, '===========>>>>>>>>>>>myProfile');
+    socialShare(message);
   }
 }

@@ -1,12 +1,12 @@
 import 'package:business_bosses_v2/features/profile/controller/profile_controller.dart';
+import 'package:business_bosses_v2/features/promotions/widgets/coinpopup.dart';
+import 'package:business_bosses_v2/features/withdrawal/presentation/depositscreen.dart';
+import 'package:business_bosses_v2/features/withdrawal/presentation/withdrawalscreen.dart';
 import 'package:business_bosses_v2/utils/theme/theme.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
-
-import '../../../action/action.dart';
-import '../../../navigation/routes.dart';
 
 class PromotionScreen extends StatefulWidget {
   static const String routeName = '/promotion-screen';
@@ -19,395 +19,161 @@ class PromotionScreen extends StatefulWidget {
 }
 
 class _PromotionScreenState extends State<PromotionScreen> {
+  // ignore: unused_field
   late String _referralId;
   final ProfileController _profileController = Get.find();
+  List<String> coinAmounts = <String>['100', '200', '500', '1000', '10000'];
+  List<String> coinPrices = <String>['0.99', '1.99', '4.99', '9.99', '99.99'];
+  List<String> coinIDs = <String>[
+    '100_bb_coins',
+    '200_bb_coins',
+    '500_bb_coins',
+    '1000_bb_coins',
+    '10000_bb_coins'
+  ];
+  final ScrollController scrollController = ScrollController();
+  late PageController _pageController;
+  int _currentIndex = 0;
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     _referralId = _profileController.myProfile.inviteId!;
+    _pageController = PageController(initialPage: _currentIndex);
   }
 
   @override
   Widget build(BuildContext context) {
+    // ignore: unused_local_variable
     ProfileController profileController = Get.find();
     return Scaffold(
-      backgroundColor: Colors.white,
-      appBar: AppBar(
-        leading: IconButton(
-          onPressed: () {
-            Navigator.pop(context);
-          },
-          icon: SvgPicture.asset('assets/svgs/backbutton.svg'),
-        ),
-        centerTitle: true,
-        title: Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: <Widget>[
-            Container(
-                padding:
-                    const EdgeInsets.only(left: 8, right: 8, top: 5, bottom: 5),
+        appBar: AppBar(
+            leading: IconButton(
+              onPressed: () {
+                Navigator.pop(context);
+              },
+              icon: SvgPicture.asset('assets/svgs/backbutton.svg'),
+            ),
+            actions: <Widget>[
+              GestureDetector(
+                onTap: () {
+                  showDialog(
+                    context: context,
+                    builder: (BuildContext context) => const CoinPopup(),
+                  );
+                },
+                child: Padding(
+                  padding: const EdgeInsets.only(right: 15.0),
+                  child: SvgPicture.asset(
+                    'assets/svgs/info.svg',
+                    height: 22,
+                  ),
+                ),
+              )
+            ],
+            centerTitle: true,
+            title: Container(
                 decoration: BoxDecoration(
-                  color: backgroundcolorinterface,
-                  borderRadius: BorderRadius.circular(50),
-                ),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: <Widget>[
-                    const Text(
-                      'My Coin Balance',
-                      style:
-                          TextStyle(fontWeight: FontWeight.w600, fontSize: 14),
-                    ),
-                    const SizedBox(
-                      width: 2,
-                    ),
-                    SvgPicture.asset(
-                      'assets/svgs/coin.svg',
-                      height: 30,
-                    ),
-                    const SizedBox(
-                      width: 2,
-                    ),
-                    Text(
-                      '${_profileController.myProfile.coinscount ?? 0}',
-                      style: const TextStyle(
-                        color: textColor,
-                        fontSize: 14,
-                        fontWeight: FontWeight.w600,
+                    color: backgroundcolorinterface,
+                    borderRadius: BorderRadius.circular(50)),
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+                child: Wrap(
+                    crossAxisAlignment: WrapCrossAlignment.center,
+                    children: <Widget>[
+                      const Text(
+                        'My Coin Balance',
+                        style: TextStyle(
+                            fontWeight: FontWeight.w600, fontSize: 14),
                       ),
-                    ),
-                  ],
-                )),
-            const SizedBox(
-              width: 30,
-            ),
-          ],
-        ),
-      ),
-      body: SingleChildScrollView(
-        padding: const EdgeInsets.all(0.0),
-        child: Column(
+                      const SizedBox(
+                        width: 5,
+                      ),
+                      SvgPicture.asset('assets/svgs/coin.svg'),
+                      const SizedBox(
+                        width: 3,
+                      ),
+                      Text(
+                        '${_profileController.myProfile.coinscount ?? 0}',
+                        style: const TextStyle(
+                          color: textColor,
+                          fontSize: 14,
+                          fontWeight: FontWeight.w600,
+                        ),
+                      ),
+                    ]))),
+        backgroundColor: Colors.white,
+        body: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
-            const SizedBox(
-              height: 20,
+            Container(
+              color: Colors.white,
+              child: Padding(
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 15, vertical: 10),
+                child: Align(
+                  alignment: Alignment.topCenter,
+                  child: CupertinoSlidingSegmentedControl<int>(
+                    backgroundColor: Colors.grey[200]!,
+                    padding: const EdgeInsets.all(5),
+                    children: <int, Widget>{
+                      0: Text('Earn',
+                          style: _currentIndex == 0
+                              ? const TextStyle(fontWeight: FontWeight.bold)
+                              : const TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  color: Colors.grey)),
+                      1: Text('Withdraw',
+                          style: _currentIndex == 1
+                              ? const TextStyle(fontWeight: FontWeight.bold)
+                              : const TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  color: Colors.grey)),
+                    },
+                    onValueChanged: (int? value) {
+                      if (value != null) {
+                        setState(() {
+                          _currentIndex = value;
+                          _pageController.animateToPage(
+                            _currentIndex,
+                            duration: const Duration(milliseconds: 300),
+                            curve: Curves.ease,
+                          );
+                        });
+                      }
+                    },
+                    groupValue: _currentIndex,
+                  ),
+                ),
+              ),
             ),
-            const Padding(
-              padding: EdgeInsets.only(left: 30, right: 30),
+            const SizedBox(
+              height: 5,
+            ),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 15.0),
               child: Text(
-                'Give Coins to your favorite Bosses and receive them from other Bosses who love your work!',
-                textAlign: TextAlign.center,
-                style: TextStyle(
-                    fontSize: 15,
-                    color: textColor,
-                    fontWeight: FontWeight.w700),
+                _currentIndex == 0 ? 'Earn Coins' : 'Withdraw Coins',
+                style:
+                    const TextStyle(fontWeight: FontWeight.w700, fontSize: 25),
               ),
             ),
-            Container(
-                width: MediaQuery.of(context).size.width,
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 120, vertical: 50),
-                decoration: const BoxDecoration(
-                  color: Colors.white,
-                ),
-                child: Column(
-                  children: <Widget>[
-                    Image.asset('assets/images/invitepicture.png')
-                  ],
-                )),
-            Container(
-                width: MediaQuery.of(context).size.width,
-                decoration: const BoxDecoration(
-                  color: Colors.white,
-                ),
-                child: Column(
-                  children: <Widget>[
-                    const Text(
-                      'Earn Coins!',
-                      style:
-                          TextStyle(fontWeight: FontWeight.w700, fontSize: 20),
-                    ),
-                    const Text(
-                      'Invite Friends',
-                      style: TextStyle(
-                          fontSize: 25,
-                          color: primaryColorLT,
-                          fontWeight: FontWeight.w700),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.only(left: 20, right: 20),
-                      child: Wrap(
-                        alignment: WrapAlignment.center,
-                        children: <Widget>[
-                          const Text(
-                            'to join Business Bosses and get 20',
-                            style: TextStyle(
-                              fontSize: 15,
-                              color: textColor,
-                              fontWeight: FontWeight.w700,
-                            ),
-                          ),
-                          const SizedBox(width: 5),
-                          SvgPicture.asset(
-                            'assets/svgs/coin.svg',
-                            height: 20,
-                            width: 20,
-                          ),
-                          const SizedBox(width: 5),
-                          // const Text(
-                          //   'for each friend.',
-                          //   style: TextStyle(
-                          //     fontSize: 15,
-                          //     color: textColor,
-                          //     fontWeight: FontWeight.w700,
-                          //   ),
-                          // ),
-                        ],
-                      ),
-                    ),
-                    const SizedBox(
-                      height: 3,
-                    ),
-                    GestureDetector(
-                      onTap: () {
-                        Get.toNamed(Routes.premiumscreen);
-                      },
-                      child: Column(
-                        children: <Widget>[
-                          const SizedBox(
-                            height: 10,
-                          ),
-                          Container(
-                              decoration: BoxDecoration(
-                                boxShadow: <BoxShadow>[
-                                  BoxShadow(
-                                    color: Colors.black.withOpacity(0.09),
-                                    blurRadius: 500.0,
-                                    spreadRadius: 0.0,
-                                  ),
-                                ],
-                              ),
-                              child: !profileController.myProfile.isSubscribed
-                                  ? Container(
-                                      decoration: BoxDecoration(
-                                        color: backgroundColor,
-                                        borderRadius:
-                                            BorderRadius.circular(100.0),
-                                      ),
-                                      child: IntrinsicWidth(
-                                        child: Padding(
-                                          padding: const EdgeInsets.symmetric(
-                                              vertical: 8, horizontal: 15),
-                                          child: Row(
-                                            mainAxisAlignment:
-                                                MainAxisAlignment.center,
-                                            children: <Widget>[
-                                              const Text(
-                                                'Subscribe to Premium',
-                                                style: TextStyle(
-                                                  fontWeight: FontWeight.w700,
-                                                  fontSize: 15,
-                                                  color: textColor,
-                                                ),
-                                              ),
-                                              const SizedBox(
-                                                width: 15,
-                                              ),
-                                              SvgPicture.asset(
-                                                'assets/svgs/nextbutton.svg',
-                                                color: primaryColorLT,
-                                              ),
-                                            ],
-                                          ),
-                                        ),
-                                      ),
-                                    )
-                                  : Container()),
-                        ],
-                      ),
-                    ),
-                    const SizedBox(
-                      height: 20,
-                    )
-                  ],
-                )),
-            const SizedBox(
-              width: double.infinity,
-              height: 1.5,
-              child: ColoredBox(color: backgroundcolorinterface),
-            ),
-            InkWell(
-              onTap: () {
-                Clipboard.setData(ClipboardData(text: _referralId))
-                    .then((value) {
-                  showSnackBar(context,
-                      message: 'Your reference id is copied to clipboard.');
-                });
-              },
-              child: Ink(
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 20.0, vertical: 8.0),
-                decoration: const BoxDecoration(
-                  color: Colors.white,
-                ),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: <Widget>[
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: <Widget>[
-                        Text(
-                          'Invite Id:',
-                          textAlign: TextAlign.center,
-                          style:
-                              Theme.of(context).textTheme.bodyLarge?.copyWith(
-                                    fontWeight: FontWeight.normal,
-                                    fontSize: 12,
-                                  ),
-                        ),
-                        Text(
-                          '$_referralId ',
-                          textAlign: TextAlign.center,
-                          style: Theme.of(context)
-                              .textTheme
-                              .bodyLarge
-                              ?.copyWith(
-                                  fontWeight: FontWeight.normal, fontSize: 12),
-                        ),
-                      ],
-                    ),
-                    const SizedBox(
-                      width: 20,
-                    ),
-                    // ignore: unnecessary_null_comparison
-                    _referralId == null
-                        ? const Icon(
-                            Icons.content_copy,
-                            size: 20.0,
-                            color: Colors.white,
-                          )
-                        : const Icon(
-                            Icons.content_copy,
-                            size: 20.0,
-                          ),
-                    const SizedBox(
-                      width: 20,
-                    ),
-                    const SizedBox(width: 8.0),
-                    ElevatedButton(
-                      style: ElevatedButton.styleFrom(
-                          backgroundColor: backgroundcolorinterface,
-                          minimumSize: const Size(
-                              150, 45) // put the width and height you want
-                          ),
-                      onPressed: () {
-                        _shareWithFriends();
-                      },
-                      child: Row(
-                        mainAxisSize: MainAxisSize.min,
-                        children: <Widget>[
-                          // ignore: unnecessary_null_comparison
-                          _referralId == null
-                              ? const Text(
-                                  'Create InviteId',
-                                  style: TextStyle(
-                                      color: Colors.white,
-                                      fontWeight: FontWeight.w600,
-                                      fontSize: 15),
-                                )
-                              : const Text(
-                                  'Invite',
-                                  style: TextStyle(
-                                      fontSize: 15,
-                                      color: textColor,
-                                      fontWeight: FontWeight.w500),
-                                ),
-                          const SizedBox(
-                            width: 5,
-                          ),
-                          SvgPicture.asset(
-                            'assets/svgs/invite.svg',
-                            color: textColor,
-                          )
-                        ],
-                      ),
-                    ),
-                  ],
-                ),
+            Expanded(
+              child: PageView(
+                controller: _pageController,
+                onPageChanged: (int index) {
+                  setState(() {
+                    _currentIndex = index;
+                  });
+                },
+                children: const <Widget>[
+                  DepositsScreen(),
+                  WithdrawalScreen(),
+                ],
               ),
             ),
-            const SizedBox(
-              width: double.infinity,
-              height: 1.5,
-              child: ColoredBox(color: backgroundcolorinterface),
-            ),
-            GestureDetector(
-              onTap: () {},
-              child: Container(
-                padding: const EdgeInsets.symmetric(
-                    horizontal: 20.0, vertical: 23.0),
-                decoration: const BoxDecoration(
-                  color: Colors.white,
-                ),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: <Widget>[
-                    Text(
-                      'Accepted Invitation:',
-                      textAlign: TextAlign.center,
-                      style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                            fontWeight: FontWeight.normal,
-                            fontSize: 15,
-                          ),
-                    ),
-                    Text(
-                      '${_profileController.myProfile.invitations ?? 0}',
-                      textAlign: TextAlign.center,
-                      style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                            fontWeight: FontWeight.normal,
-                          ),
-                    ),
-                  ],
-                ),
-              ),
-            ),
-            const SizedBox(
-              width: double.infinity,
-              height: 1.5,
-              child: ColoredBox(color: backgroundcolorinterface),
-            ),
-            const SizedBox(
-              height: 20,
-            ),
-            GestureDetector(
-              onTap: () {
-                Get.toNamed(Routes.marketPlace);
-              },
-              child: const Text(
-                'Sell your product or service',
-                style: TextStyle(
-                  fontWeight: FontWeight.w700,
-                  decoration: TextDecoration.underline,
-                ),
-              ),
-            ),
-            const SizedBox(height: 74.0),
           ],
-        ),
-      ),
-    );
+        ));
   }
 
-  void _shareWithFriends() {
-    // ignore: unnecessary_null_comparison
-    if (_referralId == null) return;
-    String message = 'Check out Business Bosses.\n'
-        'An app to meet entrepreneurs and grow your business. Join now for FREE promotion\n'
-        'https://businessbosses.onelink.me/xLWk/36a2ff16\n'
-        'Invite id: $_referralId';
-    logEvent(_profileController.myProfile.inviteId, 'invite');
-    socialShare(message);
-  }
 }

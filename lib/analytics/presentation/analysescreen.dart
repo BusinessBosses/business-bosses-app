@@ -1,10 +1,12 @@
 import 'dart:core';
 
+import 'package:business_bosses_v2/common/dialogs/snackbar.dart';
 import 'package:business_bosses_v2/common/models/user_model.dart';
 import 'package:business_bosses_v2/common/widgets/buttons/subscribe_to_premium_button.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 import '../../common/params.dart';
 import '../../features/profile/controller/profile_controller.dart';
@@ -17,6 +19,7 @@ class AnalyserScreen extends StatefulWidget {
   const AnalyserScreen({Key? key}) : super(key: key);
 
   @override
+  // ignore: library_private_types_in_public_api
   _AnalyserScreenState createState() => _AnalyserScreenState();
 }
 
@@ -51,7 +54,7 @@ class _AnalyserScreenState extends State<AnalyserScreen> {
         ),
         centerTitle: true,
         title: const Text(
-          'Analyse',
+          'Help',
           textAlign: TextAlign.center,
           style: TextStyle(fontSize: 20),
         ),
@@ -71,63 +74,65 @@ class _AnalyserScreenState extends State<AnalyserScreen> {
             padding: const EdgeInsets.only(
               left: 20,
             ),
-            child:
-                Column(crossAxisAlignment: CrossAxisAlignment.start, children: <Widget>[
-              Row(
+            child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: <Widget>[
-                  const Text(
-                    'Hi',
-                    style: TextStyle(
-                        fontSize: 25,
-                        color: textColor,
-                        fontWeight: FontWeight.w700),
-                  ),
-                  const Spacer(),
-                  Padding(
-                    padding: const EdgeInsets.only(right: 15.0),
-                    child: GestureDetector(
-                      onTap: () {
-                        Get.toNamed(Routes.premiumscreen);
-                      },
-                      child: Column(
-                        children: <Widget>[
-                          const SizedBox(
-                            height: 10,
-                          ),
-                          Container(
-                              decoration: BoxDecoration(
-                                boxShadow: <BoxShadow>[
-                                  BoxShadow(
-                                    color: Colors.black.withOpacity(0.09),
-                                    blurRadius: 500.0,
-                                    spreadRadius: 0.0,
-                                  ),
-                                ],
-                              ),
-                              child: !profileController.myProfile.isSubscribed
-                                  ? subscribetopremiumbutton()
-                                  : Container()),
-                        ],
+                  Row(
+                    children: <Widget>[
+                      const Text(
+                        'Hi',
+                        style: TextStyle(
+                            fontSize: 25,
+                            color: textColor,
+                            fontWeight: FontWeight.w700),
                       ),
-                    ),
-                  )
-                ],
-              ),
-              Text(
-                '@${profileController.myProfile.username}',
-                style: const TextStyle(
-                    fontSize: 18,
-                    fontWeight: FontWeight.w700,
-                    color: primaryColorLT),
-              ),
-              const SizedBox(
-                height: 5,
-              ),
-              const Text(
-                'how may I help you?',
-                style: TextStyle(fontSize: 15, fontWeight: FontWeight.w100),
-              ),
-            ]),
+                      const Spacer(),
+                      Padding(
+                        padding: const EdgeInsets.only(right: 15.0),
+                        child: GestureDetector(
+                          onTap: () {
+                            Get.toNamed(Routes.premiumscreen);
+                          },
+                          child: Column(
+                            children: <Widget>[
+                              const SizedBox(
+                                height: 10,
+                              ),
+                              Container(
+                                  decoration: BoxDecoration(
+                                    boxShadow: <BoxShadow>[
+                                      BoxShadow(
+                                        color: Colors.black.withOpacity(0.09),
+                                        blurRadius: 500.0,
+                                        spreadRadius: 0.0,
+                                      ),
+                                    ],
+                                  ),
+                                  child:
+                                      !profileController.myProfile.isSubscribed
+                                          ? subscribetopremiumbutton()
+                                          : Container()),
+                            ],
+                          ),
+                        ),
+                      )
+                    ],
+                  ),
+                  Text(
+                    '@${profileController.myProfile.username}',
+                    style: const TextStyle(
+                        fontSize: 18,
+                        fontWeight: FontWeight.w700,
+                        color: primaryColorLT),
+                  ),
+                  const SizedBox(
+                    height: 5,
+                  ),
+                  const Text(
+                    'how may I help you?',
+                    style: TextStyle(fontSize: 15, fontWeight: FontWeight.w100),
+                  ),
+                ]),
           ),
           const SizedBox(
             height: 30,
@@ -161,7 +166,7 @@ class _AnalyserScreenState extends State<AnalyserScreen> {
           ListTile(
               leading: SvgPicture.asset('assets/svgs/connectrelevant.svg'),
               title: const Text(
-                'Connect me to relevant people',
+                'Follow relevant people',
                 style: TextStyle(
                     fontSize: 15,
                     fontWeight: FontWeight.w700,
@@ -198,7 +203,7 @@ class _AnalyserScreenState extends State<AnalyserScreen> {
           ListTile(
               leading: SvgPicture.asset('assets/svgs/explore.svg'),
               title: const Text(
-                'Explore Business Bosses',
+                'How to use Business Bosses App',
                 style: TextStyle(
                     fontSize: 15,
                     fontWeight: FontWeight.w700,
@@ -214,9 +219,57 @@ class _AnalyserScreenState extends State<AnalyserScreen> {
             height: 1.5,
             child: ColoredBox(color: backgroundcolorinterface),
           ),
+          ListTile(
+              leading: SvgPicture.asset('assets/svgs/mail.svg'),
+              title: const Text(
+                'Contact us',
+                style: TextStyle(
+                    fontSize: 15,
+                    fontWeight: FontWeight.w700,
+                    color: textColor),
+              ),
+              onTap: () {
+                _contactUs();
+              },
+              trailing: SvgPicture.asset('assets/svgs/nexticon.svg')),
+          const SizedBox(
+            width: double.infinity,
+            height: 1.5,
+            child: ColoredBox(color: backgroundcolorinterface),
+          ),
         ],
       ),
     );
+  }
+}
+
+Future<void> _contactUs() async {
+  String? encodeQueryParameters(Map<String, String> params) {
+    return params.entries
+        .map((MapEntry<String, String> e) =>
+            '${Uri.encodeComponent(e.key)}=${Uri.encodeComponent(e.value)}')
+        .join('&');
+  }
+
+  final Uri mailUrl = Uri(
+    scheme: 'mailto',
+    path: 'support@businessbosses.co.uk',
+    query: encodeQueryParameters(<String, String>{
+      'subject': 'Contact Business Bosses',
+    }),
+  );
+
+  try {
+    if (await canLaunchUrl(mailUrl)) {
+      await launchUrl(mailUrl);
+    } else {
+      throw 'Could not launch $mailUrl';
+    }
+  } catch (e) {
+    showSnackbar(
+        title: 'OOPS!',
+        message: 'An error occurred, please try again!',
+        error: true);
   }
 }
 

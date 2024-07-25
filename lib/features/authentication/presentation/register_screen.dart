@@ -11,8 +11,8 @@ import 'forms/signup_form.dart';
 class RegisterScreen extends StatelessWidget {
   /// REGISTER SCREEN CONSTRUCTOR
 
-  RegisterScreen({Key? key}) : super(key: key);
-  final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
+  const RegisterScreen({Key? key}) : super(key: key);
+  // GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
 
   @override
   Widget build(BuildContext context) {
@@ -20,7 +20,7 @@ class RegisterScreen extends StatelessWidget {
       onTap: () => unFocusKeyboard(context),
       child: Scaffold(
         backgroundColor: Colors.white,
-        key: _scaffoldKey,
+        // key: _scaffoldKey,
         body: SafeArea(
           child: SingleChildScrollView(
             padding: const EdgeInsets.symmetric(horizontal: 20.0),

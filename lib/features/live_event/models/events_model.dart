@@ -1,5 +1,3 @@
-// ignore_for_file: public_member_api_docs
-
 import 'package:business_bosses_v2/common/models/user_model.dart';
 
 class EventModel {
@@ -12,6 +10,10 @@ class EventModel {
   final bool? status;
   final UserModel? user;
   final String? image;
+  final String? description;
+  final String? link;
+  final String? address;
+  int? totalAttendees;
   EventModel({
     this.id,
     required this.roomId,
@@ -22,6 +24,10 @@ class EventModel {
     this.status,
     this.user,
     this.image,
+    this.description,
+    this.link,
+    this.totalAttendees = 0,
+    this.address,
   });
 
   EventModel copyWith({
@@ -34,6 +40,10 @@ class EventModel {
     bool? status,
     UserModel? user,
     String? image,
+    int? totalAttendees,
+    String? description,
+    String? link,
+    String? address,
   }) {
     return EventModel(
       id: id ?? this.id,
@@ -45,6 +55,10 @@ class EventModel {
       status: status ?? this.status,
       user: user ?? this.user,
       image: image ?? this.image,
+      description: description ?? this.description,
+      link: link ?? this.link,
+      address: address ?? this.address,
+      totalAttendees: totalAttendees ?? this.totalAttendees,
     );
   }
 
@@ -59,6 +73,10 @@ class EventModel {
       'status': status,
       'user': user,
       'image': image,
+      'totalAttendees': totalAttendees,
+      'description': description,
+      'link': link,
+      'address': address,
     };
   }
 
@@ -78,6 +96,16 @@ class EventModel {
           ? UserModel.fromMap(map['user'] as Map<String, dynamic>)
           : null,
       image: map['image'] != null ? map['image'] as String : null,
+      description:
+          map['description'] != null ? map['description'] as String : null,
+      link: map['link'] != null ? map['link'] as String : null,
+      address: map['address'] != null ? map['address'] as String : null,
+      totalAttendees:
+          map['totalAttendees'] != null ? map['totalAttendees'] as int : null,
     );
+  }
+
+  void setAttendCount(int newViews) {
+    totalAttendees = newViews;
   }
 }

@@ -48,7 +48,7 @@ class LearningPopUp extends StatelessWidget {
                   child: Center(
                     child: Text(
                       'A collaborative environment that encourages learning and professional development. '
-                      'Start a Topic,'
+                      'Share resources,'
                       ' post articles, insights, and resources others can learn from.',
                       style: bodyText2,
                       textAlign: TextAlign.center,

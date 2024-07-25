@@ -95,7 +95,7 @@ class _ConnectionGridTileState extends State<ConnectionGridTile> {
               height: 36.0,
               width: 120.0,
               child: Text(
-                widget.status ? 'Connected' : 'Connect',
+                widget.status ? 'Following' : 'Follow',
                 style: TextStyle(
                     color: widget.status ? primaryColorLT : Colors.white),
               ),

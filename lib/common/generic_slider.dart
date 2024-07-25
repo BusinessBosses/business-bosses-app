@@ -65,6 +65,7 @@ class _GenericSliderState extends State<GenericSlider> {
                           width: widget.height,
                           margin: const EdgeInsets.only(top: 0.0),
                           child: NetworkImageWithPlaceHolder(
+                            borderColor: Colors.black12,
                             imageUrl: widget.images[i],
                             fit: widget.fit,
                             placeHolder: Icons.photo,

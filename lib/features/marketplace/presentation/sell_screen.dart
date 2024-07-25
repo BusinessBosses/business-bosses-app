@@ -1,4 +1,7 @@
+// ignore_for_file: equal_keys_in_map
+
 import 'package:business_bosses_v2/features/home/widgets/sellingpopup.dart';
+import 'package:business_bosses_v2/features/marketplace/widgets/currency.dart';
 import 'package:business_bosses_v2/services/api_service.dart';
 import 'package:country_list_pick/country_list_pick.dart';
 import 'package:detectable_text_field/detector/sample_regular_expressions.dart';
@@ -8,6 +11,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import 'package:photo_manager/photo_manager.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import '../../../action/action.dart';
 import '../../../common/dialogs/snackbar.dart';
 import '../../../common/models/comment_model.dart';
@@ -30,8 +34,10 @@ class CreateSellingitemScreen extends StatefulWidget {
   /// String if to update;
   final MarketModel? market;
   final bool isUpd;
+
   // CreateSellingitemScreen();
   @override
+  // ignore: library_private_types_in_public_api
   _CreateSellingitemScreenState createState() =>
       _CreateSellingitemScreenState();
 }
@@ -53,7 +59,9 @@ class _CreateSellingitemScreenState extends State<CreateSellingitemScreen> {
 
   String? description;
   String? price;
+  String? title;
   String? discount;
+  String? currency;
   String? _selectedCategory;
   String? _selectedLocation;
   String? filterCode;
@@ -64,26 +72,40 @@ class _CreateSellingitemScreenState extends State<CreateSellingitemScreen> {
   bool _shouldPromote = false;
   final TextEditingController descriptionController = TextEditingController();
   final TextEditingController _priceController = TextEditingController();
+  final TextEditingController _productnameController = TextEditingController();
+  final TextEditingController _currencyController = TextEditingController();
   final TextEditingController _discountController = TextEditingController();
+  String? defaultcountry;
+  Future<String?>? getCountryValue() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    setState(() {
+      _selectedLocation = prefs.getString('country') ?? _market!.location;
+    });
+    return _selectedLocation;
+  }
 
   @override
   void initState() {
-    // TODO: implement initState
+    getCountryValue();
     super.initState();
+
     _isUpdating = widget.isUpd;
     if (widget.isUpd) {
       _market = widget.market;
     }
     descriptionController.text = _market?.description ?? '';
     _priceController.text = _market?.price ?? '';
+
     _discountController.text = _market?.discount.toString() ?? '';
     _selectedCategory = _market?.category;
-    _selectedLocation = _market?.location;
     _fileProcessing = <bool>[];
   }
 
   @override
   Widget build(BuildContext context) {
+    _currencyController.text = _selectedLocation != null
+        ? '${currencyValues[_selectedLocation]}'
+        : 'USD';
     return GetBuilder<CreateMarketController>(
         builder: (CreateMarketController controller) {
       return GestureDetector(
@@ -111,21 +133,65 @@ class _CreateSellingitemScreenState extends State<CreateSellingitemScreen> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[
                 Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 15),
+                  child: TextFormField(
+                    controller: _productnameController,
+                    onChanged: (String val) => title = val,
+                    textInputAction: TextInputAction.next,
+                    keyboardType: TextInputType.text,
+                    maxLength: 15,
+                    decoration: inputDecoration.copyWith(
+                      hintText: 'Enter Product Title',
+                    ),
+                  ),
+                ),
+                const SizedBox(height: 10.0),
+
+                Padding(
                   padding: const EdgeInsets.only(left: 16.0, right: 16),
                   child: Row(
-                    children: [
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: <Widget>[
+                      Expanded(
+                        flex: 3,
+                        child: TextFormField(
+                          controller: _currencyController,
+                          onChanged: (String val) => currency = val,
+                          textInputAction: TextInputAction.next,
+                          keyboardType: TextInputType.text,
+                          maxLength: 3,
+                          decoration: inputDecoration.copyWith(
+                            hintText: '${currencyValues[_selectedLocation]}',
+                          ),
+                        ),
+                        // child: Padding(
+                        //   padding: const EdgeInsets.only(
+                        //       top: 18.0), // Adjust the value as needed
+                        //   child: Text(
+                        //     _selectedLocation != null
+                        //         ? '${currencyValues[_selectedLocation]}'
+                        //         : 'USD',
+                        //     style: const TextStyle(fontWeight: FontWeight.w700),
+                        //   ),
+                        // ),
+                      ),
+                      const SizedBox(
+                        width: 10,
+                      ),
                       Expanded(
                         flex:
-                            2, // Adjust the flex value to control the relative sizes
-                        child: Stack(children: [
+                            6, // Adjust the flex value to control the relative sizes
+                        child: Stack(children: <Widget>[
                           TextFormField(
                             controller: _priceController,
                             onChanged: (String val) => price = val,
                             textInputAction: TextInputAction.next,
-                            keyboardType: TextInputType.text,
+                            keyboardType: const TextInputType.numberWithOptions(
+                                decimal: true),
                             maxLength: 15,
                             decoration: inputDecoration.copyWith(
-                              hintText: 'Enter Price in USD (Example \$10)',
+                              hintText: 'Enter Price',
                             ),
                           )
                         ]),
@@ -135,9 +201,9 @@ class _CreateSellingitemScreenState extends State<CreateSellingitemScreen> {
                       ),
                       Expanded(
                         flex:
-                            1, // Adjust the flex value to control the relative sizes
+                            4, // Adjust the flex value to control the relative sizes
                         child: Stack(
-                          children: [
+                          children: <Widget>[
                             TextFormField(
                               controller: _discountController,
                               onChanged: (String val) => discount = val,
@@ -167,6 +233,7 @@ class _CreateSellingitemScreenState extends State<CreateSellingitemScreen> {
                     ],
                   ),
                 ),
+
                 const SizedBox(height: 24.0),
                 Padding(
                   padding: const EdgeInsets.only(left: 16.0, right: 16),
@@ -256,11 +323,10 @@ class _CreateSellingitemScreenState extends State<CreateSellingitemScreen> {
                         icon: SvgPicture.asset('assets/svgs/backbutton.svg'),
                       ),
                       centerTitle: true,
-                      // ignore: prefer_const_constructors
-                      title: Text(
+                      title: const Text(
                         'Select Location',
                         textAlign: TextAlign.center,
-                        style: const TextStyle(fontSize: 20),
+                        style: TextStyle(fontSize: 20),
                       ),
                     ),
                     initialSelection: _selectedLocation,
@@ -282,10 +348,19 @@ class _CreateSellingitemScreenState extends State<CreateSellingitemScreen> {
                         ),
                       );
                     },
-                    onChanged: (CountryCode? code) {
+                    onChanged: (CountryCode? code) async {
                       setState(() {
-                        _selectedLocation = code!.name!;
+                        _selectedLocation = code!.name;
                       });
+
+                      try {
+                        SharedPreferences marketplaceCountry =
+                            await SharedPreferences.getInstance();
+                        await marketplaceCountry.setString(
+                            'country', code!.name!);
+                        await marketplaceCountry.setString(
+                            'currency', code.code!);
+                      } catch (e) {}
                     },
                     useSafeArea: false,
                   ),
@@ -335,7 +410,7 @@ class _CreateSellingitemScreenState extends State<CreateSellingitemScreen> {
                         ),
                       ),
                 Padding(
-                  padding: const EdgeInsets.all(12.0),
+                  padding: const EdgeInsets.only(top:12.0, left:12, right:12),
                   child: widget.isUpd
                       ? Container()
                       : Preview(controller: createMarketController),
@@ -349,7 +424,7 @@ class _CreateSellingitemScreenState extends State<CreateSellingitemScreen> {
                             child: Container(
                               child: Padding(
                                 padding: const EdgeInsets.only(
-                                    top: 10, bottom: 10, left: 16, right: 16),
+                                   bottom: 10, left: 16, right: 16),
                                 child: Row(
                                   children: <Widget>[
                                     SvgPicture.asset('assets/svgs/rocket.svg'),
@@ -415,9 +490,6 @@ class _CreateSellingitemScreenState extends State<CreateSellingitemScreen> {
                   padding: const EdgeInsets.only(left: 16.0, right: 16),
                   child: MCustomButton(
                     onPressed: () async {
-                      setState(() {
-                        _isProcessing = true;
-                      });
                       if (descriptionController.text.isEmpty ||
                           _priceController.text.isEmpty) {
                         showSnackBar(
@@ -430,6 +502,9 @@ class _CreateSellingitemScreenState extends State<CreateSellingitemScreen> {
                         });
                         return;
                       } else {
+                        setState(() {
+                          _isProcessing = true;
+                        });
                         await _onChangeForum();
                       }
                       setState(() {
@@ -505,8 +580,9 @@ class _CreateSellingitemScreenState extends State<CreateSellingitemScreen> {
         'category': _selectedCategory,
         'location': _selectedLocation,
         'description': description,
-        'price': price,
+        'price': _currencyController.text + price.toString(),
         'discount': discount,
+        'title': title,
         'timestamp': DateTime.now().millisecondsSinceEpoch,
       }, _shouldPromote);
     } else {
@@ -515,7 +591,8 @@ class _CreateSellingitemScreenState extends State<CreateSellingitemScreen> {
         'category': _selectedCategory,
         'location': _selectedLocation,
         'description': descriptionController.text,
-        'price': _priceController.text,
+        'title': _productnameController.text,
+        'price': _currencyController.text + _priceController.text,
         'promote': _market?.promote,
         'approved': _market?.approved,
         'likes': _market?.likes,
@@ -532,8 +609,9 @@ class _CreateSellingitemScreenState extends State<CreateSellingitemScreen> {
           body: <String, dynamic>{
             'category': _selectedCategory,
             'location': _selectedLocation,
+            'title': _productnameController.text,
             'description': descriptionController.text,
-            'price': _priceController.text,
+            'price': _currencyController.text + _priceController.text,
             'discount': _discountController.text,
             'images': _market?.images,
           });

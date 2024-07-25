@@ -1,5 +1,3 @@
-// ignore_for_file: public_member_api_docs
-
 import 'dart:io';
 import 'dart:convert';
 import 'dart:math';
@@ -21,7 +19,6 @@ import 'package:business_bosses_v2/common/widgets/typography/text_widget.dart';
 
 import '../../../common/widgets/buttons/custom_button.dart';
 import '../controller/live_event_controller.dart';
-import '../widgets/call_room.dart';
 
 class CreateEvent extends StatefulWidget {
   final EventModel? event;
@@ -33,29 +30,41 @@ class CreateEvent extends StatefulWidget {
 
 class _CreateEventState extends State<CreateEvent> {
   TextEditingController titleController = TextEditingController();
+  TextEditingController descriptionController = TextEditingController();
+  TextEditingController linkController = TextEditingController();
+  TextEditingController addressController = TextEditingController();
   final ProfileController profileController = Get.find();
   DateTime startAt = DateTime.now();
   DateTime endAt = DateTime.now();
   DateTime selectedDateTime = DateTime.now();
   final LiveController liveEventController = Get.put(LiveController());
   bool isLoading = false;
+  bool isOnline = true;
 
   String? roomID;
   File? _selectedImage;
   String? updateImage;
 
   @override
-  Widget build(BuildContext context) {
+  void initState() {
+    super.initState();
+
     if (widget.event != null) {
-      setState(() {
-        roomID = widget.event!.roomId;
-        updateImage = widget.event!.image;
-      });
+      roomID = widget.event!.roomId;
+      updateImage = widget.event!.image;
+      titleController.text = widget.event!.title!;
+      startAt = widget.event!.startAt!.toLocal();
+      endAt = widget.event!.endAt!.toLocal();
+      descriptionController.text = widget.event!.description ?? '';
+      linkController.text = widget.event!.link ?? '';
+      addressController.text = widget.event!.address ?? '';
     } else {
-      setState(() {
-        roomID = generateRandomRoomID();
-      });
+      roomID = generateRandomRoomID();
     }
+  }
+
+  @override
+  Widget build(BuildContext context) {
     final DateFormat dateFormat = DateFormat('d MMM, y');
 
     // Format the date
@@ -98,6 +107,7 @@ class _CreateEventState extends State<CreateEvent> {
                 ),
                 child: TextField(
                   controller: titleController,
+                  enabled: !isLoading,
                   decoration: const InputDecoration(
                     labelText: 'Add Title',
                     labelStyle: TextStyle(fontWeight: FontWeight.w600),
@@ -106,6 +116,145 @@ class _CreateEventState extends State<CreateEvent> {
                 ),
               ),
             ),
+            Padding(
+              padding: const EdgeInsets.all(15.0),
+              child: Container(
+                padding: const EdgeInsets.symmetric(horizontal: 15),
+                constraints: const BoxConstraints(
+                  minHeight: 150.0, // Set a minimum height for the container
+                ),
+                decoration: BoxDecoration(
+                  color: const Color.fromRGBO(
+                      244, 244, 244, 1), // Background color
+                  borderRadius: BorderRadius.circular(10.0), // Border radius
+                  border: Border.all(
+                    color:
+                        const Color.fromRGBO(224, 224, 224, 1), // Border color
+                    width: 1.0, // Border width
+                  ),
+                ),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.end,
+                  children: <Widget>[
+                    TextField(
+                      controller: descriptionController,
+                      maxLines:
+                          null, // Allow the text field to expand vertically
+                      keyboardType:
+                          TextInputType.multiline, // Allow multiline input
+                      enabled: !isLoading,
+                      decoration: const InputDecoration(
+                        labelText: 'Add Description',
+                        labelStyle: TextStyle(fontWeight: FontWeight.w600),
+                        border: InputBorder.none,
+                      ),
+                      onChanged: (String text) {
+                        setState(() {}); // Update UI to show character count
+                      },
+                    ),
+                    Text(
+                      '${descriptionController.text.length}/300',
+                      style: TextStyle(
+                        color: descriptionController.text.length > 300
+                            ? Colors.red
+                            : Colors.black,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.all(15.0),
+              child: Container(
+                padding: const EdgeInsets.symmetric(horizontal: 15),
+                decoration: BoxDecoration(
+                  color: const Color.fromRGBO(
+                      244, 244, 244, 1), // Background color
+                  borderRadius: BorderRadius.circular(10.0), // Border radius
+                  border: Border.all(
+                    color:
+                        const Color.fromRGBO(224, 224, 224, 1), // Border color
+                    width: 1.0, // Border width
+                  ),
+                ),
+                child: DropdownButtonFormField<bool>(
+                  value: isOnline,
+                  items: const [
+                    DropdownMenuItem<bool>(
+                      value: true,
+                      child: Text('Online'),
+                    ),
+                    DropdownMenuItem<bool>(
+                      value: false,
+                      child: Text('Offline'),
+                    ),
+                  ],
+                  onChanged: (bool? value) {
+                    setState(() {
+                      isOnline = value ?? true;
+                    });
+                  },
+                  decoration: const InputDecoration(
+                    labelText: 'Event Type',
+                    labelStyle: TextStyle(fontWeight: FontWeight.w600),
+                    border: InputBorder.none,
+                  ),
+                ),
+              ),
+            ),
+            if (isOnline)
+              Padding(
+                padding: const EdgeInsets.all(15.0),
+                child: Container(
+                  padding: const EdgeInsets.symmetric(horizontal: 15),
+                  decoration: BoxDecoration(
+                    color: const Color.fromRGBO(
+                        244, 244, 244, 1), // Background color
+                    borderRadius: BorderRadius.circular(10.0), // Border radius
+                    border: Border.all(
+                      color: const Color.fromRGBO(
+                          224, 224, 224, 1), // Border color
+                      width: 1.0, // Border width
+                    ),
+                  ),
+                  child: TextField(
+                    controller: linkController,
+                    enabled: !isLoading,
+                    decoration: const InputDecoration(
+                      labelText: 'Add Zoom or Google Meet Link',
+                      labelStyle: TextStyle(fontWeight: FontWeight.w600),
+                      border: InputBorder.none,
+                    ),
+                  ),
+                ),
+              )
+            else
+              Padding(
+                padding: const EdgeInsets.all(15.0),
+                child: Container(
+                  padding: const EdgeInsets.symmetric(horizontal: 15),
+                  decoration: BoxDecoration(
+                    color: const Color.fromRGBO(
+                        244, 244, 244, 1), // Background color
+                    borderRadius: BorderRadius.circular(10.0), // Border radius
+                    border: Border.all(
+                      color: const Color.fromRGBO(
+                          224, 224, 224, 1), // Border color
+                      width: 1.0, // Border width
+                    ),
+                  ),
+                  child: TextField(
+                    controller: addressController,
+                    enabled: !isLoading,
+                    decoration: const InputDecoration(
+                      labelText: 'Add Address',
+                      labelStyle: TextStyle(fontWeight: FontWeight.w600),
+                      border: InputBorder.none,
+                    ),
+                  ),
+                ),
+              ),
             Padding(
               padding: const EdgeInsets.all(15.0),
               child: Container(
@@ -308,11 +457,55 @@ class _CreateEventState extends State<CreateEvent> {
                   // Format the UTC DateTime to the desired string format
                   String formattedStartDateTime = dateFormat.format(startAtt);
                   String formattedStartTime = timeFormat.format(startAtt);
+                  final String description = descriptionController.text.trim();
 
-                  if (titleController.text.isEmpty) {
+                  if (description.length > 300) {
+                    ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+                      content: Text(
+                        'Description must not exceed 300 characters.',
+                        style: TextStyle(fontWeight: FontWeight.w600),
+                      ),
+                      backgroundColor: Colors.red,
+                    ));
+                    setState(() {
+                      isLoading = false;
+                    });
+                    return;
+                  }
+
+                  if (isOnline &&
+                      !isValidMeetingLink(linkController.text.trim())) {
+                    Get.snackbar(
+                      'Validation Error',
+                      'A valid Zoom or Google Meet link is required for online events',
+                      snackPosition: SnackPosition.BOTTOM,
+                      backgroundColor: Colors.red,
+                      colorText: Colors.white,
+                    );
+                    setState(() {
+                      isLoading = false;
+                    });
+                    return;
+                  }
+
+                  if (!isOnline && addressController.text.trim().isEmpty) {
+                    Get.snackbar(
+                      'Validation Error',
+                      'Address is required for offline events',
+                      snackPosition: SnackPosition.BOTTOM,
+                      backgroundColor: Colors.red,
+                      colorText: Colors.white,
+                    );
+                    setState(() {
+                      isLoading = false;
+                    });
+                    return;
+                  }
+                  if (titleController.text.isEmpty ||
+                      descriptionController.text.isEmpty) {
                     showSnackBar(
                       context,
-                      message: 'Please enter a title',
+                      message: 'Please enter a title and description!',
                     );
                     setState(() {
                       isLoading = false;
@@ -338,6 +531,7 @@ class _CreateEventState extends State<CreateEvent> {
                     });
                     return;
                   }
+
                   if (endAt.isAfter(startAt.add(const Duration(hours: 2)))) {
                     showSnackBar(context,
                         message: 'Event duration cannot be more than 2 hours');
@@ -364,6 +558,9 @@ class _CreateEventState extends State<CreateEvent> {
                     'startTime': '00:00:00',
                     'user': profileController.myProfile.toMap(),
                     'image': imageUrl,
+                    'link': isOnline ? linkController.text.trim() : null,
+                    'address': !isOnline ? addressController.text.trim() : null,
+                    'description': descriptionController.text,
                   };
 
                   Map<String, dynamic> dataa = <String, dynamic>{
@@ -377,6 +574,9 @@ class _CreateEventState extends State<CreateEvent> {
                     'photourl': profileController.myProfile.photoUrl,
                     'user': profileController.myProfile.toString(),
                     'image': imageUrl,
+                    'link': isOnline ? linkController.text.trim() : null,
+                    'address': !isOnline ? addressController.text.trim() : null,
+                    'description': descriptionController.text,
                   };
 
                   String? jsonData = jsonEncode(dataa);
@@ -394,7 +594,9 @@ class _CreateEventState extends State<CreateEvent> {
                           isUpdate: false,
                         ));
                   } else {
-                    await liveEventController.createEvent(data);
+                    dynamic id = await liveEventController.createEvent(data);
+                    dataa['id'] = id;
+                    jsonData = jsonEncode(dataa);
                     Get.off(() => ConfirmCreateEvent(
                           roomID: roomID!,
                           time: '$formattedDate  $formattedStartTime ',
@@ -414,20 +616,29 @@ class _CreateEventState extends State<CreateEvent> {
     );
   }
 
-  void jumpToLivePage(BuildContext context,
-      {required String roomID, required bool isHost, required String title}) {
-    Navigator.push(
-      context,
-      // ignore: always_specify_types
-      MaterialPageRoute(
-        builder: (BuildContext context) => CallRoom(
-          roomID: roomID,
-          isHost: isHost,
-          title: title,
-        ),
-      ),
-    );
+  bool isValidMeetingLink(String link) {
+    final RegExp zoomRegExp =
+        RegExp(r'^https://(www\.)?zoom\.us/j/[a-zA-Z0-9]+');
+    final RegExp googleMeetRegExp =
+        RegExp(r'^https://meet\.google\.com/[a-zA-Z0-9\-]+');
+
+    return zoomRegExp.hasMatch(link) || googleMeetRegExp.hasMatch(link);
   }
+
+  // void jumpToLivePage(BuildContext context,
+  //     {required String roomID, required bool isHost, required String title}) {
+  //   Navigator.push(
+  //     context,
+  //     // ignore: always_specify_types
+  //     MaterialPageRoute(
+  //       builder: (BuildContext context) => CallRoom(
+  //         roomID: roomID,
+  //         isHost: isHost,
+  //         title: title,
+  //       ),
+  //     ),
+  //   );
+  // }
 
   String formatTime(DateTime dateTime) {
     final String formattedTime = DateFormat('h:mm a').format(dateTime);
@@ -452,18 +663,6 @@ class _CreateEventState extends State<CreateEvent> {
   void dispose() {
     titleController.dispose();
     super.dispose();
-  }
-
-  @override
-  void initState() {
-    super.initState();
-
-    // Check if widget.event is not null and populate the title
-    if (widget.event != null) {
-      titleController.text = widget.event!.title!;
-      startAt = widget.event!.startAt!.toLocal();
-      endAt = widget.event!.endAt!.toLocal();
-    }
   }
 
   Future<void> _pickImage(BuildContext context) async {

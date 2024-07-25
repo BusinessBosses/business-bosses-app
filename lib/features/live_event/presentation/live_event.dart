@@ -3,21 +3,22 @@
 import 'dart:math';
 
 import 'package:business_bosses_v2/common/widgets/network_image_with_placeholder.dart';
+import 'package:business_bosses_v2/features/home/widgets/bottom_bar.dart';
+import 'package:business_bosses_v2/features/home/widgets/floatingbutton.dart';
 import 'package:business_bosses_v2/features/live_event/controller/live_event_controller.dart';
 import 'package:business_bosses_v2/features/live_event/models/events_model.dart';
-import 'package:business_bosses_v2/features/live_event/widgets/call_room.dart';
-import 'package:business_bosses_v2/features/live_event/widgets/event_item.dart';
+import 'package:business_bosses_v2/features/live_event/widgets/event_call.dart';
+import 'package:business_bosses_v2/features/live_event/widgets/my_events.dart';
 import 'package:business_bosses_v2/features/profile/controller/profile_controller.dart';
-import 'package:business_bosses_v2/navigation/routes.dart';
+
 import 'package:business_bosses_v2/utils/theme/theme.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_sticky_header/flutter_sticky_header.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
-import 'package:lottie/lottie.dart';
 import 'package:timezone/data/latest.dart' as tzdata;
+import 'package:url_launcher/url_launcher.dart';
 
 import '../../../action/action.dart';
 import 'create_event.dart';
@@ -34,11 +35,53 @@ class _LiveEventState extends State<LiveEvent> {
   TextEditingController joinEvent = TextEditingController();
   final ScrollController scrollController = ScrollController();
   final ProfileController profileController = Get.find();
+  bool _isSearching = false;
+  bool isScrolled = true;
+  bool showFloatingButton = false;
+
+  List<Widget> get mActions {
+    return <Widget>[
+      IconButton(
+        icon: _isSearching
+            ? const Icon(Icons.close)
+            : SvgPicture.asset(
+                'assets/svgs/search.svg',
+              ),
+        onPressed: () {
+          // if (_isSearching) {
+          _isSearching = !_isSearching;
+          // }
+          setState(() {});
+        },
+      ),
+      IconButton(
+        onPressed: () {
+          Get.to(() => const MyEvents());
+        },
+        icon: const Icon(Icons.calendar_month),
+      ),
+    ];
+  }
 
   @override
   void initState() {
     tzdata.initializeTimeZones(); // Initialize time zones
     super.initState();
+    liveEventController.initEvents();
+    scrollController.addListener(() {
+      double percentageScrolled =
+          scrollController.offset / scrollController.position.maxScrollExtent;
+
+      if (percentageScrolled >= 0.8) {
+        setState(() {
+          showFloatingButton = true;
+        });
+      } else {
+        setState(() {
+          showFloatingButton = false;
+        });
+      }
+    });
   }
 
   DateTime selectedDateTime = DateTime.now();
@@ -50,242 +93,323 @@ class _LiveEventState extends State<LiveEvent> {
         return Scaffold(
             backgroundColor: Colors.white,
             appBar: AppBar(
-              leading: IconButton(
-                onPressed: () {
-                  Get.offNamed(Routes.home);
-                },
-                icon: SvgPicture.asset('assets/svgs/backbutton.svg'),
-              ),
-              centerTitle: true,
-              title: const Text(
-                'Live Events',
-                textAlign: TextAlign.center,
-                style: TextStyle(fontSize: 20),
-              ),
-            ),
-            body: liveController.loading.value
-                ? const Center(child: CircularProgressIndicator())
-                : NestedScrollView(
-                    controller: scrollController,
-                    headerSliverBuilder: (
-                      BuildContext context,
-                      bool innerBoxIsScrolled,
-                    ) {
-                      return <Widget>[
-                        SliverStickyHeader(
-                          sticky: true,
-                          header: Column(
-                            children: <Widget>[
-                              Stack(
-                                children: <Widget>[
-                                  Container(
-                                    margin: const EdgeInsets.only(
-                                      top: 10,
-                                      right: 15,
-                                      left: 15,
-                                    ),
-                                    height: 150,
-                                    width: double.infinity,
-                                    decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.circular(15.0),
-                                      image: const DecorationImage(
-                                        image: AssetImage(
-                                            'assets/images/live_event.png'),
-                                        fit: BoxFit.cover,
-                                      ),
-                                    ),
-                                  ),
-                                  const Positioned(
-                                    top: 50,
-                                    right: 35,
-                                    child: Text(
-                                      'Share your thoughts with bosses\n We want to listen as it happens',
-                                      textAlign: TextAlign.right,
-                                      style: TextStyle(
-                                        fontWeight: FontWeight.bold,
-                                        color: Colors.white,
-                                      ),
-                                      softWrap: true,
-                                    ),
-                                  ),
-                                  Positioned(
-                                    bottom: 10,
-                                    right: 35,
-                                    child: ElevatedButton(
-                                      onPressed: () => Navigator.push(
-                                        context,
-                                        // ignore: always_specify_types
-                                        MaterialPageRoute(
-                                          builder: (BuildContext context) =>
-                                              const CreateEvent(),
-                                        ),
-                                      ),
-                                      style: ElevatedButton.styleFrom(
-                                        backgroundColor: Colors.white,
-                                        padding: const EdgeInsets.symmetric(
-                                          horizontal: 20,
-                                          vertical: 10,
-                                        ),
-                                        shape: RoundedRectangleBorder(
-                                          borderRadius:
-                                              BorderRadius.circular(25.0),
-                                        ),
-                                      ),
-                                      child: const Text(
-                                        'Create Live Event',
-                                        style: TextStyle(
-                                          color: Colors.red,
-                                          fontWeight: FontWeight.bold,
-                                        ),
-                                      ),
-                                    ),
-                                  ),
-                                ],
-                              ),
-                              Container(
-                                margin: const EdgeInsets.only(
-                                  top: 10,
-                                  right: 15,
-                                  left: 15,
+              automaticallyImplyLeading: false,
+              // leading: IconButton(
+              //   onPressed: () {
+              //     Navigator.pop(context);
+              //   },
+              //   icon: SvgPicture.asset('assets/svgs/backbutton.svg'),
+              // ),
+              title: _isSearching
+                  ? Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: <Widget>[
+                        Expanded(
+                          child: TextField(
+                            controller: joinEvent,
+                            decoration: const InputDecoration(
+                              hintText: 'Find Event By ID',
+                              filled: true,
+                              fillColor: backgroundColor,
+                              border: OutlineInputBorder(
+                                borderSide: BorderSide(
+                                  color: Color.fromRGBO(224, 224, 224, 1),
                                 ),
-                                child: Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceBetween,
+                                borderRadius: BorderRadius.all(
+                                  Radius.circular(12),
+                                ),
+                              ),
+                              contentPadding: EdgeInsets.only(
+                                left: 10,
+                                right: 10,
+                                top: 0,
+                                bottom: 0,
+                              ),
+                            ),
+                            enableSuggestions: true, // Enable pasting
+                          ),
+                        ),
+                        const SizedBox(width: 10),
+                        ElevatedButton(
+                          onPressed: () {
+                            if (joinEvent.text.isEmpty) {
+                              showSnackBar(
+                                context,
+                                message: 'Please enter a title',
+                              );
+                              return;
+                            }
+                            joinLive(context, joinEvent.text);
+                          },
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor:
+                                const Color.fromRGBO(242, 28, 41, 1),
+                            padding: const EdgeInsets.symmetric(
+                              vertical: 15,
+                            ),
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(16.0),
+                            ),
+                          ),
+                          child: SvgPicture.asset(
+                            'assets/svgs/search.svg',
+                            color: Colors.white,
+                            width: 20,
+                          ),
+                        ),
+                      ],
+                    )
+                  : const Text(
+                      'Live Events',
+                      textAlign: TextAlign.center,
+                      style: TextStyle(fontSize: 20),
+                    ),
+              actions: mActions,
+            ),
+            // floatingActionButton: !liveController.loading.value
+            //     ? Padding(
+            //       padding:  EdgeInsets.only(bottom: Platform.isIOS ? 50 :80.0),
+            //       child: FloatingActionButton(
+            //           child: Icon(Icons.add),
+            //           shape: CircleBorder(),
+            //           onPressed: () {
+            //             showModalBottomSheet(
+            //                 context: context,
+            //                 shape: const RoundedRectangleBorder(
+            //                   borderRadius: BorderRadius.vertical(
+            //                     top: Radius.circular(25.0),
+            //                   ),
+            //                 ),
+            //                 builder: (context) {
+            //                   return SizedBox(
+            //                     height: 250,
+            //                     child: Padding(
+            //                       padding: const EdgeInsets.all(15.0),
+            //                       child: Column(
+            //                         crossAxisAlignment: CrossAxisAlignment.start,
+            //                         mainAxisSize: MainAxisSize.min,
+            //                         children: <Widget>[
+            //                           Expanded(
+            //                             // Set a specific height
+            //                             child: ListView.separated(
+            //                               itemCount: 3,
+            //                               separatorBuilder:
+            //                                   (BuildContext context, int index) =>
+            //                                       const Divider(),
+            //                               itemBuilder:
+            //                                   (BuildContext context, int index) {
+            //                                 return ListTile(
+            //                                   onTap: () {
+            //                                     Navigator.pop(context);
+            //                                     index == 0
+            //                                         ? Get.toNamed(
+            //                                             Routes.createPost)
+            //                                         : index == 1
+            //                                             ? sellProduct(context)
+            //                                             : Get.toNamed(
+            //                                                 Routes.createevent);
+            //                                   },
+            //                                   minVerticalPadding: 0,
+            //                                   contentPadding:
+            //                                       const EdgeInsets.only(left: 10),
+            //                                   leading: SvgPicture.asset(
+            //                                     index == 0
+            //                                         ? 'assets/svgs/text.svg'
+            //                                         : index == 1
+            //                                             ? 'assets/svgs/sellicon.svg'
+            //                                             : 'assets/svgs/liveevent.svg',
+            //                                     height: index == 0
+            //                                         ? 25
+            //                                         : index == 1
+            //                                             ? 30
+            //                                             : 22,
+            //                                     color: textColor.withOpacity(1),
+            //                                   ),
+            //                                   title: Text(
+            //                                     index == 0
+            //                                         ? 'Create a Post'
+            //                                         : index == 1
+            //                                             ? 'Sell your product & service'
+            //                                             : 'Create a Live Event',
+            //                                     style: const TextStyle(
+            //                                         fontSize: 18,
+            //                                         fontWeight: FontWeight.w700),
+            //                                   ),
+            //                                 );
+            //                               },
+            //                             ),
+            //                           )
+            //                         ],
+            //                       ),
+            //                     ),
+            //                   );
+            //                 });
+            //           },
+            //           backgroundColor: primaryColorLT,
+            //         ),
+            //     )
+            //     : Container(),
+            body: Stack(children: <Widget>[
+              liveController.loading.value
+                  ? const Stack(children: <Widget>[
+                      Center(child: CircularProgressIndicator()),
+                    ])
+                  : NestedScrollView(
+                      controller: scrollController,
+                      headerSliverBuilder: (
+                        BuildContext context,
+                        bool innerBoxIsScrolled,
+                      ) {
+                        return <Widget>[
+                          SliverStickyHeader(
+                            sticky: true,
+                            header: Column(
+                              children: <Widget>[
+                                Stack(
                                   children: <Widget>[
-                                    Expanded(
-                                      child: TextField(
-                                        controller: joinEvent,
-                                        decoration: const InputDecoration(
-                                          hintText: 'Find Event By ID',
-                                          filled: true,
-                                          fillColor: backgroundColor,
-                                          border: OutlineInputBorder(
-                                            borderSide: BorderSide(
-                                              color: Color.fromRGBO(
-                                                  224, 224, 224, 1),
-                                            ),
-                                            borderRadius: BorderRadius.all(
-                                              Radius.circular(12),
-                                            ),
-                                          ),
-                                          contentPadding: EdgeInsets.only(
-                                            left: 10,
-                                            right: 10,
-                                            top: 0,
-                                            bottom: 0,
-                                          ),
+                                    Container(
+                                      margin: const EdgeInsets.only(
+                                        top: 10,
+                                        right: 15,
+                                        left: 15,
+                                      ),
+                                      height: 150,
+                                      width: double.infinity,
+                                      decoration: BoxDecoration(
+                                        borderRadius:
+                                            BorderRadius.circular(15.0),
+                                        image: const DecorationImage(
+                                          image: AssetImage(
+                                              'assets/images/live_event.png'),
+                                          fit: BoxFit.cover,
                                         ),
-                                        enableSuggestions:
-                                            true, // Enable pasting
                                       ),
                                     ),
-                                    const SizedBox(width: 10),
-                                    ElevatedButton(
-                                      onPressed: () {
-                                        if (joinEvent.text.isEmpty) {
-                                          showSnackBar(
-                                            context,
-                                            message: 'Please enter a title',
-                                          );
-                                          return;
-                                        }
-                                        joinLive(context, joinEvent.text);
-                                      },
-                                      style: ElevatedButton.styleFrom(
-                                        backgroundColor: const Color.fromRGBO(
-                                            242, 28, 41, 1),
-                                        padding: const EdgeInsets.symmetric(
-                                          horizontal: 35,
-                                          vertical: 15,
-                                        ),
-                                        shape: RoundedRectangleBorder(
-                                          borderRadius:
-                                              BorderRadius.circular(16.0),
-                                        ),
-                                      ),
-                                      child: const Text(
-                                        'Search',
+                                    const Positioned(
+                                      top: 50,
+                                      right: 35,
+                                      child: Text(
+                                        'Share your thoughts with bosses\n We want to listen as it happens',
+                                        textAlign: TextAlign.right,
                                         style: TextStyle(
                                           fontWeight: FontWeight.bold,
+                                          color: Colors.white,
+                                        ),
+                                        softWrap: true,
+                                      ),
+                                    ),
+                                    Positioned(
+                                      bottom: 10,
+                                      right: 35,
+                                      child: ElevatedButton(
+                                        onPressed: () => Navigator.push(
+                                          context,
+                                          // ignore: always_specify_types
+                                          MaterialPageRoute(
+                                            builder: (BuildContext context) =>
+                                                const CreateEvent(),
+                                          ),
+                                        ),
+                                        style: ElevatedButton.styleFrom(
+                                          backgroundColor: Colors.white,
+                                          padding: const EdgeInsets.symmetric(
+                                            horizontal: 20,
+                                            vertical: 10,
+                                          ),
+                                          shape: RoundedRectangleBorder(
+                                            borderRadius:
+                                                BorderRadius.circular(25.0),
+                                          ),
+                                        ),
+                                        child: const Text(
+                                          'Create Live Event',
+                                          style: TextStyle(
+                                            color: Colors.red,
+                                            fontWeight: FontWeight.bold,
+                                          ),
                                         ),
                                       ),
                                     ),
                                   ],
                                 ),
-                              ),
-                              const SizedBox(height: 10),
-                            ],
+                                const SizedBox(height: 10),
+                              ],
+                            ),
                           ),
-                        ),
-                      ];
-                    },
-                    body: DefaultTabController(
-                      length: 3, // Number of tabs
-                      child: Column(
-                        children: <Widget>[
-                          Container(
-                            constraints:
-                                const BoxConstraints.expand(height: 50),
-                            child: TabBar(
-                              tabs: <Widget>[
-                                Tab(
-                                  child: Lottie.asset(
-                                    'assets/anim/liveevent.json',
-                                    height: 25,
+                        ];
+                      },
+                      body: DefaultTabController(
+                        length: 3, // Number of tabs
+                        child: Column(
+                          children: <Widget>[
+                            Container(
+                              constraints:
+                                  const BoxConstraints.expand(height: 50),
+                              child: TabBar(
+                                tabs: <Widget>[
+                                  Tab(
+                                    child: SvgPicture.asset(
+                                      'assets/svgs/liveevent.svg',
+                                      height: 18,
+                                    ),
                                   ),
-                                ),
-                                const Tab(text: 'Ongoing'),
-                                const Tab(text: 'Upcoming'),
-                              ],
+                                  const Tab(text: 'Ongoing'),
+                                  const Tab(text: 'Upcoming'),
+                                ],
+                              ),
                             ),
-                          ),
-                          const Expanded(
-                            child: TabBarView(
-                              children: <Widget>[
-                                // Content of Tab 1
-                                EventCall(
-                                  full: true,
-                                ),
+                            const Expanded(
+                              child: TabBarView(
+                                children: <Widget>[
+                                  // Content of Tab 1
+                                  EventCall(
+                                    full: true,
+                                  ),
 
-                                // Content of Tab 2
-                                EventCall(
-                                  ongoing: true,
-                                ),
+                                  // Content of Tab 2
+                                  EventCall(
+                                    ongoing: true,
+                                  ),
 
-                                // Content of Tab 3
+                                  // Content of Tab 3
 
-                                EventCall(
-                                  ongoing: false,
-                                ),
-                              ],
+                                  EventCall(
+                                    ongoing: false,
+                                  ),
+                                ],
+                              ),
                             ),
-                          ),
-                        ],
+                          ],
+                        ),
                       ),
                     ),
-                  ));
+              const BottomBar(
+                activeIndex: 2,
+              ),
+              const Floatingbutton(),
+            ]));
       },
     );
   }
 
-  void jumpToLivePage(
-    BuildContext context, {
-    required String roomID,
-    required bool isHost,
-    required String title,
-  }) {
-    Navigator.push(
-      context,
-      // ignore: always_specify_types
-      MaterialPageRoute(
-        builder: (BuildContext context) => CallRoom(
-          title: title,
-          roomID: roomID,
-          isHost: isHost,
-        ),
-      ),
-    );
-  }
+  // void jumpToLivePage(
+  //   BuildContext context, {
+  //   required String roomID,
+  //   required bool isHost,
+  //   required String title,
+  // }) {
+  //   Navigator.push(
+  //     context,
+  //     // ignore: always_specify_types
+  //     MaterialPageRoute(
+  //       builder: (BuildContext context) => CallRoom(
+  //         title: title,
+  //         roomID: roomID,
+  //         isHost: isHost,
+  //       ),
+  //     ),
+  //   );
+  // }
 
   void joinLive(BuildContext context, String id) {
     final EventModel? event = liveEventController.getEventById(id);
@@ -371,23 +495,45 @@ class _LiveEventState extends State<LiveEvent> {
                     ElevatedButton(
                       child: const Text('Join'),
                       onPressed: () {
-                        final String enteredRoomID = event.roomId!;
-                        if (profileController.myProfile.uid !=
-                            event.user?.uid) {
-                          jumpToLivePage(
-                            context,
-                            title: event.title!,
-                            roomID: enteredRoomID,
-                            isHost: false,
-                          );
-                        } else {
-                          jumpToLivePage(
-                            context,
-                            title: event.title!,
-                            roomID: enteredRoomID,
-                            isHost: true,
-                          );
-                        }
+                        // final String enteredRoomID = event.roomId!;
+                        // if (profileController.myProfile.uid !=
+                        //     event.user?.uid) {
+                        //   jumpToLivePage(
+                        //     context,
+                        //     title: event.title!,
+                        //     roomID: enteredRoomID,
+                        //     isHost: false,
+                        //   );
+                        // } else {
+                        //   jumpToLivePage(
+                        //     context,
+                        //     title: event.title!,
+                        //     roomID: enteredRoomID,
+                        //     isHost: true,
+                        //   );
+                        // }
+                        showDialog(
+                          context: context,
+                          builder: (BuildContext context) {
+                            return AlertDialog(
+                              title: const Text('Event Details'),
+                              content: Text(event.description!),
+                              actions: <Widget>[
+                                TextButton(
+                                  onPressed: () => Get.back(),
+                                  child: const Text('Cancel'),
+                                ),
+                                TextButton(
+                                  onPressed: () {
+                                    _launchURL(event.link!);
+                                    Get.back();
+                                  },
+                                  child: const Text('Goto Meeting'),
+                                ),
+                              ],
+                            );
+                          },
+                        );
                       },
                     ),
                   ElevatedButton(
@@ -450,83 +596,19 @@ class _LiveEventState extends State<LiveEvent> {
 
   @override
   void dispose() {
-    Get.delete<LiveController>();
     super.dispose();
+  }
+
+  void _launchURL(String url) async {
+    if (await canLaunchUrl(Uri.parse(url))) {
+      await launchUrl(Uri.parse(url));
+    } else {
+      throw 'Could not launch $url';
+    }
   }
 
   String formatTime(DateTime dateTime) {
     final String formattedTime = DateFormat('h:mm a').format(dateTime);
     return formattedTime;
-  }
-}
-
-class EventCall extends StatefulWidget {
-  const EventCall({super.key, this.ongoing = false, this.full = false});
-  final bool ongoing;
-  final bool full;
-
-  @override
-  State<EventCall> createState() => _EventCallState();
-}
-
-class _EventCallState extends State<EventCall> {
-  final LiveController liveEventController = Get.put(LiveController());
-
-  @override
-  Widget build(BuildContext context) {
-    if (widget.full) {
-      return liveEventController.events.isNotEmpty
-          ? Obx(
-              () => ListView.builder(
-                itemCount: liveEventController.events.length,
-                itemBuilder: (BuildContext context, int index) {
-                  EventModel event = liveEventController.events[index];
-                  return EventItem(
-                    event: event,
-                    ongoing: liveEventController.ongoing.contains(event)
-                        ? true
-                        : false,
-                  );
-                },
-              ),
-            )
-          : const Center(
-              child: Text('No Event Available!'),
-            );
-    } else {
-      return !widget.ongoing
-          ? liveEventController.upcoming.isNotEmpty
-              ? Obx(
-                  () => ListView.builder(
-                    itemCount: liveEventController.upcoming.length,
-                    itemBuilder: (BuildContext context, int index) {
-                      EventModel event = liveEventController.upcoming[index];
-                      return EventItem(
-                        event: event,
-                        ongoing: false,
-                      );
-                    },
-                  ),
-                )
-              : const Center(
-                  child: Text('No Live Event is Upcoming'),
-                )
-          : liveEventController.ongoing.isNotEmpty
-              ? Obx(
-                  () => ListView.builder(
-                    itemCount: liveEventController.ongoing.length,
-                    itemBuilder: (BuildContext context, int index) {
-                      EventModel event = liveEventController.ongoing[index];
-                      return EventItem(
-                        event: event,
-                        ongoing: true,
-                      );
-                    },
-                  ),
-                )
-              : const Center(
-                  child: Text('No Live Event is Ongoing'),
-                );
-    }
   }
 }

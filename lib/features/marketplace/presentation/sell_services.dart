@@ -1,4 +1,5 @@
 import 'package:business_bosses_v2/features/home/widgets/sellingpopup.dart';
+import 'package:business_bosses_v2/features/marketplace/widgets/currency.dart';
 import 'package:business_bosses_v2/services/api_service.dart';
 import 'package:detectable_text_field/detector/sample_regular_expressions.dart';
 import 'package:detectable_text_field/widgets/detectable_text_field.dart';
@@ -42,6 +43,7 @@ class _CreateServiceScreenState extends State<CreateServiceScreen> {
   final ProfileController _profileController = Get.find();
   // ignore: unused_field
   final MarketController _marketController = Get.put(MarketController());
+  final TextEditingController _productnameController = TextEditingController();
   final CreateMarketController createMarketController =
       Get.put(CreateMarketController());
   List<bool>? _fileProcessing;
@@ -52,7 +54,9 @@ class _CreateServiceScreenState extends State<CreateServiceScreen> {
 
   String? description;
   String? price;
+  String? title;
   String? discount;
+  String? currency;
   String? _selectedCategory;
   String? _selectedLocation;
   String? filterCode;
@@ -60,13 +64,24 @@ class _CreateServiceScreenState extends State<CreateServiceScreen> {
   String? filterCategory;
   bool _isProcessing = false;
   bool? _isUpdating;
-  bool _shouldPromote = false;
+  final bool _shouldPromote = false;
   final TextEditingController descriptionController = TextEditingController();
   final TextEditingController _priceController = TextEditingController();
+  final TextEditingController _currencyController = TextEditingController();
+  final TextEditingController _discountController = TextEditingController();
+
+  // Future<String?>? getCountryValue() async {
+  //   SharedPreferences prefs = await SharedPreferences.getInstance();
+  //   setState(() {
+  //     _selectedLocation = prefs.getString('country') ?? _market!.location;
+  //   });
+  //   return _selectedLocation;
+  // }
 
   @override
   void initState() {
     // TODO: implement initState
+    // getCountryValue();
     super.initState();
     _isUpdating = widget.isUpd;
     if (widget.isUpd) {
@@ -75,6 +90,8 @@ class _CreateServiceScreenState extends State<CreateServiceScreen> {
     descriptionController.text = _market?.description ?? '';
     price = _market?.price ?? '';
     _priceController.text = _market?.price ?? '';
+    _discountController.text = _market?.discount.toString() ?? '';
+
     _selectedCategory = _market?.category;
     _selectedLocation = _market?.location;
     _fileProcessing = <bool>[];
@@ -82,6 +99,7 @@ class _CreateServiceScreenState extends State<CreateServiceScreen> {
 
   @override
   Widget build(BuildContext context) {
+    _currencyController.text = 'USD';
     return GetBuilder<CreateMarketController>(
         builder: (CreateMarketController controller) {
       return GestureDetector(
@@ -108,6 +126,127 @@ class _CreateServiceScreenState extends State<CreateServiceScreen> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 15),
+                  child: TextFormField(
+                    controller: _productnameController,
+                    onChanged: (String val) => title = val,
+                    textInputAction: TextInputAction.next,
+                    keyboardType: TextInputType.text,
+                    maxLength: 15,
+                    decoration: inputDecoration.copyWith(
+                      hintText: 'Enter service title',
+                    ),
+                  ),
+                ),
+
+                const SizedBox(height: 10.0),
+                Padding(
+                  padding: const EdgeInsets.only(left: 16.0, right: 16),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: <Widget>[
+                      Expanded(
+                        flex: 3,
+                        child: TextFormField(
+                          controller: _currencyController,
+                          onChanged: (String val) => currency = val,
+                          textInputAction: TextInputAction.next,
+                          keyboardType: TextInputType.text,
+                          maxLength: 3,
+                          decoration: inputDecoration.copyWith(
+                            hintText: '${currencyValues[_selectedLocation]}',
+                          ),
+                        ),
+                        // child: Padding(
+                        //   padding: const EdgeInsets.only(
+                        //       top: 18.0), // Adjust the value as needed
+                        //   child: Text(
+                        //     _selectedLocation != null
+                        //         ? '${currencyValues[_selectedLocation]}'
+                        //         : 'USD',
+                        //     style: const TextStyle(fontWeight: FontWeight.w700),
+                        //   ),
+                        // ),
+                      ),
+                      const SizedBox(
+                        width: 10,
+                      ),
+                      Expanded(
+                        flex:
+                            6, // Adjust the flex value to control the relative sizes
+                        child: TextFormField(
+                          controller: _priceController,
+                          onChanged: (String val) => price = val,
+                          textInputAction: TextInputAction.next,
+                          keyboardType: const TextInputType.numberWithOptions(
+                              decimal: true),
+                          maxLength: 6,
+                          decoration: inputDecoration.copyWith(
+                            hintText: 'Price',
+                          ),
+                        ),
+                      ),
+                      SizedBox(
+                        width: 10,
+                      ),
+                      Expanded(
+                        flex:
+                            4, // Adjust the flex value to control the relative sizes
+                        child: Stack(
+                          children: <Widget>[
+                            TextFormField(
+                              controller: _discountController,
+                              onChanged: (String val) => discount = val,
+                              textInputAction: TextInputAction.next,
+                              keyboardType: TextInputType.number,
+                              maxLength: 3,
+                              decoration: inputDecoration.copyWith(
+                                hintText: 'Discount',
+                              ),
+                            ),
+                            const Positioned(
+                              right: 10,
+                              top: 0,
+                              bottom: 25,
+                              child: Align(
+                                alignment: Alignment
+                                    .centerRight, // Vertically centers the text
+                                child: Text(
+                                  '%',
+                                  style: TextStyle(fontWeight: FontWeight.w700),
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                const SizedBox(height: 12.0),
+                Padding(
+                  padding: const EdgeInsets.only(left: 16.0, right: 16),
+                  child: DetectableTextField(
+                    controller: descriptionController,
+
+                    detectionRegExp: detectionRegExp(hashtag: false)!,
+                    onDetectionTyped: (String text) {},
+                    onDetectionFinished: () {},
+                    keyboardType: TextInputType.multiline,
+                    // minLines: 5,
+                    maxLength: 300,
+                    maxLines: 5,
+                    basicStyle: Theme.of(context).textTheme.bodyMedium,
+                    onChanged: (String val) => description = val,
+
+                    decoration: inputDecoration.copyWith(
+                      hintText: 'Describe your Listing',
+                    ),
+                  ),
+                ),
+                const SizedBox(height: 10.0),
                 Padding(
                   padding: const EdgeInsets.only(left: 16.0, right: 16),
                   child: Container(
@@ -141,6 +280,8 @@ class _CreateServiceScreenState extends State<CreateServiceScreen> {
                         'Monthly Account Book Keeping',
                         'Logo & Branding Guidelines',
                         'Test, Review & Feedback',
+                        '1 to 1 Mentoring/Coaching',
+                        'Appointment',
                         'Other Business Service',
                       ].map<DropdownMenuItem<String>>((String? value) {
                         return DropdownMenuItem<String>(
@@ -148,68 +289,13 @@ class _CreateServiceScreenState extends State<CreateServiceScreen> {
                           child: value != null
                               ? Text(value)
                               : Text(
-                                  value ?? 'Select Service',
+                                  value ?? 'Select Category',
                                   style: bodyText2.copyWith(
                                     color: hintColor,
                                   ),
                                 ),
                         );
                       }).toList(),
-                    ),
-                  ),
-                ),
-                const SizedBox(height: 24.0),
-                Padding(
-                  padding: const EdgeInsets.only(left: 16.0, right: 16),
-                  child: Stack(
-                    children: [
-                      Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: TextFormField(
-                          controller: _priceController,
-                          onChanged: (String val) => price = val,
-                          textInputAction: TextInputAction.next,
-                          keyboardType: TextInputType.number,
-                          maxLength: 3,
-                          decoration: inputDecoration.copyWith(
-                            hintText: 'Price',
-                          ),
-                        ),
-                      ),
-                      const Positioned(
-                        left: 10,
-                        top: 0,
-                        bottom: 25,
-                        child: Align(
-                          alignment: Alignment
-                              .centerLeft, // Vertically centers the text
-                          child: Text(
-                            '\$',
-                            style: TextStyle(fontWeight: FontWeight.w700),
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-                const SizedBox(height: 12.0),
-                Padding(
-                  padding: const EdgeInsets.only(left: 16.0, right: 16),
-                  child: DetectableTextField(
-                    controller: descriptionController,
-
-                    detectionRegExp: detectionRegExp(hashtag: false)!,
-                    onDetectionTyped: (String text) {},
-                    onDetectionFinished: () {},
-                    keyboardType: TextInputType.multiline,
-                    // minLines: 5,
-                    maxLength: 300,
-                    maxLines: 5,
-                    basicStyle: Theme.of(context).textTheme.bodyMedium,
-                    onChanged: (String val) => description = val,
-
-                    decoration: inputDecoration.copyWith(
-                      hintText: 'Describe your Listing',
                     ),
                   ),
                 ),
@@ -322,84 +408,86 @@ class _CreateServiceScreenState extends State<CreateServiceScreen> {
                       ? Container()
                       : Preview(controller: createMarketController),
                 ),
-                widget.isUpd
-                    ? Container()
-                    : Column(
-                        children: <Widget>[
-                          Align(
-                            alignment: Alignment.center,
-                            child: Container(
-                              child: Padding(
-                                padding: const EdgeInsets.only(
-                                    top: 10, bottom: 10, left: 16, right: 16),
-                                child: Row(
-                                  children: <Widget>[
-                                    SvgPicture.asset('assets/svgs/rocket.svg'),
-                                    const SizedBox(width: 15),
-                                    const Expanded(
-                                      child: Column(
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.start,
-                                        children: <Widget>[
-                                          Text(
-                                            'Boost this listing?',
-                                            style: TextStyle(
-                                              fontWeight: FontWeight.w600,
-                                              fontSize: 18,
-                                            ),
-                                          ),
-                                          Text(
-                                            'Reach a wider audience and get more views',
-                                            style: TextStyle(
-                                              fontWeight: FontWeight.w600,
-                                              fontSize: 11,
-                                              color: Color(0xFF777777),
-                                            ),
-                                          ),
-                                        ],
-                                      ),
-                                    ),
-                                    Row(
-                                      children: <Widget>[
-                                        const Text(
-                                          'No',
-                                          style: TextStyle(
-                                              fontSize: 8,
-                                              fontWeight: FontWeight.w700),
-                                        ),
-                                        Switch(
-                                          value: _shouldPromote,
-                                          onChanged: (bool value) {
-                                            setState(() {
-                                              _shouldPromote = value;
-                                            });
-                                          },
-                                        ),
-                                        const Text(
-                                          'Yes',
-                                          style: TextStyle(
-                                              fontSize: 8,
-                                              fontWeight: FontWeight.w700),
-                                        ),
-                                      ],
-                                    ),
-                                  ],
-                                ),
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
-                const SizedBox(
-                  height: 20,
-                ),
+                // widget.isUpd
+                //     ? Container()
+                //     : Column(
+                //         children: <Widget>[
+                //           Align(
+                //             alignment: Alignment.center,
+                //             child: Container(
+                //               child: Padding(
+                //                 padding: const EdgeInsets.only(
+                //                     top: 10, bottom: 10, left: 16, right: 16),
+                //                 child: Row(
+                //                   children: <Widget>[
+                //                     SvgPicture.asset('assets/svgs/rocket.svg'),
+                //                     const SizedBox(width: 15),
+                //                     const Expanded(
+                //                       child: Column(
+                //                         crossAxisAlignment:
+                //                             CrossAxisAlignment.start,
+                //                         children: <Widget>[
+                //                           Text(
+                //                             'Boost this listing?',
+                //                             style: TextStyle(
+                //                               fontWeight: FontWeight.w600,
+                //                               fontSize: 18,
+                //                             ),
+                //                           ),
+                //                           Text(
+                //                             'Reach a wider audience and get more views',
+                //                             style: TextStyle(
+                //                               fontWeight: FontWeight.w600,
+                //                               fontSize: 11,
+                //                               color: Color(0xFF777777),
+                //                             ),
+                //                           ),
+                //                         ],
+                //                       ),
+                //                     ),
+                //                     Row(
+                //                       children: <Widget>[
+                //                         const Text(
+                //                           'No',
+                //                           style: TextStyle(
+                //                               fontSize: 8,
+                //                               fontWeight: FontWeight.w700),
+                //                         ),
+                //                         Switch(
+                //                           value: _shouldPromote,
+                //                           onChanged: (bool value) {
+                //                             setState(() {
+                //                               _shouldPromote = value;
+                //                             });
+                //                           },
+                //                         ),
+                //                         const Text(
+                //                           'Yes',
+                //                           style: TextStyle(
+                //                               fontSize: 8,
+                //                               fontWeight: FontWeight.w700),
+                //                         ),
+                //                       ],
+                //                     ),
+                //                   ],
+                //                 ),
+                //               ),
+                //             ),
+                //           ),
+                //         ],
+                //       ),
+                // const SizedBox(
+                //   height: 20,
+                // ),
                 Padding(
                   padding: const EdgeInsets.only(left: 16.0, right: 16),
                   child: MCustomButton(
                     onPressed: () async {
-                      setState(() {
-                        _isProcessing = true;
-                      });
+                      if (createMarketController.imageFileList.isEmpty) {
+                        showSnackBar(context,
+                            message: 'You must select an image to continue');
+                        return;
+                      }
                       if (descriptionController.text.isEmpty) {
                         showSnackBar(
                           context,
@@ -411,6 +499,9 @@ class _CreateServiceScreenState extends State<CreateServiceScreen> {
                         });
                         return;
                       } else {
+                        setState(() {
+                          _isProcessing = true;
+                        });
                         await _onChangeForum();
                       }
                       setState(() {
@@ -501,7 +592,8 @@ class _CreateServiceScreenState extends State<CreateServiceScreen> {
         'category': removeAfterHyphen(_selectedCategory),
         'location': _selectedLocation,
         'description': description,
-        'price': price,
+        'title': title,
+        'price': _currencyController.text + price.toString(),
         'discount': discount,
         'timestamp': DateTime.now().millisecondsSinceEpoch,
         'isProduct': false,
@@ -512,7 +604,9 @@ class _CreateServiceScreenState extends State<CreateServiceScreen> {
         'category': removeAfterHyphen(_selectedCategory),
         'location': _selectedLocation,
         'description': descriptionController.text,
-        'price': price,
+        'title': _productnameController.text,
+        'price': _currencyController.text + _priceController.text,
+        'discount': _discountController.text,
         'promote': _market?.promote,
         'approved': _market?.approved,
         'likes': _market?.likes,
@@ -529,9 +623,11 @@ class _CreateServiceScreenState extends State<CreateServiceScreen> {
           body: <String, dynamic>{
             'category': removeAfterHyphen(_selectedCategory),
             'location': _selectedLocation,
+            'title': _productnameController.text,
             'description': descriptionController.text,
             'price': price,
             'images': _market?.images,
+            'discount': _discountController.text,
           });
       Get.back();
     }

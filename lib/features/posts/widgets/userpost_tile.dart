@@ -1,23 +1,33 @@
 import 'dart:convert';
 import 'package:business_bosses_v2/common/widgets/network_image_with_placeholder.dart';
+import 'package:business_bosses_v2/features/donations/models/donations_model.dart';
+import 'package:business_bosses_v2/features/donations/presentation/expanded_donations_screen.dart';
+import 'package:business_bosses_v2/features/forum/presentation/expanded_forum_view.dart';
 import 'package:business_bosses_v2/features/home/controller/home_controller.dart';
+import 'package:business_bosses_v2/features/live_event/controller/live_event_controller.dart';
 import 'package:business_bosses_v2/features/live_event/models/events_model.dart';
 import 'package:business_bosses_v2/features/live_event/presentation/create_event.dart';
-import 'package:business_bosses_v2/features/live_event/widgets/call_room.dart';
+import 'package:business_bosses_v2/features/live_event/presentation/attendance_list.dart';
 import 'package:business_bosses_v2/features/posts/controllers/create_post_controller.dart';
 import 'package:business_bosses_v2/features/posts/models/post_model.dart';
+import 'package:business_bosses_v2/features/posts/presentation/create_poll_screen.dart';
+import 'package:business_bosses_v2/features/posts/widgets/attendance_count.dart';
 import 'package:business_bosses_v2/features/posts/widgets/post_images.dart';
 import 'package:business_bosses_v2/features/posts/widgets/post_like_comment.dart';
 import 'package:business_bosses_v2/features/profile/controller/profile_controller.dart';
 import 'package:business_bosses_v2/features/profile/widgets/premium_profile_tile.dart';
 import 'package:business_bosses_v2/functions/my_native_functions.dart';
 import 'package:business_bosses_v2/services/api_service.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:detectable_text_field/detector/sample_regular_expressions.dart';
 import 'package:detectable_text_field/widgets/detectable_text.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_polls/flutter_polls.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
+import 'package:intl/intl.dart';
 import 'package:lottie/lottie.dart';
+import 'package:url_launcher/url_launcher.dart';
 import 'package:url_launcher/url_launcher_string.dart';
 import '../../../action/action.dart';
 import '../../../common/models/api_response_model.dart';
@@ -55,6 +65,9 @@ class _PostTileState extends State<PostTile> {
   bool hide = false;
   final ProfileController profileController = Get.find();
   final HomeController homeController = Get.find();
+  final LiveController liveController = Get.put(LiveController());
+  String? selectedValue;
+  NumberFormat formatter = NumberFormat.compact();
 
   Future<void> connect(String userId) async {
     // ignore: unused_local_variable
@@ -128,24 +141,63 @@ class _PostTileState extends State<PostTile> {
 
   @override
   Widget build(BuildContext context) {
-    String? title, roomid, date, starttime, host, photourl, startat, endat;
+    String? title,
+        roomid,
+        date,
+        starttime,
+        host,
+        photourl,
+        startat,
+        endat,
+        link,
+        description;
+    int? eventId;
 
+    // Get the vote counts for each option
+    Map<String, int> voteCounts = countVotes(widget.post);
+    bool hasVoted = userHasVoted(widget.post, profileController);
+    String? selectedVote = userSelectedOption(widget.post, profileController);
+// Create PollOption list based on the vote counts
+    List<PollOption> pollOptions = List.generate(
+      widget.post.options != null ? widget.post.options!.length : 0,
+      (int index) {
+        String option = widget.post.options![index];
+        int votes = voteCounts[option] ?? 0;
+
+        return PollOption(
+          id: option,
+          title: Text(
+            option,
+            style: const TextStyle(color: Colors.black),
+          ),
+          votes: votes,
+        );
+      },
+    );
     if (widget.post.livedata != null) {
       try {
-        final jsonData = jsonDecode(widget.post.livedata!.toString());
-
-        title = jsonData['title'];
-        roomid = jsonData['roomId'];
-        date = jsonData['date'];
-        starttime = jsonData['starttime'];
-        host = jsonData['host'];
-        photourl = jsonData['photourl'];
-        startat = jsonData['startat'];
-        endat = jsonData['endat'];
+        if (widget.post.livedata!.toString().contains('roomId')) {
+          final jsonData = jsonDecode(widget.post.livedata!.toString());
+          eventId = jsonData['id'];
+          title = jsonData['title'];
+          roomid = jsonData['roomId'];
+          date = jsonData['date'];
+          starttime = jsonData['starttime'];
+          host = jsonData['host'];
+          link = jsonData['link'];
+          description = jsonData['description'];
+          photourl = jsonData['photourl'];
+          startat = jsonData['startat'];
+          endat = jsonData['endat'];
+        } else {
+          final jsonData = jsonDecode(widget.post.donation!.toString());
+          title = jsonData['title'];
+        }
       } catch (e) {}
     } else {}
 
     EventModel event = EventModel(
+      id: eventId,
       title: title,
       roomId: roomid ?? '',
       startAt: DateTime.parse(startat ?? '2023-11-07T10:45:00.000Z'),
@@ -219,8 +271,58 @@ class _PostTileState extends State<PostTile> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[
+                if (widget.post.reposts?.length != null &&
+                    widget.post.reposts!.isNotEmpty) ...<Widget>[
+                  Padding(
+                    padding: const EdgeInsets.only(left: 15.0, top: 10),
+                    child: Row(
+                      children: <Widget>[
+                        SvgPicture.asset(
+                          'assets/svgs/repost.svg',
+                          height: 13,
+                        ),
+                        const SizedBox(
+                          width: 5,
+                        ),
+                        widget.post.reposts?.contains(
+                                    profileController.myProfile.uid) ==
+                                true
+                            ? Row(
+                                children: <Widget>[
+                                  const Text(
+                                    'You Reposted',
+                                    style: TextStyle(fontSize: 12),
+                                  ),
+                                  const SizedBox(
+                                    width: 5,
+                                  ),
+                                  Container(
+                                    width: 3.0,
+                                    height: 3.0,
+                                    decoration: const BoxDecoration(
+                                      shape: BoxShape.circle,
+                                      color: Colors.black,
+                                    ),
+                                  ),
+                                  const SizedBox(
+                                    width: 5,
+                                  ),
+                                ],
+                              )
+                            : Container(),
+                        GestureDetector(
+                          onTap: () {},
+                          child: Text(
+                            '${widget.post.reposts?.length.toString()} Reposts',
+                            style: const TextStyle(fontSize: 12),
+                          ),
+                        ),
+                      ],
+                    ),
+                  )
+                ],
                 ListTile(
-                  contentPadding: const EdgeInsets.only(left: 15, right: 0),
+                  contentPadding: const EdgeInsets.only(left: 15, right: 15),
                   leading: GestureDetector(
                     onTap: () {
                       if (profileController.myProfile.uid ==
@@ -356,12 +458,18 @@ class _PostTileState extends State<PostTile> {
                                   ),
                                   onSelected: (String val) {
                                     if (val == 'Edit') {
-                                      Get.to(() => CreatePostScreen(
-                                            postId: widget.post.postId,
-                                            post: widget.post.title,
-                                            postDetail: widget.post,
-                                            images: widget.post.images,
-                                          ));
+                                      if (widget.post.isPolled!) {
+                                        Get.to(() => CreatePollScreen(
+                                              postDetail: widget.post,
+                                            ));
+                                      } else {
+                                        Get.to(() => CreatePostScreen(
+                                              postId: widget.post.postId,
+                                              post: widget.post.title,
+                                              postDetail: widget.post,
+                                              images: widget.post.images,
+                                            ));
+                                      }
                                     } else if (val == 'updateevent') {
                                       Get.to(() => CreateEvent(
                                             event: event,
@@ -394,6 +502,7 @@ class _PostTileState extends State<PostTile> {
                                                     .onDeletePost(
                                                         widget.post.postId);
                                                 Get.back();
+                                                setState(() {});
                                               },
                                               child: const Text('Yes'),
                                             ),
@@ -435,7 +544,8 @@ class _PostTileState extends State<PostTile> {
                                     )
                                   : Padding(
                                       padding: const EdgeInsets.only(
-                                          left: 14, right: 15.0),
+                                        left: 14,
+                                      ),
                                       child: InkWell(
                                         onTap: () {
                                           _showDialog();
@@ -487,6 +597,7 @@ class _PostTileState extends State<PostTile> {
                           children: <Widget>[
                             DetectableText(
                               text: widget.post.title,
+                              trimLength: 100,
                               detectionRegExp: detectionRegExp(hashtag: false)!,
                               detectedStyle: bodyText2.copyWith(
                                 color: Colors.blue,
@@ -505,31 +616,170 @@ class _PostTileState extends State<PostTile> {
                                 await launchUrlString(url);
                               },
                             ),
+                            if (widget.post.isPolled! &&
+                                (widget.post.options != null &&
+                                    widget.post.options!.isNotEmpty))
+                              FlutterPolls(
+                                leadingVotedProgessColor: Colors.black38,
+                                pollId: widget.post.postId,
+                                onVoted: (PollOption pollOption,
+                                    int newTotalVotes) async {
+                                  homeController.pollVote(
+                                      widget.post, pollOption.id!);
+                                  setState(() {
+                                    hasVoted = true;
+                                    selectedVote = pollOption.id;
+                                  });
+                                  return true;
+                                },
+                                pollTitle: const Align(
+                                  alignment: Alignment.topLeft,
+                                  child: Text(
+                                    '',
+                                    style: TextStyle(
+                                      fontSize: 0,
+                                    ),
+                                  ),
+                                ),
+                                hasVoted: hasVoted,
+                                userVotedOptionId: selectedVote,
+                                pollOptionsSplashColor: Colors.grey,
+                                votedProgressColor:
+                                    Colors.grey.withOpacity(0.3),
+                                votedBackgroundColor:
+                                    Colors.grey.withOpacity(0.2),
+                                pollOptions: pollOptions,
+                                votedCheckmark: const Icon(
+                                  Icons.check_circle,
+                                  color: Colors.black,
+                                  weight: 18,
+                                  size: 18,
+                                ),
+                              ),
                             const SizedBox(height: 10),
                           ],
                         ),
-                      if (widget.post.livedata != null) ...<Widget>[
-                        GestureDetector(
-                          onTap: () {
-                            // Add2Calendar.addEvent2Cal(Event(
-                            //     title: '$title',
-                            //     startDate: DateTime.parse(startat!),
-                            //     endDate: DateTime.parse(endat!)));
-                          },
-                          child: Container(
-                            decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(12),
-                              image: const DecorationImage(
-                                image:
-                                    AssetImage('assets/images/liveeventt.png'),
-                                fit: BoxFit.cover,
+                      if (widget.post.forum != null) ...<Widget>{
+                        Stack(
+                          children: <Widget>[
+                            SizedBox(
+                              width: double.infinity,
+                              height: 200,
+                              child: ClipRRect(
+                                borderRadius: BorderRadius.circular(15.0),
+                                child: FittedBox(
+                                  fit: BoxFit.fill,
+                                  child: CachedNetworkImage(
+                                    imageUrl:
+                                        'https://businessbosses.com.ng/learningImages/events.jpg',
+                                    memCacheHeight: 512,
+                                    memCacheWidth: 512,
+                                    placeholder:
+                                        (BuildContext context, String photo) =>
+                                            const CircularProgressIndicator(),
+                                    errorWidget: (BuildContext context,
+                                            String photo, Object error) =>
+                                        const Icon(Icons.error),
+                                  ),
+                                ),
                               ),
-                              // You can also add other properties like boxShadow for a more realistic effect
                             ),
-                            child: Stack(children: [
-                              Padding(
-                                padding: const EdgeInsets.all(10.0),
-                                child: Container(
+                            // Positioned(
+                            //   left: 10,
+                            //   top: 10,
+                            //   child: Container(
+                            //     padding: const EdgeInsets.symmetric(
+                            //         horizontal: 10, vertical: 8),
+                            //     decoration: BoxDecoration(
+                            //         color: Colors.white.withAlpha(70),
+                            //         borderRadius: BorderRadius.circular(5)),
+                            //     child: Center(
+                            //         child: Text('Industry name',
+                            //             style: const TextStyle(
+                            //               color: Colors.white,
+                            //             ))),
+                            //   ),
+                            // ),
+                            Padding(
+                              padding:
+                                  const EdgeInsets.symmetric(horizontal: 15.0),
+                              child: Column(
+                                children: <Widget>[
+                                  const SizedBox(
+                                    height: 80,
+                                  ),
+                                  Center(
+                                    child: Text(widget.post.forum!.title!,
+                                        maxLines: 2,
+                                        overflow: TextOverflow.ellipsis,
+                                        style: const TextStyle(
+                                            fontSize: 18,
+                                            color: Colors.white,
+                                            fontWeight: FontWeight.w700)),
+                                  ),
+                                  const SizedBox(
+                                    height: 10,
+                                  ),
+                                  Container(
+                                      padding: const EdgeInsets.symmetric(
+                                          horizontal: 10, vertical: 5),
+                                      decoration: BoxDecoration(
+                                          color: Colors.white.withAlpha(70),
+                                          borderRadius:
+                                              BorderRadius.circular(50)),
+                                      child: Wrap(
+                                          crossAxisAlignment:
+                                              WrapCrossAlignment.center,
+                                          children: <Widget>[
+                                            GestureDetector(
+                                              onTap: () {
+                                                Get.to(() => ExpandedForumView(
+                                                    forum: widget.post.forum!));
+                                              },
+                                              child: const Text(
+                                                'View Post',
+                                                style: TextStyle(
+                                                    color: Colors.white),
+                                              ),
+                                            ),
+                                            const SizedBox(
+                                              width: 5,
+                                            ),
+                                            SvgPicture.asset(
+                                              'assets/svgs/nexticon.svg',
+                                              color: Colors.white,
+                                            ),
+                                          ]))
+                                ],
+                              ),
+                            )
+                          ],
+                        )
+                      },
+                      if (widget.post.livedata != null) ...<Widget>[
+                        if (widget.post.livedata!
+                            .toString()
+                            .contains('roomId')) ...<Widget>{
+                          GestureDetector(
+                            onTap: () {
+                              // Add2Calendar.addEvent2Cal(Event(
+                              //     title: '$title',
+                              //     startDate: DateTime.parse(startat!),
+                              //     endDate: DateTime.parse(endat!)));
+                            },
+                            child: Container(
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(12),
+                                image: const DecorationImage(
+                                  image: AssetImage(
+                                      'assets/images/liveeventt.png'),
+                                  fit: BoxFit.cover,
+                                ),
+                                // You can also add other properties like boxShadow for a more realistic effect
+                              ),
+                              child: Stack(children: <Widget>[
+                                Padding(
+                                  padding: const EdgeInsets.all(10.0),
                                   child: Column(
                                     children: <Widget>[
                                       Row(
@@ -648,17 +898,216 @@ class _PostTileState extends State<PostTile> {
                                                 ? 'Happening now'
                                                 : '$date, $starttime',
                                         style: const TextStyle(
-                                            fontWeight: FontWeight.w700,
-                                            color: Colors.white),
+                                          fontWeight: FontWeight.w700,
+                                          color: Colors.white,
+                                        ),
                                       ),
+                                      if (eventId != null)
+                                        AttendeesCountWidget(
+                                          events: homeController.events,
+                                          currentEventId: eventId,
+                                        ),
+                                      isJoinedEvent()
+                                          ? ElevatedButton(
+                                              style: ElevatedButton.styleFrom(
+                                                backgroundColor: Colors.grey,
+                                                foregroundColor: Colors.white,
+                                                minimumSize: const Size(55, 32),
+                                                shape: RoundedRectangleBorder(
+                                                  borderRadius:
+                                                      BorderRadius.circular(
+                                                          12), // Set the border radius
+                                                ),
+                                              ),
+                                              onPressed: () async {
+                                                Get.to(() => AttendanceList(
+                                                      eventId: eventId!,
+                                                    ));
+                                              },
+                                              child: const Text(
+                                                'Attending',
+                                                style: TextStyle(
+                                                  fontSize: 10,
+                                                  fontWeight: FontWeight.w500,
+                                                ),
+                                              ),
+                                            )
+                                          : ElevatedButton(
+                                              onPressed: () async {
+                                                await homeController
+                                                    .attendEvent(event);
+                                                liveController.joined
+                                                    .add(event);
+
+                                                setState(() {});
+                                              },
+                                              child: const Text('Attend'),
+                                            ),
                                     ],
                                   ),
                                 ),
-                              ),
-                            ]),
-                          ),
-                        )
+                              ]),
+                            ),
+                          )
+                        },
                       ],
+                      if (widget.post.donation != null) ...<Widget>{
+                        Container(
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(12),
+                            image: const DecorationImage(
+                              image: AssetImage('assets/images/donationph.png'),
+                              fit: BoxFit.cover,
+                            ),
+                          ),
+                          child: Stack(children: <Widget>[
+                            Positioned.fill(
+                              child: Container(
+                                decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(12),
+                                  color: const Color.fromARGB(255, 0, 0, 0)
+                                      .withOpacity(
+                                          0.5), // Adjust the opacity as needed
+                                ),
+                              ),
+                            ),
+                            Padding(
+                              padding: const EdgeInsets.all(10.0),
+                              child: Column(
+                                children: <Widget>[
+                                  Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
+                                    children: <Widget>[
+                                      Container(
+                                        decoration: BoxDecoration(
+                                          color: Colors.white.withAlpha(70),
+                                          borderRadius:
+                                              BorderRadius.circular(5),
+                                        ),
+                                        child: Padding(
+                                          padding: const EdgeInsets.all(5.0),
+                                          child: Row(
+                                            children: <Widget>[
+                                              Text(
+                                                widget.post.donation!
+                                                            .amountRecieved <
+                                                        widget.post.donation!
+                                                            .targetAmount!
+                                                    ? 'Ongoing'
+                                                    : 'Completed',
+                                                style: const TextStyle(
+                                                  color: Colors.white,
+                                                ),
+                                              ),
+                                            ],
+                                          ),
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                  Padding(
+                                    padding: const EdgeInsets.all(8.0),
+                                    child: Text(
+                                      widget.post.donation?.title ?? '',
+                                      style: const TextStyle(
+                                          color: Colors.white,
+                                          fontSize: 18,
+                                          fontWeight: FontWeight.w700),
+                                    ),
+                                  ),
+                                  const SizedBox(
+                                    height: 5,
+                                  ),
+                                  ClipRRect(
+                                    borderRadius: BorderRadius.circular(15),
+                                    child: LinearProgressIndicator(
+                                      value: (widget
+                                              .post.donation!.amountRecieved /
+                                          widget.post.donation!.targetAmount!),
+                                      minHeight: 4,
+                                      backgroundColor: Colors.white24,
+                                      valueColor:
+                                          const AlwaysStoppedAnimation<Color>(
+                                              Colors.white),
+                                    ),
+                                  ),
+                                  const SizedBox(
+                                    height: 15,
+                                  ),
+                                  Row(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: <Widget>[
+                                      SvgPicture.asset(
+                                        'assets/svgs/coin.svg',
+                                        height: 20,
+                                      ),
+                                      const SizedBox(
+                                        width: 3,
+                                      ),
+                                      Text(
+                                        '${formatter.format(widget.post.donation!.amountRecieved)} out of ',
+                                        style: const TextStyle(
+                                            fontWeight: FontWeight.w700,
+                                            fontSize: 14,
+                                            color: Colors.white),
+                                      ),
+                                      Text(
+                                        formatter
+                                            .format(widget
+                                                .post.donation!.targetAmount)
+                                            .toString(),
+                                        style: const TextStyle(
+                                            fontWeight: FontWeight.w700,
+                                            color: Colors.white,
+                                            fontSize: 14),
+                                      ),
+                                      const Text(
+                                        ' Target',
+                                        style: TextStyle(
+                                            fontWeight: FontWeight.w700,
+                                            color: Colors.white,
+                                            fontSize: 14),
+                                      ),
+                                    ],
+                                  ),
+                                  const SizedBox(
+                                    height: 10,
+                                  ),
+                                  if (widget.post.donation!.amountRecieved <
+                                      widget.post.donation!.targetAmount!)
+                                    ElevatedButton(
+                                      onPressed: () async {
+                                        widget.post.donation!.setViews(
+                                            widget.post.donation!.views! + 1);
+                                        ApiService.put(
+                                            path:
+                                                'donation/approve/${widget.post.donation!.id}',
+                                            body: <String, dynamic>{
+                                              'views':
+                                                  widget.post.donation!.views! +
+                                                      1,
+                                              'isActive': true,
+                                              'isApproved': true,
+                                            });
+                                        DonationModel donation = DonationModel
+                                            .fromMap(<String, dynamic>{
+                                          ...widget.post.donation!.toMap(),
+                                          'user': widget.post.user!.toMap(),
+                                          'likes': <String>[],
+                                          'comments': <CommentModel>[],
+                                        });
+                                        Get.to(() => ExpandedDonationScreen(
+                                            donation: donation));
+                                      },
+                                      child: const Text('Donate'),
+                                    ),
+                                ],
+                              ),
+                            ),
+                          ]),
+                        ),
+                      },
                       if (widget.post.images?.isNotEmpty ?? false)
                         PostImages(
                           post: widget.post,
@@ -787,43 +1236,165 @@ class _PostTileState extends State<PostTile> {
                               padding: const EdgeInsets.only(right: 15),
                               child: ElevatedButton(
                                   onPressed: () {
-                                    final String enteredRoomID = event.roomId!;
-                                    if (profileController.myProfile.uid !=
-                                        event.user?.uid) {
-                                      jumpToLivePage(
-                                        context,
-                                        title: event.title!,
-                                        roomID: enteredRoomID,
-                                        isHost: false,
-                                      );
-                                    } else {
-                                      jumpToLivePage(
-                                        context,
-                                        title: event.title!,
-                                        roomID: enteredRoomID,
-                                        isHost: true,
-                                      );
-                                    }
+                                    // final String enteredRoomID = event.roomId!;
+                                    // if (profileController.myProfile.uid !=
+                                    //     event.user?.uid) {
+                                    //   jumpToLivePage(
+                                    //     context,
+                                    //     title: event.title!,
+                                    //     roomID: enteredRoomID,
+                                    //     isHost: false,
+                                    //   );
+                                    // } else {
+                                    //   jumpToLivePage(
+                                    //     context,
+                                    //     title: event.title!,
+                                    //     roomID: enteredRoomID,
+                                    //     isHost: true,
+                                    //   );
+                                    // }
+                                    showDialog(
+                                      context: context,
+                                      builder: (BuildContext context) {
+                                        return AlertDialog(
+                                          title: const Text('Event Details'),
+                                          content: Text(description!),
+                                          actions: <Widget>[
+                                            TextButton(
+                                              onPressed: () => Get.back(),
+                                              child: const Text('Cancel'),
+                                            ),
+                                            TextButton(
+                                              onPressed: () {
+                                                _launchURL(link!);
+                                                Get.back();
+                                              },
+                                              child: const Text('Goto Meeting'),
+                                            ),
+                                          ],
+                                        );
+                                      },
+                                    );
                                   },
                                   child: const Text('Join')),
                             ))
                           : Expanded(
                               child: Row(
-                              children: [
+                              children: <Widget>[
                                 GestureDetector(
-                                  onTap: () => _sharePost(),
+                                  onTap: () {
+                                    showModalBottomSheet(
+                                        context: context,
+                                        shape: const RoundedRectangleBorder(
+                                          borderRadius: BorderRadius.vertical(
+                                            top: Radius.circular(25.0),
+                                          ),
+                                        ),
+                                        builder: (BuildContext context) {
+                                          return SizedBox(
+                                            height: 250,
+                                            child: Padding(
+                                              padding:
+                                                  const EdgeInsets.all(15.0),
+                                              child: Column(
+                                                crossAxisAlignment:
+                                                    CrossAxisAlignment.start,
+                                                mainAxisSize: MainAxisSize.min,
+                                                children: <Widget>[
+                                                  Expanded(
+                                                    // Set a specific height
+                                                    child: ListView.separated(
+                                                      itemCount: 2,
+                                                      separatorBuilder:
+                                                          (BuildContext context,
+                                                                  int index) =>
+                                                              const Divider(),
+                                                      itemBuilder:
+                                                          (BuildContext context,
+                                                              int index) {
+                                                        return ListTile(
+                                                          onTap: () {
+                                                            Navigator.pop(
+                                                                context);
+                                                            index == 0
+                                                                ? _sharePost()
+                                                                : () async {
+                                                                    widget.controller.postRepost(
+                                                                        profileController
+                                                                            .myProfile
+                                                                            .uid,
+                                                                        widget
+                                                                            .post
+                                                                            .postId,
+                                                                        'post',
+                                                                        widget
+                                                                            .post
+                                                                            .timestamp,
+                                                                        widget
+                                                                            .post
+                                                                            .user!
+                                                                            .uid,
+                                                                        widget
+                                                                            .post
+                                                                            .oldtimestamp);
+                                                                  };
+                                                          },
+                                                          minVerticalPadding: 0,
+                                                          contentPadding:
+                                                              const EdgeInsets
+                                                                  .only(
+                                                                  left: 10),
+                                                          leading:
+                                                              SvgPicture.asset(
+                                                            index == 0
+                                                                ? 'assets/svgs/share.svg'
+                                                                : 'assets/svgs/repost.svg',
+                                                            height: index == 0
+                                                                ? 18
+                                                                : 25,
+                                                            color: textColor
+                                                                .withOpacity(1),
+                                                          ),
+                                                          title: Text(
+                                                            index == 0
+                                                                ? 'Share Post'
+                                                                : widget.post.reposts?.contains(profileController
+                                                                            .myProfile
+                                                                            .uid) ==
+                                                                        true
+                                                                    ? 'Undo Repost'
+                                                                    : 'Repost',
+                                                            style: const TextStyle(
+                                                                fontSize: 18,
+                                                                fontWeight:
+                                                                    FontWeight
+                                                                        .w700),
+                                                          ),
+                                                        );
+                                                      },
+                                                    ),
+                                                  )
+                                                ],
+                                              ),
+                                            ),
+                                          );
+                                        });
+                                  },
                                   child: SvgPicture.asset(
-                                    'assets/svgs/share.svg',
-                                    height: 15.0,
-                                    width: 15.0,
+                                    'assets/svgs/repost.svg',
+                                    height: 18.0,
+                                    width: 18.0,
                                   ),
                                 ),
                                 const Spacer(),
                                 Padding(
                                   padding: const EdgeInsets.only(right: 15),
                                   child: Text(
-                                    TimeFormat.formatString(
-                                        widget.post.timestamp),
+                                    widget.post.oldtimestamp != 0
+                                        ? TimeFormat.formatString(
+                                            widget.post.oldtimestamp)
+                                        : TimeFormat.formatString(
+                                            widget.post.timestamp),
                                     style: Theme.of(context)
                                         .textTheme
                                         .bodyMedium
@@ -837,18 +1408,105 @@ class _PostTileState extends State<PostTile> {
                     ],
                     if (widget.post.livedata == null) ...<Widget>[
                       GestureDetector(
-                        onTap: () => _sharePost(),
+                        onTap: () {
+                          showModalBottomSheet(
+                              context: context,
+                              shape: const RoundedRectangleBorder(
+                                borderRadius: BorderRadius.vertical(
+                                  top: Radius.circular(25.0),
+                                ),
+                              ),
+                              builder: (BuildContext context) {
+                                return SizedBox(
+                                  height: 250,
+                                  child: Padding(
+                                    padding: const EdgeInsets.all(15.0),
+                                    child: Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      mainAxisSize: MainAxisSize.min,
+                                      children: <Widget>[
+                                        Expanded(
+                                          // Set a specific height
+                                          child: ListView.separated(
+                                            itemCount: 2,
+                                            separatorBuilder:
+                                                (BuildContext context,
+                                                        int index) =>
+                                                    const Divider(),
+                                            itemBuilder: (BuildContext context,
+                                                int index) {
+                                              return ListTile(
+                                                onTap: () {
+                                                  Navigator.pop(context);
+                                                  index == 0
+                                                      ? _sharePost()
+                                                      : widget.controller
+                                                          .postRepost(
+                                                              profileController
+                                                                  .myProfile
+                                                                  .uid,
+                                                              widget
+                                                                  .post.postId,
+                                                              'post',
+                                                              widget.post
+                                                                  .timestamp,
+                                                              widget.post.user!
+                                                                  .uid,
+                                                              widget.post
+                                                                  .oldtimestamp);
+                                                },
+                                                minVerticalPadding: 0,
+                                                contentPadding:
+                                                    const EdgeInsets.only(
+                                                        left: 10),
+                                                leading: SvgPicture.asset(
+                                                  index == 0
+                                                      ? 'assets/svgs/share.svg'
+                                                      : 'assets/svgs/repost.svg',
+                                                  height: index == 0 ? 18 : 25,
+                                                  color:
+                                                      textColor.withOpacity(1),
+                                                ),
+                                                title: Text(
+                                                  index == 0
+                                                      ? 'Share Post'
+                                                      : widget.post.reposts?.contains(
+                                                                  profileController
+                                                                      .myProfile
+                                                                      .uid) ==
+                                                              true
+                                                          ? 'Undo Repost'
+                                                          : 'Repost',
+                                                  style: const TextStyle(
+                                                      fontSize: 18,
+                                                      fontWeight:
+                                                          FontWeight.w700),
+                                                ),
+                                              );
+                                            },
+                                          ),
+                                        )
+                                      ],
+                                    ),
+                                  ),
+                                );
+                              });
+                        },
                         child: SvgPicture.asset(
-                          'assets/svgs/share.svg',
-                          height: 15.0,
-                          width: 15.0,
+                          'assets/svgs/repost.svg',
+                          height: 18.0,
+                          width: 18.0,
                         ),
                       ),
                       const Spacer(),
                       Padding(
                         padding: const EdgeInsets.only(right: 15),
                         child: Text(
-                          TimeFormat.formatString(widget.post.timestamp),
+                          widget.post.oldtimestamp != 0
+                              ? TimeFormat.formatString(
+                                  widget.post.oldtimestamp)
+                              : TimeFormat.formatString(widget.post.timestamp),
                           style:
                               Theme.of(context).textTheme.bodyMedium?.copyWith(
                                     color: textColor.withOpacity(0.4),
@@ -875,7 +1533,7 @@ class _PostTileState extends State<PostTile> {
   void _sharePost() {
     String message =
         'Have a look at ${widget.post.user?.username ?? 'Business Bosses'}\'s post on Business Bosses\n'
-        'https://businessbosses.onelink.me/xLWk/36a2ff16';
+        'https://vm.businessbosses.co.uk/share/post';
     logEvent(widget.post.postId, 'post');
     socialShare(message);
   }
@@ -1023,23 +1681,45 @@ class _PostTileState extends State<PostTile> {
     );
   }
 
-  void jumpToLivePage(
-    BuildContext context, {
-    required String roomID,
-    required bool isHost,
-    required String title,
-  }) {
-    Navigator.push(
-      context,
-      // ignore: always_specify_types
-      MaterialPageRoute(
-        builder: (BuildContext context) => CallRoom(
-          title: title,
-          roomID: roomID,
-          isHost: isHost,
-        ),
-      ),
-    );
+  // void jumpToLivePage(
+  //   BuildContext context, {
+  //   required String roomID,
+  //   required bool isHost,
+  //   required String title,
+  // }) {
+  //   Navigator.push(
+  //     context,
+  //     // ignore: always_specify_types
+  //     MaterialPageRoute(
+  //       builder: (BuildContext context) => CallRoom(
+  //         title: title,
+  //         roomID: roomID,
+  //         isHost: isHost,
+  //       ),
+  //     ),
+  //   );
+  // }
+  void _launchURL(String url) async {
+    if (await canLaunchUrl(Uri.parse(url))) {
+      await launchUrl(Uri.parse(url));
+    } else {
+      throw 'Could not launch $url';
+    }
+  }
+
+  bool isJoinedEvent() {
+    // Find the current event in events list
+    if (widget.post.livedata != null) {
+      final dynamic jsonData = jsonDecode(widget.post.livedata!.toString());
+      int? eventId = jsonData['id'];
+      for (EventModel event in homeController.myEvents) {
+        if (event.id == eventId) {
+          return true; // Exit the loop once the event is found
+        }
+      }
+    }
+    // If the event is not found, set currentEvent to null
+    return false;
   }
 }
 
@@ -1050,4 +1730,60 @@ double leadingWidth(PostModel p) {
     w = w + 42;
   }
   return w;
+}
+
+bool userHasVoted(PostModel post, ProfileController profileController) {
+  String userId = profileController.myProfile.uid;
+  HomeController controller = Get.find();
+  String? selectedVote = controller.getSelectedVote(post.postId);
+  if (selectedVote != null) {
+    return true;
+  }
+  return post.isPolled! &&
+      post.pollvotes != null &&
+      post.pollvotes!
+          .any((Map<String, dynamic> vote) => vote['userId'] == userId);
+}
+
+// Get the selected option if the user has voted
+String? userSelectedOption(
+    PostModel post, ProfileController profileController) {
+  final HomeController homeController = Get.find();
+  String userId = profileController.myProfile.uid;
+
+  String? selectedVote = homeController.getSelectedVote(post.postId);
+
+  if (selectedVote != null) {
+    return selectedVote;
+  }
+
+  // Check if the post is a poll and if pollvotes exist and is not empty
+  if (post.isPolled == true &&
+      post.pollvotes != null &&
+      post.pollvotes!.isNotEmpty) {
+    // Find the vote corresponding to the user ID
+    Map<String, dynamic>? userVote = post.pollvotes!.firstWhereOrNull(
+      (Map<String, dynamic> vote) => vote['userId'] == userId,
+    );
+
+    // Check if userVote is not null and contains the 'selectedOption' key
+    if (userVote != null && userVote.containsKey('selectedOption')) {
+      return userVote['selectedOption'] as String?;
+    }
+  }
+
+  return null; // Return null if the user's selected option is not found or if it's not a poll
+}
+
+Map<String, int> countVotes(PostModel post) {
+  Map<String, int> voteCounts = <String, int>{};
+
+  if (post.isPolled! && post.pollvotes != null) {
+    for (Map<String, dynamic> vote in post.pollvotes!) {
+      String selectedOption = vote['selectedOption'];
+      voteCounts[selectedOption] = (voteCounts[selectedOption] ?? 0) + 1;
+    }
+  }
+
+  return voteCounts;
 }

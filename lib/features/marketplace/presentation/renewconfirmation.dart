@@ -91,7 +91,7 @@ class Renewconfirmation extends StatelessWidget {
                     const SizedBox(
                       width: double.infinity,
                       child: TextWidget(
-                        text: 'Enjoy Premium Subscription!',
+                        text: 'Enjoy Pro Subscription!',
                         fontWeight: FontWeight.w800,
                         size: 20,
                         color: Color(0xff333333),

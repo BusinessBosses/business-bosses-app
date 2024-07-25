@@ -41,7 +41,7 @@ class _BoostPostState extends State<BoostPost> {
   bool isCoin = false;
   late Map<String, dynamic>? paymantIntent;
   final ProfileController profileController = Get.find();
-  final payStackClient = PaystackPlugin();
+  final PaystackPlugin payStackClient = PaystackPlugin();
 
   late String duration;
   List<Map<String, dynamic>> plans = <Map<String, dynamic>>[
@@ -223,7 +223,7 @@ class _BoostPostState extends State<BoostPost> {
   }
 
   final String reference =
-      "unique_transaction_ref_${Random().nextInt(1000000)}";
+      'unique_transaction_ref_${Random().nextInt(1000000)}';
 
   void _makePayment() async {
     final Charge charge = Charge()
@@ -389,8 +389,8 @@ class _BoostPostState extends State<BoostPost> {
             const SizedBox(
               height: 15,
             ),
-            Padding(
-              padding: const EdgeInsets.only(left: 20.0),
+            const Padding(
+              padding: EdgeInsets.only(left: 20.0),
               child: TextWidget(
                 text: 'Select a Payment Option',
                 size: 18,

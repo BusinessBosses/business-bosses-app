@@ -54,7 +54,7 @@ class CreateMarketController extends GetxController {
       final double kb = bytes / 1024;
       final double mb = kb / 1024;
 
-      if (mb >= 5) {
+      if (mb >= 10) {
         showSnackbar(message: 'Image size should be maximum 10 MB.');
         loading(false);
         return null;
@@ -95,7 +95,7 @@ class CreateMarketController extends GetxController {
       final double kb = bytes / 1024;
       final double mb = kb / 1024;
 
-      if (mb >= 5) {
+      if (mb >= 10) {
         showSnackbar(message: 'Image size should be maximum 10 MB.');
         loading(false);
         return null;

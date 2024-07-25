@@ -9,6 +9,7 @@ import 'package:flutter_linkify/flutter_linkify.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 import 'package:url_launcher/url_launcher_string.dart';
+import 'package:business_bosses_v2/features/home/all_communities_screen.dart';
 
 import '../../../utils/theme/theme.dart';
 
@@ -307,6 +308,11 @@ Widget profileinfodisplay(BuildContext context, UserModel publicUser) {
                         Get.toNamed(
                           Routes.marketPlace,
                         );
+                      } else if (publicUser.interests![i].categoryId ==
+                          '6463a069-657d-47ae-b937-9a5d4c336811') {
+                        Get.to(() => const AllCommunitiesScreen(
+                              initialTabIndex: 2,
+                            ));
                       } else {
                         Get.toNamed(
                           Routes.allforumscreen,

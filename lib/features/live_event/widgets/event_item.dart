@@ -1,12 +1,11 @@
-// ignore_for_file: public_member_api_docs
-
 import 'dart:convert';
 
 import 'package:business_bosses_v2/common/widgets/network_image_with_placeholder.dart';
 import 'package:business_bosses_v2/features/live_event/controller/live_event_controller.dart';
 import 'package:business_bosses_v2/features/live_event/models/events_model.dart';
+import 'package:business_bosses_v2/features/live_event/presentation/attendance_list.dart';
 import 'package:business_bosses_v2/features/live_event/presentation/create_event.dart';
-import 'package:business_bosses_v2/features/live_event/widgets/call_room.dart';
+import 'package:business_bosses_v2/features/live_event/widgets/attendeesitem.dart';
 import 'package:business_bosses_v2/features/profile/controller/profile_controller.dart';
 import 'package:business_bosses_v2/navigation/routes.dart';
 import 'package:business_bosses_v2/utils/theme/theme.dart';
@@ -15,19 +14,28 @@ import 'package:flutter_speed_dial/flutter_speed_dial.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
+import 'package:url_launcher/url_launcher.dart';
 import '../../../action/action.dart';
+// import 'package:add_2_calendar/add_2_calendar.dart';
 
-class EventItem extends StatelessWidget {
+class EventItem extends StatefulWidget {
   final EventModel event;
   final bool ongoing;
-  final ProfileController profileController = Get.find();
-  final LiveController liveController = Get.find();
 
-  EventItem({
+  const EventItem({
     Key? key,
     required this.event,
     this.ongoing = false,
   }) : super(key: key);
+
+  @override
+  State<EventItem> createState() => _EventItemState();
+}
+
+class _EventItemState extends State<EventItem> {
+  final ProfileController profileController = Get.find();
+
+  final LiveController liveController = Get.find();
 
   @override
   Widget build(BuildContext context) {
@@ -35,8 +43,8 @@ class EventItem extends StatelessWidget {
     final DateFormat timeFormat = DateFormat('h:mm a');
 
 // Convert the event start and end times to the local time zone
-    final DateTime localStartTime = event.startAt!.toLocal();
-    final DateTime localEndTime = event.endAt!.toLocal();
+    final DateTime localStartTime = widget.event.startAt!.toLocal();
+    final DateTime localEndTime = widget.event.endAt!.toLocal();
 
     final String formattedDate = dateFormat.format(localStartTime);
 
@@ -44,20 +52,28 @@ class EventItem extends StatelessWidget {
     final String formattedEndTime = timeFormat.format(localEndTime);
 
     Map<String, dynamic> dataa = <String, dynamic>{
-      'id': event.id,
-      'title': event.title,
-      'roomId': event.roomId,
+      'id': widget.event.id,
+      'title': widget.event.title,
+      'roomId': widget.event.roomId,
       'date': formattedDate,
       'starttime': formattedStartTime,
-      'host': event.user!.name,
-      'photourl': event.user!.photoUrl,
-      'startat': event.startAt.toString(),
-      'endat': event.endAt.toString(),
-      'image': event.image,
+      'host': widget.event.user?.name,
+      'photourl': widget.event.user?.photoUrl,
+      'startat': widget.event.startAt.toString(),
+      'endat': widget.event.endAt.toString(),
+      'image': widget.event.image,
+      'link': widget.event.link,
+      'description': widget.event.description,
     };
 
     String? jsonData = jsonEncode(dataa);
-
+    int? attendCount = widget.event.totalAttendees ?? 0;
+    String? attendMessage = 'Be the first to attend!';
+    if (attendCount == 1) {
+      attendMessage = '1 person is attending';
+    } else if (attendCount > 1) {
+      attendMessage = '$attendCount people are attending';
+    }
     return Padding(
       padding: const EdgeInsets.only(left: 15),
       child: Row(
@@ -66,7 +82,7 @@ class EventItem extends StatelessWidget {
           SpeedDial(
             backgroundColor: backgroundcolorinterface,
             icon: Icons.share,
-            buttonSize: Size(40, 40),
+            buttonSize: const Size(40, 40),
             iconTheme: const IconThemeData(color: Colors.black),
             activeIcon: Icons.close,
             spacing: 3,
@@ -81,30 +97,34 @@ class EventItem extends StatelessWidget {
             overlayOpacity: 0.8,
             useRotationAnimation: true,
             tooltip: 'Open Speed Dial',
-            heroTag: 'speed-dial-hero-tag',
+            heroTag: 'speed-dial-hero-tag-${widget.event.id}-2',
             elevation: 0.0,
             animationCurve: Curves.elasticInOut,
             isOpenOnStart: false,
             shape: const CircleBorder(),
-            children: [
+            children: <SpeedDialChild>[
               SpeedDialChild(
-                  child: Padding(
-                    padding: const EdgeInsets.all(10.0),
-                    child: SvgPicture.asset(
-                      'assets/svgs/text.svg',
-                      color: Colors.white,
-                    ),
+                child: Padding(
+                  padding: const EdgeInsets.all(10.0),
+                  child: SvgPicture.asset(
+                    'assets/svgs/text.svg',
+                    color: Colors.white,
                   ),
-                  backgroundColor: Colors.red,
-                  label: 'Post on Business Bosses',
-                  labelStyle: const TextStyle(
-                      fontSize: 18.0, fontWeight: FontWeight.w700),
-                  onTap: () => Get.toNamed(Routes.createPost, arguments: {
-                        'sharemessage':
-                            'Hey there! Join this event on $formattedDate  $formattedStartTime with Room ID: ${event.roomId}',
-                        'title': event.title,
-                        'livedata': jsonData,
-                      })),
+                ),
+                backgroundColor: Colors.red,
+                label: 'Post on Business Bosses',
+                labelStyle: const TextStyle(
+                    fontSize: 18.0, fontWeight: FontWeight.w700),
+                onTap: () => Get.toNamed(
+                  Routes.createPost,
+                  arguments: <String, String?>{
+                    'sharemessage':
+                        'Hey there! Join this event on $formattedDate  $formattedStartTime with Room ID: ${widget.event.roomId}',
+                    'title': widget.event.title,
+                    'livedata': jsonData,
+                  },
+                ),
+              ),
               SpeedDialChild(
                 child: Padding(
                   padding: const EdgeInsets.all(14.0),
@@ -122,7 +142,7 @@ class EventItem extends StatelessWidget {
                     fontSize: 18.0, fontWeight: FontWeight.w700),
                 onTap: () {
                   String message =
-                      'Hey there! Join this event on $formattedDate  $formattedStartTime with Room ID: ${event.roomId}  https://businessbosses.onelink.me/xLWk/36a2ff16';
+                      'Hey there! Join this event on $formattedDate  $formattedStartTime with Room ID: ${widget.event.roomId}  https://businessbosses.onelink.me/xLWk/36a2ff16';
                   socialShare(message);
                 },
               ),
@@ -140,9 +160,9 @@ class EventItem extends StatelessWidget {
                       fontSize: 18.0, fontWeight: FontWeight.w700),
                   onTap: () {
                     // Add2Calendar.addEvent2Cal(Event(
-                    //     title: event.title ?? "",
-                    //     startDate: event.startAt!,
-                    //     endDate: event.endAt!));
+                    //     title: widget.event.title ?? '',
+                    //     startDate: localStartTime,
+                    //     endDate: localEndTime));
                   }),
             ],
           ),
@@ -159,7 +179,7 @@ class EventItem extends StatelessWidget {
                 borderRadius: BorderRadius.all(Radius.circular(15)),
               ),
               child: Padding(
-                padding: const EdgeInsets.only(left: 15.0),
+                padding: const EdgeInsets.only(left: 15.0, bottom: 7),
                 child: Column(
                   children: <Widget>[
                     Row(
@@ -167,11 +187,11 @@ class EventItem extends StatelessWidget {
                       children: <Widget>[
                         Padding(
                           padding: EdgeInsets.only(
-                            top: event.user?.uid ==
+                            top: widget.event.user?.uid ==
                                     profileController.myProfile.uid
                                 ? 0.0
                                 : 15,
-                            bottom: event.user?.uid ==
+                            bottom: widget.event.user?.uid ==
                                     profileController.myProfile.uid
                                 ? 0.0
                                 : 15,
@@ -179,7 +199,7 @@ class EventItem extends StatelessWidget {
                           child: Align(
                             alignment: Alignment.topLeft,
                             child: Text(
-                              'ID: ${event.roomId!}',
+                              'ID: ${widget.event.roomId!}',
                               textAlign: TextAlign.left,
                               style: const TextStyle(
                                 fontWeight: FontWeight.bold,
@@ -188,14 +208,43 @@ class EventItem extends StatelessWidget {
                             ),
                           ),
                         ),
-                        if (event.user?.uid == profileController.myProfile.uid)
+                        Padding(
+                          padding: const EdgeInsets.only(right: 15.0, top: 10),
+                          child: GestureDetector(
+                            onTap: () {
+                              showModalBottomSheet(
+                                  context: context,
+                                  builder: (BuildContext context) =>
+                                      AttendeesItem(
+                                        event: widget.event,
+                                      ));
+                            },
+                            child: Container(
+                              padding: const EdgeInsets.symmetric(
+                                  horizontal: 5, vertical: 5),
+                              decoration: BoxDecoration(
+                                  color: Colors.grey,
+                                  borderRadius: BorderRadius.circular(6)),
+                              child: Text(
+                                attendMessage,
+                                style: const TextStyle(
+                                    fontSize: 13, color: Colors.white),
+                              ),
+                            ),
+                          ),
+                        ),
+                        if (widget.event.user?.uid ==
+                            profileController.myProfile.uid)
                           _buildPopupMenuButton(context),
                       ],
+                    ),
+                    const SizedBox(
+                      height: 5,
                     ),
                     Align(
                       alignment: Alignment.topLeft,
                       child: Text(
-                        event.title!,
+                        widget.event.title!,
                         style: const TextStyle(
                           fontWeight: FontWeight.w700,
                           fontSize: 16,
@@ -210,66 +259,90 @@ class EventItem extends StatelessWidget {
                           width: 4,
                         ),
                         NetworkImageWithPlaceHolder(
-                          imageUrl: event.user?.photoUrl,
-                          height: 16,
-                          width: 16,
+                          imageUrl: widget.event.user?.photoUrl,
+                          height: 20,
+                          width: 20,
                         ),
                         const SizedBox(
                           width: 4,
                         ),
-                        Text(
-                          event.user?.name ?? event.user!.username,
-                          style: const TextStyle(
-                            fontWeight: FontWeight.w700,
+                        if (widget.event.user != null)
+                          Text(
+                            widget.event.user?.name ??
+                                widget.event.user!.username,
+                            style: const TextStyle(
+                              fontWeight: FontWeight.w700,
+                            ),
                           ),
-                        ),
                       ],
                     ),
                     const SizedBox(
                       height: 10,
                     ),
                     Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: <Widget>[
-                        Align(
-                          alignment: Alignment.topLeft,
+                        Expanded(
                           child: Container(
                             padding: const EdgeInsets.all(10),
                             decoration: BoxDecoration(
                               borderRadius: BorderRadius.circular(8),
                               color: const Color.fromRGBO(224, 224, 224, 1),
                             ),
-                            child: Row(
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              crossAxisAlignment: CrossAxisAlignment.start,
                               children: <Widget>[
-                                const Icon(
-                                  Icons.calendar_month,
-                                  size: 10,
+                                Row(
+                                  children: <Widget>[
+                                    const Icon(
+                                      Icons.calendar_month,
+                                      size: 10,
+                                    ),
+                                    const SizedBox(
+                                      width: 6,
+                                    ),
+                                    Text(
+                                      formattedDate.toString(),
+                                      style: const TextStyle(
+                                        fontSize: 13,
+                                        fontWeight: FontWeight.w700,
+                                      ),
+                                    ),
+                                    const SizedBox(
+                                      width: 2,
+                                    ),
+                                  ],
                                 ),
-                                const SizedBox(
-                                  width: 6,
-                                ),
-                                Text(
-                                  formattedDate.toString(),
-                                  style: const TextStyle(
-                                    fontSize: 12,
-                                    fontWeight: FontWeight.w700,
-                                  ),
-                                ),
-                                const SizedBox(
-                                  width: 2,
-                                ),
-                                Text(
-                                  '$formattedStartTime - $formattedEndTime',
-                                  style: const TextStyle(
-                                    fontSize: 12,
-                                    fontWeight: FontWeight.w700,
-                                  ),
+                                Row(
+                                  children: <Widget>[
+                                    const Icon(
+                                      Icons.access_time,
+                                      size: 10,
+                                    ),
+                                    const SizedBox(
+                                      width: 6,
+                                    ),
+                                    Text(
+                                      '$formattedStartTime - $formattedEndTime',
+                                      style: const TextStyle(
+                                        fontSize: 13,
+                                        fontWeight: FontWeight.w700,
+                                      ),
+                                    ),
+                                    const SizedBox(
+                                      width: 2,
+                                    ),
+                                  ],
                                 ),
                               ],
                             ),
                           ),
                         ),
-                        const Spacer(),
-                        if (ongoing)
+                        const SizedBox(
+                          width: 15,
+                        ),
+                        if (widget.ongoing)
                           Padding(
                             padding: const EdgeInsets.only(right: 15.0),
                             child: ElevatedButton(
@@ -283,28 +356,113 @@ class EventItem extends StatelessWidget {
                                 ),
                               ),
                               onPressed: () {
-                                if (event.user?.uid ==
-                                    profileController.myProfile.uid) {
-                                  jumpToLivePage(
-                                    context,
-                                    title: event.title!,
-                                    roomID: event.roomId!,
-                                    isHost: true,
-                                    image: event.image,
-                                  );
-                                } else {
-                                  jumpToLivePage(
-                                    context,
-                                    title: event.title!,
-                                    roomID: event.roomId!,
-                                    isHost: false,
-                                    image: event.image,
-                                  );
-                                }
+                                // if (widget.event.link != null) {
+                                //   if (widget.event.user?.uid ==
+                                //       profileController.myProfile.uid) {
+                                //     jumpToLivePage(
+                                //       context,
+                                //       title: widget.event.title!,
+                                //       roomID: widget.event.roomId!,
+                                //       isHost: true,
+                                //       image: widget.event.image,
+                                //     );
+                                //   } else {
+                                //     jumpToLivePage(
+                                //       context,
+                                //       title: widget.event.title!,
+                                //       roomID: widget.event.roomId!,
+                                //       isHost: false,
+                                //       image: widget.event.image,
+                                //     );
+                                //   }
+                                // } else {
+                                _showDialogWithLink(context);
+                                // }
                               },
                               child: const Text(
                                 'Join',
                                 style: TextStyle(
+                                  fontWeight: FontWeight.w500,
+                                ),
+                              ),
+                            ),
+                          )
+                        else if (!liveController.joined.any(
+                            (EventModel event) => event.id == widget.event.id))
+                          Padding(
+                            padding: const EdgeInsets.only(right: 15.0),
+                            child: ElevatedButton(
+                              style: ElevatedButton.styleFrom(
+                                backgroundColor: Colors.white,
+                                foregroundColor: Colors.red,
+                                minimumSize: const Size(55, 32),
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(
+                                      12), // Set the border radius
+                                ),
+                              ),
+                              onPressed: () async {
+                                Get.dialog(
+                                  AlertDialog(
+                                    title: const Text(''),
+                                    content: const Text(
+                                        'Do you also want to add the event to your calender?'),
+                                    actions: <Widget>[
+                                      TextButton(
+                                        onPressed: () {
+                                          // Close the dialog
+                                          Get.back();
+                                        },
+                                        child: const Text('No'),
+                                      ),
+                                      TextButton(
+                                        onPressed: () async {
+                                          // Add2Calendar.addEvent2Cal(
+                                          //   Event(
+                                          //       title: widget.event.title ?? '',
+                                          //       startDate: localStartTime,
+                                          //       endDate: localEndTime),
+                                          // );
+                                          Get.back();
+                                        },
+                                        child: const Text('Yes'),
+                                      ),
+                                    ],
+                                  ),
+                                );
+                                await liveController.attendEvent(widget.event);
+                                setState(() {});
+                              },
+                              child: const Text(
+                                'Attend',
+                                style: TextStyle(
+                                  fontWeight: FontWeight.w500,
+                                ),
+                              ),
+                            ),
+                          )
+                        else
+                          Padding(
+                            padding: const EdgeInsets.only(right: 15.0),
+                            child: ElevatedButton(
+                              style: ElevatedButton.styleFrom(
+                                backgroundColor: Colors.grey,
+                                foregroundColor: Colors.white,
+                                minimumSize: const Size(55, 32),
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(
+                                      6), // Set the border radius
+                                ),
+                              ),
+                              onPressed: () async {
+                                Get.to(() => AttendanceList(
+                                      eventId: widget.event.id!,
+                                    ));
+                              },
+                              child: const Text(
+                                'Attending',
+                                style: TextStyle(
+                                  fontSize: 10,
                                   fontWeight: FontWeight.w500,
                                 ),
                               ),
@@ -338,12 +496,12 @@ class EventItem extends StatelessWidget {
         size: 16,
       ),
       itemBuilder: (BuildContext context) => <PopupMenuEntry<String>>[
-        if (event.user?.uid == profileController.myProfile.uid)
+        if (widget.event.user?.uid == profileController.myProfile.uid)
           const PopupMenuItem<String>(
             value: 'edit',
             child: Text('Edit'),
           ),
-        if (event.user?.uid == profileController.myProfile.uid)
+        if (widget.event.user?.uid == profileController.myProfile.uid)
           const PopupMenuItem<String>(
             value: 'delete',
             child: Text('Delete'),
@@ -351,20 +509,49 @@ class EventItem extends StatelessWidget {
       ],
       onSelected: (String value) {
         if (value == 'edit') {
-          Navigator.push(
-            context,
-            // ignore: always_specify_types
-            MaterialPageRoute(
-              builder: (BuildContext context) => CreateEvent(
-                event: event,
-              ),
+          Get.to(
+            () => CreateEvent(
+              event: widget.event,
             ),
           );
         } else if (value == 'delete') {
-          _showDeleteConfirmationDialog(context, event.id!);
+          _showDeleteConfirmationDialog(context, widget.event.id!);
         }
       },
     );
+  }
+
+  void _showDialogWithLink(BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: const Text('Event Details'),
+          content: Text(widget.event.description!),
+          actions: <Widget>[
+            TextButton(
+              onPressed: () => Get.back(),
+              child: const Text('Cancel'),
+            ),
+            TextButton(
+              onPressed: () {
+                _launchURL(widget.event.link!);
+                Get.back();
+              },
+              child: const Text('Goto Meeting'),
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  void _launchURL(String url) async {
+    if (await canLaunchUrl(Uri.parse(url))) {
+      await launchUrl(Uri.parse(url));
+    } else {
+      throw 'Could not launch $url';
+    }
   }
 
   void _showDeleteConfirmationDialog(BuildContext context, int id) {
@@ -394,22 +581,22 @@ class EventItem extends StatelessWidget {
     );
   }
 
-  void jumpToLivePage(BuildContext context,
-      {required String roomID,
-      required bool isHost,
-      required String title,
-      String? image}) {
-    Navigator.push(
-      context,
-      // ignore: always_specify_types
-      MaterialPageRoute(
-        builder: (BuildContext context) => CallRoom(
-          roomID: roomID,
-          isHost: isHost,
-          title: title,
-          image: image,
-        ),
-      ),
-    );
-  }
+  // void jumpToLivePage(BuildContext context,
+  //     {required String roomID,
+  //     required bool isHost,
+  //     required String title,
+  //     String? image}) {
+  //   Navigator.push(
+  //     context,
+  //     // ignore: always_specify_types
+  //     MaterialPageRoute(
+  //       builder: (BuildContext context) => CallRoom(
+  //         roomID: roomID,
+  //         isHost: isHost,
+  //         title: title,
+  //         image: image,
+  //       ),
+  //     ),
+  //   );
+  // }
 }

@@ -115,8 +115,7 @@ class _CompleteSearchingScreenState extends State<CompleteSearchingScreen>
                           filterItems: controller.isUserSearch.value
                               ? controller.searchedUsers
                               : controller.recommendedConnections,
-                          isLoading: controller.loading.value ||
-                              controller.loadingSearch.value,
+                          isLoading: controller.loading.value || controller.loadingSearch.value ,
                           onConnectionChange: controller.connectToUser,
                           isSearch: controller.isUserSearch.value,
                         ),

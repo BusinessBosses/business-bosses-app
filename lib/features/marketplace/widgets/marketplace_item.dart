@@ -304,6 +304,7 @@ class _MarketTileState extends State<MarketTile> {
                                                       //   hide = true;
                                                       // });
                                                       Get.back();
+                                                      setState(() {});
                                                     },
                                                     child: const Text('Yes'),
                                                   ),
@@ -393,6 +394,17 @@ class _MarketTileState extends State<MarketTile> {
                             Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: <Widget>[
+                                if (_post.title != null)
+                                  Padding(
+                                    padding: const EdgeInsets.only(
+                                        left: 15.0, right: 15),
+                                    child: Text(
+                                      _post.title.toString(),
+                                      style: const TextStyle(
+                                        fontWeight: FontWeight.w800,
+                                      ),
+                                    ),
+                                  ),
                                 Padding(
                                   padding: const EdgeInsets.only(
                                       left: 15.0, right: 15),
@@ -402,8 +414,8 @@ class _MarketTileState extends State<MarketTile> {
                                       Text(
                                         _post.price.toString(),
                                         style: const TextStyle(
-                                          fontWeight: FontWeight.w800,
-                                        ),
+                                            fontWeight: FontWeight.w800,
+                                            color: Colors.black54),
                                       ),
                                       const SizedBox(
                                         width: 8,
@@ -440,6 +452,7 @@ class _MarketTileState extends State<MarketTile> {
                                       left: 15.0, right: 15),
                                   child: DetectableText(
                                     text: _post.description,
+                                    trimLength: 100,
                                     detectionRegExp:
                                         detectionRegExp(hashtag: false)!,
                                     detectedStyle: bodyText2.copyWith(
@@ -816,7 +829,7 @@ class _MarketTileState extends State<MarketTile> {
   void _sharePost() {
     String message =
         'Have a look at ${_post.user!.username}\'s post on Business Bosses\n'
-        'https://businessbosses.onelink.me/xLWk/36a2ff16';
+        'https://vm.businessbosses.co.uk/share/post';
     logEvent(_post.marketId, 'marketplace');
     socialShare(message);
   }

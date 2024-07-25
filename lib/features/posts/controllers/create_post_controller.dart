@@ -5,7 +5,6 @@ import 'package:business_bosses_v2/common/models/api_response_model.dart';
 import 'package:business_bosses_v2/common/models/user_model.dart';
 import 'package:business_bosses_v2/features/home/controller/home_controller.dart';
 import 'package:business_bosses_v2/features/posts/repository/post_repository.dart';
-import 'package:business_bosses_v2/navigation/routes.dart';
 import 'package:business_bosses_v2/services/api_service.dart';
 import 'package:business_bosses_v2/utils/constants/constants.dart';
 import 'package:flutter/material.dart';
@@ -45,8 +44,6 @@ class CreatePostController extends GetxController {
 
   /// PROMOTE STATE
   RxBool shouldPromote = false.obs;
-
-  final bool _promote = false;
 
   /// LOADING STATE
   RxBool loading = false.obs;
@@ -90,6 +87,7 @@ class CreatePostController extends GetxController {
       String videoUrl = result.videoUrl;
       String thumbnailUrl = result.thumbnailUrl;
 
+      // ignore: unnecessary_null_comparison
       if (videoUrl == null) {
         showSnackbar(message: 'Error Uploading video');
         return null;
@@ -139,6 +137,36 @@ class CreatePostController extends GetxController {
     return null;
   }
 
+  Future<void> onEditPoll(
+      PostModel? post, String title, List<String> options) async {
+    loading(true);
+    update();
+    if (validateCreatePostData(post!.toMap())) {
+      final ApiResponseModel response = await ApiService.put(
+        path: 'post/update-post/${post.postId}',
+        body: <String, dynamic>{'title': title, 'options': options},
+      );
+
+      if (response.success) {
+        final ProfileController profileController = Get.find();
+        final HomeController homeController = Get.find();
+        PostModel modelizedPost = PostModel.fromMap(<String, dynamic>{
+          ...post.toMap(),
+          ...response.data,
+        });
+        homeController.updatePost(modelizedPost);
+        profileController.updatePost(modelizedPost);
+        Get.back();
+        showSnackbar(message: 'Poll updated successfully!', title: 'Success');
+      } else {
+        showSnackbar(
+            message: 'Failed to editing poll.', title: 'O0PS!', error: true);
+      }
+    }
+    loading(false);
+    update();
+  }
+
   /// CREATE POST CONTROLLER (REGISTER NEW POST TO REMOTE DATA SOURCE)
   Future<void> createPost(
       Map<String, dynamic> body, ProfileController profileController) async {
@@ -149,8 +177,16 @@ class CreatePostController extends GetxController {
         final ApiResponseModel response = await PostRepository.createPost(body);
 
         if (response.success) {
-          _homeController.addNewPost(response.data, profileController);
-          profileController.addNewPost(response.data);
+          _homeController.addNewPost(<String, dynamic>{
+            ...response.data,
+            'donation': body['donation'],
+            'forum': body['forum'],
+          }, profileController);
+          profileController.addNewPost(<String, dynamic>{
+            ...response.data,
+            'donation': body['donation'],
+            'forum': body['forum'],
+          });
 
           if (shouldPromote.value == true) {
             Get.to(() => BoostPost(
@@ -178,10 +214,17 @@ class CreatePostController extends GetxController {
 
           if (response.success) {
             imageFileList.clear();
-            _homeController.addNewPost(response.data, profileController);
-            profileController.addNewPost(response.data);
+            _homeController.addNewPost(<String, dynamic>{
+              ...response.data,
+              'donation': body['donation'],
+            }, profileController);
+            profileController.addNewPost(<String, dynamic>{
+              ...response.data,
+              'donation': body['donation'],
+            });
             // Emit a WebSocket event to notify other users of the new post
-            socket.emit('newPostEvent', {'newPost': "this is the new posts"});
+            socket.emit('newPostEvent',
+                <String, String>{'newPost': 'this is the new posts'});
 
             if (shouldPromote.value == true) {
               Get.to(() => BoostPost(
@@ -213,8 +256,14 @@ class CreatePostController extends GetxController {
 
           if (response.success) {
             imageFileList.clear();
-            _homeController.addNewPost(response.data, profileController);
-            profileController.addNewPost(response.data);
+            _homeController.addNewPost(<String, dynamic>{
+              ...response.data,
+              'donation': body['donation'],
+            }, profileController);
+            profileController.addNewPost(<String, dynamic>{
+              ...response.data,
+              'donation': body['donation'],
+            });
 
             if (shouldPromote.value == true) {
               Get.to(() => BoostPost(
@@ -478,7 +527,7 @@ class CreatePostController extends GetxController {
 
     socket = IO.io(Constants.socketUrl, <String, dynamic>{
       'autoConnect': false,
-      'transports': ['websocket'],
+      'transports': <String>['websocket'],
     });
     socket.connect();
     socket.onConnect((_) {

@@ -1,503 +1,418 @@
-import 'package:business_bosses_v2/common/widgets/popup/learningpopup.dart';
-import 'package:business_bosses_v2/common/widgets/popup/opportunitiespopup.dart';
-import 'package:business_bosses_v2/common/widgets/safety_model.dart';
+// ignore_for_file: deprecated_member_use
+
+import 'package:business_bosses_v2/features/courses/controller/course_controller.dart';
+import 'package:business_bosses_v2/features/courses/models/course_model.dart';
+import 'package:business_bosses_v2/features/courses/presentation/courses.dart';
+import 'package:business_bosses_v2/features/courses/widgets/filtercoursesposts.dart';
+import 'package:business_bosses_v2/features/courses/widgets/filtercoursesusers.dart';
+import 'package:business_bosses_v2/features/forum/controller/bossup_controller.dart';
 import 'package:business_bosses_v2/features/forum/controller/forum_controller.dart';
+import 'package:business_bosses_v2/features/forum/presentation/filterchallengeposts.dart';
+import 'package:business_bosses_v2/features/forum/presentation/filterchallengeusers.dart';
 import 'package:business_bosses_v2/features/profile/controller/profile_controller.dart';
-import 'package:business_bosses_v2/utils/constants/constants.dart';
-import 'package:cached_network_image/cached_network_image.dart';
-import 'package:flutter/gestures.dart';
+import 'package:business_bosses_v2/features/search/widgets/search_bar.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_sticky_header/flutter_sticky_header.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
-import 'package:visibility_detector/visibility_detector.dart';
 
-import '../../../navigation/routes.dart';
 import '../../home/controller/home_controller.dart';
 import '../models/industry.dart';
+import '../presentation/topics.dart';
+
 import '../../../utils/theme/theme.dart';
-import '../widgets/forum_item.dart';
-import '../widgets/joinedbutton.dart';
 
-// ignore: public_member_api_docs
 class AllForumScreen extends StatefulWidget {
-  // ignore: public_member_api_docs
   static const String routeName = 'all-forum-screen';
-
-  // ignore: public_member_api_docs
   const AllForumScreen({super.key});
 
   @override
   State<AllForumScreen> createState() => _AllForumScreenState();
 }
 
-class _AllForumScreenState extends State<AllForumScreen> {
+class _AllForumScreenState extends State<AllForumScreen>
+    with TickerProviderStateMixin {
   final GlobalKey<ScaffoldState> scaffoldKey = GlobalKey<ScaffoldState>();
-  final ScrollController scrollController = ScrollController();
   late Industry industry;
+  // ignore: unused_field
   final ProfileController _myProfile = Get.find();
-  final HomeController hmeController = Get.find();
-  // final List<ForumModel> forums = [];
+  final HomeController homeController = Get.find();
+  late ForumController forumController;
+  final CourseController courseController = Get.put(CourseController());
+  bool _isSearching = false;
+  bool _iscouseSearching = false;
+  late final TabController _searchTabController;
+  late final TabController _coursesearchTabController;
+  late BossUpController bossUpController;
+
+  int currentTabIndex = 0; // Track the current tab index
+  String _filtercourses = '';
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
+    _searchTabController = TabController(length: 2, vsync: this);
+    _coursesearchTabController = TabController(length: 2, vsync: this);
     if (Get.arguments == null) {
       Get.back();
     } else {
-      industry = Get.arguments;
+      industry = Get.arguments as Industry;
     }
+    forumController = Get.put(ForumController());
+    bossUpController = Get.put(BossUpController());
+  }
+
+  void onPreferencesTap(String filterOption) {
+    setState(() {
+      _filtercourses = filterOption;
+    });
+
+    //  CoursesPage.callUpdateFilter(filterOption);
   }
 
   @override
   Widget build(BuildContext context) {
-    int userCount = industry.joinedUsers
-            ?.where((String element) => element.isNotEmpty)
-            .toList()
-            .length ??
-        0;
-
-    String formattedUserCount = formatCount(userCount);
     return GetBuilder<ForumController>(
       builder: (ForumController controller) {
-        int postCount = controller.totalForums.value;
-        String formattedpostCount = formatCount(postCount);
         return Scaffold(
-            backgroundColor: backgroundcolorinterface,
-            key: scaffoldKey,
-            appBar: AppBar(
-              leading: IconButton(
-                onPressed: () {
-                  Get.back();
-                },
-                icon: SvgPicture.asset('assets/svgs/backbutton.svg'),
-              ),
-              centerTitle: true,
-              title: Text(
-                industry.industry ?? 'Topic',
-                textAlign: TextAlign.center,
-                style: const TextStyle(fontSize: 20),
-              ),
-            ),
-            body: NestedScrollView(
-              controller: scrollController,
-              headerSliverBuilder: (
-                BuildContext context,
-                bool innerBoxIsScrolled,
-              ) {
-                return <Widget>[
-                  SliverStickyHeader(
-                    sticky: false,
-                    header: Column(
-                      children: <Widget>[
-                        Container(
-                          width: double.infinity,
-                          color: Colors.transparent,
-                          child: Column(
-                            children: <Widget>[
-                              const SizedBox(
-                                height: 10,
-                              ),
-                              if (_myProfile.myProfile.toPost)
-                                Row(
-                                  children: <Widget>[
-                                    GestureDetector(
-                                      onTap: () => <Future>{
-                                        industry.categoryId!.toString() ==
-                                                Constants.LEARNINGID
-                                            ? showDialog(
-                                                context: context,
-                                                builder:
-                                                    (BuildContext context) =>
-                                                        const LearningPopUp(),
-                                              )
-                                            : showDialog(
-                                                context: context,
-                                                builder: (BuildContext
-                                                        context) =>
-                                                    const OpportunitiesPopup(),
-                                              )
-                                      },
-                                      child: Padding(
-                                        padding:
-                                            const EdgeInsets.only(left: 20.0),
-                                        child: Row(
-                                          children: <Widget>[
-                                            const Text(
-                                              'Info',
-                                              style: TextStyle(
-                                                  fontSize: 12,
-                                                  fontWeight: FontWeight.w700),
-                                            ),
-                                            const SizedBox(
-                                              width: 5,
-                                            ),
-                                            SvgPicture.asset(
-                                              'assets/svgs/info.svg',
-                                              height: 20,
-                                            ),
-                                          ],
-                                        ),
-                                      ),
-                                    ),
-                                    const Spacer(),
-                                    Align(
-                                        alignment: Alignment.centerRight,
-                                        child: Padding(
-                                          padding:
-                                              const EdgeInsets.only(right: 20),
-                                          child: ElevatedButton(
-                                            style: ElevatedButton.styleFrom(
-                                                minimumSize:
-                                                    const Size(150, 45)),
-                                            onPressed: () {
-                                              Get.toNamed(Routes.createForum,
-                                                  arguments: <String, Object?>{
-                                                    'isBossUp': false,
-                                                    'industryId':
-                                                        industry.industryId,
-                                                    'categoryId':
-                                                        industry.categoryId
-                                                  });
-                                            },
-                                            child: Row(
-                                              mainAxisSize: MainAxisSize.min,
-                                              children: <Widget>[
-                                                Text(
-                                                  industry.categoryId!
-                                                              .toString() ==
-                                                          Constants.LEARNINGID
-                                                      ? 'Start a Topic'
-                                                      : 'Share Opportunities',
-                                                  style: const TextStyle(
-                                                      fontSize: 15,
-                                                      color: Colors.white,
-                                                      fontWeight:
-                                                          FontWeight.w500),
-                                                ),
-                                                const SizedBox(
-                                                  width: 5,
-                                                ),
-                                                SvgPicture.asset(
-                                                    'assets/svgs/startatopic.svg')
-                                              ],
-                                            ),
-                                          ),
-                                        )),
-                                  ],
-                                ),
-                              Container(
-                                decoration: BoxDecoration(
-                                  boxShadow: <BoxShadow>[
-                                    BoxShadow(
-                                      color: Colors.black.withOpacity(0.09),
-                                      blurRadius: 100.0, // soften the shadow
-                                      spreadRadius: 5, //extend the shadow
-                                    )
-                                  ],
-                                ),
-                                child: Stack(
-                                  children: <Widget>[
-                                    Container(
-                                      margin: const EdgeInsets.only(
-                                          top: 10, right: 20, left: 20),
-                                      height: 150,
-                                      width: double.infinity,
-                                      child: ClipRRect(
-                                        borderRadius:
-                                            BorderRadius.circular(15.0),
-                                        child: const ColoredBox(
-                                            color: Colors.white),
-                                      ),
-                                    ),
-                                    Column(
-                                      children: <Widget>[
-                                        Row(
-                                          children: <Widget>[
-                                            Container(
-                                              margin: const EdgeInsets.only(
-                                                  top: 25, right: 20, left: 35),
-                                              height: 86,
-                                              width: 142,
-                                              child: ClipRRect(
-                                                borderRadius:
-                                                    BorderRadius.circular(10.0),
-                                                child: FittedBox(
-                                                  fit: BoxFit.fill,
-                                                  child: CachedNetworkImage(
-                                                    imageUrl: industry.photo ??
-                                                        'https://businessbosses.com.ng/learningImages/events.jpg',
-                                                    memCacheHeight: 256,
-                                                    memCacheWidth: 256,
-                                                    placeholder: (BuildContext
-                                                                context,
-                                                            String photo) =>
-                                                        const CircularProgressIndicator(),
-                                                    errorWidget:
-                                                        // ignore: always_specify_types
-                                                        (BuildContext context,
-                                                                // ignore: always_specify_types
-                                                                String photo,
-                                                                Object error) =>
-                                                            const Icon(
-                                                                Icons.error),
-                                                  ),
-                                                ),
-                                              ),
-                                            ),
-                                            Expanded(
-                                                child: Padding(
-                                              padding: const EdgeInsets.only(
-                                                  right: 35),
-                                              child: Text(
-                                                industry.description ??
-                                                    'Industry Description',
-                                                style: const TextStyle(
-                                                    fontSize: 15,
-                                                    fontWeight:
-                                                        FontWeight.w700),
-                                                softWrap: true,
-                                                maxLines: 5,
-                                              ),
-                                            )),
-                                          ],
-                                        ),
-                                        Padding(
-                                          padding: const EdgeInsets.only(
-                                              left: 32, right: 20),
-                                          child: Row(
-                                            children: <Widget>[
-                                              Row(
-                                                children: <Widget>[
-                                                  Padding(
-                                                    padding:
-                                                        const EdgeInsets.only(
-                                                            right: 2, top: 5),
-                                                    child: SvgPicture.asset(
-                                                      'assets/svgs/members.svg',
-                                                      height: 15,
-                                                      color: primaryColorLT,
-                                                    ),
-                                                  ),
-                                                  Padding(
-                                                    padding:
-                                                        const EdgeInsets.only(
-                                                            top: 5.0),
-                                                    child: RichText(
-                                                      text: TextSpan(
-                                                        children: <InlineSpan>[
-                                                          TextSpan(
-                                                            text: industry
-                                                                        .joinedUsers ==
-                                                                    null
-                                                                ? 'Members (0)'
-                                                                : 'Members ($formattedUserCount)',
-                                                            style:
-                                                                const TextStyle(
-                                                              fontSize: 12,
-                                                              fontWeight:
-                                                                  FontWeight
-                                                                      .w600,
-                                                              color:
-                                                                  primaryColorLT,
-                                                              decoration:
-                                                                  TextDecoration
-                                                                      .underline,
-                                                            ),
-                                                            recognizer:
-                                                                TapGestureRecognizer()
-                                                                  ..onTap = () {
-                                                                    Get.toNamed(
-                                                                      Routes
-                                                                          .specificuserlistscreen,
-                                                                      arguments:
-                                                                          industry
-                                                                              .industryId,
-                                                                    );
-                                                                  },
-                                                          ),
-                                                        ],
-                                                      ),
-                                                    ),
-                                                  ),
-                                                ],
-                                              ),
-                                              Row(
-                                                children: <Widget>[
-                                                  Padding(
-                                                    padding:
-                                                        const EdgeInsets.only(
-                                                            left: 8.0,
-                                                            top: 5,
-                                                            right: 2),
-                                                    child: SvgPicture.asset(
-                                                      'assets/svgs/topics.svg',
-                                                      color: textColor,
-                                                      height: 11.5,
-                                                    ),
-                                                  ),
-                                                  Padding(
-                                                    padding:
-                                                        const EdgeInsets.only(
-                                                            top: 5.0),
-                                                    child: RichText(
-                                                      text: TextSpan(
-                                                        children: <InlineSpan>[
-                                                          TextSpan(
-                                                            text: industry
-                                                                        .categoryId!
-                                                                        .toString() ==
-                                                                    'd479f179-3f41-4d84-915d-33110cf5b4fb'
-                                                                ? 'Topics ($formattedpostCount) '
-                                                                : 'Opport. ($formattedpostCount)',
-                                                            style:
-                                                                const TextStyle(
-                                                              fontSize: 12,
-                                                              color: textColor,
-                                                              fontWeight:
-                                                                  FontWeight
-                                                                      .w600,
-                                                            ),
-                                                          ),
-                                                        ],
-                                                      ),
-                                                    ),
-                                                  ),
-                                                ],
-                                              ),
-                                              const Spacer(),
-                                              Align(
-                                                alignment:
-                                                    Alignment.centerRight,
-                                                child: JoinedButton(
-                                                  industry.joinedUsers
-                                                          ?.contains(_myProfile
-                                                              .myProfile.uid) ??
-                                                      false,
-                                                  () {
-                                                    toggleJoinAndLeaveIndustry(
-                                                        controller);
-                                                  },
-                                                ),
-                                              )
-                                            ],
-                                          ),
-                                        )
-                                      ],
-                                    )
-                                  ],
-                                ),
-                              ),
-                              const SizedBox(
-                                height: 10,
-                              ),
-                            ],
-                          ),
-                        )
-                      ],
-                    ),
-                  )
-                ];
+          backgroundColor: backgroundcolorinterface,
+          key: scaffoldKey,
+          appBar: AppBar(
+            leading: IconButton(
+              onPressed: () {
+                Get.back();
               },
-              body: controller.loading.value
-                  ? SafetyModel(
-                      isLoading: controller.loading.value,
-                      title: '',
+              icon: SvgPicture.asset('assets/svgs/backbutton.svg'),
+            ),
+            centerTitle: _isSearching ? false : true,
+            title: _isSearching
+                ? Searchbar(
+                    hintText: 'Search ${industry.industry!}',
+                    onChange: (String query) {
+                      if (query.isEmpty) {
+                        _searchTabController.index == 1
+                            ? controller.clearUserSearch()
+                            : controller.clearPostSearch();
+                      }
+                      setState(() {});
+                    },
+                    onSubmit: (String query) {
+                      controller.searchUsers(query, industry.industryId!);
+                      controller.searchPosts(query);
+                      setState(() {});
+                    },
+                  )
+                : _iscouseSearching
+                    ? Searchbar(
+                        hintText: 'Search Courses',
+                        onChange: (String query) {
+                          if (query.isEmpty) {
+                            _searchTabController.index == 1
+                                ? courseController.clearUserSearch()
+                                : courseController.clearPostSearch();
+                          }
+                          setState(() {});
+                        },
+                        onSubmit: (String query) {
+                          courseController.searchUsers(query);
+                          courseController.searchPosts(query);
+                          setState(() {});
+                        },
+                      )
+                    : Text(
+                        industry.industry ?? 'Topic',
+                        textAlign: TextAlign.center,
+                        style: const TextStyle(fontSize: 20),
+                      ),
+            actions: <Widget>[
+              currentTabIndex == 0
+                  ? IconButton(
+                      icon: _iscouseSearching
+                          ? const Icon(Icons.close)
+                          : SvgPicture.asset(
+                              'assets/svgs/preferences.svg',
+                              color: Colors.black,
+                              height: 20,
+                            ),
+                      onPressed: () {
+                        _iscouseSearching
+                            ? <void>{
+                                _iscouseSearching = !_iscouseSearching,
+                                setState(() {}),
+                                courseController.searchedPosts.clear(),
+                                courseController.searchedUsers.clear(),
+                              }
+                            : showModalBottomSheet(
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(20),
+                                ),
+                                backgroundColor: Colors.white,
+                                context: context,
+                                builder: (BuildContext context) {
+                                  return Column(
+                                    mainAxisAlignment: MainAxisAlignment.start,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: <Widget>[
+                                      Padding(
+                                        padding: const EdgeInsets.symmetric(
+                                            horizontal: 20.0, vertical: 20),
+                                        child: GestureDetector(
+                                          onTap: () {
+                                            Get.back();
+                                            _iscouseSearching =
+                                                !_iscouseSearching;
+                                            setState(() {});
+                                          },
+                                          child: SizedBox(
+                                            height: 42,
+                                            width: double.infinity,
+                                            child: TextFormField(
+                                              // key: searchkey,
+                                              style:
+                                                  const TextStyle(fontSize: 20),
+                                              decoration:
+                                                  inputDecoration.copyWith(
+                                                border: OutlineInputBorder(
+                                                  borderSide: BorderSide.none,
+                                                  borderRadius:
+                                                      BorderRadius.circular(10),
+                                                ),
+                                                fillColor:
+                                                    backgroundcolorinterface,
+                                                filled: true,
+                                                enabled: false,
+                                                prefixIcon: Container(
+                                                  padding: const EdgeInsets
+                                                      .symmetric(
+                                                      vertical: 10.0),
+                                                  child: SvgPicture.asset(
+                                                    'assets/svgs/search.svg',
+                                                    color: hintColor,
+                                                  ),
+                                                ),
+                                                hintText: 'Search Courses',
+                                              ),
+                                            ),
+                                          ),
+                                        ),
+                                      ),
+                                      const Padding(
+                                        padding: EdgeInsets.only(
+                                            left: 20, top: 15, bottom: 15),
+                                        child: Column(
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
+                                          children: <Widget>[
+                                            Text(
+                                              'Filter Courses',
+                                              style: TextStyle(
+                                                fontWeight: FontWeight.bold,
+                                                fontSize: 18,
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                      const Divider(
+                                        height: 1,
+                                        color: backgroundColor,
+                                      ),
+                                      Expanded(
+                                        child: ListView.builder(
+                                          itemCount: preferenceslist.length,
+                                          itemBuilder: (BuildContext context,
+                                              int index) {
+                                            return GestureDetector(
+                                              onTap: () {
+                                                onPreferencesTap(
+                                                    preferenceslist[index]);
+                                                Get.back();
+                                              },
+                                              child: Column(
+                                                children: <Widget>[
+                                                  Container(
+                                                    width:
+                                                        MediaQuery.of(context)
+                                                            .size
+                                                            .width,
+                                                    padding: const EdgeInsets
+                                                        .symmetric(
+                                                      horizontal: 20,
+                                                      vertical: 20,
+                                                    ),
+                                                    color: Colors.white,
+                                                    child: Text(
+                                                      preferenceslist[index] +
+                                                          preferencesnumber[
+                                                              index],
+                                                      style: const TextStyle(
+                                                        fontWeight:
+                                                            FontWeight.bold,
+                                                      ),
+                                                    ),
+                                                  ),
+                                                  const Divider(
+                                                    height: 1,
+                                                    color: backgroundColor,
+                                                  ),
+                                                ],
+                                              ),
+                                            );
+                                          },
+                                        ),
+                                      ),
+                                    ],
+                                  );
+                                },
+                              );
+                      },
                     )
-                  : controller.error.value
-                      ? SafetyModel(
-                          isLoading: false,
-                          title: 'Something went wrong',
-                          clickableText: 'Reload',
-                          onTap: () async {
-                            await controller.fetchForums();
-                          },
-                        )
-                      : !controller.loading.value &&
-                              !controller.error.value &&
-                              controller.forums.isEmpty
-                          ? const SafetyModel(
-                              isLoading: false,
-                              title: 'No post',
-                              subTitle: 'This industry has no post',
-                              // clickableText: "Reload",
-                              // onTap: () async {
-                              //   await controller.fetchForums();
-                              // },
-                            )
-                          : ListView.builder(
-                              itemCount: controller.forums.length,
-
-                              // <-- this will disable scroll
-
-                              //controller: differentController,
-
-                              itemBuilder: (BuildContext context, int i) {
-                                return VisibilityDetector(
-                                  key: Key(i.toString()),
-                                  onVisibilityChanged: (VisibilityInfo info) {
-                                    final bool hasIncrementedView =
-                                        hmeController.itemsWithIncrementedViews
-                                            .contains(
-                                                controller.forums[i].forumId);
-                                    if (info.visibleFraction == 1.0 &&
-                                        !hasIncrementedView) {
-                                      controller.updateForumViews(
-                                          controller.forums[i]);
-                                      setState(() {
-                                        hmeController.itemsWithIncrementedViews
-                                            .add(controller.forums[i]
-                                                .forumId); // Set the flag to prevent further increments
-                                      });
-                                    }
-                                  },
-                                  child: ForumItem(
-                                    forum: controller.forums[i],
-                                    key: ValueKey(controller.forums[i].forumId),
-                                    controller: controller,
-                                    isBossUp: true,
-                                  ),
-                                );
-                              }),
-            ));
+                  : IconButton(
+                      icon: _isSearching
+                          ? const Icon(Icons.close)
+                          : SvgPicture.asset(
+                              'assets/svgs/search.svg',
+                              color: Colors.black,
+                            ),
+                      onPressed: () {
+                        _isSearching = !_isSearching;
+                        setState(() {});
+                        controller.searchedPosts.clear();
+                        controller.searchedUsers.clear();
+                      })
+            ],
+            bottom: !_isSearching && !_iscouseSearching
+                ? const PreferredSize(
+                    preferredSize: Size.fromHeight(0.0),
+                    child: SizedBox(height: 0),
+                  )
+                : _iscouseSearching
+                    ? TabBar(
+                        controller: _coursesearchTabController,
+                        labelStyle:
+                            const TextStyle(fontWeight: FontWeight.w500),
+                        labelColor: Colors.black,
+                        indicatorColor: primaryColorLT,
+                        tabs: const <Widget>[
+                          Tab(text: 'Posts'),
+                          Tab(text: 'People'),
+                        ],
+                      )
+                    : TabBar(
+                        controller: _searchTabController,
+                        labelStyle:
+                            const TextStyle(fontWeight: FontWeight.w500),
+                        labelColor: Colors.black,
+                        indicatorColor: primaryColorLT,
+                        tabs: const <Widget>[
+                          Tab(text: 'Posts'),
+                          Tab(text: 'People'),
+                        ],
+                      ),
+          ),
+          body: _isSearching
+              ? TabBarView(
+                  controller: _searchTabController,
+                  children: <Widget>[
+                    Obx(
+                      () => FilterChallengePosts(
+                        filterItems: controller.searchedPosts,
+                        isLoading: controller.loading.value ||
+                            controller.loadingPosts.value,
+                      ),
+                    ),
+                    Obx(() => FilterChallengeUsers(
+                          members: controller.members,
+                          filterItems: controller.searchedUsers,
+                          isLoading: controller.loading.value ||
+                              controller.loadingMembers.value,
+                          onConnectionChange: controller.connectToUser,
+                          isSearch: controller.isUserSearch.value,
+                        )),
+                  ],
+                )
+              : _iscouseSearching
+                  ? TabBarView(
+                      controller: _coursesearchTabController,
+                      children: <Widget>[
+                        Obx(
+                          () => FilterCoursesPosts(
+                            filterItems: courseController.searchedPosts,
+                            isLoading: courseController.loading.value ||
+                                courseController.loadingPostsSearch.value,
+                          ),
+                        ),
+                        Obx(() => FilterCoursesUsers(
+                              members: courseController.usersMembers,
+                              filterItems: courseController.searchedUsers,
+                              isLoading: courseController.loading.value ||
+                                  courseController.loadingSearch.value,
+                              onConnectionChange:
+                                  courseController.connectToUser,
+                              isSearch: courseController.isUserSearch.value,
+                            )),
+                      ],
+                    )
+                  : DefaultTabController(
+                      length: 2,
+                      child: Column(
+                        children: <Widget>[
+                          Container(
+                            color: Colors.white,
+                            constraints:
+                                const BoxConstraints.expand(height: 50),
+                            child: TabBar(
+                              tabs: const <Widget>[
+                                Tab(text: 'Courses'),
+                                Tab(text: 'Resources'),
+                              ],
+                              onTap: (int index) {
+                                setState(() {
+                                  currentTabIndex =
+                                      index; // Update the current tab index
+                                });
+                              },
+                            ),
+                          ),
+                          Expanded(
+                            child: TabBarView(
+                              physics: const NeverScrollableScrollPhysics(),
+                              children: <Widget>[
+                                CoursesPage(
+                                  industryId: industry.industryId!,
+                                  filter: _filtercourses,
+                                ),
+                                const TopicsPage(),
+                              ],
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+        );
       },
     );
   }
 
-  String formatCount(int count) {
-    if (count >= 1000) {
-      double countInK = count / 1000;
-      if (countInK >= 1000) {
-        return '${(countInK / 1000).toStringAsFixed(1)}m';
-      } else {
-        return '${countInK.toStringAsFixed(1)}k';
-      }
-    } else {
-      return count.toString();
-    }
-  }
-
-  void toggleJoinAndLeaveIndustry(ForumController controller) {
-    final String myUid = _myProfile.myProfile.uid;
-    // print(myUid);
-    if (industry.joinedUsers?.contains(myUid) ?? false) {
-      industry.joinedUsers!.removeWhere((String element) => element == myUid);
-    } else {
-      if (industry.joinedUsers == null) {
-        industry.joinedUsers = <String>[myUid];
-      } else {
-        industry.joinedUsers!.add(myUid);
-      }
-    }
-    setState(() {});
-    controller.joinAndLeaveIndustry(myUid, industry.industryId!);
-  }
-
   @override
   void dispose() {
-    // TODO: implement dispose
     Get.delete<ForumController>();
     super.dispose();
   }
+
+  List<String> get preferenceslist => <String>[
+        'All Courses',
+        'Free Courses',
+        'Paid Courses',
+        // 'Free Course Bundles',
+        // 'Paid Course Bundles',
+      ];
+
+  List<String> get preferencesnumber => <String>[
+        ' (${courseController.courses.length})',
+        ' (${courseController.courses.where((CourseModel course) => course.courseType == 'free').length})',
+        ' (${courseController.courses.where((CourseModel course) => course.courseType == 'paid').length})',
+        // ' (${courseController.courses.where((CourseModel course) => course.courseType == 'free' && course.youtubeUrls!.length > 1).length})',
+        // ' (${courseController.courses.where((CourseModel course) => course.courseType == 'paid' && course.youtubeUrls!.length > 1).length})',
+      ];
 }

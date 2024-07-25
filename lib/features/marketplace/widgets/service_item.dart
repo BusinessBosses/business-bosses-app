@@ -297,7 +297,6 @@ class _ServiceTileState extends State<ServiceTile> {
                                                       _marketController
                                                           .removeListing(
                                                               _post.marketId);
-                                                      ;
                                                       // setState(() {
                                                       //   hide = true;
                                                       // });
@@ -391,6 +390,17 @@ class _ServiceTileState extends State<ServiceTile> {
                             Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: <Widget>[
+                                if (_post.title != null)
+                                  Padding(
+                                    padding: const EdgeInsets.only(
+                                        left: 15.0, right: 15),
+                                    child: Text(
+                                      _post.title.toString(),
+                                      style: const TextStyle(
+                                        fontWeight: FontWeight.w800,
+                                      ),
+                                    ),
+                                  ),
                                 Padding(
                                   padding: const EdgeInsets.only(
                                       left: 15.0, right: 15),
@@ -401,6 +411,7 @@ class _ServiceTileState extends State<ServiceTile> {
                                         '${_post.category} - \$${_post.price.toString()}',
                                         style: const TextStyle(
                                           fontWeight: FontWeight.w800,
+                                          color: Colors.black54
                                         ),
                                       ),
                                       const SizedBox(
@@ -449,6 +460,7 @@ class _ServiceTileState extends State<ServiceTile> {
                                     lessStyle: bodyText2.copyWith(
                                       color: Colors.redAccent,
                                     ),
+                                    trimLength: 100,
                                     trimExpandedText: '  show less',
                                     basicStyle:
                                         bodyText2.copyWith(color: textColor),
@@ -798,7 +810,7 @@ class _ServiceTileState extends State<ServiceTile> {
   void _sharePost() {
     String message =
         'Have a look at ${_post.user!.username}\'s post on Business Bosses\n'
-        'https://businessbosses.onelink.me/xLWk/36a2ff16';
+        'https://vm.businessbosses.co.uk/share/post';
     logEvent(_post.marketId, 'marketplace');
     socialShare(message);
   }

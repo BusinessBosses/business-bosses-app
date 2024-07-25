@@ -4,81 +4,95 @@ import 'package:business_bosses_v2/common/models/user_model.dart';
 import 'package:business_bosses_v2/features/forum/models/forum_model.dart';
 import 'package:business_bosses_v2/features/forum/models/industry.dart';
 import 'package:business_bosses_v2/features/forum/repository/forum_repository.dart';
+import 'package:business_bosses_v2/features/forum/widgets/postonhomepopup.dart';
 import 'package:business_bosses_v2/features/home/controller/home_controller.dart';
 import 'package:business_bosses_v2/features/profile/controller/profile_controller.dart';
+import 'package:business_bosses_v2/services/api_service.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:socket_io_client/socket_io_client.dart' as IO;
 
-import '../../../utils/constants/constants.dart';
 import '../../home/repository/home_repository.dart';
 
 class BossUpController extends GetxController {
   late IO.Socket socket;
   final HomeController _homeController = Get.find();
   final ProfileController _profileController = Get.find();
-  List<ForumModel> forums = <ForumModel>[];
+  RxList<ForumModel> forums = <ForumModel>[].obs;
   List<UserModel> members = <UserModel>[];
+  List<UserModel> searchedUsers = <UserModel>[];
+  List<ForumModel> searchedPosts = <ForumModel>[];
   RxInt totalForums = RxInt(0);
-  RxInt page = RxInt(0);
   RxInt membersPage = RxInt(0);
   RxBool loadingNextMembers = RxBool(false);
   RxBool loading = RxBool(false);
   RxBool error = RxBool(false);
   RxBool loadingMembers = RxBool(false);
+  RxBool loadingPosts = RxBool(false);
   RxBool errorMembers = RxBool(false);
-  Future<void> fetchForums() async {
-    loading(true);
-    error(false);
+  RxBool isUserSearch = RxBool(false);
+  RxBool isPostSearch = RxBool(false);
+  RxBool loadingPostSearch = RxBool(false);
+  late List<String> connecteds =
+      _profileController.myProfile.connecteds ?? <String>[];
+
+  void clearUserSearch() {
+    isUserSearch(false);
     update();
-    ApiResponseModel response;
-    response =
-        await ForumRepository.getForums(page.value, Constants.BOSSUPINDUSTRYID);
+  }
 
-    if (response.success) {
-      totalForums(int.parse(response.data['count'].toString()));
-      page(page.value + 1);
+  void clearPostSearch() {
+    isPostSearch(false);
+    update();
+  }
 
-      // Separate lists for ranked and non-ranked posts
-      List<ForumModel> rankedForums = <ForumModel>[];
-      List<ForumModel> nonRankedForums = <ForumModel>[];
+  Future<void> fetchForums(String industryId) async {
+    loading(true);
+    update();
+    try {
+      final ApiResponseModel response =
+          await ForumRepository.getForums(0, industryId);
+      if (response.success) {
+        totalForums(int.parse(response.data['count'].toString()));
 
-      for (int i = 0; i < response.data['rows'].length; i++) {
-        if (response.data['rows'][i]['user'] != null) {
-          ForumModel forum = ForumModel.fromMap(<String, dynamic>{
-            ...response.data['rows'][i],
-            'likes': response.data['rows'][i]['likes']
-                .map((dynamic like) => like['userId'].toString())
-                .toList(),
-            'coins': response.data['rows'][i]['coins']
-                .map((dynamic coin) => coin['userId'].toString())
-                .toList()
-          });
+        // Separate lists for ranked and non-ranked posts
+        List<ForumModel> rankedForums = <ForumModel>[];
+        List<ForumModel> nonRankedForums = <ForumModel>[];
 
-          if (forum.isRanked != null && forum.isRanked!) {
-            rankedForums.add(forum);
-          } else {
-            nonRankedForums.add(forum);
+        for (int i = 0; i < response.data['rows'].length; i++) {
+          if (response.data['rows'][i]['user'] != null) {
+            ForumModel forum = ForumModel.fromMap(<String, dynamic>{
+              ...response.data['rows'][i],
+              'likes': response.data['rows'][i]['likes']
+                  .map((dynamic like) => like['userId'].toString())
+                  .toList(),
+              'coins': response.data['rows'][i]['coins']
+                  .map((dynamic coin) => coin['userId'].toString())
+                  .toList()
+            });
+            if (forum.isRanked != null && forum.isRanked!) {
+              rankedForums.add(forum);
+            } else {
+              nonRankedForums.add(forum);
+            }
           }
         }
+
+        nonRankedForums.sort((ForumModel a, ForumModel b) =>
+            b.likes!.length.compareTo(a.likes!.length));
+
+        List<ForumModel> combinedForums = <ForumModel>[
+          ...rankedForums,
+          ...nonRankedForums
+        ];
+        forums.assignAll(combinedForums); // Add the combined list of forums
+      } else {
+        error(true);
       }
-      // After categorizing ranked and non-ranked forums
-      nonRankedForums.sort((ForumModel a, ForumModel b) =>
-          b.likes!.length.compareTo(a.likes!.length));
-      // Combine ranked and non-ranked posts, with ranked posts at the beginning
-      List<ForumModel> combinedForums = <ForumModel>[
-        ...rankedForums,
-        ...nonRankedForums
-      ];
-
-      // Clear the existing list before adding new forums
-      forums.addAll(combinedForums); // Add the combined list of forums
-
-      _homeController.addBossupForums(forums);
-    } else {
+    } catch (e) {
+      // You can set error flag to true to indicate that an error occurred
       error(true);
     }
-
     loading(false);
     update();
   }
@@ -101,11 +115,21 @@ class BossUpController extends GetxController {
     }
   }
 
-  void deleteForum(String forumId) {
-    final HomeController homeController = Get.find();
+  void deleteForum(String forumId) async {
     forums.removeWhere((ForumModel element) => element.forumId == forumId);
-    homeController.removeForum(forumId);
-
+    if (_profileController.userresources
+            .indexWhere((ForumModel element) => element.forumId == forumId) !=
+        -1) {
+      _profileController.userresources
+          .removeWhere((ForumModel element) => element.forumId == forumId);
+    }
+    await ForumRepository.deleteForum(forumId);
+    ApiService.put(
+      path: 'users/${_profileController.myProfile.uid}',
+      body: <String, dynamic>{
+        'postChallenges': _profileController.myProfile.postChallenges,
+      },
+    );
     update();
   }
 
@@ -139,6 +163,90 @@ class BossUpController extends GetxController {
     loadingMembers(false);
 
     update();
+  }
+
+  Future<void> searchUsers(String query, String? industryid) async {
+    loadingMembers(true);
+    update();
+    searchedUsers.clear();
+
+    if (members.isEmpty) {
+      await fetchIndustryUsers(industryid!);
+    }
+
+    for (dynamic user in members) {
+      if (user.username.toLowerCase().contains(query.toLowerCase()) ||
+          user.name!.toLowerCase().contains(query.toLowerCase())) {
+        searchedUsers.add(user);
+      }
+    }
+
+    loadingMembers(false);
+
+    update();
+  }
+
+  Future<void> searchPosts(String query) async {
+    loadingPostSearch(true);
+    update();
+
+    searchedPosts.clear();
+
+   for (ForumModel product in forums) {
+      if (product.description != null && product.description!.toLowerCase().contains(query.toLowerCase()) ||
+        product.title != null && product.title!.toLowerCase().contains(query.toLowerCase()) ||
+        product.user != null && 
+        (product.user!.name != null && product.user!.name!.toLowerCase().contains(query.toLowerCase()) ||
+         product.user!.username.toLowerCase().contains(query.toLowerCase()))) {
+      searchedPosts.add(product);
+    }
+    }
+
+    loadingPostSearch(false);
+    update();
+  }
+
+  void connectToUser(UserModel user) async {
+    final int checkConnected =
+        connecteds.indexWhere((String element) => element == user.uid);
+    _profileController.updateConnections(user.uid);
+    update();
+    if (isUserSearch.value) {
+      final int checkConnectedSearch =
+          connecteds.indexWhere((String element) => element == user.uid);
+      if (checkConnectedSearch == -1) {
+        connecteds.add(user.uid);
+      } else {
+        connecteds.removeAt(checkConnectedSearch);
+      }
+    }
+    if (checkConnected == -1) {
+      connecteds.add(user.uid);
+      await connect(user.uid);
+    } else {
+      connecteds.removeAt(checkConnected);
+      await disconnect(user.uid);
+    }
+
+    update();
+  }
+
+  Future<void> connect(String userId) async {
+    await ApiService.post(path: '/connection/connect', body: <String, dynamic>{
+      'userId': _profileController.myProfile.uid,
+      'connectedId': userId,
+      'timestamp': DateTime.now().millisecondsSinceEpoch
+    });
+  }
+
+  Future<void> disconnect(String userId) async {
+    await ApiService.post(
+        path: '/connection/disconnect',
+        body: <String, dynamic>{
+          'userId': _profileController.myProfile.uid,
+          'connectedId': userId,
+          'timestamp': DateTime.now().millisecondsSinceEpoch
+        });
   }
 
   /// LIKE AND UNLIKE FUNCTION
@@ -227,6 +335,12 @@ class BossUpController extends GetxController {
     });
 
     forums.insert(0, modelizedNewPost);
+    _profileController.userresources.insert(0, modelizedNewPost);
+
+    Get.off(() => PostonhomePopUp(
+          forum: modelizedNewPost,
+          isBossUp: true,
+        ));
 
     update();
   }
@@ -235,11 +349,7 @@ class BossUpController extends GetxController {
   void onInit() {
     // TODO: implement onInit
     socket = _homeController.socket;
-    if (_homeController.bossupForums.isEmpty) {
-      fetchForums();
-    } else {
-      forums = _homeController.bossupForums;
-    }
+
     super.onInit();
   }
 }

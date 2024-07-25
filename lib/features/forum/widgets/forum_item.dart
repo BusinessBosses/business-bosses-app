@@ -1,6 +1,7 @@
 import 'package:business_bosses_v2/features/forum/controller/bossup_controller.dart';
 import 'package:business_bosses_v2/features/forum/controller/forum_controller.dart';
 import 'package:business_bosses_v2/features/forum/models/forum_model.dart';
+import 'package:business_bosses_v2/features/forum/presentation/boost_forum_screen.dart';
 import 'package:business_bosses_v2/features/forum/widgets/bossup_like_comment.dart';
 import 'package:business_bosses_v2/features/posts/widgets/all_forum_images.dart';
 import 'package:business_bosses_v2/functions/my_native_functions.dart';
@@ -41,10 +42,6 @@ class ForumItem extends StatefulWidget {
   const ForumItem({
     Key? key,
     required this.forum,
-    // this.commented,
-    // this.likeUnlikeForum,
-    // this.coinUncoinForum,
-    // this.onUpdateForum,
     this.controller,
     this.isBossUp = false,
   }) : super(key: key);
@@ -57,6 +54,7 @@ class ForumItem extends StatefulWidget {
 class _ForumItemState extends State<ForumItem> {
   List<String> blocked = <String>[];
   final ProfileController profileController = Get.find();
+  late List<PopupMenuEntry<String>> myPopup;
 
   Future<void> connect(String userId) async {
     // ignore: unused_local_variable
@@ -110,25 +108,62 @@ class _ForumItemState extends State<ForumItem> {
     }
   }
 
-  final List<PopupMenuEntry<String>> myPopup = <PopupMenuEntry<String>>[
-    const PopupMenuItem<String>(
-      value: 'Edit',
-      child: Text(
-        'Edit',
-        style: bodyText2,
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    myPopup = _buildPopupMenu();
+  }
+
+  // final List<PopupMenuEntry<String>> myPopup = <PopupMenuEntry<String>>[
+  //   const PopupMenuItem<String>(
+  //     value: 'Edit',
+  //     child: Text(
+  //       'Edit',
+  //       style: bodyText2,
+  //     ),
+  //   ),
+  //   const PopupMenuDivider(
+  //     height: 0.0,
+  //   ),
+  //   const PopupMenuItem<String>(
+  //     value: 'Delete',
+  //     child: Text(
+  //       'Delete',
+  //       style: bodyText2,
+  //     ),
+  //   ),
+  // ];
+
+  List<PopupMenuEntry<String>> _buildPopupMenu() {
+    return <PopupMenuEntry<String>>[
+      const PopupMenuItem<String>(
+        value: 'Edit',
+        child: Text(
+          'Edit',
+          style: bodyText2,
+        ),
       ),
-    ),
-    const PopupMenuDivider(
-      height: 0.0,
-    ),
-    const PopupMenuItem<String>(
-      value: 'Delete',
-      child: Text(
-        'Delete',
-        style: bodyText2,
+      const PopupMenuDivider(
+        height: 0.0,
       ),
-    )
-  ];
+      const PopupMenuItem<String>(
+        value: 'Delete',
+        child: Text(
+          'Delete',
+          style: bodyText2,
+        ),
+      ),
+      if (widget.forum.promote == false)
+        const PopupMenuItem<String>(
+          value: 'Boost',
+          child: Text(
+            'Boost',
+            style: bodyText2,
+          ),
+        ),
+    ];
+  }
 
   String formatCount(int count) {
     if (count >= 1000) {
@@ -436,7 +471,7 @@ class _ForumItemState extends State<ForumItem> {
                               ),
                             )
                           : SizedBox(
-                              width: 60,
+                              width: 35,
                               // width: leadingWidth(widget.forum),
                               child: Row(
                                 mainAxisAlignment: MainAxisAlignment.start,
@@ -447,7 +482,9 @@ class _ForumItemState extends State<ForumItem> {
                                       ? MyPopupMenuButton(
                                           popupItems: myPopup,
                                           icon: const Icon(Icons.more_horiz,
-                                              size: 20),
+                                              size: 20,
+                                              color: Colors.black,
+                                              weight: 100),
                                           onSelected: (String val) {
                                             if (val == 'Edit') {
                                               Get.toNamed(Routes.createForum,
@@ -457,6 +494,12 @@ class _ForumItemState extends State<ForumItem> {
                                                   });
                                             } else if (val == 'Delete') {
                                               _showDialog(widget.forum.forumId);
+                                            } else if (val == 'Boost') {
+                                              Get.to(
+                                                () => BoostForumScreen(
+                                                  postId: widget.forum.forumId,
+                                                ),
+                                              );
                                             }
                                           },
                                         )
@@ -639,7 +682,7 @@ class _ForumItemState extends State<ForumItem> {
                                   color: Colors.redAccent,
                                 ),
                                 trimExpandedText: '  show less',
-                                maxLines: 100,
+                                trimLength: 100,
                                 basicStyle: bodyText2,
                                 onTap: (String link) async {
                                   String url = MyNativeFunctions.completeURL(
@@ -794,7 +837,7 @@ class _ForumItemState extends State<ForumItem> {
                         ),
                         const SizedBox(width: 8.0),
                         GestureDetector(
-                          onTap: () => _sharePost(),
+                          onTap: () => showOptions(),
                           child: SvgPicture.asset(
                             'assets/svgs/share.svg',
                             height: 15.0,
@@ -826,15 +869,88 @@ class _ForumItemState extends State<ForumItem> {
           );
   }
 
-  void _sharePost() {
-    String message =
-        'Have a look at ${widget.forum.user?.username ?? 'Business Bosses'}\'s post on Business Bosses\n'
-        'https://businessbosses.onelink.me/xLWk/36a2ff16';
-    logEvent(widget.forum.forumId, 'forum');
-    socialShare(message);
+  void showOptions() {
+    showModalBottomSheet(
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+      context: context,
+      backgroundColor: Colors.white,
+      builder: (BuildContext context) => Padding(
+        padding: const EdgeInsets.all(15.0),
+        child: SizedBox(
+          height: 150,
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: <Widget>[
+              GestureDetector(
+                onTap: () => Get.toNamed(
+                  Routes.createPost,
+                  arguments: <String, dynamic>{
+                    'sharemessage': 'Hey there! Check out this post',
+                    'title': widget.forum.title,
+                    'forumdata': widget.forum,
+                  },
+                ),
+                child: Container(
+                  width: double.infinity,
+                  padding: const EdgeInsets.symmetric(vertical: 15),
+                  child: Row(
+                    children: <Widget>[
+                      SvgPicture.asset(
+                        'assets/svgs/text.svg',
+                        color: textColor,
+                      ),
+                      const SizedBox(
+                        width: 10,
+                      ),
+                      const Text(
+                        'Post on Business Bosses',
+                        style: TextStyle(
+                            fontWeight: FontWeight.bold, fontSize: 18),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+              Container(
+                height: 1,
+                color: backgroundColor,
+              ),
+              GestureDetector(
+                onTap: () {
+                  String message =
+                      'Have a look at ${widget.forum.user?.username ?? 'Business Bosses'}\'s donation post on Business Bosses\n'
+                      'https://businessbosses.onelink.me/xLWk/36a2ff16';
+                  logEvent(widget.forum.forumId, 'donation');
+                  socialShare(message);
+                },
+                child: Container(
+                  width: double.infinity,
+                  padding: const EdgeInsets.symmetric(vertical: 15),
+                  child: Row(
+                    children: <Widget>[
+                      SvgPicture.asset(
+                        'assets/svgs/share.svg',
+                        color: textColor,
+                        height: 16,
+                      ),
+                      const SizedBox(
+                        width: 10,
+                      ),
+                      const Text(
+                        'Share',
+                        style: TextStyle(
+                            fontWeight: FontWeight.bold, fontSize: 18),
+                      ),
+                    ],
+                  ),
+                ),
+              )
+            ],
+          ),
+        ),
+      ),
+    );
   }
-
-  leadingWidth(ForumModel? forum) {}
 
   void _showDialog(String forumId) {
     showDialog(
@@ -862,9 +978,12 @@ class _ForumItemState extends State<ForumItem> {
                   }
 
                   if (Get.isRegistered<BossUpController>()) {
+                    profileController.myProfile.postChallenges
+                        ?.remove(widget.forum.industryId);
                     Get.find<BossUpController>()
                         .deleteForum(widget.forum.forumId);
                   }
+                  setState(() {});
                 },
                 child: const TextWidget(
                   text: 'Delete',

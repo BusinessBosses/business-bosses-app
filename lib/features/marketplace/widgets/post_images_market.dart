@@ -33,6 +33,7 @@ class PostImagesMarket extends StatelessWidget {
                     child: Padding(
                       padding: const EdgeInsets.only(left: 0, right: 0),
                       child: NetworkImageWithPlaceHolder(
+                        borderColor: Colors.black12,
                         imageUrl: post.images?[0],
                         width: double.infinity,
                         height: 240.0,
@@ -78,6 +79,7 @@ class PostImagesMarket extends StatelessWidget {
                                                     top: 10.0, right: 10),
                                                 child:
                                                     NetworkImageWithPlaceHolder(
+                                                  borderColor: Colors.black12,
                                                   imageUrl: post.images![i - 1],
                                                   width: double.infinity,
                                                   height: double.infinity,

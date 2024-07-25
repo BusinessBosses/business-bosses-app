@@ -225,7 +225,7 @@ class _MyRankingScreenState extends State<MyRankingScreen> {
                                         child: Align(
                                       alignment: Alignment.center,
                                       child: Text(
-                                        profile.myProfile.weeklyRank ?? "0%",
+                                        profile.myProfile.weeklyRank ?? '0%',
                                         style: bodyText1.copyWith(
                                             fontSize: 15.0,
                                             fontWeight: FontWeight.w900),
@@ -310,7 +310,7 @@ class _MyRankingScreenState extends State<MyRankingScreen> {
                                         child: Align(
                                       alignment: Alignment.center,
                                       child: Text(
-                                        profile.myProfile.monthlyRank ?? "0%",
+                                        profile.myProfile.monthlyRank ?? '0%',
                                         style: bodyText1.copyWith(
                                             fontSize: 15.0,
                                             fontWeight: FontWeight.w900),

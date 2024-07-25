@@ -1,7 +1,6 @@
-import 'dart:io';
-
 import 'package:business_bosses_v2/common/models/api_response_model.dart';
 import 'package:business_bosses_v2/common/models/user_model.dart';
+import 'package:business_bosses_v2/common/widgets/popup/bossup_challenge_popuphome.dart';
 import 'package:business_bosses_v2/features/moreinfoscreens/bossuppartner.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -10,17 +9,21 @@ import 'package:url_launcher/url_launcher.dart';
 
 import '../../../action/action.dart';
 import '../../../common/widgets/network_image_with_placeholder.dart';
-import '../../../common/widgets/popup/bossup_challenge_popup.dart';
 import '../../../navigation/routes.dart';
 import '../../../services/api_service.dart';
 import '../../../utils/theme/theme.dart';
 import '../controller/profile_controller.dart';
 import '../../home/controller/home_controller.dart';
 
+// final GlobalKey<NavigatorState> connectbuttonkey = GlobalKey<NavigatorState>();
+
 /// BOSS OF THE WEEK HOMEPAGE TILE
+///
+///
 class BossOfWeekProfileTile extends StatefulWidget {
-  /// BOSS OF THE WEEK PROFILE
-  const BossOfWeekProfileTile({Key? key}) : super(key: key);
+  final VoidCallback? onTileBuilt; // Add this line
+
+  const BossOfWeekProfileTile({Key? key, this.onTileBuilt}) : super(key: key);
 
   @override
   State<BossOfWeekProfileTile> createState() => _BossOfWeekProfileTileState();
@@ -33,6 +36,8 @@ class _BossOfWeekProfileTileState extends State<BossOfWeekProfileTile> {
   final ProfileController _profileController = Get.find();
   late UserModel? user;
   final HomeController homeController = Get.find();
+  late Color startColor;
+  final List<Color> startColors = <Color>[backgroundColor];
 
   Future<void> onRefer(UserModel publicUser) async {
     showDialog(
@@ -50,7 +55,7 @@ class _BossOfWeekProfileTileState extends State<BossOfWeekProfileTile> {
     );
     final ApiResponseModel res = await ApiService.get(
         path: '/connection/connecteds/referals/${publicUser.uid}');
-    Navigator.pop(context);
+    Get.back();
 
     if (res.success) {
       if (res.data.isEmpty) {
@@ -71,11 +76,20 @@ class _BossOfWeekProfileTileState extends State<BossOfWeekProfileTile> {
   @override
   void initState() {
     super.initState();
+    startColor = startColors[0];
     user = _profileController.bossOfTheWeek;
   }
 
   @override
   Widget build(BuildContext context) {
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (widget.onTileBuilt != null) {
+        WidgetsBinding.instance.addPostFrameCallback((_) {
+          widget.onTileBuilt!();
+        });
+      }
+    });
+
     List<Map<String, dynamic>> quotes = <Map<String, dynamic>>[
       <String, dynamic>{
         'by': 'Napoleon Hill',
@@ -85,55 +99,58 @@ class _BossOfWeekProfileTileState extends State<BossOfWeekProfileTile> {
     return Container(
       width: double.infinity,
       color: backgroundcolorinterface,
-      padding:
-          const EdgeInsets.only(top: 0.0, bottom: 10.0, left: 15, right: 15),
+      padding: const EdgeInsets.only(top: 0.0, bottom: 0.0, left: 0, right: 0),
       child: user != null
           ? Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
                 Align(
                   alignment: Alignment.topLeft,
-                  child: Row(
-                    children: <Widget>[
-                      CircleAvatar(
-                        radius: 48 / 3,
-                        backgroundColor: primaryColorLT.withOpacity(0.1),
-                        child: SvgPicture.asset(
-                          'assets/app/app_icon_only.svg',
-                        ),
-                      ),
-                      const SizedBox(
-                        width: 10,
-                      ),
-                      const Text(
-                        'Boss of the week',
-                        style: TextStyle(
-                            fontWeight: FontWeight.w900,
-                            fontSize: 25,
-                            color: Color(0xff333333)),
-                      ),
-                      const Spacer(),
-                      GestureDetector(
-                        onTap: () {
-                          showDialog(
-                            context: context,
-                            builder: (BuildContext context) =>
-                                const BossUpChallangePopUpcopy(),
-                          );
-                        },
-                        child: Container(
-                          color: Colors.transparent,
-                          width: 50,
-                          height: 50,
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 15.0, vertical: 5),
+                    child: Row(
+                      children: <Widget>[
+                        CircleAvatar(
+                          radius: 48 / 3,
+                          backgroundColor: primaryColorLT.withOpacity(0.1),
                           child: SvgPicture.asset(
-                            'assets/svgs/more.svg',
-                            height: 20,
-                            fit: BoxFit.none,
-                            alignment: Alignment.centerRight,
+                            'assets/app/app_icon_only.svg',
                           ),
                         ),
-                      )
-                    ],
+                        const SizedBox(
+                          width: 10,
+                        ),
+                        const Text(
+                          'Boss of the week',
+                          style: TextStyle(
+                              fontWeight: FontWeight.w900,
+                              fontSize: 25,
+                              color: Color(0xff333333)),
+                        ),
+                        const Spacer(),
+                        GestureDetector(
+                          onTap: () {
+                            showDialog(
+                              context: context,
+                              builder: (BuildContext context) =>
+                                  const BossUpChallangePopUpHome(),
+                            );
+                          },
+                          child: Container(
+                            color: Colors.transparent,
+                            width: 50,
+                            height: 50,
+                            child: SvgPicture.asset(
+                              'assets/svgs/more.svg',
+                              height: 20,
+                              fit: BoxFit.none,
+                              alignment: Alignment.centerRight,
+                            ),
+                          ),
+                        )
+                      ],
+                    ),
                   ),
                 ),
                 Align(
@@ -142,8 +159,7 @@ class _BossOfWeekProfileTileState extends State<BossOfWeekProfileTile> {
                       Get.toNamed(Routes.publicProfile, arguments: user);
                     },
                     child: Container(
-                      padding: const EdgeInsets.only(
-                          top: 3.0, bottom: 0, left: 0, right: 0),
+                      padding: const EdgeInsets.symmetric(horizontal: 15),
                       width: double.infinity,
                       decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(15),
@@ -247,13 +263,6 @@ class _BossOfWeekProfileTileState extends State<BossOfWeekProfileTile> {
                                           fontSize: 15,
                                           fontWeight: FontWeight.bold,
                                         )),
-                                if (user?.category != null)
-                                  Text(user!.category.toString(),
-                                      maxLines: 1,
-                                      overflow: TextOverflow.ellipsis,
-                                      style: const TextStyle(
-                                        fontSize: 14,
-                                      )),
                                 user?.bio == null
                                     ? Container()
                                     : Column(
@@ -290,133 +299,208 @@ class _BossOfWeekProfileTileState extends State<BossOfWeekProfileTile> {
                     ),
                   ),
                 ),
-                homeController.bossUp != null &&
-                        homeController.bossUp!.isNotEmpty
-                    ? GestureDetector(
-                        onTap: () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (BuildContext context) =>
-                                    const Bossuppartner()),
-                          );
-                        },
-                        child: Padding(
-                          padding: const EdgeInsets.only(right: 0, top: 5),
-                          child: Container(
-                              height: 40,
-                              decoration: BoxDecoration(
-                                color: const Color(0xFFFFFFFF),
-                                borderRadius: BorderRadius.circular(10),
-                                boxShadow: <BoxShadow>[
-                                  BoxShadow(
-                                    color: Colors.grey.withOpacity(0.3),
-                                    spreadRadius: 20,
-                                    blurRadius: 500,
-                                    offset: const Offset(0, 3),
-                                  ),
-                                ],
+                const SizedBox(
+                  height: 10,
+                ),
+                Container(
+                  height: 1,
+                  color: backgroundColor,
+                ),
+                GestureDetector(
+                  onTap: () {
+                    Get.to(const Bossuppartner());
+                  },
+                  child: Container(
+                    padding: const EdgeInsets.symmetric(vertical: 15),
+                    color: Colors.white,
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: <Widget>[
+                        Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 15.0),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: <Widget>[
+                              const Text(
+                                'Deals',
+                                style: TextStyle(
+                                    fontWeight: FontWeight.w700, fontSize: 18),
                               ),
-                              child: Row(
-                                children: <Widget>[
-                                  Padding(
-                                    padding: const EdgeInsets.only(
-                                      left: 10,
+                              Wrap(
+                                  crossAxisAlignment: WrapCrossAlignment.center,
+                                  children: [
+                                    const Text(
+                                      'See all',
+                                      style: TextStyle(fontSize: 11),
                                     ),
-                                    child: GestureDetector(
-                                      onTap: () async {
-                                        if (await canLaunchUrl(Uri.parse(
-                                            homeController.bossUpLink))) {
-                                          await launchUrl(Uri.parse(
-                                              homeController.bossUpLink));
-                                        }
-                                      },
-                                      child: Center(
-                                        child: Padding(
-                                          padding: const EdgeInsets.all(2),
-                                          child: Text(
-                                            homeController.bossUpTitle
-                                                .toString(),
-                                            style:
-                                                const TextStyle(fontSize: 13),
-                                          ),
-                                        ),
-                                      ),
-                                    ),
-                                  ),
-                                  const SizedBox(width: 10),
-                                  Platform.isIOS
-                                      ? Padding(
-                                          padding: const EdgeInsets.only(
-                                              left: 0.0, bottom: 4),
-                                          child: Text(
-                                            '|',
-                                            style: TextStyle(
-                                              fontSize: 20,
-                                              color: textColor.withOpacity(0.5),
-                                            ),
-                                          ),
-                                        )
-                                      : Text(
-                                          '|',
-                                          style: TextStyle(
-                                            fontSize: 20,
-                                            color: textColor.withOpacity(0.5),
-                                          ),
-                                        ),
-                                  const SizedBox(width: 10),
-                                  Platform.isIOS
-                                      ? Expanded(
-                                          child: Text(
-                                            homeController.bossUp != null &&
-                                                    homeController
-                                                        .bossUp!.isNotEmpty
-                                                ? homeController.bossUp!
-                                                        .last['companyName'] ??
-                                                    ''
-                                                : '',
-                                            style: const TextStyle(
-                                              fontSize: 15,
-                                              fontWeight: FontWeight.bold,
-                                            ),
-                                            overflow: TextOverflow.ellipsis,
-                                            maxLines: 1,
-                                          ),
-                                        )
-                                      : Expanded(
-                                          child: Text(
-                                            homeController.bossUp != null &&
-                                                    homeController
-                                                        .bossUp!.isNotEmpty
-                                                ? homeController.bossUp!
-                                                        .last['companyName'] ??
-                                                    ''
-                                                : '',
-                                            style: const TextStyle(
-                                              fontSize: 15,
-                                              fontWeight: FontWeight.bold,
-                                            ),
-                                            overflow: TextOverflow.ellipsis,
-                                            maxLines: 1,
-                                          ),
-                                        ),
-                                  const SizedBox(
-                                    width: 15,
-                                  ),
-                                  Padding(
-                                    padding: const EdgeInsets.only(
-                                      right: 10.0,
-                                    ),
-                                    child: SvgPicture.asset(
+                                    const SizedBox(width: 5.0),
+                                    SvgPicture.asset(
                                       'assets/svgs/nexticon.svg',
                                       color: textColor,
+                                      height: 8,
                                     ),
-                                  )
-                                ],
-                              )),
+                                  ]),
+                            ],
+                          ),
                         ),
-                      )
-                    : const SizedBox(),
+                        const SizedBox(
+                          height: 10,
+                        ),
+                        SingleChildScrollView(
+                          scrollDirection: Axis.horizontal,
+                          child: Row(
+                            children: homeController.bossUp!.reversed
+                                .toList()
+                                .map((Map<String, dynamic> item) {
+                              final Color startColor = startColors[
+                                  homeController.bossUp!.indexOf(item) %
+                                      startColors.length];
+                              return LayoutBuilder(
+                                builder: (BuildContext context,
+                                    BoxConstraints constraints) {
+                                  return GestureDetector(
+                                    onTap: () async {
+                                      final Uri companyUrl =
+                                          Uri.parse(item['companyUrl']);
+                                      if (!await launchUrl(companyUrl)) {
+                                        throw Exception(
+                                            'Could not launch $companyUrl');
+                                      }
+                                    },
+                                    child: Container(
+                                      width: MediaQuery.of(context).size.width /
+                                         3.58,
+                                      margin: const EdgeInsets.only(left: 15.0),
+                                      decoration: BoxDecoration(
+                                        border: Border.all(
+                                          color: startColor,
+                                          width: 1.0,
+                                        ),
+                                        gradient: LinearGradient(
+                                          colors: <Color>[
+                                            startColor,
+                                            backgroundColor
+                                          ],
+                                          begin: Alignment.topRight,
+                                          end: Alignment.bottomLeft,
+                                        ),
+                                        borderRadius: BorderRadius.circular(15),
+                                      ),
+                                      child: Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.spaceBetween,
+                                        children: <Widget>[
+                                          Padding(
+                                            padding: const EdgeInsets.only(
+                                                left: 8.0,
+                                                right: 8,
+                                                top: 8,
+                                                bottom: 5),
+                                            child: SizedBox(
+                                              height: 20.0,
+                                              width: 20.0,
+                                              child: Container(
+                                                decoration: BoxDecoration(
+                                                  border: Border.all(
+                                                      width: 0.5,
+                                                      color: Colors.black12),
+                                                  color: backgroundColor,
+                                                  borderRadius:
+                                                      BorderRadius.circular(
+                                                          100.0),
+                                                ),
+                                                child:
+                                                    NetworkImageWithPlaceHolder(
+                                                  imageUrl:
+                                                      item['companyPhoto'] ??
+                                                          '',
+                                                  radius: 100,
+                                                  placeHolder: Icons.person,
+                                                  iconSize: 15.0,
+                                                  fit: BoxFit.cover,
+                                                ),
+                                              ),
+                                            ),
+                                          ),
+                                          Padding(
+                                              padding:
+                                                  const EdgeInsets.symmetric(
+                                                horizontal: 8.0,
+                                              ),
+                                              child: Column(
+                                                children: [
+                                                  Text(
+                                                    item['companyName'],
+                                                    textAlign: TextAlign.left,
+                                                    maxLines: 2,
+                                                    style: const TextStyle(
+                                                      color: textColor,
+                                                      fontSize: 12,
+                                                      fontWeight:
+                                                          FontWeight.w700,
+                                                    ),
+                                                    overflow: TextOverflow
+                                                        .ellipsis, // Add this line to handle overflow
+                                                  ),
+                                                ],
+                                              )),
+                                          Padding(
+                                            padding: const EdgeInsets.all(8),
+                                            child: SizedBox(
+                                              width: double.infinity,
+                                              child: Wrap(
+                                                  crossAxisAlignment:
+                                                      WrapCrossAlignment.center,
+                                                  children: <Widget>[
+                                                    Container(
+                                                      decoration:
+                                                          const BoxDecoration(
+                                                              color:
+                                                                  Colors.white,
+                                                              shape: BoxShape
+                                                                  .circle),
+                                                      padding:
+                                                          const EdgeInsets.all(
+                                                              4),
+                                                      child: SvgPicture.asset(
+                                                        'assets/svgs/upicon.svg',
+                                                        color: const Color(
+                                                            0xFF0F132D),
+                                                        height: 8,
+                                                      ),
+                                                    ),
+                                                    const SizedBox(
+                                                      width: 5,
+                                                    ),
+                                                    const Text(
+                                                      'Learn more',
+                                                      style: TextStyle(
+                                                          fontSize: 11,
+                                                          color: textColor),
+                                                    ),
+                                                  ]),
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                  );
+                                },
+                              );
+                            }).toList(),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+                Container(
+                  height: 7,
+                  color: backgroundColor,
+                ),
               ],
             )
           : qouteWidget(quotes),
@@ -488,6 +572,7 @@ class _BossOfWeekProfileTileState extends State<BossOfWeekProfileTile> {
       child: Row(
         children: <Widget>[
           ElevatedButton(
+            // key: connectbuttonkey,
             onPressed: () async {
               connectToUser();
             },
@@ -495,8 +580,8 @@ class _BossOfWeekProfileTileState extends State<BossOfWeekProfileTile> {
               user?.connecteds != null &&
                       _profileController.myProfile.connecteds!
                           .contains(user!.uid)
-                  ? 'Connected'
-                  : 'Connect',
+                  ? 'Following'
+                  : 'Follow',
               style: const TextStyle(color: Colors.white),
             ),
           ),

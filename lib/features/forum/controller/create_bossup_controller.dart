@@ -87,8 +87,6 @@ class CreateBossUpController extends GetxController {
 
         if (response.success) {
           _forumController.addNewForum(response.data);
-
-          Get.back();
         }
       } else {
         if (imageFileList.isNotEmpty &&
@@ -109,8 +107,6 @@ class CreateBossUpController extends GetxController {
           if (response.success) {
             imageFileList.clear();
             _forumController.addNewForum(response.data);
-
-            Get.back();
           }
         }
       }

@@ -137,7 +137,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                         ),
                         child: ListTile(
                           title: Text(
-                            'Renew Premium Subscription',
+                            'Renew Pro Subscription',
                             style: Theme.of(context).textTheme.bodyLarge,
                           ),
                         ),
@@ -414,9 +414,11 @@ class _SettingsScreenState extends State<SettingsScreen> {
     } else if (label == 'Invite a friend terms & conditions') {
       Get.toNamed(Routes.inviteafriendscreen,
           arguments: 'Invite a friend text');
-    } else if ('Contact us' == label) {
-      _contactUs();
-    } else if ('Delete Account' == label) {
+    } 
+    // else if ('Contact us' == label) {
+    //   _contactUs();
+    // } 
+    else if ('Delete Account' == label) {
       Get.toNamed(Routes.deleteAccount);
     }
   }
@@ -460,10 +462,10 @@ class _SettingsScreenState extends State<SettingsScreen> {
       isTitle: false,
       label: 'Invite a friend terms & conditions',
     ),
-    MySettingsItem(
-      isTitle: false,
-      label: 'Contact us',
-    ),
+    // MySettingsItem(
+    //   isTitle: false,
+    //   label: 'Contact us',
+    // ),
     MySettingsItem(
       isTitle: false,
       label: 'Change password',

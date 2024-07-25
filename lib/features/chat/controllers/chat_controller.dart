@@ -271,6 +271,30 @@ class ChatController extends GetxController {
     }
   }
 
+  // Future<dynamic> initiateCall(Map<String, dynamic> data) async {
+  //   final ApiResponseModel response =
+  //       await ApiService.initPost(path: 'share/initiate-call', body: data);
+  //   if (response.success) {
+  //     Map<String, dynamic> dataNew = <String, dynamic>{
+  //       ...data,
+  //       'callID': response.data['callId'],
+  //     };
+  //     Get.to(() => CallPage(
+  //         callID: dataNew['callID'],
+  //         userId: data['userId'],
+  //         username: data['username']));
+
+  //     return;
+  //   } else {
+  //     showSnackbar(
+  //       title: 'OOPS!',
+  //       message: 'An error occurred while adding an event, please try again!',
+  //       error: true,
+  //     );
+  //   }
+  //   update();
+  // }
+
   @override
   void onInit() {
     // TODO: implement onInit

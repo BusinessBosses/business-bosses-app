@@ -1,4 +1,6 @@
+import 'dart:convert';
 import 'dart:io';
+import 'dart:math';
 
 // import 'package:apple_sign_in_safety/apple_sign_in.dart';
 // import 'package:apple_sign_in_safety/apple_sign_in_button.dart';
@@ -8,10 +10,13 @@ import 'package:business_bosses_v2/features/authentication/controller/auth_contr
 import 'package:business_bosses_v2/navigation/routes.dart';
 
 import 'package:country_picker/country_picker.dart';
+import 'package:crypto/crypto.dart';
+import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:sign_in_with_apple/sign_in_with_apple.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:url_launcher/url_launcher_string.dart';
@@ -40,7 +45,7 @@ class _SignUpFormState extends State<SignUpForm> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   final GlobalKey<FormState> _passwordFormKey = GlobalKey<FormState>();
   AutovalidateMode _autoValidateMode = AutovalidateMode.disabled;
-  String? _username, _authCred, _password, _inviteId;
+  String? _username, _authCred, _password, _inviteId, _authusername;
   bool? _isUniqueName = false;
   bool? _isUniqueEmail = false;
   bool isEmailAuth = true;
@@ -65,6 +70,35 @@ class _SignUpFormState extends State<SignUpForm> {
     } catch (e) {
       rethrow;
     }
+  }
+
+  Future<void> saveToSharedPreferences(String value, String key) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    prefs.setString(key, value);
+  }
+
+  Future<dynamic> _handleAppleLogin() async {
+    dynamic user = await _apiService.googleLogin(
+      _authCred!,
+      _password ?? DateTime.now().millisecondsSinceEpoch.toString(),
+    );
+    return user;
+  }
+
+  /// CREATE NONCE
+  String generateNonce([int length = 32]) {
+    const String charset =
+        '0123456789ABCDEFGHIJKLMNOPQRSTUVXYZabcdefghijklmnopqrstuvwxyz-._';
+    final Random random = Random.secure();
+    return List<String>.generate(
+        length, (_) => charset[random.nextInt(charset.length)]).join();
+  }
+
+  /// Returns the sha256 hash of [input] in hex notation.
+  String sha256ofString(String input) {
+    final List<int> bytes = utf8.encode(input);
+    final Digest digest = sha256.convert(bytes);
+    return digest.toString();
   }
 
   void showPasswordDialog() {
@@ -148,6 +182,63 @@ class _SignUpFormState extends State<SignUpForm> {
                 ),
               ),
             ));
+  }
+
+  void _handleAppleSignIn() async {
+    setState(() {
+      _isProcessing = true;
+    });
+    final String rawNonce = generateNonce();
+    final String nonce = sha256ofString(rawNonce);
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+
+    try {
+      final AuthorizationCredentialAppleID appleCredential =
+          await SignInWithApple.getAppleIDCredential(
+        scopes: <AppleIDAuthorizationScopes>[
+          AppleIDAuthorizationScopes.email,
+          AppleIDAuthorizationScopes.fullName,
+        ],
+        nonce: nonce,
+      );
+
+      _authCred = appleCredential.email;
+      _authusername =
+          '${appleCredential.givenName} ${appleCredential.familyName}';
+      if (_authCred == null) {
+        _authCred = prefs.getString('_authCred');
+        _authusername = prefs.getString('_authusername');
+        await logEvents('login', 'Apple SignIn');
+        dynamic user = await _handleAppleLogin();
+        Get.offAndToNamed(Routes.home);
+        if (user['success'] == false) {
+          Get.snackbar('Error', user['error']);
+        } else {}
+      } else {
+        saveToSharedPreferences(_authCred!, '_authCred');
+        saveToSharedPreferences(_authusername!, '_authusername');
+        await _handleRegister();
+        Get.snackbar('Success', 'Authentication completed');
+        await logEvents('signup', 'email');
+        Get.toNamed(
+          Routes.updateProfile,
+          arguments: UserModel(
+            username: _authusername!,
+            email: _authCred!,
+          ),
+        );
+      }
+
+      print('${_authCred!} ${_authusername!}');
+    } catch (error) {
+      // Error oc'${_authCred!} ${_authusername!}'og('Here ->>>>>> $error');
+
+      showSnackBar(context, message: 'Opps!! Something went wrong. Try again');
+    }
+
+    setState(() {
+      _isProcessing = false;
+    });
   }
 
   void _handleGoogleSignUp() async {
@@ -447,9 +538,7 @@ class _SignUpFormState extends State<SignUpForm> {
                 child: SignInWithAppleButton(
                   height: 40,
                   text: 'Sign up with Apple',
-                  onPressed: () async {
-                    AuthController().appleAuthentication();
-                  },
+                  onPressed: _handleAppleSignIn,
                 ),
               ),
             ])
@@ -574,5 +663,12 @@ class _SignUpFormState extends State<SignUpForm> {
         _username!,
         _inviteId);
     return user;
+  }
+
+  logEvents(dynamic event, dynamic method) async {
+    await FirebaseAnalytics.instance.logEvent(
+      name: event,
+      parameters: <String, dynamic>{'method': method},
+    );
   }
 }

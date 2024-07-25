@@ -15,12 +15,14 @@ class PostInteractionsWidget extends StatelessWidget {
   final ProfileController profileController;
 
   final Function() sharePost;
+  final Function() repost;
 
   const PostInteractionsWidget({
     super.key,
     required this.post,
     required this.profileController,
     required this.sharePost,
+    required this.repost,
   });
 
   @override
@@ -124,9 +126,75 @@ class PostInteractionsWidget extends StatelessWidget {
                   ),
                   const SizedBox(width: 8.0),
                   GestureDetector(
-                    onTap: sharePost,
+                    onTap: () {
+                      showModalBottomSheet(
+                          context: context,
+                          shape: const RoundedRectangleBorder(
+                            borderRadius: BorderRadius.vertical(
+                              top: Radius.circular(25.0),
+                            ),
+                          ),
+                          builder: (BuildContext context) {
+                            return SizedBox(
+                              height: 250,
+                              child: Padding(
+                                padding: const EdgeInsets.all(15.0),
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  mainAxisSize: MainAxisSize.min,
+                                  children: <Widget>[
+                                    Expanded(
+                                      // Set a specific height
+                                      child: ListView.separated(
+                                        itemCount: 2,
+                                        separatorBuilder:
+                                            (BuildContext context, int index) =>
+                                                const Divider(),
+                                        itemBuilder:
+                                            (BuildContext context, int index) {
+                                          return ListTile(
+                                            onTap: () {
+                                              Navigator.pop(context);
+                                              index == 0
+                                                  ? sharePost()
+                                                  : repost();
+                                            },
+                                            minVerticalPadding: 0,
+                                            contentPadding:
+                                                const EdgeInsets.only(left: 10),
+                                            leading: SvgPicture.asset(
+                                              index == 0
+                                                  ? 'assets/svgs/share.svg'
+                                                  : 'assets/svgs/repost.svg',
+                                              height: index == 0 ? 18 : 25,
+                                              color: textColor.withOpacity(1),
+                                            ),
+                                            title: Text(
+                                              index == 0
+                                                  ? 'Share Post'
+                                                  : post.reposts?.contains(
+                                                              profileController
+                                                                  .myProfile
+                                                                  .uid) ==
+                                                          true
+                                                      ? 'Undo Repost'
+                                                      : 'Repost',
+                                              style: const TextStyle(
+                                                  fontSize: 18,
+                                                  fontWeight: FontWeight.w700),
+                                            ),
+                                          );
+                                        },
+                                      ),
+                                    )
+                                  ],
+                                ),
+                              ),
+                            );
+                          });
+                    },
                     child: SvgPicture.asset(
-                      'assets/svgs/share.svg',
+                      'assets/svgs/repost.svg',
                       height: 15.0,
                       width: 15.0,
                     ),
