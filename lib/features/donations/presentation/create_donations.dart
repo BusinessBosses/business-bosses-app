@@ -72,7 +72,7 @@ class _CreateDonationScreenState extends State<CreateDonationScreen> {
         key: scaffoldKey,
         appBar: AppBar(
           title: Text(
-            widget.donation != null ? 'Update Project' : 'Create a Project',
+            widget.donation != null ? 'Update Project' : 'Post a Project',
           ),
           automaticallyImplyLeading: false,
           actions: <Widget>[

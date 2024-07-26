@@ -147,7 +147,7 @@ class _DonationsPageState extends State<DonationsPage> {
                                             mainAxisSize: MainAxisSize.min,
                                             children: <Widget>[
                                               const Text(
-                                                'Create a Project',
+                                                'Post a Project',
                                                 style: TextStyle(
                                                     fontSize: 15,
                                                     color: Colors.white,
