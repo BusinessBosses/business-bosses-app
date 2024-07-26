@@ -32,19 +32,99 @@ class _ServicesPageState extends State<ServicesPage> {
 
   @override
   Widget build(BuildContext context) {
+    int userCount = _marketController.users.length;
+    String formattedUserCount = formatCount(userCount);
     return Scaffold(
       backgroundColor: backgroundColor,
       body: Obx(() {
         return ListView.builder(
-          itemCount: _marketController.services.length,
+          itemCount: _marketController.isfiltered.value
+              ? _marketController.searchResult.length + 1
+              : _marketController.services.length + 1 + 1,
           itemBuilder: (BuildContext context, int index) {
-            if (index <=
+            if (index == 0) {
+              return Container(
+                width: double.infinity,
+                color: backgroundcolorinterface,
+                child: Stack(
+                  children: <Widget>[
+                    Padding(
+                      padding: const EdgeInsets.only(left: 15, top: 25),
+                      child: GestureDetector(
+                        onTap: (() {
+                          showDialog(
+                            context: context,
+                            builder: (BuildContext context) =>
+                                sellingGuide(context),
+                          );
+                        }),
+                        child: Row(
+                          children: <Widget>[
+                            const Text(
+                              'Guidelines ',
+                              style: TextStyle(
+                                  fontSize: 12, fontWeight: FontWeight.w700),
+                            ),
+                            SvgPicture.asset(
+                              'assets/svgs/info.svg',
+                              height: 20,
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                    Column(children: <Widget>[
+                      const SizedBox(
+                        height: 10,
+                      ),
+                      Align(
+                        alignment: Alignment.centerRight,
+                        child: Padding(
+                          padding: const EdgeInsets.only(
+                            right: 15,
+                          ),
+                          child: ElevatedButton(
+                            style: ElevatedButton.styleFrom(
+                                minimumSize: const Size(150,
+                                    45) // put the width and height you want
+                                ),
+                            onPressed: () {
+                              Get.to(() =>
+                                  const CreateServiceScreen(isUpd: false));
+                            },
+                            child: Row(
+                              mainAxisSize: MainAxisSize.min,
+                              children: <Widget>[
+                                const Text(
+                                  'Sell',
+                                  style: TextStyle(
+                                      fontSize: 15,
+                                      color: Colors.white,
+                                      fontWeight: FontWeight.w500),
+                                ),
+                                const SizedBox(
+                                  width: 5,
+                                ),
+                                SvgPicture.asset('assets/svgs/startatopic.svg')
+                              ],
+                            ),
+                          ),
+                        ),
+                      ),
+                      const SizedBox(
+                        height: 10,
+                      )
+                    ]),
+                  ],
+                ),
+              );
+            } else if (index <=
                 (_marketController.isfiltered.value
                     ? _marketController.searchResult.length
                     : _marketController.services.length)) {
               final MarketModel market = _marketController.isfiltered.value
-                  ? _marketController.searchResult[index]
-                  : _marketController.services[index];
+                  ? _marketController.searchResult[index - 1]
+                  : _marketController.services[index - 1];
               return ServiceTile(
                 post: market,
                 controller: _marketController,

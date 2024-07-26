@@ -59,27 +59,34 @@ class _AllLearningPostsScreenState extends State<AllLearningPostsScreen> {
                     .getCategoryIndustries(Constants.LEARNINGID)
                     .length,
                 itemBuilder: (BuildContext context, int index) {
-                  return CustomTileLearning(
-                    label: controller
-                        .getCategoryIndustries(Constants.LEARNINGID)[index]
-                        .industry!,
-                    onTap: () {
-                      if (widget.isCoursesTile == true) {
-                        Get.to(const AllForumScreen(isCourses: false),
-                            arguments: controller.getCategoryIndustries(
-                                Constants.LEARNINGID)[index]);
-                      } else {
-                        Get.to(const AllForumScreen(isCourses: true),
-                            arguments: controller.getCategoryIndustries(
-                                Constants.LEARNINGID)[index]);
-                      }
-                      // Get.toNamed(
-                      //   Routes.allforumscreen,
-                      //   arguments: controller
-                      //       .getCategoryIndustries(Constants.LEARNINGID)[index],
-                      // );
-                    },
-                  );
+                  return controller
+                              .getCategoryIndustries(
+                                  Constants.LEARNINGID)[index]
+                              .active ==
+                          true
+                      ? Container()
+                      : CustomTileLearning(
+                          label: controller
+                              .getCategoryIndustries(
+                                  Constants.LEARNINGID)[index]
+                              .industry!,
+                          onTap: () {
+                            if (widget.isCoursesTile == true) {
+                              Get.to(const AllForumScreen(isCourses: false),
+                                  arguments: controller.getCategoryIndustries(
+                                      Constants.LEARNINGID)[index]);
+                            } else {
+                              Get.to(const AllForumScreen(isCourses: true),
+                                  arguments: controller.getCategoryIndustries(
+                                      Constants.LEARNINGID)[index]);
+                            }
+                            // Get.toNamed(
+                            //   Routes.allforumscreen,
+                            //   arguments: controller
+                            //       .getCategoryIndustries(Constants.LEARNINGID)[index],
+                            // );
+                          },
+                        );
                 },
                 staggeredTileBuilder: (int index) => const StaggeredTile.fit(1),
               ),
