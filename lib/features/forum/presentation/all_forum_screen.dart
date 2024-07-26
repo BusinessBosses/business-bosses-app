@@ -136,7 +136,7 @@ class _AllForumScreenState extends State<AllForumScreen>
                         style: const TextStyle(fontSize: 20),
                       ),
             actions: <Widget>[
-              currentTabIndex == 0
+              widget.isCourses == true
                   ? IconButton(
                       icon: _iscouseSearching
                           ? const Icon(Icons.close)
