@@ -209,81 +209,109 @@ class _AllCommunitiesScreenState extends State<AllCommunitiesScreen>
                                                   bottom: 80),
                                               child: GridView.builder(
                                                 itemCount: controller
-                                                        .getCategoryIndustries(
-                                                            Constants
-                                                                .LEARNINGID)
-                                                        .length +
-                                                    2,
+                                                    .getCategoryIndustries(
+                                                        Constants.LEARNINGID)
+                                                    .length,
                                                 itemBuilder:
                                                     (BuildContext context,
                                                         int index) {
-                                                  if (index == 0) {
-                                                    return CustomTile(
-                                                      label:
-                                                          'Networking & Community',
-                                                      photo: controller
-                                                          .getCategoryIndustries(
-                                                              Constants
-                                                                  .LEARNINGID)[
-                                                              3]
-                                                          .photo!,
-                                                      onTap: () {
-                                                        Get.to(
-                                                            const AllLearningPostsScreen(
-                                                                isCoursesTile:
-                                                                    true));
-                                                      },
-                                                    );
-                                                  }
-                                                  if (index == 1) {
-                                                    return CustomTile(
-                                                        label:
-                                                            'Courses & Tutorials',
-                                                        photo: controller
-                                                            .getCategoryIndustries(
-                                                                Constants
-                                                                    .LEARNINGID)[
-                                                                3]
-                                                            .photo!,
-                                                        onTap: () {
-                                                          Get.to(
-                                                              const AllLearningPostsScreen(
-                                                                  isCoursesTile:
-                                                                      false));
-                                                          // Get.toNamed(
-                                                          //   Routes
-                                                          //       .allforumscreen,
-                                                          //   arguments: controller
-                                                          //       .getCategoryIndustries(
-                                                          //           Constants
-                                                          //               .LEARNINGID)[3],
-                                                          // );
-                                                        });
-                                                  } else
-                                                    return CustomTile(
-                                                      label: controller
-                                                          .getCategoryIndustries(
-                                                              Constants
-                                                                  .LEARNINGID)[
-                                                              index - 2]
-                                                          .industry!,
-                                                      photo: controller
-                                                          .getCategoryIndustries(
-                                                              Constants
-                                                                  .LEARNINGID)[
-                                                              index -2]
-                                                          .photo!,
-                                                      onTap: () {
-                                                        Get.toNamed(
-                                                          Routes.allforumscreen,
-                                                          arguments: controller
+                                                  // if (index == 0) {
+                                                  //   return CustomTile(
+                                                  //     label:
+                                                  //         'Networking & Community',
+                                                  //     photo: controller
+                                                  //         .getCategoryIndustries(
+                                                  //             Constants
+                                                  //                 .LEARNINGID)[
+                                                  //             3]
+                                                  //         .photo!,
+                                                  //     onTap: () {
+                                                  //       Get.to(
+                                                  //           const AllLearningPostsScreen(
+                                                  //               isCoursesTile:
+                                                  //                   true));
+                                                  //     },
+                                                  //   );
+                                                  // }
+                                                  // if (index == 1) {
+                                                  //   return CustomTile(
+                                                  //       label:
+                                                  //           'Courses & Tutorials',
+                                                  //       photo: controller
+                                                  //           .getCategoryIndustries(
+                                                  //               Constants
+                                                  //                   .LEARNINGID)[
+                                                  //               3]
+                                                  //           .photo!,
+                                                  //       onTap: () {
+                                                  //         Get.to(
+                                                  //             const AllLearningPostsScreen(
+                                                  //                 isCoursesTile:
+                                                  //                     false));
+                                                  //         // Get.toNamed(
+                                                  //         //   Routes
+                                                  //         //       .allforumscreen,
+                                                  //         //   arguments: controller
+                                                  //         //       .getCategoryIndustries(
+                                                  //         //           Constants
+                                                  //         //               .LEARNINGID)[3],
+                                                  //         // );
+                                                  //       });
+                                                  // } else
+                                                  return controller
                                                               .getCategoryIndustries(
                                                                   Constants
-                                                                      .LEARNINGID)[index -
-                                                              2],
+                                                                      .LEARNINGID)[
+                                                                  index]
+                                                              .active ==
+                                                          false
+                                                      ? Container()
+                                                      : CustomTile(
+                                                          label: controller
+                                                              .getCategoryIndustries(
+                                                                  Constants
+                                                                      .LEARNINGID)[
+                                                                  index]
+                                                              .industry!,
+                                                          photo: controller
+                                                              .getCategoryIndustries(
+                                                                  Constants
+                                                                      .LEARNINGID)[
+                                                                  index]
+                                                              .photo!,
+                                                          onTap: () {
+                                                            print(controller
+                                                                        .getCategoryIndustries(
+                                                                            Constants
+                                                                                .LEARNINGID)[
+                                                                            index].active);
+                                                            controller
+                                                                        .getCategoryIndustries(
+                                                                            Constants
+                                                                                .LEARNINGID)[
+                                                                            index]
+                                                                        .industryId ==
+                                                                    '4acc0db7-7c89-4122-b15d-7552f590af23'
+                                                                ? Get.to(const AllLearningPostsScreen(
+                                                                    isCoursesTile:
+                                                                        true))
+                                                                : controller
+                                                                            .getCategoryIndustries(Constants.LEARNINGID)[
+                                                                                index]
+                                                                            .industryId ==
+                                                                        '6bfb3524-f05e-4148-b4b2-a7a47b768b56'
+                                                                    ? Get.to(const AllLearningPostsScreen(
+                                                                        isCoursesTile:
+                                                                            false))
+                                                                    : Get
+                                                                        .toNamed(
+                                                                        Routes
+                                                                            .allforumscreen,
+                                                                        arguments:
+                                                                            controller.getCategoryIndustries(Constants.LEARNINGID)[index],
+                                                                      );
+                                                          },
                                                         );
-                                                      },
-                                                    );
                                                 },
                                                 gridDelegate:
                                                     const SliverGridDelegateWithFixedCrossAxisCount(
