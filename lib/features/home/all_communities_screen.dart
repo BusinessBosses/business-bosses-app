@@ -5,7 +5,7 @@ import 'package:business_bosses_v2/features/donations/presentation/filterdonatio
 import 'package:business_bosses_v2/features/forum/presentation/bossup_challenge.dart';
 import 'package:business_bosses_v2/features/forum/widgets/forum_item.dart';
 import 'package:business_bosses_v2/features/home/controller/commumities_controller.dart';
-import 'package:business_bosses_v2/features/home/widgets/alllearningposts.dart';
+import 'package:business_bosses_v2/features/home/widgets/all_learning_posts.dart';
 import 'package:business_bosses_v2/features/home/widgets/bottom_bar.dart';
 import 'package:business_bosses_v2/features/home/widgets/industriessearch.dart';
 import 'package:business_bosses_v2/utils/constants/constants.dart';
@@ -207,119 +207,66 @@ class _AllCommunitiesScreenState extends State<AllCommunitiesScreen>
                                           : Padding(
                                               padding: const EdgeInsets.only(
                                                   bottom: 80),
-                                              child: GridView.builder(
-                                                itemCount: controller
-                                                    .getCategoryIndustries(
-                                                        Constants.LEARNINGID)
-                                                    .length,
-                                                itemBuilder:
-                                                    (BuildContext context,
-                                                        int index) {
-                                                  // if (index == 0) {
-                                                  //   return CustomTile(
-                                                  //     label:
-                                                  //         'Networking & Community',
-                                                  //     photo: controller
-                                                  //         .getCategoryIndustries(
-                                                  //             Constants
-                                                  //                 .LEARNINGID)[
-                                                  //             3]
-                                                  //         .photo!,
-                                                  //     onTap: () {
-                                                  //       Get.to(
-                                                  //           const AllLearningPostsScreen(
-                                                  //               isCoursesTile:
-                                                  //                   true));
-                                                  //     },
-                                                  //   );
-                                                  // }
-                                                  // if (index == 1) {
-                                                  //   return CustomTile(
-                                                  //       label:
-                                                  //           'Courses & Tutorials',
-                                                  //       photo: controller
-                                                  //           .getCategoryIndustries(
-                                                  //               Constants
-                                                  //                   .LEARNINGID)[
-                                                  //               3]
-                                                  //           .photo!,
-                                                  //       onTap: () {
-                                                  //         Get.to(
-                                                  //             const AllLearningPostsScreen(
-                                                  //                 isCoursesTile:
-                                                  //                     false));
-                                                  //         // Get.toNamed(
-                                                  //         //   Routes
-                                                  //         //       .allforumscreen,
-                                                  //         //   arguments: controller
-                                                  //         //       .getCategoryIndustries(
-                                                  //         //           Constants
-                                                  //         //               .LEARNINGID)[3],
-                                                  //         // );
-                                                  //       });
-                                                  // } else
-                                                  return controller
-                                                              .getCategoryIndustries(
-                                                                  Constants
-                                                                      .LEARNINGID)[
-                                                                  index]
-                                                              .active ==
-                                                          false
-                                                      ? Container()
-                                                      : CustomTile(
-                                                          label: controller
-                                                              .getCategoryIndustries(
-                                                                  Constants
-                                                                      .LEARNINGID)[
-                                                                  index]
-                                                              .industry!,
-                                                          photo: controller
-                                                              .getCategoryIndustries(
-                                                                  Constants
-                                                                      .LEARNINGID)[
-                                                                  index]
-                                                              .photo!,
-                                                          onTap: () {
-                                                            print(controller
-                                                                .getCategoryIndustries(
-                                                                    Constants
-                                                                        .LEARNINGID)[
-                                                                    index]
-                                                                .active);
-                                                            controller
-                                                                        .getCategoryIndustries(
-                                                                            Constants
-                                                                                .LEARNINGID)[
-                                                                            index]
-                                                                        .industryId ==
-                                                                    '4acc0db7-7c89-4122-b15d-7552f590af23'
-                                                                ? Get.to(const AllLearningPostsScreen(
+                                              child: Builder(
+                                                builder: (context) {
+                                                  List<Industry>
+                                                      activeIndustries =
+                                                      controller
+                                                          .getCategoryIndustries(
+                                                              Constants
+                                                                  .LEARNINGID)
+                                                          .where((Industry
+                                                                  industry) =>
+                                                              industry.active!)
+                                                          .toList();
+
+                                                  return GridView.builder(
+                                                    itemCount:
+                                                        activeIndustries.length,
+                                                    itemBuilder:
+                                                        (BuildContext context,
+                                                            int index) {
+                                                      Industry industry =
+                                                          activeIndustries[
+                                                              index];
+                                                      return CustomTile(
+                                                        label:
+                                                            industry.industry!,
+                                                        photo: industry.photo!,
+                                                        onTap: () {
+                                                          if (industry
+                                                                  .industryId ==
+                                                              '4acc0db7-7c89-4122-b15d-7552f590af23') {
+                                                            Get.to(
+                                                                const AllLearningPostsScreen(
                                                                     isCoursesTile:
-                                                                        true))
-                                                                : controller
-                                                                            .getCategoryIndustries(Constants.LEARNINGID)[
-                                                                                index]
-                                                                            .industryId ==
-                                                                        '6bfb3524-f05e-4148-b4b2-a7a47b768b56'
-                                                                    ? Get.to(const AllLearningPostsScreen(
-                                                                        isCoursesTile:
-                                                                            false))
-                                                                    : Get
-                                                                        .toNamed(
-                                                                        Routes
-                                                                            .allforumscreen,
-                                                                        arguments:
-                                                                            controller.getCategoryIndustries(Constants.LEARNINGID)[index],
-                                                                      );
-                                                          },
-                                                        );
+                                                                        true));
+                                                          } else if (industry
+                                                                  .industryId ==
+                                                              '6bfb3524-f05e-4148-b4b2-a7a47b768b56') {
+                                                            Get.to(
+                                                                const AllLearningPostsScreen(
+                                                                    isCoursesTile:
+                                                                        false));
+                                                          } else {
+                                                            Get.toNamed(
+                                                              Routes
+                                                                  .allforumscreen,
+                                                              arguments:
+                                                                  industry,
+                                                            );
+                                                          }
+                                                        },
+                                                      );
+                                                    },
+                                                    gridDelegate:
+                                                        const SliverGridDelegateWithFixedCrossAxisCount(
+                                                      mainAxisSpacing: 15.0,
+                                                      crossAxisSpacing: 15.0,
+                                                      crossAxisCount: 2,
+                                                    ),
+                                                  );
                                                 },
-                                                gridDelegate:
-                                                    const SliverGridDelegateWithFixedCrossAxisCount(
-                                                  mainAxisSpacing: 15.0,
-                                                  crossAxisSpacing: 15.0,
-                                                  crossAxisCount: 2,
-                                                ),
                                               ),
                                             ),
                                 ),
