@@ -23,7 +23,9 @@ import '../../../utils/theme/theme.dart';
 
 class AllForumScreen extends StatefulWidget {
   static const String routeName = 'all-forum-screen';
-  const AllForumScreen({super.key});
+  const AllForumScreen({
+    super.key,
+  });
 
   @override
   State<AllForumScreen> createState() => _AllForumScreenState();
@@ -43,9 +45,11 @@ class _AllForumScreenState extends State<AllForumScreen>
   late final TabController _searchTabController;
   late final TabController _coursesearchTabController;
   late BossUpController bossUpController;
+  final String? id = Get.parameters['id'];
 
   int currentTabIndex = 0; // Track the current tab index
   String _filtercourses = '';
+   bool isCourses = true;
 
   @override
   void initState() {
@@ -57,6 +61,13 @@ class _AllForumScreenState extends State<AllForumScreen>
     } else {
       industry = Get.arguments as Industry;
     }
+
+    // if (Get.parameters['id'] == null) {
+    //   Get.back();
+    // } else {
+    //   isCourses = Get.parameters['id'].toString() == '1' ? true : false;
+    // }
+
     forumController = Get.put(ForumController());
     bossUpController = Get.put(BossUpController());
   }
@@ -130,7 +141,7 @@ class _AllForumScreenState extends State<AllForumScreen>
                           ? const Icon(Icons.close)
                           : SvgPicture.asset(
                               'assets/svgs/preferences.svg',
-                              color: Colors.black,
+                              color: const Color.fromARGB(255, 62, 55, 55),
                               height: 20,
                             ),
                       onPressed: () {
@@ -353,42 +364,48 @@ class _AllForumScreenState extends State<AllForumScreen>
                             )),
                       ],
                     )
-                  : DefaultTabController(
-                      length: 2,
-                      child: Column(
-                        children: <Widget>[
-                          Container(
-                            color: Colors.white,
-                            constraints:
-                                const BoxConstraints.expand(height: 50),
-                            child: TabBar(
-                              tabs: const <Widget>[
-                                Tab(text: 'Courses'),
-                                Tab(text: 'Resources'),
-                              ],
-                              onTap: (int index) {
-                                setState(() {
-                                  currentTabIndex =
-                                      index; // Update the current tab index
-                                });
-                              },
-                            ),
-                          ),
-                          Expanded(
-                            child: TabBarView(
-                              physics: const NeverScrollableScrollPhysics(),
-                              children: <Widget>[
-                                CoursesPage(
-                                  industryId: industry.industryId!,
-                                  filter: _filtercourses,
-                                ),
-                                const TopicsPage(),
-                              ],
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
+                  : isCourses == true
+                      ? CoursesPage(
+                          industryId: industry.industryId!,
+                          filter: _filtercourses,
+                        )
+                      : const TopicsPage(),
+          // DefaultTabController(
+          //     length: 2,
+          //     child: Column(
+          //       children: <Widget>[
+          //         Container(
+          //           color: Colors.white,
+          //           constraints:
+          //               const BoxConstraints.expand(height: 50),
+          //           child: TabBar(
+          //             tabs: const <Widget>[
+          //               Tab(text: 'Courses'),
+          //               Tab(text: 'Resources'),
+          //             ],
+          //             onTap: (int index) {
+          //               setState(() {
+          //                 currentTabIndex =
+          //                     index; // Update the current tab index
+          //               });
+          //             },
+          //           ),
+          //         ),
+          //         Expanded(
+          //           child: TabBarView(
+          //             physics: const NeverScrollableScrollPhysics(),
+          //             children: <Widget>[
+          //               CoursesPage(
+          //                 industryId: industry.industryId!,
+          //                 filter: _filtercourses,
+          //               ),
+
+          //             ],
+          //           ),
+          //         ),
+          //       ],
+          //     ),
+          //   ),
         );
       },
     );
