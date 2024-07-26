@@ -364,7 +364,7 @@ class _AllForumScreenState extends State<AllForumScreen>
                             )),
                       ],
                     )
-                  : isCourses == true
+                  : isCourses == false
                       ? CoursesPage(
                           industryId: industry.industryId!,
                           filter: _filtercourses,
