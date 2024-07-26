@@ -1,18 +1,12 @@
-import 'package:business_bosses_v2/common/widgets/tiles/custom_tile.dart';
 import 'package:business_bosses_v2/common/widgets/tiles/custom_tile_learning.dart';
 import 'package:business_bosses_v2/features/forum/presentation/all_forum_screen.dart';
 import 'package:business_bosses_v2/features/home/controller/commumities_controller.dart';
-import 'package:business_bosses_v2/navigation/routes.dart';
 import 'package:business_bosses_v2/utils/constants/constants.dart';
 import 'package:business_bosses_v2/utils/theme/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
-import 'package:http/http.dart' as http;
-import 'dart:convert';
-import 'package:business_bosses_v2/features/posts/widgets/youtube_display.dart';
-import 'package:business_bosses_v2/features/posts/widgets/yt_player.dart';
 
 class AllLearningPostsScreen extends StatefulWidget {
   static const String routeName = '/AllLearningPostsscreen';
@@ -28,8 +22,6 @@ class AllLearningPostsScreen extends StatefulWidget {
 }
 
 class _AllLearningPostsScreenState extends State<AllLearningPostsScreen> {
-  final CommunitiesController _communitiesController =
-      Get.put(CommunitiesController());
   @override
   void initState() {
     super.initState();

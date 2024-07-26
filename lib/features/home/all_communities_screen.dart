@@ -229,9 +229,10 @@ class _AllCommunitiesScreenState extends State<AllCommunitiesScreen>
                                                           .photo!,
                                                       onTap: () {
                                                         Get.to(
-                                                            const AllLearningPostsScreen(
-                                                                isCoursesTile:
-                                                                    true));
+                                                          const AllLearningPostsScreen(
+                                                              isCoursesTile:
+                                                                  true),
+                                                        );
                                                       },
                                                     );
                                                   }
@@ -259,7 +260,7 @@ class _AllCommunitiesScreenState extends State<AllCommunitiesScreen>
                                                           //               .LEARNINGID)[3],
                                                           // );
                                                         });
-                                                  } else
+                                                  } else {
                                                     return CustomTile(
                                                       label: controller
                                                           .getCategoryIndustries(
@@ -271,7 +272,7 @@ class _AllCommunitiesScreenState extends State<AllCommunitiesScreen>
                                                           .getCategoryIndustries(
                                                               Constants
                                                                   .LEARNINGID)[
-                                                              index -2]
+                                                              index - 2]
                                                           .photo!,
                                                       onTap: () {
                                                         Get.toNamed(
@@ -284,6 +285,7 @@ class _AllCommunitiesScreenState extends State<AllCommunitiesScreen>
                                                         );
                                                       },
                                                     );
+                                                  }
                                                 },
                                                 gridDelegate:
                                                     const SliverGridDelegateWithFixedCrossAxisCount(
@@ -351,7 +353,7 @@ class _AllCommunitiesScreenState extends State<AllCommunitiesScreen>
                                                   'Search for specific topics ',
                                             )
                                           : ListView.builder(
-                                              key: const ValueKey(
+                                              key: const ValueKey<String>(
                                                   'cat.categoryId'),
                                               padding: const EdgeInsets.only(
                                                   top: 8.0,
