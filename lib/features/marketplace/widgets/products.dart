@@ -44,34 +44,118 @@ class _ProductsPageState extends State<ProductsPage> {
     return Scaffold(
       body: Obx(() {
         return ListView.builder(
-          itemCount: _marketController.products.length,
+          itemCount: _marketController.isfiltered.value
+              ? _marketController.searchResult.length + 1
+              : _marketController.products.length +
+                  1 +
+                  1, // Add 1 for static text
           itemBuilder: (BuildContext context, int index) {
-            if (index <=
+            if (index == 0) {
+              return Container(
+                width: double.infinity,
+                color: backgroundcolorinterface,
+                child: Stack(
+                  children: <Widget>[
+                    Padding(
+                      padding: const EdgeInsets.only(left: 15, top: 25),
+                      child: GestureDetector(
+                        onTap: (() {
+                          showDialog(
+                            context: context,
+                            builder: (BuildContext context) =>
+                                sellingGuide(context),
+                          );
+                        }),
+                        child: Row(
+                          children: <Widget>[
+                            const Text(
+                              'Guidelines ',
+                              style: TextStyle(
+                                  fontSize: 12, fontWeight: FontWeight.w700),
+                            ),
+                            SvgPicture.asset(
+                              'assets/svgs/info.svg',
+                              height: 20,
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                    Column(children: <Widget>[
+                      const SizedBox(
+                        height: 10,
+                      ),
+                      Align(
+                        alignment: Alignment.centerRight,
+                        child: Padding(
+                          padding: const EdgeInsets.only(
+                            right: 15,
+                          ),
+                          child: ElevatedButton(
+                            style: ElevatedButton.styleFrom(
+                                minimumSize: const Size(150,
+                                    45) // put the width and height you want
+                                ),
+                            onPressed: () {
+                              Get.toNamed(Routes.sellscreen);
+                            },
+                            child: Row(
+                              mainAxisSize: MainAxisSize.min,
+                              children: <Widget>[
+                                const Text(
+                                  'Sell',
+                                  style: TextStyle(
+                                      fontSize: 15,
+                                      color: Colors.white,
+                                      fontWeight: FontWeight.w500),
+                                ),
+                                const SizedBox(
+                                  width: 5,
+                                ),
+                                SvgPicture.asset('assets/svgs/startatopic.svg')
+                              ],
+                            ),
+                          ),
+                        ),
+                      ),
+                      const SizedBox(
+                        height: 10,
+                      ),
+                    ]),
+                  ],
+                ),
+              );
+            } else if (index <=
                 (_marketController.isfiltered.value
                     ? _marketController.searchResult.length
                     : _marketController.products.length)) {
               final MarketModel market = _marketController.isfiltered.value
-                  ? _marketController.searchResult[index]
-                  : _marketController.products[index];
+                  ? _marketController
+                      .searchResult[index - 1] // Adjust for static text
+                  : _marketController
+                      .products[index - 1]; // Adjust for static text
               return VisibilityDetector(
                 key: Key(index.toString()),
                 onVisibilityChanged: (VisibilityInfo info) {
                   final bool hasIncrementedView = hmeController
                       .itemsWithIncrementedViews
-                      .contains(_marketController.products[index].marketId);
+                      .contains(_marketController.products[index - 1]
+                          .marketId); // Adjust for static text
                   if (info.visibleFraction == 1.0 && !hasIncrementedView) {
-                    _marketController
-                        .updatemarketViews(_marketController.products[index]);
+                    _marketController.updatemarketViews(_marketController
+                        .products[index - 1]); // Adjust for static text
                     setState(() {
-                      hmeController.itemsWithIncrementedViews
-                          .add(_marketController.products[index].marketId);
+                      hmeController.itemsWithIncrementedViews.add(
+                          _marketController.products[index - 1]
+                              .marketId); // Adjust for static text
                     });
                   }
                 },
                 child: MarketTile(
                   post: market,
                   controller: _marketController,
-                  key: ValueKey(_marketController.products[index].marketId),
+                  key: ValueKey(_marketController
+                      .products[index - 1].marketId), // Adjust for static text
                 ),
               );
             } else {
