@@ -265,13 +265,13 @@ class _AllCommunitiesScreenState extends State<AllCommunitiesScreen>
                                                           .getCategoryIndustries(
                                                               Constants
                                                                   .LEARNINGID)[
-                                                              index]
+                                                              index - 2]
                                                           .industry!,
                                                       photo: controller
                                                           .getCategoryIndustries(
                                                               Constants
                                                                   .LEARNINGID)[
-                                                              index - 2]
+                                                              index -2]
                                                           .photo!,
                                                       onTap: () {
                                                         Get.toNamed(
