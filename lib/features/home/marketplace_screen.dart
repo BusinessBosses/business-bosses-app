@@ -197,7 +197,7 @@ class _MarketplaceScreenState extends State<MarketplaceScreen>
                       _ismarketplaceSearching = !_ismarketplaceSearching;
                       _marketController.searchedPosts.clear();
                       _marketController.searchedServices.clear();
-                      supplierController.suppliers.clear();
+                      supplierController.searchedSuppliers.clear();
                     });
                   },
                 ),
@@ -212,7 +212,7 @@ class _MarketplaceScreenState extends State<MarketplaceScreen>
                     setState(() {});
                     _marketController.searchedPosts.clear();
                     _marketController.searchedServices.clear();
-                    supplierController.suppliers.clear();
+                    supplierController.searchedSuppliers.clear();
                   },
                 )
               ],
