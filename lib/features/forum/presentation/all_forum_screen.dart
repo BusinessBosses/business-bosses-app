@@ -23,8 +23,10 @@ import '../../../utils/theme/theme.dart';
 
 class AllForumScreen extends StatefulWidget {
   static const String routeName = 'all-forum-screen';
+  final bool? isCourses;
   const AllForumScreen({
     super.key,
+    this.isCourses = false,
   });
 
   @override
@@ -49,7 +51,6 @@ class _AllForumScreenState extends State<AllForumScreen>
 
   int currentTabIndex = 0; // Track the current tab index
   String _filtercourses = '';
-   bool isCourses = true;
 
   @override
   void initState() {
@@ -364,7 +365,7 @@ class _AllForumScreenState extends State<AllForumScreen>
                             )),
                       ],
                     )
-                  : isCourses == false
+                  : widget.isCourses == true
                       ? CoursesPage(
                           industryId: industry.industryId!,
                           filter: _filtercourses,

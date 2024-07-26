@@ -54,7 +54,7 @@ class _AllLearningPostsScreenState extends State<AllLearningPostsScreen> {
                   ? 'Networking & Community'
                   : 'Courses and Tutorials',
               textAlign: TextAlign.center,
-              style: TextStyle(fontSize: 20),
+              style: const TextStyle(fontSize: 20),
             ),
           ),
           body: Padding(
@@ -72,11 +72,20 @@ class _AllLearningPostsScreenState extends State<AllLearningPostsScreen> {
                         .getCategoryIndustries(Constants.LEARNINGID)[index]
                         .industry!,
                     onTap: () {
-                      Get.toNamed(
-                        Routes.allforumscreen,
-                        arguments: controller
-                            .getCategoryIndustries(Constants.LEARNINGID)[index],
-                      );
+                      if (widget.isCoursesTile == true) {
+                        Get.to(const AllForumScreen(isCourses: false),
+                            arguments: controller.getCategoryIndustries(
+                                Constants.LEARNINGID)[index]);
+                      } else {
+                        Get.to(const AllForumScreen(isCourses: true),
+                            arguments: controller.getCategoryIndustries(
+                                Constants.LEARNINGID)[index]);
+                      }
+                      // Get.toNamed(
+                      //   Routes.allforumscreen,
+                      //   arguments: controller
+                      //       .getCategoryIndustries(Constants.LEARNINGID)[index],
+                      // );
                     },
                   );
                 },
