@@ -15,7 +15,6 @@ import 'package:business_bosses_v2/features/marketplace/widgets/service_item.dar
 import 'package:business_bosses_v2/features/marketplace/widgets/services.dart';
 import 'package:business_bosses_v2/features/search/widgets/search_bar.dart';
 import 'package:flutter/material.dart';
-import 'package:country_list_pick/country_list_pick.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -134,8 +133,8 @@ class _MarketplaceScreenState extends State<MarketplaceScreen>
       });
     });
 
-    int userCount = _marketController.users.length;
-    String formattedUserCount = formatCount(userCount);
+    //int userCount = _marketController.users.length;
+    //String formattedUserCount = formatCount(userCount);
     _marketplacesearchTabController.addListener(_handleTabSelection);
 
     return Scaffold(

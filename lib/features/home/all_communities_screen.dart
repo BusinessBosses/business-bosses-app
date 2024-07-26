@@ -7,7 +7,6 @@ import 'package:business_bosses_v2/features/forum/widgets/forum_item.dart';
 import 'package:business_bosses_v2/features/home/controller/commumities_controller.dart';
 import 'package:business_bosses_v2/features/home/widgets/bottom_bar.dart';
 import 'package:business_bosses_v2/features/home/widgets/industriessearch.dart';
-import 'package:business_bosses_v2/features/profile/controller/profile_controller.dart';
 import 'package:business_bosses_v2/utils/constants/constants.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
@@ -43,11 +42,9 @@ class _AllCommunitiesScreenState extends State<AllCommunitiesScreen>
       Get.put(CommunitiesController());
   final DonationsController donationsController =
       Get.put(DonationsController());
-  final ProfileController _profileController = Get.find();
   late final TabController _searchTabController;
   late final TabController _donationsearchTabController;
   late final TabController _pageTabController;
-  late final TabController _donationspageTabController;
 
   List<Widget> get mActions {
     return <Widget>[
@@ -85,7 +82,6 @@ class _AllCommunitiesScreenState extends State<AllCommunitiesScreen>
     _donationsearchTabController = TabController(length: 2, vsync: this);
     _pageTabController = TabController(
         length: 3, vsync: this, initialIndex: widget.initialTabIndex ?? 0);
-    _donationspageTabController = TabController(length: 2, vsync: this);
 
     _pageTabController.addListener(() {
       setState(() {});

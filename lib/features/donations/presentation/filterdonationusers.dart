@@ -39,7 +39,6 @@ class _FilterUsersState extends State<FilterDonationsUsers> {
   Widget build(
     BuildContext context,
   ) {
-    final ProfileController profileController = Get.find();
     return widget.filterItems.isEmpty
         ? SafetyModel(
             isLoading: widget.isLoading,

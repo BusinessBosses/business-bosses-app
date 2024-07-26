@@ -1,12 +1,9 @@
-import 'package:business_bosses_v2/features/donations/controller/donations_controller.dart';
 import 'package:business_bosses_v2/features/donations/models/donations_model.dart';
 import 'package:business_bosses_v2/features/donations/widgets/donation_item.dart';
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
 
 import '../../../common/widgets/safety_model.dart';
 import '../../../utils/theme/theme.dart';
-import '../../home/controller/home_controller.dart';
 
 class FilterDonationPosts extends StatelessWidget {
   final List<DonationModel> filterItems;
@@ -23,9 +20,6 @@ class FilterDonationPosts extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final HomeController homeController = Get.find();
-    final DonationsController controller = Get.find();
-
     return GestureDetector(
       onTap: () {
         FocusScope.of(context).unfocus();
