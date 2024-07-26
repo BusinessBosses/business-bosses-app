@@ -8,7 +8,6 @@ import 'package:get/get.dart';
 
 import '../../../common/widgets/safety_model.dart';
 import '../../../utils/theme/theme.dart';
-import '../../home/controller/home_controller.dart';
 
 class FilterMarketplacePosts extends StatelessWidget {
   final List<MarketModel> filterItems;
@@ -37,7 +36,6 @@ class FilterMarketplacePosts extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final HomeController homeController = Get.find();
     final MarketController controller = Get.find();
 
     return GestureDetector(

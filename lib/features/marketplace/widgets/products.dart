@@ -44,297 +44,34 @@ class _ProductsPageState extends State<ProductsPage> {
     return Scaffold(
       body: Obx(() {
         return ListView.builder(
-          itemCount: _marketController.isfiltered.value
-              ? _marketController.searchResult.length + 1
-              : _marketController.products.length +
-                  1 +
-                  1, // Add 1 for static text
+          itemCount: _marketController.products.length,
           itemBuilder: (BuildContext context, int index) {
-            if (index == 0) {
-              return Container(
-                width: double.infinity,
-                color: backgroundcolorinterface,
-                child: Stack(
-                  children: <Widget>[
-                    Padding(
-                      padding: const EdgeInsets.only(left: 15, top: 25),
-                      child: GestureDetector(
-                        onTap: (() {
-                          showDialog(
-                            context: context,
-                            builder: (BuildContext context) =>
-                                sellingGuide(context),
-                          );
-                        }),
-                        child: Row(
-                          children: <Widget>[
-                            const Text(
-                              'Guidelines ',
-                              style: TextStyle(
-                                  fontSize: 12, fontWeight: FontWeight.w700),
-                            ),
-                            SvgPicture.asset(
-                              'assets/svgs/info.svg',
-                              height: 20,
-                            ),
-                          ],
-                        ),
-                      ),
-                    ),
-                    Column(children: <Widget>[
-                      const SizedBox(
-                        height: 10,
-                      ),
-                      Align(
-                        alignment: Alignment.centerRight,
-                        child: Padding(
-                          padding: const EdgeInsets.only(
-                            right: 15,
-                          ),
-                          child: ElevatedButton(
-                            style: ElevatedButton.styleFrom(
-                                minimumSize: const Size(150,
-                                    45) // put the width and height you want
-                                ),
-                            onPressed: () {
-                              Get.toNamed(Routes.sellscreen);
-                            },
-                            child: Row(
-                              mainAxisSize: MainAxisSize.min,
-                              children: <Widget>[
-                                const Text(
-                                  'Sell',
-                                  style: TextStyle(
-                                      fontSize: 15,
-                                      color: Colors.white,
-                                      fontWeight: FontWeight.w500),
-                                ),
-                                const SizedBox(
-                                  width: 5,
-                                ),
-                                SvgPicture.asset('assets/svgs/startatopic.svg')
-                              ],
-                            ),
-                          ),
-                        ),
-                      ),
-                      Container(
-                        decoration: BoxDecoration(
-                          boxShadow: <BoxShadow>[
-                            BoxShadow(
-                              color: Colors.black.withOpacity(0.09),
-                              blurRadius: 100.0, // soften the shadow
-                              spreadRadius: 5, //extend the shadow
-                            )
-                          ],
-                        ),
-                        child: Stack(
-                          children: <Widget>[
-                            Container(
-                              margin: const EdgeInsets.only(
-                                  bottom: 10, top: 10, right: 15, left: 15),
-                              height: 150,
-                              width: double.infinity,
-                              child: ClipRRect(
-                                borderRadius: BorderRadius.circular(15.0),
-                                child: const ColoredBox(color: Colors.white),
-                              ),
-                            ),
-                            Column(
-                              children: <Widget>[
-                                Row(
-                                  children: <Widget>[
-                                    Container(
-                                      margin: const EdgeInsets.only(
-                                          top: 25, right: 15, left: 30),
-                                      height: 86,
-                                      width: 142,
-                                      child: ClipRRect(
-                                        borderRadius:
-                                            BorderRadius.circular(10.0),
-                                        child: FittedBox(
-                                          child: CachedNetworkImage(
-                                            memCacheWidth: 256,
-                                            imageUrl:
-                                                'https://businessbosses.com.ng/learningImages/marketplace.jpg',
-                                            placeholder: (BuildContext context,
-                                                    String photo) =>
-                                                const CircularProgressIndicator(),
-                                            errorWidget: (BuildContext context,
-                                                    String photo,
-                                                    dynamic error) =>
-                                                const Icon(Icons.error),
-                                          ),
-                                        ),
-                                      ),
-                                    ),
-                                    Expanded(
-                                      child: Padding(
-                                        padding:
-                                            const EdgeInsets.only(right: 30),
-                                        child: Text(
-                                          _marketController.marketDescription,
-                                          style: const TextStyle(
-                                            fontSize: 15,
-                                            fontWeight: FontWeight.w700,
-                                          ),
-                                          softWrap: true,
-                                          maxLines: 5,
-                                        ),
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                                Padding(
-                                  padding: const EdgeInsets.only(
-                                    left: 27,
-                                    top: 0,
-                                    right: 15,
-                                  ),
-                                  child: Row(
-                                    children: <Widget>[
-                                      Row(
-                                        children: <Widget>[
-                                          Padding(
-                                            padding: const EdgeInsets.only(
-                                                right: 2, top: 5),
-                                            child: SvgPicture.asset(
-                                              'assets/svgs/members.svg',
-                                              height: 15,
-                                              color: primaryColorLT,
-                                            ),
-                                          ),
-                                          GestureDetector(
-                                            onTap: () {
-                                              Get.to(() => MarketMembersScreen(
-                                                    users:
-                                                        _marketController.users,
-                                                  ));
-                                            },
-                                            child: Padding(
-                                              padding: const EdgeInsets.only(
-                                                  top: 5.0),
-                                              child: RichText(
-                                                text: TextSpan(
-                                                  children: <InlineSpan>[
-                                                    TextSpan(
-                                                        text:
-                                                            'Members ($formattedUserCount)',
-                                                        style: const TextStyle(
-                                                          fontSize: 12,
-                                                          fontWeight:
-                                                              FontWeight.w600,
-                                                          color: primaryColorLT,
-                                                          decoration:
-                                                              TextDecoration
-                                                                  .underline,
-                                                        )),
-                                                  ],
-                                                ),
-                                              ),
-                                            ),
-                                          ),
-                                        ],
-                                      ),
-                                      Row(
-                                        children: <Widget>[
-                                          Padding(
-                                            padding: const EdgeInsets.only(
-                                                left: 8, top: 5, right: 3),
-                                            child: SvgPicture.asset(
-                                              'assets/svgs/marketplace.svg',
-                                              color: textColor,
-                                              height: 15,
-                                            ),
-                                          ),
-                                          Obx(
-                                            () {
-                                              int postCount = _marketController
-                                                  .markets.length;
-                                              String formattedpostCount =
-                                                  formatCount(postCount);
-                                              return Padding(
-                                                padding: const EdgeInsets.only(
-                                                    top: 5.0),
-                                                child: RichText(
-                                                  text: TextSpan(
-                                                    children: <InlineSpan>[
-                                                      TextSpan(
-                                                        text:
-                                                            'Listings ($formattedpostCount)',
-                                                        style: const TextStyle(
-                                                          fontSize: 12,
-                                                          color: textColor,
-                                                          fontWeight:
-                                                              FontWeight.w600,
-                                                        ),
-                                                      ),
-                                                    ],
-                                                  ),
-                                                ),
-                                              );
-                                            },
-                                          ),
-                                        ],
-                                      ),
-                                      const Spacer(),
-                                      const Align(
-                                          alignment: Alignment.centerRight,
-                                          child: Row(
-                                            crossAxisAlignment:
-                                                CrossAxisAlignment.center,
-                                            mainAxisAlignment:
-                                                MainAxisAlignment.end,
-                                            children: <Widget>[
-                                              JoinedButton(),
-                                            ],
-                                          ))
-                                    ],
-                                  ),
-                                ),
-                                const SizedBox(
-                                  height: 10,
-                                ),
-                              ],
-                            )
-                          ],
-                        ),
-                      ),
-                    ]),
-                  ],
-                ),
-              );
-            } else if (index <=
+            if (index <=
                 (_marketController.isfiltered.value
                     ? _marketController.searchResult.length
                     : _marketController.products.length)) {
               final MarketModel market = _marketController.isfiltered.value
-                  ? _marketController
-                      .searchResult[index - 1] // Adjust for static text
-                  : _marketController
-                      .products[index - 1]; // Adjust for static text
+                  ? _marketController.searchResult[index]
+                  : _marketController.products[index];
               return VisibilityDetector(
                 key: Key(index.toString()),
                 onVisibilityChanged: (VisibilityInfo info) {
                   final bool hasIncrementedView = hmeController
                       .itemsWithIncrementedViews
-                      .contains(_marketController.products[index - 1]
-                          .marketId); // Adjust for static text
+                      .contains(_marketController.products[index].marketId);
                   if (info.visibleFraction == 1.0 && !hasIncrementedView) {
-                    _marketController.updatemarketViews(_marketController
-                        .products[index - 1]); // Adjust for static text
+                    _marketController
+                        .updatemarketViews(_marketController.products[index]);
                     setState(() {
-                      hmeController.itemsWithIncrementedViews.add(
-                          _marketController.products[index - 1]
-                              .marketId); // Adjust for static text
+                      hmeController.itemsWithIncrementedViews
+                          .add(_marketController.products[index].marketId);
                     });
                   }
                 },
                 child: MarketTile(
                   post: market,
                   controller: _marketController,
-                  key: ValueKey(_marketController
-                      .products[index - 1].marketId), // Adjust for static text
+                  key: ValueKey(_marketController.products[index].marketId),
                 ),
               );
             } else {

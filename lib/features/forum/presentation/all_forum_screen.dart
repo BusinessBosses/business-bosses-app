@@ -42,8 +42,6 @@ class _AllForumScreenState extends State<AllForumScreen>
   bool _iscouseSearching = false;
   late final TabController _searchTabController;
   late final TabController _coursesearchTabController;
-  late final TabController _pageTabController;
-  late final TabController _coursespageTabController;
   late BossUpController bossUpController;
 
   int currentTabIndex = 0; // Track the current tab index
@@ -54,8 +52,6 @@ class _AllForumScreenState extends State<AllForumScreen>
     super.initState();
     _searchTabController = TabController(length: 2, vsync: this);
     _coursesearchTabController = TabController(length: 2, vsync: this);
-    _pageTabController = TabController(length: 2, vsync: this);
-    _coursespageTabController = TabController(length: 2, vsync: this);
     if (Get.arguments == null) {
       Get.back();
     } else {

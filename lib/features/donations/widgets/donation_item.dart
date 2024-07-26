@@ -745,7 +745,7 @@ class _DonationItemState extends State<DonationItem> {
                           padding: EdgeInsets.symmetric(
                               vertical: 5.0, horizontal: 30),
                           child: Text(
-                            'Donate',
+                            'Support',
                             style: TextStyle(
                               color: primaryColorLT,
                               fontWeight: FontWeight.w700,

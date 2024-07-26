@@ -1100,7 +1100,7 @@ class _PostTileState extends State<PostTile> {
                                         Get.to(() => ExpandedDonationScreen(
                                             donation: donation));
                                       },
-                                      child: const Text('Donate'),
+                                      child: const Text('Support'),
                                     ),
                                 ],
                               ),

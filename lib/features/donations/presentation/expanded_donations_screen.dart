@@ -305,7 +305,7 @@ class _ExpandedDonationScreenState extends State<ExpandedDonationScreen> {
                               height: 5,
                             ),
                             Text(
-                              'Donate To - ${widget.donation.title!}',
+                              'Support - ${widget.donation.title!}',
                               style: const TextStyle(
                                   fontWeight: FontWeight.w700, fontSize: 17),
                             ),
@@ -649,7 +649,7 @@ class _ExpandedDonationScreenState extends State<ExpandedDonationScreen> {
                                           .myProfile.coinscount!)) {
                                     Get.snackbar(
                                       'Error',
-                                      'You do not have sufficient coins to donate',
+                                      'You do not have sufficient coins to support',
                                       backgroundColor: Colors.red,
                                       colorText: Colors.white,
                                     );
@@ -685,7 +685,7 @@ class _ExpandedDonationScreenState extends State<ExpandedDonationScreen> {
                                     Navigator.of(context).pop();
                                   } else {
                                     Get.snackbar('Error',
-                                        'There\'s an error while trying to donate',
+                                        'There\'s an error while trying to support',
                                         backgroundColor: Colors.red,
                                         colorText: Colors.white);
                                   }
@@ -705,7 +705,7 @@ class _ExpandedDonationScreenState extends State<ExpandedDonationScreen> {
                                             mainAxisSize: MainAxisSize.min,
                                             children: <Widget>[
                                               Text(
-                                                'Donate',
+                                                'Support',
                                                 style: TextStyle(
                                                     fontSize: 15,
                                                     color: Colors.white,

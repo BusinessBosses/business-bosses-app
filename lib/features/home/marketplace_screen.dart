@@ -8,13 +8,13 @@ import 'package:business_bosses_v2/features/marketplace/presentation/filtermarke
 import 'package:business_bosses_v2/features/marketplace/presentation/sell_screen.dart';
 import 'package:business_bosses_v2/features/marketplace/presentation/supplierspage.dart';
 import 'package:business_bosses_v2/features/marketplace/widgets/marketplace_item.dart';
+import 'package:business_bosses_v2/features/marketplace/widgets/markets.dart';
 
 import 'package:business_bosses_v2/features/marketplace/widgets/products.dart';
 import 'package:business_bosses_v2/features/marketplace/widgets/service_item.dart';
 import 'package:business_bosses_v2/features/marketplace/widgets/services.dart';
 import 'package:business_bosses_v2/features/search/widgets/search_bar.dart';
 import 'package:flutter/material.dart';
-import 'package:country_list_pick/country_list_pick.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -64,7 +64,7 @@ class _MarketplaceScreenState extends State<MarketplaceScreen>
   void initState() {
     super.initState();
     _marketplacesearchTabController = TabController(length: 3, vsync: this);
-    _marketplaceTabController = TabController(length: 3, vsync: this);
+    _marketplaceTabController = TabController(length: 4, vsync: this);
 
     supplierController.initSuppliers();
     _scrollController.addListener(() {
@@ -133,8 +133,8 @@ class _MarketplaceScreenState extends State<MarketplaceScreen>
       });
     });
 
-    int userCount = _marketController.users.length;
-    String formattedUserCount = formatCount(userCount);
+    //int userCount = _marketController.users.length;
+    //String formattedUserCount = formatCount(userCount);
     _marketplacesearchTabController.addListener(_handleTabSelection);
 
     return Scaffold(
@@ -162,7 +162,6 @@ class _MarketplaceScreenState extends State<MarketplaceScreen>
                     setState(() {});
                   },
                   onSubmit: (String query) {
-                    supplierController.initSuppliers();
                     supplierController.searchSuppliers(query);
                     _marketController.searchServices(query);
                     _marketController.searchPosts(
@@ -509,28 +508,61 @@ class _MarketplaceScreenState extends State<MarketplaceScreen>
                                                   ),
                                                 )
                                               : DefaultTabController(
-                                                  length: 3, // Number of tabs
+                                                  length: 4, // Number of tabs
                                                   child: Column(
                                                     children: <Widget>[
                                                       Container(
+                                                        padding:
+                                                            const EdgeInsets
+                                                                .only(
+                                                                bottom: 10,
+                                                                left: 16),
                                                         constraints:
                                                             const BoxConstraints
                                                                 .expand(
-                                                                height: 50),
+                                                                height: 40),
                                                         child: TabBar(
+                                                          labelStyle:
+                                                              const TextStyle(
+                                                                  fontWeight:
+                                                                      FontWeight
+                                                                          .w400),
                                                           controller:
                                                               _marketplaceTabController,
-                                                          tabs: const <Widget>[
-                                                            // Tab(
-                                                            //     text:
-                                                            //         '•'),
-                                                            Tab(
+                                                          isScrollable: true,
+                                                          indicator:
+                                                              BoxDecoration(
+                                                            borderRadius:
+                                                                BorderRadius
+                                                                    .circular(
+                                                                        50), // Creates border
+                                                            color: Colors
+                                                                .black87
+                                                                .withAlpha(180),
+                                                          ),
+                                                          unselectedLabelColor:
+                                                              Colors.grey,
+                                                          labelColor:
+                                                              Colors.white,
+                                                          labelPadding:
+                                                              const EdgeInsets
+                                                                  .symmetric(
+                                                                  horizontal:
+                                                                      20.0),
+                                                          tabs: [
+                                                            const Tab(
+                                                              icon: Icon(
+                                                                Icons.dashboard,
+                                                                size: 15,
+                                                              ),
+                                                            ),
+                                                            const Tab(
                                                                 text:
                                                                     'Products'),
-                                                            Tab(
+                                                            const Tab(
                                                                 text:
                                                                     'Services'),
-                                                            Tab(
+                                                            const Tab(
                                                                 text:
                                                                     'Suppliers'),
                                                           ],
@@ -544,6 +576,7 @@ class _MarketplaceScreenState extends State<MarketplaceScreen>
                                                                 controller:
                                                                     _marketplaceTabController,
                                                                 children: const <Widget>[
+                                                                  MarketsPage(),
                                                                   ProductsPage(),
                                                                   ServicesPage(),
                                                                   SuppliersPage(),
