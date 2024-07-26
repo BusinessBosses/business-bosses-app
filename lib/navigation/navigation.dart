@@ -14,6 +14,7 @@ import 'package:business_bosses_v2/features/home/controller/commumities_controll
 import 'package:business_bosses_v2/features/home/controller/home_controller.dart';
 import 'package:business_bosses_v2/features/home/home_screen.dart';
 import 'package:business_bosses_v2/features/home/marketplace_screen.dart';
+import 'package:business_bosses_v2/features/home/widgets/alllearningposts.dart';
 import 'package:business_bosses_v2/features/live_event/presentation/confirm_create_event.dart';
 import 'package:business_bosses_v2/features/live_event/presentation/create_event.dart';
 import 'package:business_bosses_v2/features/live_event/presentation/live_event.dart';
@@ -287,5 +288,9 @@ var routes = [
       url: '',
       filename: '',
     ),
+  ),
+  GetPage(
+    name: Routes.alllearningpostsscreen,
+    page: () => const AllLearningPostsScreen(),
   ),
 ];
