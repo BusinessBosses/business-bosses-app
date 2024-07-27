@@ -36,7 +36,7 @@ class _AllLearningPostsScreenState extends State<AllLearningPostsScreen> {
         appBar: AppBar(
           leading: IconButton(
             onPressed: () {
-              Navigator.pop(context);
+              Get.back();
             },
             icon: SvgPicture.asset('assets/svgs/backbutton.svg'),
           ),
@@ -51,42 +51,40 @@ class _AllLearningPostsScreenState extends State<AllLearningPostsScreen> {
         ),
         body: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 15),
-          child: Expanded(
-            child: StaggeredGridView.countBuilder(
-              crossAxisCount: 2,
-              crossAxisSpacing: 15.0,
-              itemCount:
-                  controller.getCategoryIndustries(Constants.LEARNINGID).length,
-              itemBuilder: (BuildContext context, int index) {
-                return controller
-                            .getCategoryIndustries(Constants.LEARNINGID)[index]
-                            .active ==
-                        true
-                    ? Container()
-                    : CustomTileLearning(
-                        label: controller
-                            .getCategoryIndustries(Constants.LEARNINGID)[index]
-                            .industry!,
-                        onTap: () {
-                          if (widget.isCoursesTile == true) {
-                            Get.to(const AllForumScreen(isCourses: false),
-                                arguments: controller.getCategoryIndustries(
-                                    Constants.LEARNINGID)[index]);
-                          } else {
-                            Get.to(const AllForumScreen(isCourses: true),
-                                arguments: controller.getCategoryIndustries(
-                                    Constants.LEARNINGID)[index]);
-                          }
-                          // Get.toNamed(
-                          //   Routes.allforumscreen,
-                          //   arguments: controller
-                          //       .getCategoryIndustries(Constants.LEARNINGID)[index],
-                          // );
-                        },
-                      );
-              },
-              staggeredTileBuilder: (int index) => const StaggeredTile.fit(1),
-            ),
+          child: StaggeredGridView.countBuilder(
+            crossAxisCount: 2,
+            crossAxisSpacing: 15.0,
+            itemCount:
+                controller.getCategoryIndustries(Constants.LEARNINGID).length,
+            itemBuilder: (BuildContext context, int index) {
+              return controller
+                          .getCategoryIndustries(Constants.LEARNINGID)[index]
+                          .active ==
+                      true
+                  ? Container()
+                  : CustomTileLearning(
+                      label: controller
+                          .getCategoryIndustries(Constants.LEARNINGID)[index]
+                          .industry!,
+                      onTap: () {
+                        if (widget.isCoursesTile == true) {
+                          Get.to(const AllForumScreen(isCourses: false),
+                              arguments: controller.getCategoryIndustries(
+                                  Constants.LEARNINGID)[index]);
+                        } else {
+                          Get.to(const AllForumScreen(isCourses: true),
+                              arguments: controller.getCategoryIndustries(
+                                  Constants.LEARNINGID)[index]);
+                        }
+                        // Get.toNamed(
+                        //   Routes.allforumscreen,
+                        //   arguments: controller
+                        //       .getCategoryIndustries(Constants.LEARNINGID)[index],
+                        // );
+                      },
+                    );
+            },
+            staggeredTileBuilder: (int index) => const StaggeredTile.fit(1),
           ),
         ),
       );

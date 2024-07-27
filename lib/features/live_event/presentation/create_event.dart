@@ -692,15 +692,10 @@ class _CreateEventState extends State<CreateEvent> {
       showTitleActions: true,
       onConfirm: (DateTime date) {
         setState(() {
-          selectedDateTime = date;
           if (isStartTime) {
-            setState(() {
-              startAt = selectedDateTime;
-            });
+            startAt = date;
           } else {
-            setState(() {
-              endAt = selectedDateTime;
-            });
+            endAt = date;
           }
         });
       },

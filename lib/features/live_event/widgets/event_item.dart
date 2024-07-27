@@ -3,7 +3,7 @@ import 'package:business_bosses_v2/common/widgets/network_image_with_placeholder
 import 'package:business_bosses_v2/common/widgets/popup/eventpopup.dart';
 import 'package:business_bosses_v2/features/live_event/controller/live_event_controller.dart';
 import 'package:business_bosses_v2/features/live_event/models/events_model.dart';
-import 'package:business_bosses_v2/features/live_event/presentation/attendance_list.dart';
+
 import 'package:business_bosses_v2/features/live_event/presentation/create_event.dart';
 import 'package:business_bosses_v2/features/live_event/widgets/attendeesitem.dart';
 import 'package:business_bosses_v2/features/profile/controller/profile_controller.dart';
@@ -14,7 +14,7 @@ import 'package:flutter_speed_dial/flutter_speed_dial.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
-import 'package:socket_io_client/socket_io_client.dart';
+
 import 'package:url_launcher/url_launcher.dart';
 import '../../../action/action.dart';
 // import 'package:add_2_calendar/add_2_calendar.dart';

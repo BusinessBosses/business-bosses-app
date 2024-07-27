@@ -431,7 +431,7 @@ class _TopicsPageState extends State<TopicsPage> {
                             child: ForumItem(
                               forum: controller.forums[i],
                               key: ValueKey(controller.forums[i].forumId),
-                              controller: hmeController,
+                              controller: controller,
                               isBossUp: true,
                             ),
                           );
