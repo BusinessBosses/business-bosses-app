@@ -122,34 +122,37 @@ class _EventItemState extends State<EventItem> {
                             ),
                           ),
                         ),
-                        Padding(
-                          padding: const EdgeInsets.only(right: 15.0, top: 10),
-                          child: GestureDetector(
-                            onTap: () {
-                              showModalBottomSheet(
-                                  context: context,
-                                  builder: (BuildContext context) =>
-                                      AttendeesItem(
-                                        event: widget.event,
-                                      ));
-                            },
-                            child: Container(
-                              padding: const EdgeInsets.symmetric(
-                                  horizontal: 5, vertical: 5),
-                              decoration: BoxDecoration(
-                                  color: Colors.grey,
-                                  borderRadius: BorderRadius.circular(6)),
-                              child: Text(
-                                attendMessage,
-                                style: const TextStyle(
-                                    fontSize: 13, color: Colors.white),
+                        Wrap(children: <Widget>[
+                          Padding(
+                            padding:
+                                const EdgeInsets.only(right: 10.0, top: 10),
+                            child: GestureDetector(
+                              onTap: () {
+                                showModalBottomSheet(
+                                    context: context,
+                                    builder: (BuildContext context) =>
+                                        AttendeesItem(
+                                          event: widget.event,
+                                        ));
+                              },
+                              child: Container(
+                                padding: const EdgeInsets.symmetric(
+                                    horizontal: 5, vertical: 5),
+                                decoration: BoxDecoration(
+                                    color: Colors.grey,
+                                    borderRadius: BorderRadius.circular(6)),
+                                child: Text(
+                                  attendMessage,
+                                  style: const TextStyle(
+                                      fontSize: 13, color: Colors.white),
+                                ),
                               ),
                             ),
                           ),
-                        ),
-                        if (widget.event.user?.uid ==
-                            profileController.myProfile.uid)
-                          _buildPopupMenuButton(context),
+                          if (widget.event.user?.uid ==
+                              profileController.myProfile.uid)
+                            _buildPopupMenuButton(context)
+                        ]),
                       ],
                     ),
                     const SizedBox(
@@ -379,7 +382,7 @@ class _EventItemState extends State<EventItem> {
                         Column(
                           mainAxisAlignment: MainAxisAlignment.center,
                           crossAxisAlignment: CrossAxisAlignment.end,
-                          children: [
+                          children: <Widget>[
                             Padding(
                               padding: const EdgeInsets.only(right: 15.0),
                               child: SpeedDial(
