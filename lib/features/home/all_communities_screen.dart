@@ -29,6 +29,7 @@ class AllCommunitiesScreen extends StatefulWidget {
       : super(key: key);
 
   @override
+  // ignore: library_private_types_in_public_api
   _AllCommunitiesScreenState createState() => _AllCommunitiesScreenState();
 }
 
@@ -208,7 +209,8 @@ class _AllCommunitiesScreenState extends State<AllCommunitiesScreen>
                                               padding: const EdgeInsets.only(
                                                   bottom: 80),
                                               child: Builder(
-                                                builder: (context) {
+                                                builder:
+                                                    (BuildContext context) {
                                                   List<Industry>
                                                       activeIndustries =
                                                       controller
@@ -319,6 +321,7 @@ class _AllCommunitiesScreenState extends State<AllCommunitiesScreen>
                                                   .loadingSearch.value,
                                               icon: SvgPicture.asset(
                                                   'assets/svgs/search.svg',
+                                                  // ignore: deprecated_member_use
                                                   color: hintColor,
                                                   height: 80.0,
                                                   width: 80.0),

@@ -87,7 +87,7 @@ class _CreateEventState extends State<CreateEvent> {
           style: const TextStyle(fontSize: 20),
         ),
       ),
-      body: SizedBox(
+      body: SingleChildScrollView(
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: <Widget>[
@@ -180,14 +180,14 @@ class _CreateEventState extends State<CreateEvent> {
                 ),
                 child: DropdownButtonFormField<bool>(
                   value: isOnline,
-                  items: const [
+                  items: const <DropdownMenuItem<bool>>[
                     DropdownMenuItem<bool>(
                       value: true,
-                      child: Text('Online'),
+                      child: Text('Online Event'),
                     ),
                     DropdownMenuItem<bool>(
                       value: false,
-                      child: Text('Offline'),
+                      child: Text('In-Person Event'),
                     ),
                   ],
                   onChanged: (bool? value) {
@@ -491,7 +491,7 @@ class _CreateEventState extends State<CreateEvent> {
                   if (!isOnline && addressController.text.trim().isEmpty) {
                     Get.snackbar(
                       'Validation Error',
-                      'Address is required for offline events',
+                      'Address is required for in-person events',
                       snackPosition: SnackPosition.BOTTOM,
                       backgroundColor: Colors.red,
                       colorText: Colors.white,
