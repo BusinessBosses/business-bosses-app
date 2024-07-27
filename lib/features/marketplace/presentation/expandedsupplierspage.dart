@@ -53,19 +53,20 @@ class _FilterUsersState extends State<ExpandedSuppliersPage> {
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             _buildSupplierImage(),
-            const SizedBox(height: 10),
-            Wrap(
-              children: [Text(
-                widget.supplier.name,
-                style: const TextStyle(
-                  fontWeight: FontWeight.w700,
-                  fontSize: 20,
-                  color: textColor,
-                ),
+           
+            Text(
+              widget.supplier.name,
+              style: const TextStyle(
+                fontWeight: FontWeight.w700,
+                fontSize: 20,
+                color: textColor,
               ),
-              if (widget.supplier.isVerified)
-              SizedBox(width: 5,),
-              if (widget.supplier.isVerified)
+            ),
+            if (widget.supplier.isVerified)
+              SizedBox(
+                height: 5,
+              ),
+            if (widget.supplier.isVerified)
               Container(
                 padding:
                     const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
@@ -76,10 +77,8 @@ class _FilterUsersState extends State<ExpandedSuppliersPage> {
                   'Verified',
                   style: TextStyle(color: Colors.blue),
                 ),
-              ),]
-            ),
-            
-            const SizedBox(height: 30),
+              ),
+            const SizedBox(height: 10),
             if (!widget.supplier.isVerified) _buildVerificationWarning(),
             if (!widget.supplier.isVerified)
               Column(
