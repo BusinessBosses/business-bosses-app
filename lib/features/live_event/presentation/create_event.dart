@@ -56,6 +56,7 @@ class _CreateEventState extends State<CreateEvent> {
       startAt = widget.event!.startAt!.toLocal();
       endAt = widget.event!.endAt!.toLocal();
       descriptionController.text = widget.event!.description ?? '';
+      isOnline = widget.event!.link != null ? true : false;
       linkController.text = widget.event!.link ?? '';
       addressController.text = widget.event!.address ?? '';
     } else {

@@ -114,12 +114,12 @@ class _FilterUsersState extends State<FilterUsers> {
                                                     .bossOfTheWeek?.uid,
                                               )
                                           ? const Text(
-                                              'Connected',
+                                              'Following',
                                               style: TextStyle(
                                                   color: primaryColorLT),
                                             )
                                           : const Text(
-                                              'Connect',
+                                              'Follow',
                                               style: TextStyle(
                                                   color: Colors.white),
                                             ),
@@ -216,13 +216,13 @@ class _FilterUsersState extends State<FilterUsers> {
                                           child: FittedBox(
                                             child: checkConnected != -1
                                                 ? const Text(
-                                                    'Connected',
+                                                    'Following',
                                                     style: TextStyle(
                                                       color: primaryColorLT,
                                                     ),
                                                   )
                                                 : const Text(
-                                                    'Connect',
+                                                    'Follow',
                                                     style: TextStyle(
                                                       color: Colors.white,
                                                     ),

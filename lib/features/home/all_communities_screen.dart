@@ -239,14 +239,14 @@ class _AllCommunitiesScreenState extends State<AllCommunitiesScreen>
                                                           if (industry
                                                                   .industryId ==
                                                               '4acc0db7-7c89-4122-b15d-7552f590af23') {
-                                                            Get.to(
+                                                            Get.to(() =>
                                                                 const AllLearningPostsScreen(
                                                                     isCoursesTile:
                                                                         true));
                                                           } else if (industry
                                                                   .industryId ==
                                                               '6bfb3524-f05e-4148-b4b2-a7a47b768b56') {
-                                                            Get.to(
+                                                            Get.to(() =>
                                                                 const AllLearningPostsScreen(
                                                                     isCoursesTile:
                                                                         false));
