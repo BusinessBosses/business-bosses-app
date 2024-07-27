@@ -1,6 +1,5 @@
 import 'dart:convert';
 import 'package:business_bosses_v2/common/widgets/network_image_with_placeholder.dart';
-import 'package:business_bosses_v2/common/widgets/popup/eventpopup.dart';
 import 'package:business_bosses_v2/features/live_event/controller/live_event_controller.dart';
 import 'package:business_bosses_v2/features/live_event/models/events_model.dart';
 
@@ -161,15 +160,10 @@ class _EventItemState extends State<EventItem> {
                         padding: const EdgeInsets.only(right: 15.0),
                         child: GestureDetector(
                           onTap: () {
-                            Navigator.of(context).push(
-                              MaterialPageRoute(
-                                builder: (BuildContext context) =>
-                                    ImagesViewerScreen(
-                                  urls: [widget.event.image],
+                            Get.to(() => ImagesViewerScreen(
+                                  urls: <dynamic>[widget.event.image],
                                   text: widget.event.title,
-                                ),
-                              ),
-                            );
+                                ));
                           },
                           child: Padding(
                             padding: const EdgeInsets.only(left: 0, right: 0),
@@ -387,7 +381,7 @@ class _EventItemState extends State<EventItem> {
                           crossAxisAlignment: CrossAxisAlignment.end,
                           children: [
                             Padding(
-                              padding: const EdgeInsets.only(right:15.0),
+                              padding: const EdgeInsets.only(right: 15.0),
                               child: SpeedDial(
                                 backgroundColor: Colors.white,
                                 icon: Icons.share,
@@ -482,153 +476,155 @@ class _EventItemState extends State<EventItem> {
                               ),
                             ),
                             if (widget.ongoing)
-                          Padding(
-                            padding: const EdgeInsets.only(right: 15.0),
-                            child: ElevatedButton(
-                              style: ElevatedButton.styleFrom(
-                                backgroundColor: Colors.white,
-                                foregroundColor: Colors.red,
-                                minimumSize: const Size(55, 32),
-                                shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(
-                                      12), // Set the border radius
-                                ),
-                              ),
-                              onPressed: () async {
-                                final Uri eventlink =
-                                    Uri.parse(widget.event.link!);
+                              Padding(
+                                padding: const EdgeInsets.only(right: 15.0),
+                                child: ElevatedButton(
+                                  style: ElevatedButton.styleFrom(
+                                    backgroundColor: Colors.white,
+                                    foregroundColor: Colors.red,
+                                    minimumSize: const Size(55, 32),
+                                    shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(
+                                          12), // Set the border radius
+                                    ),
+                                  ),
+                                  onPressed: () async {
+                                    final Uri eventlink =
+                                        Uri.parse(widget.event.link!);
 
-                                if (widget.event.link != null) {
-                                  if (!await launchUrl(eventlink)) {
-                                    throw Exception(
-                                        'Could not launch $eventlink');
-                                  }
-                                } else {
-                                  _showDialogWithLink(context);
-                                }
-                                // if (widget.event.link != null) {
-                                //   if (widget.event.user?.uid ==
-                                //       profileController.myProfile.uid) {
-                                //     jumpToLivePage(
-                                //       context,
-                                //       title: widget.event.title!,
-                                //       roomID: widget.event.roomId!,
-                                //       isHost: true,
-                                //       image: widget.event.image,
-                                //     );
-                                //   } else {
-                                //     jumpToLivePage(
-                                //       context,
-                                //       title: widget.event.title!,
-                                //       roomID: widget.event.roomId!,
-                                //       isHost: false,
-                                //       image: widget.event.image,
-                                //     );
-                                //   }
-                                // } else {
-                                // _showDialogWithLink(context);
-                                // }
-                              },
-                              child: const Text(
-                                'Join',
-                                style: TextStyle(
-                                  fontWeight: FontWeight.w500,
+                                    if (widget.event.link != null) {
+                                      if (!await launchUrl(eventlink)) {
+                                        throw Exception(
+                                            'Could not launch $eventlink');
+                                      }
+                                    } else {
+                                      _showDialogWithLink(context);
+                                    }
+                                    // if (widget.event.link != null) {
+                                    //   if (widget.event.user?.uid ==
+                                    //       profileController.myProfile.uid) {
+                                    //     jumpToLivePage(
+                                    //       context,
+                                    //       title: widget.event.title!,
+                                    //       roomID: widget.event.roomId!,
+                                    //       isHost: true,
+                                    //       image: widget.event.image,
+                                    //     );
+                                    //   } else {
+                                    //     jumpToLivePage(
+                                    //       context,
+                                    //       title: widget.event.title!,
+                                    //       roomID: widget.event.roomId!,
+                                    //       isHost: false,
+                                    //       image: widget.event.image,
+                                    //     );
+                                    //   }
+                                    // } else {
+                                    // _showDialogWithLink(context);
+                                    // }
+                                  },
+                                  child: const Text(
+                                    'Join',
+                                    style: TextStyle(
+                                      fontWeight: FontWeight.w500,
+                                    ),
+                                  ),
                                 ),
-                              ),
-                            ),
-                          )
-                        else if (!liveController.joined.any(
-                            (EventModel event) => event.id == widget.event.id))
-                          Padding(
-                            padding: const EdgeInsets.only(right: 15.0),
-                            child: ElevatedButton(
-                              style: ElevatedButton.styleFrom(
-                                backgroundColor: Colors.white,
-                                foregroundColor: Colors.red,
-                                minimumSize: const Size(55, 32),
-                                shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(
-                                      12), // Set the border radius
+                              )
+                            else if (!liveController.joined.any(
+                                (EventModel event) =>
+                                    event.id == widget.event.id))
+                              Padding(
+                                padding: const EdgeInsets.only(right: 15.0),
+                                child: ElevatedButton(
+                                  style: ElevatedButton.styleFrom(
+                                    backgroundColor: Colors.white,
+                                    foregroundColor: Colors.red,
+                                    minimumSize: const Size(55, 32),
+                                    shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(
+                                          12), // Set the border radius
+                                    ),
+                                  ),
+                                  onPressed: () async {
+                                    // showDialog(
+                                    //   context: context,
+                                    //   builder: (BuildContext context) => EventPopUp(
+                                    //     event: widget.event,
+                                    //     isfirstattend: true,
+                                    //   ),
+                                    // );
+                                    // Get.dialog(
+                                    //   AlertDialog(
+                                    //     title: const Text(''),
+                                    //     content: const Text(
+                                    //         'Do you also want to add the event to your calender?'),
+                                    //     actions: <Widget>[
+                                    //       TextButton(
+                                    //         onPressed: () {
+                                    //           // Close the dialog
+                                    //           Get.back();
+                                    //         },
+                                    //         child: const Text('No'),
+                                    //       ),
+                                    //       TextButton(
+                                    //         onPressed: () async {
+                                    //           // Add2Calendar.addEvent2Cal(
+                                    //           //   Event(
+                                    //           //       title: widget.event.title ?? '',
+                                    //           //       startDate: localStartTime,
+                                    //           //       endDate: localEndTime),
+                                    //           // );
+                                    //           Get.back();
+                                    //         },
+                                    //         child: const Text('Yes'),
+                                    //       ),
+                                    //     ],
+                                    //   ),
+                                    // );
+                                    await liveController
+                                        .attendEvent(widget.event);
+                                    setState(() {});
+                                  },
+                                  child: const Text(
+                                    'Attend',
+                                    style: TextStyle(
+                                      fontWeight: FontWeight.w500,
+                                    ),
+                                  ),
                                 ),
-                              ),
-                              onPressed: () async {
-                                // showDialog(
-                                //   context: context,
-                                //   builder: (BuildContext context) => EventPopUp(
-                                //     event: widget.event,
-                                //     isfirstattend: true,
-                                //   ),
-                                // );
-                                // Get.dialog(
-                                //   AlertDialog(
-                                //     title: const Text(''),
-                                //     content: const Text(
-                                //         'Do you also want to add the event to your calender?'),
-                                //     actions: <Widget>[
-                                //       TextButton(
-                                //         onPressed: () {
-                                //           // Close the dialog
-                                //           Get.back();
-                                //         },
-                                //         child: const Text('No'),
-                                //       ),
-                                //       TextButton(
-                                //         onPressed: () async {
-                                //           // Add2Calendar.addEvent2Cal(
-                                //           //   Event(
-                                //           //       title: widget.event.title ?? '',
-                                //           //       startDate: localStartTime,
-                                //           //       endDate: localEndTime),
-                                //           // );
-                                //           Get.back();
-                                //         },
-                                //         child: const Text('Yes'),
-                                //       ),
-                                //     ],
-                                //   ),
-                                // );
-                                await liveController.attendEvent(widget.event);
-                                setState(() {});
-                              },
-                              child: const Text(
-                                'Attend',
-                                style: TextStyle(
-                                  fontWeight: FontWeight.w500,
+                              )
+                            else
+                              Padding(
+                                padding: const EdgeInsets.only(right: 15.0),
+                                child: ElevatedButton(
+                                  style: ElevatedButton.styleFrom(
+                                    backgroundColor: Colors.grey,
+                                    foregroundColor: Colors.white,
+                                    minimumSize: const Size(55, 32),
+                                    shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(
+                                          6), // Set the border radius
+                                    ),
+                                  ),
+                                  onPressed: () async {
+                                    // showDialog(
+                                    //   context: context,
+                                    //   builder: (BuildContext context) => EventPopUp(
+                                    //     event: widget.event,
+                                    //     isfirstattend: false,
+                                    //   ),
+                                    // );
+                                  },
+                                  child: const Text(
+                                    'Attending',
+                                    style: TextStyle(
+                                      fontSize: 10,
+                                      fontWeight: FontWeight.w500,
+                                    ),
+                                  ),
                                 ),
-                              ),
-                            ),
-                          )
-                        else
-                          Padding(
-                            padding: const EdgeInsets.only(right: 15.0),
-                            child: ElevatedButton(
-                              style: ElevatedButton.styleFrom(
-                                backgroundColor: Colors.grey,
-                                foregroundColor: Colors.white,
-                                minimumSize: const Size(55, 32),
-                                shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(
-                                      6), // Set the border radius
-                                ),
-                              ),
-                              onPressed: () async {
-                                // showDialog(
-                                //   context: context,
-                                //   builder: (BuildContext context) => EventPopUp(
-                                //     event: widget.event,
-                                //     isfirstattend: false,
-                                //   ),
-                                // );
-                              },
-                              child: const Text(
-                                'Attending',
-                                style: TextStyle(
-                                  fontSize: 10,
-                                  fontWeight: FontWeight.w500,
-                                ),
-                              ),
-                            ),
-                          )
+                              )
                           ],
                         ),
                       ],
