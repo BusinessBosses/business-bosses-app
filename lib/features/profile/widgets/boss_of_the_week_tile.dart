@@ -21,9 +21,9 @@ import '../../home/controller/home_controller.dart';
 ///
 ///
 class BossOfWeekProfileTile extends StatefulWidget {
-  final VoidCallback? onTileBuilt; // Add this line
+// Add this line
 
-  const BossOfWeekProfileTile({Key? key, this.onTileBuilt}) : super(key: key);
+  const BossOfWeekProfileTile({Key? key}) : super(key: key);
 
   @override
   State<BossOfWeekProfileTile> createState() => _BossOfWeekProfileTileState();
@@ -82,14 +82,6 @@ class _BossOfWeekProfileTileState extends State<BossOfWeekProfileTile> {
 
   @override
   Widget build(BuildContext context) {
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      if (widget.onTileBuilt != null) {
-        WidgetsBinding.instance.addPostFrameCallback((_) {
-          widget.onTileBuilt!();
-        });
-      }
-    });
-
     List<Map<String, dynamic>> quotes = <Map<String, dynamic>>[
       <String, dynamic>{
         'by': 'Napoleon Hill',
@@ -370,7 +362,7 @@ class _BossOfWeekProfileTileState extends State<BossOfWeekProfileTile> {
                                     },
                                     child: Container(
                                       width: MediaQuery.of(context).size.width /
-                                         3.58,
+                                          3.58,
                                       margin: const EdgeInsets.only(left: 15.0),
                                       decoration: BoxDecoration(
                                         border: Border.all(

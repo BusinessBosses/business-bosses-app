@@ -69,17 +69,6 @@ class _HomeScreenState extends State<HomeScreen>
 
   int marketIndex = 0;
   // final GlobalKey<NavigatorState> postButtonKey = GlobalKey<NavigatorState>();
-  void _checkScrollPosition() {
-    if (_scrollController.position.pixels >= 230) {
-      setState(() {
-        isTabVisible = true;
-      });
-    } else {
-      setState(() {
-        isTabVisible = false;
-      });
-    }
-  }
 
   @override
   void initState() {
@@ -375,11 +364,7 @@ class _HomeScreenState extends State<HomeScreen>
                                                         (BuildContext context,
                                                             BoxConstraints
                                                                 constraints) {
-                                                      return BossOfWeekProfileTile(
-                                                        onTileBuilt: () {
-                                                          _checkScrollPosition();
-                                                        },
-                                                      );
+                                                      return const BossOfWeekProfileTile();
                                                     },
                                                   ),
                                                 ),
