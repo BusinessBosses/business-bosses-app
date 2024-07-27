@@ -95,6 +95,10 @@ class EventPopUp extends StatelessWidget {
               ],
             ),
             if (event.image != null)
+              const SizedBox(
+                height: 20,
+              ),
+            if (event.image != null)
               GestureDetector(
                 onTap: () {
                   Navigator.of(context).push(
