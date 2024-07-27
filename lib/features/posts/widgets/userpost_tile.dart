@@ -622,6 +622,7 @@ class _PostTileState extends State<PostTile> {
                                 (widget.post.options != null &&
                                     widget.post.options!.isNotEmpty))
                               FlutterPolls(
+                                votedAnimationDuration: 500,
                                 leadingVotedProgessColor: Colors.black38,
                                 pollId: widget.post.postId,
                                 onVoted: (PollOption pollOption,
