@@ -1,6 +1,6 @@
 import 'dart:convert';
-
 import 'package:business_bosses_v2/common/widgets/network_image_with_placeholder.dart';
+import 'package:business_bosses_v2/common/widgets/popup/eventpopup.dart';
 import 'package:business_bosses_v2/features/live_event/controller/live_event_controller.dart';
 import 'package:business_bosses_v2/features/live_event/models/events_model.dart';
 import 'package:business_bosses_v2/features/live_event/presentation/attendance_list.dart';
@@ -14,6 +14,7 @@ import 'package:flutter_speed_dial/flutter_speed_dial.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
+import 'package:socket_io_client/socket_io_client.dart';
 import 'package:url_launcher/url_launcher.dart';
 import '../../../action/action.dart';
 // import 'package:add_2_calendar/add_2_calendar.dart';
@@ -279,12 +280,6 @@ class _EventItemState extends State<EventItem> {
                     const SizedBox(
                       height: 10,
                     ),
-                    Text(widget.event.link != null
-                        ? 'Online Event'
-                        : 'In-Person Event'),
-                    const SizedBox(
-                      height: 10,
-                    ),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: <Widget>[
@@ -331,6 +326,31 @@ class _EventItemState extends State<EventItem> {
                                     ),
                                     Text(
                                       '$formattedStartTime - $formattedEndTime',
+                                      style: const TextStyle(
+                                        fontSize: 13,
+                                        fontWeight: FontWeight.w700,
+                                      ),
+                                    ),
+                                    const SizedBox(
+                                      width: 2,
+                                    ),
+                                  ],
+                                ),
+                                Row(
+                                  children: <Widget>[
+                                    Icon(
+                                      widget.event.link != null
+                                          ? Icons.language
+                                          : Icons.location_on,
+                                      size: 10,
+                                    ),
+                                    const SizedBox(
+                                      width: 6,
+                                    ),
+                                    Text(
+                                      widget.event.link != null
+                                          ? 'Online Event'
+                                          : 'In-Person Event',
                                       style: const TextStyle(
                                         fontSize: 13,
                                         fontWeight: FontWeight.w700,
@@ -408,34 +428,41 @@ class _EventItemState extends State<EventItem> {
                                 ),
                               ),
                               onPressed: () async {
-                                Get.dialog(
-                                  AlertDialog(
-                                    title: const Text(''),
-                                    content: const Text(
-                                        'Do you also want to add the event to your calender?'),
-                                    actions: <Widget>[
-                                      TextButton(
-                                        onPressed: () {
-                                          // Close the dialog
-                                          Get.back();
-                                        },
-                                        child: const Text('No'),
-                                      ),
-                                      TextButton(
-                                        onPressed: () async {
-                                          // Add2Calendar.addEvent2Cal(
-                                          //   Event(
-                                          //       title: widget.event.title ?? '',
-                                          //       startDate: localStartTime,
-                                          //       endDate: localEndTime),
-                                          // );
-                                          Get.back();
-                                        },
-                                        child: const Text('Yes'),
-                                      ),
-                                    ],
+                                showDialog(
+                                  context: context,
+                                  builder: (BuildContext context) => EventPopUp(
+                                    event: widget.event,
+                                    isfirstattend: true,
                                   ),
                                 );
+                                // Get.dialog(
+                                //   AlertDialog(
+                                //     title: const Text(''),
+                                //     content: const Text(
+                                //         'Do you also want to add the event to your calender?'),
+                                //     actions: <Widget>[
+                                //       TextButton(
+                                //         onPressed: () {
+                                //           // Close the dialog
+                                //           Get.back();
+                                //         },
+                                //         child: const Text('No'),
+                                //       ),
+                                //       TextButton(
+                                //         onPressed: () async {
+                                //           // Add2Calendar.addEvent2Cal(
+                                //           //   Event(
+                                //           //       title: widget.event.title ?? '',
+                                //           //       startDate: localStartTime,
+                                //           //       endDate: localEndTime),
+                                //           // );
+                                //           Get.back();
+                                //         },
+                                //         child: const Text('Yes'),
+                                //       ),
+                                //     ],
+                                //   ),
+                                // );
                                 await liveController.attendEvent(widget.event);
                                 setState(() {});
                               },
@@ -461,9 +488,13 @@ class _EventItemState extends State<EventItem> {
                                 ),
                               ),
                               onPressed: () async {
-                                Get.to(() => AttendanceList(
-                                      eventId: widget.event.id!,
-                                    ));
+                                showDialog(
+                                  context: context,
+                                  builder: (BuildContext context) => EventPopUp(
+                                    event: widget.event,
+                                    isfirstattend: false,
+                                  ),
+                                );
                               },
                               child: const Text(
                                 'Attending',
