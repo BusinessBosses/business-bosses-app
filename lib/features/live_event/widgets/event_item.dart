@@ -81,93 +81,6 @@ class _EventItemState extends State<EventItem> {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.center,
         children: <Widget>[
-          // SpeedDial(
-          //   backgroundColor: backgroundcolorinterface,
-          //   icon: Icons.share,
-          //   buttonSize: const Size(40, 40),
-          //   iconTheme: const IconThemeData(color: Colors.black),
-          //   activeIcon: Icons.close,
-          //   spacing: 3,
-          //   childPadding: const EdgeInsets.all(5),
-          //   spaceBetweenChildren: 4,
-          //   switchLabelPosition: true,
-          //   visible: true,
-          //   direction: SpeedDialDirection.down,
-          //   closeManually: false,
-          //   renderOverlay: true,
-          //   overlayColor: Colors.black,
-          //   overlayOpacity: 0.8,
-          //   useRotationAnimation: true,
-          //   tooltip: 'Open Speed Dial',
-          //   heroTag: 'speed-dial-hero-tag-${widget.event.id}-2',
-          //   elevation: 0.0,
-          //   animationCurve: Curves.elasticInOut,
-          //   isOpenOnStart: false,
-          //   shape: const CircleBorder(),
-          //   children: <SpeedDialChild>[
-          //     SpeedDialChild(
-          //       child: Padding(
-          //         padding: const EdgeInsets.all(10.0),
-          //         child: SvgPicture.asset(
-          //           'assets/svgs/text.svg',
-          //           color: Colors.white,
-          //         ),
-          //       ),
-          //       backgroundColor: Colors.red,
-          //       label: 'Post on Business Bosses',
-          //       labelStyle: const TextStyle(
-          //           fontSize: 18.0, fontWeight: FontWeight.w700),
-          //       onTap: () => Get.toNamed(
-          //         Routes.createPost,
-          //         arguments: <String, String?>{
-          //           'sharemessage':
-          //               'Hey there! Join this event on $formattedDate  $formattedStartTime with Room ID: ${widget.event.roomId}',
-          //           'title': widget.event.title,
-          //           'livedata': jsonData,
-          //         },
-          //       ),
-          //     ),
-          //     SpeedDialChild(
-          //       child: Padding(
-          //         padding: const EdgeInsets.all(14.0),
-          //         child: SvgPicture.asset(
-          //           'assets/svgs/share.svg',
-          //           height: 15.0,
-          //           width: 15.0,
-          //           // ignore: deprecated_member_use
-          //           color: textColor.withOpacity(1.0),
-          //         ),
-          //       ),
-          //       backgroundColor: Colors.white,
-          //       label: 'Share',
-          //       labelStyle: const TextStyle(
-          //           fontSize: 18.0, fontWeight: FontWeight.w700),
-          //       onTap: () {
-          //         String message =
-          //             'Hey there! Join this event on $formattedDate  $formattedStartTime with Room ID: ${widget.event.roomId}  https://businessbosses.onelink.me/xLWk/36a2ff16';
-          //         socialShare(message);
-          //       },
-          //     ),
-          //     SpeedDialChild(
-          //         child: Padding(
-          //           padding: const EdgeInsets.all(13.0),
-          //           child: SvgPicture.asset(
-          //             'assets/svgs/calendar.svg',
-          //             color: Colors.black,
-          //           ),
-          //         ),
-          //         backgroundColor: Colors.white,
-          //         label: 'Save to Calendar',
-          //         labelStyle: const TextStyle(
-          //             fontSize: 18.0, fontWeight: FontWeight.w700),
-          //         onTap: () {
-          //           // Add2Calendar.addEvent2Cal(Event(
-          //           //     title: widget.event.title ?? '',
-          //           //     startDate: localStartTime,
-          //           //     endDate: localEndTime));
-          //         }),
-          //   ],
-          // ),
           Expanded(
             child: Container(
               margin: const EdgeInsets.only(
@@ -469,7 +382,106 @@ class _EventItemState extends State<EventItem> {
                         const SizedBox(
                           width: 15,
                         ),
-                        if (widget.ongoing)
+                        Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          crossAxisAlignment: CrossAxisAlignment.end,
+                          children: [
+                            Padding(
+                              padding: const EdgeInsets.only(right:15.0),
+                              child: SpeedDial(
+                                backgroundColor: Colors.white,
+                                icon: Icons.share,
+                                buttonSize: const Size(40, 40),
+                                iconTheme:
+                                    const IconThemeData(color: Colors.black),
+                                activeIcon: Icons.close,
+                                spacing: 3,
+                                childPadding: const EdgeInsets.all(5),
+                                spaceBetweenChildren: 4,
+                                switchLabelPosition: false,
+                                visible: true,
+                                direction: SpeedDialDirection.down,
+                                closeManually: false,
+                                renderOverlay: true,
+                                overlayColor: Colors.black,
+                                overlayOpacity: 0.8,
+                                useRotationAnimation: true,
+                                tooltip: 'Open Speed Dial',
+                                heroTag:
+                                    'speed-dial-hero-tag-${widget.event.id}-2',
+                                elevation: 0.0,
+                                animationCurve: Curves.elasticInOut,
+                                isOpenOnStart: false,
+                                shape: const CircleBorder(),
+                                children: <SpeedDialChild>[
+                                  SpeedDialChild(
+                                    child: Padding(
+                                      padding: const EdgeInsets.all(10.0),
+                                      child: SvgPicture.asset(
+                                        'assets/svgs/text.svg',
+                                        color: Colors.white,
+                                      ),
+                                    ),
+                                    backgroundColor: Colors.red,
+                                    label: 'Post on Business Bosses',
+                                    labelStyle: const TextStyle(
+                                        fontSize: 18.0,
+                                        fontWeight: FontWeight.w700),
+                                    onTap: () => Get.toNamed(
+                                      Routes.createPost,
+                                      arguments: <String, String?>{
+                                        'sharemessage':
+                                            'Hey there! Join this event on $formattedDate  $formattedStartTime with Room ID: ${widget.event.roomId}',
+                                        'title': widget.event.title,
+                                        'livedata': jsonData,
+                                      },
+                                    ),
+                                  ),
+                                  SpeedDialChild(
+                                    child: Padding(
+                                      padding: const EdgeInsets.all(14.0),
+                                      child: SvgPicture.asset(
+                                        'assets/svgs/share.svg',
+                                        height: 15.0,
+                                        width: 15.0,
+                                        // ignore: deprecated_member_use
+                                        color: textColor.withOpacity(1.0),
+                                      ),
+                                    ),
+                                    backgroundColor: Colors.white,
+                                    label: 'Share',
+                                    labelStyle: const TextStyle(
+                                        fontSize: 18.0,
+                                        fontWeight: FontWeight.w700),
+                                    onTap: () {
+                                      String message =
+                                          'Hey there! Join this event on $formattedDate  $formattedStartTime with Room ID: ${widget.event.roomId}  https://businessbosses.onelink.me/xLWk/36a2ff16';
+                                      socialShare(message);
+                                    },
+                                  ),
+                                  SpeedDialChild(
+                                      child: Padding(
+                                        padding: const EdgeInsets.all(13.0),
+                                        child: SvgPicture.asset(
+                                          'assets/svgs/calendar.svg',
+                                          color: Colors.black,
+                                        ),
+                                      ),
+                                      backgroundColor: Colors.white,
+                                      label: 'Save to Calendar',
+                                      labelStyle: const TextStyle(
+                                          fontSize: 18.0,
+                                          fontWeight: FontWeight.w700),
+                                      onTap: () {
+                                        // Add2Calendar.addEvent2Cal(Event(
+                                        //     title: widget.event.title ?? '',
+                                        //     startDate: localStartTime,
+                                        //     endDate: localEndTime));
+                                      }),
+                                ],
+                              ),
+                            ),
+                            if (widget.ongoing)
                           Padding(
                             padding: const EdgeInsets.only(right: 15.0),
                             child: ElevatedButton(
@@ -492,7 +504,7 @@ class _EventItemState extends State<EventItem> {
                                         'Could not launch $eventlink');
                                   }
                                 } else {
-                                   _showDialogWithLink(context);
+                                  _showDialogWithLink(context);
                                 }
                                 // if (widget.event.link != null) {
                                 //   if (widget.event.user?.uid ==
@@ -617,6 +629,8 @@ class _EventItemState extends State<EventItem> {
                               ),
                             ),
                           )
+                          ],
+                        ),
                       ],
                     ),
                     const SizedBox(
