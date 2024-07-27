@@ -107,12 +107,12 @@ class _FilterUsersState extends State<ExpandedSuppliersPage> {
                               children: [
                                 Container(
                                   decoration: const BoxDecoration(
-                                      color: Colors.white,
+                                      color: Colors.blue,
                                       shape: BoxShape.circle),
                                   padding: const EdgeInsets.all(4),
                                   child: SvgPicture.asset(
                                     'assets/svgs/upicon.svg',
-                                    color: const Color(0xFF0F132D),
+                                    color: Color.fromARGB(255, 255, 255, 255),
                                     height: 8,
                                   ),
                                 ),
