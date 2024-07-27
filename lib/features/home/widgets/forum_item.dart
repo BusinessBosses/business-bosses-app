@@ -563,7 +563,7 @@ class _ForumItemState extends State<ForumItem> {
                                           ? widget.forum.user!.name!
                                           : widget.forum.user?.name != null
                                               ? '${widget.forum.user!.name!.substring(0, 15)}...'
-                                              : '',
+                                              : '${widget.forum.user!.username}',
                                       style:
                                           Theme.of(context).textTheme.bodyLarge,
                                     ),
@@ -581,8 +581,8 @@ class _ForumItemState extends State<ForumItem> {
                                         widget.forum.user!.name!.length <= 15
                                     ? widget.forum.user!.name!
                                     : widget.forum.user?.name != null
-                                        ? '${widget.forum.user!.name!.substring(0, 12)}...'
-                                        : '',
+                                        ? '${widget.forum.user!.name!.substring(0, 15)}...'
+                                        : '${widget.forum.user!.username}',
                                 style: Theme.of(context).textTheme.bodyLarge,
                               ),
                       ),

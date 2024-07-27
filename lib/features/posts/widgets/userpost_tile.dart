@@ -670,7 +670,7 @@ class _PostTileState extends State<PostTile> {
                               child: ClipRRect(
                                 borderRadius: BorderRadius.circular(15.0),
                                 child: FittedBox(
-                                  fit: BoxFit.fill,
+                                  fit: BoxFit.cover,
                                   child: CachedNetworkImage(
                                     imageUrl: widget
                                             .post.forum!.images!.isNotEmpty
@@ -686,6 +686,14 @@ class _PostTileState extends State<PostTile> {
                                         const Icon(Icons.error),
                                   ),
                                 ),
+                              ),
+                            ),
+                            Container(
+                              width: double.infinity,
+                              height: 200,
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(15.0),
+                                color: Colors.black.withAlpha(150),
                               ),
                             ),
                             Positioned(
