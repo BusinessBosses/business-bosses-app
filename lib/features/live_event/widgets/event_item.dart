@@ -689,7 +689,7 @@ class _EventItemState extends State<EventItem> {
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          title: const Text('Event Details'),
+          title: const Text('Event Location Details'),
           content: Text(widget.event.address!),
           actions: <Widget>[
             TextButton(
