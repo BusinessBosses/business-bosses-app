@@ -33,6 +33,18 @@ class CommunitiesController extends GetxController {
     return filteredIndustries;
   }
 
+  String getIndustryNameById(String industryId) {
+    try {
+      return industries
+              .firstWhere(
+                  (Industry industry) => industry.industryId == industryId)
+              .industry ??
+          'Unknown Industry';
+    } catch (e) {
+      return 'Unknown Industry';
+    }
+  }
+
   void clearIIndustriesSearch() {
     isIndustriesSearch(false);
     update();

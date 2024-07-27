@@ -279,6 +279,12 @@ class _EventItemState extends State<EventItem> {
                     const SizedBox(
                       height: 10,
                     ),
+                    Text(widget.event.link != null
+                        ? 'Online Event'
+                        : 'In-Person Event'),
+                    const SizedBox(
+                      height: 10,
+                    ),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: <Widget>[
