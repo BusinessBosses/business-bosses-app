@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'package:business_bosses_v2/common/widgets/network_image_with_placeholder.dart';
+import 'package:business_bosses_v2/common/widgets/popup/eventpopup.dart';
 import 'package:business_bosses_v2/features/live_event/controller/live_event_controller.dart';
 import 'package:business_bosses_v2/features/live_event/models/events_model.dart';
 
@@ -9,6 +10,8 @@ import 'package:business_bosses_v2/features/posts/widgets/images_viewer_screen.d
 import 'package:business_bosses_v2/features/profile/controller/profile_controller.dart';
 import 'package:business_bosses_v2/navigation/routes.dart';
 import 'package:business_bosses_v2/utils/theme/theme.dart';
+import 'package:detectable_text_field/detector/sample_regular_expressions.dart';
+import 'package:detectable_text_field/widgets/detectable_text.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_speed_dial/flutter_speed_dial.dart';
 import 'package:flutter_svg/svg.dart';
@@ -202,12 +205,42 @@ class _EventItemState extends State<EventItem> {
                           Expanded(
                             child: Padding(
                               padding: const EdgeInsets.only(right: 15.0),
-                              child: Text(
-                                maxLines: 2,
-                                overflow: TextOverflow.ellipsis,
-                                widget.event.description ?? '',
-                                style: bodyText2,
-                                textAlign: TextAlign.left,
+                              child: DetectableText(
+                                text: widget.event.description!,
+                                trimLength: 90,
+                                detectionRegExp:
+                                    detectionRegExp(hashtag: false)!,
+                                detectedStyle: bodyText2.copyWith(
+                                  color: Colors.blue,
+                                ),
+                                moreStyle: bodyText2.copyWith(
+                                  color: Colors.redAccent,
+                                ),
+                                lessStyle: bodyText2.copyWith(
+                                  color: Colors.redAccent,
+                                ),
+                                trimExpandedText: '  show less',
+                                basicStyle:
+                                    bodyText2.copyWith(color: textColor),
+                                onTap: (String text) async {
+                                  final Uri url = Uri.parse(text);
+                                  if ((url.scheme == 'http' ||
+                                      url.scheme == 'https')) {
+                                    if (!await launchUrl(url)) {
+                                      throw Exception('Could not launch $url');
+                                    }
+                                  } else if (text.startsWith('wa.me')) {
+                                    // Handle "wa.me" links
+                                    final Uri whatsappUrl =
+                                        Uri.parse('https://$text');
+                                    if (await launchUrl(whatsappUrl)) {
+                                      await launchUrl(whatsappUrl);
+                                    } else {
+                                      throw Exception(
+                                          'Could not launch $whatsappUrl');
+                                    }
+                                  }
+                                },
                               ),
                             ),
                           ),
@@ -492,10 +525,9 @@ class _EventItemState extends State<EventItem> {
                                     ),
                                   ),
                                   onPressed: () async {
-                                    final Uri eventlink =
-                                        Uri.parse(widget.event.link!);
-
                                     if (widget.event.link != null) {
+                                      final Uri eventlink =
+                                          Uri.parse(widget.event.link!);
                                       if (!await launchUrl(eventlink)) {
                                         throw Exception(
                                             'Could not launch $eventlink');
@@ -632,9 +664,11 @@ class _EventItemState extends State<EventItem> {
                         ),
                       ],
                     ),
-                    const SizedBox(
-                      height: 8,
-                    ),
+                    if (widget.event.address != null ||
+                        widget.event.link != null)
+                      const SizedBox(
+                        height: 7,
+                      ),
                   ],
                 ),
               ),
@@ -687,22 +721,8 @@ class _EventItemState extends State<EventItem> {
     showDialog(
       context: context,
       builder: (BuildContext context) {
-        return AlertDialog(
-          title: const Text('Event Location Details'),
-          content: Text(widget.event.address!),
-          actions: <Widget>[
-            TextButton(
-              onPressed: () => Get.back(),
-              child: const Text('Cancel'),
-            ),
-            TextButton(
-              onPressed: () {
-                // _launchURL(widget.event.link!);
-                // Get.back();
-              },
-              child: const Text('Goto Meeting'),
-            ),
-          ],
+        return EventPopUp(
+          event: widget.event,
         );
       },
     );
