@@ -107,9 +107,9 @@ class _BossuppartnerState extends State<Bossuppartner> {
                       ),
                       onPressed: () async {
                         if (await canLaunchUrl(Uri.parse(
-                            'https://businessbosses.news/our-partners/'))) {
+                            'https://businessbosses.co.uk/landingpageforpartners'))) {
                           await launchUrl(Uri.parse(
-                              'https://businessbosses.news/our-partners/'));
+                              'https://businessbosses.co.uk/landingpageforpartners'));
                         }
                       },
                     ),
