@@ -34,6 +34,8 @@ class MarketController extends GetxController {
   RxBool error = RxBool(false);
   String marketDescription = '';
   String donationDescription = '';
+  String notificationDescription = '';
+  String notificationStatus = '';
   RxBool loading = RxBool(false);
   RxBool loadingMore = RxBool(false);
   RxBool isJoined = RxBool(false);
@@ -425,9 +427,15 @@ class MarketController extends GetxController {
           (dynamic entry) => entry['title'] == 'donation',
           orElse: () => null,
         );
+        final Map<String, dynamic>? popUpEntry = rows.firstWhere(
+          (dynamic entry) => entry['id'] == 6,
+          orElse: () => null,
+        );
 
         marketDescription = marketEntry?['description'];
         donationDescription = donationEntry?['description'];
+        notificationStatus = popUpEntry?['title'];
+        notificationDescription = popUpEntry?['description'];
       } else {
         marketDescription = '';
       }

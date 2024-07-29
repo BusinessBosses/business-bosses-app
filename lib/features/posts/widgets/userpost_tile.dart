@@ -673,8 +673,10 @@ class _PostTileState extends State<PostTile> {
                                 child: FittedBox(
                                   fit: BoxFit.cover,
                                   child: CachedNetworkImage(
-                                    imageUrl: widget
-                                            .post.forum!.images!.isNotEmpty
+                                    imageUrl: widget.post.forum!.images !=
+                                                null &&
+                                            widget
+                                                .post.forum!.images!.isNotEmpty
                                         ? widget.post.forum!.images![0]
                                         : 'https://businessbosses.com.ng/learningImages/events.jpg',
                                     memCacheHeight: 512,
