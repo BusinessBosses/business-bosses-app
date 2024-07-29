@@ -260,61 +260,64 @@ class _ServiceTileState extends State<ServiceTile> {
                                 color: Colors.white,
                                 child: _post.user!.uid ==
                                         profileController.myProfile.uid
-                                    ? MyPopupMenuButton(
-                                        popupItems: myPopupMore,
-                                        icon: const Icon(
-                                          Icons.more_horiz,
-                                          size: 20,
-                                          color: Colors.black,
-                                          weight: 100,
-                                        ),
-                                        onSelected: (String val) {
-                                          if (val == 'Edit') {
-                                            Get.to(
-                                              () => CreateServiceScreen(
-                                                isUpd: true,
-                                                market: _post,
-                                              ),
-                                            );
-                                          } else if (val == 'Delete') {
-                                            showDialog(
-                                              context: context,
-                                              builder: (BuildContext context) =>
-                                                  AlertDialog(
-                                                title: const Text(
-                                                  'Delete Listing',
-                                                  style: bodyText1,
+                                    ? Padding(
+                                      padding: const EdgeInsets.only(right:15.0),
+                                      child: MyPopupMenuButton(
+                                          popupItems: myPopupMore,
+                                          icon: const Icon(
+                                            Icons.more_horiz,
+                                            size: 20,
+                                            color: Colors.black,
+                                            weight: 100,
+                                          ),
+                                          onSelected: (String val) {
+                                            if (val == 'Edit') {
+                                              Get.to(
+                                                () => CreateServiceScreen(
+                                                  isUpd: true,
+                                                  market: _post,
                                                 ),
-                                                content: const Text(
-                                                    'Are you sure to delete this listing?'),
-                                                actions: <Widget>[
-                                                  TextButton(
-                                                    onPressed: () => Get.back(),
-                                                    child: const Text('No'),
+                                              );
+                                            } else if (val == 'Delete') {
+                                              showDialog(
+                                                context: context,
+                                                builder: (BuildContext context) =>
+                                                    AlertDialog(
+                                                  title: const Text(
+                                                    'Delete Listing',
+                                                    style: bodyText1,
                                                   ),
-                                                  TextButton(
-                                                    onPressed: () {
-                                                      _marketController
-                                                          .removeListing(
-                                                              _post.marketId);
-                                                      // setState(() {
-                                                      //   hide = true;
-                                                      // });
-                                                      Get.back();
-                                                    },
-                                                    child: const Text('Yes'),
-                                                  ),
-                                                ],
-                                              ),
-                                            );
-                                          } else if (val == 'Boost') {
-                                            Get.to(
-                                              () => BoostMarket(
-                                                  postId: _post.marketId),
-                                            );
-                                          }
-                                        },
-                                      )
+                                                  content: const Text(
+                                                      'Are you sure to delete this listing?'),
+                                                  actions: <Widget>[
+                                                    TextButton(
+                                                      onPressed: () => Get.back(),
+                                                      child: const Text('No'),
+                                                    ),
+                                                    TextButton(
+                                                      onPressed: () {
+                                                        _marketController
+                                                            .removeListing(
+                                                                _post.marketId);
+                                                        // setState(() {
+                                                        //   hide = true;
+                                                        // });
+                                                        Get.back();
+                                                      },
+                                                      child: const Text('Yes'),
+                                                    ),
+                                                  ],
+                                                ),
+                                              );
+                                            } else if (val == 'Boost') {
+                                              Get.to(
+                                                () => BoostMarket(
+                                                    postId: _post.marketId),
+                                              );
+                                            }
+                                          },
+                                        ),
+                                    )
                                     : _post.promote
                                         ? MyPopupMenuButton(
                                             popupItems: myPopup,
@@ -496,10 +499,18 @@ class _ServiceTileState extends State<ServiceTile> {
                                       _post.location != null
                                           ? Row(
                                               children: <Widget>[
-                                                const Icon(
-                                                  Icons.timelapse,
-                                                  size: 12,
-                                                ),
+                                                _post.location!
+                                                        .contains('Delivery')
+                                                    ? Icon(
+                                                        Icons.timelapse,
+                                                        size: 12,
+                                                        color: subtextColor,
+                                                      )
+                                                    : Icon(
+                                                        Icons.location_on,
+                                                        size: 12,
+                                                        color:  subtextColor,
+                                                      ),
                                                 const SizedBox(
                                                   width: 1,
                                                 ),
