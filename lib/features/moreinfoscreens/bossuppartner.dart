@@ -48,15 +48,15 @@ class _BossuppartnerState extends State<Bossuppartner> {
     return Scaffold(
       backgroundColor: backgroundColor,
       appBar: AppBar(
-        actions: <Widget>[
-          IconButton(
-            onPressed: () {},
-            icon: SvgPicture.asset(
-              'assets/svgs/info.svg',
-              height: 24,
-            ),
-          )
-        ],
+        // actions: <Widget>[
+        //   IconButton(
+        //     onPressed: () {},
+        //     icon: SvgPicture.asset(
+        //       'assets/svgs/info.svg',
+        //       height: 24,
+        //     ),
+        //   )
+        // ],
         leading: IconButton(
           onPressed: () {
             Navigator.pop(context);
@@ -82,7 +82,7 @@ class _BossuppartnerState extends State<Bossuppartner> {
               children: <Widget>[
                 const Expanded(
                   child: Text(
-                    'Get your deal listed & get new customers',
+                    'Partner with Business Bosses, list your deals to win more customers',
                     maxLines: 3,
                     style: TextStyle(
                       fontSize: 16,
@@ -254,7 +254,7 @@ class BossuppartnerItem extends StatelessWidget {
                     }
                   },
                   child: const Text(
-                    'Get Deal',
+                    'Claim Deal',
                     style: TextStyle(
                         color: primaryColorLT, fontWeight: FontWeight.w700),
                   )),

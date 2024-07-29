@@ -408,11 +408,10 @@ class _ServiceTileState extends State<ServiceTile> {
                                     mainAxisAlignment: MainAxisAlignment.start,
                                     children: <Widget>[
                                       Text(
-                                        '${_post.category} - \$${_post.price.toString()}',
+                                        '\$${_post.price.toString()}',
                                         style: const TextStyle(
-                                          fontWeight: FontWeight.w800,
-                                          color: Colors.black54
-                                        ),
+                                            fontWeight: FontWeight.w800,
+                                            color: Colors.black54),
                                       ),
                                       const SizedBox(
                                         width: 8,
@@ -494,8 +493,7 @@ class _ServiceTileState extends State<ServiceTile> {
                                       left: 15.0, right: 15),
                                   child: Row(
                                     children: <Widget>[
-                                      _post.location != null &&
-                                              _post.category != null
+                                      _post.location != null
                                           ? Row(
                                               children: <Widget>[
                                                 const Icon(
@@ -528,6 +526,27 @@ class _ServiceTileState extends State<ServiceTile> {
                                                 SizedBox(),
                                               ],
                                             ),
+                                      _post.category != null
+                                          ? Row(
+                                              children: [
+                                                SvgPicture.asset(
+                                                    'assets/svgs/category.svg'),
+                                                const SizedBox(
+                                                  width: 3,
+                                                ),
+                                                Text(
+                                                  _post.category!.length > 50
+                                                      ? '${_post.category!.substring(0, 50)}...'
+                                                      : _post.category!,
+                                                  style: const TextStyle(
+                                                      fontWeight:
+                                                          FontWeight.normal,
+                                                      fontSize: 12,
+                                                      color: subtextColor),
+                                                ),
+                                              ],
+                                            )
+                                          : SizedBox(),
                                     ],
                                   ),
                                 ),

@@ -86,8 +86,7 @@ class FilterPosts extends StatelessWidget {
               )
             : ListView.separated(
                 key: key,
-                separatorBuilder: (_, __) => const SizedBox(height: 8.0),
-                padding: const EdgeInsets.all(16.0),
+                separatorBuilder: (_, __) => const SizedBox(height: 7.0),
                 itemCount: filterItems.length,
                 itemBuilder: (BuildContext context, int i) {
                   return PostTile(
