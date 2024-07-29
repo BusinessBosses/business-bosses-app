@@ -63,6 +63,8 @@ class HomeController extends GetxController {
   RxList<EventModel> myEvents = RxList<EventModel>(<EventModel>[]);
   RxList<UserModel> marketMembers = RxList<UserModel>(<UserModel>[]);
   Set<dynamic> itemsWithIncrementedViews = {};
+  String notificationDescription = '';
+  String notificationStatus = '';
   Map<String, String> votes = {};
   RxList<PostModel> posts = RxList<PostModel>(<PostModel>[]);
   RxList<ForumModel> forums = RxList<ForumModel>(<ForumModel>[]);
@@ -118,6 +120,35 @@ class HomeController extends GetxController {
       }
     }
     update();
+  }
+
+  void _showMyDialog() async {
+    if (notificationStatus == 'active') {
+      showDialog(
+        context: Get.context!,
+        builder: (BuildContext context) => AlertDialog(
+          title: const TextWidget(
+            text: 'Notification',
+            fontWeight: FontWeight.bold,
+            size: 20,
+          ),
+          content: TextWidget(
+            text: notificationDescription,
+            color: Colors.black.withOpacity(.8),
+          ),
+          actions: <Widget>[
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+              child: const TextWidget(
+                text: 'OK',
+              ),
+            )
+          ],
+        ),
+      );
+    }
   }
 
   /// PROCESS RAW API DATA, MODELIZE AND SAVE TO STATE
@@ -1016,6 +1047,7 @@ class HomeController extends GetxController {
         };
         ApiService.post(path: 'users/add-device-token', body: data);
       });
+      _showMyDialog();
       if (profileController.myProfile.bio == null) {
         Get.offAndToNamed(Routes.updateProfile,
             arguments: profileController.myProfile);

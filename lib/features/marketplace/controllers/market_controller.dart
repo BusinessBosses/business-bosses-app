@@ -34,8 +34,6 @@ class MarketController extends GetxController {
   RxBool error = RxBool(false);
   String marketDescription = '';
   String donationDescription = '';
-  String notificationDescription = '';
-  String notificationStatus = '';
   RxBool loading = RxBool(false);
   RxBool loadingMore = RxBool(false);
   RxBool isJoined = RxBool(false);
@@ -434,8 +432,8 @@ class MarketController extends GetxController {
 
         marketDescription = marketEntry?['description'];
         donationDescription = donationEntry?['description'];
-        notificationStatus = popUpEntry?['title'];
-        notificationDescription = popUpEntry?['description'];
+        _homeController.notificationStatus = popUpEntry?['title'];
+        _homeController.notificationDescription = popUpEntry?['description'];
       } else {
         marketDescription = '';
       }
