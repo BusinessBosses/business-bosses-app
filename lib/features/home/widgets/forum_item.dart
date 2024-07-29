@@ -557,6 +557,8 @@ class _ForumItemState extends State<ForumItem> {
                                 child: Row(
                                   children: <Widget>[
                                     Text(
+                                      maxLines: 1,
+                                      overflow: TextOverflow.ellipsis,
                                       widget.forum.user?.name != null &&
                                               widget.forum.user!.name!.length <=
                                                   15
@@ -577,6 +579,8 @@ class _ForumItemState extends State<ForumItem> {
                                 ),
                               )
                             : Text(
+                                maxLines: 1,
+                                overflow: TextOverflow.ellipsis,
                                 widget.forum.user?.name != null &&
                                         widget.forum.user!.name!.length <= 15
                                     ? widget.forum.user!.name!

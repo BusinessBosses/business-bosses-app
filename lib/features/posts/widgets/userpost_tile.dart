@@ -366,6 +366,8 @@ class _PostTileState extends State<PostTile> {
                                 child: Row(
                                   children: <Widget>[
                                     Text(
+                                      maxLines: 1,
+                                      overflow: TextOverflow.ellipsis,
                                       widget.post.user!.name != null &&
                                               widget.post.user!.name!.length <=
                                                   20
@@ -1418,7 +1420,7 @@ class _PostTileState extends State<PostTile> {
                                             widget.post.timestamp),
                                     style: Theme.of(context)
                                         .textTheme
-                                        .bodyMedium
+                                        .bodySmall
                                         ?.copyWith(
                                           color: textColor.withOpacity(0.4),
                                         ),
@@ -1529,7 +1531,7 @@ class _PostTileState extends State<PostTile> {
                                   widget.post.oldtimestamp)
                               : TimeFormat.formatString(widget.post.timestamp),
                           style:
-                              Theme.of(context).textTheme.bodyMedium?.copyWith(
+                              Theme.of(context).textTheme.bodySmall?.copyWith(
                                     color: textColor.withOpacity(0.4),
                                   ),
                         ),

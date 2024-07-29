@@ -55,6 +55,7 @@ class ConnectionUserItem extends StatelessWidget {
             title: Text(
               user.username,
               maxLines: 1,
+              overflow: TextOverflow.ellipsis,
             ),
             subtitle: Text(
               user.category ?? user.companyName ?? user.bio ?? '',
