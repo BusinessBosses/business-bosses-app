@@ -411,7 +411,7 @@ class _ServiceTileState extends State<ServiceTile> {
                                     mainAxisAlignment: MainAxisAlignment.start,
                                     children: <Widget>[
                                       Text(
-                                        '\$${_post.price.toString()}',
+                                        _post.price.toString(),
                                         style: const TextStyle(
                                             fontWeight: FontWeight.w800,
                                             color: Colors.black54),

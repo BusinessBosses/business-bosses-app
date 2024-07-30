@@ -366,15 +366,9 @@ class _PostTileState extends State<PostTile> {
                                 child: Row(
                                   children: <Widget>[
                                     Text(
-                                      maxLines: 1,
-                                      overflow: TextOverflow.ellipsis,
-                                      widget.post.user!.name != null &&
-                                              widget.post.user!.name!.length <=
-                                                  20
+                                      widget.post.user!.name != null
                                           ? widget.post.user!.name!
-                                          : widget.post.user!.name != null
-                                              ? '${widget.post.user!.name!.substring(0, 20)}...'
-                                              : widget.post.user!.username,
+                                          : widget.post.user!.username,
                                       style:
                                           Theme.of(context).textTheme.bodyLarge,
                                     ),
@@ -383,7 +377,7 @@ class _PostTileState extends State<PostTile> {
                                       'assets/svgs/premiumbadge.svg',
                                       height: 9,
                                       color: primaryColorLT,
-                                    )
+                                    ),
                                   ],
                                 ),
                               )
@@ -392,13 +386,9 @@ class _PostTileState extends State<PostTile> {
                                 child: Row(
                                   children: <Widget>[
                                     Text(
-                                      widget.post.user!.name != null &&
-                                              widget.post.user!.name!.length <=
-                                                  15
+                                      widget.post.user!.name != null
                                           ? widget.post.user!.name!
-                                          : widget.post.user!.name != null
-                                              ? '${widget.post.user!.name!.substring(0, 12)}...'
-                                              : widget.post.user!.username,
+                                          : widget.post.user!.username,
                                       style:
                                           Theme.of(context).textTheme.bodyLarge,
                                     ),
@@ -407,26 +397,28 @@ class _PostTileState extends State<PostTile> {
                                       'assets/svgs/premiumbadge.svg',
                                       height: 9,
                                       color: primaryColorLT,
-                                    )
+                                    ),
                                   ],
                                 ),
                               )
                         : Text(
-                            widget.post.user!.name != null &&
-                                    widget.post.user!.name!.length <= 20
+                            maxLines: 1,
+                            overflow: TextOverflow.ellipsis,
+                            widget.post.user!.name != null
                                 ? widget.post.user!.name!
-                                : widget.post.user!.name != null
-                                    ? '${widget.post.user!.name!.substring(0, 12)}...'
-                                    : widget.post.user!.username,
+                                : widget.post.user!.username,
                             style: Theme.of(context).textTheme.bodyLarge,
                           ),
                   ),
                   trailing: SizedBox(
                     height: 30,
                     width:
-                        profileController.myProfile.uid != widget.post.user!.uid
+                        profileController.myProfile.connecteds !=
+                                          null &&
+                                      profileController.myProfile.connecteds!
+                                          .contains(widget.post.user!.uid)
                             ? 140
-                            : 80,
+                            : 130,
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.end,
                       children: <Widget>[
