@@ -1,0 +1,107 @@
+import 'package:business_bosses_v2/utils/theme/theme.dart';
+import 'package:flutter/material.dart';
+
+class MultipleEditTextWidget extends StatefulWidget {
+  final String caption;
+  final String hintText;
+
+  MultipleEditTextWidget({required this.caption, required this.hintText});
+
+  @override
+  _MultipleEditTextWidgetState createState() => _MultipleEditTextWidgetState();
+}
+
+class _MultipleEditTextWidgetState extends State<MultipleEditTextWidget> {
+  List<Widget> _textFields = [];
+  int _maxFields = 3;
+
+  @override
+  void initState() {
+    super.initState();
+    _addTextField();
+  }
+
+  void _addTextField() {
+    if (_textFields.length < _maxFields) {
+      setState(() {
+        _textFields.add(_buildTextField());
+      });
+    }
+  }
+
+  void _removeTextField(int index) {
+    if (_textFields.length > 0) {
+      setState(() {
+        _textFields.removeAt(index);
+      });
+    }
+  }
+
+  Widget _buildTextField() {
+    int index = _textFields.length;
+    return Padding(
+      padding: const EdgeInsets.only( top: 15, bottom:5),
+      child: Row(
+        children: [
+          Expanded(
+            child: TextField(
+              decoration: InputDecoration(
+                  hintText: widget.hintText, border: InputBorder.none),
+            ),
+          ),
+          if (_textFields.length < _maxFields)
+            Container(
+              decoration: BoxDecoration(
+                  color: prosemibackColor,
+                  borderRadius: BorderRadius.circular(10)),
+              child: IconButton(
+                icon: Icon(Icons.add,size: 20,),
+                onPressed: _addTextField,
+              ),
+            ),
+          if (_textFields.length > 0)
+            SizedBox(
+              width: 10,
+            ),
+          if (_textFields.length > 0)
+            Container(
+              decoration: BoxDecoration(
+                  color: prosemibackColor,
+                  borderRadius: BorderRadius.circular(10)),
+              child: IconButton(
+                icon: Icon(Icons.remove,size: 20,),
+                onPressed: () => _removeTextField(index),
+              ),
+            ),
+        ],
+      ),
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 15.0),
+      child: Container(
+        decoration: BoxDecoration(
+            color: Colors.white, borderRadius: BorderRadius.circular(10)),
+        padding: const EdgeInsets.symmetric(horizontal: 15.0, vertical: 10),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              widget.caption,
+              style: TextStyle(
+                fontSize: 16,
+                fontWeight: FontWeight.w600,
+              ),
+            ),
+            Column(
+              children: _textFields,
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
