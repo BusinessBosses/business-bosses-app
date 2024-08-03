@@ -425,9 +425,15 @@ class MarketController extends GetxController {
           (dynamic entry) => entry['title'] == 'donation',
           orElse: () => null,
         );
+        final Map<String, dynamic>? popUpEntry = rows.firstWhere(
+          (dynamic entry) => entry['id'] == 6,
+          orElse: () => null,
+        );
 
         marketDescription = marketEntry?['description'];
         donationDescription = donationEntry?['description'];
+        _homeController.notificationStatus = popUpEntry?['title'];
+        _homeController.notificationDescription = popUpEntry?['description'];
       } else {
         marketDescription = '';
       }

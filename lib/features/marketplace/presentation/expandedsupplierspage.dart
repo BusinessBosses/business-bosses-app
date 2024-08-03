@@ -1,3 +1,4 @@
+import 'package:business_bosses_v2/common/dialogs/snackbar.dart';
 import 'package:business_bosses_v2/common/widgets/network_image_with_placeholder.dart';
 import 'package:business_bosses_v2/features/marketplace/models/suppliers_model.dart';
 import 'package:business_bosses_v2/features/posts/widgets/images_viewer_screen.dart';
@@ -52,7 +53,7 @@ class _FilterUsersState extends State<ExpandedSuppliersPage> {
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             _buildSupplierImage(),
-            const SizedBox(height: 20),
+           
             Text(
               widget.supplier.name,
               style: const TextStyle(
@@ -61,8 +62,71 @@ class _FilterUsersState extends State<ExpandedSuppliersPage> {
                 color: textColor,
               ),
             ),
-            const SizedBox(height: 30),
+            if (widget.supplier.isVerified)
+              SizedBox(
+                height: 5,
+              ),
+            if (widget.supplier.isVerified)
+              Container(
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+                decoration: BoxDecoration(
+                    color: Colors.blue.withAlpha(35),
+                    borderRadius: BorderRadius.circular(8)),
+                child: const Text(
+                  'Verified',
+                  style: TextStyle(color: Colors.blue),
+                ),
+              ),
+            const SizedBox(height: 10),
             if (!widget.supplier.isVerified) _buildVerificationWarning(),
+            if (!widget.supplier.isVerified)
+              Column(
+                children: [
+                  const SizedBox(
+                    height: 20,
+                  ),
+                  GestureDetector(
+                    onTap: () {
+                      _contactUs();
+                    },
+                    child: Wrap(
+                      crossAxisAlignment: WrapCrossAlignment.center,
+                      children: [
+                        const Text('Own this business?'),
+                        const SizedBox(width: 5),
+                        Container(
+                          decoration: BoxDecoration(
+                              color: Colors.blue.withAlpha(35),
+                              borderRadius: BorderRadius.circular(6)),
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: 10, vertical: 5),
+                          child: Wrap(
+                              crossAxisAlignment: WrapCrossAlignment.center,
+                              children: [
+                                Container(
+                                  decoration: const BoxDecoration(
+                                      color: Colors.blue,
+                                      shape: BoxShape.circle),
+                                  padding: const EdgeInsets.all(4),
+                                  child: SvgPicture.asset(
+                                    'assets/svgs/upicon.svg',
+                                    color: Color.fromARGB(255, 255, 255, 255),
+                                    height: 8,
+                                  ),
+                                ),
+                                const SizedBox(width: 5),
+                                const Text(
+                                  'Contact us to manage or verify',
+                                  style: TextStyle(color: Colors.blue),
+                                ),
+                              ]),
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
+              ),
             const SizedBox(height: 20),
             _buildContactInfo(),
             const SizedBox(height: 20),
@@ -88,8 +152,8 @@ class _FilterUsersState extends State<ExpandedSuppliersPage> {
                 height: 128.0,
                 width: 128.0,
                 radius: 64.0,
-                cacheHeight: 90,
-                cacheWidth: 90,
+                cacheHeight: 300,
+                cacheWidth: 300,
                 placeHolder: Icons.person,
               ),
         const SizedBox(height: 20),
@@ -123,6 +187,36 @@ class _FilterUsersState extends State<ExpandedSuppliersPage> {
         ],
       ),
     );
+  }
+
+  Future<void> _contactUs() async {
+    String? encodeQueryParameters(Map<String, String> params) {
+      return params.entries
+          .map((MapEntry<String, String> e) =>
+              '${Uri.encodeComponent(e.key)}=${Uri.encodeComponent(e.value)}')
+          .join('&');
+    }
+
+    final Uri mailUrl = Uri(
+      scheme: 'mailto',
+      path: 'support@businessbosses.co.uk',
+      query: encodeQueryParameters(<String, String>{
+        'subject': 'Contact Business Bosses',
+      }),
+    );
+
+    try {
+      if (await canLaunchUrl(mailUrl)) {
+        await launchUrl(mailUrl);
+      } else {
+        throw 'Could not launch $mailUrl';
+      }
+    } catch (e) {
+      showSnackbar(
+          title: 'OOPS!',
+          message: 'An error occurred, please try again!',
+          error: true);
+    }
   }
 
   Widget _buildContactInfo() {

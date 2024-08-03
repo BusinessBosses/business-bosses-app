@@ -16,95 +16,98 @@ Widget OutlineButtonHeader(UserModel publicUser, UserModel myProfile,
     height: 50.0,
     padding: const EdgeInsets.all(4.0),
     width: double.infinity,
-    child: Row(mainAxisAlignment: MainAxisAlignment.spaceEvenly, children: <Widget>[
-      Expanded(
-        child: MCustomButton(
-          buttonType: myProfile.connecteds != null &&
-                  myProfile.connecteds!.contains(publicUser.uid)
-              ? ButtonType.outline
-              : ButtonType.elevated,
-          margin: const EdgeInsets.symmetric(horizontal: 4.0),
-          child: FittedBox(
-            child: myProfile.connecteds != null &&
-                    myProfile.connecteds!.contains(publicUser.uid)
-                ? const Text(
-                    'Connected',
-                    style: TextStyle(color: primaryColorLT),
-                  )
-                : const Text(
-                    'Connect',
-                    style: TextStyle(color: Colors.white),
-                  ),
-          ),
-          onPressed: () async {
-            onConnect();
-          },
-        ),
-      ),
-      Expanded(
-        child: MCustomButton(
-          margin: const EdgeInsets.symmetric(horizontal: 4.0),
-          onPressed: () {
-            Get.to(
-              () => const ChatRoomScreen(
-                frommarketplace: false,
+    child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+        children: <Widget>[
+          Expanded(
+            child: MCustomButton(
+              buttonType: myProfile.connecteds != null &&
+                      myProfile.connecteds!.contains(publicUser.uid)
+                  ? ButtonType.outline
+                  : ButtonType.elevated,
+              margin: const EdgeInsets.symmetric(horizontal: 4.0),
+              child: FittedBox(
+                child: myProfile.connecteds != null &&
+                        myProfile.connecteds!.contains(publicUser.uid)
+                    ? const Text(
+                        'Following',
+                        style: TextStyle(color: primaryColorLT),
+                      )
+                    : const Text(
+                        'Follow',
+                        style: TextStyle(color: Colors.white),
+                      ),
               ),
-              arguments: publicUser,
-            );
-          },
-          child: const Text('Message'),
-        ),
-      ),
-      Expanded(
-        child: MCustomButton(
-            margin: const EdgeInsets.symmetric(horizontal: 4.0),
-            onPressed: () async {
-              showDialog(
-                context: context,
-                builder: (BuildContext context) {
-                  return const AlertDialog(
-                    content: Column(
-                      mainAxisSize: MainAxisSize.min,
-                      children: <Widget>[
-                        CircularProgressIndicator(),
-                      ],
-                    ),
+              onPressed: () async {
+                onConnect();
+              },
+            ),
+          ),
+          Expanded(
+            child: MCustomButton(
+              margin: const EdgeInsets.symmetric(horizontal: 4.0),
+              onPressed: () {
+                Get.to(
+                  () => const ChatRoomScreen(
+                    frommarketplace: false,
+                  ),
+                  arguments: publicUser,
+                );
+              },
+              child: const Text('Message'),
+            ),
+          ),
+          Expanded(
+            child: MCustomButton(
+                margin: const EdgeInsets.symmetric(horizontal: 4.0),
+                onPressed: () async {
+                  showDialog(
+                    context: context,
+                    builder: (BuildContext context) {
+                      return const AlertDialog(
+                        content: Column(
+                          mainAxisSize: MainAxisSize.min,
+                          children: <Widget>[
+                            CircularProgressIndicator(),
+                          ],
+                        ),
+                      );
+                    },
                   );
+                  final ApiResponseModel res = await ApiService.get(
+                      path:
+                          '/connection/connecteds/referals/${publicUser.uid}');
+                  Navigator.pop(context);
+
+                  if (res.success) {
+                    if (res.data.isEmpty) {
+                      String message =
+                          'Have a look at ${publicUser.username}\'s profile on Business Bosses\n'
+                          'https://businessbosses.onelink.me/xLWk/36a2ff16';
+                      logEvent(publicUser.uid, 'user');
+                      socialShare(message);
+                    } else {
+                      Get.toNamed(
+                        Routes.referscreen,
+                        arguments: <String, dynamic>{'user': publicUser},
+                      );
+                    }
+                  }
+
+                  // if (profileController.myProfile.connectedCount == 0 &&
+                  //     profileController.myProfile.connectionCount == 0) {
+                  //   String message =
+                  //       'Have a look at ${publicUser.username}\'s profile on Business Bosses\n'
+                  //       'https://businessbosses.onelink.me/xLWk/36a2ff16';
+                  //   socialShare(message);
+                  // } else {
+                  //   Get.toNamed(Routes.referscreen,
+                  //       arguments: {'user': publicUser});
+                  // }
                 },
-              );
-              final ApiResponseModel res = await ApiService.get(
-                  path: '/connection/connecteds/referals/${publicUser.uid}');
-              Navigator.pop(context);
-
-              if (res.success) {
-                if (res.data.isEmpty) {
-                  String message =
-                      'Have a look at ${publicUser.username}\'s profile on Business Bosses\n'
-                      'https://businessbosses.onelink.me/xLWk/36a2ff16';
-                  logEvent(publicUser.uid, 'user');
-                  socialShare(message);
-                } else {
-                  Get.toNamed(
-                    Routes.referscreen,
-                    arguments: <String, dynamic>{'user': publicUser},
-                  );
-                }
-              }
-
-              // if (profileController.myProfile.connectedCount == 0 &&
-              //     profileController.myProfile.connectionCount == 0) {
-              //   String message =
-              //       'Have a look at ${publicUser.username}\'s profile on Business Bosses\n'
-              //       'https://businessbosses.onelink.me/xLWk/36a2ff16';
-              //   socialShare(message);
-              // } else {
-              //   Get.toNamed(Routes.referscreen,
-              //       arguments: {'user': publicUser});
-              // }
-            },
-            child: const Text('Refer')),
-      ),
-    ]),
+                child: const Text('Refer')),
+          ),
+        ]),
   );
 }
 

@@ -1,6 +1,8 @@
 import 'package:business_bosses_v2/features/home/widgets/sellingpopup.dart';
 import 'package:business_bosses_v2/features/marketplace/widgets/currency.dart';
 import 'package:business_bosses_v2/services/api_service.dart';
+import 'package:country_list_pick/country_list_pick.dart';
+import 'package:country_list_pick/support/code_country.dart';
 import 'package:detectable_text_field/detector/sample_regular_expressions.dart';
 import 'package:detectable_text_field/widgets/detectable_text_field.dart';
 import 'package:flutter/gestures.dart';
@@ -8,6 +10,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import 'package:photo_manager/photo_manager.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import '../../../action/action.dart';
 import '../../../common/dialogs/snackbar.dart';
 import '../../../common/models/comment_model.dart';
@@ -274,15 +277,27 @@ class _CreateServiceScreenState extends State<CreateServiceScreen> {
                       },
                       items: <String?>[
                         null,
-                        'Write 1 Page Business Plan',
-                        'Build 1 Page Website',
-                        'Create Social Media AD',
-                        'Monthly Account Book Keeping',
-                        'Logo & Branding Guidelines',
-                        'Test, Review & Feedback',
-                        '1 to 1 Mentoring/Coaching',
-                        'Appointment',
-                        'Other Business Service',
+                        'Home, Garden & Outdoors',
+                        'Fashion & Beauty',
+                        'Sports & Entertainment',
+                        'Books & Education',
+                        'Jewellery & Timepieces',
+                        'Security, Safety & Equipment',
+                        'Video Games & Electronics',
+                        'Agriculture, Food, Beverage',
+                        'Construction & Real Estate',
+                        'Vehicle & Transportation',
+                        'Business Services & Events',
+                        'Other',
+                        // 'Write 1 Page Business Plan',
+                        // 'Build 1 Page Website',
+                        // 'Create Social Media AD',
+                        // 'Monthly Account Book Keeping',
+                        // 'Logo & Branding Guidelines',
+                        // 'Test, Review & Feedback',
+                        // '1 to 1 Mentoring/Coaching',
+                        // 'Appointment',
+                        // 'Other Business Service',
                       ].map<DropdownMenuItem<String>>((String? value) {
                         return DropdownMenuItem<String>(
                           value: value,
@@ -299,67 +314,121 @@ class _CreateServiceScreenState extends State<CreateServiceScreen> {
                     ),
                   ),
                 ),
-                const SizedBox(height: 12.0),
+                const SizedBox(height: 8.0),
                 Padding(
-                  padding: const EdgeInsets.only(left: 16.0, right: 16),
-                  child: Container(
-                    decoration: BoxDecoration(
-                      color: Colors.white,
-                      borderRadius: BorderRadius.circular(radiusValue),
+                  padding: const EdgeInsets.only(left: 8.0, right: 8),
+                  child: CountryListPick(
+                    appBar: AppBar(
+                      leading: IconButton(
+                        onPressed: () {
+                          Navigator.pop(context);
+                        },
+                        icon: SvgPicture.asset('assets/svgs/backbutton.svg'),
+                      ),
+                      centerTitle: true,
+                      title: const Text(
+                        'Select Location',
+                        textAlign: TextAlign.center,
+                        style: TextStyle(fontSize: 20),
+                      ),
                     ),
-                    padding: const EdgeInsets.only(
-                      left: 16.0,
-                      right: 16,
-                      top: 4,
-                      bottom: 5,
-                    ),
-                    child: DropdownButton<String>(
-                      underline: Container(),
-                      value: _selectedLocation,
-                      isExpanded: true,
-                      icon: const Icon(Icons.keyboard_arrow_right),
-                      iconSize: 24,
-                      elevation: 16,
-                      onChanged: (String? newValue) {
-                        setState(() {
-                          _selectedLocation = newValue!;
-                        });
-                      },
-                      items: <String?>[
-                        null,
-                        '1 Day Delivery',
-                        '2 Day Delivery',
-                        '3 Day Delivery',
-                        '4 Day Delivery',
-                        '5 Day Delivery',
-                        '6 Day Delivery',
-                        '7 Day Delivery',
-                        '8 Day Delivery',
-                        '9 Day Delivery',
-                        '10 Day Delivery',
-                        '11 Day Delivery',
-                        '12 Day Delivery',
-                        '13 Day Delivery',
-                        '14 Day Delivery',
-                        '15 Day Delivery',
-                      ].map<DropdownMenuItem<String>>((String? value) {
-                        return DropdownMenuItem<String>(
-                          value: value,
-                          child: value != null
-                              ? Text(value)
+                    initialSelection: _selectedLocation,
+                    pickerBuilder:
+                        (BuildContext context, CountryCode? countryCode) {
+                      return Container(
+                        decoration: BoxDecoration(
+                          color: Colors.white,
+                          borderRadius: BorderRadius.circular(radiusValue),
+                        ),
+                        child: ListTile(
+                          leading: _selectedLocation != null
+                              ? Text(_selectedLocation!)
                               : Text(
-                                  value ?? 'Select Delivery Time',
-                                  style: bodyText2.copyWith(
-                                    color: hintColor,
-                                  ),
+                                  'Location',
+                                  style: bodyText2.copyWith(color: hintColor),
                                 ),
-                        );
-                      }).toList(),
-                    ),
+                          trailing: const Icon(Icons.keyboard_arrow_right),
+                        ),
+                      );
+                    },
+                    onChanged: (CountryCode? code) async {
+                      setState(() {
+                        _selectedLocation = code!.name;
+                      });
+
+                      // try {
+                      //   SharedPreferences marketplaceCountry =
+                      //       await SharedPreferences.getInstance();
+                      //   await marketplaceCountry.setString(
+                      //       'country', code!.name!);
+                      //   await marketplaceCountry.setString(
+                      //       'currency', code.code!);
+                      // } catch (e) {}
+                    },
+                    useSafeArea: false,
                   ),
                 ),
+                // const SizedBox(height: 8.0),
+                // Padding(
+                //   padding: const EdgeInsets.only(left: 16.0, right: 16),
+                //   child: Container(
+                //     decoration: BoxDecoration(
+                //       color: Colors.white,
+                //       borderRadius: BorderRadius.circular(radiusValue),
+                //     ),
+                //     padding: const EdgeInsets.only(
+                //       left: 16.0,
+                //       right: 16,
+                //       top: 0,
+                //       bottom: 5,
+                //     ),
+                //     child: DropdownButton<String>(
+                //       underline: Container(),
+                //       value: _selectedLocation,
+                //       isExpanded: true,
+                //       icon: const Icon(Icons.keyboard_arrow_right),
+                //       iconSize: 24,
+                //       elevation: 16,
+                //       onChanged: (String? newValue) {
+                //         setState(() {
+                //           _selectedLocation = newValue!;
+                //         });
+                //       },
+                //       items: <String?>[
+                //         null,
+                //         '1 Day Delivery',
+                //         '2 Day Delivery',
+                //         '3 Day Delivery',
+                //         '4 Day Delivery',
+                //         '5 Day Delivery',
+                //         '6 Day Delivery',
+                //         '7 Day Delivery',
+                //         '8 Day Delivery',
+                //         '9 Day Delivery',
+                //         '10 Day Delivery',
+                //         '11 Day Delivery',
+                //         '12 Day Delivery',
+                //         '13 Day Delivery',
+                //         '14 Day Delivery',
+                //         '15 Day Delivery',
+                //       ].map<DropdownMenuItem<String>>((String? value) {
+                //         return DropdownMenuItem<String>(
+                //           value: value,
+                //           child: value != null
+                //               ? Text(value)
+                //               : Text(
+                //                   value ?? 'Select Delivery Time',
+                //                   style: bodyText2.copyWith(
+                //                     color: hintColor,
+                //                   ),
+                //                 ),
+                //         );
+                //       }).toList(),
+                //     ),
+                //   ),
+                // ),
                 const SizedBox(
-                  height: 12,
+                  height: 15,
                 ),
                 widget.isUpd
                     ? const SizedBox()
@@ -483,11 +552,11 @@ class _CreateServiceScreenState extends State<CreateServiceScreen> {
                   padding: const EdgeInsets.only(left: 16.0, right: 16),
                   child: MCustomButton(
                     onPressed: () async {
-                      if (createMarketController.imageFileList.isEmpty) {
-                        showSnackBar(context,
-                            message: 'You must select an image to continue');
-                        return;
-                      }
+                      // if (createMarketController.imageFileList.isEmpty) {
+                      //   showSnackBar(context,
+                      //       message: 'You must select an image to continue');
+                      //   return;
+                      // }
                       if (descriptionController.text.isEmpty) {
                         showSnackBar(
                           context,

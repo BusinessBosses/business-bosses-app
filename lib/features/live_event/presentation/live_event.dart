@@ -379,6 +379,7 @@ class _LiveEventState extends State<LiveEvent> {
                                 ],
                               ),
                             ),
+                            const SizedBox(height: 80,)
                           ],
                         ),
                       ),

@@ -56,6 +56,7 @@ class _CreateEventState extends State<CreateEvent> {
       startAt = widget.event!.startAt!.toLocal();
       endAt = widget.event!.endAt!.toLocal();
       descriptionController.text = widget.event!.description ?? '';
+      isOnline = widget.event!.link != null ? true : false;
       linkController.text = widget.event!.link ?? '';
       addressController.text = widget.event!.address ?? '';
     } else {
@@ -87,7 +88,7 @@ class _CreateEventState extends State<CreateEvent> {
           style: const TextStyle(fontSize: 20),
         ),
       ),
-      body: SizedBox(
+      body: SingleChildScrollView(
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: <Widget>[
@@ -180,14 +181,14 @@ class _CreateEventState extends State<CreateEvent> {
                 ),
                 child: DropdownButtonFormField<bool>(
                   value: isOnline,
-                  items: const [
+                  items: const <DropdownMenuItem<bool>>[
                     DropdownMenuItem<bool>(
                       value: true,
-                      child: Text('Online'),
+                      child: Text('Online Event'),
                     ),
                     DropdownMenuItem<bool>(
                       value: false,
-                      child: Text('Offline'),
+                      child: Text('In-Person Event'),
                     ),
                   ],
                   onChanged: (bool? value) {
@@ -408,11 +409,14 @@ class _CreateEventState extends State<CreateEvent> {
             if (_selectedImage != null || updateImage != null)
               Stack(
                 children: <Widget>[
-                  SizedBox(
+                  Container(
                     width: 100, // Adjust the width as needed
-                    height: 100, // Adjust the height as needed
+                    height: 100,
+
                     child: updateImage == null
-                        ? Image.file(_selectedImage!)
+                        ? ClipRRect(
+                          borderRadius: BorderRadius.circular(10),
+                          child: Image.file(fit: BoxFit.cover, _selectedImage!))
                         : NetworkImageWithPlaceHolder(imageUrl: updateImage),
                   ),
                   Positioned(
@@ -491,7 +495,7 @@ class _CreateEventState extends State<CreateEvent> {
                   if (!isOnline && addressController.text.trim().isEmpty) {
                     Get.snackbar(
                       'Validation Error',
-                      'Address is required for offline events',
+                      'Address is required for in-person events',
                       snackPosition: SnackPosition.BOTTOM,
                       backgroundColor: Colors.red,
                       colorText: Colors.white,
@@ -691,15 +695,10 @@ class _CreateEventState extends State<CreateEvent> {
       showTitleActions: true,
       onConfirm: (DateTime date) {
         setState(() {
-          selectedDateTime = date;
           if (isStartTime) {
-            setState(() {
-              startAt = selectedDateTime;
-            });
+            startAt = date;
           } else {
-            setState(() {
-              endAt = selectedDateTime;
-            });
+            endAt = date;
           }
         });
       },

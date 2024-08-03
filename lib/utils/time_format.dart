@@ -62,7 +62,7 @@ class TimeFormat {
       return '${(months <= 0 ? 1 : months).toInt()}$monthLabel';
     } else {
       String formatDate(DateTime timestamp) {
-        DateFormat formatter = DateFormat('d MMMM, yyyy');
+        DateFormat formatter = DateFormat('d MMM, yyyy');
         String formattedDate = formatter.format(timestamp);
         return formattedDate;
       }

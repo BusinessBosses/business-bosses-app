@@ -22,68 +22,70 @@ Widget premiumButtonHeader(
     height: 30.0,
     padding: const EdgeInsets.all(0.0),
     width: 80,
-    child: Row(mainAxisAlignment: MainAxisAlignment.spaceEvenly, children: <Widget>[
-      Expanded(
-          child: myProfile.connecteds != null &&
-                  myProfile.connecteds!.contains(publicUser.uid)
-              ? MCustomButton(
-                  buttonType: ButtonType.outlinegrey,
-                  margin: const EdgeInsets.only(right: 0.0),
-                  child: const FittedBox(
-                    child: Text(
-                      'Refer',
-                      style: TextStyle(
-                          color: textColor, fontWeight: FontWeight.w400),
-                    ),
-                  ),
-                  onPressed: () async {
-                    showDialog(
-                      context: context,
-                      builder: (BuildContext context) {
-                        return const AlertDialog(
-                          content: Column(
-                            mainAxisSize: MainAxisSize.min,
-                            children: <Widget>[
-                              CircularProgressIndicator(),
-                            ],
-                          ),
+    child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+        children: <Widget>[
+          Expanded(
+              child: myProfile.connecteds != null &&
+                      myProfile.connecteds!.contains(publicUser.uid)
+                  ? MCustomButton(
+                      buttonType: ButtonType.outlinegrey,
+                      margin: const EdgeInsets.only(right: 0.0),
+                      child: const FittedBox(
+                        child: Text(
+                          'Refer',
+                          style: TextStyle(
+                              color: textColor, fontWeight: FontWeight.w400),
+                        ),
+                      ),
+                      onPressed: () async {
+                        showDialog(
+                          context: context,
+                          builder: (BuildContext context) {
+                            return const AlertDialog(
+                              content: Column(
+                                mainAxisSize: MainAxisSize.min,
+                                children: <Widget>[
+                                  CircularProgressIndicator(),
+                                ],
+                              ),
+                            );
+                          },
                         );
-                      },
-                    );
-                    final ApiResponseModel res = await ApiService.get(
-                        path:
-                            '/connection/connecteds/referals/${publicUser.uid}');
-                    Navigator.pop(context);
+                        final ApiResponseModel res = await ApiService.get(
+                            path:
+                                '/connection/connecteds/referals/${publicUser.uid}');
+                        Navigator.pop(context);
 
-                    if (res.success) {
-                      if (res.data.isEmpty) {
-                        String message =
-                            'Have a look at ${publicUser.username}\'s profile on Business Bosses\n'
-                            'https://businessbosses.onelink.me/xLWk/36a2ff16';
-                        logEvent(publicUser.uid, 'user');
-                        socialShare(message);
-                      } else {
-                        Get.toNamed(
-                          Routes.referscreen,
-                          arguments: <String, dynamic>{'user': publicUser},
-                        );
-                      }
-                    }
-                  })
-              : MCustomButton(
-                  buttonType: ButtonType.grey,
-                  margin: const EdgeInsets.only(right: 0.0),
-                  child: const FittedBox(
-                    child: Text(
-                      'Connect',
-                      style: TextStyle(
-                          color: textColor, fontWeight: FontWeight.w400),
-                    ),
-                  ),
-                  onPressed: () async {
-                    onConnect();
-                  }))
-    ]),
+                        if (res.success) {
+                          if (res.data.isEmpty) {
+                            String message =
+                                'Have a look at ${publicUser.username}\'s profile on Business Bosses\n'
+                                'https://businessbosses.onelink.me/xLWk/36a2ff16';
+                            logEvent(publicUser.uid, 'user');
+                            socialShare(message);
+                          } else {
+                            Get.toNamed(
+                              Routes.referscreen,
+                              arguments: <String, dynamic>{'user': publicUser},
+                            );
+                          }
+                        }
+                      })
+                  : MCustomButton(
+                      buttonType: ButtonType.grey,
+                      margin: const EdgeInsets.only(right: 0.0),
+                      child: const FittedBox(
+                        child: Text(
+                          'Follow',
+                          style: TextStyle(
+                              color: textColor, fontWeight: FontWeight.w400),
+                        ),
+                      ),
+                      onPressed: () async {
+                        onConnect();
+                      }))
+        ]),
   );
 }
 

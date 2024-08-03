@@ -3,6 +3,7 @@ import 'package:business_bosses_v2/common/widgets/network_image_with_placeholder
 import 'package:business_bosses_v2/features/donations/models/donations_model.dart';
 import 'package:business_bosses_v2/features/donations/presentation/expanded_donations_screen.dart';
 import 'package:business_bosses_v2/features/forum/presentation/expanded_forum_view.dart';
+import 'package:business_bosses_v2/features/home/controller/commumities_controller.dart';
 import 'package:business_bosses_v2/features/home/controller/home_controller.dart';
 import 'package:business_bosses_v2/features/live_event/controller/live_event_controller.dart';
 import 'package:business_bosses_v2/features/live_event/models/events_model.dart';
@@ -65,6 +66,7 @@ class _PostTileState extends State<PostTile> {
   bool hide = false;
   final ProfileController profileController = Get.find();
   final HomeController homeController = Get.find();
+  final CommunitiesController communitiesController = Get.find();
   final LiveController liveController = Get.put(LiveController());
   String? selectedValue;
   NumberFormat formatter = NumberFormat.compact();
@@ -364,6 +366,8 @@ class _PostTileState extends State<PostTile> {
                                 child: Row(
                                   children: <Widget>[
                                     Text(
+                                      maxLines: 1,
+                                      overflow: TextOverflow.ellipsis,
                                       widget.post.user!.name != null &&
                                               widget.post.user!.name!.length <=
                                                   20
@@ -620,6 +624,7 @@ class _PostTileState extends State<PostTile> {
                                 (widget.post.options != null &&
                                     widget.post.options!.isNotEmpty))
                               FlutterPolls(
+                                votedAnimationDuration: 500,
                                 leadingVotedProgessColor: Colors.black38,
                                 pollId: widget.post.postId,
                                 onVoted: (PollOption pollOption,
@@ -668,10 +673,14 @@ class _PostTileState extends State<PostTile> {
                               child: ClipRRect(
                                 borderRadius: BorderRadius.circular(15.0),
                                 child: FittedBox(
-                                  fit: BoxFit.fill,
+                                  fit: BoxFit.cover,
                                   child: CachedNetworkImage(
-                                    imageUrl:
-                                        'https://businessbosses.com.ng/learningImages/events.jpg',
+                                    imageUrl: widget.post.forum!.images !=
+                                                null &&
+                                            widget
+                                                .post.forum!.images!.isNotEmpty
+                                        ? widget.post.forum!.images![0]
+                                        : 'https://businessbosses.com.ng/learningImages/events.jpg',
                                     memCacheHeight: 512,
                                     memCacheWidth: 512,
                                     placeholder:
@@ -684,22 +693,33 @@ class _PostTileState extends State<PostTile> {
                                 ),
                               ),
                             ),
-                            // Positioned(
-                            //   left: 10,
-                            //   top: 10,
-                            //   child: Container(
-                            //     padding: const EdgeInsets.symmetric(
-                            //         horizontal: 10, vertical: 8),
-                            //     decoration: BoxDecoration(
-                            //         color: Colors.white.withAlpha(70),
-                            //         borderRadius: BorderRadius.circular(5)),
-                            //     child: Center(
-                            //         child: Text('Industry name',
-                            //             style: const TextStyle(
-                            //               color: Colors.white,
-                            //             ))),
-                            //   ),
-                            // ),
+                            Container(
+                              width: double.infinity,
+                              height: 200,
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(15.0),
+                                color: Colors.black.withAlpha(150),
+                              ),
+                            ),
+                            Positioned(
+                              left: 10,
+                              top: 10,
+                              child: Container(
+                                padding: const EdgeInsets.symmetric(
+                                    horizontal: 10, vertical: 8),
+                                decoration: BoxDecoration(
+                                    color: Colors.black.withAlpha(70),
+                                    borderRadius: BorderRadius.circular(5)),
+                                child: Center(
+                                    child: Text(
+                                        communitiesController
+                                            .getIndustryNameById(
+                                                widget.post.forum!.industryId),
+                                        style: const TextStyle(
+                                          color: Colors.white,
+                                        ))),
+                              ),
+                            ),
                             Padding(
                               padding:
                                   const EdgeInsets.symmetric(horizontal: 15.0),
@@ -709,13 +729,16 @@ class _PostTileState extends State<PostTile> {
                                     height: 80,
                                   ),
                                   Center(
-                                    child: Text(widget.post.forum!.title!,
-                                        maxLines: 2,
-                                        overflow: TextOverflow.ellipsis,
-                                        style: const TextStyle(
-                                            fontSize: 18,
-                                            color: Colors.white,
-                                            fontWeight: FontWeight.w700)),
+                                    child: Text(
+                                      widget.post.forum!.title!,
+                                      maxLines: 2,
+                                      overflow: TextOverflow.ellipsis,
+                                      style: const TextStyle(
+                                        fontSize: 18,
+                                        color: Colors.white,
+                                        fontWeight: FontWeight.w700,
+                                      ),
+                                    ),
                                   ),
                                   const SizedBox(
                                     height: 10,
@@ -724,9 +747,9 @@ class _PostTileState extends State<PostTile> {
                                       padding: const EdgeInsets.symmetric(
                                           horizontal: 10, vertical: 5),
                                       decoration: BoxDecoration(
-                                          color: Colors.white.withAlpha(70),
-                                          borderRadius:
-                                              BorderRadius.circular(50)),
+                                        color: Colors.black.withAlpha(70),
+                                        borderRadius: BorderRadius.circular(50),
+                                      ),
                                       child: Wrap(
                                           crossAxisAlignment:
                                               WrapCrossAlignment.center,
@@ -1397,7 +1420,7 @@ class _PostTileState extends State<PostTile> {
                                             widget.post.timestamp),
                                     style: Theme.of(context)
                                         .textTheme
-                                        .bodyMedium
+                                        .bodySmall
                                         ?.copyWith(
                                           color: textColor.withOpacity(0.4),
                                         ),
@@ -1508,7 +1531,7 @@ class _PostTileState extends State<PostTile> {
                                   widget.post.oldtimestamp)
                               : TimeFormat.formatString(widget.post.timestamp),
                           style:
-                              Theme.of(context).textTheme.bodyMedium?.copyWith(
+                              Theme.of(context).textTheme.bodySmall?.copyWith(
                                     color: textColor.withOpacity(0.4),
                                   ),
                         ),

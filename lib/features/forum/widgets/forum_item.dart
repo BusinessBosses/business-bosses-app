@@ -714,7 +714,8 @@ class _ForumItemState extends State<ForumItem> {
                                 profileController.myProfile.uid,
                                 widget.forum.forumId,
                                 'forum',
-                                widget.forum.user?.uid);
+                                widget.forum.user!.uid);
+                            setState(() {});
                           },
                           icon: widget.forum.likes?.contains(
                                       profileController.myProfile.uid) ==
@@ -757,6 +758,7 @@ class _ForumItemState extends State<ForumItem> {
                                           (CommentModel newComment) async {},
                                     ),
                                   );
+                            setState(() {});
                           },
                           icon: SvgPicture.asset('assets/svgs/comment.svg',
                               height: 15),
@@ -775,13 +777,14 @@ class _ForumItemState extends State<ForumItem> {
                                 profileController.myProfile.uid
                             ? TextButton.icon(
                                 onPressed: () async {
-                                  widget.controller!.postCoin(
+                                  widget.controller.postCoin(
                                     profileController.myProfile.uid,
                                     widget.forum.forumId,
                                     profileController,
                                     'forum',
                                     widget.forum.user!.uid,
                                   );
+                                  setState(() {});
                                 },
                                 icon: widget.forum.coins?.contains(
                                             profileController.myProfile.uid) !=

@@ -25,9 +25,10 @@ class ChallengeController extends GetxController {
           .map((categoryMap) => Industry.fromMap(categoryMap))
           .where((Industry category) =>
               category.categoryId == '-Mos1VMlx3oxZFRaw_BH' &&
-              (category.endedAt == null ||
-                  category.endedAt!.isAfter(DateTime.now()) ||
-                  category.endedAt!.isAtSameMomentAs(DateTime.now())))
+                  (category.endedAt == null ||
+                      category.endedAt!.isAfter(DateTime.now()) ||
+                      category.endedAt!.isAtSameMomentAs(DateTime.now())) ||
+              category.industryId == '-MsUOGcOT9oRXGakCcJv')
           .toList();
       // Assuming data returned is a list of Map<String, dynamic>
       // Sort categories by placing 'Boss Up Challenge' at the top
