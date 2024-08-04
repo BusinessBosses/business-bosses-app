@@ -1,29 +1,39 @@
 import 'package:business_bosses_v2/utils/theme/theme.dart';
 import 'package:flutter/material.dart';
 
-class ProCustomButton extends StatelessWidget {
+class ProCustomButton extends StatefulWidget {
   final String text;
   final Widget? icon;
   final VoidCallback onPressed;
+  bool back;
+  bool loading;
 
-  const ProCustomButton({
+  ProCustomButton({
     Key? key,
     required this.text,
     this.icon,
     required this.onPressed,
+    this.back = false,
+    this.loading = false,
   }) : super(key: key);
 
+  @override
+  State<ProCustomButton> createState() => _ProCustomButtonState();
+}
+
+class _ProCustomButtonState extends State<ProCustomButton> {
   @override
   Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 15.0),
-      child: Container(
+      child: SizedBox(
         height: 50,
         child: ElevatedButton(
-          onPressed: onPressed,
+          onPressed: !widget.loading ? widget.onPressed : () {},
           style: ElevatedButton.styleFrom(
-            primary: proprimaryColor, // Background color
-            padding: EdgeInsets.symmetric(horizontal: 24.0, vertical: 12.0),
+            backgroundColor: proprimaryColor, // Background color
+            padding:
+                const EdgeInsets.symmetric(horizontal: 24.0, vertical: 12.0),
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(10.0),
             ),
@@ -31,15 +41,21 @@ class ProCustomButton extends StatelessWidget {
           child: Row(
             mainAxisSize: MainAxisSize.min,
             mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Text(
-                text,
-                style: TextStyle(
-                  color: Colors.white, // Text color
-                  fontSize: 16.0,
+            children: <Widget>[
+              if (widget.back)
+                if (widget.icon != null) widget.icon!,
+              if (widget.loading) const CircularProgressIndicator(),
+              if (!widget.loading)
+                Text(
+                  widget.text,
+                  style: const TextStyle(
+                    color: Colors.white, // Text color
+                    fontSize: 16.0,
+                  ),
                 ),
-              ),
-              if (icon != null) icon!, // Display icon if it's not null
+              if (widget.back == false)
+                if (widget.icon != null)
+                  widget.icon!, // Display icon if it's not null
             ],
           ),
         ),

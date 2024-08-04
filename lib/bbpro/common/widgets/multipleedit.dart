@@ -4,10 +4,17 @@ import 'package:flutter/material.dart';
 class MultipleEditTextWidget extends StatefulWidget {
   final String caption;
   final String hintText;
+  final TextEditingController controller;
 
-  MultipleEditTextWidget({required this.caption, required this.hintText});
+  const MultipleEditTextWidget({
+    super.key,
+    required this.caption,
+    required this.hintText,
+    required this.controller,
+  });
 
   @override
+  // ignore: library_private_types_in_public_api
   _MultipleEditTextWidgetState createState() => _MultipleEditTextWidgetState();
 }
 
@@ -30,7 +37,7 @@ class _MultipleEditTextWidgetState extends State<MultipleEditTextWidget> {
   }
 
   void _removeTextField(int index) {
-    if (_textFields.length > 0) {
+    if (_textFields.isNotEmpty) {
       setState(() {
         _textFields.removeAt(index);
       });
@@ -40,13 +47,14 @@ class _MultipleEditTextWidgetState extends State<MultipleEditTextWidget> {
   Widget _buildTextField() {
     int index = _textFields.length;
     return Padding(
-      padding: const EdgeInsets.only( top: 15, bottom:5),
+      padding: const EdgeInsets.only(top: 15, bottom: 5),
       child: Row(
-        children: [
+        children: <Widget>[
           Expanded(
             child: TextField(
               decoration: InputDecoration(
                   hintText: widget.hintText, border: InputBorder.none),
+              controller: widget.controller,
             ),
           ),
           if (_textFields.length < _maxFields)
@@ -55,21 +63,27 @@ class _MultipleEditTextWidgetState extends State<MultipleEditTextWidget> {
                   color: prosemibackColor,
                   borderRadius: BorderRadius.circular(10)),
               child: IconButton(
-                icon: Icon(Icons.add,size: 20,),
+                icon: const Icon(
+                  Icons.add,
+                  size: 20,
+                ),
                 onPressed: _addTextField,
               ),
             ),
-          if (_textFields.length > 0)
-            SizedBox(
+          if (_textFields.isNotEmpty)
+            const SizedBox(
               width: 10,
             ),
-          if (_textFields.length > 0)
+          if (_textFields.isNotEmpty)
             Container(
               decoration: BoxDecoration(
                   color: prosemibackColor,
                   borderRadius: BorderRadius.circular(10)),
               child: IconButton(
-                icon: Icon(Icons.remove,size: 20,),
+                icon: const Icon(
+                  Icons.remove,
+                  size: 20,
+                ),
                 onPressed: () => _removeTextField(index),
               ),
             ),
@@ -88,10 +102,10 @@ class _MultipleEditTextWidgetState extends State<MultipleEditTextWidget> {
         padding: const EdgeInsets.symmetric(horizontal: 15.0, vertical: 10),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
+          children: <Widget>[
             Text(
               widget.caption,
-              style: TextStyle(
+              style: const TextStyle(
                 fontSize: 16,
                 fontWeight: FontWeight.w600,
               ),

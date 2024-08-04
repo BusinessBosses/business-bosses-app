@@ -4,14 +4,15 @@ import 'package:flutter/material.dart';
 class SelectionSection extends StatefulWidget {
   final Function(Map<String, bool>) onSelectionChanged;
 
-  SelectionSection({required this.onSelectionChanged});
+  const SelectionSection({super.key, required this.onSelectionChanged});
 
   @override
+  // ignore: library_private_types_in_public_api
   _SelectionSectionState createState() => _SelectionSectionState();
 }
 
 class _SelectionSectionState extends State<SelectionSection> {
-  Map<String, bool> selections = {
+  Map<String, bool> selections = <String, bool>{
     'Bank': false,
     'Paypal': false,
     'Wallet': false,
@@ -25,16 +26,16 @@ class _SelectionSectionState extends State<SelectionSection> {
       child: Container(
         decoration: BoxDecoration(
             color: Colors.white, borderRadius: BorderRadius.circular(10)),
-        padding: EdgeInsets.symmetric(vertical: 0, horizontal: 0),
+        padding: const EdgeInsets.symmetric(vertical: 0, horizontal: 0),
         child: Column(
-          children: [
+          children: <Widget>[
             ...selections.keys.map((String key) {
               return Container(
                   decoration: BoxDecoration(
                       color: Colors.white,
                       borderRadius: BorderRadius.circular(10)),
                   child: Row(
-                    children: [
+                    children: <Widget>[
                       Checkbox(
                         shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(5)),

@@ -7,10 +7,14 @@ class CustomTextWidget extends StatefulWidget {
   final String iconName;
   final String text;
 
-  CustomTextWidget(
-      {required this.caption, required this.iconName, required this.text});
+  const CustomTextWidget(
+      {super.key,
+      required this.caption,
+      required this.iconName,
+      required this.text});
 
   @override
+  // ignore: library_private_types_in_public_api
   _CustomTextWidgetState createState() => _CustomTextWidgetState();
 }
 
@@ -32,18 +36,21 @@ class _CustomTextWidgetState extends State<CustomTextWidget> {
         padding: const EdgeInsets.symmetric(horizontal: 5, vertical: 15),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
+          children: <Widget>[
             Text(
               widget.caption,
-              style: TextStyle(
-                  fontSize: 16, fontWeight: FontWeight.w600, color: textColor),
+              style: const TextStyle(
+                fontSize: 16,
+                fontWeight: FontWeight.w600,
+                color: textColor,
+              ),
             ),
-            SizedBox(
+            const SizedBox(
               height: 15,
             ),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
+              children: <Widget>[
                 Text(
                   widget.text,
                   style: TextStyle(

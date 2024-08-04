@@ -6,13 +6,16 @@ class CustomEditText extends StatelessWidget {
   final int? maxLength;
   final TextInputType inputType;
   final bool isPassword;
+  final TextEditingController controller;
 
-  CustomEditText({
+  const CustomEditText({
+    super.key,
     required this.caption,
     required this.hintText,
     this.maxLength,
     this.inputType = TextInputType.text,
     this.isPassword = false,
+    required this.controller,
   });
 
   @override
@@ -26,15 +29,15 @@ class CustomEditText extends StatelessWidget {
             left: 15.0, top: 15, right: 15, bottom: maxLength != null ? 15 : 0),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
+          children: <Widget>[
             Text(
               caption,
-              style: TextStyle(
+              style: const TextStyle(
                 fontSize: 16,
                 fontWeight: FontWeight.w600,
               ),
             ),
-            SizedBox(height: 5),
+            const SizedBox(height: 5),
             TextFormField(
               maxLines: maxLength != null ? 5 : 1,
               decoration: InputDecoration(
@@ -46,6 +49,7 @@ class CustomEditText extends StatelessWidget {
               maxLength: maxLength,
               keyboardType: inputType,
               obscureText: isPassword,
+              controller: controller,
             ),
           ],
         ),
