@@ -4,12 +4,14 @@ class ProIconButton extends StatelessWidget {
   final String text;
   final Widget? icon;
   final VoidCallback onPressed;
+  final double? radius;
 
   const ProIconButton({
     Key? key,
     required this.text,
     this.icon,
     required this.onPressed,
+    this.radius,
   }) : super(key: key);
 
   @override
@@ -20,7 +22,7 @@ class ProIconButton extends StatelessWidget {
         primary: Color(0xFF4A6FA5), // Background color
         padding: EdgeInsets.symmetric(horizontal: 24.0, vertical: 12.0),
         shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(30.0),
+          borderRadius: BorderRadius.circular(radius ?? 30.0),
         ),
       ),
       child: Row(
