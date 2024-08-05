@@ -1,3 +1,4 @@
+import 'package:business_bosses_v2/bbpro/presentation/shop_setup/presentation/dashboard.dart';
 import 'package:business_bosses_v2/bbpro/presentation/shop_setup/presentation/projects.dart';
 import 'package:business_bosses_v2/utils/theme/theme.dart';
 import 'package:flutter/material.dart';
@@ -12,7 +13,7 @@ class _BottomnavscreenState extends State<Bottomnavscreen> {
   int _selectedIndex = 0;
 
   static const List<Widget> _widgetOptions = <Widget>[
-    Text('Dashboard'),
+    Dashboard(),
     Projects(),
     Text('Clients'),
     Text('Orders & Invoices'),
