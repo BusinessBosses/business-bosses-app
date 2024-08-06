@@ -4,6 +4,8 @@ import 'package:business_bosses_v2/utils/theme/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 
+import '../../../common/widgets/salescard.dart';
+
 class Dashboard extends StatefulWidget {
   const Dashboard({
     super.key,
@@ -28,11 +30,12 @@ class _DashboardState extends State<Dashboard> {
           ),
         ),
       ),
-      body: Column(
-        children: [
-          OrdersWidget(),
-          Expanded(
-            child: StaggeredGridView.countBuilder(
+      body: SingleChildScrollView(
+        child: Column(
+          children: [
+            OrdersWidget(),
+            SalesWidget(),
+            StaggeredGridView.countBuilder(
               physics: NeverScrollableScrollPhysics(),
               staggeredTileBuilder: (int index) => const StaggeredTile.fit(1),
               padding: const EdgeInsets.symmetric(
@@ -51,8 +54,8 @@ class _DashboardState extends State<Dashboard> {
                 );
               },
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }
