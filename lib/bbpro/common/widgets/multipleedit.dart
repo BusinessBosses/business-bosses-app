@@ -57,23 +57,6 @@ class _MultipleEditTextWidgetState extends State<MultipleEditTextWidget> {
               controller: widget.controller,
             ),
           ),
-          if (_textFields.length < _maxFields)
-            Container(
-              decoration: BoxDecoration(
-                  color: prosemibackColor,
-                  borderRadius: BorderRadius.circular(10)),
-              child: IconButton(
-                icon: const Icon(
-                  Icons.add,
-                  size: 20,
-                ),
-                onPressed: _addTextField,
-              ),
-            ),
-          if (_textFields.isNotEmpty)
-            const SizedBox(
-              width: 10,
-            ),
           if (_textFields.isNotEmpty)
             Container(
               decoration: BoxDecoration(
@@ -85,6 +68,23 @@ class _MultipleEditTextWidgetState extends State<MultipleEditTextWidget> {
                   size: 20,
                 ),
                 onPressed: () => _removeTextField(index),
+              ),
+            ),
+          if (_textFields.isNotEmpty)
+            const SizedBox(
+              width: 10,
+            ),
+          if (_textFields.length < _maxFields)
+            Container(
+              decoration: BoxDecoration(
+                  color: prosemibackColor,
+                  borderRadius: BorderRadius.circular(10)),
+              child: IconButton(
+                icon: const Icon(
+                  Icons.add,
+                  size: 20,
+                ),
+                onPressed: _addTextField,
               ),
             ),
         ],

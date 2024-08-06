@@ -1,3 +1,4 @@
+import 'package:business_bosses_v2/utils/theme/theme.dart';
 import 'package:flutter/material.dart';
 
 class InfoCard extends StatefulWidget {
@@ -18,7 +19,7 @@ class _InfoCardState extends State<InfoCard> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: const EdgeInsets.all(16.0),
+      padding: const EdgeInsets.all(10.0),
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(16.0),
@@ -29,17 +30,17 @@ class _InfoCardState extends State<InfoCard> {
           Text(
             widget.cardName,
             style: TextStyle(
-              fontSize: 18,
+              fontSize: 16,
               fontWeight: FontWeight.bold,
             ),
           ),
-          SizedBox(height: 8),
+          SizedBox(height: 5),
           Text(
             widget.value,
             style: TextStyle(
-              fontSize: 16,
-              color: Colors.grey[600],
-            ),
+                color: proprimaryColor,
+                fontWeight: FontWeight.bold,
+                fontSize: 20),
           ),
         ],
       ),

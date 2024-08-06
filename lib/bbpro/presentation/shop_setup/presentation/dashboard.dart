@@ -3,6 +3,7 @@ import 'package:business_bosses_v2/bbpro/common/widgets/orderscard.dart';
 import 'package:business_bosses_v2/utils/theme/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 
 import '../../../common/widgets/salescard.dart';
 
@@ -29,6 +30,23 @@ class _DashboardState extends State<Dashboard> {
             fontWeight: FontWeight.bold,
           ),
         ),
+        actions: [
+          Padding(
+            padding: const EdgeInsets.only(right: 10.0, bottom: 15),
+            child: CircleAvatar(
+              backgroundColor: prosemibackColor,
+              radius: 30, // This sets the circle's radius
+              child: Padding(
+                padding: const EdgeInsets.all(
+                    10), // Adjust padding to fit the icon nicely
+                child: SvgPicture.asset(
+                  'assets/svgs/notificationicon.svg',
+                  height: 20,
+                ),
+              ),
+            ),
+          )
+        ],
       ),
       body: SingleChildScrollView(
         child: Column(

@@ -1,3 +1,4 @@
+import 'package:business_bosses_v2/bbpro/presentation/shop_setup/presentation/clients.dart';
 import 'package:business_bosses_v2/bbpro/presentation/shop_setup/presentation/dashboard.dart';
 import 'package:business_bosses_v2/bbpro/presentation/shop_setup/presentation/projects.dart';
 import 'package:business_bosses_v2/utils/theme/theme.dart';
@@ -15,7 +16,7 @@ class _BottomnavscreenState extends State<Bottomnavscreen> {
   static const List<Widget> _widgetOptions = <Widget>[
     Dashboard(),
     Projects(),
-    Text('Clients'),
+    ClientsScreen(),
     Text('Orders & Invoices'),
     Text('Set Up'),
   ];
