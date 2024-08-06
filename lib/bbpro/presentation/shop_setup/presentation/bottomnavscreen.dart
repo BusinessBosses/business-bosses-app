@@ -1,5 +1,6 @@
 import 'package:business_bosses_v2/bbpro/presentation/shop_setup/presentation/clients.dart';
 import 'package:business_bosses_v2/bbpro/presentation/shop_setup/presentation/dashboard.dart';
+import 'package:business_bosses_v2/bbpro/presentation/shop_setup/presentation/ordersandinvoices.dart';
 import 'package:business_bosses_v2/bbpro/presentation/shop_setup/presentation/projects.dart';
 import 'package:business_bosses_v2/utils/theme/theme.dart';
 import 'package:flutter/material.dart';
@@ -17,7 +18,7 @@ class _BottomnavscreenState extends State<Bottomnavscreen> {
     Dashboard(),
     Projects(),
     ClientsScreen(),
-    Text('Orders & Invoices'),
+    OrdersScreen(),
     Text('Set Up'),
   ];
 

@@ -17,6 +17,13 @@ class Dashboard extends StatefulWidget {
 }
 
 class _DashboardState extends State<Dashboard> {
+  final List<String> titles = [
+    'Clients',
+    'Expenses',
+    'To-do tasks',
+    'Shop Visits'
+  ];
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -67,7 +74,7 @@ class _DashboardState extends State<Dashboard> {
               itemCount: 4,
               itemBuilder: (BuildContext context, int index) {
                 return InfoCard(
-                  cardName: 'Expenses',
+                  cardName: titles[index],
                   value: '\$20k',
                 );
               },
