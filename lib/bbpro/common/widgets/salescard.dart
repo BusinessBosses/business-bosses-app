@@ -58,7 +58,7 @@ class SalesWidget extends StatelessWidget {
                       style: TextStyle(
                           color: proprimaryColor,
                           fontWeight: FontWeight.bold,
-                          fontSize: 30),
+                          fontSize: 22),
                     ),
                   ],
                 ),
@@ -68,7 +68,7 @@ class SalesWidget extends StatelessWidget {
               children: [
                 Text(
                   '128,7K',
-                  style: TextStyle(fontSize: 32, fontWeight: FontWeight.bold),
+                  style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
                 ),
               ],
             ),

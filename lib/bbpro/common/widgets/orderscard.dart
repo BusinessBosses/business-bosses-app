@@ -59,7 +59,7 @@ class OrdersWidget extends StatelessWidget {
                       style: TextStyle(
                           color: proprimaryColor,
                           fontWeight: FontWeight.bold,
-                          fontSize: 30),
+                          fontSize: 20),
                     ),
                   ],
                 ),
