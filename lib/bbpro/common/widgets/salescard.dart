@@ -17,36 +17,64 @@ class SalesWidget extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text(
-              'Sales',
-              style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Wrap(
+                  children: [
+                    Text(
+                      'Sales',
+                      style:
+                          TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                    ),
+                    Text(
+                      ' - Breakdown',
+                      style: TextStyle(
+                          fontSize: 15,
+                          color: proprimaryColor,
+                          fontWeight: FontWeight.w700),
+                    ),
+                  ],
+                ),
+                Wrap(
+                  crossAxisAlignment: WrapCrossAlignment.center,
+                  children: [
+                    Container(
+                      padding: EdgeInsets.all(5),
+                      decoration: BoxDecoration(
+                          color: prosemibackColor,
+                          borderRadius: BorderRadius.circular(30)),
+                      child: Icon(
+                        Icons.visibility_off,
+                        color: proprimaryColor,
+                        size: 15,
+                      ),
+                    ),
+                    SizedBox(
+                      width: 10,
+                    ),
+                    Text(
+                      '\$19.4k',
+                      style: TextStyle(
+                          color: proprimaryColor,
+                          fontWeight: FontWeight.bold,
+                          fontSize: 30),
+                    ),
+                  ],
+                ),
+              ],
             ),
-            SizedBox(height: 8),
-            Text(
-              'Breakdown',
-              style: TextStyle(fontSize: 16, color: Colors.blue),
-            ),
-            SizedBox(height: 16),
             Row(
               children: [
                 Text(
                   '128,7K',
                   style: TextStyle(fontSize: 32, fontWeight: FontWeight.bold),
                 ),
-                Spacer(),
-                Text(
-                  '\$19.4k',
-                  style: TextStyle(
-                      fontSize: 32,
-                      fontWeight: FontWeight.bold,
-                      color: proprimaryColor),
-                ),
               ],
             ),
-            SizedBox(height: 16),
             Container(
               padding: EdgeInsets.only(right: 5),
-              height: 150,
+              height: 100,
               width: double.infinity,
               child: LineChart(
                 LineChartData(
@@ -55,7 +83,7 @@ class SalesWidget extends StatelessWidget {
                   minY: 0,
                   maxY: 1000,
                   titlesData: FlTitlesData(
-                    leftTitles: SideTitles(showTitles: true, interval: 100),
+                    leftTitles: SideTitles(showTitles: true, interval: 200),
                     bottomTitles: SideTitles(
                         showTitles: true,
                         getTitles: (value) {

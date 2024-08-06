@@ -20,45 +20,56 @@ class OrdersWidget extends StatelessWidget {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Text(
-                  'Orders',
-                  style: TextStyle(
-                    fontSize: 18,
-                    fontWeight: FontWeight.bold,
+                Wrap(crossAxisAlignment: WrapCrossAlignment.center, children: [
+                  Text(
+                    'Orders',
+                    style: TextStyle(
+                      fontSize: 16,
+                      fontWeight: FontWeight.bold,
+                    ),
                   ),
-                ),
+                  Text(
+                    ' - Breakdown',
+                    style: TextStyle(
+                      fontSize: 15,
+                      fontWeight: FontWeight.w700,
+                      color: proprimaryColor,
+                    ),
+                  ),
+                ]),
                 Wrap(
                   crossAxisAlignment: WrapCrossAlignment.center,
                   children: [
-                    Icon(
-                      Icons.visibility_off,
-                      color: Colors.grey,
+                    Container(
+                      padding: EdgeInsets.all(5),
+                      decoration: BoxDecoration(
+                          color: prosemibackColor,
+                          borderRadius: BorderRadius.circular(30)),
+                      child: Icon(
+                        Icons.visibility_off,
+                        color: proprimaryColor,
+                        size: 15,
+                      ),
                     ),
                     SizedBox(
-                      width: 5,
+                      width: 10,
                     ),
                     Text(
                       '9',
-                      style: TextStyle(color: proprimaryColor),
+                      style: TextStyle(
+                          color: proprimaryColor,
+                          fontWeight: FontWeight.bold,
+                          fontSize: 30),
                     ),
                   ],
                 ),
               ],
             ),
-            SizedBox(height: 16),
-            Text(
-              'Breakdown',
-              style: TextStyle(
-                fontSize: 16,
-                color: proprimaryColor,
-              ),
-            ),
-            SizedBox(height: 10),
             Row(
               children: [
                 Container(
-                  width: 180,
-                  height: 180,
+                  width: 165, // Adjust the width as needed
+                  height: 165, // Adjust the height as needed
                   child: PieChart(
                     PieChartData(
                       sections: [
@@ -66,39 +77,41 @@ class OrdersWidget extends StatelessWidget {
                           color: Colors.blue,
                           value: 430,
                           title: '',
-                          radius: 50,
+                          radius: 40, // Reduced radius
                         ),
                         PieChartSectionData(
                           color: Colors.purple,
                           value: 430,
                           title: '',
-                          radius: 50,
+                          radius: 40, // Reduced radius
                         ),
                         PieChartSectionData(
                           color: Colors.yellow,
                           value: 430,
                           title: '',
-                          radius: 50,
+                          radius: 40, // Reduced radius
                         ),
                         PieChartSectionData(
                           color: Colors.green,
                           value: 430,
                           title: '',
-                          radius: 50,
+                          radius: 40, // Reduced radius
                         ),
                         PieChartSectionData(
                           color: Colors.red,
                           value: 430,
                           title: '',
-                          radius: 50,
+                          radius: 40, // Reduced radius
                         ),
                       ],
                       sectionsSpace: 0,
-                      centerSpaceRadius: 30,
+                      centerSpaceRadius: 35, // Reduced center space radius
                     ),
                   ),
                 ),
-                SizedBox(width: 10,),
+                SizedBox(
+                  width: 10,
+                ),
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
@@ -107,25 +120,33 @@ class OrdersWidget extends StatelessWidget {
                       text: 'Online',
                       value: 430,
                     ),
-                    SizedBox(height: 3,),
+                    SizedBox(
+                      height: 3,
+                    ),
                     Indicator(
                       color: Colors.purple,
                       text: 'In Person',
                       value: 430,
                     ),
-                    SizedBox(height: 3,),
+                    SizedBox(
+                      height: 3,
+                    ),
                     Indicator(
                       color: Colors.yellow,
                       text: 'Pending',
                       value: 430,
                     ),
-                    SizedBox(height: 3,),
+                    SizedBox(
+                      height: 3,
+                    ),
                     Indicator(
                       color: Colors.green,
                       text: 'Paid',
                       value: 430,
                     ),
-                    SizedBox(height: 3,),
+                    SizedBox(
+                      height: 3,
+                    ),
                     Indicator(
                       color: Colors.red,
                       text: 'Cancelled',
@@ -134,86 +155,7 @@ class OrdersWidget extends StatelessWidget {
                   ],
                 ),
               ],
-            )
-            // Row(
-            //   children: [
-            //     Container(
-            //       width: 100,
-            //       height: 100,
-            //       child: PieChart(
-            //         PieChartData(
-            //           sections: [
-            //             PieChartSectionData(
-            //               color: Colors.blue,
-            //               value: 430,
-            //               title: '',
-            //               radius: 50,
-            //             ),
-            //             PieChartSectionData(
-            //               color: Colors.purple,
-            //               value: 430,
-            //               title: '',
-            //               radius: 50,
-            //             ),
-            //             PieChartSectionData(
-            //               color: Colors.yellow,
-            //               value: 430,
-            //               title: '',
-            //               radius: 50,
-            //             ),
-            //             PieChartSectionData(
-            //               color: Colors.green,
-            //               value: 430,
-            //               title: '',
-            //               radius: 50,
-            //             ),
-            //             PieChartSectionData(
-            //               color: Colors.red,
-            //               value: 430,
-            //               title: '',
-            //               radius: 50,
-            //             ),
-            //           ],
-            //           sectionsSpace: 0,
-            //           centerSpaceRadius: 30,
-            //         ),
-            //       ),
-            //     ),
-            //     SizedBox(width: 16),
-            //     Column(
-            //       crossAxisAlignment: CrossAxisAlignment.start,
-            //       children: [
-            //         Indicator(
-            //           color: Colors.blue,
-            //           text: 'Online',
-            //           value: 430,
-            //         ),
-            //         Indicator(
-            //           color: Colors.purple,
-            //           text: 'In Person',
-            //           value: 430,
-            //         ),
-            //         Indicator(
-            //           color: Colors.yellow,
-            //           text: 'Pending',
-            //           value: 430,
-            //         ),
-            //         Indicator(
-            //           color: Colors.green,
-            //           text: 'Paid',
-            //           value: 430,
-            //         ),
-            //         Indicator(
-            //           color: Colors.red,
-            //           text: 'Cancelled',
-            //           value: 430,
-            //         ),
-            //       ],
-            //     ),
-            //   ],
-            // ),
-            ,
-            SizedBox(height: 16),
+            ),
             Align(
               alignment: Alignment.centerRight,
               child: Container(
