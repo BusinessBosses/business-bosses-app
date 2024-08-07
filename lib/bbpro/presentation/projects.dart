@@ -188,14 +188,20 @@ class RowStatusCard extends StatelessWidget {
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Text(
-                  taskStatus.displayTitle,
-                  style: const TextStyle(
-                    color: Colors.black,
-                    fontWeight: FontWeight.bold,
-                    fontSize: 18,
+                Wrap(
+                  crossAxisAlignment: WrapCrossAlignment.center,
+                  children: [
+                  CircleAvatar(radius: 5,),
+                  SizedBox(width: 10,),
+                  Text(
+                    taskStatus.displayTitle,
+                    style: const TextStyle(
+                      color: Colors.black,
+                      fontWeight: FontWeight.bold,
+                      fontSize: 18,
+                    ),
                   ),
-                ),
+                ]),
                 GestureDetector(
                   onTap: () {},
                   child: Container(
