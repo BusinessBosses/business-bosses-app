@@ -119,17 +119,17 @@ class _ProjectsState extends State<Projects> {
           ),
         ],
       ),
-      // floatingActionButton: FloatingActionButton(
-      //   onPressed: () {
-      //     setState(() {
-      //       _tasks[TaskStatus.todo]
-      //           ?.add(Task(title: "To Do $_counter", status: TaskStatus.todo));
-      //       _counter++;
-      //     });
-      //   },
-      //   tooltip: 'Add Task',
-      //   child: const Icon(Icons.add),
-      // ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {
+          setState(() {
+            _tasks[TaskStatus.todo]
+                ?.add(Task(title: "To Do $_counter", status: TaskStatus.todo));
+            _counter++;
+          });
+        },
+        tooltip: 'Add Task',
+        child: const Icon(Icons.add),
+      ),
     );
   }
 

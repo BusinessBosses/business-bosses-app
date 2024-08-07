@@ -1,16 +1,21 @@
+import 'package:business_bosses_v2/utils/theme/theme.dart';
 import 'package:flutter/material.dart';
 
 class ProIconButton extends StatelessWidget {
   final String text;
   final Widget? icon;
   final VoidCallback onPressed;
-  final double? radius; 
+  final double? radius;
+  final Color? backgroundColor;
+    final Color? textColor;
 
   const ProIconButton({
     Key? key,
     required this.text,
     this.icon,
-    required this.onPressed, this.radius,
+    required this.onPressed,
+    this.radius,
+    this.backgroundColor, this.textColor,
   }) : super(key: key);
 
   @override
@@ -18,10 +23,11 @@ class ProIconButton extends StatelessWidget {
     return ElevatedButton(
       onPressed: onPressed,
       style: ElevatedButton.styleFrom(
-        backgroundColor: Color(0xFF4A6FA5), // Background color
+        shadowColor: Colors.white,
+        backgroundColor: backgroundColor ?? proprimaryColor, // Background color
         padding: EdgeInsets.symmetric(horizontal: 24.0, vertical: 12.0),
         shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(radius??30.0),
+          borderRadius: BorderRadius.circular(radius ?? 30.0),
         ),
       ),
       child: Row(
@@ -32,7 +38,7 @@ class ProIconButton extends StatelessWidget {
           Text(
             text,
             style: TextStyle(
-              color: Colors.white, // Text color
+              color: textColor ?? Colors.white, // Text color
               fontSize: 16.0,
             ),
           ),
