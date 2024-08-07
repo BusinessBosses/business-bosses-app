@@ -596,7 +596,7 @@ class _BossOfWeekProfileTileState extends State<BossOfWeekProfileTile> {
               'Refer',
               style: TextStyle(color: primaryColorLT),
             ),
-          )
+          ),
         ],
       ),
     );

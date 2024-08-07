@@ -1,7 +1,7 @@
-import 'package:business_bosses_v2/bbpro/presentation/shop_setup/presentation/clients.dart';
-import 'package:business_bosses_v2/bbpro/presentation/shop_setup/presentation/dashboard.dart';
-import 'package:business_bosses_v2/bbpro/presentation/shop_setup/presentation/ordersandinvoices.dart';
-import 'package:business_bosses_v2/bbpro/presentation/shop_setup/presentation/projects.dart';
+import 'package:business_bosses_v2/bbpro/presentation/clients.dart';
+import 'package:business_bosses_v2/bbpro/presentation/dashboard.dart';
+import 'package:business_bosses_v2/bbpro/presentation/ordersandinvoices.dart';
+import 'package:business_bosses_v2/bbpro/presentation/projects.dart';
 import 'package:business_bosses_v2/utils/theme/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';

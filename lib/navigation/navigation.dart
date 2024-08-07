@@ -1,7 +1,7 @@
 // ignore_for_file: always_specify_types
 
 import 'package:business_bosses_v2/analytics/presentation/explorebusinessbosses_screen.dart';
-import 'package:business_bosses_v2/bbpro/presentation/shop_setup/presentation/setupshop.dart';
+import 'package:business_bosses_v2/bbpro/presentation/setupshop.dart';
 import 'package:business_bosses_v2/features/bottomnavigationscreen.dart';
 import 'package:business_bosses_v2/features/connects/controller/referrals_controller.dart';
 import 'package:business_bosses_v2/features/connects/presentation/referals_screen.dart';

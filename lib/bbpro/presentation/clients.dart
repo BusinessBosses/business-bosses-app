@@ -1,19 +1,18 @@
 import 'package:business_bosses_v2/bbpro/common/widgets/topsection.dart';
-import 'package:business_bosses_v2/bbpro/presentation/shop_setup/presentation/addclient.dart';
-import 'package:business_bosses_v2/bbpro/presentation/shop_setup/presentation/createorder.dart';
+import 'package:business_bosses_v2/bbpro/presentation/addclient.dart';
 import 'package:business_bosses_v2/utils/theme/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 
-class OrdersScreen extends StatefulWidget {
-  const OrdersScreen({super.key});
+class ClientsScreen extends StatefulWidget {
+  const ClientsScreen({super.key});
 
   @override
-  State<OrdersScreen> createState() => _OrdersScreenState();
+  State<ClientsScreen> createState() => _ClientsScreenState();
 }
 
-class _OrdersScreenState extends State<OrdersScreen> {
+class _ClientsScreenState extends State<ClientsScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -21,7 +20,7 @@ class _OrdersScreenState extends State<OrdersScreen> {
         appBar: AppBar(
           automaticallyImplyLeading: false,
           title: const Text(
-            'Orders & Invoices',
+            'Clients',
             style: TextStyle(
               color: proprimaryColor,
               fontWeight: FontWeight.bold,
@@ -48,16 +47,16 @@ class _OrdersScreenState extends State<OrdersScreen> {
         body: Column(
           children: [
             TopsectionWidget(
-            buttonText: "Create New Order",
-            onHowItWorksPressed: () {
-              // Handle "How it works" pressed
-              print("How it works pressed");
-            },
-            onAddProjectPressed: () {
-              // Handle "Add Project" pressed
-              Get.to(CreateOrder());
-            },
-          ),
+              buttonText: "Add Client",
+              onHowItWorksPressed: () {
+                // Handle "How it works" pressed
+                print("How it works pressed");
+              },
+              onAddProjectPressed: () {
+                // Handle "Add Project" pressed
+                Get.to(Addclient());
+              },
+            ),
           ],
         ));
   }

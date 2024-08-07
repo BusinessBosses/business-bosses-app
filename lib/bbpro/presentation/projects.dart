@@ -1,13 +1,13 @@
 import 'dart:async';
 import 'package:business_bosses_v2/bbpro/common/widgets/taskwidget.dart';
 import 'package:business_bosses_v2/bbpro/models/task_model.dart';
-import 'package:business_bosses_v2/bbpro/presentation/shop_setup/presentation/addproject.dart';
+import 'package:business_bosses_v2/bbpro/presentation/addproject.dart';
 import 'package:business_bosses_v2/utils/theme/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 
-import '../../../common/widgets/topsection.dart';
+import '../common/widgets/topsection.dart';
 
 class Projects extends StatefulWidget {
   const Projects({

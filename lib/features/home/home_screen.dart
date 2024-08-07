@@ -48,6 +48,8 @@ class _HomeScreenState extends State<HomeScreen>
     with WidgetsBindingObserver, TickerProviderStateMixin {
   final HomeController homeController = Get.put(HomeController());
   final ProfileController _profileController = Get.find();
+  final CommunitiesController _communitiesController =
+      Get.put(CommunitiesController());
   final LiveController liveEventController = Get.put(LiveController());
   final ChallengeController challengeController =
       Get.put(ChallengeController());
@@ -64,8 +66,6 @@ class _HomeScreenState extends State<HomeScreen>
   // final GetStorage sandBox = GetStorage();
   final ScrollController _scrollController = ScrollController();
   final MarketController marketController = Get.put(MarketController());
-  final CommunitiesController _communitiesController =
-      Get.put(CommunitiesController());
 
   int marketIndex = 0;
   // final GlobalKey<NavigatorState> postButtonKey = GlobalKey<NavigatorState>();

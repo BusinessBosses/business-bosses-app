@@ -8,7 +8,7 @@ import 'package:business_bosses_v2/bbpro/common/widgets/progresstabbar.dart';
 import 'package:business_bosses_v2/bbpro/common/widgets/selectionboxes.dart';
 import 'package:business_bosses_v2/bbpro/common/widgets/textfield.dart';
 import 'package:business_bosses_v2/bbpro/controllers/shop_controller.dart';
-import 'package:business_bosses_v2/bbpro/presentation/shop_setup/presentation/bottomnavscreen.dart';
+import 'package:business_bosses_v2/bbpro/presentation/bottomnavscreen.dart';
 import 'package:business_bosses_v2/common/dialogs/snackbar.dart';
 import 'package:business_bosses_v2/features/profile/controller/profile_controller.dart';
 import 'package:business_bosses_v2/utils/theme/theme.dart';
@@ -432,7 +432,7 @@ class _SetupshopState extends State<Setupshop>
                           // ignore: use_build_context_synchronously
                           successDialog(context);
                         } else {
-                          Get.to(Bottomnavscreen());
+                          Get.to(() => Bottomnavscreen());
                           showSnackbar(
                             message: 'Error while adding shop!',
                             error: true,
