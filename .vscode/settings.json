@@ -5,6 +5,7 @@
   "dart.flutterSdkPath": ".fvm/versions/3.13.2",
   "cSpell.words": [
     "backgroundcolorinterface",
-    "Floatingbutton"
+    "Floatingbutton",
+    "probackground"
   ]
 }

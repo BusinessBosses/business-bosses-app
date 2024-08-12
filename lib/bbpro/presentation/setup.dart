@@ -1,4 +1,5 @@
 import 'package:business_bosses_v2/bbpro/common/widgets/iconbutton.dart';
+import 'package:business_bosses_v2/bbpro/presentation/inventory.dart';
 import 'package:business_bosses_v2/common/widgets/network_image_with_placeholder.dart';
 import 'package:business_bosses_v2/features/live_event/widgets/custom_icon_button.dart';
 import 'package:business_bosses_v2/features/profile/controller/profile_controller.dart';
@@ -98,14 +99,22 @@ class _SetupState extends State<Setup> {
                             Row(
                               children: [
                                 Container(
-                                  decoration: BoxDecoration(color: Colors.white, borderRadius: BorderRadius.circular(40)),
-                                  padding: EdgeInsets.symmetric(horizontal: 8, vertical: 8),
-                                  child: Text('View Shop')),
+                                    decoration: BoxDecoration(
+                                        color: Colors.white,
+                                        borderRadius:
+                                            BorderRadius.circular(40)),
+                                    padding: EdgeInsets.symmetric(
+                                        horizontal: 8, vertical: 8),
+                                    child: Text('View Shop')),
                                 SizedBox(width: 5),
-                               Container(
-                                  decoration: BoxDecoration(color: Colors.white, borderRadius: BorderRadius.circular(40)),
-                                  padding: EdgeInsets.symmetric(horizontal: 8, vertical: 8),
-                                  child: Text('Share my link')),
+                                Container(
+                                    decoration: BoxDecoration(
+                                        color: Colors.white,
+                                        borderRadius:
+                                            BorderRadius.circular(40)),
+                                    padding: EdgeInsets.symmetric(
+                                        horizontal: 8, vertical: 8),
+                                    child: Text('Share my link')),
                                 // ProIconButton(
                                 //   // icon: Icon(
                                 //   //   Icons.add,
@@ -170,6 +179,7 @@ class _SetupState extends State<Setup> {
                                   ),
                                 ),
                                 onTap: () {
+                                  Get.to(Inventory());
                                   // Get.toNamed(
                                   //   Routes.explorebusinessbossesscreen,
                                   //   arguments: 'Description',
