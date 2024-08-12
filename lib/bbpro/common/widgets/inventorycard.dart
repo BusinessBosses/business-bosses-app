@@ -77,6 +77,7 @@ class _InventoryCardState extends State<InventoryCard> {
                 children: const [
                   CircleAvatar(
                     radius: 5,
+                    backgroundColor: Colors.green,
                   ),
                   SizedBox(width: 3),
                   Text('Out of stock', style: TextStyle(fontSize: 10), ),

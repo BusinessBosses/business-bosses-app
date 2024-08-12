@@ -1,14 +1,17 @@
+import 'package:business_bosses_v2/bbpro/common/widgets/optionsbutton.dart';
 import 'package:business_bosses_v2/bbpro/models/task_model.dart';
 import 'package:business_bosses_v2/bbpro/presentation/projects.dart';
+import 'package:business_bosses_v2/utils/theme/theme.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 
 class TaskWidget extends StatelessWidget {
   final Task task;
-  final Color backgroundColor;
+  final Color bgcolor;
 
   const TaskWidget({
     required this.task,
-    required this.backgroundColor,
+    required this.bgcolor,
     super.key,
   });
 
@@ -29,21 +32,29 @@ class TaskWidget extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Container(
-              decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(3),
-                  color: backgroundColor),
-              padding: EdgeInsets.symmetric(horizontal: 10, vertical: 5),
-              child: Text(
-                task.title,
-                style: const TextStyle(
-                  fontWeight: FontWeight.bold,
-                  fontSize: 16,
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Container(
+                  decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(3), color: bgcolor),
+                  padding: EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+                  child: Text(
+                    task.title,
+                    style: const TextStyle(
+                      fontWeight: FontWeight.bold,
+                      fontSize: 16,
+                    ),
+                  ),
                 ),
-              ),
+                OptionsButton(
+                  padding: EdgeInsets.all(0),
+                  borderColor: Colors.white,
+                ),
+              ],
             ),
             Padding(
-              padding: const EdgeInsets.all(16.0),
+              padding: const EdgeInsets.symmetric(vertical:10.0),
               child: Text(
                 task.description ?? "description",
                 style: const TextStyle(
@@ -52,6 +63,19 @@ class TaskWidget extends StatelessWidget {
                 ),
               ),
             ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.end,
+              children: [
+                CircleAvatar(
+                  backgroundColor: probackgroundColor,
+                  radius: 15,
+                  child: SvgPicture.asset(
+                    'assets/svgs/expandform.svg',
+                    color: proprimaryColor,
+                  ),
+                )
+              ],
+            )
           ],
         ),
       ),

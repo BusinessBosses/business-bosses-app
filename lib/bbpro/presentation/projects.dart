@@ -119,17 +119,17 @@ class _ProjectsState extends State<Projects> {
           ),
         ],
       ),
-      // floatingActionButton: FloatingActionButton(
-      //   onPressed: () {
-      //     setState(() {
-      //       _tasks[TaskStatus.todo]
-      //           ?.add(Task(title: "To Do $_counter", status: TaskStatus.todo));
-      //       _counter++;
-      //     });
-      //   },
-      //   tooltip: 'Add Task',
-      //   child: const Icon(Icons.add),
-      // ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {
+          setState(() {
+            _tasks[TaskStatus.todo]
+                ?.add(Task(title: "To Do $_counter", status: TaskStatus.todo));
+            _counter++;
+          });
+        },
+        tooltip: 'Add Task',
+        child: const Icon(Icons.add),
+      ),
     );
   }
 
@@ -174,11 +174,11 @@ class RowStatusCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       height: screenSize.height * 0.8,
-      width: screenSize.width * 0.8,
-      margin: const EdgeInsets.only(left: 15),
+      width: screenSize.width * 0.9,
+      margin: const EdgeInsets.only(left: 10),
       decoration: BoxDecoration(
         color: Colors.white,
-        borderRadius: BorderRadius.circular(16),
+        borderRadius: BorderRadius.circular(15),
       ),
       child: Column(
         children: [
@@ -290,7 +290,7 @@ class ListStatusColumnWidget extends StatelessWidget {
       itemBuilder: (context, index) {
         final taskWidget = TaskWidget(
           task: tasks[index],
-          backgroundColor: tasks[index].status.backgroundColor,
+          bgcolor: tasks[index].status.backgroundColor,
         );
 
         return Padding(

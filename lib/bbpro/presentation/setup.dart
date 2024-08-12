@@ -1,5 +1,6 @@
 import 'package:business_bosses_v2/bbpro/common/widgets/iconbutton.dart';
 import 'package:business_bosses_v2/bbpro/presentation/inventory.dart';
+import 'package:business_bosses_v2/common/dialogs/snackbar.dart';
 import 'package:business_bosses_v2/common/widgets/network_image_with_placeholder.dart';
 import 'package:business_bosses_v2/features/live_event/widgets/custom_icon_button.dart';
 import 'package:business_bosses_v2/features/profile/controller/profile_controller.dart';
@@ -8,6 +9,7 @@ import 'package:business_bosses_v2/utils/theme/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class Setup extends StatefulWidget {
   const Setup({super.key});
@@ -179,7 +181,10 @@ class _SetupState extends State<Setup> {
                                   ),
                                 ),
                                 onTap: () {
-                                  Get.to(Inventory());
+                                  if (titles[index] == 'Manage Inventory')
+                                    Get.to(Inventory());
+                                  if (titles[index] == 'Contact Us')
+                                    _contactUs();
                                   // Get.toNamed(
                                   //   Routes.explorebusinessbossesscreen,
                                   //   arguments: 'Description',
@@ -205,5 +210,35 @@ class _SetupState extends State<Setup> {
         ),
       ),
     );
+  }
+
+  Future<void> _contactUs() async {
+    String? encodeQueryParameters(Map<String, String> params) {
+      return params.entries
+          .map((MapEntry<String, String> e) =>
+              '${Uri.encodeComponent(e.key)}=${Uri.encodeComponent(e.value)}')
+          .join('&');
+    }
+
+    final Uri mailUrl = Uri(
+      scheme: 'mailto',
+      path: 'support@businessbosses.co.uk',
+      query: encodeQueryParameters(<String, String>{
+        'subject': 'Contact Business Bosses',
+      }),
+    );
+
+    try {
+      if (await canLaunchUrl(mailUrl)) {
+        await launchUrl(mailUrl);
+      } else {
+        throw 'Could not launch $mailUrl';
+      }
+    } catch (e) {
+      showSnackbar(
+          title: 'OOPS!',
+          message: 'An error occurred, please try again!',
+          error: true);
+    }
   }
 }
