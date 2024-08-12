@@ -82,12 +82,43 @@ class _ExpandedProductState extends State<ExpandedProduct> {
                             fontWeight: FontWeight.bold,
                           ),
                         ),
+                        SizedBox(
+                          width: 5,
+                        ),
+                        Container(
+                          decoration: BoxDecoration(
+                              color: Colors.green.withAlpha(50),
+                              borderRadius: BorderRadius.circular(30)),
+                          padding:
+                              EdgeInsets.symmetric(horizontal: 5, vertical: 5),
+                          child: Text(
+                            'Active',
+                            style: TextStyle(color: Colors.green),
+                          ),
+                        )
                       ],
                     ),
                     Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         Text(
                           'Product price',
+                          style: TextStyle(
+                            color: proprimaryColor,
+                            fontWeight: FontWeight.bold,
+                            fontSize: 16,
+                          ),
+                        ),
+                        Text(
+                          'Delivery',
+                          style: TextStyle(
+                            color: proprimaryColor,
+                            fontWeight: FontWeight.bold,
+                            fontSize: 16,
+                          ),
+                        ),
+                        Text(
+                          'Location',
                           style: TextStyle(
                             color: proprimaryColor,
                             fontWeight: FontWeight.bold,
@@ -120,10 +151,10 @@ class _ExpandedProductState extends State<ExpandedProduct> {
                           color: Colors.blue,
                         ),
                         moreStyle: bodyText2.copyWith(
-                          color: Colors.redAccent,
+                          color: proprimaryColor,
                         ),
                         lessStyle: bodyText2.copyWith(
-                          color: Colors.redAccent,
+                          color: proprimaryColor,
                         ),
                         trimLength: 10,
                         trimExpandedText: '  show less',
