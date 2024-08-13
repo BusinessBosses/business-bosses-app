@@ -409,14 +409,15 @@ class _CreateEventState extends State<CreateEvent> {
             if (_selectedImage != null || updateImage != null)
               Stack(
                 children: <Widget>[
-                  Container(
+                  SizedBox(
                     width: 100, // Adjust the width as needed
                     height: 100,
 
                     child: updateImage == null
                         ? ClipRRect(
-                          borderRadius: BorderRadius.circular(10),
-                          child: Image.file(fit: BoxFit.cover, _selectedImage!))
+                            borderRadius: BorderRadius.circular(10),
+                            child:
+                                Image.file(fit: BoxFit.cover, _selectedImage!))
                         : NetworkImageWithPlaceHolder(imageUrl: updateImage),
                   ),
                   Positioned(

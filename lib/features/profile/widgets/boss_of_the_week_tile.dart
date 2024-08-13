@@ -1,3 +1,4 @@
+import 'package:business_bosses_v2/bbpro/presentation/bottomnavscreen.dart';
 import 'package:business_bosses_v2/common/models/api_response_model.dart';
 import 'package:business_bosses_v2/common/models/user_model.dart';
 import 'package:business_bosses_v2/common/widgets/popup/bossup_challenge_popuphome.dart';
@@ -18,8 +19,6 @@ import '../../home/controller/home_controller.dart';
 // final GlobalKey<NavigatorState> connectbuttonkey = GlobalKey<NavigatorState>();
 
 /// BOSS OF THE WEEK HOMEPAGE TILE
-///
-///
 class BossOfWeekProfileTile extends StatefulWidget {
 // Add this line
 
@@ -77,7 +76,7 @@ class _BossOfWeekProfileTileState extends State<BossOfWeekProfileTile> {
   void initState() {
     super.initState();
     startColor = startColors[0];
-    user = _profileController.bossOfTheWeek;
+    user = homeController.bossOfTheWeek;
   }
 
   @override
@@ -238,6 +237,7 @@ class _BossOfWeekProfileTileState extends State<BossOfWeekProfileTile> {
                                           SvgPicture.asset(
                                             'assets/svgs/premiumbadge.svg',
                                             height: 9,
+                                            // ignore: deprecated_member_use
                                             color: primaryColorLT,
                                           )
                                         ],
@@ -321,7 +321,7 @@ class _BossOfWeekProfileTileState extends State<BossOfWeekProfileTile> {
                               ),
                               Wrap(
                                   crossAxisAlignment: WrapCrossAlignment.center,
-                                  children: [
+                                  children: <Widget>[
                                     const Text(
                                       'See all',
                                       style: TextStyle(fontSize: 11),
@@ -329,6 +329,7 @@ class _BossOfWeekProfileTileState extends State<BossOfWeekProfileTile> {
                                     const SizedBox(width: 5.0),
                                     SvgPicture.asset(
                                       'assets/svgs/nexticon.svg',
+                                      // ignore: deprecated_member_use
                                       color: textColor,
                                       height: 8,
                                     ),
@@ -423,7 +424,7 @@ class _BossOfWeekProfileTileState extends State<BossOfWeekProfileTile> {
                                                 horizontal: 8.0,
                                               ),
                                               child: Column(
-                                                children: [
+                                                children: <Widget>[
                                                   Text(
                                                     item['companyName'],
                                                     textAlign: TextAlign.left,
@@ -459,6 +460,7 @@ class _BossOfWeekProfileTileState extends State<BossOfWeekProfileTile> {
                                                               4),
                                                       child: SvgPicture.asset(
                                                         'assets/svgs/upicon.svg',
+                                                        // ignore: deprecated_member_use
                                                         color: const Color(
                                                             0xFF0F132D),
                                                         height: 8,
@@ -597,14 +599,29 @@ class _BossOfWeekProfileTileState extends State<BossOfWeekProfileTile> {
               style: TextStyle(color: primaryColorLT),
             ),
           ),
+          const SizedBox(
+            width: 10,
+          ),
+          ElevatedButton(
+            style: ElevatedButton.styleFrom(
+              backgroundColor: Colors.white,
+              elevation: 0,
+              side: const BorderSide(
+                color: primaryColorLT,
+                width: 1,
+              ),
+            ),
+            onPressed: () {
+              Get.to(() => Bottomnavscreen());
+            },
+            child: const Text(
+              'Pro',
+              style: TextStyle(color: primaryColorLT),
+            ),
+          ),
         ],
       ),
     );
-  }
-
-  void _sharePost(dynamic message) {
-    logEvent('usershare', 'user');
-    socialShare(message);
   }
 
   void connectToUser() async {
@@ -653,7 +670,7 @@ class _BossOfWeekProfileTileState extends State<BossOfWeekProfileTile> {
       'timestamp': DateTime.now().millisecondsSinceEpoch
     });
     setState(() {
-      _profileController.bossOfTheWeek?.connecteds?.removeWhere(
+      homeController.bossOfTheWeek?.connecteds?.removeWhere(
           (String string) => string == _profileController.myProfile.uid);
 
       user?.connecteds?.removeWhere(
@@ -668,7 +685,7 @@ class _BossOfWeekProfileTileState extends State<BossOfWeekProfileTile> {
       'timestamp': DateTime.now().millisecondsSinceEpoch
     });
     setState(() {
-      _profileController.bossOfTheWeek?.connecteds
+      homeController.bossOfTheWeek?.connecteds
           ?.add(_profileController.myProfile.uid);
 
       user?.connecteds?.add(_profileController.myProfile.uid);

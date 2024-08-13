@@ -728,14 +728,6 @@ class _EventItemState extends State<EventItem> {
     );
   }
 
-  void _launchURL(String url) async {
-    if (await canLaunchUrl(Uri.parse(url))) {
-      await launchUrl(Uri.parse(url));
-    } else {
-      throw 'Could not launch $url';
-    }
-  }
-
   void _showDeleteConfirmationDialog(BuildContext context, int id) {
     showDialog(
       context: context,

@@ -75,7 +75,7 @@ class _ProjectsState extends State<Projects> {
             },
             onAddProjectPressed: () {
               // Handle "Add Project" pressed
-              Get.to(Addproject());
+              Get.to(() => const Addproject());
             },
           ),
           Expanded(

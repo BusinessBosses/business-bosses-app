@@ -1,8 +1,6 @@
 import 'package:business_bosses_v2/bbpro/common/widgets/optionsbutton.dart';
-import 'package:business_bosses_v2/bbpro/models/task_model.dart';
-import 'package:business_bosses_v2/bbpro/presentation/projects.dart';
-import 'package:business_bosses_v2/common/widgets/popup/learningpopup.dart';
 import 'package:business_bosses_v2/bbpro/common/widgets/projectpopup.dart';
+import 'package:business_bosses_v2/bbpro/models/task_model.dart';
 import 'package:business_bosses_v2/utils/theme/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -35,7 +33,7 @@ class TaskWidget extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           mainAxisAlignment: MainAxisAlignment.center,
-          children: [
+          children: <Widget>[
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
@@ -60,7 +58,7 @@ class TaskWidget extends StatelessWidget {
             Padding(
               padding: const EdgeInsets.symmetric(vertical: 10.0),
               child: Text(
-                task.description ?? "description",
+                task.description ?? 'description',
                 style: const TextStyle(
                   fontWeight: FontWeight.bold,
                   fontSize: 16,

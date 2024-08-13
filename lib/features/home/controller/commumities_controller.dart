@@ -5,10 +5,10 @@ import 'package:business_bosses_v2/features/home/controller/home_controller.dart
 import 'package:business_bosses_v2/features/home/repository/home_repository.dart';
 import 'package:business_bosses_v2/features/profile/controller/profile_controller.dart';
 import 'package:get/get.dart';
-import 'package:socket_io_client/socket_io_client.dart' as IO;
+import 'package:socket_io_client/socket_io_client.dart' as io;
 
 class CommunitiesController extends GetxController {
-  late IO.Socket socket;
+  late io.Socket socket;
   final HomeController _homeController = Get.find();
   final ProfileController _profileController = Get.find();
 
@@ -207,21 +207,18 @@ class CommunitiesController extends GetxController {
 
   @override
   void onInit() {
-    // TODO: implement onInit
     socket = _homeController.socket;
     if (_homeController.industries.isEmpty) {
       fetchIndustries();
     } else {
       industries = _homeController.industries;
     }
-    // industries = _homeController.industries;
 
     super.onInit();
   }
 
   @override
   void onClose() {
-    // TODO: implement onClose
     clearSearch();
     super.onClose();
   }
