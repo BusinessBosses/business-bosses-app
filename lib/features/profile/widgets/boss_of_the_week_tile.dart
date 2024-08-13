@@ -478,7 +478,7 @@ class _BossOfWeekProfileTileState extends State<BossOfWeekProfileTile> {
                                                           style:
                                                               const TextStyle(
                                                             color: textColor,
-                                                            fontSize: 12,
+                                                            fontSize: 13,
                                                             fontWeight:
                                                                 FontWeight.w700,
                                                           ),
@@ -495,7 +495,7 @@ class _BossOfWeekProfileTileState extends State<BossOfWeekProfileTile> {
                                                           style:
                                                               const TextStyle(
                                                             color: textColor,
-                                                            fontSize: 10,
+                                                            fontSize: 12,
                                                           ),
                                                           overflow: TextOverflow
                                                               .ellipsis,
