@@ -36,13 +36,14 @@ class TaskWidget extends StatelessWidget {
           children: <Widget>[
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
+              children: <Widget>[
                 Container(
                   decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(3), color: bgcolor),
-                  padding: EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
                   child: Text(
-                    task.title,
+                    task.name!,
                     style: const TextStyle(
                       fontWeight: FontWeight.bold,
                       fontSize: 16,
@@ -68,7 +69,7 @@ class TaskWidget extends StatelessWidget {
             if (isExpanded != false)
               Row(
                 mainAxisAlignment: MainAxisAlignment.end,
-                children: [
+                children: <Widget>[
                   GestureDetector(
                     onTap: () {
                       showDialog(

@@ -27,7 +27,7 @@ class ProjectPopUp extends StatelessWidget {
             ),
             TaskWidget(
                 isExpanded: false,
-                task: Task(title: 'title', status: TaskStatus.done),
+                task: Task.fromMap(<String, dynamic>{'name': ''}),
                 bgcolor: Colors.red),
             const SizedBox(
               height: 15,
@@ -53,7 +53,7 @@ class ProjectPopUp extends StatelessWidget {
                       itemCount: 5,
                       itemBuilder: (BuildContext context, int index) {
                         return TaskDisplayItem(
-                          task: Task(title: 'title', status: TaskStatus.done),
+                          task: Task.fromMap(<String, dynamic>{'name': ''}),
                           onChanged: (bool? value) {},
                         );
                       },

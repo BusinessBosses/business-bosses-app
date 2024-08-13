@@ -1,7 +1,5 @@
-import 'package:business_bosses_v2/bbpro/common/widgets/optionsbutton.dart';
 import 'package:business_bosses_v2/bbpro/common/widgets/textfield.dart';
 import 'package:business_bosses_v2/common/generic_slider.dart';
-import 'package:business_bosses_v2/common/widgets/network_image_with_placeholder.dart';
 import 'package:detectable_text_field/detector/sample_regular_expressions.dart';
 import 'package:detectable_text_field/widgets/detectable_text.dart';
 import 'package:flutter/material.dart';
@@ -35,9 +33,9 @@ class _ExpandedProductState extends State<ExpandedProduct> {
                 fontWeight: FontWeight.bold,
               ),
             ),
-            actions: [
+            actions: const <Widget>[
               Padding(
-                padding: const EdgeInsets.only(right: 10.0, bottom: 10),
+                padding: EdgeInsets.only(right: 10.0, bottom: 10),
                 child: CircleAvatar(
                     backgroundColor: backgroundColor,
                     radius: 30, // This sets the circle's radius
@@ -49,15 +47,16 @@ class _ExpandedProductState extends State<ExpandedProduct> {
             ]),
         body: SingleChildScrollView(
           child: Column(
-            children: [
+            children: <Widget>[
               Container(
                 height: 15,
               ),
               Container(
-                padding: EdgeInsets.symmetric(horizontal: 15, vertical: 15),
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 15, vertical: 15),
                 color: Colors.white,
                 child: Column(
-                  children: [
+                  children: <Widget>[
                     Container(
                       height: 250,
                       decoration: const BoxDecoration(
@@ -66,41 +65,41 @@ class _ExpandedProductState extends State<ExpandedProduct> {
                           Radius.circular(15),
                         ),
                       ),
-                      child: GenericSlider(
+                      child: const GenericSlider(
                         images: ['', '', ''],
                       ),
                     ),
-                    SizedBox(
+                    const SizedBox(
                       height: 15,
                     ),
                     Row(
                       children: [
-                        Text(
+                        const Text(
                           'Product name',
-                          style: const TextStyle(
+                          style: TextStyle(
                             fontSize: 16,
                             fontWeight: FontWeight.bold,
                           ),
                         ),
-                        SizedBox(
+                        const SizedBox(
                           width: 5,
                         ),
                         Container(
                           decoration: BoxDecoration(
                               color: Colors.green.withAlpha(50),
                               borderRadius: BorderRadius.circular(30)),
-                          padding:
-                              EdgeInsets.symmetric(horizontal: 5, vertical: 5),
-                          child: Text(
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: 5, vertical: 5),
+                          child: const Text(
                             'Active',
                             style: TextStyle(color: Colors.green),
                           ),
                         )
                       ],
                     ),
-                    Row(
+                    const Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
+                      children: <Widget>[
                         Text(
                           'Product price',
                           style: TextStyle(
@@ -127,14 +126,14 @@ class _ExpandedProductState extends State<ExpandedProduct> {
                         ),
                       ],
                     ),
-                    SizedBox(
+                    const SizedBox(
                       height: 15,
                     ),
-                    Row(
-                      children: [
+                    const Row(
+                      children: <Widget>[
                         Text(
                           'Description',
-                          style: const TextStyle(
+                          style: TextStyle(
                             fontSize: 16,
                             fontWeight: FontWeight.w600,
                             color: textColor,
@@ -145,7 +144,7 @@ class _ExpandedProductState extends State<ExpandedProduct> {
                     Align(
                       alignment: Alignment.centerLeft,
                       child: DetectableText(
-                        text: "akwkwlwlkwkljwk wlknwl wl,nwlwnw" ?? '',
+                        text: 'akwkwlwlkwkljwk wlknwl wl,nwlwnw',
                         detectionRegExp: detectionRegExp(hashtag: false)!,
                         detectedStyle: bodyText2.copyWith(
                           color: Colors.blue,
@@ -162,10 +161,10 @@ class _ExpandedProductState extends State<ExpandedProduct> {
                         onTap: (_) {},
                       ),
                     ),
-                    SizedBox(
+                    const SizedBox(
                       height: 15,
                     ),
-                    CustomTextWidget(
+                    const CustomTextWidget(
                       caption: 'Product number',
                       iconName: '',
                       text: 'Barcode - 934890843284490',
@@ -173,10 +172,10 @@ class _ExpandedProductState extends State<ExpandedProduct> {
                       padding: 0.0,
                       textpadding: 15,
                     ),
-                    SizedBox(
+                    const SizedBox(
                       height: 15,
                     ),
-                    CustomTextWidget(
+                    const CustomTextWidget(
                       caption: 'Quantity',
                       iconName: '',
                       text: 'Barcode - 934890843284490',
@@ -184,10 +183,10 @@ class _ExpandedProductState extends State<ExpandedProduct> {
                       padding: 0.0,
                       textpadding: 15,
                     ),
-                    SizedBox(
+                    const SizedBox(
                       height: 15,
                     ),
-                    CustomTextWidget(
+                    const CustomTextWidget(
                       caption: 'Colors',
                       iconName: '',
                       text: 'Barcode - 934890843284490',
@@ -195,10 +194,10 @@ class _ExpandedProductState extends State<ExpandedProduct> {
                       padding: 0.0,
                       textpadding: 15,
                     ),
-                    SizedBox(
+                    const SizedBox(
                       height: 15,
                     ),
-                    CustomTextWidget(
+                    const CustomTextWidget(
                       caption: 'Sizes',
                       iconName: '',
                       text: 'Barcode - 934890843284490',
@@ -206,10 +205,10 @@ class _ExpandedProductState extends State<ExpandedProduct> {
                       padding: 0.0,
                       textpadding: 15,
                     ),
-                    SizedBox(
+                    const SizedBox(
                       height: 15,
                     ),
-                    CustomTextWidget(
+                    const CustomTextWidget(
                       caption: 'Storage Location',
                       iconName: '',
                       text: 'Barcode - 934890843284490',
@@ -217,10 +216,10 @@ class _ExpandedProductState extends State<ExpandedProduct> {
                       padding: 0.0,
                       textpadding: 15,
                     ),
-                    SizedBox(
+                    const SizedBox(
                       height: 15,
                     ),
-                    CustomTextWidget(
+                    const CustomTextWidget(
                       isSupplier: true,
                       caption: 'Supplier',
                       iconName: '',
@@ -230,7 +229,7 @@ class _ExpandedProductState extends State<ExpandedProduct> {
                       textpadding: 15,
                       buttontext: 'Contact Supplier',
                     ),
-                    SizedBox(
+                    const SizedBox(
                       height: 100,
                     ),
                   ],

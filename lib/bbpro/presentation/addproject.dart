@@ -1,9 +1,6 @@
 import 'package:business_bosses_v2/bbpro/common/widgets/addprojectbottomsheet.dart';
 import 'package:business_bosses_v2/bbpro/common/widgets/button.dart';
 import 'package:business_bosses_v2/bbpro/common/widgets/edittext.dart';
-import 'package:business_bosses_v2/bbpro/common/widgets/taskitem.dart';
-import 'package:business_bosses_v2/bbpro/common/widgets/button.dart';
-import 'package:business_bosses_v2/bbpro/common/widgets/edittext.dart';
 import 'package:business_bosses_v2/bbpro/controllers/project_conroller.dart';
 import 'package:business_bosses_v2/common/dialogs/snackbar.dart';
 import 'package:business_bosses_v2/features/profile/controller/profile_controller.dart';
@@ -25,16 +22,11 @@ class _AddprojectState extends State<Addproject> {
   final TextEditingController nameController = TextEditingController();
   final TextEditingController descriptionController = TextEditingController();
   final TextEditingController budgetController = TextEditingController();
-  final _formKey = GlobalKey<FormState>();
   final ProjectController projectController = Get.put(ProjectController());
   final ProfileController profileController = Get.find();
-  FocusNode _taskNameFocusNode = FocusNode();
-  List<Map<String, dynamic>> tasks = [];
+  final FocusNode _taskNameFocusNode = FocusNode();
+  List<Map<String, dynamic>> tasks = <Map<String, dynamic>>[];
 
-  final TextEditingController taskNameController = TextEditingController();
-  final TextEditingController expenseController = TextEditingController();
-  DateTime? startDate;
-  DateTime? endDate;
   @override
   void initState() {
     super.initState();
@@ -53,160 +45,68 @@ class _AddprojectState extends State<Addproject> {
   }
 
   void _showAddTaskSheet(BuildContext context) {
+    final TextEditingController taskNameController = TextEditingController();
+    final TextEditingController expenseController = TextEditingController();
+    DateTime? startDate;
+    DateTime? endDate;
+    startDate = DateTime.now();
+    endDate = DateTime.now();
     showModalBottomSheet(
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
       context: context,
       isScrollControlled: true,
-      builder: (context) {
-        return Padding(
-          padding: EdgeInsets.only(
-            bottom: MediaQuery.of(context).viewInsets.bottom,
-            left: 15,
-            right: 15,
-            top: 15,
-          ),
-          child: Container(
-            child: Form(
-              key: _formKey,
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  Expanded(
-                    child: TextFormField(
-                      maxLines: 1,
-                      focusNode: _taskNameFocusNode, // Attach the FocusNode
-                      decoration: InputDecoration(
-                        border: InputBorder.none,
-                        counterText: '',
-                        hintText: 'Write task here...',
-                        filled: false,
-                        fillColor: Colors.grey.shade100,
-                      ),
-                      maxLength: 50,
-                      controller: taskNameController,
-                    ),
-                  ),
-                  const SizedBox(height: 15),
-                  CustomEditText(
-                    caption: 'Expense',
-                    hintText: '\$0.00',
-                    controller: expenseController,
-                    inputType: TextInputType.number,
-                  ),
-                  const SizedBox(height: 15),
-                  Row(
-                    children: [
-                      Expanded(
-                        child: GestureDetector(
-                          onTap: () async {
-                            startDate = await _selectDate(context, startDate);
-                          },
-                          child: Container(
-                            padding: const EdgeInsets.symmetric(
-                                vertical: 15, horizontal: 10),
-                            decoration: BoxDecoration(
-                              border: Border.all(color: Colors.grey),
-                              borderRadius: BorderRadius.circular(5),
-                            ),
-                            child: Text(
-                              startDate != null
-                                  ? DateFormat('yyyy-MM-dd').format(startDate!)
-                                  : 'Start Date',
-                              style: const TextStyle(fontSize: 16),
-                            ),
-                          ),
-                        ),
-                      ),
-                      const SizedBox(width: 10),
-                      Expanded(
-                        child: GestureDetector(
-                          onTap: () async {
-                            endDate = await _selectDate(context, endDate);
-                          },
-                          child: Container(
-                            padding: const EdgeInsets.symmetric(
-                                vertical: 15, horizontal: 10),
-                            decoration: BoxDecoration(
-                              border: Border.all(color: Colors.grey),
-                              borderRadius: BorderRadius.circular(5),
-                            ),
-                            child: Text(
-                              endDate != null
-                                  ? DateFormat('yyyy-MM-dd').format(endDate!)
-                                  : 'End Date',
-                              style: const TextStyle(fontSize: 16),
-                            ),
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-                  const SizedBox(height: 20),
-                  ElevatedButton(
-                    onPressed: () {
-                      final Map<String, dynamic> task = <String, dynamic>{
-                        'name': taskNameController.text.trim(),
-                        'amount': expenseController.text.trim(),
-                        'startAt': startDate,
-                        'endAt': endDate,
-                      };
+      builder: (BuildContext context) {
+        return AddProjectBottomSheet(
+          taskNameController: taskNameController,
+          expenseController: expenseController,
+          startDate: startDate!,
+          endDate: endDate!,
+          onPressed: () {
+            final Map<String, dynamic> task = <String, dynamic>{
+              'name': taskNameController.text.trim(),
+              'amount': expenseController.text.trim(),
+              'startAt': startDate,
+              'endAt': endDate,
+            };
 
-                      setState(() {
-                        tasks.add(task);
-                      });
+            setState(() {
+              tasks.add(task);
+            });
 
-                      Navigator.pop(context);
-                    },
-                    child: const Text('Add Task'),
-                  ),
-                ],
-              ),
-            ),
-          ),
+            Navigator.pop(context);
+          },
         );
       },
     );
   }
 
-  Future<DateTime?> _selectDate(
-      BuildContext context, DateTime? initialDate) async {
-    final DateTime? picked = await showDatePicker(
-      context: context,
-      initialDate: initialDate ?? DateTime.now(),
-      firstDate: DateTime(2000),
-      lastDate: DateTime(2100),
-    );
-    return picked;
-  }
-
   @override
   Widget build(BuildContext context) {
-    startDate = DateTime.now();
-    endDate = DateTime.now();
     return Scaffold(
-        backgroundColor: probackgroundColor,
-        appBar: AppBar(
-          title: const Text(
-            'Add Project',
-            style: TextStyle(
-              color: proprimaryColor,
-              fontWeight: FontWeight.bold,
-            ),
+      backgroundColor: probackgroundColor,
+      appBar: AppBar(
+        title: const Text(
+          'Add Project',
+          style: TextStyle(
+            color: proprimaryColor,
+            fontWeight: FontWeight.bold,
           ),
-          automaticallyImplyLeading: false, // Used for removing back button.
-          actions: <Widget>[
-            IconButton(
-              icon: const Icon(Icons.close),
-              onPressed: () {
-                Navigator.pop(context);
-              },
-            )
-          ],
         ),
-        body: Stack(children: [
+        automaticallyImplyLeading: false, // Used for removing back button.
+        actions: <Widget>[
+          IconButton(
+            icon: const Icon(Icons.close),
+            onPressed: () {
+              Navigator.pop(context);
+            },
+          )
+        ],
+      ),
+      body: Stack(
+        children: <Widget>[
           SingleChildScrollView(
             child: Column(
-              children: [
+              children: <Widget>[
                 const SizedBox(height: 15),
                 CustomEditText(
                   caption: 'Project Name',
@@ -236,10 +136,11 @@ class _AddprojectState extends State<Addproject> {
                     decoration: BoxDecoration(
                         color: Colors.white,
                         borderRadius: BorderRadius.circular(10)),
-                    padding: EdgeInsets.symmetric(horizontal: 15, vertical: 15),
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 15, vertical: 15),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
+                      children: <Widget>[
                         const Text(
                           'Tasks',
                           style: TextStyle(
@@ -252,15 +153,15 @@ class _AddprojectState extends State<Addproject> {
                           return Card(
                             margin: const EdgeInsets.symmetric(vertical: 8.0),
                             child: ListTile(
-                              title: Text(task['taskName']),
+                              title: Text(task['name']),
                               subtitle: Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: <Widget>[
-                                  Text('Expense: \$${task['expense']}'),
+                                  Text('Expense: \$${task['amount']}'),
                                   Text(
-                                      'Start Date: ${DateFormat('yyyy-MM-dd').format(task['startDate'])}'),
+                                      'Start Date: ${DateFormat('yyyy-MM-dd').format(task['startAt'])}'),
                                   Text(
-                                      'End Date: ${DateFormat('yyyy-MM-dd').format(task['endDate'])}'),
+                                      'End Date: ${DateFormat('yyyy-MM-dd').format(task['endAt'])}'),
                                 ],
                               ),
                             ),
@@ -284,37 +185,9 @@ class _AddprojectState extends State<Addproject> {
                   textColor: proprimaryColor,
                   text: 'Add Task',
                   onPressed: () {
-                    // _showAddTaskSheet(context);
-                    showModalBottomSheet(
-                      shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(15)),
-                      context: context,
-                      isScrollControlled: true,
-                      builder: (BuildContext context) {
-                        return AddProjectBottomSheet(
-                          taskNameController: taskNameController,
-                          expenseController: expenseController,
-                          startDate: startDate!,
-                          endDate: endDate!,
-                          onPressed: () {
-                            final Map<String, dynamic> task = <String, dynamic>{
-                              'name': taskNameController.text.trim(),
-                              'amount': expenseController.text.trim(),
-                              'startAt': startDate,
-                              'endAt': endDate,
-                            };
-
-                            setState(() {
-                              tasks.add(task);
-                            });
-
-                            Navigator.pop(context);
-                          },
-                        );
-                      },
-                    );
+                    _showAddTaskSheet(context);
                   },
-                  icon: Icon(
+                  icon: const Icon(
                     Icons.add,
                     size: 20,
                     color: proprimaryColor,
@@ -328,7 +201,7 @@ class _AddprojectState extends State<Addproject> {
             bottom: 30,
             left: 0,
             right: 0,
-            child: Container(
+            child: SizedBox(
               width: MediaQuery.of(context).size.width,
               child: ProCustomButton(
                   text: 'Save',
@@ -354,6 +227,8 @@ class _AddprojectState extends State<Addproject> {
                   }),
             ),
           )
-        ]));
+        ],
+      ),
+    );
   }
 }
