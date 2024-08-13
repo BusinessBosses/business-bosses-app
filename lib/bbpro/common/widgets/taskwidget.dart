@@ -34,7 +34,7 @@ class TaskWidget extends StatelessWidget {
                   color: backgroundColor),
               padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
               child: Text(
-                task.title,
+                task.name!,
                 style: const TextStyle(
                   fontWeight: FontWeight.bold,
                   fontSize: 16,
@@ -44,7 +44,7 @@ class TaskWidget extends StatelessWidget {
             Padding(
               padding: const EdgeInsets.all(16.0),
               child: Text(
-                task.description ?? 'description',
+                task.name ?? 'description',
                 style: const TextStyle(
                   fontWeight: FontWeight.bold,
                   fontSize: 16,

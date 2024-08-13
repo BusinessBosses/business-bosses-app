@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'package:business_bosses_v2/bbpro/common/widgets/taskwidget.dart';
+import 'package:business_bosses_v2/bbpro/controllers/project_conroller.dart';
 import 'package:business_bosses_v2/bbpro/models/task_model.dart';
 import 'package:business_bosses_v2/bbpro/presentation/addproject.dart';
 import 'package:business_bosses_v2/utils/theme/theme.dart';
@@ -19,7 +20,8 @@ class Projects extends StatefulWidget {
 }
 
 class _ProjectsState extends State<Projects> {
-  final _tasks = <TaskStatus, List<Task>>{};
+  final ProjectController projectController = Get.put(ProjectController());
+  final Map<TaskStatus, List<Task>> _tasks = <TaskStatus, List<Task>>{};
   final ScrollController _mainListScrollController = ScrollController();
   int _counter = 0;
   Timer? _timer;
@@ -27,9 +29,9 @@ class _ProjectsState extends State<Projects> {
 
   @override
   void initState() {
-    TaskStatus.values.forEach((status) {
+    for (dynamic status in TaskStatus.values) {
       _tasks[status] = <Task>[];
-    });
+    }
     super.initState();
   }
 
@@ -95,7 +97,16 @@ class _ProjectsState extends State<Projects> {
                           setState(() {
                             _tasks[task.status]?.remove(task);
                             _tasks[newStatus]?.add(
-                              Task(title: task.title, status: newStatus),
+                              Task(
+                                name: task.name,
+                                status: newStatus,
+                                id: '',
+                                userId: '',
+                                projectId: '',
+                                startAt: null,
+                                endAt: null,
+                                createdAt: null,
+                              ),
                             );
                           });
                         },
