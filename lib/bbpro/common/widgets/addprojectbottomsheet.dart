@@ -3,26 +3,35 @@ import 'package:business_bosses_v2/bbpro/common/widgets/textfield.dart';
 import 'package:business_bosses_v2/utils/theme/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:intl/intl.dart';
 
 class AddProjectBottomSheet extends StatefulWidget {
+  final TextEditingController taskNameController;
+  final TextEditingController expenseController;
+  DateTime startDate;
+  DateTime endDate;
+  final VoidCallback onPressed;
+
+  AddProjectBottomSheet({
+    Key? key,
+    required this.taskNameController,
+    required this.expenseController,
+    required this.startDate,
+    required this.endDate,
+    required this.onPressed,
+  }) : super(key: key);
+
   @override
   _AddProjectBottomSheetState createState() => _AddProjectBottomSheetState();
 }
 
 class _AddProjectBottomSheetState extends State<AddProjectBottomSheet> {
   final _formKey = GlobalKey<FormState>();
-  TextEditingController _taskNameController = TextEditingController();
-  TextEditingController _projectDescriptionController = TextEditingController();
-  TextEditingController _taskController = TextEditingController();
-  TextEditingController _expenseController = TextEditingController(text: '0.00');
-  DateTime _startDate = DateTime.now();
-  DateTime _endDate = DateTime.now();
   FocusNode _taskNameFocusNode = FocusNode();
 
   @override
   void initState() {
     super.initState();
-    // Request focus when the widget is built
     WidgetsBinding.instance.addPostFrameCallback((_) {
       _taskNameFocusNode.requestFocus();
     });
@@ -55,7 +64,7 @@ class _AddProjectBottomSheetState extends State<AddProjectBottomSheet> {
                       Expanded(
                         child: TextFormField(
                           maxLines: 1,
-                          focusNode: _taskNameFocusNode, // Attach the FocusNode
+                          focusNode: _taskNameFocusNode,
                           decoration: InputDecoration(
                             border: InputBorder.none,
                             counterText: '',
@@ -64,32 +73,31 @@ class _AddProjectBottomSheetState extends State<AddProjectBottomSheet> {
                             fillColor: Colors.grey.shade100,
                           ),
                           maxLength: 50,
-                          controller: _taskNameController,
+                          controller: widget.taskNameController,
                         ),
                       ),
-                      SizedBox(
+                      const SizedBox(
                         width: 10,
                       ),
                       GestureDetector(
-                        onTap: () {},
+                        onTap: widget.onPressed,
                         child: CircleAvatar(
                           backgroundColor: proprimaryColor,
-                          child: SvgPicture.asset('assets/svgs/taskcheckmark.svg')
+                          child:
+                              SvgPicture.asset('assets/svgs/taskcheckmark.svg'),
                         ),
-                      )
+                      ),
                     ],
                   ),
                 ),
-                SizedBox(
-                  height: 10,
-                ),
+                const SizedBox(height: 10),
                 CustomEditText(
                   backgroundcolor: prosemibackColor,
                   caption: 'Expense',
                   hintText: '\$0.00',
-                  controller: _taskNameController,
+                  controller: widget.expenseController,
                 ),
-                SizedBox(height: 10),
+                const SizedBox(height: 10),
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 15.0),
                   child: Row(
@@ -99,21 +107,25 @@ class _AddProjectBottomSheetState extends State<AddProjectBottomSheet> {
                           onTap: () async {
                             DateTime? picked = await showDatePicker(
                               context: context,
-                              initialDate: _startDate,
+                              initialDate: widget.startDate,
                               firstDate: DateTime(2000),
                               lastDate: DateTime(2101),
                             );
-                            if (picked != null && picked != _startDate)
+                            if (picked != null && picked != widget.startDate) {
                               setState(() {
-                                _startDate = picked;
+                                widget.startDate = picked;
                               });
+                            }
                           },
                           child: Container(
                             decoration: BoxDecoration(
-                                color: prosemibackColor,
-                                borderRadius: BorderRadius.circular(10)),
+                              color: prosemibackColor,
+                              borderRadius: BorderRadius.circular(10),
+                            ),
                             padding: const EdgeInsets.symmetric(
-                                horizontal: 15, vertical: 15),
+                              horizontal: 15,
+                              vertical: 15,
+                            ),
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: <Widget>[
@@ -125,48 +137,55 @@ class _AddProjectBottomSheetState extends State<AddProjectBottomSheet> {
                                     color: textColor,
                                   ),
                                 ),
-                                const SizedBox(
-                                  height: 15,
-                                ),
+                                const SizedBox(height: 15),
                                 Row(
                                   mainAxisAlignment:
                                       MainAxisAlignment.spaceBetween,
                                   children: <Widget>[
                                     Text(
-                                      'widget.text',
+                                      widget.startDate != null
+                                          ? DateFormat('dd-MM-yyyy')
+                                              .format(widget.startDate!)
+                                          : 'Start Date',
                                       style: TextStyle(
-                                          fontSize: 16, color: hintColor),
+                                        fontSize: 16,
+                                        color: widget.startDate != null
+                                            ? textColor
+                                            : hintColor,
+                                      ),
                                     ),
                                   ],
-                                )
+                                ),
                               ],
                             ),
                           ),
                         ),
                       ),
-                      SizedBox(
-                        width: 10,
-                      ),
+                      SizedBox(width: 10),
                       Expanded(
                         child: GestureDetector(
                           onTap: () async {
                             DateTime? picked = await showDatePicker(
                               context: context,
-                              initialDate: _endDate,
+                              initialDate: widget.endDate,
                               firstDate: DateTime(2000),
                               lastDate: DateTime(2101),
                             );
-                            if (picked != null && picked != _endDate)
+                            if (picked != null && picked != widget.endDate) {
                               setState(() {
-                                _endDate = picked;
+                                widget.endDate = picked;
                               });
+                            }
                           },
                           child: Container(
                             decoration: BoxDecoration(
-                                color: prosemibackColor,
-                                borderRadius: BorderRadius.circular(10)),
+                              color: prosemibackColor,
+                              borderRadius: BorderRadius.circular(10),
+                            ),
                             padding: const EdgeInsets.symmetric(
-                                horizontal: 15, vertical: 15),
+                              horizontal: 15,
+                              vertical: 15,
+                            ),
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: <Widget>[
@@ -178,20 +197,25 @@ class _AddProjectBottomSheetState extends State<AddProjectBottomSheet> {
                                     color: textColor,
                                   ),
                                 ),
-                                const SizedBox(
-                                  height: 15,
-                                ),
+                                const SizedBox(height: 15),
                                 Row(
                                   mainAxisAlignment:
                                       MainAxisAlignment.spaceBetween,
                                   children: <Widget>[
                                     Text(
-                                      'widget.text',
+                                      widget.endDate != null
+                                          ? DateFormat('dd-MM-yyyy')
+                                              .format(widget.endDate!)
+                                          : 'End Date',
                                       style: TextStyle(
-                                          fontSize: 16, color: hintColor),
+                                        fontSize: 16,
+                                        color: widget.endDate != null
+                                            ? textColor
+                                            : hintColor,
+                                      ),
                                     ),
                                   ],
-                                )
+                                ),
                               ],
                             ),
                           ),
@@ -200,7 +224,7 @@ class _AddProjectBottomSheetState extends State<AddProjectBottomSheet> {
                     ],
                   ),
                 ),
-                SizedBox(height: 15,)
+                SizedBox(height: 15),
               ],
             ),
           ),
