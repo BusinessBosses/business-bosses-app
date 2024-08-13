@@ -54,17 +54,23 @@ class HomeAppBar extends StatelessWidget {
               children: [
                 Row(
                   children: [
-                    SizedBox(
-                      height: 40.0,
-                      width: 40.0,
-                      child: ClipRRect(
-                        borderRadius: BorderRadius.circular(10),
-                        child: NetworkImageWithPlaceHolder(
-                          imageUrl: profileController.myProfile.photoUrl ?? '',
-                          radius: 10,
-                          placeHolder: Icons.person,
-                          iconSize: 22.0,
-                          fit: BoxFit.cover,
+                    GestureDetector(
+                      onTap: () {
+                        Get.toNamed(Routes.myProfile);
+                      },
+                      child: SizedBox(
+                        height: 40.0,
+                        width: 40.0,
+                        child: ClipRRect(
+                          borderRadius: BorderRadius.circular(10),
+                          child: NetworkImageWithPlaceHolder(
+                            imageUrl:
+                                profileController.myProfile.photoUrl ?? '',
+                            radius: 10,
+                            placeHolder: Icons.person,
+                            iconSize: 22.0,
+                            fit: BoxFit.cover,
+                          ),
                         ),
                       ),
                     ),

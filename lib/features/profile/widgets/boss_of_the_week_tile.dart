@@ -407,7 +407,7 @@ class _BossOfWeekProfileTileState extends State<BossOfWeekProfileTile> {
                                         gradient: LinearGradient(
                                           colors: <Color>[
                                             startColor,
-                                            backgroundColor
+                                            Colors.white
                                           ],
                                           begin: Alignment.topRight,
                                           end: Alignment.bottomLeft,
