@@ -7,9 +7,12 @@ import 'package:business_bosses_v2/features/home/widgets/forum_item.dart';
 import 'package:business_bosses_v2/features/home/widgets/list_items.dart';
 import 'package:business_bosses_v2/features/live_event/controller/live_event_controller.dart';
 import 'package:business_bosses_v2/features/donations/controller/donations_controller.dart';
+import 'package:business_bosses_v2/features/live_event/widgets/event_call.dart';
+import 'package:business_bosses_v2/navigation/routes.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_sticky_header/flutter_sticky_header.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:upgrader/upgrader.dart';
@@ -189,7 +192,7 @@ class _HomeScreenState extends State<HomeScreen>
             child: Scaffold(
               backgroundColor: Colors.white,
               appBar: PreferredSize(
-                preferredSize: const Size.fromHeight(kToolbarHeight),
+                preferredSize: const Size.fromHeight(kToolbarHeight + 50),
                 child: GetBuilder<ChatController>(
                     builder: (ChatController chatController) {
                   final List<MessageModel> unseenChats = chatController.chats
@@ -211,6 +214,7 @@ class _HomeScreenState extends State<HomeScreen>
                       hasUnreadNotification:
                           profileController.myProfile.unReadCount != null &&
                               profileController.myProfile.unReadCount! > 0,
+                      controller: _tabController,
                     ),
                   );
                 }),
@@ -329,106 +333,314 @@ class _HomeScreenState extends State<HomeScreen>
 
                                           return true;
                                         },
-                                        child: NestedScrollView(
-                                          controller: _scrollController,
-                                          headerSliverBuilder:
-                                              (BuildContext context,
-                                                  bool innerBoxIsScrolled) {
-                                            return <Widget>[
-                                              SliverStickyHeader(
-                                                sticky: false,
-                                                header: Container(
-                                                  color:
-                                                      backgroundcolorinterface,
-                                                  child: LayoutBuilder(
-                                                    builder:
-                                                        (BuildContext context,
-                                                            BoxConstraints
-                                                                constraints) {
-                                                      return const BossOfWeekProfileTile();
-                                                    },
-                                                  ),
-                                                ),
-                                              ),
-                                            ];
-                                          },
-                                          body: Column(
-                                            children: <Widget>[
-                                              Visibility(
-                                                visible: isTabVisible,
-                                                child: Column(
-                                                  children: <Widget>[
-                                                    Material(
-                                                      elevation: 0.1,
-                                                      color: Colors.white,
-                                                      child:
-                                                          DefaultTabController(
-                                                        length: 2,
-                                                        child: TabBar(
-                                                          controller:
-                                                              _tabController,
-                                                          tabs: <Widget>[
-                                                            Tab(
-                                                              child: FittedBox(
-                                                                child: Text(
-                                                                  'For you',
-                                                                  style: Theme.of(
-                                                                          context)
-                                                                      .textTheme
-                                                                      .bodyLarge,
-                                                                ),
+                                        child: Column(
+                                          children: <Widget>[
+                                            Visibility(
+                                              visible: isTabVisible,
+                                              child: Column(
+                                                children: <Widget>[
+                                                  Material(
+                                                    elevation: 0.1,
+                                                    color: Colors.white,
+                                                    child: DefaultTabController(
+                                                      length: 2,
+                                                      child: TabBar(
+                                                        controller:
+                                                            _tabController,
+                                                        tabs: <Widget>[
+                                                          Tab(
+                                                            child: FittedBox(
+                                                              child: Text(
+                                                                'For you',
+                                                                style: Theme.of(
+                                                                        context)
+                                                                    .textTheme
+                                                                    .bodyLarge,
                                                               ),
                                                             ),
-                                                            Tab(
-                                                              child: FittedBox(
-                                                                child: Text(
-                                                                  'Following',
-                                                                  style: Theme.of(
-                                                                          context)
-                                                                      .textTheme
-                                                                      .bodyLarge,
-                                                                ),
+                                                          ),
+                                                          Tab(
+                                                            child: FittedBox(
+                                                              child: Text(
+                                                                'Following',
+                                                                style: Theme.of(
+                                                                        context)
+                                                                    .textTheme
+                                                                    .bodyLarge,
                                                               ),
                                                             ),
-                                                          ],
-                                                        ),
+                                                          ),
+                                                        ],
                                                       ),
                                                     ),
-                                                    Container(
-                                                      height: 1,
-                                                      color: backgroundColor,
-                                                    )
-                                                  ],
-                                                ),
+                                                  ),
+                                                  Container(
+                                                    height: 1,
+                                                    color: backgroundColor,
+                                                  )
+                                                ],
                                               ),
-                                              Expanded(
-                                                child: TabBarView(
-                                                    controller: _tabController,
-                                                    children: <Widget>[
-                                                      PostsWidget(
-                                                        onPageChange:
-                                                            widget.onPageChange,
+                                            ),
+                                            Container(
+                                              height: 700,
+                                              child: TabBarView(
+                                                  controller: _tabController,
+                                                  children: <Widget>[
+                                                    SingleChildScrollView(
+                                                      child: Column(
+                                                        children: [
+                                                          Padding(
+                                                            padding:
+                                                                const EdgeInsets
+                                                                    .symmetric(
+                                                                    horizontal:
+                                                                        15.0,
+                                                                    vertical:
+                                                                        5),
+                                                            child:
+                                                                GestureDetector(
+                                                              onTap: () => Get
+                                                                  .toNamed(Routes
+                                                                      .completesearchingscreen),
+                                                              child: Container(
+                                                                decoration: BoxDecoration(
+                                                                    color: Colors
+                                                                        .white,
+                                                                    borderRadius:
+                                                                        BorderRadius.circular(
+                                                                            10),
+                                                                    border: Border.all(
+                                                                        width:
+                                                                            1,
+                                                                        color:
+                                                                            backgroundColor)),
+                                                                height: 45,
+                                                                width: double
+                                                                    .infinity,
+                                                                child:
+                                                                    TextFormField(
+                                                                  style: const TextStyle(
+                                                                      fontSize:
+                                                                          20),
+                                                                  decoration:
+                                                                      inputDecoration
+                                                                          .copyWith(
+                                                                    border:
+                                                                        OutlineInputBorder(
+                                                                      borderSide:
+                                                                          BorderSide
+                                                                              .none,
+                                                                      borderRadius:
+                                                                          BorderRadius.circular(
+                                                                              10),
+                                                                    ),
+                                                                    fillColor:
+                                                                        backgroundColor,
+                                                                    filled:
+                                                                        true,
+                                                                    enabled:
+                                                                        false,
+                                                                    prefixIcon:
+                                                                        Container(
+                                                                      padding: const EdgeInsets
+                                                                          .symmetric(
+                                                                          vertical:
+                                                                              10.0),
+                                                                      child: SvgPicture
+                                                                          .asset(
+                                                                        'assets/svgs/search.svg',
+                                                                        color:
+                                                                            hintColor,
+                                                                      ),
+                                                                    ),
+                                                                    hintText:
+                                                                        'Search people & posts',
+                                                                  ),
+                                                                ),
+                                                              ),
+                                                            ),
+                                                          ),
+                                                          const BossOfWeekProfileTile(),
+                                                          Container(
+                                                            child: Column(
+                                                              children: [
+                                                                SizedBox(
+                                                                  height: 10,
+                                                                ),
+                                                                Padding(
+                                                                  padding: const EdgeInsets
+                                                                      .symmetric(
+                                                                      horizontal:
+                                                                          15.0),
+                                                                  child: Row(
+                                                                    mainAxisAlignment:
+                                                                        MainAxisAlignment
+                                                                            .spaceBetween,
+                                                                    children: <Widget>[
+                                                                      const Text(
+                                                                        'Events',
+                                                                        style: TextStyle(
+                                                                            fontWeight:
+                                                                                FontWeight.w700,
+                                                                            fontSize: 18),
+                                                                      ),
+                                                                      Wrap(
+                                                                          crossAxisAlignment:
+                                                                              WrapCrossAlignment.center,
+                                                                          children: <Widget>[
+                                                                            const Text(
+                                                                              'View all',
+                                                                              style: TextStyle(fontSize: 11),
+                                                                            ),
+                                                                            const SizedBox(width: 5.0),
+                                                                            SvgPicture.asset(
+                                                                              'assets/svgs/nexticon.svg',
+                                                                              // ignore: deprecated_member_use
+                                                                              color: textColor,
+                                                                              height: 8,
+                                                                            ),
+                                                                          ]),
+                                                                    ],
+                                                                  ),
+                                                                ),
+                                                                Container(
+                                                                  height: 400,
+                                                                  child:
+                                                                      SingleChildScrollView(
+                                                                    scrollDirection:
+                                                                        Axis.horizontal,
+                                                                    child: Row(
+                                                                      children: [
+                                                                        Container(
+                                                                          width:
+                                                                              400,
+                                                                          child:
+                                                                              EventCall(
+                                                                            ishome:
+                                                                                true,
+                                                                            full:
+                                                                                true,
+                                                                          ),
+                                                                        ),
+                                                                      ],
+                                                                    ),
+                                                                  ),
+                                                                ),
+                                                              ],
+                                                            ),
+                                                          ),
+
+                                                          ///Learning section
+                                                          Container(
+                                                            child: Column(
+                                                              children: [
+                                                                SizedBox(
+                                                                  height: 10,
+                                                                ),
+                                                                Padding(
+                                                                  padding: const EdgeInsets
+                                                                      .symmetric(
+                                                                      horizontal:
+                                                                          15.0),
+                                                                  child: Row(
+                                                                    mainAxisAlignment:
+                                                                        MainAxisAlignment
+                                                                            .spaceBetween,
+                                                                    children: <Widget>[
+                                                                      const Text(
+                                                                        'Learnings',
+                                                                        style: TextStyle(
+                                                                            fontWeight:
+                                                                                FontWeight.w700,
+                                                                            fontSize: 18),
+                                                                      ),
+                                                                    ],
+                                                                  ),
+                                                                ),
+                                                                Padding(
+                                                                  padding: const EdgeInsets
+                                                                      .symmetric(
+                                                                      horizontal:
+                                                                          15.0),
+                                                                  child: Row(
+                                                                    mainAxisAlignment:
+                                                                        MainAxisAlignment
+                                                                            .spaceBetween,
+                                                                    children: <Widget>[
+                                                                      const Text(
+                                                                        'Blogs on Learning',
+                                                                        style: TextStyle(
+                                                                            fontSize:
+                                                                                15),
+                                                                      ),
+                                                                      Wrap(
+                                                                          crossAxisAlignment:
+                                                                              WrapCrossAlignment.center,
+                                                                          children: <Widget>[
+                                                                            const Text(
+                                                                              'View all',
+                                                                              style: TextStyle(fontSize: 11),
+                                                                            ),
+                                                                            const SizedBox(width: 5.0),
+                                                                            SvgPicture.asset(
+                                                                              'assets/svgs/nexticon.svg',
+                                                                              // ignore: deprecated_member_use
+                                                                              color: textColor,
+                                                                              height: 8,
+                                                                            ),
+                                                                          ]),
+                                                                    ],
+                                                                  ),
+                                                                ),
+                                                                Container(
+                                                                  height: 400,
+                                                                  child:
+                                                                      SingleChildScrollView(
+                                                                    scrollDirection:
+                                                                        Axis.horizontal,
+                                                                    child: Row(
+                                                                      children: [
+                                                                        Container(
+                                                                          width:
+                                                                              400,
+                                                                          child:
+                                                                              EventCall(
+                                                                            full:
+                                                                                true,
+                                                                          ),
+                                                                        ),
+                                                                      ],
+                                                                    ),
+                                                                  ),
+                                                                ),
+                                                              ],
+                                                            ),
+                                                          )
+                                                        ],
                                                       ),
-                                                      ListView.builder(
-                                                        shrinkWrap: true,
-                                                        itemCount: controller
-                                                            .forums.length,
-                                                        itemBuilder:
-                                                            (BuildContext
-                                                                    context,
-                                                                int index) {
-                                                          return ForumItem(
-                                                            forum: controller
-                                                                .forums[index],
-                                                            controller:
-                                                                homeController,
-                                                          );
-                                                        },
-                                                      ),
-                                                    ]),
-                                              ),
-                                            ],
-                                          ),
+                                                    ),
+                                                    // PostsWidget(
+                                                    //   onPageChange:
+                                                    //       widget.onPageChange,
+                                                    // ),
+                                                    ListView.builder(
+                                                      shrinkWrap: true,
+                                                      itemCount: controller
+                                                          .forums.length,
+                                                      itemBuilder:
+                                                          (BuildContext context,
+                                                              int index) {
+                                                        return ForumItem(
+                                                          forum: controller
+                                                              .forums[index],
+                                                          controller:
+                                                              homeController,
+                                                        );
+                                                      },
+                                                    ),
+                                                  ]),
+                                            ),
+                                          ],
                                         ),
                                       ),
                                     ),

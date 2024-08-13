@@ -15,12 +15,14 @@ class HomeAppBar extends StatelessWidget {
     required this.coinsCount,
     this.hasUnreadNotification = false,
     this.isTabVisible = false,
+    required this.controller,
   }) : super(key: key);
 
   final bool hasBadge;
   final bool isTabVisible;
   final String coinsCount;
   final bool hasUnreadNotification;
+  final TabController controller;
 
   String getGreeting() {
     final hour = DateTime.now().hour;
@@ -75,13 +77,14 @@ class HomeAppBar extends StatelessWidget {
                               ? '${profileName.substring(0, 12)}...'
                               : profileName,
                           overflow: TextOverflow.ellipsis,
+                          maxLines: 1,
                           style: const TextStyle(
                             fontSize: 14,
                             fontWeight: FontWeight.bold,
                           ),
                         ),
                         Text(
-                          getGreeting(),
+                          '👋' + getGreeting(),
                           style: const TextStyle(
                             fontSize: 12,
                             color: Colors.grey,
@@ -165,6 +168,52 @@ class HomeAppBar extends StatelessWidget {
               ],
             ),
           ),
+        ),
+        TabBar(
+          controller: controller,
+          indicatorPadding: EdgeInsets.symmetric(horizontal: 16.0, vertical: 0),
+          indicatorColor: Colors.white,
+          labelColor: primaryColorLT,
+          unselectedLabelColor: Colors.grey,
+          labelStyle: TextStyle(fontWeight: FontWeight.bold),
+          tabs: [
+            Tab(
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  if (controller.index == 0)
+                    Container(
+                      margin: EdgeInsets.only(right: 8.0),
+                      width: 8,
+                      height: 8,
+                      decoration: BoxDecoration(
+                        color: Colors.red,
+                        shape: BoxShape.circle,
+                      ),
+                    ),
+                  Text('For you'),
+                ],
+              ),
+            ),
+            Tab(
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  if (controller.index == 1)
+                    Container(
+                      margin: EdgeInsets.only(right: 8.0),
+                      width: 8,
+                      height: 8,
+                      decoration: BoxDecoration(
+                        color: Colors.red,
+                        shape: BoxShape.circle,
+                      ),
+                    ),
+                  Text('Following'),
+                ],
+              ),
+            ),
+          ],
         ),
       ],
     );

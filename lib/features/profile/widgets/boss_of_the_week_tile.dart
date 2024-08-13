@@ -89,7 +89,7 @@ class _BossOfWeekProfileTileState extends State<BossOfWeekProfileTile> {
     ];
     return Container(
       width: double.infinity,
-      color: backgroundcolorinterface,
+      color: Colors.white,
       padding: const EdgeInsets.only(top: 0.0, bottom: 0.0, left: 0, right: 0),
       child: user != null
           ? Column(
@@ -115,9 +115,7 @@ class _BossOfWeekProfileTileState extends State<BossOfWeekProfileTile> {
                         const Text(
                           'Boss of the week',
                           style: TextStyle(
-                              fontWeight: FontWeight.w900,
-                              fontSize: 25,
-                              color: Color(0xff333333)),
+                              fontWeight: FontWeight.w700, fontSize: 18),
                         ),
                         const Spacer(),
                         GestureDetector(
@@ -144,159 +142,194 @@ class _BossOfWeekProfileTileState extends State<BossOfWeekProfileTile> {
                     ),
                   ),
                 ),
-                Align(
-                  child: GestureDetector(
-                    onTap: () {
-                      Get.toNamed(Routes.publicProfile, arguments: user);
-                    },
-                    child: Container(
-                      padding: const EdgeInsets.symmetric(horizontal: 15),
-                      width: double.infinity,
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(15),
-                        color: Colors.transparent,
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 15.0),
+                  child: Container(
+                    padding: const EdgeInsets.symmetric(vertical: 10),
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(15),
+                      image: const DecorationImage(
+                        image: AssetImage(
+                            'assets/images/bossoftheweekback.png'), // Replace with your image path
+                        fit: BoxFit
+                            .cover, // Adjust the image to cover the entire container
                       ),
-                      child: Row(
-                        children: <Widget>[
-                          Stack(
-                            clipBehavior: Clip.none,
-                            children: <Widget>[
-                              GestureDetector(
-                                onTap: (() {
-                                  Get.toNamed(Routes.publicProfile,
-                                      arguments: user);
-                                }),
-                                child: SizedBox(
-                                  height: 90.0,
-                                  width: 90.0,
-                                  child: Align(
-                                    alignment: Alignment.topLeft,
-                                    child: ClipRRect(
-                                      borderRadius: BorderRadius.circular(1000),
-                                      child: user?.photoUrl != null
-                                          ? NetworkImageWithPlaceHolder(
-                                              imageUrl: user?.photoUrl,
-                                              height: 90.0,
-                                              width: 90.0,
-                                              radius: radius,
-                                              placeHolder: Icons.person,
-                                              iconSize: 64.0,
-                                            )
-                                          : const CircleAvatar(
-                                              radius: 50,
-                                              backgroundImage: AssetImage(
-                                                  'assets/images/bb_avatar.jpg'),
-                                            ),
-                                    ),
-                                  ),
-                                ),
-                              ),
-                              if (user?.isRanked ?? false)
-                                Positioned(
-                                  right: 7.0,
-                                  bottom: -3.0,
-                                  child: Container(
-                                    height: 32,
-                                    width: 32,
-                                    decoration: BoxDecoration(
-                                      color: Colors.transparent,
-                                      borderRadius: BorderRadius.circular(30.0),
-                                      // ignore: prefer_const_literals_to_create_immutables
-                                    ),
-                                  ),
-                                ),
-                            ],
+                    ),
+                    child: Align(
+                      child: GestureDetector(
+                        onTap: () {
+                          Get.toNamed(Routes.publicProfile, arguments: user);
+                        },
+                        child: Container(
+                          padding: const EdgeInsets.symmetric(horizontal: 15),
+                          width: double.infinity,
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(15),
+                            color: Colors.transparent,
                           ),
-                          const SizedBox(width: 20.0),
-                          Expanded(
-                            child: Column(
-                              mainAxisAlignment: MainAxisAlignment.start,
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: <Widget>[
-                                if (user?.category == null &&
-                                    user?.companyName == null &&
-                                    user?.location == null)
-                                  const SizedBox(height: 12.0),
-                                user?.isSubscribed == true
-                                    ? Row(
-                                        children: <Widget>[
-                                          Text(
-                                              user?.name != null &&
-                                                      user!.name!.length <= 20
-                                                  ? user!.name!
-                                                  : user?.name != null
-                                                      ? '${user!.name!.substring(0, 20)}...'
-                                                      : '',
-                                              maxLines: 1,
-                                              overflow: TextOverflow.ellipsis,
-                                              style: const TextStyle(
-                                                fontSize: 15,
-                                                fontWeight: FontWeight.bold,
-                                              )),
-                                          const SizedBox(width: 5),
-                                          SvgPicture.asset(
-                                            'assets/svgs/premiumbadge.svg',
-                                            height: 9,
-                                            // ignore: deprecated_member_use
-                                            color: primaryColorLT,
+                          child: Row(
+                            children: <Widget>[
+                              Expanded(
+                                child: Column(
+                                  mainAxisAlignment: MainAxisAlignment.start,
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: <Widget>[
+                                    const SizedBox(
+                                      height: 5,
+                                    ),
+                                    if (user?.category == null &&
+                                        user?.companyName == null &&
+                                        user?.location == null)
+                                      const SizedBox(height: 12.0),
+                                    user?.isSubscribed == true
+                                        ? Row(
+                                            children: <Widget>[
+                                              Text(
+                                                  user?.name != null &&
+                                                          user!.name!.length <=
+                                                              20
+                                                      ? user!.name!
+                                                      : user?.name != null
+                                                          ? '${user!.name!.substring(0, 20)}...'
+                                                          : '',
+                                                  maxLines: 1,
+                                                  overflow:
+                                                      TextOverflow.ellipsis,
+                                                  style: const TextStyle(
+                                                      fontSize: 15,
+                                                      fontWeight:
+                                                          FontWeight.bold,
+                                                      color: Colors.white)),
+                                              const SizedBox(width: 5),
+                                              SvgPicture.asset(
+                                                'assets/svgs/premiumbadge.svg',
+                                                height: 9,
+                                                // ignore: deprecated_member_use
+                                                color: primaryColorLT,
+                                              )
+                                            ],
                                           )
-                                        ],
-                                      )
-                                    : Text(
-                                        user?.name != null &&
-                                                user!.name!.length <= 20
-                                            ? user!.name!
-                                            : user?.name != null
-                                                ? '${user!.name!.substring(0, 20)}...'
-                                                : '',
-                                        maxLines: 1,
-                                        overflow: TextOverflow.ellipsis,
-                                        style: const TextStyle(
-                                          fontSize: 15,
-                                          fontWeight: FontWeight.bold,
-                                        )),
-                                user?.bio == null
-                                    ? Container()
-                                    : Column(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.start,
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.start,
-                                        children: <Widget>[
-                                          Text(
-                                            user!.bio.toString(),
-                                            maxLines: 2,
+                                        : Text(
+                                            user?.name != null &&
+                                                    user!.name!.length <= 20
+                                                ? user!.name!
+                                                : user?.name != null
+                                                    ? '${user!.name!.substring(0, 20)}...'
+                                                    : '',
+                                            maxLines: 1,
                                             overflow: TextOverflow.ellipsis,
                                             style: const TextStyle(
-                                              color: subtextColor,
-                                              fontSize: 13,
-                                            ),
-                                          ),
-                                          Row(
+                                                fontSize: 15,
+                                                fontWeight: FontWeight.bold,
+                                                color: Colors.white)),
+                                    SizedBox(
+                                      height: 10,
+                                    ),
+                                    user?.bio == null
+                                        ? Container()
+                                        : Column(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.start,
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.start,
                                             children: <Widget>[
-                                              Expanded(
-                                                child: outlineButtonHeader(() {
-                                                  onRefer(user!);
-                                                }),
+                                              Text(
+                                                user!.bio.toString(),
+                                                maxLines: 2,
+                                                overflow: TextOverflow.ellipsis,
+                                                style: const TextStyle(
+                                                  color: Colors.white,
+                                                  fontSize: 13,
+                                                ),
+                                              ),
+                                              SizedBox(
+                                                height: 10,
+                                              ),
+                                              Row(
+                                                children: <Widget>[
+                                                  Expanded(
+                                                    child:
+                                                        outlineButtonHeader(() {
+                                                      onRefer(user!);
+                                                    }),
+                                                  ),
+                                                ],
                                               ),
                                             ],
                                           ),
-                                        ],
+                                  ],
+                                ),
+                              ),
+                              const SizedBox(width: 10.0),
+                              Stack(
+                                clipBehavior: Clip.none,
+                                children: <Widget>[
+                                  GestureDetector(
+                                    onTap: (() {
+                                      Get.toNamed(Routes.publicProfile,
+                                          arguments: user);
+                                    }),
+                                    child: SizedBox(
+                                      height: 90.0,
+                                      width: 90.0,
+                                      child: Align(
+                                        alignment: Alignment.topLeft,
+                                        child: ClipRRect(
+                                          borderRadius:
+                                              BorderRadius.circular(1000),
+                                          child: user?.photoUrl != null
+                                              ? NetworkImageWithPlaceHolder(
+                                                  imageUrl: user?.photoUrl,
+                                                  height: 90.0,
+                                                  width: 90.0,
+                                                  radius: radius,
+                                                  placeHolder: Icons.person,
+                                                  iconSize: 64.0,
+                                                )
+                                              : const CircleAvatar(
+                                                  radius: 50,
+                                                  backgroundImage: AssetImage(
+                                                      'assets/images/bb_avatar.jpg'),
+                                                ),
+                                        ),
                                       ),
-                              ],
-                            ),
-                          )
-                        ],
+                                    ),
+                                  ),
+                                  if (user?.isRanked ?? false)
+                                    Positioned(
+                                      right: 7.0,
+                                      bottom: -3.0,
+                                      child: Container(
+                                        height: 32,
+                                        width: 32,
+                                        decoration: BoxDecoration(
+                                          color: Colors.transparent,
+                                          borderRadius:
+                                              BorderRadius.circular(30.0),
+                                          // ignore: prefer_const_literals_to_create_immutables
+                                        ),
+                                      ),
+                                    ),
+                                ],
+                              ),
+                            ],
+                          ),
+                        ),
                       ),
                     ),
                   ),
                 ),
                 const SizedBox(
-                  height: 10,
+                  height: 20,
                 ),
-                Container(
-                  height: 1,
-                  color: backgroundColor,
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 15.0),
+                  child: Container(
+                    height: 3,
+                    decoration: BoxDecoration(
+                        color: backgroundColor,
+                        borderRadius: BorderRadius.circular(10)),
+                  ),
                 ),
                 GestureDetector(
                   onTap: () {
@@ -323,7 +356,7 @@ class _BossOfWeekProfileTileState extends State<BossOfWeekProfileTile> {
                                   crossAxisAlignment: WrapCrossAlignment.center,
                                   children: <Widget>[
                                     const Text(
-                                      'See all',
+                                      'View all',
                                       style: TextStyle(fontSize: 11),
                                     ),
                                     const SizedBox(width: 5.0),
@@ -363,12 +396,13 @@ class _BossOfWeekProfileTileState extends State<BossOfWeekProfileTile> {
                                     },
                                     child: Container(
                                       width: MediaQuery.of(context).size.width /
-                                          3.58,
+                                          1.5,
+                                      height: 120,
                                       margin: const EdgeInsets.only(left: 15.0),
                                       decoration: BoxDecoration(
                                         border: Border.all(
-                                          color: startColor,
-                                          width: 1.0,
+                                          color: Colors.black12,
+                                          width: 0.5,
                                         ),
                                         gradient: LinearGradient(
                                           colors: <Color>[
@@ -378,7 +412,7 @@ class _BossOfWeekProfileTileState extends State<BossOfWeekProfileTile> {
                                           begin: Alignment.topRight,
                                           end: Alignment.bottomLeft,
                                         ),
-                                        borderRadius: BorderRadius.circular(15),
+                                        borderRadius: BorderRadius.circular(12),
                                       ),
                                       child: Column(
                                         crossAxisAlignment:
@@ -386,62 +420,93 @@ class _BossOfWeekProfileTileState extends State<BossOfWeekProfileTile> {
                                         mainAxisAlignment:
                                             MainAxisAlignment.spaceBetween,
                                         children: <Widget>[
-                                          Padding(
-                                            padding: const EdgeInsets.only(
-                                                left: 8.0,
-                                                right: 8,
-                                                top: 8,
-                                                bottom: 5),
-                                            child: SizedBox(
-                                              height: 20.0,
-                                              width: 20.0,
-                                              child: Container(
-                                                decoration: BoxDecoration(
-                                                  border: Border.all(
-                                                      width: 0.5,
-                                                      color: Colors.black12),
-                                                  color: backgroundColor,
-                                                  borderRadius:
-                                                      BorderRadius.circular(
-                                                          100.0),
-                                                ),
-                                                child:
-                                                    NetworkImageWithPlaceHolder(
-                                                  imageUrl:
-                                                      item['companyPhoto'] ??
-                                                          '',
-                                                  radius: 100,
-                                                  placeHolder: Icons.person,
-                                                  iconSize: 15.0,
-                                                  fit: BoxFit.cover,
-                                                ),
-                                              ),
-                                            ),
-                                          ),
-                                          Padding(
-                                              padding:
-                                                  const EdgeInsets.symmetric(
-                                                horizontal: 8.0,
-                                              ),
-                                              child: Column(
-                                                children: <Widget>[
-                                                  Text(
-                                                    item['companyName'],
-                                                    textAlign: TextAlign.left,
-                                                    maxLines: 2,
-                                                    style: const TextStyle(
-                                                      color: textColor,
-                                                      fontSize: 12,
-                                                      fontWeight:
-                                                          FontWeight.w700,
+                                          Row(
+                                              crossAxisAlignment:
+                                                  CrossAxisAlignment.center,
+                                              children: [
+                                                Padding(
+                                                  padding:
+                                                      const EdgeInsets.only(
+                                                          left: 10,
+                                                          right: 10,
+                                                          top: 10,
+                                                          bottom: 5),
+                                                  child: SizedBox(
+                                                    height: 68.0,
+                                                    width: 68.0,
+                                                    child: Container(
+                                                      decoration: BoxDecoration(
+                                                        border: Border.all(
+                                                            width: 0.5,
+                                                            color:
+                                                                Colors.black12),
+                                                        color: backgroundColor,
+                                                        borderRadius:
+                                                            BorderRadius
+                                                                .circular(10.0),
+                                                      ),
+                                                      child:
+                                                          NetworkImageWithPlaceHolder(
+                                                        imageUrl: item[
+                                                                'companyPhoto'] ??
+                                                            '',
+                                                        radius: 10,
+                                                        placeHolder:
+                                                            Icons.person,
+                                                        iconSize: 15.0,
+                                                        fit: BoxFit.cover,
+                                                      ),
                                                     ),
-                                                    overflow: TextOverflow
-                                                        .ellipsis, // Add this line to handle overflow
                                                   ),
-                                                ],
-                                              )),
+                                                ),
+                                                Expanded(
+                                                  child: Padding(
+                                                    padding:
+                                                        const EdgeInsets.only(
+                                                            right: 10.0),
+                                                    child: Column(
+                                                      crossAxisAlignment:
+                                                          CrossAxisAlignment
+                                                              .start,
+                                                      children: [
+                                                        Text(
+                                                          item['companyName'],
+                                                          softWrap: true,
+                                                          textAlign:
+                                                              TextAlign.left,
+                                                          maxLines: 1,
+                                                          style:
+                                                              const TextStyle(
+                                                            color: textColor,
+                                                            fontSize: 12,
+                                                            fontWeight:
+                                                                FontWeight.w700,
+                                                          ),
+                                                          overflow: TextOverflow
+                                                              .ellipsis,
+                                                        ),
+                                                        Text(
+                                                          item[
+                                                              'companyDescription'],
+                                                          softWrap: true,
+                                                          textAlign:
+                                                              TextAlign.left,
+                                                          maxLines: 3,
+                                                          style:
+                                                              const TextStyle(
+                                                            color: textColor,
+                                                            fontSize: 10,
+                                                          ),
+                                                          overflow: TextOverflow
+                                                              .ellipsis,
+                                                        ),
+                                                      ],
+                                                    ),
+                                                  ),
+                                                ),
+                                              ]),
                                           Padding(
-                                            padding: const EdgeInsets.all(8),
+                                            padding: const EdgeInsets.all(10),
                                             child: SizedBox(
                                               width: double.infinity,
                                               child: Wrap(
@@ -491,9 +556,15 @@ class _BossOfWeekProfileTileState extends State<BossOfWeekProfileTile> {
                     ),
                   ),
                 ),
-                Container(
-                  height: 7,
-                  color: backgroundColor,
+                SizedBox(height: 5,),
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 15.0),
+                  child: Container(
+                    height: 3,
+                    decoration: BoxDecoration(
+                        color: backgroundColor,
+                        borderRadius: BorderRadius.circular(10)),
+                  ),
                 ),
               ],
             )
@@ -566,59 +637,69 @@ class _BossOfWeekProfileTileState extends State<BossOfWeekProfileTile> {
       child: Row(
         children: <Widget>[
           ElevatedButton(
-            // key: connectbuttonkey,
+            style: ElevatedButton.styleFrom(
+              backgroundColor: Colors.white,
+              elevation: 0,
+            ),
             onPressed: () async {
               connectToUser();
             },
-            child: Text(
-              user?.connecteds != null &&
-                      _profileController.myProfile.connecteds!
-                          .contains(user!.uid)
-                  ? 'Following'
-                  : 'Follow',
-              style: const TextStyle(color: Colors.white),
-            ),
+            child:
+                Wrap(crossAxisAlignment: WrapCrossAlignment.center, children: [
+              Text(
+                user?.connecteds != null &&
+                        _profileController.myProfile.connecteds!
+                            .contains(user!.uid)
+                    ? 'Following'
+                    : 'Follow',
+                style: const TextStyle(color: primaryColorLT),
+              ),
+            ]),
           ),
           const SizedBox(
             width: 10,
           ),
           ElevatedButton(
             style: ElevatedButton.styleFrom(
-              backgroundColor: Colors.white,
+              backgroundColor: Colors.transparent,
               elevation: 0,
               side: const BorderSide(
-                color: primaryColorLT,
-                width: 1,
+                color: Colors.white,
+                width: 1.5,
               ),
             ),
             onPressed: () {
               onRefer();
             },
-            child: const Text(
-              'Refer',
-              style: TextStyle(color: primaryColorLT),
-            ),
+            child: const Wrap(
+                crossAxisAlignment: WrapCrossAlignment.center,
+                children: [
+                  Text(
+                    'Refer',
+                    style: TextStyle(color: Colors.white),
+                  ),
+                ]),
           ),
           const SizedBox(
             width: 10,
           ),
-          ElevatedButton(
-            style: ElevatedButton.styleFrom(
-              backgroundColor: Colors.white,
-              elevation: 0,
-              side: const BorderSide(
-                color: primaryColorLT,
-                width: 1,
-              ),
-            ),
-            onPressed: () {
-              Get.to(() => Bottomnavscreen());
-            },
-            child: const Text(
-              'Pro',
-              style: TextStyle(color: primaryColorLT),
-            ),
-          ),
+          // ElevatedButton(
+          //   style: ElevatedButton.styleFrom(
+          //     backgroundColor: Colors.white,
+          //     elevation: 0,
+          //     side: const BorderSide(
+          //       color: primaryColorLT,
+          //       width: 1,
+          //     ),
+          //   ),
+          //   onPressed: () {
+          //     Get.to(() => Bottomnavscreen());
+          //   },
+          //   child: const Text(
+          //     'Pro',
+          //     style: TextStyle(color: primaryColorLT),
+          //   ),
+          // ),
         ],
       ),
     );
