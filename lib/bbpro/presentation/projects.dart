@@ -185,11 +185,11 @@ class RowStatusCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       height: screenSize.height * 0.8,
-      width: screenSize.width * 0.8,
-      margin: const EdgeInsets.only(left: 15),
+      width: screenSize.width * 0.9,
+      margin: const EdgeInsets.only(left: 10),
       decoration: BoxDecoration(
         color: Colors.white,
-        borderRadius: BorderRadius.circular(16),
+        borderRadius: BorderRadius.circular(15),
       ),
       child: Column(
         children: [
@@ -199,14 +199,20 @@ class RowStatusCard extends StatelessWidget {
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Text(
-                  taskStatus.displayTitle,
-                  style: const TextStyle(
-                    color: Colors.black,
-                    fontWeight: FontWeight.bold,
-                    fontSize: 18,
+                Wrap(
+                  crossAxisAlignment: WrapCrossAlignment.center,
+                  children: [
+                  CircleAvatar(radius: 5,),
+                  SizedBox(width: 10,),
+                  Text(
+                    taskStatus.displayTitle,
+                    style: const TextStyle(
+                      color: Colors.black,
+                      fontWeight: FontWeight.bold,
+                      fontSize: 18,
+                    ),
                   ),
-                ),
+                ]),
                 GestureDetector(
                   onTap: () {},
                   child: Container(
@@ -295,7 +301,7 @@ class ListStatusColumnWidget extends StatelessWidget {
       itemBuilder: (context, index) {
         final taskWidget = TaskWidget(
           task: tasks[index],
-          backgroundColor: tasks[index].status.backgroundColor,
+          bgcolor: tasks[index].status.backgroundColor,
         );
 
         return Padding(

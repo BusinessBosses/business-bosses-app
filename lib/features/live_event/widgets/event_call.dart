@@ -5,9 +5,11 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 class EventCall extends StatefulWidget {
-  const EventCall({super.key, this.ongoing = false, this.full = false});
+  const EventCall(
+      {super.key, this.ongoing = false, this.full = false, this.ishome});
   final bool ongoing;
   final bool full;
+  final bool? ishome;
 
   @override
   State<EventCall> createState() => _EventCallState();
@@ -22,6 +24,9 @@ class _EventCallState extends State<EventCall> {
       return liveEventController.events.isNotEmpty
           ? Obx(
               () => ListView.builder(
+                physics: widget.ishome == true
+                    ? NeverScrollableScrollPhysics()
+                    : null,
                 itemCount: liveEventController.events.length,
                 itemBuilder: (BuildContext context, int index) {
                   EventModel event = liveEventController.events[index];
@@ -42,6 +47,9 @@ class _EventCallState extends State<EventCall> {
           ? liveEventController.upcoming.isNotEmpty
               ? Obx(
                   () => ListView.builder(
+                    physics: widget.ishome == true
+                        ? NeverScrollableScrollPhysics()
+                        : null,
                     itemCount: liveEventController.upcoming.length,
                     itemBuilder: (BuildContext context, int index) {
                       EventModel event = liveEventController.upcoming[index];
@@ -58,6 +66,9 @@ class _EventCallState extends State<EventCall> {
           : liveEventController.ongoing.isNotEmpty
               ? Obx(
                   () => ListView.builder(
+                    physics: widget.ishome == true
+                        ? NeverScrollableScrollPhysics()
+                        : null,
                     itemCount: liveEventController.ongoing.length,
                     itemBuilder: (BuildContext context, int index) {
                       EventModel event = liveEventController.ongoing[index];

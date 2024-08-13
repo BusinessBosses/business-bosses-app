@@ -25,11 +25,13 @@ import '../../../action/action.dart';
 class EventItem extends StatefulWidget {
   final EventModel event;
   final bool ongoing;
+  final bool? ishomeview;
 
   const EventItem({
     Key? key,
     required this.event,
     this.ongoing = false,
+    this.ishomeview,
   }) : super(key: key);
 
   @override

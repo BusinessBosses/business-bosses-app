@@ -1,209 +1,228 @@
+import 'package:business_bosses_v2/common/widgets/network_image_with_placeholder.dart';
+import 'package:business_bosses_v2/features/marketplace/widgets/products.dart';
+import 'package:business_bosses_v2/features/profile/controller/profile_controller.dart';
 import 'package:business_bosses_v2/navigation/routes.dart';
 import 'package:business_bosses_v2/utils/theme/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
+import 'package:intl/intl.dart';
 
-// ignore: public_member_api_docs
-class Homeappbar extends StatelessWidget {
-  // ignore: public_member_api_docs
-  const Homeappbar(
-      {Key? key,
-      this.hasBadge = false,
-      required this.coinsCount,
-      this.hasUnreadNotification = false,
-      this.isTabVisible = false})
-      : super(key: key);
+class HomeAppBar extends StatelessWidget {
+  const HomeAppBar({
+    Key? key,
+    this.hasBadge = false,
+    required this.coinsCount,
+    this.hasUnreadNotification = false,
+    this.isTabVisible = false,
+    required this.controller,
+  }) : super(key: key);
+
   final bool hasBadge;
   final bool isTabVisible;
   final String coinsCount;
   final bool hasUnreadNotification;
-  // static final GlobalKey<NavigatorState> searchkey =
-  //     GlobalKey<NavigatorState>();
-  // static final GlobalKey<NavigatorState> notificationkey =
-  //     GlobalKey<NavigatorState>();
+  final TabController controller;
 
-  /// HOME SCREEN APP BAR
+  String getGreeting() {
+    final hour = DateTime.now().hour;
+    if (hour < 12) {
+      return 'Good morning';
+    } else if (hour < 17) {
+      return 'Good afternoon';
+    } else {
+      return 'Good evening';
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
-    return SingleChildScrollView(
-      child: Column(
-        children: <Widget>[
-          AppBar(
-            backgroundColor: Colors.white,
-            automaticallyImplyLeading: false,
-            elevation: 0.5,
-            bottomOpacity: 0,
-            title: GestureDetector(
-              onTap: () => Get.toNamed(Routes.completesearchingscreen),
-              child: SizedBox(
-                height: 42,
-                width: double.infinity,
-                child: TextFormField(
-                  style: const TextStyle(fontSize: 20),
-                  decoration: inputDecoration.copyWith(
-                    border: OutlineInputBorder(
-                      borderSide: BorderSide.none,
-                      borderRadius: BorderRadius.circular(10),
-                    ),
-                    fillColor: backgroundcolorinterface,
-                    filled: true,
-                    enabled: false,
-                    prefixIcon: Container(
-                      padding: const EdgeInsets.symmetric(vertical: 10.0),
-                      child: SvgPicture.asset(
-                        'assets/svgs/search.svg',
-                        color: hintColor,
-                      ),
-                    ),
-                    hintText: 'Search people & posts',
-                  ),
-                ),
-              ),
-            ),
-            leading: InkWell(
-              onTap: () {
-                Get.toNamed(Routes.chat);
-              },
-              child: SizedBox(
-                width: 55,
-                height: 20,
-                child: Row(
-                  children: <Widget>[
-                    const SizedBox(
-                      width: 15,
-                    ),
-                    Stack(
-                      clipBehavior: Clip.none,
-                      children: <Widget>[
-                        Container(
-                          decoration: const BoxDecoration(
-                            boxShadow: <BoxShadow>[
-                              BoxShadow(
-                                color: Color.fromRGBO(0, 0, 0, 0.08),
-                                spreadRadius: 0.05,
-                                blurRadius: 10,
-                                blurStyle: BlurStyle.normal,
-                              ),
-                            ],
-                          ),
-                          child: SvgPicture.asset(
-                            'assets/svgs/messagewithbackground.svg',
+    final profileController = Get.find<ProfileController>();
+    final profileName = profileController.myProfile.name!;
+
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.end,
+      children: [
+        PreferredSize(
+          preferredSize: const Size.fromHeight(80.0),
+          child: Container(
+            color: Colors.white,
+            padding:
+                const EdgeInsets.symmetric(horizontal: 16.0, vertical: 10.0),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Row(
+                  children: [
+                    GestureDetector(
+                      onTap: () {
+                        Get.toNamed(Routes.myProfile);
+                      },
+                      child: SizedBox(
+                        height: 40.0,
+                        width: 40.0,
+                        child: ClipRRect(
+                          borderRadius: BorderRadius.circular(10),
+                          child: NetworkImageWithPlaceHolder(
+                            imageUrl:
+                                profileController.myProfile.photoUrl ?? '',
+                            radius: 10,
+                            placeHolder: Icons.person,
+                            iconSize: 22.0,
+                            fit: BoxFit.cover,
                           ),
                         ),
-                        if (hasBadge)
-                          const Positioned(
-                            top: 0,
-                            right: -5,
-                            child: CircleAvatar(
-                              backgroundColor: primaryColorLT,
-                              radius: 4,
-                            ),
-                          )
+                      ),
+                    ),
+                    const SizedBox(width: 10),
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          profileName.length > 12
+                              ? '${profileName.substring(0, 12)}...'
+                              : profileName,
+                          overflow: TextOverflow.ellipsis,
+                          maxLines: 1,
+                          style: const TextStyle(
+                            fontSize: 14,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                        Text(
+                          '👋' + getGreeting(),
+                          style: const TextStyle(
+                            fontSize: 12,
+                            color: Colors.grey,
+                          ),
+                        ),
                       ],
                     ),
                   ],
                 ),
-              ),
-            ),
-            actions: <Widget>[
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: <Widget>[
-                  Container(
-                    decoration: BoxDecoration(
-                      color: backgroundcolorinterface,
-                      borderRadius: BorderRadius.circular(20),
-                    ),
-                    child: GestureDetector(
-                      child: Wrap(
-                        children: <Widget>[
-                          Padding(
-                            padding: const EdgeInsets.only(
-                                left: 8, top: 5, right: 8, bottom: 5),
-                            child: GestureDetector(
-                              onTap: () {
-                                Get.toNamed(Routes.promotionscreen);
-                              },
-                              child: Row(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                crossAxisAlignment: CrossAxisAlignment.center,
-                                children: <Widget>[
-                                  SvgPicture.asset(
-                                    'assets/svgs/coin.svg',
-                                    height: 22,
-                                  ),
-                                  const SizedBox(
-                                    width: 5,
-                                  ),
-                                  Text(
-                                    coinsCount,
-                                    style: const TextStyle(
-                                      color: Color.fromRGBO(133, 133, 133, 1),
-                                      fontSize: 15,
-                                      fontWeight: FontWeight.w700,
-                                    ),
-                                  )
-                                ],
-                              ),
-                            ),
-                          )
-                        ],
-                      ),
-                    ),
-                  ),
-                  const SizedBox(
-                    width: 10,
-                  ),
-                  InkWell(
-                    child: SizedBox(
-                      width: 55,
-                      height: 55,
+                Row(
+                  children: [
+                    GestureDetector(
+                      onTap: () => Get.toNamed(Routes.promotionscreen),
                       child: Container(
-                        decoration: const BoxDecoration(
-                          boxShadow: <BoxShadow>[
-                            BoxShadow(
-                              color: Color.fromRGBO(0, 0, 0, 0.08),
-                              spreadRadius: 0.05,
-                              blurRadius: 50,
-                              blurStyle: BlurStyle.normal,
-                            ),
-                          ],
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 8, vertical: 5),
+                        decoration: BoxDecoration(
+                          color: backgroundcolorinterface,
+                          borderRadius: BorderRadius.circular(20),
                         ),
-                        child: Stack(
-                          children: <Widget>[
-                            IconButton(
-                              padding:
-                                  const EdgeInsets.only(right: 10, top: 10),
-                              icon: SvgPicture.asset(
-                                'assets/svgs/topnotification.svg',
-                                height: 40,
+                        child: Row(
+                          children: [
+                            SvgPicture.asset('assets/svgs/coin.svg',
+                                height: 22),
+                            const SizedBox(width: 5),
+                            Text(
+                              formatCount(int.parse(coinsCount)),
+                              style: const TextStyle(
+                                color: Color.fromRGBO(133, 133, 133, 1),
+                                fontSize: 15,
+                                fontWeight: FontWeight.w700,
                               ),
-                              onPressed: () {
-                                Get.toNamed(Routes.notifications);
-                              },
                             ),
-                            if (hasUnreadNotification)
-                              const Positioned(
-                                top: 15,
-                                right: 20,
-                                child: CircleAvatar(
-                                  backgroundColor: primaryColorLT,
-                                  radius: 4,
-                                ),
-                              )
                           ],
                         ),
                       ),
                     ),
-                  ),
+                    const SizedBox(width: 2),
+                    Stack(
+                      children: [
+                        IconButton(
+                          icon: SvgPicture.asset(
+                              'assets/svgs/messagefilled.svg',
+                              height: 18,
+                              color: primaryColorLT),
+                          onPressed: () => Get.toNamed(Routes.chat),
+                        ),
+                        if (hasBadge)
+                          const Positioned(
+                            top: 12,
+                            right: 10,
+                            child: CircleAvatar(
+                              backgroundColor: primaryotherColorLT,
+                              radius: 5,
+                            ),
+                          ),
+                      ],
+                    ),
+                    Stack(
+                      children: [
+                        IconButton(
+                          icon: SvgPicture.asset(
+                              'assets/svgs/notificationfilled.svg',
+                              height: 20,
+                              color: primaryColorLT),
+                          onPressed: () => Get.toNamed(Routes.notifications),
+                        ),
+                        if (hasUnreadNotification)
+                          const Positioned(
+                            top: 12,
+                            right: 14,
+                            child: CircleAvatar(
+                              backgroundColor: primaryotherColorLT,
+                              radius: 5,
+                            ),
+                          ),
+                      ],
+                    ),
+                  ],
+                ),
+              ],
+            ),
+          ),
+        ),
+        TabBar(
+          controller: controller,
+          indicatorPadding: EdgeInsets.symmetric(horizontal: 16.0, vertical: 0),
+          indicatorColor: Colors.transparent,
+          labelColor: primaryColorLT,
+          unselectedLabelColor: Colors.grey,
+          labelStyle: TextStyle(fontWeight: FontWeight.bold),
+          tabs: [
+            Tab(
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+
+                  // if (controller. == 0)
+                  //   Container(
+                  //     margin: EdgeInsets.only(right: 8.0),
+                  //     width: 8,
+                  //     height: 8,
+                  //     decoration: BoxDecoration(
+                  //       color: Colors.red,
+                  //       shape: BoxShape.circle,
+                  //     ),
+                  //   ),
+                  Text('For you'),
                 ],
               ),
-            ],
-          ),
-        ],
-      ),
+            ),
+            Tab(
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  // if (controller.index == 1)
+                  //   Container(
+                  //     margin: EdgeInsets.only(right: 8.0),
+                  //     width: 8,
+                  //     height: 8,
+                  //     decoration: BoxDecoration(
+                  //       color: Colors.red,
+                  //       shape: BoxShape.circle,
+                  //     ),
+                  //   ),
+                  Text('Following'),
+                ],
+              ),
+            ),
+          ],
+        ),
+      ],
     );
   }
 }

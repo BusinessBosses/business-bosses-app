@@ -1,14 +1,20 @@
+import 'package:business_bosses_v2/bbpro/common/widgets/optionsbutton.dart';
+import 'package:business_bosses_v2/bbpro/common/widgets/projectpopup.dart';
 import 'package:business_bosses_v2/bbpro/models/task_model.dart';
+import 'package:business_bosses_v2/utils/theme/theme.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 
 class TaskWidget extends StatelessWidget {
   final Task task;
-  final Color backgroundColor;
+  final Color bgcolor;
+  final bool? isExpanded;
 
   const TaskWidget({
     required this.task,
-    required this.backgroundColor,
+    required this.bgcolor,
     super.key,
+    this.isExpanded,
   });
 
   @override
@@ -28,21 +34,29 @@ class TaskWidget extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
-            Container(
-              decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(3),
-                  color: backgroundColor),
-              padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
-              child: Text(
-                task.name!,
-                style: const TextStyle(
-                  fontWeight: FontWeight.bold,
-                  fontSize: 16,
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Container(
+                  decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(3), color: bgcolor),
+                  padding: EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+                  child: Text(
+                    task.title,
+                    style: const TextStyle(
+                      fontWeight: FontWeight.bold,
+                      fontSize: 16,
+                    ),
+                  ),
                 ),
-              ),
+                const OptionsButton(
+                  padding: EdgeInsets.all(0),
+                  borderColor: Colors.white,
+                ),
+              ],
             ),
             Padding(
-              padding: const EdgeInsets.all(16.0),
+              padding: const EdgeInsets.symmetric(vertical: 10.0),
               child: Text(
                 task.name ?? 'description',
                 style: const TextStyle(
@@ -51,6 +65,28 @@ class TaskWidget extends StatelessWidget {
                 ),
               ),
             ),
+            if (isExpanded != false)
+              Row(
+                mainAxisAlignment: MainAxisAlignment.end,
+                children: [
+                  GestureDetector(
+                    onTap: () {
+                      showDialog(
+                        context: context,
+                        builder: (BuildContext context) => const ProjectPopUp(),
+                      );
+                    },
+                    child: CircleAvatar(
+                      backgroundColor: probackgroundColor,
+                      radius: 15,
+                      child: SvgPicture.asset(
+                        'assets/svgs/expandform.svg',
+                        color: proprimaryColor,
+                      ),
+                    ),
+                  )
+                ],
+              )
           ],
         ),
       ),
