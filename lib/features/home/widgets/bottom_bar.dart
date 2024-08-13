@@ -43,7 +43,9 @@ class BottomBar extends StatelessWidget {
                       Expanded(
                         flex: 10,
                         child: BottomTabButton(
-                          icon: 'assets/svgs/hom.svg',
+                          icon: activeIndex == 0
+                              ? 'assets/svgs/homeufilled.svg'
+                              : 'assets/svgs/homeu.svg',
                           label: 'Home',
                           onTap: () {
                             if (activeIndex == 0) return;
@@ -55,7 +57,9 @@ class BottomBar extends StatelessWidget {
                       Expanded(
                         flex: 10,
                         child: BottomTabButton(
-                          icon: 'assets/svgs/bossup.svg',
+                          icon: activeIndex == 1
+                              ? 'assets/svgs/bossupufilled.svg'
+                              : 'assets/svgs/bossupu.svg',
                           onTap: () {
                             if (activeIndex == 1) return;
                             if (activeIndex == 0) {
@@ -71,7 +75,9 @@ class BottomBar extends StatelessWidget {
                       Expanded(
                         flex: 10,
                         child: BottomTabButton(
-                          icon: 'assets/svgs/liveevent.svg',
+                          icon: activeIndex == 2
+                              ? 'assets/svgs/eventufilled.svg'
+                              : 'assets/svgs/eventu.svg',
                           label: 'Events',
                           onTap: () {
                             if (activeIndex == 2) return;
@@ -89,7 +95,7 @@ class BottomBar extends StatelessWidget {
                         flex: 10,
                         child: BottomTabButton(
                           label: 'Marketplace',
-                          icon: 'assets/svgs/marketplace.svg',
+                          icon: activeIndex == 3 ? 'assets/svgs/cartufilled.svg' : 'assets/svgs/cartu.svg' ,
                           onTap: () {
                             if (activeIndex == 3) return;
                             if (activeIndex == 0) {
@@ -101,22 +107,22 @@ class BottomBar extends StatelessWidget {
                           isActive: activeIndex == 3,
                         ),
                       ),
-                      Expanded(
-                        flex: 10,
-                        child: BottomTabButton(
-                          icon: '',
-                          onTap: () {
-                            if (activeIndex == 4) return;
-                            if (activeIndex == 0) {
-                              Get.toNamed(Routes.myProfile);
-                            } else {
-                              Get.offAndToNamed(Routes.myProfile);
-                            }
-                          },
-                          isActive: activeIndex == 4,
-                          label: 'Profile',
-                        ),
-                      ),
+                      // Expanded(
+                      //   flex: 10,
+                      //   child: BottomTabButton(
+                      //     icon: '',
+                      //     onTap: () {
+                      //       if (activeIndex == 4) return;
+                      //       if (activeIndex == 0) {
+                      //         Get.toNamed(Routes.myProfile);
+                      //       } else {
+                      //         Get.offAndToNamed(Routes.myProfile);
+                      //       }
+                      //     },
+                      //     isActive: activeIndex == 4,
+                      //     label: 'Profile',
+                      //   ),
+                      // ),
                     ],
                   ),
                 ),
