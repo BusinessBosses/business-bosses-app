@@ -7,7 +7,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
 class Bottomnavscreen extends StatefulWidget {
+  const Bottomnavscreen({super.key});
+
   @override
+  // ignore: library_private_types_in_public_api
   _BottomnavscreenState createState() => _BottomnavscreenState();
 }
 

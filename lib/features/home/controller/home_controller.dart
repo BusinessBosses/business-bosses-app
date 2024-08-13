@@ -7,6 +7,7 @@ import 'package:business_bosses_v2/common/models/user_model.dart';
 import 'package:business_bosses_v2/common/widgets/text_widget.dart';
 import 'package:business_bosses_v2/features/chat/controllers/chat_controller.dart';
 import 'package:business_bosses_v2/features/courses/models/course_model.dart';
+import 'package:business_bosses_v2/features/donations/models/donations_model.dart';
 import 'package:business_bosses_v2/features/forum/models/forum_model.dart';
 import 'package:business_bosses_v2/features/forum/models/industry.dart';
 import 'package:business_bosses_v2/features/home/repository/home_repository.dart';
@@ -68,12 +69,18 @@ class HomeController extends GetxController {
   Map<String, String> votes = {};
   RxList<PostModel> posts = RxList<PostModel>(<PostModel>[]);
   RxList<ForumModel> forums = RxList<ForumModel>(<ForumModel>[]);
+  RxList<CourseModel> usercourses = <CourseModel>[].obs;
+  RxBool cError = RxBool(false);
+  RxList<DonationModel> userdonations = <DonationModel>[].obs;
+  UserModel? bossOfTheWeek = UserModel();
+  RxList<ForumModel> userresources = <ForumModel>[].obs;
 
   void addIndustries(List<Industry> data) {
     industries = data;
   }
 
   void addMarkets(RxList<MarketModel> data) {
+    markets.clear();
     markets = data;
   }
 
@@ -90,6 +97,7 @@ class HomeController extends GetxController {
   }
 
   void addMarketMembers(RxList<UserModel> data) {
+    marketMembers.clear();
     marketMembers = data;
   }
 
@@ -366,15 +374,15 @@ class HomeController extends GetxController {
         }
       }
     } else if (type == 'course') {
-      final int courseIndex = profileController.usercourses
-          .indexWhere((CourseModel course) => course.id == postId);
+      final int courseIndex =
+          usercourses.indexWhere((CourseModel course) => course.id == postId);
       if (courseIndex != -1) {
         final bool checkLiked =
-            profileController.usercourses[courseIndex].likes!.contains(userId);
+            usercourses[courseIndex].likes!.contains(userId);
         if (checkLiked) {
-          profileController.usercourses[courseIndex].likes?.remove(userId);
+          usercourses[courseIndex].likes?.remove(userId);
         } else {
-          profileController.usercourses[courseIndex].likes?.add(userId);
+          usercourses[courseIndex].likes?.add(userId);
         }
       }
     } else {
@@ -1008,7 +1016,6 @@ class HomeController extends GetxController {
       _chatController.processDataToState(
           response.data['chats'], profileController.myProfile.uid);
       socket.emit('handshake', profileController.myProfile.uid);
-      addCoinDaily();
       if (partner.success) {
         if (partner.data['count'] > 0) {
           bossUp?.addAll(partner.data['rows'].cast<Map<String, dynamic>>());
@@ -1035,8 +1042,41 @@ class HomeController extends GetxController {
         Get.offAndToNamed(Routes.updateProfile,
             arguments: profileController.myProfile);
       }
+      if (response.data['courses']['rows'] != null) {
+        // Check if response.data['rows'] is not null
+        for (int i = 0; i < response.data['courses']['rows'].length; i++) {
+          CourseModel usercourse = CourseModel.fromMap(<String, dynamic>{
+            ...response.data['courses']['rows'][i],
+          });
+          usercourses.add(usercourse);
+        }
+      }
+      for (int i = 0; i < response.data['donations']['rows'].length; i++) {
+        if (response.data['donations']['rows'] != null) {
+          DonationModel userdonation = DonationModel.fromMap(<String, dynamic>{
+            ...response.data['donations']['rows'][i],
+            'likes': response.data['donations']['rows'][i]['likes']
+                .map((dynamic like) => like['userId'].toString())
+                .toList(),
+          });
+          userdonations.add(userdonation);
+        }
+      }
+      for (int i = 0; i < response.data['forums']['rows'].length; i++) {
+        if (response.data['forums']['rows'] != null) {
+          ForumModel userresource = ForumModel.fromMap(<String, dynamic>{
+            ...response.data['forums']['rows'][i],
+            'likes': response.data['forums']['rows'][i]['likes']
+                .map((dynamic like) => like['userId'].toString())
+                .toList(),
+          });
+          userresources.add(userresource);
+        }
+      }
+      processBossToState(response.data['bossOfTheWeek']);
     } else {
       error(true);
+      cError(true);
       update();
       socket.disconnect();
       if (response.message == 'send a valid token') {
@@ -1051,6 +1091,7 @@ class HomeController extends GetxController {
 
     loading(false);
     update();
+    addCoinDaily();
     _showMyDialog();
     FirebaseMessaging.instance.getToken().then((String? value) {
       Map<String, dynamic> data = <String, dynamic>{
@@ -1058,6 +1099,64 @@ class HomeController extends GetxController {
       };
       ApiService.post(path: 'users/add-device-token', body: data);
     });
+  }
+
+  Future<void> updateCourse(Map<String, dynamic> course, String id) async {
+    final ApiResponseModel response =
+        await ApiService.put(path: 'courses/update-course/$id', body: course);
+
+    if (response.success) {
+      int index = usercourses.indexWhere((CourseModel c) => c.id == id);
+      if (index != -1) {
+        usercourses[index] = CourseModel.fromMap(course);
+        Get.back();
+        showSnackbar(message: 'Course updated successfully', title: 'Success');
+      } else {
+        showSnackbar(
+            message: 'Course not found in the list',
+            title: 'Error',
+            error: true);
+      }
+      update();
+    }
+  }
+
+  void onDeleteCourse(String courseId) async {
+    try {
+      final ApiResponseModel response = await ApiService.delete(
+        path: 'courses/delete-course/$courseId',
+      );
+
+      if (response.success) {
+        showSnackbar(message: 'Course deleted successfully!', title: 'Success');
+        usercourses.removeWhere((CourseModel course) => course.id == courseId);
+        update();
+        return;
+      } else {
+        showSnackbar(
+            message: 'Failed to delete course.', title: 'O0PS!', error: true);
+        return;
+      }
+    } catch (e) {
+      rethrow;
+    }
+  }
+
+  Future<void> updateCourseViews(String id, int views) async {
+    Map<String, dynamic> course = <String, dynamic>{'views': views};
+    final ApiResponseModel response =
+        await ApiService.put(path: 'courses/update-course/$id', body: course);
+
+    if (response.success) {
+      int index = usercourses.indexWhere((CourseModel c) => c.id == id);
+      if (index != -1) {
+        usercourses[index] = CourseModel.fromMap(<String, dynamic>{
+          ...usercourses[index].toMap(),
+          ...course,
+        });
+      }
+      update();
+    }
   }
 
   // /// LOAD POSTS FROM REMOTE SOURCE
@@ -1092,6 +1191,17 @@ class HomeController extends GetxController {
   //   refreshing(false);
   //   update();
   // }
+
+  void processBossToState(dynamic userData) {
+    final UserModel modelizedData = UserModel.fromMap(<dynamic, dynamic>{
+      ...userData,
+      'connections': userData['connections'].map((e) => e['connect']).toList(),
+      'connecteds': userData['connecteds'].map((e) => e['userId']).toList()
+    });
+    bossOfTheWeek = modelizedData;
+    // print(userData);
+    update();
+  }
 
   initSocket() {
     socket = IO.io(Constants.socketUrl, <String, dynamic>{

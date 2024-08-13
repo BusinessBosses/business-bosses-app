@@ -559,7 +559,7 @@ class _CourseItemState extends State<CourseItem> {
                                       onPressed: () {
                                         courseController
                                             .onDeleteCourse(widget.course.id);
-                                        profileController
+                                        homeController
                                             .onDeleteCourse(widget.course.id);
                                         setState(() {});
                                         Get.back();

@@ -1,5 +1,4 @@
 import 'package:business_bosses_v2/bbpro/models/task_model.dart';
-import 'package:business_bosses_v2/bbpro/presentation/projects.dart';
 import 'package:flutter/material.dart';
 
 class TaskWidget extends StatelessWidget {
@@ -28,12 +27,12 @@ class TaskWidget extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           mainAxisAlignment: MainAxisAlignment.center,
-          children: [
+          children: <Widget>[
             Container(
               decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(3),
                   color: backgroundColor),
-              padding: EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+              padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
               child: Text(
                 task.title,
                 style: const TextStyle(
@@ -45,7 +44,7 @@ class TaskWidget extends StatelessWidget {
             Padding(
               padding: const EdgeInsets.all(16.0),
               child: Text(
-                task.description ?? "description",
+                task.description ?? 'description',
                 style: const TextStyle(
                   fontWeight: FontWeight.bold,
                   fontSize: 16,
