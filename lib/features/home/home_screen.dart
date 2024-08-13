@@ -335,52 +335,6 @@ class _HomeScreenState extends State<HomeScreen>
                                         },
                                         child: Column(
                                           children: <Widget>[
-                                            Visibility(
-                                              visible: isTabVisible,
-                                              child: Column(
-                                                children: <Widget>[
-                                                  Material(
-                                                    elevation: 0.1,
-                                                    color: Colors.white,
-                                                    child: DefaultTabController(
-                                                      length: 2,
-                                                      child: TabBar(
-                                                        controller:
-                                                            _tabController,
-                                                        tabs: <Widget>[
-                                                          Tab(
-                                                            child: FittedBox(
-                                                              child: Text(
-                                                                'For you',
-                                                                style: Theme.of(
-                                                                        context)
-                                                                    .textTheme
-                                                                    .bodyLarge,
-                                                              ),
-                                                            ),
-                                                          ),
-                                                          Tab(
-                                                            child: FittedBox(
-                                                              child: Text(
-                                                                'Following',
-                                                                style: Theme.of(
-                                                                        context)
-                                                                    .textTheme
-                                                                    .bodyLarge,
-                                                              ),
-                                                            ),
-                                                          ),
-                                                        ],
-                                                      ),
-                                                    ),
-                                                  ),
-                                                  Container(
-                                                    height: 1,
-                                                    color: backgroundColor,
-                                                  )
-                                                ],
-                                              ),
-                                            ),
                                             Container(
                                               height: 700,
                                               child: TabBarView(
