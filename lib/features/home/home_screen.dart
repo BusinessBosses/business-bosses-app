@@ -187,9 +187,9 @@ class _HomeScreenState extends State<HomeScreen>
         builder: (HomeController controller) {
           return UpgradeAlert(
             child: Scaffold(
-              backgroundColor: backgroundcolorinterface,
+              backgroundColor: Colors.white,
               appBar: PreferredSize(
-                preferredSize: const Size.fromHeight(kToolbarHeight + 48),
+                preferredSize: const Size.fromHeight(kToolbarHeight),
                 child: GetBuilder<ChatController>(
                     builder: (ChatController chatController) {
                   final List<MessageModel> unseenChats = chatController.chats
@@ -202,7 +202,7 @@ class _HomeScreenState extends State<HomeScreen>
 
                   return GetBuilder<ProfileController>(
                     builder: (ProfileController profileController) =>
-                        Homeappbar(
+                        HomeAppBar(
                       isTabVisible: isTabVisible,
                       hasBadge: hasBadge,
                       coinsCount:
