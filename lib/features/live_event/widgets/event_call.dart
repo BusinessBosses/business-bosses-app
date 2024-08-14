@@ -20,13 +20,36 @@ class _EventCallState extends State<EventCall> {
 
   @override
   Widget build(BuildContext context) {
+    if (widget.ishome == true) {
+      return liveEventController.events.isNotEmpty
+          ? Obx(
+              () => Container(
+                height: 200,
+                child: ListView.builder(
+                  scrollDirection: Axis.horizontal,
+                  itemCount: liveEventController.events.length,
+                  itemBuilder: (BuildContext context, int index) {
+                    EventModel event = liveEventController.events[index];
+                    return EventItem(
+                      ishomeview: true,
+                      event: event,
+                      ongoing: liveEventController.ongoing.contains(event)
+                          ? true
+                          : false,
+                    );
+                  },
+                ),
+              ),
+            )
+          : const Center(
+              child: Text('No Event Available!'),
+            );
+    }
+
     if (widget.full) {
       return liveEventController.events.isNotEmpty
           ? Obx(
               () => ListView.builder(
-                physics: widget.ishome == true
-                    ? NeverScrollableScrollPhysics()
-                    : null,
                 itemCount: liveEventController.events.length,
                 itemBuilder: (BuildContext context, int index) {
                   EventModel event = liveEventController.events[index];
@@ -47,9 +70,6 @@ class _EventCallState extends State<EventCall> {
           ? liveEventController.upcoming.isNotEmpty
               ? Obx(
                   () => ListView.builder(
-                    physics: widget.ishome == true
-                        ? NeverScrollableScrollPhysics()
-                        : null,
                     itemCount: liveEventController.upcoming.length,
                     itemBuilder: (BuildContext context, int index) {
                       EventModel event = liveEventController.upcoming[index];

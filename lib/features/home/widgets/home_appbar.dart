@@ -177,28 +177,29 @@ class HomeAppBar extends StatelessWidget {
         ),
         TabBar(
           controller: controller,
-          indicatorPadding: EdgeInsets.symmetric(horizontal: 16.0, vertical: 0),
           indicatorColor: Colors.transparent,
-          labelColor: primaryColorLT,
-          unselectedLabelColor: Colors.grey,
-          labelStyle: TextStyle(fontWeight: FontWeight.bold),
           tabs: [
             Tab(
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-
-                  // if (controller. == 0)
-                  //   Container(
-                  //     margin: EdgeInsets.only(right: 8.0),
-                  //     width: 8,
-                  //     height: 8,
-                  //     decoration: BoxDecoration(
-                  //       color: Colors.red,
-                  //       shape: BoxShape.circle,
-                  //     ),
-                  //   ),
-                  Text('For you'),
+                  if (controller.index == 0)
+                    Container(
+                      margin: EdgeInsets.only(right: 8.0),
+                      width: 8.0,
+                      height: 8.0,
+                      decoration: BoxDecoration(
+                        color: Colors.red,
+                        shape: BoxShape.circle,
+                      ),
+                    ),
+                  Text(
+                    'Discover',
+                    style: TextStyle(
+                      color: controller.index == 0 ? Colors.red : Colors.grey,
+                      fontWeight: FontWeight.w700,
+                    ),
+                  ),
                 ],
               ),
             ),
@@ -206,22 +207,52 @@ class HomeAppBar extends StatelessWidget {
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  // if (controller.index == 1)
-                  //   Container(
-                  //     margin: EdgeInsets.only(right: 8.0),
-                  //     width: 8,
-                  //     height: 8,
-                  //     decoration: BoxDecoration(
-                  //       color: Colors.red,
-                  //       shape: BoxShape.circle,
-                  //     ),
-                  //   ),
-                  Text('Following'),
+                  if (controller.index == 1)
+                    Container(
+                      margin: EdgeInsets.only(right: 8.0),
+                      width: 8.0,
+                      height: 8.0,
+                      decoration: BoxDecoration(
+                        color: Colors.red,
+                        shape: BoxShape.circle,
+                      ),
+                    ),
+                  Text(
+                    'For you',
+                    style: TextStyle(
+                      color: controller.index == 1 ? Colors.red : Colors.grey,
+                      fontWeight: FontWeight.w700,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            Tab(
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  if (controller.index == 2)
+                    Container(
+                      margin: EdgeInsets.only(right: 8.0),
+                      width: 8.0,
+                      height: 8.0,
+                      decoration: BoxDecoration(
+                        color: Colors.red,
+                        shape: BoxShape.circle,
+                      ),
+                    ),
+                  Text(
+                    'Following',
+                    style: TextStyle(
+                      color: controller.index == 2 ? Colors.red : Colors.grey,
+                      fontWeight: FontWeight.w700,
+                    ),
+                  ),
                 ],
               ),
             ),
           ],
-        ),
+        )
       ],
     );
   }
