@@ -139,14 +139,23 @@ class HomeAppBar extends StatelessWidget {
                           onPressed: () => Get.toNamed(Routes.chat),
                         ),
                         if (hasBadge)
-                          const Positioned(
-                            top: 12,
-                            right: 10,
-                            child: CircleAvatar(
-                              backgroundColor: primaryotherColorLT,
-                              radius: 5,
+                          Positioned(
+                            top: 5,
+                            right: 5,
+                            child: Container(
+                              decoration: BoxDecoration(
+                                shape: BoxShape.circle,
+                                border: Border.all(
+                                  color: Colors.white, // Border color
+                                  width: 2.0, // Border width
+                                ),
+                              ),
+                              child: const CircleAvatar(
+                                backgroundColor: primaryColorLT,
+                                radius: 5,
+                              ),
                             ),
-                          ),
+                          )
                       ],
                     ),
                     Stack(
@@ -159,14 +168,23 @@ class HomeAppBar extends StatelessWidget {
                           onPressed: () => Get.toNamed(Routes.notifications),
                         ),
                         if (hasUnreadNotification)
-                          const Positioned(
-                            top: 12,
-                            right: 14,
-                            child: CircleAvatar(
-                              backgroundColor: primaryotherColorLT,
-                              radius: 5,
+                          Positioned(
+                            top: 5,
+                            right: 8,
+                            child: Container(
+                              decoration: BoxDecoration(
+                                shape: BoxShape.circle,
+                                border: Border.all(
+                                  color: Colors.white, // Border color
+                                  width: 2.0, // Border width
+                                ),
+                              ),
+                              child: const CircleAvatar(
+                                backgroundColor: primaryColorLT,
+                                radius: 5,
+                              ),
                             ),
-                          ),
+                          )
                       ],
                     ),
                   ],
