@@ -1,6 +1,6 @@
 import 'dart:async';
 import 'package:business_bosses_v2/bbpro/common/widgets/taskwidget.dart';
-import 'package:business_bosses_v2/bbpro/controllers/project_conroller.dart';
+import 'package:business_bosses_v2/bbpro/controllers/project_controller.dart';
 import 'package:business_bosses_v2/bbpro/models/task_model.dart';
 import 'package:business_bosses_v2/bbpro/presentation/addproject.dart';
 import 'package:business_bosses_v2/utils/theme/theme.dart';
@@ -20,7 +20,8 @@ class Projects extends StatefulWidget {
 }
 
 class _ProjectsState extends State<Projects> {
-  final ProjectController projectController = Get.put(ProjectController());
+  final ProjectController projectController =
+      Get.put(ProjectController()); // Get the instance
   final Map<TaskStatus, List<Task>> _tasks = <TaskStatus, List<Task>>{};
   final ScrollController _mainListScrollController = ScrollController();
   int _counter = 0;
@@ -29,15 +30,28 @@ class _ProjectsState extends State<Projects> {
 
   @override
   void initState() {
-    for (dynamic status in TaskStatus.values) {
+    super.initState();
+    for (TaskStatus status in TaskStatus.values) {
       _tasks[status] = <Task>[];
     }
-    super.initState();
+    // Initialize tasks
+    projectController
+        .initTasks(projectController.profileController.myProfile.uid)
+        .then((_) {
+      setState(() {
+        _tasks.addAll({
+          for (TaskStatus status in TaskStatus.values)
+            status: projectController.tasks
+                .where((task) => task.status == status)
+                .toList()
+        });
+      });
+    });
   }
 
   @override
   Widget build(BuildContext context) {
-    final screenSize = MediaQuery.of(context).size;
+    final Size screenSize = MediaQuery.of(context).size;
     return Scaffold(
       backgroundColor: probackgroundColor,
       appBar: AppBar(
@@ -49,7 +63,7 @@ class _ProjectsState extends State<Projects> {
             fontWeight: FontWeight.bold,
           ),
         ),
-        actions: [
+        actions: <Widget>[
           Padding(
             padding: const EdgeInsets.only(right: 10.0, bottom: 15),
             child: CircleAvatar(
@@ -68,12 +82,11 @@ class _ProjectsState extends State<Projects> {
         ],
       ),
       body: Column(
-        children: [
+        children: <Widget>[
           TopsectionWidget(
-            buttonText: "Add Project",
+            buttonText: 'Add Project',
             onHowItWorksPressed: () {
               // Handle "How it works" pressed
-              print("How it works pressed");
             },
             onAddProjectPressed: () {
               // Handle "Add Project" pressed
@@ -86,31 +99,33 @@ class _ProjectsState extends State<Projects> {
               child: CustomScrollView(
                 scrollDirection: Axis.horizontal,
                 controller: _mainListScrollController,
-                slivers: [
+                slivers: <Widget>[
                   ...TaskStatus.values.map(
-                    (status) => SliverToBoxAdapter(
+                    (TaskStatus status) => SliverToBoxAdapter(
                       child: RowStatusCard(
-                        tasks: _tasks[status] ?? [],
+                        tasks: _tasks[status] ?? <Task>[],
                         taskStatus: status,
                         screenSize: screenSize,
-                        taskAccepted: (task, newStatus) {
+                        taskAccepted: (Task task, TaskStatus newStatus) {
                           setState(() {
                             _tasks[task.status]?.remove(task);
                             _tasks[newStatus]?.add(
                               Task(
+                                id: task.id,
+                                userId: task.userId,
+                                projectId: task.projectId,
                                 name: task.name,
+                                amount: task.amount,
+                                startAt: task.startAt,
+                                endAt: task.endAt,
                                 status: newStatus,
-                                id: '',
-                                userId: '',
-                                projectId: '',
-                                startAt: null,
-                                endAt: null,
-                                createdAt: null,
+                                createdAt: task.createdAt,
+                                clientId: task.clientId,
                               ),
                             );
                           });
                         },
-                        onDrag: (isRight) {
+                        onDrag: (bool isRight) {
                           if (_lastMoveRight == isRight) {
                             return;
                           }
@@ -192,34 +207,39 @@ class RowStatusCard extends StatelessWidget {
         borderRadius: BorderRadius.circular(15),
       ),
       child: Column(
-        children: [
+        children: <Widget>[
           const SizedBox(height: 8),
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 10.0),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
+              children: <Widget>[
                 Wrap(
                   crossAxisAlignment: WrapCrossAlignment.center,
-                  children: [
-                  CircleAvatar(radius: 5,),
-                  SizedBox(width: 10,),
-                  Text(
-                    taskStatus.displayTitle,
-                    style: const TextStyle(
-                      color: Colors.black,
-                      fontWeight: FontWeight.bold,
-                      fontSize: 18,
+                  children: <Widget>[
+                    const CircleAvatar(
+                      radius: 5,
                     ),
-                  ),
-                ]),
+                    const SizedBox(
+                      width: 10,
+                    ),
+                    Text(
+                      taskStatus.displayTitle,
+                      style: const TextStyle(
+                        color: Colors.black,
+                        fontWeight: FontWeight.bold,
+                        fontSize: 18,
+                      ),
+                    ),
+                  ],
+                ),
                 GestureDetector(
                   onTap: () {},
                   child: Container(
                     decoration: BoxDecoration(
                         color: backgroundColor,
                         borderRadius: BorderRadius.circular(30)),
-                    padding: EdgeInsets.all(8),
+                    padding: const EdgeInsets.all(8),
                     child: SvgPicture.asset(
                       'assets/svgs/search.svg',
                       height: 20,
@@ -248,8 +268,8 @@ class RowStatusCard extends StatelessWidget {
                   cancelDrag: cancelDrag,
                 );
               },
-              onWillAccept: (details) => true,
-              onAcceptWithDetails: (details) {
+              onWillAccept: (Task? details) => true,
+              onAcceptWithDetails: (DragTargetDetails<Task> details) {
                 taskAccepted(details.data, taskStatus);
               },
             ),
@@ -288,7 +308,7 @@ class ListStatusColumnWidget extends StatelessWidget {
                 borderRadius: BorderRadius.circular(radius)),
             child: const Center(
               child: Text(
-                "Drag a project here",
+                'Drag a project here',
                 style: TextStyle(color: Colors.black38),
               ),
             ),
@@ -298,8 +318,8 @@ class ListStatusColumnWidget extends StatelessWidget {
     }
 
     return ListView.builder(
-      itemBuilder: (context, index) {
-        final taskWidget = TaskWidget(
+      itemBuilder: (BuildContext context, int index) {
+        final TaskWidget taskWidget = TaskWidget(
           task: tasks[index],
           bgcolor: tasks[index].status.backgroundColor,
         );
@@ -308,10 +328,11 @@ class ListStatusColumnWidget extends StatelessWidget {
           padding: const EdgeInsets.only(bottom: 12),
           child: Draggable<Task>(
             data: tasks[index],
-            dragAnchorStrategy: (draggable, context, position) {
+            dragAnchorStrategy: (Draggable<Object> draggable,
+                BuildContext context, Offset position) {
               return pointerDragAnchorStrategy(draggable, context, position);
             },
-            onDragUpdate: (details) {
+            onDragUpdate: (DragUpdateDetails details) {
               if (details.globalPosition.dx > screenSize.width * 0.8) {
                 onDrag(true);
               } else if (details.globalPosition.dx < screenSize.width * 0.2) {
@@ -322,12 +343,13 @@ class ListStatusColumnWidget extends StatelessWidget {
             },
             onDragEnd: (_) => cancelDrag(),
             onDragCompleted: () => cancelDrag(),
-            onDraggableCanceled: (velocity, offset) => cancelDrag(),
+            onDraggableCanceled: (Velocity velocity, Offset offset) =>
+                cancelDrag(),
             childWhenDragging: Opacity(
               opacity: 0.2,
               child: taskWidget,
             ),
-            feedback: Container(
+            feedback: SizedBox(
               width: screenSize.width * 0.8,
               child: taskWidget,
             ),

@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-
 import 'dart:convert';
 
 class Task {
@@ -16,14 +15,14 @@ class Task {
 
   Task({
     required this.id,
-    required this.userId,
-    required this.projectId,
-    required this.name,
+    this.userId,
+    this.projectId,
+    this.name,
     this.amount,
-    required this.startAt,
-    required this.endAt,
+    this.startAt,
+    this.endAt,
     required this.status,
-    required this.createdAt,
+    this.createdAt,
     this.clientId,
   });
 
@@ -37,14 +36,17 @@ class Task {
         projectId: json['projectId'],
         name: json['name'],
         amount: json['amount'],
-        startAt: DateTime.parse(json['startAt']),
-        endAt: DateTime.parse(json['endAt']),
-        status: json['status'],
-        createdAt: DateTime.parse(json['createdAt']),
+        startAt:
+            json['startAt'] != null ? DateTime.parse(json['startAt']) : null,
+        endAt: json['endAt'] != null ? DateTime.parse(json['endAt']) : null,
+        status: TaskStatus.fromString(json['status']),
+        createdAt: json['createdAt'] != null
+            ? DateTime.parse(json['createdAt'])
+            : null,
         clientId: json['clientId'],
       );
 
-  Map<String, dynamic> toMap() => {
+  Map<String, dynamic> toMap() => <String, dynamic>{
         'id': id,
         'userId': userId,
         'projectId': projectId,
@@ -52,23 +54,61 @@ class Task {
         'amount': amount,
         'startAt': startAt?.toIso8601String(),
         'endAt': endAt?.toIso8601String(),
-        'status': status,
+        'status': status.toString(),
         'createdAt': createdAt?.toIso8601String(),
         'clientId': clientId,
       };
 }
 
 enum TaskStatus {
-  todo('To Do', Colors.black),
-  inprogress('In Progress', Colors.blue),
-  inreview('In Review', Colors.orange),
-  done('Done', Colors.green);
+  todo,
+  pending,
+  completed;
 
-  const TaskStatus(
-    this.displayTitle,
-    this.backgroundColor,
-  );
+  static TaskStatus fromString(String status) {
+    switch (status) {
+      case 'to-do':
+        return TaskStatus.todo;
+      case 'pending':
+        return TaskStatus.pending;
+      case 'completed':
+        return TaskStatus.completed;
+      default:
+        throw ArgumentError('Unknown status: $status');
+    }
+  }
 
-  final String displayTitle;
-  final Color backgroundColor;
+  String get displayTitle {
+    switch (this) {
+      case TaskStatus.todo:
+        return 'To Do';
+      case TaskStatus.pending:
+        return 'Pending';
+      case TaskStatus.completed:
+        return 'Completed';
+    }
+  }
+
+  Color get backgroundColor {
+    switch (this) {
+      case TaskStatus.todo:
+        return Colors.black;
+      case TaskStatus.pending:
+        return Colors.orange;
+      case TaskStatus.completed:
+        return Colors.green;
+    }
+  }
+
+  @override
+  String toString() {
+    switch (this) {
+      case TaskStatus.todo:
+        return 'to-do';
+      case TaskStatus.pending:
+        return 'pending';
+      case TaskStatus.completed:
+        return 'completed';
+    }
+  }
 }
