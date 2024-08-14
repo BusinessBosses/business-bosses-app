@@ -1,3 +1,4 @@
+import 'package:business_bosses_v2/bbpro/common/widgets/customcard.dart';
 import 'package:business_bosses_v2/bbpro/controllers/clients_controller.dart';
 import 'package:business_bosses_v2/common/dialogs/snackbar.dart';
 import 'package:business_bosses_v2/features/profile/controller/profile_controller.dart';
@@ -58,6 +59,16 @@ class _AddclientState extends State<Addclient> {
                 key: _formKey,
                 child: Column(
                   children: <Widget>[
+                    const SizedBox(height: 15),
+                    CustomCard(
+                      buttonvisible: true,
+                      caption: 'Client Information',
+                      subText: 'Add a photo for your client',
+                      buttonText: 'Choose Photo',
+                      onPressed: () {},
+                      imagePath: 'assets/images/shopplaceholder.png',
+                      iconpath: 'assets/svgs/uploadicon.svg',
+                    ),
                     const SizedBox(height: 15),
                     CustomEditText(
                       caption: 'Client\'s Name',
