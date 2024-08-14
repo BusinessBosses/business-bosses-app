@@ -1,4 +1,3 @@
-import 'package:business_bosses_v2/bbpro/common/widgets/button.dart';
 import 'package:business_bosses_v2/utils/theme/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -30,8 +29,6 @@ class CustomTextWidget extends StatefulWidget {
 }
 
 class _CustomTextWidgetState extends State<CustomTextWidget> {
-  String? _selectedItem;
-
   @override
   void initState() {
     super.initState();

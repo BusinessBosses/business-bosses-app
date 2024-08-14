@@ -1,7 +1,6 @@
 import 'package:business_bosses_v2/bbpro/common/widgets/button.dart';
 import 'package:business_bosses_v2/bbpro/common/widgets/dropdown.dart';
 import 'package:business_bosses_v2/bbpro/common/widgets/edittext.dart';
-import 'package:business_bosses_v2/bbpro/common/widgets/multipleedit.dart';
 import 'package:business_bosses_v2/utils/theme/theme.dart';
 import 'package:flutter/material.dart';
 
@@ -19,7 +18,7 @@ class _CreateOrderState extends State<CreateOrder> {
     return Scaffold(
         backgroundColor: probackgroundColor,
         appBar: AppBar(
-          title: Text(
+          title: const Text(
             'Create New Order',
             style: TextStyle(
               color: proprimaryColor,
@@ -36,43 +35,43 @@ class _CreateOrderState extends State<CreateOrder> {
             )
           ],
         ),
-        body: Stack(children: [
-          Container(
+        body: Stack(children: <Widget>[
+          SizedBox(
             height: double.infinity,
             child: SingleChildScrollView(
               child: Column(
-                children: [
-                  SizedBox(height: 15),
+                children: <Widget>[
+                  const SizedBox(height: 15),
                   CustomDropdownWidget(
                       caption: 'Client\'s Name',
-                      items: ['Online'],
+                      items: const <String>['Online'],
                       iconName: 'assets/svgs/dropdown.svg'),
-                  SizedBox(height: 15),
+                  const SizedBox(height: 15),
                   CustomDropdownWidget(
                       caption: 'Choose Order',
-                      items: ['Online'],
+                      items: const <String>['Online'],
                       iconName: 'assets/svgs/dropdown.svg'),
                   const SizedBox(height: 15),
                   CustomDropdownWidget(
                       caption: 'Order Channel',
-                      items: ['Online'],
+                      items: const <String>['Online'],
                       iconName: 'assets/svgs/dropdown.svg'),
-                  SizedBox(height: 15),
+                  const SizedBox(height: 15),
                   CustomDropdownWidget(
                       caption: 'Payment Method',
-                      items: ['Online'],
+                      items: const <String>['Online'],
                       iconName: 'assets/svgs/dropdown.svg'),
-                  SizedBox(height: 15),
+                  const SizedBox(height: 15),
                   CustomDropdownWidget(
                       caption: 'Client Type',
-                      items: ['Online'],
+                      items: const <String>['Online'],
                       iconName: 'assets/svgs/dropdown.svg'),
-                  SizedBox(height: 15),
+                  const SizedBox(height: 15),
                   CustomDropdownWidget(
                       caption: 'Delivery Method',
-                      items: ['Online'],
+                      items: const <String>['Online'],
                       iconName: 'assets/svgs/dropdown.svg'),
-                  SizedBox(height: 15),
+                  const SizedBox(height: 15),
                   CustomEditText(
                     caption: 'Notes',
                     hintText: 'Add order notes here',
@@ -90,7 +89,7 @@ class _CreateOrderState extends State<CreateOrder> {
             bottom: 30,
             left: 0,
             right: 0,
-            child: Container(
+            child: SizedBox(
               width: MediaQuery.of(context).size.width,
               child: ProCustomButton(text: 'Save', onPressed: () {}),
             ),

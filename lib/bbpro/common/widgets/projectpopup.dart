@@ -2,10 +2,6 @@ import 'package:business_bosses_v2/bbpro/common/widgets/taskdisplayitem.dart';
 import 'package:business_bosses_v2/bbpro/common/widgets/taskwidget.dart';
 import 'package:business_bosses_v2/bbpro/models/task_model.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/svg.dart';
-
-import '../../../utils/size_config.dart';
-import '../../../utils/theme/theme.dart';
 
 class ProjectPopUp extends StatelessWidget {
   const ProjectPopUp({Key? key}) : super(key: key);
@@ -32,22 +28,22 @@ class ProjectPopUp extends StatelessWidget {
             const SizedBox(
               height: 15,
             ),
-            Row(
-              children: [],
+            const Row(
+              children: <Widget>[],
             ),
             Padding(
               padding: const EdgeInsets.all(0.0),
               child: Column(
-                children: [
-                  Row(
-                    children: [
+                children: <Widget>[
+                  const Row(
+                    children: <Widget>[
                       Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                        padding: EdgeInsets.symmetric(horizontal: 8.0),
                         child: Text('Tasks'),
                       ),
                     ],
                   ),
-                  Container(
+                  SizedBox(
                     height: 300,
                     child: ListView.builder(
                       itemCount: 5,

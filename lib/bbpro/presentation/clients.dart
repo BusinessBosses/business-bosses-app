@@ -26,7 +26,7 @@ class _ClientsScreenState extends State<ClientsScreen> {
               fontWeight: FontWeight.bold,
             ),
           ),
-          actions: [
+          actions: <Widget>[
             Padding(
               padding: const EdgeInsets.only(right: 10.0, bottom: 15),
               child: CircleAvatar(
@@ -45,16 +45,16 @@ class _ClientsScreenState extends State<ClientsScreen> {
           ],
         ),
         body: Column(
-          children: [
+          children: <Widget>[
             TopsectionWidget(
-              buttonText: "Add Client",
+              buttonText: 'Add Client',
               onHowItWorksPressed: () {
                 // Handle "How it works" pressed
-                print("How it works pressed");
+                print('How it works pressed');
               },
               onAddProjectPressed: () {
                 // Handle "Add Project" pressed
-                Get.to(Addclient());
+                Get.to(const Addclient());
               },
             ),
           ],
