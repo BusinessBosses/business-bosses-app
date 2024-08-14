@@ -6,7 +6,6 @@ import 'package:business_bosses_v2/utils/theme/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
-import 'package:intl/intl.dart';
 
 class HomeAppBar extends StatelessWidget {
   const HomeAppBar({
@@ -25,7 +24,7 @@ class HomeAppBar extends StatelessWidget {
   final TabController controller;
 
   String getGreeting() {
-    final hour = DateTime.now().hour;
+    final int hour = DateTime.now().hour;
     if (hour < 12) {
       return 'Good morning';
     } else if (hour < 17) {
@@ -37,12 +36,12 @@ class HomeAppBar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final profileController = Get.find<ProfileController>();
-    final profileName = profileController.myProfile.name!;
+    final ProfileController profileController = Get.find<ProfileController>();
+    final String profileName = profileController.myProfile.name!;
 
     return Column(
       mainAxisAlignment: MainAxisAlignment.end,
-      children: [
+      children: <Widget>[
         PreferredSize(
           preferredSize: const Size.fromHeight(80.0),
           child: Container(
@@ -51,9 +50,9 @@ class HomeAppBar extends StatelessWidget {
                 const EdgeInsets.symmetric(horizontal: 16.0, vertical: 10.0),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
+              children: <Widget>[
                 Row(
-                  children: [
+                  children: <Widget>[
                     GestureDetector(
                       onTap: () {
                         Get.toNamed(Routes.myProfile);
@@ -77,7 +76,7 @@ class HomeAppBar extends StatelessWidget {
                     const SizedBox(width: 10),
                     Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
+                      children: <Widget>[
                         Text(
                           profileName.length > 12
                               ? '${profileName.substring(0, 12)}...'
@@ -90,7 +89,7 @@ class HomeAppBar extends StatelessWidget {
                           ),
                         ),
                         Text(
-                          '👋' + getGreeting(),
+                          '👋${getGreeting()}',
                           style: const TextStyle(
                             fontSize: 12,
                             color: Colors.grey,
@@ -101,7 +100,7 @@ class HomeAppBar extends StatelessWidget {
                   ],
                 ),
                 Row(
-                  children: [
+                  children: <Widget>[
                     GestureDetector(
                       onTap: () => Get.toNamed(Routes.promotionscreen),
                       child: Container(
@@ -112,7 +111,7 @@ class HomeAppBar extends StatelessWidget {
                           borderRadius: BorderRadius.circular(20),
                         ),
                         child: Row(
-                          children: [
+                          children: <Widget>[
                             SvgPicture.asset('assets/svgs/coin.svg',
                                 height: 22),
                             const SizedBox(width: 5),
@@ -130,7 +129,7 @@ class HomeAppBar extends StatelessWidget {
                     ),
                     const SizedBox(width: 2),
                     Stack(
-                      children: [
+                      children: <Widget>[
                         IconButton(
                           icon: SvgPicture.asset(
                               'assets/svgs/messagefilled.svg',
@@ -150,7 +149,7 @@ class HomeAppBar extends StatelessWidget {
                       ],
                     ),
                     Stack(
-                      children: [
+                      children: <Widget>[
                         IconButton(
                           icon: SvgPicture.asset(
                               'assets/svgs/notificationfilled.svg',
@@ -177,17 +176,17 @@ class HomeAppBar extends StatelessWidget {
         ),
         TabBar(
           controller: controller,
-          indicatorPadding: EdgeInsets.symmetric(horizontal: 16.0, vertical: 0),
+          indicatorPadding:
+              const EdgeInsets.symmetric(horizontal: 16.0, vertical: 0),
           indicatorColor: Colors.transparent,
           labelColor: primaryColorLT,
           unselectedLabelColor: Colors.grey,
-          labelStyle: TextStyle(fontWeight: FontWeight.bold),
-          tabs: [
+          labelStyle: const TextStyle(fontWeight: FontWeight.bold),
+          tabs: const <Widget>[
             Tab(
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-
+                children: <Widget>[
                   // if (controller. == 0)
                   //   Container(
                   //     margin: EdgeInsets.only(right: 8.0),
@@ -205,7 +204,7 @@ class HomeAppBar extends StatelessWidget {
             Tab(
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.center,
-                children: [
+                children: <Widget>[
                   // if (controller.index == 1)
                   //   Container(
                   //     margin: EdgeInsets.only(right: 8.0),
