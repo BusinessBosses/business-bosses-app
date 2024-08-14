@@ -354,7 +354,12 @@ class _HomeScreenState extends State<HomeScreen>
                                             children: <Widget>[
                                               ListView(
                                                 children: [
-                                                  SearchSection(),
+                                                  Padding(
+                                                    padding: const EdgeInsets
+                                                        .symmetric(
+                                                        horizontal: 15.0),
+                                                    child: SearchSection(),
+                                                  ),
                                                   BossOfWeekProfileTile(),
                                                   EventsSection(),
                                                   SizedBox(
@@ -365,7 +370,7 @@ class _HomeScreenState extends State<HomeScreen>
                                                         .symmetric(
                                                         horizontal: 15.0),
                                                     child: Container(
-                                                      height: 3,
+                                                      height: 1,
                                                       decoration: BoxDecoration(
                                                           color:
                                                               backgroundColor,

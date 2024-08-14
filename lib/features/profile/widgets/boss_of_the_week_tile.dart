@@ -325,7 +325,7 @@ class _BossOfWeekProfileTileState extends State<BossOfWeekProfileTile> {
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 15.0),
                   child: Container(
-                    height: 3,
+                    height: 1,
                     decoration: BoxDecoration(
                         color: backgroundColor,
                         borderRadius: BorderRadius.circular(10)),
@@ -560,7 +560,7 @@ class _BossOfWeekProfileTileState extends State<BossOfWeekProfileTile> {
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 15.0),
                   child: Container(
-                    height: 3,
+                    height: 1,
                     decoration: BoxDecoration(
                         color: backgroundColor,
                         borderRadius: BorderRadius.circular(10)),
