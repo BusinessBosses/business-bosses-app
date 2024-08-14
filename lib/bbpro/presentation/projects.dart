@@ -144,17 +144,6 @@ class _ProjectsState extends State<Projects> {
           ),
         ],
       ),
-      // floatingActionButton: FloatingActionButton(
-      //   onPressed: () {
-      //     setState(() {
-      //       _tasks[TaskStatus.todo]
-      //           ?.add(Task(title: "To Do $_counter", status: TaskStatus.todo));
-      //       _counter++;
-      //     });
-      //   },
-      //   tooltip: 'Add Task',
-      //   child: const Icon(Icons.add),
-      // ),
     );
   }
 
@@ -216,7 +205,12 @@ class RowStatusCard extends StatelessWidget {
                 Wrap(
                   crossAxisAlignment: WrapCrossAlignment.center,
                   children: <Widget>[
-                    const CircleAvatar(
+                    CircleAvatar(
+                      backgroundColor: taskStatus.displayTitle == 'To Do'
+                          ? Colors.black
+                          : taskStatus.displayTitle == 'Pending'
+                              ? Colors.amber
+                              : Colors.green,
                       radius: 5,
                     ),
                     const SizedBox(

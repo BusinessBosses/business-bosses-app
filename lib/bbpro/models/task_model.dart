@@ -92,11 +92,11 @@ enum TaskStatus {
   Color get backgroundColor {
     switch (this) {
       case TaskStatus.todo:
-        return Colors.black;
+        return Colors.black12;
       case TaskStatus.pending:
-        return Colors.orange;
+        return Colors.yellow.withAlpha(100);
       case TaskStatus.completed:
-        return Colors.green;
+        return Colors.green.withAlpha(100);
     }
   }
 
