@@ -1,5 +1,3 @@
-import 'package:business_bosses_v2/bbpro/common/widgets/dropdown.dart';
-import 'package:business_bosses_v2/bbpro/common/widgets/infocard.dart';
 import 'package:business_bosses_v2/bbpro/common/widgets/inventorycard.dart';
 import 'package:business_bosses_v2/bbpro/presentation/viewproduct.dart';
 import 'package:business_bosses_v2/utils/theme/theme.dart';
@@ -36,7 +34,7 @@ class _InventoryState extends State<Inventory> {
             fontWeight: FontWeight.bold,
           ),
         ),
-        actions: [
+        actions: <Widget>[
           Padding(
             padding: const EdgeInsets.only(right: 10.0, bottom: 15),
             child: CircleAvatar(
@@ -55,23 +53,23 @@ class _InventoryState extends State<Inventory> {
       ),
       body: SingleChildScrollView(
         child: Column(
-          children: [
+          children: <Widget>[
             Padding(
               padding:
                   const EdgeInsets.symmetric(horizontal: 15.0, vertical: 10),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Wrap(children: [
-                    const Text(
-                      "Product List",
+                children: <Widget>[
+                  const Wrap(children: <Widget>[
+                    Text(
+                      'Product List',
                       style: TextStyle(color: Colors.black),
                     ),
                     SizedBox(
                       width: 3,
                     ),
-                    const Text(
-                      "(10)",
+                    Text(
+                      '(10)',
                       style: TextStyle(color: Colors.black),
                     ),
                   ]),
@@ -84,27 +82,28 @@ class _InventoryState extends State<Inventory> {
                     ),
                     child: Wrap(
                       crossAxisAlignment: WrapCrossAlignment.center,
-                      children: [
+                      children: <Widget>[
                         SvgPicture.asset('assets/svgs/inventoryfilter.svg'),
-                        Container(
+                        SizedBox(
                           height: 30,
                           width: 200,
                           child: DropdownButtonHideUnderline(
                             child: DropdownButton<String>(
                               value: _selectedItem,
-                              onChanged: (newValue) {
+                              onChanged: (String? newValue) {
                                 setState(() {
                                   _selectedItem = newValue;
                                 });
                               },
-                              items: ['rrtr', 'ekllee'].map((String value) {
+                              items: <String>['rrtr', 'ekllee']
+                                  .map((String value) {
                                 return DropdownMenuItem<String>(
                                   value: value,
                                   child: Text(value),
                                 );
                               }).toList(),
                               isExpanded: true,
-                              icon: Icon(
+                              icon: const Icon(
                                 Icons.expand_more,
                                 color: proprimaryColor,
                                 size: 20,
@@ -119,7 +118,7 @@ class _InventoryState extends State<Inventory> {
               ),
             ),
             StaggeredGridView.countBuilder(
-              physics: NeverScrollableScrollPhysics(),
+              physics: const NeverScrollableScrollPhysics(),
               staggeredTileBuilder: (int index) => const StaggeredTile.fit(1),
               padding: const EdgeInsets.symmetric(
                 horizontal: 15.0,
@@ -133,9 +132,9 @@ class _InventoryState extends State<Inventory> {
               itemBuilder: (BuildContext context, int index) {
                 return GestureDetector(
                   onTap: () {
-                    Get.to(ExpandedProduct());
+                    Get.to(const ExpandedProduct());
                   },
-                  child: InventoryCard(
+                  child: const InventoryCard(
                     cardName: 'Product name',
                     value: '\$20k',
                   ),

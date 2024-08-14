@@ -1,10 +1,7 @@
-import 'package:business_bosses_v2/bbpro/common/widgets/iconbutton.dart';
 import 'package:business_bosses_v2/bbpro/presentation/inventory.dart';
 import 'package:business_bosses_v2/common/dialogs/snackbar.dart';
 import 'package:business_bosses_v2/common/widgets/network_image_with_placeholder.dart';
-import 'package:business_bosses_v2/features/live_event/widgets/custom_icon_button.dart';
 import 'package:business_bosses_v2/features/profile/controller/profile_controller.dart';
-import 'package:business_bosses_v2/navigation/routes.dart';
 import 'package:business_bosses_v2/utils/theme/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
@@ -19,7 +16,7 @@ class Setup extends StatefulWidget {
 }
 
 class _SetupState extends State<Setup> {
-  final List<String> titles = [
+  final List<String> titles = <String>[
     'Edit Shop',
     'Manage Inventory',
     'Availability',
@@ -42,7 +39,7 @@ class _SetupState extends State<Setup> {
             fontWeight: FontWeight.bold,
           ),
         ),
-        actions: [
+        actions: <Widget>[
           Padding(
             padding: const EdgeInsets.only(right: 10.0, bottom: 15),
             child: CircleAvatar(
@@ -62,16 +59,16 @@ class _SetupState extends State<Setup> {
       ),
       body: SingleChildScrollView(
         child: Column(
-          children: [
+          children: <Widget>[
             Container(
               color: probackgroundColor,
               child: Padding(
                 padding:
                     const EdgeInsets.symmetric(horizontal: 15.0, vertical: 20),
                 child: Column(
-                  children: [
+                  children: <Widget>[
                     Row(
-                      children: [
+                      children: <Widget>[
                         SizedBox(
                           height: 100.0,
                           width: 100.0,
@@ -93,30 +90,30 @@ class _SetupState extends State<Setup> {
                         const SizedBox(width: 10),
                         Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
+                          children: <Widget>[
                             const Text('Shop Name',
                                 style: TextStyle(
                                     fontWeight: FontWeight.bold, fontSize: 20)),
                             const SizedBox(height: 10),
                             Row(
-                              children: [
+                              children: <Widget>[
                                 Container(
                                     decoration: BoxDecoration(
                                         color: Colors.white,
                                         borderRadius:
                                             BorderRadius.circular(40)),
-                                    padding: EdgeInsets.symmetric(
+                                    padding: const EdgeInsets.symmetric(
                                         horizontal: 8, vertical: 8),
-                                    child: Text('View Shop')),
-                                SizedBox(width: 5),
+                                    child: const Text('View Shop')),
+                                const SizedBox(width: 5),
                                 Container(
                                     decoration: BoxDecoration(
                                         color: Colors.white,
                                         borderRadius:
                                             BorderRadius.circular(40)),
-                                    padding: EdgeInsets.symmetric(
+                                    padding: const EdgeInsets.symmetric(
                                         horizontal: 8, vertical: 8),
-                                    child: Text('Share my link')),
+                                    child: const Text('Share my link')),
                                 // ProIconButton(
                                 //   // icon: Icon(
                                 //   //   Icons.add,
@@ -154,7 +151,7 @@ class _SetupState extends State<Setup> {
               width: double.infinity,
               decoration: const BoxDecoration(color: Colors.white),
               child: Column(
-                children: [
+                children: <Widget>[
                   const SizedBox(height: 15),
                   ListView.builder(
                     shrinkWrap: true,
@@ -162,7 +159,7 @@ class _SetupState extends State<Setup> {
                     itemCount: titles.length,
                     itemBuilder: (BuildContext context, int index) {
                       return Column(
-                        children: [
+                        children: <Widget>[
                           Padding(
                             padding:
                                 const EdgeInsets.symmetric(horizontal: 15.0),
@@ -181,16 +178,18 @@ class _SetupState extends State<Setup> {
                                   ),
                                 ),
                                 onTap: () {
-                                  if (titles[index] == 'Manage Inventory')
-                                    Get.to(Inventory());
-                                  if (titles[index] == 'Contact Us')
+                                  if (titles[index] == 'Manage Inventory') {
+                                    Get.to(const Inventory());
+                                  }
+                                  if (titles[index] == 'Contact Us') {
                                     _contactUs();
+                                  }
                                   // Get.toNamed(
                                   //   Routes.explorebusinessbossesscreen,
                                   //   arguments: 'Description',
                                   // );
                                 },
-                                trailing: Icon(
+                                trailing: const Icon(
                                   Icons.chevron_right,
                                   color: proprimaryColor,
                                   size: 20,

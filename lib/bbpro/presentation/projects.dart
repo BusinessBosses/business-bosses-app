@@ -24,7 +24,6 @@ class _ProjectsState extends State<Projects> {
       Get.put(ProjectController()); // Get the instance
   final Map<TaskStatus, List<Task>> _tasks = <TaskStatus, List<Task>>{};
   final ScrollController _mainListScrollController = ScrollController();
-  int _counter = 0;
   Timer? _timer;
   bool? _lastMoveRight;
 
@@ -39,10 +38,10 @@ class _ProjectsState extends State<Projects> {
         .initTasks(projectController.profileController.myProfile.uid)
         .then((_) {
       setState(() {
-        _tasks.addAll({
+        _tasks.addAll(<TaskStatus, List<Task>>{
           for (TaskStatus status in TaskStatus.values)
             status: projectController.tasks
-                .where((task) => task.status == status)
+                .where((Task task) => task.status == status)
                 .toList()
         });
       });
