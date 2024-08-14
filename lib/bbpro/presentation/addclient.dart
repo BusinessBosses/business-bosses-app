@@ -1,3 +1,6 @@
+import 'package:business_bosses_v2/bbpro/controllers/clients_controller.dart';
+import 'package:business_bosses_v2/common/dialogs/snackbar.dart';
+import 'package:business_bosses_v2/features/profile/controller/profile_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:business_bosses_v2/bbpro/common/widgets/button.dart';
 import 'package:business_bosses_v2/bbpro/common/widgets/dropdown.dart';
@@ -5,6 +8,7 @@ import 'package:business_bosses_v2/bbpro/common/widgets/edittext.dart';
 import 'package:business_bosses_v2/bbpro/common/widgets/multipleedit.dart';
 import 'package:business_bosses_v2/utils/theme/theme.dart';
 import 'package:business_bosses_v2/bbpro/models/client_model.dart';
+import 'package:get/get.dart';
 
 class Addclient extends StatefulWidget {
   const Addclient({super.key});
@@ -17,6 +21,8 @@ class _AddclientState extends State<Addclient> {
   final TextEditingController nameController = TextEditingController();
   final TextEditingController emailController = TextEditingController();
   final TextEditingController phoneController = TextEditingController();
+  final ProfileController profileController = Get.find();
+  final ClientsController clientsController = Get.put(ClientsController());
   ClientType _selectedType = ClientType.online;
 
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
@@ -92,19 +98,32 @@ class _AddclientState extends State<Addclient> {
               width: MediaQuery.of(context).size.width,
               child: ProCustomButton(
                 text: 'Save',
-                onPressed: () {
+                onPressed: () async {
                   if (_formKey.currentState?.validate() ?? false) {
                     // Handle the save action
-                    final Client client = Client(
-                      id: '', // Generate or fetch the client ID
-                      userId: '', // Fetch the user ID if applicable
-                      name: nameController.text,
-                      email: emailController.text,
-                      phone: phoneController.text,
-                      type: _selectedType,
-                      createdAt: DateTime.now(),
-                      image: <String>[], // Handle images if necessary
-                    );
+                    final Map<String, dynamic> data = <String, dynamic>{
+                      'userId': profileController
+                          .myProfile.uid, // Fetch the user ID if applicable
+                      'name': nameController.text,
+                      'email': emailController.text,
+                      'phone': phoneController.text,
+                      'type': _selectedType,
+                      'createdAt': DateTime.now(),
+                      'image': <String>[], // Handle images if necessary
+                    };
+
+                    final bool response =
+                        await clientsController.addClient(data);
+
+                    if (response) {
+                      Get.back();
+                      showSnackbar(message: 'Client Added Successfully!');
+                    } else {
+                      showSnackbar(
+                        message: 'Error Adding Client!',
+                        error: true,
+                      );
+                    }
 
                     // Call your API or service to save the client information
                     // Example: ApiService.post(path: 'clients', body: client.toMap());

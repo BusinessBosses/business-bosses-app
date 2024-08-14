@@ -1,5 +1,4 @@
 import 'package:business_bosses_v2/bbpro/common/widgets/edittext.dart';
-import 'package:business_bosses_v2/bbpro/common/widgets/textfield.dart';
 import 'package:business_bosses_v2/utils/theme/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
@@ -102,7 +101,7 @@ class _AddProjectBottomSheetState extends State<AddProjectBottomSheet> {
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 15.0),
                 child: Row(
-                  children: [
+                  children: <Widget>[
                     Expanded(
                       child: GestureDetector(
                         onTap: () async {
@@ -130,9 +129,9 @@ class _AddProjectBottomSheetState extends State<AddProjectBottomSheet> {
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: <Widget>[
-                              Text(
+                              const Text(
                                 'Start Date',
-                                style: const TextStyle(
+                                style: TextStyle(
                                   fontSize: 16,
                                   fontWeight: FontWeight.w600,
                                   color: textColor,
@@ -162,7 +161,7 @@ class _AddProjectBottomSheetState extends State<AddProjectBottomSheet> {
                         ),
                       ),
                     ),
-                    SizedBox(width: 10),
+                    const SizedBox(width: 10),
                     Expanded(
                       child: GestureDetector(
                         onTap: () async {
@@ -190,9 +189,9 @@ class _AddProjectBottomSheetState extends State<AddProjectBottomSheet> {
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: <Widget>[
-                              Text(
+                              const Text(
                                 'End Date',
-                                style: const TextStyle(
+                                style: TextStyle(
                                   fontSize: 16,
                                   fontWeight: FontWeight.w600,
                                   color: textColor,
@@ -225,7 +224,7 @@ class _AddProjectBottomSheetState extends State<AddProjectBottomSheet> {
                   ],
                 ),
               ),
-              SizedBox(height: 15),
+              const SizedBox(height: 15),
             ],
           ),
         ),
