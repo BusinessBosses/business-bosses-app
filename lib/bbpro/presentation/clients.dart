@@ -214,21 +214,9 @@ class RowStatusCard extends StatelessWidget {
             ),
           ),
           Expanded(
-            child: DragTarget<Client>(
-              builder: (BuildContext context, List<Client?> candidateData,
-                  List<dynamic> rejectedData) {
-                return ListStatusColumnWidget(
-                  clients: clients,
-                  screenSize: screenSize,
-                  onDrag: onDrag,
-                  cancelDrag: cancelDrag,
-                  Clienttype: ClientType.bbUser,
-                );
-              },
-              onWillAccept: (Client? details) => true,
-              onAcceptWithDetails: (DragTargetDetails<Client> details) {
-                taskAccepted(details.data, ClientType.bbUser);
-              },
+            child: ListStatusColumnWidget(
+              clients: clients,
+              Clienttype: clientType,
             ),
           ),
         ],
@@ -238,18 +226,12 @@ class RowStatusCard extends StatelessWidget {
 }
 
 class ListStatusColumnWidget extends StatelessWidget {
-  final void Function(bool isRight) onDrag;
-  final void Function() cancelDrag;
   final ClientType Clienttype;
   final List<Client> clients;
-  final Size screenSize;
 
   const ListStatusColumnWidget({
     required this.clients,
     required this.Clienttype,
-    required this.screenSize,
-    required this.onDrag,
-    required this.cancelDrag,
     super.key,
   });
 
@@ -265,7 +247,7 @@ class ListStatusColumnWidget extends StatelessWidget {
                 borderRadius: BorderRadius.circular(radius)),
             child: const Center(
               child: Text(
-                'Drag a project here',
+                'Your Clients will show here',
                 style: TextStyle(color: Colors.black38),
               ),
             ),
@@ -282,37 +264,7 @@ class ListStatusColumnWidget extends StatelessWidget {
         );
 
         return Padding(
-          padding: const EdgeInsets.only(bottom: 12),
-          child: Draggable<Client>(
-            data: clients[index],
-            dragAnchorStrategy: (Draggable<Object> draggable,
-                BuildContext context, Offset position) {
-              return pointerDragAnchorStrategy(draggable, context, position);
-            },
-            onDragUpdate: (DragUpdateDetails details) {
-              if (details.globalPosition.dx > screenSize.width * 0.8) {
-                onDrag(true);
-              } else if (details.globalPosition.dx < screenSize.width * 0.2) {
-                onDrag(false);
-              } else {
-                cancelDrag();
-              }
-            },
-            onDragEnd: (_) => cancelDrag(),
-            onDragCompleted: () => cancelDrag(),
-            onDraggableCanceled: (Velocity velocity, Offset offset) =>
-                cancelDrag(),
-            childWhenDragging: Opacity(
-              opacity: 0.2,
-              child: clientWidget,
-            ),
-            feedback: SizedBox(
-              width: screenSize.width * 0.8,
-              child: clientWidget,
-            ),
-            child: clientWidget,
-          ),
-        );
+            padding: const EdgeInsets.only(bottom: 12), child: clientWidget);
       },
       itemCount: clients.length,
     );
