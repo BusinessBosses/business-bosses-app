@@ -2,6 +2,7 @@ import 'package:business_bosses_v2/common/widgets/safety_model.dart';
 import 'package:business_bosses_v2/features/forum/controller/challenge_controller.dart';
 import 'package:business_bosses_v2/features/home/controller/commumities_controller.dart';
 import 'package:business_bosses_v2/features/home/widgets/bottom_bar.dart';
+import 'package:business_bosses_v2/features/home/widgets/challengessection.dart';
 import 'package:business_bosses_v2/features/home/widgets/eventssection.dart';
 import 'package:business_bosses_v2/features/home/widgets/floatingbutton.dart';
 import 'package:business_bosses_v2/features/home/widgets/forum_item.dart';
@@ -353,56 +354,64 @@ class _HomeScreenState extends State<HomeScreen>
                                             controller: _tabController,
                                             children: <Widget>[
                                               ListView(
-                                                children: [
-                                                  const Padding(
+                                                children: const [
+                                                  Padding(
                                                     padding: EdgeInsets.only(
                                                         left: 15.0,
                                                         right: 15,
                                                         top: 15),
                                                     child: SearchSection(),
                                                   ),
-                                                  SizedBox(height: 15,),
-                                                  Padding(
-                                                    padding: const EdgeInsets
-                                                        .symmetric(
-                                                        horizontal: 15.0),
-                                                    child: Container(
-                                                      height: 1,
-                                                      decoration: BoxDecoration(
-                                                          color:
-                                                              backgroundColor,
-                                                          borderRadius:
-                                                              BorderRadius
-                                                                  .circular(
-                                                                      10)),
-                                                    ),
-                                                  ),
-                                                  const BossOfWeekProfileTile(),
-                                                  const EventsSection(),
-                                                  const SizedBox(
+                                                  SizedBox(
                                                     height: 15,
                                                   ),
-                                                  Padding(
-                                                    padding: const EdgeInsets
-                                                        .symmetric(
-                                                        horizontal: 15.0),
-                                                    child: Container(
-                                                      height: 1,
-                                                      decoration: BoxDecoration(
-                                                          color:
-                                                              backgroundColor,
-                                                          borderRadius:
-                                                              BorderRadius
-                                                                  .circular(
-                                                                      10)),
-                                                    ),
-                                                  ),
-                                                  const SizedBox(
+
+                                                  LearningSection(),
+                                                  // Padding(
+                                                  //   padding: const EdgeInsets
+                                                  //       .symmetric(
+                                                  //       horizontal: 15.0),
+                                                  //   child: Container(
+                                                  //     height: 1,
+                                                  //     decoration: BoxDecoration(
+                                                  //         color:
+                                                  //             backgroundColor,
+                                                  //         borderRadius:
+                                                  //             BorderRadius
+                                                  //                 .circular(
+                                                  //                     10)),
+                                                  //   ),
+                                                  // ),
+                                                  BossOfWeekProfileTile(),
+                                                  EventsSection(),
+                                                  SizedBox(
                                                     height: 15,
                                                   ),
-                                                  const MarketplaceSection(),
-                                                  const SizedBox(
-                                                    height: 300,
+                                                  // Padding(
+                                                  //   padding: const EdgeInsets
+                                                  //       .symmetric(
+                                                  //       horizontal: 15.0),
+                                                  //   child: Container(
+                                                  //     height: 1,
+                                                  //     decoration: BoxDecoration(
+                                                  //         color:
+                                                  //             backgroundColor,
+                                                  //         borderRadius:
+                                                  //             BorderRadius
+                                                  //                 .circular(
+                                                  //                     10)),
+                                                  //   ),
+                                                  // ),
+                                                  SizedBox(
+                                                    height: 15,
+                                                  ),
+                                                  MarketplaceSection(),
+                                                  SizedBox(
+                                                    height: 15,
+                                                  ),
+                                                  ChallengesSection(),
+                                                  SizedBox(
+                                                    height: 50,
                                                   ),
                                                 ],
                                               ),

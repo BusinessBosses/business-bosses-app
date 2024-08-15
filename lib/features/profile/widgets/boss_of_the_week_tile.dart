@@ -101,16 +101,18 @@ class _BossOfWeekProfileTileState extends State<BossOfWeekProfileTile> {
                     padding: const EdgeInsets.symmetric(horizontal: 15.0),
                     child: Row(
                       children: <Widget>[
-                        CircleAvatar(
-                          radius: 48 / 3,
-                          backgroundColor: primaryColorLT.withOpacity(0.1),
-                          child: SvgPicture.asset(
-                            'assets/app/app_icon_only.svg',
+                        if (widget.isForyou == true)
+                          CircleAvatar(
+                            radius: 48 / 3,
+                            backgroundColor: primaryColorLT.withOpacity(0.1),
+                            child: SvgPicture.asset(
+                              'assets/app/app_icon_only.svg',
+                            ),
                           ),
-                        ),
-                        const SizedBox(
-                          width: 10,
-                        ),
+                        if (widget.isForyou == true)
+                          const SizedBox(
+                            width: 10,
+                          ),
                         const Text(
                           'Boss of the week',
                           style: TextStyle(
@@ -486,15 +488,6 @@ class _BossOfWeekProfileTileState extends State<BossOfWeekProfileTile> {
                       ),
                 const SizedBox(
                   height: 10,
-                ),
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 15.0),
-                  child: Container(
-                    height: 1,
-                    decoration: BoxDecoration(
-                        color: backgroundColor,
-                        borderRadius: BorderRadius.circular(10)),
-                  ),
                 ),
                 GestureDetector(
                   onTap: () {
@@ -897,15 +890,7 @@ class _BossOfWeekProfileTileState extends State<BossOfWeekProfileTile> {
                 SizedBox(
                   height: 5,
                 ),
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 15.0),
-                  child: Container(
-                    height: 1,
-                    decoration: BoxDecoration(
-                        color: backgroundColor,
-                        borderRadius: BorderRadius.circular(10)),
-                  ),
-                ),
+                
               ],
             )
           : qouteWidget(quotes),
