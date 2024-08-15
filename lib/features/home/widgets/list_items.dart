@@ -10,6 +10,7 @@ import 'package:business_bosses_v2/features/marketplace/widgets/marketplace_item
 import 'package:business_bosses_v2/features/marketplace/widgets/service_item.dart';
 import 'package:business_bosses_v2/features/posts/models/post_model.dart';
 import 'package:business_bosses_v2/features/posts/widgets/userpost_tile.dart';
+import 'package:business_bosses_v2/features/profile/widgets/boss_of_the_week_tile.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:lottie/lottie.dart';
@@ -56,7 +57,7 @@ class _PostsWidgetState extends State<PostsWidget> {
     return ListView.builder(
       shrinkWrap: true,
       controller: _scrollController,
-      itemCount: controller.mixedPosts.length,
+      itemCount: controller.mixedPosts.length + 1,
       itemBuilder: (BuildContext context, int index) {
         if (index == 0) {
           return Column(
@@ -112,7 +113,13 @@ class _PostsWidgetState extends State<PostsWidget> {
           );
         }
 
-        final dynamic currentPost = controller.mixedPosts[index];
+        if (index == 1) {
+          return BossOfWeekProfileTile(
+            isForyou: true,
+          );
+        }
+
+        final dynamic currentPost = controller.mixedPosts[index - 1];
         if (currentPost['type'] == 'post') {
           final PostModel post = controller.posts[currentPost['index']];
 

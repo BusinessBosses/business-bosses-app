@@ -58,7 +58,7 @@ class HomeAppBar extends StatelessWidget {
                         children: [
                           GestureDetector(
                             onTap: () {
-                              Get.toNamed(Routes.myProfile);
+                              // Get.toNamed(Routes.myProfile);
                             },
                             child: SizedBox(
                               height: 40.0,
@@ -103,10 +103,11 @@ class HomeAppBar extends StatelessWidget {
                           ),
                         ],
                       )
-                    : Expanded(child: Padding(
-                      padding: const EdgeInsets.only(right:15.0),
-                      child: const SearchSection(),
-                    )),
+                    : Expanded(
+                        child: Padding(
+                        padding: const EdgeInsets.only(right: 15.0),
+                        child: const SearchSection(),
+                      )),
                 Row(
                   children: [
                     GestureDetector(
@@ -200,7 +201,10 @@ class HomeAppBar extends StatelessWidget {
             ),
           ),
         ),
-        Container(height: 1, color: backgroundColor,),
+        Container(
+          height: 1,
+          color: backgroundColor,
+        ),
         TabBar(
           controller: controller,
           indicatorColor: Colors.transparent,
@@ -215,14 +219,14 @@ class HomeAppBar extends StatelessWidget {
                       width: 8.0,
                       height: 8.0,
                       decoration: BoxDecoration(
-                        color: Colors.red,
+                        color: primaryColorLT,
                         shape: BoxShape.circle,
                       ),
                     ),
                   Text(
                     'Discover',
                     style: TextStyle(
-                      color: controller.index == 0 ? Colors.red : Colors.grey,
+                      color: controller.index == 0 ? primaryColorLT : Colors.grey,
                       fontWeight: FontWeight.w700,
                     ),
                   ),
@@ -235,18 +239,18 @@ class HomeAppBar extends StatelessWidget {
                 children: [
                   if (controller.index == 1)
                     Container(
-                      margin: EdgeInsets.only(right: 8.0),
+                      margin: const EdgeInsets.only(right: 8.0),
                       width: 8.0,
                       height: 8.0,
-                      decoration: BoxDecoration(
-                        color: Colors.red,
+                      decoration: const BoxDecoration(
+                        color: primaryColorLT,
                         shape: BoxShape.circle,
                       ),
                     ),
                   Text(
                     'For you',
                     style: TextStyle(
-                      color: controller.index == 1 ? Colors.red : Colors.grey,
+                      color: controller.index == 1 ? primaryColorLT : Colors.grey,
                       fontWeight: FontWeight.w700,
                     ),
                   ),
@@ -259,18 +263,18 @@ class HomeAppBar extends StatelessWidget {
                 children: [
                   if (controller.index == 2)
                     Container(
-                      margin: EdgeInsets.only(right: 8.0),
+                      margin: const EdgeInsets.only(right: 8.0),
                       width: 8.0,
                       height: 8.0,
-                      decoration: BoxDecoration(
-                        color: Colors.red,
+                      decoration: const BoxDecoration(
+                        color: primaryColorLT,
                         shape: BoxShape.circle,
                       ),
                     ),
                   Text(
                     'Following',
                     style: TextStyle(
-                      color: controller.index == 2 ? Colors.red : Colors.grey,
+                      color: controller.index == 2 ? primaryColorLT : Colors.grey,
                       fontWeight: FontWeight.w700,
                     ),
                   ),
@@ -279,7 +283,10 @@ class HomeAppBar extends StatelessWidget {
             ),
           ],
         ),
-              Container(height: 1, color: backgroundColor,),
+        Container(
+          height: 1,
+          color: backgroundColor,
+        ),
       ],
     );
   }

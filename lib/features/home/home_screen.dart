@@ -202,7 +202,7 @@ class _HomeScreenState extends State<HomeScreen>
               backgroundColor: Colors.white,
               appBar: PreferredSize(
                 preferredSize: controller.loading.value
-                    ? Size.fromHeight(0)
+                    ? const Size.fromHeight(0)
                     : const Size.fromHeight(kToolbarHeight + 50),
                 child: controller.loading.value
                     ? Container()
@@ -354,15 +354,32 @@ class _HomeScreenState extends State<HomeScreen>
                                             children: <Widget>[
                                               ListView(
                                                 children: [
+                                                  const Padding(
+                                                    padding: EdgeInsets.only(
+                                                        left: 15.0,
+                                                        right: 15,
+                                                        top: 15),
+                                                    child: SearchSection(),
+                                                  ),
+                                                  SizedBox(height: 15,),
                                                   Padding(
                                                     padding: const EdgeInsets
                                                         .symmetric(
                                                         horizontal: 15.0),
-                                                    child: SearchSection(),
+                                                    child: Container(
+                                                      height: 1,
+                                                      decoration: BoxDecoration(
+                                                          color:
+                                                              backgroundColor,
+                                                          borderRadius:
+                                                              BorderRadius
+                                                                  .circular(
+                                                                      10)),
+                                                    ),
                                                   ),
-                                                  BossOfWeekProfileTile(),
-                                                  EventsSection(),
-                                                  SizedBox(
+                                                  const BossOfWeekProfileTile(),
+                                                  const EventsSection(),
+                                                  const SizedBox(
                                                     height: 15,
                                                   ),
                                                   Padding(
@@ -380,11 +397,11 @@ class _HomeScreenState extends State<HomeScreen>
                                                                       10)),
                                                     ),
                                                   ),
-                                                  SizedBox(
+                                                  const SizedBox(
                                                     height: 15,
                                                   ),
-                                                  MarketplaceSection(),
-                                                  SizedBox(
+                                                  const MarketplaceSection(),
+                                                  const SizedBox(
                                                     height: 300,
                                                   ),
                                                 ],
@@ -414,6 +431,7 @@ class _HomeScreenState extends State<HomeScreen>
                                   const BottomBar(
                                     activeIndex: 0,
                                   ),
+                                  const Floatingbutton(),
                                 ],
                               ),
                             ),
