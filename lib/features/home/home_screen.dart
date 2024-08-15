@@ -365,53 +365,25 @@ class _HomeScreenState extends State<HomeScreen>
                                                   SizedBox(
                                                     height: 15,
                                                   ),
-
                                                   LearningSection(),
-                                                  // Padding(
-                                                  //   padding: const EdgeInsets
-                                                  //       .symmetric(
-                                                  //       horizontal: 15.0),
-                                                  //   child: Container(
-                                                  //     height: 1,
-                                                  //     decoration: BoxDecoration(
-                                                  //         color:
-                                                  //             backgroundColor,
-                                                  //         borderRadius:
-                                                  //             BorderRadius
-                                                  //                 .circular(
-                                                  //                     10)),
-                                                  //   ),
-                                                  // ),
                                                   BossOfWeekProfileTile(),
-                                                  EventsSection(),
-                                                  SizedBox(
-                                                    height: 15,
-                                                  ),
-                                                  // Padding(
-                                                  //   padding: const EdgeInsets
-                                                  //       .symmetric(
-                                                  //       horizontal: 15.0),
-                                                  //   child: Container(
-                                                  //     height: 1,
-                                                  //     decoration: BoxDecoration(
-                                                  //         color:
-                                                  //             backgroundColor,
-                                                  //         borderRadius:
-                                                  //             BorderRadius
-                                                  //                 .circular(
-                                                  //                     10)),
-                                                  //   ),
-                                                  // ),
-                                                  SizedBox(
-                                                    height: 15,
-                                                  ),
-                                                  MarketplaceSection(),
                                                   SizedBox(
                                                     height: 15,
                                                   ),
                                                   ChallengesSection(),
                                                   SizedBox(
-                                                    height: 50,
+                                                    height: 10,
+                                                  ),
+                                                  EventsSection(),
+                                                  SizedBox(
+                                                    height: 15,
+                                                  ),
+                                                  SizedBox(
+                                                    height: 15,
+                                                  ),
+                                                  MarketplaceSection(),
+                                                  SizedBox(
+                                                    height: 120,
                                                   ),
                                                 ],
                                               ),

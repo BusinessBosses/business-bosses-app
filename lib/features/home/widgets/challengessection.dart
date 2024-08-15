@@ -45,8 +45,8 @@ class ChallengesSection extends StatelessWidget {
               ),
             ),
             SizedBox(height: 10,),
-            const SizedBox(
-                height: 260,
+             Container(
+                height: 180,
                 child: BossupChallenge(
                   ishome: true,
                 ))

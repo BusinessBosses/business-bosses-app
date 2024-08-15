@@ -40,7 +40,7 @@ class _BossupChallengeState extends State<BossupChallenge> {
           );
         } else {
           return Padding(
-            padding: const EdgeInsets.only(bottom: 80),
+            padding: EdgeInsets.only(bottom: widget.ishome! == true ? 0 : 80),
             child: ListView.builder(
               scrollDirection:
                   widget.ishome! == true ? Axis.horizontal : Axis.vertical,
@@ -106,9 +106,7 @@ class _BossupChallengeState extends State<BossupChallenge> {
                     children: <Widget>[
                       Container(
                         padding: widget.ishome == true
-                            ? const EdgeInsets.only(
-                                left: 10, right: 10
-                              )
+                            ? const EdgeInsets.only(left: 10, right: 10)
                             : const EdgeInsets.all(15),
                         margin: widget.ishome == false
                             ? const EdgeInsets.only(
@@ -240,7 +238,9 @@ class _BossupChallengeState extends State<BossupChallenge> {
                               ],
                             ),
                             if (widget.ishome == true)
-                            SizedBox(height: 10,),
+                              SizedBox(
+                                height: 10,
+                              ),
                             if (widget.ishome == true)
                               Column(
                                 mainAxisAlignment: MainAxisAlignment.start,
