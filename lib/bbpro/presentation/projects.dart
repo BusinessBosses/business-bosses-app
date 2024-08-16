@@ -95,50 +95,57 @@ class _ProjectsState extends State<Projects> {
           Expanded(
             child: Padding(
               padding: const EdgeInsets.only(bottom: 15),
-              child: CustomScrollView(
-                scrollDirection: Axis.horizontal,
-                controller: _mainListScrollController,
-                slivers: <Widget>[
-                  ...TaskStatus.values.map(
-                    (TaskStatus status) => SliverToBoxAdapter(
-                      child: RowStatusCard(
-                        tasks: _tasks[status] ?? <Task>[],
-                        taskStatus: status,
-                        screenSize: screenSize,
-                        taskAccepted: (Task task, TaskStatus newStatus) {
-                          setState(() {
-                            _tasks[task.status]?.remove(task);
-                            _tasks[newStatus]?.add(
-                              Task(
-                                id: task.id,
-                                userId: task.userId,
-                                projectId: task.projectId,
-                                name: task.name,
-                                amount: task.amount,
-                                startAt: task.startAt,
-                                endAt: task.endAt,
-                                status: newStatus,
-                                createdAt: task.createdAt,
-                                clientId: task.clientId,
-                              ),
-                            );
-                          });
-                        },
-                        onDrag: (bool isRight) {
-                          if (_lastMoveRight == isRight) {
-                            return;
-                          }
-                          _lastMoveRight = isRight;
-                          _moveMainList(isRight);
-                        },
-                        cancelDrag: () {
-                          _lastMoveRight = null;
-                          _timer?.cancel();
-                        },
-                      ),
-                    ),
-                  )
-                ],
+              child: Obx(
+                () {
+                  if (projectController.tasks.isEmpty) {
+                    return const Center(child: CircularProgressIndicator());
+                  }
+                  return CustomScrollView(
+                    scrollDirection: Axis.horizontal,
+                    controller: _mainListScrollController,
+                    slivers: <Widget>[
+                      ...TaskStatus.values.map(
+                        (TaskStatus status) => SliverToBoxAdapter(
+                          child: RowStatusCard(
+                            tasks: _tasks[status] ?? <Task>[],
+                            taskStatus: status,
+                            screenSize: screenSize,
+                            taskAccepted: (Task task, TaskStatus newStatus) {
+                              setState(() {
+                                _tasks[task.status]?.remove(task);
+                                _tasks[newStatus]?.add(
+                                  Task(
+                                    id: task.id,
+                                    userId: task.userId,
+                                    projectId: task.projectId,
+                                    name: task.name,
+                                    amount: task.amount,
+                                    startAt: task.startAt,
+                                    endAt: task.endAt,
+                                    status: newStatus,
+                                    createdAt: task.createdAt,
+                                    clientId: task.clientId,
+                                  ),
+                                );
+                              });
+                            },
+                            onDrag: (bool isRight) {
+                              if (_lastMoveRight == isRight) {
+                                return;
+                              }
+                              _lastMoveRight = isRight;
+                              _moveMainList(isRight);
+                            },
+                            cancelDrag: () {
+                              _lastMoveRight = null;
+                              _timer?.cancel();
+                            },
+                          ),
+                        ),
+                      )
+                    ],
+                  );
+                },
               ),
             ),
           ),

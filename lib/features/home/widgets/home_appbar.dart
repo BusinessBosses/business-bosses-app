@@ -217,7 +217,7 @@ class HomeAppBar extends StatelessWidget {
                       margin: const EdgeInsets.only(right: 8.0),
                       width: 8.0,
                       height: 8.0,
-                      decoration: BoxDecoration(
+                      decoration: const BoxDecoration(
                         color: Colors.red,
                         shape: BoxShape.circle,
                       ),

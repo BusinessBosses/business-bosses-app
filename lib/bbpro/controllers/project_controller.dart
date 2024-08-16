@@ -18,12 +18,12 @@ class ProjectController extends GetxController {
   }
 
   Future<void> initTasks(String userId) async {
+    tasks.clear();
     ApiResponseModel response = await ApiService.get(path: 'tasks/all');
     if (response.success) {
       for (int i = 0; i < response.data['rows'].length; i++) {
         tasks.add(Task.fromMap(response.data['rows'][i]));
       }
-      print(tasks);
     }
   }
 
