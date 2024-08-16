@@ -6,13 +6,18 @@ import 'package:business_bosses_v2/features/home/widgets/challengessection.dart'
 import 'package:business_bosses_v2/features/home/widgets/eventssection.dart';
 import 'package:business_bosses_v2/features/home/widgets/floatingbutton.dart';
 import 'package:business_bosses_v2/features/home/widgets/forum_item.dart';
+import 'package:business_bosses_v2/features/home/widgets/learningsection.dart';
 import 'package:business_bosses_v2/features/home/widgets/list_items.dart';
 import 'package:business_bosses_v2/features/home/widgets/marketplacesection.dart';
 import 'package:business_bosses_v2/features/home/widgets/searchsection.dart';
 import 'package:business_bosses_v2/features/live_event/controller/live_event_controller.dart';
 import 'package:business_bosses_v2/features/donations/controller/donations_controller.dart';
+import 'package:business_bosses_v2/features/live_event/widgets/event_call.dart';
+import 'package:business_bosses_v2/navigation/routes.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_sticky_header/flutter_sticky_header.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:upgrader/upgrader.dart';
@@ -349,34 +354,36 @@ class _HomeScreenState extends State<HomeScreen>
                                             controller: _tabController,
                                             children: <Widget>[
                                               ListView(
-                                                children: [
-                                                  const SearchSection(),
-                                                  const BossOfWeekProfileTile(),
-                                                  const EventsSection(),
-                                                  const SizedBox(
-                                                    height: 15,
-                                                  ),
+                                                children: const [
                                                   Padding(
-                                                    padding: const EdgeInsets
-                                                        .symmetric(
-                                                        horizontal: 15.0),
-                                                    child: Container(
-                                                      height: 3,
-                                                      decoration: BoxDecoration(
-                                                          color:
-                                                              backgroundColor,
-                                                          borderRadius:
-                                                              BorderRadius
-                                                                  .circular(
-                                                                      10)),
-                                                    ),
+                                                    padding: EdgeInsets.only(
+                                                        left: 15.0,
+                                                        right: 15,
+                                                        top: 15),
+                                                    child: SearchSection(),
                                                   ),
-                                                  const SizedBox(
+                                                  SizedBox(
                                                     height: 15,
                                                   ),
-                                                  const MarketplaceSection(),
-                                                  const SizedBox(
-                                                    height: 300,
+                                                  LearningSection(),
+                                                  BossOfWeekProfileTile(),
+                                                  SizedBox(
+                                                    height: 15,
+                                                  ),
+                                                  ChallengesSection(),
+                                                  SizedBox(
+                                                    height: 10,
+                                                  ),
+                                                  EventsSection(),
+                                                  SizedBox(
+                                                    height: 15,
+                                                  ),
+                                                  SizedBox(
+                                                    height: 15,
+                                                  ),
+                                                  MarketplaceSection(),
+                                                  SizedBox(
+                                                    height: 120,
                                                   ),
                                                 ],
                                               ),

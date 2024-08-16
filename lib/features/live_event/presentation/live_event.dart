@@ -160,7 +160,7 @@ class _LiveEventState extends State<LiveEvent> {
                       ],
                     )
                   : const Text(
-                      'Live Events',
+                      'Events',
                       textAlign: TextAlign.center,
                       style: TextStyle(fontSize: 20),
                     ),
@@ -322,7 +322,7 @@ class _LiveEventState extends State<LiveEvent> {
                                           ),
                                         ),
                                         child: const Text(
-                                          'Create Live Event',
+                                          'Create an Event',
                                           style: TextStyle(
                                             color: Colors.red,
                                             fontWeight: FontWeight.bold,

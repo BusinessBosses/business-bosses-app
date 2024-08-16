@@ -81,7 +81,7 @@ class _PostsWidgetState extends State<PostsWidget> {
                       ),
                       const Expanded(
                         child: TextScroll(
-                          '     Live Events - Create or Start listening to live events from bosses.           ',
+                          '     Events - Create or Start listening to live events from bosses.           ',
                           mode: TextScrollMode.bouncing,
                           style: TextStyle(color: Colors.white, fontSize: 15),
                           velocity: Velocity(

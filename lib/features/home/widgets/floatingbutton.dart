@@ -74,7 +74,7 @@ class Floatingbutton extends StatelessWidget {
                                         ? 'assets/svgs/text.svg'
                                         : index == 1
                                             ? 'assets/svgs/sellicon.svg'
-                                            : 'assets/svgs/liveevent.svg', // Assuming you have a "polls.svg" asset
+                                            : 'assets/svgs/eventu.svg', // Assuming you have a "polls.svg" asset
                                     height: index == 0
                                         ? 25
                                         : index == 1
@@ -91,7 +91,7 @@ class Floatingbutton extends StatelessWidget {
                                   : index == 1
                                       ? 'Sell your product & service'
                                       : index == 2
-                                          ? 'Create a Live Event'
+                                          ? 'Create an Event'
                                           : 'Create Polls & Surveys',
                               style: const TextStyle(
                                 fontSize: 18,

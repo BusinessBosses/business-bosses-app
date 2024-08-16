@@ -93,7 +93,63 @@ class _EventItemState extends State<EventItem> {
               ),
               child: Column(
                 children: [
-                  Text(widget.event.title!),
+                  Align(
+                    alignment: Alignment.topLeft,
+                    child: Text(
+                      widget.event.title!,
+                      style: const TextStyle(
+                        fontWeight: FontWeight.w700,
+                        fontSize: 16,
+                      ),
+                    ),
+                  ),
+                  if (widget.event.description != null)
+                    Row(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: <Widget>[
+                        Expanded(
+                          child: Padding(
+                            padding: const EdgeInsets.only(right: 15.0),
+                            child: DetectableText(
+                              text: widget.event.description!,
+                              trimLength: 90,
+                              detectionRegExp: detectionRegExp(hashtag: false)!,
+                              detectedStyle: bodyText2.copyWith(
+                                color: Colors.blue,
+                              ),
+                              moreStyle: bodyText2.copyWith(
+                                color: Colors.redAccent,
+                              ),
+                              lessStyle: bodyText2.copyWith(
+                                color: Colors.redAccent,
+                              ),
+                              trimExpandedText: '  show less',
+                              basicStyle: bodyText2.copyWith(
+                                  color: textColor, fontSize: 12),
+                              onTap: (String text) async {
+                                final Uri url = Uri.parse(text);
+                                if ((url.scheme == 'http' ||
+                                    url.scheme == 'https')) {
+                                  if (!await launchUrl(url)) {
+                                    throw Exception('Could not launch $url');
+                                  }
+                                } else if (text.startsWith('wa.me')) {
+                                  // Handle "wa.me" links
+                                  final Uri whatsappUrl =
+                                      Uri.parse('https://$text');
+                                  if (await launchUrl(whatsappUrl)) {
+                                    await launchUrl(whatsappUrl);
+                                  } else {
+                                    throw Exception(
+                                        'Could not launch $whatsappUrl');
+                                  }
+                                }
+                              },
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
                   Row(
                     children: <Widget>[
                       const Text('Host:'),
