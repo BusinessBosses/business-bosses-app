@@ -3,25 +3,27 @@ import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 
 class SalesWidget extends StatelessWidget {
+  const SalesWidget({super.key});
+
   @override
   Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.only(left: 15.0, right: 15, bottom: 15),
       child: Container(
         width: double.infinity,
-        padding: EdgeInsets.all(16.0),
+        padding: const EdgeInsets.all(16.0),
         decoration: BoxDecoration(
           color: Colors.white,
           borderRadius: BorderRadius.circular(16.0),
         ),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
+          children: <Widget>[
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Wrap(
-                  children: [
+              children: <Widget>[
+                const Wrap(
+                  children: <Widget>[
                     Text(
                       'Sales',
                       style:
@@ -38,22 +40,22 @@ class SalesWidget extends StatelessWidget {
                 ),
                 Wrap(
                   crossAxisAlignment: WrapCrossAlignment.center,
-                  children: [
+                  children: <Widget>[
                     Container(
-                      padding: EdgeInsets.all(5),
+                      padding: const EdgeInsets.all(5),
                       decoration: BoxDecoration(
                           color: prosemibackColor,
                           borderRadius: BorderRadius.circular(30)),
-                      child: Icon(
+                      child: const Icon(
                         Icons.visibility_off,
                         color: proprimaryColor,
                         size: 15,
                       ),
                     ),
-                    SizedBox(
+                    const SizedBox(
                       width: 10,
                     ),
-                    Text(
+                    const Text(
                       '\$19.4k',
                       style: TextStyle(
                           color: proprimaryColor,
@@ -64,8 +66,8 @@ class SalesWidget extends StatelessWidget {
                 ),
               ],
             ),
-            Row(
-              children: [
+            const Row(
+              children: <Widget>[
                 Text(
                   '128,7K',
                   style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
@@ -73,7 +75,7 @@ class SalesWidget extends StatelessWidget {
               ],
             ),
             Container(
-              padding: EdgeInsets.only(right: 5),
+              padding: const EdgeInsets.only(right: 5),
               height: 100,
               width: double.infinity,
               child: LineChart(
@@ -86,7 +88,7 @@ class SalesWidget extends StatelessWidget {
                     leftTitles: SideTitles(showTitles: true, interval: 200),
                     bottomTitles: SideTitles(
                         showTitles: true,
-                        getTitles: (value) {
+                        getTitles: (double value) {
                           switch (value.toInt()) {
                             case 0:
                               return 'Mon';
@@ -109,10 +111,10 @@ class SalesWidget extends StatelessWidget {
                   ),
                   gridData: FlGridData(show: false),
                   borderData: FlBorderData(show: false),
-                  lineBarsData: [
+                  lineBarsData: <LineChartBarData>[
                     LineChartBarData(
                       isStrokeCapRound: true,
-                      spots: [
+                      spots: <FlSpot>[
                         FlSpot(0, 150),
                         FlSpot(1, 250),
                         FlSpot(2, 100),
@@ -122,11 +124,11 @@ class SalesWidget extends StatelessWidget {
                         FlSpot(6, 700),
                       ],
                       isCurved: true,
-                      colors: [proprimaryColor],
+                      colors: <Color>[proprimaryColor],
                       barWidth: 4,
                       belowBarData: BarAreaData(
                         show: true,
-                        colors: [prosemibackColor.withAlpha(150)],
+                        colors: <Color>[prosemibackColor.withAlpha(150)],
                       ),
                       dotData: FlDotData(show: false),
                     ),

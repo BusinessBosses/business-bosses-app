@@ -9,18 +9,17 @@ class ClientsController extends GetxController {
   RxList<Client> clients = RxList<Client>(<Client>[]);
 
   Future<void> initClients(String userId) async {
-    ApiResponseModel response = await ApiService.get(path: 'tasks/all');
+    ApiResponseModel response = await ApiService.get(path: 'clients/all');
     if (response.success) {
       for (int i = 0; i < response.data['rows'].length; i++) {
         clients.add(Client.fromMap(response.data['rows'][i]));
       }
-      print(clients);
     }
   }
 
   Future<bool> addClient(Map<String, dynamic> data) async {
     ApiResponseModel response =
-        await ApiService.post(path: 'projects', body: data);
+        await ApiService.post(path: 'clients', body: data);
     if (response.success) {
       return true;
     } else {

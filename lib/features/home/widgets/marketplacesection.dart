@@ -11,10 +11,10 @@ class MarketplaceSection extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final MarketController _marketController = Get.find();
+    final MarketController marketController = Get.find();
     return Container(
       child: Column(
-        children: [
+        children: <Widget>[
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 15.0),
             child: Row(
@@ -42,24 +42,24 @@ class MarketplaceSection extends StatelessWidget {
               ],
             ),
           ),
-          SizedBox(
+          const SizedBox(
             height: 10,
           ),
-          Container(
+          SizedBox(
             height: 300,
             child: ListView.builder(
               scrollDirection: Axis.horizontal,
               itemCount: 5,
               itemBuilder: (BuildContext context, int index) {
-                final MarketModel market = _marketController.isfiltered.value
-                    ? _marketController.searchResult[index]
-                    : _marketController.markets[index];
+                final MarketModel market = marketController.isfiltered.value
+                    ? marketController.searchResult[index]
+                    : marketController.markets[index];
                 return MarketTile(
                   ishome: true,
                   post: market,
-                  controller: _marketController,
+                  controller: marketController,
                   key: ValueKey<String>(
-                      _marketController.markets[index].marketId),
+                      marketController.markets[index].marketId),
                 );
               },
             ),

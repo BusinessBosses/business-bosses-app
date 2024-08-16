@@ -19,17 +19,17 @@ class TopsectionWidget extends StatelessWidget {
       padding: const EdgeInsets.symmetric(horizontal: 15.0, vertical: 10),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
+        children: <Widget>[
           TextButton.icon(
             onPressed: onHowItWorksPressed,
             icon: const Icon(Icons.info_outline, color: Colors.black),
             label: const Text(
-              "How it works",
+              'How it works',
               style: TextStyle(color: Colors.black),
             ),
           ),
           ProIconButton(
-            icon: Icon(Icons.add),
+            icon: const Icon(Icons.add),
             onPressed: onAddProjectPressed,
             text: buttonText,
             radius: 10,

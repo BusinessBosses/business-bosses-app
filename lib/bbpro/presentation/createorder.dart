@@ -42,34 +42,34 @@ class _CreateOrderState extends State<CreateOrder> {
               child: Column(
                 children: <Widget>[
                   const SizedBox(height: 15),
-                  CustomDropdownWidget(
+                  const CustomDropdownWidget(
                       caption: 'Client\'s Name',
-                      items: const <String>['Online'],
+                      items: <String>['Online'],
                       iconName: 'assets/svgs/dropdown.svg'),
                   const SizedBox(height: 15),
-                  CustomDropdownWidget(
+                  const CustomDropdownWidget(
                       caption: 'Choose Order',
-                      items: const <String>['Online'],
+                      items: <String>['Online'],
                       iconName: 'assets/svgs/dropdown.svg'),
                   const SizedBox(height: 15),
-                  CustomDropdownWidget(
+                  const CustomDropdownWidget(
                       caption: 'Order Channel',
-                      items: const <String>['Online'],
+                      items: <String>['Online'],
                       iconName: 'assets/svgs/dropdown.svg'),
                   const SizedBox(height: 15),
-                  CustomDropdownWidget(
+                  const CustomDropdownWidget(
                       caption: 'Payment Method',
-                      items: const <String>['Online'],
+                      items: <String>['Online'],
                       iconName: 'assets/svgs/dropdown.svg'),
                   const SizedBox(height: 15),
-                  CustomDropdownWidget(
+                  const CustomDropdownWidget(
                       caption: 'Client Type',
-                      items: const <String>['Online'],
+                      items: <String>['Online'],
                       iconName: 'assets/svgs/dropdown.svg'),
                   const SizedBox(height: 15),
-                  CustomDropdownWidget(
+                  const CustomDropdownWidget(
                       caption: 'Delivery Method',
-                      items: const <String>['Online'],
+                      items: <String>['Online'],
                       iconName: 'assets/svgs/dropdown.svg'),
                   const SizedBox(height: 15),
                   CustomEditText(

@@ -19,8 +19,8 @@ class MultipleEditTextWidget extends StatefulWidget {
 }
 
 class _MultipleEditTextWidgetState extends State<MultipleEditTextWidget> {
-  List<Widget> _textFields = [];
-  int _maxFields = 3;
+  final List<Widget> _textFields = <Widget>[];
+  final int _maxFields = 3;
 
   @override
   void initState() {

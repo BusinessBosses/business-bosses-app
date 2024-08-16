@@ -18,8 +18,8 @@ class _HometopWidgetState extends State<HometopWidget> {
       body: Container(
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Wrap(children: [
+          children: <Widget>[
+            Wrap(children: <Widget>[
               SizedBox(
                 height: 40.0,
                 width: 40.0,
@@ -37,11 +37,11 @@ class _HometopWidgetState extends State<HometopWidget> {
                   ),
                 ),
               ),
-              Column(
-                children: [
+              const Column(
+                children: <Widget>[
                   Text('data'),
                   Wrap(
-                    children: [Text('data'), Text('Good morning')],
+                    children: <Widget>[Text('data'), Text('Good morning')],
                   )
                 ],
               )

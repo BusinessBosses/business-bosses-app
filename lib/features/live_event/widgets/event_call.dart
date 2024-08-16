@@ -23,7 +23,7 @@ class _EventCallState extends State<EventCall> {
     if (widget.ishome == true) {
       return liveEventController.events.isNotEmpty
           ? Obx(
-              () => Container(
+              () => SizedBox(
                 height: 200,
                 child: ListView.builder(
                   scrollDirection: Axis.horizontal,
@@ -87,7 +87,7 @@ class _EventCallState extends State<EventCall> {
               ? Obx(
                   () => ListView.builder(
                     physics: widget.ishome == true
-                        ? NeverScrollableScrollPhysics()
+                        ? const NeverScrollableScrollPhysics()
                         : null,
                     itemCount: liveEventController.ongoing.length,
                     itemBuilder: (BuildContext context, int index) {

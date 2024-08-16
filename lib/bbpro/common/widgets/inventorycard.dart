@@ -28,13 +28,13 @@ class _InventoryCardState extends State<InventoryCard> {
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.center,
-        children: [
-          Container(
+        children: <Widget>[
+          SizedBox(
             height: 120.0,
             width: double.infinity,
             child: ClipRRect(
               borderRadius: BorderRadius.circular(10),
-              child: NetworkImageWithPlaceHolder(
+              child: const NetworkImageWithPlaceHolder(
                 imageUrl: '',
                 radius: radius,
                 placeHolder: Icons.person,
@@ -47,7 +47,7 @@ class _InventoryCardState extends State<InventoryCard> {
           const Divider(),
           const SizedBox(height: 5),
           Row(
-            children: [
+            children: <Widget>[
               Text(
                 widget.cardName,
                 style: const TextStyle(
@@ -58,10 +58,10 @@ class _InventoryCardState extends State<InventoryCard> {
             ],
           ),
           Row(
-            children: [
+            children: <Widget>[
               Text(
                 widget.value,
-                style: TextStyle(
+                style: const TextStyle(
                   color: proprimaryColor,
                   fontWeight: FontWeight.bold,
                   fontSize: 16,
@@ -69,12 +69,12 @@ class _InventoryCardState extends State<InventoryCard> {
               ),
             ],
           ),
-          Row(
+          const Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
+            children: <Widget>[
               Wrap(
                 crossAxisAlignment: WrapCrossAlignment.center,
-                children: const [
+                children: <Widget>[
                   CircleAvatar(
                     radius: 5,
                     backgroundColor: Colors.green,

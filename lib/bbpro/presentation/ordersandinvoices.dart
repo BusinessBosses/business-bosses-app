@@ -26,7 +26,7 @@ class _OrdersScreenState extends State<OrdersScreen> {
               fontWeight: FontWeight.bold,
             ),
           ),
-          actions: [
+          actions: <Widget>[
             Padding(
               padding: const EdgeInsets.only(right: 10.0, bottom: 15),
               child: CircleAvatar(
@@ -45,16 +45,16 @@ class _OrdersScreenState extends State<OrdersScreen> {
           ],
         ),
         body: Column(
-          children: [
+          children: <Widget>[
             TopsectionWidget(
-              buttonText: "Create New Order",
+              buttonText: 'Create New Order',
               onHowItWorksPressed: () {
                 // Handle "How it works" pressed
-                print("How it works pressed");
+                print('How it works pressed');
               },
               onAddProjectPressed: () {
                 // Handle "Add Project" pressed
-                Get.to(CreateOrder());
+                Get.to(const CreateOrder());
               },
             ),
           ],

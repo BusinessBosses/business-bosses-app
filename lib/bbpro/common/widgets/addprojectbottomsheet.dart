@@ -145,7 +145,7 @@ class _AddProjectBottomSheetState extends State<AddProjectBottomSheet> {
                                   Text(
                                     widget.startDate != null
                                         ? DateFormat('dd-MM-yyyy')
-                                            .format(widget.startDate!)
+                                            .format(widget.startDate)
                                         : 'Start Date',
                                     style: TextStyle(
                                       fontSize: 16,
@@ -205,7 +205,7 @@ class _AddProjectBottomSheetState extends State<AddProjectBottomSheet> {
                                   Text(
                                     widget.endDate != null
                                         ? DateFormat('dd-MM-yyyy')
-                                            .format(widget.endDate!)
+                                            .format(widget.endDate)
                                         : 'End Date',
                                     style: TextStyle(
                                       fontSize: 16,

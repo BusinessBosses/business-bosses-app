@@ -30,7 +30,7 @@ class _TaskDisplayItemState extends State<TaskDisplayItem> {
             });
           },
         ),
-        Text('task name'),
+        const Text('task name'),
       ],
     );
   }

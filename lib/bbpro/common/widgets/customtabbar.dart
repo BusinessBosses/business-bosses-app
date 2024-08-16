@@ -23,7 +23,7 @@ class CustomTabBar extends StatelessWidget {
       ),
       labelColor: Colors.white,
       unselectedLabelColor: proprimaryColor,
-      labelPadding: EdgeInsets.symmetric(horizontal: 20),
+      labelPadding: const EdgeInsets.symmetric(horizontal: 20),
     );
   }
 }

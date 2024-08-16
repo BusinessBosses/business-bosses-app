@@ -13,34 +13,34 @@ class _TaskitemState extends State<Taskitem> {
   @override
   Widget build(BuildContext context) {
     return Column(
-      children: [
+      children: <Widget>[
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Text('data'),
+          children: <Widget>[
+            const Text('data'),
             Wrap(
               crossAxisAlignment: WrapCrossAlignment.center,
-              children: [
+              children: <Widget>[
                 Container(
                     decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(10),
                         color: backgroundColor),
-                    padding: EdgeInsets.symmetric(horizontal: 10, vertical: 10),
-                    child: Text('Edit')),
-                SizedBox(
+                    padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
+                    child: const Text('Edit')),
+                const SizedBox(
                   width: 5,
                 ),
                 Container(
-                    padding: EdgeInsets.symmetric(horizontal: 10, vertical: 10),
+                    padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
                     decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(10),
-                        color: Color(0xFF00000)),
+                        color: const Color(0x0ff00000)),
                     child: SvgPicture.asset('assets/svgs/trashicon.svg'))
               ],
             )
           ],
         ),
-        SizedBox(
+        const SizedBox(
           height: 10,
         )
       ],

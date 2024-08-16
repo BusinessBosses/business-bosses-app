@@ -1,9 +1,7 @@
 import 'package:business_bosses_v2/features/live_event/widgets/event_call.dart';
-import 'package:business_bosses_v2/navigation/routes.dart';
 import 'package:business_bosses_v2/utils/theme/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:get/get.dart';
 
 class EventsSection extends StatelessWidget {
   const EventsSection({super.key});
@@ -12,8 +10,8 @@ class EventsSection extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       child: Column(
-        children: [
-          SizedBox(
+        children: <Widget>[
+          const SizedBox(
             height: 10,
           ),
           Padding(
@@ -43,11 +41,11 @@ class EventsSection extends StatelessWidget {
               ],
             ),
           ),
-          SizedBox(
+          const SizedBox(
             height: 10,
           ),
 
-          EventCall(
+          const EventCall(
             ishome: true,
             full: true,
           ),

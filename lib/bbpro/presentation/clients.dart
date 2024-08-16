@@ -1,7 +1,7 @@
 import 'dart:async';
-
 import 'package:business_bosses_v2/bbpro/common/widgets/clientwidget.dart';
 import 'package:business_bosses_v2/bbpro/common/widgets/topsection.dart';
+import 'package:business_bosses_v2/bbpro/controllers/clients_controller.dart';
 import 'package:business_bosses_v2/bbpro/models/client_model.dart';
 import 'package:business_bosses_v2/bbpro/presentation/addclient.dart';
 import 'package:business_bosses_v2/utils/theme/theme.dart';
@@ -20,73 +20,76 @@ class _ClientsScreenState extends State<ClientsScreen> {
   final ScrollController _mainListScrollController = ScrollController();
   Timer? _timer;
   bool? _lastMoveRight;
-  final Map<ClientType, List<Client>> _clients = <ClientType, List<Client>>{};
+
+  final ClientsController clientsController = Get.put(ClientsController());
+
   @override
   Widget build(BuildContext context) {
     final Size screenSize = MediaQuery.of(context).size;
     return Scaffold(
-        backgroundColor: probackgroundColor,
-        appBar: AppBar(
-          automaticallyImplyLeading: false,
-          title: const Text(
-            'Clients',
-            style: TextStyle(
-              color: proprimaryColor,
-              fontWeight: FontWeight.bold,
-            ),
+      backgroundColor: probackgroundColor,
+      appBar: AppBar(
+        automaticallyImplyLeading: false,
+        title: const Text(
+          'Clients',
+          style: TextStyle(
+            color: proprimaryColor,
+            fontWeight: FontWeight.bold,
           ),
-          actions: <Widget>[
-            Padding(
-              padding: const EdgeInsets.only(right: 10.0, bottom: 15),
-              child: CircleAvatar(
-                backgroundColor: prosemibackColor,
-                radius: 30, // This sets the circle's radius
-                child: Padding(
-                  padding: const EdgeInsets.all(
-                      10), // Adjust padding to fit the icon nicely
-                  child: SvgPicture.asset(
-                    'assets/svgs/notificationicon.svg',
-                    height: 20,
-                  ),
+        ),
+        actions: <Widget>[
+          Padding(
+            padding: const EdgeInsets.only(right: 10.0, bottom: 15),
+            child: CircleAvatar(
+              backgroundColor: prosemibackColor,
+              radius: 30, // This sets the circle's radius
+              child: Padding(
+                padding: const EdgeInsets.all(
+                    10), // Adjust padding to fit the icon nicely
+                child: SvgPicture.asset(
+                  'assets/svgs/notificationicon.svg',
+                  height: 20,
                 ),
               ),
-            )
-          ],
-        ),
-        body: Column(
-          children: <Widget>[
-            TopsectionWidget(
-              buttonText: 'Add Client',
-              onHowItWorksPressed: () {
-                // Handle "How it works" pressed
-                print('How it works pressed');
-              },
-              onAddProjectPressed: () {
-                // Handle "Add Project" pressed
-                Get.to(const Addclient());
-              },
             ),
-            Expanded(
-              child: Padding(
-                padding: const EdgeInsets.only(bottom: 15),
-                child: CustomScrollView(
+          )
+        ],
+      ),
+      body: Column(
+        children: <Widget>[
+          TopsectionWidget(
+            buttonText: 'Add Client',
+            onHowItWorksPressed: () {
+              // Handle "How it works" pressed
+              print('How it works pressed');
+            },
+            onAddProjectPressed: () {
+              // Handle "Add Project" pressed
+              Get.to(const Addclient());
+            },
+          ),
+          Expanded(
+            child: Padding(
+              padding: const EdgeInsets.only(bottom: 15),
+              child: Obx(() {
+                if (clientsController.clients.isEmpty) {
+                  return const Center(child: CircularProgressIndicator());
+                }
+                return CustomScrollView(
                   scrollDirection: Axis.horizontal,
                   controller: _mainListScrollController,
                   slivers: <Widget>[
                     ...ClientType.values.map(
                       (ClientType status) => SliverToBoxAdapter(
                         child: RowStatusCard(
-                          clients: _clients[status] ?? <Client>[],
+                          clients: clientsController.clients
+                              .where((client) => client.type == status)
+                              .toList(),
                           clientType: status,
                           screenSize: screenSize,
                           taskAccepted: (Client task, ClientType newStatus) {
                             setState(() {
-                              // _clients[task.status]?.remove(task);
-                              // _clients[newStatus]?.add(
-                              //   Client(
-
-                              //   ),
-                              // );
+                              // Update client status here
                             });
                           },
                           onDrag: (bool isRight) {
@@ -104,11 +107,13 @@ class _ClientsScreenState extends State<ClientsScreen> {
                       ),
                     )
                   ],
-                ),
-              ),
+                );
+              }),
             ),
-          ],
-        ));
+          ),
+        ],
+      ),
+    );
   }
 
   void _moveMainList(bool isRight) {
@@ -150,6 +155,22 @@ class RowStatusCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    // Define color based on ClientType
+    Color statusColor;
+    switch (clientType) {
+      case ClientType.online:
+        statusColor = Colors.black;
+        break;
+      case ClientType.inPerson:
+        statusColor = Colors.amber;
+        break;
+      case ClientType.bbUser:
+        statusColor = Colors.green;
+        break;
+      default:
+        statusColor = Colors.grey;
+    }
+
     return Container(
       height: screenSize.height * 0.8,
       width: screenSize.width * 0.9,
@@ -170,16 +191,10 @@ class RowStatusCard extends StatelessWidget {
                   crossAxisAlignment: WrapCrossAlignment.center,
                   children: <Widget>[
                     CircleAvatar(
-                      backgroundColor: clientType.displayTitle == 'On-line'
-                          ? Colors.black
-                          : ClientType == 'In-person'
-                              ? Colors.amber
-                              : Colors.green,
+                      backgroundColor: statusColor,
                       radius: 5,
                     ),
-                    const SizedBox(
-                      width: 10,
-                    ),
+                    const SizedBox(width: 10),
                     Text(
                       clientType.displayTitle,
                       style: const TextStyle(
@@ -194,15 +209,16 @@ class RowStatusCard extends StatelessWidget {
                   onTap: () {},
                   child: Container(
                     decoration: BoxDecoration(
-                        color: backgroundColor,
-                        borderRadius: BorderRadius.circular(30)),
+                      color: backgroundColor,
+                      borderRadius: BorderRadius.circular(30),
+                    ),
                     padding: const EdgeInsets.all(8),
                     child: SvgPicture.asset(
                       'assets/svgs/search.svg',
                       height: 20,
                     ),
                   ),
-                )
+                ),
               ],
             ),
           ),
@@ -216,7 +232,7 @@ class RowStatusCard extends StatelessWidget {
           Expanded(
             child: ListStatusColumnWidget(
               clients: clients,
-              Clienttype: clientType,
+              clientType: clientType,
             ),
           ),
         ],
@@ -226,12 +242,12 @@ class RowStatusCard extends StatelessWidget {
 }
 
 class ListStatusColumnWidget extends StatelessWidget {
-  final ClientType Clienttype;
+  final ClientType clientType;
   final List<Client> clients;
 
   const ListStatusColumnWidget({
     required this.clients,
-    required this.Clienttype,
+    required this.clientType,
     super.key,
   });
 
@@ -264,7 +280,9 @@ class ListStatusColumnWidget extends StatelessWidget {
         );
 
         return Padding(
-            padding: const EdgeInsets.only(bottom: 12), child: clientWidget);
+          padding: const EdgeInsets.only(bottom: 12),
+          child: clientWidget,
+        );
       },
       itemCount: clients.length,
     );

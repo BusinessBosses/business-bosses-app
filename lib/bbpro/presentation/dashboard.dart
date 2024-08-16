@@ -17,7 +17,7 @@ class Dashboard extends StatefulWidget {
 }
 
 class _DashboardState extends State<Dashboard> {
-  final List<String> titles = [
+  final List<String> titles = <String>[
     'Clients',
     'Expenses',
     'To-do tasks',
@@ -37,7 +37,7 @@ class _DashboardState extends State<Dashboard> {
             fontWeight: FontWeight.bold,
           ),
         ),
-        actions: [
+        actions: <Widget>[
           Padding(
             padding: const EdgeInsets.only(right: 10.0, bottom: 15),
             child: CircleAvatar(
@@ -57,11 +57,11 @@ class _DashboardState extends State<Dashboard> {
       ),
       body: SingleChildScrollView(
         child: Column(
-          children: [
-            OrdersWidget(),
-            SalesWidget(),
+          children: <Widget>[
+            const OrdersWidget(),
+            const SalesWidget(),
             StaggeredGridView.countBuilder(
-              physics: NeverScrollableScrollPhysics(),
+              physics: const NeverScrollableScrollPhysics(),
               staggeredTileBuilder: (int index) => const StaggeredTile.fit(1),
               padding: const EdgeInsets.symmetric(
                 horizontal: 15.0,

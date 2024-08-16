@@ -16,9 +16,9 @@ class ProgressTabBar extends StatelessWidget {
     return Container(
       decoration: BoxDecoration(
           color: prosemibackColor, borderRadius: BorderRadius.circular(10)),
-      padding: EdgeInsets.symmetric(horizontal: 5, vertical: 10),
+      padding: const EdgeInsets.symmetric(horizontal: 5, vertical: 10),
       child: Row(
-        children: tabs.asMap().entries.map((entry) {
+        children: tabs.asMap().entries.map((MapEntry<int, String> entry) {
           int idx = entry.key;
           String tab = entry.value;
           bool isActive = idx == currentIndex;
@@ -27,18 +27,18 @@ class ProgressTabBar extends StatelessWidget {
             child: Padding(
               padding: const EdgeInsets.symmetric(horizontal: 5.0, vertical: 5),
               child: Column(
-                children: [
+                children: <Widget>[
                   Container(
                     decoration: BoxDecoration(
                       color:
                         isActive || isCompleted ? proprimaryColor : backgroundColor,
 borderRadius: BorderRadius.circular(10)
                     ),
-                    padding: EdgeInsets.symmetric(horizontal: 5),
+                    padding: const EdgeInsets.symmetric(horizontal: 5),
                     height: 4,
                     
                   ),
-                  SizedBox(height: 8),
+                  const SizedBox(height: 8),
                   Text(
                     tab,
                     style: TextStyle(

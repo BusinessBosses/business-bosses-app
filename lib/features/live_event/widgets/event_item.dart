@@ -84,7 +84,7 @@ class _EventItemState extends State<EventItem> {
         ? Padding(
             padding: const EdgeInsets.symmetric(horizontal: 15.0),
             child: Container(
-              padding: EdgeInsets.all(15),
+              padding: const EdgeInsets.all(15),
               width: MediaQuery.of(context).size.width - 30,
               decoration: BoxDecoration(
                 border: Border.all(width: 0.5, color: Colors.black12),
@@ -92,7 +92,7 @@ class _EventItemState extends State<EventItem> {
                 borderRadius: BorderRadius.circular(15),
               ),
               child: Column(
-                children: [
+                children: <Widget>[
                   Text(widget.event.title!),
                   Row(
                     children: <Widget>[

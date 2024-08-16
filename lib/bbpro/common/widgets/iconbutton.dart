@@ -25,16 +25,16 @@ class ProIconButton extends StatelessWidget {
       style: ElevatedButton.styleFrom(
         shadowColor: Colors.white,
         backgroundColor: backgroundColor ?? proprimaryColor, // Background color
-        padding: EdgeInsets.symmetric(horizontal: 24.0, vertical: 12.0),
+        padding: const EdgeInsets.symmetric(horizontal: 24.0, vertical: 12.0),
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(radius ?? 30.0),
         ),
       ),
       child: Row(
         mainAxisSize: MainAxisSize.min,
-        children: [
+        children: <Widget>[
           if (icon != null) icon!, // Display icon if it's not null
-          if (icon != null) SizedBox(width: 8.0), // Space between icon and text
+          if (icon != null) const SizedBox(width: 8.0), // Space between icon and text
           Text(
             text,
             style: TextStyle(

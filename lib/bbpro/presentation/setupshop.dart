@@ -432,7 +432,7 @@ class _SetupshopState extends State<Setupshop>
                           // ignore: use_build_context_synchronously
                           successDialog(context);
                         } else {
-                          Get.to(() => Bottomnavscreen());
+                          Get.to(() => const Bottomnavscreen());
                           showSnackbar(
                             message: 'Error while adding shop!',
                             error: true,

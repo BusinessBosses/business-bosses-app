@@ -4,6 +4,8 @@ import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
 class OrdersWidget extends StatelessWidget {
+  const OrdersWidget({super.key});
+
   @override
   Widget build(BuildContext context) {
     return Padding(
@@ -16,11 +18,11 @@ class OrdersWidget extends StatelessWidget {
         ),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
+          children: <Widget>[
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Wrap(crossAxisAlignment: WrapCrossAlignment.center, children: [
+              children: <Widget>[
+                const Wrap(crossAxisAlignment: WrapCrossAlignment.center, children: <Widget>[
                   Text(
                     'Orders',
                     style: TextStyle(
@@ -39,22 +41,22 @@ class OrdersWidget extends StatelessWidget {
                 ]),
                 Wrap(
                   crossAxisAlignment: WrapCrossAlignment.center,
-                  children: [
+                  children: <Widget>[
                     Container(
-                      padding: EdgeInsets.all(5),
+                      padding: const EdgeInsets.all(5),
                       decoration: BoxDecoration(
                           color: prosemibackColor,
                           borderRadius: BorderRadius.circular(30)),
-                      child: Icon(
+                      child: const Icon(
                         Icons.visibility_off,
                         color: proprimaryColor,
                         size: 15,
                       ),
                     ),
-                    SizedBox(
+                    const SizedBox(
                       width: 10,
                     ),
-                    Text(
+                    const Text(
                       '9',
                       style: TextStyle(
                           color: proprimaryColor,
@@ -66,13 +68,13 @@ class OrdersWidget extends StatelessWidget {
               ],
             ),
             Row(
-              children: [
-                Container(
+              children: <Widget>[
+                SizedBox(
                   width: 165, // Adjust the width as needed
                   height: 165, // Adjust the height as needed
                   child: PieChart(
                     PieChartData(
-                      sections: [
+                      sections: <PieChartSectionData>[
                         PieChartSectionData(
                           color: Colors.blue,
                           value: 430,
@@ -109,12 +111,12 @@ class OrdersWidget extends StatelessWidget {
                     ),
                   ),
                 ),
-                SizedBox(
+                const SizedBox(
                   width: 10,
                 ),
-                Column(
+                const Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
+                  children: <Widget>[
                     Indicator(
                       color: Colors.blue,
                       text: 'Online',
@@ -159,15 +161,15 @@ class OrdersWidget extends StatelessWidget {
             Align(
               alignment: Alignment.centerRight,
               child: Container(
-                padding: EdgeInsets.symmetric(horizontal: 8, vertical: 8),
+                padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 8),
                 decoration: BoxDecoration(
                     color: prosemibackColor,
                     borderRadius: BorderRadius.circular(8)),
                 child: Wrap(
                   crossAxisAlignment: WrapCrossAlignment.center,
-                  children: [
-                    Text('View All Orders'),
-                    SizedBox(width: 5),
+                  children: <Widget>[
+                    const Text('View All Orders'),
+                    const SizedBox(width: 5),
                     SvgPicture.asset(
                       'assets/svgs/nexticon.svg',
                       color: proprimaryColor,
@@ -188,7 +190,7 @@ class Indicator extends StatelessWidget {
   final String text;
   final int value;
 
-  const Indicator({
+  const Indicator({super.key, 
     required this.color,
     required this.text,
     required this.value,
@@ -197,7 +199,7 @@ class Indicator extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Row(
-      children: [
+      children: <Widget>[
         Container(
           width: 16,
           height: 16,
@@ -207,7 +209,7 @@ class Indicator extends StatelessWidget {
             color: color,
           ),
         ),
-        SizedBox(width: 8),
+        const SizedBox(width: 8),
         Text('$text  $value'),
       ],
     );

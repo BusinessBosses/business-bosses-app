@@ -66,14 +66,14 @@ class _ExpandedProductState extends State<ExpandedProduct> {
                         ),
                       ),
                       child: const GenericSlider(
-                        images: ['', '', ''],
+                        images: <String>['', '', ''],
                       ),
                     ),
                     const SizedBox(
                       height: 15,
                     ),
                     Row(
-                      children: [
+                      children: <Widget>[
                         const Text(
                           'Product name',
                           style: TextStyle(

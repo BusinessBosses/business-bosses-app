@@ -177,7 +177,7 @@ class BottomBar extends StatelessWidget {
                                 },
                               );
                             },
-                            child: CircleAvatar(
+                            child: const CircleAvatar(
                               backgroundColor: backgroundColor,
                               radius: 25,
                               child: Icon(

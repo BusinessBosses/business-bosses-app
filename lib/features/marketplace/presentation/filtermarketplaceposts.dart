@@ -21,7 +21,7 @@ class FilterMarketplacePosts extends StatelessWidget {
   final String? filterCode;
 
   /// CONSTRUCTOR
-  FilterMarketplacePosts({
+  const FilterMarketplacePosts({
     Key? key,
     this.filterItems = const <MarketModel>[],
     this.isLoading = false,
@@ -90,7 +90,7 @@ class FilterMarketplacePosts extends StatelessWidget {
                                         selectedLocationChanged!(null, null);
                                         selectedCategoryChanged!(null);
                                       },
-                                      icon: Icon(Icons.cancel))
+                                      icon: const Icon(Icons.cancel))
                                 ]),
                           ],
                         )),
@@ -266,7 +266,7 @@ class FilterMarketplacePosts extends StatelessWidget {
                   controller: controller,
                 );
               } else {
-                return SizedBox.shrink();
+                return const SizedBox.shrink();
               }
             }),
       ),

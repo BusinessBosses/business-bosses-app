@@ -26,18 +26,18 @@ class _InfoCardState extends State<InfoCard> {
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.center,
-        children: [
+        children: <Widget>[
           Text(
             widget.cardName,
-            style: TextStyle(
+            style: const TextStyle(
               fontSize: 16,
               fontWeight: FontWeight.bold,
             ),
           ),
-          SizedBox(height: 5),
+          const SizedBox(height: 5),
           Text(
             widget.value,
-            style: TextStyle(
+            style: const TextStyle(
                 color: proprimaryColor,
                 fontWeight: FontWeight.bold,
                 fontSize: 20),

@@ -24,7 +24,7 @@ class _AddclientState extends State<Addclient> {
   final TextEditingController phoneController = TextEditingController();
   final ProfileController profileController = Get.find();
   final ClientsController clientsController = Get.put(ClientsController());
-  ClientType _selectedType = ClientType.online;
+  final ClientType _selectedType = ClientType.online;
 
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
@@ -118,8 +118,8 @@ class _AddclientState extends State<Addclient> {
                       'name': nameController.text,
                       'email': emailController.text,
                       'phone': phoneController.text,
-                      'type': _selectedType,
-                      'createdAt': DateTime.now(),
+                      'type': _selectedType.displayTitle,
+                      'createdAt': DateTime.now().toString(),
                       'image': <String>[], // Handle images if necessary
                     };
 

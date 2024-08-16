@@ -3,9 +3,9 @@ import 'package:flutter/material.dart';
 
 // Enum for client types
 enum ClientType {
-  online('On-line', Colors.blue),
-  inPerson('In-person', Colors.green),
-  bbUser('BB User', Colors.orange);
+  online('on-line', Colors.blue),
+  inPerson('in-person', Colors.green),
+  bbUser('bb-user', Colors.orange);
 
   const ClientType(this.displayTitle, this.backgroundColor);
 
@@ -15,14 +15,14 @@ enum ClientType {
   // Converts a string to a ClientType enum
   static ClientType fromString(String type) {
     return ClientType.values.firstWhere(
-      (ClientType e) => e.toString().split('.').last == type,
+      (ClientType e) => e.displayTitle == type,
       orElse: () => ClientType.online, // default value
     );
   }
 
-  // Converts a ClientType enum to a string
+  // Converts a ClientType enum to the correct string representation
   String toShortString() {
-    return toString().split('.').last;
+    return displayTitle;
   }
 }
 

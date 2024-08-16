@@ -7,7 +7,7 @@ class CustomDropdownWidget extends StatefulWidget {
   final String iconName;
   final List<String> items;
 
-  CustomDropdownWidget({required this.caption, required this.items, required this.iconName});
+  const CustomDropdownWidget({super.key, required this.caption, required this.items, required this.iconName});
 
   @override
   _CustomDropdownWidgetState createState() => _CustomDropdownWidgetState();
@@ -32,10 +32,10 @@ class _CustomDropdownWidgetState extends State<CustomDropdownWidget> {
         padding: const EdgeInsets.only(left: 15.0, right: 15, top: 15),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
+          children: <Widget>[
             Text(
               widget.caption,
-              style: TextStyle(
+              style: const TextStyle(
                 fontSize: 16,
                 fontWeight: FontWeight.w600,
               ),
@@ -43,7 +43,7 @@ class _CustomDropdownWidgetState extends State<CustomDropdownWidget> {
             DropdownButtonHideUnderline(
               child: DropdownButton<String>(
                 value: _selectedItem,
-                onChanged: (newValue) {
+                onChanged: (String? newValue) {
                   setState(() {
                     _selectedItem = newValue;
                   });

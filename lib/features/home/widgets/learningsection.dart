@@ -10,16 +10,16 @@ class LearningSection extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       child: Column(
-        children: [
-          SizedBox(
+        children: <Widget>[
+          const SizedBox(
             height: 10,
           ),
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 15.0),
+          const Padding(
+            padding: EdgeInsets.symmetric(horizontal: 15.0),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: <Widget>[
-                const Text(
+                Text(
                   'Learnings',
                   style: TextStyle(fontWeight: FontWeight.w700, fontSize: 18),
                 ),
@@ -53,13 +53,13 @@ class LearningSection extends StatelessWidget {
               ],
             ),
           ),
-          Container(
+          const SizedBox(
             height: 400,
             child: SingleChildScrollView(
               scrollDirection: Axis.horizontal,
               child: Row(
-                children: [
-                  Container(
+                children: <Widget>[
+                  SizedBox(
                     width: 400,
                     child: EventCall(
                       full: true,

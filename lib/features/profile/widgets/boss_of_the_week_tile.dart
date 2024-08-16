@@ -1,4 +1,3 @@
-import 'package:business_bosses_v2/bbpro/presentation/bottomnavscreen.dart';
 import 'package:business_bosses_v2/common/models/api_response_model.dart';
 import 'package:business_bosses_v2/common/models/user_model.dart';
 import 'package:business_bosses_v2/common/widgets/popup/bossup_challenge_popuphome.dart';
@@ -222,7 +221,7 @@ class _BossOfWeekProfileTileState extends State<BossOfWeekProfileTile> {
                                                 fontSize: 15,
                                                 fontWeight: FontWeight.bold,
                                                 color: Colors.white)),
-                                    SizedBox(
+                                    const SizedBox(
                                       height: 10,
                                     ),
                                     user?.bio == null
@@ -242,7 +241,7 @@ class _BossOfWeekProfileTileState extends State<BossOfWeekProfileTile> {
                                                   fontSize: 13,
                                                 ),
                                               ),
-                                              SizedBox(
+                                              const SizedBox(
                                                 height: 10,
                                               ),
                                               Row(
@@ -423,7 +422,7 @@ class _BossOfWeekProfileTileState extends State<BossOfWeekProfileTile> {
                                           Row(
                                               crossAxisAlignment:
                                                   CrossAxisAlignment.center,
-                                              children: [
+                                              children: <Widget>[
                                                 Padding(
                                                   padding:
                                                       const EdgeInsets.only(
@@ -468,7 +467,7 @@ class _BossOfWeekProfileTileState extends State<BossOfWeekProfileTile> {
                                                       crossAxisAlignment:
                                                           CrossAxisAlignment
                                                               .start,
-                                                      children: [
+                                                      children: <Widget>[
                                                         Text(
                                                           item['companyName'],
                                                           softWrap: true,
@@ -556,7 +555,7 @@ class _BossOfWeekProfileTileState extends State<BossOfWeekProfileTile> {
                     ),
                   ),
                 ),
-                SizedBox(height: 5,),
+                const SizedBox(height: 5,),
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 15.0),
                   child: Container(
@@ -645,7 +644,7 @@ class _BossOfWeekProfileTileState extends State<BossOfWeekProfileTile> {
               connectToUser();
             },
             child:
-                Wrap(crossAxisAlignment: WrapCrossAlignment.center, children: [
+                Wrap(crossAxisAlignment: WrapCrossAlignment.center, children: <Widget>[
               Text(
                 user?.connecteds != null &&
                         _profileController.myProfile.connecteds!
@@ -673,7 +672,7 @@ class _BossOfWeekProfileTileState extends State<BossOfWeekProfileTile> {
             },
             child: const Wrap(
                 crossAxisAlignment: WrapCrossAlignment.center,
-                children: [
+                children: <Widget>[
                   Text(
                     'Refer',
                     style: TextStyle(color: Colors.white),
