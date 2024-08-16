@@ -163,7 +163,7 @@ class _MarketTileState extends State<MarketTile> {
         return Padding(
           padding: const EdgeInsets.only(left: 15.0),
           child: Container(
-            padding: const EdgeInsets.all(15),
+            padding: EdgeInsets.all(10),
             width: MediaQuery.of(context).size.width / 1.5,
             decoration: BoxDecoration(
               border: Border.all(width: 0.5, color: Colors.black12),
@@ -188,7 +188,7 @@ class _MarketTileState extends State<MarketTile> {
                 ),
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
-                  children: <Widget>[
+                  children: [
                     if (_post.title != null)
                       Text(
                         _post.title.toString(),

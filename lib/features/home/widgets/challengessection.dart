@@ -1,32 +1,29 @@
-import 'package:business_bosses_v2/features/live_event/widgets/event_call.dart';
+import 'package:business_bosses_v2/features/forum/presentation/bossup_challenge.dart';
 import 'package:business_bosses_v2/navigation/routes.dart';
 import 'package:business_bosses_v2/utils/theme/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 
-class EventsSection extends StatelessWidget {
-  const EventsSection({super.key});
+class ChallengesSection extends StatelessWidget {
+  const ChallengesSection({super.key});
 
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
-        Get.toNamed(Routes.liveEvents);
+        Get.toNamed(Routes.allCommunitiesScreen);
       },
       child: Container(
         child: Column(
           children: [
-            SizedBox(
-              height: 10,
-            ),
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 15.0),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: <Widget>[
                   const Text(
-                    'Events',
+                    'Challenges',
                     style: TextStyle(fontWeight: FontWeight.w700, fontSize: 18),
                   ),
                   Wrap(
@@ -47,13 +44,12 @@ class EventsSection extends StatelessWidget {
                 ],
               ),
             ),
-            SizedBox(
-              height: 10,
-            ),
-            EventCall(
-              ishome: true,
-              full: true,
-            ),
+            SizedBox(height: 10,),
+             Container(
+                height: 180,
+                child: BossupChallenge(
+                  ishome: true,
+                ))
           ],
         ),
       ),

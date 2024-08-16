@@ -187,7 +187,7 @@ class _AllCommunitiesScreenState extends State<AllCommunitiesScreen>
                                 controller.loading.value
                                     ? const Center(
                                         child: CircularProgressIndicator())
-                                    : const BossupChallenge(),
+                                    : const BossupChallenge(ishome: false,),
                                 Padding(
                                   padding: const EdgeInsets.only(
                                       left: 15, right: 15),

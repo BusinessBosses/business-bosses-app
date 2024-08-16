@@ -2,6 +2,7 @@ import 'package:business_bosses_v2/common/widgets/safety_model.dart';
 import 'package:business_bosses_v2/features/forum/controller/challenge_controller.dart';
 import 'package:business_bosses_v2/features/home/controller/commumities_controller.dart';
 import 'package:business_bosses_v2/features/home/widgets/bottom_bar.dart';
+import 'package:business_bosses_v2/features/home/widgets/challengessection.dart';
 import 'package:business_bosses_v2/features/home/widgets/eventssection.dart';
 import 'package:business_bosses_v2/features/home/widgets/forum_item.dart';
 import 'package:business_bosses_v2/features/home/widgets/list_items.dart';
@@ -347,11 +348,11 @@ class _HomeScreenState extends State<HomeScreen>
                                             controller: _tabController,
                                             children: <Widget>[
                                               ListView(
-                                                children: <Widget>[
-                                                  const SearchSection(),
-                                                  const BossOfWeekProfileTile(),
-                                                  const EventsSection(),
-                                                  const SizedBox(
+                                                children: [
+                                                  SearchSection(),
+                                                  BossOfWeekProfileTile(),
+                                                  EventsSection(),
+                                                  SizedBox(
                                                     height: 15,
                                                   ),
                                                   Padding(
@@ -369,11 +370,11 @@ class _HomeScreenState extends State<HomeScreen>
                                                                       10)),
                                                     ),
                                                   ),
-                                                  const SizedBox(
+                                                  SizedBox(
                                                     height: 15,
                                                   ),
-                                                  const MarketplaceSection(),
-                                                  const SizedBox(
+                                                  MarketplaceSection(),
+                                                  SizedBox(
                                                     height: 300,
                                                   ),
                                                 ],
@@ -403,6 +404,7 @@ class _HomeScreenState extends State<HomeScreen>
                                   const BottomBar(
                                     activeIndex: 0,
                                   ),
+                                  const Floatingbutton(),
                                 ],
                               ),
                             ),

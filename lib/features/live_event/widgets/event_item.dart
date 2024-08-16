@@ -84,15 +84,15 @@ class _EventItemState extends State<EventItem> {
         ? Padding(
             padding: const EdgeInsets.symmetric(horizontal: 15.0),
             child: Container(
-              padding: const EdgeInsets.all(15),
+              padding: EdgeInsets.only(left: 15, top: 15, bottom: 15),
               width: MediaQuery.of(context).size.width - 30,
               decoration: BoxDecoration(
                 border: Border.all(width: 0.5, color: Colors.black12),
-                color: Colors.white,
+                color: backgroundColor,
                 borderRadius: BorderRadius.circular(15),
               ),
               child: Column(
-                children: <Widget>[
+                children: [
                   Text(widget.event.title!),
                   Row(
                     children: <Widget>[
@@ -116,9 +116,21 @@ class _EventItemState extends State<EventItem> {
                             fontWeight: FontWeight.w700,
                           ),
                         ),
-                      AttendButton()
                     ],
                   ),
+                  const SizedBox(
+                    height: 10,
+                  ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Detailssection(),
+                      const SizedBox(
+                        width: 15,
+                      ),
+                      AttendButton(),
+                    ],
+                  )
                 ],
               ),
             ),
@@ -325,144 +337,7 @@ class _EventItemState extends State<EventItem> {
                           Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: <Widget>[
-                              Expanded(
-                                child: Container(
-                                  padding: const EdgeInsets.all(10),
-                                  decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(8),
-                                    color:
-                                        const Color.fromRGBO(224, 224, 224, 1),
-                                  ),
-                                  child: Column(
-                                    mainAxisAlignment: MainAxisAlignment.start,
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: <Widget>[
-                                      Row(
-                                        children: <Widget>[
-                                          const Icon(
-                                            Icons.calendar_month,
-                                            size: 10,
-                                          ),
-                                          const SizedBox(
-                                            width: 6,
-                                          ),
-                                          Text(
-                                            formattedDate.toString(),
-                                            style: const TextStyle(
-                                              fontSize: 13,
-                                              fontWeight: FontWeight.w700,
-                                            ),
-                                          ),
-                                          const SizedBox(
-                                            width: 2,
-                                          ),
-                                        ],
-                                      ),
-                                      Row(
-                                        children: <Widget>[
-                                          const Icon(
-                                            Icons.access_time,
-                                            size: 10,
-                                          ),
-                                          const SizedBox(
-                                            width: 6,
-                                          ),
-                                          Text(
-                                            '$formattedStartTime - $formattedEndTime',
-                                            style: const TextStyle(
-                                              fontSize: 13,
-                                              fontWeight: FontWeight.w700,
-                                            ),
-                                          ),
-                                          const SizedBox(
-                                            width: 2,
-                                          ),
-                                        ],
-                                      ),
-                                      Row(
-                                        children: <Widget>[
-                                          Icon(
-                                            widget.event.link != null
-                                                ? Icons.language
-                                                : Icons.location_on,
-                                            size: 10,
-                                          ),
-                                          const SizedBox(
-                                            width: 6,
-                                          ),
-                                          Text(
-                                            widget.event.link != null
-                                                ? 'Online Event'
-                                                : 'In-Person Event',
-                                            style: const TextStyle(
-                                              fontSize: 13,
-                                              fontWeight: FontWeight.w700,
-                                            ),
-                                          ),
-                                          const SizedBox(
-                                            width: 2,
-                                          ),
-                                        ],
-                                      ),
-                                      widget.event.link != null
-                                          ? Row(
-                                              children: <Widget>[
-                                                SvgPicture.asset(
-                                                  'assets/svgs/upicon.svg',
-                                                  height: 9,
-                                                ),
-                                                const SizedBox(
-                                                  width: 6,
-                                                ),
-                                                Flexible(
-                                                  child: Text(
-                                                    maxLines: 2,
-                                                    softWrap: true,
-                                                    overflow:
-                                                        TextOverflow.ellipsis,
-                                                    widget.event.link ?? '',
-                                                    style: const TextStyle(
-                                                      fontSize: 13,
-                                                      fontWeight:
-                                                          FontWeight.w700,
-                                                    ),
-                                                  ),
-                                                ),
-                                              ],
-                                            )
-                                          : Container(),
-                                      widget.event.address != null
-                                          ? Row(
-                                              children: <Widget>[
-                                                SvgPicture.asset(
-                                                  'assets/svgs/upicon.svg',
-                                                  height: 9,
-                                                ),
-                                                const SizedBox(
-                                                  width: 6,
-                                                ),
-                                                Flexible(
-                                                  child: Text(
-                                                    maxLines: 2,
-                                                    softWrap: true,
-                                                    overflow:
-                                                        TextOverflow.ellipsis,
-                                                    widget.event.address ?? '',
-                                                    style: const TextStyle(
-                                                      fontSize: 13,
-                                                      fontWeight:
-                                                          FontWeight.w700,
-                                                    ),
-                                                  ),
-                                                ),
-                                              ],
-                                            )
-                                          : Container(),
-                                    ],
-                                  ),
-                                ),
-                              ),
+                              Detailssection(),
                               const SizedBox(
                                 width: 15,
                               ),
@@ -659,6 +534,149 @@ class _EventItemState extends State<EventItem> {
           ],
         );
       },
+    );
+  }
+
+  Widget Detailssection() {
+    final DateFormat dateFormat = DateFormat('d MMM, y');
+    final DateFormat timeFormat = DateFormat('h:mm a');
+    final DateTime localStartTime = widget.event.startAt!.toLocal();
+    final DateTime localEndTime = widget.event.endAt!.toLocal();
+    final String formattedDate = dateFormat.format(localStartTime);
+
+    final String formattedStartTime = timeFormat.format(localStartTime);
+    final String formattedEndTime = timeFormat.format(localEndTime);
+    return Expanded(
+      child: Container(
+        padding: const EdgeInsets.all(10),
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(8),
+          color: const Color.fromRGBO(224, 224, 224, 1),
+        ),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: <Widget>[
+            Row(
+              children: <Widget>[
+                const Icon(
+                  Icons.calendar_month,
+                  size: 10,
+                ),
+                const SizedBox(
+                  width: 6,
+                ),
+                Text(
+                  formattedDate.toString(),
+                  style: const TextStyle(
+                    fontSize: 13,
+                    fontWeight: FontWeight.w700,
+                  ),
+                ),
+                const SizedBox(
+                  width: 2,
+                ),
+              ],
+            ),
+            Row(
+              children: <Widget>[
+                const Icon(
+                  Icons.access_time,
+                  size: 10,
+                ),
+                const SizedBox(
+                  width: 6,
+                ),
+                Text(
+                  '$formattedStartTime - $formattedEndTime',
+                  style: const TextStyle(
+                    fontSize: 13,
+                    fontWeight: FontWeight.w700,
+                  ),
+                ),
+                const SizedBox(
+                  width: 2,
+                ),
+              ],
+            ),
+            Row(
+              children: <Widget>[
+                Icon(
+                  widget.event.link != null
+                      ? Icons.language
+                      : Icons.location_on,
+                  size: 10,
+                ),
+                const SizedBox(
+                  width: 6,
+                ),
+                Text(
+                  widget.event.link != null
+                      ? 'Online Event'
+                      : 'In-Person Event',
+                  style: const TextStyle(
+                    fontSize: 13,
+                    fontWeight: FontWeight.w700,
+                  ),
+                ),
+                const SizedBox(
+                  width: 2,
+                ),
+              ],
+            ),
+            widget.event.link != null
+                ? Row(
+                    children: <Widget>[
+                      SvgPicture.asset(
+                        'assets/svgs/upicon.svg',
+                        height: 9,
+                      ),
+                      const SizedBox(
+                        width: 6,
+                      ),
+                      Flexible(
+                        child: Text(
+                          maxLines: 2,
+                          softWrap: true,
+                          overflow: TextOverflow.ellipsis,
+                          widget.event.link ?? '',
+                          style: const TextStyle(
+                            fontSize: 13,
+                            fontWeight: FontWeight.w700,
+                          ),
+                        ),
+                      ),
+                    ],
+                  )
+                : Container(),
+            widget.event.address != null
+                ? Row(
+                    children: <Widget>[
+                      SvgPicture.asset(
+                        'assets/svgs/upicon.svg',
+                        height: 9,
+                      ),
+                      const SizedBox(
+                        width: 6,
+                      ),
+                      Flexible(
+                        child: Text(
+                          maxLines: 2,
+                          softWrap: true,
+                          overflow: TextOverflow.ellipsis,
+                          widget.event.address ?? '',
+                          style: const TextStyle(
+                            fontSize: 13,
+                            fontWeight: FontWeight.w700,
+                          ),
+                        ),
+                      ),
+                    ],
+                  )
+                : Container(),
+          ],
+        ),
+      ),
     );
   }
 

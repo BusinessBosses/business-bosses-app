@@ -22,23 +22,26 @@ class _EventCallState extends State<EventCall> {
   Widget build(BuildContext context) {
     if (widget.ishome == true) {
       return liveEventController.events.isNotEmpty
-          ? Obx(
-              () => SizedBox(
-                height: 200,
-                child: ListView.builder(
-                  scrollDirection: Axis.horizontal,
-                  itemCount: liveEventController.events.length,
-                  itemBuilder: (BuildContext context, int index) {
-                    EventModel event = liveEventController.events[index];
-                    return EventItem(
-                      ishomeview: true,
-                      event: event,
-                      ongoing: liveEventController.ongoing.contains(event)
-                          ? true
-                          : false,
-                    );
-                  },
-                ),
+          ? Container(
+              // height: 200,
+              child: ListView.builder(
+                physics: const NeverScrollableScrollPhysics(),
+                shrinkWrap: true,
+                itemCount: 1,
+                itemBuilder: (BuildContext context, int index) {
+                  EventModel event = liveEventController.events[index];
+                  return Column(
+                    children: [
+                      EventItem(
+                        ishomeview: true,
+                        event: event,
+                        ongoing: liveEventController.ongoing.contains(event)
+                            ? true
+                            : false,
+                      ),
+                    ],
+                  );
+                },
               ),
             )
           : const Center(

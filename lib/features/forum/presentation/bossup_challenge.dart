@@ -11,7 +11,8 @@ import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 
 class BossupChallenge extends StatefulWidget {
-  const BossupChallenge({super.key});
+  final bool? ishome;
+  const BossupChallenge({super.key, this.ishome});
 
   @override
   State<BossupChallenge> createState() => _BossupChallengeState();
@@ -39,8 +40,10 @@ class _BossupChallengeState extends State<BossupChallenge> {
           );
         } else {
           return Padding(
-            padding: const EdgeInsets.only(bottom: 80),
+            padding: EdgeInsets.only(bottom: widget.ishome! == true ? 0 : 80),
             child: ListView.builder(
+              scrollDirection:
+                  widget.ishome! == true ? Axis.horizontal : Axis.vertical,
               itemCount: controller.categories.length,
               itemBuilder: (BuildContext context, int index) {
                 final Industry category = controller.categories[index];
@@ -102,31 +105,42 @@ class _BossupChallengeState extends State<BossupChallenge> {
                   child: Stack(
                     children: <Widget>[
                       Container(
-                        padding: const EdgeInsets.all(15),
-                        margin:
-                            const EdgeInsets.only(top: 15, left: 15, right: 15),
-                        decoration: const BoxDecoration(
+                        padding: widget.ishome == true
+                            ? const EdgeInsets.only(left: 10, right: 10)
+                            : const EdgeInsets.all(15),
+                        margin: widget.ishome == false
+                            ? const EdgeInsets.only(
+                                top: 15, left: 15, right: 15)
+                            : const EdgeInsets.only(
+                                left: 15,
+                              ),
+                        decoration: BoxDecoration(
+                          border: Border.all(width: 0.5, color: Colors.black12),
                           color: Colors.white,
                           borderRadius: BorderRadius.all(
                             Radius.circular(16),
                           ),
                         ),
                         child: Column(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          crossAxisAlignment: CrossAxisAlignment.start,
                           children: <Widget>[
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: <Widget>[
-                                Text(
-                                  category.industry!,
-                                  style: const TextStyle(
-                                      fontWeight: FontWeight.w700,
-                                      fontSize: 17),
-                                ),
-                                SvgPicture.asset(
-                                  'assets/svgs/nexticon.svg',
-                                )
-                              ],
-                            ),
+                            if (widget.ishome == false)
+                              Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: <Widget>[
+                                  Text(
+                                    category.industry!,
+                                    style: const TextStyle(
+                                        fontWeight: FontWeight.w700,
+                                        fontSize: 17),
+                                  ),
+                                  SvgPicture.asset(
+                                    'assets/svgs/nexticon.svg',
+                                  )
+                                ],
+                              ),
                             const SizedBox(
                               height: 10,
                             ),
@@ -165,61 +179,117 @@ class _BossupChallengeState extends State<BossupChallenge> {
                                     ),
                                   ),
                                 ),
-                                const SizedBox(
-                                  width: 25,
-                                ),
-                                Column(
-                                  mainAxisAlignment: MainAxisAlignment.start,
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: <Widget>[
-                                    Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.start,
-                                      children: <Widget>[
-                                        Text(
-                                          category.industryId ==
-                                                  '-MsUOGcOT9oRXGakCcJv'
-                                              ? 'Free Promotion'
-                                              : category.award ?? 'Win',
-                                          style: const TextStyle(
-                                            color: primaryColorLT,
-                                            fontWeight: FontWeight.bold,
-                                            fontSize: 16,
+                                if (widget.ishome == false)
+                                  const SizedBox(
+                                    width: 25,
+                                  ),
+                                if (widget.ishome == false)
+                                  Column(
+                                    mainAxisAlignment: MainAxisAlignment.start,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: <Widget>[
+                                      Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.start,
+                                        children: <Widget>[
+                                          Text(
+                                            category.industryId ==
+                                                    '-MsUOGcOT9oRXGakCcJv'
+                                                ? 'Free Promotion'
+                                                : category.award ?? 'Win',
+                                            style: const TextStyle(
+                                              color: primaryColorLT,
+                                              fontWeight: FontWeight.bold,
+                                              fontSize: 16,
+                                            ),
                                           ),
-                                        ),
-                                      ],
-                                    ),
-                                    Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.start,
-                                      children: <Widget>[
-                                        const Icon(
-                                          Icons.watch_later_outlined,
-                                          size: 15,
-                                          color: Colors.grey,
-                                        ),
-                                        const SizedBox(
-                                          width: 5,
-                                        ),
-                                        Text(
-                                          category.industryId ==
-                                                  '-MsUOGcOT9oRXGakCcJv'
-                                              ? 'Every Monday'
-                                              : _getChallengeStatus(category),
-                                          style: const TextStyle(
-                                              color: Colors.grey,
-                                              fontWeight: FontWeight.w700),
-                                        )
-                                      ],
-                                    ),
-                                    const SizedBox(
-                                      height: 5,
-                                    ),
-                                    _getChallengeTimeLeft(category),
-                                  ],
-                                )
+                                        ],
+                                      ),
+                                      Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.start,
+                                        children: <Widget>[
+                                          const Icon(
+                                            Icons.watch_later_outlined,
+                                            size: 15,
+                                            color: Colors.grey,
+                                          ),
+                                          const SizedBox(
+                                            width: 5,
+                                          ),
+                                          Text(
+                                            category.industryId ==
+                                                    '-MsUOGcOT9oRXGakCcJv'
+                                                ? 'Every Monday'
+                                                : _getChallengeStatus(category),
+                                            style: const TextStyle(
+                                                color: Colors.grey,
+                                                fontWeight: FontWeight.w700),
+                                          )
+                                        ],
+                                      ),
+                                      const SizedBox(
+                                        height: 5,
+                                      ),
+                                      _getChallengeTimeLeft(category),
+                                    ],
+                                  )
                               ],
                             ),
+                            if (widget.ishome == true)
+                              SizedBox(
+                                height: 10,
+                              ),
+                            if (widget.ishome == true)
+                              Column(
+                                mainAxisAlignment: MainAxisAlignment.start,
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: <Widget>[
+                                  Row(
+                                    mainAxisAlignment: MainAxisAlignment.start,
+                                    children: <Widget>[
+                                      Text(
+                                        category.industryId ==
+                                                '-MsUOGcOT9oRXGakCcJv'
+                                            ? 'Free Promotion'
+                                            : category.award ?? 'Win',
+                                        style: const TextStyle(
+                                          color: primaryColorLT,
+                                          fontWeight: FontWeight.bold,
+                                          fontSize: 16,
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                  Row(
+                                    mainAxisAlignment: MainAxisAlignment.start,
+                                    children: <Widget>[
+                                      const Icon(
+                                        Icons.watch_later_outlined,
+                                        size: 15,
+                                        color: Colors.grey,
+                                      ),
+                                      const SizedBox(
+                                        width: 5,
+                                      ),
+                                      Text(
+                                        category.industryId ==
+                                                '-MsUOGcOT9oRXGakCcJv'
+                                            ? 'Every Monday'
+                                            : _getChallengeStatus(category),
+                                        style: const TextStyle(
+                                            color: Colors.grey,
+                                            fontWeight: FontWeight.w700),
+                                      )
+                                    ],
+                                  ),
+                                  const SizedBox(
+                                    height: 5,
+                                  ),
+                                  _getChallengeTimeLeft(category),
+                                ],
+                              )
                           ],
                         ),
                       ),

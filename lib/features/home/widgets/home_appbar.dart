@@ -1,4 +1,5 @@
 import 'package:business_bosses_v2/common/widgets/network_image_with_placeholder.dart';
+import 'package:business_bosses_v2/features/home/widgets/searchsection.dart';
 import 'package:business_bosses_v2/features/marketplace/widgets/products.dart';
 import 'package:business_bosses_v2/features/profile/controller/profile_controller.dart';
 import 'package:business_bosses_v2/navigation/routes.dart';
@@ -43,62 +44,69 @@ class HomeAppBar extends StatelessWidget {
       mainAxisAlignment: MainAxisAlignment.end,
       children: <Widget>[
         PreferredSize(
-          preferredSize: const Size.fromHeight(80.0),
+          preferredSize: const Size.fromHeight(50.0),
           child: Container(
             color: Colors.white,
             padding:
                 const EdgeInsets.symmetric(horizontal: 16.0, vertical: 10.0),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: <Widget>[
-                Row(
-                  children: <Widget>[
-                    GestureDetector(
-                      onTap: () {
-                        Get.toNamed(Routes.myProfile);
-                      },
-                      child: SizedBox(
-                        height: 40.0,
-                        width: 40.0,
-                        child: ClipRRect(
-                          borderRadius: BorderRadius.circular(10),
-                          child: NetworkImageWithPlaceHolder(
-                            imageUrl:
-                                profileController.myProfile.photoUrl ?? '',
-                            radius: 10,
-                            placeHolder: Icons.person,
-                            iconSize: 22.0,
-                            fit: BoxFit.cover,
+              children: [
+                controller.index == 0
+                    ? Row(
+                        children: [
+                          GestureDetector(
+                            onTap: () {
+                              // Get.toNamed(Routes.myProfile);
+                            },
+                            child: SizedBox(
+                              height: 40.0,
+                              width: 40.0,
+                              child: ClipRRect(
+                                borderRadius: BorderRadius.circular(10),
+                                child: NetworkImageWithPlaceHolder(
+                                  imageUrl:
+                                      profileController.myProfile.photoUrl ??
+                                          '',
+                                  radius: 10,
+                                  placeHolder: Icons.person,
+                                  iconSize: 22.0,
+                                  fit: BoxFit.cover,
+                                ),
+                              ),
+                            ),
                           ),
-                        ),
-                      ),
-                    ),
-                    const SizedBox(width: 10),
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: <Widget>[
-                        Text(
-                          profileName.length > 12
-                              ? '${profileName.substring(0, 12)}...'
-                              : profileName,
-                          overflow: TextOverflow.ellipsis,
-                          maxLines: 1,
-                          style: const TextStyle(
-                            fontSize: 14,
-                            fontWeight: FontWeight.bold,
+                          const SizedBox(width: 10),
+                          Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                profileName.length > 12
+                                    ? '${profileName.substring(0, 12)}...'
+                                    : profileName,
+                                overflow: TextOverflow.ellipsis,
+                                maxLines: 1,
+                                style: const TextStyle(
+                                  fontSize: 14,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                              Text(
+                                '👋' + getGreeting(),
+                                style: const TextStyle(
+                                  fontSize: 12,
+                                  color: Colors.grey,
+                                ),
+                              ),
+                            ],
                           ),
-                        ),
-                        Text(
-                          '👋${getGreeting()}',
-                          style: const TextStyle(
-                            fontSize: 12,
-                            color: Colors.grey,
-                          ),
-                        ),
-                      ],
-                    ),
-                  ],
-                ),
+                        ],
+                      )
+                    : Expanded(
+                        child: Padding(
+                        padding: const EdgeInsets.only(right: 15.0),
+                        child: const SearchSection(),
+                      )),
                 Row(
                   children: <Widget>[
                     GestureDetector(
@@ -138,14 +146,23 @@ class HomeAppBar extends StatelessWidget {
                           onPressed: () => Get.toNamed(Routes.chat),
                         ),
                         if (hasBadge)
-                          const Positioned(
-                            top: 12,
-                            right: 10,
-                            child: CircleAvatar(
-                              backgroundColor: primaryotherColorLT,
-                              radius: 5,
+                          Positioned(
+                            top: 5,
+                            right: 5,
+                            child: Container(
+                              decoration: BoxDecoration(
+                                shape: BoxShape.circle,
+                                border: Border.all(
+                                  color: Colors.white, // Border color
+                                  width: 2.0, // Border width
+                                ),
+                              ),
+                              child: const CircleAvatar(
+                                backgroundColor: primaryColorLT,
+                                radius: 5,
+                              ),
                             ),
-                          ),
+                          )
                       ],
                     ),
                     Stack(
@@ -158,14 +175,23 @@ class HomeAppBar extends StatelessWidget {
                           onPressed: () => Get.toNamed(Routes.notifications),
                         ),
                         if (hasUnreadNotification)
-                          const Positioned(
-                            top: 12,
-                            right: 14,
-                            child: CircleAvatar(
-                              backgroundColor: primaryotherColorLT,
-                              radius: 5,
+                          Positioned(
+                            top: 5,
+                            right: 8,
+                            child: Container(
+                              decoration: BoxDecoration(
+                                shape: BoxShape.circle,
+                                border: Border.all(
+                                  color: Colors.white, // Border color
+                                  width: 2.0, // Border width
+                                ),
+                              ),
+                              child: const CircleAvatar(
+                                backgroundColor: primaryColorLT,
+                                radius: 5,
+                              ),
                             ),
-                          ),
+                          )
                       ],
                     ),
                   ],
@@ -173,6 +199,10 @@ class HomeAppBar extends StatelessWidget {
               ],
             ),
           ),
+        ),
+        Container(
+          height: 1,
+          color: backgroundColor,
         ),
         TabBar(
           controller: controller,
@@ -187,7 +217,7 @@ class HomeAppBar extends StatelessWidget {
                       margin: const EdgeInsets.only(right: 8.0),
                       width: 8.0,
                       height: 8.0,
-                      decoration: const BoxDecoration(
+                      decoration: BoxDecoration(
                         color: Colors.red,
                         shape: BoxShape.circle,
                       ),
@@ -195,7 +225,8 @@ class HomeAppBar extends StatelessWidget {
                   Text(
                     'Discover',
                     style: TextStyle(
-                      color: controller.index == 0 ? Colors.red : Colors.grey,
+                      color:
+                          controller.index == 0 ? primaryColorLT : Colors.grey,
                       fontWeight: FontWeight.w700,
                     ),
                   ),
@@ -211,7 +242,7 @@ class HomeAppBar extends StatelessWidget {
                       margin: const EdgeInsets.only(right: 8.0),
                       width: 8.0,
                       height: 8.0,
-                      decoration: const BoxDecoration(
+                      decoration: BoxDecoration(
                         color: Colors.red,
                         shape: BoxShape.circle,
                       ),
@@ -219,7 +250,8 @@ class HomeAppBar extends StatelessWidget {
                   Text(
                     'For you',
                     style: TextStyle(
-                      color: controller.index == 1 ? Colors.red : Colors.grey,
+                      color:
+                          controller.index == 1 ? primaryColorLT : Colors.grey,
                       fontWeight: FontWeight.w700,
                     ),
                   ),
@@ -235,7 +267,7 @@ class HomeAppBar extends StatelessWidget {
                       margin: const EdgeInsets.only(right: 8.0),
                       width: 8.0,
                       height: 8.0,
-                      decoration: const BoxDecoration(
+                      decoration: BoxDecoration(
                         color: Colors.red,
                         shape: BoxShape.circle,
                       ),
@@ -243,7 +275,8 @@ class HomeAppBar extends StatelessWidget {
                   Text(
                     'Following',
                     style: TextStyle(
-                      color: controller.index == 2 ? Colors.red : Colors.grey,
+                      color:
+                          controller.index == 2 ? primaryColorLT : Colors.grey,
                       fontWeight: FontWeight.w700,
                     ),
                   ),
@@ -251,7 +284,11 @@ class HomeAppBar extends StatelessWidget {
               ),
             ),
           ],
-        )
+        ),
+        Container(
+          height: 1,
+          color: backgroundColor,
+        ),
       ],
     );
   }
