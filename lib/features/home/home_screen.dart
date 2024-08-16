@@ -4,6 +4,7 @@ import 'package:business_bosses_v2/features/home/controller/commumities_controll
 import 'package:business_bosses_v2/features/home/widgets/bottom_bar.dart';
 import 'package:business_bosses_v2/features/home/widgets/challengessection.dart';
 import 'package:business_bosses_v2/features/home/widgets/eventssection.dart';
+import 'package:business_bosses_v2/features/home/widgets/floatingbutton.dart';
 import 'package:business_bosses_v2/features/home/widgets/forum_item.dart';
 import 'package:business_bosses_v2/features/home/widgets/list_items.dart';
 import 'package:business_bosses_v2/features/home/widgets/marketplacesection.dart';
@@ -349,10 +350,10 @@ class _HomeScreenState extends State<HomeScreen>
                                             children: <Widget>[
                                               ListView(
                                                 children: [
-                                                  SearchSection(),
-                                                  BossOfWeekProfileTile(),
-                                                  EventsSection(),
-                                                  SizedBox(
+                                                  const SearchSection(),
+                                                  const BossOfWeekProfileTile(),
+                                                  const EventsSection(),
+                                                  const SizedBox(
                                                     height: 15,
                                                   ),
                                                   Padding(
@@ -370,11 +371,11 @@ class _HomeScreenState extends State<HomeScreen>
                                                                       10)),
                                                     ),
                                                   ),
-                                                  SizedBox(
+                                                  const SizedBox(
                                                     height: 15,
                                                   ),
-                                                  MarketplaceSection(),
-                                                  SizedBox(
+                                                  const MarketplaceSection(),
+                                                  const SizedBox(
                                                     height: 300,
                                                   ),
                                                 ],
