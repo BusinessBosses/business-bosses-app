@@ -110,7 +110,12 @@ class _ProjectsState extends State<Projects> {
                             tasks: _tasks[status] ?? <Task>[],
                             taskStatus: status,
                             screenSize: screenSize,
-                            taskAccepted: (Task task, TaskStatus newStatus) {
+                            taskAccepted:
+                                (Task task, TaskStatus newStatus) async {
+                              projectController.updateTask(
+                                  task.id, <String, dynamic>{
+                                'status': newStatus.toString()
+                              });
                               setState(() {
                                 _tasks[task.status]?.remove(task);
                                 _tasks[newStatus]?.add(
@@ -125,6 +130,7 @@ class _ProjectsState extends State<Projects> {
                                     status: newStatus,
                                     createdAt: task.createdAt,
                                     clientId: task.clientId,
+                                    project: task.project,
                                   ),
                                 );
                               });

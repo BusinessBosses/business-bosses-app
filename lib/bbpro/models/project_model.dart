@@ -6,13 +6,13 @@ class Project {
   final String userId;
   final String name;
   final String description;
-  final String? amount;
+  final int? amount;
   final String duration;
   final bool isDeleted;
   final DateTime? deletedAt;
   final DateTime createdAt;
   final DateTime updatedAt;
-  final List<Task> tasks;
+  final List<Task>? tasks;
 
   Project({
     required this.id,
@@ -37,7 +37,7 @@ class Project {
         userId: json['userId'],
         name: json['name'],
         description: json['description'],
-        amount: json['amount'],
+        amount: (json['amount']),
         duration: json['duration'],
         isDeleted: json['isDeleted'],
         deletedAt: json['deletedAt'] != null
@@ -45,8 +45,10 @@ class Project {
             : null,
         createdAt: DateTime.parse(json['createdAt']),
         updatedAt: DateTime.parse(json['updatedAt']),
-        tasks:
-            List<Task>.from(json['tasks'].map((dynamic x) => Task.fromMap(x))),
+        tasks: json['tasks'] == null
+            ? null
+            : List<Task>.from(
+                json['tasks'].map((dynamic x) => Task.fromMap(x))),
       );
 
   Map<String, dynamic> toMap() => <String, dynamic>{
@@ -60,6 +62,8 @@ class Project {
         'deletedAt': deletedAt?.toIso8601String(),
         'createdAt': createdAt.toIso8601String(),
         'updatedAt': updatedAt.toIso8601String(),
-        'tasks': List<dynamic>.from(tasks.map((Task x) => x.toMap())),
+        'tasks': tasks == null
+            ? null
+            : List<dynamic>.from(tasks!.map((Task x) => x.toMap())),
       };
 }

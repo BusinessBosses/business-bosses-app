@@ -137,7 +137,7 @@ class _SetupshopState extends State<Setupshop>
                   const SizedBox(height: 20),
                   ProCustomButton(
                     onPressed: () {
-                      Get.back(); // Close the dialog
+                      Get.to(() => const Bottomnavscreen()); // Close the dialog
                     },
                     text: 'My Dashboard',
                     icon: const Icon(

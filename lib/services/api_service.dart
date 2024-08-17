@@ -263,7 +263,6 @@ class ApiService {
       );
 
       log(response.body);
-      print(response.body);
       return ApiResponseModel.fromMap(jsonDecode(response.body));
     } catch (e) {
       print(e.toString());
@@ -341,6 +340,7 @@ class ApiService {
     required Map<String, dynamic> body,
   }) async {
     final String token = sandBox.read(Constants.ACCESS_TOKEN);
+    log(token);
     try {
       final http.Response response = await http.put(
         Uri.parse('${Constants.baseUrl}/$path'),

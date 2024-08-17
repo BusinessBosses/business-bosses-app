@@ -221,6 +221,8 @@ class _AddprojectState extends State<Addproject> {
                         message: 'Project Added Succesfully!',
                       );
                       Get.back();
+                      projectController
+                          .initTasks(profileController.myProfile.uid);
                     } else {
                       showSnackbar(message: 'Error While Adding Project');
                     }

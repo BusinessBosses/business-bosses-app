@@ -37,6 +37,16 @@ class ProjectController extends GetxController {
     }
   }
 
+  Future<void> updateTask(String taskId, Map<String, dynamic> data) async {
+    try {
+      // Call your API to update the task's status in the backend
+      await ApiService.put(path: 'tasks/$taskId', body: data);
+      // You can also handle local state or cache updates if necessary
+    } catch (e) {
+      // Handle any errors that occur during the update
+    }
+  }
+
   @override
   void onInit() {
     initTasks(profileController.myProfile.uid);
