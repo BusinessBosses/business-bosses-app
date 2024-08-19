@@ -34,7 +34,7 @@ class _ProjectsState extends State<Projects>
   void initState() {
     super.initState();
     _tabController =
-        TabController(length: TaskStatus.values.length , vsync: this);
+        TabController(length: TaskStatus.values.length, vsync: this);
     for (TaskStatus status in TaskStatus.values) {
       _tasks[status] = <Task>[];
     }
@@ -60,7 +60,6 @@ class _ProjectsState extends State<Projects>
       duration: Duration(milliseconds: 300),
       curve: Curves.easeInOut,
     );
-    print(TaskStatus.values.toList());
     setState(() {});
   }
 
@@ -108,72 +107,15 @@ class _ProjectsState extends State<Projects>
               Get.to(() => const Addproject());
             },
           ),
-          Stack(children: [
-            Padding(
-              padding: const EdgeInsets.only(left: 10.0, right: 10, bottom: 10),
-              child: Container(
-                width: double.infinity,
-                padding: const EdgeInsets.symmetric(horizontal: 10),
-                decoration: BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.circular(10),
-                ),
-                child: TabBar(
-                  controller: _tabController,
-                  onTap: _scrollToSection,
-                  labelStyle: const TextStyle(
-                    fontWeight: FontWeight.w400,
-                    fontSize: 14,
-                  ),
-                  indicatorColor: Colors.white,
-                  isScrollable: true,
-                  indicator: BoxDecoration(
-                    borderRadius: BorderRadius.circular(50),
-                    color: Colors.white,
-                  ),
-                  labelPadding: const EdgeInsets.only(right: 8.0),
-                  unselectedLabelColor: Colors.grey,
-                  labelColor: Colors.white,
-                  tabs: TaskStatus.values.map((status) {
-                    int index = TaskStatus.values.indexOf(status);
-                    return Tab(
-                      child: Padding(
-                        padding: EdgeInsets.only(
-                            right: index == 3 ? 40.0 : 0.0),
-                        child: Container(
-                          decoration: BoxDecoration(
-                            color: _tabController.index == index
-                                ? proprimaryColor
-                                : backgroundColor,
-                            borderRadius: BorderRadius.circular(100),
-                          ),
-                          child: Padding(
-                            padding: const EdgeInsets.symmetric(
-                                horizontal: 10.0, vertical: 8),
-                            child: Text(status.toString() + ' (10000000)'),
-                          ),
-                        ),
-                      ),
-                    );
-                  }).toList(),
-                ),
-              ),
-            ),
-            Positioned(
-                right: 10,
-                top: 0,
-                bottom: 10,
-                child: Padding(
-                  padding: const EdgeInsets.all(5.0),
-                  child: Container(
-                      padding: EdgeInsets.symmetric(horizontal: 10),
-                      decoration: BoxDecoration(
-                          color: backgroundColor,
-                          borderRadius: BorderRadius.circular(7)),
-                      child: SvgPicture.asset(
-                          'assets/svgs/filterprosections.svg')),
-                ))
-          ]),
+          CustomTabBarWidget<TaskStatus>(
+            tabController: _tabController,
+            scrollToSection: (index) {_scrollToSection(index);},
+            proprimaryColor: proprimaryColor,
+            backgroundColor: backgroundColor,
+            listofitems: TaskStatus.values.toList(),
+            itemToString: (status) => status.toString().split('.').last,
+            itemCount: (status) => 10000000, // Example count, adjust as needed
+          ),
           Expanded(
             child: Padding(
               padding: const EdgeInsets.only(bottom: 15),

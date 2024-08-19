@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'package:business_bosses_v2/bbpro/common/widgets/clientwidget.dart';
+import 'package:business_bosses_v2/bbpro/common/widgets/customtabbar.dart';
 import 'package:business_bosses_v2/bbpro/common/widgets/topsection.dart';
 import 'package:business_bosses_v2/bbpro/controllers/clients_controller.dart';
 import 'package:business_bosses_v2/bbpro/models/client_model.dart';
@@ -16,12 +17,31 @@ class ClientsScreen extends StatefulWidget {
   State<ClientsScreen> createState() => _ClientsScreenState();
 }
 
-class _ClientsScreenState extends State<ClientsScreen> {
+class _ClientsScreenState extends State<ClientsScreen>
+    with SingleTickerProviderStateMixin {
   final ScrollController _mainListScrollController = ScrollController();
   Timer? _timer;
   bool? _lastMoveRight;
+  late TabController _tabController;
 
   final ClientsController clientsController = Get.put(ClientsController());
+
+  void _scrollToSection(int index) {
+    final double offset = index * MediaQuery.of(context).size.width * 0.9;
+    _mainListScrollController.animateTo(
+      offset,
+      duration: Duration(milliseconds: 300),
+      curve: Curves.easeInOut,
+    );
+    setState(() {});
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    _tabController =
+        TabController(length: ClientType.values.length, vsync: this);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -67,6 +87,15 @@ class _ClientsScreenState extends State<ClientsScreen> {
               // Handle "Add Project" pressed
               Get.to(const Addclient());
             },
+          ),
+          CustomTabBarWidget<ClientType>(
+            tabController: _tabController,
+            scrollToSection: (index) {_scrollToSection(index);},
+            proprimaryColor: proprimaryColor,
+            backgroundColor: backgroundColor,
+            listofitems: ClientType.values.toList(),
+            itemToString: (status) => status.toString().split('.').last,
+            itemCount: (status) => 10000000, // Example count, adjust as needed
           ),
           Expanded(
             child: Padding(
