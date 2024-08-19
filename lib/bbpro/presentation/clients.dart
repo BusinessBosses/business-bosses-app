@@ -221,11 +221,14 @@ class RowStatusCard extends StatelessWidget {
                 Wrap(
                   crossAxisAlignment: WrapCrossAlignment.center,
                   children: <Widget>[
-                    CircleAvatar(
-                      backgroundColor: statusColor,
-                      radius: 5,
-                    ),
-                    const SizedBox(width: 10),
+                    clientType.displayTitle == 'all clients'
+                        ? Container()
+                        : CircleAvatar(
+                            backgroundColor: statusColor,
+                            radius: 5,
+                          ),
+                    if (clientType.displayTitle != 'all clients')
+                      SizedBox(width: 10),
                     Text(
                       clientType.displayTitle,
                       style: const TextStyle(

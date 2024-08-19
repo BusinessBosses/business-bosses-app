@@ -91,6 +91,7 @@ class _AddclientState extends State<Addclient> {
                     CustomDropdownWidget(
                       caption: 'Client Type',
                       items: ClientType.values
+                          .skip(1) // Skip the first item
                           .map((ClientType type) => type.displayTitle)
                           .toList(),
                       iconName: 'assets/svgs/dropdown.svg',
