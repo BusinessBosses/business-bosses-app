@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'package:business_bosses_v2/bbpro/common/widgets/customtabbar.dart';
 import 'package:business_bosses_v2/bbpro/common/widgets/taskwidget.dart';
 import 'package:business_bosses_v2/bbpro/controllers/project_controller.dart';
 import 'package:business_bosses_v2/bbpro/models/task_model.dart';
@@ -19,17 +20,21 @@ class Projects extends StatefulWidget {
   State<Projects> createState() => _ProjectsState();
 }
 
-class _ProjectsState extends State<Projects> {
+class _ProjectsState extends State<Projects>
+    with SingleTickerProviderStateMixin {
   final ProjectController projectController =
       Get.put(ProjectController()); // Get the instance
   final Map<TaskStatus, List<Task>> _tasks = <TaskStatus, List<Task>>{};
   final ScrollController _mainListScrollController = ScrollController();
   Timer? _timer;
   bool? _lastMoveRight;
+  late TabController _tabController;
 
   @override
   void initState() {
     super.initState();
+    _tabController =
+        TabController(length: TaskStatus.values.length , vsync: this);
     for (TaskStatus status in TaskStatus.values) {
       _tasks[status] = <Task>[];
     }
@@ -46,6 +51,17 @@ class _ProjectsState extends State<Projects> {
         });
       });
     });
+  }
+
+  void _scrollToSection(int index) {
+    final double offset = index * MediaQuery.of(context).size.width * 0.9;
+    _mainListScrollController.animateTo(
+      offset,
+      duration: Duration(milliseconds: 300),
+      curve: Curves.easeInOut,
+    );
+    print(TaskStatus.values.toList());
+    setState(() {});
   }
 
   @override
@@ -92,6 +108,72 @@ class _ProjectsState extends State<Projects> {
               Get.to(() => const Addproject());
             },
           ),
+          Stack(children: [
+            Padding(
+              padding: const EdgeInsets.only(left: 10.0, right: 10, bottom: 10),
+              child: Container(
+                width: double.infinity,
+                padding: const EdgeInsets.symmetric(horizontal: 10),
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.circular(10),
+                ),
+                child: TabBar(
+                  controller: _tabController,
+                  onTap: _scrollToSection,
+                  labelStyle: const TextStyle(
+                    fontWeight: FontWeight.w400,
+                    fontSize: 14,
+                  ),
+                  indicatorColor: Colors.white,
+                  isScrollable: true,
+                  indicator: BoxDecoration(
+                    borderRadius: BorderRadius.circular(50),
+                    color: Colors.white,
+                  ),
+                  labelPadding: const EdgeInsets.only(right: 8.0),
+                  unselectedLabelColor: Colors.grey,
+                  labelColor: Colors.white,
+                  tabs: TaskStatus.values.map((status) {
+                    int index = TaskStatus.values.indexOf(status);
+                    return Tab(
+                      child: Padding(
+                        padding: EdgeInsets.only(
+                            right: index == 3 ? 40.0 : 0.0),
+                        child: Container(
+                          decoration: BoxDecoration(
+                            color: _tabController.index == index
+                                ? proprimaryColor
+                                : backgroundColor,
+                            borderRadius: BorderRadius.circular(100),
+                          ),
+                          child: Padding(
+                            padding: const EdgeInsets.symmetric(
+                                horizontal: 10.0, vertical: 8),
+                            child: Text(status.toString() + ' (10000000)'),
+                          ),
+                        ),
+                      ),
+                    );
+                  }).toList(),
+                ),
+              ),
+            ),
+            Positioned(
+                right: 10,
+                top: 0,
+                bottom: 10,
+                child: Padding(
+                  padding: const EdgeInsets.all(5.0),
+                  child: Container(
+                      padding: EdgeInsets.symmetric(horizontal: 10),
+                      decoration: BoxDecoration(
+                          color: backgroundColor,
+                          borderRadius: BorderRadius.circular(7)),
+                      child: SvgPicture.asset(
+                          'assets/svgs/filterprosections.svg')),
+                ))
+          ]),
           Expanded(
             child: Padding(
               padding: const EdgeInsets.only(bottom: 15),
@@ -218,17 +300,20 @@ class RowStatusCard extends StatelessWidget {
                 Wrap(
                   crossAxisAlignment: WrapCrossAlignment.center,
                   children: <Widget>[
-                    CircleAvatar(
-                      backgroundColor: taskStatus.displayTitle == 'To Do'
-                          ? Colors.black
-                          : taskStatus.displayTitle == 'Pending'
-                              ? Colors.amber
-                              : Colors.green,
-                      radius: 5,
-                    ),
-                    const SizedBox(
-                      width: 10,
-                    ),
+                    taskStatus.index == 0
+                        ? Container()
+                        : CircleAvatar(
+                            backgroundColor: taskStatus.displayTitle == 'To Do'
+                                ? Colors.black
+                                : taskStatus.displayTitle == 'Pending'
+                                    ? Colors.amber
+                                    : Colors.green,
+                            radius: 5,
+                          ),
+                    if (taskStatus.index != 0)
+                      const SizedBox(
+                        width: 10,
+                      ),
                     Text(
                       taskStatus.displayTitle,
                       style: const TextStyle(
@@ -262,24 +347,26 @@ class RowStatusCard extends StatelessWidget {
               color: Colors.black12,
             ),
           ),
-          Expanded(
-            child: DragTarget<Task>(
-              builder: (BuildContext context, List<Task?> candidateData,
-                  List<dynamic> rejectedData) {
-                return ListStatusColumnWidget(
-                  tasks: tasks,
-                  taskStatus: taskStatus,
-                  screenSize: screenSize,
-                  onDrag: onDrag,
-                  cancelDrag: cancelDrag,
-                );
-              },
-              onWillAccept: (Task? details) => true,
-              onAcceptWithDetails: (DragTargetDetails<Task> details) {
-                taskAccepted(details.data, taskStatus);
-              },
-            ),
-          ),
+          taskStatus.index == 0
+              ? Text('All items')
+              : Expanded(
+                  child: DragTarget<Task>(
+                    builder: (BuildContext context, List<Task?> candidateData,
+                        List<dynamic> rejectedData) {
+                      return ListStatusColumnWidget(
+                        tasks: tasks,
+                        taskStatus: taskStatus,
+                        screenSize: screenSize,
+                        onDrag: onDrag,
+                        cancelDrag: cancelDrag,
+                      );
+                    },
+                    onWillAccept: (Task? details) => true,
+                    onAcceptWithDetails: (DragTargetDetails<Task> details) {
+                      taskAccepted(details.data, taskStatus);
+                    },
+                  ),
+                ),
         ],
       ),
     );

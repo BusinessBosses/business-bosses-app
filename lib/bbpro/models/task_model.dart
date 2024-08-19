@@ -66,12 +66,15 @@ class Task {
 }
 
 enum TaskStatus {
+  allprojects,
   todo,
   pending,
   completed;
 
   static TaskStatus fromString(String status) {
     switch (status) {
+      case 'all projects':
+        return TaskStatus.allprojects;
       case 'to-do':
         return TaskStatus.todo;
       case 'pending':
@@ -85,6 +88,8 @@ enum TaskStatus {
 
   String get displayTitle {
     switch (this) {
+      case TaskStatus.allprojects:
+        return 'All Projects';
       case TaskStatus.todo:
         return 'To Do';
       case TaskStatus.pending:
@@ -96,6 +101,8 @@ enum TaskStatus {
 
   Color get backgroundColor {
     switch (this) {
+      case TaskStatus.allprojects:
+        return Colors.white;
       case TaskStatus.todo:
         return Colors.black12;
       case TaskStatus.pending:
@@ -108,6 +115,8 @@ enum TaskStatus {
   @override
   String toString() {
     switch (this) {
+      case TaskStatus.allprojects:
+        return 'all projects';
       case TaskStatus.todo:
         return 'to-do';
       case TaskStatus.pending:

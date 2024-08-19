@@ -3,18 +3,17 @@ import 'package:flutter/material.dart';
 
 class CustomTabBar extends StatelessWidget {
   final List<Tab> tabs;
-  final TabController tabController;
+  final ScrollController? tabController;
 
   const CustomTabBar({
     Key? key,
     required this.tabs,
-    required this.tabController,
+    this.tabController,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return TabBar(
-      controller: tabController,
       tabs: tabs,
       isScrollable: true,
       indicator: BoxDecoration(
