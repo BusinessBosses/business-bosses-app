@@ -26,7 +26,8 @@ class CustomEditText extends StatelessWidget {
       padding: const EdgeInsets.symmetric(horizontal: 15.0),
       child: Container(
         decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(10), color: backgroundcolor ?? Colors.white),
+            borderRadius: BorderRadius.circular(10),
+            color: backgroundcolor ?? Colors.white),
         padding: EdgeInsets.only(
             left: 15.0, top: 15, right: 15, bottom: maxLength != null ? 15 : 0),
         child: Column(

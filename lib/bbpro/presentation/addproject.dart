@@ -65,15 +65,15 @@ class _AddprojectState extends State<Addproject> {
             final Map<String, dynamic> task = <String, dynamic>{
               'name': taskNameController.text.trim(),
               'amount': expenseController.text.trim(),
-              'startAt': startDate,
-              'endAt': endDate,
+              'startAt': startDate.toString(),
+              'endAt': endDate.toString(),
             };
 
             setState(() {
               tasks.add(task);
             });
 
-            Navigator.pop(context);
+            Get.back();
           },
         );
       },
@@ -158,10 +158,8 @@ class _AddprojectState extends State<Addproject> {
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: <Widget>[
                                   Text('Expense: \$${task['amount']}'),
-                                  Text(
-                                      'Start Date: ${DateFormat('yyyy-MM-dd').format(task['startAt'])}'),
-                                  Text(
-                                      'End Date: ${DateFormat('yyyy-MM-dd').format(task['endAt'])}'),
+                                  Text('Start Date: ${task['startAt']}'),
+                                  Text('End Date: ${task['endAt']}'),
                                 ],
                               ),
                             ),
@@ -204,29 +202,31 @@ class _AddprojectState extends State<Addproject> {
             child: SizedBox(
               width: MediaQuery.of(context).size.width,
               child: ProCustomButton(
-                  text: 'Save',
-                  onPressed: () async {
-                    final Map<String, dynamic> data = <String, dynamic>{
-                      'userId': profileController.myProfile.uid,
-                      'name': nameController.text,
-                      'amount': budgetController.text,
-                      'description': descriptionController.text,
-                      'duration': '60days',
-                      'tasks': tasks,
-                    };
-                    final bool response =
-                        await projectController.addProject(data);
-                    if (response) {
-                      showSnackbar(
-                        message: 'Project Added Succesfully!',
-                      );
-                      Get.back();
-                      projectController
-                          .initTasks(profileController.myProfile.uid);
-                    } else {
-                      showSnackbar(message: 'Error While Adding Project');
-                    }
-                  }),
+                text: 'Save',
+                onPressed: () async {
+                  final Map<String, dynamic> data = <String, dynamic>{
+                    'userId': profileController.myProfile.uid,
+                    'name': nameController.text,
+                    'amount': budgetController.text,
+                    'description': descriptionController.text,
+                    'duration': '60days',
+                    'tasks': tasks,
+                  };
+                  final bool response =
+                      await projectController.addProject(data);
+                  if (response) {
+                    showSnackbar(
+                      message: 'Project Added Succesfully!',
+                    );
+                    Get.back();
+                    projectController
+                        .initTasks(profileController.myProfile.uid);
+                  } else {
+                    showSnackbar(
+                        message: 'Error While Adding Project', error: true);
+                  }
+                },
+              ),
             ),
           )
         ],

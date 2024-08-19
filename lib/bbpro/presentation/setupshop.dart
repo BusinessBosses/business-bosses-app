@@ -11,6 +11,7 @@ import 'package:business_bosses_v2/bbpro/controllers/shop_controller.dart';
 import 'package:business_bosses_v2/bbpro/presentation/bottomnavscreen.dart';
 import 'package:business_bosses_v2/common/dialogs/snackbar.dart';
 import 'package:business_bosses_v2/features/profile/controller/profile_controller.dart';
+import 'package:business_bosses_v2/services/api_service.dart';
 import 'package:business_bosses_v2/utils/theme/theme.dart';
 import 'package:country_list_pick/country_list_pick.dart';
 import 'package:flutter/material.dart';
@@ -23,7 +24,6 @@ class Setupshop extends StatefulWidget {
   const Setupshop({super.key});
 
   @override
-  // ignore: library_private_types_in_public_api
   _SetupshopState createState() => _SetupshopState();
 }
 
@@ -42,6 +42,7 @@ class _SetupshopState extends State<Setupshop>
   String? _selectedLocation;
   File? _selectedImage;
   bool loading = false;
+  String? image;
   late TabController _tabController;
   final List<String> _tabs = <String>[
     '1. Shop Profile',
@@ -58,7 +59,6 @@ class _SetupshopState extends State<Setupshop>
 
   void _onSelectionChanged(Map<String, bool> newSelections) {
     setState(() {
-      // Clear controllers if the corresponding selection is set to false
       if (newSelections['Bank'] == false) {
         bankController.clear();
       }
@@ -92,10 +92,15 @@ class _SetupshopState extends State<Setupshop>
   }
 
   void _nextPage() {
-    if (_tabController.index < _tabs.length - 1) {
-      setState(() {
-        _tabController.index += 1;
-      });
+    Get.to(() => const Bottomnavscreen());
+    if (_validateForm()) {
+      if (_tabController.index < _tabs.length - 1) {
+        setState(() {
+          _tabController.index += 1;
+        });
+      } else if (_tabController.index == 2) {
+        submitForm();
+      }
     }
   }
 
@@ -103,6 +108,52 @@ class _SetupshopState extends State<Setupshop>
     setState(() {
       _tabController.index -= 1;
     });
+  }
+
+  bool _validateForm() {
+    if (_tabController.index == 0) {
+      if (_selectedImage == null) {
+        showSnackbar(message: 'Photo is required', error: true);
+        return false;
+      }
+      if (nameController.text.isEmpty) {
+        showSnackbar(message: 'Shop name is required', error: true);
+        return false;
+      }
+    } else if (_tabController.index == 1) {
+      if (phoneController.text.isEmpty) {
+        showSnackbar(message: 'Phone number is required', error: true);
+        return false;
+      }
+      if (emailController.text.isEmpty || !emailController.text.contains('@')) {
+        showSnackbar(message: 'Valid email address is required', error: true);
+        return false;
+      }
+      if (_selectedLocation == null) {
+        showSnackbar(message: 'Location is required', error: true);
+        return false;
+      }
+    } else if (_tabController.index == 2) {
+      if (selections['Bank'] == true && bankController.text.isEmpty) {
+        showSnackbar(message: 'Bank payment details are required', error: true);
+        return false;
+      }
+      if (selections['Paypal'] == true && paypalController.text.isEmpty) {
+        showSnackbar(
+            message: 'Paypal payment details are required', error: true);
+        return false;
+      }
+      if (selections['Wallet'] == true && walletController.text.isEmpty) {
+        showSnackbar(
+            message: 'Wallet payment details are required', error: true);
+        return false;
+      }
+      if (selections['Cash'] == true && cashController.text.isEmpty) {
+        showSnackbar(message: 'Cash payment details are required', error: true);
+        return false;
+      }
+    }
+    return true;
   }
 
   void successDialog(BuildContext context) {
@@ -137,7 +188,7 @@ class _SetupshopState extends State<Setupshop>
                   const SizedBox(height: 20),
                   ProCustomButton(
                     onPressed: () {
-                      Get.to(() => const Bottomnavscreen()); // Close the dialog
+                      Get.to(() => const Bottomnavscreen());
                     },
                     text: 'My Dashboard',
                     icon: const Icon(
@@ -287,9 +338,6 @@ class _SetupshopState extends State<Setupshop>
                               useSafeArea: false,
                             ),
                           ),
-                          const SizedBox(
-                            height: 150,
-                          ),
                         ],
                       ),
                     ),
@@ -373,85 +421,48 @@ class _SetupshopState extends State<Setupshop>
             ],
           ),
           Positioned(
-            left: 0,
+            bottom: 10,
             right: 0,
-            bottom: 30,
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            left: 0,
+            child: Column(
               children: <Widget>[
-                if (_tabController.index > 0)
-                  Expanded(
-                    child: ProCustomButton(
-                      back: true,
-                      text: 'Back',
-                      onPressed: () async {
-                        _backPage();
-                      },
-                      icon: const Icon(
-                        Icons.navigate_before,
-                        size: 20,
-                      ),
-                    ),
-                  ),
-                Expanded(
-                  child: ProCustomButton(
-                    loading: loading,
-                    text: _tabController.index == 2 ? 'Complete Setup' : 'Next',
-                    onPressed: () async {
-                      Map<String, dynamic> selectionsText = <String, dynamic>{
-                        'Bank': bankController.text.isEmpty
-                            ? null
-                            : bankController.text,
-                        'Paypal': paypalController.text.isEmpty
-                            ? null
-                            : paypalController.text,
-                        'Wallet': walletController.text.isEmpty
-                            ? null
-                            : walletController.text,
-                        'Cash': cashController.text.isEmpty
-                            ? null
-                            : cashController.text,
-                      };
-                      if (_tabController.index == 2) {
-                        setState(() {
-                          loading = true;
-                        });
-                        final Map<String, dynamic> data = <String, dynamic>{
-                          'userId': profileController.myProfile.uid,
-                          'name': nameController.text,
-                          'email': emailController.text,
-                          'phone': phoneController.text,
-                          'description': descriptionController.text,
-                          'image': 'shop-image-url',
-                          'location': _selectedLocation,
-                          'paymentMethods': selectionsText,
-                          'details': 'Some additional details about the shop'
-                        };
-                        bool response = await shopController.addShop(data);
-                        if (response) {
-                          // ignore: use_build_context_synchronously
-                          successDialog(context);
-                        } else {
-                          Get.to(() => const Bottomnavscreen());
-                          showSnackbar(
-                            message: 'Error while adding shop!',
-                            error: true,
-                          );
-                        }
-                        setState(() {
-                          loading = false;
-                        });
-                      } else {
-                        _nextPage();
-                      }
-                    },
-                    icon: _tabController.index == 2
-                        ? Container()
-                        : const Icon(
-                            Icons.navigate_next,
-                            size: 20,
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: <Widget>[
+                    if (_tabController.index != 0)
+                      GestureDetector(
+                        onTap: _backPage,
+                        child: Container(
+                          height: 58,
+                          padding: const EdgeInsets.symmetric(horizontal: 50.0),
+                          alignment: Alignment.center,
+                          decoration: BoxDecoration(
+                            color: Colors.grey[300],
+                            borderRadius: BorderRadius.circular(20),
                           ),
-                  ),
+                          child: Text(
+                            'Back',
+                            style: TextStyle(
+                              color: Colors.grey[800],
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                        ),
+                      ),
+                    const SizedBox(
+                      width: 10,
+                    ),
+                    ProCustomButton(
+                      loading: loading,
+                      onPressed: _nextPage,
+                      text: _tabController.index == _tabs.length - 1
+                          ? 'Create Shop'
+                          : 'Continue',
+                    ),
+                  ],
+                ),
+                const SizedBox(
+                  height: 10,
                 ),
               ],
             ),
@@ -461,9 +472,77 @@ class _SetupshopState extends State<Setupshop>
     );
   }
 
-  @override
-  void dispose() {
-    _tabController.dispose();
-    super.dispose();
+  void submitForm() async {
+    List<Map<String, dynamic>> paymentMethods = <Map<String, dynamic>>[];
+
+    // Add payment methods to the array
+    if (selections['Bank'] == true && bankController.text.isNotEmpty) {
+      paymentMethods.add(<String, dynamic>{
+        'paymentMethod': 'Bank',
+        'details': bankController.text,
+      });
+    }
+    if (selections['Paypal'] == true && paypalController.text.isNotEmpty) {
+      paymentMethods.add(<String, dynamic>{
+        'paymentMethod': 'Paypal',
+        'details': paypalController.text,
+      });
+    }
+    if (selections['Wallet'] == true && walletController.text.isNotEmpty) {
+      paymentMethods.add(<String, dynamic>{
+        'paymentMethod': 'Wallet',
+        'details': walletController.text,
+      });
+    }
+    if (selections['Cash'] == true && cashController.text.isNotEmpty) {
+      paymentMethods.add(<String, dynamic>{
+        'paymentMethod': 'Cash',
+        'details': cashController.text,
+      });
+    }
+    if (_tabController.index == 2) {
+      setState(() {
+        loading = true;
+      });
+      if (_selectedImage != null) {
+        dynamic response = await ApiService.uploadFile(_selectedImage!);
+        if (response['success']) {
+          image = response['fileUrl'];
+        } else {
+          showSnackbar(
+            message: 'Error Uploading Thumbnail!',
+            error: true,
+          );
+          setState(() {
+            loading = false;
+          });
+          return;
+        }
+      }
+      final Map<String, dynamic> data = <String, dynamic>{
+        'userId': profileController.myProfile.uid,
+        'name': nameController.text,
+        'email': emailController.text,
+        'phone': phoneController.text,
+        'description': descriptionController.text,
+        'image': image,
+        'location': _selectedLocation,
+        'paymentMethods': paymentMethods,
+        'details': 'Some additional details about the shop'
+      };
+      bool response = await shopController.addShop(data);
+      if (response) {
+        // ignore: use_build_context_synchronously
+        successDialog(context);
+      } else {
+        showSnackbar(
+          message: 'Error while adding shop!',
+          error: true,
+        );
+      }
+      setState(() {
+        loading = false;
+      });
+    }
   }
 }

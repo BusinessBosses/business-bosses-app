@@ -45,7 +45,10 @@ class _ProCustomButtonState extends State<ProCustomButton> {
             children: <Widget>[
               if (widget.back)
                 if (widget.icon != null) widget.icon!,
-              if (widget.loading) const CircularProgressIndicator(),
+              if (widget.loading)
+                const CircularProgressIndicator(
+                  color: Colors.white,
+                ),
               if (!widget.loading)
                 Text(
                   widget.text,

@@ -54,7 +54,7 @@ class _OrdersScreenState extends State<OrdersScreen> {
               },
               onAddProjectPressed: () {
                 // Handle "Add Project" pressed
-                Get.to(const CreateOrder());
+                Get.to(() => const CreateOrder());
               },
             ),
           ],
