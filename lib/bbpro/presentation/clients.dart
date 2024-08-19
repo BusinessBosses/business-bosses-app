@@ -90,7 +90,9 @@ class _ClientsScreenState extends State<ClientsScreen>
           ),
           CustomTabBarWidget<ClientType>(
             tabController: _tabController,
-            scrollToSection: (index) {_scrollToSection(index);},
+            scrollToSection: (index) {
+              _scrollToSection(index);
+            },
             proprimaryColor: proprimaryColor,
             backgroundColor: backgroundColor,
             listofitems: ClientType.values.toList(),
