@@ -22,7 +22,7 @@ class ClientWidget extends StatelessWidget {
     return Container(
       decoration: BoxDecoration(
           border: Border.all(
-            color: const Color(0xff4680A6).withAlpha(50), // Border color
+            color: bgcolor.withAlpha(50), // Border color
             width: 0.5, // Border width
           ),
           color: Colors.white,
@@ -42,13 +42,21 @@ class ClientWidget extends StatelessWidget {
                       borderRadius: BorderRadius.circular(3), color: bgcolor),
                   padding:
                       const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
-                  child: Text(
-                    client.name,
-                    style: const TextStyle(
-                      fontWeight: FontWeight.bold,
-                      fontSize: 16,
-                    ),
-                  ),
+                  child: Wrap(
+                      crossAxisAlignment: WrapCrossAlignment.center,
+                      children: [
+                        SvgPicture.asset('assets/svgs/client.svg'),
+                        const SizedBox(
+                          width: 5,
+                        ),
+                        Text(
+                          client.name,
+                          style: const TextStyle(
+                            fontWeight: FontWeight.bold,
+                            fontSize: 16,
+                          ),
+                        ),
+                      ]),
                 ),
                 const OptionsButton(
                   padding: EdgeInsets.all(0),
@@ -58,36 +66,69 @@ class ClientWidget extends StatelessWidget {
             ),
             Padding(
               padding: const EdgeInsets.symmetric(vertical: 10.0),
-              child: Text(
-                client.name ?? 'description',
-                style: const TextStyle(
-                  fontWeight: FontWeight.bold,
-                  fontSize: 16,
-                ),
+              child: Column(
+                children: [
+                  Row(
+                    children: [
+                      Text(
+                        'Email: ',
+                        style: const TextStyle(
+                          fontWeight: FontWeight.normal,
+                          fontSize: 16,
+                        ),
+                      ),
+                      Text(
+                        client.email ?? 'description',
+                        style: const TextStyle(
+                          fontWeight: FontWeight.bold,
+                          fontSize: 16,
+                        ),
+                      ),
+                    ],
+                  ),
+                  Row(
+                    children: [
+                      Text(
+                        'Phone: ',
+                        style: const TextStyle(
+                          fontWeight: FontWeight.normal,
+                          fontSize: 16,
+                        ),
+                      ),
+                      Text(
+                        client.phone ?? 'description',
+                        style: const TextStyle(
+                          fontWeight: FontWeight.bold,
+                          fontSize: 16,
+                        ),
+                      ),
+                    ],
+                  ),
+                ],
               ),
             ),
-            if (isExpanded != false)
-              Row(
-                mainAxisAlignment: MainAxisAlignment.end,
-                children: <Widget>[
-                  GestureDetector(
-                    onTap: () {
-                      showDialog(
-                        context: context,
-                        builder: (BuildContext context) => const ProjectPopUp(),
-                      );
-                    },
-                    child: CircleAvatar(
-                      backgroundColor: probackgroundColor,
-                      radius: 15,
-                      child: SvgPicture.asset(
-                        'assets/svgs/expandform.svg',
-                        color: proprimaryColor,
-                      ),
-                    ),
-                  )
-                ],
-              )
+            // if (isExpanded != false)
+            //   Row(
+            //     mainAxisAlignment: MainAxisAlignment.end,
+            //     children: <Widget>[
+            //       GestureDetector(
+            //         onTap: () {
+            //           showDialog(
+            //             context: context,
+            //             builder: (BuildContext context) => const ProjectPopUp(),
+            //           );
+            //         },
+            //         child: CircleAvatar(
+            //           backgroundColor: probackgroundColor,
+            //           radius: 15,
+            //           child: SvgPicture.asset(
+            //             'assets/svgs/expandform.svg',
+            //             color: proprimaryColor,
+            //           ),
+            //         ),
+            //       )
+            //     ],
+            //   )
           ],
         ),
       ),

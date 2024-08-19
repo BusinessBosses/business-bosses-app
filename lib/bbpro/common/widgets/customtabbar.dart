@@ -66,7 +66,8 @@ class CustomTabBarWidget<T> extends StatelessWidget {
                       child: Padding(
                         padding: const EdgeInsets.symmetric(
                             horizontal: 10.0, vertical: 8),
-                        child: Text('${itemToString(status)} (${itemCount(status)})'),
+                        child: Text(
+                            '${itemToString(status)} (${itemCount(status)})'),
                       ),
                     ),
                   ),
@@ -80,16 +81,25 @@ class CustomTabBarWidget<T> extends StatelessWidget {
           top: 0,
           bottom: 10,
           child: Padding(
-            padding: const EdgeInsets.all(5.0),
-            child: Container(
-              padding: EdgeInsets.symmetric(horizontal: 10),
-              decoration: BoxDecoration(
-                color: backgroundColor,
-                borderRadius: BorderRadius.circular(7),
-              ),
-              child: SvgPicture.asset('assets/svgs/filterprosections.svg'),
-            ),
-          ),
+              padding: const EdgeInsets.all(5.0),
+              child: Container(
+                padding: EdgeInsets.symmetric(horizontal: 10),
+                decoration: BoxDecoration(
+                  color: backgroundColor,
+                  borderRadius: BorderRadius.circular(7),
+                  boxShadow: [
+                    BoxShadow(
+                      color: backgroundColor
+                          .withOpacity(0.6), // Adjust opacity as needed
+                      offset: Offset(-5,
+                          0), // Horizontal offset to show shadow on the left side
+                      blurRadius: 10, // Adjust blur radius for shadow softness
+                      spreadRadius: 2, // Adjust spread radius for shadow size
+                    ),
+                  ],
+                ),
+                child: SvgPicture.asset('assets/svgs/filterprosections.svg'),
+              )),
         ),
       ],
     );
