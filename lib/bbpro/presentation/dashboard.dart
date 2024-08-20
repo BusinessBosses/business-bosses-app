@@ -1,4 +1,5 @@
 import 'package:business_bosses_v2/bbpro/common/widgets/infocard.dart';
+import 'package:business_bosses_v2/bbpro/common/widgets/notificationbutton.dart';
 import 'package:business_bosses_v2/bbpro/common/widgets/orderscard.dart';
 import 'package:business_bosses_v2/utils/theme/theme.dart';
 import 'package:flutter/material.dart';
@@ -38,21 +39,7 @@ class _DashboardState extends State<Dashboard> {
           ),
         ),
         actions: <Widget>[
-          Padding(
-            padding: const EdgeInsets.only(right: 10.0, bottom: 15),
-            child: CircleAvatar(
-              backgroundColor: prosemibackColor,
-              radius: 30, // This sets the circle's radius
-              child: Padding(
-                padding: const EdgeInsets.all(
-                    10), // Adjust padding to fit the icon nicely
-                child: SvgPicture.asset(
-                  'assets/svgs/notificationicon.svg',
-                  height: 20,
-                ),
-              ),
-            ),
-          )
+          NotificationButton()
         ],
       ),
       body: SingleChildScrollView(
