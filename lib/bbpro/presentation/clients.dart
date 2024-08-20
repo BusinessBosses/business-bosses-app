@@ -85,7 +85,7 @@ class _ClientsScreenState extends State<ClientsScreen>
             },
             onAddProjectPressed: () {
               // Handle "Add Project" pressed
-              Get.to(const Addclient());
+              Get.to(() => const Addclient());
             },
           ),
           CustomTabBarWidget<ClientType>(

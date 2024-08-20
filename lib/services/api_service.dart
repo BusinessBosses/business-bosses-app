@@ -94,13 +94,14 @@ class ApiService {
     http.MultipartRequest request =
         http.MultipartRequest('POST', Uri.parse(uploadUrl));
     request.files.add(await http.MultipartFile.fromPath('file', image.path));
-    print('image url ========${image.path}');
+    log(image.path);
     try {
       final http.StreamedResponse streamedResponse = await request.send();
 
       Map<dynamic, dynamic> result =
           json.decode(await streamedResponse.stream.bytesToString());
       if (result['success']) {
+        log(result.toString());
         return result;
       } else {
         showSnackbar(
@@ -133,8 +134,8 @@ class ApiService {
       Map<dynamic, dynamic> result =
           json.decode(await streamedResponse.stream.bytesToString());
       if (result['success']) {
-        final videoUrl = result['video_url'];
-        final thumbnailUrl = result['thumbnail_url'];
+        final dynamic videoUrl = result['video_url'];
+        final dynamic thumbnailUrl = result['thumbnail_url'];
         return MediaUploadResult(videoUrl, thumbnailUrl);
       } else {
         showSnackbar(

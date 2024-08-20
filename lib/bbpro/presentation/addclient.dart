@@ -1,7 +1,10 @@
+import 'dart:io';
+
 import 'package:business_bosses_v2/bbpro/common/widgets/customcard.dart';
 import 'package:business_bosses_v2/bbpro/controllers/clients_controller.dart';
 import 'package:business_bosses_v2/common/dialogs/snackbar.dart';
 import 'package:business_bosses_v2/features/profile/controller/profile_controller.dart';
+import 'package:business_bosses_v2/services/api_service.dart';
 import 'package:flutter/material.dart';
 import 'package:business_bosses_v2/bbpro/common/widgets/button.dart';
 import 'package:business_bosses_v2/bbpro/common/widgets/dropdown.dart';
@@ -10,6 +13,7 @@ import 'package:business_bosses_v2/bbpro/common/widgets/multipleedit.dart';
 import 'package:business_bosses_v2/utils/theme/theme.dart';
 import 'package:business_bosses_v2/bbpro/models/client_model.dart';
 import 'package:get/get.dart';
+import 'package:image_picker/image_picker.dart';
 
 class Addclient extends StatefulWidget {
   const Addclient({super.key});
@@ -27,6 +31,10 @@ class _AddclientState extends State<Addclient> {
   final ClientType _selectedType = ClientType.online;
 
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+
+  File? _selectedImage;
+  bool isSubmit = false;
+  String? image;
 
   @override
   Widget build(BuildContext context) {
@@ -65,8 +73,9 @@ class _AddclientState extends State<Addclient> {
                       caption: 'Client Information',
                       subText: 'Add a photo for your client',
                       buttonText: 'Choose Photo',
-                      onPressed: () {},
-                      imagePath: 'assets/images/shopplaceholder.png',
+                      onPressed: _pickImage,
+                      imagePath: _selectedImage?.path ??
+                          'assets/images/shopplaceholder.png',
                       iconpath: 'assets/svgs/uploadicon.svg',
                     ),
                     const SizedBox(height: 15),
@@ -109,9 +118,95 @@ class _AddclientState extends State<Addclient> {
             child: SizedBox(
               width: MediaQuery.of(context).size.width,
               child: ProCustomButton(
+                loading: isSubmit,
                 text: 'Save',
                 onPressed: () async {
+                  setState(() {
+                    isSubmit = true;
+                  });
+                  // Manual validation
+                  final String name = nameController.text;
+                  final String email = emailController.text;
+                  final String phone = phoneController.text;
+
+                  if (_selectedImage == null) {
+                    showSnackbar(
+                      message: 'Please select a client image!',
+                      error: true,
+                    );
+                    setState(() {
+                      isSubmit = false;
+                    });
+                    return;
+                  }
+
+                  if (name.isEmpty) {
+                    showSnackbar(
+                        message: 'Please enter the client\'s name',
+                        error: true);
+                    setState(() {
+                      isSubmit = false;
+                    });
+                    return;
+                  }
+
+                  if (email.isEmpty) {
+                    showSnackbar(
+                        message: 'Please enter the client\'s email',
+                        error: true);
+                    setState(() {
+                      isSubmit = false;
+                    });
+                    return;
+                  }
+
+                  final RegExp emailRegex = RegExp(r'^[^@]+@[^@]+\.[^@]+$');
+                  if (!emailRegex.hasMatch(email)) {
+                    showSnackbar(
+                        message: 'Please enter a valid email address',
+                        error: true);
+                    setState(() {
+                      isSubmit = false;
+                    });
+                    return;
+                  }
+
+                  if (phone.isEmpty) {
+                    showSnackbar(
+                        message: 'Please enter the client\'s phone number',
+                        error: true);
+                    setState(() {
+                      isSubmit = false;
+                    });
+                    return;
+                  }
+
+                  if (_selectedType.displayTitle.isEmpty) {
+                    showSnackbar(
+                        message: 'Please select a client type', error: true);
+                    setState(() {
+                      isSubmit = false;
+                    });
+                    return;
+                  }
+
                   if (_formKey.currentState?.validate() ?? false) {
+                    if (_selectedImage != null) {
+                      dynamic response =
+                          await ApiService.uploadFile(_selectedImage!);
+                      if (response['success']) {
+                        image = response['fileUrl'];
+                      } else {
+                        showSnackbar(
+                          message: 'Error Uploading Thumbnail!',
+                          error: true,
+                        );
+                        setState(() {
+                          isSubmit = false;
+                        });
+                        return;
+                      }
+                    }
                     // Handle the save action
                     final Map<String, dynamic> data = <String, dynamic>{
                       'userId': profileController
@@ -121,7 +216,7 @@ class _AddclientState extends State<Addclient> {
                       'phone': phoneController.text,
                       'type': _selectedType.displayTitle,
                       'createdAt': DateTime.now().toString(),
-                      'image': <String>[], // Handle images if necessary
+                      'image': image, // Handle images if necessary
                     };
 
                     final bool response =
@@ -135,10 +230,10 @@ class _AddclientState extends State<Addclient> {
                         message: 'Error Adding Client!',
                         error: true,
                       );
+                      setState(() {
+                        isSubmit = false;
+                      });
                     }
-
-                    // Call your API or service to save the client information
-                    // Example: ApiService.post(path: 'clients', body: client.toMap());
                   }
                 },
               ),
@@ -147,5 +242,15 @@ class _AddclientState extends State<Addclient> {
         ],
       ),
     );
+  }
+
+  Future<void> _pickImage() async {
+    final XFile? pickedFile =
+        await ImagePicker().pickImage(source: ImageSource.gallery);
+    if (pickedFile != null) {
+      setState(() {
+        _selectedImage = File(pickedFile.path);
+      });
+    }
   }
 }
