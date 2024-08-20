@@ -25,7 +25,7 @@ class ProIconButton extends StatelessWidget {
       style: ElevatedButton.styleFrom(
         shadowColor: Colors.white,
         backgroundColor: backgroundColor ?? proprimaryColor, // Background color
-        padding: const EdgeInsets.symmetric(horizontal: 24.0, vertical: 12.0),
+        padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 10.0),
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(radius ?? 30.0),
         ),
@@ -39,7 +39,7 @@ class ProIconButton extends StatelessWidget {
             text,
             style: TextStyle(
               color: textColor ?? Colors.white, // Text color
-              fontSize: 16.0,
+              fontSize: 14.0,
             ),
           ),
         ],

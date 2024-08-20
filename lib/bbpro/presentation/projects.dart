@@ -261,7 +261,7 @@ class RowStatusCard extends StatelessWidget {
                       style: const TextStyle(
                         color: Colors.black,
                         fontWeight: FontWeight.bold,
-                        fontSize: 18,
+                        fontSize: 14,
                       ),
                     ),
                   ],
@@ -275,7 +275,7 @@ class RowStatusCard extends StatelessWidget {
                     padding: const EdgeInsets.all(8),
                     child: SvgPicture.asset(
                       'assets/svgs/search.svg',
-                      height: 20,
+                      height: 15,
                     ),
                   ),
                 )

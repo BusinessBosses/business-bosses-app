@@ -42,13 +42,25 @@ class TaskWidget extends StatelessWidget {
                       borderRadius: BorderRadius.circular(3), color: bgcolor),
                   padding:
                       const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
-                  child: Text(
-                    task.project.name,
-                    style: const TextStyle(
-                      fontWeight: FontWeight.bold,
-                      fontSize: 16,
-                    ),
-                  ),
+                  child: Wrap(
+                      crossAxisAlignment: WrapCrossAlignment.center,
+                      children: [
+                        SvgPicture.asset(
+                          'assets/svgs/projects.svg',
+                          height: 15,
+                          color: textColor,
+                        ),
+                        const SizedBox(
+                          width: 5,
+                        ),
+                        Text(
+                          task.project.name,
+                          style: const TextStyle(
+                            fontWeight: FontWeight.bold,
+                            fontSize: 14,
+                          ),
+                        ),
+                      ]),
                 ),
                 const OptionsButton(
                   padding: EdgeInsets.all(0),
@@ -58,12 +70,63 @@ class TaskWidget extends StatelessWidget {
             ),
             Padding(
               padding: const EdgeInsets.symmetric(vertical: 10.0),
-              child: Text(
-                task.name ?? 'description',
-                style: const TextStyle(
-                  fontWeight: FontWeight.bold,
-                  fontSize: 16,
-                ),
+              child: Column(
+                children: [
+                  Row(
+                    children: [
+                      Text(
+                        'Budget: ',
+                        style: const TextStyle(
+                          fontWeight: FontWeight.normal,
+                          fontSize: 14,
+                        ),
+                      ),
+                      Text(
+                        task.project.amount.toString() ?? 'description',
+                        style: const TextStyle(
+                          fontWeight: FontWeight.bold,
+                          fontSize: 14,
+                        ),
+                      ),
+                    ],
+                  ),
+                  Row(
+                    children: [
+                      Text(
+                        'Duration: ',
+                        style: const TextStyle(
+                          fontWeight: FontWeight.normal,
+                          fontSize: 14,
+                        ),
+                      ),
+                      Text(
+                        task.project.duration.toString() ?? 'description',
+                        style: const TextStyle(
+                          fontWeight: FontWeight.bold,
+                          fontSize: 14,
+                        ),
+                      ),
+                    ],
+                  ),
+                  Row(
+                    children: [
+                      Text(
+                        'Expenses: ',
+                        style: const TextStyle(
+                          fontWeight: FontWeight.normal,
+                          fontSize: 14,
+                        ),
+                      ),
+                      Text(
+                        'expenses amount',
+                        style: const TextStyle(
+                          fontWeight: FontWeight.bold,
+                          fontSize: 14,
+                        ),
+                      ),
+                    ],
+                  ),
+                ],
               ),
             ),
             if (isExpanded != false)

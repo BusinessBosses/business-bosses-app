@@ -1,3 +1,4 @@
+import 'package:business_bosses_v2/bbpro/common/widgets/statswidget.dart';
 import 'package:business_bosses_v2/bbpro/common/widgets/taskdisplayitem.dart';
 import 'package:business_bosses_v2/bbpro/common/widgets/taskwidget.dart';
 import 'package:business_bosses_v2/bbpro/models/task_model.dart';
@@ -25,6 +26,14 @@ class ProjectPopUp extends StatelessWidget {
                 isExpanded: false,
                 task: Task.fromMap(<String, dynamic>{'name': ''}),
                 bgcolor: Colors.red),
+            const SizedBox(
+              height: 15,
+            ),
+            StatsWidget(
+              completedTasks: 12,
+              totalTasks: 15,
+              completionRate: 35,
+            ),
             const SizedBox(
               height: 15,
             ),
