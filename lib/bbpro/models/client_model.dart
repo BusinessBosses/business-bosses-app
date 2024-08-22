@@ -3,10 +3,10 @@ import 'package:flutter/material.dart';
 
 // Enum for client types
 enum ClientType {
-  allclients('all clients', Colors.black),
-  online('on-line', Colors.blue),
-  inPerson('in-person', Colors.green),
-  bbUser('bb-user', Colors.orange);
+  allclients('All Clients', Colors.black),
+  online('Online', Colors.blue),
+  inPerson('In-Person', Colors.green),
+  bbUser('Bb-User', Colors.orange);
 
   const ClientType(this.displayTitle, this.backgroundColor);
 

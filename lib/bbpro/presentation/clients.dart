@@ -24,8 +24,10 @@ class _ClientsScreenState extends State<ClientsScreen>
   Timer? _timer;
   bool? _lastMoveRight;
   late TabController _tabController;
+  final List<Client> _allclients = <Client>[];
 
   final ClientsController clientsController = Get.put(ClientsController());
+  final Map<ClientType, List<Client>> _clients = <ClientType, List<Client>>{};
 
   void _scrollToSection(int index) {
     final double offset = index * MediaQuery.of(context).size.width * 0.9;
@@ -42,6 +44,24 @@ class _ClientsScreenState extends State<ClientsScreen>
     super.initState();
     _tabController =
         TabController(length: ClientType.values.length, vsync: this);
+
+    for (ClientType clientType in ClientType.values) {
+      _clients[clientType] = <Client>[];
+    }
+
+    clientsController
+        .initClients(clientsController.profileController.myProfile.uid)
+        .then((_) {
+      setState(() {
+        for (ClientType clientType in ClientType.values) {
+          List<Client> allclients = clientsController.clients
+              .where((Client client) => client.type == clientType)
+              .toList();
+          _clients[clientType] = allclients;
+          _allclients.addAll(allclients);
+        }
+      });
+    });
   }
 
   @override
@@ -81,7 +101,9 @@ class _ClientsScreenState extends State<ClientsScreen>
             proprimaryColor: proprimaryColor,
             backgroundColor: backgroundColor,
             listofitems: ClientType.values.toList(),
-            itemToString: (status) => status.toString().split('.').last,
+            itemToString: (status) =>
+                status.displayTitle.toString().split('.').last +
+                ' (${status == ClientType.allclients ? _allclients.length : _clients[status]!.length.toString()})',
           ),
           Expanded(
             child: Padding(
@@ -118,6 +140,7 @@ class _ClientsScreenState extends State<ClientsScreen>
                             _lastMoveRight = null;
                             _timer?.cancel();
                           },
+                          allclients: _allclients ?? <Client>[],
                         ),
                       ),
                     )
@@ -157,6 +180,7 @@ class RowStatusCard extends StatelessWidget {
   final ClientType clientType;
   final List<Client> clients;
   final Size screenSize;
+  final List<Client> allclients;
 
   const RowStatusCard({
     required this.clients,
@@ -166,6 +190,7 @@ class RowStatusCard extends StatelessWidget {
     required this.onDrag,
     required this.cancelDrag,
     super.key,
+    required this.allclients,
   });
 
   @override
@@ -205,7 +230,7 @@ class RowStatusCard extends StatelessWidget {
                 Wrap(
                   crossAxisAlignment: WrapCrossAlignment.center,
                   children: <Widget>[
-                    clientType.displayTitle == 'all clients'
+                    clientType.displayTitle == 'All Clients'
                         ? Container()
                         : CircleAvatar(
                             backgroundColor: statusColor,
@@ -247,12 +272,29 @@ class RowStatusCard extends StatelessWidget {
               color: Colors.black12,
             ),
           ),
-          Expanded(
-            child: ListStatusColumnWidget(
-              clients: clients,
-              clientType: clientType,
-            ),
-          ),
+          clientType.index == 0
+              ? Expanded(
+                  child: ListView.builder(
+                    itemCount: allclients.length,
+                    shrinkWrap: true,
+                    itemBuilder: (BuildContext context, int index) {
+                      final ClientWidget clientWidget = ClientWidget(
+                        client: allclients[index],
+                        bgcolor: allclients[index].type.backgroundColor,
+                      );
+                      return Padding(
+                        padding: const EdgeInsets.only(bottom: 12),
+                        child: clientWidget,
+                      );
+                    },
+                  ),
+                )
+              : Expanded(
+                  child: ListStatusColumnWidget(
+                    clients: clients,
+                    clientType: clientType,
+                  ),
+                ),
         ],
       ),
     );
