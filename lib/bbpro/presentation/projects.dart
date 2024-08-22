@@ -101,7 +101,13 @@ class _ProjectsState extends State<Projects>
             backgroundColor: backgroundColor,
             listofitems: TaskStatus.values.toList(),
             itemToString: (status) => status.toString().split('.').last,
-            itemCount: (status) => 10000000, // Example count, adjust as needed
+            itemCount: (status) => 10000000,
+            filterOptions: [
+              'Newest first',
+              'Most Completed',
+              'Highest Budget',
+              'None'
+            ],
           ),
           Expanded(
             child: Padding(

@@ -1,14 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
-class CustomTabBarWidget<T> extends StatelessWidget {
+class CustomTabBarWidget<T> extends StatefulWidget {
   final TabController _tabController;
   final Function(int) _scrollToSection;
   final Color proprimaryColor;
   final Color backgroundColor;
   final List<T> listofitems;
-  final String Function(T) itemToString; // Function to convert enum to string
-  final int Function(T) itemCount; // Function to get item count if needed
+  final String Function(T) itemToString;
+  final int Function(T) itemCount;
+  final List<String>? filterOptions; // List of filter options
+  final VoidCallback? filterontap;
 
   CustomTabBarWidget({
     required TabController tabController,
@@ -16,10 +18,19 @@ class CustomTabBarWidget<T> extends StatelessWidget {
     required this.proprimaryColor,
     required this.backgroundColor,
     required this.listofitems,
-    required this.itemToString, // Function to convert enum to string
-    required this.itemCount, // Function to get item count if needed
+    required this.itemToString,
+    required this.itemCount,
+    this.filterOptions, // Add filter options
+    this.filterontap,
   })  : _tabController = tabController,
         _scrollToSection = scrollToSection;
+
+  @override
+  _CustomTabBarWidgetState<T> createState() => _CustomTabBarWidgetState<T>();
+}
+
+class _CustomTabBarWidgetState<T> extends State<CustomTabBarWidget<T>> {
+  String? selectedFilter;
 
   @override
   Widget build(BuildContext context) {
@@ -35,8 +46,8 @@ class CustomTabBarWidget<T> extends StatelessWidget {
               borderRadius: BorderRadius.circular(10),
             ),
             child: TabBar(
-              controller: _tabController,
-              onTap: _scrollToSection,
+              controller: widget._tabController,
+              onTap: widget._scrollToSection,
               labelStyle: const TextStyle(
                 fontWeight: FontWeight.w400,
                 fontSize: 14,
@@ -50,7 +61,7 @@ class CustomTabBarWidget<T> extends StatelessWidget {
               labelPadding: const EdgeInsets.only(right: 8.0),
               unselectedLabelColor: Colors.grey,
               labelColor: Colors.white,
-              tabs: listofitems.asMap().entries.map((entry) {
+              tabs: widget.listofitems.asMap().entries.map((entry) {
                 int index = entry.key;
                 T status = entry.value;
                 return Tab(
@@ -58,16 +69,16 @@ class CustomTabBarWidget<T> extends StatelessWidget {
                     padding: EdgeInsets.only(right: index == 3 ? 40.0 : 0.0),
                     child: Container(
                       decoration: BoxDecoration(
-                        color: _tabController.index == index
-                            ? proprimaryColor
-                            : backgroundColor,
+                        color: widget._tabController.index == index
+                            ? widget.proprimaryColor
+                            : widget.backgroundColor,
                         borderRadius: BorderRadius.circular(100),
                       ),
                       child: Padding(
                         padding: const EdgeInsets.symmetric(
                             horizontal: 10.0, vertical: 8),
                         child: Text(
-                            '${itemToString(status)} (${itemCount(status)})'),
+                            '${widget.itemToString(status)} (${widget.itemCount(status)})'),
                       ),
                     ),
                   ),
@@ -81,25 +92,51 @@ class CustomTabBarWidget<T> extends StatelessWidget {
           top: 0,
           bottom: 10,
           child: Padding(
-              padding: const EdgeInsets.all(5.0),
+            padding: const EdgeInsets.all(5.0),
+            child: GestureDetector(
+              onTap: () {
+                showMenu(
+                  shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(10)),
+                  context: context,
+                  shadowColor: Colors.black12,
+                  position:
+                      const RelativeRect.fromLTRB(double.infinity, 220, 10, 0),
+                  items: widget.filterOptions!.map((String option) {
+                    return PopupMenuItem<String>(
+                      value: option,
+                      child: Text(option),
+                    );
+                  }).toList(),
+                ).then((selected) {
+                  if (selected != null) {
+                    setState(() {
+                      selectedFilter = selected;
+                    });
+                    if (widget.filterontap != null) {
+                      widget.filterontap!();
+                    }
+                  }
+                });
+              },
               child: Container(
-                padding: EdgeInsets.symmetric(horizontal: 10),
+                padding: const EdgeInsets.symmetric(horizontal: 10),
                 decoration: BoxDecoration(
-                  color: backgroundColor,
+                  color: widget.backgroundColor,
                   borderRadius: BorderRadius.circular(7),
                   boxShadow: [
                     BoxShadow(
-                      color: backgroundColor
-                          .withOpacity(0.6), // Adjust opacity as needed
-                      offset: Offset(-5,
-                          0), // Horizontal offset to show shadow on the left side
-                      blurRadius: 10, // Adjust blur radius for shadow softness
-                      spreadRadius: 2, // Adjust spread radius for shadow size
+                      color: widget.backgroundColor.withOpacity(0.6),
+                      offset: const Offset(-5, 0),
+                      blurRadius: 10,
+                      spreadRadius: 2,
                     ),
                   ],
                 ),
                 child: SvgPicture.asset('assets/svgs/filterprosections.svg'),
-              )),
+              ),
+            ),
+          ),
         ),
       ],
     );
