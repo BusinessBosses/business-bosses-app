@@ -9,6 +9,8 @@ class Taskitem extends StatefulWidget {
   final String? taskexpense;
   final String? startdate;
   final String? enddate;
+  final VoidCallback? editOnTap;
+  final VoidCallback? deleteOnTap;
 
   const Taskitem({
     super.key,
@@ -16,6 +18,8 @@ class Taskitem extends StatefulWidget {
     this.taskexpense,
     this.startdate,
     this.enddate,
+    this.editOnTap,
+    this.deleteOnTap,
   });
 
   @override
@@ -67,24 +71,28 @@ class _TaskitemState extends State<Taskitem> {
             Wrap(
               crossAxisAlignment: WrapCrossAlignment.center,
               children: <Widget>[
-                Container(
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(10),
-                    color: backgroundColor,
+                GestureDetector(
+                  onTap: widget.editOnTap,
+                  child: Container(
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(10),
+                      color: backgroundColor,
+                    ),
+                    padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
+                    child: const Text('Edit'),
                   ),
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
-                  child: const Text('Edit'),
                 ),
                 const SizedBox(width: 5),
-                Container(
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(10),
-                    color: const Color(0x0ff00000),
+                GestureDetector(
+                  onTap: widget.deleteOnTap,
+                  child: Container(
+                    padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(10),
+                      color: const Color(0x0ff00000),
+                    ),
+                    child: SvgPicture.asset('assets/svgs/trashicon.svg'),
                   ),
-                  child: SvgPicture.asset('assets/svgs/trashicon.svg'),
                 ),
               ],
             ),

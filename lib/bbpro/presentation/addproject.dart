@@ -129,45 +129,48 @@ class _AddprojectState extends State<Addproject> {
                   controller: budgetController,
                   inputType: TextInputType.number,
                 ),
-                const SizedBox(height: 15),
-                Padding(
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: 15.0,
-                  ),
-                  child: Container(
-                    decoration: BoxDecoration(
-                        color: Colors.white,
-                        borderRadius: BorderRadius.circular(10)),
+                if (tasks.length > 0) const SizedBox(height: 15),
+                if (tasks.length > 0)
+                  Padding(
                     padding: const EdgeInsets.symmetric(
-                        horizontal: 15, vertical: 15),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: <Widget>[
-                        const Text(
-                          'Tasks',
-                          style: TextStyle(
-                            fontSize: 16,
-                            fontWeight: FontWeight.w600,
+                      horizontal: 15.0,
+                    ),
+                    child: Container(
+                      decoration: BoxDecoration(
+                          color: Colors.white,
+                          borderRadius: BorderRadius.circular(10)),
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 15, vertical: 15),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: <Widget>[
+                          const Text(
+                            'Tasks',
+                            style: TextStyle(
+                              fontSize: 16,
+                              fontWeight: FontWeight.w600,
+                            ),
                           ),
-                        ),
-                        const SizedBox(height: 5),
-                        ...tasks.map((Map<String, dynamic> task) {
-                          return Taskitem(
-                            taskname: task['name'],
-                            taskexpense: task['amount'],
-                            startdate: task['startAt'],
-                            enddate: task['endAt'],
-                          );
-                        }).toList(),
-                      ],
+                          const SizedBox(height: 5),
+                          ...tasks.map((Map<String, dynamic> task) {
+                            return Taskitem(
+                              taskname: task['name'],
+                              taskexpense: task['amount'],
+                              startdate: task['startAt'],
+                              enddate: task['endAt'],
+                              editOnTap: () {},
+                              deleteOnTap: () {},
+                            );
+                          }).toList(),
+                        ],
+                      ),
                     ),
                   ),
-                ),
                 const SizedBox(height: 15),
                 ProIconButton(
                   backgroundColor: Colors.white,
                   textColor: proprimaryColor,
-                  text: 'Add Task',
+                  text: 'Add Tasks to project',
                   onPressed: () {
                     _showAddTaskSheet(context);
                   },
