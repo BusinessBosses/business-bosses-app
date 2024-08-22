@@ -1,6 +1,7 @@
 import 'package:business_bosses_v2/bbpro/common/widgets/button.dart';
 import 'package:business_bosses_v2/bbpro/common/widgets/dropdown.dart';
 import 'package:business_bosses_v2/bbpro/common/widgets/edittext.dart';
+import 'package:business_bosses_v2/bbpro/common/widgets/textfield.dart';
 import 'package:business_bosses_v2/utils/theme/theme.dart';
 import 'package:flutter/material.dart';
 
@@ -56,6 +57,16 @@ class _CreateOrderState extends State<CreateOrder> {
                       caption: 'Order Channel',
                       items: <String>['Online'],
                       iconName: 'assets/svgs/dropdown.svg'),
+                  const SizedBox(height: 15),
+                  Container(
+                    padding: EdgeInsets.symmetric(horizontal: 5),
+                    child: const CustomTextWidget(
+                      caption: 'Order Date',
+                      iconName: 'assets/svgs/calendar.svg',
+                      text: 'Select Date',
+                      textpadding: 15,
+                    ),
+                  ),
                   const SizedBox(height: 15),
                   const CustomDropdownWidget(
                       caption: 'Payment Method',

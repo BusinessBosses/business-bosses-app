@@ -221,7 +221,7 @@ class RowStatusCard extends StatelessWidget {
                       style: const TextStyle(
                         color: Colors.black,
                         fontWeight: FontWeight.bold,
-                        fontSize: 18,
+                        fontSize: 14,
                       ),
                     ),
                   ],

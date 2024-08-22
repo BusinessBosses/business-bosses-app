@@ -1,6 +1,8 @@
 import 'package:business_bosses_v2/bbpro/common/widgets/addprojectbottomsheet.dart';
 import 'package:business_bosses_v2/bbpro/common/widgets/button.dart';
 import 'package:business_bosses_v2/bbpro/common/widgets/edittext.dart';
+import 'package:business_bosses_v2/bbpro/common/widgets/taskitem.dart';
+import 'package:business_bosses_v2/bbpro/common/widgets/taskwidget.dart';
 import 'package:business_bosses_v2/bbpro/controllers/project_controller.dart';
 import 'package:business_bosses_v2/common/dialogs/snackbar.dart';
 import 'package:business_bosses_v2/features/profile/controller/profile_controller.dart';
@@ -150,20 +152,24 @@ class _AddprojectState extends State<Addproject> {
                         ),
                         const SizedBox(height: 5),
                         ...tasks.map((Map<String, dynamic> task) {
-                          return Card(
-                            margin: const EdgeInsets.symmetric(vertical: 8.0),
-                            child: ListTile(
-                              title: Text(task['name']),
-                              subtitle: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: <Widget>[
-                                  Text('Expense: \$${task['amount']}'),
-                                  Text('Start Date: ${task['startAt']}'),
-                                  Text('End Date: ${task['endAt']}'),
-                                ],
-                              ),
-                            ),
+                          return Taskitem(
+                            taskname: task['name'],
+                            taskexpense: task['amount'],
+                            startdate: task['startAt'],
+                            enddate: task['endAt'],
                           );
+
+                          // ListTile(
+                          //   title: Text(task['name']),
+                          //   subtitle: Column(
+                          //     crossAxisAlignment: CrossAxisAlignment.start,
+                          //     children: <Widget>[
+                          //       Text('Expense: \$${task['amount']}'),
+                          //       Text('Start Date: ${task['startAt']}'),
+                          //       Text('End Date: ${task['endAt']}'),
+                          //     ],
+                          //   ),
+                          // );
                         }).toList(),
                         // ListView.builder(
                         //   shrinkWrap: true,

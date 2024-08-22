@@ -261,7 +261,7 @@ class _SetupshopState extends State<Setupshop>
                           ),
                           CustomEditText(
                             maxLength: 300,
-                            caption: 'Project Description',
+                            caption: 'Shop Description',
                             hintText: 'Enter shop description here',
                             controller: descriptionController,
                           )
