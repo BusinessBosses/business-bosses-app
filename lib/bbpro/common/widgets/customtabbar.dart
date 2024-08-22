@@ -99,9 +99,9 @@ class _CustomTabBarWidgetState<T> extends State<CustomTabBarWidget<T>> {
                   shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(10)),
                   context: context,
-                  shadowColor: Colors.black12,
+                  shadowColor: Colors.black,
                   position:
-                      const RelativeRect.fromLTRB(double.infinity, 220, 10, 0),
+                      const RelativeRect.fromLTRB(double.infinity, 220, 15, 0),
                   items: widget.filterOptions!.map((String option) {
                     return PopupMenuItem<String>(
                       value: option,

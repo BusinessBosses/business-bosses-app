@@ -23,13 +23,13 @@ class Projects extends StatefulWidget {
 
 class _ProjectsState extends State<Projects>
     with SingleTickerProviderStateMixin {
-  final ProjectController projectController =
-      Get.put(ProjectController()); // Get the instance
+  final ProjectController projectController = Get.put(ProjectController());
   final Map<TaskStatus, List<Task>> _tasks = <TaskStatus, List<Task>>{};
   final ScrollController _mainListScrollController = ScrollController();
   Timer? _timer;
   bool? _lastMoveRight;
   late TabController _tabController;
+  final List<Task> _alltasks = <Task>[];
 
   @override
   void initState() {
@@ -44,12 +44,13 @@ class _ProjectsState extends State<Projects>
         .initTasks(projectController.profileController.myProfile.uid)
         .then((_) {
       setState(() {
-        _tasks.addAll(<TaskStatus, List<Task>>{
-          for (TaskStatus status in TaskStatus.values)
-            status: projectController.tasks
-                .where((Task task) => task.status == status)
-                .toList()
-        });
+        for (TaskStatus status in TaskStatus.values) {
+          List<Task> statusTasks = projectController.tasks
+              .where((Task task) => task.status == status)
+              .toList();
+          _tasks[status] = statusTasks;
+          _alltasks.addAll(statusTasks); // Add tasks to alltasks
+        }
       });
     });
   }
@@ -88,7 +89,6 @@ class _ProjectsState extends State<Projects>
               // Handle "How it works" pressed
             },
             onAddProjectPressed: () {
-              // Handle "Add Project" pressed
               Get.to(() => const Addproject());
             },
           ),
@@ -124,6 +124,7 @@ class _ProjectsState extends State<Projects>
                       ...TaskStatus.values.map(
                         (TaskStatus status) => SliverToBoxAdapter(
                           child: RowStatusCard(
+                            alltasks: _alltasks ?? <Task>[],
                             tasks: _tasks[status] ?? <Task>[],
                             taskStatus: status,
                             screenSize: screenSize,
@@ -203,6 +204,7 @@ class RowStatusCard extends StatelessWidget {
   final TaskStatus taskStatus;
   final List<Task> tasks;
   final Size screenSize;
+  final List<Task> alltasks;
 
   const RowStatusCard({
     required this.tasks,
@@ -212,6 +214,7 @@ class RowStatusCard extends StatelessWidget {
     required this.onDrag,
     required this.cancelDrag,
     super.key,
+    required this.alltasks,
   });
 
   @override
@@ -283,7 +286,21 @@ class RowStatusCard extends StatelessWidget {
             ),
           ),
           taskStatus.index == 0
-              ? Text('All items')
+              ? Expanded(
+                child: ListView.builder(
+                    itemCount: alltasks.length,
+                    shrinkWrap: true,
+                    itemBuilder: (BuildContext context, int index) {
+                      return Padding(
+                        padding: const EdgeInsets.only(bottom: 12),
+                        child: TaskWidget(
+                          task: alltasks[index],
+                          bgcolor: alltasks[index].status.backgroundColor,
+                        ),
+                      );
+                    },
+                  ),
+              )
               : Expanded(
                   child: DragTarget<Task>(
                     builder: (BuildContext context, List<Task?> candidateData,
