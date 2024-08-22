@@ -58,9 +58,7 @@ class _ClientsScreenState extends State<ClientsScreen>
             fontWeight: FontWeight.bold,
           ),
         ),
-        actions: <Widget>[
-          NotificationButton()
-        ],
+        actions: <Widget>[NotificationButton()],
       ),
       body: Column(
         children: <Widget>[
@@ -84,7 +82,6 @@ class _ClientsScreenState extends State<ClientsScreen>
             backgroundColor: backgroundColor,
             listofitems: ClientType.values.toList(),
             itemToString: (status) => status.toString().split('.').last,
-            itemCount: (status) => 10000000, // Example count, adjust as needed
           ),
           Expanded(
             child: Padding(

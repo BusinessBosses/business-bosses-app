@@ -96,8 +96,6 @@ class _OrdersScreenState extends State<OrdersScreen>
               backgroundColor: backgroundColor,
               listofitems: ClientType.values.toList(),
               itemToString: (status) => status.toString().split('.').last,
-              itemCount: (status) =>
-                  10000000, // Example count, adjust as needed
             ),
             Expanded(
               child: Padding(

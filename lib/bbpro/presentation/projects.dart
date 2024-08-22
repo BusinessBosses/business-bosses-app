@@ -100,8 +100,9 @@ class _ProjectsState extends State<Projects>
             proprimaryColor: proprimaryColor,
             backgroundColor: backgroundColor,
             listofitems: TaskStatus.values.toList(),
-            itemToString: (status) => status.toString().split('.').last,
-            itemCount: (status) => 10000000,
+            itemToString: (status) =>
+                status.toString().split('.').last +
+                ' (${status == TaskStatus.allprojects ? _alltasks.length : _tasks[status]!.length.toString()})',
             filterOptions: [
               'Newest first',
               'Most Completed',
@@ -287,7 +288,7 @@ class RowStatusCard extends StatelessWidget {
           ),
           taskStatus.index == 0
               ? Expanded(
-                child: ListView.builder(
+                  child: ListView.builder(
                     itemCount: alltasks.length,
                     shrinkWrap: true,
                     itemBuilder: (BuildContext context, int index) {
@@ -300,7 +301,7 @@ class RowStatusCard extends StatelessWidget {
                       );
                     },
                   ),
-              )
+                )
               : Expanded(
                   child: DragTarget<Task>(
                     builder: (BuildContext context, List<Task?> candidateData,

@@ -8,7 +8,7 @@ class CustomTabBarWidget<T> extends StatefulWidget {
   final Color backgroundColor;
   final List<T> listofitems;
   final String Function(T) itemToString;
-  final int Function(T) itemCount;
+  // final int itemCount;
   final List<String>? filterOptions; // List of filter options
   final VoidCallback? filterontap;
 
@@ -19,7 +19,7 @@ class CustomTabBarWidget<T> extends StatefulWidget {
     required this.backgroundColor,
     required this.listofitems,
     required this.itemToString,
-    required this.itemCount,
+    // required this.itemCount,
     this.filterOptions, // Add filter options
     this.filterontap,
   })  : _tabController = tabController,
@@ -77,8 +77,7 @@ class _CustomTabBarWidgetState<T> extends State<CustomTabBarWidget<T>> {
                       child: Padding(
                         padding: const EdgeInsets.symmetric(
                             horizontal: 10.0, vertical: 8),
-                        child: Text(
-                            '${widget.itemToString(status)} (${widget.itemCount(status)})'),
+                        child: Text('${widget.itemToString(status)}'),
                       ),
                     ),
                   ),
