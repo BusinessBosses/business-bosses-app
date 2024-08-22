@@ -158,27 +158,7 @@ class _AddprojectState extends State<Addproject> {
                             startdate: task['startAt'],
                             enddate: task['endAt'],
                           );
-
-                          // ListTile(
-                          //   title: Text(task['name']),
-                          //   subtitle: Column(
-                          //     crossAxisAlignment: CrossAxisAlignment.start,
-                          //     children: <Widget>[
-                          //       Text('Expense: \$${task['amount']}'),
-                          //       Text('Start Date: ${task['startAt']}'),
-                          //       Text('End Date: ${task['endAt']}'),
-                          //     ],
-                          //   ),
-                          // );
                         }).toList(),
-                        // ListView.builder(
-                        //   shrinkWrap: true,
-                        //   physics: NeverScrollableScrollPhysics(),
-                        //   itemCount: 2,
-                        //   itemBuilder: (BuildContext context, int index) {
-                        //     return Taskitem();
-                        //   },
-                        // ),
                       ],
                     ),
                   ),
