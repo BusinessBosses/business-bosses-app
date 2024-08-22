@@ -44,7 +44,7 @@ class TaskWidget extends StatelessWidget {
                       const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
                   child: Wrap(
                       crossAxisAlignment: WrapCrossAlignment.center,
-                      children: [
+                      children: <Widget>[
                         SvgPicture.asset(
                           'assets/svgs/projects.svg',
                           height: 15,
@@ -71,18 +71,18 @@ class TaskWidget extends StatelessWidget {
             Padding(
               padding: const EdgeInsets.symmetric(vertical: 10.0),
               child: Column(
-                children: [
+                children: <Widget>[
                   Row(
-                    children: [
-                      Text(
+                    children: <Widget>[
+                      const Text(
                         'Budget: ',
-                        style: const TextStyle(
+                        style: TextStyle(
                           fontWeight: FontWeight.normal,
                           fontSize: 14,
                         ),
                       ),
                       Text(
-                        task.project.amount.toString() ?? 'description',
+                        task.project.amount.toString(),
                         style: const TextStyle(
                           fontWeight: FontWeight.bold,
                           fontSize: 14,
@@ -91,16 +91,16 @@ class TaskWidget extends StatelessWidget {
                     ],
                   ),
                   Row(
-                    children: [
-                      Text(
+                    children: <Widget>[
+                      const Text(
                         'Duration: ',
-                        style: const TextStyle(
+                        style: TextStyle(
                           fontWeight: FontWeight.normal,
                           fontSize: 14,
                         ),
                       ),
                       Text(
-                        task.project.duration.toString() ?? 'description',
+                        task.project.duration.toString(),
                         style: const TextStyle(
                           fontWeight: FontWeight.bold,
                           fontSize: 14,
@@ -108,18 +108,18 @@ class TaskWidget extends StatelessWidget {
                       ),
                     ],
                   ),
-                  Row(
-                    children: [
+                  const Row(
+                    children: <Widget>[
                       Text(
                         'Expenses: ',
-                        style: const TextStyle(
+                        style: TextStyle(
                           fontWeight: FontWeight.normal,
                           fontSize: 14,
                         ),
                       ),
                       Text(
                         'expenses amount',
-                        style: const TextStyle(
+                        style: TextStyle(
                           fontWeight: FontWeight.bold,
                           fontSize: 14,
                         ),

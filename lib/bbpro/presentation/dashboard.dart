@@ -4,7 +4,6 @@ import 'package:business_bosses_v2/bbpro/common/widgets/orderscard.dart';
 import 'package:business_bosses_v2/utils/theme/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 
 import '../common/widgets/salescard.dart';
 
@@ -38,9 +37,7 @@ class _DashboardState extends State<Dashboard> {
             fontWeight: FontWeight.bold,
           ),
         ),
-        actions: <Widget>[
-          NotificationButton()
-        ],
+        actions: const <Widget>[NotificationButton()],
       ),
       body: SingleChildScrollView(
         child: Column(

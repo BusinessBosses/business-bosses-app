@@ -125,7 +125,7 @@ class _ProjectsState extends State<Projects>
                       ...TaskStatus.values.map(
                         (TaskStatus status) => SliverToBoxAdapter(
                           child: RowStatusCard(
-                            alltasks: _alltasks ?? <Task>[],
+                            alltasks: _alltasks,
                             tasks: _tasks[status] ?? <Task>[],
                             taskStatus: status,
                             screenSize: screenSize,
