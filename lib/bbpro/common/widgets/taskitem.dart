@@ -97,7 +97,7 @@ class _TaskitemState extends State<Taskitem> {
         if (endDateTime != null) Text('End Date: ${formatDate(endDateTime)}'),
         const SizedBox(height: 10),
         Container(
-          height: 1,
+          height: 0.5,
           color: Colors.black12,
         ),
         const SizedBox(height: 10),
