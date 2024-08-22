@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:business_bosses_v2/bbpro/common/widgets/clientwidget.dart';
 import 'package:business_bosses_v2/bbpro/common/widgets/customtabbar.dart';
 import 'package:business_bosses_v2/bbpro/common/widgets/topsection.dart';
+import 'package:business_bosses_v2/bbpro/controllers/clients_controller.dart';
 import 'package:business_bosses_v2/bbpro/models/client_model.dart';
 import 'package:business_bosses_v2/bbpro/presentation/createorder.dart';
 import 'package:business_bosses_v2/utils/theme/theme.dart';
@@ -23,7 +24,7 @@ class _OrdersScreenState extends State<OrdersScreen>
   bool? _lastMoveRight;
   late TabController _tabController;
   final ScrollController _mainListScrollController = ScrollController();
-
+  final ClientsController clientsController = Get.put(ClientsController());
   @override
   void initState() {
     super.initState();
@@ -43,6 +44,7 @@ class _OrdersScreenState extends State<OrdersScreen>
 
   @override
   Widget build(BuildContext context) {
+    final Size screenSize = MediaQuery.of(context).size;
     return Scaffold(
         backgroundColor: probackgroundColor,
         appBar: AppBar(
@@ -96,6 +98,49 @@ class _OrdersScreenState extends State<OrdersScreen>
               itemToString: (status) => status.toString().split('.').last,
               itemCount: (status) =>
                   10000000, // Example count, adjust as needed
+            ),
+            Expanded(
+              child: Padding(
+                padding: const EdgeInsets.only(bottom: 15),
+                child: Obx(() {
+                  if (clientsController.clients.isEmpty) {
+                    return const Center(child: CircularProgressIndicator());
+                  }
+                  return CustomScrollView(
+                    scrollDirection: Axis.horizontal,
+                    controller: _mainListScrollController,
+                    slivers: <Widget>[
+                      ...ClientType.values.map(
+                        (ClientType status) => SliverToBoxAdapter(
+                          child: RowStatusCard(
+                            clients: clientsController.clients
+                                .where((client) => client.type == status)
+                                .toList(),
+                            clientType: status,
+                            screenSize: screenSize,
+                            taskAccepted: (Client task, ClientType newStatus) {
+                              setState(() {
+                                // Update client status here
+                              });
+                            },
+                            onDrag: (bool isRight) {
+                              if (_lastMoveRight == isRight) {
+                                return;
+                              }
+                              _lastMoveRight = isRight;
+                              _moveMainList(isRight);
+                            },
+                            cancelDrag: () {
+                              _lastMoveRight = null;
+                              _timer?.cancel();
+                            },
+                          ),
+                        ),
+                      )
+                    ],
+                  );
+                }),
+              ),
             ),
           ],
         ));
@@ -251,7 +296,7 @@ class ListStatusColumnWidget extends StatelessWidget {
                 borderRadius: BorderRadius.circular(radius)),
             child: const Center(
               child: Text(
-                'Your Clients will show here',
+                'Your Orders will show here',
                 style: TextStyle(color: Colors.black38),
               ),
             ),
@@ -276,4 +321,3 @@ class ListStatusColumnWidget extends StatelessWidget {
     );
   }
 }
-
