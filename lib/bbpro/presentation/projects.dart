@@ -101,7 +101,7 @@ class _ProjectsState extends State<Projects>
             backgroundColor: backgroundColor,
             listofitems: TaskStatus.values.toList(),
             itemToString: (status) =>
-                status.toString().split('.').last +
+                status.displayTitle.toString().split('.').last +
                 ' (${status == TaskStatus.allprojects ? _alltasks.length : _tasks[status]!.length.toString()})',
             filterOptions: [
               'Newest first',
