@@ -1,4 +1,4 @@
-import 'package:business_bosses_v2/bbpro/common/widgets/notificationbutton.dart';
+import 'package:business_bosses_v2/bbpro/widgets/notificationbutton.dart';
 import 'package:business_bosses_v2/bbpro/presentation/inventory.dart';
 import 'package:business_bosses_v2/common/dialogs/snackbar.dart';
 import 'package:business_bosses_v2/common/widgets/network_image_with_placeholder.dart';
@@ -40,7 +40,7 @@ class _SetupState extends State<Setup> {
             fontWeight: FontWeight.bold,
           ),
         ),
-        actions: <Widget>[NotificationButton()],
+        actions: const <Widget>[NotificationButton()],
       ),
       body: SingleChildScrollView(
         child: Column(

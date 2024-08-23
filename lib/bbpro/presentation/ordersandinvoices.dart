@@ -1,8 +1,8 @@
 import 'dart:async';
 
-import 'package:business_bosses_v2/bbpro/common/widgets/clientwidget.dart';
-import 'package:business_bosses_v2/bbpro/common/widgets/customtabbar.dart';
-import 'package:business_bosses_v2/bbpro/common/widgets/topsection.dart';
+import 'package:business_bosses_v2/bbpro/widgets/clientwidget.dart';
+import 'package:business_bosses_v2/bbpro/widgets/customtabbar.dart';
+import 'package:business_bosses_v2/bbpro/widgets/topsection.dart';
 import 'package:business_bosses_v2/bbpro/controllers/clients_controller.dart';
 import 'package:business_bosses_v2/bbpro/controllers/order_controller.dart';
 import 'package:business_bosses_v2/bbpro/models/client_model.dart';

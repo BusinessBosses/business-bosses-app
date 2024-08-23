@@ -1,8 +1,8 @@
-import 'package:business_bosses_v2/bbpro/common/widgets/addprojectbottomsheet.dart';
-import 'package:business_bosses_v2/bbpro/common/widgets/button.dart';
-import 'package:business_bosses_v2/bbpro/common/widgets/edittext.dart';
-import 'package:business_bosses_v2/bbpro/common/widgets/taskitem.dart';
-import 'package:business_bosses_v2/bbpro/common/widgets/taskwidget.dart';
+import 'package:business_bosses_v2/bbpro/widgets/addprojectbottomsheet.dart';
+import 'package:business_bosses_v2/bbpro/widgets/button.dart';
+import 'package:business_bosses_v2/bbpro/widgets/edittext.dart';
+import 'package:business_bosses_v2/bbpro/widgets/taskitem.dart';
+import 'package:business_bosses_v2/bbpro/widgets/taskwidget.dart';
 import 'package:business_bosses_v2/bbpro/controllers/project_controller.dart';
 import 'package:business_bosses_v2/common/dialogs/snackbar.dart';
 import 'package:business_bosses_v2/features/profile/controller/profile_controller.dart';
@@ -11,7 +11,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 
-import '../common/widgets/iconbutton.dart';
+import '../widgets/iconbutton.dart';
 
 class Addproject extends StatefulWidget {
   const Addproject({super.key});

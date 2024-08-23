@@ -1,5 +1,5 @@
-import 'package:business_bosses_v2/bbpro/common/widgets/optionsbutton.dart';
-import 'package:business_bosses_v2/bbpro/common/widgets/projectpopup.dart';
+import 'package:business_bosses_v2/bbpro/widgets/optionsbutton.dart';
+import 'package:business_bosses_v2/bbpro/widgets/projectpopup.dart';
 import 'package:business_bosses_v2/bbpro/models/task_model.dart';
 import 'package:business_bosses_v2/utils/theme/theme.dart';
 import 'package:flutter/material.dart';

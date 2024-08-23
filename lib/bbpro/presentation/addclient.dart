@@ -1,15 +1,15 @@
 import 'dart:io';
 
-import 'package:business_bosses_v2/bbpro/common/widgets/customcard.dart';
+import 'package:business_bosses_v2/bbpro/widgets/customcard.dart';
 import 'package:business_bosses_v2/bbpro/controllers/clients_controller.dart';
 import 'package:business_bosses_v2/common/dialogs/snackbar.dart';
 import 'package:business_bosses_v2/features/profile/controller/profile_controller.dart';
 import 'package:business_bosses_v2/services/api_service.dart';
 import 'package:flutter/material.dart';
-import 'package:business_bosses_v2/bbpro/common/widgets/button.dart';
-import 'package:business_bosses_v2/bbpro/common/widgets/dropdown.dart';
-import 'package:business_bosses_v2/bbpro/common/widgets/edittext.dart';
-import 'package:business_bosses_v2/bbpro/common/widgets/multipleedit.dart';
+import 'package:business_bosses_v2/bbpro/widgets/button.dart';
+import 'package:business_bosses_v2/bbpro/widgets/dropdown.dart';
+import 'package:business_bosses_v2/bbpro/widgets/edittext.dart';
+import 'package:business_bosses_v2/bbpro/widgets/multipleedit.dart';
 import 'package:business_bosses_v2/utils/theme/theme.dart';
 import 'package:business_bosses_v2/bbpro/models/client_model.dart';
 import 'package:get/get.dart';

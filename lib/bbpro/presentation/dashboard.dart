@@ -1,11 +1,11 @@
-import 'package:business_bosses_v2/bbpro/common/widgets/infocard.dart';
-import 'package:business_bosses_v2/bbpro/common/widgets/notificationbutton.dart';
-import 'package:business_bosses_v2/bbpro/common/widgets/orderscard.dart';
+import 'package:business_bosses_v2/bbpro/widgets/infocard.dart';
+import 'package:business_bosses_v2/bbpro/widgets/notificationbutton.dart';
+import 'package:business_bosses_v2/bbpro/widgets/orderscard.dart';
 import 'package:business_bosses_v2/utils/theme/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 
-import '../common/widgets/salescard.dart';
+import '../widgets/salescard.dart';
 
 class Dashboard extends StatefulWidget {
   const Dashboard({

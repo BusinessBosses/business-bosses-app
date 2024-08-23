@@ -1,7 +1,7 @@
 import 'package:business_bosses_v2/bbpro/models/task_model.dart';
 import 'package:flutter/material.dart';
 
-import '../../../utils/theme/theme.dart';
+import '../../utils/theme/theme.dart';
 
 class TaskDisplayItem extends StatefulWidget {
   final Task task;

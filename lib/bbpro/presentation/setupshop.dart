@@ -1,12 +1,12 @@
 import 'dart:io';
 
-import 'package:business_bosses_v2/bbpro/common/widgets/button.dart';
-import 'package:business_bosses_v2/bbpro/common/widgets/customcard.dart';
-import 'package:business_bosses_v2/bbpro/common/widgets/edittext.dart';
-import 'package:business_bosses_v2/bbpro/common/widgets/multipleedit.dart';
-import 'package:business_bosses_v2/bbpro/common/widgets/progresstabbar.dart';
-import 'package:business_bosses_v2/bbpro/common/widgets/selectionboxes.dart';
-import 'package:business_bosses_v2/bbpro/common/widgets/textfield.dart';
+import 'package:business_bosses_v2/bbpro/widgets/button.dart';
+import 'package:business_bosses_v2/bbpro/widgets/customcard.dart';
+import 'package:business_bosses_v2/bbpro/widgets/edittext.dart';
+import 'package:business_bosses_v2/bbpro/widgets/multipleedit.dart';
+import 'package:business_bosses_v2/bbpro/widgets/progresstabbar.dart';
+import 'package:business_bosses_v2/bbpro/widgets/selectionboxes.dart';
+import 'package:business_bosses_v2/bbpro/widgets/textfield.dart';
 import 'package:business_bosses_v2/bbpro/controllers/shop_controller.dart';
 import 'package:business_bosses_v2/bbpro/presentation/bottomnavscreen.dart';
 import 'package:business_bosses_v2/common/dialogs/snackbar.dart';

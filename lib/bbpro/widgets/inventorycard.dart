@@ -1,4 +1,4 @@
-import 'package:business_bosses_v2/bbpro/common/widgets/optionsbutton.dart';
+import 'package:business_bosses_v2/bbpro/widgets/optionsbutton.dart';
 import 'package:business_bosses_v2/common/widgets/network_image_with_placeholder.dart';
 import 'package:business_bosses_v2/utils/theme/theme.dart';
 import 'package:flutter/material.dart';
@@ -80,7 +80,10 @@ class _InventoryCardState extends State<InventoryCard> {
                     backgroundColor: Colors.green,
                   ),
                   SizedBox(width: 3),
-                  Text('Out of stock', style: TextStyle(fontSize: 10), ),
+                  Text(
+                    'Out of stock',
+                    style: TextStyle(fontSize: 10),
+                  ),
                 ],
               ),
               OptionsButton(),

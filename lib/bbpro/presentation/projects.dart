@@ -1,7 +1,7 @@
 import 'dart:async';
-import 'package:business_bosses_v2/bbpro/common/widgets/customtabbar.dart';
-import 'package:business_bosses_v2/bbpro/common/widgets/notificationbutton.dart';
-import 'package:business_bosses_v2/bbpro/common/widgets/taskwidget.dart';
+import 'package:business_bosses_v2/bbpro/widgets/customtabbar.dart';
+import 'package:business_bosses_v2/bbpro/widgets/notificationbutton.dart';
+import 'package:business_bosses_v2/bbpro/widgets/taskwidget.dart';
 import 'package:business_bosses_v2/bbpro/controllers/project_controller.dart';
 import 'package:business_bosses_v2/bbpro/models/task_model.dart';
 import 'package:business_bosses_v2/bbpro/presentation/addproject.dart';
@@ -10,7 +10,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 
-import '../common/widgets/topsection.dart';
+import '../widgets/topsection.dart';
 
 class Projects extends StatefulWidget {
   const Projects({

@@ -1,4 +1,4 @@
-import 'package:business_bosses_v2/bbpro/common/widgets/textfield.dart';
+import 'package:business_bosses_v2/bbpro/widgets/textfield.dart';
 import 'package:business_bosses_v2/common/generic_slider.dart';
 import 'package:detectable_text_field/detector/sample_regular_expressions.dart';
 import 'package:detectable_text_field/widgets/detectable_text.dart';
