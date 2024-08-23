@@ -4,6 +4,7 @@ import 'package:business_bosses_v2/bbpro/common/widgets/clientwidget.dart';
 import 'package:business_bosses_v2/bbpro/common/widgets/customtabbar.dart';
 import 'package:business_bosses_v2/bbpro/common/widgets/topsection.dart';
 import 'package:business_bosses_v2/bbpro/controllers/clients_controller.dart';
+import 'package:business_bosses_v2/bbpro/controllers/order_controller.dart';
 import 'package:business_bosses_v2/bbpro/models/client_model.dart';
 import 'package:business_bosses_v2/bbpro/presentation/createorder.dart';
 import 'package:business_bosses_v2/utils/theme/theme.dart';
@@ -25,6 +26,7 @@ class _OrdersScreenState extends State<OrdersScreen>
   late TabController _tabController;
   final ScrollController _mainListScrollController = ScrollController();
   final ClientsController clientsController = Get.put(ClientsController());
+  final OrderController orderController = Get.put(OrderController());
   @override
   void initState() {
     super.initState();
@@ -36,7 +38,7 @@ class _OrdersScreenState extends State<OrdersScreen>
     final double offset = index * MediaQuery.of(context).size.width * 0.9;
     _mainListScrollController.animateTo(
       offset,
-      duration: Duration(milliseconds: 300),
+      duration: const Duration(milliseconds: 300),
       curve: Curves.easeInOut,
     );
     setState(() {});

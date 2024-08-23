@@ -1,3 +1,5 @@
+import 'package:business_bosses_v2/common/models/user_model.dart';
+
 class Order {
   final String id;
   final String userId;
@@ -9,6 +11,8 @@ class Order {
   final String paymentMethod;
   final String notes;
   final String invoiceOption;
+  final UserModel? user;
+  final String status;
 
   Order({
     required this.id,
@@ -21,6 +25,8 @@ class Order {
     required this.paymentMethod,
     required this.notes,
     required this.invoiceOption,
+    this.user,
+    required this.status,
   });
 
   factory Order.fromJson(Map<String, dynamic> json) {
@@ -37,6 +43,8 @@ class Order {
       paymentMethod: json['paymentMethod'],
       notes: json['notes'],
       invoiceOption: json['invoiceOption'],
+      user: json['user'] == null ? null : UserModel.fromMap(json['user']),
+      status: json['status'],
     );
   }
 
@@ -52,6 +60,8 @@ class Order {
       'paymentMethod': paymentMethod,
       'notes': notes,
       'invoiceOption': invoiceOption,
+      'user': user,
+      'status': status,
     };
   }
 }
