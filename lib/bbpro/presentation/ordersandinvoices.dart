@@ -1,7 +1,9 @@
 import 'dart:async';
 
+import 'package:business_bosses_v2/bbpro/models/order_model.dart';
 import 'package:business_bosses_v2/bbpro/widgets/clientwidget.dart';
 import 'package:business_bosses_v2/bbpro/widgets/customtabbar.dart';
+import 'package:business_bosses_v2/bbpro/widgets/orderwidget.dart';
 import 'package:business_bosses_v2/bbpro/widgets/topsection.dart';
 import 'package:business_bosses_v2/bbpro/controllers/clients_controller.dart';
 import 'package:business_bosses_v2/bbpro/controllers/order_controller.dart';
@@ -23,6 +25,8 @@ class _OrdersScreenState extends State<OrdersScreen>
     with SingleTickerProviderStateMixin {
   Timer? _timer;
   bool? _lastMoveRight;
+  final List<Order> _allorders = <Order>[];
+  final Map<OrderStatus, List<Order>> _orders = <OrderStatus, List<Order>>{};
   late TabController _tabController;
   final ScrollController _mainListScrollController = ScrollController();
   final ClientsController clientsController = Get.put(ClientsController());
@@ -32,6 +36,24 @@ class _OrdersScreenState extends State<OrdersScreen>
     super.initState();
     _tabController =
         TabController(length: ClientType.values.length, vsync: this);
+
+    for (OrderStatus status in OrderStatus.values) {
+      _orders[status] = <Order>[];
+    }
+    // Initialize tasks
+    orderController
+        .initOrders(orderController.profileController.myProfile.uid)
+        .then((_) {
+      setState(() {
+        for (OrderStatus status in OrderStatus.values) {
+          List<Order> statusOrders = orderController.orders
+              .where((Order order) => order.status == status)
+              .toList();
+          _orders[status] = statusOrders;
+          _allorders.addAll(statusOrders); // Add tasks to alltasks
+        }
+      });
+    });
   }
 
   void _scrollToSection(int index) {
@@ -89,15 +111,17 @@ class _OrdersScreenState extends State<OrdersScreen>
                 Get.to(() => const CreateOrder());
               },
             ),
-            CustomTabBarWidget<ClientType>(
+            CustomTabBarWidget<OrderStatus>(
               tabController: _tabController,
               scrollToSection: (index) {
                 _scrollToSection(index);
               },
               proprimaryColor: proprimaryColor,
               backgroundColor: backgroundColor,
-              listofitems: ClientType.values.toList(),
-              itemToString: (status) => status.toString().split('.').last,
+              listofitems: OrderStatus.values.toList(),
+              itemToString: (status) =>
+                  status.displayTitle.toString().split('.').last +
+                  ' (${status == OrderStatus.allorders ? _allorders.length : _orders[status]!.length.toString()})',
             ),
             Expanded(
               child: Padding(
@@ -110,15 +134,17 @@ class _OrdersScreenState extends State<OrdersScreen>
                     scrollDirection: Axis.horizontal,
                     controller: _mainListScrollController,
                     slivers: <Widget>[
-                      ...ClientType.values.map(
-                        (ClientType status) => SliverToBoxAdapter(
+                      ...OrderStatus.values.map(
+                        (OrderStatus status) => SliverToBoxAdapter(
                           child: RowStatusCard(
-                            clients: clientsController.clients
-                                .where((client) => client.type == status)
+                            orders: orderController.orders
+                                .where(
+                                    (order) => order.deliveryMethod == status)
                                 .toList(),
-                            clientType: status,
+                            orderStatus: status,
                             screenSize: screenSize,
-                            taskAccepted: (Client task, ClientType newStatus) {
+                            orderAccepted:
+                                (Order order, OrderStatus newStatus) {
                               setState(() {
                                 // Update client status here
                               });
@@ -134,6 +160,7 @@ class _OrdersScreenState extends State<OrdersScreen>
                               _lastMoveRight = null;
                               _timer?.cancel();
                             },
+                            allorders: _allorders,
                           ),
                         ),
                       )
@@ -166,41 +193,27 @@ class _OrdersScreenState extends State<OrdersScreen>
 }
 
 class RowStatusCard extends StatelessWidget {
-  final void Function(Client client, ClientType newStatus) taskAccepted;
+  final void Function(Order order, OrderStatus newStatus) orderAccepted;
   final void Function(bool isRight) onDrag;
   final void Function() cancelDrag;
-  final ClientType clientType;
-  final List<Client> clients;
+  final OrderStatus orderStatus;
+  final List<Order> orders;
   final Size screenSize;
+  final List<Order> allorders;
 
   const RowStatusCard({
-    required this.clients,
-    required this.clientType,
+    required this.orders,
+    required this.orderStatus,
     required this.screenSize,
-    required this.taskAccepted,
+    required this.orderAccepted,
     required this.onDrag,
     required this.cancelDrag,
     super.key,
+    required this.allorders,
   });
 
   @override
   Widget build(BuildContext context) {
-    // Define color based on ClientType
-    Color statusColor;
-    switch (clientType) {
-      case ClientType.online:
-        statusColor = Colors.black;
-        break;
-      case ClientType.inPerson:
-        statusColor = Colors.amber;
-        break;
-      case ClientType.bbUser:
-        statusColor = Colors.green;
-        break;
-      default:
-        statusColor = Colors.grey;
-    }
-
     return Container(
       height: screenSize.height * 0.8,
       width: screenSize.width * 0.9,
@@ -220,20 +233,27 @@ class RowStatusCard extends StatelessWidget {
                 Wrap(
                   crossAxisAlignment: WrapCrossAlignment.center,
                   children: <Widget>[
-                    clientType.displayTitle == 'all clients'
+                    orderStatus.index == 0
                         ? Container()
                         : CircleAvatar(
-                            backgroundColor: statusColor,
+                            backgroundColor:
+                                orderStatus.displayTitle == 'Pending'
+                                    ? Colors.amber
+                                    : orderStatus.displayTitle == 'Paid'
+                                        ? Colors.green
+                                        : Colors.red,
                             radius: 5,
                           ),
-                    if (clientType.displayTitle != 'all clients')
-                      SizedBox(width: 10),
+                    if (orderStatus.index != 0)
+                      const SizedBox(
+                        width: 10,
+                      ),
                     Text(
-                      clientType.displayTitle,
+                      orderStatus.displayTitle,
                       style: const TextStyle(
                         color: Colors.black,
                         fontWeight: FontWeight.bold,
-                        fontSize: 18,
+                        fontSize: 14,
                       ),
                     ),
                   ],
@@ -242,16 +262,15 @@ class RowStatusCard extends StatelessWidget {
                   onTap: () {},
                   child: Container(
                     decoration: BoxDecoration(
-                      color: backgroundColor,
-                      borderRadius: BorderRadius.circular(30),
-                    ),
+                        color: backgroundColor,
+                        borderRadius: BorderRadius.circular(30)),
                     padding: const EdgeInsets.all(8),
                     child: SvgPicture.asset(
                       'assets/svgs/search.svg',
-                      height: 20,
+                      height: 15,
                     ),
                   ),
-                ),
+                )
               ],
             ),
           ),
@@ -262,12 +281,40 @@ class RowStatusCard extends StatelessWidget {
               color: Colors.black12,
             ),
           ),
-          Expanded(
-            child: ListStatusColumnWidget(
-              clients: clients,
-              clientType: clientType,
-            ),
-          ),
+          orderStatus.index == 0
+              ? Expanded(
+                  child: ListView.builder(
+                    itemCount: allorders.length,
+                    shrinkWrap: true,
+                    itemBuilder: (BuildContext context, int index) {
+                      return Padding(
+                        padding: const EdgeInsets.only(bottom: 12),
+                        child: OrderWidget(
+                          order: allorders[index],
+                          bgcolor: Colors.black,
+                        ),
+                      );
+                    },
+                  ),
+                )
+              : Expanded(
+                  child: DragTarget<Order>(
+                    builder: (BuildContext context, List<Order?> candidateData,
+                        List<dynamic> rejectedData) {
+                      return ListStatusColumnWidget(
+                        orders: orders,
+                        orderStatus: orderStatus,
+                        screenSize: screenSize,
+                        onDrag: onDrag,
+                        cancelDrag: cancelDrag,
+                      );
+                    },
+                    onWillAccept: (Order? details) => true,
+                    onAcceptWithDetails: (DragTargetDetails<Order> details) {
+                      orderAccepted(details.data, orderStatus);
+                    },
+                  ),
+                ),
         ],
       ),
     );
@@ -275,18 +322,24 @@ class RowStatusCard extends StatelessWidget {
 }
 
 class ListStatusColumnWidget extends StatelessWidget {
-  final ClientType clientType;
-  final List<Client> clients;
+  final void Function(bool isRight) onDrag;
+  final void Function() cancelDrag;
+  final OrderStatus orderStatus;
+  final List<Order> orders;
+  final Size screenSize;
 
   const ListStatusColumnWidget({
-    required this.clients,
-    required this.clientType,
+    required this.orders,
+    required this.orderStatus,
+    required this.screenSize,
+    required this.onDrag,
+    required this.cancelDrag,
     super.key,
   });
 
   @override
   Widget build(BuildContext context) {
-    if (clients.isEmpty) {
+    if (orders.isEmpty) {
       return Center(
         child: Padding(
           padding: const EdgeInsets.all(10.0),
@@ -296,7 +349,7 @@ class ListStatusColumnWidget extends StatelessWidget {
                 borderRadius: BorderRadius.circular(radius)),
             child: const Center(
               child: Text(
-                'Your Orders will show here',
+                'Drag an order here',
                 style: TextStyle(color: Colors.black38),
               ),
             ),
@@ -307,17 +360,45 @@ class ListStatusColumnWidget extends StatelessWidget {
 
     return ListView.builder(
       itemBuilder: (BuildContext context, int index) {
-        final ClientWidget clientWidget = ClientWidget(
-          client: clients[index],
-          bgcolor: clients[index].type.backgroundColor,
+        final OrderWidget orderWidget = OrderWidget(
+          order: orders[index],
+          bgcolor: Colors.black,
         );
 
         return Padding(
           padding: const EdgeInsets.only(bottom: 12),
-          child: clientWidget,
+          child: Draggable<Order>(
+            data: orders[index],
+            dragAnchorStrategy: (Draggable<Object> draggable,
+                BuildContext context, Offset position) {
+              return pointerDragAnchorStrategy(draggable, context, position);
+            },
+            onDragUpdate: (DragUpdateDetails details) {
+              if (details.globalPosition.dx > screenSize.width * 0.8) {
+                onDrag(true);
+              } else if (details.globalPosition.dx < screenSize.width * 0.2) {
+                onDrag(false);
+              } else {
+                cancelDrag();
+              }
+            },
+            onDragEnd: (_) => cancelDrag(),
+            onDragCompleted: () => cancelDrag(),
+            onDraggableCanceled: (Velocity velocity, Offset offset) =>
+                cancelDrag(),
+            childWhenDragging: Opacity(
+              opacity: 0.2,
+              child: orderWidget,
+            ),
+            feedback: SizedBox(
+              width: screenSize.width * 0.8,
+              child: orderWidget,
+            ),
+            child: orderWidget,
+          ),
         );
       },
-      itemCount: clients.length,
+      itemCount: orders.length,
     );
   }
 }

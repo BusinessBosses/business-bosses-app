@@ -1,4 +1,6 @@
 import 'package:business_bosses_v2/common/models/user_model.dart';
+import 'package:flutter/material.dart';
+import 'dart:convert';
 
 class Order {
   final String id;
@@ -95,5 +97,68 @@ class OrderItem {
       'name': name,
       'amount': amount,
     };
+  }
+}
+
+enum OrderStatus {
+  allorders,
+  pending,
+  paid,
+  cancelled;
+
+  static OrderStatus fromString(String status) {
+    switch (status) {
+      case 'all orders':
+        return OrderStatus.allorders;
+
+      case 'pending':
+        return OrderStatus.pending;
+      case 'paid':
+        return OrderStatus.paid;
+      case 'cancelled':
+        return OrderStatus.cancelled;
+      default:
+        throw ArgumentError('Unknown status: $status');
+    }
+  }
+
+  String get displayTitle {
+    switch (this) {
+      case OrderStatus.allorders:
+        return 'All Orders';
+      case OrderStatus.pending:
+        return 'Pending';
+      case OrderStatus.paid:
+        return 'Paid';
+      case OrderStatus.cancelled:
+        return 'Cancelled';
+    }
+  }
+
+  Color get backgroundColor {
+    switch (this) {
+      case OrderStatus.allorders:
+        return Colors.white;
+      case OrderStatus.pending:
+        return Colors.amber;
+      case OrderStatus.paid:
+        return Colors.green.withAlpha(100);
+      case OrderStatus.cancelled:
+        return Colors.red.withAlpha(100);
+    }
+  }
+
+  @override
+  String toString() {
+    switch (this) {
+      case OrderStatus.allorders:
+        return 'all orders';
+      case OrderStatus.pending:
+        return 'pending';
+      case OrderStatus.paid:
+        return 'paid';
+      case OrderStatus.cancelled:
+        return 'cancelled';
+    }
   }
 }
