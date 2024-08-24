@@ -127,8 +127,8 @@ class _AddprojectState extends State<Addproject> {
                   controller: budgetController,
                   inputType: TextInputType.number,
                 ),
-                if (tasks.length > 0) const SizedBox(height: 15),
-                if (tasks.length > 0)
+                if (tasks.isNotEmpty) const SizedBox(height: 15),
+                if (tasks.isNotEmpty)
                   Padding(
                     padding: const EdgeInsets.symmetric(
                       horizontal: 15.0,
@@ -191,6 +191,23 @@ class _AddprojectState extends State<Addproject> {
               child: ProCustomButton(
                 text: 'Save',
                 onPressed: () async {
+                  if (nameController.text.isEmpty) {
+                    showSnackbar(message: 'Name is mandatory!', error: true);
+                    return;
+                  }
+                  if (budgetController.text.isEmpty) {
+                    showSnackbar(message: 'Budget is mandatory!', error: true);
+                    return;
+                  }
+                  if (descriptionController.text.isEmpty) {
+                    showSnackbar(message: 'Budget is mandatory!', error: true);
+                    return;
+                  }
+                  if (tasks.isEmpty) {
+                    showSnackbar(
+                        message: 'Adding tasks is mandatory!', error: true);
+                    return;
+                  }
                   final Map<String, dynamic> data = <String, dynamic>{
                     'userId': profileController.myProfile.uid,
                     'name': nameController.text,
