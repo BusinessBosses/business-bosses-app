@@ -6,6 +6,7 @@ import 'package:business_bosses_v2/bbpro/widgets/topsection.dart';
 import 'package:business_bosses_v2/bbpro/controllers/clients_controller.dart';
 import 'package:business_bosses_v2/bbpro/models/client_model.dart';
 import 'package:business_bosses_v2/bbpro/presentation/addclient.dart';
+import 'package:business_bosses_v2/common/widgets/safety_model.dart';
 import 'package:business_bosses_v2/utils/theme/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
@@ -33,7 +34,7 @@ class _ClientsScreenState extends State<ClientsScreen>
     final double offset = index * MediaQuery.of(context).size.width * 0.9;
     _mainListScrollController.animateTo(
       offset,
-      duration: Duration(milliseconds: 300),
+      duration: const Duration(milliseconds: 300),
       curve: Curves.easeInOut,
     );
     setState(() {});
@@ -78,7 +79,7 @@ class _ClientsScreenState extends State<ClientsScreen>
             fontWeight: FontWeight.bold,
           ),
         ),
-        actions: <Widget>[NotificationButton()],
+        actions: const <Widget>[NotificationButton()],
       ),
       body: Column(
         children: <Widget>[
@@ -95,22 +96,27 @@ class _ClientsScreenState extends State<ClientsScreen>
           ),
           CustomTabBarWidget<ClientType>(
             tabController: _tabController,
-            scrollToSection: (index) {
+            scrollToSection: (int index) {
               _scrollToSection(index);
             },
             proprimaryColor: proprimaryColor,
             backgroundColor: backgroundColor,
             listofitems: ClientType.values.toList(),
-            itemToString: (status) =>
-                status.displayTitle.toString().split('.').last +
-                ' (${status == ClientType.allclients ? _allclients.length : _clients[status]!.length.toString()})',
+            itemToString: (ClientType status) =>
+                '${status.displayTitle.toString().split('.').last} (${status == ClientType.allclients ? _allclients.length : _clients[status]!.length.toString()})',
           ),
           Expanded(
             child: Padding(
               padding: const EdgeInsets.only(bottom: 15),
               child: Obx(() {
-                if (clientsController.clients.isEmpty) {
+                if (clientsController.loading.value) {
                   return const Center(child: CircularProgressIndicator());
+                } else if (!clientsController.loading.value &&
+                    clientsController.clients.isEmpty) {
+                  return const SafetyModel(
+                    icon: Icon(Icons.warning),
+                    title: 'No Clients Found!',
+                  );
                 }
                 return CustomScrollView(
                   scrollDirection: Axis.horizontal,
@@ -120,7 +126,7 @@ class _ClientsScreenState extends State<ClientsScreen>
                       (ClientType status) => SliverToBoxAdapter(
                         child: RowStatusCard(
                           clients: clientsController.clients
-                              .where((client) => client.type == status)
+                              .where((Client client) => client.type == status)
                               .toList(),
                           clientType: status,
                           screenSize: screenSize,
@@ -140,7 +146,7 @@ class _ClientsScreenState extends State<ClientsScreen>
                             _lastMoveRight = null;
                             _timer?.cancel();
                           },
-                          allclients: _allclients ?? <Client>[],
+                          allclients: _allclients,
                         ),
                       ),
                     )
@@ -237,7 +243,7 @@ class RowStatusCard extends StatelessWidget {
                             radius: 5,
                           ),
                     if (clientType.displayTitle != 'all clients')
-                      SizedBox(width: 10),
+                      const SizedBox(width: 10),
                     Text(
                       clientType.displayTitle,
                       style: const TextStyle(

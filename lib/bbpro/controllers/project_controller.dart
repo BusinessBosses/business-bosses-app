@@ -9,8 +9,10 @@ class ProjectController extends GetxController {
   final ProfileController profileController = Get.find();
   RxList<Task> tasks = RxList<Task>(<Task>[]);
   RxList<Project> projects = RxList<Project>(<Project>[]);
+  RxBool loading = RxBool(true);
 
   Future<void> initProjects(String userId) async {
+    loading(true);
     projects.clear();
     ApiResponseModel response = await ApiService.get(path: 'projects/all');
     if (response.success) {
@@ -18,6 +20,8 @@ class ProjectController extends GetxController {
         projects.add(Project.fromMap(response.data['rows'][i]));
       }
     }
+    loading(false);
+    update();
   }
 
   Future<void> initTasks(String userId) async {
@@ -65,7 +69,6 @@ class ProjectController extends GetxController {
 
   @override
   void onInit() {
-    initProjects(profileController.myProfile.uid);
     super.onInit();
   }
 }

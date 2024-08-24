@@ -5,6 +5,7 @@ import 'package:business_bosses_v2/bbpro/widgets/notificationbutton.dart';
 import 'package:business_bosses_v2/bbpro/widgets/taskwidget.dart';
 import 'package:business_bosses_v2/bbpro/controllers/project_controller.dart';
 import 'package:business_bosses_v2/bbpro/presentation/addproject.dart';
+import 'package:business_bosses_v2/common/widgets/safety_model.dart';
 import 'package:business_bosses_v2/utils/theme/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -102,7 +103,7 @@ class _ProjectsState extends State<Projects>
             backgroundColor: backgroundColor,
             listofitems: ProjectStatus.values.toList(),
             itemToString: (ProjectStatus status) =>
-                '${status.displayTitle.toString().split('.').last} (${status == ProjectStatus.allprojects ? _projects.length : _projects[status]!.length.toString()})',
+                '${status.displayTitle.toString().split('.').last} (${status == ProjectStatus.allprojects ? _allProjects.length : _projects[status]!.length.toString()})',
             filterOptions: const <String>[
               'Newest first',
               'Most Completed',
@@ -115,8 +116,14 @@ class _ProjectsState extends State<Projects>
               padding: const EdgeInsets.only(bottom: 15),
               child: Obx(
                 () {
-                  if (projectController.projects.isEmpty) {
+                  if (projectController.loading.value) {
                     return const Center(child: CircularProgressIndicator());
+                  } else if (!projectController.loading.value &&
+                      projectController.projects.isEmpty) {
+                    return const SafetyModel(
+                      icon: Icon(Icons.warning),
+                      title: 'No Projects Found!',
+                    );
                   }
                   return CustomScrollView(
                     scrollDirection: Axis.horizontal,

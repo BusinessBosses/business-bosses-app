@@ -1,7 +1,6 @@
 import 'dart:async';
 
 import 'package:business_bosses_v2/bbpro/models/order_model.dart';
-import 'package:business_bosses_v2/bbpro/widgets/clientwidget.dart';
 import 'package:business_bosses_v2/bbpro/widgets/customtabbar.dart';
 import 'package:business_bosses_v2/bbpro/widgets/orderwidget.dart';
 import 'package:business_bosses_v2/bbpro/widgets/topsection.dart';
@@ -113,15 +112,14 @@ class _OrdersScreenState extends State<OrdersScreen>
             ),
             CustomTabBarWidget<OrderStatus>(
               tabController: _tabController,
-              scrollToSection: (index) {
+              scrollToSection: (int index) {
                 _scrollToSection(index);
               },
               proprimaryColor: proprimaryColor,
               backgroundColor: backgroundColor,
               listofitems: OrderStatus.values.toList(),
-              itemToString: (status) =>
-                  status.displayTitle.toString().split('.').last +
-                  ' (${status == OrderStatus.allorders ? _allorders.length : _orders[status]!.length.toString()})',
+              itemToString: (OrderStatus status) =>
+                  '${status.displayTitle.toString().split('.').last} (${status == OrderStatus.allorders ? _allorders.length : _orders[status]!.length.toString()})',
             ),
             Expanded(
               child: Padding(
@@ -138,8 +136,8 @@ class _OrdersScreenState extends State<OrdersScreen>
                         (OrderStatus status) => SliverToBoxAdapter(
                           child: RowStatusCard(
                             orders: orderController.orders
-                                .where(
-                                    (order) => order.deliveryMethod == status)
+                                .where((Order order) =>
+                                    order.deliveryMethod == status)
                                 .toList(),
                             orderStatus: status,
                             screenSize: screenSize,

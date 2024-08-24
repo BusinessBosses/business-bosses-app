@@ -7,8 +7,10 @@ import 'package:get/get.dart';
 class ClientsController extends GetxController {
   final ProfileController profileController = Get.find();
   RxList<Client> clients = RxList<Client>(<Client>[]);
+  RxBool loading = RxBool(true);
 
   Future<void> initClients(String userId) async {
+    loading(true);
     clients.clear();
     ApiResponseModel response = await ApiService.get(path: 'clients/all');
     if (response.success) {
@@ -16,6 +18,8 @@ class ClientsController extends GetxController {
         clients.add(Client.fromMap(response.data['rows'][i]));
       }
     }
+    loading(false);
+    update();
   }
 
   Future<bool> addClient(Map<String, dynamic> data) async {
@@ -36,7 +40,6 @@ class ClientsController extends GetxController {
 
   @override
   void onInit() {
-    initClients(profileController.myProfile.uid);
     super.onInit();
   }
 }

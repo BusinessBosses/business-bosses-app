@@ -14,7 +14,7 @@ class Order {
   final String notes;
   final String invoiceOption;
   final UserModel? user;
-  final String status;
+  final OrderStatus status;
 
   Order({
     required this.id,
