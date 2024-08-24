@@ -183,7 +183,7 @@ class _UserProfileTileState extends State<UserProfileTile> {
                   if (!widget.myProfile.isSubscribed)
                     GestureDetector(
                       onTap: () {
-                        Get.toNamed(Routes.premiumscreen);
+                        Get.toNamed(Routes.setupshopscreen);
                       },
                       child: Container(
                           decoration: BoxDecoration(

@@ -411,7 +411,7 @@ class _ServiceTileState extends State<ServiceTile> {
                                     mainAxisAlignment: MainAxisAlignment.start,
                                     children: <Widget>[
                                       Text(
-                                        '\$${_post.price.toString()}',
+                                        _post.price.toString(),
                                         style: const TextStyle(
                                             fontWeight: FontWeight.w800,
                                             color: Colors.black54),
@@ -501,12 +501,12 @@ class _ServiceTileState extends State<ServiceTile> {
                                               children: <Widget>[
                                                 _post.location!
                                                         .contains('Delivery')
-                                                    ? Icon(
+                                                    ? const Icon(
                                                         Icons.timelapse,
                                                         size: 12,
                                                         color: subtextColor,
                                                       )
-                                                    : Icon(
+                                                    : const Icon(
                                                         Icons.location_on,
                                                         size: 12,
                                                         color:  subtextColor,
@@ -539,7 +539,7 @@ class _ServiceTileState extends State<ServiceTile> {
                                             ),
                                       _post.category != null
                                           ? Row(
-                                              children: [
+                                              children: <Widget>[
                                                 SvgPicture.asset(
                                                     'assets/svgs/category.svg'),
                                                 const SizedBox(
@@ -557,7 +557,7 @@ class _ServiceTileState extends State<ServiceTile> {
                                                 ),
                                               ],
                                             )
-                                          : SizedBox(),
+                                          : const SizedBox(),
                                     ],
                                   ),
                                 ),

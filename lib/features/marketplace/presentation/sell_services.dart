@@ -2,7 +2,6 @@ import 'package:business_bosses_v2/features/home/widgets/sellingpopup.dart';
 import 'package:business_bosses_v2/features/marketplace/widgets/currency.dart';
 import 'package:business_bosses_v2/services/api_service.dart';
 import 'package:country_list_pick/country_list_pick.dart';
-import 'package:country_list_pick/support/code_country.dart';
 import 'package:detectable_text_field/detector/sample_regular_expressions.dart';
 import 'package:detectable_text_field/widgets/detectable_text_field.dart';
 import 'package:flutter/gestures.dart';
@@ -73,18 +72,18 @@ class _CreateServiceScreenState extends State<CreateServiceScreen> {
   final TextEditingController _currencyController = TextEditingController();
   final TextEditingController _discountController = TextEditingController();
 
-  // Future<String?>? getCountryValue() async {
-  //   SharedPreferences prefs = await SharedPreferences.getInstance();
-  //   setState(() {
-  //     _selectedLocation = prefs.getString('country') ?? _market!.location;
-  //   });
-  //   return _selectedLocation;
-  // }
+  Future<String?>? getCountryValue() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    setState(() {
+      _selectedLocation = prefs.getString('country') ?? _market!.location;
+    });
+    return _selectedLocation;
+  }
 
   @override
   void initState() {
     // TODO: implement initState
-    // getCountryValue();
+    getCountryValue();
     super.initState();
     _isUpdating = widget.isUpd;
     if (widget.isUpd) {
@@ -102,7 +101,9 @@ class _CreateServiceScreenState extends State<CreateServiceScreen> {
 
   @override
   Widget build(BuildContext context) {
-    _currencyController.text = 'USD';
+    _currencyController.text = _selectedLocation != null
+        ? '${currencyValues[_selectedLocation]}'
+        : 'USD';
     return GetBuilder<CreateMarketController>(
         builder: (CreateMarketController controller) {
       return GestureDetector(
@@ -191,7 +192,7 @@ class _CreateServiceScreenState extends State<CreateServiceScreen> {
                           ),
                         ),
                       ),
-                      SizedBox(
+                      const SizedBox(
                         width: 10,
                       ),
                       Expanded(
@@ -356,14 +357,14 @@ class _CreateServiceScreenState extends State<CreateServiceScreen> {
                         _selectedLocation = code!.name;
                       });
 
-                      // try {
-                      //   SharedPreferences marketplaceCountry =
-                      //       await SharedPreferences.getInstance();
-                      //   await marketplaceCountry.setString(
-                      //       'country', code!.name!);
-                      //   await marketplaceCountry.setString(
-                      //       'currency', code.code!);
-                      // } catch (e) {}
+                      try {
+                        SharedPreferences marketplaceCountry =
+                            await SharedPreferences.getInstance();
+                        await marketplaceCountry.setString(
+                            'country', code!.name!);
+                        await marketplaceCountry.setString(
+                            'currency', code.code!);
+                      } catch (e) {}
                     },
                     useSafeArea: false,
                   ),
@@ -640,25 +641,25 @@ class _CreateServiceScreenState extends State<CreateServiceScreen> {
     });
   }
 
-  String? removeAfterHyphen(String? input) {
-    // Find the index of the hyphen
-    int hyphenIndex = input!.indexOf('-');
+  // String? removeAfterHyphen(String? input) {
+  //   // Find the index of the hyphen
+  //   int hyphenIndex = input!.indexOf('-');
 
-    // Check if the hyphen exists in the string
-    if (hyphenIndex != -1) {
-      // Remove everything after the hyphen (including the hyphen itself)
-      return input.substring(0, hyphenIndex).trim();
-    } else {
-      // If no hyphen is found, return the original string
+  //   // Check if the hyphen exists in the string
+  //   if (hyphenIndex != -1) {
+  //     // Remove everything after the hyphen (including the hyphen itself)
+  //     return input.substring(0, hyphenIndex).trim();
+  //   } else {
+  //     // If no hyphen is found, return the original string
 
-      return input;
-    }
-  }
+  //     return input;
+  //   }
+  // }
 
   Future<void> _onChangeForum() async {
     if (widget.isUpd == false) {
       await createMarketController.createForum(<String, dynamic>{
-        'category': removeAfterHyphen(_selectedCategory),
+        'category': _selectedCategory,
         'location': _selectedLocation,
         'description': description,
         'title': title,
@@ -670,7 +671,7 @@ class _CreateServiceScreenState extends State<CreateServiceScreen> {
     } else {
       await _marketController.updatePost(<String, dynamic>{
         'marketId': _market?.marketId,
-        'category': removeAfterHyphen(_selectedCategory),
+        'category': _selectedCategory,
         'location': _selectedLocation,
         'description': descriptionController.text,
         'title': _productnameController.text,
@@ -690,7 +691,7 @@ class _CreateServiceScreenState extends State<CreateServiceScreen> {
       await ApiService.put(
           path: 'markets/${_market?.marketId}',
           body: <String, dynamic>{
-            'category': removeAfterHyphen(_selectedCategory),
+            'category': _selectedCategory,
             'location': _selectedLocation,
             'title': _productnameController.text,
             'description': descriptionController.text,

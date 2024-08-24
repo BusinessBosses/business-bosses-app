@@ -4,6 +4,7 @@ import 'package:business_bosses_v2/common/models/user_model.dart';
 import 'package:business_bosses_v2/features/donations/models/donations_model.dart';
 import 'package:business_bosses_v2/features/donations/presentation/donation_created.dart';
 import 'package:business_bosses_v2/features/forum/models/industry.dart';
+import 'package:business_bosses_v2/features/home/controller/home_controller.dart';
 import 'package:business_bosses_v2/services/api_service.dart';
 import 'package:business_bosses_v2/features/profile/controller/profile_controller.dart';
 import 'package:business_bosses_v2/utils/constants/constants.dart';
@@ -13,6 +14,7 @@ import 'package:socket_io_client/socket_io_client.dart' as IO;
 class DonationsController extends GetxController {
   late IO.Socket socket;
   final ProfileController profileController = Get.find();
+  final HomeController homeController = Get.find();
   RxList<DonationModel> donations = <DonationModel>[].obs;
   RxList<DonationModel> donationsNotApproved = <DonationModel>[].obs;
   RxList<UserModel> users = <UserModel>[].obs;
@@ -35,7 +37,6 @@ class DonationsController extends GetxController {
   RxBool hError = RxBool(false);
   RxBool tLoading = RxBool(false);
   RxBool tError = RxBool(false);
-  RxList<DonationModel> userdonations = <DonationModel>[].obs;
   late List<String> connecteds =
       profileController.myProfile.connecteds ?? <String>[];
 
@@ -121,39 +122,6 @@ class DonationsController extends GetxController {
         }
       }
       error(false);
-    } catch (e) {
-      error(true); // Set error to true if there's an error
-    } finally {
-      loading(false); // Set loading back to false after fetching data
-    }
-    update();
-  }
-
-  Future<void> fetchuserDonations(String userId) async {
-    try {
-      loading(true); // Set loading to true before fetching data
-      update();
-      ApiResponseModel response =
-          await ApiService.get(path: 'donation/user-donations/$userId');
-
-      if (response.success) {
-        userdonations.clear();
-        for (int i = 0; i < response.data['rows'].length; i++) {
-          if (response.data['rows'] != null) {
-            DonationModel userdonation =
-                DonationModel.fromMap(<String, dynamic>{
-              ...response.data['rows'][i],
-              'likes': response.data['rows'][i]['likes']
-                  .map((dynamic like) => like['userId'].toString())
-                  .toList(),
-            });
-
-            userdonations.add(userdonation);
-          }
-        }
-      } else {
-        error(true); // Set error to true if there's an error
-      }
     } catch (e) {
       error(true); // Set error to true if there's an error
     } finally {
@@ -257,16 +225,17 @@ class DonationsController extends GetxController {
         donations[donationIndex] = DonationModel.fromMap(mergedData);
       }
 
-      final int userDonationIndex = userdonations
+      final int userDonationIndex = homeController.userdonations
           .indexWhere((DonationModel donation) => donation.id == id);
 
       // Update the donation in the list with the updated data
       if (donationIndex != -1) {
         Map<String, dynamic> mergedData = <String, dynamic>{
-          ...userdonations[userDonationIndex].toMap(),
+          ...homeController.userdonations[userDonationIndex].toMap(),
           ...donation
         };
-        userdonations[userDonationIndex] = DonationModel.fromMap(mergedData);
+        homeController.userdonations[userDonationIndex] =
+            DonationModel.fromMap(mergedData);
       }
       update();
       Get.back();
@@ -519,15 +488,16 @@ class DonationsController extends GetxController {
     }
     update();
 
-    final int userDonationIndex = userdonations
+    final int userDonationIndex = homeController.userdonations
         .indexWhere((DonationModel donation) => donation.id == postId);
     if (userDonationIndex != -1) {
-      final bool checkLiked =
-          userdonations[userDonationIndex].likes!.contains(userId);
+      final bool checkLiked = homeController
+          .userdonations[userDonationIndex].likes!
+          .contains(userId);
       if (checkLiked) {
-        userdonations[userDonationIndex].likes?.remove(userId);
+        homeController.userdonations[userDonationIndex].likes?.remove(userId);
       } else {
-        userdonations[userDonationIndex].likes?.add(userId);
+        homeController.userdonations[userDonationIndex].likes?.add(userId);
       }
     }
     update();
@@ -556,10 +526,10 @@ class DonationsController extends GetxController {
       donations[donationIndex].comments?.add(comment);
     }
 
-    final int userDonationIndex = userdonations
+    final int userDonationIndex = homeController.userdonations
         .indexWhere((DonationModel donation) => donation.id == postId);
     if (donationIndex != -1) {
-      userdonations[userDonationIndex].comments?.add(comment);
+      homeController.userdonations[userDonationIndex].comments?.add(comment);
     }
 
     update();

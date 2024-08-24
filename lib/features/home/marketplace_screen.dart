@@ -469,7 +469,7 @@ class _MarketplaceScreenState extends State<MarketplaceScreen>
                                                                           market,
                                                                       controller:
                                                                           _marketController,
-                                                                      key: ValueKey(_marketController
+                                                                      key: ValueKey<String>(_marketController
                                                                           .markets[
                                                                               index]
                                                                           .marketId),
@@ -479,7 +479,7 @@ class _MarketplaceScreenState extends State<MarketplaceScreen>
                                                                           market,
                                                                       controller:
                                                                           _marketController,
-                                                                      key: ValueKey(_marketController
+                                                                      key: ValueKey<String>(_marketController
                                                                           .markets[
                                                                               index]
                                                                           .marketId),
@@ -549,20 +549,20 @@ class _MarketplaceScreenState extends State<MarketplaceScreen>
                                                                   .symmetric(
                                                                   horizontal:
                                                                       20.0),
-                                                          tabs: [
-                                                            const Tab(
+                                                          tabs: const <Widget>[
+                                                            Tab(
                                                               icon: Icon(
                                                                 Icons.dashboard,
                                                                 size: 15,
                                                               ),
                                                             ),
-                                                            const Tab(
+                                                            Tab(
                                                                 text:
                                                                     'Products'),
-                                                            const Tab(
+                                                            Tab(
                                                                 text:
                                                                     'Services'),
-                                                            const Tab(
+                                                            Tab(
                                                                 text:
                                                                     'Suppliers'),
                                                           ],

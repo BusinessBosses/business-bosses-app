@@ -1,3 +1,4 @@
+import 'package:business_bosses_v2/features/home/controller/home_controller.dart';
 import 'package:business_bosses_v2/features/profile/controller/profile_controller.dart';
 import 'package:business_bosses_v2/navigation/routes.dart';
 import 'package:flutter/material.dart';
@@ -32,12 +33,12 @@ class FilterUsers extends StatefulWidget {
 class _FilterUsersState extends State<FilterUsers> {
   final ScrollController _controller = ScrollController();
   final ProfileController _profileController = Get.find();
+  final HomeController homeController = Get.find();
   final bool loadingNext = false;
   @override
   Widget build(
     BuildContext context,
   ) {
-    final ProfileController profileController = Get.find();
     return Container(
       color: Colors.white,
       height: double.infinity,
@@ -72,7 +73,7 @@ class _FilterUsersState extends State<FilterUsers> {
                                       (String element) =>
                                           element ==
                                           (i == 0 && !widget.isSearch
-                                              ? profileController
+                                              ? homeController
                                                   .bossOfTheWeek?.uid
                                               : widget.filterItems[i].uid),
                                     )
@@ -86,10 +87,10 @@ class _FilterUsersState extends State<FilterUsers> {
                                   onTap: () async {
                                     Get.toNamed(Routes.publicProfile,
                                         arguments:
-                                            profileController.bossOfTheWeek);
+                                            homeController.bossOfTheWeek);
                                   },
                                   leading: UserAvatarWithBadge(
-                                    user: _profileController.bossOfTheWeek,
+                                    user: homeController.bossOfTheWeek,
                                     height: 48.0,
                                     width: 48.0,
                                     radius: 30.0,
@@ -110,7 +111,7 @@ class _FilterUsersState extends State<FilterUsers> {
                                               _profileController
                                                   .myProfile.connecteds!
                                                   .contains(
-                                                profileController
+                                                homeController
                                                     .bossOfTheWeek?.uid,
                                               )
                                           ? const Text(
@@ -127,33 +128,29 @@ class _FilterUsersState extends State<FilterUsers> {
                                     onPressed: () async {
                                       if (widget.onConnectionChange != null) {
                                         widget.onConnectionChange!(
-                                          profileController.bossOfTheWeek!,
+                                          homeController.bossOfTheWeek!,
                                         );
                                       }
                                     },
                                   ),
-                                  title: profileController
+                                  title: homeController
                                               .bossOfTheWeek?.isSubscribed ==
                                           true
                                       ? Row(
                                           children: <Widget>[
-                                            Text(profileController
-                                                        .bossOfTheWeek!
-                                                        .name!
-                                                        .length <=
+                                            Text(homeController.bossOfTheWeek!
+                                                        .name!.length <=
                                                     20
-                                                ? profileController
+                                                ? homeController
                                                         .bossOfTheWeek?.name ??
-                                                    profileController
-                                                        .bossOfTheWeek
+                                                    homeController.bossOfTheWeek
                                                         ?.username ??
                                                     ''
-                                                : profileController
-                                                            .bossOfTheWeek!
+                                                : homeController.bossOfTheWeek!
                                                             .name !=
                                                         null
-                                                    ? '${profileController.bossOfTheWeek!.name!.substring(0, 12)}...}'
-                                                    : '${profileController.bossOfTheWeek!.username.substring(0, 12)}...)}'),
+                                                    ? '${homeController.bossOfTheWeek!.name!.substring(0, 12)}...}'
+                                                    : '${homeController.bossOfTheWeek!.username.substring(0, 12)}...)}'),
                                             const SizedBox(width: 5),
                                             SvgPicture.asset(
                                               'assets/svgs/premiumbadge.svg',
@@ -162,22 +159,22 @@ class _FilterUsersState extends State<FilterUsers> {
                                             )
                                           ],
                                         )
-                                      : Text(profileController.bossOfTheWeek!
-                                                  .name!.length <=
+                                      : Text(homeController.bossOfTheWeek!.name!
+                                                  .length <=
                                               20
-                                          ? profileController
+                                          ? homeController
                                                   .bossOfTheWeek?.name ??
-                                              profileController
+                                              homeController
                                                   .bossOfTheWeek?.username ??
                                               ''
-                                          : profileController
+                                          : homeController
                                                       .bossOfTheWeek!.name !=
                                                   null
-                                              ? '${profileController.bossOfTheWeek!.name!.substring(0, 12)}...}'
-                                              : '${profileController.bossOfTheWeek!.username.substring(0, 12)}...)}'),
+                                              ? '${homeController.bossOfTheWeek!.name!.substring(0, 12)}...}'
+                                              : '${homeController.bossOfTheWeek!.username.substring(0, 12)}...)}'),
                                   subtitle: Text(
-                                    profileController.bossOfTheWeek?.bio ??
-                                        profileController
+                                    homeController.bossOfTheWeek?.bio ??
+                                        homeController
                                             .bossOfTheWeek?.category ??
                                         '',
                                     maxLines: 1,

@@ -1,15 +1,11 @@
 import 'package:business_bosses_v2/common/widgets/network_image_with_placeholder.dart';
 import 'package:business_bosses_v2/features/live_event/models/events_model.dart';
-import 'package:business_bosses_v2/features/live_event/widgets/attendeesitem.dart';
-import 'package:business_bosses_v2/features/posts/widgets/images_viewer_screen.dart';
 import 'package:business_bosses_v2/features/profile/controller/profile_controller.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:url_launcher/url_launcher.dart';
 
-import '../../../utils/size_config.dart';
 import '../../../utils/theme/theme.dart';
 
 /// Boss Up Challenge Pop Up
@@ -83,7 +79,7 @@ class EventPopUp extends StatelessWidget {
               height: 20,
             ),
             Column(
-              children: [
+              children: <Widget>[
                 const Text('Location Details'),
                 const SizedBox(
                   height: 5,
@@ -101,7 +97,7 @@ class EventPopUp extends StatelessWidget {
                 ),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
+                  children: <Widget>[
                     OutlinedButton(
                         onPressed: () {
                           Get.back();
@@ -124,8 +120,8 @@ class EventPopUp extends StatelessWidget {
   }
 
   void _launchMapsUrl(String address) async {
-    final query = Uri.encodeComponent(address);
-    final url = 'https://www.google.com/maps/search/?api=1&query=$query';
+    final String query = Uri.encodeComponent(address);
+    final String url = 'https://www.google.com/maps/search/?api=1&query=$query';
 
     if (await canLaunch(url)) {
       await launch(url);

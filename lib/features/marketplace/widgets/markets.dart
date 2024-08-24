@@ -336,7 +336,7 @@ class _MarketsPageState extends State<MarketsPage> {
                                         ],
                                       ),
                                       const Spacer(),
-                                      Align(
+                                      const Align(
                                           alignment: Alignment.centerRight,
                                           child: Row(
                                             crossAxisAlignment:

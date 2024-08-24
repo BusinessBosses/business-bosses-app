@@ -1,3 +1,4 @@
+import 'package:business_bosses_v2/common/widgets/network_image_with_placeholder.dart';
 import 'package:business_bosses_v2/features/marketplace/presentation/boost_market_screen.dart';
 import 'package:business_bosses_v2/features/marketplace/presentation/sell_screen.dart';
 import 'package:business_bosses_v2/features/marketplace/presentation/seller_reviews.dart';
@@ -33,13 +34,15 @@ class MarketTile extends StatefulWidget {
   final MarketModel post;
   final dynamic controller;
   final Function(int)? onPageChange;
+  final bool? ishome;
 
   ///
   const MarketTile(
       {Key? key,
       required this.post,
       required this.controller,
-      this.onPageChange})
+      this.onPageChange,
+      this.ishome})
       : super(key: key);
 
   @override
@@ -155,6 +158,138 @@ class _MarketTileState extends State<MarketTile> {
           ),
         )
       ];
+
+      if (widget.ishome == true) {
+        return Padding(
+          padding: const EdgeInsets.only(left: 15.0),
+          child: Container(
+            padding: EdgeInsets.all(10),
+            width: MediaQuery.of(context).size.width / 1.5,
+            decoration: BoxDecoration(
+              border: Border.all(width: 0.5, color: Colors.black12),
+              color: Colors.white,
+              borderRadius: BorderRadius.circular(15),
+            ),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Padding(
+                  padding: const EdgeInsets.only(left: 0, right: 0),
+                  child: NetworkImageWithPlaceHolder(
+                    borderColor: Colors.black12,
+                    imageUrl: _post.images?[0],
+                    width: double.infinity,
+                    height: 200.0,
+                    fit: BoxFit.cover,
+                    placeHolder: Icons.photo,
+                    iconSize: 50.0,
+                  ),
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        if (_post.title != null)
+                          Text(
+                            _post.title.toString(),
+                            style: const TextStyle(
+                              fontWeight: FontWeight.w800,
+                            ),
+                          ),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          children: <Widget>[
+                            Text(
+                              _post.price.toString(),
+                              style: const TextStyle(
+                                  fontWeight: FontWeight.w800,
+                                  color: Colors.black54),
+                            ),
+                            const SizedBox(
+                              width: 8,
+                            ),
+                            _post.discount.toString() == '0' ||
+                                    _post.discount == null ||
+                                    _post.discount == ''
+                                ? Container()
+                                : Container(
+                                    decoration: BoxDecoration(
+                                        borderRadius: BorderRadius.circular(5),
+                                        color:
+                                            Colors.greenAccent.withAlpha(80)),
+                                    child: Padding(
+                                      padding: const EdgeInsets.symmetric(
+                                          horizontal: 5.0, vertical: 2),
+                                      child: Text(
+                                        '${_post.discount}% off',
+                                        style: const TextStyle(
+                                          color: Colors.green,
+                                          fontWeight: FontWeight.w800,
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                          ],
+                        ),
+                        Row(
+                          children: <Widget>[
+                            const Icon(
+                              Icons.star,
+                              color: Color.fromRGBO(255, 202, 40, 1),
+                              size: 16,
+                            ),
+                            Text(
+                              _post.user!.averageRating!.toStringAsFixed(1),
+                              style: const TextStyle(
+                                fontWeight: FontWeight.bold,
+                                fontSize: 13,
+                              ),
+                            ),
+                            const SizedBox(
+                              width: 5,
+                            ),
+                            GestureDetector(
+                              onTap: () {
+                                Get.to(() =>
+                                    SellerReviewScreen(user: _post.user!));
+                              },
+                              child: const Text(
+                                '(Seller reviews)',
+                                style: TextStyle(
+                                  fontSize: 13,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ],
+                    ),
+                    ElevatedButton(
+                        onPressed: () {
+                          Get.to(
+                            () => ChatRoomScreen(
+                              frommarketplace: true,
+                              market: _post,
+                            ),
+                            arguments: _post.user,
+                          );
+                        },
+                        child: Text(
+                          'Buy',
+                          style: TextStyle(
+                              fontSize: 14, fontWeight: FontWeight.w500),
+                        ))
+                  ],
+                )
+              ],
+            ),
+          ),
+        );
+      }
 
       return _post.user != null
           ? Column(

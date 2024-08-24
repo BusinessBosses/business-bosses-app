@@ -601,7 +601,6 @@ class MarketController extends GetxController {
 
   @override
   void onInit() {
-    // TODO: implement onInit
     socket = _homeController.socket;
     isLoading = false;
     if (_homeController.markets.isEmpty) {
@@ -617,7 +616,6 @@ class MarketController extends GetxController {
 
   @override
   void dispose() {
-    // TODO: implement dispose
     socket.disconnect();
     socket.dispose();
     super.dispose();

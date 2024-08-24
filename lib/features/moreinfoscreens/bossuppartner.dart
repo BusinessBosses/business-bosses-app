@@ -76,17 +76,17 @@ class _BossuppartnerState extends State<Bossuppartner> {
         children: <Widget>[
           Padding(
             padding:
-                const EdgeInsets.only(left: 20, right: 20, top: 20, bottom: 20),
+                const EdgeInsets.only(left: 15, right: 15, top: 20, bottom: 20),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.end,
               children: <Widget>[
                 const Expanded(
                   child: Text(
-                    'Partner with Business Bosses, list your deals to win more customers',
+                    'Partner with us, list deals and get customers.',
                     maxLines: 3,
                     style: TextStyle(
-                      fontSize: 16,
-                      fontWeight: FontWeight.bold,
+                      fontSize: 15,
+                      fontWeight: FontWeight.w700,
                     ),
                   ),
                 ),
@@ -216,7 +216,7 @@ class BossuppartnerItem extends StatelessWidget {
                         companyName,
                         softWrap: true,
                         style: const TextStyle(
-                          fontSize: 18,
+                          fontSize: 15,
                           color: textColor,
                           fontWeight: FontWeight.w700,
                         ),
@@ -230,7 +230,7 @@ class BossuppartnerItem extends StatelessWidget {
                           maxLines: 4,
                           softWrap: true,
                           style: const TextStyle(
-                            fontSize: 15,
+                            fontSize: 14,
                             fontWeight: FontWeight.w100,
                           ),
                         ),

@@ -1,4 +1,3 @@
-import 'package:business_bosses_v2/features/donations/controller/donations_controller.dart';
 import 'package:business_bosses_v2/features/forum/widgets/forum_item.dart';
 import 'package:business_bosses_v2/features/home/controller/home_controller.dart';
 import 'package:business_bosses_v2/features/donations/widgets/donation_item.dart';
@@ -41,16 +40,12 @@ class _MyProfileScreenState extends State<MyProfileScreen> {
   final MarketController marketController = Get.find();
   final HomeController homeController = Get.find();
   final LiveController liveEventController = Get.put(LiveController());
-  final DonationsController donationsController = Get.find();
 
   bool isScrolled = true;
 
   @override
   void initState() {
     super.initState();
-    donationsController.fetchuserDonations(profileController.myProfile.uid);
-    profileController.fetchuserResources(profileController.myProfile.uid);
-    profileController.fetchuserCourses(profileController.myProfile.uid);
   }
 
   @override
@@ -143,12 +138,11 @@ class _MyProfileScreenState extends State<MyProfileScreen> {
                                         profileController.myProfile.uid)
                                     .isNotEmpty)
                                   const Tab(text: 'Shop'),
-                                if (profileController.userresources.isNotEmpty)
+                                if (homeController.userresources.isNotEmpty)
                                   const Tab(text: 'Resources'),
-                                if (donationsController
-                                    .userdonations.isNotEmpty)
+                                if (homeController.userdonations.isNotEmpty)
                                   const Tab(text: 'Donations'),
-                                if (profileController.usercourses.isNotEmpty)
+                                if (homeController.usercourses.isNotEmpty)
                                   const Tab(text: 'Courses'),
                               ],
                             ),
@@ -330,103 +324,35 @@ class _MyProfileScreenState extends State<MyProfileScreen> {
                                     })),
 
                               ///Forum or Resources
-                              if (profileController.userresources.isNotEmpty)
+                              if (homeController.userresources.isNotEmpty)
                                 SizedBox(
                                     height: double.infinity,
                                     width: double.infinity,
                                     child: Obx(() {
-                                      return profileController.dLoading.value
-                                          ? const Center(
-                                              child:
-                                                  CircularProgressIndicator(),
-                                            )
-                                          : profileController.dError.value
-                                              ? Column(
-                                                  mainAxisAlignment:
-                                                      MainAxisAlignment.center,
-                                                  crossAxisAlignment:
-                                                      CrossAxisAlignment.center,
-                                                  children: <Widget>[
-                                                    SvgPicture.asset(
-                                                      'assets/svgs/courses.svg',
-                                                      height: 40,
-                                                      color: Colors.grey,
-                                                    ),
-                                                    const SizedBox(
-                                                      height: 10,
-                                                    ),
-                                                    const Text(
-                                                      'Error Loading Resourses!',
-                                                      style: TextStyle(
-                                                        fontWeight:
-                                                            FontWeight.w700,
-                                                        fontSize: 15,
-                                                      ),
-                                                    ),
-                                                    const SizedBox(
-                                                      height: 50,
-                                                    ),
-                                                  ],
-                                                )
-                                              : profileController
-                                                      .userresources.isEmpty
-                                                  ? Column(
-                                                      mainAxisAlignment:
-                                                          MainAxisAlignment
-                                                              .center,
-                                                      crossAxisAlignment:
-                                                          CrossAxisAlignment
-                                                              .center,
-                                                      children: <Widget>[
-                                                        SvgPicture.asset(
-                                                          'assets/svgs/courses.svg',
-                                                          height: 40,
-                                                          color: Colors.grey,
-                                                        ),
-                                                        const SizedBox(
-                                                          height: 10,
-                                                        ),
-                                                        const Text(
-                                                          'No Resources Found',
-                                                          style: TextStyle(
-                                                            fontWeight:
-                                                                FontWeight.w700,
-                                                            fontSize: 15,
-                                                          ),
-                                                        ),
-                                                        const SizedBox(
-                                                          height: 50,
-                                                        ),
-                                                      ],
-                                                    )
-                                                  : ListView.builder(
-                                                      physics:
-                                                          const NeverScrollableScrollPhysics(),
-                                                      shrinkWrap: true,
-                                                      itemCount:
-                                                          profileController
-                                                              .userresources
-                                                              .length,
-                                                      itemBuilder:
-                                                          (BuildContext context,
-                                                              int i) {
-                                                        return ForumItem(
-                                                          forum: profileController
-                                                              .userresources[i],
-                                                          controller:
-                                                              homeController,
-                                                        );
-                                                      },
-                                                    );
+                                      return ListView.builder(
+                                        physics:
+                                            const NeverScrollableScrollPhysics(),
+                                        shrinkWrap: true,
+                                        itemCount:
+                                            homeController.userresources.length,
+                                        itemBuilder:
+                                            (BuildContext context, int i) {
+                                          return ForumItem(
+                                            forum:
+                                                homeController.userresources[i],
+                                            controller: homeController,
+                                          );
+                                        },
+                                      );
                                     })),
 
                               ///Donations
-                              if (donationsController.userdonations.isNotEmpty)
+                              if (homeController.userdonations.isNotEmpty)
                                 SizedBox(
                                     height: double.infinity,
                                     width: double.infinity,
                                     child: Obx(() {
-                                      return donationsController
+                                      return homeController
                                               .userdonations.isEmpty
                                           ? Column(
                                               mainAxisAlignment:
@@ -458,27 +384,26 @@ class _MyProfileScreenState extends State<MyProfileScreen> {
                                               physics:
                                                   const NeverScrollableScrollPhysics(),
                                               shrinkWrap: true,
-                                              itemCount: donationsController
+                                              itemCount: homeController
                                                   .userdonations.length,
                                               itemBuilder:
                                                   (BuildContext context,
                                                       int i) {
-                                                bool isLastItem =
-                                                    donationsController
+                                                bool isLastItem = homeController
+                                                            .userdonations
+                                                            .length !=
+                                                        1
+                                                    ? i ==
+                                                        homeController
                                                                 .userdonations
-                                                                .length !=
+                                                                .length -
                                                             1
-                                                        ? i ==
-                                                            donationsController
-                                                                    .userdonations
-                                                                    .length -
-                                                                1
-                                                        : i ==
-                                                            donationsController
-                                                                .userdonations
-                                                                .length;
+                                                    : i ==
+                                                        homeController
+                                                            .userdonations
+                                                            .length;
                                                 return DonationItem(
-                                                  donation: donationsController
+                                                  donation: homeController
                                                       .userdonations[i],
                                                   isLastItem: isLastItem,
                                                 );
@@ -487,16 +412,16 @@ class _MyProfileScreenState extends State<MyProfileScreen> {
                                     })),
 
                               ///Courses
-                              if (profileController.usercourses.isNotEmpty)
+                              if (homeController.usercourses.isNotEmpty)
                                 SizedBox(
                                   height: double.infinity,
                                   width: double.infinity,
                                   child: Obx(() {
-                                    return profileController.cLoading.value
+                                    return homeController.loading.value
                                         ? const Center(
                                             child: CircularProgressIndicator(),
                                           )
-                                        : profileController.cError.value
+                                        : homeController.cError.value
                                             ? Column(
                                                 mainAxisAlignment:
                                                     MainAxisAlignment.center,
@@ -524,8 +449,7 @@ class _MyProfileScreenState extends State<MyProfileScreen> {
                                                   ),
                                                 ],
                                               )
-                                            : profileController
-                                                    .usercourses.isEmpty
+                                            : homeController.usercourses.isEmpty
                                                 ? Column(
                                                     mainAxisAlignment:
                                                         MainAxisAlignment
@@ -559,15 +483,14 @@ class _MyProfileScreenState extends State<MyProfileScreen> {
                                                     physics:
                                                         const NeverScrollableScrollPhysics(),
                                                     shrinkWrap: true,
-                                                    itemCount: profileController
+                                                    itemCount: homeController
                                                         .usercourses.length,
                                                     itemBuilder:
                                                         (BuildContext context,
                                                             int i) {
                                                       return CourseItem(
-                                                        course:
-                                                            profileController
-                                                                .usercourses[i],
+                                                        course: homeController
+                                                            .usercourses[i],
                                                       );
                                                     },
                                                   );
@@ -598,9 +521,9 @@ class _MyProfileScreenState extends State<MyProfileScreen> {
         .where((MarketModel market) =>
             market.userId == profileController.myProfile.uid)
         .isNotEmpty) tabLength++;
-    if (profileController.userresources.isNotEmpty) tabLength++;
-    if (donationsController.userdonations.isNotEmpty) tabLength++;
-    if (profileController.usercourses.isNotEmpty) tabLength++;
+    if (homeController.userresources.isNotEmpty) tabLength++;
+    if (homeController.userdonations.isNotEmpty) tabLength++;
+    if (homeController.usercourses.isNotEmpty) tabLength++;
 
     return tabLength;
   }

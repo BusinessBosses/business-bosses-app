@@ -51,7 +51,7 @@ class _FilterUsersState extends State<ExpandedSuppliersPage> {
         padding: const EdgeInsets.all(15.0),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
+          children: <Widget>[
             _buildSupplierImage(),
            
             Text(
@@ -63,7 +63,7 @@ class _FilterUsersState extends State<ExpandedSuppliersPage> {
               ),
             ),
             if (widget.supplier.isVerified)
-              SizedBox(
+              const SizedBox(
                 height: 5,
               ),
             if (widget.supplier.isVerified)
@@ -82,7 +82,7 @@ class _FilterUsersState extends State<ExpandedSuppliersPage> {
             if (!widget.supplier.isVerified) _buildVerificationWarning(),
             if (!widget.supplier.isVerified)
               Column(
-                children: [
+                children: <Widget>[
                   const SizedBox(
                     height: 20,
                   ),
@@ -92,7 +92,7 @@ class _FilterUsersState extends State<ExpandedSuppliersPage> {
                     },
                     child: Wrap(
                       crossAxisAlignment: WrapCrossAlignment.center,
-                      children: [
+                      children: <Widget>[
                         const Text('Own this business?'),
                         const SizedBox(width: 5),
                         Container(
@@ -103,7 +103,7 @@ class _FilterUsersState extends State<ExpandedSuppliersPage> {
                               horizontal: 10, vertical: 5),
                           child: Wrap(
                               crossAxisAlignment: WrapCrossAlignment.center,
-                              children: [
+                              children: <Widget>[
                                 Container(
                                   decoration: const BoxDecoration(
                                       color: Colors.blue,
@@ -111,7 +111,7 @@ class _FilterUsersState extends State<ExpandedSuppliersPage> {
                                   padding: const EdgeInsets.all(4),
                                   child: SvgPicture.asset(
                                     'assets/svgs/upicon.svg',
-                                    color: Color.fromARGB(255, 255, 255, 255),
+                                    color: const Color.fromARGB(255, 255, 255, 255),
                                     height: 8,
                                   ),
                                 ),
@@ -140,7 +140,7 @@ class _FilterUsersState extends State<ExpandedSuppliersPage> {
 
   Widget _buildSupplierImage() {
     return Column(
-      children: [
+      children: <Widget>[
         widget.supplier.images!.isEmpty
             ? CircleAvatar(
                 backgroundColor: Colors.grey.withOpacity(0.5),
@@ -169,7 +169,7 @@ class _FilterUsersState extends State<ExpandedSuppliersPage> {
       ),
       padding: const EdgeInsets.all(10),
       child: Row(
-        children: [
+        children: <Widget>[
           SvgPicture.asset(
             'assets/svgs/report.svg',
             color: Colors.red,
@@ -228,7 +228,7 @@ class _FilterUsersState extends State<ExpandedSuppliersPage> {
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
+        children: <Widget>[
           const Text(
             'Contact Information',
             style: TextStyle(
@@ -261,9 +261,9 @@ class _FilterUsersState extends State<ExpandedSuppliersPage> {
       String iconPath, String label, String? value, String url, double height) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
+      children: <Widget>[
         Row(
-          children: [
+          children: <Widget>[
             SvgPicture.asset(
               iconPath,
               height: height,
@@ -306,7 +306,7 @@ class _FilterUsersState extends State<ExpandedSuppliersPage> {
       padding: const EdgeInsets.all(15),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
+        children: <Widget>[
           const Text(
             'Description',
             style: TextStyle(
@@ -352,12 +352,12 @@ class _FilterUsersState extends State<ExpandedSuppliersPage> {
   }
 
   Widget _buildImageGallery() {
-    return Container(
+    return SizedBox(
       height: 200,
       child: ListView.builder(
         scrollDirection: Axis.horizontal,
         itemCount: widget.supplier.images!.length,
-        itemBuilder: (context, i) {
+        itemBuilder: (BuildContext context, int i) {
           return GestureDetector(
             onTap: () => Get.to(
               () => ImagesViewerScreen(

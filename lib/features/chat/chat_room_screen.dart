@@ -98,11 +98,11 @@ class _ChatRoomScreenState extends State<ChatRoomScreen> {
           return Scaffold(
             backgroundColor: backgroundcolorinterface,
             appBar: AppBar(
-              actions: [
+              actions: <Widget>[
                 Container(
                   decoration:
                       BoxDecoration(borderRadius: BorderRadius.circular(3000)),
-                  padding: EdgeInsets.all(14),
+                  padding: const EdgeInsets.all(14),
                   child: MyPopupMenuButton(
                     popupItems: _popupItemForumMore,
                     icon: const Icon(Icons.more_vert),
@@ -137,7 +137,7 @@ class _ChatRoomScreenState extends State<ChatRoomScreen> {
                     onTap: () {
                       Get.toNamed(Routes.publicProfile, arguments: args);
                     },
-                    trailing: SizedBox(
+                    trailing: const SizedBox(
                       width: 70,
                       child: Row(
                         children: <Widget>[

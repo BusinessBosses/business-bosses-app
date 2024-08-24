@@ -92,7 +92,7 @@ class _CourseItemState extends State<CourseItem> {
         setState(() {
           widget.course.setViews();
         });
-        profileController.updateCourseViews(
+        homeController.updateCourseViews(
             widget.course.id, widget.course.views + 1);
         Get.to(() => ExpandedCourseScreen(course: widget.course));
       },
@@ -145,7 +145,7 @@ class _CourseItemState extends State<CourseItem> {
                               setState(() {
                                 widget.course.setViews();
                               });
-                              profileController.updateCourseViews(
+                              homeController.updateCourseViews(
                                   widget.course.id, widget.course.views + 1);
                               Get.to(() =>
                                   ExpandedCourseScreen(course: widget.course));
@@ -297,7 +297,7 @@ class _CourseItemState extends State<CourseItem> {
                                   setState(() {
                                     widget.course.setViews();
                                   });
-                                  profileController.updateCourseViews(
+                                  homeController.updateCourseViews(
                                       widget.course.id,
                                       widget.course.views + 1);
                                   Get.to(() => ExpandedCourseScreen(
@@ -553,7 +553,7 @@ class _CourseItemState extends State<CourseItem> {
                                     ),
                                     TextButton(
                                       onPressed: () {
-                                        profileController
+                                        homeController
                                             .onDeleteCourse(widget.course.id);
                                         Get.back();
                                       },

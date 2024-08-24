@@ -17,6 +17,7 @@ class AttendeesItem extends StatefulWidget {
   }) : super(key: key);
 
   @override
+  // ignore: library_private_types_in_public_api
   _AttendeesItemState createState() => _AttendeesItemState();
 }
 
@@ -55,7 +56,7 @@ class _AttendeesItemState extends State<AttendeesItem> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: <Widget>[
                     Expanded(
-                    child: Obx(() => liveController.usersLoading.value
+                      child: Obx(() => liveController.usersLoading.value
                           ? const Center(
                               child: CircularProgressIndicator(),
                             )

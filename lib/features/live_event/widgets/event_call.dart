@@ -5,9 +5,11 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 class EventCall extends StatefulWidget {
-  const EventCall({super.key, this.ongoing = false, this.full = false});
+  const EventCall(
+      {super.key, this.ongoing = false, this.full = false, this.ishome});
   final bool ongoing;
   final bool full;
+  final bool? ishome;
 
   @override
   State<EventCall> createState() => _EventCallState();
@@ -18,6 +20,35 @@ class _EventCallState extends State<EventCall> {
 
   @override
   Widget build(BuildContext context) {
+    if (widget.ishome == true) {
+      return liveEventController.events.isNotEmpty
+          ? Container(
+              // height: 200,
+              child: ListView.builder(
+                physics: const NeverScrollableScrollPhysics(),
+                shrinkWrap: true,
+                itemCount: 1,
+                itemBuilder: (BuildContext context, int index) {
+                  EventModel event = liveEventController.events[index];
+                  return Column(
+                    children: [
+                      EventItem(
+                        ishomeview: true,
+                        event: event,
+                        ongoing: liveEventController.ongoing.contains(event)
+                            ? true
+                            : false,
+                      ),
+                    ],
+                  );
+                },
+              ),
+            )
+          : const Center(
+              child: Text('No Event Available!'),
+            );
+    }
+
     if (widget.full) {
       return liveEventController.events.isNotEmpty
           ? Obx(
@@ -58,6 +89,9 @@ class _EventCallState extends State<EventCall> {
           : liveEventController.ongoing.isNotEmpty
               ? Obx(
                   () => ListView.builder(
+                    physics: widget.ishome == true
+                        ? const NeverScrollableScrollPhysics()
+                        : null,
                     itemCount: liveEventController.ongoing.length,
                     itemBuilder: (BuildContext context, int index) {
                       EventModel event = liveEventController.ongoing[index];

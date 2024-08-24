@@ -247,14 +247,14 @@ class _ExplorebusinessbossesScreenState
                       ),
                       Image.asset('assets/images/explore7.png'),
                       Text(
-                        'Live Event',
+                        'Events',
                         style: bodyText1.copyWith(
                           fontWeight: FontWeight.bold,
                           fontSize: 14.0,
                         ),
                       ),
                       Text(
-                        '• Create live events with description, date, and time.\n• Participants can attend, share and save live events.',
+                        '• Create events with description, date, and time.\n• Participants can attend, share and save live events.',
                         style: bodyText1.copyWith(
                           fontWeight: FontWeight.normal,
                           fontSize: 14.0,

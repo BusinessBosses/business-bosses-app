@@ -100,6 +100,7 @@ dependencies:
   pdfx: ^2.6.0
   internet_file: ^1.2.0
   carousel_slider: ^4.2.1
+  fl_chart: ^0.36.0
 
 
 
