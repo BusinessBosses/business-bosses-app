@@ -97,7 +97,6 @@ class _SetupshopState extends State<Setupshop>
   }
 
   void _nextPage() {
-    Get.to(() => const Bottomnavscreen());
     if (_validateForm()) {
       if (_tabController.index < _tabs.length - 1) {
         setState(() {
@@ -475,7 +474,7 @@ class _SetupshopState extends State<Setupshop>
                               onPressed: _nextPage,
                               text: _tabController.index == _tabs.length - 1
                                   ? 'Create Shop'
-                                  : 'Continue',
+                                  : 'Next',
                             ),
                           ],
                         ),
