@@ -16,18 +16,18 @@ class StatsWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-      children: [
+      children: <Widget>[
         Column(
           crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
+          children: <Widget>[
             Text(
               '$completedTasks/$totalTasks',
-              style: TextStyle(
+              style: const TextStyle(
                 fontSize: 30,
                 fontWeight: FontWeight.bold,
               ),
             ),
-            Text(
+            const Text(
               'Tasks completed',
               style: TextStyle(
                 color: Colors.grey,
@@ -37,15 +37,15 @@ class StatsWidget extends StatelessWidget {
         ),
         Column(
           crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
+          children: <Widget>[
             Text(
               '${completionRate.toStringAsFixed(0)}%',
-              style: TextStyle(
+              style: const TextStyle(
                 fontSize: 30,
                 fontWeight: FontWeight.bold,
               ),
             ),
-            Text(
+            const Text(
               'Completion rate',
               style: TextStyle(
                 color: Colors.grey,

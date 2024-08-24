@@ -1,3 +1,4 @@
+import 'package:business_bosses_v2/bbpro/models/project_model.dart';
 import 'package:business_bosses_v2/bbpro/models/task_model.dart';
 import 'package:business_bosses_v2/common/models/api_response_model.dart';
 import 'package:business_bosses_v2/features/profile/controller/profile_controller.dart';
@@ -7,13 +8,15 @@ import 'package:get/get.dart';
 class ProjectController extends GetxController {
   final ProfileController profileController = Get.find();
   RxList<Task> tasks = RxList<Task>(<Task>[]);
+  RxList<Project> projects = RxList<Project>(<Project>[]);
 
-  Future<bool> initProjects() async {
-    ApiResponseModel response = await ApiService.get(path: 'shops');
+  Future<void> initProjects(String userId) async {
+    projects.clear();
+    ApiResponseModel response = await ApiService.get(path: 'projects/all');
     if (response.success) {
-      return true;
-    } else {
-      return false;
+      for (int i = 0; i < response.data['rows'].length; i++) {
+        projects.add(Project.fromMap(response.data['rows'][i]));
+      }
     }
   }
 
@@ -45,11 +48,24 @@ class ProjectController extends GetxController {
     } catch (e) {
       // Handle any errors that occur during the update
     }
+    update();
+  }
+
+  Future<void> updateProject(
+      String projectId, Map<String, dynamic> data) async {
+    try {
+      // Call your API to update the task's status in the backend
+      await ApiService.put(path: 'projects/$projectId', body: data);
+      // You can also handle local state or cache updates if necessary
+    } catch (e) {
+      // Handle any errors that occur during the update
+    }
+    update();
   }
 
   @override
   void onInit() {
-    initTasks(profileController.myProfile.uid);
+    initProjects(profileController.myProfile.uid);
     super.onInit();
   }
 }

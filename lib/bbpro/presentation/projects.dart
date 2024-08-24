@@ -1,9 +1,9 @@
 import 'dart:async';
+import 'package:business_bosses_v2/bbpro/models/project_model.dart';
 import 'package:business_bosses_v2/bbpro/widgets/customtabbar.dart';
 import 'package:business_bosses_v2/bbpro/widgets/notificationbutton.dart';
 import 'package:business_bosses_v2/bbpro/widgets/taskwidget.dart';
 import 'package:business_bosses_v2/bbpro/controllers/project_controller.dart';
-import 'package:business_bosses_v2/bbpro/models/task_model.dart';
 import 'package:business_bosses_v2/bbpro/presentation/addproject.dart';
 import 'package:business_bosses_v2/utils/theme/theme.dart';
 import 'package:flutter/material.dart';
@@ -24,32 +24,33 @@ class Projects extends StatefulWidget {
 class _ProjectsState extends State<Projects>
     with SingleTickerProviderStateMixin {
   final ProjectController projectController = Get.put(ProjectController());
-  final Map<TaskStatus, List<Task>> _tasks = <TaskStatus, List<Task>>{};
+  final Map<ProjectStatus, List<Project>> _projects =
+      <ProjectStatus, List<Project>>{};
   final ScrollController _mainListScrollController = ScrollController();
   Timer? _timer;
   bool? _lastMoveRight;
   late TabController _tabController;
-  final List<Task> _alltasks = <Task>[];
+  final List<Project> _allProjects = <Project>[];
 
   @override
   void initState() {
     super.initState();
     _tabController =
-        TabController(length: TaskStatus.values.length, vsync: this);
-    for (TaskStatus status in TaskStatus.values) {
-      _tasks[status] = <Task>[];
+        TabController(length: ProjectStatus.values.length, vsync: this);
+    for (ProjectStatus status in ProjectStatus.values) {
+      _projects[status] = <Project>[];
     }
     // Initialize tasks
     projectController
-        .initTasks(projectController.profileController.myProfile.uid)
+        .initProjects(projectController.profileController.myProfile.uid)
         .then((_) {
       setState(() {
-        for (TaskStatus status in TaskStatus.values) {
-          List<Task> statusTasks = projectController.tasks
-              .where((Task task) => task.status == status)
+        for (ProjectStatus status in ProjectStatus.values) {
+          List<Project> statusTasks = projectController.projects
+              .where((Project project) => project.status == status)
               .toList();
-          _tasks[status] = statusTasks;
-          _alltasks.addAll(statusTasks); // Add tasks to alltasks
+          _projects[status] = statusTasks;
+          _allProjects.addAll(statusTasks); // Add tasks to alltasks
         }
       });
     });
@@ -59,7 +60,7 @@ class _ProjectsState extends State<Projects>
     final double offset = index * MediaQuery.of(context).size.width * 0.9;
     _mainListScrollController.animateTo(
       offset,
-      duration: Duration(milliseconds: 300),
+      duration: const Duration(milliseconds: 300),
       curve: Curves.easeInOut,
     );
     setState(() {});
@@ -79,7 +80,7 @@ class _ProjectsState extends State<Projects>
             fontWeight: FontWeight.bold,
           ),
         ),
-        actions: <Widget>[NotificationButton()],
+        actions: const <Widget>[NotificationButton()],
       ),
       body: Column(
         children: <Widget>[
@@ -92,18 +93,17 @@ class _ProjectsState extends State<Projects>
               Get.to(() => const Addproject());
             },
           ),
-          CustomTabBarWidget<TaskStatus>(
+          CustomTabBarWidget<ProjectStatus>(
             tabController: _tabController,
-            scrollToSection: (index) {
+            scrollToSection: (int index) {
               _scrollToSection(index);
             },
             proprimaryColor: proprimaryColor,
             backgroundColor: backgroundColor,
-            listofitems: TaskStatus.values.toList(),
-            itemToString: (status) =>
-                status.displayTitle.toString().split('.').last +
-                ' (${status == TaskStatus.allprojects ? _alltasks.length : _tasks[status]!.length.toString()})',
-            filterOptions: [
+            listofitems: ProjectStatus.values.toList(),
+            itemToString: (ProjectStatus status) =>
+                '${status.displayTitle.toString().split('.').last} (${status == ProjectStatus.allprojects ? _projects.length : _projects[status]!.length.toString()})',
+            filterOptions: const <String>[
               'Newest first',
               'Most Completed',
               'Highest Budget',
@@ -115,43 +115,41 @@ class _ProjectsState extends State<Projects>
               padding: const EdgeInsets.only(bottom: 15),
               child: Obx(
                 () {
-                  if (projectController.tasks.isEmpty) {
+                  if (projectController.projects.isEmpty) {
                     return const Center(child: CircularProgressIndicator());
                   }
                   return CustomScrollView(
                     scrollDirection: Axis.horizontal,
                     controller: _mainListScrollController,
                     slivers: <Widget>[
-                      ...TaskStatus.values.map(
-                        (TaskStatus status) => SliverToBoxAdapter(
+                      ...ProjectStatus.values.map(
+                        (ProjectStatus status) => SliverToBoxAdapter(
                           child: RowStatusCard(
-                            alltasks: _alltasks,
-                            tasks: _tasks[status] ?? <Task>[],
-                            taskStatus: status,
+                            allProjects: _allProjects,
+                            projects: _projects[status] ?? <Project>[],
+                            projectStatus: status,
                             screenSize: screenSize,
-                            taskAccepted:
-                                (Task task, TaskStatus newStatus) async {
-                              projectController.updateTask(
-                                  task.id, <String, dynamic>{
-                                'status': newStatus.toString()
-                              });
+                            taskAccepted: (Project project,
+                                ProjectStatus newStatus) async {
                               setState(() {
-                                _tasks[task.status]?.remove(task);
-                                _tasks[newStatus]?.add(
-                                  Task(
-                                    id: task.id,
-                                    userId: task.userId,
-                                    projectId: task.projectId,
-                                    name: task.name,
-                                    amount: task.amount,
-                                    startAt: task.startAt,
-                                    endAt: task.endAt,
+                                _projects[project.status]?.remove(project);
+                                _projects[newStatus]?.add(
+                                  Project(
+                                    id: project.id,
+                                    userId: project.userId,
+                                    name: project.name,
+                                    amount: project.amount,
                                     status: newStatus,
-                                    createdAt: task.createdAt,
-                                    clientId: task.clientId,
-                                    project: task.project,
+                                    createdAt: project.createdAt,
+                                    description: project.description,
+                                    duration: project.duration,
+                                    tasks: project.tasks,
                                   ),
                                 );
+                                projectController.updateProject(
+                                    project.id, <String, dynamic>{
+                                  'status': newStatus.toString()
+                                });
                               });
                             },
                             onDrag: (bool isRight) {
@@ -199,23 +197,23 @@ class _ProjectsState extends State<Projects>
 }
 
 class RowStatusCard extends StatelessWidget {
-  final void Function(Task task, TaskStatus newStatus) taskAccepted;
+  final void Function(Project task, ProjectStatus newStatus) taskAccepted;
   final void Function(bool isRight) onDrag;
   final void Function() cancelDrag;
-  final TaskStatus taskStatus;
-  final List<Task> tasks;
+  final ProjectStatus projectStatus;
+  final List<Project> projects;
   final Size screenSize;
-  final List<Task> alltasks;
+  final List<Project> allProjects;
 
   const RowStatusCard({
-    required this.tasks,
-    required this.taskStatus,
+    required this.projects,
+    required this.projectStatus,
     required this.screenSize,
     required this.taskAccepted,
     required this.onDrag,
     required this.cancelDrag,
     super.key,
-    required this.alltasks,
+    required this.allProjects,
   });
 
   @override
@@ -239,22 +237,23 @@ class RowStatusCard extends StatelessWidget {
                 Wrap(
                   crossAxisAlignment: WrapCrossAlignment.center,
                   children: <Widget>[
-                    taskStatus.index == 0
+                    projectStatus.index == 0
                         ? Container()
                         : CircleAvatar(
-                            backgroundColor: taskStatus.displayTitle == 'To Do'
-                                ? Colors.black
-                                : taskStatus.displayTitle == 'Pending'
-                                    ? Colors.amber
-                                    : Colors.green,
+                            backgroundColor:
+                                projectStatus.displayTitle == 'To Do'
+                                    ? Colors.black
+                                    : projectStatus.displayTitle == 'Pending'
+                                        ? Colors.amber
+                                        : Colors.green,
                             radius: 5,
                           ),
-                    if (taskStatus.index != 0)
+                    if (projectStatus.index != 0)
                       const SizedBox(
                         width: 10,
                       ),
                     Text(
-                      taskStatus.displayTitle,
+                      projectStatus.displayTitle,
                       style: const TextStyle(
                         color: Colors.black,
                         fontWeight: FontWeight.bold,
@@ -286,37 +285,38 @@ class RowStatusCard extends StatelessWidget {
               color: Colors.black12,
             ),
           ),
-          taskStatus.index == 0
+          projectStatus.index == 0
               ? Expanded(
                   child: ListView.builder(
-                    itemCount: alltasks.length,
+                    itemCount: allProjects.length,
                     shrinkWrap: true,
                     itemBuilder: (BuildContext context, int index) {
                       return Padding(
                         padding: const EdgeInsets.only(bottom: 12),
                         child: TaskWidget(
-                          task: alltasks[index],
-                          bgcolor: alltasks[index].status.backgroundColor,
+                          project: allProjects[index],
+                          bgcolor: allProjects[index].status.backgroundColor,
                         ),
                       );
                     },
                   ),
                 )
               : Expanded(
-                  child: DragTarget<Task>(
-                    builder: (BuildContext context, List<Task?> candidateData,
+                  child: DragTarget<Project>(
+                    builder: (BuildContext context,
+                        List<Project?> candidateData,
                         List<dynamic> rejectedData) {
                       return ListStatusColumnWidget(
-                        tasks: tasks,
-                        taskStatus: taskStatus,
+                        projects: projects,
+                        projectStatus: projectStatus,
                         screenSize: screenSize,
                         onDrag: onDrag,
                         cancelDrag: cancelDrag,
                       );
                     },
-                    onWillAccept: (Task? details) => true,
-                    onAcceptWithDetails: (DragTargetDetails<Task> details) {
-                      taskAccepted(details.data, taskStatus);
+                    onWillAccept: (Project? details) => true,
+                    onAcceptWithDetails: (DragTargetDetails<Project> details) {
+                      taskAccepted(details.data, projectStatus);
                     },
                   ),
                 ),
@@ -329,13 +329,13 @@ class RowStatusCard extends StatelessWidget {
 class ListStatusColumnWidget extends StatelessWidget {
   final void Function(bool isRight) onDrag;
   final void Function() cancelDrag;
-  final TaskStatus taskStatus;
-  final List<Task> tasks;
+  final ProjectStatus projectStatus;
+  final List<Project> projects;
   final Size screenSize;
 
   const ListStatusColumnWidget({
-    required this.tasks,
-    required this.taskStatus,
+    required this.projects,
+    required this.projectStatus,
     required this.screenSize,
     required this.onDrag,
     required this.cancelDrag,
@@ -344,7 +344,7 @@ class ListStatusColumnWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    if (tasks.isEmpty) {
+    if (projects.isEmpty) {
       return Center(
         child: Padding(
           padding: const EdgeInsets.all(10.0),
@@ -366,14 +366,14 @@ class ListStatusColumnWidget extends StatelessWidget {
     return ListView.builder(
       itemBuilder: (BuildContext context, int index) {
         final TaskWidget taskWidget = TaskWidget(
-          task: tasks[index],
-          bgcolor: tasks[index].status.backgroundColor,
+          project: projects[index],
+          bgcolor: projects[index].status.backgroundColor,
         );
 
         return Padding(
           padding: const EdgeInsets.only(bottom: 12),
-          child: Draggable<Task>(
-            data: tasks[index],
+          child: Draggable<Project>(
+            data: projects[index],
             dragAnchorStrategy: (Draggable<Object> draggable,
                 BuildContext context, Offset position) {
               return pointerDragAnchorStrategy(draggable, context, position);
@@ -403,7 +403,7 @@ class ListStatusColumnWidget extends StatelessWidget {
           ),
         );
       },
-      itemCount: tasks.length,
+      itemCount: projects.length,
     );
   }
 }

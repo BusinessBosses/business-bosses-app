@@ -1,17 +1,17 @@
+import 'package:business_bosses_v2/bbpro/models/project_model.dart';
 import 'package:business_bosses_v2/bbpro/widgets/optionsbutton.dart';
 import 'package:business_bosses_v2/bbpro/widgets/projectpopup.dart';
-import 'package:business_bosses_v2/bbpro/models/task_model.dart';
 import 'package:business_bosses_v2/utils/theme/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
 class TaskWidget extends StatelessWidget {
-  final Task task;
+  final Project project;
   final Color bgcolor;
   final bool? isExpanded;
 
   const TaskWidget({
-    required this.task,
+    required this.project,
     required this.bgcolor,
     super.key,
     this.isExpanded,
@@ -54,7 +54,7 @@ class TaskWidget extends StatelessWidget {
                           width: 5,
                         ),
                         Text(
-                          task.project.name,
+                          project.name,
                           style: const TextStyle(
                             fontWeight: FontWeight.bold,
                             fontSize: 14,
@@ -82,7 +82,7 @@ class TaskWidget extends StatelessWidget {
                         ),
                       ),
                       Text(
-                        task.project.amount.toString(),
+                        project.amount.toString(),
                         style: const TextStyle(
                           fontWeight: FontWeight.bold,
                           fontSize: 14,
@@ -100,7 +100,7 @@ class TaskWidget extends StatelessWidget {
                         ),
                       ),
                       Text(
-                        task.project.duration.toString(),
+                        project.duration.toString(),
                         style: const TextStyle(
                           fontWeight: FontWeight.bold,
                           fontSize: 14,
@@ -108,9 +108,9 @@ class TaskWidget extends StatelessWidget {
                       ),
                     ],
                   ),
-                  const Row(
+                  Row(
                     children: <Widget>[
-                      Text(
+                      const Text(
                         'Expenses: ',
                         style: TextStyle(
                           fontWeight: FontWeight.normal,
@@ -118,8 +118,8 @@ class TaskWidget extends StatelessWidget {
                         ),
                       ),
                       Text(
-                        'expenses amount',
-                        style: TextStyle(
+                        project.description ?? 'expenses',
+                        style: const TextStyle(
                           fontWeight: FontWeight.bold,
                           fontSize: 14,
                         ),
@@ -137,7 +137,9 @@ class TaskWidget extends StatelessWidget {
                     onTap: () {
                       showDialog(
                         context: context,
-                        builder: (BuildContext context) => const ProjectPopUp(),
+                        builder: (BuildContext context) => ProjectPopUp(
+                          project: project,
+                        ),
                       );
                     },
                     child: CircleAvatar(

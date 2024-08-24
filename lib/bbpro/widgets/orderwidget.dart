@@ -1,7 +1,5 @@
 import 'package:business_bosses_v2/bbpro/models/order_model.dart';
 import 'package:business_bosses_v2/bbpro/widgets/optionsbutton.dart';
-import 'package:business_bosses_v2/bbpro/widgets/projectpopup.dart';
-import 'package:business_bosses_v2/bbpro/models/task_model.dart';
 import 'package:business_bosses_v2/utils/theme/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -69,13 +67,13 @@ class OrderWidget extends StatelessWidget {
                 ),
               ],
             ),
-            Padding(
-              padding: const EdgeInsets.symmetric(vertical: 10.0),
+            const Padding(
+              padding: EdgeInsets.symmetric(vertical: 10.0),
               child: Column(
                 children: <Widget>[
                   Row(
                     children: <Widget>[
-                      const Text(
+                      Text(
                         'Budget: ',
                         style: TextStyle(
                           fontWeight: FontWeight.normal,
@@ -93,7 +91,7 @@ class OrderWidget extends StatelessWidget {
                   ),
                   Row(
                     children: <Widget>[
-                      const Text(
+                      Text(
                         'Duration: ',
                         style: TextStyle(
                           fontWeight: FontWeight.normal,
@@ -109,7 +107,7 @@ class OrderWidget extends StatelessWidget {
                       // ),
                     ],
                   ),
-                  const Row(
+                  Row(
                     children: <Widget>[
                       Text(
                         'Expenses: ',
@@ -138,7 +136,7 @@ class OrderWidget extends StatelessWidget {
                     onTap: () {
                       showDialog(
                         context: context,
-                        builder: (BuildContext context) => const ProjectPopUp(),
+                        builder: (BuildContext context) => Container(),
                       );
                     },
                     child: CircleAvatar(

@@ -17,20 +17,22 @@ class TaskDisplayItem extends StatefulWidget {
 class _TaskDisplayItemState extends State<TaskDisplayItem> {
   @override
   Widget build(BuildContext context) {
+    bool checked = widget.task.status == TaskStatus.completed;
+
     return Row(
       children: <Widget>[
         Checkbox(
           shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(5)),
           activeColor:
               proprimaryColor, // Sets the color of the checkbox when checked
-          value: true,
+          value: checked,
           onChanged: (bool? value) {
             setState(() {
-              widget.onChanged;
+              widget.onChanged(value);
             });
           },
         ),
-        const Text('task name'),
+        Text(widget.task.name!),
       ],
     );
   }

@@ -1,4 +1,6 @@
 import 'dart:convert';
+import 'package:flutter/material.dart';
+
 import 'task_model.dart'; // Make sure to import the Task model
 
 class Project {
@@ -8,11 +10,9 @@ class Project {
   final String description;
   final int? amount;
   final String duration;
-  final bool isDeleted;
-  final DateTime? deletedAt;
   final DateTime createdAt;
-  final DateTime updatedAt;
   final List<Task>? tasks;
+  final ProjectStatus status;
 
   Project({
     required this.id,
@@ -21,11 +21,9 @@ class Project {
     required this.description,
     this.amount,
     required this.duration,
-    required this.isDeleted,
-    this.deletedAt,
     required this.createdAt,
-    required this.updatedAt,
     required this.tasks,
+    this.status = ProjectStatus.todo,
   });
 
   factory Project.fromJson(String str) => Project.fromMap(json.decode(str));
@@ -35,16 +33,12 @@ class Project {
   factory Project.fromMap(Map<String, dynamic> json) => Project(
         id: json['id'],
         userId: json['userId'],
+        status: ProjectStatus.fromString(json['status']),
         name: json['name'],
         description: json['description'],
         amount: (json['amount']),
         duration: json['duration'],
-        isDeleted: json['isDeleted'],
-        deletedAt: json['deletedAt'] != null
-            ? DateTime.parse(json['deletedAt'])
-            : null,
         createdAt: DateTime.parse(json['createdAt']),
-        updatedAt: DateTime.parse(json['updatedAt']),
         tasks: json['tasks'] == null
             ? null
             : List<Task>.from(
@@ -58,12 +52,71 @@ class Project {
         'description': description,
         'amount': amount,
         'duration': duration,
-        'isDeleted': isDeleted,
-        'deletedAt': deletedAt?.toIso8601String(),
         'createdAt': createdAt.toIso8601String(),
-        'updatedAt': updatedAt.toIso8601String(),
         'tasks': tasks == null
             ? null
             : List<dynamic>.from(tasks!.map((Task x) => x.toMap())),
       };
+}
+
+enum ProjectStatus {
+  allprojects,
+  todo,
+  pending,
+  completed;
+
+  static ProjectStatus fromString(String status) {
+    switch (status) {
+      case 'all projects':
+        return ProjectStatus.allprojects;
+      case 'to-do':
+        return ProjectStatus.todo;
+      case 'pending':
+        return ProjectStatus.pending;
+      case 'completed':
+        return ProjectStatus.completed;
+      default:
+        throw ArgumentError('Unknown status: $status');
+    }
+  }
+
+  String get displayTitle {
+    switch (this) {
+      case ProjectStatus.allprojects:
+        return 'All Projects';
+      case ProjectStatus.todo:
+        return 'To Do';
+      case ProjectStatus.pending:
+        return 'Pending';
+      case ProjectStatus.completed:
+        return 'Completed';
+    }
+  }
+
+  Color get backgroundColor {
+    switch (this) {
+      case ProjectStatus.allprojects:
+        return Colors.white;
+      case ProjectStatus.todo:
+        return Colors.black12;
+      case ProjectStatus.pending:
+        return Colors.yellow.withAlpha(100);
+      case ProjectStatus.completed:
+        return Colors.green.withAlpha(100);
+    }
+  }
+
+  @override
+  String toString() {
+    switch (this) {
+      case ProjectStatus.allprojects:
+        return 'all projects';
+      case ProjectStatus.todo:
+        return 'to-do';
+      case ProjectStatus.pending:
+        return 'pending';
+      case ProjectStatus.completed:
+        return 'completed';
+    }
+  }
 }

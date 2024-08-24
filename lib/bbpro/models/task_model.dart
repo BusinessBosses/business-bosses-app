@@ -10,10 +10,10 @@ class Task {
   final String? amount;
   final DateTime? startAt;
   final DateTime? endAt;
-  final TaskStatus status;
+  TaskStatus status;
   final DateTime? createdAt;
   final String? clientId;
-  final Project project;
+  final Project? project;
 
   Task({
     required this.id,
@@ -26,7 +26,7 @@ class Task {
     required this.status,
     this.createdAt,
     this.clientId,
-    required this.project,
+    this.project,
   });
 
   factory Task.fromJson(String str) => Task.fromMap(json.decode(str));
@@ -47,7 +47,8 @@ class Task {
             ? DateTime.parse(json['createdAt'])
             : null,
         clientId: json['clientId'],
-        project: Project.fromMap(json['project']),
+        project:
+            json['project'] == null ? null : Project.fromMap(json['project']),
       );
 
   Map<String, dynamic> toMap() => <String, dynamic>{
@@ -61,7 +62,7 @@ class Task {
         'status': status.toString(),
         'createdAt': createdAt?.toIso8601String(),
         'clientId': clientId,
-        'project': project.toMap(),
+        'project': project == null ? null : project!.toMap(),
       };
 }
 

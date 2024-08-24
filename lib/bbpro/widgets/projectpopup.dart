@@ -1,14 +1,35 @@
+import 'package:business_bosses_v2/bbpro/controllers/project_controller.dart';
+import 'package:business_bosses_v2/bbpro/models/project_model.dart';
+import 'package:business_bosses_v2/bbpro/models/task_model.dart';
 import 'package:business_bosses_v2/bbpro/widgets/statswidget.dart';
 import 'package:business_bosses_v2/bbpro/widgets/taskdisplayitem.dart';
 import 'package:business_bosses_v2/bbpro/widgets/taskwidget.dart';
-import 'package:business_bosses_v2/bbpro/models/task_model.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
-class ProjectPopUp extends StatelessWidget {
-  const ProjectPopUp({Key? key}) : super(key: key);
+class ProjectPopUp extends StatefulWidget {
+  final Project project;
+  const ProjectPopUp({
+    Key? key,
+    required this.project,
+  }) : super(key: key);
 
   @override
+  State<ProjectPopUp> createState() => _ProjectPopUpState();
+}
+
+class _ProjectPopUpState extends State<ProjectPopUp> {
+  final ProjectController projectController = Get.find();
+  @override
   Widget build(BuildContext context) {
+    final int totalTasks = widget.project.tasks?.length ?? 0;
+    final int completedTasks = widget.project.tasks
+            ?.where((Task task) => task.status.toString() == 'completed')
+            .length ??
+        0;
+    final double completionRate =
+        (totalTasks > 0) ? (completedTasks / totalTasks) * 100 : 0;
+
     return Dialog(
       backgroundColor: Colors.white,
       elevation: 5,
@@ -24,15 +45,15 @@ class ProjectPopUp extends StatelessWidget {
             ),
             TaskWidget(
                 isExpanded: false,
-                task: Task.fromMap(<String, dynamic>{'name': ''}),
+                project: widget.project,
                 bgcolor: Colors.red),
             const SizedBox(
               height: 15,
             ),
             StatsWidget(
-              completedTasks: 12,
-              totalTasks: 15,
-              completionRate: 35,
+              completedTasks: completedTasks,
+              totalTasks: totalTasks,
+              completionRate: completionRate,
             ),
             const SizedBox(
               height: 15,
@@ -55,11 +76,26 @@ class ProjectPopUp extends StatelessWidget {
                   SizedBox(
                     height: 300,
                     child: ListView.builder(
-                      itemCount: 5,
+                      itemCount: widget.project.tasks?.length ?? 0,
                       itemBuilder: (BuildContext context, int index) {
                         return TaskDisplayItem(
-                          task: Task.fromMap(<String, dynamic>{'name': ''}),
-                          onChanged: (bool? value) {},
+                          task: widget.project.tasks![index],
+                          onChanged: (bool? value) {
+                            setState(() {
+                              widget.project.tasks![index].status = value!
+                                  ? TaskStatus.completed
+                                  : TaskStatus.pending;
+
+                              projectController.updateTask(
+                                  widget.project.tasks![index].id,
+                                  <String, dynamic>{
+                                    'status': widget
+                                        .project.tasks![index].status
+                                        .toString()
+                                  });
+                              // The completion rate and task stats will automatically update
+                            });
+                          },
                         );
                       },
                     ),
