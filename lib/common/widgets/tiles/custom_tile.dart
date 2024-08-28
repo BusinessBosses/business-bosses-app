@@ -100,7 +100,7 @@ class CustomTile extends StatelessWidget {
                               padding: EdgeInsets.symmetric(
                                   horizontal: 5, vertical: 5),
                               decoration: BoxDecoration(
-                                  color: Colors.black.withAlpha(100),
+                                  color: primaryColorLT,
                                   borderRadius: BorderRadius.circular(100)),
                               child: Wrap(
                                   crossAxisAlignment: WrapCrossAlignment.center,

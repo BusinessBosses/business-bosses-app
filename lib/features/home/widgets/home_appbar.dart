@@ -52,61 +52,62 @@ class HomeAppBar extends StatelessWidget {
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                controller.index == 0
-                    ? Row(
-                        children: [
-                          GestureDetector(
-                            onTap: () {
-                              // Get.toNamed(Routes.myProfile);
-                            },
-                            child: SizedBox(
-                              height: 40.0,
-                              width: 40.0,
-                              child: ClipRRect(
-                                borderRadius: BorderRadius.circular(10),
-                                child: NetworkImageWithPlaceHolder(
-                                  imageUrl:
-                                      profileController.myProfile.photoUrl ??
-                                          '',
-                                  radius: 10,
-                                  placeHolder: Icons.person,
-                                  iconSize: 22.0,
-                                  fit: BoxFit.cover,
-                                ),
-                              ),
-                            ),
-                          ),
-                          const SizedBox(width: 10),
-                          Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text(
-                                profileName.length > 12
-                                    ? '${profileName.substring(0, 12)}...'
-                                    : profileName,
-                                overflow: TextOverflow.ellipsis,
-                                maxLines: 1,
-                                style: const TextStyle(
-                                  fontSize: 14,
-                                  fontWeight: FontWeight.bold,
-                                ),
-                              ),
-                              Text(
-                                '👋' + getGreeting(),
-                                style: const TextStyle(
-                                  fontSize: 12,
-                                  color: Colors.grey,
-                                ),
-                              ),
-                            ],
-                          ),
-                        ],
-                      )
-                    : Expanded(
-                        child: Padding(
-                        padding: const EdgeInsets.only(right: 15.0),
-                        child: const SearchSection(),
-                      )),
+                // controller.index == 0
+                //     ? Row(
+                //         children: [
+                //           GestureDetector(
+                //             onTap: () {
+                //               // Get.toNamed(Routes.myProfile);
+                //             },
+                //             child: SizedBox(
+                //               height: 40.0,
+                //               width: 40.0,
+                //               child: ClipRRect(
+                //                 borderRadius: BorderRadius.circular(10),
+                //                 child: NetworkImageWithPlaceHolder(
+                //                   imageUrl:
+                //                       profileController.myProfile.photoUrl ??
+                //                           '',
+                //                   radius: 10,
+                //                   placeHolder: Icons.person,
+                //                   iconSize: 22.0,
+                //                   fit: BoxFit.cover,
+                //                 ),
+                //               ),
+                //             ),
+                //           ),
+                //           const SizedBox(width: 10),
+                //           Column(
+                //             crossAxisAlignment: CrossAxisAlignment.start,
+                //             children: [
+                //               Text(
+                //                 profileName.length > 12
+                //                     ? '${profileName.substring(0, 12)}...'
+                //                     : profileName,
+                //                 overflow: TextOverflow.ellipsis,
+                //                 maxLines: 1,
+                //                 style: const TextStyle(
+                //                   fontSize: 14,
+                //                   fontWeight: FontWeight.bold,
+                //                 ),
+                //               ),
+                //               Text(
+                //                 '👋' + getGreeting(),
+                //                 style: const TextStyle(
+                //                   fontSize: 12,
+                //                   color: Colors.grey,
+                //                 ),
+                //               ),
+                //             ],
+                //           ),
+                //         ],
+                //       )
+                //     :
+                Expanded(
+                    child: Padding(
+                  padding: const EdgeInsets.only(right: 15.0),
+                  child: const SearchSection(),
+                )),
                 Row(
                   children: <Widget>[
                     GestureDetector(
