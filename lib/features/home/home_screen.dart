@@ -350,18 +350,18 @@ class _HomeScreenState extends State<HomeScreen>
                                             children: <Widget>[
                                               ListView(
                                                 children: const [
-                                                  Padding(
-                                                    padding: EdgeInsets.only(
-                                                        left: 15.0,
-                                                        right: 15,
-                                                        top: 15),
-                                                    child: SearchSection(),
-                                                  ),
+                                                  // Padding(
+                                                  //   padding: EdgeInsets.only(
+                                                  //       left: 15.0,
+                                                  //       right: 15,
+                                                  //       top: 15),
+                                                  //   child: SearchSection(),
+                                                  // ),
                                                   SizedBox(
                                                     height: 15,
                                                   ),
                                                   LearningSection(),
-                                                  BossOfWeekProfileTile(),
+                                                  // BossOfWeekProfileTile(),
                                                   SizedBox(
                                                     height: 15,
                                                   ),
