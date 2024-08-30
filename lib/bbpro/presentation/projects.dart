@@ -2,10 +2,12 @@ import 'dart:async';
 import 'package:business_bosses_v2/bbpro/models/project_model.dart';
 import 'package:business_bosses_v2/bbpro/widgets/customtabbar.dart';
 import 'package:business_bosses_v2/bbpro/widgets/notificationbutton.dart';
+import 'package:business_bosses_v2/bbpro/widgets/proseardwidget.dart';
 import 'package:business_bosses_v2/bbpro/widgets/taskwidget.dart';
 import 'package:business_bosses_v2/bbpro/controllers/project_controller.dart';
 import 'package:business_bosses_v2/bbpro/presentation/addproject.dart';
 import 'package:business_bosses_v2/common/widgets/safety_model.dart';
+import 'package:business_bosses_v2/features/search/widgets/search_bar.dart';
 import 'package:business_bosses_v2/utils/theme/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -71,6 +73,7 @@ class _ProjectsState extends State<Projects>
   Widget build(BuildContext context) {
     final Size screenSize = MediaQuery.of(context).size;
     return Scaffold(
+      resizeToAvoidBottomInset: true,
       backgroundColor: probackgroundColor,
       appBar: AppBar(
         automaticallyImplyLeading: false,
@@ -113,7 +116,7 @@ class _ProjectsState extends State<Projects>
           ),
           Expanded(
             child: Padding(
-              padding: const EdgeInsets.only(bottom: 15),
+              padding: const EdgeInsets.only(bottom: 10),
               child: Obx(
                 () {
                   if (projectController.loading.value) {
@@ -203,7 +206,7 @@ class _ProjectsState extends State<Projects>
   }
 }
 
-class RowStatusCard extends StatelessWidget {
+class RowStatusCard extends StatefulWidget {
   final void Function(Project task, ProjectStatus newStatus) taskAccepted;
   final void Function(bool isRight) onDrag;
   final void Function() cancelDrag;
@@ -224,10 +227,16 @@ class RowStatusCard extends StatelessWidget {
   });
 
   @override
+  State<RowStatusCard> createState() => _RowStatusCardState();
+}
+
+class _RowStatusCardState extends State<RowStatusCard> {
+  bool _showSearchBar = false;
+  @override
   Widget build(BuildContext context) {
     return Container(
-      height: screenSize.height * 0.8,
-      width: screenSize.width * 0.9,
+      height: widget.screenSize.height * 0.8,
+      width: widget.screenSize.width * 0.9,
       margin: const EdgeInsets.only(left: 10),
       decoration: BoxDecoration(
         color: Colors.white,
@@ -244,23 +253,24 @@ class RowStatusCard extends StatelessWidget {
                 Wrap(
                   crossAxisAlignment: WrapCrossAlignment.center,
                   children: <Widget>[
-                    projectStatus.index == 0
+                    widget.projectStatus.index == 0
                         ? Container()
                         : CircleAvatar(
-                            backgroundColor:
-                                projectStatus.displayTitle == 'To Do'
-                                    ? Colors.black
-                                    : projectStatus.displayTitle == 'Pending'
-                                        ? Colors.amber
-                                        : Colors.green,
+                            backgroundColor: widget
+                                        .projectStatus.displayTitle ==
+                                    'To Do'
+                                ? Colors.black
+                                : widget.projectStatus.displayTitle == 'Pending'
+                                    ? Colors.amber
+                                    : Colors.green,
                             radius: 5,
                           ),
-                    if (projectStatus.index != 0)
+                    if (widget.projectStatus.index != 0)
                       const SizedBox(
                         width: 10,
                       ),
                     Text(
-                      projectStatus.displayTitle,
+                      widget.projectStatus.displayTitle,
                       style: const TextStyle(
                         color: Colors.black,
                         fontWeight: FontWeight.bold,
@@ -269,19 +279,73 @@ class RowStatusCard extends StatelessWidget {
                     ),
                   ],
                 ),
-                GestureDetector(
-                  onTap: () {},
-                  child: Container(
-                    decoration: BoxDecoration(
-                        color: backgroundColor,
-                        borderRadius: BorderRadius.circular(30)),
-                    padding: const EdgeInsets.all(8),
-                    child: SvgPicture.asset(
-                      'assets/svgs/search.svg',
-                      height: 15,
-                    ),
+                SizedBox(
+                  width: 50,
+                ),
+                if (widget.projectStatus.index != 0)
+                  SizedBox(
+                    height: 31,
                   ),
-                )
+                if (widget.projectStatus.index == 0)
+                  _showSearchBar
+                      ? Expanded(
+                          child: Container(
+                            height: 31,
+                            child: ProSearchbar(
+                              contentPadding: 10,
+                              backgroundColor: backgroundColor,
+                              hasSearchIcon: false,
+                              hintText: 'Search',
+                              onChange: (String query) {
+                                if (query.isEmpty) {}
+                              },
+                              onSubmit: (String query) {},
+                            ),
+                          ),
+                        )
+                      : GestureDetector(
+                          onTap: () {
+                            setState(() {
+                              _showSearchBar =
+                                  true; // Show search bar when button is clicked
+                            });
+                          },
+                          child: Container(
+                            decoration: BoxDecoration(
+                                color: backgroundColor,
+                                borderRadius: BorderRadius.circular(30)),
+                            padding: const EdgeInsets.all(8),
+                            child: SvgPicture.asset(
+                              'assets/svgs/search.svg',
+                              height: 15,
+                            ),
+                          ),
+                        ),
+                if (widget.projectStatus.index == 0)
+                  if (_showSearchBar)
+                    const SizedBox(
+                      width: 5,
+                    ),
+                if (widget.projectStatus.index == 0)
+                  if (_showSearchBar)
+                    GestureDetector(
+                      onTap: () {
+                        setState(() {
+                          _showSearchBar = false;
+                        });
+                      },
+                      child: Container(
+                        decoration: BoxDecoration(
+                            color: backgroundColor,
+                            borderRadius: BorderRadius.circular(30)),
+                        padding: const EdgeInsets.all(8),
+                        child: const Icon(
+                          Icons.close,
+                          color: Colors.grey,
+                          size: 15,
+                        ),
+                      ),
+                    )
               ],
             ),
           ),
@@ -292,17 +356,18 @@ class RowStatusCard extends StatelessWidget {
               color: Colors.black12,
             ),
           ),
-          projectStatus.index == 0
+          widget.projectStatus.index == 0
               ? Expanded(
                   child: ListView.builder(
-                    itemCount: allProjects.length,
+                    itemCount: widget.allProjects.length,
                     shrinkWrap: true,
                     itemBuilder: (BuildContext context, int index) {
                       return Padding(
                         padding: const EdgeInsets.only(bottom: 12),
                         child: TaskWidget(
-                          project: allProjects[index],
-                          bgcolor: allProjects[index].status.backgroundColor,
+                          project: widget.allProjects[index],
+                          bgcolor:
+                              widget.allProjects[index].status.backgroundColor,
                         ),
                       );
                     },
@@ -314,16 +379,16 @@ class RowStatusCard extends StatelessWidget {
                         List<Project?> candidateData,
                         List<dynamic> rejectedData) {
                       return ListStatusColumnWidget(
-                        projects: projects,
-                        projectStatus: projectStatus,
-                        screenSize: screenSize,
-                        onDrag: onDrag,
-                        cancelDrag: cancelDrag,
+                        projects: widget.projects,
+                        projectStatus: widget.projectStatus,
+                        screenSize: widget.screenSize,
+                        onDrag: widget.onDrag,
+                        cancelDrag: widget.cancelDrag,
                       );
                     },
                     onWillAccept: (Project? details) => true,
                     onAcceptWithDetails: (DragTargetDetails<Project> details) {
-                      taskAccepted(details.data, projectStatus);
+                      widget.taskAccepted(details.data, widget.projectStatus);
                     },
                   ),
                 ),
@@ -376,10 +441,9 @@ class ListStatusColumnWidget extends StatelessWidget {
           project: projects[index],
           bgcolor: projects[index].status.backgroundColor,
         );
-
         return Padding(
           padding: const EdgeInsets.only(bottom: 12),
-          child: Draggable<Project>(
+          child: LongPressDraggable<Project>(
             data: projects[index],
             dragAnchorStrategy: (Draggable<Object> draggable,
                 BuildContext context, Offset position) {
@@ -402,9 +466,14 @@ class ListStatusColumnWidget extends StatelessWidget {
               opacity: 0.2,
               child: taskWidget,
             ),
-            feedback: SizedBox(
-              width: screenSize.width * 0.8,
-              child: taskWidget,
+            feedback: Material(
+              color: Colors.transparent,
+              child: ConstrainedBox(
+                constraints: BoxConstraints(
+                  maxWidth: screenSize.width * 0.8,
+                ),
+                child: taskWidget,
+              ),
             ),
             child: taskWidget,
           ),

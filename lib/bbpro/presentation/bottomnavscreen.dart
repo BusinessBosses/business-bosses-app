@@ -74,7 +74,7 @@ class _BottomnavscreenState extends State<Bottomnavscreen> {
                 color: _selectedIndex == 3
                     ? proprimaryColor
                     : const Color(0xffBDBEC0)),
-            label: 'Orders & Invoices',
+            label: 'Orders',
           ),
           BottomNavigationBarItem(
             icon: SvgPicture.asset('assets/svgs/setupshop.svg',

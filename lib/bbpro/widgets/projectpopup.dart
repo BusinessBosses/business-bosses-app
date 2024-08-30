@@ -46,7 +46,7 @@ class _ProjectPopUpState extends State<ProjectPopUp> {
             TaskWidget(
                 isExpanded: false,
                 project: widget.project,
-                bgcolor: Colors.red),
+                bgcolor: widget.project.status.backgroundColor),
             const SizedBox(
               height: 15,
             ),

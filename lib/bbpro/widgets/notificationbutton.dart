@@ -14,19 +14,11 @@ class NotificationButton extends StatelessWidget {
         Get.to(ProNotifications());
       },
       child: Padding(
-        padding: const EdgeInsets.only(right: 10.0, bottom: 15),
+        padding: const EdgeInsets.only(right: 10.0, bottom: 10),
         child: CircleAvatar(
-          backgroundColor: prosemibackColor,
-          radius: 30, // This sets the circle's radius
-          child: Padding(
-            padding: const EdgeInsets.all(
-                10), // Adjust padding to fit the icon nicely
-            child: SvgPicture.asset(
-              'assets/svgs/notificationicon.svg',
-              height: 20,
-            ),
-          ),
-        ),
+              radius: 20,
+              backgroundColor: prosemibackColor,
+              child: SvgPicture.asset('assets/svgs/notificationicon.svg', height: 20,)),
       ),
     );
   }

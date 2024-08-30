@@ -109,6 +109,7 @@ class _AddprojectState extends State<Addproject> {
               children: <Widget>[
                 const SizedBox(height: 15),
                 CustomEditText(
+                  maxLength: 30,
                   caption: 'Project Name',
                   hintText: 'Enter Project name here',
                   controller: nameController,
@@ -145,7 +146,7 @@ class _AddprojectState extends State<Addproject> {
                           const Text(
                             'Tasks',
                             style: TextStyle(
-                              fontSize: 16,
+                              fontSize: 14,
                               fontWeight: FontWeight.w600,
                             ),
                           ),
@@ -178,61 +179,60 @@ class _AddprojectState extends State<Addproject> {
                     color: proprimaryColor,
                   ),
                 ),
+                const SizedBox(height: 20),
+                SizedBox(
+                  width: MediaQuery.of(context).size.width,
+                  child: ProCustomButton(
+                    text: 'Save',
+                    onPressed: () async {
+                      if (nameController.text.isEmpty) {
+                        showSnackbar(
+                            message: 'Name is mandatory!', error: true);
+                        return;
+                      }
+                      if (budgetController.text.isEmpty) {
+                        showSnackbar(
+                            message: 'Budget is mandatory!', error: true);
+                        return;
+                      }
+                      if (descriptionController.text.isEmpty) {
+                        showSnackbar(
+                            message: 'Budget is mandatory!', error: true);
+                        return;
+                      }
+                      if (tasks.isEmpty) {
+                        showSnackbar(
+                            message: 'Adding tasks is mandatory!', error: true);
+                        return;
+                      }
+                      final Map<String, dynamic> data = <String, dynamic>{
+                        'userId': profileController.myProfile.uid,
+                        'name': nameController.text,
+                        'amount': budgetController.text,
+                        'description': descriptionController.text,
+                        'duration': '60days',
+                        'tasks': tasks,
+                      };
+                      final bool response =
+                          await projectController.addProject(data);
+                      if (response) {
+                        showSnackbar(
+                          message: 'Project Added Succesfully!',
+                        );
+                        Get.back();
+                        projectController
+                            .initTasks(profileController.myProfile.uid);
+                      } else {
+                        showSnackbar(
+                            message: 'Error While Adding Project', error: true);
+                      }
+                    },
+                  ),
+                ),
                 const SizedBox(height: 100),
               ],
             ),
           ),
-          Positioned(
-            bottom: 30,
-            left: 0,
-            right: 0,
-            child: SizedBox(
-              width: MediaQuery.of(context).size.width,
-              child: ProCustomButton(
-                text: 'Save',
-                onPressed: () async {
-                  if (nameController.text.isEmpty) {
-                    showSnackbar(message: 'Name is mandatory!', error: true);
-                    return;
-                  }
-                  if (budgetController.text.isEmpty) {
-                    showSnackbar(message: 'Budget is mandatory!', error: true);
-                    return;
-                  }
-                  if (descriptionController.text.isEmpty) {
-                    showSnackbar(message: 'Budget is mandatory!', error: true);
-                    return;
-                  }
-                  if (tasks.isEmpty) {
-                    showSnackbar(
-                        message: 'Adding tasks is mandatory!', error: true);
-                    return;
-                  }
-                  final Map<String, dynamic> data = <String, dynamic>{
-                    'userId': profileController.myProfile.uid,
-                    'name': nameController.text,
-                    'amount': budgetController.text,
-                    'description': descriptionController.text,
-                    'duration': '60days',
-                    'tasks': tasks,
-                  };
-                  final bool response =
-                      await projectController.addProject(data);
-                  if (response) {
-                    showSnackbar(
-                      message: 'Project Added Succesfully!',
-                    );
-                    Get.back();
-                    projectController
-                        .initTasks(profileController.myProfile.uid);
-                  } else {
-                    showSnackbar(
-                        message: 'Error While Adding Project', error: true);
-                  }
-                },
-              ),
-            ),
-          )
         ],
       ),
     );

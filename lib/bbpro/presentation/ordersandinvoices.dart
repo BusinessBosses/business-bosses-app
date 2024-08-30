@@ -73,7 +73,7 @@ class _OrdersScreenState extends State<OrdersScreen>
         appBar: AppBar(
           automaticallyImplyLeading: false,
           title: const Text(
-            'Orders & Invoices',
+            'Orders',
             style: TextStyle(
               color: proprimaryColor,
               fontWeight: FontWeight.bold,
@@ -365,7 +365,7 @@ class ListStatusColumnWidget extends StatelessWidget {
 
         return Padding(
           padding: const EdgeInsets.only(bottom: 12),
-          child: Draggable<Order>(
+          child: LongPressDraggable<Order>(
             data: orders[index],
             dragAnchorStrategy: (Draggable<Object> draggable,
                 BuildContext context, Offset position) {

@@ -1,9 +1,12 @@
+import 'package:business_bosses_v2/bbpro/widgets/gotoshopwidget.dart';
 import 'package:business_bosses_v2/bbpro/widgets/infocard.dart';
 import 'package:business_bosses_v2/bbpro/widgets/notificationbutton.dart';
 import 'package:business_bosses_v2/bbpro/widgets/orderscard.dart';
 import 'package:business_bosses_v2/utils/theme/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
+import 'package:flutter_svg/svg.dart';
+import 'package:get/get.dart';
 
 import '../widgets/salescard.dart';
 
@@ -29,7 +32,21 @@ class _DashboardState extends State<Dashboard> {
     return Scaffold(
       backgroundColor: probackgroundColor,
       appBar: AppBar(
+        titleSpacing: 0,
+        centerTitle: true,
         automaticallyImplyLeading: false,
+        leading: IconButton(
+          onPressed: () {
+            Get.back();
+          },
+          icon: CircleAvatar(
+              radius: 25,
+              backgroundColor: prosemibackColor,
+              child: SvgPicture.asset(
+                'assets/svgs/homeu.svg',
+                height: 18,
+              )),
+        ),
         title: const Text(
           'Dashboard',
           style: TextStyle(
@@ -42,6 +59,7 @@ class _DashboardState extends State<Dashboard> {
       body: SingleChildScrollView(
         child: Column(
           children: <Widget>[
+            GotoshopWidget(),
             const OrdersWidget(),
             const SalesWidget(),
             StaggeredGridView.countBuilder(

@@ -1,5 +1,6 @@
 import 'package:business_bosses_v2/bbpro/widgets/optionsbutton.dart';
 import 'package:business_bosses_v2/bbpro/models/client_model.dart';
+import 'package:business_bosses_v2/utils/theme/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
@@ -43,7 +44,11 @@ class ClientWidget extends StatelessWidget {
                   child: Wrap(
                       crossAxisAlignment: WrapCrossAlignment.center,
                       children: [
-                        SvgPicture.asset('assets/svgs/client.svg'),
+                        SvgPicture.asset(
+                          'assets/svgs/client.svg',
+                          height: 10,
+                          color: textColor,
+                        ),
                         const SizedBox(
                           width: 5,
                         ),
@@ -51,7 +56,14 @@ class ClientWidget extends StatelessWidget {
                           client.name,
                           style: const TextStyle(
                             fontWeight: FontWeight.bold,
-                            fontSize: 16,
+                            fontSize: 13,
+                          ),
+                        ),
+                        Text(
+                          ' - ${client.type.displayTitle}',
+                          style: const TextStyle(
+                            fontWeight: FontWeight.bold,
+                            fontSize: 13,
                           ),
                         ),
                       ]),
@@ -72,14 +84,14 @@ class ClientWidget extends StatelessWidget {
                         'Email: ',
                         style: const TextStyle(
                           fontWeight: FontWeight.normal,
-                          fontSize: 16,
+                          fontSize: 13,
                         ),
                       ),
                       Text(
                         client.email ?? 'description',
                         style: const TextStyle(
                           fontWeight: FontWeight.bold,
-                          fontSize: 16,
+                          fontSize: 13,
                         ),
                       ),
                     ],
@@ -90,14 +102,14 @@ class ClientWidget extends StatelessWidget {
                         'Phone: ',
                         style: const TextStyle(
                           fontWeight: FontWeight.normal,
-                          fontSize: 16,
+                          fontSize: 13,
                         ),
                       ),
                       Text(
                         client.phone ?? 'description',
                         style: const TextStyle(
                           fontWeight: FontWeight.bold,
-                          fontSize: 16,
+                          fontSize: 13,
                         ),
                       ),
                     ],

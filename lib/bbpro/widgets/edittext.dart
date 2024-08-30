@@ -36,18 +36,18 @@ class CustomEditText extends StatelessWidget {
             Text(
               caption,
               style: const TextStyle(
-                fontSize: 16,
+                fontSize: 14,
                 fontWeight: FontWeight.w600,
               ),
             ),
-            const SizedBox(height: 5),
             TextFormField(
-              maxLines: maxLength != null ? 5 : 1,
+              maxLines: maxLength != null && maxLength! > 30 ? 5 : 1,
               decoration: InputDecoration(
                 border: InputBorder.none,
                 hintText: hintText,
                 filled: false,
                 fillColor: Colors.grey.shade100,
+                counterText: maxLength != null && maxLength! > 30 ? null : '',
               ),
               maxLength: maxLength,
               keyboardType: inputType,
