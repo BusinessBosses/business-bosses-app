@@ -99,7 +99,7 @@ class _TaskitemState extends State<Taskitem> {
           ],
         ),
         if (widget.taskexpense != null)
-          Text('Expense: \$${widget.taskexpense}'),
+          Text('Expense: ${widget.taskexpense}'),
         if (startDateTime != null)
           Text('Start Date: ${formatDate(startDateTime)}'),
         if (endDateTime != null) Text('End Date: ${formatDate(endDateTime)}'),

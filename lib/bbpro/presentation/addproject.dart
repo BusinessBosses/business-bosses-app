@@ -123,8 +123,9 @@ class _AddprojectState extends State<Addproject> {
                 ),
                 const SizedBox(height: 15),
                 CustomEditText(
+                  iscurrencyfield: true,
                   caption: 'Project Budget',
-                  hintText: '\$0.00',
+                  hintText: '0.00',
                   controller: budgetController,
                   inputType: TextInputType.number,
                 ),

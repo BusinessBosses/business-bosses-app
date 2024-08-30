@@ -92,9 +92,11 @@ class _AddProjectBottomSheetState extends State<AddProjectBottomSheet> {
               ),
               const SizedBox(height: 10),
               CustomEditText(
+                iscurrencyfield: true,
+                currencyfieldcolor: probackgroundColor,
                 backgroundcolor: prosemibackColor,
                 caption: 'Expense',
-                hintText: '\$0.00',
+                hintText: '0.00',
                 controller: widget.expenseController,
               ),
               const SizedBox(height: 10),

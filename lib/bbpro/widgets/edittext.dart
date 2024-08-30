@@ -1,3 +1,4 @@
+import 'package:business_bosses_v2/utils/theme/theme.dart';
 import 'package:flutter/material.dart';
 
 class CustomEditText extends StatelessWidget {
@@ -8,6 +9,8 @@ class CustomEditText extends StatelessWidget {
   final bool isPassword;
   final TextEditingController controller;
   final Color? backgroundcolor;
+  final bool? iscurrencyfield;
+  final Color? currencyfieldcolor;
 
   const CustomEditText({
     super.key,
@@ -18,6 +21,8 @@ class CustomEditText extends StatelessWidget {
     this.isPassword = false,
     required this.controller,
     this.backgroundcolor,
+    this.iscurrencyfield,
+    this.currencyfieldcolor,
   });
 
   @override
@@ -40,20 +45,76 @@ class CustomEditText extends StatelessWidget {
                 fontWeight: FontWeight.w600,
               ),
             ),
-            TextFormField(
-              maxLines: maxLength != null && maxLength! > 30 ? 5 : 1,
-              decoration: InputDecoration(
-                border: InputBorder.none,
-                hintText: hintText,
-                filled: false,
-                fillColor: Colors.grey.shade100,
-                counterText: maxLength != null && maxLength! > 30 ? null : '',
-              ),
-              maxLength: maxLength,
-              keyboardType: inputType,
-              obscureText: isPassword,
-              controller: controller,
-            ),
+            (iscurrencyfield == true)
+                ? Row(
+                    children: [
+                      SizedBox(
+                        height: 30,
+                        width: 40,
+                        child: TextFormField(
+                          decoration: InputDecoration(
+                            hintText: 'USD',
+                            fillColor: currencyfieldcolor ?? prosemibackColor,
+                            filled: true,
+                            contentPadding: const EdgeInsets.symmetric(
+                              horizontal: 5.0,
+                              vertical:
+                                  0.0, // Adjusted vertical padding for centering
+                            ),
+                            counterText: '',
+                            border: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(
+                                  5.0), // Set the border radius here
+                              borderSide:
+                                  BorderSide.none, // Removes the default border
+                            ),
+                          ),
+                          textAlign: TextAlign.left,
+                          textInputAction: TextInputAction.next,
+                          keyboardType: TextInputType.text,
+                          maxLength: 3,
+                        ),
+                      ),
+                      const SizedBox(
+                        width: 10,
+                      ),
+                      Expanded(
+                        flex: 6,
+                        child: TextFormField(
+                          maxLines:
+                              maxLength != null && maxLength! > 30 ? 5 : 1,
+                          decoration: InputDecoration(
+                            border: InputBorder.none,
+                            hintText: hintText,
+                            filled: false,
+                            fillColor: Colors.grey.shade100,
+                            counterText: maxLength != null && maxLength! > 30
+                                ? null
+                                : '',
+                          ),
+                          maxLength: maxLength,
+                          keyboardType: inputType,
+                          obscureText: isPassword,
+                          controller: controller,
+                        ),
+                      ),
+                    ],
+                  )
+                : TextFormField(
+                    maxLines: maxLength != null && maxLength! > 30 ? 5 : 1,
+                    decoration: InputDecoration(
+                      border: InputBorder.none,
+                      hintText: hintText,
+                      filled: false,
+                      fillColor: Colors.grey.shade100,
+                      counterText:
+                          maxLength != null && maxLength! > 30 ? null : '',
+                    ),
+                    maxLength: maxLength,
+                    keyboardType: inputType,
+                    obscureText: isPassword,
+                    controller: controller,
+                  ),
           ],
         ),
       ),
