@@ -97,6 +97,7 @@ class _AddProjectBottomSheetState extends State<AddProjectBottomSheet> {
                 backgroundcolor: prosemibackColor,
                 caption: 'Expense',
                 hintText: '0.00',
+                inputType: TextInputType.number,
                 controller: widget.expenseController,
               ),
               const SizedBox(height: 10),
