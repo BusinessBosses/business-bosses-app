@@ -12,7 +12,8 @@ class ClientsController extends GetxController {
   Future<void> initClients(String userId) async {
     loading(true);
     clients.clear();
-    ApiResponseModel response = await ApiService.get(path: 'clients/all');
+    ApiResponseModel response =
+        await ApiService.get(path: 'clients/user-clients/$userId');
     if (response.success) {
       for (int i = 0; i < response.data['rows'].length; i++) {
         clients.add(Client.fromMap(response.data['rows'][i]));

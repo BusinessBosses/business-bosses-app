@@ -1069,6 +1069,9 @@ class HomeController extends GetxController {
             'likes': response.data['forums']['rows'][i]['likes']
                 .map((dynamic like) => like['userId'].toString())
                 .toList(),
+            'coins': response.data['forums']['rows'][i]['coins']
+                .map((dynamic coin) => coin['userId'].toString())
+                .toList()
           });
           userresources.add(userresource);
         }
@@ -1081,14 +1084,8 @@ class HomeController extends GetxController {
       socket.disconnect();
       if (response.message == 'send a valid token') {
         showAccessTokenDialog();
-      } else {
-        // showSnackbar(
-        //     title: 'OOPS!',
-        //     message: 'An error occurred, please try again!',
-        //     error: true);
       }
     }
-
     loading(false);
     update();
     addCoinDaily();

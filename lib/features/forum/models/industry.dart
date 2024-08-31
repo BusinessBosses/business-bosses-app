@@ -22,6 +22,7 @@ class Industry {
   String? createDescription;
   DateTime? startAt; // Updated to DateTime
   DateTime? endedAt; // Updated to DateTime
+  int? joinedUsersCount;
 
   /// INDUSTRY MODEL
   Industry({
@@ -40,6 +41,7 @@ class Industry {
     this.createDescription,
     this.startAt,
     this.endedAt,
+    this.joinedUsersCount,
   });
 
   factory Industry.toObject(Map<dynamic, dynamic> map) {
@@ -65,6 +67,7 @@ class Industry {
       endedAt: map['endedAt'] == null
           ? null
           : DateTime.parse(map['endedAt'] as String),
+      joinedUsersCount: map['joinedUsersCount'] ?? 0,
     );
   }
 
@@ -85,6 +88,7 @@ class Industry {
       createDescription: map['createDescription'],
       startAt: map['startAt'] != null ? DateTime.parse(map['startAt']) : null,
       endedAt: map['endedAt'] != null ? DateTime.parse(map['endedAt']) : null,
+      joinedUsersCount: map['joinedUsersCount'] ?? 0,
     );
   }
 
@@ -105,6 +109,7 @@ class Industry {
       'createDescription': createDescription,
       'startAt': startAt?.toIso8601String(),
       'endedAt': endedAt?.toIso8601String(),
+      'joinedUsersCount': joinedUsersCount,
     };
   }
 
@@ -138,7 +143,7 @@ class Industry {
 
   Future<List<Industry>> fetchIndustry() async {
     final ApiResponseModel response =
-        await ApiService.get(path: Uri.parse('industry/get').toString());
+        await ApiService.get(path: Uri.parse('industry/user-count').toString());
 
     if (response.success == true) {
       final List<dynamic> responseData = jsonDecode(response.data.rows);

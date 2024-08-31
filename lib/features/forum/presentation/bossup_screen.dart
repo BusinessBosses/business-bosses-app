@@ -111,11 +111,7 @@ class _BossUpSectionState extends State<BossUpSection>
 
   @override
   Widget build(BuildContext context) {
-    int userCount = widget.bossUp.joinedUsers
-            ?.where((String element) => element.isNotEmpty)
-            .toList()
-            .length ??
-        0;
+    int userCount = widget.bossUp.joinedUsersCount ?? 0;
     String formattedUserCount = formatCount(userCount);
     return Scaffold(
       backgroundColor: Colors.white,

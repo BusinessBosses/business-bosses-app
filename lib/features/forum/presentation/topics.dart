@@ -76,11 +76,7 @@ class _TopicsPageState extends State<TopicsPage> {
   @override
   Widget build(BuildContext context) {
     return GetBuilder<ForumController>(builder: (ForumController controller) {
-      int userCount = industry.joinedUsers
-              ?.where((String element) => element.isNotEmpty)
-              .toList()
-              .length ??
-          0;
+      int userCount = industry.joinedUsersCount ?? 0;
       String formattedUserCount = formatCount(userCount);
       int postCount = controller.totalForums.value;
       String formattedpostCount = formatCount(postCount);
