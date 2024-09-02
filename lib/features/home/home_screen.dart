@@ -360,23 +360,23 @@ class _HomeScreenState extends State<HomeScreen>
                                                   SizedBox(
                                                     height: 15,
                                                   ),
-                                                  LearningSection(),
+
                                                   // BossOfWeekProfileTile(),
                                                   SizedBox(
                                                     height: 15,
                                                   ),
-                                                  ChallengesSection(),
+
                                                   SizedBox(
                                                     height: 10,
                                                   ),
-                                                  EventsSection(),
+
                                                   SizedBox(
                                                     height: 15,
                                                   ),
                                                   SizedBox(
                                                     height: 15,
                                                   ),
-                                                  MarketplaceSection(),
+
                                                   SizedBox(
                                                     height: 120,
                                                   ),

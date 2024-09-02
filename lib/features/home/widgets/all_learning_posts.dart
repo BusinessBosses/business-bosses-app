@@ -43,7 +43,7 @@ class _AllLearningPostsScreenState extends State<AllLearningPostsScreen> {
           centerTitle: true,
           title: Text(
             widget.isCoursesTile == true
-                ? 'Networking & Community'
+                ? 'Community & Networking'
                 : 'Courses and Tutorials',
             textAlign: TextAlign.center,
             style: const TextStyle(fontSize: 20),
