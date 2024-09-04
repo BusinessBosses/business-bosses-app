@@ -6,9 +6,12 @@ import 'package:business_bosses_v2/features/home/widgets/challengessection.dart'
 import 'package:business_bosses_v2/features/home/widgets/eventssection.dart';
 import 'package:business_bosses_v2/features/home/widgets/floatingbutton.dart';
 import 'package:business_bosses_v2/features/home/widgets/forum_item.dart';
+import 'package:business_bosses_v2/features/home/widgets/howtousetile.dart';
 import 'package:business_bosses_v2/features/home/widgets/learningsection.dart';
 import 'package:business_bosses_v2/features/home/widgets/list_items.dart';
 import 'package:business_bosses_v2/features/home/widgets/marketplacesection.dart';
+import 'package:business_bosses_v2/features/home/widgets/protile.dart';
+import 'package:business_bosses_v2/features/home/widgets/relevantpeopletile.dart';
 import 'package:business_bosses_v2/features/home/widgets/searchsection.dart';
 import 'package:business_bosses_v2/features/live_event/controller/live_event_controller.dart';
 import 'package:business_bosses_v2/features/donations/controller/donations_controller.dart';
@@ -360,7 +363,16 @@ class _HomeScreenState extends State<HomeScreen>
                                                   SizedBox(
                                                     height: 15,
                                                   ),
+                                                  HowtouseTile(),
+                                                  SizedBox(
+                                                    height: 15,
+                                                  ),
+                                                  ProTile(),
+                                                  SizedBox(
+                                                    height: 15,
+                                                  ),
 
+                                                  RelevantPeopleTile(),
                                                   // BossOfWeekProfileTile(),
                                                   SizedBox(
                                                     height: 15,

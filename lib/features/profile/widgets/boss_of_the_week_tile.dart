@@ -556,9 +556,9 @@ class _BossOfWeekProfileTileState extends State<BossOfWeekProfileTile> {
                                             width: MediaQuery.of(context)
                                                     .size
                                                     .width /
-                                                3.58,
+                                                4,
                                             margin: const EdgeInsets.only(
-                                                left: 15.0),
+                                                left: 12.0),
                                             decoration: BoxDecoration(
                                               border: Border.all(
                                                 color: startColor,
@@ -618,7 +618,9 @@ class _BossOfWeekProfileTileState extends State<BossOfWeekProfileTile> {
                                                 //     ),
                                                 //   ),
                                                 // ),
-                                                SizedBox(height: 8,),
+                                                SizedBox(
+                                                  height: 8,
+                                                ),
                                                 Padding(
                                                     padding: const EdgeInsets
                                                         .symmetric(
@@ -677,7 +679,7 @@ class _BossOfWeekProfileTileState extends State<BossOfWeekProfileTile> {
                                                           const Text(
                                                             'Learn more',
                                                             style: TextStyle(
-                                                                fontSize: 11,
+                                                                fontSize: 10,
                                                                 color:
                                                                     textColor),
                                                           ),

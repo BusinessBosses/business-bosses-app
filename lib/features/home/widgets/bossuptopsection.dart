@@ -23,45 +23,33 @@ class BossUpTopSection extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             mainAxisAlignment: MainAxisAlignment.start,
             children: [
-              SingleChildScrollView(
-                scrollDirection: Axis.horizontal,
-                child: Row(
-                  children: [
-                    _buildButton(context, 'Challenge', Colors.grey, () {
-                      Get.to(const BossupChallenge(
-                        ishome: false,
-                      ));
-                    }),
-                    _buildButton(context, 'Learning', Colors.orange.shade200,
-                        () {
-                      Get.to(LearningPage());
-                    }),
-                    _buildButton(context, 'Community', Colors.purple.shade200,
-                        () {
-                      Get.to(() =>
-                          const AllLearningPostsScreen(isCoursesTile: true));
-                    }),
-                  ],
-                ),
-              ),
-              const SizedBox(height: 10), // Space between the two rows
-              SingleChildScrollView(
-                scrollDirection: Axis.horizontal,
-                child: Row(
-                  children: [
-                    _buildButton(context, 'Events', Colors.orange.shade700, () {
-                      Get.toNamed(Routes.liveEvents);
-                    }),
-                    _buildButton(context, 'Crowdfund', Colors.purple.shade300,
-                        () {
-                      Get.to(DonationsPage());
-                    }),
-                    _buildButton(context, 'Upgrade +', proprimaryColor, () {
-                      // Action for Upgrade + button
-                      print('Upgrade + button tapped');
-                    }),
-                  ],
-                ),
+              Wrap(
+                spacing: 8.0, // Space between items horizontally
+                runSpacing: 10.0, // Space between rows vertically
+                children: [
+                  _buildButton(context, 'Challenge', Colors.grey.withOpacity(0.25), () {
+                    Get.to(const BossupChallenge(
+                      ishome: false,
+                    ));
+                  }),
+                  _buildButton(context, 'Learning', Colors.green.shade200.withOpacity(0.25), () {
+                    Get.to(LearningPage());
+                  }),
+                  _buildButton(context, 'Community', Colors.red.shade200.withOpacity(0.25), () {
+                    Get.to(() =>
+                        const AllLearningPostsScreen(isCoursesTile: true));
+                  }),
+                  _buildButton(context, 'Events', Colors.orange.shade700.withOpacity(0.25), () {
+                    Get.toNamed(Routes.liveEvents);
+                  }),
+                  _buildButton(context, 'Crowdfund', Colors.purple.shade300.withOpacity(0.25), () {
+                    Get.to(DonationsPage());
+                  }),
+                  _buildButton(context, 'Upgrade +', proprimaryColor.withOpacity(0.25), () {
+                    // Action for Upgrade + button
+                    print('Upgrade + button tapped');
+                  }),
+                ],
               ),
             ],
           ),
@@ -74,18 +62,18 @@ class BossUpTopSection extends StatelessWidget {
       BuildContext context, String text, Color color, VoidCallback onTap) {
     return GestureDetector(
       onTap: onTap,
-      child: Padding(
-        padding: const EdgeInsets.only(right: 8.0),
-        child: Container(
-          padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 10),
-          decoration: BoxDecoration(
-            color: color,
-            borderRadius: BorderRadius.circular(10),
-          ),
+      child: Container(
+        width: (MediaQuery.of(context).size.width - 46) / 3, // Same width for each button
+        padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
+        decoration: BoxDecoration(
+          color: color, // Transparent color for the container
+          borderRadius: BorderRadius.circular(10),
+        ),
+        child: Center(
           child: Text(
             text,
-            style: const TextStyle(
-              color: Colors.white,
+            style: TextStyle(
+              color: color.withOpacity(1.0), // Fully opaque color for the text
               fontSize: 13,
               fontWeight: FontWeight.w700,
             ),

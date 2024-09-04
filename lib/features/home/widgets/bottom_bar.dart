@@ -190,16 +190,16 @@ class BottomBar extends StatelessWidget {
                         flex: 10,
                         child: BottomTabButton(
                           icon: activeIndex == 2
-                              ? 'assets/svgs/eventufilled.svg'
-                              : 'assets/svgs/eventu.svg',
-                          label: 'Events',
+                              ? 'assets/svgs/growfilled.svg'
+                              : 'assets/svgs/grow.svg',
+                          label: 'Grow',
                           onTap: () {
                             if (activeIndex == 2) return;
 
                             if (activeIndex == 0) {
-                              Get.toNamed(Routes.liveEvents);
+                              Get.toNamed(Routes.premiumscreen);
                             } else {
-                              Get.offAndToNamed(Routes.liveEvents);
+                              Get.offAndToNamed(Routes.premiumscreen);
                             }
                           },
                           isActive: activeIndex == 2,
