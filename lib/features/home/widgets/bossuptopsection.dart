@@ -2,6 +2,7 @@ import 'package:business_bosses_v2/features/donations/presentation/donations.dar
 import 'package:business_bosses_v2/features/forum/presentation/all_forum_screen.dart';
 import 'package:business_bosses_v2/features/forum/presentation/bossup_challenge.dart';
 import 'package:business_bosses_v2/features/home/controller/commumities_controller.dart';
+import 'package:business_bosses_v2/features/home/widgets/all_learning_posts.dart';
 import 'package:business_bosses_v2/features/home/widgets/learningpage.dart';
 import 'package:business_bosses_v2/navigation/routes.dart';
 import 'package:business_bosses_v2/utils/constants/constants.dart';
@@ -37,12 +38,8 @@ class BossUpTopSection extends StatelessWidget {
                     }),
                     _buildButton(context, 'Community', Colors.purple.shade200,
                         () {
-                      Get.to(
-                        const AllForumScreen(isCourses: false),
-                        arguments: controller.getCategoryIndustries(
-                          Constants.LEARNINGID,
-                        ),
-                      );
+                      Get.to(() =>
+                          const AllLearningPostsScreen(isCoursesTile: true));
                     }),
                   ],
                 ),
