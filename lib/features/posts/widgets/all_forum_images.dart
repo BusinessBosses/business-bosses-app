@@ -345,70 +345,70 @@ class AllForumsImagesItem extends StatelessWidget {
           ],
         ),
         // SizedBox(height: 4.0),
-        fileUrls.length == 1
-            ? Container()
-            : SizedBox(
-                width: double.infinity,
-                height: 72.0,
-                child: Row(
-                  children: <Widget>[
-                    ...<int>[2, 3, 4, 5]
-                        .map(
-                          (int i) => Expanded(
-                            flex: 1,
-                            child: fileUrls.length >= i
-                                ? GestureDetector(
-                                    onTap: () {
-                                      Navigator.of(context).push(
-                                        MaterialPageRoute(
-                                          builder: (BuildContext context) =>
-                                              ImagesViewerScreen(
-                                            urls: fileUrls,
-                                            index: i - 1,
-                                            text: text,
-                                          ),
-                                        ),
-                                      );
-                                    },
-                                    child: Stack(
-                                      children: <Widget>[
-                                        Container(
-                                          padding: const EdgeInsets.only(
-                                              top: 10.0, right: 10),
-                                          child: NetworkImageWithPlaceHolder(
-                                            imageUrl: fileUrls[i - 1],
-                                            width: double.infinity,
-                                            height: double.infinity,
-                                            placeHolder: Icons.photo,
-                                            iconSize: 18.0,
-                                            radius: 8.0,
-                                          ),
-                                        ),
-                                        (fileUrls.length > 5 && i == 5)
-                                            ? Container(
-                                                padding:
-                                                    const EdgeInsets.all(0.0),
-                                                alignment: Alignment.center,
-                                                color: Colors.white
-                                                    .withOpacity(0.5),
-                                                child: Text(
-                                                  '+${fileUrls.length - 5}',
-                                                  style: headline6.copyWith(
-                                                    fontWeight: FontWeight.bold,
-                                                  ),
-                                                ),
-                                              )
-                                            : Container()
-                                      ],
-                                    ),
-                                  )
-                                : Container(),
-                          ),
-                        )
-                        .toList()
-                  ],
-                ),
-              ),
+        // fileUrls.length == 1
+        //     ? Container()
+        //     : SizedBox(
+        //         width: double.infinity,
+        //         height: 72.0,
+        //         child: Row(
+        //           children: <Widget>[
+        //             ...<int>[2, 3, 4, 5]
+        //                 .map(
+        //                   (int i) => Expanded(
+        //                     flex: 1,
+        //                     child: fileUrls.length >= i
+        //                         ? GestureDetector(
+        //                             onTap: () {
+        //                               Navigator.of(context).push(
+        //                                 MaterialPageRoute(
+        //                                   builder: (BuildContext context) =>
+        //                                       ImagesViewerScreen(
+        //                                     urls: fileUrls,
+        //                                     index: i - 1,
+        //                                     text: text,
+        //                                   ),
+        //                                 ),
+        //                               );
+        //                             },
+        //                             child: Stack(
+        //                               children: <Widget>[
+        //                                 Container(
+        //                                   padding: const EdgeInsets.only(
+        //                                       top: 10.0, right: 10),
+        //                                   child: NetworkImageWithPlaceHolder(
+        //                                     imageUrl: fileUrls[i - 1],
+        //                                     width: double.infinity,
+        //                                     height: double.infinity,
+        //                                     placeHolder: Icons.photo,
+        //                                     iconSize: 18.0,
+        //                                     radius: 8.0,
+        //                                   ),
+        //                                 ),
+        //                                 (fileUrls.length > 5 && i == 5)
+        //                                     ? Container(
+        //                                         padding:
+        //                                             const EdgeInsets.all(0.0),
+        //                                         alignment: Alignment.center,
+        //                                         color: Colors.white
+        //                                             .withOpacity(0.5),
+        //                                         child: Text(
+        //                                           '+${fileUrls.length - 5}',
+        //                                           style: headline6.copyWith(
+        //                                             fontWeight: FontWeight.bold,
+        //                                           ),
+        //                                         ),
+        //                                       )
+        //                                     : Container()
+        //                               ],
+        //                             ),
+        //                           )
+        //                         : Container(),
+        //                   ),
+        //                 )
+        //                 .toList()
+        //           ],
+        //         ),
+        //       ),
       ],
     );
   }
