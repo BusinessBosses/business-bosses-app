@@ -3,6 +3,7 @@ import 'package:business_bosses_v2/features/forum/controller/challenge_controlle
 import 'package:business_bosses_v2/features/home/controller/commumities_controller.dart';
 import 'package:business_bosses_v2/features/home/widgets/bottom_bar.dart';
 import 'package:business_bosses_v2/features/home/widgets/challengessection.dart';
+import 'package:business_bosses_v2/features/home/widgets/cointile.dart';
 import 'package:business_bosses_v2/features/home/widgets/eventssection.dart';
 import 'package:business_bosses_v2/features/home/widgets/floatingbutton.dart';
 import 'package:business_bosses_v2/features/home/widgets/forum_item.dart';
@@ -373,6 +374,10 @@ class _HomeScreenState extends State<HomeScreen>
                                                   ),
 
                                                   RelevantPeopleTile(),
+                                                   SizedBox(
+                                                    height: 15,
+                                                  ),
+                                                  CoinTile(),
                                                   // BossOfWeekProfileTile(),
                                                   SizedBox(
                                                     height: 15,

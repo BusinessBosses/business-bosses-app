@@ -1,5 +1,7 @@
+import 'package:business_bosses_v2/features/premium/proscreen.dart';
 import 'package:business_bosses_v2/utils/theme/theme.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
 class ProTile extends StatelessWidget {
   const ProTile({super.key});
@@ -10,16 +12,16 @@ class ProTile extends StatelessWidget {
       padding: const EdgeInsets.symmetric(horizontal: 15.0),
       child: Column(
         children: [
-          Row(
+          const Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: <Widget>[
-              const Text(
+              Text(
                 'Subscribe to Pro',
                 style: TextStyle(fontWeight: FontWeight.w700, fontSize: 18),
               ),
             ],
           ),
-          SizedBox(height: 5),
+          const SizedBox(height: 5),
           Container(
             padding: const EdgeInsets.symmetric(vertical: 15),
             decoration: BoxDecoration(
@@ -50,17 +52,17 @@ class ProTile extends StatelessWidget {
                         const SizedBox(
                           height: 5,
                         ),
-                        Text(
+                        const Text(
                           'Upgrade now',
                           style: TextStyle(
                               color: Colors.white,
                               fontSize: 13,
                               fontWeight: FontWeight.w700),
                         ),
-                        SizedBox(
+                        const SizedBox(
                           height: 10,
                         ),
-                        Wrap(children: [
+                        const Wrap(children: [
                           Text(
                             '\$9.99',
                             style: TextStyle(
@@ -77,7 +79,7 @@ class ProTile extends StatelessWidget {
                                 TextStyle(color: Colors.white70, fontSize: 13),
                           ),
                         ]),
-                        SizedBox(
+                        const SizedBox(
                           height: 10,
                         ),
                         Row(
@@ -88,9 +90,9 @@ class ProTile extends StatelessWidget {
                                 decoration: BoxDecoration(
                                     color: Colors.white,
                                     borderRadius: BorderRadius.circular(100)),
-                                padding: EdgeInsets.symmetric(
+                                padding: const EdgeInsets.symmetric(
                                     horizontal: 15, vertical: 8),
-                                child: Wrap(
+                                child: const Wrap(
                                     crossAxisAlignment:
                                         WrapCrossAlignment.center,
                                     children: [
@@ -110,21 +112,26 @@ class ProTile extends StatelessWidget {
                                     ]),
                               ),
                             ),
-                            SizedBox(
+                            const SizedBox(
                               width: 8,
                             ),
-                            Container(
-                              padding: EdgeInsets.symmetric(
-                                  horizontal: 15, vertical: 8),
-                              decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(100),
-                                  border: Border.all(color: Colors.white)),
-                              child: Text(
-                                'View Pro Features',
-                                style: TextStyle(
-                                    color: Colors.white,
-                                    fontSize: 13,
-                                    fontWeight: FontWeight.w700),
+                            GestureDetector(
+                              onTap: () {
+                                Get.to(ProScreen());
+                              },
+                              child: Container(
+                                padding: const EdgeInsets.symmetric(
+                                    horizontal: 15, vertical: 8),
+                                decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(100),
+                                    border: Border.all(color: Colors.white)),
+                                child: const Text(
+                                  'View Pro Features',
+                                  style: TextStyle(
+                                      color: Colors.white,
+                                      fontSize: 13,
+                                      fontWeight: FontWeight.w700),
+                                ),
                               ),
                             )
                           ],
