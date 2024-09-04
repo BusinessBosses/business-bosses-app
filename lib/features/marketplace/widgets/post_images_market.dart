@@ -80,6 +80,7 @@ class PostImagesMarket extends StatelessWidget {
                                     ImagesViewerScreen(
                                   urls: post.images,
                                   text: post.description,
+                                  index: 1,
                                 ),
                               ),
                             );
@@ -140,6 +141,7 @@ class PostImagesMarket extends StatelessWidget {
                                     builder: (BuildContext context) =>
                                         ImagesViewerScreen(
                                       urls: post.images,
+                                      index: 1,
                                       text: post.description,
                                     ),
                                   ),
