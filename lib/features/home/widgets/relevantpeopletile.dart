@@ -60,11 +60,14 @@ class _RelevantPeopleTileState extends State<RelevantPeopleTile> {
 
         return Padding(
           padding: const EdgeInsets.symmetric(horizontal: 15.0),
-          child: SizedBox(
-            height: 230,
+          child: ConstrainedBox(
+            constraints: BoxConstraints(
+              maxHeight: 223, // Set the maximum height to fit the content
+            ),
             child: Column(
-              mainAxisAlignment: MainAxisAlignment.start,
-              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              mainAxisSize: MainAxisSize.max,
               children: [
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -113,13 +116,17 @@ class _RelevantPeopleTileState extends State<RelevantPeopleTile> {
                                     profileController.myProfile.connecteds!
                                         .contains(currentUser.uid);
 
-                            return ConnectionGridTile(
-                              color: backgroundColor,
-                              user: currentUser,
-                              status: checkConnected,
-                              onChangeConnectionStatus: () {
-                                controller.connectToUser(currentUser);
-                              },
+                            return Column(
+                              children: [
+                                ConnectionGridTile(
+                                  color: backgroundColor,
+                                  user: currentUser,
+                                  status: checkConnected,
+                                  onChangeConnectionStatus: () {
+                                    controller.connectToUser(currentUser);
+                                  },
+                                ),
+                              ],
                             );
                           },
                         ),

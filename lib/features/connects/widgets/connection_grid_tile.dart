@@ -49,6 +49,7 @@ class _ConnectionGridTileState extends State<ConnectionGridTile> {
         padding: EdgeInsets.only(right: widget.color != null ? 10.0 : 0),
         child: Container(
           width: widget.color != null ? 150 : null,
+          // height: 150,
           padding: const EdgeInsets.all(16.0),
           decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(radius),
@@ -73,7 +74,10 @@ class _ConnectionGridTileState extends State<ConnectionGridTile> {
                             maxLines: 2,
                             overflow: TextOverflow.ellipsis,
                             textAlign: TextAlign.center,
-                            style: Theme.of(context).textTheme.bodyLarge,
+                            style: widget.color != null
+                                ? TextStyle(
+                                    fontSize: 13, fontWeight: FontWeight.w700)
+                                : Theme.of(context).textTheme.bodyLarge,
                           ),
                           const SizedBox(width: 5),
                           SvgPicture.asset(
@@ -90,7 +94,10 @@ class _ConnectionGridTileState extends State<ConnectionGridTile> {
                       maxLines: 2,
                       overflow: TextOverflow.ellipsis,
                       textAlign: TextAlign.center,
-                      style: Theme.of(context).textTheme.bodyLarge,
+                      style: widget.color != null
+                                ? TextStyle(
+                                    fontSize: 13, fontWeight: FontWeight.w700)
+                                : Theme.of(context).textTheme.bodyLarge,
                     ),
               const SizedBox(height: 4.0),
               widget.user.category != null
@@ -98,10 +105,10 @@ class _ConnectionGridTileState extends State<ConnectionGridTile> {
                       maxLines: 1,
                       overflow: TextOverflow.ellipsis,
                       style: const TextStyle(
-                        fontSize: 14,
+                        fontSize: 12,
                       ))
                   : widget.color != null
-                      ? SizedBox(height: 19)
+                      ? SizedBox(height: 12)
                       : Container(),
               const SizedBox(height: 12.0),
               MCustomButton(

@@ -14,16 +14,16 @@ class CoinTile extends StatelessWidget {
       child: Stack(children: [
         Column(
           children: [
-            Row(
+            const Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: <Widget>[
-                const Text(
+                Text(
                   'Earn Coins',
                   style: TextStyle(fontWeight: FontWeight.w700, fontSize: 18),
                 ),
               ],
             ),
-            SizedBox(height: 5),
+            const SizedBox(height: 5),
             Container(
               padding: const EdgeInsets.symmetric(vertical: 15),
               decoration: BoxDecoration(
@@ -55,27 +55,27 @@ class CoinTile extends StatelessWidget {
                           const SizedBox(
                             height: 5,
                           ),
-                          Text(
+                          const Text(
                             'Earn now',
                             style: TextStyle(
                                 color: textColor,
                                 fontSize: 13,
                                 fontWeight: FontWeight.w700),
                           ),
-                          SizedBox(
+                          const SizedBox(
                             height: 10,
                           ),
                           Wrap(children: [
                             Container(
-                              width: 220,
-                              child: Text(
+                              width: MediaQuery.of(context).size.width / 2,
+                              child: const Text(
                                 'Discover many ways to earn real cash just by using the Business Bosses app.',
                                 style:
                                     TextStyle(color: textColor, fontSize: 13),
                               ),
                             ),
                           ]),
-                          SizedBox(
+                          const SizedBox(
                             height: 10,
                           ),
                           Row(
@@ -85,29 +85,35 @@ class CoinTile extends StatelessWidget {
                                   Get.toNamed(Routes.promotionscreen);
                                 },
                                 child: Container(
+                                  constraints:
+                                      const BoxConstraints(minHeight: 40),
                                   decoration: BoxDecoration(
-                                      color: Colors.white,
-                                      borderRadius: BorderRadius.circular(100)),
-                                  padding: EdgeInsets.symmetric(
+                                    color: Colors.white,
+                                    borderRadius: BorderRadius.circular(100),
+                                  ),
+                                  padding: const EdgeInsets.symmetric(
                                       horizontal: 15, vertical: 8),
-                                  child: Wrap(
-                                      crossAxisAlignment:
-                                          WrapCrossAlignment.center,
-                                      children: [
-                                        Text(
-                                          'Earn',
-                                          style: TextStyle(
-                                              color: Colors.orange,
-                                              fontSize: 13),
-                                        ),
-                                        SizedBox(
-                                          width: 5,
-                                        ),
-                                        Icon(
-                                          Icons.arrow_right_alt,
-                                          color: Colors.orange,
-                                        )
-                                      ]),
+                                  child: const Row(
+                                    mainAxisSize: MainAxisSize
+                                        .min, // Row will only take up the space it needs
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.center,
+                                    children: [
+                                      Text(
+                                        'Earn',
+                                        style: TextStyle(
+                                            color: Colors.orange, fontSize: 13, fontWeight: FontWeight.w700),
+                                      ),
+                                      SizedBox(
+                                        width: 5,
+                                      ),
+                                      Icon(
+                                        Icons.arrow_right_alt,
+                                        color: Colors.orange,
+                                        size: 20,
+                                      )
+                                    ],
+                                  ),
                                 ),
                               ),
                             ],
@@ -122,9 +128,12 @@ class CoinTile extends StatelessWidget {
           ],
         ),
         Positioned(
-            right: 10,
+            right: 0,
             bottom: -40,
-            child: SvgPicture.asset('assets/svgs/coin.svg', height: 150,))
+            child: SvgPicture.asset(
+              'assets/svgs/coin.svg',
+              height: 150,
+            ))
       ]),
     );
   }

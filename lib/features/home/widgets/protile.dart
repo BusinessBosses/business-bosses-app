@@ -83,33 +83,41 @@ class ProTile extends StatelessWidget {
                           height: 10,
                         ),
                         Row(
+                          crossAxisAlignment: CrossAxisAlignment.center,
                           children: [
                             GestureDetector(
                               onTap: () {},
                               child: Container(
+                                constraints:
+                                    const BoxConstraints(minHeight: 40),
                                 decoration: BoxDecoration(
-                                    color: Colors.white,
-                                    borderRadius: BorderRadius.circular(100)),
-                                padding: const EdgeInsets.symmetric(
-                                    horizontal: 15, vertical: 8),
-                                child: const Wrap(
-                                    crossAxisAlignment:
-                                        WrapCrossAlignment.center,
-                                    children: [
-                                      Text(
-                                        'Upgrade',
-                                        style: TextStyle(
-                                            color: proprimaryColor,
-                                            fontSize: 13),
-                                      ),
-                                      SizedBox(
-                                        width: 5,
-                                      ),
-                                      Icon(
-                                        Icons.arrow_right_alt,
-                                        color: proprimaryColor,
-                                      )
-                                    ]),
+                                  color: Colors.white,
+                                  borderRadius: BorderRadius.circular(100),
+                                  border: Border.all(color: Colors.white),
+                                ),
+                                padding:
+                                    const EdgeInsets.symmetric(horizontal: 15),
+                                child: const Row(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  crossAxisAlignment: CrossAxisAlignment.center,
+                                  children: [
+                                    Text(
+                                      'Upgrade',
+                                      style: TextStyle(
+                                          color: proprimaryColor,
+                                          fontWeight: FontWeight.w700,
+                                          fontSize: 13),
+                                    ),
+                                    SizedBox(
+                                      width: 5,
+                                    ),
+                                    Icon(
+                                      Icons.arrow_right_alt,
+                                      size: 20,
+                                      color: proprimaryColor,
+                                    ),
+                                  ],
+                                ),
                               ),
                             ),
                             const SizedBox(
@@ -120,20 +128,26 @@ class ProTile extends StatelessWidget {
                                 Get.to(ProScreen());
                               },
                               child: Container(
-                                padding: const EdgeInsets.symmetric(
-                                    horizontal: 15, vertical: 8),
+                                constraints: BoxConstraints(
+                                    minHeight:
+                                        40), // Ensure the same height as the first button
                                 decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(100),
-                                    border: Border.all(color: Colors.white)),
-                                child: const Text(
-                                  'View Pro Features',
-                                  style: TextStyle(
-                                      color: Colors.white,
-                                      fontSize: 13,
-                                      fontWeight: FontWeight.w700),
+                                  borderRadius: BorderRadius.circular(100),
+                                  border: Border.all(color: Colors.white),
+                                ),
+                                padding: const EdgeInsets.symmetric(
+                                    horizontal: 15), // Removed vertical padding
+                                child: const Center(
+                                  child: Text(
+                                    'View Pro Features',
+                                    style: TextStyle(
+                                        color: Colors.white,
+                                        fontSize: 13,
+                                        fontWeight: FontWeight.w700),
+                                  ),
                                 ),
                               ),
-                            )
+                            ),
                           ],
                         ),
                       ],

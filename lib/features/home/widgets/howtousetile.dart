@@ -15,19 +15,19 @@ class HowtouseTile extends StatelessWidget {
         padding: const EdgeInsets.symmetric(horizontal: 15.0),
         child: Column(
           children: [
-            Row(
+            const Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: <Widget>[
-                const Text(
+                Text(
                   'How To Use Business Bosses App',
                   style: TextStyle(fontWeight: FontWeight.w700, fontSize: 18),
                 ),
               ],
             ),
-            SizedBox(height: 5),
+            const SizedBox(height: 5),
             Container(
               width: double.infinity,
-              padding: EdgeInsets.all(15),
+              padding: const EdgeInsets.all(15),
               decoration: BoxDecoration(
                   color: Colors.green.withOpacity(0.2),
                   borderRadius: BorderRadius.circular(15)),
@@ -37,47 +37,56 @@ class HowtouseTile extends StatelessWidget {
                   // Stack of overlapping icons with circular backgrounds
                   Image.asset(
                     'assets/images/howitworkspic.png',
-                    height: 40,
+                    height: 35,
                   ),
-                  SizedBox(height: 20),
+                  const SizedBox(height: 10),
                   // Subscription message
-                  Text(
-                    "Get to know the Business Bosses app and all of its features.",
-                    style: TextStyle(
-                      color: textColor,
-                      fontSize: 13,
-                      fontWeight: FontWeight.w700,
+                  const Padding(
+                    padding: EdgeInsets.symmetric(horizontal: 20.0),
+                    child: Text(
+                      "Get to know the Business Bosses app and all of its features.",
+                      style: TextStyle(
+                        color: textColor,
+                        fontSize: 13,
+                        fontWeight: FontWeight.w500,
+                      ),
+                      textAlign: TextAlign.center,
                     ),
-                    textAlign: TextAlign.center,
                   ),
-                  SizedBox(
+                  const SizedBox(
                     height: 10,
                   ),
                   GestureDetector(
                     onTap: () {
-                      Get.to(ExplorebusinessbossesScreen());
+                      Get.to(const ExplorebusinessbossesScreen());
                     },
                     child: Container(
+                      constraints: const BoxConstraints(minHeight: 40),
                       decoration: BoxDecoration(
-                          color: Colors.white,
-                          borderRadius: BorderRadius.circular(100)),
-                      padding:
-                          EdgeInsets.symmetric(horizontal: 15, vertical: 8),
-                      child: Wrap(
-                          crossAxisAlignment: WrapCrossAlignment.center,
-                          children: [
-                            Text(
-                              'Explore',
-                              style: TextStyle(color: Colors.green, fontSize: 13),
-                            ),
-                            SizedBox(
-                              width: 5,
-                            ),
-                            Icon(
-                              Icons.arrow_right_alt,
-                              color: Colors.green,
-                            )
-                          ]),
+                        color: Colors.white,
+                        borderRadius: BorderRadius.circular(100),
+                      ),
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 15, vertical: 8),
+                      child: const Row(
+                        mainAxisSize: MainAxisSize
+                            .min, // Row will only take up the space it needs
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          Text(
+                            'Explore',
+                            style: TextStyle(color: Colors.green, fontSize: 13, fontWeight: FontWeight.w700),
+                          ),
+                          SizedBox(
+                            width: 5,
+                          ),
+                          Icon(
+                            Icons.arrow_right_alt,
+                            color: Colors.green,
+                            size: 20,
+                          )
+                        ],
+                      ),
                     ),
                   ),
                 ],

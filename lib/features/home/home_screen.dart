@@ -353,6 +353,7 @@ class _HomeScreenState extends State<HomeScreen>
                                             controller: _tabController,
                                             children: <Widget>[
                                               ListView(
+                                                shrinkWrap: true,
                                                 children: const [
                                                   // Padding(
                                                   //   padding: EdgeInsets.only(
