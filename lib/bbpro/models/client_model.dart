@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'package:business_bosses_v2/utils/theme/theme.dart';
 import 'package:flutter/material.dart';
 
 // Enum for client types
@@ -6,7 +7,7 @@ enum ClientType {
   allclients('All Clients', Colors.black),
   online('Online', Colors.blue),
   inPerson('In-Person', Colors.green),
-  bbUser('Bb-User', Colors.orange);
+  bbUser('Bb-User', primaryColorLT);
 
   const ClientType(this.displayTitle, this.backgroundColor);
 
