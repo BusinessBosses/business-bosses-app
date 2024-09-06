@@ -291,7 +291,7 @@ class _BossOfWeekProfileTileState extends State<BossOfWeekProfileTile> {
                                                   padding: const EdgeInsets
                                                       .symmetric(
                                                       horizontal: 10,
-                                                      vertical: 8),
+                                                      vertical: 6),
                                                   decoration: BoxDecoration(
                                                       color: Colors.white,
                                                       borderRadius:
