@@ -232,7 +232,7 @@ class _BossOfWeekProfileTileState extends State<BossOfWeekProfileTile> {
                                                       imageUrl:
                                                           user?.photoUrl ?? '',
                                                       placeHolder:
-                                                          Icons.business,
+                                                          Icons.person,
                                                       iconSize: 25,
                                                       fit: BoxFit.cover,
                                                     ),
@@ -240,7 +240,7 @@ class _BossOfWeekProfileTileState extends State<BossOfWeekProfileTile> {
                                                 ),
                                                 const SizedBox(width: 4),
                                                 const Text(
-                                                  'Boss of \n the Week',
+                                                  'Boss of \nthe Week',
                                                   maxLines: 2,
                                                   style: TextStyle(
                                                     color: Colors.white,
