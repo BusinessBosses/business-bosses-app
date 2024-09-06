@@ -1,3 +1,5 @@
+import 'dart:ui';
+
 import 'package:business_bosses_v2/common/models/api_response_model.dart';
 import 'package:business_bosses_v2/common/models/user_model.dart';
 import 'package:business_bosses_v2/common/widgets/popup/bossup_challenge_popuphome.dart';
@@ -94,207 +96,536 @@ class _BossOfWeekProfileTileState extends State<BossOfWeekProfileTile> {
           ? Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
-                Align(
-                  alignment: Alignment.topLeft,
-                  child: Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 15.0),
-                    child: Row(
-                      children: <Widget>[
-                        if (widget.isForyou == true)
-                          CircleAvatar(
-                            radius: 48 / 3,
-                            backgroundColor: primaryColorLT.withOpacity(0.1),
-                            child: SvgPicture.asset(
-                              'assets/app/app_icon_only.svg',
-                            ),
-                          ),
-                        if (widget.isForyou == true)
-                          const SizedBox(
-                            width: 10,
-                          ),
-                        const Text(
-                          'Boss of the week',
-                          style: TextStyle(
-                              fontWeight: FontWeight.w700, fontSize: 18),
-                        ),
-                        const Spacer(),
-                        GestureDetector(
-                          onTap: () {
-                            showDialog(
-                              context: context,
-                              builder: (BuildContext context) =>
-                                  const BossUpChallangePopUpHome(),
-                            );
-                          },
-                          child: Container(
-                            color: Colors.transparent,
-                            width: 50,
-                            height: 50,
-                            child: SvgPicture.asset(
-                              'assets/svgs/more.svg',
-                              height: 20,
-                              fit: BoxFit.none,
-                              alignment: Alignment.centerRight,
-                            ),
-                          ),
-                        )
-                      ],
-                    ),
-                  ),
+                // Align(
+                //   alignment: Alignment.topLeft,
+                //   child: Padding(
+                //     padding: const EdgeInsets.symmetric(horizontal: 15.0),
+                //     child: Row(
+                //       children: <Widget>[
+                //         if (widget.isForyou == true)
+                //           CircleAvatar(
+                //             radius: 48 / 3,
+                //             backgroundColor: primaryColorLT.withOpacity(0.1),
+                //             child: SvgPicture.asset(
+                //               'assets/app/app_icon_only.svg',
+                //             ),
+                //           ),
+                //         if (widget.isForyou == true)
+                //           const SizedBox(
+                //             width: 10,
+                //           ),
+                //         const Text(
+                //           'Boss of the week',
+                //           style: TextStyle(
+                //               fontWeight: FontWeight.w700, fontSize: 18),
+                //         ),
+                //         const Spacer(),
+                //         GestureDetector(
+                //           onTap: () {
+                //             showDialog(
+                //               context: context,
+                //               builder: (BuildContext context) =>
+                //                   const BossUpChallangePopUpHome(),
+                //             );
+                //           },
+                //           child: Container(
+                //             color: Colors.transparent,
+                //             width: 50,
+                //             height: 50,
+                //             child: SvgPicture.asset(
+                //               'assets/svgs/more.svg',
+                //               height: 20,
+                //               fit: BoxFit.none,
+                //               alignment: Alignment.centerRight,
+                //             ),
+                //           ),
+                //         )
+                //       ],
+                //     ),
+                //   ),
+                // ),
+                Container(
+                  height: 7,
+                  color: backgroundColor,
                 ),
-                widget.isForyou == true
-                    ? Align(
-                        child: GestureDetector(
-                          onTap: () {
-                            Get.toNamed(Routes.publicProfile, arguments: user);
-                          },
-                          child: Container(
-                            padding: const EdgeInsets.symmetric(horizontal: 15),
-                            width: double.infinity,
-                            child: Row(
-                              children: <Widget>[
-                                Stack(
-                                  clipBehavior: Clip.none,
-                                  children: <Widget>[
-                                    GestureDetector(
-                                      onTap: (() {
-                                        Get.toNamed(Routes.publicProfile,
-                                            arguments: user);
-                                      }),
-                                      child: SizedBox(
-                                        height: 90.0,
-                                        width: 90.0,
-                                        child: Align(
-                                          alignment: Alignment.topLeft,
-                                          child: ClipRRect(
-                                            borderRadius:
-                                                BorderRadius.circular(1000),
-                                            child: user?.photoUrl != null
-                                                ? NetworkImageWithPlaceHolder(
-                                                    imageUrl: user?.photoUrl,
-                                                    height: 90.0,
-                                                    width: 90.0,
-                                                    radius: radius,
-                                                    placeHolder: Icons.person,
-                                                    iconSize: 64.0,
-                                                  )
-                                                : const CircleAvatar(
-                                                    radius: 50,
-                                                    backgroundImage: AssetImage(
-                                                        'assets/images/bb_avatar.jpg'),
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Container(
+                      padding: const EdgeInsets.symmetric(vertical: 10),
+                      height: 150,
+                      color: Colors.white,
+                      child: ListView.builder(
+                        scrollDirection: Axis.horizontal,
+                        itemCount: 2 + (homeController.bossUp?.length ?? 0),
+                        itemBuilder: (context, index) {
+                          if (index == 0) {
+                            return Padding(
+                              padding: const EdgeInsets.only(left: 10.0),
+                              child: Container(
+                                width: 110,
+                                decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(10),
+                                  color: Colors.grey[200],
+                                ),
+                                child: ClipRRect(
+                                  borderRadius: BorderRadius.circular(10),
+                                  child: Stack(
+                                    fit: StackFit.expand,
+                                    children: [
+                                      user?.photoUrl != null
+                                          ? ImageFiltered(
+                                              imageFilter: ImageFilter.blur(sigmaX: 10, sigmaY: 10),
+                                              child: Image.network(
+                                                user!.photoUrl!,
+                                                fit: BoxFit.cover,
+                                              ),
+                                            )
+                                          : ImageFiltered(
+                                              imageFilter: ImageFilter.blur(sigmaX: 5, sigmaY: 5),
+                                              child: Image.asset(
+                                                'assets/images/bb_avatar.jpg',
+                                                fit: BoxFit.cover,
+                                              ),
+                                            ),
+                                      Container(
+                                        decoration: BoxDecoration(
+                                          gradient: LinearGradient(
+                                            begin: Alignment.topCenter,
+                                            end: Alignment.bottomCenter,
+                                            colors: [
+                                              primaryColorLT.withOpacity(0.0),
+                                              primaryColorLT.withOpacity(0.6),
+                                            ],
+                                          ),
+                                        ),
+                                      ),
+                                      Positioned(
+                                        top: 5,
+                                        left: 0,
+                                        child: Container(
+                                          padding: const EdgeInsets.symmetric(
+                                              horizontal: 8, vertical: 4),
+                                          child: Row(
+                                            mainAxisSize: MainAxisSize.min,
+                                            children: [
+                                              Container(
+                                                width: 40,
+                                                height: 40,
+                                                decoration: BoxDecoration(
+                                                  shape: BoxShape.circle,
+                                                  border: Border.all(
+                                                    color: Colors.white,
+                                                    width: 3,
                                                   ),
+                                                ),
+                                                child: ClipOval(
+                                                  child:
+                                                      NetworkImageWithPlaceHolder(
+                                                    imageUrl:
+                                                        user?.photoUrl ?? '',
+                                                    placeHolder: Icons.business,
+                                                    iconSize: 25,
+                                                    fit: BoxFit.cover,
+                                                  ),
+                                                ),
+                                              ),
+                                              const SizedBox(width: 4),
+                                              const Text(
+                                                'Boss of \n the Week',
+                                                maxLines: 2,
+                                                style: TextStyle(
+                                                  color: Colors.white,
+                                                  fontSize: 8,
+                                                  fontWeight: FontWeight.bold,
+                                                ),
+                                              ),
+                                            ],
+                                          ),
+                                        ),
+                                      ),
+                                      Positioned(
+                                        bottom: 10,
+                                        left: 10,
+                                        right: 10,
+                                        child: Column(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.start,
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
+                                          mainAxisSize: MainAxisSize.min,
+                                          children: [
+                                            Text(
+                                              user?.name ?? 'user?.username',
+                                              maxLines: 1,
+                                              overflow: TextOverflow.ellipsis,
+                                              style: const TextStyle(
+                                                color: Colors.white,
+                                                fontSize: 12,
+                                                fontWeight: FontWeight.bold,
+                                              ),
+                                              textAlign: TextAlign.left,
+                                            ),
+                                            Text(
+                                              maxLines: 1,
+                                              overflow: TextOverflow.ellipsis,
+                                              user?.bio ?? '',
+                                              style: const TextStyle(
+                                                color: Colors.white,
+                                                fontSize: 10,
+                                              ),
+                                              textAlign: TextAlign.left,
+                                            ),
+                                            const SizedBox(height: 5),
+                                            Container(
+                                              width: double.infinity,
+                                              padding:
+                                                  const EdgeInsets.symmetric(
+                                                      horizontal: 10,
+                                                      vertical: 8),
+                                              decoration: BoxDecoration(
+                                                  color: Colors.white,
+                                                  borderRadius:
+                                                      BorderRadius.circular(5)),
+                                              child: const Text(
+                                                'Follow',
+                                                style: TextStyle(
+                                                    fontSize: 12,
+                                                    color: primaryColorLT,
+                                                    fontWeight:
+                                                        FontWeight.w700),
+                                                textAlign: TextAlign.center,
+                                              ),
+                                            )
+                                          ],
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ),
+                            );
+                          } else if (index ==
+                              homeController.bossUp!.length + 1) {
+                            return GestureDetector(
+                              onTap: () {
+                                Get.to(const Bossuppartner());
+                              },
+                              child: Container(
+                                width: 110,
+                                margin: const EdgeInsets.only(
+                                    left: 12.0, right: 10.0),
+                                decoration: BoxDecoration(
+                                  border: Border.all(
+                                    color: Colors.black12,
+                                    width: 1.0,
+                                  ),
+                                  color: Colors.white,
+                                  borderRadius: BorderRadius.circular(15),
+                                ),
+                                child: Column(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    CircleAvatar(
+                                      backgroundColor: backgroundColor,
+                                      radius: 20,
+                                      child: Icon(
+                                        Icons.arrow_forward,
+                                        color: primaryColorLT,
+                                        size: 20,
+                                      ),
+                                    ),
+                                    SizedBox(height: 10),
+                                    Text(
+                                      'See All Deals',
+                                      style: TextStyle(
+                                        color: textColor,
+                                        fontSize: 12,
+                                        fontWeight: FontWeight.bold,
+                                      ),
+                                      textAlign: TextAlign.center,
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            );
+                          } else {
+                            final reversedIndex =
+                                homeController.bossUp!.length - (index - 1);
+                            final item =
+                                homeController.bossUp![reversedIndex - 1];
+                            final Color startColor = startColors[
+                                (reversedIndex - 1) % startColors.length];
+                            return GestureDetector(
+                              onTap: () async {
+                                final Uri companyUrl =
+                                    Uri.parse(item['companyUrl']);
+                                if (!await launchUrl(companyUrl)) {
+                                  throw Exception(
+                                      'Could not launch $companyUrl');
+                                }
+                              },
+                              child: Container(
+                                width: 110,
+                                margin: const EdgeInsets.only(left: 10.0),
+                                decoration: BoxDecoration(
+                                  border: Border.all(
+                                    color: startColor,
+                                    width: 1.0,
+                                  ),
+                                  gradient: LinearGradient(
+                                    colors: <Color>[
+                                      startColor,
+                                      backgroundColor
+                                    ],
+                                    begin: Alignment.topRight,
+                                    end: Alignment.bottomLeft,
+                                  ),
+                                  borderRadius: BorderRadius.circular(15),
+                                ),
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: <Widget>[
+                                    Padding(
+                                      padding: const EdgeInsets.all(8.0),
+                                      child: Container(
+                                        width: 30,
+                                        height: 30,
+                                        decoration: BoxDecoration(
+                                          shape: BoxShape.circle,
+                                          border: Border.all(
+                                            color: Colors.white,
+                                            width: 3,
+                                          ),
+                                        ),
+                                        child: ClipOval(
+                                          child: NetworkImageWithPlaceHolder(
+                                            imageUrl:
+                                                item['companyPhoto'] ?? '',
+                                            placeHolder: Icons.business,
+                                            iconSize: 25,
+                                            fit: BoxFit.cover,
                                           ),
                                         ),
                                       ),
                                     ),
-                                    if (user?.isRanked ?? false)
-                                      Positioned(
-                                        right: 7.0,
-                                        bottom: -3.0,
-                                        child: Container(
-                                          height: 32,
-                                          width: 32,
-                                          decoration: BoxDecoration(
-                                            color: Colors.transparent,
-                                            borderRadius:
-                                                BorderRadius.circular(30.0),
-                                            // ignore: prefer_const_literals_to_create_immutables
+                                    Padding(
+                                      padding: const EdgeInsets.symmetric(
+                                          horizontal: 8.0),
+                                      child: Column(
+                                        children: [
+                                          Text(
+                                            item['companyName'],
+                                            textAlign: TextAlign.left,
+                                            maxLines: 2,
+                                            style: const TextStyle(
+                                              color: textColor,
+                                              fontSize: 12,
+                                              fontWeight: FontWeight.w700,
+                                            ),
+                                            overflow: TextOverflow.ellipsis,
                                           ),
+                                        ],
+                                      ),
+                                    ),
+                                    Padding(
+                                      padding: const EdgeInsets.all(8),
+                                      child: SizedBox(
+                                        width: double.infinity,
+                                        child: Wrap(
+                                          crossAxisAlignment:
+                                              WrapCrossAlignment.center,
+                                          children: <Widget>[
+                                            Container(
+                                              decoration: const BoxDecoration(
+                                                color: Colors.white,
+                                                shape: BoxShape.circle,
+                                              ),
+                                              padding: const EdgeInsets.all(4),
+                                              child: SvgPicture.asset(
+                                                'assets/svgs/upicon.svg',
+                                                color: const Color(0xFF0F132D),
+                                                height: 8,
+                                              ),
+                                            ),
+                                            const SizedBox(width: 5),
+                                            const Text(
+                                              'Learn more',
+                                              style: TextStyle(
+                                                  fontSize: 10,
+                                                  color: textColor),
+                                            ),
+                                          ],
                                         ),
                                       ),
+                                    ),
                                   ],
                                 ),
-                                const SizedBox(width: 20.0),
-                                Expanded(
-                                  child: Column(
-                                    mainAxisAlignment: MainAxisAlignment.start,
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: <Widget>[
-                                      if (user?.category == null &&
-                                          user?.companyName == null &&
-                                          user?.location == null)
-                                        const SizedBox(height: 12.0),
-                                      user?.isSubscribed == true
-                                          ? Row(
-                                              children: <Widget>[
-                                                Text(
-                                                    user?.name != null &&
-                                                            user!.name!
-                                                                    .length <=
-                                                                20
-                                                        ? user!.name!
-                                                        : user?.name != null
-                                                            ? '${user!.name!.substring(0, 20)}...'
-                                                            : '',
-                                                    maxLines: 1,
-                                                    overflow:
-                                                        TextOverflow.ellipsis,
-                                                    style: const TextStyle(
-                                                      fontSize: 15,
-                                                      fontWeight:
-                                                          FontWeight.bold,
-                                                    )),
-                                                const SizedBox(width: 5),
-                                                SvgPicture.asset(
-                                                  'assets/svgs/premiumbadge.svg',
-                                                  height: 9,
-                                                  color: primaryColorLT,
-                                                )
-                                              ],
-                                            )
-                                          : Text(
-                                              user?.name != null &&
-                                                      user!.name!.length <= 20
-                                                  ? user!.name!
-                                                  : user?.name != null
-                                                      ? '${user!.name!.substring(0, 20)}...'
-                                                      : '',
-                                              maxLines: 1,
-                                              overflow: TextOverflow.ellipsis,
-                                              style: const TextStyle(
-                                                fontSize: 15,
-                                                fontWeight: FontWeight.bold,
-                                              )),
-                                      user?.bio == null
-                                          ? Container()
-                                          : Column(
-                                              mainAxisAlignment:
-                                                  MainAxisAlignment.start,
-                                              crossAxisAlignment:
-                                                  CrossAxisAlignment.start,
-                                              children: <Widget>[
-                                                Text(
-                                                  user!.bio.toString(),
-                                                  maxLines: 2,
-                                                  overflow:
-                                                      TextOverflow.ellipsis,
-                                                  style: const TextStyle(
-                                                    color: subtextColor,
-                                                    fontSize: 13,
-                                                  ),
-                                                ),
-                                                Row(
-                                                  children: <Widget>[
-                                                    Expanded(
-                                                      child:
-                                                          outlineButtonHeader(
-                                                              () {
-                                                        onRefer(user!);
-                                                      }),
-                                                    ),
-                                                  ],
-                                                ),
-                                              ],
-                                            ),
-                                    ],
-                                  ),
-                                )
-                              ],
-                            ),
-                          ),
-                        ),
-                      )
+                              ),
+                            );
+                          }
+                        },
+                      ),
+                    ),
+                  ],
+                ),
+
+                widget.isForyou == true
+                    ? Container()
+                    // Align(
+                    //     child: GestureDetector(
+                    //       onTap: () {
+                    //         Get.toNamed(Routes.publicProfile, arguments: user);
+                    //       },
+                    //       child: Container(
+                    //         padding: const EdgeInsets.symmetric(horizontal: 15),
+                    //         width: double.infinity,
+                    //         child: Row(
+                    //           children: <Widget>[
+                    //             Stack(
+                    //               clipBehavior: Clip.none,
+                    //               children: <Widget>[
+                    //                 GestureDetector(
+                    //                   onTap: (() {
+                    //                     Get.toNamed(Routes.publicProfile,
+                    //                         arguments: user);
+                    //                   }),
+                    //                   child: SizedBox(
+                    //                     height: 90.0,
+                    //                     width: 90.0,
+                    //                     child: Align(
+                    //                       alignment: Alignment.topLeft,
+                    //                       child: ClipRRect(
+                    //                         borderRadius:
+                    //                             BorderRadius.circular(1000),
+                    //                         child: user?.photoUrl != null
+                    //                             ? NetworkImageWithPlaceHolder(
+                    //                                 imageUrl: user?.photoUrl,
+                    //                                 height: 90.0,
+                    //                                 width: 90.0,
+                    //                                 radius: radius,
+                    //                                 placeHolder: Icons.person,
+                    //                                 iconSize: 64.0,
+                    //                               )
+                    //                             : const CircleAvatar(
+                    //                                 radius: 50,
+                    //                                 backgroundImage: AssetImage(
+                    //                                     'assets/images/bb_avatar.jpg'),
+                    //                               ),
+                    //                       ),
+                    //                     ),
+                    //                   ),
+                    //                 ),
+                    //                 if (user?.isRanked ?? false)
+                    //                   Positioned(
+                    //                     right: 7.0,
+                    //                     bottom: -3.0,
+                    //                     child: Container(
+                    //                       height: 32,
+                    //                       width: 32,
+                    //                       decoration: BoxDecoration(
+                    //                         color: Colors.transparent,
+                    //                         borderRadius:
+                    //                             BorderRadius.circular(30.0),
+                    //                         // ignore: prefer_const_literals_to_create_immutables
+                    //                       ),
+                    //                     ),
+                    //                   ),
+                    //               ],
+                    //             ),
+                    //             const SizedBox(width: 20.0),
+                    //             Expanded(
+                    //               child: Column(
+                    //                 mainAxisAlignment: MainAxisAlignment.start,
+                    //                 crossAxisAlignment:
+                    //                     CrossAxisAlignment.start,
+                    //                 children: <Widget>[
+                    //                   if (user?.category == null &&
+                    //                       user?.companyName == null &&
+                    //                       user?.location == null)
+                    //                     const SizedBox(height: 12.0),
+                    //                   user?.isSubscribed == true
+                    //                       ? Row(
+                    //                           children: <Widget>[
+                    //                             Text(
+                    //                                 user?.name != null &&
+                    //                                         user!.name!
+                    //                                                 .length <=
+                    //                                             20
+                    //                                     ? user!.name!
+                    //                                     : user?.name != null
+                    //                                         ? '${user!.name!.substring(0, 20)}...'
+                    //                                         : '',
+                    //                                 maxLines: 1,
+                    //                                 overflow:
+                    //                                     TextOverflow.ellipsis,
+                    //                                 style: const TextStyle(
+                    //                                   fontSize: 15,
+                    //                                   fontWeight:
+                    //                                       FontWeight.bold,
+                    //                                 )),
+                    //                             const SizedBox(width: 5),
+                    //                             SvgPicture.asset(
+                    //                               'assets/svgs/premiumbadge.svg',
+                    //                               height: 9,
+                    //                               color: primaryColorLT,
+                    //                             )
+                    //                           ],
+                    //                         )
+                    //                       : Text(
+                    //                           user?.name != null &&
+                    //                                   user!.name!.length <= 20
+                    //                               ? user!.name!
+                    //                               : user?.name != null
+                    //                                   ? '${user!.name!.substring(0, 20)}...'
+                    //                                   : '',
+                    //                           maxLines: 1,
+                    //                           overflow: TextOverflow.ellipsis,
+                    //                           style: const TextStyle(
+                    //                             fontSize: 15,
+                    //                             fontWeight: FontWeight.bold,
+                    //                           )),
+                    //                   user?.bio == null
+                    //                       ? Container()
+                    //                       : Column(
+                    //                           mainAxisAlignment:
+                    //                               MainAxisAlignment.start,
+                    //                           crossAxisAlignment:
+                    //                               CrossAxisAlignment.start,
+                    //                           children: <Widget>[
+                    //                             Text(
+                    //                               user!.bio.toString(),
+                    //                               maxLines: 2,
+                    //                               overflow:
+                    //                                   TextOverflow.ellipsis,
+                    //                               style: const TextStyle(
+                    //                                 color: subtextColor,
+                    //                                 fontSize: 13,
+                    //                               ),
+                    //                             ),
+                    //                             Row(
+                    //                               children: <Widget>[
+                    //                                 Expanded(
+                    //                                   child:
+                    //                                       outlineButtonHeader(
+                    //                                           () {
+                    //                                     onRefer(user!);
+                    //                                   }),
+                    //                                 ),
+                    //                               ],
+                    //                             ),
+                    //                           ],
+                    //                         ),
+                    //                 ],
+                    //               ),
+                    //             )
+                    //           ],
+                    //         ),
+                    //       ),
+                    //     ),
+                    //   )
                     : Padding(
                         padding: const EdgeInsets.symmetric(horizontal: 15.0),
                         child: Container(
@@ -384,7 +715,7 @@ class _BossOfWeekProfileTileState extends State<BossOfWeekProfileTile> {
                                                       fontWeight:
                                                           FontWeight.bold,
                                                       color: Colors.white)),
-                                          SizedBox(
+                                          const SizedBox(
                                             height: 10,
                                           ),
                                           user?.bio == null
@@ -405,7 +736,7 @@ class _BossOfWeekProfileTileState extends State<BossOfWeekProfileTile> {
                                                         fontSize: 13,
                                                       ),
                                                     ),
-                                                    SizedBox(
+                                                    const SizedBox(
                                                       height: 10,
                                                     ),
                                                     Row(
@@ -486,412 +817,412 @@ class _BossOfWeekProfileTileState extends State<BossOfWeekProfileTile> {
                         ),
                       ),
                 const SizedBox(
-                  height: 10,
+                  height: 7,
                 ),
-                GestureDetector(
-                  onTap: () {
-                    Get.to(const Bossuppartner());
-                  },
-                  child: Container(
-                    padding: const EdgeInsets.symmetric(vertical: 10),
-                    color: Colors.white,
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: <Widget>[
-                        Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 15.0),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: <Widget>[
-                              const Text(
-                                'Deals',
-                                style: TextStyle(
-                                    fontWeight: FontWeight.w700, fontSize: 18),
-                              ),
-                              Wrap(
-                                  crossAxisAlignment: WrapCrossAlignment.center,
-                                  children: <Widget>[
-                                    const Text(
-                                      'View all',
-                                      style: TextStyle(fontSize: 11),
-                                    ),
-                                    const SizedBox(width: 5.0),
-                                    SvgPicture.asset(
-                                      'assets/svgs/nexticon.svg',
-                                      // ignore: deprecated_member_use
-                                      color: textColor,
-                                      height: 8,
-                                    ),
-                                  ]),
-                            ],
-                          ),
-                        ),
-                        const SizedBox(
-                          height: 10,
-                        ),
-                        SingleChildScrollView(
-                          scrollDirection: Axis.horizontal,
-                          child: Row(
-                            children: homeController.bossUp!.reversed
-                                .toList()
-                                .map((Map<String, dynamic> item) {
-                              final Color startColor = startColors[
-                                  homeController.bossUp!.indexOf(item) %
-                                      startColors.length];
-                              return widget.isForyou == true
-                                  ? LayoutBuilder(
-                                      builder: (BuildContext context,
-                                          BoxConstraints constraints) {
-                                        return GestureDetector(
-                                          onTap: () async {
-                                            final Uri companyUrl =
-                                                Uri.parse(item['companyUrl']);
-                                            if (!await launchUrl(companyUrl)) {
-                                              throw Exception(
-                                                  'Could not launch $companyUrl');
-                                            }
-                                          },
-                                          child: Container(
-                                            width: MediaQuery.of(context)
-                                                    .size
-                                                    .width /
-                                                4,
-                                            margin: const EdgeInsets.only(
-                                                left: 12.0),
-                                            decoration: BoxDecoration(
-                                              border: Border.all(
-                                                color: startColor,
-                                                width: 1.0,
-                                              ),
-                                              gradient: LinearGradient(
-                                                colors: <Color>[
-                                                  startColor,
-                                                  backgroundColor
-                                                ],
-                                                begin: Alignment.topRight,
-                                                end: Alignment.bottomLeft,
-                                              ),
-                                              borderRadius:
-                                                  BorderRadius.circular(15),
-                                            ),
-                                            child: Column(
-                                              crossAxisAlignment:
-                                                  CrossAxisAlignment.start,
-                                              mainAxisAlignment:
-                                                  MainAxisAlignment
-                                                      .spaceBetween,
-                                              children: <Widget>[
-                                                // Padding(
-                                                //   padding:
-                                                //       const EdgeInsets.only(
-                                                //           left: 8.0,
-                                                //           right: 8,
-                                                //           top: 8,
-                                                //           bottom: 5),
-                                                //   child: SizedBox(
-                                                //     height: 20.0,
-                                                //     width: 20.0,
-                                                //     child: Container(
-                                                //       decoration: BoxDecoration(
-                                                //         border: Border.all(
-                                                //             width: 0.5,
-                                                //             color:
-                                                //                 Colors.black12),
-                                                //         color: backgroundColor,
-                                                //         borderRadius:
-                                                //             BorderRadius
-                                                //                 .circular(
-                                                //                     100.0),
-                                                //       ),
-                                                //       child:
-                                                //           NetworkImageWithPlaceHolder(
-                                                //         imageUrl: item[
-                                                //                 'companyPhoto'] ??
-                                                //             '',
-                                                //         radius: 100,
-                                                //         placeHolder:
-                                                //             Icons.person,
-                                                //         iconSize: 15.0,
-                                                //         fit: BoxFit.cover,
-                                                //       ),
-                                                //     ),
-                                                //   ),
-                                                // ),
-                                                SizedBox(
-                                                  height: 8,
-                                                ),
-                                                Padding(
-                                                    padding: const EdgeInsets
-                                                        .symmetric(
-                                                      horizontal: 8.0,
-                                                    ),
-                                                    child: Column(
-                                                      children: [
-                                                        Text(
-                                                          item['companyName'],
-                                                          textAlign:
-                                                              TextAlign.left,
-                                                          maxLines: 2,
-                                                          style:
-                                                              const TextStyle(
-                                                            color: textColor,
-                                                            fontSize: 12,
-                                                            fontWeight:
-                                                                FontWeight.w700,
-                                                          ),
-                                                          overflow: TextOverflow
-                                                              .ellipsis, // Add this line to handle overflow
-                                                        ),
-                                                      ],
-                                                    )),
-                                                Padding(
-                                                  padding:
-                                                      const EdgeInsets.all(8),
-                                                  child: SizedBox(
-                                                    width: double.infinity,
-                                                    child: Wrap(
-                                                        crossAxisAlignment:
-                                                            WrapCrossAlignment
-                                                                .center,
-                                                        children: <Widget>[
-                                                          Container(
-                                                            decoration:
-                                                                const BoxDecoration(
-                                                                    color: Colors
-                                                                        .white,
-                                                                    shape: BoxShape
-                                                                        .circle),
-                                                            padding:
-                                                                const EdgeInsets
-                                                                    .all(4),
-                                                            child: SvgPicture
-                                                                .asset(
-                                                              'assets/svgs/upicon.svg',
-                                                              color: const Color(
-                                                                  0xFF0F132D),
-                                                              height: 8,
-                                                            ),
-                                                          ),
-                                                          const SizedBox(
-                                                            width: 5,
-                                                          ),
-                                                          const Text(
-                                                            'Learn more',
-                                                            style: TextStyle(
-                                                                fontSize: 10,
-                                                                color:
-                                                                    textColor),
-                                                          ),
-                                                        ]),
-                                                  ),
-                                                ),
-                                              ],
-                                            ),
-                                          ),
-                                        );
-                                      },
-                                    )
-                                  : LayoutBuilder(
-                                      builder: (BuildContext context,
-                                          BoxConstraints constraints) {
-                                        return GestureDetector(
-                                          onTap: () async {
-                                            final Uri companyUrl =
-                                                Uri.parse(item['companyUrl']);
-                                            if (!await launchUrl(companyUrl)) {
-                                              throw Exception(
-                                                  'Could not launch $companyUrl');
-                                            }
-                                          },
-                                          child: Container(
-                                            width: MediaQuery.of(context)
-                                                    .size
-                                                    .width /
-                                                1.5,
-                                            height: 120,
-                                            margin: const EdgeInsets.only(
-                                                left: 15.0),
-                                            decoration: BoxDecoration(
-                                              border: Border.all(
-                                                color: Colors.black12,
-                                                width: 0.5,
-                                              ),
-                                              gradient: LinearGradient(
-                                                colors: <Color>[
-                                                  startColor,
-                                                  Colors.white
-                                                ],
-                                                begin: Alignment.topRight,
-                                                end: Alignment.bottomLeft,
-                                              ),
-                                              borderRadius:
-                                                  BorderRadius.circular(12),
-                                            ),
-                                            child: Column(
-                                              crossAxisAlignment:
-                                                  CrossAxisAlignment.start,
-                                              mainAxisAlignment:
-                                                  MainAxisAlignment
-                                                      .spaceBetween,
-                                              children: <Widget>[
-                                                Row(
-                                                    crossAxisAlignment:
-                                                        CrossAxisAlignment
-                                                            .center,
-                                                    children: [
-                                                      Padding(
-                                                        padding:
-                                                            const EdgeInsets
-                                                                .only(
-                                                                left: 10,
-                                                                right: 10,
-                                                                top: 10,
-                                                                bottom: 5),
-                                                        child: SizedBox(
-                                                          height: 68.0,
-                                                          width: 68.0,
-                                                          child: Container(
-                                                            decoration:
-                                                                BoxDecoration(
-                                                              border: Border.all(
-                                                                  width: 0.5,
-                                                                  color: Colors
-                                                                      .black12),
-                                                              color:
-                                                                  backgroundColor,
-                                                              borderRadius:
-                                                                  BorderRadius
-                                                                      .circular(
-                                                                          10.0),
-                                                            ),
-                                                            child:
-                                                                NetworkImageWithPlaceHolder(
-                                                              imageUrl: item[
-                                                                      'companyPhoto'] ??
-                                                                  '',
-                                                              radius: 10,
-                                                              placeHolder:
-                                                                  Icons.person,
-                                                              iconSize: 15.0,
-                                                              fit: BoxFit.cover,
-                                                            ),
-                                                          ),
-                                                        ),
-                                                      ),
-                                                      Expanded(
-                                                        child: Padding(
-                                                          padding:
-                                                              const EdgeInsets
-                                                                  .only(
-                                                                  right: 10.0),
-                                                          child: Column(
-                                                            crossAxisAlignment:
-                                                                CrossAxisAlignment
-                                                                    .start,
-                                                            children: [
-                                                              Text(
-                                                                item[
-                                                                    'companyName'],
-                                                                softWrap: true,
-                                                                textAlign:
-                                                                    TextAlign
-                                                                        .left,
-                                                                maxLines: 1,
-                                                                style:
-                                                                    const TextStyle(
-                                                                  color:
-                                                                      textColor,
-                                                                  fontSize: 13,
-                                                                  fontWeight:
-                                                                      FontWeight
-                                                                          .w700,
-                                                                ),
-                                                                overflow:
-                                                                    TextOverflow
-                                                                        .ellipsis,
-                                                              ),
-                                                              Text(
-                                                                item[
-                                                                    'companyDescription'],
-                                                                softWrap: true,
-                                                                textAlign:
-                                                                    TextAlign
-                                                                        .left,
-                                                                maxLines: 3,
-                                                                style:
-                                                                    const TextStyle(
-                                                                  color:
-                                                                      textColor,
-                                                                  fontSize: 12,
-                                                                ),
-                                                                overflow:
-                                                                    TextOverflow
-                                                                        .ellipsis,
-                                                              ),
-                                                            ],
-                                                          ),
-                                                        ),
-                                                      ),
-                                                    ]),
-                                                Padding(
-                                                  padding:
-                                                      const EdgeInsets.all(10),
-                                                  child: SizedBox(
-                                                    width: double.infinity,
-                                                    child: Wrap(
-                                                        crossAxisAlignment:
-                                                            WrapCrossAlignment
-                                                                .center,
-                                                        children: <Widget>[
-                                                          Container(
-                                                            decoration:
-                                                                const BoxDecoration(
-                                                                    color: Colors
-                                                                        .white,
-                                                                    shape: BoxShape
-                                                                        .circle),
-                                                            padding:
-                                                                const EdgeInsets
-                                                                    .all(4),
-                                                            child: SvgPicture
-                                                                .asset(
-                                                              'assets/svgs/upicon.svg',
-                                                              // ignore: deprecated_member_use
-                                                              color: const Color(
-                                                                  0xFF0F132D),
-                                                              height: 8,
-                                                            ),
-                                                          ),
-                                                          const SizedBox(
-                                                            width: 5,
-                                                          ),
-                                                          const Text(
-                                                            'Learn more',
-                                                            style: TextStyle(
-                                                                fontSize: 11,
-                                                                color:
-                                                                    textColor),
-                                                          ),
-                                                        ]),
-                                                  ),
-                                                ),
-                                              ],
-                                            ),
-                                          ),
-                                        );
-                                      },
-                                    );
-                            }).toList(),
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
-                SizedBox(
-                  height: 5,
-                ),
+                // GestureDetector(
+                //   onTap: () {
+                //     Get.to(const Bossuppartner());
+                //   },
+                //   child: Container(
+                //     padding: const EdgeInsets.symmetric(vertical: 10),
+                //     color: Colors.white,
+                //     child: Column(
+                //       mainAxisAlignment: MainAxisAlignment.start,
+                //       crossAxisAlignment: CrossAxisAlignment.start,
+                //       children: <Widget>[
+                //         Padding(
+                //           padding: const EdgeInsets.symmetric(horizontal: 15.0),
+                //           child: Row(
+                //             mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                //             children: <Widget>[
+                //               const Text(
+                //                 'Deals',
+                //                 style: TextStyle(
+                //                     fontWeight: FontWeight.w700, fontSize: 18),
+                //               ),
+                //               Wrap(
+                //                   crossAxisAlignment: WrapCrossAlignment.center,
+                //                   children: <Widget>[
+                //                     const Text(
+                //                       'View all',
+                //                       style: TextStyle(fontSize: 11),
+                //                     ),
+                //                     const SizedBox(width: 5.0),
+                //                     SvgPicture.asset(
+                //                       'assets/svgs/nexticon.svg',
+                //                       // ignore: deprecated_member_use
+                //                       color: textColor,
+                //                       height: 8,
+                //                     ),
+                //                   ]),
+                //             ],
+                //           ),
+                //         ),
+                //         const SizedBox(
+                //           height: 10,
+                //         ),
+                //         SingleChildScrollView(
+                //           scrollDirection: Axis.horizontal,
+                //           child: Row(
+                //             children: homeController.bossUp!.reversed
+                //                 .toList()
+                //                 .map((Map<String, dynamic> item) {
+                //               final Color startColor = startColors[
+                //                   homeController.bossUp!.indexOf(item) %
+                //                       startColors.length];
+                //               return widget.isForyou == true
+                //                   ? LayoutBuilder(
+                //                       builder: (BuildContext context,
+                //                           BoxConstraints constraints) {
+                //                         return GestureDetector(
+                //                           onTap: () async {
+                //                             final Uri companyUrl =
+                //                                 Uri.parse(item['companyUrl']);
+                //                             if (!await launchUrl(companyUrl)) {
+                //                               throw Exception(
+                //                                   'Could not launch $companyUrl');
+                //                             }
+                //                           },
+                //                           child: Container(
+                //                             width: MediaQuery.of(context)
+                //                                     .size
+                //                                     .width /
+                //                                 4,
+                //                             margin: const EdgeInsets.only(
+                //                                 left: 12.0),
+                //                             decoration: BoxDecoration(
+                //                               border: Border.all(
+                //                                 color: startColor,
+                //                                 width: 1.0,
+                //                               ),
+                //                               gradient: LinearGradient(
+                //                                 colors: <Color>[
+                //                                   startColor,
+                //                                   backgroundColor
+                //                                 ],
+                //                                 begin: Alignment.topRight,
+                //                                 end: Alignment.bottomLeft,
+                //                               ),
+                //                               borderRadius:
+                //                                   BorderRadius.circular(15),
+                //                             ),
+                //                             child: Column(
+                //                               crossAxisAlignment:
+                //                                   CrossAxisAlignment.start,
+                //                               mainAxisAlignment:
+                //                                   MainAxisAlignment
+                //                                       .spaceBetween,
+                //                               children: <Widget>[
+                //                                 // Padding(
+                //                                 //   padding:
+                //                                 //       const EdgeInsets.only(
+                //                                 //           left: 8.0,
+                //                                 //           right: 8,
+                //                                 //           top: 8,
+                //                                 //           bottom: 5),
+                //                                 //   child: SizedBox(
+                //                                 //     height: 20.0,
+                //                                 //     width: 20.0,
+                //                                 //     child: Container(
+                //                                 //       decoration: BoxDecoration(
+                //                                 //         border: Border.all(
+                //                                 //             width: 0.5,
+                //                                 //             color:
+                //                                 //                 Colors.black12),
+                //                                 //         color: backgroundColor,
+                //                                 //         borderRadius:
+                //                                 //             BorderRadius
+                //                                 //                 .circular(
+                //                                 //                     100.0),
+                //                                 //       ),
+                //                                 //       child:
+                //                                 //           NetworkImageWithPlaceHolder(
+                //                                 //         imageUrl: item[
+                //                                 //                 'companyPhoto'] ??
+                //                                 //             '',
+                //                                 //         radius: 100,
+                //                                 //         placeHolder:
+                //                                 //             Icons.person,
+                //                                 //         iconSize: 15.0,
+                //                                 //         fit: BoxFit.cover,
+                //                                 //       ),
+                //                                 //     ),
+                //                                 //   ),
+                //                                 // ),
+                //                                 SizedBox(
+                //                                   height: 8,
+                //                                 ),
+                //                                 Padding(
+                //                                     padding: const EdgeInsets
+                //                                         .symmetric(
+                //                                       horizontal: 8.0,
+                //                                     ),
+                //                                     child: Column(
+                //                                       children: [
+                //                                         Text(
+                //                                           item['companyName'],
+                //                                           textAlign:
+                //                                               TextAlign.left,
+                //                                           maxLines: 2,
+                //                                           style:
+                //                                               const TextStyle(
+                //                                             color: textColor,
+                //                                             fontSize: 12,
+                //                                             fontWeight:
+                //                                                 FontWeight.w700,
+                //                                           ),
+                //                                           overflow: TextOverflow
+                //                                               .ellipsis, // Add this line to handle overflow
+                //                                         ),
+                //                                       ],
+                //                                     )),
+                //                                 Padding(
+                //                                   padding:
+                //                                       const EdgeInsets.all(8),
+                //                                   child: SizedBox(
+                //                                     width: double.infinity,
+                //                                     child: Wrap(
+                //                                         crossAxisAlignment:
+                //                                             WrapCrossAlignment
+                //                                                 .center,
+                //                                         children: <Widget>[
+                //                                           Container(
+                //                                             decoration:
+                //                                                 const BoxDecoration(
+                //                                                     color: Colors
+                //                                                         .white,
+                //                                                     shape: BoxShape
+                //                                                         .circle),
+                //                                             padding:
+                //                                                 const EdgeInsets
+                //                                                     .all(4),
+                //                                             child: SvgPicture
+                //                                                 .asset(
+                //                                               'assets/svgs/upicon.svg',
+                //                                               color: const Color(
+                //                                                   0xFF0F132D),
+                //                                               height: 8,
+                //                                             ),
+                //                                           ),
+                //                                           const SizedBox(
+                //                                             width: 5,
+                //                                           ),
+                //                                           const Text(
+                //                                             'Learn more',
+                //                                             style: TextStyle(
+                //                                                 fontSize: 10,
+                //                                                 color:
+                //                                                     textColor),
+                //                                           ),
+                //                                         ]),
+                //                                   ),
+                //                                 ),
+                //                               ],
+                //                             ),
+                //                           ),
+                //                         );
+                //                       },
+                //                     )
+                //                   : LayoutBuilder(
+                //                       builder: (BuildContext context,
+                //                           BoxConstraints constraints) {
+                //                         return GestureDetector(
+                //                           onTap: () async {
+                //                             final Uri companyUrl =
+                //                                 Uri.parse(item['companyUrl']);
+                //                             if (!await launchUrl(companyUrl)) {
+                //                               throw Exception(
+                //                                   'Could not launch $companyUrl');
+                //                             }
+                //                           },
+                //                           child: Container(
+                //                             width: MediaQuery.of(context)
+                //                                     .size
+                //                                     .width /
+                //                                 1.5,
+                //                             height: 120,
+                //                             margin: const EdgeInsets.only(
+                //                                 left: 15.0),
+                //                             decoration: BoxDecoration(
+                //                               border: Border.all(
+                //                                 color: Colors.black12,
+                //                                 width: 0.5,
+                //                               ),
+                //                               gradient: LinearGradient(
+                //                                 colors: <Color>[
+                //                                   startColor,
+                //                                   Colors.white
+                //                                 ],
+                //                                 begin: Alignment.topRight,
+                //                                 end: Alignment.bottomLeft,
+                //                               ),
+                //                               borderRadius:
+                //                                   BorderRadius.circular(12),
+                //                             ),
+                //                             child: Column(
+                //                               crossAxisAlignment:
+                //                                   CrossAxisAlignment.start,
+                //                               mainAxisAlignment:
+                //                                   MainAxisAlignment
+                //                                       .spaceBetween,
+                //                               children: <Widget>[
+                //                                 Row(
+                //                                     crossAxisAlignment:
+                //                                         CrossAxisAlignment
+                //                                             .center,
+                //                                     children: [
+                //                                       Padding(
+                //                                         padding:
+                //                                             const EdgeInsets
+                //                                                 .only(
+                //                                                 left: 10,
+                //                                                 right: 10,
+                //                                                 top: 10,
+                //                                                 bottom: 5),
+                //                                         child: SizedBox(
+                //                                           height: 68.0,
+                //                                           width: 68.0,
+                //                                           child: Container(
+                //                                             decoration:
+                //                                                 BoxDecoration(
+                //                                               border: Border.all(
+                //                                                   width: 0.5,
+                //                                                   color: Colors
+                //                                                       .black12),
+                //                                               color:
+                //                                                   backgroundColor,
+                //                                               borderRadius:
+                //                                                   BorderRadius
+                //                                                       .circular(
+                //                                                           10.0),
+                //                                             ),
+                //                                             child:
+                //                                                 NetworkImageWithPlaceHolder(
+                //                                               imageUrl: item[
+                //                                                       'companyPhoto'] ??
+                //                                                   '',
+                //                                               radius: 10,
+                //                                               placeHolder:
+                //                                                   Icons.person,
+                //                                               iconSize: 15.0,
+                //                                               fit: BoxFit.cover,
+                //                                             ),
+                //                                           ),
+                //                                         ),
+                //                                       ),
+                //                                       Expanded(
+                //                                         child: Padding(
+                //                                           padding:
+                //                                               const EdgeInsets
+                //                                                   .only(
+                //                                                   right: 10.0),
+                //                                           child: Column(
+                //                                             crossAxisAlignment:
+                //                                                 CrossAxisAlignment
+                //                                                     .start,
+                //                                             children: [
+                //                                               Text(
+                //                                                 item[
+                //                                                     'companyName'],
+                //                                                 softWrap: true,
+                //                                                 textAlign:
+                //                                                     TextAlign
+                //                                                         .left,
+                //                                                 maxLines: 1,
+                //                                                 style:
+                //                                                     const TextStyle(
+                //                                                   color:
+                //                                                       textColor,
+                //                                                   fontSize: 13,
+                //                                                   fontWeight:
+                //                                                       FontWeight
+                //                                                           .w700,
+                //                                                 ),
+                //                                                 overflow:
+                //                                                     TextOverflow
+                //                                                         .ellipsis,
+                //                                               ),
+                //                                               Text(
+                //                                                 item[
+                //                                                     'companyDescription'],
+                //                                                 softWrap: true,
+                //                                                 textAlign:
+                //                                                     TextAlign
+                //                                                         .left,
+                //                                                 maxLines: 3,
+                //                                                 style:
+                //                                                     const TextStyle(
+                //                                                   color:
+                //                                                       textColor,
+                //                                                   fontSize: 12,
+                //                                                 ),
+                //                                                 overflow:
+                //                                                     TextOverflow
+                //                                                         .ellipsis,
+                //                                               ),
+                //                                             ],
+                //                                           ),
+                //                                         ),
+                //                                       ),
+                //                                     ]),
+                //                                 Padding(
+                //                                   padding:
+                //                                       const EdgeInsets.all(10),
+                //                                   child: SizedBox(
+                //                                     width: double.infinity,
+                //                                     child: Wrap(
+                //                                         crossAxisAlignment:
+                //                                             WrapCrossAlignment
+                //                                                 .center,
+                //                                         children: <Widget>[
+                //                                           Container(
+                //                                             decoration:
+                //                                                 const BoxDecoration(
+                //                                                     color: Colors
+                //                                                         .white,
+                //                                                     shape: BoxShape
+                //                                                         .circle),
+                //                                             padding:
+                //                                                 const EdgeInsets
+                //                                                     .all(4),
+                //                                             child: SvgPicture
+                //                                                 .asset(
+                //                                               'assets/svgs/upicon.svg',
+                //                                               // ignore: deprecated_member_use
+                //                                               color: const Color(
+                //                                                   0xFF0F132D),
+                //                                               height: 8,
+                //                                             ),
+                //                                           ),
+                //                                           const SizedBox(
+                //                                             width: 5,
+                //                                           ),
+                //                                           const Text(
+                //                                             'Learn more',
+                //                                             style: TextStyle(
+                //                                                 fontSize: 11,
+                //                                                 color:
+                //                                                     textColor),
+                //                                           ),
+                //                                         ]),
+                //                                   ),
+                //                                 ),
+                //                               ],
+                //                             ),
+                //                           ),
+                //                         );
+                //                       },
+                //                     );
+                //             }).toList(),
+                //           ),
+                //         ),
+                //       ],
+                //     ),
+                //   ),
+                // ),
+                // SizedBox(
+                //   height: 5,
+                // ),
               ],
             )
           : qouteWidget(quotes),
