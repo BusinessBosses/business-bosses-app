@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 
 class CustomEditText extends StatelessWidget {
   final String caption;
+  final Widget? optionalText;
   final String hintText;
   final int? maxLength;
   final TextInputType inputType;
@@ -23,6 +24,7 @@ class CustomEditText extends StatelessWidget {
     this.backgroundcolor,
     this.iscurrencyfield,
     this.currencyfieldcolor,
+    this.optionalText,
   });
 
   @override
@@ -38,13 +40,21 @@ class CustomEditText extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
-            Text(
-              caption,
-              style: const TextStyle(
-                fontSize: 14,
-                fontWeight: FontWeight.w600,
+            Wrap(
+              crossAxisAlignment: WrapCrossAlignment.center,
+              children: [
+              Text(
+                caption,
+                style: const TextStyle(
+                  fontSize: 14,
+                  fontWeight: FontWeight.w600,
+                ),
               ),
-            ),
+              SizedBox(
+                width: 10,
+              ),
+              optionalText ?? Container()
+            ]),
             (iscurrencyfield == true)
                 ? Row(
                     children: [
@@ -52,6 +62,7 @@ class CustomEditText extends StatelessWidget {
                         height: 30,
                         width: 40,
                         child: TextFormField(
+                          style: TextStyle(fontSize: 13),
                           decoration: InputDecoration(
                             hintText: 'USD',
                             fillColor: currencyfieldcolor ?? prosemibackColor,
@@ -81,6 +92,7 @@ class CustomEditText extends StatelessWidget {
                       Expanded(
                         flex: 6,
                         child: TextFormField(
+                          style: TextStyle(fontSize: 13),
                           maxLines:
                               maxLength != null && maxLength! > 30 ? 5 : 1,
                           decoration: InputDecoration(
@@ -101,6 +113,7 @@ class CustomEditText extends StatelessWidget {
                     ],
                   )
                 : TextFormField(
+                    style: TextStyle(fontSize: 13),
                     maxLines: maxLength != null && maxLength! > 30 ? 5 : 1,
                     decoration: InputDecoration(
                       border: InputBorder.none,

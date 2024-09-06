@@ -49,7 +49,7 @@ class _SelectionSectionState extends State<SelectionSection> {
                           });
                         },
                       ),
-                      Text(key),
+                      Text(key, style: TextStyle(fontSize: 13),),
                     ],
                   ));
             }).toList(),
