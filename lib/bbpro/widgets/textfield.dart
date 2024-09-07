@@ -50,7 +50,7 @@ class _CustomTextWidgetState extends State<CustomTextWidget> {
             Text(
               widget.caption,
               style: const TextStyle(
-                fontSize: 16,
+                fontSize: 14,
                 fontWeight: FontWeight.w600,
                 color: textColor,
               ),
@@ -65,7 +65,7 @@ class _CustomTextWidgetState extends State<CustomTextWidget> {
                   child: Text(
                     widget.text,
                     style: TextStyle(
-                        fontSize: 16,
+                        fontSize: 13,
                         color: widget.text == 'Choose Shop Location'
                             ? hintColor
                             : textColor),

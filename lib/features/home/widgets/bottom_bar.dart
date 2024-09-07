@@ -1,4 +1,7 @@
 import 'package:business_bosses_v2/features/home/bottom_nav.dart';
+import 'package:business_bosses_v2/features/home/sellProduct.dart';
+import 'package:business_bosses_v2/features/posts/presentation/create_poll_screen.dart';
+import 'package:business_bosses_v2/features/premium/proscreen.dart';
 import 'package:business_bosses_v2/navigation/routes.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -186,16 +189,16 @@ class BottomBar extends StatelessWidget {
                         flex: 10,
                         child: BottomTabButton(
                           icon: activeIndex == 2
-                              ? 'assets/svgs/eventufilled.svg'
-                              : 'assets/svgs/eventu.svg',
-                          label: 'Events',
+                              ? 'assets/svgs/growfilled.svg'
+                              : 'assets/svgs/grow.svg',
+                          label: 'Grow',
                           onTap: () {
                             if (activeIndex == 2) return;
 
                             if (activeIndex == 0) {
-                              Get.toNamed(Routes.liveEvents);
+                              Get.to(const ProScreen());
                             } else {
-                              Get.offAndToNamed(Routes.liveEvents);
+                              Get.off(const ProScreen());
                             }
                           },
                           isActive: activeIndex == 2,

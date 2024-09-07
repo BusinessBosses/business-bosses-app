@@ -55,6 +55,7 @@ class _MultipleEditTextWidgetState extends State<MultipleEditTextWidget> {
               decoration: InputDecoration(
                   hintText: widget.hintText, border: InputBorder.none),
               controller: widget.controller,
+              style: const TextStyle(fontSize: 13),
             ),
           ),
           if (_textFields.isNotEmpty)
@@ -106,7 +107,7 @@ class _MultipleEditTextWidgetState extends State<MultipleEditTextWidget> {
             Text(
               widget.caption,
               style: const TextStyle(
-                fontSize: 16,
+                fontSize: 14,
                 fontWeight: FontWeight.w600,
               ),
             ),

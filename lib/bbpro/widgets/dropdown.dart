@@ -46,7 +46,7 @@ class _CustomDropdownWidgetState extends State<CustomDropdownWidget> {
             Text(
               widget.caption,
               style: const TextStyle(
-                fontSize: 16,
+                fontSize: 14,
                 fontWeight: FontWeight.w600,
               ),
             ),
@@ -62,14 +62,14 @@ class _CustomDropdownWidgetState extends State<CustomDropdownWidget> {
                     widget.items.map<DropdownMenuItem<String>>((String value) {
                   return DropdownMenuItem<String>(
                     value: value,
-                    child: Text(value),
+                    child: Text(value, style: const TextStyle(fontSize: 13)),
                   );
                 }).toList(),
                 isExpanded: true,
                 icon: SvgPicture.asset(
                   widget.iconName,
                   color: proprimaryColor,
-                ), // Add this line to change the icon
+                ),
               ),
             )
           ],

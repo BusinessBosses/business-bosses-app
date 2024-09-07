@@ -2,6 +2,7 @@ import 'dart:async';
 import 'package:business_bosses_v2/bbpro/widgets/clientwidget.dart';
 import 'package:business_bosses_v2/bbpro/widgets/customtabbar.dart';
 import 'package:business_bosses_v2/bbpro/widgets/notificationbutton.dart';
+import 'package:business_bosses_v2/bbpro/widgets/proseardwidget.dart';
 import 'package:business_bosses_v2/bbpro/widgets/topsection.dart';
 import 'package:business_bosses_v2/bbpro/controllers/clients_controller.dart';
 import 'package:business_bosses_v2/bbpro/models/client_model.dart';
@@ -107,7 +108,7 @@ class _ClientsScreenState extends State<ClientsScreen>
           ),
           Expanded(
             child: Padding(
-              padding: const EdgeInsets.only(bottom: 15),
+              padding: const EdgeInsets.only(bottom: 10),
               child: Obx(() {
                 if (clientsController.loading.value) {
                   return const Center(child: CircularProgressIndicator());
@@ -179,7 +180,7 @@ class _ClientsScreenState extends State<ClientsScreen>
   }
 }
 
-class RowStatusCard extends StatelessWidget {
+class RowStatusCard extends StatefulWidget {
   final void Function(Client client, ClientType newStatus) taskAccepted;
   final void Function(bool isRight) onDrag;
   final void Function() cancelDrag;
@@ -200,26 +201,33 @@ class RowStatusCard extends StatelessWidget {
   });
 
   @override
+  State<RowStatusCard> createState() => _RowStatusCardState();
+}
+
+class _RowStatusCardState extends State<RowStatusCard> {
+  bool _showSearchBar = false;
+
+  @override
   Widget build(BuildContext context) {
     // Define color based on ClientType
     Color statusColor;
-    switch (clientType) {
+    switch (widget.clientType) {
       case ClientType.online:
-        statusColor = Colors.black;
+        statusColor = Colors.blue;
         break;
       case ClientType.inPerson:
-        statusColor = Colors.amber;
+        statusColor = Colors.green;
         break;
       case ClientType.bbUser:
-        statusColor = Colors.green;
+        statusColor = primaryColorLT;
         break;
       default:
         statusColor = Colors.grey;
     }
 
     return Container(
-      height: screenSize.height * 0.8,
-      width: screenSize.width * 0.9,
+      height: widget.screenSize.height * 0.8,
+      width: widget.screenSize.width * 0.9,
       margin: const EdgeInsets.only(left: 10),
       decoration: BoxDecoration(
         color: Colors.white,
@@ -236,16 +244,16 @@ class RowStatusCard extends StatelessWidget {
                 Wrap(
                   crossAxisAlignment: WrapCrossAlignment.center,
                   children: <Widget>[
-                    clientType.displayTitle == 'All Clients'
+                    widget.clientType.displayTitle == 'All Clients'
                         ? Container()
                         : CircleAvatar(
                             backgroundColor: statusColor,
                             radius: 5,
                           ),
-                    if (clientType.displayTitle != 'all clients')
+                    if (widget.clientType.displayTitle != 'all clients')
                       const SizedBox(width: 10),
                     Text(
-                      clientType.displayTitle,
+                      widget.clientType.displayTitle,
                       style: const TextStyle(
                         color: Colors.black,
                         fontWeight: FontWeight.bold,
@@ -254,20 +262,70 @@ class RowStatusCard extends StatelessWidget {
                     ),
                   ],
                 ),
-                GestureDetector(
-                  onTap: () {},
-                  child: Container(
-                    decoration: BoxDecoration(
-                      color: backgroundColor,
-                      borderRadius: BorderRadius.circular(30),
-                    ),
-                    padding: const EdgeInsets.all(8),
-                    child: SvgPicture.asset(
-                      'assets/svgs/search.svg',
-                      height: 20,
+                const SizedBox(
+                  width: 50,
+                ),
+                if (widget.clientType.index != 0)
+                  const SizedBox(
+                    height: 31,
+                  ),
+                if (widget.clientType.index == 0)
+                  _showSearchBar
+                      ? Expanded(
+                          child: SizedBox(
+                            height: 31,
+                            child: ProSearchbar(
+                              contentPadding: 10,
+                              backgroundColor: backgroundColor,
+                              hasSearchIcon: false,
+                              hintText: 'Search',
+                              onChange: (String query) {
+                                if (query.isEmpty) {}
+                              },
+                              onSubmit: (String query) {},
+                            ),
+                          ),
+                        )
+                      : GestureDetector(
+                          onTap: () {
+                            setState(() {
+                              _showSearchBar = true;
+                            });
+                          },
+                          child: Container(
+                            decoration: BoxDecoration(
+                                color: backgroundColor,
+                                borderRadius: BorderRadius.circular(30)),
+                            padding: const EdgeInsets.all(8),
+                            child: SvgPicture.asset(
+                              'assets/svgs/search.svg',
+                              height: 15,
+                            ),
+                          ),
+                        ),
+                if (widget.clientType.index == 0 && _showSearchBar)
+                  const SizedBox(
+                    width: 5,
+                  ),
+                if (widget.clientType.index == 0 && _showSearchBar)
+                  GestureDetector(
+                    onTap: () {
+                      setState(() {
+                        _showSearchBar = false;
+                      });
+                    },
+                    child: Container(
+                      decoration: BoxDecoration(
+                          color: backgroundColor,
+                          borderRadius: BorderRadius.circular(30)),
+                      padding: const EdgeInsets.all(8),
+                      child: const Icon(
+                        Icons.close,
+                        color: Colors.grey,
+                        size: 15,
+                      ),
                     ),
                   ),
-                ),
               ],
             ),
           ),
@@ -278,15 +336,15 @@ class RowStatusCard extends StatelessWidget {
               color: Colors.black12,
             ),
           ),
-          clientType.index == 0
+          widget.clientType.index == 0
               ? Expanded(
                   child: ListView.builder(
-                    itemCount: allclients.length,
+                    itemCount: widget.allclients.length,
                     shrinkWrap: true,
                     itemBuilder: (BuildContext context, int index) {
                       final ClientWidget clientWidget = ClientWidget(
-                        client: allclients[index],
-                        bgcolor: allclients[index].type.backgroundColor,
+                        client: widget.allclients[index],
+                        bgcolor: widget.allclients[index].type.backgroundColor,
                       );
                       return Padding(
                         padding: const EdgeInsets.only(bottom: 12),
@@ -297,8 +355,8 @@ class RowStatusCard extends StatelessWidget {
                 )
               : Expanded(
                   child: ListStatusColumnWidget(
-                    clients: clients,
-                    clientType: clientType,
+                    clients: widget.clients,
+                    clientType: widget.clientType,
                   ),
                 ),
         ],

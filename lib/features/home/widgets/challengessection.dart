@@ -12,7 +12,9 @@ class ChallengesSection extends StatelessWidget {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
-        Get.toNamed(Routes.allCommunitiesScreen);
+        Get.to(const BossupChallenge(
+          ishome: false,
+        ));
       },
       child: Container(
         child: Column(
@@ -44,8 +46,10 @@ class ChallengesSection extends StatelessWidget {
                 ],
               ),
             ),
-            SizedBox(height: 10,),
-             Container(
+            SizedBox(
+              height: 10,
+            ),
+            Container(
                 height: 190,
                 child: BossupChallenge(
                   ishome: true,

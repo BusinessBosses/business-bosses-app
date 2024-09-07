@@ -394,7 +394,7 @@ class _SignUpFormState extends State<SignUpForm> {
                 obscureText: _invisiblePassword,
                 keyboardType: TextInputType.visiblePassword,
                 decoration: inputDecoration.copyWith(
-                  hintText: 'Enter your password',
+                  hintText: 'Password (min 8)',
                   suffixIcon: _showHideIcon(PasswordField.password),
                   hintStyle: const TextStyle(
                     color: iconColor,

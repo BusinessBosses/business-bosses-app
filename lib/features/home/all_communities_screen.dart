@@ -6,8 +6,12 @@ import 'package:business_bosses_v2/features/forum/presentation/bossup_challenge.
 import 'package:business_bosses_v2/features/forum/widgets/forum_item.dart';
 import 'package:business_bosses_v2/features/home/controller/commumities_controller.dart';
 import 'package:business_bosses_v2/features/home/widgets/all_learning_posts.dart';
+import 'package:business_bosses_v2/features/home/widgets/bossuptopsection.dart';
 import 'package:business_bosses_v2/features/home/widgets/bottom_bar.dart';
+import 'package:business_bosses_v2/features/home/widgets/challengessection.dart';
+import 'package:business_bosses_v2/features/home/widgets/eventssection.dart';
 import 'package:business_bosses_v2/features/home/widgets/industriessearch.dart';
+import 'package:business_bosses_v2/features/home/widgets/learningsection.dart';
 import 'package:business_bosses_v2/utils/constants/constants.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
@@ -107,9 +111,11 @@ class _AllCommunitiesScreenState extends State<AllCommunitiesScreen>
                   child: DefaultTabController(
                     length: _isSearching ? 2 : 3,
                     child: Scaffold(
-                      backgroundColor: backgroundcolorinterface,
+                      backgroundColor: Colors.white,
                       appBar: AppBar(
                         automaticallyImplyLeading: false,
+                        shadowColor: Colors.black54,
+                        elevation: 0.1,
                         title: _isSearching
                             ? Searchbar(
                                 hintText: 'Search',
@@ -145,136 +151,74 @@ class _AllCommunitiesScreenState extends State<AllCommunitiesScreen>
                                   )
                                 : const Text('Boss Up'),
                         actions: mActions,
-                        bottom: !_isSearching && !_isSearchingDonations
-                            ? TabBar(
-                                controller: _pageTabController,
-                                labelStyle: const TextStyle(
-                                    fontWeight: FontWeight.w500),
-                                labelColor: Colors.black,
-                                tabs: const <Widget>[
-                                  Tab(text: 'Challenge'),
-                                  Tab(text: 'Learning'),
-                                  Tab(text: 'Crowdfund'),
-                                ],
-                              )
-                            : _isSearchingDonations
-                                ? TabBar(
-                                    controller: _donationsearchTabController,
-                                    labelStyle: const TextStyle(
-                                        fontWeight: FontWeight.w500),
-                                    labelColor: Colors.black,
-                                    indicatorColor: primaryColorLT,
-                                    tabs: const <Widget>[
-                                      Tab(text: 'Projects'),
-                                      Tab(text: 'Members'),
-                                    ],
-                                  )
-                                : TabBar(
-                                    controller: _searchTabController,
-                                    labelStyle: const TextStyle(
-                                        fontWeight: FontWeight.w500),
-                                    labelColor: Colors.black,
-                                    tabs: const <Widget>[
-                                      Tab(text: 'Posts'),
-                                      Tab(text: 'Groups'),
-                                    ],
-                                  ),
+                        // bottom: !_isSearching && !_isSearchingDonations
+                        //     ? TabBar(
+                        //         controller: _pageTabController,
+                        //         labelStyle: const TextStyle(
+                        //             fontWeight: FontWeight.w500),
+                        //         labelColor: Colors.black,
+                        //         tabs: const <Widget>[
+                        //           Tab(text: 'Challenge'),
+                        //           Tab(text: 'Learning'),
+                        //           Tab(text: 'Crowdfund'),
+                        //         ],
+                        //       )
+                        //     : _isSearchingDonations
+                        //         ? TabBar(
+                        //             controller: _donationsearchTabController,
+                        //             labelStyle: const TextStyle(
+                        //                 fontWeight: FontWeight.w500),
+                        //             labelColor: Colors.black,
+                        //             indicatorColor: primaryColorLT,
+                        //             tabs: const <Widget>[
+                        //               Tab(text: 'Projects'),
+                        //               Tab(text: 'Members'),
+                        //             ],
+                        //           )
+                        //         : TabBar(
+                        //             controller: _searchTabController,
+                        //             labelStyle: const TextStyle(
+                        //                 fontWeight: FontWeight.w500),
+                        //             labelColor: Colors.black,
+                        //             tabs: const <Widget>[
+                        //               Tab(text: 'Posts'),
+                        //               Tab(text: 'Groups'),
+                        //             ],
+                        //           ),
                       ),
                       body: !_isSearching && !_isSearchingDonations
-                          ? TabBarView(
-                              controller: _pageTabController,
-                              children: <Widget>[
-                                controller.loading.value
-                                    ? const Center(
-                                        child: CircularProgressIndicator())
-                                    : const BossupChallenge(ishome: false,),
-                                Padding(
-                                  padding: const EdgeInsets.only(
-                                      left: 15, right: 15),
-                                  child: controller.loading.value
-                                      ? SafetyModel(
-                                          isLoading: controller.loading.value,
-                                          title: '')
-                                      : controller.error.value
-                                          ? SafetyModel(
-                                              isLoading: false,
-                                              title: 'Something went wrong',
-                                              clickableText: 'Reload',
-                                              onTap: () async {
-                                                await controller
-                                                    .fetchIndustries();
-                                              },
-                                            )
-                                          : Padding(
-                                              padding: const EdgeInsets.only(
-                                                  bottom: 80),
-                                              child: Builder(
-                                                builder:
-                                                    (BuildContext context) {
-                                                  List<Industry>
-                                                      activeIndustries =
-                                                      controller
-                                                          .getCategoryIndustries(
-                                                              Constants
-                                                                  .LEARNINGID)
-                                                          .where((Industry
-                                                                  industry) =>
-                                                              industry.active!)
-                                                          .toList();
-
-                                                  return GridView.builder(
-                                                    itemCount:
-                                                        activeIndustries.length,
-                                                    itemBuilder:
-                                                        (BuildContext context,
-                                                            int index) {
-                                                      Industry industry =
-                                                          activeIndustries[
-                                                              index];
-                                                      return CustomTile(
-                                                        label:
-                                                            industry.industry!,
-                                                        photo: industry.photo!,
-                                                        onTap: () {
-                                                          if (industry
-                                                                  .industryId ==
-                                                              '4acc0db7-7c89-4122-b15d-7552f590af23') {
-                                                            Get.to(() =>
-                                                                const AllLearningPostsScreen(
-                                                                    isCoursesTile:
-                                                                        true));
-                                                          } else if (industry
-                                                                  .industryId ==
-                                                              '6bfb3524-f05e-4148-b4b2-a7a47b768b56') {
-                                                            Get.to(() =>
-                                                                const AllLearningPostsScreen(
-                                                                    isCoursesTile:
-                                                                        false));
-                                                          } else {
-                                                            Get.toNamed(
-                                                              Routes
-                                                                  .allforumscreen,
-                                                              arguments:
-                                                                  industry,
-                                                            );
-                                                          }
-                                                        },
-                                                      );
-                                                    },
-                                                    gridDelegate:
-                                                        const SliverGridDelegateWithFixedCrossAxisCount(
-                                                      mainAxisSpacing: 15.0,
-                                                      crossAxisSpacing: 15.0,
-                                                      crossAxisCount: 2,
-                                                    ),
-                                                  );
-                                                },
-                                              ),
-                                            ),
-                                ),
-                                const DonationsPage(),
-                              ],
+                          ? SingleChildScrollView(
+                              child: Column(
+                                mainAxisAlignment: MainAxisAlignment.start,
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  SizedBox(
+                                    height: 15,
+                                  ),
+                                  BossUpTopSection(),
+                                  SizedBox(
+                                    height: 15,
+                                  ),
+                                  ChallengesSection(),
+                                  LearningSection(),
+                                  EventsSection(),
+                                  SizedBox(
+                                    height: 100,
+                                  ),
+                                ],
+                              ),
                             )
+                          // TabBarView(
+                          //     controller: _pageTabController,
+                          //     children: <Widget>[
+                          // controller.loading.value
+                          //     ? const Center(
+                          //         child: CircularProgressIndicator())
+                          //     : const BossupChallenge(ishome: false,),
+
+                          // const DonationsPage(),
+                          //   ],
+                          // )
                           : _isSearchingDonations
                               ? TabBarView(
                                   controller: _donationsearchTabController,

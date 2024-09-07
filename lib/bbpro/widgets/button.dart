@@ -55,6 +55,7 @@ class _ProCustomButtonState extends State<ProCustomButton> {
                   style: const TextStyle(
                     color: Colors.white, // Text color
                     fontSize: 16.0,
+                    fontWeight: FontWeight.w700
                   ),
                 ),
               if (widget.back == false)
