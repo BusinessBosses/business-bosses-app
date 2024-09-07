@@ -128,11 +128,22 @@ class _CreateOrderState extends State<CreateOrder> {
                     child: Column(
                       children: <Widget>[
                         const SizedBox(height: 15),
+                        // CustomDropdownWidget(
+                        //   caption: 'Client\'s Name',
+                        //   items: const <String>['clients', 'clients'],
+                        //   iconName: 'assets/svgs/dropdown.svg',
+                        //   initialValue: selectedClient,
+                        //   onChanged: (String? value) {
+                        //     setState(() {
+                        //       selectedClient = value!;
+                        //     });
+                        //   },
+                        // ),
                         CustomDropdownWidget(
                           caption: 'Client\'s Name',
-                          items: clients,
+                          items: const <String>['Online', 'Offline'],
                           iconName: 'assets/svgs/dropdown.svg',
-                          initialValue: selectedClient,
+                          initialValue: selectedOrder,
                           onChanged: (String? value) {
                             setState(() {
                               selectedClient = value!;

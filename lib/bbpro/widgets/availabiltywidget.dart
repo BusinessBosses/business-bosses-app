@@ -10,8 +10,9 @@ class AvailabilityWidget extends StatefulWidget {
 }
 
 class _AvailabilityWidgetState extends State<AvailabilityWidget> {
-  final List<Appointment> _appointments = <Appointment>[];
+  final List<DateTime> _selectedDates = <DateTime>[];
   bool _isAlwaysAvailable = false;
+  final List<bool> _selectedWeekdays = List.filled(7, false);
 
   @override
   Widget build(BuildContext context) {
@@ -21,11 +22,11 @@ class _AvailabilityWidgetState extends State<AvailabilityWidget> {
         decoration: BoxDecoration(
             color: Colors.white, borderRadius: BorderRadius.circular(radius)),
         padding: const EdgeInsets.all(15),
-        height: 400,
+        height: 500,
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
-            const Text('Available Times'),
+            const Text('Available Days'),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: <Widget>[
@@ -60,11 +61,33 @@ class _AvailabilityWidgetState extends State<AvailabilityWidget> {
                 ),
               ],
             ),
+            const SizedBox(height: 10),
+            Wrap(
+              spacing: 8,
+              children: List.generate(7, (int index) {
+                return ChoiceChip(
+                  label: Text(_getWeekdayName(index)),
+                  selected: _selectedWeekdays[index],
+                  selectedColor: proprimaryColor,
+                  onSelected: (bool selected) {
+                    setState(() {
+                      _selectedWeekdays[index] = selected;
+                      _updateSelectedDates();
+                    });
+                  },
+                );
+              }),
+            ),
             Expanded(
               child: _isAlwaysAvailable
                   ? const Center(child: Text('Always Available'))
                   : SfCalendar(
-                      view: CalendarView.week,
+                      view: CalendarView.month,
+                      initialDisplayDate: DateTime.now(),
+                      monthViewSettings: const MonthViewSettings(
+                        appointmentDisplayMode:
+                            MonthAppointmentDisplayMode.indicator,
+                      ),
                       dataSource: _getCalendarDataSource(),
                       onTap: _handleCalendarTap,
                     ),
@@ -75,19 +98,54 @@ class _AvailabilityWidgetState extends State<AvailabilityWidget> {
     );
   }
 
+  String _getWeekdayName(int index) {
+    List<String> weekdays = <String>[
+      'Mon',
+      'Tue',
+      'Wed',
+      'Thu',
+      'Fri',
+      'Sat',
+      'Sun'
+    ];
+    return weekdays[index];
+  }
+
+  void _updateSelectedDates() {
+    _selectedDates.clear();
+    DateTime now = DateTime.now();
+    for (int i = 0; i < 365; i++) {
+      DateTime date = now.add(Duration(days: i));
+      if (_selectedWeekdays[date.weekday - 1]) {
+        _selectedDates.add(date);
+      }
+    }
+  }
+
   CalendarDataSource _getCalendarDataSource() {
-    return _AppointmentDataSource(_appointments);
+    List<Appointment> appointments = _selectedDates
+        .map((DateTime date) => Appointment(
+              startTime: date,
+              endTime: date,
+              subject: 'Available',
+              color: proprimaryColor,
+              isAllDay: true,
+            ))
+        .toList();
+
+    return _AppointmentDataSource(appointments);
   }
 
   void _handleCalendarTap(CalendarTapDetails details) {
     if (details.targetElement == CalendarElement.calendarCell) {
       setState(() {
-        _appointments.add(Appointment(
-          startTime: details.date!,
-          endTime: details.date!.add(const Duration(hours: 1)),
-          subject: 'Available',
-          color: proprimaryColor,
-        ));
+        DateTime selectedDate = DateTime(
+            details.date!.year, details.date!.month, details.date!.day);
+        if (_selectedDates.contains(selectedDate)) {
+          _selectedDates.remove(selectedDate);
+        } else {
+          _selectedDates.add(selectedDate);
+        }
       });
     }
   }
