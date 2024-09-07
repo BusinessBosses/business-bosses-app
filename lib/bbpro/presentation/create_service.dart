@@ -395,10 +395,13 @@ class _CreateServiceListingState extends State<CreateServiceListing> {
 
             const SizedBox(height: 16),
 
-            MultipleEditTextWidget(
-                caption: 'Add Additional Packages to this service',
-                hintText: 'Package Name',
-                controller: _serviceNameController),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 15.0),
+              child: MultipleEditTextWidget(
+                  caption: 'Add Additional Packages to this service',
+                  hintText: 'Package Name',
+                  controller: _serviceNameController),
+            ),
             const SizedBox(height: 16),
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 15.0),
