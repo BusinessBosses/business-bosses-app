@@ -1,4 +1,5 @@
 import 'package:business_bosses_v2/bbpro/controllers/shop_controller.dart';
+import 'package:business_bosses_v2/bbpro/presentation/create_product.dart';
 import 'package:business_bosses_v2/bbpro/presentation/create_service.dart';
 import 'package:business_bosses_v2/bbpro/widgets/gotoshopwidget.dart';
 import 'package:business_bosses_v2/bbpro/widgets/infocard.dart';
@@ -57,7 +58,7 @@ class _DashboardState extends State<Dashboard> {
                         onTap: () {
                           Navigator.pop(context);
                           if (index == 0) {
-                            // Handle Add Products
+                            Get.to(() => const CreateProductListing());
                           } else if (index == 1) {
                             Get.to(() => const CreateServiceListing());
                           } else if (index == 2) {

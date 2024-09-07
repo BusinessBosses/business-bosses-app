@@ -2,7 +2,12 @@ import 'dart:io';
 
 import 'package:business_bosses_v2/bbpro/controllers/order_controller.dart';
 import 'package:business_bosses_v2/bbpro/controllers/shop_controller.dart';
+import 'package:business_bosses_v2/bbpro/widgets/availabiltywidget.dart';
 import 'package:business_bosses_v2/bbpro/widgets/button.dart';
+import 'package:business_bosses_v2/bbpro/widgets/dropdown.dart';
+import 'package:business_bosses_v2/bbpro/widgets/edittext.dart';
+import 'package:business_bosses_v2/bbpro/widgets/multipleedit.dart';
+import 'package:business_bosses_v2/bbpro/widgets/switchwidget.dart';
 import 'package:business_bosses_v2/bbpro/widgets/textfield.dart';
 import 'package:business_bosses_v2/common/dialogs/snackbar.dart';
 import 'package:business_bosses_v2/features/profile/controller/profile_controller.dart';
@@ -19,40 +24,47 @@ class CreateProductListing extends StatefulWidget {
   const CreateProductListing({super.key});
 
   @override
-  // ignore: library_private_types_in_public_api
   _CreateProductListingState createState() => _CreateProductListingState();
 }
 
 class _CreateProductListingState extends State<CreateProductListing> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
-  final OrderController orderController = Get.find();
+  final OrderController orderController = Get.put(OrderController());
   final ProfileController profileController = Get.find();
   final ShopController shopController = Get.put(ShopController());
-  bool isSubmitted = false;
-
   final ImagePicker _picker = ImagePicker();
   final List<File> _selectedImages = <File>[];
+  final TextEditingController _productNameController = TextEditingController();
+  final TextEditingController _priceController = TextEditingController();
+  final TextEditingController _descriptionController = TextEditingController();
+  final TextEditingController _discountController = TextEditingController();
+  final TextEditingController storageLocationController =
+      TextEditingController();
+  final TextEditingController productNumberController = TextEditingController();
+  final TextEditingController quantityController = TextEditingController();
+  final TextEditingController colorController = TextEditingController();
+  final TextEditingController sizeController = TextEditingController();
+
+  bool isSubmitted = false;
+  bool _isSwitched = false;
 
   // Form fields
   String? productName;
   String? price;
   String? discount;
   String? description;
-  String? category; // Default selected category
-  String? location; // Default selected location
-  String? deliveryMethod; // Default selected delivery method
-  List<String>? images = <String>[]; // Store uploaded images
+  String? category;
   String country = '';
-  DateTime? startDate; // Selected start date
-  DateTime? endDate;
-
+  List<String>? images = <String>[];
   String? paymentMethod;
-
-  String? storageLocation; // Entered by the user
-  int? productNumber; // Entered by the user
+  String? deliveryMethod;
+  DateTime? startDate;
+  DateTime? endDate;
+  String? storageLocation;
+  int? productNumber;
   int? quantity;
-  String? color; // Selected or entered by the user
-  String? size; // Selected end date
+  String? color;
+  String? size;
 
   Future<void> _pickImage() async {
     final XFile? image = await _picker.pickImage(source: ImageSource.gallery);
@@ -66,6 +78,7 @@ class _CreateProductListingState extends State<CreateProductListing> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: probackgroundColor,
       appBar: AppBar(
         automaticallyImplyLeading: false,
         title: const Text(
@@ -84,60 +97,69 @@ class _CreateProductListingState extends State<CreateProductListing> {
           ),
         ],
       ),
-      body: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Form(
-          key: _formKey,
-          child: ListView(
-            children: <Widget>[
-              // Product Name Field
-              TextFormField(
-                decoration: const InputDecoration(
-                  labelText: 'Product Name',
-                  hintText: 'Enter product name here',
-                  border: OutlineInputBorder(),
-                ),
-                validator: (String? value) {
-                  if (value == null || value.isEmpty) {
-                    return 'Please enter a product name';
-                  }
-                  return null;
-                },
-                onChanged: (String value) {
-                  setState(() {
-                    productName = value;
-                  });
-                },
-              ),
-              const SizedBox(height: 16),
-
-              // Price and Discount Fields (Row)
-              Row(
-                children: <Widget>[
-                  Expanded(
-                    child: TextFormField(
-                      decoration: const InputDecoration(
-                        labelText: 'Price',
-                        hintText: 'USD',
-                        border: OutlineInputBorder(),
-                      ),
-                      keyboardType: TextInputType.number,
-                      onChanged: (String value) {
-                        setState(() {
-                          price = value;
-                        });
-                      },
-                    ),
+      body: Form(
+        key: _formKey,
+        child: ListView(
+          children: <Widget>[
+            const SizedBox(height: 16),
+            CustomEditText(
+              caption: 'Product Name',
+              hintText: 'Enter product name here',
+              controller: _productNameController,
+              validator: (String? value) {
+                if (value == null || value.isEmpty) {
+                  return 'Please enter a product name';
+                }
+                return null;
+              },
+              onChanged: (String value) {
+                setState(() {
+                  productName = value;
+                });
+              },
+            ),
+            const SizedBox(height: 16),
+            Row(
+              children: <Widget>[
+                Expanded(
+                  child: CustomEditText(
+                    caption: 'Price',
+                    hintText: 'Enter price in USD',
+                    controller: _priceController,
+                    inputType: TextInputType.number,
+                    validator: (String? value) {
+                      if (value == null || value.isEmpty) {
+                        return 'Please enter a price';
+                      }
+                      if (double.tryParse(value) == null) {
+                        return 'Please enter a valid number';
+                      }
+                      return null;
+                    },
+                    onChanged: (String value) {
+                      setState(() {
+                        price = value;
+                      });
+                    },
                   ),
-                  const SizedBox(width: 16),
-                  Expanded(
-                    child: TextFormField(
-                      decoration: const InputDecoration(
-                        labelText: 'Discount',
-                        hintText: '10 %',
-                        border: OutlineInputBorder(),
-                      ),
-                      keyboardType: TextInputType.number,
+                ),
+                Expanded(
+                  child: Padding(
+                    padding: const EdgeInsets.only(right: 15.0),
+                    child: CustomEditText(
+                      padding: 0,
+                      caption: 'Discount',
+                      hintText: 'Enter discount',
+                      controller: _discountController,
+                      inputType: TextInputType.number,
+                      validator: (String? value) {
+                        if (value != null && value.isNotEmpty) {
+                          if (double.tryParse(value) == null) {
+                            return 'Please enter a valid number';
+                          }
+                        }
+                        return null;
+                      },
                       onChanged: (String value) {
                         setState(() {
                           discount = value;
@@ -145,119 +167,110 @@ class _CreateProductListingState extends State<CreateProductListing> {
                       },
                     ),
                   ),
-                ],
-              ),
-              const SizedBox(height: 16),
-
-              // Description Field
-              TextFormField(
-                maxLines: 3,
-                maxLength: 300,
-                decoration: const InputDecoration(
-                  labelText: 'Describe your Listing',
-                  hintText: 'Add product description here',
-                  border: OutlineInputBorder(),
                 ),
-                onChanged: (String value) {
-                  setState(() {
-                    description = value;
-                  });
-                },
-              ),
-              const SizedBox(height: 16),
-
-              // Select Category Dropdown
-              DropdownButtonFormField<String>(
-                decoration: const InputDecoration(
-                  labelText: 'Select Category',
-                  border: OutlineInputBorder(),
-                ),
-                value: category,
-                items: <String>['Beauty', 'Electronics', 'Fashion', 'Home']
-                    .map((String category) {
-                  return DropdownMenuItem<String>(
-                    value: category,
-                    child: Text(category),
-                  );
-                }).toList(),
-                onChanged: (String? newValue) {
-                  setState(() {
-                    category = newValue as String;
-                  });
-                },
-              ),
-              const SizedBox(height: 16),
-
-              // Location Dropdown
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 7.0),
-                child: CountryListPick(
-                  appBar: AppBar(
-                    leading: IconButton(
-                      onPressed: () {
-                        Navigator.pop(context);
-                      },
-                      icon: SvgPicture.asset('assets/svgs/backbutton.svg'),
-                    ),
-                    centerTitle: true,
-                    title: const Text(
-                      'Select Location',
-                      textAlign: TextAlign.center,
-                      style: TextStyle(
-                        fontSize: 20,
-                      ),
-                    ),
-                  ),
-                  initialSelection: country,
-                  pickerBuilder:
-                      (BuildContext context, CountryCode? countryCode) {
-                    return Container(
-                      decoration: BoxDecoration(
-                        color: Colors.white,
-                        borderRadius: BorderRadius.circular(radiusValue),
-                      ),
-                      child: CustomTextWidget(
-                        caption: 'Location',
-                        iconName: 'assets/svgs/nexticon.svg',
-                        text: country,
-                      ),
-                    );
-                  },
-                  onChanged: (CountryCode? code) async {
-                    setState(() {
-                      country = code!.name!;
-                    });
-                  },
-                  useSafeArea: false,
-                ),
-              ),
-              const SizedBox(height: 16),
-
-              // Add Attachment (Image Picker)
-              Row(
-                children: <Widget>[
-                  Expanded(
-                    child: TextFormField(
-                      decoration: const InputDecoration(
-                        labelText: 'Add Attachment',
-                        border: OutlineInputBorder(),
-                      ),
-                      readOnly: true,
-                    ),
-                  ),
-                  IconButton(
-                    icon: const Icon(Icons.image),
+              ],
+            ),
+            const SizedBox(height: 16),
+            CustomEditText(
+              caption: 'Describe your Product',
+              hintText: 'Add product description here',
+              controller: _descriptionController,
+              maxLength: 300,
+              validator: (String? value) {
+                if (value == null || value.isEmpty) {
+                  return 'Please enter a description';
+                }
+                return null;
+              },
+              onChanged: (String value) {
+                setState(() {
+                  description = value;
+                });
+              },
+            ),
+            const SizedBox(height: 16),
+            CustomDropdownWidget(
+              caption: 'Select Category',
+              hintText: 'Choose a category',
+              items: const <String>['Beauty', 'Electronics', 'Fashion', 'Home'],
+              iconName: 'assets/svgs/dropdown.svg',
+              onChanged: (String? newValue) {
+                setState(() {
+                  category = newValue;
+                });
+              },
+            ),
+            const SizedBox(height: 16),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 7.0),
+              child: CountryListPick(
+                appBar: AppBar(
+                  leading: IconButton(
                     onPressed: () {
-                      _pickImage();
+                      Navigator.pop(context);
                     },
+                    icon: SvgPicture.asset('assets/svgs/backbutton.svg'),
                   ),
-                ],
+                  centerTitle: true,
+                  title: const Text(
+                    'Select Location',
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
+                      fontSize: 20,
+                    ),
+                  ),
+                ),
+                initialSelection: country,
+                pickerBuilder:
+                    (BuildContext context, CountryCode? countryCode) {
+                  return Container(
+                    decoration: BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.circular(radiusValue),
+                    ),
+                    child: CustomTextWidget(
+                      caption: 'Location',
+                      iconName: 'assets/svgs/nexticon.svg',
+                      text: country,
+                    ),
+                  );
+                },
+                onChanged: (CountryCode? code) async {
+                  setState(() {
+                    country = code!.name!;
+                  });
+                },
+                useSafeArea: false,
               ),
-              const SizedBox(height: 16),
-
-              const SizedBox(height: 8),
-              if (_selectedImages.isNotEmpty)
-                GridView.builder(
+            ),
+            const SizedBox(height: 16),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 15.0),
+              child: GestureDetector(
+                onTap: _pickImage,
+                child: Container(
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.circular(radiusValue),
+                  ),
+                  child: const Padding(
+                    padding: EdgeInsets.all(15.0),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: <Widget>[
+                        Text('Add Attachment'),
+                        Icon(Icons.image),
+                      ],
+                    ),
+                  ),
+                ),
+              ),
+            ),
+            const SizedBox(height: 16),
+            if (_selectedImages.isNotEmpty)
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 15.0),
+                child: GridView.builder(
                   shrinkWrap: true,
                   physics: const NeverScrollableScrollPhysics(),
                   gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
@@ -273,192 +286,196 @@ class _CreateProductListingState extends State<CreateProductListing> {
                     );
                   },
                 ),
-
-              // Delivery Method Dropdown
-              DropdownButtonFormField<String>(
-                decoration: const InputDecoration(
-                  labelText: 'Delivery Method',
-                  border: OutlineInputBorder(),
-                ),
-                value: deliveryMethod,
-                items: <String>['Online', 'Courier', 'In-Store Pickup']
-                    .map((String method) {
-                  return DropdownMenuItem<String>(
-                    value: method,
-                    child: Text(method),
-                  );
-                }).toList(),
-                onChanged: (String? newValue) {
-                  setState(() {
-                    deliveryMethod = newValue as String;
-                  });
-                },
               ),
-              const SizedBox(height: 16),
-              Row(
-                children: <Widget>[
-                  Expanded(
-                    child: TextFormField(
-                      readOnly: true,
-                      decoration: InputDecoration(
-                        labelText: 'Start Date',
-                        hintText: _formatDate(startDate),
-                        border: const OutlineInputBorder(),
-                      ),
-                      onTap: () =>
-                          _selectDate(context, true), // true means start date
+            CustomDropdownWidget(
+              caption: 'Delivery Method',
+              hintText: 'Choose a delivery method',
+              items: const <String>['Online', 'Courier', 'In-Store Pickup'],
+              iconName: 'assets/svgs/dropdown.svg',
+              onChanged: (String? newValue) {
+                setState(() {
+                  deliveryMethod = newValue;
+                });
+              },
+            ),
+            const SizedBox(height: 16),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 15.0),
+              child: Container(
+                padding: const EdgeInsets.all(15),
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.circular(10),
+                ),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: <Widget>[
+                    const Text('Delivery Date'),
+                    Row(
+                      children: <Widget>[
+                        Expanded(
+                          child: TextFormField(
+                            readOnly: true,
+                            decoration: InputDecoration(
+                              labelText: 'Start Date',
+                              hintText: _formatDate(startDate),
+                            ),
+                            onTap: () => _selectDate(context, true),
+                          ),
+                        ),
+                        const SizedBox(width: 16),
+                        Expanded(
+                          child: TextFormField(
+                            readOnly: true,
+                            decoration: InputDecoration(
+                              labelText: 'End Date',
+                              hintText: _formatDate(endDate),
+                            ),
+                            onTap: () => _selectDate(context, false),
+                          ),
+                        ),
+                      ],
                     ),
-                  ),
-                  const SizedBox(width: 16),
-                  Expanded(
-                    child: TextFormField(
-                      readOnly: true,
-                      decoration: InputDecoration(
-                        labelText: 'End Date',
-                        hintText: _formatDate(endDate),
-                        border: const OutlineInputBorder(),
+                  ],
+                ),
+              ),
+            ),
+            const SizedBox(height: 16),
+            CustomDropdownWidget(
+              caption: 'Payment Method',
+              hintText: 'Choose a payment method',
+              items: const <String>[
+                'Credit Card',
+                'PayPal',
+                'Bank Transfer',
+                'Cash'
+              ],
+              iconName: 'assets/svgs/dropdown.svg',
+              onChanged: (String? newValue) {
+                setState(() {
+                  paymentMethod = newValue;
+                });
+              },
+            ),
+            const SizedBox(height: 16),
+            CustomEditText(
+              caption: 'Storage Location',
+              hintText: 'Enter storage location',
+              onChanged: (String value) {
+                setState(() {
+                  storageLocation = value;
+                });
+              },
+              controller: storageLocationController,
+            ),
+            const SizedBox(height: 16),
+            CustomEditText(
+              caption: 'Product Number',
+              hintText: 'Enter product number',
+              inputType: TextInputType.number,
+              onChanged: (String value) {
+                setState(() {
+                  productNumber = int.tryParse(value);
+                });
+              },
+              controller: productNumberController,
+            ),
+            const SizedBox(height: 16),
+            CustomEditText(
+              caption: 'Quantity',
+              hintText: 'Enter quantity',
+              inputType: TextInputType.number,
+              onChanged: (String value) {
+                setState(() {
+                  quantity = int.tryParse(value);
+                });
+              },
+              controller: quantityController,
+            ),
+            const SizedBox(height: 16),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 15.0),
+              child: Container(
+                padding: const EdgeInsets.all(15),
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.circular(10),
+                ),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: <Widget>[
+                    const Text(
+                      'Product Variations',
+                      style: TextStyle(
+                        fontSize: 14,
+                        fontWeight: FontWeight.w700,
                       ),
-                      onTap: () =>
-                          _selectDate(context, false), // false means end date
                     ),
-                  ),
-                ],
-              ),
-
-              const SizedBox(height: 16),
-              // Payment Method Dropdown
-              DropdownButtonFormField<String>(
-                decoration: const InputDecoration(
-                  labelText: 'Payment Method',
-                  border: OutlineInputBorder(),
+                    const SizedBox(height: 10),
+                    Row(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: <Widget>[
+                        Expanded(
+                          child: MultipleEditTextWidget(
+                            padding: const EdgeInsets.all(5),
+                            backgroundColor: backgroundColor,
+                            buttonSize: 10,
+                            caption: 'Color',
+                            hintText: 'color',
+                            controller: colorController,
+                          ),
+                        ),
+                        const SizedBox(width: 10),
+                        Expanded(
+                          child: MultipleEditTextWidget(
+                            backgroundColor: backgroundColor,
+                            padding: const EdgeInsets.all(5),
+                            buttonSize: 10,
+                            caption: 'Size',
+                            hintText: 'size',
+                            controller: sizeController,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ],
                 ),
-                value: paymentMethod,
-                items: <String>['Credit Card', 'PayPal', 'Bank Transfer']
-                    .map((String method) {
-                  return DropdownMenuItem<String>(
-                    value: method,
-                    child: Text(method),
-                  );
-                }).toList(),
-                onChanged: (String? newValue) {
+              ),
+            ),
+            const SizedBox(height: 16),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 15.0),
+              child: SwitchWidget(
+                value: _isSwitched,
+                onChanged: (bool value) {
                   setState(() {
-                    paymentMethod = newValue ?? 'Credit Card';
+                    _isSwitched = value;
                   });
                 },
+                caption: 'Status',
+                subtext:
+                    'If status is active, this product will show in your shop',
+                activeColor: Colors.blue,
+                inactiveColor: Colors.grey,
               ),
-              const SizedBox(height: 16),
-
-// Storage Location Field
-              TextFormField(
-                decoration: const InputDecoration(
-                  labelText: 'Storage Location',
-                  hintText: 'Shelf 3',
-                  border: OutlineInputBorder(),
-                ),
-                onChanged: (String value) {
-                  setState(() {
-                    // Update storage location value
-                  });
-                },
-              ),
-              const SizedBox(height: 16),
-
-              // Product Number Field
-              TextFormField(
-                decoration: const InputDecoration(
-                  labelText: 'Product Number',
-                  hintText: 'Enter product number',
-                  border: OutlineInputBorder(),
-                ),
-                keyboardType: TextInputType.number,
-                onChanged: (String value) {
-                  setState(() {
-                    productNumber = int.tryParse(value) ?? 0;
-                  });
-                },
-              ),
-              const SizedBox(height: 16),
-
-              // Quantity Field
-              TextFormField(
-                decoration: const InputDecoration(
-                  labelText: 'Quantity',
-                  hintText: 'Enter quantity',
-                  border: OutlineInputBorder(),
-                ),
-                keyboardType: TextInputType.number,
-                onChanged: (String value) {
-                  setState(() {
-                    quantity = int.tryParse(value) ?? 0;
-                  });
-                },
-              ),
-              const SizedBox(height: 16),
-
-              // Color Field
-              TextFormField(
-                decoration: const InputDecoration(
-                  labelText: 'Color',
-                  hintText: 'Enter product color',
-                  border: OutlineInputBorder(),
-                ),
-                onChanged: (String value) {
-                  setState(() {
-                    color = value;
-                  });
-                },
-              ),
-              const SizedBox(height: 16),
-
-              // Size Field
-              TextFormField(
-                decoration: const InputDecoration(
-                  labelText: 'Size',
-                  hintText: 'Enter product size',
-                  border: OutlineInputBorder(),
-                ),
-                onChanged: (String value) {
-                  setState(() {
-                    size = value;
-                  });
-                },
-              ),
-              const SizedBox(height: 16),
-
-              // Storage Location Field
-              TextFormField(
-                decoration: const InputDecoration(
-                  labelText: 'Storage Location',
-                  hintText: 'Enter storage location',
-                  border: OutlineInputBorder(),
-                ),
-                onChanged: (String value) {
-                  setState(() {
-                    storageLocation = value;
-                  });
-                },
-              ),
-              const SizedBox(height: 16),
-              // Sell Button
-              ProCustomButton(
-                loading: isSubmitted,
-                text: 'Create',
-                onPressed: _submitForm,
-              ),
-            ],
-          ),
+            ),
+            const SizedBox(height: 16),
+            ProCustomButton(
+              loading: isSubmitted,
+              text: 'Create',
+              onPressed: _submitForm,
+            ),
+          ],
         ),
       ),
     );
   }
 
-  // Helper function to format dates
   String _formatDate(DateTime? date) {
     if (date == null) return 'Select Date';
     return DateFormat('yyyy-MM-dd').format(date);
   }
 
-  // Function to show date picker
   Future<void> _selectDate(BuildContext context, bool isStartDate) async {
     final DateTime? pickedDate = await showDatePicker(
       context: context,
@@ -491,28 +508,28 @@ class _CreateProductListingState extends State<CreateProductListing> {
         });
       }
     }
-    // Build the product listing JSON object based on form input
     final Map<String, dynamic> productListing = <String, dynamic>{
-      'userId': profileController.myProfile.uid, // Get this from your auth
-      'shopId': shopController.shop?.id, // Set accordingly
+      'userId': profileController.myProfile.uid,
+      'shopId': shopController.shop?.id,
       'name': productName,
       'price': price,
       'discount': discount,
       'description': description,
       'category': category,
-      'location': location,
+      'location': country,
       'images': images,
-      'paymentMethod': paymentMethod, // Example
+      'paymentMethod': paymentMethod,
       'deliveryMethod': deliveryMethod,
-      'url': 'http://example.com/laptop', // Example URL
+      'url': 'http://example.com/product', // Example URL
       'itemType': 'product',
-      'isActive': true,
+      'isActive': _isSwitched,
+      'supplierId': null,
       'supplierId': null, // Set accordingly
       'storageLocation': storageLocation,
       'productNumber': productNumber,
       'quantity': quantity,
-      'startAt': startDate.toString(), // Example dates
-      'endAt': endDate.toString(),
+      'startAt': startDate?.toIso8601String(),
+      'endAt': endDate?.toIso8601String(),
       'color': color,
       'size': size,
     };
@@ -520,7 +537,7 @@ class _CreateProductListingState extends State<CreateProductListing> {
     bool response = await orderController.addProducts(productListing);
     if (response) {
       showSnackbar(
-        message: 'Product Added Succesfully!',
+        message: 'Product Added Successfully!',
       );
       Get.back();
     } else {
@@ -532,7 +549,5 @@ class _CreateProductListingState extends State<CreateProductListing> {
     setState(() {
       isSubmitted = false;
     });
-
-    // Here you can send this productListing to your backend or Firestore
   }
 }
