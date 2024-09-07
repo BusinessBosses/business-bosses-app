@@ -9,10 +9,30 @@ class AvailabilityWidget extends StatefulWidget {
   _AvailabilityWidgetState createState() => _AvailabilityWidgetState();
 }
 
-class _AvailabilityWidgetState extends State<AvailabilityWidget> {
+class _AvailabilityWidgetState extends State<AvailabilityWidget>
+    with SingleTickerProviderStateMixin {
+  late AnimationController _animationController;
+  late Animation<double> _animation;
   final List<DateTime> _selectedDates = <DateTime>[];
   bool _isAlwaysAvailable = false;
   final List<bool> _selectedWeekdays = List.filled(7, false);
+
+  @override
+  void initState() {
+    super.initState();
+    _animationController = AnimationController(
+      vsync: this,
+      duration: const Duration(milliseconds: 200),
+    );
+    _animation =
+        CurvedAnimation(parent: _animationController, curve: Curves.easeInOut);
+  }
+
+  @override
+  void dispose() {
+    _animationController.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -33,30 +53,64 @@ class _AvailabilityWidgetState extends State<AvailabilityWidget> {
                 const Text('I am always available to offer this service'),
                 GestureDetector(
                   onTap: () {
+                    _isAlwaysAvailable
+                        ? _animationController.reverse()
+                        : _animationController.forward();
                     setState(() {
                       _isAlwaysAvailable = !_isAlwaysAvailable;
+                      if (_isAlwaysAvailable) {
+                        _selectedWeekdays.fillRange(0, 7, true);
+                      } else {
+                        _selectedWeekdays.fillRange(0, 7, false);
+                      }
+                      _updateSelectedDates();
                     });
                   },
-                  child: Container(
-                    width: 40,
-                    height: 24,
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(12),
-                      color: _isAlwaysAvailable ? proprimaryColor : Colors.grey,
-                    ),
-                    child: Center(
-                      child: _isAlwaysAvailable
-                          ? const Icon(
-                              Icons.check,
-                              size: 12,
-                              color: Colors.white,
-                            )
-                          : const Icon(
-                              Icons.close,
-                              size: 12,
-                              color: Colors.white,
+                  child: AnimatedBuilder(
+                    animation: _animation,
+                    builder: (BuildContext context, Widget? child) {
+                      return Container(
+                        width: 50,
+                        height: 30,
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(15),
+                          color: _isAlwaysAvailable
+                              ? proprimaryColor
+                              : Colors.grey,
+                        ),
+                        child: Stack(
+                          children: <Widget>[
+                            Positioned(
+                              left: _isAlwaysAvailable ? 20 : 0,
+                              right: _isAlwaysAvailable ? 0 : 20,
+                              top: 2,
+                              bottom: 2,
+                              child: Container(
+                                width: 26,
+                                height: 26,
+                                decoration: const BoxDecoration(
+                                  shape: BoxShape.circle,
+                                  color: Colors.white,
+                                ),
+                                child: Center(
+                                  child: _isAlwaysAvailable
+                                      ? const Icon(
+                                          Icons.check,
+                                          size: 12,
+                                          color: proprimaryColor,
+                                        )
+                                      : const Icon(
+                                          Icons.close,
+                                          size: 12,
+                                          color: Colors.grey,
+                                        ),
+                                ),
+                              ),
                             ),
-                    ),
+                          ],
+                        ),
+                      );
+                    },
                   ),
                 ),
               ],
@@ -113,11 +167,13 @@ class _AvailabilityWidgetState extends State<AvailabilityWidget> {
 
   void _updateSelectedDates() {
     _selectedDates.clear();
-    DateTime now = DateTime.now();
-    for (int i = 0; i < 365; i++) {
-      DateTime date = now.add(Duration(days: i));
-      if (_selectedWeekdays[date.weekday - 1]) {
-        _selectedDates.add(date);
+    if (!_isAlwaysAvailable) {
+      DateTime now = DateTime.now();
+      for (int i = 0; i < 365; i++) {
+        DateTime date = now.add(Duration(days: i));
+        if (_selectedWeekdays[date.weekday - 1]) {
+          _selectedDates.add(date);
+        }
       }
     }
   }
@@ -137,7 +193,8 @@ class _AvailabilityWidgetState extends State<AvailabilityWidget> {
   }
 
   void _handleCalendarTap(CalendarTapDetails details) {
-    if (details.targetElement == CalendarElement.calendarCell) {
+    if (!_isAlwaysAvailable &&
+        details.targetElement == CalendarElement.calendarCell) {
       setState(() {
         DateTime selectedDate = DateTime(
             details.date!.year, details.date!.month, details.date!.day);
