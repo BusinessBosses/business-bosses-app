@@ -12,6 +12,9 @@ class CustomEditText extends StatelessWidget {
   final Color? backgroundcolor;
   final bool? iscurrencyfield;
   final Color? currencyfieldcolor;
+  final String? Function(String?)? validator;
+  final void Function(String)? onChanged;
+  final double? padding;
 
   const CustomEditText({
     super.key,
@@ -25,12 +28,15 @@ class CustomEditText extends StatelessWidget {
     this.iscurrencyfield,
     this.currencyfieldcolor,
     this.optionalText,
+    this.validator,
+    this.onChanged,
+    this.padding,
   });
 
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 15.0),
+      padding: EdgeInsets.symmetric(horizontal: padding ?? 15.0),
       child: Container(
         decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(10),
@@ -41,43 +47,40 @@ class CustomEditText extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
             Wrap(
-              crossAxisAlignment: WrapCrossAlignment.center,
-              children: [
-              Text(
-                caption,
-                style: const TextStyle(
-                  fontSize: 14,
-                  fontWeight: FontWeight.w600,
-                ),
-              ),
-              SizedBox(
-                width: 10,
-              ),
-              optionalText ?? Container()
-            ]),
+                crossAxisAlignment: WrapCrossAlignment.center,
+                children: <Widget>[
+                  Text(
+                    caption,
+                    style: const TextStyle(
+                      fontSize: 14,
+                      fontWeight: FontWeight.w600,
+                    ),
+                  ),
+                  const SizedBox(
+                    width: 10,
+                  ),
+                  optionalText ?? Container()
+                ]),
             (iscurrencyfield == true)
                 ? Row(
-                    children: [
+                    children: <Widget>[
                       SizedBox(
                         height: 30,
                         width: 40,
                         child: TextFormField(
-                          style: TextStyle(fontSize: 13),
+                          style: const TextStyle(fontSize: 13),
                           decoration: InputDecoration(
                             hintText: 'USD',
                             fillColor: currencyfieldcolor ?? prosemibackColor,
                             filled: true,
                             contentPadding: const EdgeInsets.symmetric(
                               horizontal: 5.0,
-                              vertical:
-                                  0.0, // Adjusted vertical padding for centering
+                              vertical: 0.0,
                             ),
                             counterText: '',
                             border: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(
-                                  5.0), // Set the border radius here
-                              borderSide:
-                                  BorderSide.none, // Removes the default border
+                              borderRadius: BorderRadius.circular(5.0),
+                              borderSide: BorderSide.none,
                             ),
                           ),
                           textAlign: TextAlign.left,
@@ -92,7 +95,7 @@ class CustomEditText extends StatelessWidget {
                       Expanded(
                         flex: 6,
                         child: TextFormField(
-                          style: TextStyle(fontSize: 13),
+                          style: const TextStyle(fontSize: 13),
                           maxLines:
                               maxLength != null && maxLength! > 30 ? 5 : 1,
                           decoration: InputDecoration(
@@ -108,12 +111,14 @@ class CustomEditText extends StatelessWidget {
                           keyboardType: inputType,
                           obscureText: isPassword,
                           controller: controller,
+                          validator: validator,
+                          onChanged: onChanged,
                         ),
                       ),
                     ],
                   )
                 : TextFormField(
-                    style: TextStyle(fontSize: 13),
+                    style: const TextStyle(fontSize: 13),
                     maxLines: maxLength != null && maxLength! > 30 ? 5 : 1,
                     decoration: InputDecoration(
                       border: InputBorder.none,
@@ -127,6 +132,8 @@ class CustomEditText extends StatelessWidget {
                     keyboardType: inputType,
                     obscureText: isPassword,
                     controller: controller,
+                    validator: validator,
+                    onChanged: onChanged,
                   ),
           ],
         ),

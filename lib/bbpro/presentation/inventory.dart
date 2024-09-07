@@ -1,5 +1,7 @@
+import 'package:business_bosses_v2/bbpro/widgets/button.dart';
 import 'package:business_bosses_v2/bbpro/widgets/inventorycard.dart';
 import 'package:business_bosses_v2/bbpro/presentation/viewproduct.dart';
+import 'package:business_bosses_v2/utils/theme/theme.dart';
 import 'package:business_bosses_v2/utils/theme/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
@@ -36,27 +38,65 @@ class _InventoryState extends State<Inventory> {
         ),
         actions: <Widget>[
           Padding(
-            padding: const EdgeInsets.only(right: 10.0, bottom: 15),
-            child: CircleAvatar(
-              backgroundColor: prosemibackColor,
-              radius: 30,
-              child: Padding(
-                padding: const EdgeInsets.all(10),
-                child: SvgPicture.asset(
-                  'assets/svgs/notificationicon.svg',
-                  height: 20,
-                ),
+            padding: const EdgeInsets.only(right: 15.0),
+            child: GestureDetector(
+              onTap: () {
+                final RenderBox button =
+                    context.findRenderObject() as RenderBox;
+                final RenderBox overlay =
+                    Overlay.of(context).context.findRenderObject() as RenderBox;
+                final RelativeRect position = RelativeRect.fromRect(
+                  Rect.fromPoints(
+                    button.localToGlobal(
+                        button.size.topRight(const Offset(0, 110)),
+                        ancestor: overlay),
+                    button.localToGlobal(
+                        button.size.bottomRight(const Offset(0, 20)),
+                        ancestor: overlay),
+                  ),
+                  Offset.zero & overlay.size,
+                );
+
+                showMenu(
+                  shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(10)),
+                  context: context,
+                  shadowColor: Colors.black,
+                  position: position,
+                  items: <String>[
+                    'All Products',
+                    'Low Stock',
+                    'Out of Stock',
+                    'Most Popular',
+                    'Newest First',
+                  ].map((String option) {
+                    return PopupMenuItem<String>(
+                      value: option,
+                      child: Text(option),
+                    );
+                  }).toList(),
+                ).then((String? selected) {
+                  if (selected != null) {
+                    setState(() {
+                      _selectedItem = selected;
+                    });
+                    // Implement filter logic here
+                  }
+                });
+              },
+              child: CircleAvatar(
+                backgroundColor: backgroundColor,
+                child: SvgPicture.asset('assets/svgs/filterprosections.svg'),
               ),
             ),
-          )
+          ),
         ],
       ),
       body: SingleChildScrollView(
         child: Column(
           children: <Widget>[
             Padding(
-              padding:
-                  const EdgeInsets.symmetric(horizontal: 15.0, vertical: 10),
+              padding: const EdgeInsets.only(left: 15.0, top: 10, bottom: 10),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: <Widget>[
@@ -73,47 +113,52 @@ class _InventoryState extends State<Inventory> {
                       style: TextStyle(color: Colors.black),
                     ),
                   ]),
-                  Container(
-                    padding: const EdgeInsets.symmetric(
-                        horizontal: 15, vertical: 10),
-                    decoration: BoxDecoration(
-                      color: Colors.white,
-                      borderRadius: BorderRadius.circular(10),
-                    ),
-                    child: Wrap(
-                      crossAxisAlignment: WrapCrossAlignment.center,
-                      children: <Widget>[
-                        SvgPicture.asset('assets/svgs/inventoryfilter.svg'),
-                        SizedBox(
-                          height: 30,
-                          width: 200,
-                          child: DropdownButtonHideUnderline(
-                            child: DropdownButton<String>(
-                              value: _selectedItem,
-                              onChanged: (String? newValue) {
-                                setState(() {
-                                  _selectedItem = newValue;
-                                });
-                              },
-                              items: <String>['rrtr', 'ekllee']
-                                  .map((String value) {
-                                return DropdownMenuItem<String>(
-                                  value: value,
-                                  child: Text(value),
-                                );
-                              }).toList(),
-                              isExpanded: true,
-                              icon: const Icon(
-                                Icons.expand_more,
-                                color: proprimaryColor,
-                                size: 20,
-                              ),
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
+                  ProCustomButton(
+                    text: 'Add Products',
+                    onPressed: () {},
+                    icon: const Icon(Icons.add),
                   ),
+                  // Container(
+                  //   padding: const EdgeInsets.symmetric(
+                  //       horizontal: 15, vertical: 10),
+                  //   decoration: BoxDecoration(
+                  //     color: Colors.white,
+                  //     borderRadius: BorderRadius.circular(10),
+                  //   ),
+                  //   child: Wrap(
+                  //     crossAxisAlignment: WrapCrossAlignment.center,
+                  //     children: <Widget>[
+                  //       SvgPicture.asset('assets/svgs/inventoryfilter.svg'),
+                  //       SizedBox(
+                  //         height: 30,
+                  //         width: 200,
+                  //         child: DropdownButtonHideUnderline(
+                  //           child: DropdownButton<String>(
+                  //             value: _selectedItem,
+                  //             onChanged: (String? newValue) {
+                  //               setState(() {
+                  //                 _selectedItem = newValue;
+                  //               });
+                  //             },
+                  //             items: <String>['rrtr', 'ekllee']
+                  //                 .map((String value) {
+                  //               return DropdownMenuItem<String>(
+                  //                 value: value,
+                  //                 child: Text(value),
+                  //               );
+                  //             }).toList(),
+                  //             isExpanded: true,
+                  //             icon: const Icon(
+                  //               Icons.expand_more,
+                  //               color: proprimaryColor,
+                  //               size: 20,
+                  //             ),
+                  //           ),
+                  //         ),
+                  //       ),
+                  //     ],
+                  //   ),
+                  // ),
                 ],
               ),
             ),

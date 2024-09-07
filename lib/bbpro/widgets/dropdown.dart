@@ -6,17 +6,18 @@ class CustomDropdownWidget extends StatefulWidget {
   final String caption;
   final String iconName;
   final List<String> items;
-  final String? initialValue; // New: Allows setting an initial value
-  final ValueChanged<String?>?
-      onChanged; // New: Callback for when value changes
+  final String? initialValue;
+  final ValueChanged<String?>? onChanged;
+  final String? hintText; // Changed: hintText is now optional
 
   const CustomDropdownWidget({
     super.key,
     required this.caption,
     required this.items,
     required this.iconName,
-    this.initialValue, // New: Set initial value
-    this.onChanged, // New: Set onChanged callback
+    this.initialValue,
+    this.onChanged,
+    this.hintText, // Changed: hintText is now optional
   });
 
   @override
@@ -29,7 +30,7 @@ class _CustomDropdownWidgetState extends State<CustomDropdownWidget> {
   @override
   void initState() {
     super.initState();
-    _selectedItem = widget.items.isNotEmpty ? widget.items[0] : null;
+    _selectedItem = widget.initialValue;
   }
 
   @override
@@ -53,10 +54,17 @@ class _CustomDropdownWidgetState extends State<CustomDropdownWidget> {
             DropdownButtonHideUnderline(
               child: DropdownButton<String>(
                 value: _selectedItem,
+                hint: widget.hintText != null
+                    ? Text(widget.hintText!,
+                        style: const TextStyle(fontSize: 13))
+                    : null, // Changed: Only show hint if hintText is provided
                 onChanged: (String? newValue) {
                   setState(() {
                     _selectedItem = newValue;
                   });
+                  if (widget.onChanged != null) {
+                    widget.onChanged!(newValue);
+                  }
                 },
                 items:
                     widget.items.map<DropdownMenuItem<String>>((String value) {

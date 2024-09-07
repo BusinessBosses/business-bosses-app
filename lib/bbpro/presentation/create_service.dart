@@ -1,6 +1,11 @@
 import 'dart:io';
 
 import 'package:business_bosses_v2/bbpro/controllers/shop_controller.dart';
+import 'package:business_bosses_v2/bbpro/widgets/availabiltywidget.dart';
+import 'package:business_bosses_v2/bbpro/widgets/dropdown.dart';
+import 'package:business_bosses_v2/bbpro/widgets/edittext.dart';
+import 'package:business_bosses_v2/bbpro/widgets/multipleedit.dart';
+import 'package:business_bosses_v2/bbpro/widgets/switchwidget.dart';
 import 'package:business_bosses_v2/features/profile/controller/profile_controller.dart';
 import 'package:business_bosses_v2/services/api_service.dart';
 import 'package:flutter/material.dart';
@@ -24,17 +29,23 @@ class CreateServiceListing extends StatefulWidget {
 
 class _CreateServiceListingState extends State<CreateServiceListing> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
-  final OrderController orderController = Get.find();
+  final OrderController orderController = Get.put(OrderController());
   final ShopController shopController = Get.put(ShopController());
   final ProfileController profileController = Get.find();
   final ImagePicker _picker = ImagePicker();
   final List<File> _selectedImages = <File>[];
+  final TextEditingController _serviceNameController = TextEditingController();
+  final TextEditingController _priceController = TextEditingController();
+  final TextEditingController _descriptionController = TextEditingController();
+  final TextEditingController _discountController = TextEditingController();
 
   bool isSubmitted = false;
+  bool _isSwitched = false;
 
   // Form fields
   String? serviceName;
   double? price;
+  double? discount;
   String? description;
   String? category;
   String? location;
@@ -57,6 +68,7 @@ class _CreateServiceListingState extends State<CreateServiceListing> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: probackgroundColor,
       appBar: AppBar(
         automaticallyImplyLeading: false,
         title: const Text(
@@ -75,160 +87,215 @@ class _CreateServiceListingState extends State<CreateServiceListing> {
           ),
         ],
       ),
-      body: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Form(
-          key: _formKey,
-          child: ListView(
-            children: <Widget>[
-              // Service Name Field
-              TextFormField(
-                decoration: const InputDecoration(
-                  labelText: 'Service Name',
-                  hintText: 'Enter service name here',
-                  border: OutlineInputBorder(),
-                ),
-                validator: (String? value) {
-                  if (value == null || value.isEmpty) {
-                    return 'Please enter a service name';
-                  }
-                  return null;
-                },
-                onChanged: (String value) {
-                  setState(() {
-                    serviceName = value;
-                  });
-                },
-              ),
-              const SizedBox(height: 16),
+      body: Form(
+        key: _formKey,
+        child: ListView(
+          children: <Widget>[
+            const SizedBox(height: 16),
+            CustomEditText(
+              caption: 'Service Name',
+              hintText: 'Enter service name here',
+              controller: _serviceNameController,
+              validator: (String? value) {
+                if (value == null || value.isEmpty) {
+                  return 'Please enter a service name';
+                }
+                return null;
+              },
+              onChanged: (String value) {
+                setState(() {
+                  serviceName = value;
+                });
+              },
+            ),
+            const SizedBox(height: 16),
 
-              // Price Field
-              TextFormField(
-                decoration: const InputDecoration(
-                  labelText: 'Price',
-                  hintText: 'USD',
-                  border: OutlineInputBorder(),
-                ),
-                keyboardType: TextInputType.number,
-                onChanged: (String value) {
-                  setState(() {
-                    price = double.tryParse(value);
-                  });
-                },
-              ),
-              const SizedBox(height: 16),
-
-              // Description Field
-              TextFormField(
-                maxLines: 3,
-                maxLength: 300,
-                decoration: const InputDecoration(
-                  labelText: 'Describe your Service',
-                  hintText: 'Add service description here',
-                  border: OutlineInputBorder(),
-                ),
-                onChanged: (String value) {
-                  setState(() {
-                    description = value;
-                  });
-                },
-              ),
-              const SizedBox(height: 16),
-
-              // Select Category Dropdown
-              DropdownButtonFormField<String>(
-                decoration: const InputDecoration(
-                  labelText: 'Select Category',
-                  border: OutlineInputBorder(),
-                ),
-                value: category,
-                items: <String>[
-                  'Design Services',
-                  'Consulting',
-                  'Technical Support'
-                ].map((String category) {
-                  return DropdownMenuItem<String>(
-                    value: category,
-                    child: Text(category),
-                  );
-                }).toList(),
-                onChanged: (String? newValue) {
-                  setState(() {
-                    category = newValue;
-                  });
-                },
-              ),
-              const SizedBox(height: 16),
-
-              // Location Dropdown
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 7.0),
-                child: CountryListPick(
-                  appBar: AppBar(
-                    leading: IconButton(
-                      onPressed: () {
-                        Navigator.pop(context);
-                      },
-                      icon: SvgPicture.asset('assets/svgs/backbutton.svg'),
-                    ),
-                    centerTitle: true,
-                    title: const Text(
-                      'Select Location',
-                      textAlign: TextAlign.center,
-                      style: TextStyle(
-                        fontSize: 20,
-                      ),
-                    ),
-                  ),
-                  initialSelection: location,
-                  pickerBuilder:
-                      (BuildContext context, CountryCode? countryCode) {
-                    return Container(
-                      decoration: BoxDecoration(
-                        color: Colors.white,
-                        borderRadius: BorderRadius.circular(radiusValue),
-                      ),
-                      child: CustomTextWidget(
-                        caption: 'Location',
-                        iconName: 'assets/svgs/nexticon.svg',
-                        text: location ?? 'Select Location',
-                      ),
-                    );
-                  },
-                  onChanged: (CountryCode? code) {
-                    setState(() {
-                      location = code?.name;
-                    });
-                  },
-                  useSafeArea: false,
-                ),
-              ),
-              const SizedBox(height: 16),
-
-              // Add Attachment (Image Picker)
-              Row(
-                children: <Widget>[
-                  Expanded(
-                    child: TextFormField(
-                      decoration: const InputDecoration(
-                        labelText: 'Add Attachment',
-                        border: OutlineInputBorder(),
-                      ),
-                      readOnly: true,
-                    ),
-                  ),
-                  IconButton(
-                    icon: const Icon(Icons.image),
-                    onPressed: () {
-                      _pickImage();
+            Row(
+              children: <Widget>[
+                Expanded(
+                  child: CustomEditText(
+                    caption: 'Price',
+                    hintText: 'Enter price in USD',
+                    controller: _priceController,
+                    inputType: TextInputType.number,
+                    validator: (String? value) {
+                      if (value == null || value.isEmpty) {
+                        return 'Please enter a price';
+                      }
+                      if (double.tryParse(value) == null) {
+                        return 'Please enter a valid number';
+                      }
+                      return null;
+                    },
+                    onChanged: (String value) {
+                      setState(() {
+                        price = double.tryParse(value);
+                      });
                     },
                   ),
-                ],
-              ),
-              const SizedBox(height: 16),
+                ),
+                Expanded(
+                  child: Padding(
+                    padding: const EdgeInsets.only(right: 15.0),
+                    child: CustomEditText(
+                      padding: 0,
+                      caption: 'Discount',
+                      hintText: 'Enter discount',
+                      controller: _discountController,
+                      inputType: TextInputType.number,
+                      validator: (String? value) {
+                        if (value != null && value.isNotEmpty) {
+                          if (double.tryParse(value) == null) {
+                            return 'Please enter a valid number';
+                          }
+                        }
+                        return null;
+                      },
+                      onChanged: (String value) {
+                        setState(() {
+                          discount = double.tryParse(value);
+                        });
+                      },
+                    ),
+                  ),
+                ),
+              ],
+            ),
+            const SizedBox(height: 16),
 
-              if (_selectedImages.isNotEmpty)
-                GridView.builder(
+            CustomEditText(
+              caption: 'Describe your Service',
+              hintText: 'Add service description here',
+              controller: _descriptionController,
+              maxLength: 300,
+              validator: (String? value) {
+                if (value == null || value.isEmpty) {
+                  return 'Please enter a description';
+                }
+                return null;
+              },
+              onChanged: (String value) {
+                setState(() {
+                  description = value;
+                });
+              },
+            ),
+            const SizedBox(height: 16),
+            CustomDropdownWidget(
+              caption: 'Select Category',
+              hintText: 'Choose a category',
+              items: const <String>[
+                'Design Services',
+                'Consulting',
+                'Technical Support'
+              ],
+              iconName: 'assets/svgs/dropdown.svg',
+              onChanged: (String? newValue) {
+                setState(() {
+                  category = newValue;
+                });
+              },
+            ),
+
+            // Select Category Dropdown
+            // DropdownButtonFormField<String>(
+            //   decoration: const InputDecoration(
+            //     labelText: 'Select Category',
+            //     border: OutlineInputBorder(),
+            //   ),
+            //   value: category,
+            //   items: <String>[
+            //     'Design Services',
+            //     'Consulting',
+            //     'Technical Support'
+            //   ].map((String category) {
+            //     return DropdownMenuItem<String>(
+            //       value: category,
+            //       child: Text(category),
+            //     );
+            //   }).toList(),
+            //   onChanged: (String? newValue) {
+            //     setState(() {
+            //       category = newValue;
+            //     });
+            //   },
+            // ),
+            const SizedBox(height: 16),
+
+            // Location Dropdown
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 7.0),
+              child: CountryListPick(
+                appBar: AppBar(
+                  leading: IconButton(
+                    onPressed: () {
+                      Navigator.pop(context);
+                    },
+                    icon: SvgPicture.asset('assets/svgs/backbutton.svg'),
+                  ),
+                  centerTitle: true,
+                  title: const Text(
+                    'Select Location',
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
+                      fontSize: 20,
+                    ),
+                  ),
+                ),
+                initialSelection: location,
+                pickerBuilder:
+                    (BuildContext context, CountryCode? countryCode) {
+                  return Container(
+                    decoration: BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.circular(radiusValue),
+                    ),
+                    child: CustomTextWidget(
+                      caption: 'Location',
+                      iconName: 'assets/svgs/nexticon.svg',
+                      text: location ?? 'Select Location',
+                    ),
+                  );
+                },
+                onChanged: (CountryCode? code) {
+                  setState(() {
+                    location = code?.name;
+                  });
+                },
+                useSafeArea: false,
+              ),
+            ),
+            const SizedBox(height: 16),
+
+            // Add Attachment (Image Picker)
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 15.0),
+              child: GestureDetector(
+                onTap: _pickImage,
+                child: Container(
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.circular(radiusValue),
+                  ),
+                  child: const Padding(
+                    padding: EdgeInsets.all(15.0),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: <Widget>[
+                        Text('Add Attachment'),
+                        Icon(Icons.image),
+                      ],
+                    ),
+                  ),
+                ),
+              ),
+            ),
+            const SizedBox(height: 16),
+
+            if (_selectedImages.isNotEmpty)
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 15.0),
+                child: GridView.builder(
                   shrinkWrap: true,
                   physics: const NeverScrollableScrollPhysics(),
                   gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
@@ -244,100 +311,121 @@ class _CreateServiceListingState extends State<CreateServiceListing> {
                     );
                   },
                 ),
+              ),
 
-              // Delivery Method Dropdown
-              DropdownButtonFormField<String>(
-                decoration: const InputDecoration(
-                  labelText: 'Delivery Method',
-                  border: OutlineInputBorder(),
-                ),
-                value: deliveryMethod,
-                items: <String>['Online', 'In-Person'].map((String method) {
-                  return DropdownMenuItem<String>(
-                    value: method,
-                    child: Text(method),
-                  );
-                }).toList(),
-                onChanged: (String? newValue) {
+            // Delivery Method Dropdown
+            CustomDropdownWidget(
+              caption: 'Delivery Method',
+              hintText: 'Choose a delivery method',
+              items: const <String>['Online', 'In-Person'],
+              iconName: 'assets/svgs/dropdown.svg',
+              onChanged: (String? newValue) {
+                setState(() {
+                  deliveryMethod = newValue;
+                });
+              },
+            ),
+            const SizedBox(height: 16),
+
+            const AvailabilityWidget(),
+
+            // Delivery Time Field
+            // TextFormField(
+            //   decoration: const InputDecoration(
+            //     labelText: 'Delivery Time',
+            //     hintText: 'e.g., 3-5 business days',
+            //     border: OutlineInputBorder(),
+            //   ),
+            //   onChanged: (String value) {
+            //     setState(() {
+            //       deliveryTime = value;
+            //     });
+            //   },
+            // ),
+            const SizedBox(height: 16),
+
+            // Available Time Field
+            // TextFormField(
+            //   readOnly: true,
+            //   decoration: InputDecoration(
+            //     labelText: 'Available Time',
+            //     hintText: _formatDate(availableTime),
+            //     border: const OutlineInputBorder(),
+            //   ),
+            //   onTap: () => _selectDate(context),
+            // ),
+            // const SizedBox(height: 16),
+
+            // Payment Method Dropdown
+
+            CustomDropdownWidget(
+              caption: 'Payment Method',
+              hintText: 'Choose a payment method',
+              items: const <String>[
+                'Credit Card',
+                'PayPal',
+                'Bank Transfer',
+                'Cash'
+              ],
+              iconName: 'assets/svgs/dropdown.svg',
+              onChanged: (String? newValue) {
+                setState(() {
+                  paymentMethod = newValue;
+                });
+              },
+            ),
+
+            const SizedBox(height: 16),
+
+            // Service Type Field
+            CustomDropdownWidget(
+              caption: 'Service Type',
+              hintText: 'Choose a service type',
+              items: const <String>[
+                '1:1 (Individual)',
+                '1 to Many',
+              ],
+              iconName: 'assets/svgs/dropdown.svg',
+              onChanged: (String? newValue) {
+                setState(() {
+                  serviceType = newValue;
+                });
+              },
+            ),
+
+            const SizedBox(height: 16),
+
+            MultipleEditTextWidget(
+                caption: 'Add Additional Packages to this service',
+                hintText: 'Package Name',
+                controller: _serviceNameController),
+            const SizedBox(height: 16),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 15.0),
+              child: SwitchWidget(
+                value: _isSwitched,
+                onChanged: (bool value) {
                   setState(() {
-                    deliveryMethod = newValue;
+                    _isSwitched = value;
                   });
                 },
+                caption: 'Status',
+                subtext:
+                    'If status is active, this product will show in your shop',
+                activeColor: Colors.blue,
+                inactiveColor: Colors.grey,
               ),
-              const SizedBox(height: 16),
+            ),
 
-              // Delivery Time Field
-              TextFormField(
-                decoration: const InputDecoration(
-                  labelText: 'Delivery Time',
-                  hintText: 'e.g., 3-5 business days',
-                  border: OutlineInputBorder(),
-                ),
-                onChanged: (String value) {
-                  setState(() {
-                    deliveryTime = value;
-                  });
-                },
-              ),
-              const SizedBox(height: 16),
+            const SizedBox(height: 16),
 
-              // Available Time Field
-              TextFormField(
-                readOnly: true,
-                decoration: InputDecoration(
-                  labelText: 'Available Time',
-                  hintText: _formatDate(availableTime),
-                  border: const OutlineInputBorder(),
-                ),
-                onTap: () => _selectDate(context),
-              ),
-              const SizedBox(height: 16),
-
-              // Payment Method Dropdown
-              DropdownButtonFormField<String>(
-                decoration: const InputDecoration(
-                  labelText: 'Payment Method',
-                  border: OutlineInputBorder(),
-                ),
-                value: paymentMethod,
-                items: <String>['Credit Card', 'PayPal', 'Bank Transfer']
-                    .map((String method) {
-                  return DropdownMenuItem<String>(
-                    value: method,
-                    child: Text(method),
-                  );
-                }).toList(),
-                onChanged: (String? newValue) {
-                  setState(() {
-                    paymentMethod = newValue;
-                  });
-                },
-              ),
-              const SizedBox(height: 16),
-
-              // Service Type Field
-              TextFormField(
-                decoration: const InputDecoration(
-                  labelText: 'Service Type',
-                  hintText: 'e.g., design',
-                  border: OutlineInputBorder(),
-                ),
-                onChanged: (String value) {
-                  setState(() {
-                    serviceType = value;
-                  });
-                },
-              ),
-              const SizedBox(height: 16),
-
-              // Submit Button
-              ProCustomButton(
-                loading: isSubmitted,
-                text: 'Create Service',
-                onPressed: _submitForm,
-              ),
-            ],
-          ),
+            // Submit Button
+            ProCustomButton(
+              loading: isSubmitted,
+              text: 'Create Service',
+              onPressed: _submitForm,
+            ),
+          ],
         ),
       ),
     );

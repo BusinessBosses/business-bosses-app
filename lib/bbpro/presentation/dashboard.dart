@@ -1,4 +1,5 @@
 import 'package:business_bosses_v2/bbpro/controllers/shop_controller.dart';
+import 'package:business_bosses_v2/bbpro/presentation/create_service.dart';
 import 'package:business_bosses_v2/bbpro/widgets/gotoshopwidget.dart';
 import 'package:business_bosses_v2/bbpro/widgets/infocard.dart';
 import 'package:business_bosses_v2/bbpro/widgets/notificationbutton.dart';
@@ -28,6 +29,82 @@ class _DashboardState extends State<Dashboard> {
     'Shop Visits'
   ];
   final ShopController shopController = Get.put(ShopController());
+
+  void _showBottomSheet() {
+    showModalBottomSheet(
+      context: context,
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(
+          top: Radius.circular(25.0),
+        ),
+      ),
+      builder: (BuildContext context) {
+        return SizedBox(
+          height: 500,
+          child: Padding(
+            padding: const EdgeInsets.all(15.0),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisSize: MainAxisSize.min,
+              children: <Widget>[
+                Expanded(
+                  child: ListView.separated(
+                    itemCount: 6,
+                    separatorBuilder: (BuildContext context, int index) =>
+                        const Divider(),
+                    itemBuilder: (BuildContext context, int index) {
+                      return ListTile(
+                        onTap: () {
+                          Navigator.pop(context);
+                          if (index == 0) {
+                            // Handle Add Products
+                          } else if (index == 1) {
+                            Get.to(() => const CreateServiceListing());
+                          } else if (index == 2) {
+                            // Handle Add Projects
+                          } else if (index == 3) {
+                            // Handle Add Orders
+                          } else if (index == 4) {
+                            // Handle Add Clients
+                          } else if (index == 5) {
+                            // Handle Add Suppliers
+                          }
+                        },
+                        minVerticalPadding: 0,
+                        contentPadding: const EdgeInsets.only(left: 10),
+                        leading: Icon(
+                          Icons.add,
+                          size: 22,
+                          color: textColor.withOpacity(1),
+                        ),
+                        title: Text(
+                          index == 0
+                              ? 'Add Products'
+                              : index == 1
+                                  ? 'Add Services'
+                                  : index == 2
+                                      ? 'Add Projects'
+                                      : index == 3
+                                          ? 'Add Orders'
+                                          : index == 4
+                                              ? 'Add Clients'
+                                              : 'Add Suppliers',
+                          style: const TextStyle(
+                            fontSize: 18,
+                            fontWeight: FontWeight.w700,
+                          ),
+                        ),
+                      );
+                    },
+                  ),
+                )
+              ],
+            ),
+          ),
+        );
+      },
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -85,6 +162,11 @@ class _DashboardState extends State<Dashboard> {
             ),
           ],
         ),
+      ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: _showBottomSheet,
+        backgroundColor: proprimaryColor,
+        child: const Icon(Icons.add),
       ),
     );
   }
