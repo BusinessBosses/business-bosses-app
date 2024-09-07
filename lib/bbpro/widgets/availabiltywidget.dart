@@ -16,6 +16,10 @@ class _AvailabilityWidgetState extends State<AvailabilityWidget>
   final List<DateTime> _selectedDates = <DateTime>[];
   bool _isAlwaysAvailable = false;
   final List<bool> _selectedWeekdays = List.filled(7, false);
+  TimeOfDay _startTime = const TimeOfDay(hour: 9, minute: 0);
+  TimeOfDay _endTime = const TimeOfDay(hour: 17, minute: 0);
+  bool _startTimeSelected = false;
+  bool _endTimeSelected = false;
 
   @override
   void initState() {
@@ -42,7 +46,7 @@ class _AvailabilityWidgetState extends State<AvailabilityWidget>
         decoration: BoxDecoration(
             color: Colors.white, borderRadius: BorderRadius.circular(radius)),
         padding: const EdgeInsets.all(15),
-        height: 500,
+        height: 600, // Increased height to accommodate time selection
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
@@ -146,6 +150,31 @@ class _AvailabilityWidgetState extends State<AvailabilityWidget>
                       onTap: _handleCalendarTap,
                     ),
             ),
+            const SizedBox(height: 20),
+            const Text('Available Time for selected days'),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: <Widget>[
+                TextButton(
+                  onPressed: () => _selectTime(context, true),
+                  child: Text(
+                    'Start Time: ${_startTime.format(context)}',
+                    style: TextStyle(
+                      color: _startTimeSelected ? Colors.black : Colors.grey,
+                    ),
+                  ),
+                ),
+                TextButton(
+                  onPressed: () => _selectTime(context, false),
+                  child: Text(
+                    'End Time: ${_endTime.format(context)}',
+                    style: TextStyle(
+                      color: _endTimeSelected ? Colors.black : Colors.grey,
+                    ),
+                  ),
+                ),
+              ],
+            ),
           ],
         ),
       ),
@@ -202,6 +231,24 @@ class _AvailabilityWidgetState extends State<AvailabilityWidget>
           _selectedDates.remove(selectedDate);
         } else {
           _selectedDates.add(selectedDate);
+        }
+      });
+    }
+  }
+
+  Future<void> _selectTime(BuildContext context, bool isStartTime) async {
+    final TimeOfDay? picked = await showTimePicker(
+      context: context,
+      initialTime: isStartTime ? _startTime : _endTime,
+    );
+    if (picked != null) {
+      setState(() {
+        if (isStartTime) {
+          _startTime = picked;
+          _startTimeSelected = true;
+        } else {
+          _endTime = picked;
+          _endTimeSelected = true;
         }
       });
     }
