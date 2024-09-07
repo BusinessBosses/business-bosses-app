@@ -9,7 +9,6 @@ import 'package:business_bosses_v2/features/home/widgets/forum_item.dart';
 import 'package:business_bosses_v2/features/home/widgets/learningsection.dart';
 import 'package:business_bosses_v2/features/home/widgets/list_items.dart';
 import 'package:business_bosses_v2/features/home/widgets/marketplacesection.dart';
-import 'package:business_bosses_v2/features/home/widgets/searchsection.dart';
 import 'package:business_bosses_v2/features/live_event/controller/live_event_controller.dart';
 import 'package:business_bosses_v2/features/donations/controller/donations_controller.dart';
 import 'package:flutter/material.dart';
@@ -25,7 +24,6 @@ import '../home/widgets/home_appbar.dart';
 import '../marketplace/controllers/market_controller.dart';
 import '../posts/models/post_model.dart';
 import '../profile/controller/profile_controller.dart';
-import '../profile/widgets/boss_of_the_week_tile.dart';
 import 'package:socket_io_client/socket_io_client.dart' as io;
 
 class HomeScreen extends StatefulWidget {
@@ -349,7 +347,7 @@ class _HomeScreenState extends State<HomeScreen>
                                             controller: _tabController,
                                             children: <Widget>[
                                               ListView(
-                                                children: const [
+                                                children: const <Widget>[
                                                   // Padding(
                                                   //   padding: EdgeInsets.only(
                                                   //       left: 15.0,

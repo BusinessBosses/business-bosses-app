@@ -1,7 +1,6 @@
 import 'package:business_bosses_v2/bbpro/models/project_model.dart';
 import 'package:business_bosses_v2/bbpro/widgets/optionsbutton.dart';
 import 'package:business_bosses_v2/bbpro/widgets/projectpopup.dart';
-import 'package:business_bosses_v2/features/withdrawal/presentation/depositscreen.dart';
 import 'package:business_bosses_v2/utils/theme/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -20,7 +19,7 @@ class TaskWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Stack(children: [
+    return Stack(children: <Widget>[
       Container(
         decoration: BoxDecoration(
             border: Border.all(
@@ -73,7 +72,7 @@ class TaskWidget extends StatelessWidget {
                   ),
                   OptionsButton(
                     isExpanded: isExpanded != false ? true : false,
-                    padding: EdgeInsets.all(0),
+                    padding: const EdgeInsets.all(0),
                     borderColor: Colors.white,
                   ),
                 ],
@@ -116,9 +115,9 @@ class TaskWidget extends StatelessWidget {
                         ),
                       ],
                     ),
-                    Row(
+                    const Row(
                       children: <Widget>[
-                        const Text(
+                        Text(
                           'Expenses: ',
                           style: TextStyle(
                             fontWeight: FontWeight.bold,
@@ -127,7 +126,7 @@ class TaskWidget extends StatelessWidget {
                         ),
                         Text(
                           'expenses',
-                          style: const TextStyle(
+                          style: TextStyle(
                             fontSize: 13,
                           ),
                         ),
@@ -144,8 +143,8 @@ class TaskWidget extends StatelessWidget {
                               overflow: TextOverflow.ellipsis,
                               maxLines: 4,
                               text: TextSpan(
-                                children: [
-                                  TextSpan(
+                                children: <InlineSpan>[
+                                  const TextSpan(
                                     text: 'Description: ',
                                     style: TextStyle(
                                         fontWeight: FontWeight
@@ -155,7 +154,7 @@ class TaskWidget extends StatelessWidget {
                                   ),
                                   TextSpan(
                                     text: project.description,
-                                    style: TextStyle(
+                                    style: const TextStyle(
                                         fontSize: 10, color: textColor),
                                   ),
                                 ],

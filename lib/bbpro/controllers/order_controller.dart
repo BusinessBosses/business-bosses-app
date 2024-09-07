@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:business_bosses_v2/bbpro/models/order_model.dart';
 import 'package:business_bosses_v2/common/models/api_response_model.dart';
 import 'package:business_bosses_v2/features/profile/controller/profile_controller.dart';
@@ -10,7 +12,7 @@ class OrderController extends GetxController {
 
   Future<void> initOrders(String userId) async {
     orders.clear();
-    ApiResponseModel response = await ApiService.get(path: 'clients/all');
+    ApiResponseModel response = await ApiService.get(path: 'orders/all');
     if (response.success) {
       for (int i = 0; i < response.data['rows'].length; i++) {
         orders.add(Order.fromJson(response.data['rows'][i]));
@@ -20,7 +22,7 @@ class OrderController extends GetxController {
 
   Future<bool> addOrders(Map<String, dynamic> data) async {
     ApiResponseModel response =
-        await ApiService.post(path: 'clients', body: data);
+        await ApiService.post(path: 'orders', body: data);
     if (response.success) {
       // Convert the response data to a Client object and add it to the list
       Order newClient = Order.fromJson(<String, dynamic>{
@@ -30,6 +32,28 @@ class OrderController extends GetxController {
       orders.add(newClient);
       return true;
     } else {
+      return false;
+    }
+  }
+
+  Future<bool> addProducts(Map<String, dynamic> data) async {
+    ApiResponseModel response =
+        await ApiService.post(path: 'goods', body: data);
+    if (response.success) {
+      return true;
+    } else {
+      log(response.toMap().toString());
+      return false;
+    }
+  }
+
+  Future<bool> addService(Map<String, dynamic> data) async {
+    ApiResponseModel response =
+        await ApiService.post(path: 'services', body: data);
+    if (response.success) {
+      return true;
+    } else {
+      log(response.toMap().toString());
       return false;
     }
   }

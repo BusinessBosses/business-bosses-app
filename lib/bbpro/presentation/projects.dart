@@ -278,17 +278,17 @@ class _RowStatusCardState extends State<RowStatusCard> {
                     ),
                   ],
                 ),
-                SizedBox(
+                const SizedBox(
                   width: 50,
                 ),
                 if (widget.projectStatus.index != 0)
-                  SizedBox(
+                  const SizedBox(
                     height: 31,
                   ),
                 if (widget.projectStatus.index == 0)
                   _showSearchBar
                       ? Expanded(
-                          child: Container(
+                          child: SizedBox(
                             height: 31,
                             child: ProSearchbar(
                               contentPadding: 10,

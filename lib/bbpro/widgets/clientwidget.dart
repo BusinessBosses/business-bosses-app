@@ -77,18 +77,18 @@ class ClientWidget extends StatelessWidget {
             Padding(
               padding: const EdgeInsets.symmetric(vertical: 10.0),
               child: Column(
-                children: [
+                children: <Widget>[
                   Row(
                     children: [
-                      Text(
+                      const Text(
                         'Email: ',
-                        style: const TextStyle(
+                        style: TextStyle(
                           fontWeight: FontWeight.normal,
                           fontSize: 13,
                         ),
                       ),
                       Text(
-                        client.email ?? 'description',
+                        client.email,
                         style: const TextStyle(
                           fontWeight: FontWeight.bold,
                           fontSize: 13,
@@ -97,16 +97,16 @@ class ClientWidget extends StatelessWidget {
                     ],
                   ),
                   Row(
-                    children: [
-                      Text(
+                    children: <Widget>[
+                      const Text(
                         'Phone: ',
-                        style: const TextStyle(
+                        style: TextStyle(
                           fontWeight: FontWeight.normal,
                           fontSize: 13,
                         ),
                       ),
                       Text(
-                        client.phone ?? 'description',
+                        client.phone,
                         style: const TextStyle(
                           fontWeight: FontWeight.bold,
                           fontSize: 13,

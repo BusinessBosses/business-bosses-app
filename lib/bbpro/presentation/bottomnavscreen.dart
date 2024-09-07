@@ -1,3 +1,4 @@
+import 'package:business_bosses_v2/bbpro/controllers/clients_controller.dart';
 import 'package:business_bosses_v2/bbpro/presentation/clients.dart';
 import 'package:business_bosses_v2/bbpro/presentation/dashboard.dart';
 import 'package:business_bosses_v2/bbpro/presentation/ordersandinvoices.dart';
@@ -6,6 +7,7 @@ import 'package:business_bosses_v2/bbpro/presentation/setup.dart';
 import 'package:business_bosses_v2/utils/theme/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:get/get.dart';
 
 class Bottomnavscreen extends StatefulWidget {
   const Bottomnavscreen({super.key});
@@ -16,6 +18,7 @@ class Bottomnavscreen extends StatefulWidget {
 }
 
 class _BottomnavscreenState extends State<Bottomnavscreen> {
+  final ClientsController clientsController = Get.put(ClientsController());
   int _selectedIndex = 0;
 
   static const List<Widget> _widgetOptions = <Widget>[

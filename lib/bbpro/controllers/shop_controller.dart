@@ -6,7 +6,7 @@ import 'package:get/get.dart';
 
 class ShopController extends GetxController {
   final ProfileController profileController = Get.find();
-  RxList<Shop> shops = RxList<Shop>(<Shop>[]);
+  Shop? shop;
   RxBool loading = RxBool(true);
 
   Future<bool> initShop() async {
@@ -14,14 +14,25 @@ class ShopController extends GetxController {
       path: 'shops/user-shops/${profileController.myProfile.uid}',
     );
     if (response.success) {
-      for (int i = 0; i < response.data['rows'].length; i++) {
-        shops.add(Shop.fromMap(response.data['rows'][i]));
+      shop = Shop.fromMap(response.data['rows'][0]);
+      if (response.data['rows'][0] != null) {
+      } else {
+        loading(false);
+        update();
+        return false;
       }
+    } else {
+      loading(false);
+      update();
+      return false;
     }
     loading(false);
-    if (shops.isNotEmpty) {
+    update();
+    if (response.data['rows'][0] != null) {
+      update();
       return true;
     } else {
+      loading(false);
       return false;
     }
   }
@@ -30,6 +41,10 @@ class ShopController extends GetxController {
     ApiResponseModel response =
         await ApiService.post(path: 'shops', body: data);
     if (response.success) {
+      shop = Shop.fromMap(<String, dynamic>{
+        ...response.data,
+        'user': profileController.myProfile.toMap()
+      });
       return true;
     } else {
       return false;

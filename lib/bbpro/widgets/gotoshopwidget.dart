@@ -11,39 +11,39 @@ class GotoshopWidget extends StatelessWidget {
     return Padding(
       padding: const EdgeInsets.only(top: 15, left: 15, right: 15),
       child: Container(
-        padding: EdgeInsets.symmetric(horizontal: 10, vertical: 10),
+        padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
+        decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(10), color: Colors.white),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
+          children: <Widget>[
             Wrap(
-              crossAxisAlignment: WrapCrossAlignment.center,
-              children: [
-              SizedBox(
-                height: 40.0,
-                width: 40.0,
-                child: ClipRRect(
-                  borderRadius: BorderRadius.circular(10),
-                  child: NetworkImageWithPlaceHolder(
-                    imageUrl: 'profileController.myProfile.photoUrl' ?? '',
-                    radius: 8,
-                    placeHolder: Icons.person,
-                    iconSize: 22.0,
-                    fit: BoxFit.cover,
+                crossAxisAlignment: WrapCrossAlignment.center,
+                children: <Widget>[
+                  SizedBox(
+                    height: 40.0,
+                    width: 40.0,
+                    child: ClipRRect(
+                      borderRadius: BorderRadius.circular(10),
+                      child: const NetworkImageWithPlaceHolder(
+                        imageUrl: 'profileController.myProfile.photoUrl',
+                        radius: 8,
+                        placeHolder: Icons.person,
+                        iconSize: 22.0,
+                        fit: BoxFit.cover,
+                      ),
+                    ),
                   ),
-                ),
-              ),
-              SizedBox(width: 10),
-              Text('Gotoshop name'),
-            ]),
+                  const SizedBox(width: 10),
+                  const Text('Gotoshop name'),
+                ]),
             SvgPicture.asset(
               'assets/svgs/nexticon.svg',
               color: proprimaryColor,
             ),
           ],
         ),
-        decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(10), color: Colors.white),
       ),
     );
   }

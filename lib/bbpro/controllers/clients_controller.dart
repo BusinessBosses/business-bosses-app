@@ -41,6 +41,7 @@ class ClientsController extends GetxController {
 
   @override
   void onInit() {
+    initClients(profileController.myProfile.uid);
     super.onInit();
   }
 }

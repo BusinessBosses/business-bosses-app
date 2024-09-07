@@ -1,9 +1,9 @@
 import 'package:business_bosses_v2/common/widgets/network_image_with_placeholder.dart';
 import 'package:business_bosses_v2/features/live_event/models/events_model.dart';
-import 'package:business_bosses_v2/features/profile/controller/profile_controller.dart';
+// import 'package:business_bosses_v2/features/profile/controller/profile_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:intl/intl.dart';
+// import 'package:intl/intl.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import '../../../utils/theme/theme.dart';
@@ -17,22 +17,22 @@ class EventPopUp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    String? attendMessage = 'Be the first to attend!';
-    int? attendCount = event.totalAttendees ?? 0;
-    if (attendCount == 1) {
-      attendMessage = '1 person is attending';
-    } else if (attendCount > 1) {
-      attendMessage = '$attendCount people are attending';
-    }
-    final ProfileController profileController = Get.find();
-    final DateFormat dateFormat = DateFormat('d MMM, y');
-    final DateFormat timeFormat = DateFormat('h:mm a');
-    final DateTime localStartTime = event.startAt!.toLocal();
-    final DateTime localEndTime = event.endAt!.toLocal();
-    final String formattedDate = dateFormat.format(localStartTime);
+    // String? attendMessage = 'Be the first to attend!';
+    // int? attendCount = event.totalAttendees ?? 0;
+    // if (attendCount == 1) {
+    //   attendMessage = '1 person is attending';
+    // } else if (attendCount > 1) {
+    //   attendMessage = '$attendCount people are attending';
+    // }
+    // final ProfileController profileController = Get.find();
+    // final DateFormat dateFormat = DateFormat('d MMM, y');
+    // final DateFormat timeFormat = DateFormat('h:mm a');
+    // final DateTime localStartTime = event.startAt!.toLocal();
+    // final DateTime localEndTime = event.endAt!.toLocal();
+    // final String formattedDate = dateFormat.format(localStartTime);
 
-    final String formattedStartTime = timeFormat.format(localStartTime);
-    final String formattedEndTime = timeFormat.format(localEndTime);
+    // final String formattedStartTime = timeFormat.format(localStartTime);
+    // final String formattedEndTime = timeFormat.format(localEndTime);
     return Dialog(
       backgroundColor: backgroundColor,
       elevation: 5,
@@ -121,10 +121,11 @@ class EventPopUp extends StatelessWidget {
 
   void _launchMapsUrl(String address) async {
     final String query = Uri.encodeComponent(address);
-    final String url = 'https://www.google.com/maps/search/?api=1&query=$query';
+    final Uri? url =
+        Uri.tryParse('https://www.google.com/maps/search/?api=1&query=$query');
 
-    if (await canLaunch(url)) {
-      await launch(url);
+    if (await canLaunchUrl(url!)) {
+      await launchUrl(url);
     } else {
       throw 'Could not launch $url';
     }

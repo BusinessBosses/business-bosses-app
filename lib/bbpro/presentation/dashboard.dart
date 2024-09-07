@@ -1,3 +1,4 @@
+import 'package:business_bosses_v2/bbpro/controllers/shop_controller.dart';
 import 'package:business_bosses_v2/bbpro/widgets/gotoshopwidget.dart';
 import 'package:business_bosses_v2/bbpro/widgets/infocard.dart';
 import 'package:business_bosses_v2/bbpro/widgets/notificationbutton.dart';
@@ -26,6 +27,7 @@ class _DashboardState extends State<Dashboard> {
     'To-do tasks',
     'Shop Visits'
   ];
+  final ShopController shopController = Get.put(ShopController());
 
   @override
   Widget build(BuildContext context) {
@@ -59,7 +61,7 @@ class _DashboardState extends State<Dashboard> {
       body: SingleChildScrollView(
         child: Column(
           children: <Widget>[
-            GotoshopWidget(),
+            const GotoshopWidget(),
             const OrdersWidget(),
             const SalesWidget(),
             StaggeredGridView.countBuilder(

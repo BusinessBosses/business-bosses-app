@@ -6,8 +6,18 @@ class CustomDropdownWidget extends StatefulWidget {
   final String caption;
   final String iconName;
   final List<String> items;
+  final String? initialValue; // New: Allows setting an initial value
+  final ValueChanged<String?>?
+      onChanged; // New: Callback for when value changes
 
-  const CustomDropdownWidget({super.key, required this.caption, required this.items, required this.iconName});
+  const CustomDropdownWidget({
+    super.key,
+    required this.caption,
+    required this.items,
+    required this.iconName,
+    this.initialValue, // New: Set initial value
+    this.onChanged, // New: Set onChanged callback
+  });
 
   @override
   _CustomDropdownWidgetState createState() => _CustomDropdownWidgetState();
@@ -56,7 +66,10 @@ class _CustomDropdownWidgetState extends State<CustomDropdownWidget> {
                   );
                 }).toList(),
                 isExpanded: true,
-                icon: SvgPicture.asset(widget.iconName, color: proprimaryColor,), // Add this line to change the icon
+                icon: SvgPicture.asset(
+                  widget.iconName,
+                  color: proprimaryColor,
+                ), // Add this line to change the icon
               ),
             )
           ],

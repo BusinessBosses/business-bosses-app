@@ -90,7 +90,7 @@ class _SetupshopState extends State<Setupshop>
     super.initState();
     shopController.initShop().then((bool value) {
       if (value) {
-        Get.off(() => const Bottomnavscreen());
+        Get.to(() => const Bottomnavscreen());
       }
     });
     _tabController = TabController(length: _tabs.length, vsync: this);
