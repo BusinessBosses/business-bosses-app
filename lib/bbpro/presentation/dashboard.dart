@@ -1,6 +1,7 @@
 import 'package:business_bosses_v2/bbpro/controllers/shop_controller.dart';
 import 'package:business_bosses_v2/bbpro/presentation/create_product.dart';
 import 'package:business_bosses_v2/bbpro/presentation/create_service.dart';
+import 'package:business_bosses_v2/bbpro/presentation/create_supplier.dart';
 import 'package:business_bosses_v2/bbpro/widgets/gotoshopwidget.dart';
 import 'package:business_bosses_v2/bbpro/widgets/infocard.dart';
 import 'package:business_bosses_v2/bbpro/widgets/notificationbutton.dart';
@@ -50,7 +51,8 @@ class _DashboardState extends State<Dashboard> {
               children: <Widget>[
                 Expanded(
                   child: ListView.separated(
-                    itemCount: 6,
+                    itemCount:
+                        5, // Set the itemCount to match the actual list items
                     separatorBuilder: (BuildContext context, int index) =>
                         const Divider(),
                     itemBuilder: (BuildContext context, int index) {
@@ -62,13 +64,11 @@ class _DashboardState extends State<Dashboard> {
                           } else if (index == 1) {
                             Get.to(() => const CreateServiceListing());
                           } else if (index == 2) {
-                            // Handle Add Projects
+                            Get.to(() => const AddSupplierScreen());
                           } else if (index == 3) {
                             // Handle Add Orders
                           } else if (index == 4) {
                             // Handle Add Clients
-                          } else if (index == 5) {
-                            // Handle Add Suppliers
                           }
                         },
                         minVerticalPadding: 0,
@@ -84,12 +84,10 @@ class _DashboardState extends State<Dashboard> {
                               : index == 1
                                   ? 'Add Services'
                                   : index == 2
-                                      ? 'Add Projects'
+                                      ? 'Add Suppliers'
                                       : index == 3
                                           ? 'Add Orders'
-                                          : index == 4
-                                              ? 'Add Clients'
-                                              : 'Add Suppliers',
+                                          : 'Add Clients',
                           style: const TextStyle(
                             fontSize: 18,
                             fontWeight: FontWeight.w700,

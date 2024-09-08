@@ -1,3 +1,5 @@
+import 'package:business_bosses_v2/bbpro/models/product_model.dart';
+import 'package:business_bosses_v2/bbpro/models/service_model.dart';
 import 'package:business_bosses_v2/bbpro/models/shop_model.dart';
 import 'package:business_bosses_v2/common/models/api_response_model.dart';
 import 'package:business_bosses_v2/features/profile/controller/profile_controller.dart';
@@ -8,6 +10,8 @@ class ShopController extends GetxController {
   final ProfileController profileController = Get.find();
   Shop? shop;
   RxBool loading = RxBool(true);
+  RxList<Product> products = RxList<Product>(<Product>[]);
+  RxList<Service> services = RxList<Service>(<Service>[]);
 
   Future<bool> initShop() async {
     ApiResponseModel response = await ApiService.get(
@@ -15,8 +19,7 @@ class ShopController extends GetxController {
     );
     if (response.success) {
       shop = Shop.fromMap(response.data['rows'][0]);
-      if (response.data['rows'][0] != null) {
-      } else {
+      if (response.data['rows'][0] == null) {
         loading(false);
         update();
         return false;
@@ -29,6 +32,22 @@ class ShopController extends GetxController {
     loading(false);
     update();
     if (response.data['rows'][0] != null) {
+      ApiResponseModel productResponse = await ApiService.get(
+        path: 'goods/user-products/${profileController.myProfile.uid}',
+      );
+      if (productResponse.success) {
+        for (int i = 0; i < productResponse.data['rows'].length; i++) {
+          products.add(Product.fromJson(productResponse.data['rows'][i]));
+        }
+      }
+      ApiResponseModel servicesResponse = await ApiService.get(
+        path: 'services/user-services/${profileController.myProfile.uid}',
+      );
+      if (servicesResponse.success) {
+        for (int i = 0; i < servicesResponse.data['rows'].length; i++) {
+          services.add(Service.fromJson(servicesResponse.data['rows'][i]));
+        }
+      }
       update();
       return true;
     } else {

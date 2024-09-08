@@ -2,7 +2,6 @@ import 'dart:io';
 
 import 'package:business_bosses_v2/bbpro/controllers/order_controller.dart';
 import 'package:business_bosses_v2/bbpro/controllers/shop_controller.dart';
-import 'package:business_bosses_v2/bbpro/widgets/availabiltywidget.dart';
 import 'package:business_bosses_v2/bbpro/widgets/button.dart';
 import 'package:business_bosses_v2/bbpro/widgets/dropdown.dart';
 import 'package:business_bosses_v2/bbpro/widgets/edittext.dart';
@@ -24,6 +23,7 @@ class CreateProductListing extends StatefulWidget {
   const CreateProductListing({super.key});
 
   @override
+  // ignore: library_private_types_in_public_api
   _CreateProductListingState createState() => _CreateProductListingState();
 }
 
@@ -497,57 +497,59 @@ class _CreateProductListingState extends State<CreateProductListing> {
   }
 
   void _submitForm() async {
-    setState(() {
-      isSubmitted = true;
-    });
-    for (File image in _selectedImages) {
-      dynamic response = await ApiService.uploadFile(image);
-      if (response['success']) {
-        setState(() {
-          images!.add(response['fileUrl']);
-        });
+    if (_formKey.currentState?.validate() ?? false) {
+      _formKey.currentState?.save();
+      setState(() {
+        isSubmitted = true;
+      });
+      for (File image in _selectedImages) {
+        dynamic response = await ApiService.uploadFile(image);
+        if (response['success']) {
+          setState(() {
+            images!.add(response['fileUrl']);
+          });
+        }
       }
-    }
-    final Map<String, dynamic> productListing = <String, dynamic>{
-      'userId': profileController.myProfile.uid,
-      'shopId': shopController.shop?.id,
-      'name': productName,
-      'price': price,
-      'discount': discount,
-      'description': description,
-      'category': category,
-      'location': country,
-      'images': images,
-      'paymentMethod': paymentMethod,
-      'deliveryMethod': deliveryMethod,
-      'url': 'http://example.com/product', // Example URL
-      'itemType': 'product',
-      'isActive': _isSwitched,
-      'supplierId': null,
-      'supplierId': null, // Set accordingly
-      'storageLocation': storageLocation,
-      'productNumber': productNumber,
-      'quantity': quantity,
-      'startAt': startDate?.toIso8601String(),
-      'endAt': endDate?.toIso8601String(),
-      'color': color,
-      'size': size,
-    };
+      final Map<String, dynamic> productListing = <String, dynamic>{
+        'userId': profileController.myProfile.uid,
+        'shopId': shopController.shop?.id,
+        'name': productName,
+        'price': price,
+        'discount': discount,
+        'description': description,
+        'category': category,
+        'location': country,
+        'images': images,
+        'paymentMethod': paymentMethod,
+        'deliveryMethod': deliveryMethod,
+        'url': 'http://example.com/product', // Example URL
+        'itemType': 'product',
+        'isActive': _isSwitched,
+        'supplierId': null,
+        'storageLocation': storageLocation,
+        'productNumber': productNumber,
+        'quantity': quantity,
+        'startAt': startDate?.toIso8601String(),
+        'endAt': endDate?.toIso8601String(),
+        'color': color,
+        'size': size,
+      };
 
-    bool response = await orderController.addProducts(productListing);
-    if (response) {
-      showSnackbar(
-        message: 'Product Added Successfully!',
-      );
-      Get.back();
-    } else {
-      showSnackbar(
-        message: 'Error While Adding Product',
-        error: true,
-      );
+      bool response = await orderController.addProducts(productListing);
+      if (response) {
+        showSnackbar(
+          message: 'Product Added Successfully!',
+        );
+        Navigator.pop(context);
+      } else {
+        showSnackbar(
+          message: 'Error While Adding Product',
+          error: true,
+        );
+      }
+      setState(() {
+        isSubmitted = false;
+      });
     }
-    setState(() {
-      isSubmitted = false;
-    });
   }
 }

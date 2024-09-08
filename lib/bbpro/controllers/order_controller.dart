@@ -58,6 +58,17 @@ class OrderController extends GetxController {
     }
   }
 
+  Future<bool> addSupplier(Map<String, dynamic> data) async {
+    ApiResponseModel response =
+        await ApiService.post(path: 'suppliers', body: data);
+    if (response.success) {
+      return true;
+    } else {
+      log(response.toMap().toString());
+      return false;
+    }
+  }
+
   @override
   void onInit() {
     initOrders(profileController.myProfile.uid);

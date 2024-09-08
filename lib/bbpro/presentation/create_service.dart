@@ -495,7 +495,7 @@ class _CreateServiceListingState extends State<CreateServiceListing> {
         if (response) {
           // Handle success
           showSnackbar(message: 'Service Added Succesfully!');
-          Get.back();
+          Navigator.pop(context);
         } else {
           // Handle error
           showSnackbar(message: 'Error Adding Service!', error: true);
