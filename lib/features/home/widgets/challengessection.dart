@@ -1,24 +1,30 @@
 import 'package:business_bosses_v2/features/forum/presentation/bossup_challenge.dart';
-import 'package:business_bosses_v2/navigation/routes.dart';
 import 'package:business_bosses_v2/utils/theme/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 
-class ChallengesSection extends StatelessWidget {
-  const ChallengesSection({super.key});
+class ChallengesSection extends StatefulWidget {
+  final Color? backgroundColor;
+  const ChallengesSection({super.key, this.backgroundColor});
 
+  @override
+  State<ChallengesSection> createState() => _ChallengesSectionState();
+}
+
+class _ChallengesSectionState extends State<ChallengesSection> {
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
-        Get.to(const BossupChallenge(
+        Get.to(BossupChallenge(
+          backgroundColor: widget.backgroundColor ?? Colors.white,
           ishome: false,
         ));
       },
       child: Container(
         child: Column(
-          children: [
+          children: <Widget>[
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 15.0),
               child: Row(
@@ -46,12 +52,13 @@ class ChallengesSection extends StatelessWidget {
                 ],
               ),
             ),
-            SizedBox(
+            const SizedBox(
               height: 10,
             ),
-            Container(
+            SizedBox(
                 height: 190,
                 child: BossupChallenge(
+                  backgroundColor: widget.backgroundColor ?? Colors.white,
                   ishome: true,
                 ))
           ],

@@ -1,7 +1,14 @@
 import 'package:business_bosses_v2/common/widgets/text_widget.dart';
+import 'package:business_bosses_v2/features/courses/controller/course_controller.dart';
 import 'package:business_bosses_v2/features/courses/models/course_model.dart';
+import 'package:business_bosses_v2/features/courses/presentation/courses.dart';
+import 'package:business_bosses_v2/features/forum/models/industry.dart';
+import 'package:business_bosses_v2/features/home/controller/commumities_controller.dart';
 import 'package:business_bosses_v2/features/home/controller/home_controller.dart';
+import 'package:business_bosses_v2/features/home/widgets/challengessection.dart';
 import 'package:business_bosses_v2/features/home/widgets/course_item.dart';
+import 'package:business_bosses_v2/features/home/widgets/marketplacesection.dart';
+import 'package:business_bosses_v2/features/home/widgets/videossection.dart';
 import 'package:business_bosses_v2/features/live_event/controller/live_event_controller.dart';
 import 'package:business_bosses_v2/features/live_event/presentation/live_event.dart';
 import 'package:business_bosses_v2/features/marketplace/controllers/market_controller.dart';
@@ -11,6 +18,8 @@ import 'package:business_bosses_v2/features/marketplace/widgets/service_item.dar
 import 'package:business_bosses_v2/features/posts/models/post_model.dart';
 import 'package:business_bosses_v2/features/posts/widgets/userpost_tile.dart';
 import 'package:business_bosses_v2/features/profile/widgets/boss_of_the_week_tile.dart';
+import 'package:business_bosses_v2/utils/constants/constants.dart';
+import 'package:business_bosses_v2/utils/theme/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:lottie/lottie.dart';
@@ -29,11 +38,16 @@ class _PostsWidgetState extends State<PostsWidget> {
   final HomeController controller = Get.find();
   final MarketController marketController = Get.find();
   final LiveController liveEventController = Get.find();
+  // final CommunitiesController communitiesController = Get.find();
   final ScrollController _scrollController = ScrollController();
+  final CourseController courseController = Get.put(CourseController());
+  late Industry industry;
 
   @override
   void initState() {
     super.initState();
+    // industry =
+    //     communitiesController.getCategoryIndustries(Constants.LEARNINGID)[0];
 
     // Add scroll listener
     _scrollController.addListener(() {
@@ -57,7 +71,7 @@ class _PostsWidgetState extends State<PostsWidget> {
     return ListView.builder(
       shrinkWrap: true,
       controller: _scrollController,
-      itemCount: controller.mixedPosts.length + 1,
+      itemCount: controller.mixedPosts.length + 4, // Added 3 for section texts
       itemBuilder: (BuildContext context, int index) {
         if (index == 0) {
           return Column(
@@ -114,12 +128,44 @@ class _PostsWidgetState extends State<PostsWidget> {
         }
 
         if (index == 1) {
-          return BossOfWeekProfileTile(
+          return const BossOfWeekProfileTile(
             isForyou: true,
           );
         }
+        if (index == 3) {
+          return const Column(
+            children: <Widget>[
+              ChallengesSection(
+                backgroundColor: backgroundColor,
+              ),
+              SizedBox(
+                height: 10,
+              )
+            ],
+          );
+        }
 
-        final dynamic currentPost = controller.mixedPosts[index - 1];
+        if (index == 9) {
+          return const Column(
+            children: <Widget>[
+              MarketplaceSection(),
+              SizedBox(
+                height: 10,
+              )
+            ],
+          );
+        }
+
+        if (index == 15) {
+          return const Text('data');
+        }
+
+        int postIndex = index;
+        if (index > 3) postIndex--;
+        if (index > 9) postIndex--;
+        if (index > 15) postIndex--;
+
+        final dynamic currentPost = controller.mixedPosts[postIndex - 1];
         if (currentPost['type'] == 'post') {
           final PostModel post = controller.posts[currentPost['index']];
 

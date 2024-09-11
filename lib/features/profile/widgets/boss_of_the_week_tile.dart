@@ -556,9 +556,9 @@ class _BossOfWeekProfileTileState extends State<BossOfWeekProfileTile> {
                                             width: MediaQuery.of(context)
                                                     .size
                                                     .width /
-                                                3.58,
+                                                4,
                                             margin: const EdgeInsets.only(
-                                                left: 15.0),
+                                                left: 10.0),
                                             decoration: BoxDecoration(
                                               border: Border.all(
                                                 color: startColor,
@@ -890,7 +890,7 @@ class _BossOfWeekProfileTileState extends State<BossOfWeekProfileTile> {
                   ),
                 ),
                 const SizedBox(
-                  height: 5,
+                  height: 7,
                 ),
               ],
             )

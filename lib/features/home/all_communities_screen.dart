@@ -187,11 +187,11 @@ class _AllCommunitiesScreenState extends State<AllCommunitiesScreen>
                         //           ),
                       ),
                       body: !_isSearching && !_isSearchingDonations
-                          ? SingleChildScrollView(
+                          ? const SingleChildScrollView(
                               child: Column(
                                 mainAxisAlignment: MainAxisAlignment.start,
                                 crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
+                                children: <Widget>[
                                   SizedBox(
                                     height: 15,
                                   ),

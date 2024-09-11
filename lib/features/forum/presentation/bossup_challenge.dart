@@ -11,8 +11,9 @@ import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 
 class BossupChallenge extends StatefulWidget {
+  final Color? backgroundColor;
   final bool? ishome;
-  const BossupChallenge({super.key, this.ishome});
+  const BossupChallenge({super.key, this.ishome, this.backgroundColor});
 
   @override
   State<BossupChallenge> createState() => _BossupChallengeState();
@@ -23,8 +24,7 @@ class _BossupChallengeState extends State<BossupChallenge> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        backgroundColor:
-            widget.ishome == false ? backgroundColor : Colors.white,
+        backgroundColor: widget.backgroundColor ?? Colors.white,
         appBar: widget.ishome == false
             ? AppBar(
                 leading: IconButton(
@@ -135,7 +135,7 @@ class _BossupChallengeState extends State<BossupChallenge> {
                             border:
                                 Border.all(width: 0.5, color: Colors.black12),
                             color: Colors.white,
-                            borderRadius: BorderRadius.all(
+                            borderRadius: const BorderRadius.all(
                               Radius.circular(16),
                             ),
                           ),
@@ -260,7 +260,7 @@ class _BossupChallengeState extends State<BossupChallenge> {
                                 ],
                               ),
                               if (widget.ishome == true)
-                                SizedBox(
+                                const SizedBox(
                                   height: 10,
                                 ),
                               if (widget.ishome == true)
