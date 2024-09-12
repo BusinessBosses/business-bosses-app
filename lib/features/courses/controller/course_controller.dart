@@ -23,7 +23,7 @@ class CourseController extends GetxController {
   RxBool error = RxBool(false);
   RxBool courseLoading = RxBool(false);
   RxBool courseError = RxBool(false);
-  late Industry industry;
+  Rx<Industry?> industry = Rx<Industry?>(null);
   List<dynamic> myHistory = <dynamic>[];
   List<dynamic> myHistoryReceived = <dynamic>[];
   List<dynamic> myHistoryOut = <dynamic>[];
@@ -57,7 +57,7 @@ class CourseController extends GetxController {
       return;
     } else {
       if (Get.arguments.runtimeType == Industry) {
-        industry = Get.arguments;
+        industry.value = Get.arguments;
         initCourses();
       }
     }
@@ -189,12 +189,19 @@ class CourseController extends GetxController {
   }
 
   Future<void> initCourses() async {
+    if (industry.value == null) {
+      error(true);
+      loading(false);
+      update();
+      return;
+    }
+
     loading(true);
     error(false);
     update();
 
     final ApiResponseModel response = await ApiService.get(
-        path: '/courses/get-industry-courses/${industry.industryId}?size=1000');
+        path: '/courses/get-industry-courses/${industry.value!.industryId}?size=1000');
     if (response.success) {
       for (int i = 0; i < response.data['rows'].length; i++) {
         if (response.data['rows'][i]['user'] != null) {

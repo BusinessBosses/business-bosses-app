@@ -3,12 +3,13 @@ import 'package:business_bosses_v2/features/courses/controller/course_controller
 import 'package:business_bosses_v2/features/courses/models/course_model.dart';
 import 'package:business_bosses_v2/features/courses/presentation/courses.dart';
 import 'package:business_bosses_v2/features/forum/models/industry.dart';
+import 'package:business_bosses_v2/features/forum/presentation/all_forum_screen.dart';
 import 'package:business_bosses_v2/features/home/controller/commumities_controller.dart';
 import 'package:business_bosses_v2/features/home/controller/home_controller.dart';
 import 'package:business_bosses_v2/features/home/widgets/challengessection.dart';
 import 'package:business_bosses_v2/features/home/widgets/course_item.dart';
+import 'package:business_bosses_v2/features/home/widgets/course_list.dart';
 import 'package:business_bosses_v2/features/home/widgets/marketplacesection.dart';
-import 'package:business_bosses_v2/features/home/widgets/videossection.dart';
 import 'package:business_bosses_v2/features/live_event/controller/live_event_controller.dart';
 import 'package:business_bosses_v2/features/live_event/presentation/live_event.dart';
 import 'package:business_bosses_v2/features/marketplace/controllers/market_controller.dart';
@@ -38,7 +39,7 @@ class _PostsWidgetState extends State<PostsWidget> {
   final HomeController controller = Get.find();
   final MarketController marketController = Get.find();
   final LiveController liveEventController = Get.find();
-  // final CommunitiesController communitiesController = Get.find();
+  final CommunitiesController communitiesController = Get.find();
   final ScrollController _scrollController = ScrollController();
   final CourseController courseController = Get.put(CourseController());
   late Industry industry;
@@ -46,8 +47,8 @@ class _PostsWidgetState extends State<PostsWidget> {
   @override
   void initState() {
     super.initState();
-    // industry =
-    //     communitiesController.getCategoryIndustries(Constants.LEARNINGID)[0];
+    industry =
+        communitiesController.getCategoryIndustries(Constants.LEARNINGID)[2];
 
     // Add scroll listener
     _scrollController.addListener(() {
@@ -156,9 +157,12 @@ class _PostsWidgetState extends State<PostsWidget> {
           );
         }
 
-        if (index == 15) {
-          return const Text('data');
-        }
+        // if (index == 15) {
+        //   return const SizedBox(
+        //     height: 200,
+        //     child: AllForumScreen(isCourses: true),
+        //   );
+        // }
 
         int postIndex = index;
         if (index > 3) postIndex--;

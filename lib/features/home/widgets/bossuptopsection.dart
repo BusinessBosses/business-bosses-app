@@ -22,30 +22,37 @@ class BossUpTopSection extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             mainAxisAlignment: MainAxisAlignment.start,
-            children: [
+            children: <Widget>[
               Wrap(
                 spacing: 8.0, // Space between items horizontally
                 runSpacing: 10.0, // Space between rows vertically
-                children: [
-                  _buildButton(context, 'Challenge', Colors.grey.withOpacity(0.25), () {
+                children: <Widget>[
+                  _buildButton(context, 'Challenge',
+                      Colors.grey.shade800.withOpacity(0.1), () {
                     Get.to(const BossupChallenge(
                       ishome: false,
                     ));
                   }),
-                  _buildButton(context, 'Learning', Colors.green.shade200.withOpacity(0.25), () {
-                    Get.to(LearningPage());
+                  _buildButton(context, 'Learning',
+                      Colors.green.shade700.withOpacity(0.1), () {
+                    Get.to(const LearningPage());
                   }),
-                  _buildButton(context, 'Community', Colors.red.shade200.withOpacity(0.25), () {
+                  _buildButton(context, 'Community',
+                      Colors.red.shade700.withOpacity(0.1), () {
                     Get.to(() =>
                         const AllLearningPostsScreen(isCoursesTile: true));
                   }),
-                  _buildButton(context, 'Events', Colors.orange.shade700.withOpacity(0.25), () {
+                  _buildButton(context, 'Events',
+                      Colors.orange.shade900.withOpacity(0.1), () {
                     Get.toNamed(Routes.liveEvents);
                   }),
-                  _buildButton(context, 'Crowdfund', Colors.purple.shade300.withOpacity(0.25), () {
-                    Get.to(DonationsPage());
+                  _buildButton(context, 'Crowdfund',
+                      Colors.purple.shade700.withOpacity(0.1), () {
+                    Get.to(const DonationsPage());
                   }),
-                  _buildButton(context, 'Upgrade +', proprimaryColor.withOpacity(0.25), () {
+                  _buildButton(
+                      context, 'Upgrade +', proprimaryColor.withOpacity(0.1),
+                      () {
                     // Action for Upgrade + button
                     print('Upgrade + button tapped');
                   }),
@@ -63,7 +70,8 @@ class BossUpTopSection extends StatelessWidget {
     return GestureDetector(
       onTap: onTap,
       child: Container(
-        width: (MediaQuery.of(context).size.width - 46) / 3, // Same width for each button
+        width: (MediaQuery.of(context).size.width - 46) /
+            3, // Same width for each button
         padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
         decoration: BoxDecoration(
           color: color, // Transparent color for the container
