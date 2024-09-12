@@ -161,7 +161,7 @@ class _MarketTileState extends State<MarketTile> {
 
       if (widget.ishome == true) {
         return Padding(
-          padding: const EdgeInsets.only(left: 15.0),
+          padding: const EdgeInsets.only(left: 10.0),
           child: Container(
             padding: const EdgeInsets.all(10),
             width: MediaQuery.of(context).size.width / 1.5,

@@ -15,7 +15,7 @@ class SearchSection extends StatelessWidget {
         decoration: BoxDecoration(
             color: Colors.white,
             borderRadius: BorderRadius.circular(10),
-            border: Border.all(width: 0.5, color: hintColor)),
+            border: Border.all(width: 1, color: hintColor)),
         height: 45,
         width: double.infinity,
         child: TextFormField(

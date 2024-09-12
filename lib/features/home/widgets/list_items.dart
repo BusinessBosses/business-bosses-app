@@ -43,6 +43,8 @@ class _PostsWidgetState extends State<PostsWidget> {
   final ScrollController _scrollController = ScrollController();
   final CourseController courseController = Get.put(CourseController());
   late Industry industry;
+  final GlobalKey<State<CourseList>> courseListKey =
+      GlobalKey<State<CourseList>>();
 
   @override
   void initState() {
@@ -64,6 +66,9 @@ class _PostsWidgetState extends State<PostsWidget> {
   @override
   void dispose() {
     _scrollController.dispose();
+    if (courseListKey.currentState is CourseList) {
+      (courseListKey.currentState as dynamic).pauseAllVideos();
+    }
     super.dispose();
   }
 
@@ -157,12 +162,23 @@ class _PostsWidgetState extends State<PostsWidget> {
           );
         }
 
-        // if (index == 15) {
-        //   return const SizedBox(
-        //     height: 200,
-        //     child: AllForumScreen(isCourses: true),
-        //   );
-        // }
+        if (index == 15) {
+          return VisibilityDetector(
+            key: const Key('CourseListContainer'),
+            onVisibilityChanged: (VisibilityInfo info) {
+              if (info.visibleFraction == 0) {
+                // CourseList is not visible, ensure videos are paused
+                if (courseListKey.currentState != null) {
+                  (courseListKey.currentState as dynamic).pauseAllVideos();
+                }
+              }
+            },
+            child: SizedBox(
+              height: 300,
+              child: CourseList(key: courseListKey),
+            ),
+          );
+        }
 
         int postIndex = index;
         if (index > 3) postIndex--;

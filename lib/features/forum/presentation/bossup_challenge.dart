@@ -129,7 +129,7 @@ class _BossupChallengeState extends State<BossupChallenge> {
                               ? const EdgeInsets.only(
                                   top: 15, left: 15, right: 15)
                               : const EdgeInsets.only(
-                                  left: 15,
+                                  left: 10,
                                 ),
                           decoration: BoxDecoration(
                             border:
