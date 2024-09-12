@@ -264,55 +264,58 @@ class _BossupChallengeState extends State<BossupChallenge> {
                                   height: 10,
                                 ),
                               if (widget.ishome == true)
-                                Column(
-                                  mainAxisAlignment: MainAxisAlignment.start,
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: <Widget>[
-                                    Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.start,
-                                      children: <Widget>[
-                                        Text(
-                                          category.industryId ==
-                                                  '-MsUOGcOT9oRXGakCcJv'
-                                              ? 'Free Promotion'
-                                              : category.award ?? 'Win',
-                                          style: const TextStyle(
-                                            color: primaryColorLT,
-                                            fontWeight: FontWeight.bold,
-                                            fontSize: 16,
+                                Expanded(
+                                  child: Column(
+                                    mainAxisAlignment: MainAxisAlignment.start,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: <Widget>[
+                                      Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.start,
+                                        children: <Widget>[
+                                          Text(
+                                            category.industryId ==
+                                                    '-MsUOGcOT9oRXGakCcJv'
+                                                ? 'Free Promotion'
+                                                : category.award ?? 'Win',
+                                            style: const TextStyle(
+                                              color: primaryColorLT,
+                                              fontWeight: FontWeight.bold,
+                                              fontSize: 16,
+                                            ),
                                           ),
-                                        ),
-                                      ],
-                                    ),
-                                    Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.start,
-                                      children: <Widget>[
-                                        const Icon(
-                                          Icons.watch_later_outlined,
-                                          size: 15,
-                                          color: Colors.grey,
-                                        ),
-                                        const SizedBox(
-                                          width: 5,
-                                        ),
-                                        Text(
-                                          category.industryId ==
-                                                  '-MsUOGcOT9oRXGakCcJv'
-                                              ? 'Every Monday'
-                                              : _getChallengeStatus(category),
-                                          style: const TextStyle(
-                                              color: Colors.grey,
-                                              fontWeight: FontWeight.w700),
-                                        )
-                                      ],
-                                    ),
-                                    const SizedBox(
-                                      height: 5,
-                                    ),
-                                    _getChallengeTimeLeft(category),
-                                  ],
+                                        ],
+                                      ),
+                                      Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.start,
+                                        children: <Widget>[
+                                          const Icon(
+                                            Icons.watch_later_outlined,
+                                            size: 15,
+                                            color: Colors.grey,
+                                          ),
+                                          const SizedBox(
+                                            width: 5,
+                                          ),
+                                          Text(
+                                            category.industryId ==
+                                                    '-MsUOGcOT9oRXGakCcJv'
+                                                ? 'Every Monday'
+                                                : _getChallengeStatus(category),
+                                            style: const TextStyle(
+                                                color: Colors.grey,
+                                                fontWeight: FontWeight.w700),
+                                          )
+                                        ],
+                                      ),
+                                      const SizedBox(
+                                        height: 5,
+                                      ),
+                                      _getChallengeTimeLeft(category),
+                                    ],
+                                  ),
                                 )
                             ],
                           ),
@@ -334,7 +337,7 @@ class _BossupChallengeState extends State<BossupChallenge> {
     if (difference.isNegative) {
       return "Time's up"; // Or handle accordingly if time is already passed
     } else if (difference.inDays > 0) {
-      return "Ends in ${difference.inDays} day${difference.inDays > 1 ? 's' : ''}";
+      return "Ends ${difference.inDays} day${difference.inDays > 1 ? 's' : ''}";
     } else {
       return '1 day left';
     }
@@ -342,58 +345,64 @@ class _BossupChallengeState extends State<BossupChallenge> {
 
   Widget _getChallengeTimeLeft(Industry category) {
     DateTime now = DateTime.now();
-    if (category.startAt != null && now.isBefore(category.startAt!)) {
-      return Container(
-        padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
-        decoration: BoxDecoration(
-          color: Colors.grey.withAlpha(40),
-          borderRadius:
-              BorderRadius.circular(20), // Adjust the radius as needed
-        ),
-        child: Text(
-          _calculateTimeLeftToStart(category.startAt!),
-          style: const TextStyle(
-            color: Colors.black54,
-            fontSize: 12,
-            fontWeight: FontWeight.w700,
+    bool hasNotStarted =
+        category.startAt != null && now.isBefore(category.startAt!);
+
+    return SizedBox(
+      width: 142,
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: <Widget>[
+          Container(
+            padding: const EdgeInsets.symmetric(horizontal: 7, vertical: 5),
+            decoration: BoxDecoration(
+              color: hasNotStarted
+                  ? Colors.grey.withAlpha(40)
+                  : Colors.green.withAlpha(40),
+              borderRadius: BorderRadius.circular(20),
+            ),
+            child: Text(
+              hasNotStarted
+                  ? _calculateTimeLeftToStart(category.startAt!)
+                  : category.endedAt != null
+                      ? _calculateTimeLeft(category.endedAt!)
+                      : 'Ongoing',
+              style: TextStyle(
+                color: hasNotStarted ? Colors.black54 : Colors.green,
+                fontSize: 10,
+                fontWeight: FontWeight.w700,
+              ),
+            ),
           ),
-        ),
-      );
-    } else if (category.endedAt != null) {
-      return Container(
-        padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
-        decoration: BoxDecoration(
-          color: Colors.green.withAlpha(40),
-          borderRadius:
-              BorderRadius.circular(20), // Adjust the radius as needed
-        ),
-        child: Text(
-          _calculateTimeLeft(category.endedAt!),
-          style: const TextStyle(
-            color: Colors.green,
-            fontSize: 12,
-            fontWeight: FontWeight.w700,
+          OutlinedButton(
+            onPressed: hasNotStarted
+                ? null
+                : () {
+                    Get.to(() => BossUpSection(
+                          industry: category,
+                          bossUp: Get.find<ChallengeController>().categories[0],
+                        ));
+                  },
+            style: OutlinedButton.styleFrom(
+              side: BorderSide(
+                  color: hasNotStarted ? Colors.grey : primaryColorLT),
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(7),
+              ),
+              padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 7),
+            ),
+            child: Text(
+              'Enter',
+              style: TextStyle(
+                color: hasNotStarted ? Colors.grey : primaryColorLT,
+                fontWeight: FontWeight.bold,
+                fontSize: 11,
+              ),
+            ),
           ),
-        ),
-      );
-    } else {
-      return Container(
-        padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
-        decoration: BoxDecoration(
-          color: Colors.green.withAlpha(40),
-          borderRadius:
-              BorderRadius.circular(20), // Adjust the radius as needed
-        ),
-        child: const Text(
-          'Ongoing',
-          style: TextStyle(
-            color: Colors.green,
-            fontSize: 12,
-            fontWeight: FontWeight.w700,
-          ),
-        ),
-      );
-    }
+        ],
+      ),
+    );
   }
 
   String _calculateTimeLeftToStart(DateTime startTime) {
@@ -401,9 +410,9 @@ class _BossupChallengeState extends State<BossupChallenge> {
     Duration difference = startTime.difference(now);
 
     if (difference.inDays > 0) {
-      return "Starts in ${difference.inDays} day${difference.inDays > 1 ? 's' : ''}";
+      return "Starts ${difference.inDays} day${difference.inDays > 1 ? 's' : ''}";
     } else {
-      return 'Starts in 1 day';
+      return 'Starts 1 day';
     }
   }
 

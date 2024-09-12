@@ -582,44 +582,44 @@ class _BossOfWeekProfileTileState extends State<BossOfWeekProfileTile> {
                                                   MainAxisAlignment
                                                       .spaceBetween,
                                               children: <Widget>[
-                                                // Padding(
-                                                //   padding:
-                                                //       const EdgeInsets.only(
-                                                //           left: 8.0,
-                                                //           right: 8,
-                                                //           top: 8,
-                                                //           bottom: 5),
-                                                //   child: SizedBox(
-                                                //     height: 20.0,
-                                                //     width: 20.0,
-                                                //     child: Container(
-                                                //       decoration: BoxDecoration(
-                                                //         border: Border.all(
-                                                //             width: 0.5,
-                                                //             color:
-                                                //                 Colors.black12),
-                                                //         color: backgroundColor,
-                                                //         borderRadius:
-                                                //             BorderRadius
-                                                //                 .circular(
-                                                //                     100.0),
-                                                //       ),
-                                                //       child:
-                                                //           NetworkImageWithPlaceHolder(
-                                                //         imageUrl: item[
-                                                //                 'companyPhoto'] ??
-                                                //             '',
-                                                //         radius: 100,
-                                                //         placeHolder:
-                                                //             Icons.person,
-                                                //         iconSize: 15.0,
-                                                //         fit: BoxFit.cover,
-                                                //       ),
-                                                //     ),
-                                                //   ),
-                                                // ),
+                                                Padding(
+                                                  padding:
+                                                      const EdgeInsets.only(
+                                                          left: 8.0,
+                                                          right: 8,
+                                                          top: 8,
+                                                          bottom: 5),
+                                                  child: SizedBox(
+                                                    height: 35.0,
+                                                    width: 35.0,
+                                                    child: Container(
+                                                      decoration: BoxDecoration(
+                                                        border: Border.all(
+                                                            width: 0.5,
+                                                            color:
+                                                                Colors.black12),
+                                                        color: backgroundColor,
+                                                        borderRadius:
+                                                            BorderRadius
+                                                                .circular(
+                                                                    100.0),
+                                                      ),
+                                                      child:
+                                                          NetworkImageWithPlaceHolder(
+                                                        imageUrl: item[
+                                                                'companyPhoto'] ??
+                                                            '',
+                                                        radius: 200,
+                                                        placeHolder:
+                                                            Icons.person,
+                                                        iconSize: 15.0,
+                                                        fit: BoxFit.cover,
+                                                      ),
+                                                    ),
+                                                  ),
+                                                ),
                                                 const SizedBox(
-                                                  height: 8,
+                                                  height: 3,
                                                 ),
                                                 Padding(
                                                     padding: const EdgeInsets

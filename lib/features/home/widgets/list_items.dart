@@ -151,7 +151,7 @@ class _PostsWidgetState extends State<PostsWidget> {
           );
         }
 
-        if (index == 9) {
+        if (index == 5) {
           return const Column(
             children: <Widget>[
               MarketplaceSection(),
@@ -162,7 +162,7 @@ class _PostsWidgetState extends State<PostsWidget> {
           );
         }
 
-        if (index == 15) {
+        if (index == 7) {
           return VisibilityDetector(
             key: const Key('CourseListContainer'),
             onVisibilityChanged: (VisibilityInfo info) {

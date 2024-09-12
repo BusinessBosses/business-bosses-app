@@ -585,7 +585,7 @@ class _ServiceTileState extends State<ServiceTile> {
                                               user: _post.user!));
                                         },
                                         child: const Text(
-                                          'reviews',
+                                          'Reviews',
                                           style: TextStyle(
                                             fontSize: 12,
                                             fontWeight: FontWeight.bold,

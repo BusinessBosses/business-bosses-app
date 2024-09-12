@@ -2,6 +2,7 @@ import 'package:business_bosses_v2/common/widgets/safety_model.dart';
 import 'package:business_bosses_v2/common/widgets/text_widget.dart';
 import 'package:business_bosses_v2/features/forum/models/forum_model.dart';
 import 'package:business_bosses_v2/features/forum/widgets/forum_item.dart';
+import 'package:business_bosses_v2/features/home/widgets/discoversection.dart';
 import 'package:business_bosses_v2/features/search/controller/search_controller.dart';
 import 'package:business_bosses_v2/features/search/widgets/search_bar.dart';
 import 'package:business_bosses_v2/features/search/widgets/filterusers.dart';
@@ -26,12 +27,11 @@ class CompleteSearchingScreen extends StatefulWidget {
 class _CompleteSearchingScreenState extends State<CompleteSearchingScreen>
     with TickerProviderStateMixin {
   late TabController _tabController;
-
   final bool _hasFilter = false;
+  bool _isTyping = false;
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     _tabController = TabController(vsync: this, length: 2);
   }
@@ -56,40 +56,41 @@ class _CompleteSearchingScreenState extends State<CompleteSearchingScreen>
               title: Searchbar(
                 hintText: 'Search',
                 onChange: (String query) {
+                  setState(() {
+                    _isTyping = query.isNotEmpty;
+                  });
                   if (query.isEmpty) {
                     controller.clearUserSearch();
+                  } else {
+                    controller.search(query,
+                        currentIndex: _tabController.index);
                   }
                 },
                 onSubmit: (String query) {
-                  controller.search(query, currentIndex: _tabController.index);
+                  // Removed onSubmit as search is now performed on key entry
                 },
               ),
-              bottom: TabBar(
-                controller: _tabController,
-                tabs: const <Widget>[
-                  Tab(
-                    child: TextWidget(
-                      text: 'People',
-                      size: 20,
-                      fontWeight: FontWeight.w700,
-                    ),
-                  ),
-                  Tab(
-                    child: TextWidget(
-                      text: 'Posts',
-                      size: 20,
-                      fontWeight: FontWeight.w700,
-                    ),
-                  ),
-                  // Tab(
-                  //   child: TextWidget(
-                  //     text: 'Forums',
-                  //     size: 20,
-                  //     fontWeight: FontWeight.w700,
-                  //   ),
-                  // ),
-                ],
-              ),
+              bottom: _isTyping
+                  ? TabBar(
+                      controller: _tabController,
+                      tabs: const <Widget>[
+                        Tab(
+                          child: TextWidget(
+                            text: 'People',
+                            size: 20,
+                            fontWeight: FontWeight.w700,
+                          ),
+                        ),
+                        Tab(
+                          child: TextWidget(
+                            text: 'Posts',
+                            size: 20,
+                            fontWeight: FontWeight.w700,
+                          ),
+                        ),
+                      ],
+                    )
+                  : null,
               actions: <Widget>[
                 if (_hasFilter)
                   IconButton(
@@ -105,36 +106,37 @@ class _CompleteSearchingScreenState extends State<CompleteSearchingScreen>
               onVerticalDragDown: (_) {
                 FocusScope.of(context).unfocus();
               },
-              child: Column(
+              child: Stack(
                 children: <Widget>[
-                  Expanded(
-                    child: TabBarView(
-                      controller: _tabController,
+                  if (!_isTyping) const DiscoverSection(),
+                  if (_isTyping)
+                    Column(
                       children: <Widget>[
-                        FilterUsers(
-                          filterItems: controller.isUserSearch.value
-                              ? controller.searchedUsers
-                              : controller.recommendedConnections,
-                          isLoading: controller.loading.value ||
-                              controller.loadingSearch.value,
-                          onConnectionChange: controller.connectToUser,
-                          isSearch: controller.isUserSearch.value,
-                        ),
-                        FilterPosts(
-                          filterItems: controller.isPostSearch.value
-                              ? controller.searchedPosts
-                              : controller.recommendedPosts,
-                          isLoading: controller.loading.value ||
-                              controller.loadingSearch.value,
-                        ),
-                        // FilterForum(
-                        //   filterItems: controller.searchedForums,
-                        //   isLoading: controller.loading.value ||
-                        //       controller.loadingSearch.value,
-                        // ),
+                        Expanded(
+                          child: TabBarView(
+                            controller: _tabController,
+                            children: <Widget>[
+                              FilterUsers(
+                                filterItems: controller.isUserSearch.value
+                                    ? controller.searchedUsers
+                                    : controller.recommendedConnections,
+                                isLoading: controller.loading.value ||
+                                    controller.loadingSearch.value,
+                                onConnectionChange: controller.connectToUser,
+                                isSearch: controller.isUserSearch.value,
+                              ),
+                              FilterPosts(
+                                filterItems: controller.isPostSearch.value
+                                    ? controller.searchedPosts
+                                    : controller.recommendedPosts,
+                                isLoading: controller.loading.value ||
+                                    controller.loadingSearch.value,
+                              ),
+                            ],
+                          ),
+                        )
                       ],
                     ),
-                  )
                 ],
               ),
             ),
@@ -144,47 +146,6 @@ class _CompleteSearchingScreenState extends State<CompleteSearchingScreen>
     );
   }
 }
-
-/// FILTER POSTS
-// class FilterPosts extends StatelessWidget {
-//   final List<PostModel> filterItems;
-//   final bool isLoading;
-
-//   /// CONSTRUCTOR
-//   const FilterPosts({
-//     Key? key,
-//     this.filterItems = const <PostModel>[],
-//     this.isLoading = false,
-//   }) : super(key: key);
-
-//   @override
-//   Widget build(BuildContext context) {
-//     final HomeController homeController = Get.find();
-//     return filterItems.isEmpty
-//         ? SafetyModel(
-//             icon: const Icon(
-//               Icons.edit,
-//               size: 80.0,
-//               color: hintColor,
-//             ),
-//             title: 'No post found',
-//             subTitle: 'Your search posts will be displayed here!',
-//             isLoading: isLoading,
-//           )
-//         : ListView.separated(
-//             key: key,
-//             separatorBuilder: (_, __) => const SizedBox(height: 8.0),
-//             padding: const EdgeInsets.all(16.0),
-//             itemCount: filterItems.length ?? 0,
-//             itemBuilder: (BuildContext context, int i) {
-//               return PostTile(
-//                 post: filterItems[i],
-//                 controller: homeController,
-//               );
-//             },
-//           );
-//   }
-// }
 
 /// FILTER FORUMS
 class FilterForum extends StatelessWidget {

@@ -1,8 +1,9 @@
+import 'package:business_bosses_v2/features/home/widgets/all_learning_posts.dart';
 import 'package:business_bosses_v2/utils/theme/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
-import 'package:video_player/video_player.dart';
+import 'package:youtube_player_flutter/youtube_player_flutter.dart';
 import 'package:visibility_detector/visibility_detector.dart';
 
 class CourseList extends StatefulWidget {
@@ -15,7 +16,7 @@ class CourseList extends StatefulWidget {
 class CourseListState extends State<CourseList>
     with WidgetsBindingObserver, AutomaticKeepAliveClientMixin {
   late PageController _pageController;
-  late List<VideoPlayerController> _controllers;
+  late List<YoutubePlayerController> _controllers;
   int _currentPage = 0;
   bool _isVisible = true;
 
@@ -31,17 +32,28 @@ class CourseListState extends State<CourseList>
   }
 
   void _initializeControllers() {
-    _controllers = List.generate(
-      10,
-      (int index) => VideoPlayerController.network(
-        'https://flutter.github.io/assets-for-api-docs/assets/videos/butterfly.mp4', // Replace with your video URLs
-      )..initialize().then((_) {
+    final List<String> videoIds = <String>[
+      'dQw4w9WgXcQ', // Replace with actual YouTube video IDs
+      'jNQXAC9IVRw',
+      'kJQP7kiw5Fk',
+    ];
+
+    _controllers = List<YoutubePlayerController>.generate(
+      3,
+      (int index) => YoutubePlayerController(
+        initialVideoId: videoIds[index],
+        flags: const YoutubePlayerFlags(
+          autoPlay: false,
+          mute: false,
+          disableDragSeek: true,
+          enableCaption: false,
+          isLive: false,
+          forceHD: false,
+          hideControls: true,
+        ),
+      )..addListener(() {
           if (mounted) {
             setState(() {});
-            if (index == 0) {
-              _controllers[0].play();
-              _controllers[0].setLooping(true);
-            }
           }
         }),
     );
@@ -51,7 +63,7 @@ class CourseListState extends State<CourseList>
   void dispose() {
     WidgetsBinding.instance.removeObserver(this);
     _pageController.dispose();
-    for (VideoPlayerController controller in _controllers) {
+    for (YoutubePlayerController controller in _controllers) {
       controller.dispose();
     }
     super.dispose();
@@ -69,7 +81,7 @@ class CourseListState extends State<CourseList>
   }
 
   void pauseAllVideos() {
-    for (VideoPlayerController controller in _controllers) {
+    for (YoutubePlayerController controller in _controllers) {
       controller.pause();
     }
   }
@@ -98,7 +110,8 @@ class CourseListState extends State<CourseList>
             padding: const EdgeInsets.symmetric(horizontal: 15.0),
             child: GestureDetector(
               onTap: () {
-                // Get.to(() => const CourseDetailsScreen());
+                Get.to(
+                    () => const AllLearningPostsScreen(isCoursesTile: false));
               },
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -131,13 +144,12 @@ class CourseListState extends State<CourseList>
             child: PageView.builder(
               controller: _pageController,
               padEnds: false,
-              itemCount: 10,
+              itemCount: 3,
               onPageChanged: (int page) {
                 setState(() {
                   _currentPage = page;
                 });
                 _controllers[_currentPage].play();
-                _controllers[_currentPage].setLooping(true);
                 for (int i = 0; i < _controllers.length; i++) {
                   if (i != _currentPage) {
                     _controllers[i].pause();
@@ -179,15 +191,28 @@ class CourseListState extends State<CourseList>
         child: Stack(
           fit: StackFit.expand,
           children: <Widget>[
-            _controllers[index].value.isInitialized
-                ? AspectRatio(
-                    aspectRatio: _controllers[index].value.aspectRatio,
-                    child: VideoPlayer(_controllers[index]),
-                  )
-                : Container(color: Colors.black),
+            YoutubePlayer(
+              controller: _controllers[index],
+              showVideoProgressIndicator: false,
+              controlsTimeOut: const Duration(seconds: 0),
+              onReady: () {
+                _controllers[index].addListener(() {});
+              },
+            ),
+            Positioned.fill(
+              child: GestureDetector(
+                onTap: () {
+                  if (_controllers[index].value.isPlaying) {
+                    _controllers[index].pause();
+                  } else {
+                    _controllers[index].play();
+                  }
+                },
+              ),
+            ),
             Positioned(
               left: 10,
-              bottom: 20,
+              bottom: 10,
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: <Widget>[
@@ -199,7 +224,7 @@ class CourseListState extends State<CourseList>
                       fontSize: 18,
                     ),
                   ),
-                  const SizedBox(height: 5),
+                  const SizedBox(height: 0),
                   Text(
                     'Posted by User ${index + 1}',
                     style: const TextStyle(
@@ -210,26 +235,39 @@ class CourseListState extends State<CourseList>
                 ],
               ),
             ),
-            Positioned(
-              right: 0,
-              bottom: 10,
-              child: Column(
-                children: <Widget>[
-                  IconButton(
-                    icon: const Icon(Icons.favorite_border, color: Colors.white),
-                    onPressed: () {},
-                  ),
-                  IconButton(
-                    icon: const Icon(Icons.comment, color: Colors.white),
-                    onPressed: () {},
-                  ),
-                  IconButton(
-                    icon: const Icon(Icons.share, color: Colors.white),
-                    onPressed: () {},
-                  ),
-                ],
-              ),
-            ),
+            // Positioned(
+            //   right: 0,
+            //   bottom: 10,
+            //   child: Column(
+            //     children: <Widget>[
+            //       IconButton(
+            //         onPressed: () {},
+            //         icon: SvgPicture.asset(
+            //           'assets/svgs/like.svg',
+            //           height: 15,
+            //           color: Colors.white,
+            //         ),
+            //       ),
+            //       IconButton(
+            //         onPressed: () {},
+            //         icon: SvgPicture.asset(
+            //           'assets/svgs/comment.svg',
+            //           height: 15,
+            //           color: Colors.white,
+            //         ),
+            //       ),
+            //       IconButton(
+            //         onPressed: () {},
+            //         icon: SvgPicture.asset(
+            //           'assets/svgs/share.svg',
+            //           height: 15.0,
+            //           width: 15.0,
+            //           color: Colors.white,
+            //         ),
+            //       ),
+            //     ],
+            //   ),
+            // ),
           ],
         ),
       ),

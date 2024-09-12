@@ -257,7 +257,7 @@ class _MarketTileState extends State<MarketTile> {
                                     SellerReviewScreen(user: _post.user!));
                               },
                               child: const Text(
-                                'reviews',
+                                'Reviews',
                                 style: TextStyle(
                                   fontSize: 13,
                                   fontWeight: FontWeight.bold,
@@ -690,7 +690,7 @@ class _MarketTileState extends State<MarketTile> {
                                                                   _post.user!));
                                                     },
                                                     child: const Text(
-                                                      'reviews',
+                                                      'Reviews',
                                                       style: TextStyle(
                                                         fontSize: 12,
                                                         fontWeight:
