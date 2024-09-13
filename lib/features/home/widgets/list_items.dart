@@ -163,21 +163,23 @@ class _PostsWidgetState extends State<PostsWidget> {
         }
 
         if (index == 7) {
-          return VisibilityDetector(
-            key: const Key('CourseListContainer'),
-            onVisibilityChanged: (VisibilityInfo info) {
-              if (info.visibleFraction == 0) {
-                // CourseList is not visible, ensure videos are paused
-                if (courseListKey.currentState != null) {
-                  (courseListKey.currentState as dynamic).pauseAllVideos();
-                }
-              }
-            },
-            child: SizedBox(
-              height: 300,
-              child: CourseList(key: courseListKey),
-            ),
+          return
+              //  VisibilityDetector(
+              //   key: const Key('CourseListContainer'),
+              //   onVisibilityChanged: (VisibilityInfo info) {
+              //     if (info.visibleFraction == 0) {
+              //       // CourseList is not visible, ensure videos are paused
+              //       if (courseListKey.currentState != null) {
+              //         (courseListKey.currentState as dynamic).pauseAllVideos();
+              //       }
+              //     }
+              //   },
+              //   child:
+              SizedBox(
+            height: 300,
+            child: CourseList(key: courseListKey),
           );
+          // );
         }
 
         int postIndex = index;
@@ -185,7 +187,7 @@ class _PostsWidgetState extends State<PostsWidget> {
         if (index > 5) postIndex--;
         if (index > 7) postIndex--;
 
-        if (postIndex % 10 == 5 && postIndex > 10) {
+        if ((postIndex - 10) % 15 == 0 && postIndex >= 10) {
           return Column(
             children: <Widget>[
               const Column(
@@ -202,7 +204,22 @@ class _PostsWidgetState extends State<PostsWidget> {
             ],
           );
         }
-        if (postIndex % 5 == 0 && postIndex > 10) {
+        if ((postIndex - 15) % 15 == 0 && postIndex >= 15) {
+          return Column(
+            children: <Widget>[
+              const Column(
+                children: <Widget>[
+                  MarketplaceSection(),
+                  SizedBox(
+                    height: 10,
+                  )
+                ],
+              ),
+              _buildPostWidget(postIndex - 1),
+            ],
+          );
+        }
+        if ((postIndex - 20) % 15 == 0 && postIndex >= 20) {
           return Column(
             children: <Widget>[
               SizedBox(

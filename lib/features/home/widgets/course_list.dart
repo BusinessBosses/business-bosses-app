@@ -117,7 +117,7 @@ class CourseListState extends State<CourseList>
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: <Widget>[
                   const Text(
-                    'Courses',
+                    'Courses & Tutorials',
                     style: TextStyle(fontWeight: FontWeight.w700, fontSize: 18),
                   ),
                   Wrap(
