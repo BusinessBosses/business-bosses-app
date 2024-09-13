@@ -35,7 +35,7 @@ class SearchSection extends StatelessWidget {
                 color: hintColor,
               ),
             ),
-            hintText: 'Search people & posts',
+            hintText: 'Search',
           ),
         ),
       ),

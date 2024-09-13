@@ -27,11 +27,12 @@ class CompleteSearchingScreen extends StatefulWidget {
 class _CompleteSearchingScreenState extends State<CompleteSearchingScreen>
     with TickerProviderStateMixin {
   late TabController _tabController;
+
   final bool _hasFilter = false;
-  bool _isTyping = false;
 
   @override
   void initState() {
+    // TODO: implement initState
     super.initState();
     _tabController = TabController(vsync: this, length: 2);
   }
@@ -55,42 +56,44 @@ class _CompleteSearchingScreenState extends State<CompleteSearchingScreen>
               ),
               title: Searchbar(
                 hintText: 'Search',
-                onChange: (String query) {
-                  setState(() {
-                    _isTyping = query.isNotEmpty;
-                  });
-                  if (query.isEmpty) {
+                onChange: (String value) {
+                  controller.query.value = value;
+                  if (value.isEmpty) {
                     controller.clearUserSearch();
                   } else {
-                    controller.search(query,
-                        currentIndex: _tabController.index);
+                    controller.search(currentIndex: _tabController.index);
                   }
                 },
-                onSubmit: (String query) {
-                  // Removed onSubmit as search is now performed on key entry
+                onSubmit: (String value) {
+                  controller.query.value = value;
+                  controller.search(currentIndex: _tabController.index);
                 },
               ),
-              bottom: _isTyping
-                  ? TabBar(
-                      controller: _tabController,
-                      tabs: const <Widget>[
-                        Tab(
-                          child: TextWidget(
-                            text: 'People',
-                            size: 20,
-                            fontWeight: FontWeight.w700,
+              bottom: PreferredSize(
+                preferredSize: Size.fromHeight(
+                    controller.query.value.isNotEmpty ? kToolbarHeight : 0),
+                child: Obx(() => controller.query.value.isNotEmpty
+                    ? TabBar(
+                        controller: _tabController,
+                        tabs: const <Widget>[
+                          Tab(
+                            child: TextWidget(
+                              text: 'People',
+                              size: 20,
+                              fontWeight: FontWeight.w700,
+                            ),
                           ),
-                        ),
-                        Tab(
-                          child: TextWidget(
-                            text: 'Posts',
-                            size: 20,
-                            fontWeight: FontWeight.w700,
+                          Tab(
+                            child: TextWidget(
+                              text: 'Posts',
+                              size: 20,
+                              fontWeight: FontWeight.w700,
+                            ),
                           ),
-                        ),
-                      ],
-                    )
-                  : null,
+                        ],
+                      )
+                    : Container()),
+              ),
               actions: <Widget>[
                 if (_hasFilter)
                   IconButton(
@@ -99,18 +102,16 @@ class _CompleteSearchingScreenState extends State<CompleteSearchingScreen>
                   ),
               ],
             ),
-            body: GestureDetector(
-              onTap: () {
-                FocusScope.of(context).unfocus();
-              },
-              onVerticalDragDown: (_) {
-                FocusScope.of(context).unfocus();
-              },
-              child: Stack(
-                children: <Widget>[
-                  if (!_isTyping) const DiscoverSection(),
-                  if (_isTyping)
-                    Column(
+            body: controller.query.value.isEmpty
+                ? const DiscoverSection()
+                : GestureDetector(
+                    onTap: () {
+                      FocusScope.of(context).unfocus();
+                    },
+                    onVerticalDragDown: (_) {
+                      FocusScope.of(context).unfocus();
+                    },
+                    child: Column(
                       children: <Widget>[
                         Expanded(
                           child: TabBarView(
@@ -132,20 +133,64 @@ class _CompleteSearchingScreenState extends State<CompleteSearchingScreen>
                                 isLoading: controller.loading.value ||
                                     controller.loadingSearch.value,
                               ),
+                              // FilterForum(
+                              //   filterItems: controller.searchedForums,
+                              //   isLoading: controller.loading.value ||
+                              //       controller.loadingSearch.value,
+                              // ),
                             ],
                           ),
                         )
                       ],
                     ),
-                ],
-              ),
-            ),
+                  ),
           ),
         );
       },
     );
   }
 }
+
+/// FILTER POSTS
+// class FilterPosts extends StatelessWidget {
+//   final List<PostModel> filterItems;
+//   final bool isLoading;
+
+//   /// CONSTRUCTOR
+//   const FilterPosts({
+//     Key? key,
+//     this.filterItems = const <PostModel>[],
+//     this.isLoading = false,
+//   }) : super(key: key);
+
+//   @override
+//   Widget build(BuildContext context) {
+//     final HomeController homeController = Get.find();
+//     return filterItems.isEmpty
+//         ? SafetyModel(
+//             icon: const Icon(
+//               Icons.edit,
+//               size: 80.0,
+//               color: hintColor,
+//             ),
+//             title: 'No post found',
+//             subTitle: 'Your search posts will be displayed here!',
+//             isLoading: isLoading,
+//           )
+//         : ListView.separated(
+//             key: key,
+//             separatorBuilder: (_, __) => const SizedBox(height: 8.0),
+//             padding: const EdgeInsets.all(16.0),
+//             itemCount: filterItems.length ?? 0,
+//             itemBuilder: (BuildContext context, int i) {
+//               return PostTile(
+//                 post: filterItems[i],
+//                 controller: homeController,
+//               );
+//             },
+//           );
+//   }
+// }
 
 /// FILTER FORUMS
 class FilterForum extends StatelessWidget {

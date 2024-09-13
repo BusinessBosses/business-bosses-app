@@ -202,6 +202,7 @@ class _AllCommunitiesScreenState extends State<AllCommunitiesScreen>
                                   ChallengesSection(),
                                   LearningSection(),
                                   EventsSection(),
+                                  // Crowdfund(),
                                   SizedBox(
                                     height: 100,
                                   ),

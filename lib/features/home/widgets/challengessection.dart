@@ -56,7 +56,7 @@ class _ChallengesSectionState extends State<ChallengesSection> {
               height: 10,
             ),
             SizedBox(
-                height: 200,
+                height: 201,
                 child: BossupChallenge(
                   backgroundColor: widget.backgroundColor ?? Colors.white,
                   ishome: true,
