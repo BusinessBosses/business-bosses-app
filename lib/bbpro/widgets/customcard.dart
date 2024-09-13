@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:business_bosses_v2/common/widgets/network_image_with_placeholder.dart';
 import 'package:business_bosses_v2/utils/theme/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -29,7 +30,6 @@ class CustomCard extends StatelessWidget {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 15.0),
       child: Container(
-       
         child: Container(
           padding: const EdgeInsets.all(15),
           decoration: BoxDecoration(
@@ -100,19 +100,21 @@ class CustomCard extends StatelessWidget {
                 ),
                 child: ClipRRect(
                   borderRadius: BorderRadius.circular(8),
-                  child: imagePath.startsWith('assets/')
-                      ? Image.asset(
-                          imagePath,
-                          width: 100,
-                          height: 100,
-                          fit: BoxFit.cover,
-                        )
-                      : Image.file(
-                          File(imagePath),
-                          width: 100,
-                          height: 100,
-                          fit: BoxFit.cover,
-                        ),
+                  child: imagePath.startsWith('http')
+                      ? NetworkImageWithPlaceHolder(imageUrl: imagePath)
+                      : imagePath.startsWith('assets/')
+                          ? Image.asset(
+                              imagePath,
+                              width: 100,
+                              height: 100,
+                              fit: BoxFit.cover,
+                            )
+                          : Image.file(
+                              File(imagePath),
+                              width: 100,
+                              height: 100,
+                              fit: BoxFit.cover,
+                            ),
                 ),
               ),
             ],

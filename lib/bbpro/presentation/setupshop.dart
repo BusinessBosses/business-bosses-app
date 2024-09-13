@@ -1,9 +1,9 @@
 import 'dart:io';
 
+import 'package:business_bosses_v2/bbpro/models/shop_model.dart';
 import 'package:business_bosses_v2/bbpro/widgets/button.dart';
 import 'package:business_bosses_v2/bbpro/widgets/customcard.dart';
 import 'package:business_bosses_v2/bbpro/widgets/edittext.dart';
-import 'package:business_bosses_v2/bbpro/widgets/multipleedit.dart';
 import 'package:business_bosses_v2/bbpro/widgets/selectionboxes.dart';
 import 'package:business_bosses_v2/bbpro/widgets/textfield.dart';
 import 'package:business_bosses_v2/bbpro/controllers/shop_controller.dart';
@@ -20,9 +20,11 @@ import 'package:image_picker/image_picker.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class Setupshop extends StatefulWidget {
-  const Setupshop({super.key});
+  final Shop? shop;
+  const Setupshop({super.key, this.shop});
 
   @override
+  // ignore: library_private_types_in_public_api
   _SetupshopState createState() => _SetupshopState();
 }
 
@@ -80,15 +82,25 @@ class _SetupshopState extends State<Setupshop> {
   @override
   void initState() {
     super.initState();
-    shopController.initShop().then((bool value) {
-      if (value) {
-        Get.to(() => const Bottomnavscreen());
-      }
-    });
+    if (widget.shop != null) {
+      nameController.text = widget.shop!.name;
+      descriptionController.text = widget.shop!.description;
+      phoneController.text = widget.shop!.phone;
+      emailController.text = widget.shop!.email;
+      _selectedLocation = widget.shop!.location;
+      image = widget.shop!.image;
+      _populatePaymentMethods(widget.shop!.payments);
+    } else {
+      shopController.initShop().then((bool value) {
+        if (value) {
+          Get.to(() => const Bottomnavscreen());
+        }
+      });
+    }
   }
 
   bool _validateForm() {
-    if (_selectedImage == null) {
+    if (_selectedImage == null && image == null) {
       showSnackbar(message: 'Photo is required', error: true);
       return false;
     }
@@ -127,6 +139,24 @@ class _SetupshopState extends State<Setupshop> {
     return true;
   }
 
+  // Helper to populate payment method details based on shop data
+  void _populatePaymentMethods(List<dynamic> paymentMethods) {
+    for (Map<String, dynamic> method in paymentMethods) {
+      if (method['paymentMethod'] == 'Bank') {
+        selections['Bank'] = true;
+        bankController.text = method['details'];
+      } else if (method['paymentMethod'] == 'Paypal') {
+        selections['Paypal'] = true;
+        paypalController.text = method['details'];
+      } else if (method['paymentMethod'] == 'Wallet') {
+        selections['Wallet'] = true;
+        walletController.text = method['details'];
+      } else if (method['paymentMethod'] == 'Cash') {
+        selections['Cash'] = true;
+      }
+    }
+  }
+
   void successDialog(BuildContext context) {
     showDialog(
       barrierDismissible: false,
@@ -144,9 +174,11 @@ class _SetupshopState extends State<Setupshop> {
                 mainAxisSize: MainAxisSize.min,
                 children: <Widget>[
                   const SizedBox(height: 20),
-                  const Text(
-                    'Shop created successfully!',
-                    style: TextStyle(
+                  Text(
+                    widget.shop != null
+                        ? 'Shop updated successfully!'
+                        : 'Shop created successfully!',
+                    style: const TextStyle(
                       fontSize: 18,
                     ),
                   ),
@@ -181,10 +213,10 @@ class _SetupshopState extends State<Setupshop> {
     return Scaffold(
       backgroundColor: probackgroundColor,
       appBar: AppBar(
-        automaticallyImplyLeading: false,
-        title: const Text(
-          'Set Up Shop',
-          style: TextStyle(
+        automaticallyImplyLeading: widget.shop != null ? true : false,
+        title: Text(
+          widget.shop != null ? 'Edit Shop' : 'Set Up Shop',
+          style: const TextStyle(
             color: proprimaryColor,
             fontWeight: FontWeight.bold,
           ),
@@ -206,8 +238,11 @@ class _SetupshopState extends State<Setupshop> {
                         subText: 'Add a photo for your shop',
                         buttonText: 'Choose Photo',
                         onPressed: _pickImage,
-                        imagePath: _selectedImage?.path ??
-                            'assets/images/shopplaceholder.png',
+                        imagePath: _selectedImage != null
+                            ? _selectedImage!.path
+                            : widget.shop != null && widget.shop!.image != null
+                                ? widget.shop!.image!
+                                : 'assets/images/shopplaceholder.png',
                         iconpath: 'assets/svgs/uploadicon.svg',
                       ),
                       const SizedBox(height: 15),
@@ -219,8 +254,8 @@ class _SetupshopState extends State<Setupshop> {
                       const SizedBox(height: 15),
                       CustomEditText(
                         optionalText: RichText(
-                          text: TextSpan(
-                            children: [
+                          text: const TextSpan(
+                            children: <InlineSpan>[
                               TextSpan(
                                 text: '(Description)',
                                 style: TextStyle(
@@ -239,8 +274,8 @@ class _SetupshopState extends State<Setupshop> {
                       const SizedBox(height: 15),
                       CustomEditText(
                         optionalText: RichText(
-                          text: TextSpan(
-                            children: [
+                          text: const TextSpan(
+                            children: <InlineSpan>[
                               TextSpan(
                                 text: '(Optional)',
                                 style: TextStyle(
@@ -258,8 +293,8 @@ class _SetupshopState extends State<Setupshop> {
                       const SizedBox(height: 15),
                       CustomEditText(
                         optionalText: RichText(
-                          text: TextSpan(
-                            children: [
+                          text: const TextSpan(
+                            children: <InlineSpan>[
                               TextSpan(
                                 text: '(Optional)',
                                 style: TextStyle(
@@ -390,7 +425,9 @@ class _SetupshopState extends State<Setupshop> {
                         child: ProCustomButton(
                           loading: loading,
                           onPressed: submitForm,
-                          text: 'Complete Setup',
+                          text: widget.shop != null
+                              ? 'Save Changes'
+                              : 'Complete Setup',
                         ),
                       ),
                       const SizedBox(height: 30),
@@ -465,7 +502,21 @@ class _SetupshopState extends State<Setupshop> {
       'details': 'Some additional details about the shop'
     };
 
-    bool response = await shopController.addShop(data);
+    final Map<String, dynamic> dataUpdate = <String, dynamic>{
+      'name': nameController.text,
+      'email': emailController.text,
+      'phone': phoneController.text,
+      'description': descriptionController.text,
+      'image': image,
+      'location': _selectedLocation,
+      'paymentMethods': paymentMethods,
+    };
+    bool response = false;
+    if (widget.shop != null) {
+      response = await shopController.updateShop(widget.shop!.id, dataUpdate);
+    } else {
+      response = await shopController.addShop(data);
+    }
     if (response) {
       // ignore: use_build_context_synchronously
       successDialog(context);

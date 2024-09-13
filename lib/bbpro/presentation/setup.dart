@@ -1,3 +1,5 @@
+import 'package:business_bosses_v2/bbpro/controllers/shop_controller.dart';
+import 'package:business_bosses_v2/bbpro/presentation/setupshop.dart';
 import 'package:business_bosses_v2/bbpro/widgets/notificationbutton.dart';
 import 'package:business_bosses_v2/bbpro/presentation/inventory.dart';
 import 'package:business_bosses_v2/common/dialogs/snackbar.dart';
@@ -16,6 +18,7 @@ class Setup extends StatefulWidget {
 }
 
 class _SetupState extends State<Setup> {
+  final ShopController shopController = Get.find();
   final List<String> titles = <String>[
     'Edit Shop',
     'Manage Inventory',
@@ -162,8 +165,13 @@ class _SetupState extends State<Setup> {
                                   ),
                                 ),
                                 onTap: () {
+                                  if (titles[index] == 'Edit Shop') {
+                                    Get.to(() => Setupshop(
+                                          shop: shopController.shop,
+                                        ));
+                                  }
                                   if (titles[index] == 'Manage Inventory') {
-                                    Get.to(const Inventory());
+                                    Get.to(() => const Inventory());
                                   }
                                   if (titles[index] == 'Contact Us') {
                                     _contactUs();

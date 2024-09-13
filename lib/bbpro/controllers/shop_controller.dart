@@ -18,20 +18,19 @@ class ShopController extends GetxController {
       path: 'shops/user-shops/${profileController.myProfile.uid}',
     );
     if (response.success) {
-      shop = Shop.fromMap(response.data['rows'][0]);
-      if (response.data['rows'][0] == null) {
+      if (response.data['rows'].isEmpty) {
         loading(false);
         update();
         return false;
+      } else {
+        shop = Shop.fromMap(response.data['rows'][0]);
       }
     } else {
       loading(false);
       update();
       return false;
     }
-    loading(false);
-    update();
-    if (response.data['rows'][0] != null) {
+    if (response.data['rows'].isNotEmpty) {
       ApiResponseModel productResponse = await ApiService.get(
         path: 'goods/user-products/${profileController.myProfile.uid}',
       );
@@ -48,6 +47,7 @@ class ShopController extends GetxController {
           services.add(Service.fromJson(servicesResponse.data['rows'][i]));
         }
       }
+      loading(false);
       update();
       return true;
     } else {
@@ -59,6 +59,20 @@ class ShopController extends GetxController {
   Future<bool> addShop(Map<String, dynamic> data) async {
     ApiResponseModel response =
         await ApiService.post(path: 'shops', body: data);
+    if (response.success) {
+      shop = Shop.fromMap(<String, dynamic>{
+        ...response.data,
+        'user': profileController.myProfile.toMap()
+      });
+      return true;
+    } else {
+      return false;
+    }
+  }
+
+  Future<bool> updateShop(String id, Map<String, dynamic> data) async {
+    ApiResponseModel response =
+        await ApiService.put(path: 'shops/$id', body: data);
     if (response.success) {
       shop = Shop.fromMap(<String, dynamic>{
         ...response.data,

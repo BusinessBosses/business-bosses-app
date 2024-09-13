@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:business_bosses_v2/bbpro/controllers/order_controller.dart';
 import 'package:business_bosses_v2/bbpro/controllers/shop_controller.dart';
+import 'package:business_bosses_v2/bbpro/models/product_model.dart';
 import 'package:business_bosses_v2/bbpro/widgets/button.dart';
 import 'package:business_bosses_v2/bbpro/widgets/dropdown.dart';
 import 'package:business_bosses_v2/bbpro/widgets/edittext.dart';
@@ -20,7 +21,8 @@ import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
 
 class CreateProductListing extends StatefulWidget {
-  const CreateProductListing({super.key});
+  final Product? product;
+  const CreateProductListing({super.key, this.product});
 
   @override
   // ignore: library_private_types_in_public_api
@@ -81,9 +83,11 @@ class _CreateProductListingState extends State<CreateProductListing> {
       backgroundColor: probackgroundColor,
       appBar: AppBar(
         automaticallyImplyLeading: false,
-        title: const Text(
-          'Create Product Listing',
-          style: TextStyle(
+        title: Text(
+          widget.product != null
+              ? 'Create Product Listing'
+              : 'Edit Product Listing',
+          style: const TextStyle(
             color: proprimaryColor,
             fontWeight: FontWeight.bold,
           ),

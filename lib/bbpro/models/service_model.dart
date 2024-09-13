@@ -14,7 +14,7 @@ class Service {
   String location;
   String paymentMethod;
   String deliveryMethod;
-  String url;
+  String? url;
   String itemType;
   bool isActive;
   String deliveryTime;
@@ -35,7 +35,7 @@ class Service {
     required this.location,
     required this.paymentMethod,
     required this.deliveryMethod,
-    required this.url,
+    this.url,
     required this.itemType,
     required this.isActive,
     required this.deliveryTime,
@@ -48,11 +48,12 @@ class Service {
     return Service(
       images: json['images'] != null ? List<String>.from(json['images']) : null,
       id: json['id'],
-      user: json['userId'] != null ? UserModel.fromMap(json['userId']) : null,
-      shop: json['shopId'] != null ? Shop.fromMap(json['shopId']) : null,
+      user: json['user'] != null ? UserModel.fromMap(json['user']) : null,
+      shop: json['shop'] != null ? Shop.fromMap(json['shop']) : null,
       name: json['name'],
       price: (json['price'] as num).toDouble(),
-      discount: (json['discount'] as num).toDouble(),
+      discount:
+          json['discount'] == null ? 0 : (json['discount'] as num).toDouble(),
       description: json['description'],
       category: json['category'],
       location: json['location'],

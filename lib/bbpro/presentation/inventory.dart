@@ -1,3 +1,6 @@
+import 'package:business_bosses_v2/bbpro/controllers/shop_controller.dart';
+import 'package:business_bosses_v2/bbpro/models/product_model.dart';
+import 'package:business_bosses_v2/bbpro/presentation/create_product.dart';
 import 'package:business_bosses_v2/bbpro/widgets/button.dart';
 import 'package:business_bosses_v2/bbpro/widgets/inventorycard.dart';
 import 'package:business_bosses_v2/bbpro/presentation/viewproduct.dart';
@@ -15,6 +18,7 @@ class Inventory extends StatefulWidget {
 }
 
 class _InventoryState extends State<Inventory> {
+  final ShopController shopController = Get.find();
   String? _selectedItem; // Define the _selectedItem state variable
 
   @override
@@ -114,7 +118,9 @@ class _InventoryState extends State<Inventory> {
                   ]),
                   ProCustomButton(
                     text: 'Add Products',
-                    onPressed: () {},
+                    onPressed: () {
+                      Get.to(() => const CreateProductListing());
+                    },
                     icon: const Icon(Icons.add),
                   ),
                   // Container(
@@ -172,15 +178,17 @@ class _InventoryState extends State<Inventory> {
               mainAxisSpacing: 10.0,
               // controller: _controller,
               shrinkWrap: true,
-              itemCount: 40,
+              itemCount: shopController.products.length,
               itemBuilder: (BuildContext context, int index) {
+                final Product product = shopController.products[index];
                 return GestureDetector(
                   onTap: () {
-                    Get.to(const ExpandedProduct());
+                    Get.to(() => ExpandedProduct(
+                          product: product,
+                        ));
                   },
-                  child: const InventoryCard(
-                    cardName: 'Product name',
-                    value: '\$20k',
+                  child: InventoryCard(
+                    product: product,
                   ),
                 );
               },

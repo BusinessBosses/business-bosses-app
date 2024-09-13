@@ -63,7 +63,7 @@ class Product {
       discount: json['discount'],
       description: json['description'],
       category: json['category'],
-      location: json['location'],
+      location: json['location'] ?? 'Nigeria',
       paymentMethod: json['paymentMethod'],
       deliveryMethod: json['deliveryMethod'],
       url: json['url'],

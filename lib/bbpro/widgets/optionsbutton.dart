@@ -1,16 +1,21 @@
+import 'package:business_bosses_v2/bbpro/models/product_model.dart';
+import 'package:business_bosses_v2/bbpro/presentation/create_product.dart';
 import 'package:business_bosses_v2/utils/theme/theme.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
 class OptionsButton extends StatelessWidget {
   final EdgeInsetsGeometry? padding;
   final Color? borderColor;
   final bool? isExpanded;
+  final Product? product;
 
   const OptionsButton({
     Key? key,
     this.padding,
     this.borderColor,
     this.isExpanded,
+    this.product,
   }) : super(key: key);
 
   @override
@@ -73,8 +78,12 @@ class OptionsButton extends StatelessWidget {
               // View action
             } else if (value == 'Edit') {
               // Edit action
+              if (product != null) {
+                Get.to(() => const CreateProductListing());
+              }
             } else if (value == 'Delete') {
               // Delete action
+              if (product != null) {}
             }
           }
         });

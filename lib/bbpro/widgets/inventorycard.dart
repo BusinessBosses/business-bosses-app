@@ -1,19 +1,21 @@
+// ignore_for_file: public_member_api_docs, sort_constructors_first
+import 'package:flutter/material.dart';
+
+import 'package:business_bosses_v2/bbpro/models/product_model.dart';
 import 'package:business_bosses_v2/bbpro/widgets/optionsbutton.dart';
 import 'package:business_bosses_v2/common/widgets/network_image_with_placeholder.dart';
 import 'package:business_bosses_v2/utils/theme/theme.dart';
-import 'package:flutter/material.dart';
 
 class InventoryCard extends StatefulWidget {
-  final String cardName;
-  final String value;
+  final Product product;
 
   const InventoryCard({
-    required this.cardName,
-    required this.value,
     Key? key,
+    required this.product,
   }) : super(key: key);
 
   @override
+  // ignore: library_private_types_in_public_api
   _InventoryCardState createState() => _InventoryCardState();
 }
 
@@ -34,8 +36,8 @@ class _InventoryCardState extends State<InventoryCard> {
             width: double.infinity,
             child: ClipRRect(
               borderRadius: BorderRadius.circular(10),
-              child: const NetworkImageWithPlaceHolder(
-                imageUrl: '',
+              child: NetworkImageWithPlaceHolder(
+                imageUrl: widget.product.images?[0],
                 radius: radius,
                 placeHolder: Icons.person,
                 iconSize: 0.0,
@@ -49,7 +51,7 @@ class _InventoryCardState extends State<InventoryCard> {
           Row(
             children: <Widget>[
               Text(
-                widget.cardName,
+                widget.product.name,
                 style: const TextStyle(
                   fontSize: 16,
                   fontWeight: FontWeight.bold,
@@ -60,7 +62,7 @@ class _InventoryCardState extends State<InventoryCard> {
           Row(
             children: <Widget>[
               Text(
-                widget.value,
+                widget.product.price,
                 style: const TextStyle(
                   color: proprimaryColor,
                   fontWeight: FontWeight.bold,
@@ -69,24 +71,28 @@ class _InventoryCardState extends State<InventoryCard> {
               ),
             ],
           ),
-          const Row(
+          Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: <Widget>[
               Wrap(
                 crossAxisAlignment: WrapCrossAlignment.center,
                 children: <Widget>[
-                  CircleAvatar(
+                  const CircleAvatar(
                     radius: 5,
                     backgroundColor: Colors.green,
                   ),
-                  SizedBox(width: 3),
+                  const SizedBox(width: 3),
                   Text(
-                    'Out of stock',
-                    style: TextStyle(fontSize: 10),
+                    widget.product.quantity > 0
+                        ? '${widget.product.quantity.toString()} in Stock'
+                        : 'Out of stock',
+                    style: const TextStyle(fontSize: 10),
                   ),
                 ],
               ),
-              OptionsButton(),
+              OptionsButton(
+                product: widget.product,
+              ),
             ],
           ),
         ],
