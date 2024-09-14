@@ -8,6 +8,7 @@ import 'package:business_bosses_v2/services/api_service.dart';
 import 'package:get/get.dart';
 
 class CompleteSearchController extends GetxController {
+  RxString query = RxString('');
   List<UserModel> recommendedConnections = <UserModel>[];
   List<UserModel> searchedUsers = <UserModel>[];
   List<PostModel> searchedPosts = <PostModel>[];
@@ -28,7 +29,7 @@ class CompleteSearchController extends GetxController {
     update();
   }
 
-  Future<void> search(String query, {int currentIndex = 0}) async {
+  Future<void> search({int currentIndex = 0}) async {
     loadingSearch(true);
     update();
     searchedUsers.clear();

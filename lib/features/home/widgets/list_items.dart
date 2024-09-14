@@ -163,139 +163,186 @@ class _PostsWidgetState extends State<PostsWidget> {
         }
 
         if (index == 7) {
-          return VisibilityDetector(
-            key: const Key('CourseListContainer'),
-            onVisibilityChanged: (VisibilityInfo info) {
-              if (info.visibleFraction == 0) {
-                // CourseList is not visible, ensure videos are paused
-                if (courseListKey.currentState != null) {
-                  (courseListKey.currentState as dynamic).pauseAllVideos();
-                }
-              }
-            },
-            child: SizedBox(
-              height: 300,
-              child: CourseList(key: courseListKey),
-            ),
+          return
+              //  VisibilityDetector(
+              //   key: const Key('CourseListContainer'),
+              //   onVisibilityChanged: (VisibilityInfo info) {
+              //     if (info.visibleFraction == 0) {
+              //       // CourseList is not visible, ensure videos are paused
+              //       if (courseListKey.currentState != null) {
+              //         (courseListKey.currentState as dynamic).pauseAllVideos();
+              //       }
+              //     }
+              //   },
+              //   child:
+              SizedBox(
+            height: 300,
+            child: CourseList(key: courseListKey),
           );
+          // );
         }
 
         int postIndex = index;
         if (index > 3) postIndex--;
-        if (index > 9) postIndex--;
-        if (index > 15) postIndex--;
+        if (index > 5) postIndex--;
+        if (index > 7) postIndex--;
 
-        final dynamic currentPost = controller.mixedPosts[postIndex - 1];
-        if (currentPost['type'] == 'post') {
-          final PostModel post = controller.posts[currentPost['index']];
-
-          // Handle regular non-promoted PostModel
-          final PostModel nonPromotedPostModel = post;
-          final bool hasIncrementedView = controller.itemsWithIncrementedViews
-              .contains(nonPromotedPostModel.postId);
-          return VisibilityDetector(
-            key: Key(index.toString()),
-            onVisibilityChanged: (VisibilityInfo info) {
-              if (info.visibleFraction == 1.0 && !hasIncrementedView) {
-                controller.updateViews(nonPromotedPostModel);
-                setState(() {
-                  controller.itemsWithIncrementedViews
-                      .add(nonPromotedPostModel.postId);
-                });
-              }
-            },
-            child: PostTile(
-              controller: controller,
-              post: nonPromotedPostModel,
-              onPageChange: (int page) {
-                if (widget.onPageChange != null) {
-                  widget.onPageChange!(page);
-                }
-              },
-            ),
-          );
-        } else if (currentPost['type'] == 'promotedPost') {
-          final PostModel post = controller.promotedPosts[currentPost['index']];
-
-          // Handle regular non-promoted PostModel
-          final PostModel promotedPostModel = post;
-          final bool hasIncrementedView = controller.itemsWithIncrementedViews
-              .contains(promotedPostModel.postId);
-          return VisibilityDetector(
-            key: Key(index.toString()),
-            onVisibilityChanged: (VisibilityInfo info) {
-              if (info.visibleFraction == 1.0 && !hasIncrementedView) {
-                controller.updateViews(promotedPostModel);
-                setState(() {
-                  controller.itemsWithIncrementedViews
-                      .add(promotedPostModel.postId);
-                });
-              }
-            },
-            child: PostTile(
-              controller: controller,
-              post: promotedPostModel,
-              onPageChange: (int page) {
-                if (widget.onPageChange != null) {
-                  widget.onPageChange!(page);
-                }
-              },
-            ),
-          );
-        } else if (currentPost['type'] == 'market') {
-          final MarketModel post =
-              controller.promotedMarkets[currentPost['index']];
-
-          // Handle regular non-promoted PostModel
-          final MarketModel marketModel = post;
-          final bool hasIncrementedView = controller.itemsWithIncrementedViews
-              .contains(marketModel.marketId);
-          return VisibilityDetector(
-            key: Key(index.toString()),
-            onVisibilityChanged: (VisibilityInfo info) {
-              if (info.visibleFraction == 1.0 && !hasIncrementedView) {
-                marketController.updatemarketViews(marketModel);
-                setState(() {
-                  controller.itemsWithIncrementedViews
-                      .add(marketModel.marketId);
-                });
-              }
-            },
-            child: marketModel.isProduct
-                ? MarketTile(
-                    controller: controller,
-                    post: marketModel,
-                  )
-                : ServiceTile(
-                    controller: controller,
-                    post: marketModel,
-                  ),
-          );
-        } else if (currentPost['type'] == 'course') {
-          final CourseModel post =
-              controller.promotedCourses[currentPost['index']];
-
-          // Handle regular non-promoted PostModel
-          final CourseModel courseModel = post;
+        if ((postIndex - 10) % 15 == 0 && postIndex >= 10) {
           return Column(
-            mainAxisAlignment: MainAxisAlignment.start,
-            crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[
-              const Padding(
-                padding: EdgeInsets.symmetric(horizontal: 15, vertical: 5),
-                child: TextWidget(
-                  text: 'Sponsored',
-                  fontWeight: FontWeight.w700,
-                  size: 10,
-                ),
+              const Column(
+                children: <Widget>[
+                  ChallengesSection(
+                    backgroundColor: backgroundColor,
+                  ),
+                  SizedBox(
+                    height: 10,
+                  )
+                ],
               ),
-              CourseItem(course: courseModel),
+              _buildPostWidget(postIndex - 1),
             ],
           );
-        } else {
-          return const SizedBox();
         }
+        if ((postIndex - 15) % 15 == 0 && postIndex >= 15) {
+          return Column(
+            children: <Widget>[
+              const Column(
+                children: <Widget>[
+                  MarketplaceSection(),
+                  SizedBox(
+                    height: 10,
+                  )
+                ],
+              ),
+              _buildPostWidget(postIndex - 1),
+            ],
+          );
+        }
+        if ((postIndex - 20) % 15 == 0 && postIndex >= 20) {
+          return Column(
+            children: <Widget>[
+              SizedBox(
+                height: 300,
+                child: CourseList(key: courseListKey),
+              ),
+              _buildPostWidget(postIndex - 1),
+            ],
+          );
+        }
+
+        return _buildPostWidget(postIndex - 1);
       },
     );
+  }
+
+  Widget _buildPostWidget(int postIndex) {
+    final dynamic currentPost = controller.mixedPosts[postIndex];
+    if (currentPost['type'] == 'post') {
+      final PostModel post = controller.posts[currentPost['index']];
+
+      // Handle regular non-promoted PostModel
+      final PostModel nonPromotedPostModel = post;
+      final bool hasIncrementedView = controller.itemsWithIncrementedViews
+          .contains(nonPromotedPostModel.postId);
+      return VisibilityDetector(
+        key: Key(postIndex.toString()),
+        onVisibilityChanged: (VisibilityInfo info) {
+          if (info.visibleFraction == 1.0 && !hasIncrementedView) {
+            controller.updateViews(nonPromotedPostModel);
+            setState(() {
+              controller.itemsWithIncrementedViews
+                  .add(nonPromotedPostModel.postId);
+            });
+          }
+        },
+        child: PostTile(
+          controller: controller,
+          post: nonPromotedPostModel,
+          onPageChange: (int page) {
+            if (widget.onPageChange != null) {
+              widget.onPageChange!(page);
+            }
+          },
+        ),
+      );
+    } else if (currentPost['type'] == 'promotedPost') {
+      final PostModel post = controller.promotedPosts[currentPost['index']];
+
+      // Handle regular non-promoted PostModel
+      final PostModel promotedPostModel = post;
+      final bool hasIncrementedView = controller.itemsWithIncrementedViews
+          .contains(promotedPostModel.postId);
+      return VisibilityDetector(
+        key: Key(postIndex.toString()),
+        onVisibilityChanged: (VisibilityInfo info) {
+          if (info.visibleFraction == 1.0 && !hasIncrementedView) {
+            controller.updateViews(promotedPostModel);
+            setState(() {
+              controller.itemsWithIncrementedViews
+                  .add(promotedPostModel.postId);
+            });
+          }
+        },
+        child: PostTile(
+          controller: controller,
+          post: promotedPostModel,
+          onPageChange: (int page) {
+            if (widget.onPageChange != null) {
+              widget.onPageChange!(page);
+            }
+          },
+        ),
+      );
+    } else if (currentPost['type'] == 'market') {
+      final MarketModel post = controller.promotedMarkets[currentPost['index']];
+
+      // Handle regular non-promoted PostModel
+      final MarketModel marketModel = post;
+      final bool hasIncrementedView =
+          controller.itemsWithIncrementedViews.contains(marketModel.marketId);
+      return VisibilityDetector(
+        key: Key(postIndex.toString()),
+        onVisibilityChanged: (VisibilityInfo info) {
+          if (info.visibleFraction == 1.0 && !hasIncrementedView) {
+            marketController.updatemarketViews(marketModel);
+            setState(() {
+              controller.itemsWithIncrementedViews.add(marketModel.marketId);
+            });
+          }
+        },
+        child: marketModel.isProduct
+            ? MarketTile(
+                controller: controller,
+                post: marketModel,
+              )
+            : ServiceTile(
+                controller: controller,
+                post: marketModel,
+              ),
+      );
+    } else if (currentPost['type'] == 'course') {
+      final CourseModel post = controller.promotedCourses[currentPost['index']];
+
+      // Handle regular non-promoted PostModel
+      final CourseModel courseModel = post;
+      return Column(
+        mainAxisAlignment: MainAxisAlignment.start,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: <Widget>[
+          const Padding(
+            padding: EdgeInsets.symmetric(horizontal: 15, vertical: 5),
+            child: TextWidget(
+              text: 'Sponsored',
+              fontWeight: FontWeight.w700,
+              size: 10,
+            ),
+          ),
+          CourseItem(course: courseModel),
+        ],
+      );
+    } else {
+      return const SizedBox();
+    }
   }
 }

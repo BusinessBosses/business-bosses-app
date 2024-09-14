@@ -49,7 +49,7 @@ class CourseListState extends State<CourseList>
           enableCaption: false,
           isLive: false,
           forceHD: false,
-          hideControls: true,
+          hideControls: false,
         ),
       )..addListener(() {
           if (mounted) {
@@ -117,7 +117,7 @@ class CourseListState extends State<CourseList>
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: <Widget>[
                   const Text(
-                    'Courses',
+                    'Courses & Tutorials',
                     style: TextStyle(fontWeight: FontWeight.w700, fontSize: 18),
                   ),
                   Wrap(
@@ -140,7 +140,8 @@ class CourseListState extends State<CourseList>
             ),
           ),
           const SizedBox(height: 10),
-          Expanded(
+          SizedBox(
+            height: 250, // Adjust this height as needed
             child: PageView.builder(
               controller: _pageController,
               padEnds: false,
@@ -175,7 +176,7 @@ class CourseListState extends State<CourseList>
 
   Widget _buildCourseItem(int index) {
     return Container(
-      margin: const EdgeInsets.only(left: 10),
+      margin: const EdgeInsets.only(left: 10, right: 10),
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(15),
         boxShadow: <BoxShadow>[
@@ -193,22 +194,15 @@ class CourseListState extends State<CourseList>
           children: <Widget>[
             YoutubePlayer(
               controller: _controllers[index],
-              showVideoProgressIndicator: false,
-              controlsTimeOut: const Duration(seconds: 0),
+              showVideoProgressIndicator: true,
+              progressIndicatorColor: Colors.red,
+              progressColors: const ProgressBarColors(
+                playedColor: Colors.red,
+                handleColor: Colors.redAccent,
+              ),
               onReady: () {
                 _controllers[index].addListener(() {});
               },
-            ),
-            Positioned.fill(
-              child: GestureDetector(
-                onTap: () {
-                  if (_controllers[index].value.isPlaying) {
-                    _controllers[index].pause();
-                  } else {
-                    _controllers[index].play();
-                  }
-                },
-              ),
             ),
             Positioned(
               left: 10,
@@ -224,7 +218,7 @@ class CourseListState extends State<CourseList>
                       fontSize: 18,
                     ),
                   ),
-                  const SizedBox(height: 0),
+                  const SizedBox(height: 5),
                   Text(
                     'Posted by User ${index + 1}',
                     style: const TextStyle(
@@ -235,39 +229,6 @@ class CourseListState extends State<CourseList>
                 ],
               ),
             ),
-            // Positioned(
-            //   right: 0,
-            //   bottom: 10,
-            //   child: Column(
-            //     children: <Widget>[
-            //       IconButton(
-            //         onPressed: () {},
-            //         icon: SvgPicture.asset(
-            //           'assets/svgs/like.svg',
-            //           height: 15,
-            //           color: Colors.white,
-            //         ),
-            //       ),
-            //       IconButton(
-            //         onPressed: () {},
-            //         icon: SvgPicture.asset(
-            //           'assets/svgs/comment.svg',
-            //           height: 15,
-            //           color: Colors.white,
-            //         ),
-            //       ),
-            //       IconButton(
-            //         onPressed: () {},
-            //         icon: SvgPicture.asset(
-            //           'assets/svgs/share.svg',
-            //           height: 15.0,
-            //           width: 15.0,
-            //           color: Colors.white,
-            //         ),
-            //       ),
-            //     ],
-            //   ),
-            // ),
           ],
         ),
       ),
