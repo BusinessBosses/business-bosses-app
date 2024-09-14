@@ -43,6 +43,12 @@ class _SetupshopState extends State<Setupshop> {
   File? _selectedImage;
   bool loading = false;
   String? image;
+  Map<String, bool> selectedOptions = <String, bool>{
+    'Bank': false,
+    'Paypal': false,
+    'Wallet': false,
+    'Cash': false
+  };
 
   Map<String, bool> selections = <String, bool>{
     'Bank': false,
@@ -145,16 +151,21 @@ class _SetupshopState extends State<Setupshop> {
       if (method['paymentMethod'] == 'Bank') {
         selections['Bank'] = true;
         bankController.text = method['details'];
+        selectedOptions['Bank'] = true;
       } else if (method['paymentMethod'] == 'Paypal') {
         selections['Paypal'] = true;
         paypalController.text = method['details'];
+        selectedOptions['Paypal'] = true;
       } else if (method['paymentMethod'] == 'Wallet') {
         selections['Wallet'] = true;
         walletController.text = method['details'];
+        selectedOptions['Wallet'] = true;
       } else if (method['paymentMethod'] == 'Cash') {
         selections['Cash'] = true;
+        selectedOptions['Cash'] = true;
       }
     }
+    setState(() {});
   }
 
   void successDialog(BuildContext context) {
@@ -374,9 +385,28 @@ class _SetupshopState extends State<Setupshop> {
                         iconpath: 'assets/svgs/uploadicon.svg',
                       ),
                       const SizedBox(height: 15),
-                      SelectionSection(
-                        onSelectionChanged: _onSelectionChanged,
-                      ),
+                      if (widget.shop != null) ...<Widget>{
+                        SelectionSection(
+                          onSelectionChanged: _onSelectionChanged,
+                          options: const <String>[
+                            'Bank',
+                            'Paypal',
+                            'Wallet',
+                            'Cash'
+                          ],
+                        ),
+                      } else ...<Widget>{
+                        SelectionSection(
+                          options: const <String>[
+                            'Bank',
+                            'Paypal',
+                            'Wallet',
+                            'Cash'
+                          ],
+                          onSelectionChanged: _onSelectionChanged,
+                          selectedOptions: selectedOptions,
+                        ),
+                      },
                       const SizedBox(height: 15),
                       Visibility(
                         visible: selections['Bank'] ?? false,

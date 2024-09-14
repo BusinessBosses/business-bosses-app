@@ -13,7 +13,6 @@ class Bottomnavscreen extends StatefulWidget {
   const Bottomnavscreen({super.key});
 
   @override
-  // ignore: library_private_types_in_public_api
   _BottomnavscreenState createState() => _BottomnavscreenState();
 }
 
@@ -35,63 +34,72 @@ class _BottomnavscreenState extends State<Bottomnavscreen> {
     });
   }
 
+  Future<bool> _onWillPop() async {
+    // If not on the Dashboard, go back to the Dashboard
+
+    return true;
+  }
+
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: Center(
-        child: _widgetOptions.elementAt(_selectedIndex),
-      ),
-      bottomNavigationBar: BottomNavigationBar(
-        backgroundColor: Colors.white,
-        type: BottomNavigationBarType.fixed,
-        items: <BottomNavigationBarItem>[
-          BottomNavigationBarItem(
-            icon: SvgPicture.asset(
-              'assets/svgs/dashboard.svg',
-              height: 20,
-              color: _selectedIndex == 0
-                  ? proprimaryColor
-                  : const Color(0xffBDBEC0),
+    return WillPopScope(
+      onWillPop: _onWillPop,
+      child: Scaffold(
+        body: Center(
+          child: _widgetOptions.elementAt(_selectedIndex),
+        ),
+        bottomNavigationBar: BottomNavigationBar(
+          backgroundColor: Colors.white,
+          type: BottomNavigationBarType.fixed,
+          items: <BottomNavigationBarItem>[
+            BottomNavigationBarItem(
+              icon: SvgPicture.asset(
+                'assets/svgs/dashboard.svg',
+                height: 20,
+                color: _selectedIndex == 0
+                    ? proprimaryColor
+                    : const Color(0xffBDBEC0),
+              ),
+              label: 'Dashboard',
             ),
-            label: 'Dashboard',
-          ),
-          BottomNavigationBarItem(
-            icon: SvgPicture.asset('assets/svgs/projects.svg',
-                height: 20,
-                color: _selectedIndex == 1
-                    ? proprimaryColor
-                    : const Color(0xffBDBEC0)),
-            label: 'Projects',
-          ),
-          BottomNavigationBarItem(
-            icon: SvgPicture.asset('assets/svgs/clients.svg',
-                height: 20,
-                color: _selectedIndex == 2
-                    ? proprimaryColor
-                    : const Color(0xffBDBEC0)),
-            label: 'Clients',
-          ),
-          BottomNavigationBarItem(
-            icon: SvgPicture.asset('assets/svgs/ordersinvoices.svg',
-                height: 20,
-                color: _selectedIndex == 3
-                    ? proprimaryColor
-                    : const Color(0xffBDBEC0)),
-            label: 'Orders',
-          ),
-          BottomNavigationBarItem(
-            icon: SvgPicture.asset('assets/svgs/setupshop.svg',
-                height: 20,
-                color: _selectedIndex == 4
-                    ? proprimaryColor
-                    : const Color(0xffBDBEC0)),
-            label: 'Set Up',
-          ),
-        ],
-        currentIndex: _selectedIndex,
-        selectedItemColor: proprimaryColor,
-        unselectedItemColor: Colors.grey,
-        onTap: _onItemTapped,
+            BottomNavigationBarItem(
+              icon: SvgPicture.asset('assets/svgs/projects.svg',
+                  height: 20,
+                  color: _selectedIndex == 1
+                      ? proprimaryColor
+                      : const Color(0xffBDBEC0)),
+              label: 'Projects',
+            ),
+            BottomNavigationBarItem(
+              icon: SvgPicture.asset('assets/svgs/clients.svg',
+                  height: 20,
+                  color: _selectedIndex == 2
+                      ? proprimaryColor
+                      : const Color(0xffBDBEC0)),
+              label: 'Clients',
+            ),
+            BottomNavigationBarItem(
+              icon: SvgPicture.asset('assets/svgs/ordersinvoices.svg',
+                  height: 20,
+                  color: _selectedIndex == 3
+                      ? proprimaryColor
+                      : const Color(0xffBDBEC0)),
+              label: 'Orders',
+            ),
+            BottomNavigationBarItem(
+              icon: SvgPicture.asset('assets/svgs/setupshop.svg',
+                  height: 20,
+                  color: _selectedIndex == 4
+                      ? proprimaryColor
+                      : const Color(0xffBDBEC0)),
+              label: 'Set Up',
+            ),
+          ],
+          currentIndex: _selectedIndex,
+          selectedItemColor: proprimaryColor,
+          unselectedItemColor: Colors.grey,
+          onTap: _onItemTapped,
+        ),
       ),
     );
   }

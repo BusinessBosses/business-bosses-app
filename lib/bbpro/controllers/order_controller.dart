@@ -47,6 +47,17 @@ class OrderController extends GetxController {
     }
   }
 
+  Future<bool> updateProduct(int id, Map<String, dynamic> data) async {
+    ApiResponseModel response =
+        await ApiService.put(path: 'goods/$id', body: data);
+    if (response.success) {
+      return true;
+    } else {
+      log(response.toMap().toString());
+      return false;
+    }
+  }
+
   Future<bool> addService(Map<String, dynamic> data) async {
     ApiResponseModel response =
         await ApiService.post(path: 'services', body: data);
@@ -60,7 +71,7 @@ class OrderController extends GetxController {
 
   Future<bool> addSupplier(Map<String, dynamic> data) async {
     ApiResponseModel response =
-        await ApiService.post(path: 'suppliers', body: data);
+        await ApiService.post(path: 'vendors', body: data);
     if (response.success) {
       return true;
     } else {

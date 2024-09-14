@@ -68,6 +68,36 @@ class _CreateProductListingState extends State<CreateProductListing> {
   String? color;
   String? size;
 
+  @override
+  void initState() {
+    super.initState();
+    if (widget.product != null) {
+      // initiate Edit Here
+      _productNameController.text = widget.product!.name;
+      _priceController.text = widget.product!.price.toString();
+      _descriptionController.text = widget.product!.description;
+      _discountController.text = widget.product!.discount.toString();
+      storageLocationController.text = widget.product!.storageLocation;
+      productNumberController.text = widget.product!.productNumber.toString();
+      quantityController.text = widget.product!.quantity.toString();
+      colorController.text = widget.product!.color;
+      sizeController.text = widget.product!.size;
+      category = widget.product!.category;
+      country = widget.product!.location;
+      deliveryMethod = widget.product!.deliveryMethod;
+      paymentMethod = widget.product!.paymentMethod;
+      startDate = widget.product!.startAt;
+      endDate = widget.product!.endAt;
+      _isSwitched = widget.product!.isActive;
+
+      // If images exist in the product model, you can populate the image list as well
+      if (widget.product!.images != null) {
+        images = widget.product!.images;
+        // If you have the image paths, you can convert them to File and add them to _selectedImages.
+      }
+    }
+  }
+
   Future<void> _pickImage() async {
     final XFile? image = await _picker.pickImage(source: ImageSource.gallery);
     if (image != null) {
@@ -466,7 +496,7 @@ class _CreateProductListingState extends State<CreateProductListing> {
             const SizedBox(height: 16),
             ProCustomButton(
               loading: isSubmitted,
-              text: 'Create',
+              text: widget.product != null ? 'Save CHanges' : 'Create',
               onPressed: _submitForm,
             ),
           ],
@@ -538,18 +568,33 @@ class _CreateProductListingState extends State<CreateProductListing> {
         'color': color,
         'size': size,
       };
-
-      bool response = await orderController.addProducts(productListing);
-      if (response) {
-        showSnackbar(
-          message: 'Product Added Successfully!',
-        );
-        Navigator.pop(context);
+      if (widget.product != null) {
+        bool response = await orderController.addProducts(productListing);
+        if (response) {
+          showSnackbar(
+            message: 'Product Added Successfully!',
+          );
+          Navigator.pop(context);
+        } else {
+          showSnackbar(
+            message: 'Error While Adding Product',
+            error: true,
+          );
+        }
       } else {
-        showSnackbar(
-          message: 'Error While Adding Product',
-          error: true,
-        );
+        bool response = await orderController.updateProduct(
+            widget.product!.id, productListing);
+        if (response) {
+          showSnackbar(
+            message: 'Product Updated Successfully!',
+          );
+          Navigator.pop(context);
+        } else {
+          showSnackbar(
+            message: 'Error While Updating Product',
+            error: true,
+          );
+        }
       }
       setState(() {
         isSubmitted = false;

@@ -1,14 +1,19 @@
+import 'dart:io';
+
 import 'package:business_bosses_v2/bbpro/controllers/order_controller.dart';
 import 'package:business_bosses_v2/bbpro/widgets/button.dart';
+import 'package:business_bosses_v2/bbpro/widgets/customcard.dart';
 import 'package:business_bosses_v2/bbpro/widgets/edittext.dart';
 import 'package:business_bosses_v2/bbpro/widgets/textfield.dart';
 import 'package:business_bosses_v2/common/dialogs/snackbar.dart';
 import 'package:business_bosses_v2/features/profile/controller/profile_controller.dart';
+import 'package:business_bosses_v2/services/api_service.dart';
 import 'package:business_bosses_v2/utils/theme/theme.dart';
 import 'package:country_list_pick/country_list_pick.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
+import 'package:image_picker/image_picker.dart';
 
 class AddSupplierScreen extends StatefulWidget {
   const AddSupplierScreen({super.key});
@@ -33,6 +38,18 @@ class _AddSupplierScreenState extends State<AddSupplierScreen> {
   final TextEditingController locationController = TextEditingController();
   String country = '';
   bool isSubmitted = false;
+  File? _selectedImage;
+  String? image;
+
+  Future<void> _pickImage() async {
+    final XFile? pickedFile =
+        await ImagePicker().pickImage(source: ImageSource.gallery);
+    if (pickedFile != null) {
+      setState(() {
+        _selectedImage = File(pickedFile.path);
+      });
+    }
+  }
 
   // Function to handle form submission
   void _submitForm() async {
@@ -41,6 +58,22 @@ class _AddSupplierScreenState extends State<AddSupplierScreen> {
       setState(() {
         isSubmitted = true;
       });
+      if (_selectedImage != null) {
+        dynamic response = await ApiService.uploadFile(_selectedImage!);
+        if (response['success']) {
+          image = response['fileUrl'];
+        } else {
+          showSnackbar(
+            message: 'Error while creating supplier!',
+            error: true,
+          );
+          setState(() {
+            isSubmitted = false;
+          });
+          return;
+        }
+      }
+
       // Creating JSON to be sent
       Map<String, dynamic> supplierData = <String, dynamic>{
         'userId': profileController.myProfile.uid,
@@ -50,20 +83,20 @@ class _AddSupplierScreenState extends State<AddSupplierScreen> {
         'description': descriptionController.text,
         'url': urlController.text,
         'category': categoryController.text,
+        'images': <String?>[image],
         'location': country,
       };
 
-      print(supplierData); // Send this JSON data to the API
       try {
-        // bool success = await orderController.addSupplier(supplierData);
-        // if (success) {
-        //   showSnackbar(message: 'Supplier Added Successfully!');
-        //   await Future.delayed(
-        //       const Duration(seconds: 1)); // Optional delay for visibility
-        //   Navigator.pop(context);
-        // } else {
-        //   showSnackbar(message: 'Error Adding Supplier!', error: true);
-        // }
+        bool success = await orderController.addSupplier(supplierData);
+        if (success) {
+          showSnackbar(message: 'Supplier Added Successfully!');
+          await Future.delayed(
+              const Duration(seconds: 1)); // Optional delay for visibility
+          Navigator.pop(context);
+        } else {
+          showSnackbar(message: 'Error Adding Supplier!', error: true);
+        }
       } catch (e) {
         showSnackbar(message: 'An error occurred: $e', error: true);
       } finally {
@@ -98,6 +131,18 @@ class _AddSupplierScreenState extends State<AddSupplierScreen> {
         key: _formKey,
         child: ListView(
           children: <Widget>[
+            CustomCard(
+              buttonvisible: true,
+              caption: 'Customize Supplier Listing',
+              subText: 'Add a photo for your supplier',
+              buttonText: 'Choose Photo',
+              onPressed: _pickImage,
+              imagePath: _selectedImage != null
+                  ? _selectedImage!.path
+                  : 'assets/images/shopplaceholder.png',
+              iconpath: 'assets/svgs/uploadicon.svg',
+            ),
+            const SizedBox(height: 15),
             // Name Input
             CustomEditText(
               caption: 'Suppliers\' Business Name',
@@ -106,6 +151,21 @@ class _AddSupplierScreenState extends State<AddSupplierScreen> {
               validator: (String? value) {
                 if (value == null || value.isEmpty) {
                   return 'Please enter supplier name';
+                }
+                return null;
+              },
+            ),
+
+            const SizedBox(height: 16),
+            // Description Input
+            CustomEditText(
+              caption: 'Description',
+              hintText: 'Add product description here',
+              controller: descriptionController,
+              maxLength: 300,
+              validator: (String? value) {
+                if (value == null || value.isEmpty) {
+                  return 'Please enter a description';
                 }
                 return null;
               },
@@ -147,24 +207,9 @@ class _AddSupplierScreenState extends State<AddSupplierScreen> {
             ),
 
             const SizedBox(height: 16),
-            // Description Input
-            CustomEditText(
-              caption: 'Description',
-              hintText: 'Add product description here',
-              controller: descriptionController,
-              maxLength: 300,
-              validator: (String? value) {
-                if (value == null || value.isEmpty) {
-                  return 'Please enter a description';
-                }
-                return null;
-              },
-            ),
-
-            const SizedBox(height: 16),
             // URL Input
             CustomEditText(
-              caption: 'URL',
+              caption: 'Website',
               hintText: '',
               controller: urlController,
             ),
