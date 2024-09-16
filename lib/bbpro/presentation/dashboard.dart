@@ -117,17 +117,31 @@ class _DashboardState extends State<Dashboard> {
         titleSpacing: 0,
         centerTitle: true,
         automaticallyImplyLeading: false,
-        leading: IconButton(
-          onPressed: () {
-            Get.back();
-          },
-          icon: CircleAvatar(
-              radius: 25,
-              backgroundColor: prosemibackColor,
-              child: SvgPicture.asset(
-                'assets/svgs/homeu.svg',
-                height: 18,
-              )),
+        leading: Stack(
+          alignment: Alignment.center,
+          children: <Widget>[
+            IconButton(
+              onPressed: () {
+                Get.back();
+              },
+              icon: CircleAvatar(
+                radius: 30,
+                backgroundColor: Colors.transparent,
+                child: Image.asset(
+                  'assets/images/app_logo_2.png',
+                  height: 30,
+                ),
+              ),
+            ),
+            const Positioned(
+              left: -5,
+              child: Icon(
+                Icons.chevron_left,
+                color: primaryColorLT,
+                size: 24,
+              ),
+            ),
+          ],
         ),
         title: const Text(
           'Dashboard',
