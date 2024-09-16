@@ -52,7 +52,7 @@ class _DashboardState extends State<Dashboard> {
                 Expanded(
                   child: ListView.separated(
                     itemCount:
-                        5, // Set the itemCount to match the actual list items
+                        6, // Set the itemCount to match the actual list items
                     separatorBuilder: (BuildContext context, int index) =>
                         const Divider(),
                     itemBuilder: (BuildContext context, int index) {
@@ -69,6 +69,8 @@ class _DashboardState extends State<Dashboard> {
                             // Handle Add Orders
                           } else if (index == 4) {
                             // Handle Add Clients
+                          } else if (index == 5) {
+                            // Handle Add Projects
                           }
                         },
                         minVerticalPadding: 0,
@@ -87,7 +89,9 @@ class _DashboardState extends State<Dashboard> {
                                       ? 'Add Suppliers'
                                       : index == 3
                                           ? 'Add Orders'
-                                          : 'Add Clients',
+                                          : index == 4
+                                              ? 'Add Clients'
+                                              : 'Add Projects',
                           style: const TextStyle(
                             fontSize: 18,
                             fontWeight: FontWeight.w700,
