@@ -23,8 +23,8 @@ class _BottomnavscreenState extends State<Bottomnavscreen> {
   static const List<Widget> _widgetOptions = <Widget>[
     Dashboard(),
     Projects(),
-    ClientsScreen(),
     OrdersScreen(),
+    ClientsScreen(),
     Setup(),
   ];
 
@@ -71,20 +71,20 @@ class _BottomnavscreenState extends State<Bottomnavscreen> {
               label: 'Projects',
             ),
             BottomNavigationBarItem(
-              icon: SvgPicture.asset('assets/svgs/clients.svg',
+              icon: SvgPicture.asset('assets/svgs/ordersinvoices.svg',
                   height: 20,
                   color: _selectedIndex == 2
                       ? proprimaryColor
                       : const Color(0xffBDBEC0)),
-              label: 'Clients',
+              label: 'Orders',
             ),
             BottomNavigationBarItem(
-              icon: SvgPicture.asset('assets/svgs/ordersinvoices.svg',
+              icon: SvgPicture.asset('assets/svgs/clients.svg',
                   height: 20,
                   color: _selectedIndex == 3
                       ? proprimaryColor
                       : const Color(0xffBDBEC0)),
-              label: 'Orders',
+              label: 'Clients',
             ),
             BottomNavigationBarItem(
               icon: SvgPicture.asset('assets/svgs/setupshop.svg',

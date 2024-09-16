@@ -74,7 +74,7 @@ class _ClientsScreenState extends State<ClientsScreen>
       appBar: AppBar(
         automaticallyImplyLeading: false,
         title: const Text(
-          'Clients',
+          'Clients & Suppliers',
           style: TextStyle(
             color: proprimaryColor,
             fontWeight: FontWeight.bold,
