@@ -224,6 +224,14 @@ class _SetupshopState extends State<Setupshop> {
     return Scaffold(
       backgroundColor: probackgroundColor,
       appBar: AppBar(
+        leading: widget.shop != null
+            ? IconButton(
+                onPressed: () {
+                  Navigator.pop(context);
+                },
+                icon: SvgPicture.asset('assets/svgs/backbutton.svg'),
+              )
+            : null,
         automaticallyImplyLeading: widget.shop != null ? true : false,
         title: Text(
           widget.shop != null ? 'Edit Shop' : 'Set Up Shop',

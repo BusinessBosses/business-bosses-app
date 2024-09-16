@@ -8,10 +8,12 @@ import 'package:business_bosses_v2/utils/theme/theme.dart';
 
 class InventoryCard extends StatefulWidget {
   final Product product;
+  final bool? isProduct;
 
   const InventoryCard({
     Key? key,
     required this.product,
+    this.isProduct,
   }) : super(key: key);
 
   @override
@@ -71,30 +73,31 @@ class _InventoryCardState extends State<InventoryCard> {
               ),
             ],
           ),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: <Widget>[
-              Wrap(
-                crossAxisAlignment: WrapCrossAlignment.center,
-                children: <Widget>[
-                  const CircleAvatar(
-                    radius: 5,
-                    backgroundColor: Colors.green,
-                  ),
-                  const SizedBox(width: 3),
-                  Text(
-                    widget.product.quantity > 0
-                        ? '${widget.product.quantity.toString()} in Stock'
-                        : 'Out of stock',
-                    style: const TextStyle(fontSize: 10),
-                  ),
-                ],
-              ),
-              OptionsButton(
-                product: widget.product,
-              ),
-            ],
-          ),
+          if (widget.isProduct == true)
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: <Widget>[
+                Wrap(
+                  crossAxisAlignment: WrapCrossAlignment.center,
+                  children: <Widget>[
+                    const CircleAvatar(
+                      radius: 5,
+                      backgroundColor: Colors.green,
+                    ),
+                    const SizedBox(width: 3),
+                    Text(
+                      widget.product.quantity > 0
+                          ? '${widget.product.quantity.toString()} in Stock'
+                          : 'Out of stock',
+                      style: const TextStyle(fontSize: 10),
+                    ),
+                  ],
+                ),
+                OptionsButton(
+                  product: widget.product,
+                ),
+              ],
+            ),
         ],
       ),
     );

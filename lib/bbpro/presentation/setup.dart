@@ -1,4 +1,5 @@
 import 'package:business_bosses_v2/bbpro/controllers/shop_controller.dart';
+import 'package:business_bosses_v2/bbpro/presentation/servicesmanagement.dart';
 import 'package:business_bosses_v2/bbpro/presentation/setupshop.dart';
 import 'package:business_bosses_v2/bbpro/widgets/notificationbutton.dart';
 import 'package:business_bosses_v2/bbpro/presentation/inventory.dart';
@@ -7,6 +8,7 @@ import 'package:business_bosses_v2/common/widgets/network_image_with_placeholder
 import 'package:business_bosses_v2/features/profile/controller/profile_controller.dart';
 import 'package:business_bosses_v2/utils/theme/theme.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -22,7 +24,8 @@ class _SetupState extends State<Setup> {
   final List<String> titles = <String>[
     'Edit Shop',
     'Manage Inventory',
-    'Availability',
+    'Manage Services',
+    'Manage Suppliers',
     'Privacy Policy & Terms of Use',
     'Contact Us',
     'Manage Subscription'
@@ -172,6 +175,9 @@ class _SetupState extends State<Setup> {
                                   }
                                   if (titles[index] == 'Manage Inventory') {
                                     Get.to(() => const Inventory());
+                                  }
+                                  if (titles[index] == 'Manage Services') {
+                                    Get.to(() => const ManageServices());
                                   }
                                   if (titles[index] == 'Contact Us') {
                                     _contactUs();

@@ -1,23 +1,22 @@
 import 'package:business_bosses_v2/bbpro/controllers/shop_controller.dart';
-import 'package:business_bosses_v2/bbpro/models/product_model.dart';
-import 'package:business_bosses_v2/bbpro/presentation/create_product.dart';
+import 'package:business_bosses_v2/bbpro/models/service_model.dart';
+import 'package:business_bosses_v2/bbpro/presentation/create_service.dart';
 import 'package:business_bosses_v2/bbpro/widgets/button.dart';
-import 'package:business_bosses_v2/bbpro/widgets/inventorycard.dart';
-import 'package:business_bosses_v2/bbpro/presentation/viewproduct.dart';
+
 import 'package:business_bosses_v2/utils/theme/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 
-class Inventory extends StatefulWidget {
-  const Inventory({super.key});
+class ManageServices extends StatefulWidget {
+  const ManageServices({super.key});
 
   @override
-  State<Inventory> createState() => _InventoryState();
+  State<ManageServices> createState() => _ManageServicesState();
 }
 
-class _InventoryState extends State<Inventory> {
+class _ManageServicesState extends State<ManageServices> {
   final ShopController shopController = Get.find();
   String? _selectedItem;
 
@@ -33,7 +32,7 @@ class _InventoryState extends State<Inventory> {
           icon: SvgPicture.asset('assets/svgs/backbutton.svg'),
         ),
         title: const Text(
-          'Inventory',
+          'Manage Services',
           style: TextStyle(
             color: proprimaryColor,
             fontWeight: FontWeight.bold,
@@ -67,9 +66,7 @@ class _InventoryState extends State<Inventory> {
                   shadowColor: Colors.black,
                   position: position,
                   items: <String>[
-                    'All Products',
-                    'Low Stock',
-                    'Out of Stock',
+                    'All Services',
                     'Most Popular',
                     'Newest First',
                   ].map((String option) {
@@ -104,7 +101,7 @@ class _InventoryState extends State<Inventory> {
               children: <Widget>[
                 const Wrap(children: <Widget>[
                   Text(
-                    'Products List',
+                    'Services List',
                     style: TextStyle(color: Colors.black),
                   ),
                   SizedBox(
@@ -116,9 +113,9 @@ class _InventoryState extends State<Inventory> {
                   ),
                 ]),
                 ProCustomButton(
-                  text: 'Add Products',
+                  text: 'Add Service',
                   onPressed: () {
-                    Get.to(() => const CreateProductListing());
+                    Get.to(() => const CreateServiceListing());
                   },
                   icon: const Icon(Icons.add),
                 ),
@@ -135,18 +132,19 @@ class _InventoryState extends State<Inventory> {
               crossAxisCount: 2,
               crossAxisSpacing: 10.0,
               mainAxisSpacing: 10.0,
-              itemCount: shopController.products.length,
+              itemCount: shopController.services.length,
               itemBuilder: (BuildContext context, int index) {
-                final Product product = shopController.products[index];
+                final Service service = shopController.services[index];
                 return GestureDetector(
-                  onTap: () {
-                    Get.to(() => ExpandedProduct(
-                          product: product,
-                        ));
-                  },
-                  child: InventoryCard(
-                    product: product,
-                  ),
+                  // onTap: () {
+                  //   Get.to(() => ExpandedService(
+                  //         service: service,
+                  //       ));
+                  // },
+                  child: const Text('service.name'),
+                  // ServiceCard(
+                  //   service: service,
+                  // ),
                 );
               },
             ),
