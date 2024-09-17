@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'package:business_bosses_v2/bbpro/presentation/addsupplier.dart';
 import 'package:business_bosses_v2/bbpro/widgets/clientwidget.dart';
 import 'package:business_bosses_v2/bbpro/widgets/customtabbar.dart';
 import 'package:business_bosses_v2/bbpro/widgets/notificationbutton.dart';
@@ -199,7 +200,7 @@ class _ClientsScreenState extends State<ClientsScreen>
             },
             onAddProjectPressed: () {
               // Handle "Add Project" pressed
-              Get.to(() => const Addclient());
+              Get.to(() => const AddSupplier());
             },
           ),
           Expanded(
@@ -215,7 +216,7 @@ class _ClientsScreenState extends State<ClientsScreen>
               shrinkWrap: true,
               physics: null,
               itemBuilder: (BuildContext context, int index) {
-                return  SuppliersCard();
+                return const SuppliersCard();
               },
             ),
           ),
