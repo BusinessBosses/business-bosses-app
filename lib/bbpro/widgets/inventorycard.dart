@@ -94,7 +94,7 @@ class _InventoryCardState extends State<InventoryCard> {
                   ],
                 ),
                 OptionsButton(
-                  product: widget.product,
+                  item: widget.product,
                 ),
               ],
             ),

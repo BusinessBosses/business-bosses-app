@@ -43,7 +43,7 @@ class ClientWidget extends StatelessWidget {
                       const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
                   child: Wrap(
                       crossAxisAlignment: WrapCrossAlignment.center,
-                      children: [
+                      children: <Widget>[
                         SvgPicture.asset(
                           'assets/svgs/client.svg',
                           height: 10,
@@ -68,8 +68,8 @@ class ClientWidget extends StatelessWidget {
                         ),
                       ]),
                 ),
-                const OptionsButton(
-                  padding: EdgeInsets.all(0),
+                OptionsButton(
+                  padding: const EdgeInsets.all(0),
                   borderColor: Colors.white,
                 ),
               ],
@@ -79,7 +79,7 @@ class ClientWidget extends StatelessWidget {
               child: Column(
                 children: <Widget>[
                   Row(
-                    children: [
+                    children: <Widget>[
                       const Text(
                         'Email: ',
                         style: TextStyle(

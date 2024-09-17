@@ -2,6 +2,8 @@ import 'package:business_bosses_v2/bbpro/controllers/shop_controller.dart';
 import 'package:business_bosses_v2/bbpro/models/service_model.dart';
 import 'package:business_bosses_v2/bbpro/presentation/create_service.dart';
 import 'package:business_bosses_v2/bbpro/widgets/button.dart';
+import 'package:business_bosses_v2/bbpro/widgets/servicecard.dart';
+import 'package:business_bosses_v2/common/widgets/network_image_with_placeholder.dart';
 
 import 'package:business_bosses_v2/utils/theme/theme.dart';
 import 'package:flutter/material.dart';
@@ -10,7 +12,8 @@ import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 
 class ManageServices extends StatefulWidget {
-  const ManageServices({super.key});
+  final bool? isService;
+  const ManageServices({super.key, this.isService});
 
   @override
   State<ManageServices> createState() => _ManageServicesState();
@@ -32,7 +35,7 @@ class _ManageServicesState extends State<ManageServices> {
           icon: SvgPicture.asset('assets/svgs/backbutton.svg'),
         ),
         title: const Text(
-          'Manage Services',
+          'My Services',
           style: TextStyle(
             color: proprimaryColor,
             fontWeight: FontWeight.bold,
@@ -132,19 +135,20 @@ class _ManageServicesState extends State<ManageServices> {
               crossAxisCount: 2,
               crossAxisSpacing: 10.0,
               mainAxisSpacing: 10.0,
-              itemCount: shopController.services.length,
+              itemCount: 10 ?? shopController.services.length,
               itemBuilder: (BuildContext context, int index) {
-                final Service service = shopController.services[index];
+                final Service? service = shopController.services.length > index
+                    ? shopController.services[index]
+                    : null;
                 return GestureDetector(
                   // onTap: () {
-                  //   Get.to(() => ExpandedService(
-                  //         service: service,
-                  //       ));
+                  //   if (service != null) {
+                  //     Get.to(() => ExpandedService(
+                  //           service: service,
+                  //         ));
+                  //   }
                   // },
-                  child: const Text('service.name'),
-                  // ServiceCard(
-                  //   service: service,
-                  // ),
+                  child: ServiceCard(service: service),
                 );
               },
             ),

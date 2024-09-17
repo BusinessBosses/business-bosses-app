@@ -54,11 +54,9 @@ class AllForumsImagesItem extends StatelessWidget {
                 },
                 child: isYt
                     ? YoutubeDisplay(post.ytUrl!)
-                    : fileUrls?.isEmpty == true ||
-                            fileUrls == null ||
-                            fileUrls?[0] == ''
+                    : fileUrls.isEmpty == true || fileUrls[0] == ''
                         ? const SizedBox()
-                        : fileUrls!.length == 1
+                        : fileUrls.length == 1
                             ? GestureDetector(
                                 onTap: () {
                                   Navigator.of(context).push(
@@ -76,7 +74,7 @@ class AllForumsImagesItem extends StatelessWidget {
                                       const EdgeInsets.only(left: 0, right: 0),
                                   child: NetworkImageWithPlaceHolder(
                                     borderColor: Colors.black12,
-                                    imageUrl: fileUrls?[0],
+                                    imageUrl: fileUrls[0],
                                     width: double.infinity,
                                     height: 240.0,
                                     fit: BoxFit.cover,
@@ -85,9 +83,9 @@ class AllForumsImagesItem extends StatelessWidget {
                                   ),
                                 ),
                               )
-                            : fileUrls!.length == 2
+                            : fileUrls.length == 2
                                 ? Row(
-                                    children: [
+                                    children: <Widget>[
                                       Expanded(
                                         child: GestureDetector(
                                           onTap: () {
@@ -107,7 +105,7 @@ class AllForumsImagesItem extends StatelessWidget {
                                                 left: 0, right: 0),
                                             child: NetworkImageWithPlaceHolder(
                                               borderColor: Colors.black12,
-                                              imageUrl: fileUrls?[0],
+                                              imageUrl: fileUrls[0],
                                               height: 240.0,
                                               fit: BoxFit.cover,
                                               placeHolder: Icons.photo,
@@ -116,7 +114,7 @@ class AllForumsImagesItem extends StatelessWidget {
                                           ),
                                         ),
                                       ),
-                                      SizedBox(
+                                      const SizedBox(
                                           width:
                                               8.0), // Add spacing between images if needed
                                       Expanded(
@@ -139,7 +137,7 @@ class AllForumsImagesItem extends StatelessWidget {
                                                 left: 0, right: 0),
                                             child: NetworkImageWithPlaceHolder(
                                               borderColor: Colors.black12,
-                                              imageUrl: fileUrls?[1],
+                                              imageUrl: fileUrls[1],
                                               height: 240.0,
                                               fit: BoxFit.cover,
                                               placeHolder: Icons.photo,
@@ -151,7 +149,7 @@ class AllForumsImagesItem extends StatelessWidget {
                                     ],
                                   )
                                 : Row(
-                                    children: [
+                                    children: <Widget>[
                                       Expanded(
                                         child: GestureDetector(
                                           onTap: () {
@@ -171,7 +169,7 @@ class AllForumsImagesItem extends StatelessWidget {
                                                 left: 0, right: 0),
                                             child: NetworkImageWithPlaceHolder(
                                               borderColor: Colors.black12,
-                                              imageUrl: fileUrls?[0],
+                                              imageUrl: fileUrls[0],
                                               height: 240.0,
                                               fit: BoxFit.cover,
                                               placeHolder: Icons.photo,
@@ -180,12 +178,12 @@ class AllForumsImagesItem extends StatelessWidget {
                                           ),
                                         ),
                                       ),
-                                      SizedBox(width: 8.0),
+                                      const SizedBox(width: 8.0),
                                       Expanded(
                                         child: Column(
                                           crossAxisAlignment: CrossAxisAlignment
                                               .stretch, // Make sure Column takes up full width
-                                          children: [
+                                          children: <Widget>[
                                             GestureDetector(
                                               onTap: () {
                                                 Navigator.of(context).push(
@@ -207,7 +205,7 @@ class AllForumsImagesItem extends StatelessWidget {
                                                   child:
                                                       NetworkImageWithPlaceHolder(
                                                     borderColor: Colors.black12,
-                                                    imageUrl: fileUrls?[1],
+                                                    imageUrl: fileUrls[1],
                                                     height: 116.0,
                                                     fit: BoxFit.cover,
                                                     placeHolder: Icons.photo,
@@ -216,7 +214,7 @@ class AllForumsImagesItem extends StatelessWidget {
                                                 ),
                                               ),
                                             ),
-                                            SizedBox(height: 8.0),
+                                            const SizedBox(height: 8.0),
                                             GestureDetector(
                                               onTap: () {
                                                 Navigator.of(context).push(
@@ -239,7 +237,7 @@ class AllForumsImagesItem extends StatelessWidget {
                                                         .map(
                                                           (int i) => Expanded(
                                                             flex: 1,
-                                                            child: fileUrls!
+                                                            child: fileUrls
                                                                         .length >=
                                                                     i
                                                                 ? GestureDetector(
@@ -269,7 +267,7 @@ class AllForumsImagesItem extends StatelessWidget {
                                                                             borderColor:
                                                                                 Colors.black12,
                                                                             imageUrl:
-                                                                                fileUrls![i - 1],
+                                                                                fileUrls[i - 1],
                                                                             width:
                                                                                 double.infinity,
                                                                             height:
@@ -282,7 +280,7 @@ class AllForumsImagesItem extends StatelessWidget {
                                                                                 8.0,
                                                                           ),
                                                                         ),
-                                                                        if (fileUrls!.length >
+                                                                        if (fileUrls.length >
                                                                                 3 &&
                                                                             i ==
                                                                                 3)
@@ -295,7 +293,7 @@ class AllForumsImagesItem extends StatelessWidget {
                                                                                 Colors.white.withOpacity(0.5),
                                                                             child:
                                                                                 Text(
-                                                                              '+${fileUrls!.length - 3}',
+                                                                              '+${fileUrls.length - 3}',
                                                                               style: headline6.copyWith(
                                                                                 fontWeight: FontWeight.bold,
                                                                               ),

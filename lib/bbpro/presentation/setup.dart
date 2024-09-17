@@ -23,9 +23,9 @@ class _SetupState extends State<Setup> {
   final ShopController shopController = Get.find();
   final List<String> titles = <String>[
     'Edit Shop',
-    'Manage Inventory',
-    'Manage Services',
-    'Manage Suppliers',
+    'My Inventory',
+    'My Services',
+    'My Suppliers',
     'Privacy Policy & Terms of Use',
     'Contact Us',
     'Manage Subscription'
@@ -173,10 +173,10 @@ class _SetupState extends State<Setup> {
                                           shop: shopController.shop,
                                         ));
                                   }
-                                  if (titles[index] == 'Manage Inventory') {
+                                  if (titles[index] == 'My Inventory') {
                                     Get.to(() => const Inventory());
                                   }
-                                  if (titles[index] == 'Manage Services') {
+                                  if (titles[index] == 'My Services') {
                                     Get.to(() => const ManageServices());
                                   }
                                   if (titles[index] == 'Contact Us') {

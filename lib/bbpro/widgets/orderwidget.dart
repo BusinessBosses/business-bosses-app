@@ -61,8 +61,8 @@ class OrderWidget extends StatelessWidget {
                         ),
                       ]),
                 ),
-                const OptionsButton(
-                  padding: EdgeInsets.all(0),
+                OptionsButton(
+                  padding: const EdgeInsets.all(0),
                   borderColor: Colors.white,
                 ),
               ],
