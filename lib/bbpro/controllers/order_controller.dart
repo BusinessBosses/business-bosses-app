@@ -10,7 +10,7 @@ class OrderController extends GetxController {
 
   Future<void> initOrders(String userId) async {
     orders.clear();
-    ApiResponseModel response = await ApiService.get(path: 'clients/all');
+    ApiResponseModel response = await ApiService.get(path: 'orders/all');
     if (response.success) {
       for (int i = 0; i < response.data['rows'].length; i++) {
         orders.add(Order.fromJson(response.data['rows'][i]));
@@ -20,7 +20,7 @@ class OrderController extends GetxController {
 
   Future<bool> addOrders(Map<String, dynamic> data) async {
     ApiResponseModel response =
-        await ApiService.post(path: 'clients', body: data);
+        await ApiService.post(path: 'orders', body: data);
     if (response.success) {
       // Convert the response data to a Client object and add it to the list
       Order newClient = Order.fromJson(<String, dynamic>{

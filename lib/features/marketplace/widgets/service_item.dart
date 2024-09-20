@@ -1,7 +1,6 @@
 import 'package:business_bosses_v2/features/marketplace/presentation/boost_market_screen.dart';
 import 'package:business_bosses_v2/features/marketplace/presentation/sell_services.dart';
 import 'package:business_bosses_v2/features/marketplace/presentation/seller_reviews.dart';
-
 import 'package:business_bosses_v2/features/marketplace/widgets/post_images_market.dart';
 import 'package:business_bosses_v2/features/posts/models/post_model.dart';
 import 'package:business_bosses_v2/features/profile/controller/profile_controller.dart';
@@ -261,8 +260,9 @@ class _ServiceTileState extends State<ServiceTile> {
                                 child: _post.user!.uid ==
                                         profileController.myProfile.uid
                                     ? Padding(
-                                      padding: const EdgeInsets.only(right:15.0),
-                                      child: MyPopupMenuButton(
+                                        padding:
+                                            const EdgeInsets.only(right: 15.0),
+                                        child: MyPopupMenuButton(
                                           popupItems: myPopupMore,
                                           icon: const Icon(
                                             Icons.more_horiz,
@@ -281,8 +281,9 @@ class _ServiceTileState extends State<ServiceTile> {
                                             } else if (val == 'Delete') {
                                               showDialog(
                                                 context: context,
-                                                builder: (BuildContext context) =>
-                                                    AlertDialog(
+                                                builder:
+                                                    (BuildContext context) =>
+                                                        AlertDialog(
                                                   title: const Text(
                                                     'Delete Listing',
                                                     style: bodyText1,
@@ -291,7 +292,8 @@ class _ServiceTileState extends State<ServiceTile> {
                                                       'Are you sure to delete this listing?'),
                                                   actions: <Widget>[
                                                     TextButton(
-                                                      onPressed: () => Get.back(),
+                                                      onPressed: () =>
+                                                          Get.back(),
                                                       child: const Text('No'),
                                                     ),
                                                     TextButton(
@@ -317,7 +319,7 @@ class _ServiceTileState extends State<ServiceTile> {
                                             }
                                           },
                                         ),
-                                    )
+                                      )
                                     : _post.promote
                                         ? MyPopupMenuButton(
                                             popupItems: myPopup,
@@ -509,7 +511,7 @@ class _ServiceTileState extends State<ServiceTile> {
                                                     : const Icon(
                                                         Icons.location_on,
                                                         size: 12,
-                                                        color:  subtextColor,
+                                                        color: subtextColor,
                                                       ),
                                                 const SizedBox(
                                                   width: 1,
@@ -558,14 +560,9 @@ class _ServiceTileState extends State<ServiceTile> {
                                               ],
                                             )
                                           : const SizedBox(),
-                                    ],
-                                  ),
-                                ),
-                                Padding(
-                                  padding:
-                                      const EdgeInsets.only(left: 13.0, top: 3),
-                                  child: Row(
-                                    children: <Widget>[
+                                      const SizedBox(
+                                        width: 3,
+                                      ),
                                       const Icon(
                                         Icons.star,
                                         color: Color.fromRGBO(255, 202, 40, 1),
@@ -576,7 +573,7 @@ class _ServiceTileState extends State<ServiceTile> {
                                             .toStringAsFixed(1),
                                         style: const TextStyle(
                                           fontWeight: FontWeight.bold,
-                                          fontSize: 13,
+                                          fontSize: 12,
                                         ),
                                       ),
                                       const SizedBox(
@@ -588,9 +585,9 @@ class _ServiceTileState extends State<ServiceTile> {
                                               user: _post.user!));
                                         },
                                         child: const Text(
-                                          'Seller reviews',
+                                          'Reviews',
                                           style: TextStyle(
-                                            fontSize: 13,
+                                            fontSize: 12,
                                             fontWeight: FontWeight.bold,
                                             decoration:
                                                 TextDecoration.underline,

@@ -34,7 +34,7 @@ class HomeRepository {
 
   static Future<ApiResponseModel> fetchIndustries() async {
     final ApiResponseModel response =
-        await ApiService.get(path: 'industry/get');
+        await ApiService.get(path: 'industry/user-count');
     return response;
   }
 

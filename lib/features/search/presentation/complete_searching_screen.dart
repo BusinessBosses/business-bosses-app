@@ -2,6 +2,7 @@ import 'package:business_bosses_v2/common/widgets/safety_model.dart';
 import 'package:business_bosses_v2/common/widgets/text_widget.dart';
 import 'package:business_bosses_v2/features/forum/models/forum_model.dart';
 import 'package:business_bosses_v2/features/forum/widgets/forum_item.dart';
+import 'package:business_bosses_v2/features/home/widgets/discoversection.dart';
 import 'package:business_bosses_v2/features/search/controller/search_controller.dart';
 import 'package:business_bosses_v2/features/search/widgets/search_bar.dart';
 import 'package:business_bosses_v2/features/search/widgets/filterusers.dart';
@@ -55,40 +56,43 @@ class _CompleteSearchingScreenState extends State<CompleteSearchingScreen>
               ),
               title: Searchbar(
                 hintText: 'Search',
-                onChange: (String query) {
-                  if (query.isEmpty) {
+                onChange: (String value) {
+                  controller.query.value = value;
+                  if (value.isEmpty) {
                     controller.clearUserSearch();
+                  } else {
+                    controller.search(currentIndex: _tabController.index);
                   }
                 },
-                onSubmit: (String query) {
-                  controller.search(query, currentIndex: _tabController.index);
+                onSubmit: (String value) {
+                  controller.query.value = value;
+                  controller.search(currentIndex: _tabController.index);
                 },
               ),
-              bottom: TabBar(
-                controller: _tabController,
-                tabs: const <Widget>[
-                  Tab(
-                    child: TextWidget(
-                      text: 'People',
-                      size: 20,
-                      fontWeight: FontWeight.w700,
-                    ),
-                  ),
-                  Tab(
-                    child: TextWidget(
-                      text: 'Posts',
-                      size: 20,
-                      fontWeight: FontWeight.w700,
-                    ),
-                  ),
-                  // Tab(
-                  //   child: TextWidget(
-                  //     text: 'Forums',
-                  //     size: 20,
-                  //     fontWeight: FontWeight.w700,
-                  //   ),
-                  // ),
-                ],
+              bottom: PreferredSize(
+                preferredSize: Size.fromHeight(
+                    controller.query.value.isNotEmpty ? kToolbarHeight : 0),
+                child: Obx(() => controller.query.value.isNotEmpty
+                    ? TabBar(
+                        controller: _tabController,
+                        tabs: const <Widget>[
+                          Tab(
+                            child: TextWidget(
+                              text: 'People',
+                              size: 20,
+                              fontWeight: FontWeight.w700,
+                            ),
+                          ),
+                          Tab(
+                            child: TextWidget(
+                              text: 'Posts',
+                              size: 20,
+                              fontWeight: FontWeight.w700,
+                            ),
+                          ),
+                        ],
+                      )
+                    : Container()),
               ),
               actions: <Widget>[
                 if (_hasFilter)
@@ -98,46 +102,48 @@ class _CompleteSearchingScreenState extends State<CompleteSearchingScreen>
                   ),
               ],
             ),
-            body: GestureDetector(
-              onTap: () {
-                FocusScope.of(context).unfocus();
-              },
-              onVerticalDragDown: (_) {
-                FocusScope.of(context).unfocus();
-              },
-              child: Column(
-                children: <Widget>[
-                  Expanded(
-                    child: TabBarView(
-                      controller: _tabController,
+            body: controller.query.value.isEmpty
+                ? const DiscoverSection()
+                : GestureDetector(
+                    onTap: () {
+                      FocusScope.of(context).unfocus();
+                    },
+                    onVerticalDragDown: (_) {
+                      FocusScope.of(context).unfocus();
+                    },
+                    child: Column(
                       children: <Widget>[
-                        FilterUsers(
-                          filterItems: controller.isUserSearch.value
-                              ? controller.searchedUsers
-                              : controller.recommendedConnections,
-                          isLoading: controller.loading.value ||
-                              controller.loadingSearch.value,
-                          onConnectionChange: controller.connectToUser,
-                          isSearch: controller.isUserSearch.value,
-                        ),
-                        FilterPosts(
-                          filterItems: controller.isPostSearch.value
-                              ? controller.searchedPosts
-                              : controller.recommendedPosts,
-                          isLoading: controller.loading.value ||
-                              controller.loadingSearch.value,
-                        ),
-                        // FilterForum(
-                        //   filterItems: controller.searchedForums,
-                        //   isLoading: controller.loading.value ||
-                        //       controller.loadingSearch.value,
-                        // ),
+                        Expanded(
+                          child: TabBarView(
+                            controller: _tabController,
+                            children: <Widget>[
+                              FilterUsers(
+                                filterItems: controller.isUserSearch.value
+                                    ? controller.searchedUsers
+                                    : controller.recommendedConnections,
+                                isLoading: controller.loading.value ||
+                                    controller.loadingSearch.value,
+                                onConnectionChange: controller.connectToUser,
+                                isSearch: controller.isUserSearch.value,
+                              ),
+                              FilterPosts(
+                                filterItems: controller.isPostSearch.value
+                                    ? controller.searchedPosts
+                                    : controller.recommendedPosts,
+                                isLoading: controller.loading.value ||
+                                    controller.loadingSearch.value,
+                              ),
+                              // FilterForum(
+                              //   filterItems: controller.searchedForums,
+                              //   isLoading: controller.loading.value ||
+                              //       controller.loadingSearch.value,
+                              // ),
+                            ],
+                          ),
+                        )
                       ],
                     ),
-                  )
-                ],
-              ),
-            ),
+                  ),
           ),
         );
       },

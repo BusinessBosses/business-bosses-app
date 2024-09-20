@@ -1,17 +1,18 @@
 import 'dart:async';
 
-import 'package:business_bosses_v2/bbpro/models/order_model.dart';
-import 'package:business_bosses_v2/bbpro/widgets/customtabbar.dart';
-import 'package:business_bosses_v2/bbpro/widgets/orderwidget.dart';
-import 'package:business_bosses_v2/bbpro/widgets/topsection.dart';
-import 'package:business_bosses_v2/bbpro/controllers/clients_controller.dart';
-import 'package:business_bosses_v2/bbpro/controllers/order_controller.dart';
-import 'package:business_bosses_v2/bbpro/models/client_model.dart';
-import 'package:business_bosses_v2/bbpro/presentation/createorder.dart';
-import 'package:business_bosses_v2/utils/theme/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
+
+import 'package:business_bosses_v2/bbpro/controllers/clients_controller.dart';
+import 'package:business_bosses_v2/bbpro/controllers/order_controller.dart';
+import 'package:business_bosses_v2/bbpro/models/client_model.dart';
+import 'package:business_bosses_v2/bbpro/models/order_model.dart';
+import 'package:business_bosses_v2/bbpro/presentation/createorder.dart';
+import 'package:business_bosses_v2/bbpro/widgets/customtabbar.dart';
+import 'package:business_bosses_v2/bbpro/widgets/orderwidget.dart';
+import 'package:business_bosses_v2/bbpro/widgets/topsection.dart';
+import 'package:business_bosses_v2/utils/theme/theme.dart';
 
 class OrdersScreen extends StatefulWidget {
   const OrdersScreen({super.key});
@@ -73,7 +74,7 @@ class _OrdersScreenState extends State<OrdersScreen>
         appBar: AppBar(
           automaticallyImplyLeading: false,
           title: const Text(
-            'Orders & Invoices',
+            'Orders',
             style: TextStyle(
               color: proprimaryColor,
               fontWeight: FontWeight.bold,
@@ -365,7 +366,7 @@ class ListStatusColumnWidget extends StatelessWidget {
 
         return Padding(
           padding: const EdgeInsets.only(bottom: 12),
-          child: Draggable<Order>(
+          child: LongPressDraggable<Order>(
             data: orders[index],
             dragAnchorStrategy: (Draggable<Object> draggable,
                 BuildContext context, Offset position) {

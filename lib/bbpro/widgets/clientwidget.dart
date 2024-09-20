@@ -1,5 +1,6 @@
 import 'package:business_bosses_v2/bbpro/widgets/optionsbutton.dart';
 import 'package:business_bosses_v2/bbpro/models/client_model.dart';
+import 'package:business_bosses_v2/utils/theme/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
@@ -42,8 +43,12 @@ class ClientWidget extends StatelessWidget {
                       const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
                   child: Wrap(
                       crossAxisAlignment: WrapCrossAlignment.center,
-                      children: [
-                        SvgPicture.asset('assets/svgs/client.svg'),
+                      children: <Widget>[
+                        SvgPicture.asset(
+                          'assets/svgs/client.svg',
+                          height: 10,
+                          color: textColor,
+                        ),
                         const SizedBox(
                           width: 5,
                         ),
@@ -51,13 +56,20 @@ class ClientWidget extends StatelessWidget {
                           client.name,
                           style: const TextStyle(
                             fontWeight: FontWeight.bold,
-                            fontSize: 16,
+                            fontSize: 13,
+                          ),
+                        ),
+                        Text(
+                          ' - ${client.type.displayTitle}',
+                          style: const TextStyle(
+                            fontWeight: FontWeight.bold,
+                            fontSize: 13,
                           ),
                         ),
                       ]),
                 ),
-                const OptionsButton(
-                  padding: EdgeInsets.all(0),
+                OptionsButton(
+                  padding: const EdgeInsets.all(0),
                   borderColor: Colors.white,
                 ),
               ],
@@ -65,39 +77,39 @@ class ClientWidget extends StatelessWidget {
             Padding(
               padding: const EdgeInsets.symmetric(vertical: 10.0),
               child: Column(
-                children: [
+                children: <Widget>[
                   Row(
-                    children: [
-                      Text(
+                    children: <Widget>[
+                      const Text(
                         'Email: ',
-                        style: const TextStyle(
+                        style: TextStyle(
                           fontWeight: FontWeight.normal,
-                          fontSize: 16,
+                          fontSize: 13,
                         ),
                       ),
                       Text(
-                        client.email ?? 'description',
+                        client.email,
                         style: const TextStyle(
                           fontWeight: FontWeight.bold,
-                          fontSize: 16,
+                          fontSize: 13,
                         ),
                       ),
                     ],
                   ),
                   Row(
-                    children: [
-                      Text(
+                    children: <Widget>[
+                      const Text(
                         'Phone: ',
-                        style: const TextStyle(
+                        style: TextStyle(
                           fontWeight: FontWeight.normal,
-                          fontSize: 16,
+                          fontSize: 13,
                         ),
                       ),
                       Text(
-                        client.phone ?? 'description',
+                        client.phone,
                         style: const TextStyle(
                           fontWeight: FontWeight.bold,
-                          fontSize: 16,
+                          fontSize: 13,
                         ),
                       ),
                     ],

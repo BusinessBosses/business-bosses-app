@@ -12,14 +12,14 @@ class MarketplaceSection extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final MarketController _marketController = Get.find();
+    final MarketController marketController = Get.find();
     return GestureDetector(
       onTap: () {
         Get.toNamed(Routes.marketPlace);
       },
       child: Container(
         child: Column(
-          children: [
+          children: <Widget>[
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 15.0),
               child: Row(
@@ -47,24 +47,33 @@ class MarketplaceSection extends StatelessWidget {
                 ],
               ),
             ),
-            SizedBox(
+            const SizedBox(
               height: 10,
             ),
-            Container(
+            SizedBox(
               height: 300,
               child: ListView.builder(
                 scrollDirection: Axis.horizontal,
-                itemCount: 5,
+                itemCount: 10,
                 itemBuilder: (BuildContext context, int index) {
-                  final MarketModel market = _marketController.isfiltered.value
-                      ? _marketController.searchResult[index]
-                      : _marketController.markets[index];
+                  final List<MarketModel> filteredMarkets =
+                      marketController.isfiltered.value
+                          ? marketController.searchResult
+                              .where((MarketModel market) =>
+                                  market.images != null &&
+                                  market.images!.isNotEmpty)
+                              .toList()
+                          : marketController.markets
+                              .where((MarketModel market) =>
+                                  market.images != null &&
+                                  market.images!.isNotEmpty)
+                              .toList();
+                  final MarketModel market = filteredMarkets[index];
                   return MarketTile(
                     ishome: true,
                     post: market,
-                    controller: _marketController,
-                    key: ValueKey<String>(
-                        _marketController.markets[index].marketId),
+                    controller: marketController,
+                    key: ValueKey<String>(market.marketId),
                   );
                 },
               ),

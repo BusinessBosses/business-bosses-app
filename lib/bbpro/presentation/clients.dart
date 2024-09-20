@@ -1,14 +1,19 @@
 import 'dart:async';
+import 'package:business_bosses_v2/bbpro/presentation/addsupplier.dart';
 import 'package:business_bosses_v2/bbpro/widgets/clientwidget.dart';
 import 'package:business_bosses_v2/bbpro/widgets/customtabbar.dart';
 import 'package:business_bosses_v2/bbpro/widgets/notificationbutton.dart';
+import 'package:business_bosses_v2/bbpro/widgets/proseardwidget.dart';
+import 'package:business_bosses_v2/bbpro/widgets/supplierscard.dart';
 import 'package:business_bosses_v2/bbpro/widgets/topsection.dart';
 import 'package:business_bosses_v2/bbpro/controllers/clients_controller.dart';
 import 'package:business_bosses_v2/bbpro/models/client_model.dart';
 import 'package:business_bosses_v2/bbpro/presentation/addclient.dart';
 import 'package:business_bosses_v2/common/widgets/safety_model.dart';
 import 'package:business_bosses_v2/utils/theme/theme.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 
@@ -20,11 +25,12 @@ class ClientsScreen extends StatefulWidget {
 }
 
 class _ClientsScreenState extends State<ClientsScreen>
-    with SingleTickerProviderStateMixin {
+    with TickerProviderStateMixin {
   final ScrollController _mainListScrollController = ScrollController();
   Timer? _timer;
   bool? _lastMoveRight;
   late TabController _tabController;
+  late TabController _viewController;
   final List<Client> _allclients = <Client>[];
 
   final ClientsController clientsController = Get.put(ClientsController());
@@ -45,6 +51,7 @@ class _ClientsScreenState extends State<ClientsScreen>
     super.initState();
     _tabController =
         TabController(length: ClientType.values.length, vsync: this);
+    _viewController = TabController(length: 2, vsync: this);
 
     for (ClientType clientType in ClientType.values) {
       _clients[clientType] = <Client>[];
@@ -66,97 +73,154 @@ class _ClientsScreenState extends State<ClientsScreen>
   }
 
   @override
+  void dispose() {
+    _tabController.dispose();
+    _viewController.dispose();
+    _mainListScrollController.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     final Size screenSize = MediaQuery.of(context).size;
     return Scaffold(
       backgroundColor: probackgroundColor,
       appBar: AppBar(
         automaticallyImplyLeading: false,
-        title: const Text(
-          'Clients',
-          style: TextStyle(
-            color: proprimaryColor,
-            fontWeight: FontWeight.bold,
+        title: Container(
+          padding: const EdgeInsets.only(bottom: 5),
+          width: 200,
+          child: CupertinoSlidingSegmentedControl<int>(
+            groupValue: _viewController.index,
+            children: const <int, Widget>{
+              0: Padding(
+                padding: EdgeInsets.symmetric(horizontal: 5, vertical: 10),
+                child: Text('Clients', style: TextStyle(fontSize: 14)),
+              ),
+              1: Padding(
+                padding: EdgeInsets.symmetric(horizontal: 5, vertical: 10),
+                child: Text('Suppliers', style: TextStyle(fontSize: 14)),
+              ),
+            },
+            onValueChanged: (int? value) {
+              if (value != null) {
+                setState(() {
+                  _viewController.index = value;
+                });
+              }
+            },
           ),
         ),
         actions: const <Widget>[NotificationButton()],
       ),
-      body: Column(
-        children: <Widget>[
+      body: TabBarView(controller: _viewController, children: <Widget>[
+        Column(
+          children: <Widget>[
+            TopsectionWidget(
+              buttonText: 'Add Client',
+              onHowItWorksPressed: () {
+                // Handle "How it works" pressed
+                print('How it works pressed');
+              },
+              onAddProjectPressed: () {
+                // Handle "Add Project" pressed
+                Get.to(() => const Addclient());
+              },
+            ),
+            CustomTabBarWidget<ClientType>(
+              tabController: _tabController,
+              scrollToSection: (int index) {
+                _scrollToSection(index);
+              },
+              proprimaryColor: proprimaryColor,
+              backgroundColor: backgroundColor,
+              listofitems: ClientType.values.toList(),
+              itemToString: (ClientType status) =>
+                  '${status.displayTitle.toString().split('.').last} (${status == ClientType.allclients ? _allclients.length : _clients[status]!.length.toString()})',
+            ),
+            Expanded(
+              child: Padding(
+                padding: const EdgeInsets.only(bottom: 10),
+                child: Obx(() {
+                  if (clientsController.loading.value) {
+                    return const Center(child: CircularProgressIndicator());
+                  } else if (!clientsController.loading.value &&
+                      clientsController.clients.isEmpty) {
+                    return const SafetyModel(
+                      icon: Icon(Icons.warning),
+                      title: 'No Clients Found!',
+                    );
+                  }
+                  return CustomScrollView(
+                    scrollDirection: Axis.horizontal,
+                    controller: _mainListScrollController,
+                    slivers: <Widget>[
+                      ...ClientType.values.map(
+                        (ClientType status) => SliverToBoxAdapter(
+                          child: RowStatusCard(
+                            clients: clientsController.clients
+                                .where((Client client) => client.type == status)
+                                .toList(),
+                            clientType: status,
+                            screenSize: screenSize,
+                            taskAccepted: (Client task, ClientType newStatus) {
+                              setState(() {
+                                // Update client status here
+                              });
+                            },
+                            onDrag: (bool isRight) {
+                              if (_lastMoveRight == isRight) {
+                                return;
+                              }
+                              _lastMoveRight = isRight;
+                              _moveMainList(isRight);
+                            },
+                            cancelDrag: () {
+                              _lastMoveRight = null;
+                              _timer?.cancel();
+                            },
+                            allclients: _allclients,
+                          ),
+                        ),
+                      )
+                    ],
+                  );
+                }),
+              ),
+            ),
+          ],
+        ),
+        Column(children: <Widget>[
           TopsectionWidget(
-            buttonText: 'Add Client',
+            buttonText: 'Add Supplier',
             onHowItWorksPressed: () {
               // Handle "How it works" pressed
               print('How it works pressed');
             },
             onAddProjectPressed: () {
               // Handle "Add Project" pressed
-              Get.to(() => const Addclient());
+              Get.to(() => const AddSupplier());
             },
-          ),
-          CustomTabBarWidget<ClientType>(
-            tabController: _tabController,
-            scrollToSection: (int index) {
-              _scrollToSection(index);
-            },
-            proprimaryColor: proprimaryColor,
-            backgroundColor: backgroundColor,
-            listofitems: ClientType.values.toList(),
-            itemToString: (ClientType status) =>
-                '${status.displayTitle.toString().split('.').last} (${status == ClientType.allclients ? _allclients.length : _clients[status]!.length.toString()})',
           ),
           Expanded(
-            child: Padding(
-              padding: const EdgeInsets.only(bottom: 15),
-              child: Obx(() {
-                if (clientsController.loading.value) {
-                  return const Center(child: CircularProgressIndicator());
-                } else if (!clientsController.loading.value &&
-                    clientsController.clients.isEmpty) {
-                  return const SafetyModel(
-                    icon: Icon(Icons.warning),
-                    title: 'No Clients Found!',
-                  );
-                }
-                return CustomScrollView(
-                  scrollDirection: Axis.horizontal,
-                  controller: _mainListScrollController,
-                  slivers: <Widget>[
-                    ...ClientType.values.map(
-                      (ClientType status) => SliverToBoxAdapter(
-                        child: RowStatusCard(
-                          clients: clientsController.clients
-                              .where((Client client) => client.type == status)
-                              .toList(),
-                          clientType: status,
-                          screenSize: screenSize,
-                          taskAccepted: (Client task, ClientType newStatus) {
-                            setState(() {
-                              // Update client status here
-                            });
-                          },
-                          onDrag: (bool isRight) {
-                            if (_lastMoveRight == isRight) {
-                              return;
-                            }
-                            _lastMoveRight = isRight;
-                            _moveMainList(isRight);
-                          },
-                          cancelDrag: () {
-                            _lastMoveRight = null;
-                            _timer?.cancel();
-                          },
-                          allclients: _allclients,
-                        ),
-                      ),
-                    )
-                  ],
-                );
-              }),
+            child: StaggeredGridView.countBuilder(
+              staggeredTileBuilder: (int index) => const StaggeredTile.fit(1),
+              padding: const EdgeInsets.symmetric(
+                horizontal: 15.0,
+              ),
+              crossAxisCount: 2,
+              crossAxisSpacing: 8.0,
+              mainAxisSpacing: 8.0,
+              itemCount: 10,
+              shrinkWrap: true,
+              physics: null,
+              itemBuilder: (BuildContext context, int index) {
+                return const SuppliersCard();
+              },
             ),
           ),
-        ],
-      ),
+        ]),
+      ]),
     );
   }
 
@@ -179,7 +243,7 @@ class _ClientsScreenState extends State<ClientsScreen>
   }
 }
 
-class RowStatusCard extends StatelessWidget {
+class RowStatusCard extends StatefulWidget {
   final void Function(Client client, ClientType newStatus) taskAccepted;
   final void Function(bool isRight) onDrag;
   final void Function() cancelDrag;
@@ -200,26 +264,33 @@ class RowStatusCard extends StatelessWidget {
   });
 
   @override
+  State<RowStatusCard> createState() => _RowStatusCardState();
+}
+
+class _RowStatusCardState extends State<RowStatusCard> {
+  bool _showSearchBar = false;
+
+  @override
   Widget build(BuildContext context) {
     // Define color based on ClientType
     Color statusColor;
-    switch (clientType) {
+    switch (widget.clientType) {
       case ClientType.online:
-        statusColor = Colors.black;
+        statusColor = Colors.blue;
         break;
       case ClientType.inPerson:
-        statusColor = Colors.amber;
+        statusColor = Colors.green;
         break;
       case ClientType.bbUser:
-        statusColor = Colors.green;
+        statusColor = primaryColorLT;
         break;
       default:
         statusColor = Colors.grey;
     }
 
     return Container(
-      height: screenSize.height * 0.8,
-      width: screenSize.width * 0.9,
+      height: widget.screenSize.height * 0.8,
+      width: widget.screenSize.width * 0.9,
       margin: const EdgeInsets.only(left: 10),
       decoration: BoxDecoration(
         color: Colors.white,
@@ -236,16 +307,16 @@ class RowStatusCard extends StatelessWidget {
                 Wrap(
                   crossAxisAlignment: WrapCrossAlignment.center,
                   children: <Widget>[
-                    clientType.displayTitle == 'All Clients'
+                    widget.clientType.displayTitle == 'All Clients'
                         ? Container()
                         : CircleAvatar(
                             backgroundColor: statusColor,
                             radius: 5,
                           ),
-                    if (clientType.displayTitle != 'all clients')
+                    if (widget.clientType.displayTitle != 'all clients')
                       const SizedBox(width: 10),
                     Text(
-                      clientType.displayTitle,
+                      widget.clientType.displayTitle,
                       style: const TextStyle(
                         color: Colors.black,
                         fontWeight: FontWeight.bold,
@@ -254,20 +325,70 @@ class RowStatusCard extends StatelessWidget {
                     ),
                   ],
                 ),
-                GestureDetector(
-                  onTap: () {},
-                  child: Container(
-                    decoration: BoxDecoration(
-                      color: backgroundColor,
-                      borderRadius: BorderRadius.circular(30),
-                    ),
-                    padding: const EdgeInsets.all(8),
-                    child: SvgPicture.asset(
-                      'assets/svgs/search.svg',
-                      height: 20,
+                const SizedBox(
+                  width: 50,
+                ),
+                if (widget.clientType.index != 0)
+                  const SizedBox(
+                    height: 31,
+                  ),
+                if (widget.clientType.index == 0)
+                  _showSearchBar
+                      ? Expanded(
+                          child: SizedBox(
+                            height: 31,
+                            child: ProSearchbar(
+                              contentPadding: 10,
+                              backgroundColor: backgroundColor,
+                              hasSearchIcon: false,
+                              hintText: 'Search',
+                              onChange: (String query) {
+                                if (query.isEmpty) {}
+                              },
+                              onSubmit: (String query) {},
+                            ),
+                          ),
+                        )
+                      : GestureDetector(
+                          onTap: () {
+                            setState(() {
+                              _showSearchBar = true;
+                            });
+                          },
+                          child: Container(
+                            decoration: BoxDecoration(
+                                color: backgroundColor,
+                                borderRadius: BorderRadius.circular(30)),
+                            padding: const EdgeInsets.all(8),
+                            child: SvgPicture.asset(
+                              'assets/svgs/search.svg',
+                              height: 15,
+                            ),
+                          ),
+                        ),
+                if (widget.clientType.index == 0 && _showSearchBar)
+                  const SizedBox(
+                    width: 5,
+                  ),
+                if (widget.clientType.index == 0 && _showSearchBar)
+                  GestureDetector(
+                    onTap: () {
+                      setState(() {
+                        _showSearchBar = false;
+                      });
+                    },
+                    child: Container(
+                      decoration: BoxDecoration(
+                          color: backgroundColor,
+                          borderRadius: BorderRadius.circular(30)),
+                      padding: const EdgeInsets.all(8),
+                      child: const Icon(
+                        Icons.close,
+                        color: Colors.grey,
+                        size: 15,
+                      ),
                     ),
                   ),
-                ),
               ],
             ),
           ),
@@ -278,15 +399,15 @@ class RowStatusCard extends StatelessWidget {
               color: Colors.black12,
             ),
           ),
-          clientType.index == 0
+          widget.clientType.index == 0
               ? Expanded(
                   child: ListView.builder(
-                    itemCount: allclients.length,
+                    itemCount: widget.allclients.length,
                     shrinkWrap: true,
                     itemBuilder: (BuildContext context, int index) {
                       final ClientWidget clientWidget = ClientWidget(
-                        client: allclients[index],
-                        bgcolor: allclients[index].type.backgroundColor,
+                        client: widget.allclients[index],
+                        bgcolor: widget.allclients[index].type.backgroundColor,
                       );
                       return Padding(
                         padding: const EdgeInsets.only(bottom: 12),
@@ -297,8 +418,8 @@ class RowStatusCard extends StatelessWidget {
                 )
               : Expanded(
                   child: ListStatusColumnWidget(
-                    clients: clients,
-                    clientType: clientType,
+                    clients: widget.clients,
+                    clientType: widget.clientType,
                   ),
                 ),
         ],

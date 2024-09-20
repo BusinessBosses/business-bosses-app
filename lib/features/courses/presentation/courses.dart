@@ -13,13 +13,13 @@ import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 
 class CoursesPage extends StatefulWidget {
-  final String industryId;
+  final String industry;
   final String filter;
 
   const CoursesPage({
     super.key,
-    required this.industryId,
     required this.filter,
+    required this.industry,
   });
 
   @override
@@ -47,7 +47,9 @@ class _CoursesPageState extends State<CoursesPage> {
       Get.back();
     } else {
       industry = Get.arguments;
+      courseController.industry.value = industry;
     }
+    courseController.initCourses();
   }
 
   @override
@@ -112,7 +114,7 @@ class _CoursesPageState extends State<CoursesPage> {
                                       minimumSize: const Size(150, 45)),
                                   onPressed: () {
                                     Get.to(() => CreateCourseScreen(
-                                        industryId: widget.industryId));
+                                        industryId: industry.industryId!));
                                   },
                                   child: Row(
                                     mainAxisSize: MainAxisSize.min,
@@ -145,8 +147,15 @@ class _CoursesPageState extends State<CoursesPage> {
       },
       body: Obx(
         () {
+          if (courseController.loading.value) {
+            return const Center(child: CircularProgressIndicator());
+          }
+
           final List<CourseModel> filteredCourses =
               courseController.courses.where((CourseModel course) {
+            if (course.industryId != industry.industryId) {
+              return false;
+            }
             if (widget.filter.isEmpty ||
                 (widget.filter == 'All Courses' &&
                     (course.courseType == 'free' ||
@@ -258,11 +267,7 @@ class _CoursesPageState extends State<CoursesPage> {
                       child: Container(
                         width: MediaQuery.of(context).size.width,
                         color: Colors.white,
-                        child: courseController.loading.value
-                            ? const Center(
-                                child: CircularProgressIndicator(),
-                              )
-                            : const Center(child: Text('No Courses found')),
+                        child: const Center(child: Text('No Courses found')),
                       ),
                     )
                   : Expanded(

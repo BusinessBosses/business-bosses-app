@@ -73,7 +73,7 @@ class _DataSelectionScreenState extends State<DataSelectionScreen> {
       _isLoading = true;
     });
     final ApiResponseModel response =
-        await ApiService.get(path: 'industry/get?size=100');
+        await ApiService.get(path: 'industry/user-count?size=100');
     if (response.success) {
       _industries = Industry.toIndustries(snapshot: response.data['rows']);
       _industries

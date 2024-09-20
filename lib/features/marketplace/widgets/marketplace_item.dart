@@ -161,9 +161,9 @@ class _MarketTileState extends State<MarketTile> {
 
       if (widget.ishome == true) {
         return Padding(
-          padding: const EdgeInsets.only(left: 15.0),
+          padding: const EdgeInsets.only(left: 10.0),
           child: Container(
-            padding: EdgeInsets.all(10),
+            padding: const EdgeInsets.all(10),
             width: MediaQuery.of(context).size.width / 1.5,
             decoration: BoxDecoration(
               border: Border.all(width: 0.5, color: Colors.black12),
@@ -173,7 +173,7 @@ class _MarketTileState extends State<MarketTile> {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
+              children: <Widget>[
                 Padding(
                   padding: const EdgeInsets.only(left: 0, right: 0),
                   child: NetworkImageWithPlaceHolder(
@@ -188,10 +188,10 @@ class _MarketTileState extends State<MarketTile> {
                 ),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
+                  children: <Widget>[
                     Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
+                      children: <Widget>[
                         if (_post.title != null)
                           Text(
                             _post.title.toString(),
@@ -257,7 +257,7 @@ class _MarketTileState extends State<MarketTile> {
                                     SellerReviewScreen(user: _post.user!));
                               },
                               child: const Text(
-                                '(Seller reviews)',
+                                'Reviews',
                                 style: TextStyle(
                                   fontSize: 13,
                                   fontWeight: FontWeight.bold,
@@ -278,7 +278,7 @@ class _MarketTileState extends State<MarketTile> {
                             arguments: _post.user,
                           );
                         },
-                        child: Text(
+                        child: const Text(
                           'Buy',
                           style: TextStyle(
                               fontSize: 14, fontWeight: FontWeight.w500),
@@ -634,93 +634,81 @@ class _MarketTileState extends State<MarketTile> {
                                     children: <Widget>[
                                       _post.location != null &&
                                               _post.category != null
-                                          ? Row(
-                                              children: <Widget>[
-                                                SvgPicture.asset(
-                                                    'assets/svgs/location.svg'),
-                                                const SizedBox(
-                                                  width: 1,
-                                                ),
-                                                Text(
-                                                  _post.location!.length > 50
-                                                      ? '${_post.location!.substring(0, 50)}...'
-                                                      : _post.location!,
-                                                  style: const TextStyle(
+                                          ? SingleChildScrollView(
+                                              scrollDirection: Axis.horizontal,
+                                              child: Row(
+                                                children: <Widget>[
+                                                  SvgPicture.asset(
+                                                      'assets/svgs/location.svg'),
+                                                  const SizedBox(width: 1),
+                                                  Text(
+                                                    _post.location ?? '',
+                                                    style: const TextStyle(
+                                                        fontWeight:
+                                                            FontWeight.normal,
+                                                        fontSize: 12,
+                                                        color: subtextColor),
+                                                  ),
+                                                  const SizedBox(width: 5),
+                                                  SvgPicture.asset(
+                                                      'assets/svgs/category.svg'),
+                                                  const SizedBox(width: 3),
+                                                  Text(
+                                                    _post.category ?? '',
+                                                    style: const TextStyle(
                                                       fontWeight:
                                                           FontWeight.normal,
                                                       fontSize: 12,
-                                                      color: subtextColor),
-                                                  overflow:
-                                                      TextOverflow.ellipsis,
-                                                  softWrap: false,
-                                                ),
-                                                const SizedBox(
-                                                  width: 5,
-                                                ),
-                                                SvgPicture.asset(
-                                                    'assets/svgs/category.svg'),
-                                                const SizedBox(
-                                                  width: 3,
-                                                ),
-                                                Text(
-                                                  _post.category!.length > 50
-                                                      ? '${_post.category!.substring(0, 50)}...'
-                                                      : _post.category!,
-                                                  style: const TextStyle(
+                                                      color: subtextColor,
+                                                    ),
+                                                    overflow:
+                                                        TextOverflow.ellipsis,
+                                                    maxLines: 1,
+                                                  ),
+                                                  const SizedBox(width: 5),
+                                                  const Icon(
+                                                    Icons.star,
+                                                    color: Color.fromRGBO(
+                                                        255, 202, 40, 1),
+                                                    size: 16,
+                                                  ),
+                                                  Text(
+                                                    _post.user!.averageRating!
+                                                        .toStringAsFixed(1),
+                                                    style: const TextStyle(
                                                       fontWeight:
-                                                          FontWeight.normal,
+                                                          FontWeight.bold,
                                                       fontSize: 12,
-                                                      color: subtextColor),
-                                                ),
-                                                const SizedBox(
-                                                  width: 5,
-                                                ),
-                                              ],
+                                                    ),
+                                                  ),
+                                                  const SizedBox(width: 5),
+                                                  GestureDetector(
+                                                    onTap: () {
+                                                      Get.to(() =>
+                                                          SellerReviewScreen(
+                                                              user:
+                                                                  _post.user!));
+                                                    },
+                                                    child: const Text(
+                                                      'Reviews',
+                                                      style: TextStyle(
+                                                        fontSize: 12,
+                                                        fontWeight:
+                                                            FontWeight.bold,
+                                                        decoration:
+                                                            TextDecoration
+                                                                .underline,
+                                                      ),
+                                                    ),
+                                                  ),
+                                                ],
+                                              ),
                                             )
                                           : const Row(
                                               children: <Widget>[
                                                 SizedBox(),
                                               ],
                                             ),
-                                    ],
-                                  ),
-                                ),
-                                Padding(
-                                  padding:
-                                      const EdgeInsets.only(left: 13.0, top: 3),
-                                  child: Row(
-                                    children: <Widget>[
-                                      const Icon(
-                                        Icons.star,
-                                        color: Color.fromRGBO(255, 202, 40, 1),
-                                        size: 16,
-                                      ),
-                                      Text(
-                                        _post.user!.averageRating!
-                                            .toStringAsFixed(1),
-                                        style: const TextStyle(
-                                          fontWeight: FontWeight.bold,
-                                          fontSize: 13,
-                                        ),
-                                      ),
-                                      const SizedBox(
-                                        width: 5,
-                                      ),
-                                      GestureDetector(
-                                        onTap: () {
-                                          Get.to(() => SellerReviewScreen(
-                                              user: _post.user!));
-                                        },
-                                        child: const Text(
-                                          'Seller reviews',
-                                          style: TextStyle(
-                                            fontSize: 13,
-                                            fontWeight: FontWeight.bold,
-                                            decoration:
-                                                TextDecoration.underline,
-                                          ),
-                                        ),
-                                      ),
                                     ],
                                   ),
                                 ),

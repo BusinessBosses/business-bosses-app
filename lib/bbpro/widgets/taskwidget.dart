@@ -19,143 +19,186 @@ class TaskWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      decoration: BoxDecoration(
-          border: Border.all(
-            color: const Color(0xff4680A6).withAlpha(50), // Border color
-            width: 0.5, // Border width
-          ),
-          color: Colors.white,
-          borderRadius: BorderRadius.circular(10)),
-      margin: const EdgeInsets.symmetric(horizontal: 10),
-      child: Padding(
-        padding: const EdgeInsets.all(10.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: <Widget>[
-                Container(
-                  decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(3), color: bgcolor),
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
-                  child: Wrap(
-                      crossAxisAlignment: WrapCrossAlignment.center,
-                      children: <Widget>[
-                        SvgPicture.asset(
-                          'assets/svgs/projects.svg',
-                          height: 15,
-                          color: textColor,
-                        ),
-                        const SizedBox(
-                          width: 5,
-                        ),
-                        Text(
-                          project.name,
-                          style: const TextStyle(
-                            fontWeight: FontWeight.bold,
-                            fontSize: 14,
-                          ),
-                        ),
-                      ]),
-                ),
-                const OptionsButton(
-                  padding: EdgeInsets.all(0),
-                  borderColor: Colors.white,
-                ),
-              ],
+    return Stack(children: <Widget>[
+      Container(
+        decoration: BoxDecoration(
+            border: Border.all(
+              color: const Color(0xff4680A6).withAlpha(50), // Border color
+              width: 0.5, // Border width
             ),
-            Padding(
-              padding: const EdgeInsets.symmetric(vertical: 10.0),
-              child: Column(
+            color: Colors.white,
+            borderRadius: BorderRadius.circular(10)),
+        margin: const EdgeInsets.symmetric(horizontal: 10),
+        child: Padding(
+          padding: const EdgeInsets.all(10.0),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: <Widget>[
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: <Widget>[
-                  Row(
-                    children: <Widget>[
-                      const Text(
-                        'Budget: ',
-                        style: TextStyle(
-                          fontWeight: FontWeight.normal,
-                          fontSize: 14,
-                        ),
-                      ),
-                      Text(
-                        project.amount.toString(),
-                        style: const TextStyle(
-                          fontWeight: FontWeight.bold,
-                          fontSize: 14,
-                        ),
-                      ),
-                    ],
+                  Container(
+                    decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(3), color: bgcolor),
+                    padding:
+                        const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+                    child: Wrap(
+                        crossAxisAlignment: WrapCrossAlignment.center,
+                        children: <Widget>[
+                          SvgPicture.asset(
+                            'assets/svgs/projects.svg',
+                            height: 10,
+                            color: textColor,
+                          ),
+                          const SizedBox(
+                            width: 5,
+                          ),
+                          Text(
+                            project.name,
+                            style: const TextStyle(
+                              fontWeight: FontWeight.bold,
+                              fontSize: 13,
+                            ),
+                          ),
+                          Text(
+                            ' - ${project.status.displayTitle}',
+                            style: const TextStyle(
+                              fontWeight: FontWeight.bold,
+                              fontSize: 13,
+                            ),
+                          ),
+                        ]),
                   ),
-                  Row(
-                    children: <Widget>[
-                      const Text(
-                        'Duration: ',
-                        style: TextStyle(
-                          fontWeight: FontWeight.normal,
-                          fontSize: 14,
-                        ),
-                      ),
-                      Text(
-                        project.duration.toString(),
-                        style: const TextStyle(
-                          fontWeight: FontWeight.bold,
-                          fontSize: 14,
-                        ),
-                      ),
-                    ],
-                  ),
-                  Row(
-                    children: <Widget>[
-                      const Text(
-                        'Expenses: ',
-                        style: TextStyle(
-                          fontWeight: FontWeight.normal,
-                          fontSize: 14,
-                        ),
-                      ),
-                      Text(
-                        project.description ?? 'expenses',
-                        style: const TextStyle(
-                          fontWeight: FontWeight.bold,
-                          fontSize: 14,
-                        ),
-                      ),
-                    ],
+                  OptionsButton(
+                    isExpanded: isExpanded != false ? true : false,
+                    padding: const EdgeInsets.all(0),
+                    borderColor: Colors.white,
                   ),
                 ],
               ),
-            ),
-            if (isExpanded != false)
-              Row(
-                mainAxisAlignment: MainAxisAlignment.end,
-                children: <Widget>[
-                  GestureDetector(
-                    onTap: () {
-                      showDialog(
-                        context: context,
-                        builder: (BuildContext context) => ProjectPopUp(
-                          project: project,
+              Padding(
+                padding: const EdgeInsets.symmetric(vertical: 10.0),
+                child: Column(
+                  children: <Widget>[
+                    Row(
+                      children: <Widget>[
+                        const Text(
+                          'Budget: ',
+                          style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                            fontSize: 13,
+                          ),
                         ),
-                      );
-                    },
-                    child: CircleAvatar(
-                      backgroundColor: probackgroundColor,
-                      radius: 15,
-                      child: SvgPicture.asset(
-                        'assets/svgs/expandform.svg',
-                        color: proprimaryColor,
-                      ),
+                        Text(
+                          project.amount.toString(),
+                          style: const TextStyle(
+                            fontSize: 13,
+                          ),
+                        ),
+                      ],
                     ),
-                  )
-                ],
-              )
-          ],
+                    Row(
+                      children: <Widget>[
+                        const Text(
+                          'Duration: ',
+                          style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                            fontSize: 13,
+                          ),
+                        ),
+                        Text(
+                          project.duration.toString(),
+                          style: const TextStyle(
+                            fontSize: 13,
+                          ),
+                        ),
+                      ],
+                    ),
+                    const Row(
+                      children: <Widget>[
+                        Text(
+                          'Expenses: ',
+                          style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                            fontSize: 13,
+                          ),
+                        ),
+                        Text(
+                          'expenses',
+                          style: TextStyle(
+                            fontSize: 13,
+                          ),
+                        ),
+                      ],
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: <Widget>[
+                        Expanded(
+                          child: Padding(
+                            padding: const EdgeInsets.only(right: 40.0),
+                            child: RichText(
+                              overflow: TextOverflow.ellipsis,
+                              maxLines: 4,
+                              text: TextSpan(
+                                children: <InlineSpan>[
+                                  const TextSpan(
+                                    text: 'Description: ',
+                                    style: TextStyle(
+                                        fontWeight: FontWeight
+                                            .bold, // This keeps the "Description:" normal
+                                        fontSize: 10,
+                                        color: textColor),
+                                  ),
+                                  TextSpan(
+                                    text: project.description,
+                                    style: const TextStyle(
+                                        fontSize: 10, color: textColor),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
+              ),
+            ],
+          ),
         ),
       ),
-    );
+      if (isExpanded != false)
+        Positioned(
+          right: 20,
+          bottom: 10,
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.end,
+            children: <Widget>[
+              GestureDetector(
+                onTap: () {
+                  showDialog(
+                    context: context,
+                    builder: (BuildContext context) => ProjectPopUp(
+                      project: project,
+                    ),
+                  );
+                },
+                child: CircleAvatar(
+                  backgroundColor: probackgroundColor,
+                  radius: 15,
+                  child: SvgPicture.asset(
+                    'assets/svgs/expandform.svg',
+                    color: proprimaryColor,
+                  ),
+                ),
+              )
+            ],
+          ),
+        )
+    ]);
   }
 }

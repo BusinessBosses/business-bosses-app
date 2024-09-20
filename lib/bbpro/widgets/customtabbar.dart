@@ -77,7 +77,12 @@ class _CustomTabBarWidgetState<T> extends State<CustomTabBarWidget<T>> {
                       child: Padding(
                         padding: const EdgeInsets.symmetric(
                             horizontal: 10.0, vertical: 8),
-                        child: Text('${widget.itemToString(status)}'),
+                        child: index == 0
+                            ? const Icon(
+                                Icons.dashboard,
+                                size: 11,
+                              )
+                            : Text('${widget.itemToString(status)}', style: TextStyle(fontSize: 11),),
                       ),
                     ),
                   ),
@@ -106,6 +111,7 @@ class _CustomTabBarWidgetState<T> extends State<CustomTabBarWidget<T>> {
                       value: option,
                       child: Text(option),
                     );
+                    
                   }).toList(),
                 ).then((selected) {
                   if (selected != null) {

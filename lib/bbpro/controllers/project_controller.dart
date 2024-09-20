@@ -14,7 +14,8 @@ class ProjectController extends GetxController {
   Future<void> initProjects(String userId) async {
     loading(true);
     projects.clear();
-    ApiResponseModel response = await ApiService.get(path: 'projects/all');
+    ApiResponseModel response =
+        await ApiService.get(path: 'projects/user-projects/$userId');
     if (response.success) {
       for (int i = 0; i < response.data['rows'].length; i++) {
         projects.add(Project.fromMap(response.data['rows'][i]));
@@ -26,7 +27,8 @@ class ProjectController extends GetxController {
 
   Future<void> initTasks(String userId) async {
     tasks.clear();
-    ApiResponseModel response = await ApiService.get(path: 'tasks/all');
+    ApiResponseModel response =
+        await ApiService.get(path: 'tasks/user-tasks/$userId');
     if (response.success) {
       for (int i = 0; i < response.data['rows'].length; i++) {
         tasks.add(Task.fromMap(response.data['rows'][i]));

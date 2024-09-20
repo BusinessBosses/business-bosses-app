@@ -384,7 +384,7 @@ class _BossOfWeekProfileTileState extends State<BossOfWeekProfileTile> {
                                                       fontWeight:
                                                           FontWeight.bold,
                                                       color: Colors.white)),
-                                          SizedBox(
+                                          const SizedBox(
                                             height: 10,
                                           ),
                                           user?.bio == null
@@ -405,7 +405,7 @@ class _BossOfWeekProfileTileState extends State<BossOfWeekProfileTile> {
                                                         fontSize: 13,
                                                       ),
                                                     ),
-                                                    SizedBox(
+                                                    const SizedBox(
                                                       height: 10,
                                                     ),
                                                     Row(
@@ -556,9 +556,9 @@ class _BossOfWeekProfileTileState extends State<BossOfWeekProfileTile> {
                                             width: MediaQuery.of(context)
                                                     .size
                                                     .width /
-                                                3.58,
+                                                4,
                                             margin: const EdgeInsets.only(
-                                                left: 15.0),
+                                                left: 10.0),
                                             decoration: BoxDecoration(
                                               border: Border.all(
                                                 color: startColor,
@@ -590,8 +590,8 @@ class _BossOfWeekProfileTileState extends State<BossOfWeekProfileTile> {
                                                           top: 8,
                                                           bottom: 5),
                                                   child: SizedBox(
-                                                    height: 20.0,
-                                                    width: 20.0,
+                                                    height: 35.0,
+                                                    width: 35.0,
                                                     child: Container(
                                                       decoration: BoxDecoration(
                                                         border: Border.all(
@@ -609,7 +609,7 @@ class _BossOfWeekProfileTileState extends State<BossOfWeekProfileTile> {
                                                         imageUrl: item[
                                                                 'companyPhoto'] ??
                                                             '',
-                                                        radius: 100,
+                                                        radius: 200,
                                                         placeHolder:
                                                             Icons.person,
                                                         iconSize: 15.0,
@@ -618,13 +618,16 @@ class _BossOfWeekProfileTileState extends State<BossOfWeekProfileTile> {
                                                     ),
                                                   ),
                                                 ),
+                                                const SizedBox(
+                                                  height: 3,
+                                                ),
                                                 Padding(
                                                     padding: const EdgeInsets
                                                         .symmetric(
                                                       horizontal: 8.0,
                                                     ),
                                                     child: Column(
-                                                      children: [
+                                                      children: <Widget>[
                                                         Text(
                                                           item['companyName'],
                                                           textAlign:
@@ -736,7 +739,7 @@ class _BossOfWeekProfileTileState extends State<BossOfWeekProfileTile> {
                                                     crossAxisAlignment:
                                                         CrossAxisAlignment
                                                             .center,
-                                                    children: [
+                                                    children: <Widget>[
                                                       Padding(
                                                         padding:
                                                             const EdgeInsets
@@ -786,7 +789,7 @@ class _BossOfWeekProfileTileState extends State<BossOfWeekProfileTile> {
                                                             crossAxisAlignment:
                                                                 CrossAxisAlignment
                                                                     .start,
-                                                            children: [
+                                                            children: <Widget>[
                                                               Text(
                                                                 item[
                                                                     'companyName'],
@@ -886,8 +889,8 @@ class _BossOfWeekProfileTileState extends State<BossOfWeekProfileTile> {
                     ),
                   ),
                 ),
-                SizedBox(
-                  height: 5,
+                const SizedBox(
+                  height: 7,
                 ),
               ],
             )
@@ -999,16 +1002,17 @@ class _BossOfWeekProfileTileState extends State<BossOfWeekProfileTile> {
             onPressed: () {
               onRefer();
             },
-            child:
-                Wrap(crossAxisAlignment: WrapCrossAlignment.center, children: [
-              Text(
-                'Refer',
-                style: TextStyle(
-                    color: widget.isForyou == true
-                        ? primaryColorLT
-                        : Colors.white),
-              ),
-            ]),
+            child: Wrap(
+                crossAxisAlignment: WrapCrossAlignment.center,
+                children: <Widget>[
+                  Text(
+                    'Refer',
+                    style: TextStyle(
+                        color: widget.isForyou == true
+                            ? primaryColorLT
+                            : Colors.white),
+                  ),
+                ]),
           ),
           const SizedBox(
             width: 10,

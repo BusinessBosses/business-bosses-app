@@ -2,16 +2,13 @@ import 'package:business_bosses_v2/common/widgets/safety_model.dart';
 import 'package:business_bosses_v2/features/forum/controller/challenge_controller.dart';
 import 'package:business_bosses_v2/features/home/controller/commumities_controller.dart';
 import 'package:business_bosses_v2/features/home/widgets/bottom_bar.dart';
-import 'package:business_bosses_v2/features/home/widgets/challengessection.dart';
-import 'package:business_bosses_v2/features/home/widgets/eventssection.dart';
+import 'package:business_bosses_v2/features/home/widgets/discoversection.dart';
 import 'package:business_bosses_v2/features/home/widgets/floatingbutton.dart';
 import 'package:business_bosses_v2/features/home/widgets/forum_item.dart';
-import 'package:business_bosses_v2/features/home/widgets/learningsection.dart';
 import 'package:business_bosses_v2/features/home/widgets/list_items.dart';
-import 'package:business_bosses_v2/features/home/widgets/marketplacesection.dart';
-import 'package:business_bosses_v2/features/home/widgets/searchsection.dart';
 import 'package:business_bosses_v2/features/live_event/controller/live_event_controller.dart';
 import 'package:business_bosses_v2/features/donations/controller/donations_controller.dart';
+import 'package:business_bosses_v2/utils/theme/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
@@ -25,7 +22,6 @@ import '../home/widgets/home_appbar.dart';
 import '../marketplace/controllers/market_controller.dart';
 import '../posts/models/post_model.dart';
 import '../profile/controller/profile_controller.dart';
-import '../profile/widgets/boss_of_the_week_tile.dart';
 import 'package:socket_io_client/socket_io_client.dart' as io;
 
 class HomeScreen extends StatefulWidget {
@@ -312,7 +308,7 @@ class _HomeScreenState extends State<HomeScreen>
                                   Container(
                                     height: MediaQuery.of(context).size.height,
                                     width: MediaQuery.of(context).size.width,
-                                    color: Colors.white,
+                                    color: backgroundColor,
                                     child: RefreshIndicator(
                                       onRefresh: controller.loadData,
                                       child: NotificationListener<
@@ -348,40 +344,7 @@ class _HomeScreenState extends State<HomeScreen>
                                         child: TabBarView(
                                             controller: _tabController,
                                             children: <Widget>[
-                                              ListView(
-                                                children: const [
-                                                  Padding(
-                                                    padding: EdgeInsets.only(
-                                                        left: 15.0,
-                                                        right: 15,
-                                                        top: 15),
-                                                    child: SearchSection(),
-                                                  ),
-                                                  SizedBox(
-                                                    height: 15,
-                                                  ),
-                                                  LearningSection(),
-                                                  BossOfWeekProfileTile(),
-                                                  SizedBox(
-                                                    height: 15,
-                                                  ),
-                                                  ChallengesSection(),
-                                                  SizedBox(
-                                                    height: 10,
-                                                  ),
-                                                  EventsSection(),
-                                                  SizedBox(
-                                                    height: 15,
-                                                  ),
-                                                  SizedBox(
-                                                    height: 15,
-                                                  ),
-                                                  MarketplaceSection(),
-                                                  SizedBox(
-                                                    height: 120,
-                                                  ),
-                                                ],
-                                              ),
+                                              const DiscoverSection(),
                                               PostsWidget(
                                                 onPageChange:
                                                     widget.onPageChange,

@@ -11,6 +11,7 @@ class MCustomButton extends StatelessWidget {
   final String? label;
   final bool isProcessing;
   final ButtonType buttonType;
+  final Color? strokeColor;
 
   const MCustomButton({
     Key? key,
@@ -23,6 +24,7 @@ class MCustomButton extends StatelessWidget {
     this.label,
     this.isProcessing = false,
     this.buttonType = ButtonType.outline,
+    this.strokeColor,
   }) : super(key: key);
 
   @override
@@ -33,6 +35,12 @@ class MCustomButton extends StatelessWidget {
             width: width,
             height: height,
             child: OutlinedButton(
+              style: OutlinedButton.styleFrom(
+                side: BorderSide(
+                  color: strokeColor ?? primaryColorLT,
+                  width: 1.0,
+                ),
+              ),
               onPressed: isProcessing ? null : onPressed as void Function()?,
               child: isProcessing
                   ? const SizedBox(
@@ -102,8 +110,8 @@ class MCustomButton extends StatelessWidget {
                     height: height,
                     child: OutlinedButton(
                       style: OutlinedButton.styleFrom(
-                        side: const BorderSide(
-                          color: Colors.grey, // Adjust the color as needed
+                        side: BorderSide(
+                          color: strokeColor ?? Colors.grey,
                         ),
                       ),
                       onPressed:

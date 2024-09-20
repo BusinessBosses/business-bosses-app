@@ -2,10 +2,14 @@
   "java.configuration.updateBuildConfiguration": "interactive",
   "cmake.configureOnOpen": true,
   "editor.inlineSuggest.showToolbar": "always",
-  "dart.flutterSdkPath": ".fvm/versions/3.13.2",
+  "dart.flutterSdkPath": ".fvm/versions/3.13.5",
   "cSpell.words": [
     "backgroundcolorinterface",
     "Floatingbutton",
     "probackground"
-  ]
+  ],
+  "editor.formatOnSave": true,
+  "editor.codeActionsOnSave": {
+    "source.fixAll": "explicit",
+  }
 }

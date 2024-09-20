@@ -5,12 +5,18 @@ class MultipleEditTextWidget extends StatefulWidget {
   final String caption;
   final String hintText;
   final TextEditingController controller;
+  final EdgeInsetsGeometry? padding;
+  final double? buttonSize;
+  final Color? backgroundColor;
 
   const MultipleEditTextWidget({
     super.key,
     required this.caption,
     required this.hintText,
     required this.controller,
+    this.padding = const EdgeInsets.symmetric(horizontal: 15.0, vertical: 10),
+    this.buttonSize = 20,
+    this.backgroundColor,
   });
 
   @override
@@ -46,67 +52,68 @@ class _MultipleEditTextWidgetState extends State<MultipleEditTextWidget> {
 
   Widget _buildTextField() {
     int index = _textFields.length;
-    return Padding(
-      padding: const EdgeInsets.only(top: 15, bottom: 5),
-      child: Row(
-        children: <Widget>[
-          Expanded(
-            child: TextField(
-              decoration: InputDecoration(
-                  hintText: widget.hintText, border: InputBorder.none),
-              controller: widget.controller,
+    return Row(
+      children: <Widget>[
+        Expanded(
+          child: TextField(
+            decoration: InputDecoration(
+                hintText: widget.hintText, border: InputBorder.none),
+            controller: widget.controller,
+            style: const TextStyle(fontSize: 13),
+          ),
+        ),
+        if (_textFields.isNotEmpty)
+          Container(
+            padding: widget.padding,
+            decoration: BoxDecoration(
+                color: prosemibackColor,
+                borderRadius: BorderRadius.circular(10)),
+            child: GestureDetector(
+              onTap: () => _removeTextField(index),
+              child: Icon(
+                Icons.remove,
+                size: widget.buttonSize,
+              ),
             ),
           ),
-          if (_textFields.isNotEmpty)
-            Container(
-              decoration: BoxDecoration(
-                  color: prosemibackColor,
-                  borderRadius: BorderRadius.circular(10)),
-              child: IconButton(
-                icon: const Icon(
-                  Icons.remove,
-                  size: 20,
-                ),
-                onPressed: () => _removeTextField(index),
+        if (_textFields.isNotEmpty)
+          const SizedBox(
+            width: 10,
+          ),
+        if (_textFields.length < _maxFields)
+          Container(
+            padding: widget.padding,
+            decoration: BoxDecoration(
+                color: prosemibackColor,
+                borderRadius: BorderRadius.circular(10)),
+            child: GestureDetector(
+              onTap: _addTextField,
+              child: Icon(
+                Icons.add,
+                size: widget.buttonSize,
               ),
             ),
-          if (_textFields.isNotEmpty)
-            const SizedBox(
-              width: 10,
-            ),
-          if (_textFields.length < _maxFields)
-            Container(
-              decoration: BoxDecoration(
-                  color: prosemibackColor,
-                  borderRadius: BorderRadius.circular(10)),
-              child: IconButton(
-                icon: const Icon(
-                  Icons.add,
-                  size: 20,
-                ),
-                onPressed: _addTextField,
-              ),
-            ),
-        ],
-      ),
+          ),
+      ],
     );
   }
 
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 15.0),
+      padding: const EdgeInsets.symmetric(horizontal: 0.0),
       child: Container(
         decoration: BoxDecoration(
-            color: Colors.white, borderRadius: BorderRadius.circular(10)),
-        padding: const EdgeInsets.symmetric(horizontal: 15.0, vertical: 10),
+            color: widget.backgroundColor ?? Colors.white,
+            borderRadius: BorderRadius.circular(10)),
+        padding: const EdgeInsets.all(10),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
             Text(
               widget.caption,
               style: const TextStyle(
-                fontSize: 16,
+                fontSize: 14,
                 fontWeight: FontWeight.w600,
               ),
             ),

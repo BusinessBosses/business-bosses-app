@@ -1,8 +1,10 @@
+import 'package:business_bosses_v2/bbpro/controllers/shop_controller.dart';
+import 'package:business_bosses_v2/bbpro/presentation/servicesmanagement.dart';
+import 'package:business_bosses_v2/bbpro/presentation/setupshop.dart';
 import 'package:business_bosses_v2/bbpro/widgets/notificationbutton.dart';
 import 'package:business_bosses_v2/bbpro/presentation/inventory.dart';
 import 'package:business_bosses_v2/common/dialogs/snackbar.dart';
 import 'package:business_bosses_v2/common/widgets/network_image_with_placeholder.dart';
-import 'package:business_bosses_v2/features/profile/controller/profile_controller.dart';
 import 'package:business_bosses_v2/utils/theme/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -16,10 +18,12 @@ class Setup extends StatefulWidget {
 }
 
 class _SetupState extends State<Setup> {
+  final ShopController shopController = Get.find();
   final List<String> titles = <String>[
     'Edit Shop',
-    'Manage Inventory',
-    'Availability',
+    'My Inventory',
+    'My Services',
+    'My Suppliers',
     'Privacy Policy & Terms of Use',
     'Contact Us',
     'Manage Subscription'
@@ -27,7 +31,6 @@ class _SetupState extends State<Setup> {
 
   @override
   Widget build(BuildContext context) {
-    final ProfileController profileController = Get.find();
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
@@ -61,8 +64,7 @@ class _SetupState extends State<Setup> {
                             child: ClipRRect(
                               borderRadius: BorderRadius.circular(1000),
                               child: NetworkImageWithPlaceHolder(
-                                imageUrl:
-                                    profileController.myProfile.photoUrl ?? '',
+                                imageUrl: shopController.shop!.image ?? '',
                                 radius: radius,
                                 placeHolder: Icons.person,
                                 iconSize: 22.0,
@@ -75,8 +77,8 @@ class _SetupState extends State<Setup> {
                         Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: <Widget>[
-                            const Text('Shop Name',
-                                style: TextStyle(
+                            Text(shopController.shop!.name,
+                                style: const TextStyle(
                                     fontWeight: FontWeight.bold, fontSize: 20)),
                             const SizedBox(height: 10),
                             Row(
@@ -162,8 +164,16 @@ class _SetupState extends State<Setup> {
                                   ),
                                 ),
                                 onTap: () {
-                                  if (titles[index] == 'Manage Inventory') {
-                                    Get.to(const Inventory());
+                                  if (titles[index] == 'Edit Shop') {
+                                    Get.to(() => Setupshop(
+                                          shop: shopController.shop,
+                                        ));
+                                  }
+                                  if (titles[index] == 'My Inventory') {
+                                    Get.to(() => const Inventory());
+                                  }
+                                  if (titles[index] == 'My Services') {
+                                    Get.to(() => const ManageServices());
                                   }
                                   if (titles[index] == 'Contact Us') {
                                     _contactUs();

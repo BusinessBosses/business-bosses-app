@@ -158,11 +158,11 @@ class CourseModel {
           : 0.0,
       likes: map['likes'] != null
           ? List<String>.from(
-              map['likes'].map((like) => like['userId'].toString()))
+              map['likes'].map((dynamic like) => like['userId'].toString()))
           : null,
       coins: map['coins'] != null
           ? List<String>.from(
-              map['coins'].map((coin) => coin['userId'].toString()))
+              map['coins'].map((dynamic coin) => coin['userId'].toString()))
           : null,
       paymentMethod:
           map['paymentMethod'] != null ? map['paymentMethod'] as String : null,

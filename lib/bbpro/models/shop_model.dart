@@ -10,7 +10,7 @@ class Shop {
   final String location;
   final int views;
   final DateTime? timestamp;
-  final String? paymentMethod;
+  final List<dynamic> payments;
   final bool promote;
   final int? promotionDuration;
   final bool? approved;
@@ -28,7 +28,7 @@ class Shop {
     required this.location,
     this.views = 0,
     this.timestamp,
-    this.paymentMethod,
+    required this.payments,
     required this.promote,
     this.promotionDuration,
     this.approved = false,
@@ -49,7 +49,7 @@ class Shop {
       views: json['views'],
       timestamp:
           json['timestamp'] != null ? DateTime.parse(json['timestamp']) : null,
-      paymentMethod: json['paymentMethod'],
+      payments: json['payments'] ?? <dynamic>[],
       promote: json['promote'],
       promotionDuration: json['promotionDuration'],
       approved: json['approved'] ?? false,
@@ -70,7 +70,7 @@ class Shop {
       'location': location,
       'views': views,
       'timestamp': timestamp?.toIso8601String(),
-      'paymentMethod': paymentMethod,
+      'payments': payments,
       'promote': promote,
       'promotionDuration': promotionDuration,
       'approved': approved,

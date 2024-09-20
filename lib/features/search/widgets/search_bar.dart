@@ -9,6 +9,7 @@ class Searchbar extends StatelessWidget {
   final String hintText;
   // ignore: public_member_api_docs
   final Function(String val)? onChange;
+  final FocusNode? focusNode;
   // ignore: public_member_api_docs
   final Function(String val)? onSubmit;
   // ignore: public_member_api_docs
@@ -24,6 +25,7 @@ class Searchbar extends StatelessWidget {
     this.onSubmit,
     this.hasSearchIcon = true,
     this.autofocus = true,
+    this.focusNode,
   }) : super(key: key);
 
   @override

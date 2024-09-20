@@ -367,7 +367,7 @@ class _AllForumScreenState extends State<AllForumScreen>
                     )
                   : widget.isCourses == true
                       ? CoursesPage(
-                          industryId: industry.industryId!,
+                          industry: industry.industryId!,
                           filter: _filtercourses,
                         )
                       : const TopicsPage(),

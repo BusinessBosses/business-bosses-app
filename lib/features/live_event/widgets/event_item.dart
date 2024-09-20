@@ -50,12 +50,12 @@ class _EventItemState extends State<EventItem> {
 
 // Convert the event start and end times to the local time zone
     final DateTime localStartTime = widget.event.startAt!.toLocal();
-    final DateTime localEndTime = widget.event.endAt!.toLocal();
+    // final DateTime localEndTime = widget.event.endAt!.toLocal();
 
     final String formattedDate = dateFormat.format(localStartTime);
 
     final String formattedStartTime = timeFormat.format(localStartTime);
-    final String formattedEndTime = timeFormat.format(localEndTime);
+    // final String formattedEndTime = timeFormat.format(localEndTime);
 
     Map<String, dynamic> dataa = <String, dynamic>{
       'id': widget.event.id,
@@ -84,7 +84,7 @@ class _EventItemState extends State<EventItem> {
         ? Padding(
             padding: const EdgeInsets.symmetric(horizontal: 15.0),
             child: Container(
-              padding: EdgeInsets.only(left: 15, top: 15, bottom: 15),
+              padding: const EdgeInsets.only(left: 15, top: 15, bottom: 15),
               width: MediaQuery.of(context).size.width - 30,
               decoration: BoxDecoration(
                 border: Border.all(width: 0.5, color: Colors.black12),
@@ -92,7 +92,7 @@ class _EventItemState extends State<EventItem> {
                 borderRadius: BorderRadius.circular(15),
               ),
               child: Column(
-                children: [
+                children: <Widget>[
                   Align(
                     alignment: Alignment.topLeft,
                     child: Text(
@@ -179,12 +179,12 @@ class _EventItemState extends State<EventItem> {
                   ),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Detailssection(),
+                    children: <Widget>[
+                      detailssection(),
                       const SizedBox(
                         width: 15,
                       ),
-                      AttendButton(),
+                      attendButton(),
                     ],
                   )
                 ],
@@ -393,7 +393,7 @@ class _EventItemState extends State<EventItem> {
                           Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: <Widget>[
-                              Detailssection(),
+                              detailssection(),
                               const SizedBox(
                                 width: 15,
                               ),
@@ -497,7 +497,7 @@ class _EventItemState extends State<EventItem> {
                                       ],
                                     ),
                                   ),
-                                  AttendButton()
+                                  attendButton()
                                 ],
                               ),
                             ],
@@ -593,7 +593,7 @@ class _EventItemState extends State<EventItem> {
     );
   }
 
-  Widget Detailssection() {
+  Widget detailssection() {
     final DateFormat dateFormat = DateFormat('d MMM, y');
     final DateFormat timeFormat = DateFormat('h:mm a');
     final DateTime localStartTime = widget.event.startAt!.toLocal();
@@ -736,7 +736,7 @@ class _EventItemState extends State<EventItem> {
     );
   }
 
-  Widget AttendButton() {
+  Widget attendButton() {
     return widget.ongoing
         ? Padding(
             padding: const EdgeInsets.only(right: 15.0),

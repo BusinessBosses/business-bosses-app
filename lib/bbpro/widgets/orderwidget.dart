@@ -46,7 +46,7 @@ class OrderWidget extends StatelessWidget {
                       children: <Widget>[
                         SvgPicture.asset(
                           'assets/svgs/projects.svg',
-                          height: 15,
+                          height: 13,
                           color: textColor,
                         ),
                         const SizedBox(
@@ -56,13 +56,13 @@ class OrderWidget extends StatelessWidget {
                           order.user!.username,
                           style: const TextStyle(
                             fontWeight: FontWeight.bold,
-                            fontSize: 14,
+                            fontSize: 13,
                           ),
                         ),
                       ]),
                 ),
-                const OptionsButton(
-                  padding: EdgeInsets.all(0),
+                OptionsButton(
+                  padding: const EdgeInsets.all(0),
                   borderColor: Colors.white,
                 ),
               ],
@@ -77,14 +77,14 @@ class OrderWidget extends StatelessWidget {
                         'Budget: ',
                         style: TextStyle(
                           fontWeight: FontWeight.normal,
-                          fontSize: 14,
+                          fontSize: 13,
                         ),
                       ),
                       // Text(
                       //   task.project.amount.toString(),
                       //   style: const TextStyle(
                       //     fontWeight: FontWeight.bold,
-                      //     fontSize: 14,
+                      //     fontSize: 13,
                       //   ),
                       // ),
                     ],
@@ -95,14 +95,14 @@ class OrderWidget extends StatelessWidget {
                         'Duration: ',
                         style: TextStyle(
                           fontWeight: FontWeight.normal,
-                          fontSize: 14,
+                          fontSize: 13,
                         ),
                       ),
                       // Text(
                       //   task.project.duration.toString(),
                       //   style: const TextStyle(
                       //     fontWeight: FontWeight.bold,
-                      //     fontSize: 14,
+                      //     fontSize: 13,
                       //   ),
                       // ),
                     ],
@@ -113,14 +113,14 @@ class OrderWidget extends StatelessWidget {
                         'Expenses: ',
                         style: TextStyle(
                           fontWeight: FontWeight.normal,
-                          fontSize: 14,
+                          fontSize: 13,
                         ),
                       ),
                       Text(
                         'expenses amount',
                         style: TextStyle(
                           fontWeight: FontWeight.bold,
-                          fontSize: 14,
+                          fontSize: 13,
                         ),
                       ),
                     ],

@@ -18,7 +18,8 @@ class ChallengeController extends GetxController {
     try {
       loading(true); // Set loading to true before fetching data
       update();
-      ApiResponseModel response = await ApiService.get(path: 'industry/get');
+      ApiResponseModel response =
+          await ApiService.get(path: 'industry/user-count');
       List<dynamic> responseData = response.data['rows'];
 
       categories = responseData
