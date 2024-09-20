@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:business_bosses_v2/bbpro/controllers/shop_controller.dart';
 import 'package:business_bosses_v2/bbpro/widgets/customcard.dart';
 import 'package:business_bosses_v2/bbpro/widgets/textfield.dart';
 import 'package:business_bosses_v2/common/dialogs/snackbar.dart';
@@ -27,13 +28,74 @@ class _AddSupplierState extends State<AddSupplier> {
   final TextEditingController nameController = TextEditingController();
   final TextEditingController emailController = TextEditingController();
   final TextEditingController phoneController = TextEditingController();
+  final TextEditingController descriptionController = TextEditingController();
+  final TextEditingController urlController = TextEditingController();
   final ProfileController profileController = Get.find();
+  final ShopController shopController = Get.find();
   String? _selectedLocation;
+  String? category;
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
   File? _selectedImage;
   bool isSubmit = false;
   String? image;
+
+  void _submitForm() async {
+    if (_formKey.currentState!.validate()) {
+      _formKey.currentState!.save();
+      setState(() {
+        isSubmit = true;
+      });
+      if (_selectedImage != null) {
+        dynamic response = await ApiService.uploadFile(_selectedImage!);
+        if (response['success']) {
+          image = response['fileUrl'];
+        } else {
+          showSnackbar(
+            message: 'Error while creating supplier!',
+            error: true,
+          );
+          setState(() {
+            isSubmit = false;
+          });
+          return;
+        }
+      }
+
+      // Creating JSON to be sent
+      Map<String, dynamic> supplierData = <String, dynamic>{
+        'userId': profileController.myProfile.uid,
+        'name': nameController.text,
+        'email': emailController.text,
+        'phone': phoneController.text,
+        'description': descriptionController.text,
+        'url': urlController.text,
+        'category': category,
+        'images': <String?>[image],
+        'location': _selectedLocation,
+      };
+
+      try {
+        bool success = await shopController.addSupplier(supplierData);
+        if (success) {
+          showSnackbar(message: 'Supplier Added Successfully!');
+          await Future.delayed(
+              const Duration(seconds: 1)); // Optional delay for visibility
+          // ignore: use_build_context_synchronously
+          Navigator.pop(context);
+        } else {
+          showSnackbar(message: 'Error Adding Supplier!', error: true);
+        }
+      } catch (e) {
+        showSnackbar(message: 'An error occurred: $e', error: true);
+      } finally {
+        setState(() {
+          isSubmit = false;
+        });
+      }
+      // You can now send `supplierData` to your API endpoint
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -94,13 +156,16 @@ class _AddSupplierState extends State<AddSupplier> {
                       maxLength: 300,
                       caption: 'Description',
                       hintText: 'Add a description here',
-                      controller: nameController,
+                      controller: descriptionController,
                     ),
                     const SizedBox(height: 15),
-                    const CustomDropdownWidget(
+                    CustomDropdownWidget(
                       caption: 'Select Industry',
-                      items: <String>['test', 'test', 'test'],
+                      items: const <String>['test', 'test', 'test'],
                       iconName: 'assets/svgs/dropdown.svg',
+                      onChanged: (String? value) => setState(() {
+                        category = value!;
+                      }),
                     ),
                     const SizedBox(height: 15),
                     Padding(
@@ -150,7 +215,7 @@ class _AddSupplierState extends State<AddSupplier> {
                     CustomEditText(
                       caption: 'Website',
                       hintText: 'Eg. https://www.supplier.com',
-                      controller: nameController,
+                      controller: urlController,
                     ),
                     const SizedBox(height: 15),
                     Padding(
@@ -187,9 +252,7 @@ class _AddSupplierState extends State<AddSupplier> {
                 loading: isSubmit,
                 text: 'Save',
                 onPressed: () async {
-                  setState(() {
-                    isSubmit = true;
-                  });
+                  _submitForm();
                 },
               ),
             ),

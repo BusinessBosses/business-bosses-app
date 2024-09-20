@@ -1,7 +1,7 @@
 import 'package:business_bosses_v2/bbpro/controllers/shop_controller.dart';
+import 'package:business_bosses_v2/bbpro/presentation/addsupplier.dart';
 import 'package:business_bosses_v2/bbpro/presentation/create_product.dart';
 import 'package:business_bosses_v2/bbpro/presentation/create_service.dart';
-import 'package:business_bosses_v2/bbpro/presentation/create_supplier.dart';
 import 'package:business_bosses_v2/bbpro/widgets/gotoshopwidget.dart';
 import 'package:business_bosses_v2/bbpro/widgets/infocard.dart';
 import 'package:business_bosses_v2/bbpro/widgets/notificationbutton.dart';
@@ -9,7 +9,6 @@ import 'package:business_bosses_v2/bbpro/widgets/orderscard.dart';
 import 'package:business_bosses_v2/utils/theme/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
-import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 
 import '../widgets/salescard.dart';
@@ -64,7 +63,7 @@ class _DashboardState extends State<Dashboard> {
                           } else if (index == 1) {
                             Get.to(() => const CreateServiceListing());
                           } else if (index == 2) {
-                            Get.to(() => const AddSupplierScreen());
+                            Get.to(() => const AddSupplier());
                           } else if (index == 3) {
                             // Handle Add Orders
                           } else if (index == 4) {

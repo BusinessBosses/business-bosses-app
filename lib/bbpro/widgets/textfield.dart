@@ -5,7 +5,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 class CustomTextWidget extends StatefulWidget {
   final String caption;
   final String iconName;
-  final String text;
+  final String? text;
   final Color? backgroundColor;
   final double? padding;
   final double? textpadding;
@@ -63,7 +63,7 @@ class _CustomTextWidgetState extends State<CustomTextWidget> {
               children: <Widget>[
                 Expanded(
                   child: Text(
-                    widget.text,
+                    widget.text == null ? '' : widget.text!,
                     style: TextStyle(
                         fontSize: 13,
                         color: widget.text == 'Choose Shop Location'

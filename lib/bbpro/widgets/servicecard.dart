@@ -21,7 +21,9 @@ class ServiceCard extends StatefulWidget {
 
 class _ServiceCardState extends State<ServiceCard> {
   void _onEdit() {
-    Get.to(() => const CreateServiceListing());
+    Get.to(() => CreateServiceListing(
+          service: widget.service,
+        ));
   }
 
   @override

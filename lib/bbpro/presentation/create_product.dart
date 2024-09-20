@@ -67,10 +67,14 @@ class _CreateProductListingState extends State<CreateProductListing> {
   int? quantity;
   String? color;
   String? size;
+  List<String> paymentMethods = <String>[];
 
   @override
   void initState() {
     super.initState();
+    for (dynamic payments in shopController.shop!.payments) {
+      paymentMethods.add(payments['paymentMethod']);
+    }
     if (widget.product != null) {
       // initiate Edit Here
       _productNameController.text = widget.product!.name;
@@ -146,11 +150,6 @@ class _CreateProductListingState extends State<CreateProductListing> {
                 }
                 return null;
               },
-              onChanged: (String value) {
-                setState(() {
-                  productName = value;
-                });
-              },
             ),
             const SizedBox(height: 16),
             Row(
@@ -169,11 +168,6 @@ class _CreateProductListingState extends State<CreateProductListing> {
                         return 'Please enter a valid number';
                       }
                       return null;
-                    },
-                    onChanged: (String value) {
-                      setState(() {
-                        price = value;
-                      });
                     },
                   ),
                 ),
@@ -194,11 +188,6 @@ class _CreateProductListingState extends State<CreateProductListing> {
                         }
                         return null;
                       },
-                      onChanged: (String value) {
-                        setState(() {
-                          discount = value;
-                        });
-                      },
                     ),
                   ),
                 ),
@@ -215,11 +204,6 @@ class _CreateProductListingState extends State<CreateProductListing> {
                   return 'Please enter a description';
                 }
                 return null;
-              },
-              onChanged: (String value) {
-                setState(() {
-                  description = value;
-                });
               },
             ),
             const SizedBox(height: 16),
@@ -378,12 +362,7 @@ class _CreateProductListingState extends State<CreateProductListing> {
             CustomDropdownWidget(
               caption: 'Payment Method',
               hintText: 'Choose a payment method',
-              items: const <String>[
-                'Credit Card',
-                'PayPal',
-                'Bank Transfer',
-                'Cash'
-              ],
+              items: paymentMethods,
               iconName: 'assets/svgs/dropdown.svg',
               onChanged: (String? newValue) {
                 setState(() {
@@ -395,11 +374,6 @@ class _CreateProductListingState extends State<CreateProductListing> {
             CustomEditText(
               caption: 'Storage Location',
               hintText: 'Enter storage location',
-              onChanged: (String value) {
-                setState(() {
-                  storageLocation = value;
-                });
-              },
               controller: storageLocationController,
             ),
             const SizedBox(height: 16),
@@ -407,11 +381,6 @@ class _CreateProductListingState extends State<CreateProductListing> {
               caption: 'Product Number',
               hintText: 'Enter product number',
               inputType: TextInputType.number,
-              onChanged: (String value) {
-                setState(() {
-                  productNumber = int.tryParse(value);
-                });
-              },
               controller: productNumberController,
             ),
             const SizedBox(height: 16),
@@ -419,11 +388,6 @@ class _CreateProductListingState extends State<CreateProductListing> {
               caption: 'Quantity',
               hintText: 'Enter quantity',
               inputType: TextInputType.number,
-              onChanged: (String value) {
-                setState(() {
-                  quantity = int.tryParse(value);
-                });
-              },
               controller: quantityController,
             ),
             const SizedBox(height: 16),
@@ -496,7 +460,7 @@ class _CreateProductListingState extends State<CreateProductListing> {
             const SizedBox(height: 16),
             ProCustomButton(
               loading: isSubmitted,
-              text: widget.product != null ? 'Save CHanges' : 'Create',
+              text: widget.product != null ? 'Save Changes' : 'Create',
               onPressed: _submitForm,
             ),
           ],
@@ -547,10 +511,10 @@ class _CreateProductListingState extends State<CreateProductListing> {
       final Map<String, dynamic> productListing = <String, dynamic>{
         'userId': profileController.myProfile.uid,
         'shopId': shopController.shop?.id,
-        'name': productName,
-        'price': price,
-        'discount': discount,
-        'description': description,
+        'name': _productNameController.text,
+        'price': _priceController.text,
+        'discount': _discountController.text,
+        'description': _descriptionController.text,
         'category': category,
         'location': country,
         'images': images,
@@ -560,16 +524,16 @@ class _CreateProductListingState extends State<CreateProductListing> {
         'itemType': 'product',
         'isActive': _isSwitched,
         'supplierId': null,
-        'storageLocation': storageLocation,
-        'productNumber': productNumber,
-        'quantity': quantity,
+        'storageLocation': storageLocationController.text,
+        'productNumber': productNumberController.text,
+        'quantity': quantityController.text,
         'startAt': startDate?.toIso8601String(),
         'endAt': endDate?.toIso8601String(),
-        'color': color,
-        'size': size,
+        'color': colorController.text,
+        'size': sizeController.text,
       };
-      if (widget.product != null) {
-        bool response = await orderController.addProducts(productListing);
+      if (widget.product == null) {
+        bool response = await shopController.addProducts(productListing);
         if (response) {
           showSnackbar(
             message: 'Product Added Successfully!',
@@ -582,7 +546,7 @@ class _CreateProductListingState extends State<CreateProductListing> {
           );
         }
       } else {
-        bool response = await orderController.updateProduct(
+        bool response = await shopController.updateProduct(
             widget.product!.id, productListing);
         if (response) {
           showSnackbar(

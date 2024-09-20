@@ -3,7 +3,6 @@ import 'package:business_bosses_v2/bbpro/models/service_model.dart';
 import 'package:business_bosses_v2/bbpro/presentation/create_service.dart';
 import 'package:business_bosses_v2/bbpro/widgets/button.dart';
 import 'package:business_bosses_v2/bbpro/widgets/servicecard.dart';
-import 'package:business_bosses_v2/common/widgets/network_image_with_placeholder.dart';
 
 import 'package:business_bosses_v2/utils/theme/theme.dart';
 import 'package:flutter/material.dart';
@@ -135,21 +134,10 @@ class _ManageServicesState extends State<ManageServices> {
               crossAxisCount: 2,
               crossAxisSpacing: 10.0,
               mainAxisSpacing: 10.0,
-              itemCount: 10 ?? shopController.services.length,
+              itemCount: shopController.services.length,
               itemBuilder: (BuildContext context, int index) {
-                final Service? service = shopController.services.length > index
-                    ? shopController.services[index]
-                    : null;
-                return GestureDetector(
-                  // onTap: () {
-                  //   if (service != null) {
-                  //     Get.to(() => ExpandedService(
-                  //           service: service,
-                  //         ));
-                  //   }
-                  // },
-                  child: ServiceCard(service: service),
-                );
+                final Service service = shopController.services[index];
+                return ServiceCard(service: service);
               },
             ),
           ),

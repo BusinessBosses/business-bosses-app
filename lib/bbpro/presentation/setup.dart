@@ -5,10 +5,8 @@ import 'package:business_bosses_v2/bbpro/widgets/notificationbutton.dart';
 import 'package:business_bosses_v2/bbpro/presentation/inventory.dart';
 import 'package:business_bosses_v2/common/dialogs/snackbar.dart';
 import 'package:business_bosses_v2/common/widgets/network_image_with_placeholder.dart';
-import 'package:business_bosses_v2/features/profile/controller/profile_controller.dart';
 import 'package:business_bosses_v2/utils/theme/theme.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -33,7 +31,6 @@ class _SetupState extends State<Setup> {
 
   @override
   Widget build(BuildContext context) {
-    final ProfileController profileController = Get.find();
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
@@ -67,8 +64,7 @@ class _SetupState extends State<Setup> {
                             child: ClipRRect(
                               borderRadius: BorderRadius.circular(1000),
                               child: NetworkImageWithPlaceHolder(
-                                imageUrl:
-                                    profileController.myProfile.photoUrl ?? '',
+                                imageUrl: shopController.shop!.image ?? '',
                                 radius: radius,
                                 placeHolder: Icons.person,
                                 iconSize: 22.0,
@@ -81,8 +77,8 @@ class _SetupState extends State<Setup> {
                         Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: <Widget>[
-                            const Text('Shop Name',
-                                style: TextStyle(
+                            Text(shopController.shop!.name,
+                                style: const TextStyle(
                                     fontWeight: FontWeight.bold, fontSize: 20)),
                             const SizedBox(height: 10),
                             Row(

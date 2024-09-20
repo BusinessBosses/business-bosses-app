@@ -1,10 +1,12 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
+import 'package:business_bosses_v2/bbpro/presentation/create_product.dart';
 import 'package:flutter/material.dart';
 
 import 'package:business_bosses_v2/bbpro/models/product_model.dart';
 import 'package:business_bosses_v2/bbpro/widgets/optionsbutton.dart';
 import 'package:business_bosses_v2/common/widgets/network_image_with_placeholder.dart';
 import 'package:business_bosses_v2/utils/theme/theme.dart';
+import 'package:get/get.dart';
 
 class InventoryCard extends StatefulWidget {
   final Product product;
@@ -95,6 +97,9 @@ class _InventoryCardState extends State<InventoryCard> {
                 ),
                 OptionsButton(
                   item: widget.product,
+                  onEdit: () => Get.to(() => CreateProductListing(
+                        product: widget.product,
+                      )),
                 ),
               ],
             ),

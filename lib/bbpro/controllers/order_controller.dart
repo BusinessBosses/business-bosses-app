@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:business_bosses_v2/bbpro/models/order_model.dart';
 import 'package:business_bosses_v2/common/models/api_response_model.dart';
 import 'package:business_bosses_v2/features/profile/controller/profile_controller.dart';
@@ -32,50 +30,6 @@ class OrderController extends GetxController {
       orders.add(newClient);
       return true;
     } else {
-      return false;
-    }
-  }
-
-  Future<bool> addProducts(Map<String, dynamic> data) async {
-    ApiResponseModel response =
-        await ApiService.post(path: 'goods', body: data);
-    if (response.success) {
-      return true;
-    } else {
-      log(response.toMap().toString());
-      return false;
-    }
-  }
-
-  Future<bool> updateProduct(int id, Map<String, dynamic> data) async {
-    ApiResponseModel response =
-        await ApiService.put(path: 'goods/$id', body: data);
-    if (response.success) {
-      return true;
-    } else {
-      log(response.toMap().toString());
-      return false;
-    }
-  }
-
-  Future<bool> addService(Map<String, dynamic> data) async {
-    ApiResponseModel response =
-        await ApiService.post(path: 'services', body: data);
-    if (response.success) {
-      return true;
-    } else {
-      log(response.toMap().toString());
-      return false;
-    }
-  }
-
-  Future<bool> addSupplier(Map<String, dynamic> data) async {
-    ApiResponseModel response =
-        await ApiService.post(path: 'vendors', body: data);
-    if (response.success) {
-      return true;
-    } else {
-      log(response.toMap().toString());
       return false;
     }
   }

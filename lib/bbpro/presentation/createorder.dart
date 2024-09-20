@@ -1,10 +1,14 @@
 import 'package:business_bosses_v2/bbpro/controllers/clients_controller.dart';
 import 'package:business_bosses_v2/bbpro/controllers/order_controller.dart';
+import 'package:business_bosses_v2/bbpro/controllers/shop_controller.dart';
 import 'package:business_bosses_v2/bbpro/models/client_model.dart';
+import 'package:business_bosses_v2/bbpro/models/product_model.dart';
+import 'package:business_bosses_v2/bbpro/models/service_model.dart';
 import 'package:business_bosses_v2/bbpro/widgets/button.dart';
 import 'package:business_bosses_v2/bbpro/widgets/dropdown.dart';
 import 'package:business_bosses_v2/bbpro/widgets/edittext.dart';
 import 'package:business_bosses_v2/bbpro/widgets/textfield.dart';
+import 'package:business_bosses_v2/common/dialogs/snackbar.dart';
 import 'package:business_bosses_v2/features/profile/controller/profile_controller.dart';
 import 'package:business_bosses_v2/utils/theme/theme.dart';
 import 'package:flutter/material.dart';
@@ -23,40 +27,53 @@ class _CreateOrderState extends State<CreateOrder> {
 
   bool loading = false;
 
-  String selectedClient = 'Online';
+  String? selectedClient;
   String selectedOrder = 'Online';
   String selectedOrderChannel = 'Online';
   String selectedClientType = 'Online';
-  String selectedDeliveryMethod = 'Courier';
-  String selectedOrderDate = 'Select Date';
-  String selectedPaymentMethod = 'Bank';
+  String? selectedDeliveryMethod;
+  String? selectedOrderDate;
+  String? selectedPaymentMethod;
+  String? clientId;
+  List<String> paymentMedthod = <String>[];
 
-  List<String> clients = <String>[];
+  List<String> clientsName = <String>[];
+  List<Map<String, dynamic>> clients = <Map<String, dynamic>>[];
 
   // GetX Controller
   final OrderController orderController = Get.find();
   final ProfileController profileController = Get.find();
   final ClientsController clientsController = Get.put(ClientsController());
+  final ShopController shopController = Get.find();
 
   // Sample product and service lists
-  final List<Map<String, dynamic>> products = <Map<String, dynamic>>[
-    <String, dynamic>{'type': 'product', 'id': 1, 'name': 'Product 1'},
-    <String, dynamic>{'type': 'product', 'id': 2, 'name': 'Product 2'},
-    <String, dynamic>{'type': 'product', 'id': 3, 'name': 'Product 3'},
-  ];
+  final List<Map<String, dynamic>> products = <Map<String, dynamic>>[];
 
-  final List<Map<String, dynamic>> services = <Map<String, dynamic>>[
-    <String, dynamic>{'type': 'service', 'id': 1, 'name': 'Service 1'},
-    <String, dynamic>{'type': 'service', 'id': 2, 'name': 'Service 2'},
-  ];
+  final List<Map<String, dynamic>> services = <Map<String, dynamic>>[];
 
   List<Map<String, dynamic>> selectedItems = <Map<String, dynamic>>[];
 
   void _submitOrder() {
+    if (clientId != null) {
+      showSnackbar(message: 'Please select a valid client', error: true);
+      return;
+    } else if (selectedItems.isEmpty) {
+      showSnackbar(message: 'Please select an item', error: true);
+      return;
+    } else if (selectedDeliveryMethod == null) {
+      showSnackbar(message: 'Please select a delivery method', error: true);
+      return;
+    } else if (selectedOrderDate == null) {
+      showSnackbar(message: 'Please select a date!', error: true);
+      return;
+    } else if (selectedPaymentMethod == null) {
+      showSnackbar(message: 'Please select a payment method', error: true);
+      return;
+    }
     final Map<String, dynamic> orderData = <String, dynamic>{
       'userId': profileController.myProfile.uid,
-      'shopId': 'c215b1f3-4465-4f48-a97e-742802d9d0d4',
-      'clientId': selectedClient,
+      'shopId': shopController.shop?.id,
+      'clientId': clientId,
       'items': selectedItems,
       'deliveryMethod': selectedDeliveryMethod,
       'deliveryDate': selectedOrderDate,
@@ -76,7 +93,30 @@ class _CreateOrderState extends State<CreateOrder> {
       // Check if the widget is still mounted
       setState(() {
         for (Client client in clientsController.clients) {
-          clients.add(client.name);
+          clientsName.add(client.name);
+          clients.add(<String, dynamic>{'name': client.name, 'id': client.id});
+        }
+        for (Product product in shopController.products) {
+          products.add(
+            <String, dynamic>{
+              'type': 'product',
+              'id': product.id,
+              'name': product.name
+            },
+          );
+        }
+        for (Service service in shopController.services) {
+          services.add(
+            <String, dynamic>{
+              'type': 'service',
+              'id': service.id,
+              'name': service.name
+            },
+          );
+        }
+
+        for (dynamic payments in shopController.shop!.payments) {
+          paymentMedthod.add(payments);
         }
         loading = false; // Update the loading state
       });
@@ -91,6 +131,14 @@ class _CreateOrderState extends State<CreateOrder> {
         selectedItems.removeWhere(
             (Map<String, dynamic> element) => element['id'] == item['id']);
       }
+    });
+  }
+
+  void _onClientSelect(String name) {
+    final dynamic clientName = clients
+        .firstWhere((Map<String, dynamic> element) => element['name'] == name);
+    setState(() {
+      clientId = clientName['id'];
     });
   }
 
@@ -141,12 +189,13 @@ class _CreateOrderState extends State<CreateOrder> {
                         // ),
                         CustomDropdownWidget(
                           caption: 'Client\'s Name',
-                          items: const <String>['Online', 'Offline'],
+                          items: clientsName,
                           iconName: 'assets/svgs/dropdown.svg',
-                          initialValue: selectedOrder,
+                          initialValue: selectedClient,
                           onChanged: (String? value) {
                             setState(() {
                               selectedClient = value!;
+                              _onClientSelect(value);
                             });
                           },
                         ),
@@ -187,12 +236,7 @@ class _CreateOrderState extends State<CreateOrder> {
                         const SizedBox(height: 15),
                         CustomDropdownWidget(
                           caption: 'Payment Method',
-                          items: const <String>[
-                            'Bank',
-                            'Paypal',
-                            'Wallet',
-                            'Cash'
-                          ],
+                          items: paymentMedthod,
                           iconName: 'assets/svgs/dropdown.svg',
                           initialValue: selectedPaymentMethod,
                           onChanged: (String? value) {

@@ -6,6 +6,7 @@ class AvailabilityWidget extends StatefulWidget {
   const AvailabilityWidget({Key? key}) : super(key: key);
 
   @override
+  // ignore: library_private_types_in_public_api
   _AvailabilityWidgetState createState() => _AvailabilityWidgetState();
 }
 
@@ -15,7 +16,7 @@ class _AvailabilityWidgetState extends State<AvailabilityWidget>
   late Animation<double> _animation;
   final List<DateTime> _selectedDates = <DateTime>[];
   bool _isAlwaysAvailable = false;
-  final List<bool> _selectedWeekdays = List.filled(7, false);
+  final List<bool> _selectedWeekdays = List<bool>.filled(7, false);
   TimeOfDay _startTime = const TimeOfDay(hour: 9, minute: 0);
   TimeOfDay _endTime = const TimeOfDay(hour: 17, minute: 0);
   bool _startTimeSelected = false;
@@ -122,7 +123,7 @@ class _AvailabilityWidgetState extends State<AvailabilityWidget>
             const SizedBox(height: 10),
             Wrap(
               spacing: 8,
-              children: List.generate(7, (int index) {
+              children: List<Widget>.generate(7, (int index) {
                 return ChoiceChip(
                   label: Text(_getWeekdayName(index)),
                   selected: _selectedWeekdays[index],

@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:business_bosses_v2/bbpro/controllers/shop_controller.dart';
+import 'package:business_bosses_v2/bbpro/models/service_model.dart';
 import 'package:business_bosses_v2/bbpro/widgets/availabiltywidget.dart';
 import 'package:business_bosses_v2/bbpro/widgets/dropdown.dart';
 import 'package:business_bosses_v2/bbpro/widgets/edittext.dart';
@@ -14,22 +15,22 @@ import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
 import 'package:get/get.dart';
 import 'package:country_list_pick/country_list_pick.dart';
-import 'package:business_bosses_v2/bbpro/controllers/order_controller.dart';
 import 'package:business_bosses_v2/bbpro/widgets/button.dart';
 import 'package:business_bosses_v2/bbpro/widgets/textfield.dart';
 import 'package:business_bosses_v2/common/dialogs/snackbar.dart';
 import 'package:business_bosses_v2/utils/theme/theme.dart';
 
 class CreateServiceListing extends StatefulWidget {
-  const CreateServiceListing({super.key});
+  final Service? service;
+  const CreateServiceListing({super.key, this.service});
 
   @override
+  // ignore: library_private_types_in_public_api
   _CreateServiceListingState createState() => _CreateServiceListingState();
 }
 
 class _CreateServiceListingState extends State<CreateServiceListing> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
-  final OrderController orderController = Get.put(OrderController());
   final ShopController shopController = Get.put(ShopController());
   final ProfileController profileController = Get.find();
   final ImagePicker _picker = ImagePicker();
@@ -56,6 +57,23 @@ class _CreateServiceListingState extends State<CreateServiceListing> {
   DateTime? availableTime;
   String? serviceType;
 
+  @override
+  void initState() {
+    super.initState();
+    if (widget.service != null) {
+      _serviceNameController.text = widget.service!.name;
+      _priceController.text = widget.service!.price.toString();
+      _discountController.text = widget.service!.discount.toString();
+      _descriptionController.text = widget.service!.description;
+      category = widget.service!.category;
+      location = widget.service!.location;
+      deliveryMethod = widget.service!.deliveryMethod;
+      deliveryTime = widget.service!.deliveryTime;
+      availableTime = widget.service!.availableTime;
+      serviceType = widget.service!.serviceType;
+    }
+  }
+
   Future<void> _pickImage() async {
     final XFile? image = await _picker.pickImage(source: ImageSource.gallery);
     if (image != null) {
@@ -71,9 +89,9 @@ class _CreateServiceListingState extends State<CreateServiceListing> {
       backgroundColor: probackgroundColor,
       appBar: AppBar(
         automaticallyImplyLeading: false,
-        title: const Text(
-          'Create Service Listing',
-          style: TextStyle(
+        title: Text(
+          widget.service != null ? 'Edit Service' : 'Create Service Listing',
+          style: const TextStyle(
             color: proprimaryColor,
             fontWeight: FontWeight.bold,
           ),
@@ -182,6 +200,7 @@ class _CreateServiceListingState extends State<CreateServiceListing> {
             ),
             const SizedBox(height: 16),
             CustomDropdownWidget(
+              initialValue: category,
               caption: 'Select Category',
               hintText: 'Choose a category',
               items: const <String>[
@@ -315,6 +334,7 @@ class _CreateServiceListingState extends State<CreateServiceListing> {
 
             // Delivery Method Dropdown
             CustomDropdownWidget(
+              initialValue: deliveryMethod,
               caption: 'Delivery Method',
               hintText: 'Choose a delivery method',
               items: const <String>['Online', 'In-Person'],
@@ -425,7 +445,7 @@ class _CreateServiceListingState extends State<CreateServiceListing> {
             // Submit Button
             ProCustomButton(
               loading: isSubmitted,
-              text: 'Create Service',
+              text: widget.service != null ? 'Save Changes' : 'Create Service',
               onPressed: _submitForm,
             ),
           ],
@@ -491,7 +511,7 @@ class _CreateServiceListingState extends State<CreateServiceListing> {
       // For demonstration, print the map
       // You can now send this data to your API or database
       // Example:
-      await orderController.addService(serviceData).then((bool response) {
+      await shopController.addService(serviceData).then((bool response) {
         if (response) {
           // Handle success
           showSnackbar(message: 'Service Added Succesfully!');
