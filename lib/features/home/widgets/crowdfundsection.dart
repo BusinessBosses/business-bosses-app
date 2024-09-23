@@ -63,11 +63,8 @@ class _CrowdfundSectionState extends State<CrowdfundSection> {
               ),
               const SizedBox(
                   height: 218,
-                  child: Padding(
-                    padding: EdgeInsets.symmetric(horizontal: 15.0),
-                    child: DonationsPage(
-                      ishome: true,
-                    ),
+                  child: DonationsPage(
+                    ishome: true,
                   ))
             ],
           ),
