@@ -70,7 +70,7 @@ class CustomTile extends StatelessWidget {
                         children: <Widget>[
                           Padding(
                             padding: ishome == true
-                                ? const EdgeInsets.only(left: 15)
+                                ? const EdgeInsets.only(left: 10)
                                 : const EdgeInsets.only(
                                     left: 10.0,
                                     right: 10.0,
