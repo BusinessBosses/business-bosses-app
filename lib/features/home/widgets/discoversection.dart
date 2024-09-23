@@ -24,16 +24,20 @@ class DiscoverSection extends StatelessWidget {
           SizedBox(height: 15),
           HowtouseTile(),
           SizedBox(height: 15),
-          ProTile(),
-          SizedBox(height: 15),
           RelevantPeopleTile(),
+          Padding(
+            padding: EdgeInsets.symmetric(horizontal: 15.0),
+            child: Row(
+              children: <Widget>[
+                Expanded(child: ProTile()),
+                SizedBox(width: 10),
+                Expanded(child: CoinTile()),
+              ],
+            ),
+          ),
+
           SizedBox(height: 15),
-          CoinTile(),
-          // BossOfWeekProfileTile(),
-          SizedBox(height: 15),
-          SizedBox(height: 10),
-          SizedBox(height: 15),
-          SizedBox(height: 15),
+
           SizedBox(height: 120),
         ],
       ),

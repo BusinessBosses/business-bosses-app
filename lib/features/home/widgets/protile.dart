@@ -9,9 +9,9 @@ class ProTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 15.0),
+      padding: const EdgeInsets.symmetric(horizontal: 0.0),
       child: Column(
-        children: [
+        children: <Widget>[
           const Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: <Widget>[
@@ -26,12 +26,12 @@ class ProTile extends StatelessWidget {
             padding: const EdgeInsets.symmetric(vertical: 15),
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(15),
-              image: const DecorationImage(
-                image: AssetImage(
-                    'assets/images/probackgroundpic.png'), // Replace with your image path
-                fit: BoxFit
-                    .cover, // Adjust the image to cover the entire container
-              ),
+              color: proprimaryColor,
+              // image: const DecorationImage(
+              //   image: AssetImage(
+              //       'assets/images/probackgroundpic.png'), // Replace with your image path
+              //   fit: BoxFit
+              //       .cover, // Adjust the image to cover the entire container
             ),
             child: Align(
               child: GestureDetector(
@@ -62,7 +62,7 @@ class ProTile extends StatelessWidget {
                         const SizedBox(
                           height: 10,
                         ),
-                        const Wrap(children: [
+                        const Wrap(children: <Widget>[
                           Text(
                             '\$9.99',
                             style: TextStyle(
@@ -84,7 +84,7 @@ class ProTile extends StatelessWidget {
                         ),
                         Row(
                           crossAxisAlignment: CrossAxisAlignment.center,
-                          children: [
+                          children: <Widget>[
                             GestureDetector(
                               onTap: () {},
                               child: Container(
@@ -100,7 +100,7 @@ class ProTile extends StatelessWidget {
                                 child: const Row(
                                   mainAxisAlignment: MainAxisAlignment.center,
                                   crossAxisAlignment: CrossAxisAlignment.center,
-                                  children: [
+                                  children: <Widget>[
                                     Text(
                                       'Upgrade',
                                       style: TextStyle(
@@ -120,34 +120,34 @@ class ProTile extends StatelessWidget {
                                 ),
                               ),
                             ),
-                            const SizedBox(
-                              width: 8,
-                            ),
-                            GestureDetector(
-                              onTap: () {
-                                Get.to(ProScreen());
-                              },
-                              child: Container(
-                                constraints: BoxConstraints(
-                                    minHeight:
-                                        40), // Ensure the same height as the first button
-                                decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(100),
-                                  border: Border.all(color: Colors.white),
-                                ),
-                                padding: const EdgeInsets.symmetric(
-                                    horizontal: 15), // Removed vertical padding
-                                child: const Center(
-                                  child: Text(
-                                    'View Pro Features',
-                                    style: TextStyle(
-                                        color: Colors.white,
-                                        fontSize: 13,
-                                        fontWeight: FontWeight.w700),
-                                  ),
-                                ),
-                              ),
-                            ),
+                            // const SizedBox(
+                            //   width: 8,
+                            // ),
+                            // GestureDetector(
+                            //   onTap: () {
+                            //     Get.to(ProScreen());
+                            //   },
+                            //   child: Container(
+                            //     constraints: BoxConstraints(
+                            //         minHeight:
+                            //             40), // Ensure the same height as the first button
+                            //     decoration: BoxDecoration(
+                            //       borderRadius: BorderRadius.circular(100),
+                            //       border: Border.all(color: Colors.white),
+                            //     ),
+                            //     padding: const EdgeInsets.symmetric(
+                            //         horizontal: 15), // Removed vertical padding
+                            //     child: const Center(
+                            //       child: Text(
+                            //         'View Pro Features',
+                            //         style: TextStyle(
+                            //             color: Colors.white,
+                            //             fontSize: 13,
+                            //             fontWeight: FontWeight.w700),
+                            //       ),
+                            //     ),
+                            //   ),
+                            // ),
                           ],
                         ),
                       ],
