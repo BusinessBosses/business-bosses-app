@@ -517,8 +517,8 @@ class _ServiceTileState extends State<ServiceTile> {
                                                   width: 1,
                                                 ),
                                                 Text(
-                                                  _post.location!.length > 50
-                                                      ? '${_post.location!.substring(0, 50)}...'
+                                                  _post.location!.length > 20
+                                                      ? '${_post.location!.substring(0, 20)}...'
                                                       : _post.location!,
                                                   style: const TextStyle(
                                                       fontWeight:
@@ -548,8 +548,8 @@ class _ServiceTileState extends State<ServiceTile> {
                                                   width: 3,
                                                 ),
                                                 Text(
-                                                  _post.category!.length > 50
-                                                      ? '${_post.category!.substring(0, 50)}...'
+                                                  _post.category!.length > 20
+                                                      ? '${_post.category!.substring(0, 20)}...'
                                                       : _post.category!,
                                                   style: const TextStyle(
                                                       fontWeight:
