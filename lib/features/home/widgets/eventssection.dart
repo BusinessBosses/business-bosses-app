@@ -16,8 +16,8 @@ class EventsSection extends StatelessWidget {
       },
       child: Container(
         child: Column(
-          children: [
-            SizedBox(
+          children: <Widget>[
+            const SizedBox(
               height: 10,
             ),
             Padding(
@@ -47,10 +47,10 @@ class EventsSection extends StatelessWidget {
                 ],
               ),
             ),
-            SizedBox(
+            const SizedBox(
               height: 10,
             ),
-            EventCall(
+            const EventCall(
               ishome: true,
               full: true,
             ),

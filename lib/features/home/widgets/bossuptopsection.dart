@@ -48,7 +48,7 @@ class BossUpTopSection extends StatelessWidget {
                   }),
                   _buildButton(context, 'Crowdfund',
                       Colors.purple.shade700.withOpacity(0.1), () {
-                    Get.to(const DonationsPage());
+                    Get.to(const DonationsPage(ishome: false));
                   }),
                   _buildButton(
                       context, 'Upgrade +', proprimaryColor.withOpacity(0.1),
