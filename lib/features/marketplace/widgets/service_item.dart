@@ -464,7 +464,7 @@ class _ServiceTileState extends State<ServiceTile> {
                                     lessStyle: bodyText2.copyWith(
                                       color: Colors.redAccent,
                                     ),
-                                    trimLength: 100,
+                                    trimLength: 50,
                                     trimExpandedText: '  show less',
                                     basicStyle:
                                         bodyText2.copyWith(color: textColor),

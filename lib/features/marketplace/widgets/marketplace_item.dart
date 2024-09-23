@@ -587,7 +587,8 @@ class _MarketTileState extends State<MarketTile> {
                                       left: 15.0, right: 15),
                                   child: DetectableText(
                                     text: _post.description,
-                                    trimLength: 100,
+                                    // maxLines: 2,
+                                    trimLength: 50,
                                     detectionRegExp:
                                         detectionRegExp(hashtag: false)!,
                                     detectedStyle: bodyText2.copyWith(

@@ -553,7 +553,7 @@ class _DonationsPageState extends State<DonationsPage> {
                                               padding: EdgeInsets.only(
                                                   left: widget.ishome == false
                                                       ? 0
-                                                      : 15.0),
+                                                      : 10.0),
                                               child: DonationItem(
                                                 donation:
                                                     controller.donations[i],
