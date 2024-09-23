@@ -14,7 +14,7 @@ class HowtouseTile extends StatelessWidget {
       child: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 15.0),
         child: Column(
-          children: [
+          children: <Widget>[
             const Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: <Widget>[
@@ -33,7 +33,7 @@ class HowtouseTile extends StatelessWidget {
                   borderRadius: BorderRadius.circular(15)),
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
-                children: [
+                children: <Widget>[
                   // Stack of overlapping icons with circular backgrounds
                   Image.asset(
                     'assets/images/howitworkspic.png',
@@ -44,7 +44,7 @@ class HowtouseTile extends StatelessWidget {
                   const Padding(
                     padding: EdgeInsets.symmetric(horizontal: 20.0),
                     child: Text(
-                      "Get to know the Business Bosses app and all of its features.",
+                      'Get to know the Business Bosses app and all of its features.',
                       style: TextStyle(
                         color: textColor,
                         fontSize: 13,
@@ -72,10 +72,13 @@ class HowtouseTile extends StatelessWidget {
                         mainAxisSize: MainAxisSize
                             .min, // Row will only take up the space it needs
                         crossAxisAlignment: CrossAxisAlignment.center,
-                        children: [
+                        children: <Widget>[
                           Text(
                             'Explore',
-                            style: TextStyle(color: Colors.green, fontSize: 13, fontWeight: FontWeight.w700),
+                            style: TextStyle(
+                                color: Colors.green,
+                                fontSize: 13,
+                                fontWeight: FontWeight.w700),
                           ),
                           SizedBox(
                             width: 5,
