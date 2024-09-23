@@ -151,7 +151,8 @@ class Confirmation extends StatelessWidget {
                       ),
                       label: 'Ok',
                       onPressed: () {
-                        Get.offNamedUntil(Routes.home, (Route route) => false);
+                        // Get.offNamedUntil(Routes.home, (Route route) => false);
+                        Get.offAndToNamed(Routes.home);
                         // Navigator.of(context).pushNamedAndRemoveUntil(
                         //   BottomNavScreen.routeName,
                         //   (Route route) => false,
