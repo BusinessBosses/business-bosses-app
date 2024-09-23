@@ -773,11 +773,11 @@ class _DonationItemState extends State<DonationItem> {
               color: backgroundcolorinterface,
               height: 7,
             ),
-            if (widget.isLastItem)
-              Container(
-                color: backgroundColor,
-                height: 80,
-              ),
+            // if (widget.isLastItem)
+            //   Container(
+            //     // color: backgroundColor,
+            //     height: 80,
+            //   ),
           ],
         ),
       ),
