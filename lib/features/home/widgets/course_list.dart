@@ -39,12 +39,12 @@ class CourseListState extends State<CourseList>
     ];
 
     _controllers = List<YoutubePlayerController>.generate(
-      3,
+      videoIds.length,
       (int index) => YoutubePlayerController(
         initialVideoId: videoIds[index],
         flags: const YoutubePlayerFlags(
-          autoPlay: false,
-          mute: false,
+          autoPlay: false, // Prevents autoplay
+          mute: true, // Keep video muted by default
           disableDragSeek: true,
           enableCaption: false,
           isLive: false,
@@ -72,11 +72,7 @@ class CourseListState extends State<CourseList>
   @override
   void didChangeAppLifecycleState(AppLifecycleState state) {
     if (state == AppLifecycleState.paused) {
-      // App loses focus
       _controllers[_currentPage].pause();
-    } else if (state == AppLifecycleState.resumed) {
-      // App regains focus
-      _controllers[_currentPage].play();
     }
   }
 
@@ -101,7 +97,6 @@ class CourseListState extends State<CourseList>
           setState(() {
             _isVisible = true;
           });
-          _playCurrentVideo();
         }
       },
       child: Column(
@@ -130,7 +125,6 @@ class CourseListState extends State<CourseList>
                         const SizedBox(width: 5.0),
                         SvgPicture.asset(
                           'assets/svgs/nexticon.svg',
-                          // ignore: deprecated_member_use
                           color: textColor,
                           height: 8,
                         ),
@@ -145,17 +139,12 @@ class CourseListState extends State<CourseList>
             child: PageView.builder(
               controller: _pageController,
               padEnds: false,
-              itemCount: 3,
+              itemCount: _controllers.length,
               onPageChanged: (int page) {
                 setState(() {
                   _currentPage = page;
                 });
-                _controllers[_currentPage].play();
-                for (int i = 0; i < _controllers.length; i++) {
-                  if (i != _currentPage) {
-                    _controllers[i].pause();
-                  }
-                }
+                pauseAllVideos(); // Pause all videos when the page changes
               },
               itemBuilder: (BuildContext context, int index) {
                 return _buildCourseItem(index);
@@ -166,12 +155,6 @@ class CourseListState extends State<CourseList>
         ],
       ),
     );
-  }
-
-  void _playCurrentVideo() {
-    if (_controllers.isNotEmpty) {
-      _controllers[_currentPage].play();
-    }
   }
 
   Widget _buildCourseItem(int index) {
@@ -203,6 +186,32 @@ class CourseListState extends State<CourseList>
               onReady: () {
                 _controllers[index].addListener(() {});
               },
+            ),
+            Positioned(
+              bottom: 10,
+              right: 10,
+              child: Row(
+                children: <Widget>[
+                  IconButton(
+                    icon: Icon(
+                      _controllers[index].value.volume == 0
+                          ? Icons.volume_off
+                          : Icons.volume_up,
+                      color: Colors.white,
+                    ),
+                    onPressed: () {
+                      if (_controllers[index].value.volume == 0) {
+                        _controllers[index].setVolume(100);
+                        _controllers[index].unMute();
+                      } else {
+                        _controllers[index].setVolume(0);
+                        _controllers[index].mute();
+                      }
+                      setState(() {});
+                    },
+                  ),
+                ],
+              ),
             ),
             Positioned(
               left: 10,

@@ -310,10 +310,12 @@ class _BossupChallengeState extends State<BossupChallenge> {
                                           )
                                         ],
                                       ),
-                                      const SizedBox(
-                                        height: 5,
+                                      const Spacer(),
+                                      Padding(
+                                        padding:
+                                            const EdgeInsets.only(bottom: 10.0),
+                                        child: _getChallengeTimeLeft(category),
                                       ),
-                                      _getChallengeTimeLeft(category),
                                     ],
                                   ),
                                 )
@@ -351,6 +353,7 @@ class _BossupChallengeState extends State<BossupChallenge> {
     return SizedBox(
       width: 142,
       child: Row(
+        crossAxisAlignment: CrossAxisAlignment.center,
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: <Widget>[
           Container(
@@ -374,32 +377,37 @@ class _BossupChallengeState extends State<BossupChallenge> {
               ),
             ),
           ),
-          OutlinedButton(
-            onPressed: hasNotStarted
-                ? null
-                : () {
-                    Get.to(() => BossUpSection(
+          if (widget.ishome == true)
+            GestureDetector(
+              onTap: () {
+                hasNotStarted
+                    ? null
+                    : Get.to(() => BossUpSection(
                           industry: category,
                           bossUp: Get.find<ChallengeController>().categories[0],
                         ));
-                  },
-            style: OutlinedButton.styleFrom(
-              side: BorderSide(
-                  color: hasNotStarted ? Colors.grey : primaryColorLT),
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(7),
+              },
+              child: Container(
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 10, vertical: 7),
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(7),
+                  border: Border.all(
+                    color: hasNotStarted
+                        ? Colors.grey.withAlpha(40)
+                        : primaryColorLT,
+                  ),
+                ),
+                child: Text(
+                  'Enter',
+                  style: TextStyle(
+                    color: hasNotStarted ? Colors.grey : primaryColorLT,
+                    fontWeight: FontWeight.bold,
+                    fontSize: 11,
+                  ),
+                ),
               ),
-              padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 7),
             ),
-            child: Text(
-              'Enter',
-              style: TextStyle(
-                color: hasNotStarted ? Colors.grey : primaryColorLT,
-                fontWeight: FontWeight.bold,
-                fontSize: 11,
-              ),
-            ),
-          ),
         ],
       ),
     );
