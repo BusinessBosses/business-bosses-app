@@ -33,7 +33,7 @@ class CourseListState extends State<CourseList>
 
   void _initializeControllers() {
     final List<String> videoIds = <String>[
-      'dQw4w9WgXcQ', // Replace with actual YouTube video IDs
+      'dQw4w9WgXcQ',
       'jNQXAC9IVRw',
       'kJQP7kiw5Fk',
     ];
@@ -43,8 +43,8 @@ class CourseListState extends State<CourseList>
       (int index) => YoutubePlayerController(
         initialVideoId: videoIds[index],
         flags: const YoutubePlayerFlags(
-          autoPlay: false, // Prevents autoplay
-          mute: true, // Keep video muted by default
+          autoPlay: false,
+          mute: true,
           disableDragSeek: true,
           enableCaption: false,
           isLive: false,
