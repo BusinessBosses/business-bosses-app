@@ -408,7 +408,9 @@ class _DonationsPageState extends State<DonationsPage> {
                     : GetBuilder<DonationsController>(
                         builder: (DonationsController controller) {
                           return Container(
-                            color: backgroundColor,
+                            color: widget.ishome == false
+                                ? backgroundColor
+                                : Colors.white,
                             child: Column(
                               children: <Widget>[
                                 widget.ishome == false
