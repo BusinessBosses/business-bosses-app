@@ -41,7 +41,7 @@ dependencies:
   file_picker:
   firebase_analytics: ^10.2.1
   firebase_core: ^2.10.0
-  firebase_dynamic_links: ^5.1.1
+  # firebase_dynamic_links: ^5.1.1
   firebase_messaging: ^14.6.1
   flutter:
     sdk: flutter

@@ -9,6 +9,7 @@ import 'package:business_bosses_v2/features/home/widgets/all_learning_posts.dart
 import 'package:business_bosses_v2/features/home/widgets/bossuptopsection.dart';
 import 'package:business_bosses_v2/features/home/widgets/bottom_bar.dart';
 import 'package:business_bosses_v2/features/home/widgets/challengessection.dart';
+import 'package:business_bosses_v2/features/home/widgets/crowdfundsection.dart';
 import 'package:business_bosses_v2/features/home/widgets/eventssection.dart';
 import 'package:business_bosses_v2/features/home/widgets/industriessearch.dart';
 import 'package:business_bosses_v2/features/home/widgets/learningsection.dart';
@@ -202,7 +203,10 @@ class _AllCommunitiesScreenState extends State<AllCommunitiesScreen>
                                   ChallengesSection(),
                                   LearningSection(),
                                   EventsSection(),
-                                  // Crowdfund(),
+                                  SizedBox(
+                                    height: 5,
+                                  ),
+                                  CrowdfundSection(),
                                   SizedBox(
                                     height: 100,
                                   ),

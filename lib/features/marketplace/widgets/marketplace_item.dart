@@ -634,75 +634,73 @@ class _MarketTileState extends State<MarketTile> {
                                     children: <Widget>[
                                       _post.location != null &&
                                               _post.category != null
-                                          ? SingleChildScrollView(
-                                              scrollDirection: Axis.horizontal,
-                                              child: Row(
-                                                children: <Widget>[
-                                                  SvgPicture.asset(
-                                                      'assets/svgs/location.svg'),
-                                                  const SizedBox(width: 1),
-                                                  Text(
-                                                    _post.location ?? '',
-                                                    style: const TextStyle(
-                                                        fontWeight:
-                                                            FontWeight.normal,
-                                                        fontSize: 12,
-                                                        color: subtextColor),
-                                                  ),
-                                                  const SizedBox(width: 5),
-                                                  SvgPicture.asset(
-                                                      'assets/svgs/category.svg'),
-                                                  const SizedBox(width: 3),
-                                                  Text(
-                                                    _post.category ?? '',
-                                                    style: const TextStyle(
+                                          ? Row(
+                                              children: <Widget>[
+                                                SvgPicture.asset(
+                                                    'assets/svgs/location.svg'),
+                                                const SizedBox(width: 1),
+                                                Text(
+                                                  _post.location!.length > 20
+                                                      ? '${_post.location!.substring(0, 20)}...'
+                                                      : _post.location!,
+                                                  style: const TextStyle(
                                                       fontWeight:
                                                           FontWeight.normal,
                                                       fontSize: 12,
-                                                      color: subtextColor,
-                                                    ),
-                                                    overflow:
-                                                        TextOverflow.ellipsis,
-                                                    maxLines: 1,
+                                                      color: subtextColor),
+                                                ),
+                                                const SizedBox(width: 5),
+                                                SvgPicture.asset(
+                                                    'assets/svgs/category.svg'),
+                                                const SizedBox(width: 3),
+                                                Text(
+                                                  _post.category!.length > 20
+                                                      ? '${_post.category!.substring(0, 20)}...'
+                                                      : _post.category!,
+                                                  style: const TextStyle(
+                                                    fontWeight:
+                                                        FontWeight.normal,
+                                                    fontSize: 12,
+                                                    color: subtextColor,
                                                   ),
-                                                  const SizedBox(width: 5),
-                                                  const Icon(
-                                                    Icons.star,
-                                                    color: Color.fromRGBO(
-                                                        255, 202, 40, 1),
-                                                    size: 16,
+                                                  overflow:
+                                                      TextOverflow.ellipsis,
+                                                  maxLines: 1,
+                                                ),
+                                                const SizedBox(width: 5),
+                                                const Icon(
+                                                  Icons.star,
+                                                  color: Color.fromRGBO(
+                                                      255, 202, 40, 1),
+                                                  size: 16,
+                                                ),
+                                                Text(
+                                                  _post.user!.averageRating!
+                                                      .toStringAsFixed(1),
+                                                  style: const TextStyle(
+                                                    fontWeight: FontWeight.bold,
+                                                    fontSize: 12,
                                                   ),
-                                                  Text(
-                                                    _post.user!.averageRating!
-                                                        .toStringAsFixed(1),
-                                                    style: const TextStyle(
+                                                ),
+                                                const SizedBox(width: 5),
+                                                GestureDetector(
+                                                  onTap: () {
+                                                    Get.to(() =>
+                                                        SellerReviewScreen(
+                                                            user: _post.user!));
+                                                  },
+                                                  child: const Text(
+                                                    'Reviews',
+                                                    style: TextStyle(
+                                                      fontSize: 12,
                                                       fontWeight:
                                                           FontWeight.bold,
-                                                      fontSize: 12,
+                                                      decoration: TextDecoration
+                                                          .underline,
                                                     ),
                                                   ),
-                                                  const SizedBox(width: 5),
-                                                  GestureDetector(
-                                                    onTap: () {
-                                                      Get.to(() =>
-                                                          SellerReviewScreen(
-                                                              user:
-                                                                  _post.user!));
-                                                    },
-                                                    child: const Text(
-                                                      'Reviews',
-                                                      style: TextStyle(
-                                                        fontSize: 12,
-                                                        fontWeight:
-                                                            FontWeight.bold,
-                                                        decoration:
-                                                            TextDecoration
-                                                                .underline,
-                                                      ),
-                                                    ),
-                                                  ),
-                                                ],
-                                              ),
+                                                ),
+                                              ],
                                             )
                                           : const Row(
                                               children: <Widget>[
