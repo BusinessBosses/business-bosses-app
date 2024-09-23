@@ -508,11 +508,8 @@ class _ServiceTileState extends State<ServiceTile> {
                                                         size: 12,
                                                         color: subtextColor,
                                                       )
-                                                    : const Icon(
-                                                        Icons.location_on,
-                                                        size: 12,
-                                                        color: subtextColor,
-                                                      ),
+                                                    : SvgPicture.asset(
+                                                        'assets/svgs/location.svg'),
                                                 const SizedBox(
                                                   width: 1,
                                                 ),
