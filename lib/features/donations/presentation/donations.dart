@@ -201,18 +201,8 @@ class _DonationsPageState extends State<DonationsPage> {
                                           ],
                                         ),
                                       Container(
-                                        decoration: BoxDecoration(
-                                          boxShadow: <BoxShadow>[
-                                            BoxShadow(
-                                              color: Colors.black
-                                                  .withOpacity(0.09),
-                                              blurRadius:
-                                                  100.0, // soften the shadow
-                                              spreadRadius:
-                                                  5, //extend the shadow
-                                            )
-                                          ],
-                                        ),
+                                        decoration: const BoxDecoration(
+                                            color: backgroundColor),
                                         child: Stack(
                                           children: <Widget>[
                                             Container(
@@ -417,155 +407,165 @@ class _DonationsPageState extends State<DonationsPage> {
                       )
                     : GetBuilder<DonationsController>(
                         builder: (DonationsController controller) {
-                          return Column(
-                            children: <Widget>[
-                              widget.ishome == false
-                                  ? Padding(
-                                      padding: const EdgeInsets.only(
-                                          right: 15,
-                                          left: 15,
-                                          bottom: 10,
-                                          top: 10),
-                                      child: Container(
-                                          height: 40,
-                                          decoration: BoxDecoration(
-                                            color: const Color(0xFFFFFFFF),
-                                            borderRadius:
-                                                BorderRadius.circular(10),
-                                            boxShadow: <BoxShadow>[
-                                              BoxShadow(
-                                                color: Colors.grey
-                                                    .withOpacity(0.3),
-                                                spreadRadius: 20,
-                                                blurRadius: 500,
-                                                offset: const Offset(0, 3),
-                                              ),
-                                            ],
-                                          ),
-                                          child: Row(
-                                            mainAxisAlignment:
-                                                MainAxisAlignment.spaceBetween,
-                                            children: <Widget>[
-                                              GestureDetector(
-                                                onTap: () {
-                                                  Get.toNamed(
-                                                      Routes.promotionscreen);
-                                                },
-                                                child: Padding(
-                                                  padding:
-                                                      const EdgeInsets.only(
-                                                          left: 10.0),
-                                                  child: Container(
-                                                    width: 142,
-                                                    padding: const EdgeInsets
-                                                        .symmetric(vertical: 1),
-                                                    decoration: BoxDecoration(
-                                                        color: backgroundColor,
-                                                        borderRadius:
-                                                            BorderRadius
-                                                                .circular(5)),
-                                                    child: Wrap(
-                                                      alignment:
-                                                          WrapAlignment.center,
-                                                      crossAxisAlignment:
-                                                          WrapCrossAlignment
-                                                              .center,
-                                                      children: <Widget>[
-                                                        const Text('Balance: '),
-                                                        SvgPicture.asset(
-                                                            'assets/svgs/coin.svg'),
-                                                        const SizedBox(
-                                                          width: 2,
-                                                        ),
-                                                        Text(
-                                                          '${_myProfile.myProfile.coinscount!}',
-                                                          style: const TextStyle(
-                                                              fontWeight:
-                                                                  FontWeight
-                                                                      .w700,
-                                                              color:
-                                                                  subtextColor),
-                                                        )
-                                                      ],
+                          return Container(
+                            color: backgroundColor,
+                            child: Column(
+                              children: <Widget>[
+                                widget.ishome == false
+                                    ? Padding(
+                                        padding: const EdgeInsets.only(
+                                            right: 15,
+                                            left: 15,
+                                            bottom: 10,
+                                            top: 10),
+                                        child: Container(
+                                            height: 40,
+                                            decoration: BoxDecoration(
+                                              color: Colors.white,
+                                              borderRadius:
+                                                  BorderRadius.circular(10),
+                                              // boxShadow: <BoxShadow>[
+                                              //   BoxShadow(
+                                              //     color: Colors.grey
+                                              //         .withOpacity(0.3),
+                                              //     spreadRadius: 20,
+                                              //     blurRadius: 500,
+                                              //     offset: const Offset(0, 3),
+                                              //   ),
+                                              // ],
+                                            ),
+                                            child: Row(
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment
+                                                      .spaceBetween,
+                                              children: <Widget>[
+                                                GestureDetector(
+                                                  onTap: () {
+                                                    Get.toNamed(
+                                                        Routes.promotionscreen);
+                                                  },
+                                                  child: Padding(
+                                                    padding:
+                                                        const EdgeInsets.only(
+                                                            left: 10.0),
+                                                    child: Container(
+                                                      width: 142,
+                                                      padding: const EdgeInsets
+                                                          .symmetric(
+                                                          vertical: 1),
+                                                      decoration: BoxDecoration(
+                                                          color:
+                                                              backgroundColor,
+                                                          borderRadius:
+                                                              BorderRadius
+                                                                  .circular(5)),
+                                                      child: Wrap(
+                                                        alignment: WrapAlignment
+                                                            .center,
+                                                        crossAxisAlignment:
+                                                            WrapCrossAlignment
+                                                                .center,
+                                                        children: <Widget>[
+                                                          const Text(
+                                                              'Balance: '),
+                                                          SvgPicture.asset(
+                                                              'assets/svgs/coin.svg'),
+                                                          const SizedBox(
+                                                            width: 2,
+                                                          ),
+                                                          Text(
+                                                            '${_myProfile.myProfile.coinscount!}',
+                                                            style: const TextStyle(
+                                                                fontWeight:
+                                                                    FontWeight
+                                                                        .w700,
+                                                                color:
+                                                                    subtextColor),
+                                                          )
+                                                        ],
+                                                      ),
                                                     ),
                                                   ),
                                                 ),
-                                              ),
-                                              GestureDetector(
-                                                onTap: () {
-                                                  Get.to(() =>
-                                                      const DonationsHistory());
-                                                },
-                                                child: Padding(
-                                                  padding:
-                                                      const EdgeInsets.only(
-                                                    right: 10.0,
+                                                GestureDetector(
+                                                  onTap: () {
+                                                    Get.to(() =>
+                                                        const DonationsHistory());
+                                                  },
+                                                  child: Padding(
+                                                    padding:
+                                                        const EdgeInsets.only(
+                                                      right: 10.0,
+                                                    ),
+                                                    child: Wrap(
+                                                        crossAxisAlignment:
+                                                            WrapCrossAlignment
+                                                                .center,
+                                                        children: <Widget>[
+                                                          const Text(
+                                                            'Crowdfund History ',
+                                                            style: TextStyle(
+                                                                fontWeight:
+                                                                    FontWeight
+                                                                        .w700),
+                                                          ),
+                                                          SvgPicture.asset(
+                                                            'assets/svgs/nexticon.svg',
+                                                            color: textColor,
+                                                          ),
+                                                        ]),
                                                   ),
-                                                  child: Wrap(
-                                                      crossAxisAlignment:
-                                                          WrapCrossAlignment
-                                                              .center,
-                                                      children: <Widget>[
-                                                        const Text(
-                                                          'Crowdfund History ',
-                                                          style: TextStyle(
-                                                              fontWeight:
-                                                                  FontWeight
-                                                                      .w700),
-                                                        ),
-                                                        SvgPicture.asset(
-                                                          'assets/svgs/nexticon.svg',
-                                                          color: textColor,
-                                                        ),
-                                                      ]),
-                                                ),
-                                              )
-                                            ],
-                                          )),
-                                    )
-                                  : Container(),
-                              controller.loading.value
-                                  ? const Expanded(
-                                      child: Center(
-                                        child: CircularProgressIndicator(),
-                                      ),
-                                    )
-                                  : Expanded(
-                                      child: ListView.builder(
-                                        shrinkWrap: true,
-                                        scrollDirection: widget.ishome == false
-                                            ? Axis.vertical
-                                            : Axis.horizontal,
-                                        itemCount: widget.ishome == false
-                                            ? controller.donations.length
-                                            : 5,
-                                        itemBuilder:
-                                            (BuildContext context, int i) {
-                                          bool isLastItem = controller
-                                                      .donations.length !=
-                                                  1
-                                              ? i ==
-                                                  controller.donations.length -
-                                                      1
-                                              : i ==
-                                                  controller.donations.length;
-                                          return Padding(
-                                            padding: EdgeInsets.only(
-                                                left: widget.ishome == false
-                                                    ? 0
-                                                    : 15.0),
-                                            child: DonationItem(
-                                              donation: controller.donations[i],
-                                              isLastItem: isLastItem,
-                                              isHome: widget.ishome == false
-                                                  ? false
-                                                  : true,
-                                            ),
-                                          );
-                                        },
-                                      ),
-                                    )
-                            ],
+                                                )
+                                              ],
+                                            )),
+                                      )
+                                    : Container(),
+                                controller.loading.value
+                                    ? const Expanded(
+                                        child: Center(
+                                          child: CircularProgressIndicator(),
+                                        ),
+                                      )
+                                    : Expanded(
+                                        child: ListView.builder(
+                                          shrinkWrap: true,
+                                          scrollDirection:
+                                              widget.ishome == false
+                                                  ? Axis.vertical
+                                                  : Axis.horizontal,
+                                          itemCount: widget.ishome == false
+                                              ? controller.donations.length
+                                              : 5,
+                                          itemBuilder:
+                                              (BuildContext context, int i) {
+                                            bool isLastItem =
+                                                controller.donations.length != 1
+                                                    ? i ==
+                                                        controller.donations
+                                                                .length -
+                                                            1
+                                                    : i ==
+                                                        controller
+                                                            .donations.length;
+                                            return Padding(
+                                              padding: EdgeInsets.only(
+                                                  left: widget.ishome == false
+                                                      ? 0
+                                                      : 15.0),
+                                              child: DonationItem(
+                                                donation:
+                                                    controller.donations[i],
+                                                isLastItem: isLastItem,
+                                                isHome: widget.ishome == false
+                                                    ? false
+                                                    : true,
+                                              ),
+                                            );
+                                          },
+                                        ),
+                                      )
+                              ],
+                            ),
                           );
                         },
                       ),

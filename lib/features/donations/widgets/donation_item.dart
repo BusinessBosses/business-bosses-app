@@ -136,7 +136,7 @@ class _DonationItemState extends State<DonationItem> {
         width: widget.isHome == true ? 181 : null,
         decoration: BoxDecoration(
             color: Colors.white,
-            borderRadius: BorderRadius.circular(15),
+            borderRadius: BorderRadius.circular(widget.isHome == true ? 15 : 0),
             border: widget.isHome == true
                 ? Border.all(color: Colors.black12, width: 0.5)
                 : null),

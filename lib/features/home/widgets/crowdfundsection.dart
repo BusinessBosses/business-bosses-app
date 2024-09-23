@@ -22,8 +22,7 @@ class _CrowdfundSectionState extends State<CrowdfundSection> {
         builder: (DonationsController controller) {
       return GestureDetector(
         onTap: () {
-          Get.to(BossupChallenge(
-            backgroundColor: widget.backgroundColor ?? Colors.white,
+          Get.to(const DonationsPage(
             ishome: false,
           ));
         },
