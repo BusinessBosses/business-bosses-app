@@ -8,10 +8,12 @@ import 'package:business_bosses_v2/bbpro/presentation/create_service.dart';
 
 class ServiceCard extends StatefulWidget {
   final Service? service;
+  final bool? myShop;
 
   const ServiceCard({
     Key? key,
     this.service,
+    this.myShop,
   }) : super(key: key);
 
   @override
@@ -68,7 +70,6 @@ class _ServiceCardState extends State<ServiceCard> {
                         fontWeight: FontWeight.bold,
                       ),
                     ),
-                    const SizedBox(height: 4),
                     Text(
                       widget.service?.price.toString() ?? 'Price',
                       style: const TextStyle(
@@ -77,7 +78,6 @@ class _ServiceCardState extends State<ServiceCard> {
                         fontSize: 13,
                       ),
                     ),
-                    const SizedBox(height: 4),
                     Text(
                       widget.service?.description ?? 'Service description',
                       style: const TextStyle(fontSize: 11),
@@ -87,10 +87,32 @@ class _ServiceCardState extends State<ServiceCard> {
                   ],
                 ),
               ),
-              OptionsButton(
-                item: widget.service,
-                onEdit: _onEdit,
-              ),
+              widget.myShop == false
+                  ? GestureDetector(
+                      onTap: () {},
+                      child: Container(
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 10, vertical: 7),
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(7),
+                          border: Border.all(
+                            color: proprimaryColor,
+                          ),
+                        ),
+                        child: const Text(
+                          'Book',
+                          style: TextStyle(
+                            color: proprimaryColor,
+                            fontWeight: FontWeight.bold,
+                            fontSize: 11,
+                          ),
+                        ),
+                      ),
+                    )
+                  : OptionsButton(
+                      item: widget.service,
+                      onEdit: _onEdit,
+                    ),
             ],
           ),
         ],
