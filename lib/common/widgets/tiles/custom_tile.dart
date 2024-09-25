@@ -100,7 +100,7 @@ class CustomTile extends StatelessWidget {
                           if (ishome == true)
                             Positioned(
                                 bottom: 10,
-                                left: 25,
+                                left: 20,
                                 child: Container(
                                   padding: const EdgeInsets.symmetric(
                                       horizontal: 5, vertical: 5),
