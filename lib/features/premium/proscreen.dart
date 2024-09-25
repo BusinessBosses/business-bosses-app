@@ -148,11 +148,11 @@ class _ProScreenState extends State<ProScreen> {
               child: Stack(
                 alignment: Alignment.topCenter,
                 children: <Widget>[
-                  SvgPicture.asset(
-                    'assets/svgs/premiumback.svg',
-                    width: MediaQuery.of(context).size.width,
-                    fit: BoxFit.fitWidth,
-                  ),
+                  // SvgPicture.asset(
+                  //   'assets/svgs/premiumback.svg',
+                  //   width: MediaQuery.of(context).size.width,
+                  //   fit: BoxFit.fitWidth,
+                  // ),
                   Column(
                     children: <Widget>[
                       Expanded(
