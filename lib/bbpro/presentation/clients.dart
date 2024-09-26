@@ -32,6 +32,7 @@ class _ClientsScreenState extends State<ClientsScreen>
   late TabController _tabController;
   late TabController _viewController;
   final List<Client> _allclients = <Client>[];
+  bool loading = true;
 
   final ClientsController clientsController = Get.put(ClientsController());
   final Map<ClientType, List<Client>> _clients = <ClientType, List<Client>>{};
@@ -67,6 +68,7 @@ class _ClientsScreenState extends State<ClientsScreen>
               .toList();
           _clients[clientType] = allclients;
           _allclients.addAll(allclients);
+          loading = false;
         }
       });
     });
@@ -141,51 +143,53 @@ class _ClientsScreenState extends State<ClientsScreen>
             Expanded(
               child: Padding(
                 padding: const EdgeInsets.only(bottom: 10),
-                child: Obx(() {
-                  if (clientsController.loading.value) {
-                    return const Center(child: CircularProgressIndicator());
-                  } else if (!clientsController.loading.value &&
-                      clientsController.clients.isEmpty) {
-                    return const SafetyModel(
-                      icon: Icon(Icons.warning),
-                      title: 'No Clients Found!',
-                    );
-                  }
-                  return CustomScrollView(
-                    scrollDirection: Axis.horizontal,
-                    controller: _mainListScrollController,
-                    slivers: <Widget>[
-                      ...ClientType.values.map(
-                        (ClientType status) => SliverToBoxAdapter(
-                          child: RowStatusCard(
-                            clients: clientsController.clients
-                                .where((Client client) => client.type == status)
-                                .toList(),
-                            clientType: status,
-                            screenSize: screenSize,
-                            taskAccepted: (Client task, ClientType newStatus) {
-                              setState(() {
-                                // Update client status here
-                              });
-                            },
-                            onDrag: (bool isRight) {
-                              if (_lastMoveRight == isRight) {
-                                return;
-                              }
-                              _lastMoveRight = isRight;
-                              _moveMainList(isRight);
-                            },
-                            cancelDrag: () {
-                              _lastMoveRight = null;
-                              _timer?.cancel();
-                            },
-                            allclients: _allclients,
-                          ),
-                        ),
+                child: loading
+                    ? const Center(
+                        child: CircularProgressIndicator(),
                       )
-                    ],
-                  );
-                }),
+                    : clientsController.clients.isEmpty
+                        ? const Center(
+                            child: SafetyModel(
+                              isLoading: false,
+                              title: 'No Clients Found!',
+                            ),
+                          )
+                        : CustomScrollView(
+                            scrollDirection: Axis.horizontal,
+                            controller: _mainListScrollController,
+                            slivers: <Widget>[
+                              ...ClientType.values.map(
+                                (ClientType status) => SliverToBoxAdapter(
+                                  child: RowStatusCard(
+                                    clients: clientsController.clients
+                                        .where((Client client) =>
+                                            client.type == status)
+                                        .toList(),
+                                    clientType: status,
+                                    screenSize: screenSize,
+                                    taskAccepted:
+                                        (Client task, ClientType newStatus) {
+                                      setState(() {
+                                        // Update client status here
+                                      });
+                                    },
+                                    onDrag: (bool isRight) {
+                                      if (_lastMoveRight == isRight) {
+                                        return;
+                                      }
+                                      _lastMoveRight = isRight;
+                                      _moveMainList(isRight);
+                                    },
+                                    cancelDrag: () {
+                                      _lastMoveRight = null;
+                                      _timer?.cancel();
+                                    },
+                                    allclients: _allclients,
+                                  ),
+                                ),
+                              )
+                            ],
+                          ),
               ),
             ),
           ],

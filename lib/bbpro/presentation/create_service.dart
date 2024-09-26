@@ -2,7 +2,6 @@ import 'dart:io';
 
 import 'package:business_bosses_v2/bbpro/controllers/shop_controller.dart';
 import 'package:business_bosses_v2/bbpro/models/service_model.dart';
-import 'package:business_bosses_v2/bbpro/widgets/availabiltywidget.dart';
 import 'package:business_bosses_v2/bbpro/widgets/dropdown.dart';
 import 'package:business_bosses_v2/bbpro/widgets/edittext.dart';
 import 'package:business_bosses_v2/bbpro/widgets/multipleedit.dart';
@@ -19,6 +18,7 @@ import 'package:business_bosses_v2/bbpro/widgets/button.dart';
 import 'package:business_bosses_v2/bbpro/widgets/textfield.dart';
 import 'package:business_bosses_v2/common/dialogs/snackbar.dart';
 import 'package:business_bosses_v2/utils/theme/theme.dart';
+import 'package:syncfusion_flutter_calendar/calendar.dart';
 
 class CreateServiceListing extends StatefulWidget {
   final Service? service;
@@ -29,7 +29,8 @@ class CreateServiceListing extends StatefulWidget {
   _CreateServiceListingState createState() => _CreateServiceListingState();
 }
 
-class _CreateServiceListingState extends State<CreateServiceListing> {
+class _CreateServiceListingState extends State<CreateServiceListing>
+    with SingleTickerProviderStateMixin {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   final ShopController shopController = Get.put(ShopController());
   final ProfileController profileController = Get.find();
@@ -44,10 +45,6 @@ class _CreateServiceListingState extends State<CreateServiceListing> {
   bool _isSwitched = false;
 
   // Form fields
-  String? serviceName;
-  double? price;
-  double? discount;
-  String? description;
   String? category;
   String? location;
   List<String>? images = <String>[];
@@ -57,9 +54,30 @@ class _CreateServiceListingState extends State<CreateServiceListing> {
   DateTime? availableTime;
   String? serviceType;
 
+  late AnimationController _animationController;
+  late Animation<double> _animation;
+  final List<DateTime> _selectedDates = <DateTime>[];
+  bool _isAlwaysAvailable = false;
+  final List<bool> _selectedWeekdays = List<bool>.filled(7, false);
+  TimeOfDay _startTime = const TimeOfDay(hour: 9, minute: 0);
+  TimeOfDay _endTime = const TimeOfDay(hour: 17, minute: 0);
+  bool _startTimeSelected = false;
+  bool _endTimeSelected = false;
+  List<String> paymentMethods = <String>[];
+
   @override
   void initState() {
     super.initState();
+    _animationController = AnimationController(
+      duration: const Duration(milliseconds: 200),
+      vsync: this,
+    );
+    _animation =
+        CurvedAnimation(parent: _animationController, curve: Curves.easeInOut);
+
+    for (dynamic payments in shopController.shop!.payments) {
+      paymentMethods.add(payments['paymentMethod']);
+    }
     if (widget.service != null) {
       _serviceNameController.text = widget.service!.name;
       _priceController.text = widget.service!.price.toString();
@@ -71,6 +89,7 @@ class _CreateServiceListingState extends State<CreateServiceListing> {
       deliveryTime = widget.service!.deliveryTime;
       availableTime = widget.service!.availableTime;
       serviceType = widget.service!.serviceType;
+      paymentMethod = widget.service!.paymentMethod;
     }
   }
 
@@ -120,11 +139,6 @@ class _CreateServiceListingState extends State<CreateServiceListing> {
                 }
                 return null;
               },
-              onChanged: (String value) {
-                setState(() {
-                  serviceName = value;
-                });
-              },
             ),
             const SizedBox(height: 16),
 
@@ -145,11 +159,6 @@ class _CreateServiceListingState extends State<CreateServiceListing> {
                       }
                       return null;
                     },
-                    onChanged: (String value) {
-                      setState(() {
-                        price = double.tryParse(value);
-                      });
-                    },
                   ),
                 ),
                 Expanded(
@@ -169,11 +178,6 @@ class _CreateServiceListingState extends State<CreateServiceListing> {
                         }
                         return null;
                       },
-                      onChanged: (String value) {
-                        setState(() {
-                          discount = double.tryParse(value);
-                        });
-                      },
                     ),
                   ),
                 ),
@@ -191,11 +195,6 @@ class _CreateServiceListingState extends State<CreateServiceListing> {
                   return 'Please enter a description';
                 }
                 return null;
-              },
-              onChanged: (String value) {
-                setState(() {
-                  description = value;
-                });
               },
             ),
             const SizedBox(height: 16),
@@ -347,7 +346,7 @@ class _CreateServiceListingState extends State<CreateServiceListing> {
             ),
             const SizedBox(height: 16),
 
-            const AvailabilityWidget(),
+            availabilityWidget(),
 
             // Delivery Time Field
             // TextFormField(
@@ -381,12 +380,7 @@ class _CreateServiceListingState extends State<CreateServiceListing> {
             CustomDropdownWidget(
               caption: 'Payment Method',
               hintText: 'Choose a payment method',
-              items: const <String>[
-                'Credit Card',
-                'PayPal',
-                'Bank Transfer',
-                'Cash'
-              ],
+              items: paymentMethods,
               iconName: 'assets/svgs/dropdown.svg',
               onChanged: (String? newValue) {
                 setState(() {
@@ -448,6 +442,8 @@ class _CreateServiceListingState extends State<CreateServiceListing> {
               text: widget.service != null ? 'Save Changes' : 'Create Service',
               onPressed: _submitForm,
             ),
+
+            const SizedBox(height: 16),
           ],
         ),
       ),
@@ -476,6 +472,20 @@ class _CreateServiceListingState extends State<CreateServiceListing> {
   }
 
   void _submitForm() async {
+    if (_serviceNameController.text.isEmpty) {
+      showSnackbar(
+        message: 'Service Name is Mandatory!',
+        error: true,
+      );
+      return;
+    } else if (_priceController.text.isEmpty) {
+      showSnackbar(
+        message: 'Price is Mandatory!',
+        error: true,
+      );
+      return;
+    }
+
     if (_formKey.currentState?.validate() ?? false) {
       _formKey.currentState?.save();
       setState(() {
@@ -493,9 +503,10 @@ class _CreateServiceListingState extends State<CreateServiceListing> {
       final Map<String, dynamic> serviceData = <String, dynamic>{
         'userId': profileController.myProfile.uid,
         'shopId': shopController.shop?.id,
-        'name': serviceName,
-        'price': price,
-        'description': description,
+        'name': _serviceNameController.text,
+        'price': _priceController.text,
+        'description': _descriptionController.text,
+        'discount': _discountController.text,
         'category': category,
         'location': location,
         'images': images,
@@ -528,5 +539,226 @@ class _CreateServiceListingState extends State<CreateServiceListing> {
       });
       // Clear the form or navigate to another screen if needed
     }
+  }
+
+  Widget availabilityWidget() {
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 15.0),
+      child: Container(
+        decoration: BoxDecoration(
+            color: Colors.white, borderRadius: BorderRadius.circular(radius)),
+        padding: const EdgeInsets.all(15),
+        height: 600, // Increased height to accommodate time selection
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: <Widget>[
+            const Text('Available Days'),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: <Widget>[
+                const Text('I am always available to offer this service'),
+                GestureDetector(
+                  onTap: () {
+                    _isAlwaysAvailable
+                        ? _animationController.reverse()
+                        : _animationController.forward();
+                    setState(() {
+                      _isAlwaysAvailable = !_isAlwaysAvailable;
+                      if (_isAlwaysAvailable) {
+                        _selectedWeekdays.fillRange(0, 7, true);
+                      } else {
+                        _selectedWeekdays.fillRange(0, 7, false);
+                      }
+                      _updateSelectedDates();
+                    });
+                  },
+                  child: AnimatedBuilder(
+                    animation: _animation,
+                    builder: (BuildContext context, Widget? child) {
+                      return Container(
+                        width: 50,
+                        height: 30,
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(15),
+                          color: _isAlwaysAvailable
+                              ? proprimaryColor
+                              : Colors.grey,
+                        ),
+                        child: Stack(
+                          children: <Widget>[
+                            Positioned(
+                              left: _isAlwaysAvailable ? 20 : 0,
+                              right: _isAlwaysAvailable ? 0 : 20,
+                              top: 2,
+                              bottom: 2,
+                              child: Container(
+                                width: 26,
+                                height: 26,
+                                decoration: const BoxDecoration(
+                                  shape: BoxShape.circle,
+                                  color: Colors.white,
+                                ),
+                                child: Center(
+                                  child: _isAlwaysAvailable
+                                      ? const Icon(
+                                          Icons.check,
+                                          size: 12,
+                                          color: proprimaryColor,
+                                        )
+                                      : const Icon(
+                                          Icons.close,
+                                          size: 12,
+                                          color: Colors.grey,
+                                        ),
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                      );
+                    },
+                  ),
+                ),
+              ],
+            ),
+            const SizedBox(height: 10),
+            Wrap(
+              spacing: 8,
+              children: List<Widget>.generate(7, (int index) {
+                return ChoiceChip(
+                  label: Text(_getWeekdayName(index)),
+                  selected: _selectedWeekdays[index],
+                  selectedColor: proprimaryColor,
+                  onSelected: (bool selected) {
+                    setState(() {
+                      _selectedWeekdays[index] = selected;
+                      _updateSelectedDates();
+                    });
+                  },
+                );
+              }),
+            ),
+            Expanded(
+              child: _isAlwaysAvailable
+                  ? const Center(child: Text('Always Available'))
+                  : SfCalendar(
+                      view: CalendarView.month,
+                      initialDisplayDate: DateTime.now(),
+                      monthViewSettings: const MonthViewSettings(
+                        appointmentDisplayMode:
+                            MonthAppointmentDisplayMode.indicator,
+                      ),
+                      dataSource: _getCalendarDataSource(),
+                      onTap: _handleCalendarTap,
+                    ),
+            ),
+            const SizedBox(height: 20),
+            const Text('Available Time for selected days'),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: <Widget>[
+                TextButton(
+                  onPressed: () => _selectTime(context, true),
+                  child: Text(
+                    'Start Time: ${_startTime.format(context)}',
+                    style: TextStyle(
+                      color: _startTimeSelected ? Colors.black : Colors.grey,
+                    ),
+                  ),
+                ),
+                TextButton(
+                  onPressed: () => _selectTime(context, false),
+                  child: Text(
+                    'End Time: ${_endTime.format(context)}',
+                    style: TextStyle(
+                      color: _endTimeSelected ? Colors.black : Colors.grey,
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  String _getWeekdayName(int index) {
+    List<String> weekdays = <String>[
+      'Mon',
+      'Tue',
+      'Wed',
+      'Thu',
+      'Fri',
+      'Sat',
+      'Sun'
+    ];
+    return weekdays[index];
+  }
+
+  void _updateSelectedDates() {
+    _selectedDates.clear();
+    if (!_isAlwaysAvailable) {
+      DateTime now = DateTime.now();
+      for (int i = 0; i < 365; i++) {
+        DateTime date = now.add(Duration(days: i));
+        if (_selectedWeekdays[date.weekday - 1]) {
+          _selectedDates.add(date);
+        }
+      }
+    }
+  }
+
+  CalendarDataSource _getCalendarDataSource() {
+    List<Appointment> appointments = _selectedDates
+        .map((DateTime date) => Appointment(
+              startTime: date,
+              endTime: date,
+              subject: 'Available',
+              color: proprimaryColor,
+              isAllDay: true,
+            ))
+        .toList();
+
+    return _AppointmentDataSource(appointments);
+  }
+
+  void _handleCalendarTap(CalendarTapDetails details) {
+    if (!_isAlwaysAvailable &&
+        details.targetElement == CalendarElement.calendarCell) {
+      setState(() {
+        DateTime selectedDate = DateTime(
+            details.date!.year, details.date!.month, details.date!.day);
+        if (_selectedDates.contains(selectedDate)) {
+          _selectedDates.remove(selectedDate);
+        } else {
+          _selectedDates.add(selectedDate);
+        }
+      });
+    }
+  }
+
+  Future<void> _selectTime(BuildContext context, bool isStartTime) async {
+    final TimeOfDay? picked = await showTimePicker(
+      context: context,
+      initialTime: isStartTime ? _startTime : _endTime,
+    );
+    if (picked != null) {
+      setState(() {
+        if (isStartTime) {
+          _startTime = picked;
+          _startTimeSelected = true;
+        } else {
+          _endTime = picked;
+          _endTimeSelected = true;
+        }
+      });
+    }
+  }
+}
+
+class _AppointmentDataSource extends CalendarDataSource {
+  _AppointmentDataSource(List<Appointment> source) {
+    appointments = source;
   }
 }

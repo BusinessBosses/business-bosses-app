@@ -12,7 +12,6 @@ class ProjectController extends GetxController {
   RxBool loading = RxBool(true);
 
   Future<void> initProjects(String userId) async {
-    loading(true);
     projects.clear();
     ApiResponseModel response =
         await ApiService.get(path: 'projects/user-projects/$userId');
@@ -67,10 +66,5 @@ class ProjectController extends GetxController {
       // Handle any errors that occur during the update
     }
     update();
-  }
-
-  @override
-  void onInit() {
-    super.onInit();
   }
 }

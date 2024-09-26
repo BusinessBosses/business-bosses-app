@@ -29,7 +29,8 @@ class Setupshop extends StatefulWidget {
 }
 
 class _SetupshopState extends State<Setupshop> {
-  final ShopController shopController = Get.put(ShopController());
+  final ShopController shopController =
+      Get.put(ShopController(), permanent: true);
   final ProfileController profileController = Get.find();
   final TextEditingController nameController = TextEditingController();
   final TextEditingController descriptionController = TextEditingController();
@@ -99,7 +100,7 @@ class _SetupshopState extends State<Setupshop> {
     } else {
       shopController.initShop().then((bool value) {
         if (value) {
-          Get.to(() => const Bottomnavscreen());
+          Get.off(() => const Bottomnavscreen());
         }
       });
     }
@@ -152,15 +153,18 @@ class _SetupshopState extends State<Setupshop> {
         selections['Bank'] = true;
         bankController.text = method['details'];
         selectedOptions['Bank'] = true;
-      } else if (method['paymentMethod'] == 'Paypal') {
+      }
+      if (method['paymentMethod'] == 'Paypal') {
         selections['Paypal'] = true;
         paypalController.text = method['details'];
         selectedOptions['Paypal'] = true;
-      } else if (method['paymentMethod'] == 'Wallet') {
+      }
+      if (method['paymentMethod'] == 'Wallet') {
         selections['Wallet'] = true;
         walletController.text = method['details'];
         selectedOptions['Wallet'] = true;
-      } else if (method['paymentMethod'] == 'Cash') {
+      }
+      if (method['paymentMethod'] == 'Cash') {
         selections['Cash'] = true;
         selectedOptions['Cash'] = true;
       }
@@ -393,7 +397,7 @@ class _SetupshopState extends State<Setupshop> {
                         iconpath: 'assets/svgs/uploadicon.svg',
                       ),
                       const SizedBox(height: 15),
-                      if (widget.shop != null) ...<Widget>{
+                      if (widget.shop == null) ...<Widget>{
                         SelectionSection(
                           onSelectionChanged: _onSelectionChanged,
                           options: const <String>[
@@ -567,5 +571,11 @@ class _SetupshopState extends State<Setupshop> {
     setState(() {
       loading = false;
     });
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    Get.delete<ShopController>();
   }
 }
