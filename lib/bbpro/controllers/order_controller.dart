@@ -7,6 +7,7 @@ import 'package:get/get.dart';
 class OrderController extends GetxController {
   final ProfileController profileController = Get.find();
   RxList<Order> orders = RxList<Order>(<Order>[]);
+  RxBool loading = RxBool(true);
 
   Future<void> initOrders(String userId) async {
     orders.clear();
@@ -16,6 +17,8 @@ class OrderController extends GetxController {
         orders.add(Order.fromJson(response.data['rows'][i]));
       }
     }
+    loading(false);
+    update();
   }
 
   Future<bool> addOrders(Map<String, dynamic> data) async {
@@ -32,11 +35,5 @@ class OrderController extends GetxController {
     } else {
       return false;
     }
-  }
-
-  @override
-  void onInit() {
-    initOrders(profileController.myProfile.uid);
-    super.onInit();
   }
 }

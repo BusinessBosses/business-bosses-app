@@ -60,6 +60,7 @@ class ShopController extends GetxController {
           suppliers.add(Vendor.fromMap(vendorsReponse.data['rows'][i]));
         }
       }
+      loading(false);
       return true;
     } else {
       loading(false);

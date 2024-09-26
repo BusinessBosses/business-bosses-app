@@ -30,6 +30,7 @@ class _ProjectsState extends State<Projects>
       <ProjectStatus, List<Project>>{};
   final ScrollController _mainListScrollController = ScrollController();
   Timer? _timer;
+  bool loading = true;
   bool? _lastMoveRight;
   late TabController _tabController;
   final List<Project> _allProjects = <Project>[];
@@ -39,22 +40,39 @@ class _ProjectsState extends State<Projects>
     super.initState();
     _tabController =
         TabController(length: ProjectStatus.values.length, vsync: this);
+
+    // Initialize empty lists for each status
     for (ProjectStatus status in ProjectStatus.values) {
       _projects[status] = <Project>[];
     }
-    // Initialize tasks
+
+    // Initialize projects and load tasks
     projectController
         .initProjects(projectController.profileController.myProfile.uid)
         .then((_) {
+      if (!mounted) return; // Ensure the widget is still in the tree
+
       setState(() {
         for (ProjectStatus status in ProjectStatus.values) {
           List<Project> statusTasks = projectController.projects
               .where((Project project) => project.status == status)
               .toList();
           _projects[status] = statusTasks;
-          _allProjects.addAll(statusTasks); // Add tasks to alltasks
+          _allProjects.addAll(statusTasks);
         }
+        loading = false;
+        projectController.loading.value = false;
       });
+    }).catchError((error) {
+      // Handle error
+      if (mounted) {
+        setState(() {
+          loading = false;
+          projectController.loading.value = false;
+        });
+      }
+      // Log the error or show a dialog/snackbar to the user
+      print('Error loading projects: $error');
     });
   }
 
@@ -114,72 +132,70 @@ class _ProjectsState extends State<Projects>
             ],
           ),
           Expanded(
-            child: Padding(
-              padding: const EdgeInsets.only(bottom: 10),
-              child: Obx(
-                () {
-                  if (projectController.loading.value) {
-                    return const Center(child: CircularProgressIndicator());
-                  } else if (!projectController.loading.value &&
-                      projectController.projects.isEmpty) {
-                    return const SafetyModel(
-                      icon: Icon(Icons.warning),
-                      title: 'No Projects Found!',
-                    );
-                  }
-                  return CustomScrollView(
-                    scrollDirection: Axis.horizontal,
-                    controller: _mainListScrollController,
-                    slivers: <Widget>[
-                      ...ProjectStatus.values.map(
-                        (ProjectStatus status) => SliverToBoxAdapter(
-                          child: RowStatusCard(
-                            allProjects: _allProjects,
-                            projects: _projects[status] ?? <Project>[],
-                            projectStatus: status,
-                            screenSize: screenSize,
-                            taskAccepted: (Project project,
-                                ProjectStatus newStatus) async {
-                              setState(() {
-                                _projects[project.status]?.remove(project);
-                                _projects[newStatus]?.add(
-                                  Project(
-                                    id: project.id,
-                                    userId: project.userId,
-                                    name: project.name,
-                                    amount: project.amount,
-                                    status: newStatus,
-                                    createdAt: project.createdAt,
-                                    description: project.description,
-                                    duration: project.duration,
-                                    tasks: project.tasks,
-                                  ),
-                                );
-                                projectController.updateProject(
-                                    project.id, <String, dynamic>{
-                                  'status': newStatus.toString()
-                                });
-                              });
-                            },
-                            onDrag: (bool isRight) {
-                              if (_lastMoveRight == isRight) {
-                                return;
-                              }
-                              _lastMoveRight = isRight;
-                              _moveMainList(isRight);
-                            },
-                            cancelDrag: () {
-                              _lastMoveRight = null;
-                              _timer?.cancel();
-                            },
-                          ),
+            child: loading
+                ? const Center(
+                    child: CircularProgressIndicator(),
+                  )
+                : projectController.projects.isEmpty
+                    ? const Center(
+                        child: SafetyModel(
+                        isLoading: false,
+                        title: 'No Projects Found!',
+                      ))
+                    : Padding(
+                        padding: const EdgeInsets.only(bottom: 10),
+                        child: CustomScrollView(
+                          scrollDirection: Axis.horizontal,
+                          controller: _mainListScrollController,
+                          slivers: <Widget>[
+                            ...ProjectStatus.values.map(
+                              (ProjectStatus status) => SliverToBoxAdapter(
+                                child: RowStatusCard(
+                                  allProjects: _allProjects,
+                                  projects: _projects[status] ?? <Project>[],
+                                  projectStatus: status,
+                                  screenSize: screenSize,
+                                  taskAccepted: (Project project,
+                                      ProjectStatus newStatus) async {
+                                    setState(() {
+                                      _projects[project.status]
+                                          ?.remove(project);
+                                      _projects[newStatus]?.add(
+                                        Project(
+                                          id: project.id,
+                                          userId: project.userId,
+                                          name: project.name,
+                                          amount: project.amount,
+                                          status: newStatus,
+                                          createdAt: project.createdAt,
+                                          description: project.description,
+                                          duration: project.duration,
+                                          tasks: project.tasks,
+                                        ),
+                                      );
+                                      projectController.updateProject(
+                                          project.id, <String, dynamic>{
+                                        'status': newStatus.toString()
+                                      });
+                                    });
+                                  },
+                                  onDrag: (bool isRight) {
+                                    if (_lastMoveRight == isRight) {
+                                      return;
+                                    }
+                                    _lastMoveRight = isRight;
+                                    _moveMainList(isRight);
+                                  },
+                                  cancelDrag: () {
+                                    _lastMoveRight = null;
+                                    _timer?.cancel();
+                                  },
+                                ),
+                              ),
+                            )
+                          ],
                         ),
-                      )
-                    ],
-                  );
-                },
-              ),
-            ),
+                      ),
           ),
         ],
       ),
