@@ -176,7 +176,7 @@ class _DonationItemState extends State<DonationItem> {
                             child: ClipRRect(
                               borderRadius: BorderRadius.circular(12.0),
                               child: FittedBox(
-                                fit: BoxFit.fill,
+                                fit: BoxFit.cover,
                                 child: SizedBox(
                                   // color: Colors.black,
                                   height: 200,
