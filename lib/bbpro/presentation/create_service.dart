@@ -642,6 +642,11 @@ class _CreateServiceListingState extends State<CreateServiceListing>
               child: _isAlwaysAvailable
                   ? const Center(child: Text('Always Available'))
                   : SfCalendar(
+                      selectionDecoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(8),
+                        color: Colors.transparent,
+                      ),
+                      todayHighlightColor: proprimaryColor,
                       view: CalendarView.month,
                       initialDisplayDate: DateTime.now(),
                       monthViewSettings: const MonthViewSettings(
@@ -649,7 +654,7 @@ class _CreateServiceListingState extends State<CreateServiceListing>
                             MonthAppointmentDisplayMode.indicator,
                       ),
                       dataSource: _getCalendarDataSource(),
-                      onTap: _handleCalendarTap,
+                      onTap: null,
                     ),
             ),
             const SizedBox(height: 20),
@@ -723,20 +728,20 @@ class _CreateServiceListingState extends State<CreateServiceListing>
     return _AppointmentDataSource(appointments);
   }
 
-  void _handleCalendarTap(CalendarTapDetails details) {
-    if (!_isAlwaysAvailable &&
-        details.targetElement == CalendarElement.calendarCell) {
-      setState(() {
-        DateTime selectedDate = DateTime(
-            details.date!.year, details.date!.month, details.date!.day);
-        if (_selectedDates.contains(selectedDate)) {
-          _selectedDates.remove(selectedDate);
-        } else {
-          _selectedDates.add(selectedDate);
-        }
-      });
-    }
-  }
+  // void _handleCalendarTap(CalendarTapDetails details) {
+  //   if (!_isAlwaysAvailable &&
+  //       details.targetElement == CalendarElement.calendarCell) {
+  //     setState(() {
+  //       DateTime selectedDate = DateTime(
+  //           details.date!.year, details.date!.month, details.date!.day);
+  //       if (_selectedDates.contains(selectedDate)) {
+  //         _selectedDates.remove(selectedDate);
+  //       } else {
+  //         _selectedDates.add(selectedDate);
+  //       }
+  //     });
+  //   }
+  // }
 
   Future<void> _selectTime(BuildContext context, bool isStartTime) async {
     final TimeOfDay? picked = await showTimePicker(
