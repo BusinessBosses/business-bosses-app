@@ -89,7 +89,7 @@ class _DonationsPageState extends State<DonationsPage> {
                               children: <Widget>[
                                 Container(
                                   width: double.infinity,
-                                  color: Colors.transparent,
+                                  color: backgroundColor,
                                   child: Column(
                                     children: <Widget>[
                                       const SizedBox(

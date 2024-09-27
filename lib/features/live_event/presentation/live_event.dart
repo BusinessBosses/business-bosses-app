@@ -94,12 +94,12 @@ class _LiveEventState extends State<LiveEvent> {
             backgroundColor: Colors.white,
             appBar: AppBar(
               automaticallyImplyLeading: false,
-              // leading: IconButton(
-              //   onPressed: () {
-              //     Navigator.pop(context);
-              //   },
-              //   icon: SvgPicture.asset('assets/svgs/backbutton.svg'),
-              // ),
+              leading: IconButton(
+                onPressed: () {
+                  Navigator.pop(context);
+                },
+                icon: SvgPicture.asset('assets/svgs/backbutton.svg'),
+              ),
               title: _isSearching
                   ? Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -379,15 +379,19 @@ class _LiveEventState extends State<LiveEvent> {
                                 ],
                               ),
                             ),
-                            const SizedBox(height: 80,)
+                            const SizedBox(
+                              height: 80,
+                            )
                           ],
                         ),
                       ),
                     ),
-              const BottomBar(
-                activeIndex: 2,
+              // const BottomBar(
+              //   activeIndex: 2,
+              // ),
+              const Floatingbutton(
+                isEvent: true,
               ),
-              const Floatingbutton(),
             ]));
       },
     );

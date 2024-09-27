@@ -1,5 +1,6 @@
 import 'dart:core';
 
+import 'package:business_bosses_v2/analytics/presentation/howtouseapp.dart';
 import 'package:business_bosses_v2/common/dialogs/snackbar.dart';
 import 'package:business_bosses_v2/common/models/user_model.dart';
 import 'package:business_bosses_v2/common/widgets/buttons/subscribe_to_premium_button.dart';
@@ -64,7 +65,7 @@ class _AnalyserScreenState extends State<AnalyserScreen> {
         children: <Widget>[
           const SizedBox(
             width: double.infinity,
-            height: 20,
+            height: 10,
             child: ColoredBox(color: backgroundcolorinterface),
           ),
           const SizedBox(
@@ -210,8 +211,7 @@ class _AnalyserScreenState extends State<AnalyserScreen> {
                     color: textColor),
               ),
               onTap: () {
-                Get.toNamed(Routes.explorebusinessbossesscreen,
-                    arguments: 'Description');
+                Get.to(const HowToUseAppScreen());
               },
               trailing: SvgPicture.asset('assets/svgs/nexticon.svg')),
           const SizedBox(
