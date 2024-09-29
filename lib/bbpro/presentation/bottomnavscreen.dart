@@ -18,7 +18,7 @@ class Bottomnavscreen extends StatefulWidget {
 }
 
 class _BottomnavscreenState extends State<Bottomnavscreen> {
-  final ShopController shopController = Get.put(ShopController());
+  final ShopController shopController = Get.find();
   final ClientsController clientsController = Get.put(ClientsController());
   int _selectedIndex = 0;
 
@@ -104,5 +104,10 @@ class _BottomnavscreenState extends State<Bottomnavscreen> {
         ),
       ),
     );
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
   }
 }

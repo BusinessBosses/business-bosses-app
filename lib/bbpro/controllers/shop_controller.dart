@@ -23,15 +23,11 @@ class ShopController extends GetxController {
     );
     if (response.success) {
       if (response.data['rows'].isEmpty) {
-        loading(false);
-        update();
         return false;
       } else {
         shop = Shop.fromMap(response.data['rows'][0]);
       }
     } else {
-      loading(false);
-      update();
       return false;
     }
     if (response.data['rows'].isNotEmpty) {
@@ -60,10 +56,8 @@ class ShopController extends GetxController {
           suppliers.add(Vendor.fromMap(vendorsReponse.data['rows'][i]));
         }
       }
-      loading(false);
       return true;
     } else {
-      loading(false);
       return false;
     }
   }
@@ -100,7 +94,7 @@ class ShopController extends GetxController {
     ApiResponseModel response =
         await ApiService.post(path: 'goods', body: data);
     if (response.success) {
-      products.add(response.data);
+      products.add(Product.fromJson(response.data));
       return true;
     } else {
       log(response.toMap().toString());
@@ -123,7 +117,7 @@ class ShopController extends GetxController {
     ApiResponseModel response =
         await ApiService.post(path: 'services', body: data);
     if (response.success) {
-      services.add(response.data);
+      services.add(Service.fromJson(response.data));
       return true;
     } else {
       log(response.toMap().toString());
@@ -135,7 +129,7 @@ class ShopController extends GetxController {
     ApiResponseModel response =
         await ApiService.post(path: 'vendors', body: data);
     if (response.success) {
-      suppliers.add(response.data);
+      suppliers.add(Vendor.fromMap(response.data));
       return true;
     } else {
       log(response.toMap().toString());

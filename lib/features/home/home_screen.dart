@@ -1,3 +1,4 @@
+import 'package:business_bosses_v2/bbpro/controllers/shop_controller.dart';
 import 'package:business_bosses_v2/common/widgets/safety_model.dart';
 import 'package:business_bosses_v2/features/forum/controller/challenge_controller.dart';
 import 'package:business_bosses_v2/features/home/controller/commumities_controller.dart';
@@ -55,6 +56,7 @@ class _HomeScreenState extends State<HomeScreen>
   // final GetStorage sandBox = GetStorage();
   final ScrollController _scrollController = ScrollController();
   final MarketController marketController = Get.put(MarketController());
+  final ShopController shopController = Get.put(ShopController());
 
   int marketIndex = 0;
   // final GlobalKey<NavigatorState> postButtonKey = GlobalKey<NavigatorState>();

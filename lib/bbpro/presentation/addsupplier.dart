@@ -26,6 +26,7 @@ class AddSupplier extends StatefulWidget {
 
 class _AddSupplierState extends State<AddSupplier> {
   final TextEditingController nameController = TextEditingController();
+  final TextEditingController productController = TextEditingController();
   final TextEditingController emailController = TextEditingController();
   final TextEditingController phoneController = TextEditingController();
   final TextEditingController descriptionController = TextEditingController();
@@ -149,7 +150,7 @@ class _AddSupplierState extends State<AddSupplier> {
                     CustomEditText(
                       caption: 'Supplied Products',
                       hintText: 'Eg. Dresses, Bags, etc',
-                      controller: nameController,
+                      controller: productController,
                     ),
                     const SizedBox(height: 15),
                     CustomEditText(
