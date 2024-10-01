@@ -46,7 +46,9 @@ class Service {
 
   factory Service.fromJson(Map<String, dynamic> json) {
     return Service(
-      images: json['images'] != null ? List<String>.from(json['images']) : null,
+      images: json['images'] != null && json['images'] is List
+          ? List<String>.from(json['images'])
+          : <String>[],
       id: json['id'],
       user: json['user'] != null ? UserModel.fromMap(json['user']) : null,
       shop: json['shop'] != null ? Shop.fromMap(json['shop']) : null,

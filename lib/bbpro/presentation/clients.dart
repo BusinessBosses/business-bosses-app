@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'package:business_bosses_v2/bbpro/controllers/shop_controller.dart';
 import 'package:business_bosses_v2/bbpro/presentation/addsupplier.dart';
 import 'package:business_bosses_v2/bbpro/widgets/clientwidget.dart';
 import 'package:business_bosses_v2/bbpro/widgets/customtabbar.dart';
@@ -35,6 +36,7 @@ class _ClientsScreenState extends State<ClientsScreen>
   bool loading = true;
 
   final ClientsController clientsController = Get.put(ClientsController());
+  final ShopController shopController = Get.find();
   final Map<ClientType, List<Client>> _clients = <ClientType, List<Client>>{};
 
   void _scrollToSection(int index) {
@@ -206,23 +208,33 @@ class _ClientsScreenState extends State<ClientsScreen>
               Get.to(() => const AddSupplier());
             },
           ),
-          Expanded(
-            child: StaggeredGridView.countBuilder(
-              staggeredTileBuilder: (int index) => const StaggeredTile.fit(1),
-              padding: const EdgeInsets.symmetric(
-                horizontal: 15.0,
+          if (shopController.suppliers.isNotEmpty)
+            Expanded(
+              child: StaggeredGridView.countBuilder(
+                staggeredTileBuilder: (int index) => const StaggeredTile.fit(1),
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 15.0,
+                ),
+                crossAxisCount: 2,
+                crossAxisSpacing: 8.0,
+                mainAxisSpacing: 8.0,
+                itemCount: shopController.suppliers.length,
+                shrinkWrap: true,
+                physics: null,
+                itemBuilder: (BuildContext context, int index) {
+                  return SuppliersCard(
+                    supplier: shopController.suppliers[index],
+                  );
+                },
               ),
-              crossAxisCount: 2,
-              crossAxisSpacing: 8.0,
-              mainAxisSpacing: 8.0,
-              itemCount: 10,
-              shrinkWrap: true,
-              physics: null,
-              itemBuilder: (BuildContext context, int index) {
-                return const SuppliersCard();
-              },
             ),
-          ),
+          if (shopController.suppliers.isEmpty)
+            const Center(
+              child: SafetyModel(
+                isLoading: false,
+                title: 'No Suppliers Found!',
+              ),
+            )
         ]),
       ]),
     );

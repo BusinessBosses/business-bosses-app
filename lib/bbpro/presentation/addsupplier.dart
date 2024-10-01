@@ -162,7 +162,7 @@ class _AddSupplierState extends State<AddSupplier> {
                     const SizedBox(height: 15),
                     CustomDropdownWidget(
                       caption: 'Select Industry',
-                      items: const <String>['test', 'test', 'test'],
+                      items: const <String>['test1', 'test2', 'test3'],
                       iconName: 'assets/svgs/dropdown.svg',
                       onChanged: (String? value) => setState(() {
                         category = value!;

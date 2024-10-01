@@ -102,8 +102,12 @@ class _SetupshopState extends State<Setupshop> {
       shopController.initShop().then((bool value) {
         if (value) {
           Get.off(() => const Bottomnavscreen());
+          return;
         }
-        loading = false;
+        if (mounted) {
+          loading = false;
+          setState(() {});
+        }
       });
     }
   }
@@ -208,7 +212,7 @@ class _SetupshopState extends State<Setupshop> {
                   const SizedBox(height: 20),
                   ProCustomButton(
                     onPressed: () {
-                      Get.to(() => const Bottomnavscreen());
+                      Get.off(() => const Bottomnavscreen());
                     },
                     text: 'My Dashboard',
                     icon: const Icon(
