@@ -3,13 +3,17 @@ import 'dart:developer';
 import 'package:business_bosses_v2/bbpro/widgets/button.dart';
 import 'package:business_bosses_v2/features/home/widgets/bottom_bar.dart';
 import 'package:business_bosses_v2/features/marketplace/presentation/subscription_confirmation.dart';
+import 'package:business_bosses_v2/features/notifications/widgets/quotewidget.dart';
+import 'package:business_bosses_v2/features/posts/presentation/create_post_screen.dart';
 import 'package:business_bosses_v2/features/premium/unlockedfeatures.dart';
+import 'package:business_bosses_v2/features/profile/widgets/boss_of_the_week_tile.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 import 'package:purchases_flutter/purchases_flutter.dart';
+import 'package:url_launcher/url_launcher.dart';
 import 'package:url_launcher/url_launcher_string.dart';
 
 import '../../../utils/theme/theme.dart';
@@ -29,11 +33,17 @@ class ProScreen extends StatefulWidget {
   State<ProScreen> createState() => _ProScreenState();
 }
 
-class _ProScreenState extends State<ProScreen> {
+class _ProScreenState extends State<ProScreen> with TickerProviderStateMixin {
   String paymentMethodId = '';
+  late final TabController protabbarcontroller;
   bool isCoin = false;
   bool isSubscribed = false;
   final ProfileController profileController = Get.find();
+  final List<String> reviews = <String>[
+    'Best app ever! So easy to use and manage everything.',
+    'This app transformed my business! Highly recommend.',
+    'Streamline operations and grow your business with this app!'
+  ];
   final List<FeatureItem> features = <FeatureItem>[
     FeatureItem(
       iconPath: 'assets/svgs/bizcenter.svg',
@@ -116,6 +126,12 @@ class _ProScreenState extends State<ProScreen> {
   ];
 
   @override
+  void initState() {
+    super.initState();
+    protabbarcontroller = TabController(length: 3, vsync: this);
+  }
+
+  @override
   Widget build(BuildContext context) {
     Purchases.logIn(profileController.myProfile.uid.toString());
     return Scaffold(
@@ -129,7 +145,7 @@ class _ProScreenState extends State<ProScreen> {
         ),
         centerTitle: true,
         title: const Text(
-          'Upgrade to Pro',
+          'Grow',
           textAlign: TextAlign.center,
           style: TextStyle(fontSize: 20),
         ),
@@ -139,65 +155,283 @@ class _ProScreenState extends State<ProScreen> {
           mainAxisAlignment: MainAxisAlignment.start,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
-            Container(
-              height: 10,
-              color: backgroundcolorinterface,
-            ),
-            Expanded(
-              // Wrap the Stack with Expanded
-              child: Stack(
-                alignment: Alignment.topCenter,
-                children: <Widget>[
-                  // SvgPicture.asset(
-                  //   'assets/svgs/premiumback.svg',
-                  //   width: MediaQuery.of(context).size.width,
-                  //   fit: BoxFit.fitWidth,
-                  // ),
-                  Column(
-                    children: <Widget>[
-                      Expanded(
-                        child: ListView.builder(
-                          itemCount: features.length + 3,
-                          itemBuilder: (BuildContext context, int index) {
-                            if (index == 0) {
-                              return const Padding(
-                                padding: EdgeInsets.only(
-                                    left: 15.0, top: 30, bottom: 5),
-                                child: Text(
-                                  'See what you\'ll unlock',
-                                  style: TextStyle(
-                                      fontSize: 18,
-                                      fontWeight: FontWeight.bold),
-                                ),
-                              );
-                            } else if (index == 1) {
-                              return const Padding(
-                                padding: EdgeInsets.only(
-                                    left: 15.0, top: 0, bottom: 15),
-                                child: Text(
-                                  'Everything you need to grow your business successfully',
-                                  style: TextStyle(fontSize: 14),
-                                ),
-                              );
-                            } else if (index == features.length + 2) {
-                              // Check for the last position
-                              return Padding(
-                                  padding: const EdgeInsets.only(
-                                      left: 0.0, top: 30, bottom: 90),
-                                  child: ProCustomButton(
-                                      text: 'Start Free Trial',
-                                      onPressed: () {}));
-                            } else {
-                              return FeatureTile(feature: features[index - 2]);
-                            }
-                          },
+            const Center(
+                child: Text(
+              'Everything you need to grow your business',
+              style: TextStyle(
+                  fontSize: 14,
+                  fontWeight: FontWeight.w700,
+                  color: proprimaryColor),
+            )),
+            Padding(
+              padding:
+                  const EdgeInsets.symmetric(horizontal: 15.0, vertical: 15),
+              child: Material(
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(10),
+                ),
+                color: probackgroundColor,
+                child: TabBar(
+                  indicatorColor: Colors.black,
+                  controller: protabbarcontroller,
+                  tabs: const <Widget>[
+                    Tab(
+                      child: FittedBox(
+                        child: Text(
+                          'Upgrade to Pro',
+                          style: TextStyle(fontSize: 11),
                         ),
-                      )
-                    ],
-                  ),
-                ],
+                      ),
+                    ),
+                    Tab(
+                      child: FittedBox(
+                        child: Text(
+                          'Become a Partner',
+                          style: TextStyle(fontSize: 11),
+                        ),
+                      ),
+                    ),
+                    Tab(
+                      child: FittedBox(
+                        child: Text(
+                          'Boost Posts',
+                          style: TextStyle(fontSize: 11),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
               ),
             ),
+            Expanded(
+                child: TabBarView(
+                    controller: protabbarcontroller,
+                    children: <Widget>[
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 0.0),
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: <Widget>[
+                        const Padding(
+                          padding: EdgeInsets.symmetric(horizontal: 15.0),
+                          child: Text(
+                            'Save time, save money, set up and manage your business 10x faster',
+                            style: TextStyle(fontSize: 12),
+                          ),
+                        ),
+                        Expanded(
+                          child: Stack(children: <Widget>[
+                            Padding(
+                              padding:
+                                  const EdgeInsets.symmetric(horizontal: 15.0),
+                              child: ListView.builder(
+                                physics: const NeverScrollableScrollPhysics(),
+                                itemCount: features.length,
+                                itemBuilder: (BuildContext context, int index) {
+                                  return FeatureTile(feature: features[index]);
+                                },
+                              ),
+                            ),
+                            Positioned(
+                              bottom: 0,
+                              left: 0,
+                              right: 0,
+                              child: Container(
+                                height: 200,
+                                decoration: const BoxDecoration(
+                                  color: Colors.white,
+                                  gradient: LinearGradient(
+                                    begin: Alignment.bottomCenter,
+                                    end: Alignment.topCenter,
+                                    colors: <Color>[
+                                      Colors.white,
+                                      Colors.white10,
+                                    ],
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ]),
+                        ),
+                        GestureDetector(
+                          onTap: () {
+                            showModalBottomSheet(
+                              context: context,
+                              shape: const RoundedRectangleBorder(
+                                borderRadius: BorderRadius.only(
+                                  topLeft: Radius.circular(20),
+                                  topRight: Radius.circular(20),
+                                ),
+                              ),
+                              isScrollControlled: true,
+                              builder: (BuildContext context) {
+                                return FractionallySizedBox(
+                                  heightFactor: 0.8,
+                                  child: Padding(
+                                    padding: const EdgeInsets.symmetric(
+                                        horizontal: 15.0),
+                                    child: ListView.builder(
+                                      itemCount: features.length,
+                                      itemBuilder:
+                                          (BuildContext context, int index) {
+                                        return FeatureTile(
+                                            feature: features[index]);
+                                      },
+                                    ),
+                                  ),
+                                );
+                              },
+                            );
+                          },
+                          child: const Text(
+                            'See all',
+                            style: TextStyle(
+                                fontSize: 14, fontWeight: FontWeight.bold),
+                          ),
+                        ),
+                        Padding(
+                            padding: const EdgeInsets.only(
+                                left: 0.0, top: 10, bottom: 10),
+                            child: Container(
+                              width: double.infinity,
+                              padding:
+                                  const EdgeInsets.symmetric(horizontal: 30),
+                              child: ProCustomButton(
+                                  text: 'Start Free Trial', onPressed: () {}),
+                            )),
+                        Padding(
+                          padding: const EdgeInsets.only(bottom: 100.0),
+                          child: SizedBox(
+                            width: double.infinity,
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: <Widget>[
+                                const Center(
+                                  child: Text(
+                                    'Our Happy Customers',
+                                    style: TextStyle(
+                                        color: proprimaryColor,
+                                        fontWeight: FontWeight.bold),
+                                  ),
+                                ),
+                                SizedBox(
+                                  width: double
+                                      .infinity, // Occupy the available width
+                                  height: 80, // Adjust height as needed
+                                  child: ListView.builder(
+                                    scrollDirection: Axis.horizontal,
+                                    itemCount: reviews.length + 2,
+                                    itemBuilder:
+                                        (BuildContext context, int index) {
+                                      return index == 0
+                                          ? const SizedBox(
+                                              width: 5,
+                                            )
+                                          : index == reviews.length + 1
+                                              ? const SizedBox(
+                                                  width: 15,
+                                                )
+                                              : SizedBox(
+                                                  width: MediaQuery.of(context)
+                                                          .size
+                                                          .width /
+                                                      2.8,
+                                                  child: Container(
+                                                    margin:
+                                                        const EdgeInsets.only(
+                                                            top: 10, left: 10),
+                                                    padding:
+                                                        const EdgeInsets.all(
+                                                            10),
+                                                    decoration: BoxDecoration(
+                                                      borderRadius:
+                                                          BorderRadius.circular(
+                                                              10),
+                                                      color: backgroundColor,
+                                                    ),
+                                                    child: Text(
+                                                      reviews[index - 1],
+                                                      style: const TextStyle(
+                                                          fontSize: 12),
+                                                      textAlign:
+                                                          TextAlign.center,
+                                                    ),
+                                                  ),
+                                                );
+                                    },
+                                  ),
+                                )
+                              ],
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  Column(
+                    children: <Widget>[
+                      Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 15.0),
+                        child: FeatureTile(
+                          feature: FeatureItem(
+                            iconPath: 'assets/svgs/partner.svg',
+                            caption: 'Exclusive Partner Offers Awaits You',
+                            subtext: 'Access special deals and benefits',
+                            color:
+                                Colors.grey.withOpacity(0.2), // Changed color
+                          ),
+                        ),
+                      ),
+                      const Padding(
+                        padding:
+                            EdgeInsets.only(left: 15.0, top: 15, bottom: 10),
+                        child: Align(
+                          alignment: Alignment
+                              .centerLeft, // Aligns the text to the left
+                          child: Text(
+                            'What you get',
+                            style: TextStyle(
+                                fontWeight: FontWeight.w700,
+                                color: proprimaryColor,
+                                fontSize: 14),
+                          ),
+                        ),
+                      ),
+                      const Padding(
+                        padding: EdgeInsets.symmetric(horizontal: 15.0),
+                        child: Text(
+                            'More Customers, Selected Referrals, Exclusive Brand Positioning, Entrepreneurial Support, Economic Development, Community Engagement, and many more. '),
+                      ),
+                      const SizedBox(
+                        height: 15,
+                      ),
+                      const BossOfWeekProfileTile(
+                        isForyou: false,
+                      ),
+                      Padding(
+                          padding: const EdgeInsets.only(
+                              left: 0.0, top: 10, bottom: 10),
+                          child: Container(
+                            width: double.infinity,
+                            padding: const EdgeInsets.symmetric(horizontal: 30),
+                            child: ProCustomButton(
+                                text: 'Sign Up Now',
+                                onPressed: () async {
+                                  if (await canLaunchUrl(Uri.parse(
+                                      'https://businessbosses.co.uk/landingpageforpartners'))) {
+                                    await launchUrl(Uri.parse(
+                                        'https://businessbosses.co.uk/landingpageforpartners'));
+                                  }
+                                }),
+                          )),
+                    ],
+                  ),
+                  const CreatePostScreen(
+                    isGrow: true,
+                  )
+                ])),
           ],
         ),
         const BottomBar(activeIndex: 2),

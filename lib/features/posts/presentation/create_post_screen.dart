@@ -9,6 +9,7 @@ import 'package:business_bosses_v2/features/posts/widgets/preview.dart';
 import 'package:business_bosses_v2/features/posts/widgets/promote_section.dart';
 import 'package:business_bosses_v2/features/posts/widgets/text_input.dart';
 import 'package:business_bosses_v2/features/posts/widgets/user_details_widget.dart';
+import 'package:business_bosses_v2/features/premium/unlockedfeatures.dart';
 import 'package:business_bosses_v2/functions/unfocus_keyboard.dart';
 import 'package:business_bosses_v2/utils/theme/theme.dart';
 import 'package:flutter/material.dart';
@@ -24,10 +25,16 @@ class CreatePostScreen extends StatefulWidget {
   final String? post;
   final List<String?>? images;
   final PostModel? postDetail;
+  final bool? isGrow;
 
   /// SCREEN CONSTRUCTOR
   const CreatePostScreen(
-      {Key? key, this.postId, this.post, this.images, this.postDetail})
+      {Key? key,
+      this.postId,
+      this.post,
+      this.images,
+      this.postDetail,
+      this.isGrow})
       : super(key: key);
   static const String routeName = '/create-post';
 
@@ -82,6 +89,10 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
       forumModel = forumData;
     }
 
+    if (widget.isGrow == true) {
+      _createPostController.shouldPromote.value = true;
+    }
+
     if (widget.postId != null) {
       _titleCtrl.text = widget.post!;
     } else {
@@ -113,33 +124,49 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
           key: _formKey,
           child: Scaffold(
             backgroundColor: Colors.white,
-            appBar: AppBar(
-              leading: IconButton(
-                onPressed: () {
-                  Navigator.pop(context);
-                },
-                icon: SvgPicture.asset('assets/svgs/backbutton.svg'),
-              ),
-              centerTitle: true,
-              title: widget.postId == null
-                  ? const Text('Create Post')
-                  : const Text('Update Post'),
-            ),
+            appBar: widget.isGrow == true
+                ? null
+                : AppBar(
+                    leading: IconButton(
+                      onPressed: () {
+                        Navigator.pop(context);
+                      },
+                      icon: SvgPicture.asset('assets/svgs/backbutton.svg'),
+                    ),
+                    centerTitle: true,
+                    title: widget.postId == null
+                        ? const Text('Create Post')
+                        : const Text('Update Post'),
+                  ),
             body: GestureDetector(
               onTap: () => unFocusKeyboard(context),
               child: SingleChildScrollView(
                 child: Column(
                   children: <Widget>[
-                    const SizedBox(
-                      width: double.infinity,
-                      height: 20,
-                      child: ColoredBox(color: backgroundcolorinterface),
-                    ),
+                    if (widget.isGrow == true)
+                      Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 15.0),
+                        child: FeatureTile(
+                          feature: FeatureItem(
+                            iconPath: 'assets/svgs/rocket.svg',
+                            caption: 'Boost Your Post',
+                            subtext:
+                                'Reach a wider audience and get more views',
+                            color: Colors.red.withOpacity(0.2), // Changed color
+                          ),
+                        ),
+                      ),
+                    if (widget.isGrow != true)
+                      const SizedBox(
+                        width: double.infinity,
+                        height: 20,
+                        child: ColoredBox(color: backgroundcolorinterface),
+                      ),
                     Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 20.0),
                       child: Column(
                         children: <Widget>[
-                          const UserDetailsWidget(),
+                          if (widget.isGrow != true) const UserDetailsWidget(),
                           TextInput(
                             onDetectionTyped: (String text) {},
                             titleController: _titleCtrl,
@@ -297,9 +324,10 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
                               ],
                             ),
                           ),
-                    const SizedBox(
-                      height: 10,
-                    ),
+                    if (widget.isGrow != true)
+                      const SizedBox(
+                        height: 10,
+                      ),
 
                     // if (controller.imageFileList.isNotEmpty)
                     Padding(
@@ -309,12 +337,14 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
                         isUpdating: widget.postDetail != null,
                       ),
                     ),
-                    widget.postId == null
-                        ? PromoteSection(controller: controller)
-                        : Container(),
-                    const SizedBox(
-                      height: 20,
-                    ),
+                    if (widget.isGrow != true)
+                      widget.postId == null
+                          ? PromoteSection(controller: controller)
+                          : Container(),
+                    if (widget.isGrow != true)
+                      const SizedBox(
+                        height: 20,
+                      ),
                     Padding(
                       padding: const EdgeInsets.only(left: 15, right: 15),
                       child: CustomButton(

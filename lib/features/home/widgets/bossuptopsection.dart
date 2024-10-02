@@ -37,25 +37,29 @@ class BossUpTopSection extends StatelessWidget {
                       Colors.green.shade700.withOpacity(0.1), () {
                     Get.to(const LearningPage());
                   }),
-                  _buildButton(context, 'Community',
-                      Colors.red.shade700.withOpacity(0.1), () {
-                    Get.to(() =>
-                        const AllLearningPostsScreen(isCoursesTile: true));
-                  }),
-                  _buildButton(context, 'Events',
-                      Colors.orange.shade900.withOpacity(0.1), () {
-                    Get.toNamed(Routes.liveEvents);
-                  }),
                   _buildButton(context, 'Crowdfund',
                       Colors.purple.shade700.withOpacity(0.1), () {
                     Get.to(const DonationsPage(ishome: false));
                   }),
-                  _buildButton(
-                      context, 'Upgrade +', proprimaryColor.withOpacity(0.1),
-                      () {
-                    // Action for Upgrade + button
-                    print('Upgrade + button tapped');
-                  }),
+                  // _buildButton(context, 'Community',
+                  //     Colors.red.shade700.withOpacity(0.1), () {
+                  //   Get.to(() =>
+                  //       const AllLearningPostsScreen(isCoursesTile: true));
+                  // }),
+                  // _buildButton(context, 'Events',
+                  //     Colors.orange.shade900.withOpacity(0.1), () {
+                  //   Get.toNamed(Routes.liveEvents);
+                  // }),
+                  // _buildButton(context, 'Crowdfund',
+                  //     Colors.purple.shade700.withOpacity(0.1), () {
+                  //   Get.to(const DonationsPage(ishome: false));
+                  // }),
+                  // _buildButton(
+                  //     context, 'Upgrade +', proprimaryColor.withOpacity(0.1),
+                  //     () {
+                  //   // Action for Upgrade + button
+                  //   print('Upgrade + button tapped');
+                  // }),
                 ],
               ),
             ],

@@ -536,30 +536,30 @@ class _ServiceTileState extends State<ServiceTile> {
                                                 SizedBox(),
                                               ],
                                             ),
-                                      _post.category != null
-                                          ? Row(
-                                              children: <Widget>[
-                                                SvgPicture.asset(
-                                                    'assets/svgs/category.svg'),
-                                                const SizedBox(
-                                                  width: 3,
-                                                ),
-                                                Text(
-                                                  _post.category!.length > 20
-                                                      ? '${_post.category!.substring(0, 20)}...'
-                                                      : _post.category!,
-                                                  style: const TextStyle(
-                                                      fontWeight:
-                                                          FontWeight.normal,
-                                                      fontSize: 12,
-                                                      color: subtextColor),
-                                                ),
-                                              ],
-                                            )
-                                          : const SizedBox(),
-                                      const SizedBox(
-                                        width: 3,
-                                      ),
+                                      // _post.category != null
+                                      //     ? Row(
+                                      //         children: <Widget>[
+                                      //           SvgPicture.asset(
+                                      //               'assets/svgs/category.svg'),
+                                      //           const SizedBox(
+                                      //             width: 3,
+                                      //           ),
+                                      //           Text(
+                                      //             _post.category!.length > 20
+                                      //                 ? '${_post.category!.substring(0, 20)}...'
+                                      //                 : _post.category!,
+                                      //             style: const TextStyle(
+                                      //                 fontWeight:
+                                      //                     FontWeight.normal,
+                                      //                 fontSize: 12,
+                                      //                 color: subtextColor),
+                                      //           ),
+                                      //         ],
+                                      //       )
+                                      //     : const SizedBox(),
+                                      // const SizedBox(
+                                      //   width: 3,
+                                      // ),
                                       const Icon(
                                         Icons.star,
                                         color: Color.fromRGBO(255, 202, 40, 1),

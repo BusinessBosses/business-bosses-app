@@ -10,7 +10,7 @@ class FeatureTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ListTile(
-      contentPadding: const EdgeInsets.symmetric(horizontal: 15, vertical: 0),
+      contentPadding: const EdgeInsets.symmetric(horizontal: 0, vertical: 0),
       leading: Container(
         padding: const EdgeInsets.all(8),
         decoration: BoxDecoration(
@@ -26,9 +26,15 @@ class FeatureTile extends StatelessWidget {
       ),
       title: Text(
         feature.caption,
-        style: const TextStyle(fontWeight: FontWeight.bold),
+        style: const TextStyle(
+          fontWeight: FontWeight.bold,
+          fontSize: 14,
+        ),
       ),
-      subtitle: Text(feature.subtext),
+      subtitle: Text(
+        feature.subtext,
+        style: const TextStyle(fontSize: 12),
+      ),
     );
   }
 }

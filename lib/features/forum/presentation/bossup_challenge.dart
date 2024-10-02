@@ -356,27 +356,28 @@ class _BossupChallengeState extends State<BossupChallenge> {
         crossAxisAlignment: CrossAxisAlignment.center,
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: <Widget>[
-          Container(
-            padding: const EdgeInsets.symmetric(horizontal: 7, vertical: 5),
-            decoration: BoxDecoration(
-              color: hasNotStarted
-                  ? Colors.grey.withAlpha(40)
-                  : Colors.green.withAlpha(40),
-              borderRadius: BorderRadius.circular(20),
-            ),
-            child: Text(
-              hasNotStarted
-                  ? _calculateTimeLeftToStart(category.startAt!)
-                  : category.endedAt != null
-                      ? _calculateTimeLeft(category.endedAt!)
-                      : 'Ongoing',
-              style: TextStyle(
-                color: hasNotStarted ? Colors.black54 : Colors.green,
-                fontSize: 10,
-                fontWeight: FontWeight.w700,
+          if (widget.ishome != true)
+            Container(
+              padding: const EdgeInsets.symmetric(horizontal: 7, vertical: 5),
+              decoration: BoxDecoration(
+                color: hasNotStarted
+                    ? Colors.grey.withAlpha(40)
+                    : Colors.green.withAlpha(40),
+                borderRadius: BorderRadius.circular(20),
+              ),
+              child: Text(
+                hasNotStarted
+                    ? _calculateTimeLeftToStart(category.startAt!)
+                    : category.endedAt != null
+                        ? _calculateTimeLeft(category.endedAt!)
+                        : 'Ongoing',
+                style: TextStyle(
+                  color: hasNotStarted ? Colors.black54 : Colors.green,
+                  fontSize: 10,
+                  fontWeight: FontWeight.w700,
+                ),
               ),
             ),
-          ),
           if (widget.ishome == true)
             GestureDetector(
               onTap: () {
@@ -388,6 +389,8 @@ class _BossupChallengeState extends State<BossupChallenge> {
                         ));
               },
               child: Container(
+                width: 142,
+                margin: const EdgeInsets.symmetric(horizontal: 0),
                 padding:
                     const EdgeInsets.symmetric(horizontal: 10, vertical: 7),
                 decoration: BoxDecoration(
@@ -399,12 +402,13 @@ class _BossupChallengeState extends State<BossupChallenge> {
                   ),
                 ),
                 child: Text(
-                  'Enter',
+                  'Enter Challenge',
                   style: TextStyle(
                     color: hasNotStarted ? Colors.grey : primaryColorLT,
                     fontWeight: FontWeight.bold,
                     fontSize: 11,
                   ),
+                  textAlign: TextAlign.center,
                 ),
               ),
             ),

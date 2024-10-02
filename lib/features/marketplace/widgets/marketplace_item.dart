@@ -651,24 +651,24 @@ class _MarketTileState extends State<MarketTile> {
                                                       color: subtextColor),
                                                 ),
                                                 const SizedBox(width: 5),
-                                                SvgPicture.asset(
-                                                    'assets/svgs/category.svg'),
-                                                const SizedBox(width: 3),
-                                                Text(
-                                                  _post.category!.length > 20
-                                                      ? '${_post.category!.substring(0, 20)}...'
-                                                      : _post.category!,
-                                                  style: const TextStyle(
-                                                    fontWeight:
-                                                        FontWeight.normal,
-                                                    fontSize: 12,
-                                                    color: subtextColor,
-                                                  ),
-                                                  overflow:
-                                                      TextOverflow.ellipsis,
-                                                  maxLines: 1,
-                                                ),
-                                                const SizedBox(width: 5),
+                                                // SvgPicture.asset(
+                                                //     'assets/svgs/category.svg'),
+                                                // const SizedBox(width: 3),
+                                                // Text(
+                                                //   _post.category!.length > 20
+                                                //       ? '${_post.category!.substring(0, 20)}...'
+                                                //       : _post.category!,
+                                                //   style: const TextStyle(
+                                                //     fontWeight:
+                                                //         FontWeight.normal,
+                                                //     fontSize: 12,
+                                                //     color: subtextColor,
+                                                //   ),
+                                                //   overflow:
+                                                //       TextOverflow.ellipsis,
+                                                //   maxLines: 1,
+                                                // ),
+                                                // const SizedBox(width: 5),
                                                 const Icon(
                                                   Icons.star,
                                                   color: Color.fromRGBO(

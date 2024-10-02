@@ -201,7 +201,13 @@ class _AllCommunitiesScreenState extends State<AllCommunitiesScreen>
                                     height: 15,
                                   ),
                                   ChallengesSection(),
+                                  SizedBox(
+                                    height: 15,
+                                  ),
                                   LearningSection(),
+                                  SizedBox(
+                                    height: 15,
+                                  ),
                                   EventsSection(),
                                   SizedBox(
                                     height: 5,
