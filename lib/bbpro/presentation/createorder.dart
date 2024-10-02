@@ -35,7 +35,7 @@ class _CreateOrderState extends State<CreateOrder> {
   String? selectedOrderDate;
   String? selectedPaymentMethod;
   String? clientId;
-  List<String> paymentMedthod = <String>[];
+  List<String> paymentMethod = <String>[];
 
   List<String> clientsName = <String>[];
   List<Map<String, dynamic>> clients = <Map<String, dynamic>>[];
@@ -116,7 +116,7 @@ class _CreateOrderState extends State<CreateOrder> {
         }
 
         for (dynamic payments in shopController.shop!.payments) {
-          paymentMedthod.add(payments);
+          paymentMethod.add(payments);
         }
         loading = false; // Update the loading state
       });
@@ -236,7 +236,7 @@ class _CreateOrderState extends State<CreateOrder> {
                         const SizedBox(height: 15),
                         CustomDropdownWidget(
                           caption: 'Payment Method',
-                          items: paymentMedthod,
+                          items: paymentMethod,
                           iconName: 'assets/svgs/dropdown.svg',
                           initialValue: selectedPaymentMethod,
                           onChanged: (String? value) {

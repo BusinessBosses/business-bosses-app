@@ -25,7 +25,10 @@ class ShopController extends GetxController {
       if (response.data['rows'].isEmpty) {
         return false;
       } else {
-        shop = Shop.fromMap(response.data['rows'][0]);
+        shop = Shop.fromMap(<String, dynamic>{
+          ...response.data['rows'][0],
+          'user': profileController.myProfile.toMap()
+        });
       }
     } else {
       return false;
@@ -70,6 +73,7 @@ class ShopController extends GetxController {
         ...response.data,
         'user': profileController.myProfile.toMap()
       });
+      update();
       return true;
     } else {
       return false;
@@ -84,6 +88,7 @@ class ShopController extends GetxController {
         ...response.data,
         'user': profileController.myProfile.toMap()
       });
+      update();
       return true;
     } else {
       return false;
@@ -95,6 +100,7 @@ class ShopController extends GetxController {
         await ApiService.post(path: 'goods', body: data);
     if (response.success) {
       products.add(Product.fromJson(response.data));
+      update();
       return true;
     } else {
       log(response.toMap().toString());
@@ -106,6 +112,7 @@ class ShopController extends GetxController {
     ApiResponseModel response =
         await ApiService.put(path: 'goods/$id', body: data);
     if (response.success) {
+      update();
       return true;
     } else {
       log(response.toMap().toString());
@@ -118,6 +125,7 @@ class ShopController extends GetxController {
         await ApiService.post(path: 'services', body: data);
     if (response.success) {
       services.add(Service.fromJson(response.data));
+      update();
       return true;
     } else {
       log(response.toMap().toString());
@@ -130,6 +138,7 @@ class ShopController extends GetxController {
         await ApiService.post(path: 'vendors', body: data);
     if (response.success) {
       suppliers.add(Vendor.fromMap(response.data));
+      update();
       return true;
     } else {
       log(response.toMap().toString());
