@@ -31,7 +31,7 @@ class _SuppliersCardState extends State<SuppliersCard> {
   @override
   Widget build(BuildContext context) {
     return InkWell(
-      onTap: () {},
+      onTap: widget.onTap,
       borderRadius: BorderRadius.circular(radius),
       child: Ink(
         padding: const EdgeInsets.all(15.0),

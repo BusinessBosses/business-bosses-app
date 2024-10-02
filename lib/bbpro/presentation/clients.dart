@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'package:business_bosses_v2/bbpro/controllers/shop_controller.dart';
 import 'package:business_bosses_v2/bbpro/presentation/addsupplier.dart';
+import 'package:business_bosses_v2/bbpro/presentation/expandedprosupplierpage.dart';
 import 'package:business_bosses_v2/bbpro/widgets/clientwidget.dart';
 import 'package:business_bosses_v2/bbpro/widgets/customtabbar.dart';
 import 'package:business_bosses_v2/bbpro/widgets/notificationbutton.dart';
@@ -11,6 +12,7 @@ import 'package:business_bosses_v2/bbpro/controllers/clients_controller.dart';
 import 'package:business_bosses_v2/bbpro/models/client_model.dart';
 import 'package:business_bosses_v2/bbpro/presentation/addclient.dart';
 import 'package:business_bosses_v2/common/widgets/safety_model.dart';
+import 'package:business_bosses_v2/features/marketplace/presentation/expandedsupplierspage.dart';
 import 'package:business_bosses_v2/utils/theme/theme.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -223,6 +225,10 @@ class _ClientsScreenState extends State<ClientsScreen>
                 physics: null,
                 itemBuilder: (BuildContext context, int index) {
                   return SuppliersCard(
+                    onTap: () {
+                      Get.to(() => ExpandedProSuppliersPage(
+                          supplier: shopController.suppliers[index]));
+                    },
                     supplier: shopController.suppliers[index],
                   );
                 },
