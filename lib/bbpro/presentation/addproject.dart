@@ -81,6 +81,11 @@ class _AddprojectState extends State<Addproject> {
           startDate: startDate!,
           endDate: endDate!,
           onPressed: () {
+            if (startDate!.isAfter(endDate!)) {
+              showSnackbar(
+                  message: 'Start date cannot be after end date!', error: true);
+              return;
+            }
             final Map<String, dynamic> task = <String, dynamic>{
               'name': taskNameController.text.trim(),
               'amount': expenseController.text.trim(),
