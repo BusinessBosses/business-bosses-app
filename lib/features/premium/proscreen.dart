@@ -427,7 +427,7 @@ class _ProScreenState extends State<ProScreen> with TickerProviderStateMixin {
                             width: double.infinity,
                             padding: const EdgeInsets.symmetric(horizontal: 30),
                             child: ProCustomButton(
-                                text: 'Sign Up Now',
+                                text: 'Partner with us',
                                 onPressed: () async {
                                   if (await canLaunchUrl(Uri.parse(
                                       'https://businessbosses.co.uk/landingpageforpartners'))) {
