@@ -13,6 +13,7 @@ import 'package:business_bosses_v2/features/home/widgets/crowdfundsection.dart';
 import 'package:business_bosses_v2/features/home/widgets/eventssection.dart';
 import 'package:business_bosses_v2/features/home/widgets/industriessearch.dart';
 import 'package:business_bosses_v2/features/home/widgets/learningsection.dart';
+import 'package:business_bosses_v2/features/live_event/presentation/live_event.dart';
 import 'package:business_bosses_v2/utils/constants/constants.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
@@ -55,6 +56,13 @@ class _AllCommunitiesScreenState extends State<AllCommunitiesScreen>
 
   List<Widget> get mActions {
     return <Widget>[
+      if (!_isSearching)
+        IconButton(
+          onPressed: () {
+            Get.to(() => const LiveEvent());
+          },
+          icon: const Icon(Icons.calendar_month),
+        ),
       _pageTabController.index != 2
           ? IconButton(
               icon: _isSearching
