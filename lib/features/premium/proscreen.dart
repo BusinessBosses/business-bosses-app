@@ -302,7 +302,9 @@ class _ProScreenState extends State<ProScreen> with TickerProviderStateMixin {
                               padding:
                                   const EdgeInsets.symmetric(horizontal: 30),
                               child: ProCustomButton(
-                                  text: 'Start Free Trial', onPressed: () {}),
+                                  color: primaryColorLT,
+                                  text: 'Start Free Trial',
+                                  onPressed: () {}),
                             )),
                         Padding(
                           padding: const EdgeInsets.only(bottom: 100.0),
@@ -427,6 +429,7 @@ class _ProScreenState extends State<ProScreen> with TickerProviderStateMixin {
                             width: double.infinity,
                             padding: const EdgeInsets.symmetric(horizontal: 30),
                             child: ProCustomButton(
+                                color: primaryColorLT,
                                 text: 'Partner with us',
                                 onPressed: () async {
                                   if (await canLaunchUrl(Uri.parse(

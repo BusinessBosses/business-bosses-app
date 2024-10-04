@@ -1,3 +1,4 @@
+import 'package:business_bosses_v2/bbpro/widgets/button.dart';
 import 'package:business_bosses_v2/common/dialogs/snackbar.dart';
 import 'package:business_bosses_v2/common/widgets/buttons/custom_button.dart';
 import 'package:business_bosses_v2/common/widgets/gallery_screen.dart';
@@ -345,53 +346,110 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
                       const SizedBox(
                         height: 20,
                       ),
-                    Padding(
-                      padding: const EdgeInsets.only(left: 15, right: 15),
-                      child: CustomButton(
-                        buttonType: ButtonType.elevated,
-                        label: widget.postId == null ? 'Post' : 'Update Post',
-                        onPressed: () async {
-                          _formKey.currentState!.save();
-                          if (!_formKey.currentState!.validate()) return;
+                    if (widget.isGrow == true)
+                      Padding(
+                          padding: const EdgeInsets.only(
+                              left: 0.0, top: 10, bottom: 10),
+                          child: Container(
+                              width: double.infinity,
+                              padding:
+                                  const EdgeInsets.symmetric(horizontal: 30),
+                              child: ProCustomButton(
+                                color: primaryColorLT,
+                                text: 'Post',
+                                onPressed: () async {
+                                  _formKey.currentState!.save();
+                                  if (!_formKey.currentState!.validate()) {
+                                    return;
+                                  }
 
-                          if (controller.imageFileList.length > 5) {
-                            /// If the user has selected more than five images, show an error message
-                            Get.snackbar(
-                                'Error', 'You can select up to five images.');
-                          } else {
-                            /// Otherwise, create the post
-                            if (widget.postId == null) {
-                              await controller.createPost(<String, dynamic>{
-                                'livedata': livedata,
-                                'donationId': donationModel != null
-                                    ? donationModel!.id
-                                    : null,
-                                'donation': donationModel != null
-                                    ? donationModel!.toMap()
-                                    : null,
-                                'forumId': forumModel != null
-                                    ? forumModel!.forumId
-                                    : null,
-                                'forum': forumModel != null
-                                    ? forumModel!.toMap()
-                                    : null,
-                                'title': _titleCtrl.text.trim(),
-                                'ytUrl': _ytUrl,
-                                'images': _ytUrl != null && _ytUrl != ''
-                                    ? 'https://api.businessbosses.co.uk/appfiles/1698854755_13_download_(1).png'
-                                    : null, // Set images to null if _ytUrl is null or empty
-                                'timestamp':
-                                    DateTime.now().millisecondsSinceEpoch,
-                              }, _profileController);
+                                  if (controller.imageFileList.length > 5) {
+                                    /// If the user has selected more than five images, show an error message
+                                    Get.snackbar('Error',
+                                        'You can select up to five images.');
+                                  } else {
+                                    /// Otherwise, create the post
+                                    if (widget.postId == null) {
+                                      await controller
+                                          .createPost(<String, dynamic>{
+                                        'livedata': livedata,
+                                        'donationId': donationModel != null
+                                            ? donationModel!.id
+                                            : null,
+                                        'donation': donationModel != null
+                                            ? donationModel!.toMap()
+                                            : null,
+                                        'forumId': forumModel != null
+                                            ? forumModel!.forumId
+                                            : null,
+                                        'forum': forumModel != null
+                                            ? forumModel!.toMap()
+                                            : null,
+                                        'title': _titleCtrl.text.trim(),
+                                        'ytUrl': _ytUrl,
+                                        'images': _ytUrl != null && _ytUrl != ''
+                                            ? 'https://api.businessbosses.co.uk/appfiles/1698854755_13_download_(1).png'
+                                            : null, // Set images to null if _ytUrl is null or empty
+                                        'timestamp': DateTime.now()
+                                            .millisecondsSinceEpoch,
+                                      }, _profileController);
+                                    } else {
+                                      await controller.onEditPost(
+                                          widget.postDetail,
+                                          _titleCtrl.text.trim());
+                                    }
+                                  }
+                                },
+                                loading: controller.loading.value,
+                              ))),
+                    if (widget.isGrow != true)
+                      Padding(
+                        padding: const EdgeInsets.only(left: 15, right: 15),
+                        child: CustomButton(
+                          buttonType: ButtonType.elevated,
+                          label: widget.postId == null ? 'Post' : 'Update Post',
+                          onPressed: () async {
+                            _formKey.currentState!.save();
+                            if (!_formKey.currentState!.validate()) return;
+
+                            if (controller.imageFileList.length > 5) {
+                              /// If the user has selected more than five images, show an error message
+                              Get.snackbar(
+                                  'Error', 'You can select up to five images.');
                             } else {
-                              await controller.onEditPost(
-                                  widget.postDetail, _titleCtrl.text.trim());
+                              /// Otherwise, create the post
+                              if (widget.postId == null) {
+                                await controller.createPost(<String, dynamic>{
+                                  'livedata': livedata,
+                                  'donationId': donationModel != null
+                                      ? donationModel!.id
+                                      : null,
+                                  'donation': donationModel != null
+                                      ? donationModel!.toMap()
+                                      : null,
+                                  'forumId': forumModel != null
+                                      ? forumModel!.forumId
+                                      : null,
+                                  'forum': forumModel != null
+                                      ? forumModel!.toMap()
+                                      : null,
+                                  'title': _titleCtrl.text.trim(),
+                                  'ytUrl': _ytUrl,
+                                  'images': _ytUrl != null && _ytUrl != ''
+                                      ? 'https://api.businessbosses.co.uk/appfiles/1698854755_13_download_(1).png'
+                                      : null, // Set images to null if _ytUrl is null or empty
+                                  'timestamp':
+                                      DateTime.now().millisecondsSinceEpoch,
+                                }, _profileController);
+                              } else {
+                                await controller.onEditPost(
+                                    widget.postDetail, _titleCtrl.text.trim());
+                              }
                             }
-                          }
-                        },
-                        isProcessing: controller.loading.value,
+                          },
+                          isProcessing: controller.loading.value,
+                        ),
                       ),
-                    ),
                     const SizedBox(
                       height: 50,
                     )
