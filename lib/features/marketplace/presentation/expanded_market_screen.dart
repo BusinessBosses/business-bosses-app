@@ -78,7 +78,6 @@ class _ExpandedMarketplaceScreenState extends State<ExpandedMarketplaceScreen> {
         title: const Text(
           '',
           textAlign: TextAlign.center,
-          style: TextStyle(fontSize: 20),
         ),
         actions: <Widget>[
           widget.market.user!.uid == profileController.myProfile.uid

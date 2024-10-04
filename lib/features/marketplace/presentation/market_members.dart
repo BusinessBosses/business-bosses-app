@@ -40,7 +40,6 @@ class _MarketMembersScreenState extends State<MarketMembersScreen> {
         title: const Text(
           'Marketplace Members',
           textAlign: TextAlign.center,
-          style: TextStyle(fontSize: 20),
         ),
       ),
       body: widget.users.isEmpty

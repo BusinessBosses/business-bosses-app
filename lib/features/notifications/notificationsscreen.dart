@@ -52,7 +52,6 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
               title: const Text(
                 'Notifications',
                 textAlign: TextAlign.center,
-                style: TextStyle(fontSize: 20),
               ),
             ),
             body: controller.loading.value

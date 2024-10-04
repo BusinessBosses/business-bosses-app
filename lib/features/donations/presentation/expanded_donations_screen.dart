@@ -69,7 +69,6 @@ class _ExpandedDonationScreenState extends State<ExpandedDonationScreen> {
           title: const Text(
             'Crowdfund',
             textAlign: TextAlign.center,
-            style: TextStyle(fontSize: 20),
           ),
           actions: <Widget>[
             widget.donation.user!.uid == profileController.myProfile.uid

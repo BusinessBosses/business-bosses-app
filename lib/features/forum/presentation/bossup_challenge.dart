@@ -37,7 +37,6 @@ class _BossupChallengeState extends State<BossupChallenge> {
                 title: const Text(
                   'Challenge',
                   textAlign: TextAlign.center,
-                  style: TextStyle(fontSize: 20),
                 ),
               )
             : null,

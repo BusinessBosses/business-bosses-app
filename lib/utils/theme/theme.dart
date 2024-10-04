@@ -10,7 +10,7 @@ final ThemeData appTheme = ThemeData(
     elevation: 0.0,
     titleTextStyle: TextStyle(
       color: textColor,
-      fontSize: 20.0,
+      fontSize: 16.0,
       fontWeight: FontWeight.w500,
     ),
     iconTheme: IconThemeData(color: textColor),

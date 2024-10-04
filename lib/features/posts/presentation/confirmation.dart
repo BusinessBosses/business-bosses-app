@@ -23,8 +23,7 @@ class Confirmation extends StatelessWidget {
             icon: SvgPicture.asset('assets/svgs/backbutton.svg'),
           ),
           centerTitle: true,
-          title: const TextWidget(
-              text: 'Payment Confirmation', color: Color(0xFF333333), size: 20),
+          title: const TextWidget(text: 'Payment Confirmation'),
         ),
         body: SingleChildScrollView(
           child: Stack(

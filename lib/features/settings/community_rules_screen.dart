@@ -79,7 +79,7 @@ class _CommunityRulesScreenState extends State<CommunityRulesScreen> {
         title: const Text(
           'Community Rules',
           textAlign: TextAlign.center,
-          style: TextStyle(fontSize: 20),
+          style: TextStyle(fontSize: 16),
         ),
       ),
       body: MyContainer(

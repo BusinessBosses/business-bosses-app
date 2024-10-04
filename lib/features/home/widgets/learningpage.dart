@@ -35,7 +35,6 @@ class _LearningPageState extends State<LearningPage> {
           title: const Text(
             'Learning',
             textAlign: TextAlign.center,
-            style: TextStyle(fontSize: 20),
           ),
         ),
         body: Padding(

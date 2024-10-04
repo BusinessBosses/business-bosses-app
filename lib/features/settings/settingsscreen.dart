@@ -101,7 +101,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
         title: const Text(
           'Settings',
           textAlign: TextAlign.center,
-          style: TextStyle(fontSize: 20),
+          style: TextStyle(fontSize: 16),
         ),
       ),
       body: SingleChildScrollView(
@@ -414,10 +414,10 @@ class _SettingsScreenState extends State<SettingsScreen> {
     } else if (label == 'Invite a friend terms & conditions') {
       Get.toNamed(Routes.inviteafriendscreen,
           arguments: 'Invite a friend text');
-    } 
+    }
     // else if ('Contact us' == label) {
     //   _contactUs();
-    // } 
+    // }
     else if ('Delete Account' == label) {
       Get.toNamed(Routes.deleteAccount);
     }

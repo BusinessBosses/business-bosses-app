@@ -46,7 +46,6 @@ class _AllLearningPostsScreenState extends State<AllLearningPostsScreen> {
                 ? 'Community & Networking'
                 : 'Courses and Tutorials',
             textAlign: TextAlign.center,
-            style: const TextStyle(fontSize: 20),
           ),
         ),
         body: Padding(

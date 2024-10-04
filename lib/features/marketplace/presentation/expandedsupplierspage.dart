@@ -44,7 +44,6 @@ class _FilterUsersState extends State<ExpandedSuppliersPage> {
         centerTitle: true,
         title: const Text(
           'About Supplier',
-          style: TextStyle(fontSize: 20),
         ),
       ),
       body: SingleChildScrollView(
@@ -53,7 +52,6 @@ class _FilterUsersState extends State<ExpandedSuppliersPage> {
           crossAxisAlignment: CrossAxisAlignment.center,
           children: <Widget>[
             _buildSupplierImage(),
-           
             Text(
               widget.supplier.name,
               style: const TextStyle(
@@ -111,7 +109,8 @@ class _FilterUsersState extends State<ExpandedSuppliersPage> {
                                   padding: const EdgeInsets.all(4),
                                   child: SvgPicture.asset(
                                     'assets/svgs/upicon.svg',
-                                    color: const Color.fromARGB(255, 255, 255, 255),
+                                    color: const Color.fromARGB(
+                                        255, 255, 255, 255),
                                     height: 8,
                                   ),
                                 ),

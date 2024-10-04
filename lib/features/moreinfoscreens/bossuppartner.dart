@@ -69,7 +69,6 @@ class _BossuppartnerState extends State<Bossuppartner> {
         title: const Text(
           'Partners Deals',
           textAlign: TextAlign.center,
-          style: TextStyle(fontSize: 20),
         ),
       ),
       body: Column(

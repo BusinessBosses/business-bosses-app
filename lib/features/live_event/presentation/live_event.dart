@@ -162,7 +162,6 @@ class _LiveEventState extends State<LiveEvent> {
                   : const Text(
                       'Events',
                       textAlign: TextAlign.center,
-                      style: TextStyle(fontSize: 20),
                     ),
               actions: mActions,
             ),

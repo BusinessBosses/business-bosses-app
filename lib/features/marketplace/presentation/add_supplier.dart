@@ -243,7 +243,6 @@ class _AddSupplierScreenState extends State<AddSupplierScreen> {
                       title: const Text(
                         'Select Location',
                         textAlign: TextAlign.center,
-                        style: TextStyle(fontSize: 20),
                       ),
                     ),
                     initialSelection: _selectedLocation,

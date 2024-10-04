@@ -147,7 +147,7 @@ class _ProScreenState extends State<ProScreen> with TickerProviderStateMixin {
         title: const Text(
           'Grow',
           textAlign: TextAlign.center,
-          style: TextStyle(fontSize: 20),
+          style: TextStyle(fontSize: 16),
         ),
       ),
       body: Stack(children: <Widget>[

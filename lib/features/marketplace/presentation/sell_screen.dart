@@ -146,7 +146,6 @@ class _CreateSellingitemScreenState extends State<CreateSellingitemScreen> {
                   ),
                 ),
                 const SizedBox(height: 10.0),
-
                 Padding(
                   padding: const EdgeInsets.only(left: 16.0, right: 16),
                   child: Row(
@@ -233,7 +232,6 @@ class _CreateSellingitemScreenState extends State<CreateSellingitemScreen> {
                     ],
                   ),
                 ),
-
                 const SizedBox(height: 24.0),
                 Padding(
                   padding: const EdgeInsets.only(left: 16.0, right: 16),
@@ -326,7 +324,6 @@ class _CreateSellingitemScreenState extends State<CreateSellingitemScreen> {
                       title: const Text(
                         'Select Location',
                         textAlign: TextAlign.center,
-                        style: TextStyle(fontSize: 20),
                       ),
                     ),
                     initialSelection: _selectedLocation,
@@ -410,7 +407,8 @@ class _CreateSellingitemScreenState extends State<CreateSellingitemScreen> {
                         ),
                       ),
                 Padding(
-                  padding: const EdgeInsets.only(top:12.0, left:12, right:12),
+                  padding:
+                      const EdgeInsets.only(top: 12.0, left: 12, right: 12),
                   child: widget.isUpd
                       ? Container()
                       : Preview(controller: createMarketController),
@@ -424,7 +422,7 @@ class _CreateSellingitemScreenState extends State<CreateSellingitemScreen> {
                             child: Container(
                               child: Padding(
                                 padding: const EdgeInsets.only(
-                                   bottom: 10, left: 16, right: 16),
+                                    bottom: 10, left: 16, right: 16),
                                 child: Row(
                                   children: <Widget>[
                                     SvgPicture.asset('assets/svgs/rocket.svg'),

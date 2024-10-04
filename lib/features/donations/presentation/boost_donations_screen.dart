@@ -264,7 +264,6 @@ class _BoostDonationState extends State<BoostDonation> {
         centerTitle: true,
         title: const TextWidget(
           text: 'Boost Post',
-          size: 20,
         ),
       ),
       body: SingleChildScrollView(

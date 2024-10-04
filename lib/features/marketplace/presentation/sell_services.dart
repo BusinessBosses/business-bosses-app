@@ -330,7 +330,6 @@ class _CreateServiceScreenState extends State<CreateServiceScreen> {
                       title: const Text(
                         'Select Location',
                         textAlign: TextAlign.center,
-                        style: TextStyle(fontSize: 20),
                       ),
                     ),
                     initialSelection: _selectedLocation,

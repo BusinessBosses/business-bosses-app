@@ -90,7 +90,7 @@ class _InviteAFriendTermsAndConditionsState
         title: const Text(
           'Invite a Friend Terms & Conditions',
           textAlign: TextAlign.center,
-          style: TextStyle(fontSize: 20),
+          style: TextStyle(fontSize: 16),
         ),
       ),
       body: MyContainer(

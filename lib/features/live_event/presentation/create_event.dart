@@ -85,7 +85,6 @@ class _CreateEventState extends State<CreateEvent> {
         title: Text(
           widget.event != null ? 'Update Event' : 'Create Event',
           textAlign: TextAlign.center,
-          style: const TextStyle(fontSize: 20),
         ),
       ),
       body: SingleChildScrollView(

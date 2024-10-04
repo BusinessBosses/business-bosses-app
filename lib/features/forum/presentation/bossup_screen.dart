@@ -146,7 +146,6 @@ class _BossUpSectionState extends State<BossUpSection>
             : Text(
                 widget.industry.industry!,
                 textAlign: TextAlign.center,
-                style: const TextStyle(fontSize: 20),
               ),
         actions: <Widget>[
           IconButton(

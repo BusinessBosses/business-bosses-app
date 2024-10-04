@@ -64,7 +64,7 @@ class _CoinHistoryScreenState extends State<CoinHistoryScreen> {
                           const Text(
                             'My Coin Balance',
                             style: TextStyle(
-                                fontWeight: FontWeight.w600, fontSize: 14),
+                                fontWeight: FontWeight.w600, fontSize: 16),
                           ),
                           const SizedBox(
                             width: 2,

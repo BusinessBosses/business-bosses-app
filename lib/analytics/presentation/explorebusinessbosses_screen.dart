@@ -85,7 +85,6 @@ class _ExplorebusinessbossesScreenState
         title: const Text(
           'How to use Business Bosses App',
           textAlign: TextAlign.center,
-          style: TextStyle(fontSize: 20),
         ),
       ),
       body: SingleChildScrollView(

@@ -233,9 +233,6 @@ class _CreateProductListingState extends State<CreateProductListing> {
                   title: const Text(
                     'Select Location',
                     textAlign: TextAlign.center,
-                    style: TextStyle(
-                      fontSize: 20,
-                    ),
                   ),
                 ),
                 initialSelection: country,

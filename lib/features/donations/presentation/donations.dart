@@ -65,7 +65,6 @@ class _DonationsPageState extends State<DonationsPage> {
                 title: const Text(
                   'CrowdFund',
                   textAlign: TextAlign.center,
-                  style: TextStyle(fontSize: 20),
                 ),
               )
             : null,
