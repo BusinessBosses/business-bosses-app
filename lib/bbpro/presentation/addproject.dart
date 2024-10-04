@@ -94,6 +94,16 @@ class _AddprojectState extends State<Addproject> {
 
             Get.back();
           },
+          onStartDateChanged: (DateTime newDate) {
+            setState(() {
+              startDate = newDate;
+            });
+          },
+          onEndDateChanged: (DateTime newDate) {
+            setState(() {
+              endDate = newDate;
+            });
+          },
         );
       },
     );
@@ -118,6 +128,11 @@ class _AddprojectState extends State<Addproject> {
           startDate: startDate,
           endDate: endDate,
           onPressed: () {
+            if (startDate.isAfter(endDate)) {
+              showSnackbar(
+                  message: 'Start date cannot be after end date!', error: true);
+              return;
+            }
             final Map<String, dynamic> updatedTask = <String, dynamic>{
               'name': taskNameController.text.trim(),
               'amount': expenseController.text.trim(),
@@ -131,6 +146,16 @@ class _AddprojectState extends State<Addproject> {
             });
 
             Get.back();
+          },
+          onStartDateChanged: (DateTime newDate) {
+            setState(() {
+              startDate = newDate;
+            });
+          },
+          onEndDateChanged: (DateTime newDate) {
+            setState(() {
+              endDate = newDate;
+            });
           },
         );
       },
