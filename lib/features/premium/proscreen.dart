@@ -172,6 +172,7 @@ class _ProScreenState extends State<ProScreen> with TickerProviderStateMixin {
                 ),
                 color: probackgroundColor,
                 child: TabBar(
+                  indicatorPadding: const EdgeInsets.symmetric(horizontal: 15),
                   indicatorColor: Colors.black,
                   controller: protabbarcontroller,
                   tabs: const <Widget>[
@@ -179,7 +180,8 @@ class _ProScreenState extends State<ProScreen> with TickerProviderStateMixin {
                       child: FittedBox(
                         child: Text(
                           'Upgrade to Pro',
-                          style: TextStyle(fontSize: 11),
+                          style: TextStyle(
+                              fontSize: 11, fontWeight: FontWeight.w700),
                         ),
                       ),
                     ),
@@ -187,7 +189,8 @@ class _ProScreenState extends State<ProScreen> with TickerProviderStateMixin {
                       child: FittedBox(
                         child: Text(
                           'Become a Partner',
-                          style: TextStyle(fontSize: 11),
+                          style: TextStyle(
+                              fontSize: 11, fontWeight: FontWeight.w700),
                         ),
                       ),
                     ),
@@ -195,7 +198,8 @@ class _ProScreenState extends State<ProScreen> with TickerProviderStateMixin {
                       child: FittedBox(
                         child: Text(
                           'Boost Posts',
-                          style: TextStyle(fontSize: 11),
+                          style: TextStyle(
+                              fontSize: 11, fontWeight: FontWeight.w700),
                         ),
                       ),
                     ),
@@ -391,7 +395,7 @@ class _ProScreenState extends State<ProScreen> with TickerProviderStateMixin {
                           alignment: Alignment
                               .centerLeft, // Aligns the text to the left
                           child: Text(
-                            'What you get',
+                            'What you\'ll get',
                             style: TextStyle(
                                 fontWeight: FontWeight.w700,
                                 color: proprimaryColor,
@@ -401,11 +405,17 @@ class _ProScreenState extends State<ProScreen> with TickerProviderStateMixin {
                       ),
                       const Padding(
                         padding: EdgeInsets.symmetric(horizontal: 15.0),
-                        child: Text(
-                            'More Customers, Selected Referrals, Exclusive Brand Positioning, Entrepreneurial Support, Economic Development, Community Engagement, and many more. '),
-                      ),
-                      const SizedBox(
-                        height: 15,
+                        child: Align(
+                          alignment: Alignment.centerLeft,
+                          child: Text(
+                            '• More Customers\n'
+                            '• Selected Referrals\n'
+                            '• Exclusive Brand Positioning\n'
+                            '• Entrepreneurial Support\n'
+                            '• Economic Development\n'
+                            '• Community Engagement\n',
+                          ),
+                        ),
                       ),
                       const BossOfWeekProfileTile(
                         isForyou: false,

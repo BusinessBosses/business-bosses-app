@@ -74,12 +74,12 @@ const TextStyle headline6 = TextStyle(
 const TextStyle bodyText1 = TextStyle(
   color: textColor,
   fontWeight: FontWeight.bold,
-  fontSize: 16.0,
+  fontSize: 14.0,
 );
 const TextStyle bodyText2 = TextStyle(
   color: textColor,
   fontWeight: FontWeight.normal,
-  fontSize: 14.0,
+  fontSize: 12.0,
 );
 final InputDecoration inputDecoration = InputDecoration(
   hintStyle: bodyText2.copyWith(color: hintColor),

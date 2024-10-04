@@ -16,8 +16,8 @@ class ProTile extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: <Widget>[
               Text(
-                'Subscribe to Pro',
-                style: TextStyle(fontWeight: FontWeight.w700, fontSize: 18),
+                'Upgrade to Pro',
+                style: TextStyle(fontWeight: FontWeight.w700, fontSize: 14),
               ),
             ],
           ),
@@ -86,7 +86,9 @@ class ProTile extends StatelessWidget {
                           crossAxisAlignment: CrossAxisAlignment.center,
                           children: <Widget>[
                             GestureDetector(
-                              onTap: () {},
+                              onTap: () {
+                                Get.to(const ProScreen());
+                              },
                               child: Container(
                                 constraints:
                                     const BoxConstraints(minHeight: 40),

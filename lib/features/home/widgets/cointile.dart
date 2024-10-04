@@ -18,7 +18,7 @@ class CoinTile extends StatelessWidget {
             children: <Widget>[
               Text(
                 'Earn Coins',
-                style: TextStyle(fontWeight: FontWeight.w700, fontSize: 18),
+                style: TextStyle(fontWeight: FontWeight.w700, fontSize: 14),
               ),
             ],
           ),

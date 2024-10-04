@@ -140,7 +140,9 @@ class _BossupChallengeState extends State<BossupChallenge> {
                             ),
                           ),
                           child: Column(
-                            mainAxisAlignment: MainAxisAlignment.start,
+                            mainAxisAlignment: widget.ishome == false
+                                ? MainAxisAlignment.start
+                                : MainAxisAlignment.spaceBetween,
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: <Widget>[
                               if (widget.ishome == false)
@@ -311,11 +313,13 @@ class _BossupChallengeState extends State<BossupChallenge> {
                                         ],
                                       ),
                                       const Spacer(),
-                                      Padding(
-                                        padding:
-                                            const EdgeInsets.only(bottom: 10.0),
-                                        child: _getChallengeTimeLeft(category),
-                                      ),
+                                      if (widget.ishome == true)
+                                        Padding(
+                                          padding: const EdgeInsets.only(
+                                              bottom: 10.0),
+                                          child:
+                                              _getChallengeTimeLeft(category),
+                                        ),
                                     ],
                                   ),
                                 )

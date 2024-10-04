@@ -47,7 +47,7 @@ class LearningSection extends StatelessWidget {
                     const Text(
                       'Courses & Tutorials',
                       style:
-                          TextStyle(fontWeight: FontWeight.w700, fontSize: 18),
+                          TextStyle(fontWeight: FontWeight.w700, fontSize: 14),
                     ),
                     Wrap(
                         crossAxisAlignment: WrapCrossAlignment.center,
@@ -67,7 +67,12 @@ class LearningSection extends StatelessWidget {
                   ],
                 ),
               ),
-              SizedBox(
+              const SizedBox(
+                height: 10,
+              ),
+              Container(
+                color: Colors.white,
+                width: double.infinity,
                 height: 150,
                 child: ListView.builder(
                   scrollDirection: Axis.horizontal,

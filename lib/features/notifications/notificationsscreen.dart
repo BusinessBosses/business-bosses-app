@@ -142,7 +142,7 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
                                                     ))
                                               Container(
                                                 padding: const EdgeInsets.only(
-                                                    left: 16.0),
+                                                    left: 16.0, top: 10),
                                                 child: Text(
                                                   formattedDate,
                                                   style: bodyText1,

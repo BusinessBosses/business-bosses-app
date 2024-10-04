@@ -412,13 +412,11 @@ class _PostTileState extends State<PostTile> {
                   ),
                   trailing: SizedBox(
                     height: 30,
-                    width:
-                        profileController.myProfile.connecteds !=
-                                          null &&
-                                      profileController.myProfile.connecteds!
-                                          .contains(widget.post.user!.uid)
-                            ? 140
-                            : 130,
+                    width: profileController.myProfile.connecteds != null &&
+                            profileController.myProfile.connecteds!
+                                .contains(widget.post.user!.uid)
+                        ? 140
+                        : 130,
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.end,
                       children: <Widget>[
@@ -726,7 +724,7 @@ class _PostTileState extends State<PostTile> {
                                       maxLines: 2,
                                       overflow: TextOverflow.ellipsis,
                                       style: const TextStyle(
-                                        fontSize: 18,
+                                        fontSize: 14,
                                         color: Colors.white,
                                         fontWeight: FontWeight.w700,
                                       ),
@@ -870,7 +868,7 @@ class _PostTileState extends State<PostTile> {
                                           '$title',
                                           style: const TextStyle(
                                               color: Colors.white,
-                                              fontSize: 18,
+                                              fontSize: 14,
                                               fontWeight: FontWeight.w700),
                                         ),
                                       ),
@@ -1027,7 +1025,7 @@ class _PostTileState extends State<PostTile> {
                                       widget.post.donation?.title ?? '',
                                       style: const TextStyle(
                                           color: Colors.white,
-                                          fontSize: 18,
+                                          fontSize: 14,
                                           fontWeight: FontWeight.w700),
                                     ),
                                   ),
@@ -1380,7 +1378,7 @@ class _PostTileState extends State<PostTile> {
                                                                     ? 'Undo Repost'
                                                                     : 'Repost',
                                                             style: const TextStyle(
-                                                                fontSize: 18,
+                                                                fontSize: 14,
                                                                 fontWeight:
                                                                     FontWeight
                                                                         .w700),
@@ -1494,7 +1492,7 @@ class _PostTileState extends State<PostTile> {
                                                           ? 'Undo Repost'
                                                           : 'Repost',
                                                   style: const TextStyle(
-                                                      fontSize: 18,
+                                                      fontSize: 14,
                                                       fontWeight:
                                                           FontWeight.w700),
                                                 ),

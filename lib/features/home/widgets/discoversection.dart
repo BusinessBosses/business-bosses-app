@@ -21,10 +21,11 @@ class DiscoverSection extends StatelessWidget {
           //       top: 15),
           //   child: SearchSection(),
           // ),
-          SizedBox(height: 15),
+          SizedBox(height: 20),
           HowtouseTile(),
-          SizedBox(height: 15),
+          SizedBox(height: 20),
           RelevantPeopleTile(),
+          SizedBox(height: 20),
           Padding(
             padding: EdgeInsets.symmetric(horizontal: 15.0),
             child: Row(

@@ -194,23 +194,23 @@ class _AllCommunitiesScreenState extends State<AllCommunitiesScreen>
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: <Widget>[
                                   SizedBox(
-                                    height: 15,
+                                    height: 20,
                                   ),
                                   BossUpTopSection(),
                                   SizedBox(
-                                    height: 15,
+                                    height: 20,
                                   ),
                                   ChallengesSection(),
                                   SizedBox(
-                                    height: 15,
+                                    height: 20,
                                   ),
                                   LearningSection(),
                                   SizedBox(
-                                    height: 15,
+                                    height: 20,
                                   ),
                                   EventsSection(),
                                   SizedBox(
-                                    height: 5,
+                                    height: 25,
                                   ),
                                   CrowdfundSection(),
                                   SizedBox(

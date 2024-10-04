@@ -21,7 +21,7 @@ class HowtouseTile extends StatelessWidget {
               children: <Widget>[
                 Text(
                   'How To Use Business Bosses App',
-                  style: TextStyle(fontWeight: FontWeight.w700, fontSize: 18),
+                  style: TextStyle(fontWeight: FontWeight.w700, fontSize: 14),
                 ),
               ],
             ),
