@@ -1,5 +1,6 @@
 import 'package:business_bosses_v2/bbpro/models/project_model.dart';
 import 'package:business_bosses_v2/bbpro/models/task_model.dart';
+import 'package:business_bosses_v2/common/dialogs/snackbar.dart';
 import 'package:business_bosses_v2/common/models/api_response_model.dart';
 import 'package:business_bosses_v2/features/profile/controller/profile_controller.dart';
 import 'package:business_bosses_v2/services/api_service.dart';
@@ -66,5 +67,27 @@ class ProjectController extends GetxController {
       // Handle any errors that occur during the update
     }
     update();
+  }
+
+  Future<bool> deleteProject(String projectId) async {
+    try {
+      // Call your API to update the task's status in the backend
+      final ApiResponseModel response =
+          await ApiService.delete(path: 'projects/$projectId');
+
+      if (response.success) {
+        initProjects(profileController.myProfile.uid);
+        return true;
+      } else {
+        showSnackbar(message: 'Error deleting project');
+        return false;
+      }
+
+      // You can also handle local state or cache updates if necessary
+    } catch (e) {
+      showSnackbar(message: 'Error deleting project');
+      return false;
+      // Handle any errors that occur during the update
+    }
   }
 }

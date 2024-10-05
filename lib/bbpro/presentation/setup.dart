@@ -24,7 +24,6 @@ class _SetupState extends State<Setup> {
     'Edit Shop',
     'My Inventory',
     'My Services',
-    'My Suppliers',
     'Privacy Policy & Terms of Use',
     'Contact Us',
     'Manage Subscription'

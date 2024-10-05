@@ -31,6 +31,8 @@ class _AddprojectState extends State<Addproject> {
   final List<Map<String, dynamic>> tasks = <Map<String, dynamic>>[];
   final TextEditingController taskNameController = TextEditingController();
   final TextEditingController expenseController = TextEditingController();
+  bool isSubmit = false;
+
   @override
   void initState() {
     super.initState();
@@ -282,6 +284,7 @@ class _AddprojectState extends State<Addproject> {
                 SizedBox(
                   width: MediaQuery.of(context).size.width,
                   child: ProCustomButton(
+                    loading: isSubmit,
                     text: 'Save',
                     onPressed: () async {
                       if (nameController.text.isEmpty) {
@@ -304,6 +307,9 @@ class _AddprojectState extends State<Addproject> {
                             message: 'Adding tasks is mandatory!', error: true);
                         return;
                       }
+                      setState(() {
+                        isSubmit = true;
+                      });
                       final Map<String, dynamic> data = <String, dynamic>{
                         'userId': profileController.myProfile.uid,
                         'name': nameController.text,
@@ -318,12 +324,17 @@ class _AddprojectState extends State<Addproject> {
                         showSnackbar(
                           message: 'Project Added Succesfully!',
                         );
-                        Get.back();
-                        projectController
+                        await projectController
                             .initTasks(profileController.myProfile.uid);
+                        // ignore: use_build_context_synchronously
+                        Navigator.pop(context);
                       } else {
                         showSnackbar(
                             message: 'Error While Adding Project', error: true);
+
+                        setState(() {
+                          isSubmit = false;
+                        });
                       }
                     },
                   ),
