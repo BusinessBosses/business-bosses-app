@@ -26,6 +26,20 @@ enum ClientType {
   String toShortString() {
     return displayTitle;
   }
+
+  // Converts a ClientType enum to the format expected by the API
+  String toApiString() {
+    switch (this) {
+      case ClientType.online:
+        return 'on-line';
+      case ClientType.inPerson:
+        return 'in-person';
+      case ClientType.bbUser:
+        return 'bb-user';
+      default:
+        return 'on-line'; // default value, if needed
+    }
+  }
 }
 
 // Client model

@@ -151,49 +151,51 @@ class _ClientsScreenState extends State<ClientsScreen>
                     ? const Center(
                         child: CircularProgressIndicator(),
                       )
-                    : clientsController.clients.isEmpty
-                        ? const Center(
-                            child: SafetyModel(
-                              isLoading: false,
-                              title: 'No Clients Found!',
-                            ),
-                          )
-                        : CustomScrollView(
-                            scrollDirection: Axis.horizontal,
-                            controller: _mainListScrollController,
-                            slivers: <Widget>[
-                              ...ClientType.values.map(
-                                (ClientType status) => SliverToBoxAdapter(
-                                  child: RowStatusCard(
-                                    clients: clientsController.clients
-                                        .where((Client client) =>
-                                            client.type == status)
-                                        .toList(),
-                                    clientType: status,
-                                    screenSize: screenSize,
-                                    taskAccepted:
-                                        (Client task, ClientType newStatus) {
-                                      setState(() {
-                                        // Update client status here
-                                      });
-                                    },
-                                    onDrag: (bool isRight) {
-                                      if (_lastMoveRight == isRight) {
-                                        return;
-                                      }
-                                      _lastMoveRight = isRight;
-                                      _moveMainList(isRight);
-                                    },
-                                    cancelDrag: () {
-                                      _lastMoveRight = null;
-                                      _timer?.cancel();
-                                    },
-                                    allclients: _allclients,
-                                  ),
+                    : Obx(
+                        () => clientsController.clients.isEmpty
+                            ? const Center(
+                                child: SafetyModel(
+                                  isLoading: false,
+                                  title: 'No Clients Found!',
                                 ),
                               )
-                            ],
-                          ),
+                            : CustomScrollView(
+                                scrollDirection: Axis.horizontal,
+                                controller: _mainListScrollController,
+                                slivers: <Widget>[
+                                  ...ClientType.values.map(
+                                    (ClientType status) => SliverToBoxAdapter(
+                                      child: RowStatusCard(
+                                        clients: clientsController.clients
+                                            .where((Client client) =>
+                                                client.type == status)
+                                            .toList(),
+                                        clientType: status,
+                                        screenSize: screenSize,
+                                        taskAccepted: (Client task,
+                                            ClientType newStatus) {
+                                          setState(() {
+                                            // Update client status here
+                                          });
+                                        },
+                                        onDrag: (bool isRight) {
+                                          if (_lastMoveRight == isRight) {
+                                            return;
+                                          }
+                                          _lastMoveRight = isRight;
+                                          _moveMainList(isRight);
+                                        },
+                                        cancelDrag: () {
+                                          _lastMoveRight = null;
+                                          _timer?.cancel();
+                                        },
+                                        allclients: _allclients,
+                                      ),
+                                    ),
+                                  )
+                                ],
+                              ),
+                      ),
               ),
             ),
           ],
@@ -210,37 +212,41 @@ class _ClientsScreenState extends State<ClientsScreen>
               Get.to(() => const AddSupplier());
             },
           ),
-          if (shopController.suppliers.isNotEmpty)
-            Expanded(
-              child: StaggeredGridView.countBuilder(
-                staggeredTileBuilder: (int index) => const StaggeredTile.fit(1),
-                padding: const EdgeInsets.symmetric(
-                  horizontal: 15.0,
+          Obx(() {
+            if (shopController.suppliers.isNotEmpty) {
+              return Expanded(
+                child: StaggeredGridView.countBuilder(
+                  staggeredTileBuilder: (int index) =>
+                      const StaggeredTile.fit(1),
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 15.0,
+                  ),
+                  crossAxisCount: 2,
+                  crossAxisSpacing: 8.0,
+                  mainAxisSpacing: 8.0,
+                  itemCount: shopController.suppliers.length,
+                  shrinkWrap: true,
+                  physics: null,
+                  itemBuilder: (BuildContext context, int index) {
+                    return SuppliersCard(
+                      onTap: () {
+                        Get.to(() => ExpandedProSuppliersPage(
+                            supplier: shopController.suppliers[index]));
+                      },
+                      supplier: shopController.suppliers[index],
+                    );
+                  },
                 ),
-                crossAxisCount: 2,
-                crossAxisSpacing: 8.0,
-                mainAxisSpacing: 8.0,
-                itemCount: shopController.suppliers.length,
-                shrinkWrap: true,
-                physics: null,
-                itemBuilder: (BuildContext context, int index) {
-                  return SuppliersCard(
-                    onTap: () {
-                      Get.to(() => ExpandedProSuppliersPage(
-                          supplier: shopController.suppliers[index]));
-                    },
-                    supplier: shopController.suppliers[index],
-                  );
-                },
-              ),
-            ),
-          if (shopController.suppliers.isEmpty)
-            const Center(
-              child: SafetyModel(
-                isLoading: false,
-                title: 'No Suppliers Found!',
-              ),
-            )
+              );
+            } else {
+              return const Center(
+                child: SafetyModel(
+                  isLoading: false,
+                  title: 'No Suppliers Found!',
+                ),
+              );
+            }
+          }),
         ]),
       ]),
     );

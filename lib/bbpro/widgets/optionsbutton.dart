@@ -7,14 +7,16 @@ class OptionsButton extends StatelessWidget {
   final bool? isExpanded;
   final dynamic item;
   final Function? onEdit;
+  final Function? onDelete;
 
   const OptionsButton({
     Key? key,
     this.padding,
     this.borderColor,
-    this.isExpanded,
+    this.isExpanded = false,
     this.item,
     this.onEdit,
+    this.onDelete,
   }) : super(key: key);
 
   @override
@@ -82,6 +84,9 @@ class OptionsButton extends StatelessWidget {
               }
             } else if (value == 'Delete') {
               // Delete action
+              if (onDelete != null) {
+                onDelete!();
+              }
               if (item != null) {
                 // Implement delete logic here
               }
@@ -99,7 +104,11 @@ class OptionsButton extends StatelessWidget {
             width: 1,
           ),
         ),
-        child: const Center(child: Icon(Icons.more_vert)),
+        child: const Center(
+          child: Icon(
+            Icons.more_vert,
+          ),
+        ),
       ),
     );
   }

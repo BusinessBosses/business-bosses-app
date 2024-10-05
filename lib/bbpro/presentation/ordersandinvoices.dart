@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:business_bosses_v2/action/action.dart';
 import 'package:business_bosses_v2/common/widgets/safety_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
@@ -113,6 +114,13 @@ class _OrdersScreenState extends State<OrdersScreen>
               },
               onAddProjectPressed: () {
                 // Handle "Add Project" pressed
+                if (clientsController.clients.isEmpty) {
+                  showSnackBar(
+                    context,
+                    message: 'You have to add a client to create order!',
+                  );
+                  return;
+                }
                 Get.to(() => const CreateOrder());
               },
             ),
@@ -150,7 +158,8 @@ class _OrdersScreenState extends State<OrdersScreen>
                                   child: RowStatusCard(
                                     orders: orderController.orders
                                         .where((Order order) =>
-                                            order.deliveryMethod == status)
+                                            order.status.displayTitle ==
+                                            status.displayTitle)
                                         .toList(),
                                     orderStatus: status,
                                     screenSize: screenSize,

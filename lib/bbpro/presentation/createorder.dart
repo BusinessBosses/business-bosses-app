@@ -96,6 +96,7 @@ class _CreateOrderState extends State<CreateOrder> {
           clientsName.add(client.name);
           clients.add(<String, dynamic>{'name': client.name, 'id': client.id});
         }
+
         for (Product product in shopController.products) {
           products.add(
             <String, dynamic>{
@@ -116,7 +117,7 @@ class _CreateOrderState extends State<CreateOrder> {
         }
 
         for (dynamic payments in shopController.shop!.payments) {
-          paymentMethod.add(payments);
+          paymentMethod.add(payments['paymentMethod']);
         }
         loading = false; // Update the loading state
       });

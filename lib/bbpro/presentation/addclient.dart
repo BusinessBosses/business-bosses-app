@@ -16,7 +16,8 @@ import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
 
 class Addclient extends StatefulWidget {
-  const Addclient({super.key});
+  final Client? client;
+  const Addclient({super.key, this.client});
 
   @override
   State<Addclient> createState() => _AddclientState();
@@ -28,13 +29,26 @@ class _AddclientState extends State<Addclient> {
   final TextEditingController phoneController = TextEditingController();
   final ProfileController profileController = Get.find();
   final ClientsController clientsController = Get.put(ClientsController());
-  final ClientType _selectedType = ClientType.online;
+  String? selectedType;
 
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
   File? _selectedImage;
   bool isSubmit = false;
   String? image;
+  List<String>? updateImage;
+
+  @override
+  void initState() {
+    super.initState();
+    if (widget.client != null) {
+      nameController.text = widget.client!.name;
+      emailController.text = widget.client!.email;
+      phoneController.text = widget.client!.phone;
+      updateImage = widget.client!.image;
+      selectedType = widget.client!.type.toApiString();
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -75,7 +89,9 @@ class _AddclientState extends State<Addclient> {
                       buttonText: 'Choose Photo',
                       onPressed: _pickImage,
                       imagePath: _selectedImage?.path ??
-                          'assets/images/shopplaceholder.png',
+                          (updateImage != null
+                              ? updateImage![0]
+                              : 'assets/images/shopplaceholder.png'),
                       iconpath: 'assets/svgs/uploadicon.svg',
                     ),
                     const SizedBox(height: 15),
@@ -103,14 +119,32 @@ class _AddclientState extends State<Addclient> {
                       ),
                     ),
                     const SizedBox(height: 15),
-                    CustomDropdownWidget(
-                      caption: 'Client Type',
-                      items: ClientType.values
-                          .skip(1) // Skip the first item
-                          .map((ClientType type) => type.displayTitle)
-                          .toList(),
-                      iconName: 'assets/svgs/dropdown.svg',
-                    ),
+                    widget.client != null
+                        ? CustomDropdownWidget(
+                            initialValue: toInitialString(selectedType!),
+                            caption: 'Client Type',
+                            items: ClientType.values
+                                .skip(1) // Skip the first item
+                                .map((ClientType type) => type.displayTitle)
+                                .toList(),
+                            onChanged: (String? value) {
+                              selectedType = value;
+                              setState(() {});
+                            },
+                            iconName: 'assets/svgs/dropdown.svg',
+                          )
+                        : CustomDropdownWidget(
+                            caption: 'Client Type',
+                            items: ClientType.values
+                                .skip(1) // Skip the first item
+                                .map((ClientType type) => type.displayTitle)
+                                .toList(),
+                            onChanged: (String? value) {
+                              selectedType = value;
+                              setState(() {});
+                            },
+                            iconName: 'assets/svgs/dropdown.svg',
+                          ),
                     const SizedBox(height: 150),
                   ],
                 ),
@@ -135,7 +169,7 @@ class _AddclientState extends State<Addclient> {
                   final String email = emailController.text;
                   final String phone = phoneController.text;
 
-                  if (_selectedImage == null) {
+                  if (_selectedImage == null && updateImage == null) {
                     showSnackbar(
                       message: 'Please select a client image!',
                       error: true,
@@ -187,7 +221,7 @@ class _AddclientState extends State<Addclient> {
                     return;
                   }
 
-                  if (_selectedType.displayTitle.isEmpty) {
+                  if (selectedType == null) {
                     showSnackbar(
                         message: 'Please select a client type', error: true);
                     setState(() {
@@ -213,6 +247,9 @@ class _AddclientState extends State<Addclient> {
                         return;
                       }
                     }
+                    if (widget.client != null && _selectedImage == null) {
+                      image = updateImage![0];
+                    }
                     // Handle the save action
                     final Map<String, dynamic> data = <String, dynamic>{
                       'userId': profileController
@@ -220,20 +257,32 @@ class _AddclientState extends State<Addclient> {
                       'name': nameController.text,
                       'email': emailController.text,
                       'phone': phoneController.text,
-                      'type': _selectedType.displayTitle,
-                      'createdAt': DateTime.now().toString(),
+                      'type': toApiString(selectedType!),
                       'image': image, // Handle images if necessary
                     };
 
-                    final bool response =
-                        await clientsController.addClient(data);
+                    bool response;
+
+                    if (widget.client != null) {
+                      response = await clientsController.updateClient(
+                          widget.client!.id, data);
+                    } else {
+                      response = await clientsController.addClient(data);
+                    }
 
                     if (response) {
-                      Get.back();
-                      showSnackbar(message: 'Client Added Successfully!');
+                      showSnackbar(
+                        message: widget.client != null
+                            ? 'Client Updated Successfully!'
+                            : 'Client Added Successfully!',
+                      );
+                      // ignore: use_build_context_synchronously
+                      Navigator.pop(context);
                     } else {
                       showSnackbar(
-                        message: 'Error Adding Client!',
+                        message: widget.client != null
+                            ? ' Error updatig client!'
+                            : 'Error Adding Client!',
                         error: true,
                       );
                       setState(() {
@@ -257,6 +306,32 @@ class _AddclientState extends State<Addclient> {
       setState(() {
         _selectedImage = File(pickedFile.path);
       });
+    }
+  }
+
+  String toApiString(String type) {
+    switch (type) {
+      case 'Online':
+        return 'on-line';
+      case 'In-Person':
+        return 'in-person';
+      case 'Bb-User':
+        return 'bb-user';
+      default:
+        return 'on-line'; // default value, if needed
+    }
+  }
+
+  String toInitialString(String type) {
+    switch (type) {
+      case 'on-line':
+        return 'Online';
+      case 'in-person':
+        return 'In-Person';
+      case 'bb-user':
+        return 'Bb-User';
+      default:
+        return 'Online'; // default value, if needed
     }
   }
 }

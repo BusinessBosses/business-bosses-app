@@ -2,7 +2,6 @@ import 'package:business_bosses_v2/bbpro/models/supplier_model.dart';
 import 'package:business_bosses_v2/bbpro/presentation/addsupplier.dart';
 import 'package:business_bosses_v2/common/dialogs/snackbar.dart';
 import 'package:business_bosses_v2/common/widgets/network_image_with_placeholder.dart';
-import 'package:business_bosses_v2/features/marketplace/models/suppliers_model.dart';
 import 'package:business_bosses_v2/features/posts/widgets/images_viewer_screen.dart';
 import 'package:detectable_text_field/detector/sample_regular_expressions.dart';
 import 'package:detectable_text_field/widgets/detectable_text.dart';
