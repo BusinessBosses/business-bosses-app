@@ -57,7 +57,6 @@ class _AnalyserScreenState extends State<AnalyserScreen> {
         title: const Text(
           'Help',
           textAlign: TextAlign.center,
-          style: TextStyle(fontSize: 20),
         ),
       ),
       body: Column(

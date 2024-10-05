@@ -255,9 +255,7 @@ class _CreateServiceListingState extends State<CreateServiceListing>
                   title: const Text(
                     'Select Location',
                     textAlign: TextAlign.center,
-                    style: TextStyle(
-                      fontSize: 20,
-                    ),
+                    style: TextStyle(),
                   ),
                 ),
                 initialSelection: location,

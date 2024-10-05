@@ -146,7 +146,6 @@ class _FilterUsersState extends State<FilterSuppliers> {
                                 title: Text(
                                   'Select Location',
                                   textAlign: TextAlign.center,
-                                  style: const TextStyle(fontSize: 20),
                                 ),
                               ),
                               initialSelection: filterCode ?? 'GB',

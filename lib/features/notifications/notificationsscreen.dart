@@ -52,7 +52,6 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
               title: const Text(
                 'Notifications',
                 textAlign: TextAlign.center,
-                style: TextStyle(fontSize: 20),
               ),
             ),
             body: controller.loading.value
@@ -142,7 +141,7 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
                                                     ))
                                               Container(
                                                 padding: const EdgeInsets.only(
-                                                    left: 16.0),
+                                                    left: 16.0, top: 10),
                                                 child: Text(
                                                   formattedDate,
                                                   style: bodyText1,

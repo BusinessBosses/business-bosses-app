@@ -125,7 +125,7 @@ class _PremiumScreenState extends State<PremiumScreen> {
         title: const Text(
           'Upgrade to Pro',
           textAlign: TextAlign.center,
-          style: TextStyle(fontSize: 20),
+          style: TextStyle(fontSize: 16),
         ),
       ),
       body: SingleChildScrollView(

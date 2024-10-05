@@ -1,9 +1,11 @@
 import 'package:business_bosses_v2/bbpro/models/project_model.dart';
+import 'package:business_bosses_v2/bbpro/presentation/addproject.dart';
 import 'package:business_bosses_v2/bbpro/widgets/optionsbutton.dart';
 import 'package:business_bosses_v2/bbpro/widgets/projectpopup.dart';
 import 'package:business_bosses_v2/utils/theme/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:get/get.dart';
 
 class TaskWidget extends StatelessWidget {
   final Project project;
@@ -71,6 +73,18 @@ class TaskWidget extends StatelessWidget {
                         ]),
                   ),
                   OptionsButton(
+                    onView: () => showDialog(
+                      context: context,
+                      builder: (BuildContext context) => ProjectPopUp(
+                        project: project,
+                      ),
+                    ),
+                    onEdit: () {
+                      Get.to(() => Addproject(
+                            project: project,
+                          ));
+                    },
+                    onDelete: () {},
                     isExpanded: isExpanded != false ? true : false,
                     padding: const EdgeInsets.all(0),
                     borderColor: Colors.white,

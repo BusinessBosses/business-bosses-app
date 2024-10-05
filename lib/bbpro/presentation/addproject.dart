@@ -1,3 +1,5 @@
+import 'package:business_bosses_v2/bbpro/models/project_model.dart';
+import 'package:business_bosses_v2/bbpro/models/task_model.dart';
 import 'package:business_bosses_v2/bbpro/widgets/addprojectbottomsheet.dart';
 import 'package:business_bosses_v2/bbpro/widgets/button.dart';
 import 'package:business_bosses_v2/bbpro/widgets/edittext.dart';
@@ -12,7 +14,8 @@ import 'package:get/get.dart';
 import '../widgets/iconbutton.dart';
 
 class Addproject extends StatefulWidget {
-  const Addproject({super.key});
+  final Project? project;
+  const Addproject({super.key, this.project});
 
   @override
   State<Addproject> createState() => _AddprojectState();
@@ -25,12 +28,28 @@ class _AddprojectState extends State<Addproject> {
   final ProjectController projectController = Get.put(ProjectController());
   final ProfileController profileController = Get.find();
   final FocusNode _taskNameFocusNode = FocusNode();
-  List<Map<String, dynamic>> tasks = <Map<String, dynamic>>[];
-
+  final List<Map<String, dynamic>> tasks = <Map<String, dynamic>>[];
+  final TextEditingController taskNameController = TextEditingController();
+  final TextEditingController expenseController = TextEditingController();
   @override
   void initState() {
     super.initState();
     // Request focus when the widget is built
+    if (widget.project != null) {
+      nameController.text = widget.project!.name;
+      descriptionController.text = widget.project!.description;
+      budgetController.text = widget.project!.amount.toString();
+      if (widget.project!.tasks != null) {
+        // ignore: always_specify_types
+        tasks.addAll(widget.project!.tasks!.map((Task task) => {
+              'name': task.name,
+              'amount': task.amount,
+              'startAt': task.startAt.toString(),
+              'endAt': task.endAt.toString(),
+            }));
+      }
+    }
+
     WidgetsBinding.instance.addPostFrameCallback((_) {
       _taskNameFocusNode.requestFocus();
     });
@@ -45,12 +64,12 @@ class _AddprojectState extends State<Addproject> {
   }
 
   void _showAddTaskSheet(BuildContext context) {
-    final TextEditingController taskNameController = TextEditingController();
-    final TextEditingController expenseController = TextEditingController();
     DateTime? startDate;
     DateTime? endDate;
     startDate = DateTime.now();
     endDate = DateTime.now();
+    taskNameController.clear();
+    expenseController.clear();
     showModalBottomSheet(
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
       context: context,
@@ -62,6 +81,11 @@ class _AddprojectState extends State<Addproject> {
           startDate: startDate!,
           endDate: endDate!,
           onPressed: () {
+            if (startDate!.isAfter(endDate!)) {
+              showSnackbar(
+                  message: 'Start date cannot be after end date!', error: true);
+              return;
+            }
             final Map<String, dynamic> task = <String, dynamic>{
               'name': taskNameController.text.trim(),
               'amount': expenseController.text.trim(),
@@ -75,6 +99,69 @@ class _AddprojectState extends State<Addproject> {
 
             Get.back();
           },
+          onStartDateChanged: (DateTime newDate) {
+            setState(() {
+              startDate = newDate;
+            });
+          },
+          onEndDateChanged: (DateTime newDate) {
+            setState(() {
+              endDate = newDate;
+            });
+          },
+        );
+      },
+    );
+  }
+
+  _editTaskSheet(BuildContext context, int index) {
+    Map<String, dynamic> taskToEdit = tasks[index];
+
+    taskNameController.text = taskToEdit['name'];
+    expenseController.text = taskToEdit['amount'];
+    DateTime startDate = DateTime.parse(taskToEdit['startAt']);
+    DateTime endDate = DateTime.parse(taskToEdit['endAt']);
+
+    showModalBottomSheet(
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
+      context: context,
+      isScrollControlled: true,
+      builder: (BuildContext context) {
+        return AddProjectBottomSheet(
+          taskNameController: taskNameController,
+          expenseController: expenseController,
+          startDate: startDate,
+          endDate: endDate,
+          onPressed: () {
+            if (startDate.isAfter(endDate)) {
+              showSnackbar(
+                  message: 'Start date cannot be after end date!', error: true);
+              return;
+            }
+            final Map<String, dynamic> updatedTask = <String, dynamic>{
+              'name': taskNameController.text.trim(),
+              'amount': expenseController.text.trim(),
+              'startAt': startDate.toString(),
+              'endAt': endDate.toString(),
+            };
+
+            // Update the task in the list
+            setState(() {
+              tasks[index] = updatedTask;
+            });
+
+            Get.back();
+          },
+          onStartDateChanged: (DateTime newDate) {
+            setState(() {
+              startDate = newDate;
+            });
+          },
+          onEndDateChanged: (DateTime newDate) {
+            setState(() {
+              endDate = newDate;
+            });
+          },
         );
       },
     );
@@ -85,9 +172,9 @@ class _AddprojectState extends State<Addproject> {
     return Scaffold(
       backgroundColor: probackgroundColor,
       appBar: AppBar(
-        title: const Text(
-          'Add Project',
-          style: TextStyle(
+        title: Text(
+          widget.project == null ? 'Add Project' : 'Edit Project',
+          style: const TextStyle(
             color: proprimaryColor,
             fontWeight: FontWeight.bold,
           ),
@@ -152,14 +239,25 @@ class _AddprojectState extends State<Addproject> {
                             ),
                           ),
                           const SizedBox(height: 5),
-                          ...tasks.map((Map<String, dynamic> task) {
+                          ...tasks
+                              .asMap()
+                              .entries
+                              .map((MapEntry<int, Map<String, dynamic>> entry) {
+                            final int index = entry.key;
+                            final Map<String, dynamic> task = entry.value;
                             return Taskitem(
                               taskname: task['name'],
                               taskexpense: task['amount'],
                               startdate: task['startAt'],
                               enddate: task['endAt'],
-                              editOnTap: () {},
-                              deleteOnTap: () {},
+                              editOnTap: () {
+                                _editTaskSheet(context, index);
+                              },
+                              deleteOnTap: () {
+                                setState(() {
+                                  tasks.removeAt(index);
+                                });
+                              },
                             );
                           }).toList(),
                         ],

@@ -56,7 +56,6 @@ class _SpecificUserListScreenState extends State<SpecificUserListScreen> {
               // _prarams.title ??
               'Members',
               textAlign: TextAlign.center,
-              style: TextStyle(fontSize: 20),
             ),
           ),
           body: controller.members.isEmpty

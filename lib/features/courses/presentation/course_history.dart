@@ -51,7 +51,6 @@ class _CourseHistoryState extends State<CourseHistory> {
         title: const Text(
           'Course History',
           textAlign: TextAlign.center,
-          style: TextStyle(fontSize: 20),
         ),
       ),
       body: Obx(

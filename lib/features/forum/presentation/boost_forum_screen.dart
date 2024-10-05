@@ -211,7 +211,6 @@ class _BoostForumScreenState extends State<BoostForumScreen> {
         centerTitle: true,
         title: const TextWidget(
           text: 'Boost Forum',
-          size: 20,
         ),
       ),
       body: SingleChildScrollView(

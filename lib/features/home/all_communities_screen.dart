@@ -13,6 +13,7 @@ import 'package:business_bosses_v2/features/home/widgets/crowdfundsection.dart';
 import 'package:business_bosses_v2/features/home/widgets/eventssection.dart';
 import 'package:business_bosses_v2/features/home/widgets/industriessearch.dart';
 import 'package:business_bosses_v2/features/home/widgets/learningsection.dart';
+import 'package:business_bosses_v2/features/live_event/presentation/live_event.dart';
 import 'package:business_bosses_v2/utils/constants/constants.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
@@ -55,6 +56,13 @@ class _AllCommunitiesScreenState extends State<AllCommunitiesScreen>
 
   List<Widget> get mActions {
     return <Widget>[
+      if (!_isSearching)
+        IconButton(
+          onPressed: () {
+            Get.to(() => const LiveEvent());
+          },
+          icon: const Icon(Icons.calendar_month),
+        ),
       _pageTabController.index != 2
           ? IconButton(
               icon: _isSearching
@@ -194,23 +202,23 @@ class _AllCommunitiesScreenState extends State<AllCommunitiesScreen>
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: <Widget>[
                                   SizedBox(
-                                    height: 15,
+                                    height: 20,
                                   ),
                                   BossUpTopSection(),
                                   SizedBox(
-                                    height: 15,
+                                    height: 20,
                                   ),
                                   ChallengesSection(),
                                   SizedBox(
-                                    height: 15,
+                                    height: 20,
                                   ),
                                   LearningSection(),
                                   SizedBox(
-                                    height: 15,
+                                    height: 20,
                                   ),
                                   EventsSection(),
                                   SizedBox(
-                                    height: 5,
+                                    height: 25,
                                   ),
                                   CrowdfundSection(),
                                   SizedBox(

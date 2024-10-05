@@ -51,7 +51,6 @@ class _ConfirmCreateEventState extends State<ConfirmCreateEvent> {
               ? 'Event Updated'
               : 'Event Created',
           textAlign: TextAlign.center,
-          style: const TextStyle(fontSize: 20),
         ),
       ),
       body: Column(

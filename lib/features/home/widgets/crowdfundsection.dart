@@ -37,7 +37,7 @@ class _CrowdfundSectionState extends State<CrowdfundSection> {
                     const Text(
                       'Crowdfund',
                       style:
-                          TextStyle(fontWeight: FontWeight.w700, fontSize: 18),
+                          TextStyle(fontWeight: FontWeight.w700, fontSize: 14),
                     ),
                     Wrap(
                         crossAxisAlignment: WrapCrossAlignment.center,
@@ -61,7 +61,7 @@ class _CrowdfundSectionState extends State<CrowdfundSection> {
                 height: 10,
               ),
               const SizedBox(
-                  height: 218,
+                  height: 230,
                   child: DonationsPage(
                     ishome: true,
                   ))

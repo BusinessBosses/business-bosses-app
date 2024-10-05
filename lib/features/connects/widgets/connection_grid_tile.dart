@@ -49,12 +49,13 @@ class _ConnectionGridTileState extends State<ConnectionGridTile> {
         padding: EdgeInsets.only(right: widget.color != null ? 10.0 : 0),
         child: Container(
           width: widget.color != null ? 150 : null,
-          // height: 150,
+          height: widget.color != null ? 190 : null,
           padding: const EdgeInsets.all(16.0),
           decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(radius),
               color: widget.color ?? Colors.white),
           child: Column(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: <Widget>[
               UserAvatarWithBadge(
                 user: widget.user,
@@ -64,52 +65,57 @@ class _ConnectionGridTileState extends State<ConnectionGridTile> {
                 placeHolder: Icons.person,
               ),
               const SizedBox(height: 8.0),
-              widget.user.isSubscribed == true
-                  ? Padding(
-                      padding: const EdgeInsets.only(top: 0.0),
-                      child: Row(
-                        children: <Widget>[
-                          Text(
-                            widget.user.name ?? widget.user.username,
-                            maxLines: 2,
-                            overflow: TextOverflow.ellipsis,
-                            textAlign: TextAlign.center,
-                            style: widget.color != null
-                                ? TextStyle(
-                                    fontSize: 13, fontWeight: FontWeight.w700)
-                                : Theme.of(context).textTheme.bodyLarge,
+              Column(
+                children: <Widget>[
+                  widget.user.isSubscribed == true
+                      ? Padding(
+                          padding: const EdgeInsets.only(top: 0.0),
+                          child: Row(
+                            children: <Widget>[
+                              Text(
+                                widget.user.name ?? widget.user.username,
+                                maxLines: 2,
+                                overflow: TextOverflow.ellipsis,
+                                textAlign: TextAlign.center,
+                                style: widget.color != null
+                                    ? const TextStyle(
+                                        fontSize: 13,
+                                        fontWeight: FontWeight.w700)
+                                    : Theme.of(context).textTheme.bodyLarge,
+                              ),
+                              const SizedBox(width: 5),
+                              SvgPicture.asset(
+                                'assets/svgs/premiumbadge.svg',
+                                height: 9,
+                                color: primaryColorLT,
+                              )
+                            ],
                           ),
-                          const SizedBox(width: 5),
-                          SvgPicture.asset(
-                            'assets/svgs/premiumbadge.svg',
-                            height: 9,
-                            color: primaryColorLT,
-                          )
-                        ],
-                      ),
-                    )
-                  : Text(
-                      truncateWithEllipsis(widget.color != null ? 10 : 30,
-                          widget.user.name ?? widget.user.username),
-                      maxLines: 2,
-                      overflow: TextOverflow.ellipsis,
-                      textAlign: TextAlign.center,
-                      style: widget.color != null
-                                ? TextStyle(
-                                    fontSize: 13, fontWeight: FontWeight.w700)
-                                : Theme.of(context).textTheme.bodyLarge,
-                    ),
-              const SizedBox(height: 4.0),
-              widget.user.category != null
-                  ? Text(widget.user.category.toString(),
-                      maxLines: 1,
-                      overflow: TextOverflow.ellipsis,
-                      style: const TextStyle(
-                        fontSize: 12,
-                      ))
-                  : widget.color != null
-                      ? SizedBox(height: 12)
-                      : Container(),
+                        )
+                      : Text(
+                          truncateWithEllipsis(widget.color != null ? 10 : 30,
+                              widget.user.name ?? widget.user.username),
+                          maxLines: 2,
+                          overflow: TextOverflow.ellipsis,
+                          textAlign: TextAlign.center,
+                          style: widget.color != null
+                              ? const TextStyle(
+                                  fontSize: 13, fontWeight: FontWeight.w700)
+                              : Theme.of(context).textTheme.bodyLarge,
+                        ),
+                  const SizedBox(height: 4.0),
+                  widget.user.category != null
+                      ? Text(widget.user.category.toString(),
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                          style: const TextStyle(
+                            fontSize: 12,
+                          ))
+                      : widget.color != null
+                          ? const SizedBox(height: 12)
+                          : Container(),
+                ],
+              ),
               const SizedBox(height: 12.0),
               MCustomButton(
                 buttonType:

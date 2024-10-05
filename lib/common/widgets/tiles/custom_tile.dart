@@ -33,7 +33,7 @@ class CustomTile extends StatelessWidget {
               Container(
                 margin: EdgeInsets.only(top: ishome == true ? 0 : 15),
                 decoration: BoxDecoration(
-                  color: Colors.white,
+                  color: ishome == true ? null : Colors.white,
                   borderRadius: BorderRadius.circular(20),
                   border: !showBorder
                       ? null
@@ -51,7 +51,7 @@ class CustomTile extends StatelessWidget {
                     children: <Widget>[
                       ishome == true
                           ? Container(
-                              height: 5,
+                              height: 0,
                             )
                           : ListTile(
                               title: Text(

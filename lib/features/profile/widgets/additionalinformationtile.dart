@@ -377,7 +377,7 @@ class _AdditionalInfoTileState extends State<AdditionalInfoTile> {
                               title: Text(
                                 'Select Country',
                                 textAlign: TextAlign.center,
-                                style: const TextStyle(fontSize: 20),
+                                style: const TextStyle(fontSize: 16),
                               ),
                             ),
                             initialSelection: _location ?? 'GB',

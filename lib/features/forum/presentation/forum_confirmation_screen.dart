@@ -24,7 +24,8 @@ class ForumConfirmationScreen extends StatelessWidget {
           ),
           centerTitle: true,
           title: const TextWidget(
-              text: 'Payment Confirmatio', color: Color(0xFF333333), size: 20),
+            text: 'Payment Confirmatio',
+          ),
         ),
         body: SingleChildScrollView(
           child: Stack(

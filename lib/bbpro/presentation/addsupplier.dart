@@ -200,9 +200,6 @@ class _AddSupplierState extends State<AddSupplier> {
                           title: const Text(
                             'Select Location',
                             textAlign: TextAlign.center,
-                            style: TextStyle(
-                              fontSize: 20,
-                            ),
                           ),
                         ),
                         initialSelection: '',

@@ -354,7 +354,7 @@ class _SetupshopState extends State<Setupshop> {
                             'Select Location',
                             textAlign: TextAlign.center,
                             style: TextStyle(
-                              fontSize: 20,
+                              fontSize: 16,
                             ),
                           ),
                         ),

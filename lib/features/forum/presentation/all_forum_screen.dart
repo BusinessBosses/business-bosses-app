@@ -133,7 +133,6 @@ class _AllForumScreenState extends State<AllForumScreen>
                     : Text(
                         industry.industry ?? 'Topic',
                         textAlign: TextAlign.center,
-                        style: const TextStyle(fontSize: 20),
                       ),
             actions: <Widget>[
               widget.isCourses == true

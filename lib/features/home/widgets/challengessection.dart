@@ -32,7 +32,7 @@ class _ChallengesSectionState extends State<ChallengesSection> {
                 children: <Widget>[
                   const Text(
                     'Challenges',
-                    style: TextStyle(fontWeight: FontWeight.w700, fontSize: 18),
+                    style: TextStyle(fontWeight: FontWeight.w700, fontSize: 14),
                   ),
                   Wrap(
                       crossAxisAlignment: WrapCrossAlignment.center,
@@ -56,7 +56,7 @@ class _ChallengesSectionState extends State<ChallengesSection> {
               height: 10,
             ),
             SizedBox(
-                height: 190,
+                height: 200,
                 child: BossupChallenge(
                   backgroundColor: widget.backgroundColor ?? Colors.white,
                   ishome: true,

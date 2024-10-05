@@ -40,7 +40,8 @@ class _RelevantUsersScreenState extends State<RelevantUsersScreen> {
           controller.recommendedConnections.toList();
       final List<UserModel> filteredConnectionsbytitle = controller
           .recommendedConnections
-          .where((UserModel element) => element.category.toString() == _filtertitle)
+          .where((UserModel element) =>
+              element.category.toString() == _filtertitle)
           .toList();
 
       void _refreshScreen() {
@@ -98,7 +99,6 @@ class _RelevantUsersScreenState extends State<RelevantUsersScreen> {
           title: const Text(
             'Follow',
             textAlign: TextAlign.center,
-            style: TextStyle(fontSize: 20),
           ),
           actions: <Widget>[
             IconButton(

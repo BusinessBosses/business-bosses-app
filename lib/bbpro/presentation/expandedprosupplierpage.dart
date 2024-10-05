@@ -45,7 +45,6 @@ class _FilterUsersState extends State<ExpandedProSuppliersPage> {
         centerTitle: true,
         title: const Text(
           'About Supplier',
-          style: TextStyle(fontSize: 20),
         ),
         // ignore: prefer_const_literals_to_create_immutables
         actions: <Widget>[

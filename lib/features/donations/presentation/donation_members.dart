@@ -37,7 +37,6 @@ class _DonationMembersState extends State<DonationMembers> {
         title: const Text(
           'Crowdfund Members',
           textAlign: TextAlign.center,
-          style: TextStyle(fontSize: 20),
         ),
       ),
       body: widget.users.isEmpty

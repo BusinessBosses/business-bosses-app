@@ -229,7 +229,7 @@ class _UpdateProfileScreenState extends State<UpdateProfileScreen> {
           title: Text(
             currentRoute.isFirst ? 'Complete your Profile' : 'Edit Profile',
             textAlign: TextAlign.center,
-            style: const TextStyle(fontSize: 20),
+            style: const TextStyle(fontSize: 16),
           ),
         ),
         body: Column(
@@ -924,7 +924,7 @@ class _UpdateProfileScreenState extends State<UpdateProfileScreen> {
                                                   'Select Country',
                                                   textAlign: TextAlign.center,
                                                   style: const TextStyle(
-                                                      fontSize: 20),
+                                                      fontSize: 16),
                                                 ),
                                               ),
                                               initialSelection:

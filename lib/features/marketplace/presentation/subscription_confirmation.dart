@@ -26,7 +26,8 @@ class SubscriptionConfirmation extends StatelessWidget {
           ),
           centerTitle: true,
           title: const TextWidget(
-              text: 'Payment Confirmation', color: Color(0xFF333333), size: 20),
+            text: 'Payment Confirmation',
+          ),
         ),
         body: SingleChildScrollView(
           child: Stack(

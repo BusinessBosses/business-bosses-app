@@ -137,7 +137,6 @@ class _HowToUseAppScreenState extends State<HowToUseAppScreen> {
         title: const Text(
           'How to Use Business Bosses App',
           textAlign: TextAlign.center,
-          style: TextStyle(fontSize: 20),
         ),
       ),
       body: GridView.builder(
