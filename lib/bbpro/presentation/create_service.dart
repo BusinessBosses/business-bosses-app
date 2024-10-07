@@ -64,6 +64,16 @@ class _CreateServiceListingState extends State<CreateServiceListing>
   bool _startTimeSelected = false;
   bool _endTimeSelected = false;
   List<String> paymentMethods = <String>[];
+  List<String> selectedSubmitWeekdays = <String>[];
+  List<String> weekdays = <String>[
+    'Mon',
+    'Tue',
+    'Wed',
+    'Thu',
+    'Fri',
+    'Sat',
+    'Sun'
+  ];
 
   @override
   void initState() {
@@ -470,6 +480,9 @@ class _CreateServiceListingState extends State<CreateServiceListing>
   }
 
   void _submitForm() async {
+    print('${_startTime.hour}:${_startTime.minute}');
+    print(_endTime.toString());
+
     if (_serviceNameController.text.isEmpty) {
       showSnackbar(
         message: 'Service Name is Mandatory!',
@@ -564,8 +577,10 @@ class _CreateServiceListingState extends State<CreateServiceListing>
                       _isAlwaysAvailable = !_isAlwaysAvailable;
                       if (_isAlwaysAvailable) {
                         _selectedWeekdays.fillRange(0, 7, true);
+                        selectedSubmitWeekdays = weekdays;
                       } else {
                         _selectedWeekdays.fillRange(0, 7, false);
+                        selectedSubmitWeekdays = <String>[];
                       }
                       _updateSelectedDates();
                     });
@@ -631,6 +646,16 @@ class _CreateServiceListingState extends State<CreateServiceListing>
                     setState(() {
                       _selectedWeekdays[index] = selected;
                       _updateSelectedDates();
+                      if (selectedSubmitWeekdays
+                          .contains(_getWeekdayName(index))) {
+                        selectedSubmitWeekdays.remove(_getWeekdayName(
+                            index)); // Remove if already selected
+                      } else {
+                        selectedSubmitWeekdays
+                            .add(_getWeekdayName(index)); // Add if not selected
+                      }
+                      selectedSubmitWeekdays.sort((String a, String b) =>
+                          weekdays.indexOf(a).compareTo(weekdays.indexOf(b)));
                     });
                   },
                 );
@@ -687,7 +712,7 @@ class _CreateServiceListingState extends State<CreateServiceListing>
   }
 
   String _getWeekdayName(int index) {
-    List<String> weekdays = <String>[
+    List<String> weekdayss = <String>[
       'Mon',
       'Tue',
       'Wed',
@@ -696,7 +721,7 @@ class _CreateServiceListingState extends State<CreateServiceListing>
       'Sat',
       'Sun'
     ];
-    return weekdays[index];
+    return weekdayss[index];
   }
 
   void _updateSelectedDates() {
