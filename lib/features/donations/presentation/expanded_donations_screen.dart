@@ -69,7 +69,6 @@ class _ExpandedDonationScreenState extends State<ExpandedDonationScreen> {
           title: const Text(
             'Crowdfund',
             textAlign: TextAlign.center,
-            style: TextStyle(fontSize: 20),
           ),
           actions: <Widget>[
             widget.donation.user!.uid == profileController.myProfile.uid
@@ -285,7 +284,7 @@ class _ExpandedDonationScreenState extends State<ExpandedDonationScreen> {
                           bottom: 50,
                         ),
                         padding: const EdgeInsets.symmetric(
-                          vertical: 15,
+                          vertical: 5,
                           horizontal: 30,
                         ),
                         decoration: BoxDecoration(
@@ -430,9 +429,6 @@ class _ExpandedDonationScreenState extends State<ExpandedDonationScreen> {
                                   ),
                                 )
                               ],
-                            ),
-                            const SizedBox(
-                              height: 20,
                             ),
 
                             ///for when goal has been reached
@@ -770,7 +766,7 @@ class _ExpandedDonationScreenState extends State<ExpandedDonationScreen> {
                     ])
                   ]),
                   const SizedBox(
-                    height: 10,
+                    height: 5,
                   ),
                   Container(
                     color: backgroundColor,
@@ -823,6 +819,7 @@ class _ExpandedDonationScreenState extends State<ExpandedDonationScreen> {
                                       widget.donation.user?.name ??
                                           widget.donation.user!.name!,
                                       style: const TextStyle(
+                                          fontSize: 14,
                                           fontWeight: FontWeight.w700),
                                     ),
                                     widget.donation.user?.isSubscribed == true
@@ -838,25 +835,26 @@ class _ExpandedDonationScreenState extends State<ExpandedDonationScreen> {
                                   ]),
                               Text(
                                 formattedDifference,
-                                style: const TextStyle(color: subtextColor),
+                                style: const TextStyle(
+                                    color: subtextColor, fontSize: 12),
                               )
                             ],
                           ),
                         ),
                         const SizedBox(
-                          height: 30,
+                          height: 10,
                         ),
                         const Text(
                           'Story',
                           style: TextStyle(
-                              fontWeight: FontWeight.w700, fontSize: 18),
+                              fontWeight: FontWeight.w700, fontSize: 14),
                         ),
                         const SizedBox(
-                          height: 20,
+                          height: 5,
                         ),
                         Text(
                           widget.donation.description!,
-                          style: const TextStyle(fontSize: 16),
+                          style: const TextStyle(fontSize: 14),
                         )
                       ],
                     ),

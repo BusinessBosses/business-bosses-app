@@ -23,21 +23,21 @@ class ShopController extends GetxController {
     );
     if (response.success) {
       if (response.data['rows'].isEmpty) {
-        loading(false);
-        update();
         return false;
       } else {
-        shop = Shop.fromMap(response.data['rows'][0]);
+        shop = Shop.fromMap(<String, dynamic>{
+          ...response.data['rows'][0],
+          'user': profileController.myProfile.toMap()
+        });
       }
     } else {
-      loading(false);
-      update();
       return false;
     }
     if (response.data['rows'].isNotEmpty) {
       ApiResponseModel productResponse = await ApiService.get(
         path: 'goods/user-products/${profileController.myProfile.uid}',
       );
+      products.clear();
       if (productResponse.success) {
         for (int i = 0; i < productResponse.data['rows'].length; i++) {
           products.add(Product.fromJson(productResponse.data['rows'][i]));
@@ -46,6 +46,7 @@ class ShopController extends GetxController {
       ApiResponseModel servicesResponse = await ApiService.get(
         path: 'services/user-services/${profileController.myProfile.uid}',
       );
+      services.clear();
       if (servicesResponse.success) {
         for (int i = 0; i < servicesResponse.data['rows'].length; i++) {
           services.add(Service.fromJson(servicesResponse.data['rows'][i]));
@@ -55,6 +56,7 @@ class ShopController extends GetxController {
       ApiResponseModel vendorsReponse = await ApiService.get(
         path: 'vendors/user/${profileController.myProfile.uid}',
       );
+      suppliers.clear();
       if (vendorsReponse.success) {
         for (int i = 0; i < vendorsReponse.data['rows'].length; i++) {
           suppliers.add(Vendor.fromMap(vendorsReponse.data['rows'][i]));
@@ -62,7 +64,6 @@ class ShopController extends GetxController {
       }
       return true;
     } else {
-      loading(false);
       return false;
     }
   }
@@ -75,6 +76,7 @@ class ShopController extends GetxController {
         ...response.data,
         'user': profileController.myProfile.toMap()
       });
+      update();
       return true;
     } else {
       return false;
@@ -89,6 +91,7 @@ class ShopController extends GetxController {
         ...response.data,
         'user': profileController.myProfile.toMap()
       });
+      update();
       return true;
     } else {
       return false;
@@ -99,7 +102,8 @@ class ShopController extends GetxController {
     ApiResponseModel response =
         await ApiService.post(path: 'goods', body: data);
     if (response.success) {
-      products.add(response.data);
+      products.add(Product.fromJson(response.data));
+      update();
       return true;
     } else {
       log(response.toMap().toString());
@@ -111,6 +115,10 @@ class ShopController extends GetxController {
     ApiResponseModel response =
         await ApiService.put(path: 'goods/$id', body: data);
     if (response.success) {
+      final int productIndex =
+          products.indexWhere((Product element) => element.id == id);
+      products[productIndex] = Product.fromJson(response.data);
+      update();
       return true;
     } else {
       log(response.toMap().toString());
@@ -122,7 +130,23 @@ class ShopController extends GetxController {
     ApiResponseModel response =
         await ApiService.post(path: 'services', body: data);
     if (response.success) {
-      services.add(response.data);
+      services.add(Service.fromJson(response.data));
+      update();
+      return true;
+    } else {
+      log(response.toMap().toString());
+      return false;
+    }
+  }
+
+  Future<bool> updateService(int id, Map<String, dynamic> data) async {
+    ApiResponseModel response =
+        await ApiService.put(path: 'services/$id', body: data);
+    if (response.success) {
+      final int serviceIndex =
+          services.indexWhere((Service element) => element.id == id);
+      services[serviceIndex] = Service.fromJson(response.data);
+      update();
       return true;
     } else {
       log(response.toMap().toString());
@@ -134,7 +158,23 @@ class ShopController extends GetxController {
     ApiResponseModel response =
         await ApiService.post(path: 'vendors', body: data);
     if (response.success) {
-      suppliers.add(response.data);
+      suppliers.add(Vendor.fromMap(response.data));
+      update();
+      return true;
+    } else {
+      log(response.toMap().toString());
+      return false;
+    }
+  }
+
+  Future<bool> updateSupplier(String id, Map<String, dynamic> data) async {
+    ApiResponseModel response =
+        await ApiService.put(path: 'vendors/$id', body: data);
+    if (response.success) {
+      final int vendorIndex =
+          suppliers.indexWhere((Vendor element) => element.id == id);
+      suppliers[vendorIndex] = Vendor.fromMap(response.data);
+      update();
       return true;
     } else {
       log(response.toMap().toString());

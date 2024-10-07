@@ -29,7 +29,8 @@ class Setupshop extends StatefulWidget {
 }
 
 class _SetupshopState extends State<Setupshop> {
-  final ShopController shopController = Get.put(ShopController());
+  final ShopController shopController = Get.find();
+
   final ProfileController profileController = Get.find();
   final TextEditingController nameController = TextEditingController();
   final TextEditingController descriptionController = TextEditingController();
@@ -41,7 +42,8 @@ class _SetupshopState extends State<Setupshop> {
   final TextEditingController cashController = TextEditingController();
   String? _selectedLocation;
   File? _selectedImage;
-  bool loading = false;
+  bool loading = true;
+  bool isSubmit = false;
   String? image;
   Map<String, bool> selectedOptions = <String, bool>{
     'Bank': false,
@@ -99,7 +101,12 @@ class _SetupshopState extends State<Setupshop> {
     } else {
       shopController.initShop().then((bool value) {
         if (value) {
-          Get.to(() => const Bottomnavscreen());
+          Get.off(() => const Bottomnavscreen());
+          return;
+        }
+        if (mounted) {
+          loading = false;
+          setState(() {});
         }
       });
     }
@@ -152,15 +159,18 @@ class _SetupshopState extends State<Setupshop> {
         selections['Bank'] = true;
         bankController.text = method['details'];
         selectedOptions['Bank'] = true;
-      } else if (method['paymentMethod'] == 'Paypal') {
+      }
+      if (method['paymentMethod'] == 'Paypal') {
         selections['Paypal'] = true;
         paypalController.text = method['details'];
         selectedOptions['Paypal'] = true;
-      } else if (method['paymentMethod'] == 'Wallet') {
+      }
+      if (method['paymentMethod'] == 'Wallet') {
         selections['Wallet'] = true;
         walletController.text = method['details'];
         selectedOptions['Wallet'] = true;
-      } else if (method['paymentMethod'] == 'Cash') {
+      }
+      if (method['paymentMethod'] == 'Cash') {
         selections['Cash'] = true;
         selectedOptions['Cash'] = true;
       }
@@ -202,7 +212,7 @@ class _SetupshopState extends State<Setupshop> {
                   const SizedBox(height: 20),
                   ProCustomButton(
                     onPressed: () {
-                      Get.to(() => const Bottomnavscreen());
+                      Get.off(() => const Bottomnavscreen());
                     },
                     text: 'My Dashboard',
                     icon: const Icon(
@@ -241,239 +251,235 @@ class _SetupshopState extends State<Setupshop> {
           ),
         ),
       ),
-      body: Obx(
-        () => shopController.loading.value
-            ? const Center(
-                child: CircularProgressIndicator(),
-              )
-            : SingleChildScrollView(
-                child: Padding(
-                  padding: const EdgeInsets.only(top: 15.0),
-                  child: Column(
-                    children: <Widget>[
-                      CustomCard(
-                        buttonvisible: true,
-                        caption: 'Customize your Shop',
-                        subText: 'Add a photo for your shop',
-                        buttonText: 'Choose Photo',
-                        onPressed: _pickImage,
-                        imagePath: _selectedImage != null
-                            ? _selectedImage!.path
-                            : widget.shop != null && widget.shop!.image != null
-                                ? widget.shop!.image!
-                                : 'assets/images/shopplaceholder.png',
-                        iconpath: 'assets/svgs/uploadicon.svg',
-                      ),
-                      const SizedBox(height: 15),
-                      CustomEditText(
-                        caption: 'Shop name *',
-                        hintText: 'Enter shop name here',
-                        controller: nameController,
-                      ),
-                      const SizedBox(height: 15),
-                      CustomEditText(
-                        optionalText: RichText(
-                          text: const TextSpan(
-                            children: <InlineSpan>[
-                              TextSpan(
-                                text: '(Description)',
-                                style: TextStyle(
-                                  color: subtextColor,
-                                  fontSize: 12,
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                        maxLength: 300,
-                        caption: 'Shop Message *',
-                        hintText: 'Enter shop description here',
-                        controller: descriptionController,
-                      ),
-                      const SizedBox(height: 15),
-                      CustomEditText(
-                        optionalText: RichText(
-                          text: const TextSpan(
-                            children: <InlineSpan>[
-                              TextSpan(
-                                text: '(Optional)',
-                                style: TextStyle(
-                                  color: subtextColor,
-                                  fontSize: 12,
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                        hintText: '+234 000 000 000',
-                        controller: phoneController,
-                        caption: 'Phone Number',
-                      ),
-                      const SizedBox(height: 15),
-                      CustomEditText(
-                        optionalText: RichText(
-                          text: const TextSpan(
-                            children: <InlineSpan>[
-                              TextSpan(
-                                text: '(Optional)',
-                                style: TextStyle(
-                                  color: subtextColor,
-                                  fontSize: 12,
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                        caption: 'Business Email Address',
-                        hintText: 'example@business.com',
-                        controller: emailController,
-                      ),
-                      const SizedBox(height: 15),
-                      Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                        child: CountryListPick(
-                          appBar: AppBar(
-                            leading: IconButton(
-                              onPressed: () {
-                                Navigator.pop(context);
-                              },
-                              icon: SvgPicture.asset(
-                                  'assets/svgs/backbutton.svg'),
-                            ),
-                            centerTitle: true,
-                            title: const Text(
-                              'Select Location',
-                              textAlign: TextAlign.center,
+      body: widget.shop == null && loading
+          ? const Center(
+              child: CircularProgressIndicator(),
+            )
+          : SingleChildScrollView(
+              child: Padding(
+                padding: const EdgeInsets.only(top: 15.0),
+                child: Column(
+                  children: <Widget>[
+                    CustomCard(
+                      buttonvisible: true,
+                      caption: 'Customize your Shop',
+                      subText: 'Add a photo for your shop',
+                      buttonText: 'Choose Photo',
+                      onPressed: _pickImage,
+                      imagePath: _selectedImage != null
+                          ? _selectedImage!.path
+                          : widget.shop != null && widget.shop!.image != null
+                              ? widget.shop!.image!
+                              : 'assets/images/shopplaceholder.png',
+                      iconpath: 'assets/svgs/uploadicon.svg',
+                    ),
+                    const SizedBox(height: 15),
+                    CustomEditText(
+                      caption: 'Shop name *',
+                      hintText: 'Enter shop name here',
+                      controller: nameController,
+                    ),
+                    const SizedBox(height: 15),
+                    CustomEditText(
+                      optionalText: RichText(
+                        text: const TextSpan(
+                          children: <InlineSpan>[
+                            TextSpan(
+                              text: '(Description)',
                               style: TextStyle(
-                                fontSize: 20,
+                                color: subtextColor,
+                                fontSize: 12,
                               ),
                             ),
+                          ],
+                        ),
+                      ),
+                      maxLength: 300,
+                      caption: 'Shop Message *',
+                      hintText: 'Enter shop description here',
+                      controller: descriptionController,
+                    ),
+                    const SizedBox(height: 15),
+                    CustomEditText(
+                      optionalText: RichText(
+                        text: const TextSpan(
+                          children: <InlineSpan>[
+                            TextSpan(
+                              text: '(Optional)',
+                              style: TextStyle(
+                                color: subtextColor,
+                                fontSize: 12,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                      hintText: '+234 000 000 000',
+                      controller: phoneController,
+                      caption: 'Phone Number',
+                    ),
+                    const SizedBox(height: 15),
+                    CustomEditText(
+                      optionalText: RichText(
+                        text: const TextSpan(
+                          children: <InlineSpan>[
+                            TextSpan(
+                              text: '(Optional)',
+                              style: TextStyle(
+                                color: subtextColor,
+                                fontSize: 12,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                      caption: 'Business Email Address',
+                      hintText: 'example@business.com',
+                      controller: emailController,
+                    ),
+                    const SizedBox(height: 15),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                      child: CountryListPick(
+                        appBar: AppBar(
+                          leading: IconButton(
+                            onPressed: () {
+                              Navigator.pop(context);
+                            },
+                            icon:
+                                SvgPicture.asset('assets/svgs/backbutton.svg'),
                           ),
-                          initialSelection: _selectedLocation,
-                          pickerBuilder:
-                              (BuildContext context, CountryCode? countryCode) {
-                            return Container(
-                              decoration: BoxDecoration(
-                                color: Colors.white,
-                                borderRadius:
-                                    BorderRadius.circular(radiusValue),
-                              ),
-                              child: CustomTextWidget(
-                                caption: 'Location',
-                                iconName: 'assets/svgs/nexticon.svg',
-                                text:
-                                    _selectedLocation ?? 'Choose Shop Location',
-                              ),
-                            );
-                          },
-                          onChanged: (CountryCode? code) async {
-                            setState(() {
-                              _selectedLocation = code!.name;
-                            });
+                          centerTitle: true,
+                          title: const Text(
+                            'Select Location',
+                            textAlign: TextAlign.center,
+                            style: TextStyle(
+                              fontSize: 16,
+                            ),
+                          ),
+                        ),
+                        initialSelection: _selectedLocation,
+                        pickerBuilder:
+                            (BuildContext context, CountryCode? countryCode) {
+                          return Container(
+                            decoration: BoxDecoration(
+                              color: Colors.white,
+                              borderRadius: BorderRadius.circular(radiusValue),
+                            ),
+                            child: CustomTextWidget(
+                              caption: 'Location',
+                              iconName: 'assets/svgs/nexticon.svg',
+                              text: _selectedLocation ?? 'Choose Shop Location',
+                            ),
+                          );
+                        },
+                        onChanged: (CountryCode? code) async {
+                          setState(() {
+                            _selectedLocation = code!.name;
+                          });
 
-                            try {
-                              SharedPreferences marketplaceCountry =
-                                  await SharedPreferences.getInstance();
-                              await marketplaceCountry.setString(
-                                  'country', code!.name!);
-                              await marketplaceCountry.setString(
-                                  'currency', code.code!);
-                            } catch (e) {}
-                          },
-                          useSafeArea: false,
-                        ),
+                          try {
+                            SharedPreferences marketplaceCountry =
+                                await SharedPreferences.getInstance();
+                            await marketplaceCountry.setString(
+                                'country', code!.name!);
+                            await marketplaceCountry.setString(
+                                'currency', code.code!);
+                          } catch (e) {}
+                        },
+                        useSafeArea: false,
                       ),
-                      const SizedBox(height: 15),
-                      CustomCard(
-                        caption: 'Add a Payment Method',
-                        subText: 'Choose how clients pay you',
-                        buttonText: 'Choose Photo',
-                        onPressed: () {},
-                        imagePath: 'assets/images/paymentplaceholder.png',
-                        iconpath: 'assets/svgs/uploadicon.svg',
+                    ),
+                    const SizedBox(height: 15),
+                    CustomCard(
+                      caption: 'Add a Payment Method',
+                      subText: 'Choose how clients pay you',
+                      buttonText: 'Choose Photo',
+                      onPressed: () {},
+                      imagePath: 'assets/images/paymentplaceholder.png',
+                      iconpath: 'assets/svgs/uploadicon.svg',
+                    ),
+                    const SizedBox(height: 15),
+                    if (widget.shop == null) ...<Widget>{
+                      SelectionSection(
+                        onSelectionChanged: _onSelectionChanged,
+                        options: const <String>[
+                          'Bank',
+                          'Paypal',
+                          'Wallet',
+                          'Cash'
+                        ],
                       ),
-                      const SizedBox(height: 15),
-                      if (widget.shop != null) ...<Widget>{
-                        SelectionSection(
-                          onSelectionChanged: _onSelectionChanged,
-                          options: const <String>[
-                            'Bank',
-                            'Paypal',
-                            'Wallet',
-                            'Cash'
-                          ],
-                        ),
-                      } else ...<Widget>{
-                        SelectionSection(
-                          options: const <String>[
-                            'Bank',
-                            'Paypal',
-                            'Wallet',
-                            'Cash'
-                          ],
-                          onSelectionChanged: _onSelectionChanged,
-                          selectedOptions: selectedOptions,
-                        ),
-                      },
-                      const SizedBox(height: 15),
-                      Visibility(
-                        visible: selections['Bank'] ?? false,
-                        child: CustomEditText(
-                          maxLength: 300,
-                          caption:
-                              'Enter Bank Details - FULL NAME: COUNTRY: BANK NAME: ACCOUNT NUMBER:',
-                          hintText: 'Enter account information here',
-                          controller: bankController,
-                        ),
+                    } else ...<Widget>{
+                      SelectionSection(
+                        options: const <String>[
+                          'Bank',
+                          'Paypal',
+                          'Wallet',
+                          'Cash'
+                        ],
+                        onSelectionChanged: _onSelectionChanged,
+                        selectedOptions: selectedOptions,
                       ),
-                      const SizedBox(height: 15),
-                      Visibility(
-                        visible: selections['Paypal'] ?? false,
-                        child: CustomEditText(
-                          maxLength: 300,
-                          caption:
-                              'Enter Paypal Details - FULL NAME: PAYPAL EMAIL ADDRESS:',
-                          hintText: 'Enter account information here',
-                          controller: paypalController,
-                        ),
+                    },
+                    const SizedBox(height: 15),
+                    Visibility(
+                      visible: selections['Bank'] ?? false,
+                      child: CustomEditText(
+                        maxLength: 300,
+                        caption:
+                            'Enter Bank Details - FULL NAME: COUNTRY: BANK NAME: ACCOUNT NUMBER:',
+                        hintText: 'Enter account information here',
+                        controller: bankController,
                       ),
-                      const SizedBox(height: 15),
-                      Visibility(
-                        visible: selections['Wallet'] ?? false,
-                        child: CustomEditText(
-                          maxLength: 300,
-                          caption:
-                              'Enter Wallet Details - FULL NAME: WALLET EMAIL ADDRESS: or WALLET NUMBER',
-                          hintText: 'Enter account information here',
-                          controller: walletController,
-                        ),
+                    ),
+                    const SizedBox(height: 15),
+                    Visibility(
+                      visible: selections['Paypal'] ?? false,
+                      child: CustomEditText(
+                        maxLength: 300,
+                        caption:
+                            'Enter Paypal Details - FULL NAME: PAYPAL EMAIL ADDRESS:',
+                        hintText: 'Enter account information here',
+                        controller: paypalController,
                       ),
-                      const SizedBox(height: 15),
-                      Visibility(
-                        visible: selections['Cash'] ?? false,
-                        child: CustomEditText(
-                          maxLength: 300,
-                          caption: 'Enter Cash Payment Details',
-                          hintText: 'Enter payment information here',
-                          controller: cashController,
-                        ),
+                    ),
+                    const SizedBox(height: 15),
+                    Visibility(
+                      visible: selections['Wallet'] ?? false,
+                      child: CustomEditText(
+                        maxLength: 300,
+                        caption:
+                            'Enter Wallet Details - FULL NAME: WALLET EMAIL ADDRESS: or WALLET NUMBER',
+                        hintText: 'Enter account information here',
+                        controller: walletController,
                       ),
-                      SizedBox(
-                        width: double.infinity,
-                        child: ProCustomButton(
-                          loading: loading,
-                          onPressed: submitForm,
-                          text: widget.shop != null
-                              ? 'Save Changes'
-                              : 'Complete Setup',
-                        ),
+                    ),
+                    const SizedBox(height: 15),
+                    Visibility(
+                      visible: selections['Cash'] ?? false,
+                      child: CustomEditText(
+                        maxLength: 300,
+                        caption: 'Enter Cash Payment Details',
+                        hintText: 'Enter payment information here',
+                        controller: cashController,
                       ),
-                      const SizedBox(height: 30),
-                    ],
-                  ),
+                    ),
+                    SizedBox(
+                      width: double.infinity,
+                      child: ProCustomButton(
+                        loading: isSubmit,
+                        onPressed: submitForm,
+                        text: widget.shop != null
+                            ? 'Save Changes'
+                            : 'Complete Setup',
+                      ),
+                    ),
+                    const SizedBox(height: 30),
+                  ],
                 ),
               ),
-      ),
+            ),
     );
   }
 
@@ -481,7 +487,7 @@ class _SetupshopState extends State<Setupshop> {
     if (!_validateForm()) return;
 
     setState(() {
-      loading = true;
+      isSubmit = true;
     });
 
     List<Map<String, dynamic>> paymentMethods = <Map<String, dynamic>>[];
@@ -522,7 +528,7 @@ class _SetupshopState extends State<Setupshop> {
           error: true,
         );
         setState(() {
-          loading = false;
+          isSubmit = false;
         });
         return;
       }
@@ -565,7 +571,7 @@ class _SetupshopState extends State<Setupshop> {
       );
     }
     setState(() {
-      loading = false;
+      isSubmit = false;
     });
   }
 }

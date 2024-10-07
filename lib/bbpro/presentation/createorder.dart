@@ -35,7 +35,8 @@ class _CreateOrderState extends State<CreateOrder> {
   String? selectedOrderDate;
   String? selectedPaymentMethod;
   String? clientId;
-  List<String> paymentMedthod = <String>[];
+  List<String> paymentMethod = <String>[];
+  bool isSubmit = false;
 
   List<String> clientsName = <String>[];
   List<Map<String, dynamic>> clients = <Map<String, dynamic>>[];
@@ -53,8 +54,8 @@ class _CreateOrderState extends State<CreateOrder> {
 
   List<Map<String, dynamic>> selectedItems = <Map<String, dynamic>>[];
 
-  void _submitOrder() {
-    if (clientId != null) {
+  void _submitOrder() async {
+    if (clientId == null) {
       showSnackbar(message: 'Please select a valid client', error: true);
       return;
     } else if (selectedItems.isEmpty) {
@@ -70,6 +71,9 @@ class _CreateOrderState extends State<CreateOrder> {
       showSnackbar(message: 'Please select a payment method', error: true);
       return;
     }
+    setState(() {
+      isSubmit = true;
+    });
     final Map<String, dynamic> orderData = <String, dynamic>{
       'userId': profileController.myProfile.uid,
       'shopId': shopController.shop?.id,
@@ -83,7 +87,16 @@ class _CreateOrderState extends State<CreateOrder> {
     };
 
     // Call the addOrder method from the GetX controller
-    orderController.addOrders(orderData);
+    bool response = await orderController.addOrders(orderData);
+    if (response) {
+      showSnackbar(message: 'Order Added Successfully!');
+      Navigator.pop(context);
+    } else {
+      showSnackbar(message: 'Error creating order!', error: true);
+      setState(() {
+        isSubmit = true;
+      });
+    }
   }
 
   @override
@@ -96,6 +109,7 @@ class _CreateOrderState extends State<CreateOrder> {
           clientsName.add(client.name);
           clients.add(<String, dynamic>{'name': client.name, 'id': client.id});
         }
+
         for (Product product in shopController.products) {
           products.add(
             <String, dynamic>{
@@ -116,7 +130,7 @@ class _CreateOrderState extends State<CreateOrder> {
         }
 
         for (dynamic payments in shopController.shop!.payments) {
-          paymentMedthod.add(payments);
+          paymentMethod.add(payments['paymentMethod']);
         }
         loading = false; // Update the loading state
       });
@@ -140,6 +154,7 @@ class _CreateOrderState extends State<CreateOrder> {
     setState(() {
       clientId = clientName['id'];
     });
+    print(clientId);
   }
 
   @override
@@ -226,17 +241,20 @@ class _CreateOrderState extends State<CreateOrder> {
                         const SizedBox(height: 15),
                         Container(
                           padding: const EdgeInsets.symmetric(horizontal: 5),
-                          child: CustomTextWidget(
-                            caption: 'Order Date',
-                            iconName: 'assets/svgs/calendar.svg',
-                            text: selectedOrderDate,
-                            textpadding: 15,
+                          child: GestureDetector(
+                            onTap: () => _selectOrderDate(context),
+                            child: CustomTextWidget(
+                              caption: 'Order Date',
+                              iconName: 'assets/svgs/calendar.svg',
+                              text: selectedOrderDate,
+                              textpadding: 15,
+                            ),
                           ),
                         ),
                         const SizedBox(height: 15),
                         CustomDropdownWidget(
                           caption: 'Payment Method',
-                          items: paymentMedthod,
+                          items: paymentMethod,
                           iconName: 'assets/svgs/dropdown.svg',
                           initialValue: selectedPaymentMethod,
                           onChanged: (String? value) {
@@ -320,6 +338,7 @@ class _CreateOrderState extends State<CreateOrder> {
                   child: SizedBox(
                     width: MediaQuery.of(context).size.width,
                     child: ProCustomButton(
+                      loading: isSubmit,
                       text: 'Create',
                       onPressed: _submitOrder,
                     ),
@@ -328,5 +347,20 @@ class _CreateOrderState extends State<CreateOrder> {
               ],
             ),
     );
+  }
+
+  void _selectOrderDate(BuildContext context) async {
+    DateTime? pickedDate = await showDatePicker(
+      context: context,
+      initialDate: DateTime.now(),
+      firstDate: DateTime(2000), // Set the minimum date
+      lastDate: DateTime(2101), // Set the maximum date
+    );
+    if (pickedDate != null) {
+      setState(() {
+        selectedOrderDate =
+            pickedDate.toString().split(' ')[0]; // Store only the date part
+      });
+    }
   }
 }

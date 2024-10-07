@@ -27,7 +27,7 @@ class EventsSection extends StatelessWidget {
                 children: <Widget>[
                   const Text(
                     'Events',
-                    style: TextStyle(fontWeight: FontWeight.w700, fontSize: 18),
+                    style: TextStyle(fontWeight: FontWeight.w700, fontSize: 14),
                   ),
                   Wrap(
                       crossAxisAlignment: WrapCrossAlignment.center,

@@ -214,12 +214,12 @@ class _PostDetailsScreenState extends State<PostDetailsScreen> {
                       child: widget.post.title.isNotEmpty
                           ? Linkify(
                               text: widget.post.title,
-                              style: bodyText1.copyWith(
+                              style: bodyText2.copyWith(
                                   fontWeight: FontWeight.normal),
                               onOpen: (LinkableElement linkableElement) =>
                                   _onUrlClick(context, linkableElement),
                               options: const LinkifyOptions(humanize: false),
-                              linkStyle: bodyText1.copyWith(
+                              linkStyle: bodyText2.copyWith(
                                   color: Colors.blue,
                                   fontWeight: FontWeight.normal),
                             )

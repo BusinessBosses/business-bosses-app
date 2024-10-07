@@ -118,7 +118,7 @@ class _CreateProductListingState extends State<CreateProductListing> {
       appBar: AppBar(
         automaticallyImplyLeading: false,
         title: Text(
-          widget.product != null
+          widget.product == null
               ? 'Create Product Listing'
               : 'Edit Product Listing',
           style: const TextStyle(
@@ -233,9 +233,6 @@ class _CreateProductListingState extends State<CreateProductListing> {
                   title: const Text(
                     'Select Location',
                     textAlign: TextAlign.center,
-                    style: TextStyle(
-                      fontSize: 20,
-                    ),
                   ),
                 ),
                 initialSelection: country,
@@ -463,6 +460,7 @@ class _CreateProductListingState extends State<CreateProductListing> {
               text: widget.product != null ? 'Save Changes' : 'Create',
               onPressed: _submitForm,
             ),
+            const SizedBox(height: 16),
           ],
         ),
       ),

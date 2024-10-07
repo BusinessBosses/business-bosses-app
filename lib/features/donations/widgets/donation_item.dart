@@ -120,174 +120,400 @@ class _DonationItemState extends State<DonationItem> {
     // ignore: unused_local_variable
     String formattedDifference = formatDuration(difference);
 
-    return GestureDetector(
-      onTap: () {
-        widget.donation.setViews(widget.donation.views! + 1);
-        ApiService.put(
-            path: 'donation/approve/${widget.donation.id}',
-            body: <String, dynamic>{
-              'views': widget.donation.views! + 1,
-              'isActive': true,
-              'isApproved': true,
-            });
-        Get.to(() => ExpandedDonationScreen(donation: widget.donation));
-      },
-      child: Container(
-        width: widget.isHome == true ? 181 : null,
-        decoration: BoxDecoration(
-            color: Colors.white,
-            borderRadius: BorderRadius.circular(widget.isHome == true ? 15 : 0),
-            border: widget.isHome == true
-                ? Border.all(color: Colors.black12, width: 0.5)
-                : null),
-        child: Column(
-          children: <Widget>[
-            Padding(
-              padding: EdgeInsets.only(
-                  top: widget.isHome == true ? 10 : 15.0,
-                  left: widget.isHome == true ? 10 : 15.0,
-                  right: widget.isHome == true ? 10 : 15.0,
-                  bottom: 10),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.start,
+    return widget.isHome == true
+        ? GestureDetector(
+            onTap: () {
+              widget.donation.setViews(widget.donation.views! + 1);
+              ApiService.put(
+                  path: 'donation/approve/${widget.donation.id}',
+                  body: <String, dynamic>{
+                    'views': widget.donation.views! + 1,
+                    'isActive': true,
+                    'isApproved': true,
+                  });
+              Get.to(() => ExpandedDonationScreen(donation: widget.donation));
+            },
+            child: Container(
+              padding: const EdgeInsets.all(10),
+              decoration: BoxDecoration(
+                  border: Border.all(color: Colors.black12, width: 0.5),
+                  color: Colors.white,
+                  borderRadius: BorderRadius.circular(12)),
+              child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: <Widget>[
-                  Stack(children: <Widget>[
-                    GestureDetector(
-                      onTap: () {
-                        widget.donation.setViews(widget.donation.views! + 1);
-                        ApiService.put(
-                            path: 'donation/approve/${widget.donation.id}',
-                            body: <String, dynamic>{
-                              'views': widget.donation.views! + 1,
-                              'isActive': true,
-                              'isApproved': true,
-                            });
-                        Get.to(() =>
-                            ExpandedDonationScreen(donation: widget.donation));
-                      },
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: <Widget>[
-                          SizedBox(
-                            height: 90,
-                            width: 160,
+                  SizedBox(
+                    height: 90,
+                    width: 160,
+                    child: ClipRRect(
+                      borderRadius: BorderRadius.circular(12.0),
+                      child: FittedBox(
+                        fit: BoxFit.cover,
+                        child: SizedBox(
+                          // color: Colors.black,
+                          height: 200,
+                          width: 200,
+                          child: widget.donation.images.isNotEmpty
+                              ? NetworkImageWithPlaceHolder(
+                                  imageUrl: widget.donation.images[0])
+                              : widget.donation.youtubeUrls != null
+                                  ? YoutubeDisplay(widget.donation.youtubeUrls!)
+                                  : const SizedBox(),
+                        ),
+                      ),
+                    ),
+                  ),
+                  GestureDetector(
+                    onTap: () {
+                      Get.toNamed(Routes.publicProfile,
+                          arguments: widget.donation.user);
+                    },
+                    child: Row(
+                      children: <Widget>[
+                        SizedBox(
+                          height: 20.0,
+                          width: 20.0,
+                          child: Align(
+                            alignment: Alignment.topLeft,
                             child: ClipRRect(
-                              borderRadius: BorderRadius.circular(12.0),
-                              child: FittedBox(
-                                fit: BoxFit.fill,
-                                child: SizedBox(
-                                  // color: Colors.black,
-                                  height: 200,
-                                  width: 200,
-                                  child: widget.donation.images.isNotEmpty
-                                      ? NetworkImageWithPlaceHolder(
-                                          imageUrl: widget.donation.images[0])
-                                      : widget.donation.youtubeUrls != null
-                                          ? YoutubeDisplay(
-                                              widget.donation.youtubeUrls!)
-                                          : const SizedBox(),
-                                ),
+                              borderRadius: BorderRadius.circular(1000),
+                              child: NetworkImageWithPlaceHolder(
+                                imageUrl: widget.donation.user?.photoUrl ?? '',
+                                radius: radius,
+                                placeHolder: Icons.person,
+                                iconSize: 15.0,
+                                fit: BoxFit.cover,
                               ),
                             ),
                           ),
-                          const SizedBox(
-                            height: 5,
-                          ),
-                          GestureDetector(
-                            onTap: () {
-                              Get.toNamed(Routes.publicProfile,
-                                  arguments: widget.donation.user);
-                            },
-                            child: Row(
-                              children: <Widget>[
-                                SizedBox(
-                                  height: 20.0,
-                                  width: 20.0,
-                                  child: Align(
-                                    alignment: Alignment.topLeft,
-                                    child: ClipRRect(
-                                      borderRadius: BorderRadius.circular(1000),
-                                      child: NetworkImageWithPlaceHolder(
-                                        imageUrl:
-                                            widget.donation.user?.photoUrl ??
-                                                '',
-                                        radius: radius,
-                                        placeHolder: Icons.person,
-                                        iconSize: 15.0,
-                                        fit: BoxFit.cover,
-                                      ),
+                        ),
+                        const SizedBox(
+                          width: 5,
+                        ),
+                        Text(
+                          overflow:
+                              TextOverflow.ellipsis, // or TextOverflow.ellipsis
+                          maxLines: 1,
+                          widget.donation.user?.name ??
+                              widget.donation.user!.name!,
+                          style: TextStyle(
+                              color: widget.isHome == true
+                                  ? subtextColor
+                                  : textColor,
+                              fontSize: 12,
+                              fontWeight: FontWeight.w700),
+                        ),
+                        if (widget.donation.user?.isSubscribed == true)
+                          Wrap(children: <Widget>[
+                            const SizedBox(width: 3),
+                            SvgPicture.asset(
+                              'assets/svgs/premiumbadge.svg',
+                              height: 7,
+                              color: primaryColorLT,
+                            )
+                          ]),
+                      ],
+                    ),
+                  ),
+                  SizedBox(
+                    width: 160,
+                    height: 90,
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: <Widget>[
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: <Widget>[
+                            Text(
+                              overflow: TextOverflow.ellipsis,
+                              maxLines: 1,
+                              widget.donation.title!,
+                              style: const TextStyle(
+                                  fontSize: 14, fontWeight: FontWeight.w700),
+                            ),
+                            Text(
+                              overflow: TextOverflow.ellipsis,
+                              maxLines: 2,
+                              widget.donation.description!,
+                              style: const TextStyle(
+                                  color: Colors.black45, fontSize: 12),
+                            ),
+                          ],
+                        ),
+                        const Spacer(),
+                        Row(
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: <Widget>[
+                            Expanded(
+                              child: Container(
+                                padding: const EdgeInsets.symmetric(
+                                    horizontal: 0, vertical: 5),
+                                decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(20),
+                                ),
+                                child: ClipRRect(
+                                  borderRadius: BorderRadius.circular(20),
+                                  child: LinearProgressIndicator(
+                                    value: (widget.donation.amountRecieved /
+                                        widget.donation.targetAmount!),
+                                    minHeight: 4,
+                                    backgroundColor: backgroundcolorinterface,
+                                    valueColor:
+                                        const AlwaysStoppedAnimation<Color>(
+                                            primaryColorLT),
+                                  ),
+                                ),
+                              ),
+                            ),
+                            const SizedBox(
+                              width: 10,
+                            ),
+                            GestureDetector(
+                              onTap: () {
+                                widget.donation
+                                    .setViews(widget.donation.views! + 1);
+                                ApiService.put(
+                                    path:
+                                        'donation/approve/${widget.donation.id}',
+                                    body: <String, dynamic>{
+                                      'views': widget.donation.views! + 1,
+                                      'isActive': true,
+                                      'isApproved': true,
+                                    });
+                                Get.to(() => ExpandedDonationScreen(
+                                    donation: widget.donation));
+                              },
+                              child: Container(
+                                padding: const EdgeInsets.symmetric(
+                                    horizontal: 10, vertical: 7),
+                                decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(7),
+                                  border: Border.all(color: primaryColorLT),
+                                ),
+                                child: const Text(
+                                  'Support',
+                                  style: TextStyle(
+                                    color: primaryColorLT,
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 11,
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
+              ),
+            ))
+        : GestureDetector(
+            onTap: () {
+              widget.donation.setViews(widget.donation.views! + 1);
+              ApiService.put(
+                  path: 'donation/approve/${widget.donation.id}',
+                  body: <String, dynamic>{
+                    'views': widget.donation.views! + 1,
+                    'isActive': true,
+                    'isApproved': true,
+                  });
+              Get.to(() => ExpandedDonationScreen(donation: widget.donation));
+            },
+            child: Container(
+              decoration: const BoxDecoration(
+                color: Colors.white,
+              ),
+              child: Column(
+                children: <Widget>[
+                  Padding(
+                    padding: const EdgeInsets.only(
+                        top: 15.0, left: 15.0, right: 15.0, bottom: 10),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: <Widget>[
+                        GestureDetector(
+                          onTap: () {
+                            widget.donation
+                                .setViews(widget.donation.views! + 1);
+                            ApiService.put(
+                                path: 'donation/approve/${widget.donation.id}',
+                                body: <String, dynamic>{
+                                  'views': widget.donation.views! + 1,
+                                  'isActive': true,
+                                  'isApproved': true,
+                                });
+                            Get.to(() => ExpandedDonationScreen(
+                                donation: widget.donation));
+                          },
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: <Widget>[
+                              SizedBox(
+                                height: 90,
+                                width: 160,
+                                child: ClipRRect(
+                                  borderRadius: BorderRadius.circular(12.0),
+                                  child: FittedBox(
+                                    fit: BoxFit.cover,
+                                    child: SizedBox(
+                                      // color: Colors.black,
+                                      height: 200,
+                                      width: 200,
+                                      child: widget.donation.images.isNotEmpty
+                                          ? NetworkImageWithPlaceHolder(
+                                              imageUrl:
+                                                  widget.donation.images[0])
+                                          : widget.donation.youtubeUrls != null
+                                              ? YoutubeDisplay(
+                                                  widget.donation.youtubeUrls!)
+                                              : const SizedBox(),
                                     ),
                                   ),
                                 ),
-                                const SizedBox(
-                                  width: 5,
+                              ),
+                              const SizedBox(
+                                height: 5,
+                              ),
+                              GestureDetector(
+                                onTap: () {
+                                  Get.toNamed(Routes.publicProfile,
+                                      arguments: widget.donation.user);
+                                },
+                                child: Row(
+                                  children: <Widget>[
+                                    SizedBox(
+                                      height: 20.0,
+                                      width: 20.0,
+                                      child: Align(
+                                        alignment: Alignment.topLeft,
+                                        child: ClipRRect(
+                                          borderRadius:
+                                              BorderRadius.circular(1000),
+                                          child: NetworkImageWithPlaceHolder(
+                                            imageUrl: widget
+                                                    .donation.user?.photoUrl ??
+                                                '',
+                                            radius: radius,
+                                            placeHolder: Icons.person,
+                                            iconSize: 15.0,
+                                            fit: BoxFit.cover,
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                    const SizedBox(
+                                      width: 5,
+                                    ),
+                                    Text(
+                                      overflow: TextOverflow
+                                          .ellipsis, // or TextOverflow.ellipsis
+                                      maxLines: 1,
+                                      widget.donation.user?.name ??
+                                          widget.donation.user!.name!,
+                                      style: TextStyle(
+                                          color: widget.isHome == true
+                                              ? subtextColor
+                                              : textColor,
+                                          fontSize: 12,
+                                          fontWeight: FontWeight.w700),
+                                    ),
+                                    widget.donation.user?.isSubscribed == true
+                                        ? Wrap(children: <Widget>[
+                                            const SizedBox(width: 3),
+                                            SvgPicture.asset(
+                                              'assets/svgs/premiumbadge.svg',
+                                              height: 7,
+                                              color: primaryColorLT,
+                                            )
+                                          ])
+                                        : Container()
+                                  ],
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                        if (widget.isHome == false)
+                          const SizedBox(
+                            width: 10,
+                          ),
+                        if (widget.isHome == false)
+                          Expanded(
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: <Widget>[
+                                Text(
+                                  overflow: TextOverflow
+                                      .ellipsis, // or TextOverflow.ellipsis
+                                  maxLines: 2,
+                                  widget.donation.title!,
+                                  style: const TextStyle(
+                                      fontWeight: FontWeight.w700,
+                                      fontSize: 14),
                                 ),
                                 Text(
                                   overflow: TextOverflow
                                       .ellipsis, // or TextOverflow.ellipsis
-                                  maxLines: 1,
-                                  widget.donation.user?.name ??
-                                      widget.donation.user!.name!,
-                                  style: TextStyle(
-                                      color: widget.isHome == true
-                                          ? subtextColor
-                                          : textColor,
-                                      fontWeight: FontWeight.w700),
+                                  maxLines: 2,
+                                  widget.donation.description!,
+                                  style: const TextStyle(
+                                      color: Colors.black45, fontSize: 12),
                                 ),
-                                widget.donation.user?.isSubscribed == true
-                                    ? Wrap(children: <Widget>[
-                                        const SizedBox(width: 3),
-                                        SvgPicture.asset(
-                                          'assets/svgs/premiumbadge.svg',
-                                          height: 7,
-                                          color: primaryColorLT,
-                                        )
-                                      ])
-                                    : Container()
-                              ],
-                            ),
-                          ),
-                          if (widget.isHome == true)
-                            SizedBox(
-                              width: 160,
-                              child: Column(
-                                mainAxisAlignment: MainAxisAlignment.start,
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: <Widget>[
-                                  Text(
-                                    overflow: TextOverflow.ellipsis,
-                                    maxLines: 1,
-                                    widget.donation.title!,
-                                    style: const TextStyle(
-                                        fontWeight: FontWeight.w700),
-                                  ),
-                                  Text(
-                                    overflow: TextOverflow.ellipsis,
-                                    maxLines: 2,
-                                    widget.donation.description!,
-                                    style:
-                                        const TextStyle(color: Colors.black45),
-                                  ),
-                                  const SizedBox(
-                                    height: 5,
-                                  ),
-                                  Row(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.center,
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceBetween,
-                                    children: <Widget>[
-                                      Expanded(
-                                        child: Container(
-                                          padding: const EdgeInsets.symmetric(
-                                              horizontal: 0, vertical: 5),
-                                          decoration: BoxDecoration(
-                                            borderRadius:
-                                                BorderRadius.circular(20),
+                                const SizedBox(
+                                  height: 10,
+                                ),
+                                Row(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: <Widget>[
+                                    Expanded(
+                                      child: Column(
+                                        children: <Widget>[
+                                          Row(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.spaceBetween,
+                                            children: <Widget>[
+                                              Row(
+                                                children: <Widget>[
+                                                  Text(
+                                                    formatter.format(widget
+                                                        .donation
+                                                        .amountRecieved),
+                                                    style: const TextStyle(
+                                                        fontSize: 10,
+                                                        color: subtextColor,
+                                                        fontWeight:
+                                                            FontWeight.w700),
+                                                  ),
+                                                  Text(
+                                                    widget.donation
+                                                                .amountRecieved ==
+                                                            1
+                                                        ? ' coin raised'
+                                                        : ' coins raised',
+                                                    style: const TextStyle(
+                                                        fontSize: 10,
+                                                        color: subtextColor),
+                                                  ),
+                                                ],
+                                              ),
+                                              Text(
+                                                '${((widget.donation.amountRecieved / widget.donation.targetAmount!) * 100).toStringAsFixed(1)}%',
+                                                style: const TextStyle(
+                                                    fontSize: 10,
+                                                    color: subtextColor),
+                                              ),
+                                            ],
                                           ),
-                                          child: ClipRRect(
+                                          const SizedBox(
+                                            height: 5,
+                                          ),
+                                          ClipRRect(
                                             borderRadius:
                                                 BorderRadius.circular(20),
                                             child: LinearProgressIndicator(
@@ -303,614 +529,531 @@ class _DonationItemState extends State<DonationItem> {
                                                       Color>(primaryColorLT),
                                             ),
                                           ),
-                                        ),
-                                      ),
-                                      const SizedBox(
-                                        width: 10,
-                                      ),
-                                      GestureDetector(
-                                        onTap: () {
-                                          widget.donation.setViews(
-                                              widget.donation.views! + 1);
-                                          ApiService.put(
-                                              path:
-                                                  'donation/approve/${widget.donation.id}',
-                                              body: <String, dynamic>{
-                                                'views':
-                                                    widget.donation.views! + 1,
-                                                'isActive': true,
-                                                'isApproved': true,
-                                              });
-                                          Get.to(() => ExpandedDonationScreen(
-                                              donation: widget.donation));
-                                        },
-                                        child: Container(
-                                          padding: const EdgeInsets.symmetric(
-                                              horizontal: 10, vertical: 7),
-                                          decoration: BoxDecoration(
-                                            borderRadius:
-                                                BorderRadius.circular(7),
-                                            border: Border.all(
-                                                color: primaryColorLT),
+                                          const SizedBox(
+                                            height: 5,
                                           ),
-                                          child: const Text(
-                                            'Support',
-                                            style: TextStyle(
-                                              color: primaryColorLT,
-                                              fontWeight: FontWeight.bold,
-                                              fontSize: 11,
-                                            ),
+                                          Row(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.spaceBetween,
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.center,
+                                            children: <Widget>[
+                                              Wrap(
+                                                crossAxisAlignment:
+                                                    WrapCrossAlignment.center,
+                                                children: <Widget>[
+                                                  SvgPicture.asset(
+                                                    'assets/svgs/coin.svg',
+                                                    height: 12,
+                                                  ),
+                                                  Text(
+                                                    formatter.format(widget
+                                                        .donation
+                                                        .targetAmount!),
+                                                    style: const TextStyle(
+                                                        color: subtextColor,
+                                                        fontWeight:
+                                                            FontWeight.w700,
+                                                        fontSize: 12),
+                                                  ),
+                                                  const Text(
+                                                    ' Target',
+                                                    style: TextStyle(
+                                                        color: subtextColor,
+                                                        fontSize: 10),
+                                                  ),
+                                                ],
+                                              ),
+                                              Wrap(
+                                                crossAxisAlignment:
+                                                    WrapCrossAlignment.center,
+                                                children: <Widget>[
+                                                  Text(
+                                                    formatter.format(widget
+                                                        .donation
+                                                        .transactions!
+                                                        .length),
+                                                    style: const TextStyle(
+                                                        fontSize: 10,
+                                                        color: subtextColor,
+                                                        fontWeight:
+                                                            FontWeight.w700),
+                                                  ),
+                                                  Text(
+                                                    widget
+                                                                .donation
+                                                                .transactions!
+                                                                .length ==
+                                                            1
+                                                        ? ' Supporter'
+                                                        : ' Supporters',
+                                                    style: const TextStyle(
+                                                        fontSize: 10,
+                                                        color: subtextColor),
+                                                  ),
+                                                ],
+                                              )
+                                            ],
                                           ),
-                                        ),
+                                        ],
                                       ),
-                                    ],
-                                  ),
-                                ],
-                              ),
-                            )
-                        ],
-                      ),
-                    ),
-                  ]),
-                  if (widget.isHome == false)
-                    const SizedBox(
-                      width: 10,
-                    ),
-                  if (widget.isHome == false)
-                    Expanded(
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: <Widget>[
-                          Text(
-                            overflow: TextOverflow
-                                .ellipsis, // or TextOverflow.ellipsis
-                            maxLines: 2,
-                            widget.donation.title!,
-                            style: const TextStyle(fontWeight: FontWeight.w700),
-                          ),
-                          Text(
-                            overflow: TextOverflow
-                                .ellipsis, // or TextOverflow.ellipsis
-                            maxLines: 2,
-                            widget.donation.description!,
-                            style: const TextStyle(color: Colors.black45),
-                          ),
-                          const SizedBox(
-                            height: 10,
-                          ),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: <Widget>[
-                              Expanded(
-                                child: Column(
-                                  children: <Widget>[
-                                    Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.spaceBetween,
-                                      children: <Widget>[
-                                        Row(
-                                          children: <Widget>[
-                                            Text(
-                                              formatter.format(widget
-                                                  .donation.amountRecieved),
-                                              style: const TextStyle(
-                                                  fontSize: 10,
-                                                  color: subtextColor,
-                                                  fontWeight: FontWeight.w700),
-                                            ),
-                                            Text(
-                                              widget.donation.amountRecieved ==
-                                                      1
-                                                  ? ' coin raised'
-                                                  : ' coins raised',
-                                              style: const TextStyle(
-                                                  fontSize: 10,
-                                                  color: subtextColor),
-                                            ),
-                                          ],
-                                        ),
-                                        Text(
-                                          '${((widget.donation.amountRecieved / widget.donation.targetAmount!) * 100).toStringAsFixed(1)}%',
-                                          style: const TextStyle(
-                                              fontSize: 10,
-                                              color: subtextColor),
-                                        ),
-                                      ],
-                                    ),
-                                    const SizedBox(
-                                      height: 5,
-                                    ),
-                                    ClipRRect(
-                                      borderRadius: BorderRadius.circular(20),
-                                      child: LinearProgressIndicator(
-                                        value: (widget.donation.amountRecieved /
-                                            widget.donation.targetAmount!),
-                                        minHeight: 4,
-                                        backgroundColor:
-                                            backgroundcolorinterface,
-                                        valueColor:
-                                            const AlwaysStoppedAnimation<Color>(
-                                                primaryColorLT),
-                                      ),
-                                    ),
-                                    const SizedBox(
-                                      height: 5,
-                                    ),
-                                    Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.spaceBetween,
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.center,
-                                      children: <Widget>[
-                                        Wrap(
-                                          crossAxisAlignment:
-                                              WrapCrossAlignment.center,
-                                          children: <Widget>[
-                                            SvgPicture.asset(
-                                              'assets/svgs/coin.svg',
-                                              height: 12,
-                                            ),
-                                            Text(
-                                              formatter.format(widget
-                                                  .donation.targetAmount!),
-                                              style: const TextStyle(
-                                                  color: subtextColor,
-                                                  fontWeight: FontWeight.w700,
-                                                  fontSize: 12),
-                                            ),
-                                            const Text(
-                                              ' Target',
-                                              style: TextStyle(
-                                                  color: subtextColor,
-                                                  fontSize: 10),
-                                            ),
-                                          ],
-                                        ),
-                                        Wrap(
-                                          crossAxisAlignment:
-                                              WrapCrossAlignment.center,
-                                          children: <Widget>[
-                                            Text(
-                                              formatter.format(widget.donation
-                                                  .transactions!.length),
-                                              style: const TextStyle(
-                                                  fontSize: 10,
-                                                  color: subtextColor,
-                                                  fontWeight: FontWeight.w700),
-                                            ),
-                                            Text(
-                                              widget.donation.transactions!
-                                                          .length ==
-                                                      1
-                                                  ? ' Supporter'
-                                                  : ' Supporters',
-                                              style: const TextStyle(
-                                                  fontSize: 10,
-                                                  color: subtextColor),
-                                            ),
-                                          ],
-                                        )
-                                      ],
                                     ),
                                   ],
                                 ),
-                              ),
-                            ],
-                          ),
-                          const SizedBox(
-                            height: 10,
-                          ),
-                        ],
-                      ),
-                    ),
-                  // const SizedBox(
-                  //   width: 10,
-                  // ),
-                  if (widget.isHome == false)
-                    (widget.donation.user!.uid ==
-                                profileController.myProfile.uid &&
-                            widget.donation.amountRecieved <
-                                widget.donation.targetAmount!)
-                        ? MyPopupMenuButton(
-                            popupItems: myPopupMore,
-                            icon: const Icon(
-                              Icons.more_horiz,
-                              size: 20,
-                              color: Colors.black,
-                              weight: 100,
+                                const SizedBox(
+                                  height: 10,
+                                ),
+                              ],
                             ),
-                            onSelected: (String val) {
-                              if (val == 'Edit') {
-                                Get.to(() => CreateDonationScreen(
-                                      donation: widget.donation,
-                                    ));
-                              } else if (val == 'Delete') {
-                                showDialog(
-                                  context: context,
-                                  builder: (BuildContext context) =>
-                                      AlertDialog(
-                                    title: const Text(
-                                      'Delete Donation Post',
-                                      style: bodyText1,
-                                    ),
-                                    content: const Text(
-                                        'Are you sure you want to delete this donation post?'),
-                                    actions: <Widget>[
-                                      TextButton(
-                                        onPressed: () => Get.back(),
-                                        child: const Text('No'),
-                                      ),
-                                      TextButton(
-                                        onPressed: () {
-                                          donationsController.deleteDonation(
-                                              widget.donation.id);
-                                          Get.back();
-                                          setState(() {});
-                                        },
-                                        child: const Text('Yes'),
-                                      ),
-                                    ],
+                          ),
+                        // const SizedBox(
+                        //   width: 10,
+                        // ),
+                        if (widget.isHome == false)
+                          (widget.donation.user!.uid ==
+                                      profileController.myProfile.uid &&
+                                  widget.donation.amountRecieved <
+                                      widget.donation.targetAmount!)
+                              ? MyPopupMenuButton(
+                                  popupItems: myPopupMore,
+                                  icon: const Icon(
+                                    Icons.more_horiz,
+                                    size: 20,
+                                    color: Colors.black,
+                                    weight: 100,
                                   ),
-                                );
-                              }
-                              // else if (val == 'Boost') {
-                              //   Get.to(() => BoostDonation(
-                              //         donationId: widget.donation.id,
-                              //         donationTitle: widget.donation.title!,
-                              //       ));
-                              // }
-                            },
-                          )
-                        : GestureDetector(
-                            onTap: () {
-                              showDialog(
-                                  context: context,
-                                  builder: (BuildContext context) =>
-                                      AlertDialog(
-                                        content: Column(
-                                          mainAxisSize: MainAxisSize.min,
-                                          children: <Widget>[
-                                            ListTile(
-                                              onTap: () {
-                                                // Navigator.pop(context);
-                                                showDialog(
-                                                  context: context,
-                                                  builder:
-                                                      (BuildContext context) =>
-                                                          AlertDialog(
-                                                    title: const TextWidget(
-                                                      text:
-                                                          'Do you want to block user?',
-                                                      centralize: true,
-                                                      fontWeight:
-                                                          FontWeight.w700,
-                                                      size: 20,
-                                                    ),
-                                                    content: TextWidget(
-                                                      text:
-                                                          'You will no longer see Donations, posts and comments from this user on your feed',
-                                                      centralize: true,
-                                                      color: Colors.black
-                                                          .withOpacity(.6),
-                                                    ),
-                                                    actions: <Widget>[
-                                                      TextButton(
-                                                        onPressed: () =>
-                                                            Navigator.pop(
-                                                                context),
-                                                        child: const TextWidget(
-                                                          text: 'Cancel',
-                                                          fontWeight:
-                                                              FontWeight.w700,
-                                                          size: 18,
-                                                          color: Colors.grey,
-                                                        ),
-                                                      ),
-                                                      GestureDetector(
-                                                        onTap: () {
-                                                          Navigator.pop(
-                                                              context);
-                                                          // print(_post.user.uid);
-                                                          setState(() {
-                                                            // blocked.add(
-                                                            //     widget.Donation.user!.uid);
-                                                          });
-                                                          showSnackBar(context,
-                                                              message:
-                                                                  'User has been blocked');
-                                                        },
-                                                        child: Container(
-                                                          padding:
-                                                              const EdgeInsets
-                                                                  .symmetric(
-                                                            vertical: 7,
-                                                            horizontal: 14,
-                                                          ),
-                                                          decoration:
-                                                              BoxDecoration(
-                                                            color:
-                                                                primaryColorLT,
-                                                            borderRadius:
-                                                                BorderRadius
-                                                                    .circular(
-                                                                        5),
-                                                          ),
-                                                          child:
-                                                              const TextWidget(
-                                                            text: 'Block',
-                                                            color: Colors.white,
-                                                            fontWeight:
-                                                                FontWeight.bold,
-                                                          ),
-                                                        ),
-                                                      )
-                                                    ],
-                                                  ),
-                                                );
-                                              },
-                                              contentPadding: EdgeInsets.zero,
-                                              title: GestureDetector(
-                                                child: widget.donation.user
-                                                            ?.isSubscribed ==
-                                                        true
-                                                    ? Row(
-                                                        children: <Widget>[
-                                                          TextWidget(
-                                                            text:
-                                                                'Block @${widget.donation.user?.name}',
-                                                            color: Colors.blue,
-                                                          ),
-                                                          const SizedBox(
-                                                              width: 5),
-                                                          SvgPicture.asset(
-                                                            'assets/svgs/premiumbadge.svg',
-                                                            height: 9,
-                                                            color:
-                                                                primaryColorLT,
-                                                          )
-                                                        ],
-                                                      )
-                                                    : TextWidget(
-                                                        text:
-                                                            'Block @${widget.donation.user?.name}',
-                                                        color: Colors.blue,
-                                                      ),
-                                              ),
+                                  onSelected: (String val) {
+                                    if (val == 'Edit') {
+                                      Get.to(() => CreateDonationScreen(
+                                            donation: widget.donation,
+                                          ));
+                                    } else if (val == 'Delete') {
+                                      showDialog(
+                                        context: context,
+                                        builder: (BuildContext context) =>
+                                            AlertDialog(
+                                          title: const Text(
+                                            'Delete Donation Post',
+                                            style: bodyText1,
+                                          ),
+                                          content: const Text(
+                                              'Are you sure you want to delete this donation post?'),
+                                          actions: <Widget>[
+                                            TextButton(
+                                              onPressed: () => Get.back(),
+                                              child: const Text('No'),
                                             ),
-                                            ListTile(
-                                              onTap: () {
-                                                Navigator.of(context)
-                                                    .pop(context);
-                                                showDialog(
-                                                  context: context,
-                                                  builder:
-                                                      (BuildContext context) =>
-                                                          AlertDialog(
-                                                    title: const TextWidget(
-                                                      text:
-                                                          'Do you want to report Donation?',
-                                                      centralize: true,
-                                                      fontWeight:
-                                                          FontWeight.w700,
-                                                      size: 20,
-                                                    ),
-                                                    content: TextWidget(
-                                                      text:
-                                                          'The Donation will be reported to admin to evaluate if it violates any community policy',
-                                                      centralize: true,
-                                                      color: Colors.black
-                                                          .withOpacity(.6),
-                                                    ),
-                                                    actions: <Widget>[
-                                                      TextButton(
-                                                        onPressed: () =>
-                                                            Navigator.pop(
-                                                                context),
-                                                        child: const TextWidget(
-                                                          text: 'Cancel',
-                                                          fontWeight:
-                                                              FontWeight.w700,
-                                                          size: 18,
-                                                          color: Colors.grey,
-                                                        ),
-                                                      ),
-                                                      GestureDetector(
-                                                        onTap: () {
-                                                          Navigator.pop(
-                                                              context);
-                                                          showSnackBar(context,
-                                                              message:
-                                                                  'Donation has been Reported');
-                                                        },
-                                                        child: Container(
-                                                          padding:
-                                                              const EdgeInsets
-                                                                  .symmetric(
-                                                            vertical: 7,
-                                                            horizontal: 14,
-                                                          ),
-                                                          decoration:
-                                                              BoxDecoration(
-                                                            color:
-                                                                primaryColorLT,
-                                                            borderRadius:
-                                                                BorderRadius
-                                                                    .circular(
-                                                                        5),
-                                                          ),
-                                                          child:
-                                                              const TextWidget(
-                                                            text: 'Report',
-                                                            color: Colors.white,
-                                                            fontWeight:
-                                                                FontWeight.bold,
-                                                          ),
-                                                        ),
-                                                      )
-                                                    ],
-                                                  ),
-                                                );
+                                            TextButton(
+                                              onPressed: () {
+                                                donationsController
+                                                    .deleteDonation(
+                                                        widget.donation.id);
+                                                Get.back();
+                                                setState(() {});
                                               },
-                                              contentPadding: EdgeInsets.zero,
-                                              title: const TextWidget(
-                                                text: 'Report this Project',
-                                                color: Colors.red,
-                                              ),
-                                            )
+                                              child: const Text('Yes'),
+                                            ),
                                           ],
                                         ),
-                                      ));
+                                      );
+                                    }
+                                    // else if (val == 'Boost') {
+                                    //   Get.to(() => BoostDonation(
+                                    //         donationId: widget.donation.id,
+                                    //         donationTitle: widget.donation.title!,
+                                    //       ));
+                                    // }
+                                  },
+                                )
+                              : GestureDetector(
+                                  onTap: () {
+                                    showDialog(
+                                        context: context,
+                                        builder: (BuildContext context) =>
+                                            AlertDialog(
+                                              content: Column(
+                                                mainAxisSize: MainAxisSize.min,
+                                                children: <Widget>[
+                                                  ListTile(
+                                                    onTap: () {
+                                                      // Navigator.pop(context);
+                                                      showDialog(
+                                                        context: context,
+                                                        builder: (BuildContext
+                                                                context) =>
+                                                            AlertDialog(
+                                                          title:
+                                                              const TextWidget(
+                                                            text:
+                                                                'Do you want to block user?',
+                                                            centralize: true,
+                                                            fontWeight:
+                                                                FontWeight.w700,
+                                                            size: 20,
+                                                          ),
+                                                          content: TextWidget(
+                                                            text:
+                                                                'You will no longer see Donations, posts and comments from this user on your feed',
+                                                            centralize: true,
+                                                            color: Colors.black
+                                                                .withOpacity(
+                                                                    .6),
+                                                          ),
+                                                          actions: <Widget>[
+                                                            TextButton(
+                                                              onPressed: () =>
+                                                                  Navigator.pop(
+                                                                      context),
+                                                              child:
+                                                                  const TextWidget(
+                                                                text: 'Cancel',
+                                                                fontWeight:
+                                                                    FontWeight
+                                                                        .w700,
+                                                                size: 18,
+                                                                color:
+                                                                    Colors.grey,
+                                                              ),
+                                                            ),
+                                                            GestureDetector(
+                                                              onTap: () {
+                                                                Navigator.pop(
+                                                                    context);
+                                                                // print(_post.user.uid);
+                                                                setState(() {
+                                                                  // blocked.add(
+                                                                  //     widget.Donation.user!.uid);
+                                                                });
+                                                                showSnackBar(
+                                                                    context,
+                                                                    message:
+                                                                        'User has been blocked');
+                                                              },
+                                                              child: Container(
+                                                                padding:
+                                                                    const EdgeInsets
+                                                                        .symmetric(
+                                                                  vertical: 7,
+                                                                  horizontal:
+                                                                      14,
+                                                                ),
+                                                                decoration:
+                                                                    BoxDecoration(
+                                                                  color:
+                                                                      primaryColorLT,
+                                                                  borderRadius:
+                                                                      BorderRadius
+                                                                          .circular(
+                                                                              5),
+                                                                ),
+                                                                child:
+                                                                    const TextWidget(
+                                                                  text: 'Block',
+                                                                  color: Colors
+                                                                      .white,
+                                                                  fontWeight:
+                                                                      FontWeight
+                                                                          .bold,
+                                                                ),
+                                                              ),
+                                                            )
+                                                          ],
+                                                        ),
+                                                      );
+                                                    },
+                                                    contentPadding:
+                                                        EdgeInsets.zero,
+                                                    title: GestureDetector(
+                                                      child: widget
+                                                                  .donation
+                                                                  .user
+                                                                  ?.isSubscribed ==
+                                                              true
+                                                          ? Row(
+                                                              children: <Widget>[
+                                                                TextWidget(
+                                                                  text:
+                                                                      'Block @${widget.donation.user?.name}',
+                                                                  color: Colors
+                                                                      .blue,
+                                                                ),
+                                                                const SizedBox(
+                                                                    width: 5),
+                                                                SvgPicture
+                                                                    .asset(
+                                                                  'assets/svgs/premiumbadge.svg',
+                                                                  height: 9,
+                                                                  color:
+                                                                      primaryColorLT,
+                                                                )
+                                                              ],
+                                                            )
+                                                          : TextWidget(
+                                                              text:
+                                                                  'Block @${widget.donation.user?.name}',
+                                                              color:
+                                                                  Colors.blue,
+                                                            ),
+                                                    ),
+                                                  ),
+                                                  ListTile(
+                                                    onTap: () {
+                                                      Navigator.of(context)
+                                                          .pop(context);
+                                                      showDialog(
+                                                        context: context,
+                                                        builder: (BuildContext
+                                                                context) =>
+                                                            AlertDialog(
+                                                          title:
+                                                              const TextWidget(
+                                                            text:
+                                                                'Do you want to report Donation?',
+                                                            centralize: true,
+                                                            fontWeight:
+                                                                FontWeight.w700,
+                                                            size: 20,
+                                                          ),
+                                                          content: TextWidget(
+                                                            text:
+                                                                'The Donation will be reported to admin to evaluate if it violates any community policy',
+                                                            centralize: true,
+                                                            color: Colors.black
+                                                                .withOpacity(
+                                                                    .6),
+                                                          ),
+                                                          actions: <Widget>[
+                                                            TextButton(
+                                                              onPressed: () =>
+                                                                  Navigator.pop(
+                                                                      context),
+                                                              child:
+                                                                  const TextWidget(
+                                                                text: 'Cancel',
+                                                                fontWeight:
+                                                                    FontWeight
+                                                                        .w700,
+                                                                size: 18,
+                                                                color:
+                                                                    Colors.grey,
+                                                              ),
+                                                            ),
+                                                            GestureDetector(
+                                                              onTap: () {
+                                                                Navigator.pop(
+                                                                    context);
+                                                                showSnackBar(
+                                                                    context,
+                                                                    message:
+                                                                        'Donation has been Reported');
+                                                              },
+                                                              child: Container(
+                                                                padding:
+                                                                    const EdgeInsets
+                                                                        .symmetric(
+                                                                  vertical: 7,
+                                                                  horizontal:
+                                                                      14,
+                                                                ),
+                                                                decoration:
+                                                                    BoxDecoration(
+                                                                  color:
+                                                                      primaryColorLT,
+                                                                  borderRadius:
+                                                                      BorderRadius
+                                                                          .circular(
+                                                                              5),
+                                                                ),
+                                                                child:
+                                                                    const TextWidget(
+                                                                  text:
+                                                                      'Report',
+                                                                  color: Colors
+                                                                      .white,
+                                                                  fontWeight:
+                                                                      FontWeight
+                                                                          .bold,
+                                                                ),
+                                                              ),
+                                                            )
+                                                          ],
+                                                        ),
+                                                      );
+                                                    },
+                                                    contentPadding:
+                                                        EdgeInsets.zero,
+                                                    title: const TextWidget(
+                                                      text:
+                                                          'Report this Project',
+                                                      color: Colors.red,
+                                                    ),
+                                                  )
+                                                ],
+                                              ),
+                                            ));
+                                  },
+                                  child: const Icon(
+                                    Icons.more_horiz,
+                                    size: 20,
+                                    color: Colors.black,
+                                    weight: 100,
+                                  ),
+                                )
+                      ],
+                    ),
+                  ),
+                  // const SizedBox(
+                  //   height: 10,
+                  // ),
+
+                  if (widget.isHome == false)
+                    Row(
+                      children: <Widget>[
+                        TextButton.icon(
+                          onPressed: () async {
+                            donationsController.postLike(
+                              profileController.myProfile.uid,
+                              widget.donation.id,
+                              widget.donation.user!.uid,
+                            );
+                            setState(() {});
+                          },
+                          icon: widget.donation.likes?.contains(
+                                      profileController.myProfile.uid) ==
+                                  true
+                              ? SvgPicture.asset(
+                                  'assets/svgs/likefilled.svg',
+                                  height: 15,
+                                )
+                              : SvgPicture.asset(
+                                  'assets/svgs/like.svg',
+                                  height: 15,
+                                ),
+                          label: Text(
+                            widget.donation.likes!.length.toString(),
+                            style: Theme.of(context)
+                                .textTheme
+                                .bodyMedium
+                                ?.copyWith(
+                                  fontWeight: FontWeight.w700,
+                                  color: textColor.withOpacity(0.8),
+                                ),
+                          ),
+                        ),
+                        TextButton.icon(
+                          onPressed: () {
+                            showModalBottomSheet(
+                              context: context,
+                              builder: (BuildContext context) =>
+                                  DonationCommentItem(
+                                donation: widget.donation,
+                                onComment: (CommentModel newComment) async {
+                                  setState(() {});
+                                },
+                              ),
+                            );
+                          },
+                          icon: SvgPicture.asset(
+                            'assets/svgs/comment.svg',
+                            height: 15,
+                          ),
+                          label: Text(
+                            '${widget.donation.comments?.length ?? 0}',
+                            style: Theme.of(context)
+                                .textTheme
+                                .bodyMedium
+                                ?.copyWith(
+                                  fontWeight: FontWeight.w700,
+                                  color: textColor.withOpacity(0.8),
+                                ),
+                          ),
+                        ),
+                        TextButton.icon(
+                          onPressed: () async {},
+                          icon: const Icon(Icons.remove_red_eye_outlined,
+                              size: 19, color: Colors.black),
+                          label: Text(
+                            widget.donation.views.toString(),
+                            style: Theme.of(context)
+                                .textTheme
+                                .bodyMedium
+                                ?.copyWith(
+                                  fontWeight: FontWeight.w700,
+                                  color: textColor.withOpacity(0.8),
+                                ),
+                          ),
+                        ),
+                        const SizedBox(width: 8.0),
+                        GestureDetector(
+                          onTap: () => _sharePost(),
+                          child: SvgPicture.asset(
+                            'assets/svgs/share.svg',
+                            height: 15.0,
+                            width: 15.0,
+                            color: textColor.withOpacity(1.0),
+                          ),
+                        ),
+                        const Spacer(),
+                        Padding(
+                          padding: const EdgeInsets.only(right: 15.0),
+                          child: GestureDetector(
+                            onTap: () {
+                              widget.donation
+                                  .setViews(widget.donation.views! + 1);
+                              ApiService.put(
+                                  path:
+                                      'donation/approve/${widget.donation.id}',
+                                  body: <String, dynamic>{
+                                    'views': widget.donation.views! + 1,
+                                    'isActive': true,
+                                    'isApproved': true,
+                                  });
+                              Get.to(() => ExpandedDonationScreen(
+                                  donation: widget.donation));
                             },
-                            child: const Icon(
-                              Icons.more_horiz,
-                              size: 20,
-                              color: Colors.black,
-                              weight: 100,
+                            child: Container(
+                              decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(8),
+                                  border: Border.all(
+                                      width: 1.5, color: primaryColorLT)),
+                              child: const Center(
+                                child: Padding(
+                                  padding: EdgeInsets.symmetric(
+                                      vertical: 5.0, horizontal: 30),
+                                  child: Text(
+                                    'Support',
+                                    style: TextStyle(
+                                      color: primaryColorLT,
+                                      fontWeight: FontWeight.w700,
+                                      fontSize: 11,
+                                    ),
+                                  ),
+                                ),
+                              ),
                             ),
-                          )
+                          ),
+                        ),
+                        // Padding(
+                        //   padding: const EdgeInsets.only(right: 15),
+                        //   child: Text(
+                        //     formattedDifference,
+                        //     style: Theme.of(context)
+                        //         .textTheme
+                        //         .bodyMedium
+                        //         ?.copyWith(color: textColor.withOpacity(0.4)),
+                        //   ),
+                        // )
+                      ],
+                    ),
+                  if (widget.isHome == false)
+                    Container(
+                      color: backgroundcolorinterface,
+                      height: 7,
+                    ),
                 ],
               ),
             ),
-            // const SizedBox(
-            //   height: 10,
-            // ),
-
-            if (widget.isHome == false)
-              Row(
-                children: <Widget>[
-                  TextButton.icon(
-                    onPressed: () async {
-                      donationsController.postLike(
-                        profileController.myProfile.uid,
-                        widget.donation.id,
-                        widget.donation.user!.uid,
-                      );
-                      setState(() {});
-                    },
-                    icon: widget.donation.likes
-                                ?.contains(profileController.myProfile.uid) ==
-                            true
-                        ? SvgPicture.asset(
-                            'assets/svgs/likefilled.svg',
-                            height: 15,
-                          )
-                        : SvgPicture.asset(
-                            'assets/svgs/like.svg',
-                            height: 15,
-                          ),
-                    label: Text(
-                      widget.donation.likes!.length.toString(),
-                      style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                            fontWeight: FontWeight.w700,
-                            color: textColor.withOpacity(0.8),
-                          ),
-                    ),
-                  ),
-                  TextButton.icon(
-                    onPressed: () {
-                      showModalBottomSheet(
-                        context: context,
-                        builder: (BuildContext context) => DonationCommentItem(
-                          donation: widget.donation,
-                          onComment: (CommentModel newComment) async {
-                            setState(() {});
-                          },
-                        ),
-                      );
-                    },
-                    icon: SvgPicture.asset(
-                      'assets/svgs/comment.svg',
-                      height: 15,
-                    ),
-                    label: Text(
-                      '${widget.donation.comments?.length ?? 0}',
-                      style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                            fontWeight: FontWeight.w700,
-                            color: textColor.withOpacity(0.8),
-                          ),
-                    ),
-                  ),
-                  TextButton.icon(
-                    onPressed: () async {},
-                    icon: const Icon(Icons.remove_red_eye_outlined,
-                        size: 19, color: Colors.black),
-                    label: Text(
-                      widget.donation.views.toString(),
-                      style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                            fontWeight: FontWeight.w700,
-                            color: textColor.withOpacity(0.8),
-                          ),
-                    ),
-                  ),
-                  const SizedBox(width: 8.0),
-                  GestureDetector(
-                    onTap: () => _sharePost(),
-                    child: SvgPicture.asset(
-                      'assets/svgs/share.svg',
-                      height: 15.0,
-                      width: 15.0,
-                      color: textColor.withOpacity(1.0),
-                    ),
-                  ),
-                  const Spacer(),
-                  Padding(
-                    padding: const EdgeInsets.only(right: 15.0),
-                    child: GestureDetector(
-                      onTap: () {
-                        widget.donation.setViews(widget.donation.views! + 1);
-                        ApiService.put(
-                            path: 'donation/approve/${widget.donation.id}',
-                            body: <String, dynamic>{
-                              'views': widget.donation.views! + 1,
-                              'isActive': true,
-                              'isApproved': true,
-                            });
-                        Get.to(() =>
-                            ExpandedDonationScreen(donation: widget.donation));
-                      },
-                      child: Container(
-                        decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(8),
-                            border:
-                                Border.all(width: 1.5, color: primaryColorLT)),
-                        child: const Center(
-                          child: Padding(
-                            padding: EdgeInsets.symmetric(
-                                vertical: 5.0, horizontal: 30),
-                            child: Text(
-                              'Support',
-                              style: TextStyle(
-                                color: primaryColorLT,
-                                fontWeight: FontWeight.w700,
-                                fontSize: 11,
-                              ),
-                            ),
-                          ),
-                        ),
-                      ),
-                    ),
-                  ),
-                  // Padding(
-                  //   padding: const EdgeInsets.only(right: 15),
-                  //   child: Text(
-                  //     formattedDifference,
-                  //     style: Theme.of(context)
-                  //         .textTheme
-                  //         .bodyMedium
-                  //         ?.copyWith(color: textColor.withOpacity(0.4)),
-                  //   ),
-                  // )
-                ],
-              ),
-            if (widget.isHome == false)
-              Container(
-                color: backgroundcolorinterface,
-                height: 7,
-              ),
-          ],
-        ),
-      ),
-    );
+          );
   }
 
   String formatDuration(Duration difference) {

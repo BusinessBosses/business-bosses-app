@@ -1,5 +1,7 @@
 import 'dart:async';
+import 'package:business_bosses_v2/bbpro/controllers/shop_controller.dart';
 import 'package:business_bosses_v2/bbpro/presentation/addsupplier.dart';
+import 'package:business_bosses_v2/bbpro/presentation/expandedprosupplierpage.dart';
 import 'package:business_bosses_v2/bbpro/widgets/clientwidget.dart';
 import 'package:business_bosses_v2/bbpro/widgets/customtabbar.dart';
 import 'package:business_bosses_v2/bbpro/widgets/notificationbutton.dart';
@@ -10,6 +12,7 @@ import 'package:business_bosses_v2/bbpro/controllers/clients_controller.dart';
 import 'package:business_bosses_v2/bbpro/models/client_model.dart';
 import 'package:business_bosses_v2/bbpro/presentation/addclient.dart';
 import 'package:business_bosses_v2/common/widgets/safety_model.dart';
+import 'package:business_bosses_v2/features/marketplace/presentation/expandedsupplierspage.dart';
 import 'package:business_bosses_v2/utils/theme/theme.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -32,8 +35,10 @@ class _ClientsScreenState extends State<ClientsScreen>
   late TabController _tabController;
   late TabController _viewController;
   final List<Client> _allclients = <Client>[];
+  bool loading = true;
 
   final ClientsController clientsController = Get.put(ClientsController());
+  final ShopController shopController = Get.find();
   final Map<ClientType, List<Client>> _clients = <ClientType, List<Client>>{};
 
   void _scrollToSection(int index) {
@@ -67,6 +72,7 @@ class _ClientsScreenState extends State<ClientsScreen>
               .toList();
           _clients[clientType] = allclients;
           _allclients.addAll(allclients);
+          loading = false;
         }
       });
     });
@@ -141,51 +147,55 @@ class _ClientsScreenState extends State<ClientsScreen>
             Expanded(
               child: Padding(
                 padding: const EdgeInsets.only(bottom: 10),
-                child: Obx(() {
-                  if (clientsController.loading.value) {
-                    return const Center(child: CircularProgressIndicator());
-                  } else if (!clientsController.loading.value &&
-                      clientsController.clients.isEmpty) {
-                    return const SafetyModel(
-                      icon: Icon(Icons.warning),
-                      title: 'No Clients Found!',
-                    );
-                  }
-                  return CustomScrollView(
-                    scrollDirection: Axis.horizontal,
-                    controller: _mainListScrollController,
-                    slivers: <Widget>[
-                      ...ClientType.values.map(
-                        (ClientType status) => SliverToBoxAdapter(
-                          child: RowStatusCard(
-                            clients: clientsController.clients
-                                .where((Client client) => client.type == status)
-                                .toList(),
-                            clientType: status,
-                            screenSize: screenSize,
-                            taskAccepted: (Client task, ClientType newStatus) {
-                              setState(() {
-                                // Update client status here
-                              });
-                            },
-                            onDrag: (bool isRight) {
-                              if (_lastMoveRight == isRight) {
-                                return;
-                              }
-                              _lastMoveRight = isRight;
-                              _moveMainList(isRight);
-                            },
-                            cancelDrag: () {
-                              _lastMoveRight = null;
-                              _timer?.cancel();
-                            },
-                            allclients: _allclients,
-                          ),
-                        ),
+                child: loading
+                    ? const Center(
+                        child: CircularProgressIndicator(),
                       )
-                    ],
-                  );
-                }),
+                    : Obx(
+                        () => clientsController.clients.isEmpty
+                            ? const Center(
+                                child: SafetyModel(
+                                  isLoading: false,
+                                  title: 'No Clients Found!',
+                                ),
+                              )
+                            : CustomScrollView(
+                                scrollDirection: Axis.horizontal,
+                                controller: _mainListScrollController,
+                                slivers: <Widget>[
+                                  ...ClientType.values.map(
+                                    (ClientType status) => SliverToBoxAdapter(
+                                      child: RowStatusCard(
+                                        clients: clientsController.clients
+                                            .where((Client client) =>
+                                                client.type == status)
+                                            .toList(),
+                                        clientType: status,
+                                        screenSize: screenSize,
+                                        taskAccepted: (Client task,
+                                            ClientType newStatus) {
+                                          setState(() {
+                                            // Update client status here
+                                          });
+                                        },
+                                        onDrag: (bool isRight) {
+                                          if (_lastMoveRight == isRight) {
+                                            return;
+                                          }
+                                          _lastMoveRight = isRight;
+                                          _moveMainList(isRight);
+                                        },
+                                        cancelDrag: () {
+                                          _lastMoveRight = null;
+                                          _timer?.cancel();
+                                        },
+                                        allclients: _allclients,
+                                      ),
+                                    ),
+                                  )
+                                ],
+                              ),
+                      ),
               ),
             ),
           ],
@@ -202,23 +212,41 @@ class _ClientsScreenState extends State<ClientsScreen>
               Get.to(() => const AddSupplier());
             },
           ),
-          Expanded(
-            child: StaggeredGridView.countBuilder(
-              staggeredTileBuilder: (int index) => const StaggeredTile.fit(1),
-              padding: const EdgeInsets.symmetric(
-                horizontal: 15.0,
-              ),
-              crossAxisCount: 2,
-              crossAxisSpacing: 8.0,
-              mainAxisSpacing: 8.0,
-              itemCount: 10,
-              shrinkWrap: true,
-              physics: null,
-              itemBuilder: (BuildContext context, int index) {
-                return const SuppliersCard();
-              },
-            ),
-          ),
+          Obx(() {
+            if (shopController.suppliers.isNotEmpty) {
+              return Expanded(
+                child: StaggeredGridView.countBuilder(
+                  staggeredTileBuilder: (int index) =>
+                      const StaggeredTile.fit(1),
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 15.0,
+                  ),
+                  crossAxisCount: 2,
+                  crossAxisSpacing: 8.0,
+                  mainAxisSpacing: 8.0,
+                  itemCount: shopController.suppliers.length,
+                  shrinkWrap: true,
+                  physics: null,
+                  itemBuilder: (BuildContext context, int index) {
+                    return SuppliersCard(
+                      onTap: () {
+                        Get.to(() => ExpandedProSuppliersPage(
+                            supplier: shopController.suppliers[index]));
+                      },
+                      supplier: shopController.suppliers[index],
+                    );
+                  },
+                ),
+              );
+            } else {
+              return const Center(
+                child: SafetyModel(
+                  isLoading: false,
+                  title: 'No Suppliers Found!',
+                ),
+              );
+            }
+          }),
         ]),
       ]),
     );

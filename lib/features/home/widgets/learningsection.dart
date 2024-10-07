@@ -22,23 +22,23 @@ class LearningSection extends StatelessWidget {
         },
         child: Container(
           child: Column(
-            children: [
+            children: <Widget>[
               const SizedBox(
                 height: 10,
               ),
-              const Padding(
-                padding: EdgeInsets.symmetric(horizontal: 15.0),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: <Widget>[
-                    Text(
-                      'Learning',
-                      style:
-                          TextStyle(fontWeight: FontWeight.w700, fontSize: 18),
-                    ),
-                  ],
-                ),
-              ),
+              // const Padding(
+              //   padding: EdgeInsets.symmetric(horizontal: 15.0),
+              //   child: Row(
+              //     mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              //     children: <Widget>[
+              //       Text(
+              //         'Learning',
+              //         style:
+              //             TextStyle(fontWeight: FontWeight.w700, fontSize: 18),
+              //       ),
+              //     ],
+              //   ),
+              // ),
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 15.0),
                 child: Row(
@@ -46,7 +46,8 @@ class LearningSection extends StatelessWidget {
                   children: <Widget>[
                     const Text(
                       'Courses & Tutorials',
-                      style: TextStyle(fontSize: 15),
+                      style:
+                          TextStyle(fontWeight: FontWeight.w700, fontSize: 14),
                     ),
                     Wrap(
                         crossAxisAlignment: WrapCrossAlignment.center,
@@ -66,7 +67,12 @@ class LearningSection extends StatelessWidget {
                   ],
                 ),
               ),
+              const SizedBox(
+                height: 10,
+              ),
               Container(
+                color: Colors.white,
+                width: double.infinity,
                 height: 150,
                 child: ListView.builder(
                   scrollDirection: Axis.horizontal,
@@ -76,7 +82,7 @@ class LearningSection extends StatelessWidget {
                         .getCategoryIndustries(Constants.LEARNINGID)
                         .where((Industry industry) => !industry.active!)
                         .toList()[index];
-                    return Container(
+                    return SizedBox(
                       width: 200,
                       height: 200,
                       child: CustomTile(

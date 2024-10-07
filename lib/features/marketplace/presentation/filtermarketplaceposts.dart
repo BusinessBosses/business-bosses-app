@@ -179,7 +179,6 @@ class FilterMarketplacePosts extends StatelessWidget {
                                     title: Text(
                                       'Select Location',
                                       textAlign: TextAlign.center,
-                                      style: const TextStyle(fontSize: 20),
                                     ),
                                   ),
                                   initialSelection: filterCode ?? 'GB',

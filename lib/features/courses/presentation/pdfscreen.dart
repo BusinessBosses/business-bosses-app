@@ -65,7 +65,6 @@ class _PDFScreenState extends State<PDFScreen> {
         title: Text(
           widget.filename,
           textAlign: TextAlign.center,
-          style: const TextStyle(fontSize: 20),
         ),
       ),
       body: Stack(children: <Widget>[
@@ -74,7 +73,8 @@ class _PDFScreenState extends State<PDFScreen> {
           height: double.infinity,
           child: FutureBuilder<PdfDocument>(
             future: _pdfDocument,
-            builder: (BuildContext context, AsyncSnapshot<PdfDocument> snapshot) {
+            builder:
+                (BuildContext context, AsyncSnapshot<PdfDocument> snapshot) {
               if (snapshot.connectionState == ConnectionState.waiting) {
                 return const Center(
                   child: CircularProgressIndicator(
@@ -108,7 +108,8 @@ class _PDFScreenState extends State<PDFScreen> {
                       color: Colors.black12,
                       borderRadius: BorderRadius.circular(20),
                     ),
-                    padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+                    padding:
+                        const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
                     child: const Text('Scroll down'),
                   ),
                 ),

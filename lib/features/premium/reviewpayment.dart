@@ -154,7 +154,7 @@ class _ReviewPaymentState extends State<ReviewPayment> {
         centerTitle: true,
         title: const TextWidget(
           text: 'Review Payment',
-          size: 20,
+          size: 16,
         ),
       ),
       body: SingleChildScrollView(

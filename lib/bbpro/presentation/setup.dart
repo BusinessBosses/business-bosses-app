@@ -1,6 +1,7 @@
 import 'package:business_bosses_v2/bbpro/controllers/shop_controller.dart';
 import 'package:business_bosses_v2/bbpro/presentation/servicesmanagement.dart';
 import 'package:business_bosses_v2/bbpro/presentation/setupshop.dart';
+import 'package:business_bosses_v2/bbpro/presentation/shopscreen.dart';
 import 'package:business_bosses_v2/bbpro/widgets/notificationbutton.dart';
 import 'package:business_bosses_v2/bbpro/presentation/inventory.dart';
 import 'package:business_bosses_v2/common/dialogs/snackbar.dart';
@@ -23,7 +24,6 @@ class _SetupState extends State<Setup> {
     'Edit Shop',
     'My Inventory',
     'My Services',
-    'My Suppliers',
     'Privacy Policy & Terms of Use',
     'Contact Us',
     'Manage Subscription'
@@ -83,14 +83,19 @@ class _SetupState extends State<Setup> {
                             const SizedBox(height: 10),
                             Row(
                               children: <Widget>[
-                                Container(
-                                    decoration: BoxDecoration(
-                                        color: Colors.white,
-                                        borderRadius:
-                                            BorderRadius.circular(40)),
-                                    padding: const EdgeInsets.symmetric(
-                                        horizontal: 8, vertical: 8),
-                                    child: const Text('View Shop')),
+                                GestureDetector(
+                                  onTap: () {
+                                    Get.to(() => const ShopScreen());
+                                  },
+                                  child: Container(
+                                      decoration: BoxDecoration(
+                                          color: Colors.white,
+                                          borderRadius:
+                                              BorderRadius.circular(40)),
+                                      padding: const EdgeInsets.symmetric(
+                                          horizontal: 8, vertical: 8),
+                                      child: const Text('View Shop')),
+                                ),
                                 const SizedBox(width: 5),
                                 Container(
                                     decoration: BoxDecoration(

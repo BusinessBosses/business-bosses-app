@@ -1,5 +1,7 @@
 import 'dart:async';
 
+import 'package:business_bosses_v2/action/action.dart';
+import 'package:business_bosses_v2/common/widgets/safety_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
@@ -31,6 +33,8 @@ class _OrdersScreenState extends State<OrdersScreen>
   final ScrollController _mainListScrollController = ScrollController();
   final ClientsController clientsController = Get.put(ClientsController());
   final OrderController orderController = Get.put(OrderController());
+  bool loading = true;
+
   @override
   void initState() {
     super.initState();
@@ -51,6 +55,8 @@ class _OrdersScreenState extends State<OrdersScreen>
               .toList();
           _orders[status] = statusOrders;
           _allorders.addAll(statusOrders); // Add tasks to alltasks
+          loading = false;
+          orderController.loading.value = false;
         }
       });
     });
@@ -108,6 +114,13 @@ class _OrdersScreenState extends State<OrdersScreen>
               },
               onAddProjectPressed: () {
                 // Handle "Add Project" pressed
+                if (clientsController.clients.isEmpty) {
+                  showSnackBar(
+                    context,
+                    message: 'You have to add a client to create order!',
+                  );
+                  return;
+                }
                 Get.to(() => const CreateOrder());
               },
             ),
@@ -125,47 +138,54 @@ class _OrdersScreenState extends State<OrdersScreen>
             Expanded(
               child: Padding(
                 padding: const EdgeInsets.only(bottom: 15),
-                child: Obx(() {
-                  if (clientsController.clients.isEmpty) {
-                    return const Center(child: CircularProgressIndicator());
-                  }
-                  return CustomScrollView(
-                    scrollDirection: Axis.horizontal,
-                    controller: _mainListScrollController,
-                    slivers: <Widget>[
-                      ...OrderStatus.values.map(
-                        (OrderStatus status) => SliverToBoxAdapter(
-                          child: RowStatusCard(
-                            orders: orderController.orders
-                                .where((Order order) =>
-                                    order.deliveryMethod == status)
-                                .toList(),
-                            orderStatus: status,
-                            screenSize: screenSize,
-                            orderAccepted:
-                                (Order order, OrderStatus newStatus) {
-                              setState(() {
-                                // Update client status here
-                              });
-                            },
-                            onDrag: (bool isRight) {
-                              if (_lastMoveRight == isRight) {
-                                return;
-                              }
-                              _lastMoveRight = isRight;
-                              _moveMainList(isRight);
-                            },
-                            cancelDrag: () {
-                              _lastMoveRight = null;
-                              _timer?.cancel();
-                            },
-                            allorders: _allorders,
-                          ),
-                        ),
+                child: loading
+                    ? const Center(
+                        child: CircularProgressIndicator(),
                       )
-                    ],
-                  );
-                }),
+                    : orderController.orders.isEmpty
+                        ? const Center(
+                            child: SafetyModel(
+                              isLoading: false,
+                              title: 'No Orders Found!',
+                            ),
+                          )
+                        : CustomScrollView(
+                            scrollDirection: Axis.horizontal,
+                            controller: _mainListScrollController,
+                            slivers: <Widget>[
+                              ...OrderStatus.values.map(
+                                (OrderStatus status) => SliverToBoxAdapter(
+                                  child: RowStatusCard(
+                                    orders: orderController.orders
+                                        .where((Order order) =>
+                                            order.status.displayTitle ==
+                                            status.displayTitle)
+                                        .toList(),
+                                    orderStatus: status,
+                                    screenSize: screenSize,
+                                    orderAccepted:
+                                        (Order order, OrderStatus newStatus) {
+                                      setState(() {
+                                        // Update client status here
+                                      });
+                                    },
+                                    onDrag: (bool isRight) {
+                                      if (_lastMoveRight == isRight) {
+                                        return;
+                                      }
+                                      _lastMoveRight = isRight;
+                                      _moveMainList(isRight);
+                                    },
+                                    cancelDrag: () {
+                                      _lastMoveRight = null;
+                                      _timer?.cancel();
+                                    },
+                                    allorders: _allorders,
+                                  ),
+                                ),
+                              )
+                            ],
+                          ),
               ),
             ),
           ],

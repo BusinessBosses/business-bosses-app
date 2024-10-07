@@ -102,7 +102,6 @@ class _ProfileAnalyseScreenState extends State<ProfileAnalyseScreen> {
         title: const Text(
           'Analyse Profile',
           textAlign: TextAlign.center,
-          style: TextStyle(fontSize: 20),
         ),
       ),
       body: loading

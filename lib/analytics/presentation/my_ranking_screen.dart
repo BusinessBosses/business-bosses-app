@@ -142,7 +142,6 @@ class _MyRankingScreenState extends State<MyRankingScreen> {
         title: const Text(
           'Ranking',
           textAlign: TextAlign.center,
-          style: TextStyle(fontSize: 20),
         ),
       ),
       body: SingleChildScrollView(

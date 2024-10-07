@@ -11,6 +11,8 @@ class AddProjectBottomSheet extends StatefulWidget {
   DateTime startDate;
   DateTime endDate;
   final VoidCallback onPressed;
+  final Function(DateTime) onStartDateChanged;
+  final Function(DateTime) onEndDateChanged;
 
   AddProjectBottomSheet({
     Key? key,
@@ -19,6 +21,8 @@ class AddProjectBottomSheet extends StatefulWidget {
     required this.startDate,
     required this.endDate,
     required this.onPressed,
+    required this.onStartDateChanged,
+    required this.onEndDateChanged,
   }) : super(key: key);
 
   @override
@@ -118,6 +122,7 @@ class _AddProjectBottomSheetState extends State<AddProjectBottomSheet> {
                             setState(() {
                               widget.startDate = picked;
                             });
+                            widget.onStartDateChanged(picked);
                           }
                         },
                         child: Container(
@@ -178,6 +183,8 @@ class _AddProjectBottomSheetState extends State<AddProjectBottomSheet> {
                             setState(() {
                               widget.endDate = picked;
                             });
+                            widget
+                                .onEndDateChanged(picked); // Call the callback
                           }
                         },
                         child: Container(

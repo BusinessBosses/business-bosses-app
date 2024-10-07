@@ -37,7 +37,7 @@ class _DeleteAccountScreenState extends State<DeleteAccountScreen> {
         title: const Text(
           'Delete Account',
           textAlign: TextAlign.center,
-          style: TextStyle(fontSize: 20),
+          style: TextStyle(fontSize: 16),
         ),
       ),
       body: Stack(

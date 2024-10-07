@@ -9,13 +9,15 @@ import 'package:business_bosses_v2/utils/theme/theme.dart';
 import 'package:get/get.dart';
 
 class InventoryCard extends StatefulWidget {
-  final Product product;
+  final Product? product;
+  final bool? myShop;
   final bool? isProduct;
 
   const InventoryCard({
     Key? key,
-    required this.product,
+    this.product,
     this.isProduct,
+    this.myShop,
   }) : super(key: key);
 
   @override
@@ -33,7 +35,8 @@ class _InventoryCardState extends State<InventoryCard> {
         borderRadius: BorderRadius.circular(16.0),
       ),
       child: Column(
-        crossAxisAlignment: CrossAxisAlignment.center,
+        mainAxisAlignment: MainAxisAlignment.start,
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
           SizedBox(
             height: 120.0,
@@ -41,7 +44,7 @@ class _InventoryCardState extends State<InventoryCard> {
             child: ClipRRect(
               borderRadius: BorderRadius.circular(10),
               child: NetworkImageWithPlaceHolder(
-                imageUrl: widget.product.images?[0],
+                imageUrl: widget.product?.images?[0],
                 radius: radius,
                 placeHolder: Icons.person,
                 iconSize: 0.0,
@@ -53,56 +56,90 @@ class _InventoryCardState extends State<InventoryCard> {
           const Divider(),
           const SizedBox(height: 5),
           Row(
+            crossAxisAlignment: CrossAxisAlignment.end,
             children: <Widget>[
-              Text(
-                widget.product.name,
-                style: const TextStyle(
-                  fontSize: 16,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-            ],
-          ),
-          Row(
-            children: <Widget>[
-              Text(
-                widget.product.price,
-                style: const TextStyle(
-                  color: proprimaryColor,
-                  fontWeight: FontWeight.bold,
-                  fontSize: 16,
-                ),
-              ),
-            ],
-          ),
-          if (widget.isProduct == true)
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: <Widget>[
-                Wrap(
-                  crossAxisAlignment: WrapCrossAlignment.center,
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: <Widget>[
-                    const CircleAvatar(
-                      radius: 5,
-                      backgroundColor: Colors.green,
-                    ),
-                    const SizedBox(width: 3),
                     Text(
-                      widget.product.quantity > 0
-                          ? '${widget.product.quantity.toString()} in Stock'
-                          : 'Out of stock',
-                      style: const TextStyle(fontSize: 10),
+                      widget.product?.name ?? 'Product Name',
+                      style: const TextStyle(
+                        fontSize: 13,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                    Text(
+                      widget.product?.price ?? 'Price',
+                      style: const TextStyle(
+                        color: proprimaryColor,
+                        fontWeight: FontWeight.bold,
+                        fontSize: 13,
+                      ),
+                    ),
+                    Text(
+                      widget.product?.description ?? 'Product description',
+                      style: const TextStyle(fontSize: 11),
+                      maxLines: 2,
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                    // if (widget.isProduct == true)
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: <Widget>[
+                        Wrap(
+                          crossAxisAlignment: WrapCrossAlignment.center,
+                          children: <Widget>[
+                            const CircleAvatar(
+                              radius: 3,
+                              backgroundColor: Colors.green,
+                            ),
+                            const SizedBox(width: 3),
+                            Text(
+                              widget.product?.quantity != null
+                                  ? widget.product!.quantity > 0
+                                      ? '${widget.product?.quantity.toString()} in Stock'
+                                      : 'Out of stock'
+                                  : 'Out of stock',
+                              style: const TextStyle(fontSize: 10),
+                            ),
+                          ],
+                        ),
+                      ],
                     ),
                   ],
                 ),
-                OptionsButton(
-                  item: widget.product,
-                  onEdit: () => Get.to(() => CreateProductListing(
-                        product: widget.product,
-                      )),
-                ),
-              ],
-            ),
+              ),
+              widget.myShop == false
+                  ? GestureDetector(
+                      onTap: () {},
+                      child: Container(
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 10, vertical: 7),
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(7),
+                          border: Border.all(
+                            color: proprimaryColor,
+                          ),
+                        ),
+                        child: const Text(
+                          'Order',
+                          style: TextStyle(
+                            color: proprimaryColor,
+                            fontWeight: FontWeight.bold,
+                            fontSize: 11,
+                          ),
+                        ),
+                      ),
+                    )
+                  : OptionsButton(
+                      item: widget.product,
+                      onEdit: () => Get.to(() => CreateProductListing(
+                            product: widget.product,
+                          )),
+                    ),
+            ],
+          ),
         ],
       ),
     );

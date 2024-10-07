@@ -270,7 +270,6 @@ class _BoostCourseState extends State<BoostCourse> {
         centerTitle: true,
         title: const TextWidget(
           text: 'Boost Post',
-          size: 20,
         ),
       ),
       body: SingleChildScrollView(

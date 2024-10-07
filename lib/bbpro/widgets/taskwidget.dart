@@ -1,11 +1,15 @@
+import 'package:business_bosses_v2/bbpro/controllers/project_controller.dart';
 import 'package:business_bosses_v2/bbpro/models/project_model.dart';
+import 'package:business_bosses_v2/bbpro/presentation/addproject.dart';
 import 'package:business_bosses_v2/bbpro/widgets/optionsbutton.dart';
 import 'package:business_bosses_v2/bbpro/widgets/projectpopup.dart';
+import 'package:business_bosses_v2/common/dialogs/snackbar.dart';
 import 'package:business_bosses_v2/utils/theme/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:get/get.dart';
 
-class TaskWidget extends StatelessWidget {
+class TaskWidget extends StatefulWidget {
   final Project project;
   final Color bgcolor;
   final bool? isExpanded;
@@ -17,6 +21,12 @@ class TaskWidget extends StatelessWidget {
     this.isExpanded,
   });
 
+  @override
+  State<TaskWidget> createState() => _TaskWidgetState();
+}
+
+class _TaskWidgetState extends State<TaskWidget> {
+  final ProjectController projectController = Get.find();
   @override
   Widget build(BuildContext context) {
     return Stack(children: <Widget>[
@@ -40,7 +50,8 @@ class TaskWidget extends StatelessWidget {
                 children: <Widget>[
                   Container(
                     decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(3), color: bgcolor),
+                        borderRadius: BorderRadius.circular(3),
+                        color: widget.bgcolor),
                     padding:
                         const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
                     child: Wrap(
@@ -55,14 +66,14 @@ class TaskWidget extends StatelessWidget {
                             width: 5,
                           ),
                           Text(
-                            project.name,
+                            widget.project.name,
                             style: const TextStyle(
                               fontWeight: FontWeight.bold,
                               fontSize: 13,
                             ),
                           ),
                           Text(
-                            ' - ${project.status.displayTitle}',
+                            ' - ${widget.project.status.displayTitle}',
                             style: const TextStyle(
                               fontWeight: FontWeight.bold,
                               fontSize: 13,
@@ -71,7 +82,54 @@ class TaskWidget extends StatelessWidget {
                         ]),
                   ),
                   OptionsButton(
-                    isExpanded: isExpanded != false ? true : false,
+                    onView: () => showDialog(
+                      context: context,
+                      builder: (BuildContext context) => ProjectPopUp(
+                        project: widget.project,
+                      ),
+                    ),
+                    onEdit: () {
+                      Get.to(() => Addproject(
+                            project: widget.project,
+                          ));
+                    },
+                    onDelete: () {
+                      showDialog(
+                        context: context,
+                        builder: (BuildContext context) => AlertDialog(
+                          title: const Text(
+                            'Delete Project',
+                            style: bodyText1,
+                          ),
+                          content: const Text(
+                              'Are you sure you want to delete this project?'),
+                          actions: <Widget>[
+                            TextButton(
+                              onPressed: () => Get.back(),
+                              child: const Text('No'),
+                            ),
+                            TextButton(
+                              onPressed: () async {
+                                final bool delete = await projectController
+                                    .deleteProject(widget.project.id);
+                                if (delete) {
+                                  showSnackbar(
+                                      message: 'Project deleted successfully!');
+                                } else {
+                                  showSnackbar(
+                                      message: 'Error deleting project!',
+                                      error: true);
+                                }
+                                setState(() {});
+                                Get.back();
+                              },
+                              child: const Text('Yes'),
+                            ),
+                          ],
+                        ),
+                      );
+                    },
+                    isExpanded: widget.isExpanded != false ? true : false,
                     padding: const EdgeInsets.all(0),
                     borderColor: Colors.white,
                   ),
@@ -91,7 +149,7 @@ class TaskWidget extends StatelessWidget {
                           ),
                         ),
                         Text(
-                          project.amount.toString(),
+                          widget.project.amount.toString(),
                           style: const TextStyle(
                             fontSize: 13,
                           ),
@@ -108,7 +166,7 @@ class TaskWidget extends StatelessWidget {
                           ),
                         ),
                         Text(
-                          project.duration.toString(),
+                          widget.project.duration.toString(),
                           style: const TextStyle(
                             fontSize: 13,
                           ),
@@ -153,7 +211,7 @@ class TaskWidget extends StatelessWidget {
                                         color: textColor),
                                   ),
                                   TextSpan(
-                                    text: project.description,
+                                    text: widget.project.description,
                                     style: const TextStyle(
                                         fontSize: 10, color: textColor),
                                   ),
@@ -171,7 +229,7 @@ class TaskWidget extends StatelessWidget {
           ),
         ),
       ),
-      if (isExpanded != false)
+      if (widget.isExpanded != false)
         Positioned(
           right: 20,
           bottom: 10,
@@ -183,7 +241,7 @@ class TaskWidget extends StatelessWidget {
                   showDialog(
                     context: context,
                     builder: (BuildContext context) => ProjectPopUp(
-                      project: project,
+                      project: widget.project,
                     ),
                   );
                 },

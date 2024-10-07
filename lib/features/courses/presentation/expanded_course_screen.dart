@@ -146,7 +146,7 @@ class _ExpandedCourseScreenState extends State<ExpandedCourseScreen> {
                       title: Text(
                         widget.course.title!,
                         textAlign: TextAlign.center,
-                        style: const TextStyle(fontSize: 20),
+                        style: const TextStyle(fontSize: 16),
                       ),
                       expandedHeight: 300.0,
                       collapsedHeight: 300.0,
@@ -893,7 +893,8 @@ class _ExpandedCourseScreenState extends State<ExpandedCourseScreen> {
                                     ),
                                   ],
                                 ),
-                                if (widget.course.youtubeUrls != null) ...<Widget>[
+                                if (widget.course.youtubeUrls !=
+                                    null) ...<Widget>[
                                   widget.course.youtubeUrls!.length > 1
                                       ? SizedBox(
                                           height: 90,

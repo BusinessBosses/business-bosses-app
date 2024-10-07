@@ -3,12 +3,17 @@ import 'dart:developer';
 import 'package:business_bosses_v2/bbpro/widgets/button.dart';
 import 'package:business_bosses_v2/features/home/widgets/bottom_bar.dart';
 import 'package:business_bosses_v2/features/marketplace/presentation/subscription_confirmation.dart';
+import 'package:business_bosses_v2/features/notifications/widgets/quotewidget.dart';
+import 'package:business_bosses_v2/features/posts/presentation/create_post_screen.dart';
+import 'package:business_bosses_v2/features/premium/unlockedfeatures.dart';
+import 'package:business_bosses_v2/features/profile/widgets/boss_of_the_week_tile.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 import 'package:purchases_flutter/purchases_flutter.dart';
+import 'package:url_launcher/url_launcher.dart';
 import 'package:url_launcher/url_launcher_string.dart';
 
 import '../../../utils/theme/theme.dart';
@@ -28,13 +33,103 @@ class ProScreen extends StatefulWidget {
   State<ProScreen> createState() => _ProScreenState();
 }
 
-class _ProScreenState extends State<ProScreen> {
+class _ProScreenState extends State<ProScreen> with TickerProviderStateMixin {
   String paymentMethodId = '';
+  late final TabController protabbarcontroller;
   bool isCoin = false;
   bool isSubscribed = false;
   final ProfileController profileController = Get.find();
+  final List<String> reviews = <String>[
+    'Best app ever! So easy to use and manage everything.',
+    'This app transformed my business! Highly recommend.',
+    'Streamline operations and grow your business with this app!'
+  ];
+  final List<FeatureItem> features = <FeatureItem>[
+    FeatureItem(
+      iconPath: 'assets/svgs/bizcenter.svg',
+      caption: 'Biz-Centre Website',
+      subtext: 'Easily build your online presence',
+      color: Colors.pink.withOpacity(0.2), // Changed color
+    ),
+    FeatureItem(
+      iconPath: 'assets/svgs/pos.svg',
+      caption: 'POS Management',
+      subtext: 'Quick POS for seamless transactions',
+      color: Colors.orange.withOpacity(0.2), // Changed color
+    ),
+    FeatureItem(
+      iconPath: 'assets/svgs/payment.svg',
+      caption: 'Payment Management',
+      subtext: 'Online or cash payments for orders & invoices',
+      color: Colors.yellow.withOpacity(0.2), // Changed color
+    ),
+    FeatureItem(
+      iconPath: 'assets/svgs/business.svg',
+      caption: 'Bundled Business Management',
+      subtext: 'Track projects, expenses, orders, & inventory',
+      color: Colors.green.withOpacity(0.2), // Changed color
+    ),
+    FeatureItem(
+      iconPath: 'assets/svgs/appointment.svg',
+      caption: 'Appointment Management',
+      subtext: 'Book, manage, and send reminders',
+      color: Colors.blue.withOpacity(0.2), // Changed color
+    ),
+    FeatureItem(
+      iconPath: 'assets/svgs/crm.svg',
+      caption: 'Customer Relationship Management',
+      subtext: 'Manage contacts and client interactions with CRM',
+      color: Colors.indigo.withOpacity(0.2), // Changed color
+    ),
+    FeatureItem(
+      iconPath: 'assets/svgs/analytics.svg',
+      caption: 'Performance Analytics',
+      subtext: 'Access real-time revenue and analytics',
+      color: Colors.purple.withOpacity(0.2), // Changed color
+    ),
+    FeatureItem(
+      iconPath: 'assets/svgs/premiumbadgered.svg',
+      caption: 'Premium Badge',
+      subtext: 'Showcase your Pro status',
+      color: Colors.red.withOpacity(0.2), // Changed color
+    ),
+    FeatureItem(
+      iconPath: 'assets/svgs/coin.svg',
+      caption: 'Coin Rewards',
+      subtext: 'Get 100 coins per month',
+      color: Colors.orange.withOpacity(0.2), // Changed color
+    ),
+    FeatureItem(
+      iconPath: 'assets/svgs/rocket.svg',
+      caption: 'Boosted Posts',
+      subtext: 'Reach more customers with no fees',
+      color: Colors.lime.withOpacity(0.2), // Changed color
+    ),
+    FeatureItem(
+      iconPath: 'assets/svgs/networkgrowth.svg',
+      caption: 'Network Growth',
+      subtext: 'Get more connections and referrals',
+      color: Colors.cyan.withOpacity(0.2), // Changed color
+    ),
+    FeatureItem(
+      iconPath: 'assets/svgs/visibility.svg',
+      caption: 'Increased Visibility',
+      subtext: 'Get discovered in post searches',
+      color: Colors.brown.withOpacity(0.2), // Changed color
+    ),
+    FeatureItem(
+      iconPath: 'assets/svgs/partner.svg',
+      caption: 'Exclusive Partner Offers',
+      subtext: 'Access special deals and benefits',
+      color: Colors.grey.withOpacity(0.2), // Changed color
+    ),
+  ];
 
-  ///intialize the payment
+  @override
+  void initState() {
+    super.initState();
+    protabbarcontroller = TabController(length: 3, vsync: this);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -50,348 +145,307 @@ class _ProScreenState extends State<ProScreen> {
         ),
         centerTitle: true,
         title: const Text(
-          'Become a pro member',
+          'Grow',
           textAlign: TextAlign.center,
-          style: TextStyle(fontSize: 20),
+          style: TextStyle(fontSize: 16),
         ),
       ),
       body: Stack(children: <Widget>[
-        SingleChildScrollView(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.start,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: <Widget>[
-              Container(
-                height: 10,
-                color: backgroundcolorinterface,
-              ),
-              SizedBox(
-                child: Stack(
-                  alignment: Alignment.topCenter,
-                  children: <Widget>[
-                    SvgPicture.asset(
-                      'assets/svgs/premiumback.svg',
-                      width: MediaQuery.of(context).size.width,
-                      fit: BoxFit.fitWidth,
+        Column(
+          mainAxisAlignment: MainAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: <Widget>[
+            const Center(
+                child: Text(
+              'Everything you need to grow your business',
+              style: TextStyle(
+                  fontSize: 14,
+                  fontWeight: FontWeight.w700,
+                  color: proprimaryColor),
+            )),
+            Padding(
+              padding:
+                  const EdgeInsets.symmetric(horizontal: 15.0, vertical: 15),
+              child: Material(
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(10),
+                ),
+                color: probackgroundColor,
+                child: TabBar(
+                  indicatorPadding: const EdgeInsets.symmetric(horizontal: 15),
+                  indicatorColor: Colors.black,
+                  controller: protabbarcontroller,
+                  tabs: const <Widget>[
+                    Tab(
+                      child: FittedBox(
+                        child: Text(
+                          'Upgrade to Pro',
+                          style: TextStyle(
+                              fontSize: 11, fontWeight: FontWeight.w700),
+                        ),
+                      ),
                     ),
-                    Column(
-                      children: <Widget>[
-                        Padding(
-                          padding: const EdgeInsets.only(
-                              left: 50.0, right: 50, top: 50),
-                          child: RichText(
-                            textAlign: TextAlign.center,
-                            text: const TextSpan(
-                              children: <InlineSpan>[
-                                TextSpan(
-                                  text:
-                                      'Everything you need to grow your business successfully',
-                                  style: TextStyle(
-                                      color: Colors.black,
-                                      fontSize: 15,
-                                      fontWeight: FontWeight.w500),
-                                ),
-                              ],
-                            ),
-                          ),
+                    Tab(
+                      child: FittedBox(
+                        child: Text(
+                          'Become a Partner',
+                          style: TextStyle(
+                              fontSize: 11, fontWeight: FontWeight.w700),
                         ),
-                        const Padding(
-                          padding: EdgeInsets.all(15.0),
-                          child: Text(
-                            'Manage all your business operations in one place; Set up biz-centre, POS, CRM, project, invoices, payment, inventory, appointments & more.',
-                            style: TextStyle(
-                              color: Colors.black87,
-                              fontSize: 12,
-                              fontWeight: FontWeight.w100,
-                            ),
-                            textAlign:
-                                TextAlign.center, // Center-aligns the text
-                          ),
+                      ),
+                    ),
+                    Tab(
+                      child: FittedBox(
+                        child: Text(
+                          'Boost Posts',
+                          style: TextStyle(
+                              fontSize: 11, fontWeight: FontWeight.w700),
                         ),
-                        Padding(
-                          padding: const EdgeInsets.only(left: 10.0, right: 10),
-                          child: Column(
-                            children: <Widget>[
-                              Container(
-                                child: Column(
-                                  children: <Widget>[
-                                    Padding(
-                                      padding: const EdgeInsets.only(
-                                          top: 20.0, left: 30),
-                                      child: Column(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.start,
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.start,
-                                        children: <Widget>[
-                                          const Text(
-                                            'Whats included:',
-                                            style: TextStyle(
-                                                fontSize: 16,
-                                                fontWeight: FontWeight.bold),
-                                          ),
-                                          const SizedBox(height: 10),
-                                          const Row(
-                                            children: <Widget>[
-                                              Icon(
-                                                Icons.check_circle,
-                                                size: 17,
-                                                color: proprimaryColor,
-                                              ),
-                                              SizedBox(width: 15),
-                                              Text(
-                                                'Easily Set up your online Biz- Centre website',
-                                                style: TextStyle(
-                                                    fontSize: 12,
-                                                    fontWeight:
-                                                        FontWeight.w600),
-                                              )
-                                            ],
-                                          ),
-                                          const SizedBox(height: 10),
-                                          const Row(
-                                            children: <Widget>[
-                                              Icon(
-                                                Icons.check_circle,
-                                                size: 17,
-                                                color: proprimaryColor,
-                                              ),
-                                              SizedBox(width: 15),
-                                              Text(
-                                                'Quick POS to receive online & in-person sales',
-                                                style: TextStyle(
-                                                    fontSize: 12,
-                                                    fontWeight:
-                                                        FontWeight.w600),
-                                              )
-                                            ],
-                                          ),
-                                          const SizedBox(height: 10),
-                                          const Row(
-                                            children: <Widget>[
-                                              Icon(
-                                                Icons.check_circle,
-                                                size: 17,
-                                                color: proprimaryColor,
-                                              ),
-                                              SizedBox(width: 15),
-                                              Text(
-                                                'Accept online or cash payment for orders & invoices',
-                                                style: TextStyle(
-                                                    fontSize: 12,
-                                                    fontWeight:
-                                                        FontWeight.w600),
-                                              )
-                                            ],
-                                          ),
-                                          const SizedBox(height: 10),
-                                          const Row(
-                                            children: <Widget>[
-                                              Icon(
-                                                Icons.check_circle,
-                                                size: 17,
-                                                color: proprimaryColor,
-                                              ),
-                                              SizedBox(width: 15),
-                                              Text(
-                                                'Manage Project, Expenses, Budget & Inventory',
-                                                style: TextStyle(
-                                                    fontSize: 12,
-                                                    fontWeight:
-                                                        FontWeight.w600),
-                                              )
-                                            ],
-                                          ),
-                                          const SizedBox(height: 10),
-                                          const Row(
-                                            children: <Widget>[
-                                              Icon(
-                                                Icons.check_circle,
-                                                size: 17,
-                                                color: proprimaryColor,
-                                              ),
-                                              SizedBox(width: 15),
-                                              Text(
-                                                'Appointment booking, scheduling & Reminders',
-                                                style: TextStyle(
-                                                    fontSize: 12,
-                                                    fontWeight:
-                                                        FontWeight.w600),
-                                              )
-                                            ],
-                                          ),
-                                          const SizedBox(height: 10),
-                                          const Row(
-                                            children: <Widget>[
-                                              Icon(
-                                                Icons.check_circle,
-                                                size: 17,
-                                                color: proprimaryColor,
-                                              ),
-                                              SizedBox(width: 15),
-                                              Text(
-                                                'Manage clients & customers contacts (CRM)',
-                                                style: TextStyle(
-                                                    fontSize: 12,
-                                                    fontWeight:
-                                                        FontWeight.w600),
-                                              )
-                                            ],
-                                          ),
-                                          const SizedBox(height: 10),
-                                          const Row(
-                                            children: <Widget>[
-                                              Icon(
-                                                Icons.check_circle,
-                                                size: 17,
-                                                color: proprimaryColor,
-                                              ),
-                                              SizedBox(width: 15),
-                                              Text(
-                                                'Access Real time Revenue dashboard analytics',
-                                                style: TextStyle(
-                                                    fontSize: 12,
-                                                    fontWeight:
-                                                        FontWeight.w600),
-                                              )
-                                            ],
-                                          ),
-                                          const SizedBox(height: 10),
-                                          Row(
-                                            children: <Widget>[
-                                              SvgPicture.asset(
-                                                'assets/svgs/goldcheckmark.svg',
-                                                height: 15,
-                                                color: primaryColorLT,
-                                              ),
-                                              const SizedBox(width: 15),
-                                              const Text(
-                                                'Premium Badge',
-                                                style: TextStyle(
-                                                    fontSize: 12,
-                                                    fontWeight:
-                                                        FontWeight.w600),
-                                              )
-                                            ],
-                                          ),
-                                          const SizedBox(height: 10),
-                                          Row(
-                                            children: <Widget>[
-                                              SvgPicture.asset(
-                                                  'assets/svgs/coin.svg',
-                                                  height: 15),
-                                              const SizedBox(width: 10),
-                                              const Text(
-                                                'Earn 100 coins per month',
-                                                style: TextStyle(
-                                                    fontSize: 12,
-                                                    fontWeight:
-                                                        FontWeight.w600),
-                                              )
-                                            ],
-                                          ),
-                                          const SizedBox(height: 10),
-                                          Row(
-                                            children: <Widget>[
-                                              SvgPicture.asset(
-                                                  'assets/svgs/rocket.svg',
-                                                  height: 12),
-                                              const SizedBox(width: 15),
-                                              const Text(
-                                                'Boost post FREE with coins',
-                                                style: TextStyle(
-                                                    fontSize: 12,
-                                                    fontWeight:
-                                                        FontWeight.w600),
-                                              )
-                                            ],
-                                          ),
-                                          const SizedBox(height: 15),
-                                          Row(
-                                            children: <Widget>[
-                                              SvgPicture.asset(
-                                                  'assets/svgs/moreconnections.svg',
-                                                  height: 10),
-                                              const SizedBox(width: 15),
-                                              const Text(
-                                                'More connections & referrals',
-                                                style: TextStyle(
-                                                    fontSize: 12,
-                                                    fontWeight:
-                                                        FontWeight.w600),
-                                              )
-                                            ],
-                                          ),
-                                          const SizedBox(height: 15),
-                                          Row(
-                                            children: <Widget>[
-                                              SvgPicture.asset(
-                                                  'assets/svgs/rankingicon.svg',
-                                                  height: 12),
-                                              const SizedBox(width: 15),
-                                              const Text(
-                                                'Recognition on posts search',
-                                                style: TextStyle(
-                                                    fontSize: 12,
-                                                    fontWeight:
-                                                        FontWeight.w600),
-                                              )
-                                            ],
-                                          ),
-                                          const SizedBox(height: 15),
-                                          Row(
-                                            children: <Widget>[
-                                              SvgPicture.asset(
-                                                  'assets/svgs/handshake.svg',
-                                                  height: 10),
-                                              const SizedBox(width: 18),
-                                              const Text(
-                                                'Exclusive Partner Offers',
-                                                style: TextStyle(
-                                                    fontSize: 12,
-                                                    fontWeight:
-                                                        FontWeight.w600),
-                                              )
-                                            ],
-                                          ),
-                                          const SizedBox(height: 15),
-                                        ],
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              ),
-                              const SizedBox(height: 7),
-                              SizedBox(
-                                width: double.infinity,
-                                child: ProCustomButton(
-                                  text: 'Start free trial',
-                                  onPressed: () {},
-                                ),
-                              ),
-                              const SizedBox(
-                                height: 5,
-                              ),
-                              const Text(
-                                'Get 3 days free then 1 month for £1',
-                                style: TextStyle(
-                                  color: Colors.black87,
-                                  fontSize: 12,
-                                  fontWeight: FontWeight.w100,
-                                ),
-                                textAlign:
-                                    TextAlign.center, // Center-aligns the text
-                              ),
-                            ],
-                          ),
-                        )
-                      ],
+                      ),
                     ),
                   ],
                 ),
               ),
-            ],
-          ),
+            ),
+            Expanded(
+                child: TabBarView(
+                    controller: protabbarcontroller,
+                    children: <Widget>[
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 0.0),
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: <Widget>[
+                        const Padding(
+                          padding: EdgeInsets.symmetric(horizontal: 15.0),
+                          child: Text(
+                            'Save time, save money, set up and manage your business 10x faster',
+                            style: TextStyle(fontSize: 12),
+                          ),
+                        ),
+                        Expanded(
+                          child: Stack(children: <Widget>[
+                            Padding(
+                              padding:
+                                  const EdgeInsets.symmetric(horizontal: 15.0),
+                              child: ListView.builder(
+                                physics: const NeverScrollableScrollPhysics(),
+                                itemCount: features.length,
+                                itemBuilder: (BuildContext context, int index) {
+                                  return FeatureTile(feature: features[index]);
+                                },
+                              ),
+                            ),
+                            Positioned(
+                              bottom: 0,
+                              left: 0,
+                              right: 0,
+                              child: Container(
+                                height: 200,
+                                decoration: const BoxDecoration(
+                                  color: Colors.white,
+                                  gradient: LinearGradient(
+                                    begin: Alignment.bottomCenter,
+                                    end: Alignment.topCenter,
+                                    colors: <Color>[
+                                      Colors.white,
+                                      Colors.white10,
+                                    ],
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ]),
+                        ),
+                        GestureDetector(
+                          onTap: () {
+                            showModalBottomSheet(
+                              context: context,
+                              shape: const RoundedRectangleBorder(
+                                borderRadius: BorderRadius.only(
+                                  topLeft: Radius.circular(20),
+                                  topRight: Radius.circular(20),
+                                ),
+                              ),
+                              isScrollControlled: true,
+                              builder: (BuildContext context) {
+                                return FractionallySizedBox(
+                                  heightFactor: 0.8,
+                                  child: Padding(
+                                    padding: const EdgeInsets.symmetric(
+                                        horizontal: 15.0),
+                                    child: ListView.builder(
+                                      itemCount: features.length,
+                                      itemBuilder:
+                                          (BuildContext context, int index) {
+                                        return FeatureTile(
+                                            feature: features[index]);
+                                      },
+                                    ),
+                                  ),
+                                );
+                              },
+                            );
+                          },
+                          child: const Text(
+                            'See all',
+                            style: TextStyle(
+                                fontSize: 14, fontWeight: FontWeight.bold),
+                          ),
+                        ),
+                        Padding(
+                            padding: const EdgeInsets.only(
+                                left: 0.0, top: 10, bottom: 10),
+                            child: Container(
+                              width: double.infinity,
+                              padding:
+                                  const EdgeInsets.symmetric(horizontal: 30),
+                              child: ProCustomButton(
+                                  color: primaryColorLT,
+                                  text: 'Start Free Trial',
+                                  onPressed: () {}),
+                            )),
+                        Padding(
+                          padding: const EdgeInsets.only(bottom: 100.0),
+                          child: SizedBox(
+                            width: double.infinity,
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: <Widget>[
+                                const Center(
+                                  child: Text(
+                                    'Our Happy Customers',
+                                    style: TextStyle(
+                                        color: proprimaryColor,
+                                        fontWeight: FontWeight.bold),
+                                  ),
+                                ),
+                                SizedBox(
+                                  width: double
+                                      .infinity, // Occupy the available width
+                                  height: 80, // Adjust height as needed
+                                  child: ListView.builder(
+                                    scrollDirection: Axis.horizontal,
+                                    itemCount: reviews.length + 2,
+                                    itemBuilder:
+                                        (BuildContext context, int index) {
+                                      return index == 0
+                                          ? const SizedBox(
+                                              width: 5,
+                                            )
+                                          : index == reviews.length + 1
+                                              ? const SizedBox(
+                                                  width: 15,
+                                                )
+                                              : SizedBox(
+                                                  width: MediaQuery.of(context)
+                                                          .size
+                                                          .width /
+                                                      2.8,
+                                                  child: Container(
+                                                    margin:
+                                                        const EdgeInsets.only(
+                                                            top: 10, left: 10),
+                                                    padding:
+                                                        const EdgeInsets.all(
+                                                            10),
+                                                    decoration: BoxDecoration(
+                                                      borderRadius:
+                                                          BorderRadius.circular(
+                                                              10),
+                                                      color: backgroundColor,
+                                                    ),
+                                                    child: Text(
+                                                      reviews[index - 1],
+                                                      style: const TextStyle(
+                                                          fontSize: 12),
+                                                      textAlign:
+                                                          TextAlign.center,
+                                                    ),
+                                                  ),
+                                                );
+                                    },
+                                  ),
+                                )
+                              ],
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  Column(
+                    children: <Widget>[
+                      Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 15.0),
+                        child: FeatureTile(
+                          feature: FeatureItem(
+                            iconPath: 'assets/svgs/partner.svg',
+                            caption: 'Exclusive Partner Offers Awaits You',
+                            subtext: 'Access special deals and benefits',
+                            color:
+                                Colors.grey.withOpacity(0.2), // Changed color
+                          ),
+                        ),
+                      ),
+                      const Padding(
+                        padding:
+                            EdgeInsets.only(left: 15.0, top: 15, bottom: 10),
+                        child: Align(
+                          alignment: Alignment
+                              .centerLeft, // Aligns the text to the left
+                          child: Text(
+                            'What you\'ll get',
+                            style: TextStyle(
+                                fontWeight: FontWeight.w700,
+                                color: proprimaryColor,
+                                fontSize: 14),
+                          ),
+                        ),
+                      ),
+                      const Padding(
+                        padding: EdgeInsets.symmetric(horizontal: 15.0),
+                        child: Align(
+                          alignment: Alignment.centerLeft,
+                          child: Text(
+                            '• More Customers\n'
+                            '• Selected Referrals\n'
+                            '• Exclusive Brand Positioning\n'
+                            '• Entrepreneurial Support\n'
+                            '• Economic Development\n'
+                            '• Community Engagement\n',
+                          ),
+                        ),
+                      ),
+                      const BossOfWeekProfileTile(
+                        isForyou: false,
+                      ),
+                      Padding(
+                          padding: const EdgeInsets.only(
+                              left: 0.0, top: 10, bottom: 10),
+                          child: Container(
+                            width: double.infinity,
+                            padding: const EdgeInsets.symmetric(horizontal: 30),
+                            child: ProCustomButton(
+                                color: primaryColorLT,
+                                text: 'Partner with us',
+                                onPressed: () async {
+                                  if (await canLaunchUrl(Uri.parse(
+                                      'https://businessbosses.co.uk/landingpageforpartners'))) {
+                                    await launchUrl(Uri.parse(
+                                        'https://businessbosses.co.uk/landingpageforpartners'));
+                                  }
+                                }),
+                          )),
+                    ],
+                  ),
+                  const CreatePostScreen(
+                    isGrow: true,
+                  )
+                ])),
+          ],
         ),
         const BottomBar(activeIndex: 2),
       ]),

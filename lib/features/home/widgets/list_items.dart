@@ -77,7 +77,7 @@ class _PostsWidgetState extends State<PostsWidget> {
     return ListView.builder(
       shrinkWrap: true,
       controller: _scrollController,
-      itemCount: controller.mixedPosts.length + 4, // Added 3 for section texts
+      itemCount: controller.mixedPosts.length + 2,
       itemBuilder: (BuildContext context, int index) {
         if (index == 0) {
           return Column(
@@ -138,106 +138,45 @@ class _PostsWidgetState extends State<PostsWidget> {
             isForyou: true,
           );
         }
-        if (index == 3) {
-          return const Column(
-            children: <Widget>[
-              ChallengesSection(
-                backgroundColor: backgroundColor,
-              ),
-              SizedBox(
-                height: 10,
-              )
-            ],
-          );
-        }
 
-        if (index == 5) {
-          return const Column(
-            children: <Widget>[
-              MarketplaceSection(),
-              SizedBox(
-                height: 10,
-              )
-            ],
-          );
-        }
-
-        if (index == 7) {
-          return
-              //  VisibilityDetector(
-              //   key: const Key('CourseListContainer'),
-              //   onVisibilityChanged: (VisibilityInfo info) {
-              //     if (info.visibleFraction == 0) {
-              //       // CourseList is not visible, ensure videos are paused
-              //       if (courseListKey.currentState != null) {
-              //         (courseListKey.currentState as dynamic).pauseAllVideos();
-              //       }
-              //     }
-              //   },
-              //   child:
-              SizedBox(
-            height: 300,
-            child: CourseList(key: courseListKey),
-          );
-          // );
-        }
-
-        int postIndex = index;
-        if (index > 3) postIndex--;
-        if (index > 5) postIndex--;
-        if (index > 7) postIndex--;
-
-        if ((postIndex - 10) % 15 == 0 && postIndex >= 10) {
-          return Column(
-            children: <Widget>[
-              const Column(
-                children: <Widget>[
-                  ChallengesSection(
-                    backgroundColor: backgroundColor,
-                  ),
-                  SizedBox(
-                    height: 10,
-                  )
-                ],
-              ),
-              _buildPostWidget(postIndex - 1),
-            ],
-          );
-        }
-        if ((postIndex - 15) % 15 == 0 && postIndex >= 15) {
-          return Column(
-            children: <Widget>[
-              const Column(
-                children: <Widget>[
-                  MarketplaceSection(),
-                  SizedBox(
-                    height: 10,
-                  )
-                ],
-              ),
-              _buildPostWidget(postIndex - 1),
-            ],
-          );
-        }
-        if ((postIndex - 20) % 15 == 0 && postIndex >= 20) {
-          return Column(
-            children: <Widget>[
-              SizedBox(
-                height: 300,
-                child: CourseList(key: courseListKey),
-              ),
-              _buildPostWidget(postIndex - 1),
-            ],
-          );
-        }
-
-        return _buildPostWidget(postIndex - 1);
+        return _buildPostWidget(index - 2);
       },
     );
   }
 
   Widget _buildPostWidget(int postIndex) {
+    // List to hold multiple widgets (ChallengeSection + Post)
+    List<Widget> widgets = <Widget>[];
+
+    // Insert ChallengesSection every 6th item without replacing the original post
+    if (postIndex == 2) {
+      widgets.add(Column(
+        children: <Widget>[
+          const ChallengesSection(backgroundColor: backgroundColor),
+          Container(
+            height: 10,
+            color: backgroundColor,
+          )
+        ],
+      ));
+    }
+
+    if (postIndex != 0 && postIndex % 6 == 0) {
+      widgets.add(Column(
+        children: <Widget>[
+          const ChallengesSection(backgroundColor: backgroundColor),
+          Container(
+            height: 10,
+            color: backgroundColor,
+          )
+        ],
+      ));
+    }
+
     final dynamic currentPost = controller.mixedPosts[postIndex];
+
+    Widget postWidget;
+
     if (currentPost['type'] == 'post') {
       final PostModel post = controller.posts[currentPost['index']];
 
@@ -245,7 +184,7 @@ class _PostsWidgetState extends State<PostsWidget> {
       final PostModel nonPromotedPostModel = post;
       final bool hasIncrementedView = controller.itemsWithIncrementedViews
           .contains(nonPromotedPostModel.postId);
-      return VisibilityDetector(
+      postWidget = VisibilityDetector(
         key: Key(postIndex.toString()),
         onVisibilityChanged: (VisibilityInfo info) {
           if (info.visibleFraction == 1.0 && !hasIncrementedView) {
@@ -269,11 +208,11 @@ class _PostsWidgetState extends State<PostsWidget> {
     } else if (currentPost['type'] == 'promotedPost') {
       final PostModel post = controller.promotedPosts[currentPost['index']];
 
-      // Handle regular non-promoted PostModel
+      // Handle promoted PostModel
       final PostModel promotedPostModel = post;
       final bool hasIncrementedView = controller.itemsWithIncrementedViews
           .contains(promotedPostModel.postId);
-      return VisibilityDetector(
+      postWidget = VisibilityDetector(
         key: Key(postIndex.toString()),
         onVisibilityChanged: (VisibilityInfo info) {
           if (info.visibleFraction == 1.0 && !hasIncrementedView) {
@@ -297,11 +236,11 @@ class _PostsWidgetState extends State<PostsWidget> {
     } else if (currentPost['type'] == 'market') {
       final MarketModel post = controller.promotedMarkets[currentPost['index']];
 
-      // Handle regular non-promoted PostModel
+      // Handle MarketModel
       final MarketModel marketModel = post;
       final bool hasIncrementedView =
           controller.itemsWithIncrementedViews.contains(marketModel.marketId);
-      return VisibilityDetector(
+      postWidget = VisibilityDetector(
         key: Key(postIndex.toString()),
         onVisibilityChanged: (VisibilityInfo info) {
           if (info.visibleFraction == 1.0 && !hasIncrementedView) {
@@ -324,9 +263,8 @@ class _PostsWidgetState extends State<PostsWidget> {
     } else if (currentPost['type'] == 'course') {
       final CourseModel post = controller.promotedCourses[currentPost['index']];
 
-      // Handle regular non-promoted PostModel
-      final CourseModel courseModel = post;
-      return Column(
+      // Handle CourseModel
+      postWidget = Column(
         mainAxisAlignment: MainAxisAlignment.start,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
@@ -338,11 +276,17 @@ class _PostsWidgetState extends State<PostsWidget> {
               size: 10,
             ),
           ),
-          CourseItem(course: courseModel),
+          CourseItem(course: post),
         ],
       );
     } else {
-      return const SizedBox();
+      postWidget = const SizedBox();
     }
+
+    widgets.add(postWidget);
+
+    return Column(
+      children: widgets,
+    );
   }
 }

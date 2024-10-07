@@ -1,4 +1,5 @@
 import 'package:business_bosses_v2/bbpro/controllers/clients_controller.dart';
+import 'package:business_bosses_v2/bbpro/controllers/shop_controller.dart';
 import 'package:business_bosses_v2/bbpro/presentation/clients.dart';
 import 'package:business_bosses_v2/bbpro/presentation/dashboard.dart';
 import 'package:business_bosses_v2/bbpro/presentation/ordersandinvoices.dart';
@@ -17,6 +18,7 @@ class Bottomnavscreen extends StatefulWidget {
 }
 
 class _BottomnavscreenState extends State<Bottomnavscreen> {
+  final ShopController shopController = Get.find();
   final ClientsController clientsController = Get.put(ClientsController());
   int _selectedIndex = 0;
 
@@ -102,5 +104,10 @@ class _BottomnavscreenState extends State<Bottomnavscreen> {
         ),
       ),
     );
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
   }
 }

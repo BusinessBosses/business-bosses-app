@@ -1,20 +1,19 @@
+import 'package:business_bosses_v2/bbpro/models/supplier_model.dart';
 import 'package:business_bosses_v2/bbpro/widgets/optionsbutton.dart';
 import 'package:business_bosses_v2/common/widgets/buttons/my_outlined_button.dart';
-import 'package:business_bosses_v2/features/marketplace/models/suppliers_model.dart';
-import 'package:business_bosses_v2/features/marketplace/presentation/expandedsupplierspage.dart';
 import 'package:business_bosses_v2/utils/theme/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 class SuppliersCard extends StatefulWidget {
-  final SuppliersModel? supplier;
+  final Vendor supplier;
   final bool? status;
   final Function()? onChangeSuppliersStatus;
   final Function()? onTap;
 
   const SuppliersCard({
     Key? key,
-    this.supplier,
+    required this.supplier,
     this.status,
     this.onChangeSuppliersStatus,
     this.onTap,
@@ -32,11 +31,7 @@ class _SuppliersCardState extends State<SuppliersCard> {
   @override
   Widget build(BuildContext context) {
     return InkWell(
-      onTap: () {
-        if (widget.supplier != null) {
-          Get.to(() => ExpandedSuppliersPage(supplier: widget.supplier!));
-        }
-      },
+      onTap: widget.onTap,
       borderRadius: BorderRadius.circular(radius),
       child: Ink(
         padding: const EdgeInsets.all(15.0),
@@ -44,29 +39,14 @@ class _SuppliersCardState extends State<SuppliersCard> {
             borderRadius: BorderRadius.circular(radius), color: Colors.white),
         child: Column(
           children: <Widget>[
-            if (widget.supplier?.isVerified ?? false)
-              Align(
-                alignment: Alignment.centerRight,
-                child: Container(
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
-                  decoration: BoxDecoration(
-                      color: Colors.blue.withAlpha(35),
-                      borderRadius: BorderRadius.circular(8)),
-                  child: const Text(
-                    'Verified',
-                    style: TextStyle(color: Colors.blue),
-                  ),
-                ),
-              ),
             const SizedBox(
               height: 10,
             ),
             ClipRRect(
               borderRadius: BorderRadius.circular(64),
               child: Image.network(
-                widget.supplier?.images?.isNotEmpty == true
-                    ? widget.supplier!.images![0]
+                widget.supplier.images.isNotEmpty == true
+                    ? widget.supplier.images[0]
                     : '',
                 height: 64,
                 width: 64,
@@ -82,7 +62,7 @@ class _SuppliersCardState extends State<SuppliersCard> {
             ),
             const SizedBox(height: 8.0),
             Text(
-              widget.supplier?.name ?? 'Unknown Supplier',
+              widget.supplier.name,
               maxLines: 2,
               overflow: TextOverflow.ellipsis,
               textAlign: TextAlign.center,
@@ -92,14 +72,14 @@ class _SuppliersCardState extends State<SuppliersCard> {
                   color: textColor.withAlpha(200)),
             ),
             Text(
-              widget.supplier?.description ?? 'No description available',
+              widget.supplier.description,
               maxLines: 2,
               overflow: TextOverflow.ellipsis,
               textAlign: TextAlign.center,
               style: Theme.of(context).textTheme.bodyMedium,
             ),
             Text(
-              widget.supplier?.location ?? 'Unknown location',
+              widget.supplier.location,
               maxLines: 2,
               overflow: TextOverflow.ellipsis,
               textAlign: TextAlign.center,

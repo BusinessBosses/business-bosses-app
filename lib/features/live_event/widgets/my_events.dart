@@ -19,7 +19,7 @@ class _MyEventsState extends State<MyEvents> {
   final LiveController liveController = Get.put(LiveController());
   @override
   Widget build(BuildContext context) {
-        String? previousscreen = Get.previousRoute;
+    String? previousscreen = Get.previousRoute;
     return Scaffold(
         appBar: AppBar(
           leading: IconButton(
@@ -31,7 +31,6 @@ class _MyEventsState extends State<MyEvents> {
           title: const Text(
             'My Events',
             textAlign: TextAlign.center,
-            style: TextStyle(fontSize: 20),
           ),
           centerTitle: true,
           actions: <Widget>[
@@ -69,7 +68,7 @@ class _MyEventsState extends State<MyEvents> {
                         ),
                       ],
                     )
-                  :  previousscreen == '/myProfileScreen'
+                  : previousscreen == '/myProfileScreen'
                       ? Center(
                           child: Column(
                             mainAxisAlignment: MainAxisAlignment.center,
@@ -125,7 +124,6 @@ class _MyEventsState extends State<MyEvents> {
                             'You Have Not Chosen To Attend Any Event!',
                           ),
                         ),
-      
         ));
   }
 }

@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:business_bosses_v2/bbpro/models/client_model.dart';
 import 'package:business_bosses_v2/common/models/api_response_model.dart';
 import 'package:business_bosses_v2/features/profile/controller/profile_controller.dart';
@@ -33,8 +35,36 @@ class ClientsController extends GetxController {
         ...response.data,
       });
       clients.add(newClient);
+      update();
       return true;
     } else {
+      return false;
+    }
+  }
+
+  Future<bool> updateClient(String id, Map<String, dynamic> data) async {
+    ApiResponseModel response =
+        await ApiService.put(path: 'clients/$id', body: data);
+    if (response.success) {
+      final int clientIndex =
+          clients.indexWhere((Client element) => element.id == id);
+      clients[clientIndex] = Client.fromMap(response.data);
+      update();
+      return true;
+    } else {
+      log(response.toMap().toString());
+      return false;
+    }
+  }
+
+  Future<bool> deleteClient(String id) async {
+    ApiResponseModel response = await ApiService.delete(path: 'clients/$id');
+    if (response.success) {
+      clients.removeWhere((Client element) => element.id == id);
+      update();
+      return true;
+    } else {
+      log(response.toMap().toString());
       return false;
     }
   }

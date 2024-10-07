@@ -53,7 +53,6 @@ class _DonationsHistoryState extends State<DonationsHistory> {
           title: const Text(
             'My Crowdfund History',
             textAlign: TextAlign.center,
-            style: TextStyle(fontSize: 20),
           ),
         ),
         body: Obx(

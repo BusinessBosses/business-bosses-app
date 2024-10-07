@@ -43,7 +43,6 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
           title: const Text(
             'Forgot password',
             textAlign: TextAlign.center,
-            style: TextStyle(fontSize: 20),
           ),
         ),
         body: Form(

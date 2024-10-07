@@ -58,82 +58,79 @@ class _RelevantPeopleTileState extends State<RelevantPeopleTile> {
           return _compareUsersByPhotoUrl(a, b);
         });
 
-        return Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 15.0),
-          child: ConstrainedBox(
-            constraints: BoxConstraints(
-              maxHeight: 223, // Set the maximum height to fit the content
+        return Column(
+          mainAxisAlignment: MainAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          mainAxisSize: MainAxisSize.max,
+          children: <Widget>[
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 15.0),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: <Widget>[
+                  const Text(
+                    'Follow Relevant People',
+                    style: TextStyle(fontWeight: FontWeight.w700, fontSize: 14),
+                  ),
+                  GestureDetector(
+                    onTap: () {
+                      Get.toNamed(Routes.relevantusersscreen);
+                    },
+                    child: Wrap(
+                        crossAxisAlignment: WrapCrossAlignment.center,
+                        children: <Widget>[
+                          const Text(
+                            'View all',
+                            style: TextStyle(fontSize: 11),
+                          ),
+                          const SizedBox(width: 5.0),
+                          SvgPicture.asset(
+                            'assets/svgs/nexticon.svg',
+                            // ignore: deprecated_member_use
+                            color: textColor,
+                            height: 8,
+                          ),
+                        ]),
+                  ),
+                ],
+              ),
             ),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              mainAxisSize: MainAxisSize.max,
-              children: [
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: <Widget>[
-                    const Text(
-                      'Follow Relevant People',
-                      style:
-                          TextStyle(fontWeight: FontWeight.w700, fontSize: 18),
-                    ),
-                    GestureDetector(
-                      onTap: () {
-                        Get.toNamed(Routes.relevantusersscreen);
+            const SizedBox(height: 8),
+            controller.loading.value
+                ? const Center(child: CircularProgressIndicator())
+                : SizedBox(
+                    height: 190,
+                    child: ListView.builder(
+                      scrollDirection: Axis.horizontal,
+                      itemCount: 11,
+                      shrinkWrap: true,
+                      itemBuilder: (BuildContext context, int index) {
+                        final UserModel currentUser =
+                            filteredConnections[index];
+
+                        bool checkConnected =
+                            profileController.myProfile.connecteds != null &&
+                                profileController.myProfile.connecteds!
+                                    .contains(currentUser.uid);
+
+                        return index == 0
+                            ? const SizedBox(width: 15)
+                            : Column(
+                                children: <Widget>[
+                                  ConnectionGridTile(
+                                    color: backgroundColor,
+                                    user: currentUser,
+                                    status: checkConnected,
+                                    onChangeConnectionStatus: () {
+                                      controller.connectToUser(currentUser);
+                                    },
+                                  ),
+                                ],
+                              );
                       },
-                      child: Wrap(
-                          crossAxisAlignment: WrapCrossAlignment.center,
-                          children: <Widget>[
-                            const Text(
-                              'View all',
-                              style: TextStyle(fontSize: 11),
-                            ),
-                            const SizedBox(width: 5.0),
-                            SvgPicture.asset(
-                              'assets/svgs/nexticon.svg',
-                              // ignore: deprecated_member_use
-                              color: textColor,
-                              height: 8,
-                            ),
-                          ]),
                     ),
-                  ],
-                ),
-                const SizedBox(height: 8),
-                controller.loading.value
-                    ? const Center(child: CircularProgressIndicator())
-                    : Expanded(
-                        child: ListView.builder(
-                          scrollDirection: Axis.horizontal,
-                          itemCount: 10,
-                          shrinkWrap: true,
-                          itemBuilder: (context, index) {
-                            final currentUser = filteredConnections[index];
-
-                            bool checkConnected =
-                                profileController.myProfile.connecteds !=
-                                        null &&
-                                    profileController.myProfile.connecteds!
-                                        .contains(currentUser.uid);
-
-                            return Column(
-                              children: [
-                                ConnectionGridTile(
-                                  color: backgroundColor,
-                                  user: currentUser,
-                                  status: checkConnected,
-                                  onChangeConnectionStatus: () {
-                                    controller.connectToUser(currentUser);
-                                  },
-                                ),
-                              ],
-                            );
-                          },
-                        ),
-                      ),
-              ],
-            ),
-          ),
+                  ),
+          ],
         );
       },
     );

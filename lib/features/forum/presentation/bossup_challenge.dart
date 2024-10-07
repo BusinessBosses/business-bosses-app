@@ -37,7 +37,6 @@ class _BossupChallengeState extends State<BossupChallenge> {
                 title: const Text(
                   'Challenge',
                   textAlign: TextAlign.center,
-                  style: TextStyle(fontSize: 20),
                 ),
               )
             : null,
@@ -129,7 +128,7 @@ class _BossupChallengeState extends State<BossupChallenge> {
                               ? const EdgeInsets.only(
                                   top: 15, left: 15, right: 15)
                               : const EdgeInsets.only(
-                                  left: 15,
+                                  left: 10,
                                 ),
                           decoration: BoxDecoration(
                             border:
@@ -140,7 +139,9 @@ class _BossupChallengeState extends State<BossupChallenge> {
                             ),
                           ),
                           child: Column(
-                            mainAxisAlignment: MainAxisAlignment.start,
+                            mainAxisAlignment: widget.ishome == false
+                                ? MainAxisAlignment.start
+                                : MainAxisAlignment.spaceBetween,
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: <Widget>[
                               if (widget.ishome == false)
@@ -311,11 +312,13 @@ class _BossupChallengeState extends State<BossupChallenge> {
                                         ],
                                       ),
                                       const Spacer(),
-                                      Padding(
-                                        padding:
-                                            const EdgeInsets.only(bottom: 10.0),
-                                        child: _getChallengeTimeLeft(category),
-                                      ),
+                                      if (widget.ishome == true)
+                                        Padding(
+                                          padding: const EdgeInsets.only(
+                                              bottom: 10.0),
+                                          child:
+                                              _getChallengeTimeLeft(category),
+                                        ),
                                     ],
                                   ),
                                 )
@@ -356,27 +359,28 @@ class _BossupChallengeState extends State<BossupChallenge> {
         crossAxisAlignment: CrossAxisAlignment.center,
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: <Widget>[
-          Container(
-            padding: const EdgeInsets.symmetric(horizontal: 7, vertical: 5),
-            decoration: BoxDecoration(
-              color: hasNotStarted
-                  ? Colors.grey.withAlpha(40)
-                  : Colors.green.withAlpha(40),
-              borderRadius: BorderRadius.circular(20),
-            ),
-            child: Text(
-              hasNotStarted
-                  ? _calculateTimeLeftToStart(category.startAt!)
-                  : category.endedAt != null
-                      ? _calculateTimeLeft(category.endedAt!)
-                      : 'Ongoing',
-              style: TextStyle(
-                color: hasNotStarted ? Colors.black54 : Colors.green,
-                fontSize: 10,
-                fontWeight: FontWeight.w700,
+          if (widget.ishome != true)
+            Container(
+              padding: const EdgeInsets.symmetric(horizontal: 7, vertical: 5),
+              decoration: BoxDecoration(
+                color: hasNotStarted
+                    ? Colors.grey.withAlpha(40)
+                    : Colors.green.withAlpha(40),
+                borderRadius: BorderRadius.circular(20),
+              ),
+              child: Text(
+                hasNotStarted
+                    ? _calculateTimeLeftToStart(category.startAt!)
+                    : category.endedAt != null
+                        ? _calculateTimeLeft(category.endedAt!)
+                        : 'Ongoing',
+                style: TextStyle(
+                  color: hasNotStarted ? Colors.black54 : Colors.green,
+                  fontSize: 10,
+                  fontWeight: FontWeight.w700,
+                ),
               ),
             ),
-          ),
           if (widget.ishome == true)
             GestureDetector(
               onTap: () {
@@ -388,6 +392,8 @@ class _BossupChallengeState extends State<BossupChallenge> {
                         ));
               },
               child: Container(
+                width: 142,
+                margin: const EdgeInsets.symmetric(horizontal: 0),
                 padding:
                     const EdgeInsets.symmetric(horizontal: 10, vertical: 7),
                 decoration: BoxDecoration(
@@ -399,12 +405,13 @@ class _BossupChallengeState extends State<BossupChallenge> {
                   ),
                 ),
                 child: Text(
-                  'Enter',
+                  'Enter Challenge',
                   style: TextStyle(
                     color: hasNotStarted ? Colors.grey : primaryColorLT,
                     fontWeight: FontWeight.bold,
                     fontSize: 11,
                   ),
+                  textAlign: TextAlign.center,
                 ),
               ),
             ),

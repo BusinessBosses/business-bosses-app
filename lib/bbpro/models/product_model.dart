@@ -70,8 +70,12 @@ class Product {
       itemType: json['itemType'],
       isActive: json['isActive'],
       storageLocation: json['storageLocation'],
-      productNumber: json['productNumber'],
-      quantity: json['quantity'],
+      productNumber: json['productNumber'] is int
+          ? json['productNumber']
+          : int.parse(json['productNumber']),
+      quantity: json['quantity'] is int
+          ? json['quantity']
+          : int.parse(json['quantity']),
       startAt: DateTime.parse(json['startAt']),
       endAt: DateTime.parse(json['endAt']),
       color: json['color'],

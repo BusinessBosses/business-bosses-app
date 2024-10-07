@@ -53,6 +53,7 @@ class _ChatScreenState extends State<ChatScreen> {
       child: GetBuilder<ChatController>(
         builder: (ChatController controller) {
           return Scaffold(
+            backgroundColor: Colors.white,
             appBar: _isSearching
                 ? SearchAppBar(
                     hintText: 'Search messages',
@@ -99,10 +100,31 @@ class _ChatScreenState extends State<ChatScreen> {
                     : ListView.builder(
                         itemCount: controller.chats.length,
                         itemBuilder: (BuildContext context, int i) {
-                          return ChatItem(
-                            myChatUser: controller.chats[i],
-                            chatController: controller,
-                            // key: ValueKey(_myChats[i].user?.uid),
+                          return Column(
+                            children: <Widget>[
+                              if (i == 0)
+                                Padding(
+                                  padding: const EdgeInsets.symmetric(
+                                      horizontal: 15.0),
+                                  child: Divider(
+                                    height: 0.5,
+                                    color: Colors.grey.withOpacity(0.3),
+                                  ),
+                                ),
+                              ChatItem(
+                                myChatUser: controller.chats[i],
+                                chatController: controller,
+                                // key: ValueKey(_myChats[i].user?.uid),
+                              ),
+                              Padding(
+                                padding: const EdgeInsets.symmetric(
+                                    horizontal: 15.0),
+                                child: Divider(
+                                  height: 0.5,
+                                  color: Colors.grey.withOpacity(0.3),
+                                ),
+                              ),
+                            ],
                           );
                         },
                       ),
@@ -225,7 +247,8 @@ class _ChatItemState extends State<ChatItem> {
             },
             child: Container(
               key: widget.key,
-              padding: const EdgeInsets.all(16.0),
+              padding:
+                  const EdgeInsets.only(right: 15.0, top: 10.0, bottom: 10.0),
               child: Row(
                 children: <Widget>[
                   if (getUnreadMessages()) const UnReadDot() else Container(),

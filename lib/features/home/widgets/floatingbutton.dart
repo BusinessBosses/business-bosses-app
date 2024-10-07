@@ -8,8 +8,10 @@ import '../../../navigation/routes.dart';
 import '../../../utils/theme/theme.dart';
 
 class Floatingbutton extends StatelessWidget {
+  final bool? isEvent;
   const Floatingbutton({
     Key? key,
+    this.isEvent,
   }) : super(key: key);
 
   @override
@@ -110,7 +112,7 @@ class Floatingbutton extends StatelessWidget {
         );
       },
       child: Padding(
-        padding: const EdgeInsets.only(bottom: 90, right: 15),
+        padding: EdgeInsets.only(bottom: isEvent == true ? 15 : 90, right: 15),
         child: Align(
           alignment: Alignment.bottomRight,
           child: Container(

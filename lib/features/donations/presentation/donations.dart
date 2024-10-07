@@ -65,7 +65,6 @@ class _DonationsPageState extends State<DonationsPage> {
                 title: const Text(
                   'CrowdFund',
                   textAlign: TextAlign.center,
-                  style: TextStyle(fontSize: 20),
                 ),
               )
             : null,
@@ -89,7 +88,7 @@ class _DonationsPageState extends State<DonationsPage> {
                               children: <Widget>[
                                 Container(
                                   width: double.infinity,
-                                  color: Colors.transparent,
+                                  color: backgroundColor,
                                   child: Column(
                                     children: <Widget>[
                                       const SizedBox(
@@ -553,7 +552,7 @@ class _DonationsPageState extends State<DonationsPage> {
                                               padding: EdgeInsets.only(
                                                   left: widget.ishome == false
                                                       ? 0
-                                                      : 15.0),
+                                                      : 10.0),
                                               child: DonationItem(
                                                 donation:
                                                     controller.donations[i],

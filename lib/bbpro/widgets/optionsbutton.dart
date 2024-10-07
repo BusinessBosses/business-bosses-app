@@ -6,24 +6,29 @@ class OptionsButton extends StatelessWidget {
   final Color? borderColor;
   final bool? isExpanded;
   final dynamic item;
-  final Function? onEdit;
+  final VoidCallback? onEdit;
+  final VoidCallback? onDelete;
+  final VoidCallback? onView;
 
   const OptionsButton({
     Key? key,
     this.padding,
     this.borderColor,
-    this.isExpanded,
+    this.isExpanded = false,
     this.item,
     this.onEdit,
+    this.onDelete,
+    this.onView,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     final List<PopupMenuEntry<String>> myPopupMore = <PopupMenuEntry<String>>[
       if (isExpanded == true)
-        const PopupMenuItem<String>(
+        PopupMenuItem<String>(
+          onTap: onView,
           value: 'View',
-          child: Text(
+          child: const Text(
             'View',
             style: bodyText2,
           ),
@@ -32,9 +37,10 @@ class OptionsButton extends StatelessWidget {
         const PopupMenuDivider(
           height: 0.0,
         ),
-      const PopupMenuItem<String>(
+      PopupMenuItem<String>(
         value: 'Edit',
-        child: Text(
+        onTap: onEdit,
+        child: const Text(
           'Edit',
           style: bodyText2,
         ),
@@ -42,9 +48,10 @@ class OptionsButton extends StatelessWidget {
       const PopupMenuDivider(
         height: 0.0,
       ),
-      const PopupMenuItem<String>(
+      PopupMenuItem<String>(
         value: 'Delete',
-        child: Text(
+        onTap: onDelete,
+        child: const Text(
           'Delete',
           style: bodyText2,
         ),
@@ -82,6 +89,9 @@ class OptionsButton extends StatelessWidget {
               }
             } else if (value == 'Delete') {
               // Delete action
+              if (onDelete != null) {
+                onDelete!();
+              }
               if (item != null) {
                 // Implement delete logic here
               }
@@ -99,7 +109,11 @@ class OptionsButton extends StatelessWidget {
             width: 1,
           ),
         ),
-        child: const Center(child: Icon(Icons.more_vert)),
+        child: const Center(
+          child: Icon(
+            Icons.more_vert,
+          ),
+        ),
       ),
     );
   }
