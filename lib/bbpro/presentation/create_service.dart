@@ -11,7 +11,7 @@ import 'package:business_bosses_v2/services/api_service.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:intl/intl.dart';
+
 import 'package:get/get.dart';
 import 'package:country_list_pick/country_list_pick.dart';
 import 'package:business_bosses_v2/bbpro/widgets/button.dart';
@@ -458,31 +458,28 @@ class _CreateServiceListingState extends State<CreateServiceListing>
     );
   }
 
-  String _formatDate(DateTime? dateTime) {
-    if (dateTime == null) {
-      return 'Select date';
-    }
-    return DateFormat('yyyy-MM-dd').format(dateTime);
-  }
+  // String _formatDate(DateTime? dateTime) {
+  //   if (dateTime == null) {
+  //     return 'Select date';
+  //   }
+  //   return DateFormat('yyyy-MM-dd').format(dateTime);
+  // }
 
-  Future<void> _selectDate(BuildContext context) async {
-    final DateTime? picked = await showDatePicker(
-      context: context,
-      initialDate: availableTime ?? DateTime.now(),
-      firstDate: DateTime(2000),
-      lastDate: DateTime(2101),
-    );
-    if (picked != null && picked != availableTime) {
-      setState(() {
-        availableTime = picked;
-      });
-    }
-  }
+  // Future<void> _selectDate(BuildContext context) async {
+  //   final DateTime? picked = await showDatePicker(
+  //     context: context,
+  //     initialDate: availableTime ?? DateTime.now(),
+  //     firstDate: DateTime(2000),
+  //     lastDate: DateTime(2101),
+  //   );
+  //   if (picked != null && picked != availableTime) {
+  //     setState(() {
+  //       availableTime = picked;
+  //     });
+  //   }
+  // }
 
   void _submitForm() async {
-    print('${_startTime.hour}:${_startTime.minute}');
-    print(_endTime.toString());
-
     if (_serviceNameController.text.isEmpty) {
       showSnackbar(
         message: 'Service Name is Mandatory!',
@@ -492,6 +489,12 @@ class _CreateServiceListingState extends State<CreateServiceListing>
     } else if (_priceController.text.isEmpty) {
       showSnackbar(
         message: 'Price is Mandatory!',
+        error: true,
+      );
+      return;
+    } else if (selectedSubmitWeekdays.isEmpty) {
+      showSnackbar(
+        message: 'Selecting a day is Mandatory!',
         error: true,
       );
       return;
@@ -527,7 +530,14 @@ class _CreateServiceListingState extends State<CreateServiceListing>
         'availableTime': availableTime?.toIso8601String(),
         'serviceType': serviceType,
         'itemType': 'service',
-        'isActive': true
+        'isActive': _isSwitched,
+        'serviceAvailability': <String, dynamic>{
+          'dayOfWeek': selectedSubmitWeekdays,
+          'startTime': '${_startTime.hour}:${_startTime.minute}:00',
+          'endTime': '${_endTime.hour}:${_endTime.minute}:00',
+          'startDate': '2023-10-01',
+          'endDate': '2023-10-01'
+        }
       };
 
       // For demonstration, print the map
@@ -542,8 +552,6 @@ class _CreateServiceListingState extends State<CreateServiceListing>
           // Handle error
           showSnackbar(message: 'Error Adding Service!', error: true);
         }
-      }).catchError((dynamic error) {
-        Get.snackbar('Error', 'An unexpected error occurred');
       });
       setState(() {
         isSubmitted = false;

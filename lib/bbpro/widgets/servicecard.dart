@@ -44,8 +44,8 @@ class _ServiceCardState extends State<ServiceCard> {
             width: double.infinity,
             child: ClipRRect(
               borderRadius: BorderRadius.circular(10),
-              child: NetworkImageWithPlaceHolder(
-                imageUrl: widget.service?.images?[0],
+              child: const NetworkImageWithPlaceHolder(
+                imageUrl: '',
                 radius: radius,
                 placeHolder: Icons.person,
                 iconSize: 0.0,
