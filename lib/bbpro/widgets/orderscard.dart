@@ -16,7 +16,7 @@ class OrdersWidget extends StatefulWidget {
 }
 
 class _OrdersWidgetState extends State<OrdersWidget> {
-  bool isHidden = true;
+  bool isHidden = false;
   final OrderController orderController = Get.put(OrderController());
   @override
   Widget build(BuildContext context) {

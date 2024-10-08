@@ -40,7 +40,7 @@ class _GotoshopWidgetState extends State<GotoshopWidget> {
                       child: ClipRRect(
                         borderRadius: BorderRadius.circular(10),
                         child: NetworkImageWithPlaceHolder(
-                          imageUrl: shopController.shop!.image ?? '',
+                          imageUrl: shopController.shop?.image ?? '',
                           radius: 8,
                           placeHolder: Icons.person,
                           iconSize: 22.0,

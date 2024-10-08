@@ -5,22 +5,25 @@ import 'package:business_bosses_v2/bbpro/presentation/dashboard.dart';
 import 'package:business_bosses_v2/bbpro/presentation/ordersandinvoices.dart';
 import 'package:business_bosses_v2/bbpro/presentation/projects.dart';
 import 'package:business_bosses_v2/bbpro/presentation/setup.dart';
+import 'package:business_bosses_v2/features/profile/controller/profile_controller.dart';
 import 'package:business_bosses_v2/utils/theme/theme.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 
 class Bottomnavscreen extends StatefulWidget {
-  const Bottomnavscreen({super.key});
+  final int? initialindex;
+  const Bottomnavscreen({super.key, this.initialindex});
 
   @override
   _BottomnavscreenState createState() => _BottomnavscreenState();
 }
 
 class _BottomnavscreenState extends State<Bottomnavscreen> {
-  final ShopController shopController = Get.find();
+  final ShopController shopController = Get.put(ShopController());
   final ClientsController clientsController = Get.put(ClientsController());
-  int _selectedIndex = 0;
+  final ProfileController profileController = Get.put(ProfileController());
+  late int _selectedIndex;
 
   static const List<Widget> _widgetOptions = <Widget>[
     Dashboard(),
@@ -30,6 +33,12 @@ class _BottomnavscreenState extends State<Bottomnavscreen> {
     Setup(),
   ];
 
+  @override
+  void initState() {
+    super.initState();
+    _selectedIndex = widget.initialindex ?? 0;
+  }
+
   void _onItemTapped(int index) {
     setState(() {
       _selectedIndex = index;
@@ -37,8 +46,12 @@ class _BottomnavscreenState extends State<Bottomnavscreen> {
   }
 
   Future<bool> _onWillPop() async {
-    // If not on the Dashboard, go back to the Dashboard
-
+    final newIndex = Get.arguments;
+    if (newIndex != null && newIndex is int) {
+      setState(() {
+        _selectedIndex = newIndex;
+      });
+    }
     return true;
   }
 
