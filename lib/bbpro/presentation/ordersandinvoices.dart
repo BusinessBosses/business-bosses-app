@@ -90,10 +90,9 @@ class _OrdersScreenState extends State<OrdersScreen>
               padding: const EdgeInsets.only(right: 10.0, bottom: 15),
               child: CircleAvatar(
                 backgroundColor: prosemibackColor,
-                radius: 30, // This sets the circle's radius
+                radius: 30,
                 child: Padding(
-                  padding: const EdgeInsets.all(
-                      10), // Adjust padding to fit the icon nicely
+                  padding: const EdgeInsets.all(10),
                   child: SvgPicture.asset(
                     'assets/svgs/notificationicon.svg',
                     height: 20,

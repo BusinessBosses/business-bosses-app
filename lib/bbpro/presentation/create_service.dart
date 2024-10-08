@@ -6,6 +6,7 @@ import 'package:business_bosses_v2/bbpro/widgets/dropdown.dart';
 import 'package:business_bosses_v2/bbpro/widgets/edittext.dart';
 import 'package:business_bosses_v2/bbpro/widgets/multipleedit.dart';
 import 'package:business_bosses_v2/bbpro/widgets/switchwidget.dart';
+import 'package:business_bosses_v2/features/marketplace/widgets/currency.dart';
 import 'package:business_bosses_v2/features/profile/controller/profile_controller.dart';
 import 'package:business_bosses_v2/services/api_service.dart';
 import 'package:flutter/material.dart';
@@ -40,6 +41,7 @@ class _CreateServiceListingState extends State<CreateServiceListing>
   final TextEditingController _priceController = TextEditingController();
   final TextEditingController _descriptionController = TextEditingController();
   final TextEditingController _discountController = TextEditingController();
+  final TextEditingController currencyController = TextEditingController();
 
   bool isSubmitted = false;
   bool _isSwitched = false;
@@ -91,6 +93,9 @@ class _CreateServiceListingState extends State<CreateServiceListing>
       serviceType = widget.service!.serviceType;
       paymentMethod = widget.service!.paymentMethod;
     }
+    currencyController.text = shopController.shop?.location != null
+        ? '${currencyValues[shopController.shop!.location.toString()]}'
+        : 'USD';
   }
 
   Future<void> _pickImage() async {
@@ -146,8 +151,10 @@ class _CreateServiceListingState extends State<CreateServiceListing>
               children: <Widget>[
                 Expanded(
                   child: CustomEditText(
+                    iscurrencyfield: true,
+                    currencycontroller: currencyController,
                     caption: 'Price',
-                    hintText: 'Enter price in USD',
+                    hintText: 'Enter price',
                     controller: _priceController,
                     inputType: TextInputType.number,
                     validator: (String? value) {

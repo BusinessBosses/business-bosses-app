@@ -1,3 +1,4 @@
+import 'package:business_bosses_v2/bbpro/controllers/shop_controller.dart';
 import 'package:business_bosses_v2/bbpro/models/project_model.dart';
 import 'package:business_bosses_v2/bbpro/models/task_model.dart';
 import 'package:business_bosses_v2/bbpro/widgets/addprojectbottomsheet.dart';
@@ -6,6 +7,7 @@ import 'package:business_bosses_v2/bbpro/widgets/edittext.dart';
 import 'package:business_bosses_v2/bbpro/widgets/taskitem.dart';
 import 'package:business_bosses_v2/bbpro/controllers/project_controller.dart';
 import 'package:business_bosses_v2/common/dialogs/snackbar.dart';
+import 'package:business_bosses_v2/features/marketplace/widgets/currency.dart';
 import 'package:business_bosses_v2/features/profile/controller/profile_controller.dart';
 import 'package:business_bosses_v2/utils/theme/theme.dart';
 import 'package:flutter/material.dart';
@@ -25,12 +27,14 @@ class _AddprojectState extends State<Addproject> {
   final TextEditingController nameController = TextEditingController();
   final TextEditingController descriptionController = TextEditingController();
   final TextEditingController budgetController = TextEditingController();
+  final TextEditingController currencyController = TextEditingController();
   final ProjectController projectController = Get.put(ProjectController());
   final ProfileController profileController = Get.find();
   final FocusNode _taskNameFocusNode = FocusNode();
   final List<Map<String, dynamic>> tasks = <Map<String, dynamic>>[];
   final TextEditingController taskNameController = TextEditingController();
   final TextEditingController expenseController = TextEditingController();
+  ShopController shopController = Get.find();
   @override
   void initState() {
     super.initState();
@@ -49,6 +53,10 @@ class _AddprojectState extends State<Addproject> {
             }));
       }
     }
+
+    currencyController.text = shopController.shop?.location != null
+        ? '${currencyValues[shopController.shop!.location.toString()]}'
+        : 'USD';
 
     WidgetsBinding.instance.addPostFrameCallback((_) {
       _taskNameFocusNode.requestFocus();
@@ -76,6 +84,7 @@ class _AddprojectState extends State<Addproject> {
       isScrollControlled: true,
       builder: (BuildContext context) {
         return AddProjectBottomSheet(
+          currencyController: currencyController,
           taskNameController: taskNameController,
           expenseController: expenseController,
           startDate: startDate!,
@@ -128,6 +137,7 @@ class _AddprojectState extends State<Addproject> {
       isScrollControlled: true,
       builder: (BuildContext context) {
         return AddProjectBottomSheet(
+          currencyController: currencyController,
           taskNameController: taskNameController,
           expenseController: expenseController,
           startDate: startDate,
@@ -210,6 +220,7 @@ class _AddprojectState extends State<Addproject> {
                 ),
                 const SizedBox(height: 15),
                 CustomEditText(
+                  currencycontroller: currencyController,
                   iscurrencyfield: true,
                   caption: 'Project Budget',
                   hintText: '0.00',
