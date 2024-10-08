@@ -10,16 +10,29 @@ class ClientsController extends GetxController {
   final ProfileController profileController = Get.find();
   RxList<Client> clients = RxList<Client>(<Client>[]);
   RxBool loading = RxBool(true);
+  final Map<ClientType, List<Client>> clientsType =
+      <ClientType, List<Client>>{};
+  final List<Client> allclients = <Client>[];
 
   Future<void> initClients(String userId) async {
     loading(true);
     clients.clear();
+    allclients.clear();
     ApiResponseModel response =
         await ApiService.get(path: 'clients/user-clients/$userId');
     if (response.success) {
       for (int i = 0; i < response.data['rows'].length; i++) {
         clients.add(Client.fromMap(response.data['rows'][i]));
       }
+    }
+    for (ClientType clientType in ClientType.values) {
+      clientsType[clientType] = <Client>[];
+    }
+    for (ClientType clientType in ClientType.values) {
+      List<Client> allclients =
+          clients.where((Client client) => client.type == clientType).toList();
+      clientsType[clientType] = allclients;
+      allclients.addAll(allclients);
     }
     loading(false);
     update();

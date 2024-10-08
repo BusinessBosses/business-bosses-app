@@ -12,7 +12,6 @@ import 'package:business_bosses_v2/bbpro/controllers/clients_controller.dart';
 import 'package:business_bosses_v2/bbpro/models/client_model.dart';
 import 'package:business_bosses_v2/bbpro/presentation/addclient.dart';
 import 'package:business_bosses_v2/common/widgets/safety_model.dart';
-import 'package:business_bosses_v2/features/marketplace/presentation/expandedsupplierspage.dart';
 import 'package:business_bosses_v2/utils/theme/theme.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -34,12 +33,10 @@ class _ClientsScreenState extends State<ClientsScreen>
   bool? _lastMoveRight;
   late TabController _tabController;
   late TabController _viewController;
-  final List<Client> _allclients = <Client>[];
   bool loading = true;
 
   final ClientsController clientsController = Get.put(ClientsController());
   final ShopController shopController = Get.find();
-  final Map<ClientType, List<Client>> _clients = <ClientType, List<Client>>{};
 
   void _scrollToSection(int index) {
     final double offset = index * MediaQuery.of(context).size.width * 0.9;
@@ -58,22 +55,11 @@ class _ClientsScreenState extends State<ClientsScreen>
         TabController(length: ClientType.values.length, vsync: this);
     _viewController = TabController(length: 2, vsync: this);
 
-    for (ClientType clientType in ClientType.values) {
-      _clients[clientType] = <Client>[];
-    }
-
     clientsController
         .initClients(clientsController.profileController.myProfile.uid)
         .then((_) {
       setState(() {
-        for (ClientType clientType in ClientType.values) {
-          List<Client> allclients = clientsController.clients
-              .where((Client client) => client.type == clientType)
-              .toList();
-          _clients[clientType] = allclients;
-          _allclients.addAll(allclients);
-          loading = false;
-        }
+        loading = false;
       });
     });
   }
@@ -142,7 +128,7 @@ class _ClientsScreenState extends State<ClientsScreen>
               backgroundColor: backgroundColor,
               listofitems: ClientType.values.toList(),
               itemToString: (ClientType status) =>
-                  '${status.displayTitle.toString().split('.').last} (${status == ClientType.allclients ? _allclients.length : _clients[status]!.length.toString()})',
+                  '${status.displayTitle.toString().split('.').last} (${status == ClientType.allclients ? clientsController.clients.length : (clientsController.clientsType[status] == null ? '0' : clientsController.clientsType[status]!.length.toString())})',
             ),
             Expanded(
               child: Padding(
@@ -189,7 +175,7 @@ class _ClientsScreenState extends State<ClientsScreen>
                                           _lastMoveRight = null;
                                           _timer?.cancel();
                                         },
-                                        allclients: _allclients,
+                                        allclients: clientsController.clients,
                                       ),
                                     ),
                                   )
