@@ -57,16 +57,21 @@ class ProjectController extends GetxController {
     update();
   }
 
-  Future<void> updateProject(
+  Future<bool> updateProject(
       String projectId, Map<String, dynamic> data) async {
     try {
       // Call your API to update the task's status in the backend
-      await ApiService.put(path: 'projects/$projectId', body: data);
+      final ApiResponseModel response =
+          await ApiService.put(path: 'projects/$projectId', body: data);
+      if (response.success) {
+        return true;
+      }
+      return false;
       // You can also handle local state or cache updates if necessary
     } catch (e) {
       // Handle any errors that occur during the update
+      return false;
     }
-    update();
   }
 
   Future<bool> deleteProject(String projectId) async {

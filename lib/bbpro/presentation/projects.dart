@@ -136,66 +136,69 @@ class _ProjectsState extends State<Projects>
                 ? const Center(
                     child: CircularProgressIndicator(),
                   )
-                : projectController.projects.isEmpty
-                    ? const Center(
-                        child: SafetyModel(
-                        isLoading: false,
-                        title: 'No Projects Found!',
-                      ))
-                    : Padding(
-                        padding: const EdgeInsets.only(bottom: 10),
-                        child: CustomScrollView(
-                          scrollDirection: Axis.horizontal,
-                          controller: _mainListScrollController,
-                          slivers: <Widget>[
-                            ...ProjectStatus.values.map(
-                              (ProjectStatus status) => SliverToBoxAdapter(
-                                child: RowStatusCard(
-                                  allProjects: _allProjects,
-                                  projects: _projects[status] ?? <Project>[],
-                                  projectStatus: status,
-                                  screenSize: screenSize,
-                                  taskAccepted: (Project project,
-                                      ProjectStatus newStatus) async {
-                                    setState(() {
-                                      _projects[project.status]
-                                          ?.remove(project);
-                                      _projects[newStatus]?.add(
-                                        Project(
-                                          id: project.id,
-                                          userId: project.userId,
-                                          name: project.name,
-                                          amount: project.amount,
-                                          status: newStatus,
-                                          createdAt: project.createdAt,
-                                          description: project.description,
-                                          duration: project.duration,
-                                          tasks: project.tasks,
-                                        ),
-                                      );
-                                      projectController.updateProject(
-                                          project.id, <String, dynamic>{
-                                        'status': newStatus.toString()
-                                      });
-                                    });
-                                  },
-                                  onDrag: (bool isRight) {
-                                    if (_lastMoveRight == isRight) {
-                                      return;
-                                    }
-                                    _lastMoveRight = isRight;
-                                    _moveMainList(isRight);
-                                  },
-                                  cancelDrag: () {
-                                    _lastMoveRight = null;
-                                    _timer?.cancel();
-                                  },
-                                ),
-                              ),
-                            )
-                          ],
-                        ),
-                      ),
+                : Obx(
+                    () => projectController.projects.isEmpty
+                        ? const Center(
+                            child: SafetyModel(
+                            isLoading: false,
+                            title: 'No Projects Found!',
+                          ))
+                        : Padding(
+                            padding: const EdgeInsets.only(bottom: 10),
+                            child: CustomScrollView(
+                              scrollDirection: Axis.horizontal,
+                              controller: _mainListScrollController,
+                              slivers: <Widget>[
+                                ...ProjectStatus.values.map(
+                                  (ProjectStatus status) => SliverToBoxAdapter(
+                                    child: RowStatusCard(
+                                      allProjects: _allProjects,
+                                      projects:
+                                          _projects[status] ?? <Project>[],
+                                      projectStatus: status,
+                                      screenSize: screenSize,
+                                      taskAccepted: (Project project,
+                                          ProjectStatus newStatus) async {
+                                        setState(() {
+                                          _projects[project.status]
+                                              ?.remove(project);
+                                          _projects[newStatus]?.add(
+                                            Project(
+                                              id: project.id,
+                                              userId: project.userId,
+                                              name: project.name,
+                                              amount: project.amount,
+                                              status: newStatus,
+                                              createdAt: project.createdAt,
+                                              description: project.description,
+                                              duration: project.duration,
+                                              tasks: project.tasks,
+                                            ),
+                                          );
+                                          projectController.updateProject(
+                                              project.id, <String, dynamic>{
+                                            'status': newStatus.toString()
+                                          });
+                                        });
+                                      },
+                                      onDrag: (bool isRight) {
+                                        if (_lastMoveRight == isRight) {
+                                          return;
+                                        }
+                                        _lastMoveRight = isRight;
+                                        _moveMainList(isRight);
+                                      },
+                                      cancelDrag: () {
+                                        _lastMoveRight = null;
+                                        _timer?.cancel();
+                                      },
+                                    ),
+                                  ),
+                                )
+                              ],
+                            ),
+                          ),
+                  ),
           ),
         ],
       ),

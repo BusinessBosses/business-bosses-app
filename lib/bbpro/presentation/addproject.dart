@@ -318,19 +318,29 @@ class _AddprojectState extends State<Addproject> {
                         'duration': '60days',
                         'tasks': tasks,
                       };
-                      final bool response =
-                          await projectController.addProject(data);
+                      final bool response;
+                      if (widget.project != null) {
+                        response = await projectController.updateProject(
+                            widget.project!.id, data);
+                      } else {
+                        response = await projectController.addProject(data);
+                      }
                       if (response) {
                         showSnackbar(
-                          message: 'Project Added Succesfully!',
+                          message: widget.project != null
+                              ? 'Project Updated Successfully!'
+                              : 'Project Added Successfully!',
                         );
                         await projectController
-                            .initTasks(profileController.myProfile.uid);
+                            .initProjects(profileController.myProfile.uid);
                         // ignore: use_build_context_synchronously
                         Navigator.pop(context);
                       } else {
                         showSnackbar(
-                            message: 'Error While Adding Project', error: true);
+                            message: widget.project != null
+                                ? 'Error While Editing Project!'
+                                : 'Error While Adding Project',
+                            error: true);
 
                         setState(() {
                           isSubmit = false;
