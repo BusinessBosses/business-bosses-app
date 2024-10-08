@@ -172,9 +172,22 @@ class _DashboardState extends State<Dashboard> {
               shrinkWrap: true,
               itemCount: 4,
               itemBuilder: (BuildContext context, int index) {
-                return InfoCard(
-                  cardName: titles[index],
-                  value: '\$20k',
+                return GestureDetector(
+                  onTap: () {
+                    if (index == 0) {
+                      Get.to(() => const Addclient());
+                    } else if (index == 1) {
+                      // Add navigation for Expenses
+                    } else if (index == 2) {
+                      // Add navigation for To-do tasks
+                    } else if (index == 3) {
+                      Get.to(() => const CreateOrder());
+                    }
+                  },
+                  child: InfoCard(
+                    cardName: titles[index],
+                    value: '\$20k',
+                  ),
                 );
               },
             ),

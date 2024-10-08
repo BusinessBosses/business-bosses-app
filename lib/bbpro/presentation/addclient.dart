@@ -132,7 +132,7 @@ class _AddclientState extends State<Addclient> {
 
                   if (_selectedImage == null) {
                     showSnackbar(
-                      message: 'Please select a client image!',
+                      message: 'Please add a client image!',
                       error: true,
                     );
                     setState(() {
