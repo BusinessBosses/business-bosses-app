@@ -98,6 +98,7 @@ class _AddclientState extends State<Addclient> {
                     ),
                     const SizedBox(height: 15),
                     CustomDropdownWidget(
+                      hintText: 'Select Client Type',
                       caption: 'Client Type',
                       items: ClientType.values
                           .skip(1) // Skip the first item
