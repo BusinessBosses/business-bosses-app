@@ -283,6 +283,8 @@ class _CreateServiceListingState extends State<CreateServiceListing>
                 onChanged: (CountryCode? code) {
                   setState(() {
                     location = code?.name;
+                    currencyController.text =
+                        '${currencyValues[code?.name.toString()]}';
                   });
                 },
                 useSafeArea: false,
