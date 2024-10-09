@@ -103,7 +103,7 @@ class _TaskitemState extends State<Taskitem> {
           ],
         ),
         if (widget.taskexpense != null)
-          Text(widget.isPackage != null
+          Text(widget.isPackage == null
               ? 'Expense: ${widget.taskexpense}'
               : 'Price: ${widget.taskexpense}'),
         if (startDateTime != null)
