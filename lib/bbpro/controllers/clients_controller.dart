@@ -32,7 +32,7 @@ class ClientsController extends GetxController {
       List<Client> allclients =
           clients.where((Client client) => client.type == clientType).toList();
       clientsType[clientType] = allclients;
-      allclients.addAll(allclients);
+      this.allclients.addAll(allclients);
     }
     loading(false);
     update();
