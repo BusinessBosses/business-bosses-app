@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:business_bosses_v2/action/action.dart';
 import 'package:business_bosses_v2/common/widgets/safety_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
@@ -26,8 +27,6 @@ class _OrdersScreenState extends State<OrdersScreen>
     with SingleTickerProviderStateMixin {
   Timer? _timer;
   bool? _lastMoveRight;
-  final List<Order> _allorders = <Order>[];
-  final Map<OrderStatus, List<Order>> _orders = <OrderStatus, List<Order>>{};
   late TabController _tabController;
   final ScrollController _mainListScrollController = ScrollController();
   final ClientsController clientsController = Get.put(ClientsController());
@@ -40,23 +39,13 @@ class _OrdersScreenState extends State<OrdersScreen>
     _tabController =
         TabController(length: ClientType.values.length, vsync: this);
 
-    for (OrderStatus status in OrderStatus.values) {
-      _orders[status] = <Order>[];
-    }
     // Initialize tasks
     orderController
         .initOrders(orderController.profileController.myProfile.uid)
         .then((_) {
       setState(() {
-        for (OrderStatus status in OrderStatus.values) {
-          List<Order> statusOrders = orderController.orders
-              .where((Order order) => order.status == status)
-              .toList();
-          _orders[status] = statusOrders;
-          _allorders.addAll(statusOrders); // Add tasks to alltasks
-          loading = false;
-          orderController.loading.value = false;
-        }
+        loading = false;
+        orderController.loading.value = false;
       });
     });
   }
@@ -112,6 +101,13 @@ class _OrdersScreenState extends State<OrdersScreen>
               },
               onAddProjectPressed: () {
                 // Handle "Add Project" pressed
+                if (clientsController.clients.isEmpty) {
+                  showSnackBar(
+                    context,
+                    message: 'You have to add a client to create order!',
+                  );
+                  return;
+                }
                 Get.to(() => const CreateOrder());
               },
             ),
@@ -124,7 +120,7 @@ class _OrdersScreenState extends State<OrdersScreen>
               backgroundColor: backgroundColor,
               listofitems: OrderStatus.values.toList(),
               itemToString: (OrderStatus status) =>
-                  '${status.displayTitle.toString().split('.').last} (${status == OrderStatus.allorders ? _allorders.length : _orders[status]!.length.toString()})',
+                  '${status.displayTitle.toString().split('.').last} (${status == OrderStatus.allorders ? orderController.orders.length : (orderController.ordersStatus[status] == null ? '0' : orderController.ordersStatus[status]!.length.toString())})',
             ),
             Expanded(
               child: Padding(
@@ -149,7 +145,8 @@ class _OrdersScreenState extends State<OrdersScreen>
                                   child: RowStatusCard(
                                     orders: orderController.orders
                                         .where((Order order) =>
-                                            order.deliveryMethod == status)
+                                            order.status.displayTitle ==
+                                            status.displayTitle)
                                         .toList(),
                                     orderStatus: status,
                                     screenSize: screenSize,
@@ -170,7 +167,7 @@ class _OrdersScreenState extends State<OrdersScreen>
                                       _lastMoveRight = null;
                                       _timer?.cancel();
                                     },
-                                    allorders: _allorders,
+                                    allorders: orderController.orders,
                                   ),
                                 ),
                               )

@@ -246,42 +246,40 @@ class _OrderProductScreenState extends State<OrderProductScreen>
                       ],
                     ),
                   ]),
-                  Container(
-                    child: Column(
-                      children: <Widget>[
-                        const OrderPreviewCard(
-                          title: 'AI Robot with Intel Iris',
-                          size: 'Medium 24',
-                          color: 'Black',
-                          price: 10000,
-                          deliveryDays: 5,
-                          deliveryLocation: 'In Person, London',
-                          imageUrl: '',
-                        ),
-                        const SizedBox(
-                          height: 15,
-                        ),
-                        const OrderPaymentMethodsWidget(),
-                        const SizedBox(
-                          height: 15,
-                        ),
-                        const OrderSummaryWidget(),
-                        const SizedBox(
-                          height: 15,
-                        ),
-                        SizedBox(
-                          width: double.infinity,
-                          child: ProCustomButton(
-                            onPressed: () {},
-                            text: 'Next ',
-                            icon: SvgPicture.asset(
-                              'assets/svgs/nexticon.svg',
-                              color: Colors.white,
-                            ),
+                  Column(
+                    children: <Widget>[
+                      const OrderPreviewCard(
+                        title: 'AI Robot with Intel Iris',
+                        size: 'Medium 24',
+                        color: 'Black',
+                        price: 10000,
+                        deliveryDays: 5,
+                        deliveryLocation: 'In Person, London',
+                        imageUrl: '',
+                      ),
+                      const SizedBox(
+                        height: 15,
+                      ),
+                      const OrderPaymentMethodsWidget(),
+                      const SizedBox(
+                        height: 15,
+                      ),
+                      const OrderSummaryWidget(),
+                      const SizedBox(
+                        height: 15,
+                      ),
+                      SizedBox(
+                        width: double.infinity,
+                        child: ProCustomButton(
+                          onPressed: () {},
+                          text: 'Next ',
+                          icon: SvgPicture.asset(
+                            'assets/svgs/nexticon.svg',
+                            color: Colors.white,
                           ),
-                        )
-                      ],
-                    ),
+                        ),
+                      )
+                    ],
                   ),
                   Column(
                     children: <Widget>[

@@ -1,10 +1,14 @@
+import 'package:business_bosses_v2/bbpro/controllers/clients_controller.dart';
+import 'package:business_bosses_v2/bbpro/presentation/addclient.dart';
 import 'package:business_bosses_v2/bbpro/widgets/optionsbutton.dart';
 import 'package:business_bosses_v2/bbpro/models/client_model.dart';
+import 'package:business_bosses_v2/common/dialogs/snackbar.dart';
 import 'package:business_bosses_v2/utils/theme/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:get/get.dart';
 
-class ClientWidget extends StatelessWidget {
+class ClientWidget extends StatefulWidget {
   final Client client;
   final Color bgcolor;
   final bool? isExpanded;
@@ -17,11 +21,17 @@ class ClientWidget extends StatelessWidget {
   });
 
   @override
+  State<ClientWidget> createState() => _ClientWidgetState();
+}
+
+class _ClientWidgetState extends State<ClientWidget> {
+  @override
   Widget build(BuildContext context) {
+    final ClientsController clientsController = Get.find();
     return Container(
       decoration: BoxDecoration(
           border: Border.all(
-            color: bgcolor.withAlpha(50), // Border color
+            color: widget.bgcolor.withAlpha(50), // Border color
             width: 0.5, // Border width
           ),
           color: Colors.white,
@@ -38,7 +48,8 @@ class ClientWidget extends StatelessWidget {
               children: <Widget>[
                 Container(
                   decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(3), color: bgcolor),
+                      borderRadius: BorderRadius.circular(3),
+                      color: widget.bgcolor),
                   padding:
                       const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
                   child: Wrap(
@@ -53,14 +64,14 @@ class ClientWidget extends StatelessWidget {
                           width: 5,
                         ),
                         Text(
-                          client.name,
+                          widget.client.name,
                           style: const TextStyle(
                             fontWeight: FontWeight.bold,
                             fontSize: 13,
                           ),
                         ),
                         Text(
-                          ' - ${client.type.displayTitle}',
+                          ' - ${widget.client.type.displayTitle}',
                           style: const TextStyle(
                             fontWeight: FontWeight.bold,
                             fontSize: 13,
@@ -69,6 +80,47 @@ class ClientWidget extends StatelessWidget {
                       ]),
                 ),
                 OptionsButton(
+                  onEdit: () {
+                    Get.to(() => Addclient(
+                          client: widget.client,
+                        ));
+                  },
+                  onDelete: () {
+                    showDialog(
+                      context: context,
+                      builder: (BuildContext context) => AlertDialog(
+                        title: const Text(
+                          'Delete Client',
+                          style: bodyText1,
+                        ),
+                        content: const Text(
+                            'Are you sure you want to delete this client?'),
+                        actions: <Widget>[
+                          TextButton(
+                            onPressed: () => Get.back(),
+                            child: const Text('No'),
+                          ),
+                          TextButton(
+                            onPressed: () async {
+                              final bool delete = await clientsController
+                                  .deleteClient(widget.client.id);
+                              if (delete) {
+                                showSnackbar(
+                                    message: 'Client deleted successfully!');
+                              } else {
+                                showSnackbar(
+                                    message: 'Error deleting client!',
+                                    error: true);
+                              }
+                              setState(() {});
+                              Get.back();
+                            },
+                            child: const Text('Yes'),
+                          ),
+                        ],
+                      ),
+                    );
+                  },
                   padding: const EdgeInsets.all(0),
                   borderColor: Colors.white,
                 ),
@@ -88,7 +140,7 @@ class ClientWidget extends StatelessWidget {
                         ),
                       ),
                       Text(
-                        client.email,
+                        widget.client.email,
                         style: const TextStyle(
                           fontWeight: FontWeight.bold,
                           fontSize: 13,
@@ -106,7 +158,7 @@ class ClientWidget extends StatelessWidget {
                         ),
                       ),
                       Text(
-                        client.phone,
+                        widget.client.phone,
                         style: const TextStyle(
                           fontWeight: FontWeight.bold,
                           fontSize: 13,

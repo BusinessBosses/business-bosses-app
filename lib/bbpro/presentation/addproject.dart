@@ -35,6 +35,8 @@ class _AddprojectState extends State<Addproject> {
   final TextEditingController taskNameController = TextEditingController();
   final TextEditingController expenseController = TextEditingController();
   ShopController shopController = Get.find();
+  bool isSubmit = false;
+
   @override
   void initState() {
     super.initState();
@@ -293,6 +295,7 @@ class _AddprojectState extends State<Addproject> {
                 SizedBox(
                   width: MediaQuery.of(context).size.width,
                   child: ProCustomButton(
+                    loading: isSubmit,
                     text: 'Save',
                     onPressed: () async {
                       if (nameController.text.isEmpty) {
@@ -315,6 +318,9 @@ class _AddprojectState extends State<Addproject> {
                             message: 'Adding tasks is mandatory!', error: true);
                         return;
                       }
+                      setState(() {
+                        isSubmit = true;
+                      });
                       final Map<String, dynamic> data = <String, dynamic>{
                         'userId': profileController.myProfile.uid,
                         'name': nameController.text,
@@ -323,18 +329,33 @@ class _AddprojectState extends State<Addproject> {
                         'duration': '60days',
                         'tasks': tasks,
                       };
-                      final bool response =
-                          await projectController.addProject(data);
+                      final bool response;
+                      if (widget.project != null) {
+                        response = await projectController.updateProject(
+                            widget.project!.id, data);
+                      } else {
+                        response = await projectController.addProject(data);
+                      }
                       if (response) {
                         showSnackbar(
-                          message: 'Project Added Succesfully!',
+                          message: widget.project != null
+                              ? 'Project Updated Successfully!'
+                              : 'Project Added Successfully!',
                         );
-                        Get.back();
-                        projectController
-                            .initTasks(profileController.myProfile.uid);
+                        await projectController
+                            .initProjects(profileController.myProfile.uid);
+                        // ignore: use_build_context_synchronously
+                        Navigator.pop(context);
                       } else {
                         showSnackbar(
-                            message: 'Error While Adding Project', error: true);
+                            message: widget.project != null
+                                ? 'Error While Editing Project!'
+                                : 'Error While Adding Project',
+                            error: true);
+
+                        setState(() {
+                          isSubmit = false;
+                        });
                       }
                     },
                   ),

@@ -17,10 +17,11 @@ class Service {
   String? url;
   String itemType;
   bool isActive;
-  String deliveryTime;
-  DateTime availableTime;
+  String? deliveryTime;
+  DateTime? availableTime;
   String serviceType;
   DateTime createdAt;
+  Map<String, dynamic>? availability;
 
   Service({
     this.images,
@@ -38,10 +39,11 @@ class Service {
     this.url,
     required this.itemType,
     required this.isActive,
-    required this.deliveryTime,
-    required this.availableTime,
+    this.deliveryTime,
+    this.availableTime,
     required this.serviceType,
     required this.createdAt,
+    this.availability,
   });
 
   factory Service.fromJson(Map<String, dynamic> json) {
@@ -53,7 +55,7 @@ class Service {
       user: json['user'] != null ? UserModel.fromMap(json['user']) : null,
       shop: json['shop'] != null ? Shop.fromMap(json['shop']) : null,
       name: json['name'],
-      price: (json['price'] as num).toDouble(),
+      price: double.parse(json['price'].toString()),
       discount:
           json['discount'] == null ? 0 : (json['discount'] as num).toDouble(),
       description: json['description'],
@@ -65,9 +67,9 @@ class Service {
       itemType: json['itemType'],
       isActive: json['isActive'],
       deliveryTime: json['deliveryTime'],
-      availableTime: DateTime.parse(json['availableTime']),
       serviceType: json['serviceType'],
       createdAt: DateTime.parse(json['createdAt']),
+      availability: json['availability'],
     );
   }
 
@@ -89,9 +91,9 @@ class Service {
       'itemType': itemType,
       'isActive': isActive,
       'deliveryTime': deliveryTime,
-      'availableTime': availableTime.toIso8601String(),
       'serviceType': serviceType,
       'createdAt': createdAt.toIso8601String(),
+      'availability': availability.toString(),
     };
   }
 
@@ -114,10 +116,10 @@ Service {
   user: $user,
   shop: $shop,
   deliveryTime: $deliveryTime,
-  availableTime: ${availableTime.toIso8601String()},
   serviceType: $serviceType,
   createdAt: ${createdAt.toIso8601String()},
-  images: $images
+  images: $images, 
+  availability: $availability,
 }
 ''';
   }

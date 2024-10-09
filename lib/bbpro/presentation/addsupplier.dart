@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:business_bosses_v2/bbpro/controllers/shop_controller.dart';
+import 'package:business_bosses_v2/bbpro/models/supplier_model.dart';
 import 'package:business_bosses_v2/bbpro/widgets/customcard.dart';
 import 'package:business_bosses_v2/bbpro/widgets/textfield.dart';
 import 'package:business_bosses_v2/common/dialogs/snackbar.dart';
@@ -18,7 +19,8 @@ import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
 
 class AddSupplier extends StatefulWidget {
-  const AddSupplier({super.key});
+  final Vendor? supplier;
+  const AddSupplier({super.key, this.supplier});
 
   @override
   State<AddSupplier> createState() => _AddSupplierState();
@@ -40,6 +42,20 @@ class _AddSupplierState extends State<AddSupplier> {
   File? _selectedImage;
   bool isSubmit = false;
   String? image;
+  List<String>? updateImage;
+
+  @override
+  void initState() {
+    super.initState();
+    if (widget.supplier != null) {
+      nameController.text = widget.supplier!.name;
+      emailController.text = widget.supplier!.email;
+      phoneController.text = widget.supplier!.phone;
+      urlController.text = widget.supplier!.url;
+      descriptionController.text = widget.supplier!.description;
+      updateImage = widget.supplier!.images;
+    }
+  }
 
   void _submitForm() async {
     if (_formKey.currentState!.validate()) {
@@ -146,12 +162,12 @@ class _AddSupplierState extends State<AddSupplier> {
                       hintText: 'Enter name here',
                       controller: nameController,
                     ),
-                    const SizedBox(height: 15),
-                    CustomEditText(
-                      caption: 'Supplied Products',
-                      hintText: 'Eg. Dresses, Bags, etc',
-                      controller: productController,
-                    ),
+                    // const SizedBox(height: 15),
+                    // CustomEditText(
+                    //   caption: 'Supplied Products',
+                    //   hintText: 'Eg. Dresses, Bags, etc',
+                    //   controller: productController,
+                    // ),
                     const SizedBox(height: 15),
                     CustomEditText(
                       maxLength: 300,
