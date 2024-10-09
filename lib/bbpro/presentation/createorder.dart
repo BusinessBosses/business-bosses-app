@@ -2,6 +2,7 @@ import 'package:business_bosses_v2/bbpro/controllers/clients_controller.dart';
 import 'package:business_bosses_v2/bbpro/controllers/order_controller.dart';
 import 'package:business_bosses_v2/bbpro/controllers/shop_controller.dart';
 import 'package:business_bosses_v2/bbpro/models/client_model.dart';
+import 'package:business_bosses_v2/bbpro/models/order_model.dart';
 import 'package:business_bosses_v2/bbpro/models/product_model.dart';
 import 'package:business_bosses_v2/bbpro/models/service_model.dart';
 import 'package:business_bosses_v2/bbpro/widgets/button.dart';
@@ -15,7 +16,8 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 class CreateOrder extends StatefulWidget {
-  const CreateOrder({super.key});
+  final Order? order;
+  const CreateOrder({super.key, this.order});
 
   @override
   State<CreateOrder> createState() => _CreateOrderState();
@@ -102,6 +104,8 @@ class _CreateOrderState extends State<CreateOrder> {
   @override
   void initState() {
     super.initState();
+    if (widget.order != null) {}
+
     if (mounted) {
       // Check if the widget is still mounted
       setState(() {
@@ -154,7 +158,6 @@ class _CreateOrderState extends State<CreateOrder> {
     setState(() {
       clientId = clientName['id'];
     });
-    print(clientId);
   }
 
   @override
@@ -162,9 +165,9 @@ class _CreateOrderState extends State<CreateOrder> {
     return Scaffold(
       backgroundColor: probackgroundColor,
       appBar: AppBar(
-        title: const Text(
-          'Create New Order',
-          style: TextStyle(
+        title: Text(
+          widget.order != null ? 'Update Order' : 'Create New Order',
+          style: const TextStyle(
             color: proprimaryColor,
             fontWeight: FontWeight.bold,
           ),
@@ -278,12 +281,16 @@ class _CreateOrderState extends State<CreateOrder> {
                         const SizedBox(height: 15),
                         CustomDropdownWidget(
                           caption: 'Delivery Method',
-                          items: const <String>['Courier', 'Pickup'],
+                          items: const <String>['Online', 'In-Person'],
                           iconName: 'assets/svgs/dropdown.svg',
                           initialValue: selectedDeliveryMethod,
                           onChanged: (String? value) {
                             setState(() {
-                              selectedDeliveryMethod = value!;
+                              if (value != 'Online') {
+                                selectedDeliveryMethod = 'online';
+                              } else {
+                                selectedDeliveryMethod = 'in_person';
+                              }
                             });
                           },
                         ),
