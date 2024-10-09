@@ -31,6 +31,7 @@ class _ProjectsState extends State<Projects>
   bool loading = true;
   bool? _lastMoveRight;
   late TabController _tabController;
+  List<Project> filteredProjects = <Project>[];
 
   @override
   void initState() {
@@ -47,6 +48,7 @@ class _ProjectsState extends State<Projects>
       setState(() {
         loading = false;
         projectController.loading.value = false;
+        filteredProjects = projectController.allProjects;
       });
     }).catchError((error) {
       // Handle error
@@ -240,6 +242,15 @@ class RowStatusCard extends StatefulWidget {
 
 class _RowStatusCardState extends State<RowStatusCard> {
   bool _showSearchBar = false;
+  List<Project> filteredProjects = <Project>[];
+  String searchQuery = '';
+
+  @override
+  void initState() {
+    super.initState();
+    filteredProjects = widget.allProjects;
+  }
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -305,7 +316,16 @@ class _RowStatusCardState extends State<RowStatusCard> {
                               hasSearchIcon: false,
                               hintText: 'Search',
                               onChange: (String query) {
-                                if (query.isEmpty) {}
+                                setState(() {
+                                  searchQuery =
+                                      query; // Update the search query
+                                  filteredProjects = widget.allProjects
+                                      .where((Project project) {
+                                    return project.name
+                                        .toLowerCase()
+                                        .contains(query.toLowerCase());
+                                  }).toList();
+                                });
                               },
                               onSubmit: (String query) {},
                             ),
@@ -314,8 +334,7 @@ class _RowStatusCardState extends State<RowStatusCard> {
                       : GestureDetector(
                           onTap: () {
                             setState(() {
-                              _showSearchBar =
-                                  true; // Show search bar when button is clicked
+                              _showSearchBar = true;
                             });
                           },
                           child: Container(
@@ -340,6 +359,8 @@ class _RowStatusCardState extends State<RowStatusCard> {
                       onTap: () {
                         setState(() {
                           _showSearchBar = false;
+                          searchQuery = '';
+                          filteredProjects = widget.allProjects;
                         });
                       },
                       child: Container(
@@ -365,22 +386,25 @@ class _RowStatusCardState extends State<RowStatusCard> {
             ),
           ),
           widget.projectStatus.index == 0
-              ? Expanded(
-                  child: ListView.builder(
-                    itemCount: widget.allProjects.length,
-                    shrinkWrap: true,
-                    itemBuilder: (BuildContext context, int index) {
-                      return Padding(
-                        padding: const EdgeInsets.only(bottom: 12),
-                        child: TaskWidget(
-                          project: widget.allProjects[index],
-                          bgcolor:
-                              widget.allProjects[index].status.backgroundColor,
-                        ),
-                      );
-                    },
-                  ),
-                )
+              ? filteredProjects.isNotEmpty
+                  ? Expanded(
+                      child: ListView.builder(
+                        itemCount: filteredProjects.length,
+                        shrinkWrap: true,
+                        itemBuilder: (BuildContext context, int index) {
+                          return Padding(
+                            padding: const EdgeInsets.only(bottom: 12),
+                            child: TaskWidget(
+                              project: filteredProjects[index],
+                              bgcolor: filteredProjects[index]
+                                  .status
+                                  .backgroundColor,
+                            ),
+                          );
+                        },
+                      ),
+                    )
+                  : const Text('No projects found')
               : Expanded(
                   child: DragTarget<Project>(
                     builder: (BuildContext context,
