@@ -1,4 +1,3 @@
-import 'package:business_bosses_v2/bbpro/models/package_model.dart';
 import 'package:business_bosses_v2/bbpro/models/shop_model.dart';
 import 'package:business_bosses_v2/common/models/user_model.dart';
 

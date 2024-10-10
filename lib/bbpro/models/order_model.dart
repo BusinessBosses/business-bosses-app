@@ -127,7 +127,6 @@ enum OrderStatus {
     switch (status) {
       case 'all orders':
         return OrderStatus.allorders;
-
       case 'pending':
         return OrderStatus.pending;
       case 'paid':
