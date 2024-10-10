@@ -15,6 +15,7 @@ class EventsSection extends StatelessWidget {
         Get.toNamed(Routes.liveEvents);
       },
       child: Container(
+        color: backgroundColor,
         child: Column(
           children: <Widget>[
             const SizedBox(

@@ -21,6 +21,7 @@ class LearningSection extends StatelessWidget {
           Get.to(() => const AllLearningPostsScreen(isCoursesTile: false));
         },
         child: Container(
+          color: backgroundColor,
           child: Column(
             children: <Widget>[
               const SizedBox(
@@ -71,7 +72,7 @@ class LearningSection extends StatelessWidget {
                 height: 10,
               ),
               Container(
-                color: Colors.white,
+                color: backgroundColor,
                 width: double.infinity,
                 height: 150,
                 child: ListView.builder(

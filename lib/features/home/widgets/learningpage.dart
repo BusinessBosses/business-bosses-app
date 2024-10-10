@@ -5,6 +5,7 @@ import 'package:business_bosses_v2/features/home/controller/commumities_controll
 import 'package:business_bosses_v2/features/home/widgets/all_learning_posts.dart';
 import 'package:business_bosses_v2/navigation/routes.dart';
 import 'package:business_bosses_v2/utils/constants/constants.dart';
+import 'package:business_bosses_v2/utils/theme/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
@@ -24,19 +25,20 @@ class _LearningPageState extends State<LearningPage> {
     return GetBuilder<CommunitiesController>(
         builder: (CommunitiesController controller) {
       return Scaffold(
-        appBar: AppBar(
-          leading: IconButton(
-            onPressed: () {
-              Navigator.pop(context);
-            },
-            icon: SvgPicture.asset('assets/svgs/backbutton.svg'),
-          ),
-          centerTitle: true,
-          title: const Text(
-            'Learning',
-            textAlign: TextAlign.center,
-          ),
-        ),
+        backgroundColor: backgroundColor,
+        // appBar: AppBar(
+        //   leading: IconButton(
+        //     onPressed: () {
+        //       Navigator.pop(context);
+        //     },
+        //     icon: SvgPicture.asset('assets/svgs/backbutton.svg'),
+        //   ),
+        //   centerTitle: true,
+        //   title: const Text(
+        //     'Learning',
+        //     textAlign: TextAlign.center,
+        //   ),
+        // ),
         body: Padding(
           padding: const EdgeInsets.only(left: 15, right: 15),
           child: controller.loading.value

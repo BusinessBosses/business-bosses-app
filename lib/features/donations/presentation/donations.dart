@@ -53,21 +53,21 @@ class _DonationsPageState extends State<DonationsPage> {
   Widget build(BuildContext context) {
     return Scaffold(
         backgroundColor: Colors.white,
-        appBar: widget.ishome == false
-            ? AppBar(
-                leading: IconButton(
-                  onPressed: () {
-                    Navigator.pop(context);
-                  },
-                  icon: SvgPicture.asset('assets/svgs/backbutton.svg'),
-                ),
-                centerTitle: true,
-                title: const Text(
-                  'CrowdFund',
-                  textAlign: TextAlign.center,
-                ),
-              )
-            : null,
+        // appBar: widget.ishome == false
+        //     ? AppBar(
+        //         leading: IconButton(
+        //           onPressed: () {
+        //             Navigator.pop(context);
+        //           },
+        //           icon: SvgPicture.asset('assets/svgs/backbutton.svg'),
+        //         ),
+        //         centerTitle: true,
+        //         title: const Text(
+        //           'CrowdFund',
+        //           textAlign: TextAlign.center,
+        //         ),
+        //       )
+        //     : null,
         body: donationsController.loading.value
             ? const Expanded(
                 child: Center(
@@ -527,20 +527,25 @@ class _DonationsPageState extends State<DonationsPage> {
                                           child: CircularProgressIndicator(),
                                         ),
                                       )
-                                    : Expanded(
-                                        child: ListView.builder(
-                                          shrinkWrap: true,
-                                          scrollDirection:
-                                              widget.ishome == false
-                                                  ? Axis.vertical
-                                                  : Axis.horizontal,
-                                          itemCount: widget.ishome == false
-                                              ? controller.donations.length
-                                              : 5,
-                                          itemBuilder:
-                                              (BuildContext context, int i) {
-                                            bool isLastItem =
-                                                controller.donations.length != 1
+                                    : Container(
+                                        child: Expanded(
+                                          child: Container(
+                                            color: backgroundColor,
+                                            child: ListView.builder(
+                                              shrinkWrap: true,
+                                              scrollDirection:
+                                                  widget.ishome == false
+                                                      ? Axis.vertical
+                                                      : Axis.horizontal,
+                                              itemCount: widget.ishome == false
+                                                  ? controller.donations.length
+                                                  : 5,
+                                              itemBuilder:
+                                                  (BuildContext context,
+                                                      int i) {
+                                                bool isLastItem = controller
+                                                            .donations.length !=
+                                                        1
                                                     ? i ==
                                                         controller.donations
                                                                 .length -
@@ -548,21 +553,25 @@ class _DonationsPageState extends State<DonationsPage> {
                                                     : i ==
                                                         controller
                                                             .donations.length;
-                                            return Padding(
-                                              padding: EdgeInsets.only(
-                                                  left: widget.ishome == false
-                                                      ? 0
-                                                      : 10.0),
-                                              child: DonationItem(
-                                                donation:
-                                                    controller.donations[i],
-                                                isLastItem: isLastItem,
-                                                isHome: widget.ishome == false
-                                                    ? false
-                                                    : true,
-                                              ),
-                                            );
-                                          },
+                                                return Padding(
+                                                  padding: EdgeInsets.only(
+                                                      left:
+                                                          widget.ishome == false
+                                                              ? 0
+                                                              : 10.0),
+                                                  child: DonationItem(
+                                                    donation:
+                                                        controller.donations[i],
+                                                    isLastItem: isLastItem,
+                                                    isHome:
+                                                        widget.ishome == false
+                                                            ? false
+                                                            : true,
+                                                  ),
+                                                );
+                                              },
+                                            ),
+                                          ),
                                         ),
                                       )
                               ],

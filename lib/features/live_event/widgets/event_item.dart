@@ -88,7 +88,7 @@ class _EventItemState extends State<EventItem> {
               width: MediaQuery.of(context).size.width - 30,
               decoration: BoxDecoration(
                 border: Border.all(width: 0.5, color: Colors.black12),
-                color: backgroundColor,
+                color: Colors.white,
                 borderRadius: BorderRadius.circular(15),
               ),
               child: Column(
@@ -607,7 +607,9 @@ class _EventItemState extends State<EventItem> {
         padding: const EdgeInsets.all(10),
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(8),
-          color: const Color.fromRGBO(224, 224, 224, 1),
+          color: widget.ishomeview == true
+              ? backgroundColor
+              : const Color.fromRGBO(224, 224, 224, 1),
         ),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.start,
