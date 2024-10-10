@@ -9,6 +9,7 @@ class CustomEditText extends StatelessWidget {
   final TextInputType inputType;
   final bool isPassword;
   final TextEditingController controller;
+  final TextEditingController? currencycontroller;
   final Color? backgroundcolor;
   final bool? iscurrencyfield;
   final Color? currencyfieldcolor;
@@ -31,6 +32,7 @@ class CustomEditText extends StatelessWidget {
     this.validator,
     this.onChanged,
     this.padding,
+    this.currencycontroller,
   });
 
   @override
@@ -68,6 +70,7 @@ class CustomEditText extends StatelessWidget {
                         height: 30,
                         width: 40,
                         child: TextFormField(
+                          controller: currencycontroller,
                           style: const TextStyle(fontSize: 13),
                           decoration: InputDecoration(
                             hintText: 'USD',

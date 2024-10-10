@@ -10,6 +10,7 @@ import 'package:business_bosses_v2/bbpro/widgets/multipleedit.dart';
 import 'package:business_bosses_v2/bbpro/widgets/switchwidget.dart';
 import 'package:business_bosses_v2/bbpro/widgets/textfield.dart';
 import 'package:business_bosses_v2/common/dialogs/snackbar.dart';
+import 'package:business_bosses_v2/features/marketplace/widgets/currency.dart';
 import 'package:business_bosses_v2/features/profile/controller/profile_controller.dart';
 import 'package:business_bosses_v2/services/api_service.dart';
 import 'package:business_bosses_v2/utils/theme/theme.dart';
@@ -46,6 +47,8 @@ class _CreateProductListingState extends State<CreateProductListing> {
   final TextEditingController quantityController = TextEditingController();
   final TextEditingController colorController = TextEditingController();
   final TextEditingController sizeController = TextEditingController();
+  final TextEditingController currencycontroller = TextEditingController();
+  final TextEditingController deliverydayscontroller = TextEditingController();
 
   bool isSubmitted = false;
   bool _isSwitched = false;
@@ -60,6 +63,7 @@ class _CreateProductListingState extends State<CreateProductListing> {
   List<String>? images = <String>[];
   String? paymentMethod;
   String? deliveryMethod;
+  String? deliveryDuration;
   DateTime? startDate;
   DateTime? endDate;
   String? storageLocation;
@@ -75,6 +79,10 @@ class _CreateProductListingState extends State<CreateProductListing> {
     for (dynamic payments in shopController.shop!.payments) {
       paymentMethods.add(payments['paymentMethod']);
     }
+    currencycontroller.text = shopController.shop?.location != null
+        ? '${currencyValues[shopController.shop!.location.toString()]}'
+        : 'USD';
+
     if (widget.product != null) {
       // initiate Edit Here
       _productNameController.text = widget.product!.name;
@@ -85,6 +93,7 @@ class _CreateProductListingState extends State<CreateProductListing> {
       productNumberController.text = widget.product!.productNumber.toString();
       quantityController.text = widget.product!.quantity.toString();
       colorController.text = widget.product!.color;
+      deliveryDuration = widget.product!.deliveryDuration;
       sizeController.text = widget.product!.size;
       category = widget.product!.category;
       country = widget.product!.location;
@@ -156,8 +165,10 @@ class _CreateProductListingState extends State<CreateProductListing> {
               children: <Widget>[
                 Expanded(
                   child: CustomEditText(
+                    currencycontroller: currencycontroller,
                     caption: 'Price',
-                    hintText: 'Enter price in USD',
+                    iscurrencyfield: true,
+                    hintText: 'Enter price',
                     controller: _priceController,
                     inputType: TextInputType.number,
                     validator: (String? value) {
@@ -253,6 +264,8 @@ class _CreateProductListingState extends State<CreateProductListing> {
                 onChanged: (CountryCode? code) async {
                   setState(() {
                     country = code!.name!;
+                    currencycontroller.text =
+                        '${currencyValues[code.name.toString()]}';
                   });
                 },
                 useSafeArea: false,
@@ -314,46 +327,52 @@ class _CreateProductListingState extends State<CreateProductListing> {
               },
             ),
             const SizedBox(height: 16),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 15.0),
-              child: Container(
-                padding: const EdgeInsets.all(15),
-                decoration: BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.circular(10),
-                ),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: <Widget>[
-                    const Text('Delivery Date'),
-                    Row(
-                      children: <Widget>[
-                        Expanded(
-                          child: TextFormField(
-                            readOnly: true,
-                            decoration: InputDecoration(
-                              labelText: 'Start Date',
-                              hintText: _formatDate(startDate),
-                            ),
-                            onTap: () => _selectDate(context, true),
-                          ),
-                        ),
-                        const SizedBox(width: 16),
-                        Expanded(
-                          child: TextFormField(
-                            readOnly: true,
-                            decoration: InputDecoration(
-                              labelText: 'End Date',
-                              hintText: _formatDate(endDate),
-                            ),
-                            onTap: () => _selectDate(context, false),
-                          ),
-                        ),
-                      ],
-                    ),
-                  ],
-                ),
-              ),
+            // Padding(
+            //   padding: const EdgeInsets.symmetric(horizontal: 15.0),
+            //   child: Container(
+            //     padding: const EdgeInsets.all(15),
+            //     decoration: BoxDecoration(
+            //       color: Colors.white,
+            //       borderRadius: BorderRadius.circular(10),
+            //     ),
+            //     child: Column(
+            //       crossAxisAlignment: CrossAxisAlignment.start,
+            //       children: <Widget>[
+            //         const Text('Delivery Duration'),
+            //         Row(
+            //           children: <Widget>[
+            //             Expanded(
+            //               child: TextFormField(
+            //                 readOnly: true,
+            //                 decoration: InputDecoration(
+            //                   labelText: 'Start Date',
+            //                   hintText: _formatDate(startDate),
+            //                 ),
+            //                 onTap: () => _selectDate(context, true),
+            //               ),
+            //             ),
+            //             const SizedBox(width: 16),
+            //             Expanded(
+            //               child: TextFormField(
+            //                 readOnly: true,
+            //                 decoration: InputDecoration(
+            //                   labelText: 'End Date',
+            //                   hintText: _formatDate(endDate),
+            //                 ),
+            //                 onTap: () => _selectDate(context, false),
+            //               ),
+            //             ),
+            //           ],
+            //         ),
+            //       ],
+            //     ),
+            //   ),
+            // ),
+            CustomEditText(
+              inputType: const TextInputType.numberWithOptions(decimal: false),
+              caption: 'Delivery Duration (Days)',
+              hintText: 'Enter number of days you can deliver after purchase',
+              controller: deliverydayscontroller,
             ),
             const SizedBox(height: 16),
             CustomDropdownWidget(
@@ -510,7 +529,7 @@ class _CreateProductListingState extends State<CreateProductListing> {
         'userId': profileController.myProfile.uid,
         'shopId': shopController.shop?.id,
         'name': _productNameController.text,
-        'price': _priceController.text,
+        'price': currencycontroller.text + _priceController.text,
         'discount': _discountController.text,
         'description': _descriptionController.text,
         'category': category,
@@ -519,6 +538,7 @@ class _CreateProductListingState extends State<CreateProductListing> {
         'paymentMethod': paymentMethod,
         'deliveryMethod': deliveryMethod,
         'url': 'http://example.com/product', // Example URL
+        'deliveryDuration': deliveryDuration,
         'itemType': 'product',
         'isActive': _isSwitched,
         'supplierId': null,

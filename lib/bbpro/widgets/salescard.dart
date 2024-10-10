@@ -1,10 +1,19 @@
+import 'package:business_bosses_v2/bbpro/controllers/order_controller.dart';
 import 'package:business_bosses_v2/utils/theme/theme.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
-class SalesWidget extends StatelessWidget {
+class SalesWidget extends StatefulWidget {
   const SalesWidget({super.key});
 
+  @override
+  State<SalesWidget> createState() => _SalesWidgetState();
+}
+
+class _SalesWidgetState extends State<SalesWidget> {
+  bool isHidden = false;
+  final OrderController orderController = Get.put(OrderController());
   @override
   Widget build(BuildContext context) {
     return Padding(
@@ -38,31 +47,42 @@ class SalesWidget extends StatelessWidget {
                     ),
                   ],
                 ),
-                Wrap(
-                  crossAxisAlignment: WrapCrossAlignment.center,
-                  children: <Widget>[
-                    Container(
-                      padding: const EdgeInsets.all(5),
-                      decoration: BoxDecoration(
+                GestureDetector(
+                  onTap: () {
+                    setState(() {
+                      isHidden = !isHidden;
+                    });
+                  },
+                  child: Wrap(
+                    crossAxisAlignment: WrapCrossAlignment.center,
+                    children: <Widget>[
+                      Container(
+                        padding: const EdgeInsets.all(5),
+                        decoration: BoxDecoration(
                           color: prosemibackColor,
-                          borderRadius: BorderRadius.circular(30)),
-                      child: const Icon(
-                        Icons.visibility_off,
-                        color: proprimaryColor,
-                        size: 15,
+                          borderRadius: BorderRadius.circular(30),
+                        ),
+                        child: Icon(
+                          isHidden ? Icons.visibility_off : Icons.visibility,
+                          color: proprimaryColor,
+                          size: 15,
+                        ),
                       ),
-                    ),
-                    const SizedBox(
-                      width: 10,
-                    ),
-                    const Text(
-                      '\$19.4k',
-                      style: TextStyle(
+                      const SizedBox(
+                        width: 10,
+                      ),
+                      Text(
+                        isHidden
+                            ? '***'
+                            : orderController.orders.length.toString(),
+                        style: const TextStyle(
                           color: proprimaryColor,
                           fontWeight: FontWeight.bold,
-                          fontSize: 22),
-                    ),
-                  ],
+                          fontSize: 20,
+                        ),
+                      ),
+                    ],
+                  ),
                 ),
               ],
             ),

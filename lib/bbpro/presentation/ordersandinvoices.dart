@@ -27,8 +27,6 @@ class _OrdersScreenState extends State<OrdersScreen>
     with SingleTickerProviderStateMixin {
   Timer? _timer;
   bool? _lastMoveRight;
-  final List<Order> _allorders = <Order>[];
-  final Map<OrderStatus, List<Order>> _orders = <OrderStatus, List<Order>>{};
   late TabController _tabController;
   final ScrollController _mainListScrollController = ScrollController();
   final ClientsController clientsController = Get.put(ClientsController());
@@ -41,23 +39,13 @@ class _OrdersScreenState extends State<OrdersScreen>
     _tabController =
         TabController(length: ClientType.values.length, vsync: this);
 
-    for (OrderStatus status in OrderStatus.values) {
-      _orders[status] = <Order>[];
-    }
     // Initialize tasks
     orderController
         .initOrders(orderController.profileController.myProfile.uid)
         .then((_) {
       setState(() {
-        for (OrderStatus status in OrderStatus.values) {
-          List<Order> statusOrders = orderController.orders
-              .where((Order order) => order.status == status)
-              .toList();
-          _orders[status] = statusOrders;
-          _allorders.addAll(statusOrders); // Add tasks to alltasks
-          loading = false;
-          orderController.loading.value = false;
-        }
+        loading = false;
+        orderController.loading.value = false;
       });
     });
   }
@@ -91,10 +79,9 @@ class _OrdersScreenState extends State<OrdersScreen>
               padding: const EdgeInsets.only(right: 10.0, bottom: 15),
               child: CircleAvatar(
                 backgroundColor: prosemibackColor,
-                radius: 30, // This sets the circle's radius
+                radius: 30,
                 child: Padding(
-                  padding: const EdgeInsets.all(
-                      10), // Adjust padding to fit the icon nicely
+                  padding: const EdgeInsets.all(10),
                   child: SvgPicture.asset(
                     'assets/svgs/notificationicon.svg',
                     height: 20,
@@ -133,7 +120,7 @@ class _OrdersScreenState extends State<OrdersScreen>
               backgroundColor: backgroundColor,
               listofitems: OrderStatus.values.toList(),
               itemToString: (OrderStatus status) =>
-                  '${status.displayTitle.toString().split('.').last} (${status == OrderStatus.allorders ? _allorders.length : _orders[status]!.length.toString()})',
+                  '${status.displayTitle.toString().split('.').last} (${status == OrderStatus.allorders ? orderController.orders.length : (orderController.ordersStatus[status] == null ? '0' : orderController.ordersStatus[status]!.length.toString())})',
             ),
             Expanded(
               child: Padding(
@@ -180,7 +167,7 @@ class _OrdersScreenState extends State<OrdersScreen>
                                       _lastMoveRight = null;
                                       _timer?.cancel();
                                     },
-                                    allorders: _allorders,
+                                    allorders: orderController.orders,
                                   ),
                                 ),
                               )

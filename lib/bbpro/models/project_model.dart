@@ -36,7 +36,7 @@ class Project {
         status: ProjectStatus.fromString(json['status']),
         name: json['name'],
         description: json['description'],
-        amount: (json['amount']),
+        amount: int.parse(json['amount'].toString()),
         duration: json['duration'],
         createdAt: DateTime.parse(json['createdAt']),
         tasks: json['tasks'] == null

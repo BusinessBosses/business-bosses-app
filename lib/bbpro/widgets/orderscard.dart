@@ -1,11 +1,23 @@
+import 'package:business_bosses_v2/bbpro/controllers/order_controller.dart';
+import 'package:business_bosses_v2/bbpro/presentation/bottomnavscreen.dart';
+import 'package:business_bosses_v2/bbpro/presentation/ordersandinvoices.dart';
 import 'package:business_bosses_v2/utils/theme/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:get/get.dart';
 
-class OrdersWidget extends StatelessWidget {
-  const OrdersWidget({super.key});
+class OrdersWidget extends StatefulWidget {
+  final Function? onPressed;
+  const OrdersWidget({super.key, this.onPressed});
 
+  @override
+  State<OrdersWidget> createState() => _OrdersWidgetState();
+}
+
+class _OrdersWidgetState extends State<OrdersWidget> {
+  bool isHidden = false;
+  final OrderController orderController = Get.put(OrderController());
   @override
   Widget build(BuildContext context) {
     return Padding(
@@ -22,56 +34,70 @@ class OrdersWidget extends StatelessWidget {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: <Widget>[
-                const Wrap(crossAxisAlignment: WrapCrossAlignment.center, children: <Widget>[
-                  Text(
-                    'Orders',
-                    style: TextStyle(
-                      fontSize: 16,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                  Text(
-                    ' - Breakdown',
-                    style: TextStyle(
-                      fontSize: 15,
-                      fontWeight: FontWeight.w700,
-                      color: proprimaryColor,
-                    ),
-                  ),
-                ]),
-                Wrap(
+                const Wrap(
                   crossAxisAlignment: WrapCrossAlignment.center,
                   children: <Widget>[
-                    Container(
-                      padding: const EdgeInsets.all(5),
-                      decoration: BoxDecoration(
-                          color: prosemibackColor,
-                          borderRadius: BorderRadius.circular(30)),
-                      child: const Icon(
-                        Icons.visibility_off,
-                        color: proprimaryColor,
-                        size: 15,
+                    Text(
+                      'Orders',
+                      style: TextStyle(
+                        fontSize: 16,
+                        fontWeight: FontWeight.bold,
                       ),
                     ),
-                    const SizedBox(
-                      width: 10,
-                    ),
-                    const Text(
-                      '9',
+                    Text(
+                      ' - Breakdown',
                       style: TextStyle(
-                          color: proprimaryColor,
-                          fontWeight: FontWeight.bold,
-                          fontSize: 20),
+                        fontSize: 15,
+                        fontWeight: FontWeight.w700,
+                        color: proprimaryColor,
+                      ),
                     ),
                   ],
+                ),
+                GestureDetector(
+                  onTap: () {
+                    setState(() {
+                      isHidden = !isHidden;
+                    });
+                  },
+                  child: Wrap(
+                    crossAxisAlignment: WrapCrossAlignment.center,
+                    children: <Widget>[
+                      Container(
+                        padding: const EdgeInsets.all(5),
+                        decoration: BoxDecoration(
+                          color: prosemibackColor,
+                          borderRadius: BorderRadius.circular(30),
+                        ),
+                        child: Icon(
+                          isHidden ? Icons.visibility_off : Icons.visibility,
+                          color: proprimaryColor,
+                          size: 15,
+                        ),
+                      ),
+                      const SizedBox(
+                        width: 10,
+                      ),
+                      Text(
+                        isHidden
+                            ? '***'
+                            : orderController.orders.length.toString(),
+                        style: const TextStyle(
+                          color: proprimaryColor,
+                          fontWeight: FontWeight.bold,
+                          fontSize: 20,
+                        ),
+                      ),
+                    ],
+                  ),
                 ),
               ],
             ),
             Row(
               children: <Widget>[
                 SizedBox(
-                  width: 165, // Adjust the width as needed
-                  height: 165, // Adjust the height as needed
+                  width: 165,
+                  height: 165,
                   child: PieChart(
                     PieChartData(
                       sections: <PieChartSectionData>[
@@ -160,21 +186,27 @@ class OrdersWidget extends StatelessWidget {
             ),
             Align(
               alignment: Alignment.centerRight,
-              child: Container(
-                padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 8),
-                decoration: BoxDecoration(
-                    color: prosemibackColor,
-                    borderRadius: BorderRadius.circular(8)),
-                child: Wrap(
-                  crossAxisAlignment: WrapCrossAlignment.center,
-                  children: <Widget>[
-                    const Text('View All Orders'),
-                    const SizedBox(width: 5),
-                    SvgPicture.asset(
-                      'assets/svgs/nexticon.svg',
-                      color: proprimaryColor,
-                    ),
-                  ],
+              child: GestureDetector(
+                onTap: () {
+                  widget.onPressed;
+                },
+                child: Container(
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 8, vertical: 8),
+                  decoration: BoxDecoration(
+                      color: prosemibackColor,
+                      borderRadius: BorderRadius.circular(8)),
+                  child: Wrap(
+                    crossAxisAlignment: WrapCrossAlignment.center,
+                    children: <Widget>[
+                      const Text('View All Orders'),
+                      const SizedBox(width: 5),
+                      SvgPicture.asset(
+                        'assets/svgs/nexticon.svg',
+                        color: proprimaryColor,
+                      ),
+                    ],
+                  ),
                 ),
               ),
             ),
@@ -190,7 +222,8 @@ class Indicator extends StatelessWidget {
   final String text;
   final int value;
 
-  const Indicator({super.key, 
+  const Indicator({
+    super.key,
     required this.color,
     required this.text,
     required this.value,

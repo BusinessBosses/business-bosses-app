@@ -8,6 +8,9 @@ class OrderController extends GetxController {
   final ProfileController profileController = Get.find();
   RxList<Order> orders = RxList<Order>(<Order>[]);
   RxBool loading = RxBool(true);
+  final List<Order> allorders = <Order>[];
+  final Map<OrderStatus, List<Order>> ordersStatus =
+      <OrderStatus, List<Order>>{};
 
   Future<void> initOrders(String userId) async {
     orders.clear();
@@ -16,6 +19,15 @@ class OrderController extends GetxController {
       for (int i = 0; i < response.data['rows'].length; i++) {
         orders.add(Order.fromJson(response.data['rows'][i]));
       }
+    }
+    for (OrderStatus status in OrderStatus.values) {
+      ordersStatus[status] = <Order>[];
+    }
+    for (OrderStatus status in OrderStatus.values) {
+      List<Order> statusOrders =
+          orders.where((Order order) => order.status == status).toList();
+      ordersStatus[status] = statusOrders;
+      allorders.addAll(statusOrders); // Add tasks to alltasks
     }
     loading(false);
     update();

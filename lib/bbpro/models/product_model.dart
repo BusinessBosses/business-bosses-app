@@ -15,6 +15,7 @@ class Product {
   String paymentMethod;
   String deliveryMethod;
   String url;
+  String? deliveryDuration;
   String itemType;
   bool isActive;
   String storageLocation;
@@ -40,6 +41,7 @@ class Product {
     required this.paymentMethod,
     required this.deliveryMethod,
     required this.url,
+    this.deliveryDuration,
     required this.itemType,
     required this.isActive,
     required this.storageLocation,
@@ -67,6 +69,7 @@ class Product {
       paymentMethod: json['paymentMethod'],
       deliveryMethod: json['deliveryMethod'],
       url: json['url'],
+      deliveryDuration: json['deliveryDuration'],
       itemType: json['itemType'],
       isActive: json['isActive'],
       storageLocation: json['storageLocation'],
@@ -99,6 +102,7 @@ class Product {
       'paymentMethod': paymentMethod,
       'deliveryMethod': deliveryMethod,
       'url': url,
+      'deliveryDuration': deliveryDuration,
       'itemType': itemType,
       'isActive': isActive,
       'storageLocation': storageLocation,
@@ -126,6 +130,7 @@ Product {
   paymentMethod: $paymentMethod,
   deliveryMethod: $deliveryMethod,
   url: $url,
+  deliveryDuration: $deliveryDuration,
   itemType: $itemType,
   isActive: $isActive,
   user: $user,

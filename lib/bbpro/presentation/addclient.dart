@@ -101,24 +101,27 @@ class _AddclientState extends State<Addclient> {
                       controller: nameController,
                     ),
                     const SizedBox(height: 15),
-                    Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 15.0),
-                      child: MultipleEditTextWidget(
-                        caption: 'Client\'s Email',
-                        hintText: 'example@business.com',
-                        controller: emailController,
-                      ),
+                    CustomEditText(
+                      caption: 'Client\'s Email',
+                      hintText: 'example@business.com',
+                      controller: emailController,
                     ),
                     const SizedBox(height: 15),
-                    Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 15.0),
-                      child: MultipleEditTextWidget(
-                        caption: 'Client\'s Phone number',
-                        hintText: '+234 000 000 000',
-                        controller: phoneController,
-                      ),
+                    CustomEditText(
+                      caption: 'Client\'s Phone number',
+                      hintText: '+234 000 000 000',
+                      controller: phoneController,
                     ),
                     const SizedBox(height: 15),
+                    // CustomDropdownWidget(
+                    //   hintText: 'Select Client Type',
+                    //   caption: 'Client Type',
+                    //   items: ClientType.values
+                    //       .skip(1) // Skip the first item
+                    //       .map((ClientType type) => type.displayTitle)
+                    //       .toList(),
+                    //   iconName: 'assets/svgs/dropdown.svg',
+                    // ),
                     widget.client != null
                         ? CustomDropdownWidget(
                             initialValue: toInitialString(selectedType!),
@@ -171,7 +174,7 @@ class _AddclientState extends State<Addclient> {
 
                   if (_selectedImage == null && updateImage == null) {
                     showSnackbar(
-                      message: 'Please select a client image!',
+                      message: 'Please add a client image!',
                       error: true,
                     );
                     setState(() {

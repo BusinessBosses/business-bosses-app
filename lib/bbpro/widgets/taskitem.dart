@@ -11,6 +11,7 @@ class Taskitem extends StatefulWidget {
   final String? enddate;
   final VoidCallback? editOnTap;
   final VoidCallback? deleteOnTap;
+  final bool? isPackage;
 
   const Taskitem({
     super.key,
@@ -20,6 +21,7 @@ class Taskitem extends StatefulWidget {
     this.enddate,
     this.editOnTap,
     this.deleteOnTap,
+    this.isPackage,
   });
 
   @override
@@ -44,7 +46,7 @@ class _TaskitemState extends State<Taskitem> {
   }
 
   DateTime parseDate(String date) {
-    return DateFormat("yyyy-MM-dd").parse(date);
+    return DateFormat('yyyy-MM-dd').parse(date);
   }
 
   @override
@@ -78,7 +80,8 @@ class _TaskitemState extends State<Taskitem> {
                       borderRadius: BorderRadius.circular(10),
                       color: backgroundColor,
                     ),
-                    padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 10, vertical: 10),
                     child: const Text('Edit'),
                   ),
                 ),
@@ -86,7 +89,8 @@ class _TaskitemState extends State<Taskitem> {
                 GestureDetector(
                   onTap: widget.deleteOnTap,
                   child: Container(
-                    padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 10, vertical: 10),
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(10),
                       color: const Color(0x0ff00000),
@@ -99,7 +103,9 @@ class _TaskitemState extends State<Taskitem> {
           ],
         ),
         if (widget.taskexpense != null)
-          Text('Expense: ${widget.taskexpense}'),
+          Text(widget.isPackage == null
+              ? 'Expense: ${widget.taskexpense}'
+              : 'Price: ${widget.taskexpense}'),
         if (startDateTime != null)
           Text('Start Date: ${formatDate(startDateTime)}'),
         if (endDateTime != null) Text('End Date: ${formatDate(endDateTime)}'),

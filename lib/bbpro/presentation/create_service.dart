@@ -2,10 +2,14 @@ import 'dart:io';
 
 import 'package:business_bosses_v2/bbpro/controllers/shop_controller.dart';
 import 'package:business_bosses_v2/bbpro/models/service_model.dart';
+import 'package:business_bosses_v2/bbpro/widgets/addpackagebottomsheet.dart';
 import 'package:business_bosses_v2/bbpro/widgets/dropdown.dart';
 import 'package:business_bosses_v2/bbpro/widgets/edittext.dart';
+import 'package:business_bosses_v2/bbpro/widgets/iconbutton.dart';
 import 'package:business_bosses_v2/bbpro/widgets/multipleedit.dart';
 import 'package:business_bosses_v2/bbpro/widgets/switchwidget.dart';
+import 'package:business_bosses_v2/bbpro/widgets/taskitem.dart';
+import 'package:business_bosses_v2/features/marketplace/widgets/currency.dart';
 import 'package:business_bosses_v2/features/profile/controller/profile_controller.dart';
 import 'package:business_bosses_v2/services/api_service.dart';
 import 'package:flutter/material.dart';
@@ -36,10 +40,14 @@ class _CreateServiceListingState extends State<CreateServiceListing>
   final ProfileController profileController = Get.find();
   final ImagePicker _picker = ImagePicker();
   final List<File> _selectedImages = <File>[];
+  final List<Map<String, dynamic>> packages = <Map<String, dynamic>>[];
   final TextEditingController _serviceNameController = TextEditingController();
   final TextEditingController _priceController = TextEditingController();
   final TextEditingController _descriptionController = TextEditingController();
   final TextEditingController _discountController = TextEditingController();
+  final TextEditingController currencyController = TextEditingController();
+  final TextEditingController packageNameController = TextEditingController();
+  final TextEditingController expenseController = TextEditingController();
 
   bool isSubmitted = false;
   bool _isSwitched = false;
@@ -100,7 +108,14 @@ class _CreateServiceListingState extends State<CreateServiceListing>
       availableTime = widget.service!.availableTime;
       serviceType = widget.service!.serviceType;
       paymentMethod = widget.service!.paymentMethod;
+      // packages.addAll(widget.service!.packages!.map((Package package) => <String, >{
+      //         'name': package.name,
+      //         'amount': package.amount,
+      //       }));
     }
+    currencyController.text = shopController.shop?.location != null
+        ? '${currencyValues[shopController.shop!.location.toString()]}'
+        : 'USD';
   }
 
   Future<void> _pickImage() async {
@@ -110,6 +125,68 @@ class _CreateServiceListingState extends State<CreateServiceListing>
         _selectedImages.add(File(image.path));
       });
     }
+  }
+
+  void _showAddPackageSheet(BuildContext context) {
+    packageNameController.clear();
+    expenseController.clear();
+    showModalBottomSheet(
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
+      context: context,
+      isScrollControlled: true,
+      builder: (BuildContext context) {
+        return AddPackageBottomSheet(
+          currencyController: currencyController,
+          packageNameController: packageNameController,
+          expenseController: expenseController,
+          onPressed: () {
+            final Map<String, dynamic> package = <String, dynamic>{
+              'name': packageNameController.text.trim(),
+              'amount': currencyController.text + expenseController.text.trim(),
+            };
+
+            setState(() {
+              packages.add(package);
+            });
+
+            Get.back();
+          },
+        );
+      },
+    );
+  }
+
+  _editPackageSheet(BuildContext context, int index) {
+    Map<String, dynamic> packageToEdit = packages[index];
+
+    packageNameController.text = packageToEdit['name'];
+    expenseController.text = packageToEdit['amount'];
+
+    showModalBottomSheet(
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
+      context: context,
+      isScrollControlled: true,
+      builder: (BuildContext context) {
+        return AddPackageBottomSheet(
+          currencyController: currencyController,
+          packageNameController: packageNameController,
+          expenseController: expenseController,
+          onPressed: () {
+            final Map<String, dynamic> updatedPackage = <String, dynamic>{
+              'name': packageNameController.text.trim(),
+              'amount': currencyController.text + expenseController.text.trim(),
+            };
+
+            // Update the task in the list
+            setState(() {
+              packages[index] = updatedPackage;
+            });
+
+            Get.back();
+          },
+        );
+      },
+    );
   }
 
   @override
@@ -156,8 +233,10 @@ class _CreateServiceListingState extends State<CreateServiceListing>
               children: <Widget>[
                 Expanded(
                   child: CustomEditText(
+                    iscurrencyfield: true,
+                    currencycontroller: currencyController,
                     caption: 'Price',
-                    hintText: 'Enter price in USD',
+                    hintText: 'Enter price',
                     controller: _priceController,
                     inputType: TextInputType.number,
                     validator: (String? value) {
@@ -286,6 +365,8 @@ class _CreateServiceListingState extends State<CreateServiceListing>
                 onChanged: (CountryCode? code) {
                   setState(() {
                     location = code?.name;
+                    currencyController.text =
+                        '${currencyValues[code?.name.toString()]}';
                   });
                 },
                 useSafeArea: false,
@@ -414,16 +495,80 @@ class _CreateServiceListingState extends State<CreateServiceListing>
                 });
               },
             ),
-
+            if (packages.isNotEmpty) const SizedBox(height: 16),
+            if (packages.isNotEmpty)
+              Padding(
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 15.0,
+                ),
+                child: Container(
+                  decoration: BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.circular(10)),
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 15, vertical: 15),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: <Widget>[
+                      const Text(
+                        'Additional Packages',
+                        style: TextStyle(
+                          fontSize: 14,
+                          fontWeight: FontWeight.w600,
+                        ),
+                      ),
+                      const SizedBox(height: 5),
+                      ...packages
+                          .asMap()
+                          .entries
+                          .map((MapEntry<int, Map<String, dynamic>> entry) {
+                        final int index = entry.key;
+                        final Map<String, dynamic> task = entry.value;
+                        return Taskitem(
+                          isPackage: true,
+                          taskname: task['name'],
+                          taskexpense: task['amount'],
+                          editOnTap: () {
+                            _editPackageSheet(context, index);
+                          },
+                          deleteOnTap: () {
+                            setState(() {
+                              packages.removeAt(index);
+                            });
+                          },
+                        );
+                      }).toList(),
+                    ],
+                  ),
+                ),
+              ),
             const SizedBox(height: 16),
-
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 15.0),
-              child: MultipleEditTextWidget(
-                  caption: 'Add Additional Packages to this service',
-                  hintText: 'Package Name',
-                  controller: _serviceNameController),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: <Widget>[
+                ProIconButton(
+                  backgroundColor: Colors.white,
+                  textColor: proprimaryColor,
+                  text: 'Add Additional Packages to this service',
+                  onPressed: () {
+                    _showAddPackageSheet(context);
+                  },
+                  icon: const Icon(
+                    Icons.add,
+                    size: 20,
+                    color: proprimaryColor,
+                  ),
+                ),
+              ],
             ),
+
+            // Padding(
+            //   padding: const EdgeInsets.symmetric(horizontal: 15.0),
+            //   child: MultipleEditTextWidget(
+            //       caption: 'Add Additional Packages to this service',
+            //       hintText: 'Package Name',
+            //       controller: _serviceNameController),
+            // ),
             const SizedBox(height: 16),
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 15.0),

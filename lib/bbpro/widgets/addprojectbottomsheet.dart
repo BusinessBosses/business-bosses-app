@@ -8,6 +8,7 @@ import 'package:intl/intl.dart';
 class AddProjectBottomSheet extends StatefulWidget {
   final TextEditingController taskNameController;
   final TextEditingController expenseController;
+  final TextEditingController? currencyController;
   DateTime startDate;
   DateTime endDate;
   final VoidCallback onPressed;
@@ -23,6 +24,7 @@ class AddProjectBottomSheet extends StatefulWidget {
     required this.onPressed,
     required this.onStartDateChanged,
     required this.onEndDateChanged,
+    this.currencyController,
   }) : super(key: key);
 
   @override
@@ -96,6 +98,7 @@ class _AddProjectBottomSheetState extends State<AddProjectBottomSheet> {
               ),
               const SizedBox(height: 10),
               CustomEditText(
+                currencycontroller: widget.currencyController,
                 iscurrencyfield: true,
                 currencyfieldcolor: probackgroundColor,
                 backgroundcolor: prosemibackColor,

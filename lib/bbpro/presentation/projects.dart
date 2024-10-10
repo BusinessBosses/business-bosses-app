@@ -26,25 +26,18 @@ class Projects extends StatefulWidget {
 class _ProjectsState extends State<Projects>
     with SingleTickerProviderStateMixin {
   final ProjectController projectController = Get.put(ProjectController());
-  final Map<ProjectStatus, List<Project>> _projects =
-      <ProjectStatus, List<Project>>{};
   final ScrollController _mainListScrollController = ScrollController();
   Timer? _timer;
   bool loading = true;
   bool? _lastMoveRight;
   late TabController _tabController;
-  final List<Project> _allProjects = <Project>[];
+  List<Project> filteredProjects = <Project>[];
 
   @override
   void initState() {
     super.initState();
     _tabController =
         TabController(length: ProjectStatus.values.length, vsync: this);
-
-    // Initialize empty lists for each status
-    for (ProjectStatus status in ProjectStatus.values) {
-      _projects[status] = <Project>[];
-    }
 
     // Initialize projects and load tasks
     projectController
@@ -53,15 +46,9 @@ class _ProjectsState extends State<Projects>
       if (!mounted) return; // Ensure the widget is still in the tree
 
       setState(() {
-        for (ProjectStatus status in ProjectStatus.values) {
-          List<Project> statusTasks = projectController.projects
-              .where((Project project) => project.status == status)
-              .toList();
-          _projects[status] = statusTasks;
-          _allProjects.addAll(statusTasks);
-        }
         loading = false;
         projectController.loading.value = false;
+        filteredProjects = projectController.allProjects;
       });
     }).catchError((error) {
       // Handle error
@@ -123,7 +110,7 @@ class _ProjectsState extends State<Projects>
             backgroundColor: backgroundColor,
             listofitems: ProjectStatus.values.toList(),
             itemToString: (ProjectStatus status) =>
-                '${status.displayTitle.toString().split('.').last} (${status == ProjectStatus.allprojects ? _allProjects.length : _projects[status]!.length.toString()})',
+                '${status.displayTitle.toString().split('.').last} (${status == ProjectStatus.allprojects ? projectController.projects.length : (projectController.statusProjects[status] == null ? '0' : projectController.statusProjects[status]!.length.toString())})',
             filterOptions: const <String>[
               'Newest first',
               'Most Completed',
@@ -152,17 +139,22 @@ class _ProjectsState extends State<Projects>
                                 ...ProjectStatus.values.map(
                                   (ProjectStatus status) => SliverToBoxAdapter(
                                     child: RowStatusCard(
-                                      allProjects: _allProjects,
-                                      projects:
-                                          _projects[status] ?? <Project>[],
+                                      allProjects:
+                                          projectController.allProjects,
+                                      projects: projectController
+                                              .statusProjects[status] ??
+                                          <Project>[],
                                       projectStatus: status,
                                       screenSize: screenSize,
                                       taskAccepted: (Project project,
                                           ProjectStatus newStatus) async {
                                         setState(() {
-                                          _projects[project.status]
+                                          projectController
+                                              .statusProjects[project.status]
                                               ?.remove(project);
-                                          _projects[newStatus]?.add(
+                                          projectController
+                                              .statusProjects[newStatus]
+                                              ?.add(
                                             Project(
                                               id: project.id,
                                               userId: project.userId,
@@ -177,7 +169,7 @@ class _ProjectsState extends State<Projects>
                                           );
                                           projectController.updateProject(
                                               project.id, <String, dynamic>{
-                                            'status': newStatus.toString()
+                                            'status': newStatus.toString(),
                                           });
                                         });
                                       },
@@ -250,6 +242,15 @@ class RowStatusCard extends StatefulWidget {
 
 class _RowStatusCardState extends State<RowStatusCard> {
   bool _showSearchBar = false;
+  List<Project> filteredProjects = <Project>[];
+  String searchQuery = '';
+
+  @override
+  void initState() {
+    super.initState();
+    filteredProjects = widget.allProjects;
+  }
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -315,7 +316,16 @@ class _RowStatusCardState extends State<RowStatusCard> {
                               hasSearchIcon: false,
                               hintText: 'Search',
                               onChange: (String query) {
-                                if (query.isEmpty) {}
+                                setState(() {
+                                  searchQuery =
+                                      query; // Update the search query
+                                  filteredProjects = widget.allProjects
+                                      .where((Project project) {
+                                    return project.name
+                                        .toLowerCase()
+                                        .contains(query.toLowerCase());
+                                  }).toList();
+                                });
                               },
                               onSubmit: (String query) {},
                             ),
@@ -324,8 +334,7 @@ class _RowStatusCardState extends State<RowStatusCard> {
                       : GestureDetector(
                           onTap: () {
                             setState(() {
-                              _showSearchBar =
-                                  true; // Show search bar when button is clicked
+                              _showSearchBar = true;
                             });
                           },
                           child: Container(
@@ -350,6 +359,8 @@ class _RowStatusCardState extends State<RowStatusCard> {
                       onTap: () {
                         setState(() {
                           _showSearchBar = false;
+                          searchQuery = '';
+                          filteredProjects = widget.allProjects;
                         });
                       },
                       child: Container(
@@ -375,22 +386,25 @@ class _RowStatusCardState extends State<RowStatusCard> {
             ),
           ),
           widget.projectStatus.index == 0
-              ? Expanded(
-                  child: ListView.builder(
-                    itemCount: widget.allProjects.length,
-                    shrinkWrap: true,
-                    itemBuilder: (BuildContext context, int index) {
-                      return Padding(
-                        padding: const EdgeInsets.only(bottom: 12),
-                        child: TaskWidget(
-                          project: widget.allProjects[index],
-                          bgcolor:
-                              widget.allProjects[index].status.backgroundColor,
-                        ),
-                      );
-                    },
-                  ),
-                )
+              ? filteredProjects.isNotEmpty
+                  ? Expanded(
+                      child: ListView.builder(
+                        itemCount: filteredProjects.length,
+                        shrinkWrap: true,
+                        itemBuilder: (BuildContext context, int index) {
+                          return Padding(
+                            padding: const EdgeInsets.only(bottom: 12),
+                            child: TaskWidget(
+                              project: filteredProjects[index],
+                              bgcolor: filteredProjects[index]
+                                  .status
+                                  .backgroundColor,
+                            ),
+                          );
+                        },
+                      ),
+                    )
+                  : const Text('No projects found')
               : Expanded(
                   child: DragTarget<Project>(
                     builder: (BuildContext context,

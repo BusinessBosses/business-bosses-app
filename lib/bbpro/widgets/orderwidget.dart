@@ -1,10 +1,12 @@
 import 'package:business_bosses_v2/bbpro/models/order_model.dart';
+import 'package:business_bosses_v2/bbpro/presentation/createorder.dart';
 import 'package:business_bosses_v2/bbpro/widgets/optionsbutton.dart';
 import 'package:business_bosses_v2/utils/theme/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:get/get.dart';
 
-class OrderWidget extends StatelessWidget {
+class OrderWidget extends StatefulWidget {
   final Order order;
   final Color bgcolor;
   final bool? isExpanded;
@@ -16,6 +18,11 @@ class OrderWidget extends StatelessWidget {
     this.isExpanded,
   });
 
+  @override
+  State<OrderWidget> createState() => _OrderWidgetState();
+}
+
+class _OrderWidgetState extends State<OrderWidget> {
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -38,7 +45,8 @@ class OrderWidget extends StatelessWidget {
               children: <Widget>[
                 Container(
                   decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(3), color: bgcolor),
+                      borderRadius: BorderRadius.circular(3),
+                      color: widget.bgcolor),
                   padding:
                       const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
                   child: Wrap(
@@ -53,7 +61,7 @@ class OrderWidget extends StatelessWidget {
                           width: 5,
                         ),
                         Text(
-                          order.user!.username,
+                          widget.order.user!.username,
                           style: const TextStyle(
                             fontWeight: FontWeight.bold,
                             fontSize: 13,
@@ -64,6 +72,8 @@ class OrderWidget extends StatelessWidget {
                 OptionsButton(
                   padding: const EdgeInsets.all(0),
                   borderColor: Colors.white,
+                  onEdit: onEdit,
+                  onDelete: onDelete,
                 ),
               ],
             ),
@@ -128,7 +138,7 @@ class OrderWidget extends StatelessWidget {
                 ],
               ),
             ),
-            if (isExpanded != false)
+            if (widget.isExpanded != false)
               Row(
                 mainAxisAlignment: MainAxisAlignment.end,
                 children: <Widget>[
@@ -155,4 +165,12 @@ class OrderWidget extends StatelessWidget {
       ),
     );
   }
+
+  void onEdit() {
+    Get.to(() => CreateOrder(
+          order: widget.order,
+        ));
+  }
+
+  void onDelete() {}
 }

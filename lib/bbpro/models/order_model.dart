@@ -1,3 +1,5 @@
+import 'package:business_bosses_v2/bbpro/models/product_model.dart';
+import 'package:business_bosses_v2/bbpro/models/service_model.dart';
 import 'package:business_bosses_v2/common/models/user_model.dart';
 import 'package:flutter/material.dart';
 
@@ -6,28 +8,32 @@ class Order {
   final String userId;
   final String shopId;
   final String clientId;
-  final List<OrderItem> items;
+  final List<OrderItem>? items;
   final String deliveryMethod;
-  final DateTime deliveryDate;
+  final DateTime? deliveryDate;
   final String paymentMethod;
   final String notes;
   final String invoiceOption;
   final UserModel? user;
   final OrderStatus status;
+  final List<Product>? products;
+  final List<Service>? services;
 
   Order({
     required this.id,
     required this.userId,
     required this.shopId,
     required this.clientId,
-    required this.items,
+    this.items,
     required this.deliveryMethod,
-    required this.deliveryDate,
+    this.deliveryDate,
     required this.paymentMethod,
     required this.notes,
     required this.invoiceOption,
     this.user,
     required this.status,
+    this.products,
+    this.services,
   });
 
   factory Order.fromJson(Map<String, dynamic> json) {
@@ -36,16 +42,25 @@ class Order {
       userId: json['userId'],
       shopId: json['shopId'],
       clientId: json['clientId'],
-      items: (json['items'] as List<dynamic>)
-          .map((dynamic item) => OrderItem.fromJson(item))
-          .toList(),
       deliveryMethod: json['deliveryMethod'],
-      deliveryDate: DateTime.parse(json['deliveryDate']),
+      deliveryDate: json['deliveryDate'] == null
+          ? null
+          : DateTime.parse(json['deliveryDate']),
       paymentMethod: json['paymentMethod'],
       notes: json['notes'],
       invoiceOption: json['invoiceOption'],
       user: json['user'] == null ? null : UserModel.fromMap(json['user']),
-      status: json['status'],
+      status: OrderStatus.fromString(json['status']),
+      products: json['products'] != null
+          ? (json['products'] as List<dynamic>)
+              .map((dynamic item) => Product.fromJson(item))
+              .toList()
+          : <Product>[],
+      services: json['services'] != null
+          ? (json['services'] as List<dynamic>)
+              .map((dynamic item) => Service.fromJson(item))
+              .toList()
+          : <Service>[],
     );
   }
 
@@ -55,14 +70,17 @@ class Order {
       'userId': userId,
       'shopId': shopId,
       'clientId': clientId,
-      'items': items.map((OrderItem item) => item.toJson()).toList(),
       'deliveryMethod': deliveryMethod,
-      'deliveryDate': deliveryDate.toIso8601String(),
+      'deliveryDate': deliveryDate != null
+          ? DateTime.now()
+          : deliveryDate!.toIso8601String(),
       'paymentMethod': paymentMethod,
       'notes': notes,
       'invoiceOption': invoiceOption,
       'user': user,
       'status': status,
+      'products': products?.map((Product product) => product.toJson()).toList(),
+      'services': services?.map((Service service) => service.toJson()).toList(),
     };
   }
 }
@@ -109,7 +127,6 @@ enum OrderStatus {
     switch (status) {
       case 'all orders':
         return OrderStatus.allorders;
-
       case 'pending':
         return OrderStatus.pending;
       case 'paid':

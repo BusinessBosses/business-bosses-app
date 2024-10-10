@@ -11,14 +11,29 @@ class ProjectController extends GetxController {
   RxList<Task> tasks = RxList<Task>(<Task>[]);
   RxList<Project> projects = RxList<Project>(<Project>[]);
   RxBool loading = RxBool(true);
+  final Map<ProjectStatus, List<Project>> statusProjects =
+      <ProjectStatus, List<Project>>{};
+  final List<Project> allProjects = <Project>[];
 
   Future<void> initProjects(String userId) async {
     projects.clear();
+    allProjects.clear();
     ApiResponseModel response =
         await ApiService.get(path: 'projects/user-projects/$userId');
     if (response.success) {
       for (int i = 0; i < response.data['rows'].length; i++) {
         projects.add(Project.fromMap(response.data['rows'][i]));
+      }
+      // Initialize empty lists for each status
+      for (ProjectStatus status in ProjectStatus.values) {
+        statusProjects[status] = <Project>[];
+      }
+      for (ProjectStatus status in ProjectStatus.values) {
+        List<Project> statusTasks = projects
+            .where((Project project) => project.status == status)
+            .toList();
+        statusProjects[status] = statusTasks;
+        allProjects.addAll(statusTasks);
       }
     }
     loading(false);
