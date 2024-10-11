@@ -64,7 +64,7 @@ class _HomeScreenState extends State<HomeScreen>
   @override
   void initState() {
     super.initState();
-    _tabController = TabController(vsync: this, length: 3, initialIndex: 1);
+    _tabController = TabController(vsync: this, length: 2, initialIndex: 1);
 
     WidgetsBinding.instance.addObserver(this);
     // showTutorial();
@@ -346,7 +346,7 @@ class _HomeScreenState extends State<HomeScreen>
                                         child: TabBarView(
                                             controller: _tabController,
                                             children: <Widget>[
-                                              const DiscoverSection(),
+                                              // const DiscoverSection(),
                                               PostsWidget(
                                                 onPageChange:
                                                     widget.onPageChange,

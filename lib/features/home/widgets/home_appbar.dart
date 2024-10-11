@@ -1,3 +1,4 @@
+import 'package:business_bosses_v2/features/home/discoverscreen.dart';
 import 'package:business_bosses_v2/features/home/widgets/searchsection.dart';
 import 'package:business_bosses_v2/features/marketplace/widgets/products.dart';
 import 'package:business_bosses_v2/navigation/routes.dart';
@@ -98,11 +99,36 @@ class HomeAppBar extends StatelessWidget {
                 //         ],
                 //       )
                 //     :
-                const Expanded(
-                    child: Padding(
-                  padding: EdgeInsets.only(right: 15.0),
-                  child: SearchSection(),
+                Expanded(
+                    child: Row(
+                  children: <Widget>[
+                    GestureDetector(
+                      onTap: () {
+                        Get.to(const DiscoverScreen());
+                      },
+                      child: CircleAvatar(
+                        backgroundColor: backgroundColor,
+                        child: SvgPicture.asset(
+                          'assets/svgs/homesearch.svg',
+                          color: textColor,
+                          height: 20,
+                        ),
+                      ),
+                    ),
+                    const SizedBox(
+                      width: 10,
+                    ),
+                    const Text(
+                      'Discover',
+                      style: TextStyle(
+                        color: textColor,
+                        fontSize: 16.0,
+                        fontWeight: FontWeight.w700,
+                      ),
+                    ),
+                  ],
                 )),
+
                 Row(
                   children: <Widget>[
                     GestureDetector(
@@ -204,6 +230,31 @@ class HomeAppBar extends StatelessWidget {
           controller: controller,
           indicatorColor: Colors.transparent,
           tabs: <Widget>[
+            // Tab(
+            //   child: Row(
+            //     mainAxisAlignment: MainAxisAlignment.center,
+            //     children: <Widget>[
+            //       if (controller.index == 0)
+            //         Container(
+            //           margin: const EdgeInsets.only(right: 8.0),
+            //           width: 8.0,
+            //           height: 8.0,
+            //           decoration: const BoxDecoration(
+            //             color: Colors.red,
+            //             shape: BoxShape.circle,
+            //           ),
+            //         ),
+            //       Text(
+            //         'Discover',
+            //         style: TextStyle(
+            //           color:
+            //               controller.index == 0 ? primaryColorLT : Colors.grey,
+            //           fontWeight: FontWeight.w700,
+            //         ),
+            //       ),
+            //     ],
+            //   ),
+            // ),
             Tab(
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.center,
@@ -219,7 +270,7 @@ class HomeAppBar extends StatelessWidget {
                       ),
                     ),
                   Text(
-                    'Discover',
+                    'For you',
                     style: TextStyle(
                       color:
                           controller.index == 0 ? primaryColorLT : Colors.grey,
@@ -244,35 +295,10 @@ class HomeAppBar extends StatelessWidget {
                       ),
                     ),
                   Text(
-                    'For you',
-                    style: TextStyle(
-                      color:
-                          controller.index == 1 ? primaryColorLT : Colors.grey,
-                      fontWeight: FontWeight.w700,
-                    ),
-                  ),
-                ],
-              ),
-            ),
-            Tab(
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: <Widget>[
-                  if (controller.index == 2)
-                    Container(
-                      margin: const EdgeInsets.only(right: 8.0),
-                      width: 8.0,
-                      height: 8.0,
-                      decoration: const BoxDecoration(
-                        color: Colors.red,
-                        shape: BoxShape.circle,
-                      ),
-                    ),
-                  Text(
                     'Following',
                     style: TextStyle(
                       color:
-                          controller.index == 2 ? primaryColorLT : Colors.grey,
+                          controller.index == 1 ? primaryColorLT : Colors.grey,
                       fontWeight: FontWeight.w700,
                     ),
                   ),
