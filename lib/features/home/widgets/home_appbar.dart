@@ -222,91 +222,73 @@ class HomeAppBar extends StatelessWidget {
             ),
           ),
         ),
-        Container(
-          height: 1,
-          color: backgroundColor,
-        ),
-        TabBar(
-          controller: controller,
-          indicatorColor: Colors.transparent,
-          tabs: <Widget>[
-            // Tab(
-            //   child: Row(
-            //     mainAxisAlignment: MainAxisAlignment.center,
-            //     children: <Widget>[
-            //       if (controller.index == 0)
-            //         Container(
-            //           margin: const EdgeInsets.only(right: 8.0),
-            //           width: 8.0,
-            //           height: 8.0,
-            //           decoration: const BoxDecoration(
-            //             color: Colors.red,
-            //             shape: BoxShape.circle,
-            //           ),
-            //         ),
-            //       Text(
-            //         'Discover',
-            //         style: TextStyle(
-            //           color:
-            //               controller.index == 0 ? primaryColorLT : Colors.grey,
-            //           fontWeight: FontWeight.w700,
-            //         ),
-            //       ),
-            //     ],
-            //   ),
-            // ),
-            Tab(
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: <Widget>[
-                  if (controller.index == 0)
-                    Container(
-                      margin: const EdgeInsets.only(right: 8.0),
-                      width: 8.0,
-                      height: 8.0,
-                      decoration: const BoxDecoration(
-                        color: Colors.red,
-                        shape: BoxShape.circle,
+        if (isTabVisible)
+          Container(
+            color: Colors.white,
+            child: TabBar(
+              controller: controller,
+              indicatorColor: Colors.transparent,
+              tabs: <Widget>[
+                Tab(
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: <Widget>[
+                      if (controller.index == 0)
+                        Container(
+                          margin: const EdgeInsets.only(right: 8.0),
+                          width: 8.0,
+                          height: 8.0,
+                          decoration: const BoxDecoration(
+                            color: Colors.red,
+                            shape: BoxShape.circle,
+                          ),
+                        ),
+                      Text(
+                        'For you',
+                        style: TextStyle(
+                          color: controller.index == 0
+                              ? primaryColorLT
+                              : Colors.grey,
+                          fontWeight: FontWeight.w700,
+                        ),
                       ),
-                    ),
-                  Text(
-                    'For you',
-                    style: TextStyle(
-                      color:
-                          controller.index == 0 ? primaryColorLT : Colors.grey,
-                      fontWeight: FontWeight.w700,
-                    ),
+                    ],
                   ),
-                ],
-              ),
-            ),
-            Tab(
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: <Widget>[
-                  if (controller.index == 1)
-                    Container(
-                      margin: const EdgeInsets.only(right: 8.0),
-                      width: 8.0,
-                      height: 8.0,
-                      decoration: const BoxDecoration(
-                        color: Colors.red,
-                        shape: BoxShape.circle,
+                ),
+                Tab(
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: <Widget>[
+                      if (controller.index == 1)
+                        Container(
+                          margin: const EdgeInsets.only(right: 8.0),
+                          width: 8.0,
+                          height: 8.0,
+                          decoration: const BoxDecoration(
+                            color: Colors.red,
+                            shape: BoxShape.circle,
+                          ),
+                        ),
+                      Text(
+                        'Following',
+                        style: TextStyle(
+                          color: controller.index == 1
+                              ? primaryColorLT
+                              : Colors.grey,
+                          fontWeight: FontWeight.w700,
+                        ),
                       ),
-                    ),
-                  Text(
-                    'Following',
-                    style: TextStyle(
-                      color:
-                          controller.index == 1 ? primaryColorLT : Colors.grey,
-                      fontWeight: FontWeight.w700,
-                    ),
+                    ],
                   ),
-                ],
-              ),
+                ),
+              ],
             ),
-          ],
-        ),
+          ),
+        if (isTabVisible)
+          const Divider(
+            height: 0.5,
+            color: Colors.black12,
+          ),
         Container(
           height: 1,
           color: backgroundColor,

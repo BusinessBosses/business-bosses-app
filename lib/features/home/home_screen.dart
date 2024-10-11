@@ -197,7 +197,7 @@ class _HomeScreenState extends State<HomeScreen>
               appBar: PreferredSize(
                 preferredSize: controller.loading.value
                     ? const Size.fromHeight(0)
-                    : const Size.fromHeight(kToolbarHeight + 50),
+                    : const Size.fromHeight(kToolbarHeight),
                 child: controller.loading.value
                     ? Container()
                     : GetBuilder<ChatController>(

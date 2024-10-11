@@ -160,29 +160,26 @@ class _ProScreenState extends State<ProScreen> with TickerProviderStateMixin {
                 child: Text(
               'Everything you need to grow your business',
               style: TextStyle(
-                  fontSize: 14,
-                  fontWeight: FontWeight.w700,
-                  color: proprimaryColor),
+                  fontSize: 14, fontWeight: FontWeight.w700, color: textColor),
             )),
             Padding(
               padding:
-                  const EdgeInsets.symmetric(horizontal: 15.0, vertical: 15),
+                  const EdgeInsets.symmetric(horizontal: 0.0, vertical: 15),
               child: Material(
                 shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(10),
+                  borderRadius: BorderRadius.circular(0),
                 ),
-                color: probackgroundColor,
+                color: backgroundColor,
                 child: TabBar(
                   indicatorPadding: const EdgeInsets.symmetric(horizontal: 15),
-                  indicatorColor: Colors.black,
+                  indicatorColor: primaryColorLT,
                   controller: protabbarcontroller,
                   tabs: const <Widget>[
                     Tab(
                       child: FittedBox(
                         child: Text(
                           'Set up Business',
-                          style: TextStyle(
-                              fontSize: 11, fontWeight: FontWeight.w700),
+                          style: TextStyle(fontWeight: FontWeight.w700),
                         ),
                       ),
                     ),
@@ -190,8 +187,7 @@ class _ProScreenState extends State<ProScreen> with TickerProviderStateMixin {
                       child: FittedBox(
                         child: Text(
                           'Become a Partner',
-                          style: TextStyle(
-                              fontSize: 11, fontWeight: FontWeight.w700),
+                          style: TextStyle(fontWeight: FontWeight.w700),
                         ),
                       ),
                     ),
@@ -199,8 +195,7 @@ class _ProScreenState extends State<ProScreen> with TickerProviderStateMixin {
                       child: FittedBox(
                         child: Text(
                           'Post Ad',
-                          style: TextStyle(
-                              fontSize: 11, fontWeight: FontWeight.w700),
+                          style: TextStyle(fontWeight: FontWeight.w700),
                         ),
                       ),
                     ),
@@ -241,7 +236,7 @@ class _ProScreenState extends State<ProScreen> with TickerProviderStateMixin {
                               'Upgrade now to',
                               style: TextStyle(
                                   fontWeight: FontWeight.w700,
-                                  color: proprimaryColor,
+                                  color: textColor,
                                   fontSize: 14),
                             ),
                           ),
@@ -258,6 +253,7 @@ class _ProScreenState extends State<ProScreen> with TickerProviderStateMixin {
                               '• Manage budget, expenses, tasks, and inventory\n'
                               '• Schedule appointments and set reminders\n'
                               '• Access real-time revenue and analytics\n',
+                              style: TextStyle(fontSize: 14),
                             ),
                           ),
                         ),
@@ -271,7 +267,7 @@ class _ProScreenState extends State<ProScreen> with TickerProviderStateMixin {
                               'Plus these for free',
                               style: TextStyle(
                                   fontWeight: FontWeight.w700,
-                                  color: proprimaryColor,
+                                  color: textColor,
                                   fontSize: 14),
                             ),
                           ),
@@ -280,9 +276,12 @@ class _ProScreenState extends State<ProScreen> with TickerProviderStateMixin {
                           padding: EdgeInsets.symmetric(horizontal: 15.0),
                           child: Align(
                             alignment: Alignment.centerLeft,
-                            child: Text('• Pro badge for increased visibility\n'
-                                '• 100 coins monthly to boost posts\n'
-                                '• Special deals and benefits\n'),
+                            child: Text(
+                              '• Pro badge for increased visibility\n'
+                              '• 100 coins monthly to boost posts\n'
+                              '• Special deals and benefits\n',
+                              style: TextStyle(fontSize: 14),
+                            ),
                           ),
                         ),
                         Padding(
@@ -310,7 +309,7 @@ class _ProScreenState extends State<ProScreen> with TickerProviderStateMixin {
                                   child: Text(
                                     'Our Happy Customers',
                                     style: TextStyle(
-                                        color: proprimaryColor,
+                                        color: textColor,
                                         fontWeight: FontWeight.bold),
                                   ),
                                 ),
@@ -393,7 +392,7 @@ class _ProScreenState extends State<ProScreen> with TickerProviderStateMixin {
                             'What you\'ll get',
                             style: TextStyle(
                                 fontWeight: FontWeight.w700,
-                                color: proprimaryColor,
+                                color: textColor,
                                 fontSize: 14),
                           ),
                         ),
@@ -409,6 +408,7 @@ class _ProScreenState extends State<ProScreen> with TickerProviderStateMixin {
                             '• Entrepreneurial Support\n'
                             '• Listed across multiple media\n'
                             '• Community Engagement\n',
+                            style: TextStyle(fontSize: 14),
                           ),
                         ),
                       ),
