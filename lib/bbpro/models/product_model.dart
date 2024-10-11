@@ -7,7 +7,7 @@ class Product {
   UserModel? user;
   Shop? shop;
   String name;
-  String price;
+  int price;
   String discount;
   String description;
   String category;
@@ -61,7 +61,7 @@ class Product {
       user: json['user'] != null ? UserModel.fromMap(json['user']) : null,
       shop: json['shop'] != null ? Shop.fromMap(json['shop']) : null,
       name: json['name'],
-      price: json['price'],
+      price: int.parse(json['price'].toString()),
       discount: json['discount'],
       description: json['description'],
       category: json['category'],

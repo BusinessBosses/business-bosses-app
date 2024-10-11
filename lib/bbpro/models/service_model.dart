@@ -56,8 +56,9 @@ class Service {
       shop: json['shop'] != null ? Shop.fromMap(json['shop']) : null,
       name: json['name'],
       price: double.parse(json['price'].toString()),
-      discount:
-          json['discount'] == null ? 0 : (json['discount'] as num).toDouble(),
+      discount: json['discount'] == null
+          ? 0
+          : double.parse(json['discount'].toString()),
       description: json['description'],
       category: json['category'],
       location: json['location'],

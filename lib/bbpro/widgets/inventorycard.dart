@@ -70,7 +70,7 @@ class _InventoryCardState extends State<InventoryCard> {
                       ),
                     ),
                     Text(
-                      widget.product?.price ?? 'Price',
+                      widget.product?.price.toString() ?? 'Price',
                       style: const TextStyle(
                         color: proprimaryColor,
                         fontWeight: FontWeight.bold,
