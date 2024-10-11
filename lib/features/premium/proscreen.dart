@@ -238,7 +238,7 @@ class _ProScreenState extends State<ProScreen> with TickerProviderStateMixin {
                             alignment: Alignment
                                 .centerLeft, // Aligns the text to the left
                             child: Text(
-                              'Upgrade now to;',
+                              'Upgrade now to',
                               style: TextStyle(
                                   fontWeight: FontWeight.w700,
                                   color: proprimaryColor,
@@ -261,22 +261,28 @@ class _ProScreenState extends State<ProScreen> with TickerProviderStateMixin {
                             ),
                           ),
                         ),
-                        // GestureDetector(
-                        //   onTap: () {},
-                        //   child: const Text(
-                        //     'See all',
-                        //     style: TextStyle(
-                        //         fontSize: 14, fontWeight: FontWeight.bold),
-                        //   ),
-                        // ),
+                        const Padding(
+                          padding:
+                              EdgeInsets.only(left: 15.0, top: 5, bottom: 10),
+                          child: Align(
+                            alignment: Alignment
+                                .centerLeft, // Aligns the text to the left
+                            child: Text(
+                              'Plus these for free',
+                              style: TextStyle(
+                                  fontWeight: FontWeight.w700,
+                                  color: proprimaryColor,
+                                  fontSize: 14),
+                            ),
+                          ),
+                        ),
                         const Padding(
                           padding: EdgeInsets.symmetric(horizontal: 15.0),
                           child: Align(
                             alignment: Alignment.centerLeft,
-                            child: Text(
-                                '• Get a Pro badge for increased visibility\n'
-                                '• Earn 100 coins monthly to boost posts\n'
-                                '• Access special deals and benefits\n'),
+                            child: Text('• Pro badge for increased visibility\n'
+                                '• 100 coins monthly to boost posts\n'
+                                '• Special deals and benefits\n'),
                           ),
                         ),
                         Padding(
@@ -292,7 +298,8 @@ class _ProScreenState extends State<ProScreen> with TickerProviderStateMixin {
                                   onPressed: () {}),
                             )),
                         Padding(
-                          padding: const EdgeInsets.only(bottom: 100.0),
+                          padding:
+                              const EdgeInsets.only(bottom: 100.0, top: 10),
                           child: SizedBox(
                             width: double.infinity,
                             child: Column(
