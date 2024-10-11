@@ -19,6 +19,7 @@ class Inventory extends StatefulWidget {
 
 class _InventoryState extends State<Inventory> {
   final ShopController shopController = Get.find();
+  // ignore: unused_field
   String? _selectedItem;
 
   @override
@@ -102,17 +103,17 @@ class _InventoryState extends State<Inventory> {
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: <Widget>[
-                const Wrap(children: <Widget>[
-                  Text(
+                Wrap(children: <Widget>[
+                  const Text(
                     'Products List',
                     style: TextStyle(color: Colors.black),
                   ),
-                  SizedBox(
+                  const SizedBox(
                     width: 3,
                   ),
                   Text(
-                    '(10)',
-                    style: TextStyle(color: Colors.black),
+                    '(${shopController.products.length})',
+                    style: const TextStyle(color: Colors.black),
                   ),
                 ]),
                 ProCustomButton(

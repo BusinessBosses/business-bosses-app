@@ -169,7 +169,7 @@ class _ProjectsState extends State<Projects>
                                           );
                                           projectController.updateProject(
                                               project.id, <String, dynamic>{
-                                            'status': newStatus.toString()
+                                            'status': newStatus.toString(),
                                           });
                                         });
                                       },
