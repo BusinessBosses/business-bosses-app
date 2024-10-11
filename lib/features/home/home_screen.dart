@@ -64,7 +64,7 @@ class _HomeScreenState extends State<HomeScreen>
   @override
   void initState() {
     super.initState();
-    _tabController = TabController(vsync: this, length: 2, initialIndex: 1);
+    _tabController = TabController(vsync: this, length: 2, initialIndex: 0);
 
     WidgetsBinding.instance.addObserver(this);
     // showTutorial();

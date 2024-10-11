@@ -70,29 +70,26 @@ class _CompleteSearchingScreenState extends State<CompleteSearchingScreen>
                 },
               ),
               bottom: PreferredSize(
-                preferredSize: const Size.fromHeight(kToolbarHeight),
-                child: Obx(() => controller.query.value.isNotEmpty
-                    ? TabBar(
-                        controller: _tabController,
-                        tabs: const <Widget>[
-                          Tab(
-                            child: TextWidget(
-                              text: 'People',
-                              size: 14,
-                              fontWeight: FontWeight.w700,
-                            ),
-                          ),
-                          Tab(
-                            child: TextWidget(
-                              text: 'Posts',
-                              size: 14,
-                              fontWeight: FontWeight.w700,
-                            ),
-                          ),
-                        ],
-                      )
-                    : Container()),
-              ),
+                  preferredSize: const Size.fromHeight(kToolbarHeight),
+                  child: TabBar(
+                    controller: _tabController,
+                    tabs: const <Widget>[
+                      Tab(
+                        child: TextWidget(
+                          text: 'People',
+                          size: 14,
+                          fontWeight: FontWeight.w700,
+                        ),
+                      ),
+                      Tab(
+                        child: TextWidget(
+                          text: 'Posts',
+                          size: 14,
+                          fontWeight: FontWeight.w700,
+                        ),
+                      ),
+                    ],
+                  )),
               actions: <Widget>[
                 if (_hasFilter)
                   IconButton(

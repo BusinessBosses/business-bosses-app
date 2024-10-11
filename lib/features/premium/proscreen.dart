@@ -252,12 +252,12 @@ class _ProScreenState extends State<ProScreen> with TickerProviderStateMixin {
                             alignment: Alignment.centerLeft,
                             child: Text(
                               '• Create your own business link \n'
-                              '• Launch your products and services quickly and easily.\n'
-                              '• Reach customers in-person, online or on the go.\n'
-                              '• Track every sale with seamless POS system.\n'
-                              '• Manage Budget, Expenses, Task & inventory.\n'
-                              '• Appointment scheduling & Reminders.\n'
-                              '• Access Real time Revenue & analytics.\n',
+                              '• Launch your products and services quickly and easily\n'
+                              '• Reach customers in person, online, or on the go\n'
+                              '• Track every sale with a seamless POS system\n'
+                              '• Manage budget, expenses, tasks, and inventory\n'
+                              '• Schedule appointments and set reminders\n'
+                              '• Access real-time revenue and analytics\n',
                             ),
                           ),
                         ),
@@ -274,9 +274,9 @@ class _ProScreenState extends State<ProScreen> with TickerProviderStateMixin {
                           child: Align(
                             alignment: Alignment.centerLeft,
                             child: Text(
-                                '• Get Pro badge for increased visibility \n'
-                                '• Earn 100 coins monthly to Boost posts \n'
-                                '• Access special deals and benefits \n'),
+                                '• Get a Pro badge for increased visibility\n'
+                                '• Earn 100 coins monthly to boost posts\n'
+                                '• Access special deals and benefits\n'),
                           ),
                         ),
                         Padding(
@@ -400,7 +400,7 @@ class _ProScreenState extends State<ProScreen> with TickerProviderStateMixin {
                             '• Selected Referrals\n'
                             '• Exclusive Brand Positioning\n'
                             '• Entrepreneurial Support\n'
-                            '• Economic Development\n'
+                            '• Listed across multiple media\n'
                             '• Community Engagement\n',
                           ),
                         ),
