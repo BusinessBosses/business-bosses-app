@@ -109,7 +109,7 @@ class _ExpandedProductState extends State<ExpandedProduct> {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: <Widget>[
                       Text(
-                        widget.product.price,
+                        widget.product.price.toString(),
                         style: const TextStyle(
                           color: proprimaryColor,
                           fontWeight: FontWeight.bold,

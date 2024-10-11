@@ -130,7 +130,7 @@ class _OrderProductScreenState extends State<OrderProductScreen>
                                     MainAxisAlignment.spaceBetween,
                                 children: <Widget>[
                                   Text(
-                                    widget.product?.price ?? 'Price',
+                                    widget.product?.price.toString() ?? 'Price',
                                     style: const TextStyle(
                                       color: proprimaryColor,
                                       fontWeight: FontWeight.bold,
