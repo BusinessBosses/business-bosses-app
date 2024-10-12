@@ -9,7 +9,6 @@ import 'package:flutter/material.dart';
 import 'package:business_bosses_v2/bbpro/widgets/button.dart';
 import 'package:business_bosses_v2/bbpro/widgets/dropdown.dart';
 import 'package:business_bosses_v2/bbpro/widgets/edittext.dart';
-import 'package:business_bosses_v2/bbpro/widgets/multipleedit.dart';
 import 'package:business_bosses_v2/utils/theme/theme.dart';
 import 'package:business_bosses_v2/bbpro/models/client_model.dart';
 import 'package:get/get.dart';

@@ -79,7 +79,20 @@ class _OrderWidgetState extends State<OrderWidget> {
                   padding: const EdgeInsets.all(0),
                   borderColor: Colors.white,
                   onEdit: onEdit,
-                  onDelete: onDelete,
+                  onDelete: () async {
+                    final bool delete =
+                        await orderController.deleteOrder(widget.order.id);
+                    if (delete) {
+                      showSnackbar(message: 'Order deleted successfully!');
+                    } else {
+                      showSnackbar(
+                        message: 'Error deleting order!',
+                        error: true,
+                      );
+                    }
+                    setState(() {});
+                    orderController.initOrders(profileController.myProfile.uid);
+                  },
                 ),
               ],
             ),
@@ -178,9 +191,11 @@ class _OrderWidgetState extends State<OrderWidget> {
   }
 
   void onEdit() {
-    Get.to(() => CreateOrder(
-          order: widget.order,
-        ));
+    Get.to(
+      () => CreateOrder(
+        order: widget.order,
+      ),
+    );
   }
 
   void onDelete() {
@@ -210,7 +225,6 @@ class _OrderWidgetState extends State<OrderWidget> {
                 );
               }
               setState(() {});
-              Navigator.pop(context);
               orderController.initOrders(profileController.myProfile.uid);
             },
             child: const Text('Yes'),
