@@ -1,4 +1,7 @@
 import 'package:business_bosses_v2/bbpro/presentation/pronotificationsettings.dart';
+import 'package:business_bosses_v2/common/widgets/safety_model.dart';
+import 'package:business_bosses_v2/features/notifications/controller/notification_controller.dart';
+import 'package:business_bosses_v2/features/notifications/models/my_notification.dart';
 import 'package:business_bosses_v2/utils/theme/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
@@ -12,106 +15,123 @@ class ProNotifications extends StatefulWidget {
 }
 
 class _ProNotificationsState extends State<ProNotifications> {
+  final NotificationController notificationController =
+      Get.put(NotificationController());
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        backgroundColor: probackgroundColor,
-        appBar: AppBar(
-          leading: IconButton(
-            onPressed: () {
-              Navigator.pop(context);
+      backgroundColor: probackgroundColor,
+      appBar: AppBar(
+        leading: IconButton(
+          onPressed: () {
+            Navigator.pop(context);
+          },
+          icon: SvgPicture.asset('assets/svgs/backbutton.svg'),
+        ),
+        title: const Text(
+          'Notifications',
+          style: TextStyle(
+            color: proprimaryColor,
+            fontWeight: FontWeight.bold,
+          ),
+        ),
+        actions: <Widget>[
+          GestureDetector(
+            onTap: () {
+              Get.to(() => const ProNotificationSettings());
             },
-            icon: SvgPicture.asset('assets/svgs/backbutton.svg'),
-          ),
-          title: const Text(
-            'Notifications',
-            style: TextStyle(
-              color: proprimaryColor,
-              fontWeight: FontWeight.bold,
-            ),
-          ),
-          actions: <Widget>[
-            GestureDetector(
-              onTap: () {
-                Get.to(ProNotificationSettings());
-              },
-              child: Padding(
-                padding: const EdgeInsets.only(right: 10.0, bottom: 10),
-                child: CircleAvatar(
-                  backgroundColor: prosemibackColor,
-                  radius: 30, // This sets the circle's radius
-                  child: Padding(
-                    padding: const EdgeInsets.all(
-                        10), // Adjust padding to fit the icon nicely
-                    child: SvgPicture.asset(
-                      'assets/svgs/settings.svg',
-                      height: 20,
-                    ),
+            child: Padding(
+              padding: const EdgeInsets.only(right: 10.0, bottom: 10),
+              child: CircleAvatar(
+                backgroundColor: prosemibackColor,
+                radius: 30, // This sets the circle's radius
+                child: Padding(
+                  padding: const EdgeInsets.all(
+                      10), // Adjust padding to fit the icon nicely
+                  child: SvgPicture.asset(
+                    'assets/svgs/settings.svg',
+                    height: 20,
                   ),
                 ),
               ),
-            )
-          ],
-        ),
-        body: Column(
-          children: [
-            SizedBox(
-              height: 15,
             ),
-            ListView.builder(
-              shrinkWrap: true,
-              itemCount: 5,
-              itemBuilder: (BuildContext context, int index) {
-                return Container(
-                    decoration: BoxDecoration(color: Colors.white),
-                    padding: const EdgeInsets.only(
-                      left: 15,
-                      right: 15,
-                    ),
-                    child: Row(
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        children: [
-                          CircleAvatar(
-                            backgroundColor: prosemibackColor,
-                            radius: 15, // This sets the circle's radius
-                            child: Padding(
-                              padding: const EdgeInsets.all(
-                                  8), // Adjust padding to fit the icon nicely
-                              child: SvgPicture.asset(
-                                'assets/svgs/notificationicon.svg',
-                                height: 20,
-                              ),
-                            ),
+          )
+        ],
+      ),
+      body: Obx(
+        () => notificationController.loading.value
+            ? const SafetyModel(
+                isLoading: true,
+              )
+            : Column(
+                children: <Widget>[
+                  const SizedBox(
+                    height: 15,
+                  ),
+                  ListView.builder(
+                    shrinkWrap: true,
+                    itemCount: notificationController.ordersNotification.length,
+                    itemBuilder: (BuildContext context, int index) {
+                      final MyNotification notification =
+                          notificationController.ordersNotification[index];
+                      return Container(
+                          decoration: const BoxDecoration(color: Colors.white),
+                          padding: const EdgeInsets.only(
+                            left: 15,
+                            right: 15,
                           ),
-                          const SizedBox(
-                            width: 15,
-                          ),
-                          Column(
-                            mainAxisAlignment: MainAxisAlignment.start,
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              SizedBox(
-                                height: 15,
-                              ),
-                              Text(
-                                'Notification Title',
-                                style: TextStyle(fontWeight: FontWeight.w700),
-                              ),
-                              Text('Notification Description'),
-                              SizedBox(
-                                height: 15,
-                              ),
-                              Container(
-                                width: MediaQuery.of(context).size.width - 75,
-                                height: 0.5,
-                                color: Colors.black12,
-                              )
-                            ],
-                          )
-                        ]));
-              },
-            ),
-          ],
-        ));
+                          child: Row(
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              children: <Widget>[
+                                CircleAvatar(
+                                  backgroundColor: prosemibackColor,
+                                  radius: 15, // This sets the circle's radius
+                                  child: Padding(
+                                    padding: const EdgeInsets.all(
+                                        8), // Adjust padding to fit the icon nicely
+                                    child: SvgPicture.asset(
+                                      'assets/svgs/notificationicon.svg',
+                                      height: 20,
+                                    ),
+                                  ),
+                                ),
+                                const SizedBox(
+                                  width: 15,
+                                ),
+                                Column(
+                                  mainAxisAlignment: MainAxisAlignment.start,
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: <Widget>[
+                                    const SizedBox(
+                                      height: 15,
+                                    ),
+                                    Text(
+                                      notification.title,
+                                      style: const TextStyle(
+                                          fontWeight: FontWeight.w700),
+                                    ),
+                                    Text(
+                                      notification.message,
+                                      softWrap: true,
+                                      overflow: TextOverflow.clip,
+                                    ),
+                                    const SizedBox(
+                                      height: 15,
+                                    ),
+                                    Container(
+                                      width: MediaQuery.of(context).size.width -
+                                          75,
+                                      height: 0.5,
+                                      color: Colors.black12,
+                                    )
+                                  ],
+                                )
+                              ]));
+                    },
+                  ),
+                ],
+              ),
+      ),
+    );
   }
 }
