@@ -149,11 +149,12 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
                         padding: const EdgeInsets.symmetric(horizontal: 15.0),
                         child: FeatureTile(
                           feature: FeatureItem(
-                            iconPath: 'assets/svgs/rocket.svg',
+                            iconPath: 'assets/svgs/rocketblack.svg',
                             caption: 'Boost Your Post',
                             subtext:
                                 'Reach a wider audience and get more views',
-                            color: Colors.red.withOpacity(0.2), // Changed color
+                            color:
+                                Colors.grey.withOpacity(0.2), // Changed color
                           ),
                         ),
                       ),

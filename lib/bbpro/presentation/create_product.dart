@@ -6,6 +6,7 @@ import 'package:business_bosses_v2/bbpro/models/product_model.dart';
 import 'package:business_bosses_v2/bbpro/widgets/button.dart';
 import 'package:business_bosses_v2/bbpro/widgets/dropdown.dart';
 import 'package:business_bosses_v2/bbpro/widgets/edittext.dart';
+import 'package:business_bosses_v2/bbpro/widgets/iconbutton.dart';
 import 'package:business_bosses_v2/bbpro/widgets/multipleedit.dart';
 import 'package:business_bosses_v2/bbpro/widgets/switchwidget.dart';
 import 'package:business_bosses_v2/bbpro/widgets/textfield.dart';
@@ -72,6 +73,8 @@ class _CreateProductListingState extends State<CreateProductListing> {
   String? color;
   String? size;
   List<String> paymentMethods = <String>[];
+  List<String> colors = <String>[];
+  List<String> sizes = <String>[];
 
   @override
   void initState() {
@@ -327,47 +330,6 @@ class _CreateProductListingState extends State<CreateProductListing> {
               },
             ),
             const SizedBox(height: 16),
-            // Padding(
-            //   padding: const EdgeInsets.symmetric(horizontal: 15.0),
-            //   child: Container(
-            //     padding: const EdgeInsets.all(15),
-            //     decoration: BoxDecoration(
-            //       color: Colors.white,
-            //       borderRadius: BorderRadius.circular(10),
-            //     ),
-            //     child: Column(
-            //       crossAxisAlignment: CrossAxisAlignment.start,
-            //       children: <Widget>[
-            //         const Text('Delivery Duration'),
-            //         Row(
-            //           children: <Widget>[
-            //             Expanded(
-            //               child: TextFormField(
-            //                 readOnly: true,
-            //                 decoration: InputDecoration(
-            //                   labelText: 'Start Date',
-            //                   hintText: _formatDate(startDate),
-            //                 ),
-            //                 onTap: () => _selectDate(context, true),
-            //               ),
-            //             ),
-            //             const SizedBox(width: 16),
-            //             Expanded(
-            //               child: TextFormField(
-            //                 readOnly: true,
-            //                 decoration: InputDecoration(
-            //                   labelText: 'End Date',
-            //                   hintText: _formatDate(endDate),
-            //                 ),
-            //                 onTap: () => _selectDate(context, false),
-            //               ),
-            //             ),
-            //           ],
-            //         ),
-            //       ],
-            //     ),
-            //   ),
-            // ),
             CustomEditText(
               inputType: const TextInputType.numberWithOptions(decimal: false),
               caption: 'Delivery Duration (Days)',
@@ -426,29 +388,33 @@ class _CreateProductListingState extends State<CreateProductListing> {
                       ),
                     ),
                     const SizedBox(height: 10),
-                    Row(
+                    Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: <Widget>[
-                        Expanded(
-                          child: MultipleEditTextWidget(
-                            padding: const EdgeInsets.all(5),
-                            backgroundColor: backgroundColor,
-                            buttonSize: 10,
-                            caption: 'Color',
-                            hintText: 'color',
-                            controller: colorController,
-                          ),
+                        MultipleEditTextWidget(
+                          padding: const EdgeInsets.all(5),
+                          backgroundColor: backgroundColor,
+                          buttonSize: 20,
+                          caption: 'Color',
+                          hintText: 'color',
+                          onValuesChanged: (List<String> values) {
+                            setState(() {
+                              colors = values;
+                            });
+                          },
                         ),
-                        const SizedBox(width: 10),
-                        Expanded(
-                          child: MultipleEditTextWidget(
-                            backgroundColor: backgroundColor,
-                            padding: const EdgeInsets.all(5),
-                            buttonSize: 10,
-                            caption: 'Size',
-                            hintText: 'size',
-                            controller: sizeController,
-                          ),
+                        const SizedBox(height: 10),
+                        MultipleEditTextWidget(
+                          padding: const EdgeInsets.all(5),
+                          backgroundColor: backgroundColor,
+                          buttonSize: 20,
+                          caption: 'Size',
+                          hintText: 'size',
+                          onValuesChanged: (List<String> values) {
+                            setState(() {
+                              sizes = values;
+                            });
+                          },
                         ),
                       ],
                     ),

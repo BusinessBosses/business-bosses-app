@@ -25,21 +25,21 @@ class _BossupChallengeState extends State<BossupChallenge> {
   Widget build(BuildContext context) {
     return Scaffold(
         backgroundColor: widget.backgroundColor ?? Colors.white,
-        appBar: widget.ishome == false
-            ? AppBar(
-                leading: IconButton(
-                  onPressed: () {
-                    Navigator.pop(context);
-                  },
-                  icon: SvgPicture.asset('assets/svgs/backbutton.svg'),
-                ),
-                centerTitle: true,
-                title: const Text(
-                  'Challenge',
-                  textAlign: TextAlign.center,
-                ),
-              )
-            : null,
+        // appBar: widget.ishome == false
+        //     ? AppBar(
+        //         leading: IconButton(
+        //           onPressed: () {
+        //             Navigator.pop(context);
+        //           },
+        //           icon: SvgPicture.asset('assets/svgs/backbutton.svg'),
+        //         ),
+        //         centerTitle: true,
+        //         title: const Text(
+        //           'Challenge',
+        //           textAlign: TextAlign.center,
+        //         ),
+        //       )
+        //     : null,
         body: GetBuilder<ChallengeController>(
           init:
               ChallengeController(), // Initialize controller here if not initialized before
@@ -57,155 +57,220 @@ class _BossupChallengeState extends State<BossupChallenge> {
                 title: 'There was an error loading data',
               );
             } else {
-              return ListView.builder(
-                scrollDirection:
-                    widget.ishome! == true ? Axis.horizontal : Axis.vertical,
-                itemCount: controller.categories.length,
-                itemBuilder: (BuildContext context, int index) {
-                  final Industry category = controller.categories[index];
-                  return GestureDetector(
-                    onTap: () {
-                      DateTime now = DateTime.now();
-                      if (category.startAt != null &&
-                          now.isBefore(category.startAt!)) {
-                        showDialog(
-                          context: context,
-                          builder: (BuildContext context) {
-                            return AlertDialog(
-                              title: const Text(
-                                'How It Works!',
-                                style: TextStyle(
-                                  fontWeight: FontWeight.bold,
-                                  decoration: TextDecoration.underline,
-                                ),
-                                textAlign: TextAlign.center,
-                              ),
-                              content: Column(
-                                mainAxisSize: MainAxisSize.min,
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                crossAxisAlignment: CrossAxisAlignment.center,
-                                children: <Widget>[
-                                  Text(
-                                    category.criteria!,
-                                    textAlign: TextAlign.center,
+              return Container(
+                color: backgroundColor,
+                child: ListView.builder(
+                  scrollDirection:
+                      widget.ishome! == true ? Axis.horizontal : Axis.vertical,
+                  itemCount: controller.categories.length,
+                  itemBuilder: (BuildContext context, int index) {
+                    final Industry category = controller.categories[index];
+                    return GestureDetector(
+                      onTap: () {
+                        DateTime now = DateTime.now();
+                        if (category.startAt != null &&
+                            now.isBefore(category.startAt!)) {
+                          showDialog(
+                            context: context,
+                            builder: (BuildContext context) {
+                              return AlertDialog(
+                                title: const Text(
+                                  'How It Works!',
+                                  style: TextStyle(
+                                    fontWeight: FontWeight.bold,
+                                    decoration: TextDecoration.underline,
                                   ),
-                                  const SizedBox(
-                                    height: 10,
-                                  ),
-                                  Text(
-                                    _calculateStartDate(category.startAt!),
-                                    style: const TextStyle(
-                                        fontSize: 20,
-                                        fontWeight: FontWeight.bold),
-                                  ),
-                                ],
-                              ),
-                              actions: <Widget>[
-                                TextButton(
-                                  child: const Text('OK'),
-                                  onPressed: () {
-                                    Navigator.of(context).pop();
-                                  },
+                                  textAlign: TextAlign.center,
                                 ),
-                              ],
-                            );
-                          },
-                        );
-                        return;
-                      }
-                      Get.to(() => BossUpSection(
-                            industry: category,
-                            bossUp: controller.categories[0],
-                          ));
-                    },
-                    child: Stack(
-                      children: <Widget>[
-                        Container(
-                          padding: widget.ishome == true
-                              ? const EdgeInsets.only(left: 10, right: 10)
-                              : const EdgeInsets.all(15),
-                          margin: widget.ishome == false
-                              ? const EdgeInsets.only(
-                                  top: 15, left: 15, right: 15)
-                              : const EdgeInsets.only(
-                                  left: 10,
-                                ),
-                          decoration: BoxDecoration(
-                            border:
-                                Border.all(width: 0.5, color: Colors.black12),
-                            color: Colors.white,
-                            borderRadius: const BorderRadius.all(
-                              Radius.circular(16),
-                            ),
-                          ),
-                          child: Column(
-                            mainAxisAlignment: widget.ishome == false
-                                ? MainAxisAlignment.start
-                                : MainAxisAlignment.spaceBetween,
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: <Widget>[
-                              if (widget.ishome == false)
-                                Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceBetween,
+                                content: Column(
+                                  mainAxisSize: MainAxisSize.min,
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  crossAxisAlignment: CrossAxisAlignment.center,
                                   children: <Widget>[
                                     Text(
-                                      category.industry!,
-                                      style: const TextStyle(
-                                          fontWeight: FontWeight.w700,
-                                          fontSize: 17),
+                                      category.criteria!,
+                                      textAlign: TextAlign.center,
                                     ),
-                                    SvgPicture.asset(
-                                      'assets/svgs/nexticon.svg',
-                                    )
+                                    const SizedBox(
+                                      height: 10,
+                                    ),
+                                    Text(
+                                      _calculateStartDate(category.startAt!),
+                                      style: const TextStyle(
+                                          fontSize: 20,
+                                          fontWeight: FontWeight.bold),
+                                    ),
                                   ],
                                 ),
-                              const SizedBox(
-                                height: 10,
+                                actions: <Widget>[
+                                  TextButton(
+                                    child: const Text('OK'),
+                                    onPressed: () {
+                                      Navigator.of(context).pop();
+                                    },
+                                  ),
+                                ],
+                              );
+                            },
+                          );
+                          return;
+                        }
+                        Get.to(() => BossUpSection(
+                              industry: category,
+                              bossUp: controller.categories[0],
+                            ));
+                      },
+                      child: Stack(
+                        children: <Widget>[
+                          Container(
+                            padding: widget.ishome == true
+                                ? const EdgeInsets.only(left: 10, right: 10)
+                                : const EdgeInsets.all(15),
+                            margin: widget.ishome == false
+                                ? const EdgeInsets.only(
+                                    top: 15, left: 15, right: 15)
+                                : const EdgeInsets.only(
+                                    left: 10,
+                                  ),
+                            decoration: BoxDecoration(
+                              border:
+                                  Border.all(width: 0.5, color: Colors.black12),
+                              color: Colors.white,
+                              borderRadius: const BorderRadius.all(
+                                Radius.circular(16),
                               ),
-                              Row(
-                                mainAxisAlignment: MainAxisAlignment.start,
-                                children: <Widget>[
-                                  Container(
-                                    height: 86,
-                                    width: 142,
-                                    decoration: BoxDecoration(
+                            ),
+                            child: Column(
+                              mainAxisAlignment: widget.ishome == false
+                                  ? MainAxisAlignment.start
+                                  : MainAxisAlignment.spaceBetween,
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: <Widget>[
+                                if (widget.ishome == false)
+                                  Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
+                                    children: <Widget>[
+                                      Text(
+                                        category.industry!,
+                                        style: const TextStyle(
+                                            fontWeight: FontWeight.w700,
+                                            fontSize: 17),
+                                      ),
+                                      SvgPicture.asset(
+                                        'assets/svgs/nexticon.svg',
+                                      )
+                                    ],
+                                  ),
+                                const SizedBox(
+                                  height: 10,
+                                ),
+                                Row(
+                                  mainAxisAlignment: MainAxisAlignment.start,
+                                  children: <Widget>[
+                                    Container(
+                                      height: 86,
+                                      width: 142,
+                                      decoration: BoxDecoration(
+                                          borderRadius:
+                                              BorderRadius.circular(9.9),
+                                          border: Border.all(
+                                            color: Colors.black12,
+                                            width: 0.5,
+                                          )),
+                                      child: ClipRRect(
                                         borderRadius:
-                                            BorderRadius.circular(9.9),
-                                        border: Border.all(
-                                          color: Colors.black12,
-                                          width: 0.5,
-                                        )),
-                                    child: ClipRRect(
-                                      borderRadius: BorderRadius.circular(10.0),
-                                      child: FittedBox(
-                                        fit: BoxFit.fill,
-                                        child: CachedNetworkImage(
-                                          width: 120,
-                                          imageUrl: category.photo!,
-                                          memCacheHeight: 256,
-                                          memCacheWidth: 256,
-                                          placeholder: (BuildContext context,
-                                                  String photo) =>
-                                              const Center(
-                                            child: SizedBox(
-                                                child:
-                                                    CircularProgressIndicator()),
+                                            BorderRadius.circular(10.0),
+                                        child: FittedBox(
+                                          fit: BoxFit.fill,
+                                          child: CachedNetworkImage(
+                                            width: 120,
+                                            imageUrl: category.photo!,
+                                            memCacheHeight: 256,
+                                            memCacheWidth: 256,
+                                            placeholder: (BuildContext context,
+                                                    String photo) =>
+                                                const Center(
+                                              child: SizedBox(
+                                                  child:
+                                                      CircularProgressIndicator()),
+                                            ),
+                                            errorWidget: (BuildContext context,
+                                                    String photo,
+                                                    dynamic error) =>
+                                                const Icon(Icons.error),
                                           ),
-                                          errorWidget: (BuildContext context,
-                                                  String photo,
-                                                  dynamic error) =>
-                                              const Icon(Icons.error),
                                         ),
                                       ),
                                     ),
+                                    if (widget.ishome == false)
+                                      const SizedBox(
+                                        width: 25,
+                                      ),
+                                    if (widget.ishome == false)
+                                      Column(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.start,
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        children: <Widget>[
+                                          Row(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.start,
+                                            children: <Widget>[
+                                              Text(
+                                                category.industryId ==
+                                                        '-MsUOGcOT9oRXGakCcJv'
+                                                    ? 'Free Promotion'
+                                                    : category.award ?? 'Win',
+                                                style: const TextStyle(
+                                                  color: primaryColorLT,
+                                                  fontWeight: FontWeight.bold,
+                                                  fontSize: 16,
+                                                ),
+                                              ),
+                                            ],
+                                          ),
+                                          Row(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.start,
+                                            children: <Widget>[
+                                              const Icon(
+                                                Icons.watch_later_outlined,
+                                                size: 15,
+                                                color: Colors.grey,
+                                              ),
+                                              const SizedBox(
+                                                width: 5,
+                                              ),
+                                              Text(
+                                                category.industryId ==
+                                                        '-MsUOGcOT9oRXGakCcJv'
+                                                    ? 'Every Monday'
+                                                    : _getChallengeStatus(
+                                                        category),
+                                                style: const TextStyle(
+                                                    color: Colors.grey,
+                                                    fontWeight:
+                                                        FontWeight.w700),
+                                              )
+                                            ],
+                                          ),
+                                          const SizedBox(
+                                            height: 5,
+                                          ),
+                                          _getChallengeTimeLeft(category),
+                                        ],
+                                      )
+                                  ],
+                                ),
+                                if (widget.ishome == true)
+                                  const SizedBox(
+                                    height: 10,
                                   ),
-                                  if (widget.ishome == false)
-                                    const SizedBox(
-                                      width: 25,
-                                    ),
-                                  if (widget.ishome == false)
-                                    Column(
+                                if (widget.ishome == true)
+                                  Expanded(
+                                    child: Column(
                                       mainAxisAlignment:
                                           MainAxisAlignment.start,
                                       crossAxisAlignment:
@@ -252,83 +317,25 @@ class _BossupChallengeState extends State<BossupChallenge> {
                                             )
                                           ],
                                         ),
-                                        const SizedBox(
-                                          height: 5,
-                                        ),
-                                        _getChallengeTimeLeft(category),
+                                        const Spacer(),
+                                        if (widget.ishome == true)
+                                          Padding(
+                                            padding: const EdgeInsets.only(
+                                                bottom: 10.0),
+                                            child:
+                                                _getChallengeTimeLeft(category),
+                                          ),
                                       ],
-                                    )
-                                ],
-                              ),
-                              if (widget.ishome == true)
-                                const SizedBox(
-                                  height: 10,
-                                ),
-                              if (widget.ishome == true)
-                                Expanded(
-                                  child: Column(
-                                    mainAxisAlignment: MainAxisAlignment.start,
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: <Widget>[
-                                      Row(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.start,
-                                        children: <Widget>[
-                                          Text(
-                                            category.industryId ==
-                                                    '-MsUOGcOT9oRXGakCcJv'
-                                                ? 'Free Promotion'
-                                                : category.award ?? 'Win',
-                                            style: const TextStyle(
-                                              color: primaryColorLT,
-                                              fontWeight: FontWeight.bold,
-                                              fontSize: 16,
-                                            ),
-                                          ),
-                                        ],
-                                      ),
-                                      Row(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.start,
-                                        children: <Widget>[
-                                          const Icon(
-                                            Icons.watch_later_outlined,
-                                            size: 15,
-                                            color: Colors.grey,
-                                          ),
-                                          const SizedBox(
-                                            width: 5,
-                                          ),
-                                          Text(
-                                            category.industryId ==
-                                                    '-MsUOGcOT9oRXGakCcJv'
-                                                ? 'Every Monday'
-                                                : _getChallengeStatus(category),
-                                            style: const TextStyle(
-                                                color: Colors.grey,
-                                                fontWeight: FontWeight.w700),
-                                          )
-                                        ],
-                                      ),
-                                      const Spacer(),
-                                      if (widget.ishome == true)
-                                        Padding(
-                                          padding: const EdgeInsets.only(
-                                              bottom: 10.0),
-                                          child:
-                                              _getChallengeTimeLeft(category),
-                                        ),
-                                    ],
-                                  ),
-                                )
-                            ],
+                                    ),
+                                  )
+                              ],
+                            ),
                           ),
-                        ),
-                      ],
-                    ),
-                  );
-                },
+                        ],
+                      ),
+                    );
+                  },
+                ),
               );
             }
           },

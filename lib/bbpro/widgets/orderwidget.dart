@@ -53,16 +53,16 @@ class _OrderWidgetState extends State<OrderWidget> {
                       crossAxisAlignment: WrapCrossAlignment.center,
                       children: <Widget>[
                         SvgPicture.asset(
-                          'assets/svgs/projects.svg',
+                          'assets/svgs/ordersinvoices.svg',
                           height: 13,
                           color: textColor,
                         ),
                         const SizedBox(
                           width: 5,
                         ),
-                        Text(
-                          widget.order.user!.username,
-                          style: const TextStyle(
+                        const Text(
+                          'name and price',
+                          style: TextStyle(
                             fontWeight: FontWeight.bold,
                             fontSize: 13,
                           ),
@@ -77,58 +77,60 @@ class _OrderWidgetState extends State<OrderWidget> {
                 ),
               ],
             ),
-            const Padding(
-              padding: EdgeInsets.symmetric(vertical: 10.0),
+            Padding(
+              padding: const EdgeInsets.symmetric(vertical: 10.0),
               child: Column(
                 children: <Widget>[
                   Row(
                     children: <Widget>[
-                      Text(
-                        'Budget: ',
+                      const Text(
+                        'Client: ',
                         style: TextStyle(
                           fontWeight: FontWeight.normal,
                           fontSize: 13,
                         ),
                       ),
-                      // Text(
-                      //   task.project.amount.toString(),
-                      //   style: const TextStyle(
-                      //     fontWeight: FontWeight.bold,
-                      //     fontSize: 13,
-                      //   ),
-                      // ),
+                      Text(
+                        widget.order.user!.name ?? widget.order.user!.username,
+                        style: const TextStyle(
+                          fontWeight: FontWeight.bold,
+                          fontSize: 13,
+                        ),
+                      ),
                     ],
                   ),
                   Row(
                     children: <Widget>[
-                      Text(
-                        'Duration: ',
+                      const Text(
+                        'Delivery: ',
                         style: TextStyle(
                           fontWeight: FontWeight.normal,
                           fontSize: 13,
                         ),
                       ),
-                      // Text(
-                      //   task.project.duration.toString(),
-                      //   style: const TextStyle(
-                      //     fontWeight: FontWeight.bold,
-                      //     fontSize: 13,
-                      //   ),
-                      // ),
+                      Text(
+                        widget.order.deliveryMethod == 'in_person'
+                            ? 'In Person'
+                            : 'Online',
+                        style: const TextStyle(
+                          fontWeight: FontWeight.bold,
+                          fontSize: 13,
+                        ),
+                      ),
                     ],
                   ),
                   Row(
                     children: <Widget>[
-                      Text(
-                        'Expenses: ',
+                      const Text(
+                        'Order Date: ',
                         style: TextStyle(
                           fontWeight: FontWeight.normal,
                           fontSize: 13,
                         ),
                       ),
                       Text(
-                        'expenses amount',
-                        style: TextStyle(
+                        widget.order.deliveryDate.toString(),
+                        style: const TextStyle(
                           fontWeight: FontWeight.bold,
                           fontSize: 13,
                         ),

@@ -12,6 +12,7 @@ import 'package:business_bosses_v2/features/home/widgets/challengessection.dart'
 import 'package:business_bosses_v2/features/home/widgets/crowdfundsection.dart';
 import 'package:business_bosses_v2/features/home/widgets/eventssection.dart';
 import 'package:business_bosses_v2/features/home/widgets/industriessearch.dart';
+import 'package:business_bosses_v2/features/home/widgets/learningpage.dart';
 import 'package:business_bosses_v2/features/home/widgets/learningsection.dart';
 import 'package:business_bosses_v2/features/live_event/presentation/live_event.dart';
 import 'package:business_bosses_v2/utils/constants/constants.dart';
@@ -53,6 +54,7 @@ class _AllCommunitiesScreenState extends State<AllCommunitiesScreen>
   late final TabController _searchTabController;
   late final TabController _donationsearchTabController;
   late final TabController _pageTabController;
+  late final TabController _bossupTabController;
 
   List<Widget> get mActions {
     return <Widget>[
@@ -95,6 +97,7 @@ class _AllCommunitiesScreenState extends State<AllCommunitiesScreen>
     super.initState();
     _searchTabController = TabController(length: 2, vsync: this);
     _donationsearchTabController = TabController(length: 2, vsync: this);
+    _bossupTabController = TabController(length: 4, vsync: this);
     _pageTabController = TabController(
         length: 3, vsync: this, initialIndex: widget.initialTabIndex ?? 0);
 
@@ -123,8 +126,8 @@ class _AllCommunitiesScreenState extends State<AllCommunitiesScreen>
                       backgroundColor: Colors.white,
                       appBar: AppBar(
                         automaticallyImplyLeading: false,
-                        shadowColor: Colors.black54,
-                        elevation: 0.1,
+                        // shadowColor: Colors.black54,
+                        // elevation: 0.1,
                         title: _isSearching
                             ? Searchbar(
                                 hintText: 'Search',
@@ -196,33 +199,107 @@ class _AllCommunitiesScreenState extends State<AllCommunitiesScreen>
                         //           ),
                       ),
                       body: !_isSearching && !_isSearchingDonations
-                          ? const SingleChildScrollView(
+                          ? DefaultTabController(
+                              length: 4,
                               child: Column(
-                                mainAxisAlignment: MainAxisAlignment.start,
-                                crossAxisAlignment: CrossAxisAlignment.start,
                                 children: <Widget>[
-                                  SizedBox(
-                                    height: 20,
+                                  Container(
+                                    padding: const EdgeInsets.only(
+                                        top: 0, bottom: 10, left: 16),
+                                    constraints:
+                                        const BoxConstraints.expand(height: 40),
+                                    child: TabBar(
+                                      labelStyle: const TextStyle(
+                                          fontWeight: FontWeight.w400),
+                                      controller: _bossupTabController,
+                                      isScrollable: true,
+                                      indicator: BoxDecoration(
+                                        borderRadius: BorderRadius.circular(
+                                            50), // Creates border
+                                        color: Colors.black87.withAlpha(180),
+                                      ),
+                                      unselectedLabelColor: Colors.grey,
+                                      labelColor: Colors.white,
+                                      labelPadding: const EdgeInsets.symmetric(
+                                          horizontal: 20.0),
+                                      tabs: const <Widget>[
+                                        Tab(
+                                          text: 'All',
+                                        ),
+                                        Tab(text: 'Challenges'),
+                                        Tab(text: 'Learning'),
+                                        Tab(text: 'Crowdfund'),
+                                      ],
+                                    ),
                                   ),
-                                  BossUpTopSection(),
-                                  SizedBox(
-                                    height: 20,
-                                  ),
-                                  ChallengesSection(),
-                                  SizedBox(
-                                    height: 20,
-                                  ),
-                                  LearningSection(),
-                                  SizedBox(
-                                    height: 20,
-                                  ),
-                                  EventsSection(),
-                                  SizedBox(
-                                    height: 25,
-                                  ),
-                                  CrowdfundSection(),
-                                  SizedBox(
-                                    height: 100,
+                                  Expanded(
+                                    child: Column(
+                                      children: <Widget>[
+                                        Expanded(
+                                          child: TabBarView(
+                                            controller: _bossupTabController,
+                                            children: <Widget>[
+                                              Container(
+                                                color: backgroundColor,
+                                                child: SingleChildScrollView(
+                                                  child: Column(
+                                                    mainAxisAlignment:
+                                                        MainAxisAlignment.start,
+                                                    crossAxisAlignment:
+                                                        CrossAxisAlignment
+                                                            .start,
+                                                    children: <Widget>[
+                                                      const SizedBox(
+                                                        height: 20,
+                                                      ),
+                                                      ChallengesSection(
+                                                        onTap: () {
+                                                          setState(() {
+                                                            _bossupTabController
+                                                                .index = 1;
+                                                          });
+                                                        },
+                                                      ),
+                                                      const SizedBox(
+                                                        height: 20,
+                                                      ),
+                                                      const LearningSection(),
+                                                      const SizedBox(
+                                                        height: 20,
+                                                      ),
+                                                      const EventsSection(),
+                                                      const SizedBox(
+                                                        height: 25,
+                                                      ),
+                                                      CrowdfundSection(
+                                                        onTap: () {
+                                                          setState(() {
+                                                            _bossupTabController
+                                                                .index = 3;
+                                                          });
+                                                        },
+                                                      ),
+                                                      const SizedBox(
+                                                        height: 100,
+                                                      ),
+                                                    ],
+                                                  ),
+                                                ),
+                                              ),
+                                              const BossupChallenge(
+                                                ishome: false,
+                                                backgroundColor:
+                                                    backgroundColor,
+                                              ),
+                                              const LearningPage(),
+                                              const DonationsPage(
+                                                ishome: false,
+                                              ),
+                                            ],
+                                          ),
+                                        ),
+                                      ],
+                                    ),
                                   ),
                                 ],
                               ),
