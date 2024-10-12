@@ -17,7 +17,7 @@ enum ClientType {
   // Converts a string to a ClientType enum
   static ClientType fromString(String type) {
     return ClientType.values.firstWhere(
-      (ClientType e) => e.displayTitle == type,
+      (ClientType e) => e.toApiString() == type,
       orElse: () => ClientType.online, // default value
     );
   }

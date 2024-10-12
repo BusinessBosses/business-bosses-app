@@ -7,8 +7,8 @@ class Product {
   UserModel? user;
   Shop? shop;
   String name;
-  int price;
-  String discount;
+  double price;
+  double discount;
   String description;
   String category;
   String location;
@@ -61,8 +61,8 @@ class Product {
       user: json['user'] != null ? UserModel.fromMap(json['user']) : null,
       shop: json['shop'] != null ? Shop.fromMap(json['shop']) : null,
       name: json['name'],
-      price: int.parse(json['price'].toString()),
-      discount: json['discount'],
+      price: double.parse(json['price'].toString()),
+      discount: double.parse(json['discount'].toString()),
       description: json['description'],
       category: json['category'],
       location: json['location'] ?? 'Nigeria',
