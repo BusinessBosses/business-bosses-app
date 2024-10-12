@@ -8,6 +8,7 @@ import 'package:business_bosses_v2/utils/theme/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
+import 'package:intl/intl.dart';
 
 class OrderWidget extends StatefulWidget {
   final Order order;
@@ -96,7 +97,7 @@ class _OrderWidgetState extends State<OrderWidget> {
                         ),
                       ),
                       Text(
-                        widget.order.user!.name ?? widget.order.user!.username,
+                        widget.order.client.name,
                         style: const TextStyle(
                           fontWeight: FontWeight.bold,
                           fontSize: 13,
@@ -134,7 +135,9 @@ class _OrderWidgetState extends State<OrderWidget> {
                         ),
                       ),
                       Text(
-                        widget.order.createdAt.toString(),
+                        DateFormat('dd MMM yyyy')
+                            .format(widget.order.createdAt)
+                            .toString(),
                         style: const TextStyle(
                           fontWeight: FontWeight.bold,
                           fontSize: 13,
