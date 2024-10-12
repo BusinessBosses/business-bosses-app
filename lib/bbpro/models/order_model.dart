@@ -1,3 +1,4 @@
+import 'package:business_bosses_v2/bbpro/models/client_model.dart';
 import 'package:business_bosses_v2/bbpro/models/product_model.dart';
 import 'package:business_bosses_v2/bbpro/models/service_model.dart';
 import 'package:business_bosses_v2/common/models/user_model.dart';
@@ -15,6 +16,7 @@ class Order {
   final String notes;
   final String invoiceOption;
   final UserModel? user;
+  final Client client;
   final OrderStatus status;
   final List<Product>? products;
   final List<Service>? services;
@@ -35,6 +37,7 @@ class Order {
     required this.status,
     this.products,
     this.services,
+    required this.client,
     required this.createdAt,
   });
 
@@ -63,6 +66,7 @@ class Order {
               .map((dynamic item) => Service.fromJson(item))
               .toList()
           : <Service>[],
+      client: Client.fromMap(json['client']),
       createdAt: DateTime.parse(json['createdAt']),
     );
   }
@@ -81,6 +85,7 @@ class Order {
       'notes': notes,
       'invoiceOption': invoiceOption,
       'user': user,
+      'client': client,
       'status': status,
       'products': products?.map((Product product) => product.toJson()).toList(),
       'services': services?.map((Service service) => service.toJson()).toList(),
