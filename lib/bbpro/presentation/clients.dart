@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'package:business_bosses_v2/bbpro/controllers/shop_controller.dart';
-import 'package:business_bosses_v2/bbpro/presentation/addsupplier.dart';
+import 'package:business_bosses_v2/bbpro/presentation/add_client.dart';
+import 'package:business_bosses_v2/bbpro/presentation/add_supplier.dart';
 import 'package:business_bosses_v2/bbpro/presentation/expandedprosupplierpage.dart';
 import 'package:business_bosses_v2/bbpro/widgets/clientwidget.dart';
 import 'package:business_bosses_v2/bbpro/widgets/customtabbar.dart';
@@ -10,7 +11,6 @@ import 'package:business_bosses_v2/bbpro/widgets/supplierscard.dart';
 import 'package:business_bosses_v2/bbpro/widgets/topsection.dart';
 import 'package:business_bosses_v2/bbpro/controllers/clients_controller.dart';
 import 'package:business_bosses_v2/bbpro/models/client_model.dart';
-import 'package:business_bosses_v2/bbpro/presentation/addclient.dart';
 import 'package:business_bosses_v2/common/widgets/safety_model.dart';
 import 'package:business_bosses_v2/utils/theme/theme.dart';
 import 'package:flutter/cupertino.dart';

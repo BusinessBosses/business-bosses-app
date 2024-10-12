@@ -1,5 +1,5 @@
 import 'package:business_bosses_v2/bbpro/controllers/clients_controller.dart';
-import 'package:business_bosses_v2/bbpro/presentation/addclient.dart';
+import 'package:business_bosses_v2/bbpro/presentation/add_client.dart';
 import 'package:business_bosses_v2/bbpro/widgets/optionsbutton.dart';
 import 'package:business_bosses_v2/bbpro/models/client_model.dart';
 import 'package:business_bosses_v2/common/dialogs/snackbar.dart';

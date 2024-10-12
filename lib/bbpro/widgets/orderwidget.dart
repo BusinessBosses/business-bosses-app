@@ -1,6 +1,8 @@
+import 'package:business_bosses_v2/bbpro/controllers/order_controller.dart';
 import 'package:business_bosses_v2/bbpro/models/order_model.dart';
-import 'package:business_bosses_v2/bbpro/presentation/createorder.dart';
+import 'package:business_bosses_v2/bbpro/presentation/create_order.dart';
 import 'package:business_bosses_v2/bbpro/widgets/optionsbutton.dart';
+import 'package:business_bosses_v2/common/dialogs/snackbar.dart';
 import 'package:business_bosses_v2/utils/theme/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -23,6 +25,7 @@ class OrderWidget extends StatefulWidget {
 }
 
 class _OrderWidgetState extends State<OrderWidget> {
+  final OrderController orderController = Get.find();
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -174,5 +177,39 @@ class _OrderWidgetState extends State<OrderWidget> {
         ));
   }
 
-  void onDelete() {}
+  void onDelete() {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) => AlertDialog(
+        title: const Text(
+          'Delete Project',
+          style: bodyText1,
+        ),
+        content: const Text('Are you sure you want to delete this order?'),
+        actions: <Widget>[
+          TextButton(
+            onPressed: () => Get.back(),
+            child: const Text('No'),
+          ),
+          TextButton(
+            onPressed: () async {
+              final bool delete =
+                  await orderController.deleteOrder(widget.order.id);
+              if (delete) {
+                showSnackbar(message: 'Order deleted successfully!');
+              } else {
+                showSnackbar(
+                  message: 'Error deleting order!',
+                  error: true,
+                );
+              }
+              setState(() {});
+              Get.back();
+            },
+            child: const Text('Yes'),
+          ),
+        ],
+      ),
+    );
+  }
 }

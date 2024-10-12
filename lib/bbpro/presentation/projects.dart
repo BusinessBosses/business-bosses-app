@@ -5,7 +5,7 @@ import 'package:business_bosses_v2/bbpro/widgets/notificationbutton.dart';
 import 'package:business_bosses_v2/bbpro/widgets/proseardwidget.dart';
 import 'package:business_bosses_v2/bbpro/widgets/taskwidget.dart';
 import 'package:business_bosses_v2/bbpro/controllers/project_controller.dart';
-import 'package:business_bosses_v2/bbpro/presentation/addproject.dart';
+import 'package:business_bosses_v2/bbpro/presentation/add_project.dart';
 import 'package:business_bosses_v2/common/widgets/safety_model.dart';
 import 'package:business_bosses_v2/utils/theme/theme.dart';
 import 'package:flutter/material.dart';
