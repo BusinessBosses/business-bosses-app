@@ -183,40 +183,54 @@ class _OrderWidgetState extends State<OrderWidget> {
         ));
   }
 
-  void onDelete() {
-    showDialog(
-      context: context,
-      builder: (BuildContext context) => AlertDialog(
-        title: const Text(
-          'Delete Project',
-          style: bodyText1,
-        ),
-        content: const Text('Are you sure you want to delete this order?'),
-        actions: <Widget>[
-          TextButton(
-            onPressed: () => Navigator.pop(context),
-            child: const Text('No'),
-          ),
-          TextButton(
-            onPressed: () async {
-              final bool delete =
-                  await orderController.deleteOrder(widget.order.id);
-              if (delete) {
-                showSnackbar(message: 'Order deleted successfully!');
-              } else {
-                showSnackbar(
-                  message: 'Error deleting order!',
-                  error: true,
-                );
-              }
-              setState(() {});
-              Navigator.pop(context);
-              orderController.initOrders(profileController.myProfile.uid);
-            },
-            child: const Text('Yes'),
-          ),
-        ],
-      ),
-    );
+//Ernest can you check this why is not working fine
+  // void onDelete() {
+  //   showDialog(
+  //     context: context,
+  //     builder: (BuildContext context) => AlertDialog(
+  //       title: const Text(
+  //         'Delete Project',
+  //         style: bodyText1,
+  //       ),
+  //       content: const Text('Are you sure you want to delete this order?'),
+  //       actions: <Widget>[
+  //         TextButton(
+  //           onPressed: () => Navigator.pop(context),
+  //           child: const Text('No'),
+  //         ),
+  //         TextButton(
+  //           onPressed: () async {
+  //             final bool delete =
+  //                 await orderController.deleteOrder(widget.order.id);
+  //             if (delete) {
+  //               showSnackbar(message: 'Order deleted successfully!');
+  //             } else {
+  //               showSnackbar(
+  //                 message: 'Error deleting order!',
+  //                 error: true,
+  //               );
+  //             }
+  //             setState(() {});
+  //             Navigator.pop(context);
+  //             orderController.initOrders(profileController.myProfile.uid);
+  //           },
+  //           child: const Text('Yes'),
+  //         ),
+  //       ],
+  //     ),
+  //   );
+  // }
+
+//lets use this for now but the issues with this also is that the shows the snackbar twice which is not greet at all
+  void onDelete() async {
+    final bool delete = await orderController.deleteOrder(widget.order.id);
+    if (delete) {
+      showSnackbar(message: 'Order deleted successfully!');
+    } else {
+      showSnackbar(
+        message: 'Error deleting order!',
+        error: true,
+      );
+    }
   }
 }
