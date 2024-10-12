@@ -39,11 +39,7 @@ class _MyEventsState extends State<MyEvents> {
                     onPressed: () {
                       Get.to(() => const LiveEvent());
                     },
-                    icon: SvgPicture.asset(
-                      'assets/svgs/liveevent.svg',
-                      height: 23,
-                      color: Colors.black,
-                    ),
+                    icon: const Icon(Icons.calendar_month),
                   )
                 : const SizedBox(),
           ],

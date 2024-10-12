@@ -70,30 +70,26 @@ class _CompleteSearchingScreenState extends State<CompleteSearchingScreen>
                 },
               ),
               bottom: PreferredSize(
-                preferredSize: Size.fromHeight(
-                    controller.query.value.isNotEmpty ? kToolbarHeight : 0),
-                child: Obx(() => controller.query.value.isNotEmpty
-                    ? TabBar(
-                        controller: _tabController,
-                        tabs: const <Widget>[
-                          Tab(
-                            child: TextWidget(
-                              text: 'People',
-                              size: 20,
-                              fontWeight: FontWeight.w700,
-                            ),
-                          ),
-                          Tab(
-                            child: TextWidget(
-                              text: 'Posts',
-                              size: 20,
-                              fontWeight: FontWeight.w700,
-                            ),
-                          ),
-                        ],
-                      )
-                    : Container()),
-              ),
+                  preferredSize: const Size.fromHeight(kToolbarHeight),
+                  child: TabBar(
+                    controller: _tabController,
+                    tabs: const <Widget>[
+                      Tab(
+                        child: TextWidget(
+                          text: 'People',
+                          size: 14,
+                          fontWeight: FontWeight.w700,
+                        ),
+                      ),
+                      Tab(
+                        child: TextWidget(
+                          text: 'Posts',
+                          size: 14,
+                          fontWeight: FontWeight.w700,
+                        ),
+                      ),
+                    ],
+                  )),
               actions: <Widget>[
                 if (_hasFilter)
                   IconButton(
@@ -102,48 +98,46 @@ class _CompleteSearchingScreenState extends State<CompleteSearchingScreen>
                   ),
               ],
             ),
-            body: controller.query.value.isEmpty
-                ? const DiscoverSection()
-                : GestureDetector(
-                    onTap: () {
-                      FocusScope.of(context).unfocus();
-                    },
-                    onVerticalDragDown: (_) {
-                      FocusScope.of(context).unfocus();
-                    },
-                    child: Column(
+            body: GestureDetector(
+              onTap: () {
+                FocusScope.of(context).unfocus();
+              },
+              onVerticalDragDown: (_) {
+                FocusScope.of(context).unfocus();
+              },
+              child: Column(
+                children: <Widget>[
+                  Expanded(
+                    child: TabBarView(
+                      controller: _tabController,
                       children: <Widget>[
-                        Expanded(
-                          child: TabBarView(
-                            controller: _tabController,
-                            children: <Widget>[
-                              FilterUsers(
-                                filterItems: controller.isUserSearch.value
-                                    ? controller.searchedUsers
-                                    : controller.recommendedConnections,
-                                isLoading: controller.loading.value ||
-                                    controller.loadingSearch.value,
-                                onConnectionChange: controller.connectToUser,
-                                isSearch: controller.isUserSearch.value,
-                              ),
-                              FilterPosts(
-                                filterItems: controller.isPostSearch.value
-                                    ? controller.searchedPosts
-                                    : controller.recommendedPosts,
-                                isLoading: controller.loading.value ||
-                                    controller.loadingSearch.value,
-                              ),
-                              // FilterForum(
-                              //   filterItems: controller.searchedForums,
-                              //   isLoading: controller.loading.value ||
-                              //       controller.loadingSearch.value,
-                              // ),
-                            ],
-                          ),
-                        )
+                        FilterUsers(
+                          filterItems: controller.isUserSearch.value
+                              ? controller.searchedUsers
+                              : controller.recommendedConnections,
+                          isLoading: controller.loading.value ||
+                              controller.loadingSearch.value,
+                          onConnectionChange: controller.connectToUser,
+                          isSearch: controller.isUserSearch.value,
+                        ),
+                        FilterPosts(
+                          filterItems: controller.isPostSearch.value
+                              ? controller.searchedPosts
+                              : controller.recommendedPosts,
+                          isLoading: controller.loading.value ||
+                              controller.loadingSearch.value,
+                        ),
+                        // FilterForum(
+                        //   filterItems: controller.searchedForums,
+                        //   isLoading: controller.loading.value ||
+                        //       controller.loadingSearch.value,
+                        // ),
                       ],
                     ),
-                  ),
+                  )
+                ],
+              ),
+            ),
           ),
         );
       },

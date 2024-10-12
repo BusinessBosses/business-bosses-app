@@ -10,7 +10,7 @@ import 'package:business_bosses_v2/bbpro/controllers/clients_controller.dart';
 import 'package:business_bosses_v2/bbpro/controllers/order_controller.dart';
 import 'package:business_bosses_v2/bbpro/models/client_model.dart';
 import 'package:business_bosses_v2/bbpro/models/order_model.dart';
-import 'package:business_bosses_v2/bbpro/presentation/createorder.dart';
+import 'package:business_bosses_v2/bbpro/presentation/create_order.dart';
 import 'package:business_bosses_v2/bbpro/widgets/customtabbar.dart';
 import 'package:business_bosses_v2/bbpro/widgets/orderwidget.dart';
 import 'package:business_bosses_v2/bbpro/widgets/topsection.dart';
@@ -129,50 +129,52 @@ class _OrdersScreenState extends State<OrdersScreen>
                     ? const Center(
                         child: CircularProgressIndicator(),
                       )
-                    : orderController.orders.isEmpty
-                        ? const Center(
-                            child: SafetyModel(
-                              isLoading: false,
-                              title: 'No Orders Found!',
-                            ),
-                          )
-                        : CustomScrollView(
-                            scrollDirection: Axis.horizontal,
-                            controller: _mainListScrollController,
-                            slivers: <Widget>[
-                              ...OrderStatus.values.map(
-                                (OrderStatus status) => SliverToBoxAdapter(
-                                  child: RowStatusCard(
-                                    orders: orderController.orders
-                                        .where((Order order) =>
-                                            order.status.displayTitle ==
-                                            status.displayTitle)
-                                        .toList(),
-                                    orderStatus: status,
-                                    screenSize: screenSize,
-                                    orderAccepted:
-                                        (Order order, OrderStatus newStatus) {
-                                      setState(() {
-                                        // Update client status here
-                                      });
-                                    },
-                                    onDrag: (bool isRight) {
-                                      if (_lastMoveRight == isRight) {
-                                        return;
-                                      }
-                                      _lastMoveRight = isRight;
-                                      _moveMainList(isRight);
-                                    },
-                                    cancelDrag: () {
-                                      _lastMoveRight = null;
-                                      _timer?.cancel();
-                                    },
-                                    allorders: orderController.orders,
-                                  ),
+                    : Obx(
+                        () => orderController.orders.isEmpty
+                            ? const Center(
+                                child: SafetyModel(
+                                  isLoading: false,
+                                  title: 'No Orders Found!',
                                 ),
                               )
-                            ],
-                          ),
+                            : CustomScrollView(
+                                scrollDirection: Axis.horizontal,
+                                controller: _mainListScrollController,
+                                slivers: <Widget>[
+                                  ...OrderStatus.values.map(
+                                    (OrderStatus status) => SliverToBoxAdapter(
+                                      child: RowStatusCard(
+                                        orders: orderController.orders
+                                            .where((Order order) =>
+                                                order.status.displayTitle ==
+                                                status.displayTitle)
+                                            .toList(),
+                                        orderStatus: status,
+                                        screenSize: screenSize,
+                                        orderAccepted: (Order order,
+                                            OrderStatus newStatus) {
+                                          setState(() {
+                                            // Update client status here
+                                          });
+                                        },
+                                        onDrag: (bool isRight) {
+                                          if (_lastMoveRight == isRight) {
+                                            return;
+                                          }
+                                          _lastMoveRight = isRight;
+                                          _moveMainList(isRight);
+                                        },
+                                        cancelDrag: () {
+                                          _lastMoveRight = null;
+                                          _timer?.cancel();
+                                        },
+                                        allorders: orderController.orders,
+                                      ),
+                                    ),
+                                  )
+                                ],
+                              ),
+                      ),
               ),
             ),
           ],
@@ -297,7 +299,7 @@ class RowStatusCard extends StatelessWidget {
                         padding: const EdgeInsets.only(bottom: 12),
                         child: OrderWidget(
                           order: allorders[index],
-                          bgcolor: Colors.black,
+                          bgcolor: allorders[index].status.backgroundColor,
                         ),
                       );
                     },
@@ -368,7 +370,7 @@ class ListStatusColumnWidget extends StatelessWidget {
       itemBuilder: (BuildContext context, int index) {
         final OrderWidget orderWidget = OrderWidget(
           order: orders[index],
-          bgcolor: Colors.black,
+          bgcolor: orders[index].status.backgroundColor,
         );
 
         return Padding(

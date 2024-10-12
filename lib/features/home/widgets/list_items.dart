@@ -149,7 +149,7 @@ class _PostsWidgetState extends State<PostsWidget> {
     List<Widget> widgets = <Widget>[];
 
     // Insert ChallengesSection every 6th item without replacing the original post
-    if (postIndex == 2) {
+    if (postIndex == 3) {
       widgets.add(Column(
         children: <Widget>[
           const ChallengesSection(backgroundColor: backgroundColor),
@@ -161,17 +161,17 @@ class _PostsWidgetState extends State<PostsWidget> {
       ));
     }
 
-    if (postIndex != 0 && postIndex % 6 == 0) {
-      widgets.add(Column(
-        children: <Widget>[
-          const ChallengesSection(backgroundColor: backgroundColor),
-          Container(
-            height: 10,
-            color: backgroundColor,
-          )
-        ],
-      ));
-    }
+    // if (postIndex != 0 && postIndex % 6 == 0) {
+    //   widgets.add(Column(
+    //     children: <Widget>[
+    //       const ChallengesSection(backgroundColor: backgroundColor),
+    //       Container(
+    //         height: 10,
+    //         color: backgroundColor,
+    //       )
+    //     ],
+    //   ));
+    // }
 
     final dynamic currentPost = controller.mixedPosts[postIndex];
 

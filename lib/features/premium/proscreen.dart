@@ -2,6 +2,7 @@ import 'dart:developer';
 
 import 'package:business_bosses_v2/bbpro/widgets/button.dart';
 import 'package:business_bosses_v2/features/home/widgets/bottom_bar.dart';
+import 'package:business_bosses_v2/features/live_event/presentation/live_event.dart';
 import 'package:business_bosses_v2/features/marketplace/presentation/subscription_confirmation.dart';
 import 'package:business_bosses_v2/features/notifications/widgets/quotewidget.dart';
 import 'package:business_bosses_v2/features/posts/presentation/create_post_screen.dart';
@@ -137,18 +138,18 @@ class _ProScreenState extends State<ProScreen> with TickerProviderStateMixin {
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
-        leading: IconButton(
-          onPressed: () {
-            Navigator.pop(context);
-          },
-          icon: SvgPicture.asset('assets/svgs/backbutton.svg'),
-        ),
-        centerTitle: true,
+        automaticallyImplyLeading: false,
         title: const Text(
           'Grow',
-          textAlign: TextAlign.center,
-          style: TextStyle(fontSize: 16),
         ),
+        actions: <Widget>[
+          IconButton(
+            onPressed: () {
+              Get.to(() => const LiveEvent());
+            },
+            icon: const Icon(Icons.calendar_month),
+          ),
+        ],
       ),
       body: Stack(children: <Widget>[
         Column(
@@ -159,29 +160,26 @@ class _ProScreenState extends State<ProScreen> with TickerProviderStateMixin {
                 child: Text(
               'Everything you need to grow your business',
               style: TextStyle(
-                  fontSize: 14,
-                  fontWeight: FontWeight.w700,
-                  color: proprimaryColor),
+                  fontSize: 14, fontWeight: FontWeight.w700, color: textColor),
             )),
             Padding(
               padding:
-                  const EdgeInsets.symmetric(horizontal: 15.0, vertical: 15),
+                  const EdgeInsets.symmetric(horizontal: 0.0, vertical: 15),
               child: Material(
                 shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(10),
+                  borderRadius: BorderRadius.circular(0),
                 ),
-                color: probackgroundColor,
+                color: backgroundColor,
                 child: TabBar(
                   indicatorPadding: const EdgeInsets.symmetric(horizontal: 15),
-                  indicatorColor: Colors.black,
+                  indicatorColor: primaryColorLT,
                   controller: protabbarcontroller,
                   tabs: const <Widget>[
                     Tab(
                       child: FittedBox(
                         child: Text(
-                          'Upgrade to Pro',
-                          style: TextStyle(
-                              fontSize: 11, fontWeight: FontWeight.w700),
+                          'Set up Business',
+                          style: TextStyle(fontWeight: FontWeight.w700),
                         ),
                       ),
                     ),
@@ -189,17 +187,15 @@ class _ProScreenState extends State<ProScreen> with TickerProviderStateMixin {
                       child: FittedBox(
                         child: Text(
                           'Become a Partner',
-                          style: TextStyle(
-                              fontSize: 11, fontWeight: FontWeight.w700),
+                          style: TextStyle(fontWeight: FontWeight.w700),
                         ),
                       ),
                     ),
                     Tab(
                       child: FittedBox(
                         child: Text(
-                          'Boost Posts',
-                          style: TextStyle(
-                              fontSize: 11, fontWeight: FontWeight.w700),
+                          'Post Ad',
+                          style: TextStyle(fontWeight: FontWeight.w700),
                         ),
                       ),
                     ),
@@ -214,84 +210,78 @@ class _ProScreenState extends State<ProScreen> with TickerProviderStateMixin {
                   Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 0.0),
                     child: Column(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      mainAxisAlignment: MainAxisAlignment.start,
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: <Widget>[
-                        const Padding(
-                          padding: EdgeInsets.symmetric(horizontal: 15.0),
-                          child: Text(
-                            'Save time, save money, set up and manage your business 10x faster',
-                            style: TextStyle(fontSize: 12),
+                        Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 15.0),
+                          child: FeatureTile(
+                            feature: FeatureItem(
+                              iconPath: 'assets/svgs/businessbb.svg',
+                              caption: 'Set Up Your Business',
+                              subtext:
+                                  'Save time, grow your business 10x faster',
+                              color:
+                                  Colors.grey.withOpacity(0.2), // Changed color
+                            ),
                           ),
                         ),
-                        Expanded(
-                          child: Stack(children: <Widget>[
-                            Padding(
-                              padding:
-                                  const EdgeInsets.symmetric(horizontal: 15.0),
-                              child: ListView.builder(
-                                physics: const NeverScrollableScrollPhysics(),
-                                itemCount: features.length,
-                                itemBuilder: (BuildContext context, int index) {
-                                  return FeatureTile(feature: features[index]);
-                                },
-                              ),
+                        const Padding(
+                          padding:
+                              EdgeInsets.only(left: 15.0, top: 15, bottom: 10),
+                          child: Align(
+                            alignment: Alignment
+                                .centerLeft, // Aligns the text to the left
+                            child: Text(
+                              'Upgrade now to',
+                              style: TextStyle(
+                                  fontWeight: FontWeight.w700,
+                                  color: textColor,
+                                  fontSize: 14),
                             ),
-                            Positioned(
-                              bottom: 0,
-                              left: 0,
-                              right: 0,
-                              child: Container(
-                                height: 200,
-                                decoration: const BoxDecoration(
-                                  color: Colors.white,
-                                  gradient: LinearGradient(
-                                    begin: Alignment.bottomCenter,
-                                    end: Alignment.topCenter,
-                                    colors: <Color>[
-                                      Colors.white,
-                                      Colors.white10,
-                                    ],
-                                  ),
-                                ),
-                              ),
-                            ),
-                          ]),
+                          ),
                         ),
-                        GestureDetector(
-                          onTap: () {
-                            showModalBottomSheet(
-                              context: context,
-                              shape: const RoundedRectangleBorder(
-                                borderRadius: BorderRadius.only(
-                                  topLeft: Radius.circular(20),
-                                  topRight: Radius.circular(20),
-                                ),
-                              ),
-                              isScrollControlled: true,
-                              builder: (BuildContext context) {
-                                return FractionallySizedBox(
-                                  heightFactor: 0.8,
-                                  child: Padding(
-                                    padding: const EdgeInsets.symmetric(
-                                        horizontal: 15.0),
-                                    child: ListView.builder(
-                                      itemCount: features.length,
-                                      itemBuilder:
-                                          (BuildContext context, int index) {
-                                        return FeatureTile(
-                                            feature: features[index]);
-                                      },
-                                    ),
-                                  ),
-                                );
-                              },
-                            );
-                          },
-                          child: const Text(
-                            'See all',
-                            style: TextStyle(
-                                fontSize: 14, fontWeight: FontWeight.bold),
+                        const Padding(
+                          padding: EdgeInsets.symmetric(horizontal: 15.0),
+                          child: Align(
+                            alignment: Alignment.centerLeft,
+                            child: Text(
+                              '• Create your own business link \n'
+                              '• Launch your products and services quickly and easily\n'
+                              '• Reach customers in person, online, or on the go\n'
+                              '• Track every sale with a seamless POS system\n'
+                              '• Manage budget, expenses, tasks, and inventory\n'
+                              '• Schedule appointments and set reminders\n'
+                              '• Access real-time revenue and analytics\n',
+                              style: TextStyle(fontSize: 14),
+                            ),
+                          ),
+                        ),
+                        const Padding(
+                          padding:
+                              EdgeInsets.only(left: 15.0, top: 5, bottom: 10),
+                          child: Align(
+                            alignment: Alignment
+                                .centerLeft, // Aligns the text to the left
+                            child: Text(
+                              'Plus these for free',
+                              style: TextStyle(
+                                  fontWeight: FontWeight.w700,
+                                  color: textColor,
+                                  fontSize: 14),
+                            ),
+                          ),
+                        ),
+                        const Padding(
+                          padding: EdgeInsets.symmetric(horizontal: 15.0),
+                          child: Align(
+                            alignment: Alignment.centerLeft,
+                            child: Text(
+                              '• Pro badge for increased visibility\n'
+                              '• 100 coins monthly to boost posts\n'
+                              '• Special deals and benefits\n',
+                              style: TextStyle(fontSize: 14),
+                            ),
                           ),
                         ),
                         Padding(
@@ -307,7 +297,8 @@ class _ProScreenState extends State<ProScreen> with TickerProviderStateMixin {
                                   onPressed: () {}),
                             )),
                         Padding(
-                          padding: const EdgeInsets.only(bottom: 100.0),
+                          padding:
+                              const EdgeInsets.only(bottom: 100.0, top: 10),
                           child: SizedBox(
                             width: double.infinity,
                             child: Column(
@@ -318,7 +309,7 @@ class _ProScreenState extends State<ProScreen> with TickerProviderStateMixin {
                                   child: Text(
                                     'Our Happy Customers',
                                     style: TextStyle(
-                                        color: proprimaryColor,
+                                        color: textColor,
                                         fontWeight: FontWeight.bold),
                                   ),
                                 ),
@@ -383,8 +374,9 @@ class _ProScreenState extends State<ProScreen> with TickerProviderStateMixin {
                         child: FeatureTile(
                           feature: FeatureItem(
                             iconPath: 'assets/svgs/partner.svg',
-                            caption: 'Exclusive Partner Offers Awaits You',
-                            subtext: 'Access special deals and benefits',
+                            caption: 'Exclusive Partners Awaits You',
+                            subtext:
+                                'Partner with us, list your deals and gets customers',
                             color:
                                 Colors.grey.withOpacity(0.2), // Changed color
                           ),
@@ -400,7 +392,7 @@ class _ProScreenState extends State<ProScreen> with TickerProviderStateMixin {
                             'What you\'ll get',
                             style: TextStyle(
                                 fontWeight: FontWeight.w700,
-                                color: proprimaryColor,
+                                color: textColor,
                                 fontSize: 14),
                           ),
                         ),
@@ -414,13 +406,11 @@ class _ProScreenState extends State<ProScreen> with TickerProviderStateMixin {
                             '• Selected Referrals\n'
                             '• Exclusive Brand Positioning\n'
                             '• Entrepreneurial Support\n'
-                            '• Economic Development\n'
+                            '• Listed across multiple media\n'
                             '• Community Engagement\n',
+                            style: TextStyle(fontSize: 14),
                           ),
                         ),
-                      ),
-                      const BossOfWeekProfileTile(
-                        isForyou: false,
                       ),
                       Padding(
                           padding: const EdgeInsets.only(
@@ -439,6 +429,9 @@ class _ProScreenState extends State<ProScreen> with TickerProviderStateMixin {
                                   }
                                 }),
                           )),
+                      const BossOfWeekProfileTile(
+                        isForyou: false,
+                      ),
                     ],
                   ),
                   const CreatePostScreen(

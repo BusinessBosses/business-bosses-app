@@ -48,4 +48,13 @@ class OrderController extends GetxController {
       return false;
     }
   }
+
+  Future<bool> deleteOrder(String id) async {
+    ApiResponseModel response = await ApiService.delete(path: 'orders/$id');
+    if (response.success) {
+      return true;
+    } else {
+      return false;
+    }
+  }
 }

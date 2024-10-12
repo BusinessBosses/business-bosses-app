@@ -12,33 +12,27 @@ class SearchSection extends StatelessWidget {
     return GestureDetector(
       onTap: () => Get.toNamed(Routes.completesearchingscreen),
       child: Container(
-        decoration: BoxDecoration(
-            color: Colors.white,
-            borderRadius: BorderRadius.circular(10),
-            border: Border.all(width: 1, color: hintColor)),
-        height: 45,
-        width: double.infinity,
-        child: TextFormField(
-          style: const TextStyle(fontSize: 20),
-          decoration: inputDecoration.copyWith(
-            border: OutlineInputBorder(
-              borderSide: BorderSide.none,
+          decoration: BoxDecoration(
+              color: backgroundColor,
               borderRadius: BorderRadius.circular(10),
-            ),
-            fillColor: backgroundColor,
-            filled: true,
-            enabled: false,
-            prefixIcon: Container(
-              padding: const EdgeInsets.symmetric(vertical: 10.0),
-              child: SvgPicture.asset(
+              border: Border.all(width: 1, color: hintColor)),
+          height: 45,
+          width: double.infinity,
+          padding: const EdgeInsets.symmetric(horizontal: 15),
+          child: Row(
+            children: <Widget>[
+              SvgPicture.asset(
                 'assets/svgs/search.svg',
-                color: hintColor,
+                color: Colors.black45,
+                height: 20,
               ),
-            ),
-            hintText: 'Search',
-          ),
-        ),
-      ),
+              const SizedBox(width: 7),
+              const Text(
+                'Search People and Posts',
+                style: TextStyle(fontSize: 14, color: Colors.black45),
+              )
+            ],
+          )),
     );
   }
 }

@@ -1,5 +1,8 @@
+import 'package:business_bosses_v2/features/home/discoverscreen.dart';
+import 'package:business_bosses_v2/features/home/sellProduct.dart';
 import 'package:business_bosses_v2/features/home/widgets/searchsection.dart';
 import 'package:business_bosses_v2/features/marketplace/widgets/products.dart';
+import 'package:business_bosses_v2/features/posts/presentation/create_poll_screen.dart';
 import 'package:business_bosses_v2/navigation/routes.dart';
 import 'package:business_bosses_v2/utils/theme/theme.dart';
 import 'package:flutter/material.dart';
@@ -98,13 +101,152 @@ class HomeAppBar extends StatelessWidget {
                 //         ],
                 //       )
                 //     :
-                const Expanded(
-                    child: Padding(
-                  padding: EdgeInsets.only(right: 15.0),
-                  child: SearchSection(),
+                Expanded(
+                    child: GestureDetector(
+                  onTap: () {
+                    Get.to(const DiscoverScreen());
+                  },
+                  child: Row(
+                    children: <Widget>[
+                      CircleAvatar(
+                        backgroundColor: backgroundColor,
+                        child: SvgPicture.asset(
+                          'assets/svgs/homesearch.svg',
+                          color: textColor,
+                          height: 20,
+                        ),
+                      ),
+                      const SizedBox(
+                        width: 5,
+                      ),
+                      const Text(
+                        'Discover',
+                        style: TextStyle(
+                          color: textColor,
+                          fontSize: 16.0,
+                          fontWeight: FontWeight.w700,
+                        ),
+                      ),
+                    ],
+                  ),
                 )),
+
                 Row(
                   children: <Widget>[
+                    PopupMenuButton<String>(
+                      onSelected: (String item) {
+                        switch (item) {
+                          case 'Item 1':
+                            Get.toNamed(Routes.createPost);
+                            break;
+                          case 'Item 2':
+                            sellProduct(context);
+                            break;
+                          case 'Item 3':
+                            Get.toNamed(Routes.createevent);
+                            break;
+                          case 'Item 4':
+                            Get.to(() => const CreatePollScreen());
+                            break;
+                        }
+                      },
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(10.0),
+                      ),
+                      itemBuilder: (BuildContext context) {
+                        return <PopupMenuEntry<String>>[
+                          PopupMenuItem<String>(
+                            value: 'Item 1',
+                            child: Row(
+                              children: <Widget>[
+                                SvgPicture.asset(
+                                  'assets/svgs/text.svg',
+                                  color: textColor,
+                                  height: 15,
+                                ),
+                                const SizedBox(width: 8),
+                                const Text(
+                                  'Create a Post',
+                                  style: TextStyle(
+                                    fontSize: 13,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                          PopupMenuItem<String>(
+                            value: 'Item 2',
+                            child: Row(
+                              children: <Widget>[
+                                SvgPicture.asset(
+                                  'assets/svgs/sellicon.svg',
+                                  height: 20,
+                                  color: textColor,
+                                ),
+                                const SizedBox(width: 8),
+                                const Text(
+                                  'Sell your products & services',
+                                  style: TextStyle(
+                                    fontSize: 13,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                          PopupMenuItem<String>(
+                            value: 'Item 3',
+                            child: Row(
+                              children: <Widget>[
+                                SvgPicture.asset(
+                                  'assets/svgs/eventu.svg',
+                                  color: textColor,
+                                  height: 15,
+                                ),
+                                const SizedBox(width: 8),
+                                const Text(
+                                  'Create an Event',
+                                  style: TextStyle(
+                                    fontSize: 13,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                          const PopupMenuItem<String>(
+                            value: 'Item 4',
+                            child: Row(
+                              children: <Widget>[
+                                Icon(
+                                  Icons.poll,
+                                  color: textColor,
+                                  size: 18,
+                                ),
+                                SizedBox(width: 8),
+                                Text(
+                                  'Create Polls & Surveys',
+                                  style: TextStyle(
+                                    fontSize: 13,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ];
+                      },
+                      offset: const Offset(0, 40),
+                      child: Container(
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 4, vertical: 4),
+                        decoration: BoxDecoration(
+                          color: backgroundcolorinterface,
+                          borderRadius: BorderRadius.circular(20),
+                        ),
+                        child: const Icon(Icons.add),
+                      ),
+                    ),
+                    const SizedBox(
+                      width: 10,
+                    ),
                     GestureDetector(
                       onTap: () => Get.toNamed(Routes.promotionscreen),
                       child: Container(
@@ -122,7 +264,7 @@ class HomeAppBar extends StatelessWidget {
                             Text(
                               formatCount(int.parse(coinsCount)),
                               style: const TextStyle(
-                                color: Color.fromRGBO(133, 133, 133, 1),
+                                color: textColor,
                                 fontSize: 15,
                                 fontWeight: FontWeight.w700,
                               ),
@@ -196,91 +338,73 @@ class HomeAppBar extends StatelessWidget {
             ),
           ),
         ),
-        Container(
-          height: 1,
-          color: backgroundColor,
-        ),
-        TabBar(
-          controller: controller,
-          indicatorColor: Colors.transparent,
-          tabs: <Widget>[
-            Tab(
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: <Widget>[
-                  if (controller.index == 0)
-                    Container(
-                      margin: const EdgeInsets.only(right: 8.0),
-                      width: 8.0,
-                      height: 8.0,
-                      decoration: const BoxDecoration(
-                        color: Colors.red,
-                        shape: BoxShape.circle,
+        if (isTabVisible)
+          Container(
+            color: Colors.white,
+            child: TabBar(
+              controller: controller,
+              indicatorColor: Colors.transparent,
+              tabs: <Widget>[
+                Tab(
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: <Widget>[
+                      if (controller.index == 0)
+                        Container(
+                          margin: const EdgeInsets.only(right: 8.0),
+                          width: 8.0,
+                          height: 8.0,
+                          decoration: const BoxDecoration(
+                            color: Colors.red,
+                            shape: BoxShape.circle,
+                          ),
+                        ),
+                      Text(
+                        'For you',
+                        style: TextStyle(
+                          color: controller.index == 0
+                              ? primaryColorLT
+                              : Colors.grey,
+                          fontWeight: FontWeight.w700,
+                        ),
                       ),
-                    ),
-                  Text(
-                    'Discover',
-                    style: TextStyle(
-                      color:
-                          controller.index == 0 ? primaryColorLT : Colors.grey,
-                      fontWeight: FontWeight.w700,
-                    ),
+                    ],
                   ),
-                ],
-              ),
-            ),
-            Tab(
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: <Widget>[
-                  if (controller.index == 1)
-                    Container(
-                      margin: const EdgeInsets.only(right: 8.0),
-                      width: 8.0,
-                      height: 8.0,
-                      decoration: const BoxDecoration(
-                        color: Colors.red,
-                        shape: BoxShape.circle,
+                ),
+                Tab(
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: <Widget>[
+                      if (controller.index == 1)
+                        Container(
+                          margin: const EdgeInsets.only(right: 8.0),
+                          width: 8.0,
+                          height: 8.0,
+                          decoration: const BoxDecoration(
+                            color: Colors.red,
+                            shape: BoxShape.circle,
+                          ),
+                        ),
+                      Text(
+                        'Following',
+                        style: TextStyle(
+                          color: controller.index == 1
+                              ? primaryColorLT
+                              : Colors.grey,
+                          fontWeight: FontWeight.w700,
+                        ),
                       ),
-                    ),
-                  Text(
-                    'For you',
-                    style: TextStyle(
-                      color:
-                          controller.index == 1 ? primaryColorLT : Colors.grey,
-                      fontWeight: FontWeight.w700,
-                    ),
+                    ],
                   ),
-                ],
-              ),
+                ),
+              ],
             ),
-            Tab(
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: <Widget>[
-                  if (controller.index == 2)
-                    Container(
-                      margin: const EdgeInsets.only(right: 8.0),
-                      width: 8.0,
-                      height: 8.0,
-                      decoration: const BoxDecoration(
-                        color: Colors.red,
-                        shape: BoxShape.circle,
-                      ),
-                    ),
-                  Text(
-                    'Following',
-                    style: TextStyle(
-                      color:
-                          controller.index == 2 ? primaryColorLT : Colors.grey,
-                      fontWeight: FontWeight.w700,
-                    ),
-                  ),
-                ],
-              ),
-            ),
-          ],
-        ),
+          ),
+        if (isTabVisible)
+          const Divider(
+            height: 0.5,
+            color: Colors.black12,
+          ),
         Container(
           height: 1,
           color: backgroundColor,

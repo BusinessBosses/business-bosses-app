@@ -232,22 +232,16 @@ class _AddSupplierState extends State<AddSupplier> {
                       controller: urlController,
                     ),
                     const SizedBox(height: 15),
-                    Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 15.0),
-                      child: MultipleEditTextWidget(
-                        caption: 'Email',
-                        hintText: 'example@business.com',
-                        controller: emailController,
-                      ),
+                    CustomEditText(
+                      caption: 'Email',
+                      hintText: 'example@business.com',
+                      controller: emailController,
                     ),
                     const SizedBox(height: 15),
-                    Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 15.0),
-                      child: MultipleEditTextWidget(
-                        caption: 'Phone number',
-                        hintText: '+234 000 000 000',
-                        controller: phoneController,
-                      ),
+                    CustomEditText(
+                      caption: 'Phone number',
+                      hintText: '+234 000 000 000',
+                      controller: phoneController,
                     ),
                     const SizedBox(height: 15),
                     const SizedBox(height: 150),

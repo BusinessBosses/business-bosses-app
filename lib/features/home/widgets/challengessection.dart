@@ -6,7 +6,8 @@ import 'package:get/get.dart';
 
 class ChallengesSection extends StatefulWidget {
   final Color? backgroundColor;
-  const ChallengesSection({super.key, this.backgroundColor});
+  final Function? onTap;
+  const ChallengesSection({super.key, this.backgroundColor, this.onTap});
 
   @override
   State<ChallengesSection> createState() => _ChallengesSectionState();
@@ -34,21 +35,28 @@ class _ChallengesSectionState extends State<ChallengesSection> {
                     'Challenges',
                     style: TextStyle(fontWeight: FontWeight.w700, fontSize: 14),
                   ),
-                  Wrap(
-                      crossAxisAlignment: WrapCrossAlignment.center,
-                      children: <Widget>[
-                        const Text(
-                          'View all',
-                          style: TextStyle(fontSize: 11),
-                        ),
-                        const SizedBox(width: 5.0),
-                        SvgPicture.asset(
-                          'assets/svgs/nexticon.svg',
-                          // ignore: deprecated_member_use
-                          color: textColor,
-                          height: 8,
-                        ),
-                      ]),
+                  GestureDetector(
+                    onTap: () {
+                      if (widget.onTap != null) {
+                        widget.onTap!();
+                      }
+                    },
+                    child: Wrap(
+                        crossAxisAlignment: WrapCrossAlignment.center,
+                        children: <Widget>[
+                          const Text(
+                            'View all',
+                            style: TextStyle(fontSize: 11),
+                          ),
+                          const SizedBox(width: 5.0),
+                          SvgPicture.asset(
+                            'assets/svgs/nexticon.svg',
+                            // ignore: deprecated_member_use
+                            color: textColor,
+                            height: 8,
+                          ),
+                        ]),
+                  ),
                 ],
               ),
             ),

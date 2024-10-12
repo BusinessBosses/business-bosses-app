@@ -1,5 +1,5 @@
 import 'package:business_bosses_v2/bbpro/models/supplier_model.dart';
-import 'package:business_bosses_v2/bbpro/presentation/addsupplier.dart';
+import 'package:business_bosses_v2/bbpro/presentation/add_supplier.dart';
 import 'package:business_bosses_v2/common/dialogs/snackbar.dart';
 import 'package:business_bosses_v2/common/widgets/network_image_with_placeholder.dart';
 import 'package:business_bosses_v2/features/posts/widgets/images_viewer_screen.dart';
