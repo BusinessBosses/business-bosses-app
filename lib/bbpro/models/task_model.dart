@@ -7,7 +7,7 @@ class Task {
   final String? userId;
   final String? projectId;
   final String? name;
-  final String? amount;
+  final double? amount;
   final DateTime? startAt;
   final DateTime? endAt;
   TaskStatus status;
@@ -38,7 +38,7 @@ class Task {
         userId: json['userId'],
         projectId: json['projectId'],
         name: json['name'],
-        amount: json['amount'],
+        amount: double.parse(json['amount'].toString()),
         startAt:
             json['startAt'] != null ? DateTime.parse(json['startAt']) : null,
         endAt: json['endAt'] != null ? DateTime.parse(json['endAt']) : null,

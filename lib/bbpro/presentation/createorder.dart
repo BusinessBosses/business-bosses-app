@@ -92,6 +92,7 @@ class _CreateOrderState extends State<CreateOrder> {
     bool response = await orderController.addOrders(orderData);
     if (response) {
       showSnackbar(message: 'Order Added Successfully!');
+      await orderController.initOrders(profileController.myProfile.uid);
       Navigator.pop(context);
     } else {
       showSnackbar(message: 'Error creating order!', error: true);

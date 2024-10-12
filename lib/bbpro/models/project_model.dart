@@ -8,7 +8,7 @@ class Project {
   final String userId;
   final String name;
   final String description;
-  final String? amount;
+  final double? amount;
   final String duration;
   final DateTime createdAt;
   final List<Task>? tasks;
@@ -36,7 +36,7 @@ class Project {
         status: ProjectStatus.fromString(json['status']),
         name: json['name'],
         description: json['description'],
-        amount: json['amount']?.toString(),
+        amount: double.parse(json['amount']!.toString()),
         duration: json['duration'],
         createdAt: DateTime.parse(json['createdAt']),
         tasks: json['tasks'] == null
