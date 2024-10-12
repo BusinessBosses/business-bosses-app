@@ -156,7 +156,7 @@ enum OrderStatus {
       case OrderStatus.allorders:
         return Colors.white;
       case OrderStatus.pending:
-        return Colors.amber;
+        return Colors.amber.withAlpha(100);
       case OrderStatus.paid:
         return Colors.green.withAlpha(100);
       case OrderStatus.cancelled:
