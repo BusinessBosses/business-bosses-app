@@ -136,7 +136,8 @@ class _OrderWidgetState extends State<OrderWidget> {
                       ),
                       Text(
                         DateFormat('dd MMM yyyy')
-                            .format(widget.order.createdAt)
+                            .format(widget.order.deliveryDate ??
+                                widget.order.createdAt)
                             .toString(),
                         style: const TextStyle(
                           fontWeight: FontWeight.bold,
