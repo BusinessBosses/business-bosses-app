@@ -97,7 +97,7 @@ class _CreateOrderState extends State<CreateOrder> {
     } else {
       showSnackbar(message: 'Error creating order!', error: true);
       setState(() {
-        isSubmit = true;
+        isSubmit = false;
       });
     }
   }
