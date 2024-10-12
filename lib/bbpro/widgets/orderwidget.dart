@@ -3,6 +3,7 @@ import 'package:business_bosses_v2/bbpro/models/order_model.dart';
 import 'package:business_bosses_v2/bbpro/presentation/create_order.dart';
 import 'package:business_bosses_v2/bbpro/widgets/optionsbutton.dart';
 import 'package:business_bosses_v2/common/dialogs/snackbar.dart';
+import 'package:business_bosses_v2/features/profile/controller/profile_controller.dart';
 import 'package:business_bosses_v2/utils/theme/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -26,6 +27,7 @@ class OrderWidget extends StatefulWidget {
 
 class _OrderWidgetState extends State<OrderWidget> {
   final OrderController orderController = Get.find();
+  final ProfileController profileController = Get.find();
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -188,7 +190,7 @@ class _OrderWidgetState extends State<OrderWidget> {
         content: const Text('Are you sure you want to delete this order?'),
         actions: <Widget>[
           TextButton(
-            onPressed: () => Get.back(),
+            onPressed: () => Navigator.pop(context),
             child: const Text('No'),
           ),
           TextButton(
@@ -204,7 +206,8 @@ class _OrderWidgetState extends State<OrderWidget> {
                 );
               }
               setState(() {});
-              Get.back();
+              Navigator.pop(context);
+              orderController.initOrders(profileController.myProfile.uid);
             },
             child: const Text('Yes'),
           ),
