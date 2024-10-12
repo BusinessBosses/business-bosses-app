@@ -297,7 +297,7 @@ class RowStatusCard extends StatelessWidget {
                         padding: const EdgeInsets.only(bottom: 12),
                         child: OrderWidget(
                           order: allorders[index],
-                          bgcolor: Colors.black,
+                          bgcolor: allorders[index].status.backgroundColor,
                         ),
                       );
                     },
@@ -368,7 +368,7 @@ class ListStatusColumnWidget extends StatelessWidget {
       itemBuilder: (BuildContext context, int index) {
         final OrderWidget orderWidget = OrderWidget(
           order: orders[index],
-          bgcolor: Colors.black,
+          bgcolor: orders[index].status.backgroundColor,
         );
 
         return Padding(
