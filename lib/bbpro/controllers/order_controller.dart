@@ -14,6 +14,7 @@ class OrderController extends GetxController {
 
   Future<void> initOrders(String userId) async {
     orders.clear();
+    allorders.clear();
     ApiResponseModel response = await ApiService.get(path: 'orders/all');
     if (response.success) {
       for (int i = 0; i < response.data['rows'].length; i++) {
@@ -42,7 +43,11 @@ class OrderController extends GetxController {
         'id': response.data['id'],
         ...response.data,
       });
-      orders.add(newClient);
+      orders.add(
+          newClient); // Add to ordersStatus based on the new order's status
+      ordersStatus[newClient.status]?.add(newClient);
+      allorders.add(newClient); // Add to all orders
+      update();
       return true;
     } else {
       return false;
@@ -52,6 +57,14 @@ class OrderController extends GetxController {
   Future<bool> deleteOrder(String id) async {
     ApiResponseModel response = await ApiService.delete(path: 'orders/$id');
     if (response.success) {
+      Order? deletedOrder =
+          orders.firstWhereOrNull((Order order) => order.id == id);
+      orders.removeWhere((Order order) =>
+          order.id ==
+          id); // Remove from ordersStatus based on the order's status
+      ordersStatus[deletedOrder?.status]?.remove(deletedOrder);
+      allorders.remove(deletedOrder); // Remove from all orders
+      update();
       return true;
     } else {
       return false;

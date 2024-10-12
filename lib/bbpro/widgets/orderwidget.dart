@@ -134,7 +134,7 @@ class _OrderWidgetState extends State<OrderWidget> {
                         ),
                       ),
                       Text(
-                        widget.order.deliveryDate.toString(),
+                        widget.order.createdAt.toString(),
                         style: const TextStyle(
                           fontWeight: FontWeight.bold,
                           fontSize: 13,
