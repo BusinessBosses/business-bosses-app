@@ -8,7 +8,7 @@ class Project {
   final String userId;
   final String name;
   final String description;
-  final double? amount;
+  final String? amount; // Changed from double? to String?
   final String duration;
   final DateTime createdAt;
   final List<Task>? tasks;
@@ -36,7 +36,8 @@ class Project {
         status: ProjectStatus.fromString(json['status']),
         name: json['name'],
         description: json['description'],
-        amount: double.parse(json['amount']!.toString()),
+        amount:
+            json['amount']?.toString(), // Changed to handle amount as String
         duration: json['duration'],
         createdAt: DateTime.parse(json['createdAt']),
         tasks: json['tasks'] == null
@@ -50,7 +51,7 @@ class Project {
         'userId': userId,
         'name': name,
         'description': description,
-        'amount': amount,
+        'amount': amount, // Changed to handle amount as String
         'duration': duration,
         'createdAt': createdAt.toIso8601String(),
         'tasks': tasks == null
