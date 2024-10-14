@@ -16,10 +16,16 @@ enum ClientType {
 
   // Converts a string to a ClientType enum
   static ClientType fromString(String type) {
-    return ClientType.values.firstWhere(
-      (ClientType e) => e.toApiString() == type,
-      orElse: () => ClientType.online, // default value
-    );
+    switch (type) {
+      case 'on-line':
+        return ClientType.online;
+      case 'in-person':
+        return ClientType.inPerson;
+      case 'bb-user':
+        return ClientType.bbUser;
+      default:
+        return ClientType.online; // default value if the type doesn't match
+    }
   }
 
   // Converts a ClientType enum to the correct string representation

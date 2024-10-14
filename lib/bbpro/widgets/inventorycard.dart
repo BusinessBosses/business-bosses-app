@@ -1,4 +1,5 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
+import 'package:business_bosses_v2/bbpro/controllers/shop_controller.dart';
 import 'package:business_bosses_v2/bbpro/presentation/create_product.dart';
 import 'package:flutter/material.dart';
 
@@ -26,6 +27,7 @@ class InventoryCard extends StatefulWidget {
 }
 
 class _InventoryCardState extends State<InventoryCard> {
+  final ShopController shopController = Get.find();
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -70,7 +72,7 @@ class _InventoryCardState extends State<InventoryCard> {
                       ),
                     ),
                     Text(
-                      widget.product?.price.toString() ?? 'Price',
+                      '${shopController.shop!.currency}${widget.product?.price.toString()}',
                       style: const TextStyle(
                         color: proprimaryColor,
                         fontWeight: FontWeight.bold,

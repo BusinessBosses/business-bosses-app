@@ -221,14 +221,23 @@ class _AddprojectState extends State<Addproject> {
                   maxLength: 300,
                 ),
                 const SizedBox(height: 15),
-                CustomEditText(
-                  currencycontroller: currencyController,
-                  iscurrencyfield: true,
-                  caption: 'Project Budget',
-                  hintText: '0.00',
-                  controller: budgetController,
-                  inputType: TextInputType.number,
-                ),
+                if (widget.project != null)
+                  CustomEditText(
+                    iscurrencyfield: true,
+                    caption: 'Project Budget',
+                    hintText: '0.00',
+                    controller: budgetController,
+                    inputType: TextInputType.number,
+                  ),
+                if (widget.project == null)
+                  CustomEditText(
+                    currencycontroller: currencyController,
+                    iscurrencyfield: true,
+                    caption: 'Project Budget',
+                    hintText: '0.00',
+                    controller: budgetController,
+                    inputType: TextInputType.number,
+                  ),
                 if (tasks.isNotEmpty) const SizedBox(height: 15),
                 if (tasks.isNotEmpty)
                   Padding(

@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:business_bosses_v2/action/action.dart';
+import 'package:business_bosses_v2/bbpro/controllers/shop_controller.dart';
 import 'package:business_bosses_v2/common/widgets/safety_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
@@ -31,6 +32,7 @@ class _OrdersScreenState extends State<OrdersScreen>
   final ScrollController _mainListScrollController = ScrollController();
   final ClientsController clientsController = Get.put(ClientsController());
   final OrderController orderController = Get.put(OrderController());
+  final ShopController shopController = Get.find();
   bool loading = true;
 
   @override
@@ -105,6 +107,15 @@ class _OrdersScreenState extends State<OrdersScreen>
                   showSnackBar(
                     context,
                     message: 'You have to add a client to create order!',
+                  );
+                  return;
+                }
+                if (shopController.products.isEmpty &&
+                    shopController.products.isEmpty) {
+                  showSnackBar(
+                    context,
+                    message:
+                        'You have to add a product or service to create order!',
                   );
                   return;
                 }

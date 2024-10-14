@@ -142,7 +142,7 @@ class _CreateServiceListingState extends State<CreateServiceListing>
           onPressed: () {
             final Map<String, dynamic> package = <String, dynamic>{
               'name': packageNameController.text.trim(),
-              'amount': currencyController.text + expenseController.text.trim(),
+              'price': expenseController.text.trim(),
             };
 
             setState(() {
@@ -174,7 +174,7 @@ class _CreateServiceListingState extends State<CreateServiceListing>
           onPressed: () {
             final Map<String, dynamic> updatedPackage = <String, dynamic>{
               'name': packageNameController.text.trim(),
-              'amount': currencyController.text + expenseController.text.trim(),
+              'price': expenseController.text.trim(),
             };
 
             // Update the task in the list
@@ -347,7 +347,7 @@ class _CreateServiceListingState extends State<CreateServiceListing>
                     style: TextStyle(),
                   ),
                 ),
-                initialSelection: location,
+                initialSelection: shopController.shop!.location,
                 pickerBuilder:
                     (BuildContext context, CountryCode? countryCode) {
                   return Container(
@@ -358,7 +358,7 @@ class _CreateServiceListingState extends State<CreateServiceListing>
                     child: CustomTextWidget(
                       caption: 'Location',
                       iconName: 'assets/svgs/nexticon.svg',
-                      text: location ?? 'Select Location',
+                      text: shopController.shop!.location,
                     ),
                   );
                 },
@@ -667,7 +667,7 @@ class _CreateServiceListingState extends State<CreateServiceListing>
         'description': _descriptionController.text,
         'discount': _discountController.text,
         'category': category,
-        'location': location,
+        'location': shopController.shop!.location,
         'images': images,
         'paymentMethod': paymentMethod,
         'deliveryMethod': deliveryMethod,
@@ -682,7 +682,8 @@ class _CreateServiceListingState extends State<CreateServiceListing>
           'endTime': '${_endTime.hour}:${_endTime.minute}:00',
           'startDate': '2023-10-01',
           'endDate': '2023-10-01'
-        }
+        },
+        'servicePackages': packages,
       };
 
       // For demonstration, print the map

@@ -59,7 +59,7 @@ class HowtouseTile extends StatelessWidget {
                   ),
                   GestureDetector(
                     onTap: () {
-                      Get.to(const HowToUseAppScreen());
+                      Get.to(() => const HowToUseAppScreen());
                     },
                     child: Container(
                       constraints: const BoxConstraints(minHeight: 40),

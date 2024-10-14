@@ -132,19 +132,21 @@ class _ShopScreenState extends State<ShopScreen> {
                 color: Colors.grey[200],
                 borderRadius: BorderRadius.circular(8),
               ),
-              child: const Row(
+              child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: <Widget>[
-                  Text('Catalog(10)'),
+                  Text(
+                      'Catalog(${shopController.products.length + shopController.services.length})'),
                   Row(
                     children: <Widget>[
-                      Icon(Icons.location_on, color: Colors.red, size: 18),
-                      SizedBox(width: 8),
-                      Text('Location'),
+                      const Icon(Icons.location_on,
+                          color: Colors.red, size: 18),
+                      const SizedBox(width: 8),
+                      Text(shopController.shop!.location),
                     ],
                   ),
-                  Text('Contact'),
-                  Row(
+                  const Text('Contact'),
+                  const Row(
                     children: <Widget>[
                       Icon(Icons.star, color: Colors.amber, size: 18),
                       SizedBox(width: 4),

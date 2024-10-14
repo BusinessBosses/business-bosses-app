@@ -18,10 +18,10 @@ class _ChallengesSectionState extends State<ChallengesSection> {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
-        Get.to(BossupChallenge(
-          backgroundColor: widget.backgroundColor ?? Colors.white,
-          ishome: false,
-        ));
+        Get.to(() => BossupChallenge(
+              backgroundColor: widget.backgroundColor ?? Colors.white,
+              ishome: false,
+            ));
       },
       child: Container(
         child: Column(

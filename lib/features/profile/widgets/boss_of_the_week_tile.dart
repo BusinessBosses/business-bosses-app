@@ -493,7 +493,7 @@ class _BossOfWeekProfileTileState extends State<BossOfWeekProfileTile> {
                 ),
                 GestureDetector(
                   onTap: () {
-                    Get.to(const Bossuppartner());
+                    Get.to(() => const Bossuppartner());
                   },
                   child: Container(
                     padding: const EdgeInsets.symmetric(vertical: 10),

@@ -110,9 +110,11 @@ class _ManageServicesState extends State<ManageServices> {
                   const SizedBox(
                     width: 3,
                   ),
-                  Text(
-                    '(${shopController.services.length})',
-                    style: const TextStyle(color: Colors.black),
+                  Obx(
+                    () => Text(
+                      '(${shopController.services.length})',
+                      style: const TextStyle(color: Colors.black),
+                    ),
                   ),
                 ]),
                 ProCustomButton(
@@ -125,21 +127,23 @@ class _ManageServicesState extends State<ManageServices> {
               ],
             ),
           ),
-          Expanded(
-            child: StaggeredGridView.countBuilder(
-              physics: const AlwaysScrollableScrollPhysics(),
-              staggeredTileBuilder: (int index) => const StaggeredTile.fit(1),
-              padding: const EdgeInsets.symmetric(
-                horizontal: 15.0,
+          Obx(
+            () => Expanded(
+              child: StaggeredGridView.countBuilder(
+                physics: const AlwaysScrollableScrollPhysics(),
+                staggeredTileBuilder: (int index) => const StaggeredTile.fit(1),
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 15.0,
+                ),
+                crossAxisCount: 2,
+                crossAxisSpacing: 10.0,
+                mainAxisSpacing: 10.0,
+                itemCount: shopController.services.length,
+                itemBuilder: (BuildContext context, int index) {
+                  final Service service = shopController.services[index];
+                  return ServiceCard(service: service);
+                },
               ),
-              crossAxisCount: 2,
-              crossAxisSpacing: 10.0,
-              mainAxisSpacing: 10.0,
-              itemCount: shopController.services.length,
-              itemBuilder: (BuildContext context, int index) {
-                final Service service = shopController.services[index];
-                return ServiceCard(service: service);
-              },
             ),
           ),
         ],

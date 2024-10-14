@@ -171,16 +171,16 @@ class _AddclientState extends State<Addclient> {
                   final String email = emailController.text;
                   final String phone = phoneController.text;
 
-                  if (_selectedImage == null && updateImage == null) {
-                    showSnackbar(
-                      message: 'Please add a client image!',
-                      error: true,
-                    );
-                    setState(() {
-                      isSubmit = false;
-                    });
-                    return;
-                  }
+                  // if (_selectedImage == null && updateImage == null) {
+                  //   showSnackbar(
+                  //     message: 'Please add a client image!',
+                  //     error: true,
+                  //   );
+                  //   setState(() {
+                  //     isSubmit = false;
+                  //   });
+                  //   return;
+                  // }
 
                   if (name.isEmpty) {
                     showSnackbar(
@@ -249,7 +249,9 @@ class _AddclientState extends State<Addclient> {
                         return;
                       }
                     }
-                    if (widget.client != null && _selectedImage == null) {
+                    if (widget.client != null &&
+                        _selectedImage == null &&
+                        updateImage != null) {
                       image = updateImage![0];
                     }
                     // Handle the save action
@@ -279,6 +281,8 @@ class _AddclientState extends State<Addclient> {
                             : 'Client Added Successfully!',
                       );
                       // ignore: use_build_context_synchronously
+                      await clientsController
+                          .initClients(profileController.myProfile.uid);
                       Navigator.pop(context);
                     } else {
                       showSnackbar(

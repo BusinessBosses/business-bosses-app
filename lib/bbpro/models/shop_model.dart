@@ -16,6 +16,7 @@ class Shop {
   final bool? approved;
   final String? plan;
   final DateTime createdAt;
+  final String currency;
   final UserModel? user;
 
   Shop({
@@ -33,6 +34,7 @@ class Shop {
     this.promotionDuration,
     this.approved = false,
     this.plan,
+    required this.currency,
     required this.createdAt,
     this.user,
   });
@@ -54,6 +56,7 @@ class Shop {
       promotionDuration: json['promotionDuration'],
       approved: json['approved'] ?? false,
       plan: json['plan'],
+      currency: json['currency'],
       createdAt: DateTime.parse(json['createdAt']),
       user: json['user'] != null ? UserModel.fromMap(json['user']) : null,
     );
@@ -75,6 +78,7 @@ class Shop {
       'promotionDuration': promotionDuration,
       'approved': approved,
       'plan': plan,
+      'currency': currency,
       'createdAt': createdAt.toIso8601String(),
       'user': user?.toMap(),
     };

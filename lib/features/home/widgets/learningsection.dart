@@ -93,7 +93,7 @@ class LearningSection extends StatelessWidget {
                         ishome: true,
                         onTap: () {
                           print('object');
-                          Get.to(const AllForumScreen(isCourses: true),
+                          Get.to(() => const AllForumScreen(isCourses: true),
                               arguments: controller
                                   .getCategoryIndustries(Constants.LEARNINGID)
                                   .where(
