@@ -333,8 +333,7 @@ class _AddprojectState extends State<Addproject> {
                       final Map<String, dynamic> data = <String, dynamic>{
                         'userId': profileController.myProfile.uid,
                         'name': nameController.text,
-                        'amount':
-                            currencyController.text + budgetController.text,
+                        'amount': budgetController.text,
                         'description': descriptionController.text,
                         'duration': '60days',
                         'tasks': tasks,
