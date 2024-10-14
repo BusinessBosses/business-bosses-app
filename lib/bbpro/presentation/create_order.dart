@@ -279,13 +279,23 @@ class _CreateOrderState extends State<CreateOrder> {
                                   ),
                                 ),
                                 const SizedBox(height: 5),
+                                Taskitem(
+                                  isOrder: true,
+                                  taskname: 'dndkdkd',
+                                  taskexpense: 'dldldld',
+                                  deleteOnTap: () {
+                                    setState(() {
+                                      // selectedItems.removeAt(index);
+                                    });
+                                  },
+                                ),
                                 ...selectedItems.asMap().entries.map(
                                     (MapEntry<int, Map<String, dynamic>>
                                         entry) {
                                   final int index = entry.key;
                                   final Map<String, dynamic> task = entry.value;
                                   return Taskitem(
-                                    isPackage: true,
+                                    isOrder: true,
                                     taskname: task['name'],
                                     taskexpense: task['amount'],
                                     deleteOnTap: () {
@@ -299,6 +309,7 @@ class _CreateOrderState extends State<CreateOrder> {
                             ),
                           ),
                         ),
+                        const SizedBox(height: 10),
                         Row(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: <Widget>[

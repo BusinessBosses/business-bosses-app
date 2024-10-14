@@ -1,3 +1,4 @@
+import 'package:business_bosses_v2/common/widgets/network_image_with_placeholder.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:intl/intl.dart';
@@ -71,11 +72,40 @@ class _TaskitemState extends State<Taskitem> {
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: <Widget>[
-            Text(widget.taskname),
+            Wrap(
+                crossAxisAlignment: WrapCrossAlignment.center,
+                children: <Widget>[
+                  if (widget.isOrder != null)
+                    const SizedBox(
+                      height: 50.0,
+                      width: 50.0,
+                      child: Align(
+                        alignment: Alignment.topLeft,
+                        child: ClipRRect(
+                          child: NetworkImageWithPlaceHolder(
+                            imageUrl: '',
+                            placeHolder: Icons.image,
+                            iconSize: 22.0,
+                            fit: BoxFit.cover,
+                          ),
+                        ),
+                      ),
+                    ),
+                  if (widget.isOrder != null) const SizedBox(width: 10),
+                  Column(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: <Widget>[
+                      Text(widget.taskname),
+                      if (widget.isOrder != null)
+                        Text(widget.taskexpense!.toString()),
+                    ],
+                  )
+                ]),
             Wrap(
               crossAxisAlignment: WrapCrossAlignment.center,
               children: <Widget>[
-                if (widget.isOrder != null)
+                if (widget.isOrder == null)
                   GestureDetector(
                     onTap: widget.editOnTap,
                     child: Container(
@@ -105,7 +135,7 @@ class _TaskitemState extends State<Taskitem> {
             ),
           ],
         ),
-        if (widget.taskexpense != null)
+        if (widget.isOrder == null)
           Text(widget.isPackage == null
               ? 'Expense: ${widget.taskexpense}'
               : 'Price: ${widget.taskexpense}'),
