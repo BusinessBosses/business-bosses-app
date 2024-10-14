@@ -111,9 +111,11 @@ class _InventoryState extends State<Inventory> {
                   const SizedBox(
                     width: 3,
                   ),
-                  Text(
-                    '(${shopController.products.length})',
-                    style: const TextStyle(color: Colors.black),
+                  Obx(
+                    () => Text(
+                      '(${shopController.products.length})',
+                      style: const TextStyle(color: Colors.black),
+                    ),
                   ),
                 ]),
                 ProCustomButton(
@@ -126,30 +128,32 @@ class _InventoryState extends State<Inventory> {
               ],
             ),
           ),
-          Expanded(
-            child: StaggeredGridView.countBuilder(
-              physics: const AlwaysScrollableScrollPhysics(),
-              staggeredTileBuilder: (int index) => const StaggeredTile.fit(1),
-              padding: const EdgeInsets.symmetric(
-                horizontal: 15.0,
+          Obx(
+            () => Expanded(
+              child: StaggeredGridView.countBuilder(
+                physics: const AlwaysScrollableScrollPhysics(),
+                staggeredTileBuilder: (int index) => const StaggeredTile.fit(1),
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 15.0,
+                ),
+                crossAxisCount: 2,
+                crossAxisSpacing: 10.0,
+                mainAxisSpacing: 10.0,
+                itemCount: shopController.products.length,
+                itemBuilder: (BuildContext context, int index) {
+                  final Product product = shopController.products[index];
+                  return GestureDetector(
+                    onTap: () {
+                      Get.to(() => ExpandedProduct(
+                            product: product,
+                          ));
+                    },
+                    child: InventoryCard(
+                      product: product,
+                    ),
+                  );
+                },
               ),
-              crossAxisCount: 2,
-              crossAxisSpacing: 10.0,
-              mainAxisSpacing: 10.0,
-              itemCount: shopController.products.length,
-              itemBuilder: (BuildContext context, int index) {
-                final Product product = shopController.products[index];
-                return GestureDetector(
-                  onTap: () {
-                    Get.to(() => ExpandedProduct(
-                          product: product,
-                        ));
-                  },
-                  child: InventoryCard(
-                    product: product,
-                  ),
-                );
-              },
             ),
           ),
         ],

@@ -11,14 +11,17 @@ class NotificationButton extends StatelessWidget {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
-        Get.to(ProNotifications());
+        Get.to(() => const ProNotifications());
       },
       child: Padding(
         padding: const EdgeInsets.only(right: 10.0, bottom: 10),
         child: CircleAvatar(
-              radius: 20,
-              backgroundColor: prosemibackColor,
-              child: SvgPicture.asset('assets/svgs/notificationicon.svg', height: 20,)),
+            radius: 20,
+            backgroundColor: prosemibackColor,
+            child: SvgPicture.asset(
+              'assets/svgs/notificationicon.svg',
+              height: 20,
+            )),
       ),
     );
   }

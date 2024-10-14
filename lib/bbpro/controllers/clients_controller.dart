@@ -47,7 +47,13 @@ class ClientsController extends GetxController {
         'id': response.data['id'],
         ...response.data,
       });
-      clients.add(newClient);
+      clients.add(
+          newClient); // Add the new client to the appropriate ClientType list
+      ClientType clientType = newClient.type;
+
+      clientsType[clientType]!.add(newClient);
+
+      // Update the UI
       update();
       return true;
     } else {
@@ -71,9 +77,23 @@ class ClientsController extends GetxController {
   }
 
   Future<bool> deleteClient(String id) async {
+    Client? deletedClient =
+        clients.firstWhereOrNull((Client element) => element.id == id);
     ApiResponseModel response = await ApiService.delete(path: 'clients/$id');
     if (response.success) {
+      if (deletedClient != null) {
+        ClientType clientType = deletedClient.type;
+        if (clientsType.containsKey(clientType)) {
+          clientsType[clientType]!.remove(deletedClient);
+
+          // If the ClientType list is empty, optionally remove it from the map
+          if (clientsType[clientType]!.isEmpty) {
+            clientsType.remove(clientType);
+          }
+        }
+      }
       clients.removeWhere((Client element) => element.id == id);
+
       update();
       return true;
     } else {

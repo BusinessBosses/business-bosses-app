@@ -1,3 +1,4 @@
+import 'package:business_bosses_v2/bbpro/controllers/shop_controller.dart';
 import 'package:business_bosses_v2/bbpro/models/service_model.dart';
 import 'package:business_bosses_v2/bbpro/widgets/optionsbutton.dart';
 import 'package:business_bosses_v2/common/widgets/network_image_with_placeholder.dart';
@@ -22,6 +23,7 @@ class ServiceCard extends StatefulWidget {
 }
 
 class _ServiceCardState extends State<ServiceCard> {
+  final ShopController shopController = Get.find();
   void _onEdit() {
     Get.to(() => CreateServiceListing(
           service: widget.service,
@@ -74,7 +76,7 @@ class _ServiceCardState extends State<ServiceCard> {
                       ),
                     ),
                     Text(
-                      widget.service?.price.toString() ?? 'Price',
+                      '${shopController.shop!.currency}${widget.service?.price.toString()}',
                       style: const TextStyle(
                         color: proprimaryColor,
                         fontWeight: FontWeight.bold,

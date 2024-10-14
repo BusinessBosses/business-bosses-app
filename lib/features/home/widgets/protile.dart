@@ -87,7 +87,7 @@ class ProTile extends StatelessWidget {
                           children: <Widget>[
                             GestureDetector(
                               onTap: () {
-                                Get.to(const ProScreen());
+                                Get.to(() => const ProScreen());
                               },
                               child: Container(
                                 constraints:

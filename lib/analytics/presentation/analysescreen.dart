@@ -210,7 +210,7 @@ class _AnalyserScreenState extends State<AnalyserScreen> {
                     color: textColor),
               ),
               onTap: () {
-                Get.to(const HowToUseAppScreen());
+                Get.to(() => const HowToUseAppScreen());
               },
               trailing: SvgPicture.asset('assets/svgs/nexticon.svg')),
           const SizedBox(

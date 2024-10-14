@@ -249,7 +249,7 @@ class _CreateProductListingState extends State<CreateProductListing> {
                     textAlign: TextAlign.center,
                   ),
                 ),
-                initialSelection: country,
+                initialSelection: shopController.shop!.location,
                 pickerBuilder:
                     (BuildContext context, CountryCode? countryCode) {
                   return Container(
@@ -260,7 +260,7 @@ class _CreateProductListingState extends State<CreateProductListing> {
                     child: CustomTextWidget(
                       caption: 'Location',
                       iconName: 'assets/svgs/nexticon.svg',
-                      text: country,
+                      text: shopController.shop!.location,
                     ),
                   );
                 },
@@ -443,7 +443,79 @@ class _CreateProductListingState extends State<CreateProductListing> {
             ProCustomButton(
               loading: isSubmitted,
               text: widget.product != null ? 'Save Changes' : 'Create',
-              onPressed: _submitForm,
+              onPressed: () async {
+                if (_formKey.currentState?.validate() ?? false) {
+                  _formKey.currentState?.save();
+                  setState(() {
+                    isSubmitted = true;
+                  });
+                  for (File image in _selectedImages) {
+                    dynamic response = await ApiService.uploadFile(image);
+                    if (response['success']) {
+                      setState(() {
+                        images!.add(response['fileUrl']);
+                      });
+                    }
+                  }
+                  final Map<String, dynamic> productListing = <String, dynamic>{
+                    'userId': profileController.myProfile.uid,
+                    'shopId': shopController.shop?.id,
+                    'name': _productNameController.text,
+                    'price': _priceController.text,
+                    'discount': _discountController.text,
+                    'description': _descriptionController.text,
+                    'category': category,
+                    'location': shopController.shop?.location,
+                    'images': images,
+                    'paymentMethod': paymentMethod,
+                    'deliveryMethod': deliveryMethod,
+                    'url': 'http://example.com/product', // Example URL
+                    'deliveryDuration': deliveryDuration,
+                    'itemType': 'product',
+                    'isActive': _isSwitched,
+                    'supplierId': null,
+                    'storageLocation': storageLocationController.text,
+                    'productNumber': productNumberController.text,
+                    'quantity': quantityController.text,
+                    'startAt': startDate?.toIso8601String(),
+                    'endAt': endDate?.toIso8601String(),
+                    'color': colorController.text,
+                    'size': sizeController.text,
+                  };
+                  if (widget.product == null) {
+                    bool response =
+                        await shopController.addProducts(productListing);
+                    if (response) {
+                      showSnackbar(
+                        message: 'Product Added Successfully!',
+                      );
+                      Navigator.pop(context);
+                    } else {
+                      showSnackbar(
+                        message: 'Error While Adding Product',
+                        error: true,
+                      );
+                    }
+                  } else {
+                    bool response = await shopController.updateProduct(
+                        widget.product!.id, productListing);
+                    if (response) {
+                      showSnackbar(
+                        message: 'Product Updated Successfully!',
+                      );
+                      Navigator.pop(context);
+                    } else {
+                      showSnackbar(
+                        message: 'Error While Updating Product',
+                        error: true,
+                      );
+                    }
+                  }
+                  setState(() {
+                    isSubmitted = false;
+                  });
+                }
+              },
             ),
             const SizedBox(height: 16),
           ],
@@ -473,79 +545,6 @@ class _CreateProductListingState extends State<CreateProductListing> {
         } else {
           endDate = pickedDate;
         }
-      });
-    }
-  }
-
-  void _submitForm() async {
-    if (_formKey.currentState?.validate() ?? false) {
-      _formKey.currentState?.save();
-      setState(() {
-        isSubmitted = true;
-      });
-      for (File image in _selectedImages) {
-        dynamic response = await ApiService.uploadFile(image);
-        if (response['success']) {
-          setState(() {
-            images!.add(response['fileUrl']);
-          });
-        }
-      }
-      final Map<String, dynamic> productListing = <String, dynamic>{
-        'userId': profileController.myProfile.uid,
-        'shopId': shopController.shop?.id,
-        'name': _productNameController.text,
-        'price': currencycontroller.text + _priceController.text,
-        'discount': _discountController.text,
-        'description': _descriptionController.text,
-        'category': category,
-        'location': country,
-        'images': images,
-        'paymentMethod': paymentMethod,
-        'deliveryMethod': deliveryMethod,
-        'url': 'http://example.com/product', // Example URL
-        'deliveryDuration': deliveryDuration,
-        'itemType': 'product',
-        'isActive': _isSwitched,
-        'supplierId': null,
-        'storageLocation': storageLocationController.text,
-        'productNumber': productNumberController.text,
-        'quantity': quantityController.text,
-        'startAt': startDate?.toIso8601String(),
-        'endAt': endDate?.toIso8601String(),
-        'color': colorController.text,
-        'size': sizeController.text,
-      };
-      if (widget.product == null) {
-        bool response = await shopController.addProducts(productListing);
-        if (response) {
-          showSnackbar(
-            message: 'Product Added Successfully!',
-          );
-          Navigator.pop(context);
-        } else {
-          showSnackbar(
-            message: 'Error While Adding Product',
-            error: true,
-          );
-        }
-      } else {
-        bool response = await shopController.updateProduct(
-            widget.product!.id, productListing);
-        if (response) {
-          showSnackbar(
-            message: 'Product Updated Successfully!',
-          );
-          Navigator.pop(context);
-        } else {
-          showSnackbar(
-            message: 'Error While Updating Product',
-            error: true,
-          );
-        }
-      }
-      setState(() {
-        isSubmitted = false;
       });
     }
   }

@@ -104,7 +104,7 @@ class HomeAppBar extends StatelessWidget {
                 Expanded(
                     child: GestureDetector(
                   onTap: () {
-                    Get.to(const DiscoverScreen());
+                    Get.to(() => const DiscoverScreen());
                   },
                   child: Row(
                     children: <Widget>[

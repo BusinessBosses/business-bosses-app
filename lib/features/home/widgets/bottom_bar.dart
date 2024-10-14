@@ -194,9 +194,9 @@ class BottomBar extends StatelessWidget {
                             if (activeIndex == 2) return;
 
                             if (activeIndex == 0) {
-                              Get.to(const ProScreen());
+                              Get.to(() => const ProScreen());
                             } else {
-                              Get.off(const ProScreen());
+                              Get.off(() => const ProScreen());
                             }
                           },
                           isActive: activeIndex == 2,

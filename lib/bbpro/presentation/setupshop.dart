@@ -9,6 +9,7 @@ import 'package:business_bosses_v2/bbpro/widgets/textfield.dart';
 import 'package:business_bosses_v2/bbpro/controllers/shop_controller.dart';
 import 'package:business_bosses_v2/bbpro/presentation/bottomnavscreen.dart';
 import 'package:business_bosses_v2/common/dialogs/snackbar.dart';
+import 'package:business_bosses_v2/features/marketplace/widgets/currency.dart';
 import 'package:business_bosses_v2/features/profile/controller/profile_controller.dart';
 import 'package:business_bosses_v2/services/api_service.dart';
 import 'package:business_bosses_v2/utils/theme/theme.dart';
@@ -543,6 +544,9 @@ class _SetupshopState extends State<Setupshop> {
       'image': image,
       'location': _selectedLocation,
       'paymentMethods': paymentMethods,
+      'currency': _selectedLocation != null
+          ? '${currencyValues[_selectedLocation.toString()]}'
+          : 'USD',
       'details': 'Some additional details about the shop'
     };
 
@@ -553,6 +557,9 @@ class _SetupshopState extends State<Setupshop> {
       'description': descriptionController.text,
       'image': image,
       'location': _selectedLocation,
+      'currency': _selectedLocation != null
+          ? '${currencyValues[_selectedLocation.toString()]}'
+          : 'USD',
       'paymentMethods': paymentMethods,
     };
     bool response = false;
