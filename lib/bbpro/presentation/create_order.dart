@@ -258,58 +258,61 @@ class _CreateOrderState extends State<CreateOrder> {
                           },
                         ),
                         const SizedBox(height: 15),
-                        Padding(
-                          padding: const EdgeInsets.symmetric(
-                            horizontal: 15.0,
-                          ),
-                          child: Container(
-                            decoration: BoxDecoration(
-                                color: Colors.white,
-                                borderRadius: BorderRadius.circular(10)),
+                        if (selectedItems.isNotEmpty)
+                          Padding(
                             padding: const EdgeInsets.symmetric(
-                                horizontal: 15, vertical: 15),
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: <Widget>[
-                                const Text(
-                                  'Selected Orders',
-                                  style: TextStyle(
-                                    fontSize: 14,
-                                    fontWeight: FontWeight.w600,
+                              horizontal: 15.0,
+                            ),
+                            child: Container(
+                              decoration: BoxDecoration(
+                                  color: Colors.white,
+                                  borderRadius: BorderRadius.circular(10)),
+                              padding: const EdgeInsets.symmetric(
+                                  horizontal: 15, vertical: 15),
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: <Widget>[
+                                  const Text(
+                                    'Selected Orders',
+                                    style: TextStyle(
+                                      fontSize: 14,
+                                      fontWeight: FontWeight.w600,
+                                    ),
                                   ),
-                                ),
-                                const SizedBox(height: 5),
-                                Taskitem(
-                                  isOrder: true,
-                                  taskname: 'dndkdkd',
-                                  taskexpense: 'dldldld',
-                                  deleteOnTap: () {
-                                    setState(() {
-                                      // selectedItems.removeAt(index);
-                                    });
-                                  },
-                                ),
-                                ...selectedItems.asMap().entries.map(
-                                    (MapEntry<int, Map<String, dynamic>>
-                                        entry) {
-                                  final int index = entry.key;
-                                  final Map<String, dynamic> task = entry.value;
-                                  return Taskitem(
-                                    isOrder: true,
-                                    taskname: task['name'],
-                                    taskexpense: task['amount'],
-                                    deleteOnTap: () {
-                                      setState(() {
-                                        selectedItems.removeAt(index);
-                                      });
-                                    },
-                                  );
-                                }).toList(),
-                              ],
+                                  const SizedBox(height: 5),
+                                  // Taskitem(
+                                  //   isOrder: true,
+                                  //   taskname: 'dndkdkd',
+                                  //   taskexpense: 'dldldld',
+                                  //   deleteOnTap: () {
+                                  //     setState(() {
+                                  //       // selectedItems.removeAt(index);
+                                  //     });
+                                  //   },
+                                  // ),
+                                  ...selectedItems.asMap().entries.map(
+                                      (MapEntry<int, Map<String, dynamic>>
+                                          entry) {
+                                    final int index = entry.key;
+                                    final Map<String, dynamic> task =
+                                        entry.value;
+                                    return Taskitem(
+                                      isOrder: true,
+                                      taskname: task['name'],
+                                      taskexpense: task['amount'],
+                                      deleteOnTap: () {
+                                        setState(() {
+                                          selectedItems.removeAt(index);
+                                        });
+                                      },
+                                    );
+                                  }).toList(),
+                                ],
+                              ),
                             ),
                           ),
-                        ),
-                        const SizedBox(height: 10),
+                        if (selectedItems.isNotEmpty)
+                          const SizedBox(height: 10),
                         Row(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: <Widget>[
