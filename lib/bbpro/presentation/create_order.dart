@@ -6,8 +6,12 @@ import 'package:business_bosses_v2/bbpro/models/order_model.dart';
 import 'package:business_bosses_v2/bbpro/models/product_model.dart';
 import 'package:business_bosses_v2/bbpro/models/service_model.dart';
 import 'package:business_bosses_v2/bbpro/widgets/button.dart';
+import 'package:business_bosses_v2/bbpro/widgets/chooseorderbottomsheet.dart';
 import 'package:business_bosses_v2/bbpro/widgets/dropdown.dart';
 import 'package:business_bosses_v2/bbpro/widgets/edittext.dart';
+import 'package:business_bosses_v2/bbpro/widgets/iconbutton.dart';
+import 'package:business_bosses_v2/bbpro/widgets/invoiceoptionswidget.dart';
+import 'package:business_bosses_v2/bbpro/widgets/taskitem.dart';
 import 'package:business_bosses_v2/bbpro/widgets/textfield.dart';
 import 'package:business_bosses_v2/common/dialogs/snackbar.dart';
 import 'package:business_bosses_v2/features/profile/controller/profile_controller.dart';
@@ -55,6 +59,27 @@ class _CreateOrderState extends State<CreateOrder> {
   final List<Map<String, dynamic>> services = <Map<String, dynamic>>[];
 
   List<Map<String, dynamic>> selectedItems = <Map<String, dynamic>>[];
+
+  void _showOrderSheet(BuildContext context) {
+    showModalBottomSheet(
+      backgroundColor: Colors.white,
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
+      context: context,
+      isScrollControlled: true,
+      // isDismissible: false,
+      // enableDrag: false,
+      builder: (BuildContext context) {
+        return SizedBox(
+          height: MediaQuery.of(context).size.height * 0.9,
+          child: ChooseOrderBottomSheet(
+            products: products,
+            services: services,
+            selectedItems: selectedItems,
+          ),
+        );
+      },
+    );
+  }
 
   void _submitOrder() async {
     if (clientId == null) {
@@ -176,6 +201,7 @@ class _CreateOrderState extends State<CreateOrder> {
 
   @override
   Widget build(BuildContext context) {
+    int selectedOption = 0;
     return Scaffold(
       backgroundColor: probackgroundColor,
       appBar: AppBar(
@@ -232,17 +258,66 @@ class _CreateOrderState extends State<CreateOrder> {
                           },
                         ),
                         const SizedBox(height: 15),
-                        CustomDropdownWidget(
-                          caption: 'Choose Order',
-                          items: const <String>['Online', 'Offline'],
-                          iconName: 'assets/svgs/dropdown.svg',
-                          initialValue: selectedOrder,
-                          onChanged: (String? value) {
-                            setState(() {
-                              selectedOrder = value!;
-                            });
-                          },
+                        Padding(
+                          padding: const EdgeInsets.symmetric(
+                            horizontal: 15.0,
+                          ),
+                          child: Container(
+                            decoration: BoxDecoration(
+                                color: Colors.white,
+                                borderRadius: BorderRadius.circular(10)),
+                            padding: const EdgeInsets.symmetric(
+                                horizontal: 15, vertical: 15),
+                            child: const Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: <Widget>[
+                                Text(
+                                  'Selected Orders',
+                                  style: TextStyle(
+                                    fontSize: 14,
+                                    fontWeight: FontWeight.w600,
+                                  ),
+                                ),
+                                SizedBox(height: 5),
+                                // ...packages.asMap().entries.map(
+                                //     (MapEntry<int, Map<String, dynamic>>
+                                //         entry) {
+                                //   final int index = entry.key;
+                                //   final Map<String, dynamic> task = entry.value;
+                                //   return Taskitem(
+                                //     isPackage: true,
+                                //     taskname: task['name'],
+                                //     taskexpense: task['amount'],
+                                //     deleteOnTap: () {
+                                //       // setState(() {
+                                //       //   packages.removeAt(index);
+                                //       // });
+                                //     },
+                                //   );
+                                // }).toList(),
+                              ],
+                            ),
+                          ),
                         ),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: <Widget>[
+                            ProIconButton(
+                              backgroundColor: Colors.white,
+                              textColor: proprimaryColor,
+                              text: 'Choose Order',
+                              onPressed: () {
+                                _showOrderSheet(context);
+                              },
+                              icon: const Icon(
+                                Icons.add,
+                                size: 20,
+                                color: proprimaryColor,
+                              ),
+                            ),
+                          ],
+                        ),
+
                         const SizedBox(height: 15),
                         CustomDropdownWidget(
                           caption: 'Order Channel',
@@ -309,41 +384,17 @@ class _CreateOrderState extends State<CreateOrder> {
                           },
                         ),
                         const SizedBox(height: 15),
-                        // Products Selection
-                        const Text('Select Products:'),
-                        Column(
-                          children:
-                              products.map((Map<String, dynamic> product) {
-                            return CheckboxListTile(
-                              title: Text(product['name']),
-                              value: selectedItems.contains(product),
-                              onChanged: (bool? selected) {
-                                _onItemSelect(selected, product);
-                              },
-                            );
-                          }).toList(),
-                        ),
-                        const SizedBox(height: 15),
-                        // Services Selection
-                        const Text('Select Services:'),
-                        Column(
-                          children:
-                              services.map((Map<String, dynamic> service) {
-                            return CheckboxListTile(
-                              title: Text(service['name']),
-                              value: selectedItems.contains(service),
-                              onChanged: (bool? selected) {
-                                _onItemSelect(selected, service);
-                              },
-                            );
-                          }).toList(),
-                        ),
-                        const SizedBox(height: 15),
                         CustomEditText(
                           caption: 'Notes',
                           hintText: 'Add order notes here',
                           controller: notesController,
                           maxLength: 300,
+                        ),
+                        const SizedBox(height: 15),
+                        InvoiceOptionsWidget(
+                          onOptionSelected: (int selectedOption) {
+                            // print('Selected option: $selectedOption');
+                          },
                         ),
                         const SizedBox(
                           height: 150,

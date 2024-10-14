@@ -12,6 +12,7 @@ class Taskitem extends StatefulWidget {
   final VoidCallback? editOnTap;
   final VoidCallback? deleteOnTap;
   final bool? isPackage;
+  final bool? isOrder;
 
   const Taskitem({
     super.key,
@@ -22,6 +23,7 @@ class Taskitem extends StatefulWidget {
     this.editOnTap,
     this.deleteOnTap,
     this.isPackage,
+    this.isOrder,
   });
 
   @override
@@ -73,18 +75,19 @@ class _TaskitemState extends State<Taskitem> {
             Wrap(
               crossAxisAlignment: WrapCrossAlignment.center,
               children: <Widget>[
-                GestureDetector(
-                  onTap: widget.editOnTap,
-                  child: Container(
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(10),
-                      color: backgroundColor,
+                if (widget.isOrder != null)
+                  GestureDetector(
+                    onTap: widget.editOnTap,
+                    child: Container(
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(10),
+                        color: backgroundColor,
+                      ),
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 10, vertical: 10),
+                      child: const Text('Edit'),
                     ),
-                    padding: const EdgeInsets.symmetric(
-                        horizontal: 10, vertical: 10),
-                    child: const Text('Edit'),
                   ),
-                ),
                 const SizedBox(width: 5),
                 GestureDetector(
                   onTap: widget.deleteOnTap,
