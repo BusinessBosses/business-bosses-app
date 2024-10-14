@@ -268,33 +268,33 @@ class _CreateOrderState extends State<CreateOrder> {
                                 borderRadius: BorderRadius.circular(10)),
                             padding: const EdgeInsets.symmetric(
                                 horizontal: 15, vertical: 15),
-                            child: const Column(
+                            child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: <Widget>[
-                                Text(
+                                const Text(
                                   'Selected Orders',
                                   style: TextStyle(
                                     fontSize: 14,
                                     fontWeight: FontWeight.w600,
                                   ),
                                 ),
-                                SizedBox(height: 5),
-                                // ...packages.asMap().entries.map(
-                                //     (MapEntry<int, Map<String, dynamic>>
-                                //         entry) {
-                                //   final int index = entry.key;
-                                //   final Map<String, dynamic> task = entry.value;
-                                //   return Taskitem(
-                                //     isPackage: true,
-                                //     taskname: task['name'],
-                                //     taskexpense: task['amount'],
-                                //     deleteOnTap: () {
-                                //       // setState(() {
-                                //       //   packages.removeAt(index);
-                                //       // });
-                                //     },
-                                //   );
-                                // }).toList(),
+                                const SizedBox(height: 5),
+                                ...selectedItems.asMap().entries.map(
+                                    (MapEntry<int, Map<String, dynamic>>
+                                        entry) {
+                                  final int index = entry.key;
+                                  final Map<String, dynamic> task = entry.value;
+                                  return Taskitem(
+                                    isPackage: true,
+                                    taskname: task['name'],
+                                    taskexpense: task['amount'],
+                                    deleteOnTap: () {
+                                      setState(() {
+                                        selectedItems.removeAt(index);
+                                      });
+                                    },
+                                  );
+                                }).toList(),
                               ],
                             ),
                           ),
