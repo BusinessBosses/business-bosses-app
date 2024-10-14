@@ -15,8 +15,8 @@ import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 
 class OrderProductScreen extends StatefulWidget {
-  final Product? product;
-  const OrderProductScreen({super.key, this.product});
+  final Product product;
+  const OrderProductScreen({super.key, required this.product});
 
   @override
   State<OrderProductScreen> createState() => _OrderProductScreenState();
@@ -90,7 +90,7 @@ class _OrderProductScreenState extends State<OrderProductScreen>
                                   ),
                                 ),
                                 child: GenericSlider(
-                                  images: widget.product?.images ??
+                                  images: widget.product.images ??
                                       <String>['', '', ''],
                                 ),
                               ),
@@ -100,7 +100,7 @@ class _OrderProductScreenState extends State<OrderProductScreen>
                               Row(
                                 children: <Widget>[
                                   Text(
-                                    widget.product?.name ?? 'Product Name',
+                                    widget.product.name,
                                     style: const TextStyle(
                                       fontSize: 16,
                                       fontWeight: FontWeight.bold,
@@ -130,7 +130,7 @@ class _OrderProductScreenState extends State<OrderProductScreen>
                                     MainAxisAlignment.spaceBetween,
                                 children: <Widget>[
                                   Text(
-                                    widget.product?.price.toString() ?? 'Price',
+                                    widget.product.price.toString(),
                                     style: const TextStyle(
                                       color: proprimaryColor,
                                       fontWeight: FontWeight.bold,
@@ -138,8 +138,7 @@ class _OrderProductScreenState extends State<OrderProductScreen>
                                     ),
                                   ),
                                   Text(
-                                    widget.product?.deliveryMethod ??
-                                        'Delivery Method',
+                                    widget.product.deliveryMethod,
                                     style: const TextStyle(
                                       color: proprimaryColor,
                                       fontWeight: FontWeight.bold,
@@ -147,7 +146,7 @@ class _OrderProductScreenState extends State<OrderProductScreen>
                                     ),
                                   ),
                                   Text(
-                                    widget.product?.location ?? 'Location',
+                                    widget.product.location,
                                     style: const TextStyle(
                                       color: proprimaryColor,
                                       fontWeight: FontWeight.bold,
@@ -174,8 +173,7 @@ class _OrderProductScreenState extends State<OrderProductScreen>
                               Align(
                                 alignment: Alignment.centerLeft,
                                 child: DetectableText(
-                                  text: widget.product?.description ??
-                                      'Description text',
+                                  text: widget.product.description,
                                   detectionRegExp:
                                       detectionRegExp(hashtag: false)!,
                                   detectedStyle: bodyText2.copyWith(

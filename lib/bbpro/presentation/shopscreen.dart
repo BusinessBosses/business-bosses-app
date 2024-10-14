@@ -1,5 +1,6 @@
 import 'package:business_bosses_v2/bbpro/controllers/shop_controller.dart';
 import 'package:business_bosses_v2/bbpro/models/order_model.dart';
+import 'package:business_bosses_v2/bbpro/models/product_model.dart';
 import 'package:business_bosses_v2/bbpro/presentation/bookservice.dart';
 import 'package:business_bosses_v2/bbpro/presentation/orderproduct.dart';
 import 'package:business_bosses_v2/bbpro/widgets/inventorycard.dart';
@@ -166,22 +167,27 @@ class _ShopScreenState extends State<ShopScreen> {
               crossAxisCount: 2,
               crossAxisSpacing: 10.0,
               mainAxisSpacing: 10.0,
-              itemCount: 7,
+              itemCount: shopController.products.length,
               itemBuilder: (BuildContext context, int index) {
-                return index == 2
-                    ? GestureDetector(
-                        onTap: () {
-                          Get.to(() => const OrderProductScreen());
-                        },
-                        child: const InventoryCard(
-                          myShop: true,
-                        ),
-                      )
-                    : GestureDetector(
-                        onTap: () {
-                          Get.to(() => const BookServiceScreen());
-                        },
-                        child: const ServiceCard(myShop: true));
+                final Product product = shopController.products[index];
+                // return index == 2
+                //     ?
+                return GestureDetector(
+                  onTap: () {
+                    Get.to(() => OrderProductScreen(
+                          product: product,
+                        ));
+                  },
+                  child: InventoryCard(
+                    product: product,
+                    myShop: true,
+                  ),
+                );
+                // : GestureDetector(
+                //     onTap: () {
+                //       Get.to(() => const BookServiceScreen());
+                //     },
+                //     child: const ServiceCard(myShop: true));
               },
             ),
           ),
