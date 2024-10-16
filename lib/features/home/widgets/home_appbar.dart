@@ -273,20 +273,23 @@ class HomeAppBar extends StatelessWidget {
                         ),
                       ),
                     ),
-                    const SizedBox(width: 2),
+                    const SizedBox(width: 10),
                     Stack(
                       children: <Widget>[
-                        IconButton(
-                          icon: SvgPicture.asset(
-                              'assets/svgs/messagefilled.svg',
-                              height: 18,
-                              color: primaryColorLT),
-                          onPressed: () => Get.toNamed(Routes.chat),
+                        GestureDetector(
+                          onTap: () => Get.toNamed(Routes.chat),
+                          child: CircleAvatar(
+                            backgroundColor: Colors.transparent,
+                            child: SvgPicture.asset(
+                                'assets/svgs/messagefilled.svg',
+                                height: 18,
+                                color: primaryColorLT),
+                          ),
                         ),
                         if (hasBadge)
                           Positioned(
                             top: 5,
-                            right: 5,
+                            right: 3,
                             child: Container(
                               decoration: BoxDecoration(
                                 shape: BoxShape.circle,
@@ -305,17 +308,20 @@ class HomeAppBar extends StatelessWidget {
                     ),
                     Stack(
                       children: <Widget>[
-                        IconButton(
-                          icon: SvgPicture.asset(
-                              'assets/svgs/notificationfilled.svg',
-                              height: 20,
-                              color: primaryColorLT),
-                          onPressed: () => Get.toNamed(Routes.notifications),
+                        GestureDetector(
+                          onTap: () => Get.toNamed(Routes.notifications),
+                          child: CircleAvatar(
+                            backgroundColor: Colors.transparent,
+                            child: SvgPicture.asset(
+                                'assets/svgs/notificationfilled.svg',
+                                height: 20,
+                                color: primaryColorLT),
+                          ),
                         ),
                         if (hasUnreadNotification)
                           Positioned(
                             top: 5,
-                            right: 8,
+                            right: 6,
                             child: Container(
                               decoration: BoxDecoration(
                                 shape: BoxShape.circle,

@@ -160,7 +160,7 @@ class _CreateServiceListingState extends State<CreateServiceListing>
     Map<String, dynamic> packageToEdit = packages[index];
 
     packageNameController.text = packageToEdit['name'];
-    expenseController.text = packageToEdit['amount'];
+    expenseController.text = packageToEdit['price'];
 
     showModalBottomSheet(
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
@@ -527,7 +527,7 @@ class _CreateServiceListingState extends State<CreateServiceListing>
                         return Taskitem(
                           isPackage: true,
                           taskname: task['name'],
-                          taskexpense: task['amount'],
+                          taskexpense: task['price'],
                           editOnTap: () {
                             _editPackageSheet(context, index);
                           },
