@@ -3,6 +3,7 @@ import 'package:business_bosses_v2/bbpro/models/service_model.dart';
 import 'package:business_bosses_v2/bbpro/presentation/create_service.dart';
 import 'package:business_bosses_v2/bbpro/widgets/button.dart';
 import 'package:business_bosses_v2/bbpro/widgets/servicecard.dart';
+import 'package:business_bosses_v2/common/widgets/safety_model.dart';
 
 import 'package:business_bosses_v2/utils/theme/theme.dart';
 import 'package:flutter/material.dart';
@@ -128,23 +129,29 @@ class _ManageServicesState extends State<ManageServices> {
             ),
           ),
           Obx(
-            () => Expanded(
-              child: StaggeredGridView.countBuilder(
-                physics: const AlwaysScrollableScrollPhysics(),
-                staggeredTileBuilder: (int index) => const StaggeredTile.fit(1),
-                padding: const EdgeInsets.symmetric(
-                  horizontal: 15.0,
-                ),
-                crossAxisCount: 2,
-                crossAxisSpacing: 10.0,
-                mainAxisSpacing: 10.0,
-                itemCount: shopController.services.length,
-                itemBuilder: (BuildContext context, int index) {
-                  final Service service = shopController.services[index];
-                  return ServiceCard(service: service);
-                },
-              ),
-            ),
+            () => shopController.services.isEmpty
+                ? const SafetyModel(
+                    isLoading: false,
+                    title: 'No Services Added!',
+                  )
+                : Expanded(
+                    child: StaggeredGridView.countBuilder(
+                      physics: const AlwaysScrollableScrollPhysics(),
+                      staggeredTileBuilder: (int index) =>
+                          const StaggeredTile.fit(1),
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 15.0,
+                      ),
+                      crossAxisCount: 2,
+                      crossAxisSpacing: 10.0,
+                      mainAxisSpacing: 10.0,
+                      itemCount: shopController.services.length,
+                      itemBuilder: (BuildContext context, int index) {
+                        final Service service = shopController.services[index];
+                        return ServiceCard(service: service);
+                      },
+                    ),
+                  ),
           ),
         ],
       ),

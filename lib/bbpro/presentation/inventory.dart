@@ -4,6 +4,7 @@ import 'package:business_bosses_v2/bbpro/presentation/create_product.dart';
 import 'package:business_bosses_v2/bbpro/widgets/button.dart';
 import 'package:business_bosses_v2/bbpro/widgets/inventorycard.dart';
 import 'package:business_bosses_v2/bbpro/presentation/viewproduct.dart';
+import 'package:business_bosses_v2/common/widgets/safety_model.dart';
 import 'package:business_bosses_v2/utils/theme/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
@@ -129,32 +130,38 @@ class _InventoryState extends State<Inventory> {
             ),
           ),
           Obx(
-            () => Expanded(
-              child: StaggeredGridView.countBuilder(
-                physics: const AlwaysScrollableScrollPhysics(),
-                staggeredTileBuilder: (int index) => const StaggeredTile.fit(1),
-                padding: const EdgeInsets.symmetric(
-                  horizontal: 15.0,
-                ),
-                crossAxisCount: 2,
-                crossAxisSpacing: 10.0,
-                mainAxisSpacing: 10.0,
-                itemCount: shopController.products.length,
-                itemBuilder: (BuildContext context, int index) {
-                  final Product product = shopController.products[index];
-                  return GestureDetector(
-                    onTap: () {
-                      Get.to(() => ExpandedProduct(
+            () => shopController.products.isEmpty
+                ? const SafetyModel(
+                    isLoading: false,
+                    title: 'No Products In Your Inventory!',
+                  )
+                : Expanded(
+                    child: StaggeredGridView.countBuilder(
+                      physics: const AlwaysScrollableScrollPhysics(),
+                      staggeredTileBuilder: (int index) =>
+                          const StaggeredTile.fit(1),
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 15.0,
+                      ),
+                      crossAxisCount: 2,
+                      crossAxisSpacing: 10.0,
+                      mainAxisSpacing: 10.0,
+                      itemCount: shopController.products.length,
+                      itemBuilder: (BuildContext context, int index) {
+                        final Product product = shopController.products[index];
+                        return GestureDetector(
+                          onTap: () {
+                            Get.to(() => ExpandedProduct(
+                                  product: product,
+                                ));
+                          },
+                          child: InventoryCard(
                             product: product,
-                          ));
-                    },
-                    child: InventoryCard(
-                      product: product,
+                          ),
+                        );
+                      },
                     ),
-                  );
-                },
-              ),
-            ),
+                  ),
           ),
         ],
       ),
