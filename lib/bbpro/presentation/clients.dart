@@ -421,7 +421,8 @@ class _RowStatusCardState extends State<RowStatusCard> {
                     itemBuilder: (BuildContext context, int index) {
                       final ClientWidget clientWidget = ClientWidget(
                         client: widget.allclients[index],
-                        bgcolor: widget.allclients[index].type.backgroundColor,
+                        bgcolor: widget.allclients[index].type.backgroundColor
+                            .withAlpha(100),
                       );
                       return Padding(
                         padding: const EdgeInsets.only(bottom: 12),
@@ -477,7 +478,7 @@ class ListStatusColumnWidget extends StatelessWidget {
       itemBuilder: (BuildContext context, int index) {
         final ClientWidget clientWidget = ClientWidget(
           client: clients[index],
-          bgcolor: clients[index].type.backgroundColor,
+          bgcolor: clients[index].type.backgroundColor.withAlpha(100),
         );
 
         return Padding(

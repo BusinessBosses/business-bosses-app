@@ -110,15 +110,15 @@ class _OrdersScreenState extends State<OrdersScreen>
                   );
                   return;
                 }
-                if (shopController.products.isEmpty &&
-                    shopController.products.isEmpty) {
-                  showSnackBar(
-                    context,
-                    message:
-                        'You have to add a product or service to create order!',
-                  );
-                  return;
-                }
+                // if (shopController.products.isEmpty &&
+                //     shopController.products.isEmpty) {
+                //   showSnackBar(
+                //     context,
+                //     message:
+                //         'You have to add a product or service to create order!',
+                //   );
+                //   return;
+                // }
                 Get.to(() => const CreateOrder());
               },
             ),

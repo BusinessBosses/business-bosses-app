@@ -51,12 +51,13 @@ class ProSearchbar extends StatelessWidget {
                     const EdgeInsets.symmetric(vertical: 12.0, horizontal: 0.0),
                 child: SvgPicture.asset(
                   'assets/svgs/search.svg',
+                  height: 20,
                   color: hintColor,
                 ),
               ),
         border: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(100.0), 
-          borderSide: BorderSide.none, 
+          borderRadius: BorderRadius.circular(100.0),
+          borderSide: BorderSide.none,
         ),
         // enabledBorder: OutlineInputBorder(
         //   borderRadius:
