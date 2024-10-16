@@ -54,10 +54,36 @@ class _AddSupplierState extends State<AddSupplier> {
       urlController.text = widget.supplier!.url;
       descriptionController.text = widget.supplier!.description;
       updateImage = widget.supplier!.images;
+      _selectedLocation = widget.supplier!.location;
     }
   }
 
   void _submitForm() async {
+    if (nameController.text.isEmpty) {
+      showSnackbar(message: 'Name is required!', error: true);
+      return;
+    }
+    if (emailController.text.isEmpty) {
+      showSnackbar(message: 'Email is required', error: true);
+      return;
+    }
+    if (phoneController.text.isEmpty) {
+      showSnackbar(message: 'Phone Number is required', error: true);
+      return;
+    }
+    if (descriptionController.text.isEmpty) {
+      showSnackbar(message: 'Description is required', error: true);
+      return;
+    }
+    if (category == null) {
+      showSnackbar(message: 'Category is required', error: true);
+      return;
+    }
+
+    if (_selectedLocation == null) {
+      showSnackbar(message: 'Location is required', error: true);
+      return;
+    }
     if (_formKey.currentState!.validate()) {
       _formKey.currentState!.save();
       setState(() {

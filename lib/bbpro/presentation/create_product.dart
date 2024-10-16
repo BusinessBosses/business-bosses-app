@@ -335,6 +335,12 @@ class _CreateProductListingState extends State<CreateProductListing> {
               caption: 'Delivery Duration (Days)',
               hintText: 'Enter number of days you can deliver after purchase',
               controller: deliverydayscontroller,
+              validator: (String? value) {
+                if (value == null || value.isEmpty) {
+                  return 'Please enter number of delivery days';
+                }
+                return null;
+              },
             ),
             const SizedBox(height: 16),
             CustomDropdownWidget(
@@ -353,6 +359,12 @@ class _CreateProductListingState extends State<CreateProductListing> {
               caption: 'Storage Location',
               hintText: 'Enter storage location',
               controller: storageLocationController,
+              validator: (String? value) {
+                if (value == null || value.isEmpty) {
+                  return 'Please enter a storage location';
+                }
+                return null;
+              },
             ),
             const SizedBox(height: 16),
             CustomEditText(
@@ -360,6 +372,12 @@ class _CreateProductListingState extends State<CreateProductListing> {
               hintText: 'Enter product number',
               inputType: TextInputType.number,
               controller: productNumberController,
+              validator: (String? value) {
+                if (value == null || value.isEmpty) {
+                  return 'Please enter a product number';
+                }
+                return null;
+              },
             ),
             const SizedBox(height: 16),
             CustomEditText(
@@ -367,6 +385,12 @@ class _CreateProductListingState extends State<CreateProductListing> {
               hintText: 'Enter quantity',
               inputType: TextInputType.number,
               controller: quantityController,
+              validator: (String? value) {
+                if (value == null || value.isEmpty) {
+                  return 'Please enter quantity available';
+                }
+                return null;
+              },
             ),
             const SizedBox(height: 16),
             Padding(
@@ -444,8 +468,26 @@ class _CreateProductListingState extends State<CreateProductListing> {
               loading: isSubmitted,
               text: widget.product != null ? 'Save Changes' : 'Create',
               onPressed: () async {
+                if (category == null) {
+                  showSnackbar(message: 'Select a category', error: true);
+                  return;
+                }
+                if (paymentMethod == null) {
+                  showSnackbar(message: 'Select a payment method', error: true);
+                  return;
+                }
+                if (deliveryMethod == null) {
+                  showSnackbar(
+                      message: 'Select a delivery method', error: true);
+                  return;
+                }
+                if (_selectedImages.isEmpty) {
+                  showSnackbar(message: 'Select a product image', error: true);
+                  return;
+                }
                 if (_formKey.currentState?.validate() ?? false) {
                   _formKey.currentState?.save();
+
                   setState(() {
                     isSubmitted = true;
                   });
