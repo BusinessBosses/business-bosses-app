@@ -1,3 +1,4 @@
+import 'package:business_bosses_v2/bbpro/controllers/clients_controller.dart';
 import 'package:business_bosses_v2/bbpro/controllers/shop_controller.dart';
 import 'package:business_bosses_v2/bbpro/presentation/add_client.dart';
 import 'package:business_bosses_v2/bbpro/presentation/add_project.dart';
@@ -34,6 +35,7 @@ class _DashboardState extends State<Dashboard> {
     'Shop Visits'
   ];
   final ShopController shopController = Get.put(ShopController());
+  final ClientsController clientsController = Get.put(ClientsController());
 
   void _showBottomSheet() {
     showModalBottomSheet(
@@ -199,7 +201,9 @@ class _DashboardState extends State<Dashboard> {
                   },
                   child: InfoCard(
                     cardName: titles[index],
-                    value: '\$20k',
+                    value: index == 0
+                        ? clientsController.allclients.length.toString()
+                        : 'value',
                   ),
                 );
               },
