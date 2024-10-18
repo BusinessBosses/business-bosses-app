@@ -452,7 +452,7 @@ class _CreateServiceListingState extends State<CreateServiceListing>
                   validator: (String? value) {
                     if (value == null || value.isEmpty) {
                       return deliveryMethod == 'Online'
-                          ? 'Please enter a link'
+                          ? 'Please enter meeting link here'
                           : 'Please enter an address';
                     }
                     return null;
@@ -773,7 +773,10 @@ class _CreateServiceListingState extends State<CreateServiceListing>
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
-            const Text('Available Days'),
+            const Text(
+              'Select a Date and Time',
+              style: TextStyle(fontWeight: FontWeight.w600, fontSize: 14),
+            ),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: <Widget>[
