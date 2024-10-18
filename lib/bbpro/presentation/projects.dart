@@ -59,7 +59,7 @@ class _ProjectsState extends State<Projects>
         });
       }
       // Log the error or show a dialog/snackbar to the user
-      print('Error loading projects: $error');
+      print('Error loading tasks: $error');
     });
   }
 
@@ -82,7 +82,7 @@ class _ProjectsState extends State<Projects>
       appBar: AppBar(
         automaticallyImplyLeading: false,
         title: const Text(
-          'Projects',
+          'Tasks',
           style: TextStyle(
             color: proprimaryColor,
             fontWeight: FontWeight.bold,
@@ -93,7 +93,7 @@ class _ProjectsState extends State<Projects>
       body: Column(
         children: <Widget>[
           TopsectionWidget(
-            buttonText: 'Add Project',
+            buttonText: 'Add Tasks',
             onHowItWorksPressed: () {
               // Handle "How it works" pressed
             },
@@ -128,7 +128,7 @@ class _ProjectsState extends State<Projects>
                         ? const Center(
                             child: SafetyModel(
                             isLoading: false,
-                            title: 'No Projects Found!',
+                            title: 'No Tasks Found!',
                           ))
                         : Padding(
                             padding: const EdgeInsets.only(bottom: 10),
@@ -458,7 +458,7 @@ class ListStatusColumnWidget extends StatelessWidget {
                 borderRadius: BorderRadius.circular(radius)),
             child: const Center(
               child: Text(
-                'Drag a project here',
+                'Drag a task here',
                 style: TextStyle(color: Colors.black38),
               ),
             ),
