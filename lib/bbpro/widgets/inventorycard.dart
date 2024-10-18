@@ -1,6 +1,7 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'package:business_bosses_v2/bbpro/controllers/shop_controller.dart';
 import 'package:business_bosses_v2/bbpro/presentation/create_product.dart';
+import 'package:business_bosses_v2/common/dialogs/snackbar.dart';
 import 'package:flutter/material.dart';
 
 import 'package:business_bosses_v2/bbpro/models/product_model.dart';
@@ -99,7 +100,7 @@ class _InventoryCardState extends State<InventoryCard> {
                             const SizedBox(width: 3),
                             Text(
                               widget.product?.quantity != null
-                                  ? widget.product!.quantity > 0
+                                  ? widget.product!.quantity! > 0
                                       ? '${widget.product?.quantity.toString()} in Stock'
                                       : 'Out of stock'
                                   : 'Out of stock',
@@ -136,11 +137,47 @@ class _InventoryCardState extends State<InventoryCard> {
                     )
                   : OptionsButton(
                       item: widget.product,
-                      onEdit: () => Get.to(() => CreateProductListing(
-                            product: widget.product,
-                          )),
+                      onEdit: () => Get.to(
+                        () => CreateProductListing(
+                          product: widget.product,
+                        ),
+                      ),
+                      onDelete: onDelete,
                     ),
             ],
+          ),
+        ],
+      ),
+    );
+  }
+
+  void onDelete() {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) => AlertDialog(
+        title: const Text(
+          'Delete Product',
+          style: bodyText1,
+        ),
+        content: const Text('Are you sure you want to delete this product?'),
+        actions: <Widget>[
+          TextButton(
+            onPressed: () => Navigator.pop(context),
+            child: const Text('No'),
+          ),
+          TextButton(
+            onPressed: () async {
+              final bool delete =
+                  await shopController.deleteProduct(widget.product!.id);
+              if (delete) {
+                showSnackbar(message: 'Product deleted successfully!');
+              } else {
+                showSnackbar(message: 'Error deleting product!', error: true);
+              }
+              setState(() {});
+              Navigator.pop(context);
+            },
+            child: const Text('Yes'),
           ),
         ],
       ),

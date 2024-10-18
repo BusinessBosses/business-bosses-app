@@ -299,7 +299,7 @@ class _CreateOrderState extends State<CreateOrder> {
                                     return Taskitem(
                                       isOrder: true,
                                       taskname: task['name'],
-                                      taskexpense: task['amount'],
+                                      taskexpense: task['type'],
                                       deleteOnTap: () {
                                         setState(() {
                                           selectedItems.removeAt(index);

@@ -689,16 +689,31 @@ class _CreateServiceListingState extends State<CreateServiceListing>
       // For demonstration, print the map
       // You can now send this data to your API or database
       // Example:
-      await shopController.addService(serviceData).then((bool response) {
-        if (response) {
-          // Handle success
-          showSnackbar(message: 'Service Added Succesfully!');
-          Navigator.pop(context);
-        } else {
-          // Handle error
-          showSnackbar(message: 'Error Adding Service!', error: true);
-        }
-      });
+      if (widget.service == null) {
+        await shopController.addService(serviceData).then((bool response) {
+          if (response) {
+            // Handle success
+            showSnackbar(message: 'Service Added Succesfully!');
+            Navigator.pop(context);
+          } else {
+            // Handle error
+            showSnackbar(message: 'Error Adding Service!', error: true);
+          }
+        });
+      } else {
+        await shopController
+            .updateService(widget.service!.id, serviceData)
+            .then((bool response) {
+          if (response) {
+            // Handle success
+            showSnackbar(message: 'Service Updated Succesfully!');
+            Navigator.pop(context);
+          } else {
+            // Handle error
+            showSnackbar(message: 'Error Updating Service!', error: true);
+          }
+        });
+      }
       setState(() {
         isSubmitted = false;
       });

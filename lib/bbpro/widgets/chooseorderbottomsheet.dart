@@ -4,6 +4,7 @@ import 'package:business_bosses_v2/bbpro/widgets/proseardwidget.dart';
 import 'package:business_bosses_v2/utils/theme/theme.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
 class ChooseOrderBottomSheet extends StatefulWidget {
   final List<Map<String, dynamic>> products;
@@ -47,114 +48,132 @@ class _ChooseOrderBottomSheetState extends State<ChooseOrderBottomSheet>
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      child: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: <Widget>[
-            const Text(
-              'Choose Order',
-              style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-            ),
-            const SizedBox(height: 10),
-            CupertinoSlidingSegmentedControl<int>(
-              backgroundColor: probackgroundColor,
-              groupValue: _selectedIndex,
-              children: const <int, Widget>{
-                0: Padding(
-                    padding: EdgeInsets.symmetric(horizontal: 5, vertical: 10),
-                    child: Text(
-                      'Products',
-                      style: TextStyle(fontSize: 14),
-                    )),
-                1: Text(
-                  'Services',
-                  style: TextStyle(fontSize: 14),
-                ),
-                2: Text(
-                  'Custom',
-                  style: TextStyle(fontSize: 14),
-                ),
-              },
-              onValueChanged: (int? value) {
-                setState(() {
-                  _selectedIndex = value!;
-                  _tabController.animateTo(value);
-                });
-              },
-            ),
-            const SizedBox(height: 20),
-            Expanded(
-              // Use Expanded to make TabBarView fill the space
-              child: TabBarView(
-                controller: _tabController,
-                children: <Widget>[
-                  // Products Tab content
-                  Column(
-                    children: <Widget>[
-                      ProSearchbar(
-                        hasSearchIcon: true,
-                        contentPadding: 10,
-                        backgroundColor: backgroundColor,
-                        hintText: 'Search Products',
-                        onChange: (String query) {
-                          setState(() {});
-                        },
-                        onSubmit: (String query) {},
-                      ),
-                      Column(
-                        children:
-                            widget.products.map((Map<String, dynamic> product) {
-                          return CheckboxListTile(
-                            title: Text(product['name']),
-                            value: widget.selectedItems.contains(product),
-                            onChanged: (bool? selected) {
-                              // _onItemSelect(selected, product);
-                            },
-                          );
-                        }).toList(),
-                      ),
-                    ],
-                  ),
-
-                  // Services Tab content
-                  Column(
-                    children: <Widget>[
-                      ProSearchbar(
-                        hasSearchIcon: true,
-                        contentPadding: 10,
-                        backgroundColor: backgroundColor,
-                        hintText: 'Search Services',
-                        onChange: (String query) {
-                          setState(() {});
-                        },
-                        onSubmit: (String query) {},
-                      ),
-                      Column(
-                        children:
-                            widget.services.map((Map<String, dynamic> service) {
-                          return CheckboxListTile(
-                            title: Text(service['name']),
-                            value: widget.selectedItems.contains(service),
-                            onChanged: (bool? selected) {
-                              // _onItemSelect(selected, service);
-                            },
-                          );
-                        }).toList(),
-                      ),
-                    ],
-                  ),
-
-                  // Custom Tab content
-                  _buildCustomTab(),
-                ],
+    return Padding(
+      padding: const EdgeInsets.all(16.0),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: <Widget>[
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: <Widget>[
+              const Text(
+                'Choose Order',
+                style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
               ),
+              GestureDetector(
+                child: IconButton(
+                    onPressed: Get.back, icon: const Icon(Icons.close)),
+              )
+            ],
+          ),
+          const SizedBox(height: 10),
+          CupertinoSlidingSegmentedControl<int>(
+            backgroundColor: probackgroundColor,
+            groupValue: _selectedIndex,
+            children: const <int, Widget>{
+              0: Padding(
+                  padding: EdgeInsets.symmetric(horizontal: 5, vertical: 10),
+                  child: Text(
+                    'Products',
+                    style: TextStyle(fontSize: 14),
+                  )),
+              1: Text(
+                'Services',
+                style: TextStyle(fontSize: 14),
+              ),
+              2: Text(
+                'Custom',
+                style: TextStyle(fontSize: 14),
+              ),
+            },
+            onValueChanged: (int? value) {
+              setState(() {
+                _selectedIndex = value!;
+                _tabController.animateTo(value);
+              });
+            },
+          ),
+          const SizedBox(height: 20),
+          Expanded(
+            // Use Expanded to make TabBarView fill the space
+            child: TabBarView(
+              controller: _tabController,
+              children: <Widget>[
+                // Products Tab content
+                Column(
+                  children: <Widget>[
+                    ProSearchbar(
+                      hasSearchIcon: true,
+                      contentPadding: 10,
+                      backgroundColor: backgroundColor,
+                      hintText: 'Search Products',
+                      onChange: (String query) {
+                        setState(() {});
+                      },
+                      onSubmit: (String query) {},
+                    ),
+                    Column(
+                      children:
+                          widget.products.map((Map<String, dynamic> product) {
+                        return CheckboxListTile(
+                          title: Text(product['name']),
+                          value: widget.selectedItems.contains(product),
+                          onChanged: (bool? selected) {
+                            _onItemSelect(selected, product);
+                          },
+                        );
+                      }).toList(),
+                    ),
+                  ],
+                ),
+
+                // Services Tab content
+                Column(
+                  children: <Widget>[
+                    ProSearchbar(
+                      hasSearchIcon: true,
+                      contentPadding: 10,
+                      backgroundColor: backgroundColor,
+                      hintText: 'Search Services',
+                      onChange: (String query) {
+                        setState(() {});
+                      },
+                      onSubmit: (String query) {},
+                    ),
+                    Column(
+                      children:
+                          widget.services.map((Map<String, dynamic> service) {
+                        return CheckboxListTile(
+                          title: Text(service['name']),
+                          value: widget.selectedItems.contains(service),
+                          onChanged: (bool? selected) {
+                            _onItemSelect(selected, service);
+                          },
+                        );
+                      }).toList(),
+                    ),
+                  ],
+                ),
+
+                // Custom Tab content
+                _buildCustomTab(),
+              ],
             ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
+  }
+
+  void _onItemSelect(bool? selected, Map<String, dynamic> item) {
+    setState(() {
+      if (selected!) {
+        widget.selectedItems.add(item);
+      } else {
+        widget.selectedItems.removeWhere(
+            (Map<String, dynamic> element) => element['id'] == item['id']);
+      }
+    });
   }
 
   Widget _buildCustomTab() {
@@ -195,9 +214,20 @@ class _ChooseOrderBottomSheetState extends State<ChooseOrderBottomSheet>
         ),
         SizedBox(
             width: double.infinity,
-            child: ProCustomButton(text: 'Save', onPressed: () {}))
+            child: ProCustomButton(text: 'Save', onPressed: _saveCustomOrder))
       ],
     );
+  }
+
+  void _saveCustomOrder() {
+    setState(() {
+      widget.selectedItems.add(<String, dynamic>{
+        'name': nameController.text,
+        'price': priceController.text,
+        'description': descriptionController.text,
+        'type': 'custom'
+      });
+    });
   }
 
   Widget _buildProductItem(String title, String price, String imagePath) {

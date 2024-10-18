@@ -162,9 +162,11 @@ class _ProjectsState extends State<Projects>
                                               amount: project.amount,
                                               status: newStatus,
                                               createdAt: project.createdAt,
+                                              startAt: project.startAt,
+                                              endAt: project.endAt,
                                               description: project.description,
                                               duration: project.duration,
-                                              tasks: project.tasks,
+                                              // tasks: project.tasks,
                                             ),
                                           );
                                           projectController.updateProject(

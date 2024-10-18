@@ -19,13 +19,13 @@ class Product {
   String itemType;
   bool isActive;
   String storageLocation;
-  int productNumber;
-  int quantity;
+  String? productNumber;
+  int? quantity;
   DateTime? startAt;
   DateTime? endAt;
   String color;
   String size;
-  DateTime createdAt;
+  DateTime? createdAt;
 
   Product({
     this.images,
@@ -73,17 +73,15 @@ class Product {
       itemType: json['itemType'],
       isActive: json['isActive'],
       storageLocation: json['storageLocation'],
-      productNumber: json['productNumber'] is int
-          ? json['productNumber']
-          : int.parse(json['productNumber']),
-      quantity: json['quantity'] is int
+      productNumber: json['productNumber'].toString(),
+      quantity: json['quantity'] is int && json['quantity'] != null
           ? json['quantity']
-          : int.parse(json['quantity']),
+          : null,
       startAt: json['startAt'] == null ? null : DateTime.parse(json['startAt']),
       endAt: json['endAt'] == null ? null : DateTime.parse(json['endAt']),
       color: json['color'],
       size: json['size'],
-      createdAt: DateTime.parse(json['createdAt']),
+      createdAt: null,
     );
   }
 
@@ -112,7 +110,7 @@ class Product {
       'endAt': endAt == null ? null : endAt!.toIso8601String(),
       'color': color,
       'size': size,
-      'createdAt': createdAt.toIso8601String(),
+      // 'createdAt': createdAt.toIso8601String(),
     };
   }
 
@@ -142,7 +140,7 @@ Product {
   size: $size,
   startAt: ${startAt == null ? null : startAt!.toIso8601String()},
   endAt: ${endAt == null ? null : endAt!.toIso8601String()},
-  createdAt: ${createdAt.toIso8601String()},
+  
   images: $images
 }
 ''';
