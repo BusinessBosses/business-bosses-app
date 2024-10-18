@@ -142,7 +142,7 @@ class _TaskWidgetState extends State<TaskWidget> {
                     Row(
                       children: <Widget>[
                         const Text(
-                          'Budget: ',
+                          'Expenses: ',
                           style: TextStyle(
                             fontWeight: FontWeight.bold,
                             fontSize: 13,
@@ -168,23 +168,6 @@ class _TaskWidgetState extends State<TaskWidget> {
                         Text(
                           widget.project.duration.toString(),
                           style: const TextStyle(
-                            fontSize: 13,
-                          ),
-                        ),
-                      ],
-                    ),
-                    const Row(
-                      children: <Widget>[
-                        Text(
-                          'Expenses: ',
-                          style: TextStyle(
-                            fontWeight: FontWeight.bold,
-                            fontSize: 13,
-                          ),
-                        ),
-                        Text(
-                          'expenses',
-                          style: TextStyle(
                             fontSize: 13,
                           ),
                         ),
@@ -222,6 +205,41 @@ class _TaskWidgetState extends State<TaskWidget> {
                         ),
                       ],
                     ),
+                    const SizedBox(
+                      height: 10,
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: <Widget>[
+                        Container(
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: 10, vertical: 5),
+                          decoration: BoxDecoration(
+                              color: prosemibackColor,
+                              borderRadius: BorderRadius.circular(20)),
+                          child: Center(
+                            child: Wrap(
+                                crossAxisAlignment: WrapCrossAlignment.center,
+                                children: <Widget>[
+                                  const Text(
+                                    'Change Task Status',
+                                    style: TextStyle(
+                                        fontSize: 14,
+                                        color: proprimaryColor,
+                                        fontWeight: FontWeight.bold),
+                                  ),
+                                  const SizedBox(
+                                    width: 8,
+                                  ),
+                                  SvgPicture.asset(
+                                    'assets/svgs/dropdown.svg',
+                                    color: proprimaryColor,
+                                  )
+                                ]),
+                          ),
+                        )
+                      ],
+                    )
                   ],
                 ),
               ),

@@ -290,10 +290,10 @@ class _RowStatusCardState extends State<RowStatusCard> {
     Color statusColor;
     switch (widget.clientType) {
       case ClientType.online:
-        statusColor = Colors.blue;
+        statusColor = Colors.green;
         break;
       case ClientType.inPerson:
-        statusColor = Colors.green;
+        statusColor = Colors.blue;
         break;
       case ClientType.bbUser:
         statusColor = primaryColorLT;

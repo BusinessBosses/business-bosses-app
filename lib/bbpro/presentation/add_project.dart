@@ -12,6 +12,7 @@ import 'package:business_bosses_v2/features/profile/controller/profile_controlle
 import 'package:business_bosses_v2/utils/theme/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:intl/intl.dart';
 
 import '../widgets/iconbutton.dart';
 
@@ -185,7 +186,7 @@ class _AddprojectState extends State<Addproject> {
       backgroundColor: probackgroundColor,
       appBar: AppBar(
         title: Text(
-          widget.project == null ? 'Add Project' : 'Edit Project',
+          widget.project == null ? 'Add Task' : 'Edit Task',
           style: const TextStyle(
             color: proprimaryColor,
             fontWeight: FontWeight.bold,
@@ -209,14 +210,14 @@ class _AddprojectState extends State<Addproject> {
                 const SizedBox(height: 15),
                 CustomEditText(
                   maxLength: 30,
-                  caption: 'Project Name',
-                  hintText: 'Enter Project name here',
+                  caption: 'Task Name',
+                  hintText: 'Enter Task name here',
                   controller: nameController,
                 ),
                 const SizedBox(height: 15),
                 CustomEditText(
-                  caption: 'Project Description',
-                  hintText: 'Enter Project goals',
+                  caption: 'Task Description',
+                  hintText: 'Enter Task goals',
                   controller: descriptionController,
                   maxLength: 300,
                 ),
@@ -224,7 +225,7 @@ class _AddprojectState extends State<Addproject> {
                 if (widget.project != null)
                   CustomEditText(
                     iscurrencyfield: true,
-                    caption: 'Project Budget',
+                    caption: 'Task Expenses',
                     hintText: '0.00',
                     controller: budgetController,
                     inputType: TextInputType.number,
@@ -233,74 +234,133 @@ class _AddprojectState extends State<Addproject> {
                   CustomEditText(
                     currencycontroller: currencyController,
                     iscurrencyfield: true,
-                    caption: 'Project Budget',
+                    caption: 'Task Expenses',
                     hintText: '0.00',
                     controller: budgetController,
                     inputType: TextInputType.number,
                   ),
-                if (tasks.isNotEmpty) const SizedBox(height: 15),
-                if (tasks.isNotEmpty)
-                  Padding(
-                    padding: const EdgeInsets.symmetric(
-                      horizontal: 15.0,
-                    ),
-                    child: Container(
-                      decoration: BoxDecoration(
-                          color: Colors.white,
-                          borderRadius: BorderRadius.circular(10)),
-                      padding: const EdgeInsets.symmetric(
-                          horizontal: 15, vertical: 15),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: <Widget>[
-                          const Text(
-                            'Tasks',
-                            style: TextStyle(
-                              fontSize: 14,
-                              fontWeight: FontWeight.w600,
+                const SizedBox(
+                  height: 15,
+                ),
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 15.0),
+                  child: Row(
+                    children: <Widget>[
+                      Expanded(
+                        child: GestureDetector(
+                          onTap: () async {
+                            DateTime? picked = await showDatePicker(
+                              context: context,
+                              initialDate: DateTime.now(),
+                              firstDate: DateTime(2000),
+                              lastDate: DateTime(2101),
+                            );
+                            // if (picked != null && picked != startDate) {
+                            //   setState(() {
+                            //     startDate = picked;
+                            //   });
+                            //   onStartDateChanged(picked);
+                            // }
+                          },
+                          child: Container(
+                            decoration: BoxDecoration(
+                              color: Colors.white,
+                              borderRadius: BorderRadius.circular(10),
+                            ),
+                            padding: const EdgeInsets.symmetric(
+                              horizontal: 15,
+                              vertical: 15,
+                            ),
+                            child: const Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: <Widget>[
+                                Text(
+                                  'Start Date',
+                                  style: TextStyle(
+                                    fontSize: 14,
+                                    fontWeight: FontWeight.w600,
+                                    color: textColor,
+                                  ),
+                                ),
+                                SizedBox(height: 15),
+                                Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: <Widget>[
+                                    Text(
+                                      'Start Date',
+                                      style: TextStyle(
+                                        fontSize: 14,
+                                        color: hintColor,
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ],
                             ),
                           ),
-                          const SizedBox(height: 5),
-                          ...tasks
-                              .asMap()
-                              .entries
-                              .map((MapEntry<int, Map<String, dynamic>> entry) {
-                            final int index = entry.key;
-                            final Map<String, dynamic> task = entry.value;
-                            return Taskitem(
-                              taskname: task['name'],
-                              taskexpense: task['amount'],
-                              startdate: task['startAt'],
-                              enddate: task['endAt'],
-                              editOnTap: () {
-                                _editTaskSheet(context, index);
-                              },
-                              deleteOnTap: () {
-                                setState(() {
-                                  tasks.removeAt(index);
-                                });
-                              },
-                            );
-                          }).toList(),
-                        ],
+                        ),
                       ),
-                    ),
-                  ),
-                const SizedBox(height: 15),
-                ProIconButton(
-                  backgroundColor: Colors.white,
-                  textColor: proprimaryColor,
-                  text: 'Add Tasks to project',
-                  onPressed: () {
-                    _showAddTaskSheet(context);
-                  },
-                  icon: const Icon(
-                    Icons.add,
-                    size: 20,
-                    color: proprimaryColor,
+                      const SizedBox(width: 10),
+                      Expanded(
+                        child: GestureDetector(
+                          onTap: () async {
+                            DateTime? picked = await showDatePicker(
+                              context: context,
+                              initialDate: DateTime.now(),
+                              firstDate: DateTime(2000),
+                              lastDate: DateTime(2101),
+                            );
+                            // if (picked != null && picked != endDate) {
+                            //   setState(() {
+                            //     endDate = picked;
+                            //   });
+                            //   onEndDateChanged(picked); // Call the callback
+                            // }
+                          },
+                          child: Container(
+                            decoration: BoxDecoration(
+                              color: Colors.white,
+                              borderRadius: BorderRadius.circular(10),
+                            ),
+                            padding: const EdgeInsets.symmetric(
+                              horizontal: 15,
+                              vertical: 15,
+                            ),
+                            child: const Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: <Widget>[
+                                Text(
+                                  'End Date',
+                                  style: TextStyle(
+                                    fontSize: 14,
+                                    fontWeight: FontWeight.w600,
+                                    color: textColor,
+                                  ),
+                                ),
+                                SizedBox(height: 15),
+                                Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: <Widget>[
+                                    Text(
+                                      'End Date',
+                                      style: TextStyle(
+                                        fontSize: 14,
+                                        color: hintColor,
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
+                      ),
+                    ],
                   ),
                 ),
-                const SizedBox(height: 20),
+                const SizedBox(height: 15),
                 SizedBox(
                   width: MediaQuery.of(context).size.width,
                   child: ProCustomButton(
@@ -348,8 +408,8 @@ class _AddprojectState extends State<Addproject> {
                       if (response) {
                         showSnackbar(
                           message: widget.project != null
-                              ? 'Project Updated Successfully!'
-                              : 'Project Added Successfully!',
+                              ? 'Task Updated Successfully!'
+                              : 'Task Added Successfully!',
                         );
                         await projectController
                             .initProjects(profileController.myProfile.uid);
@@ -358,8 +418,8 @@ class _AddprojectState extends State<Addproject> {
                       } else {
                         showSnackbar(
                             message: widget.project != null
-                                ? 'Error While Editing Project!'
-                                : 'Error While Adding Project',
+                                ? 'Error While Editing Task!'
+                                : 'Error While Adding Task',
                             error: true);
 
                         setState(() {

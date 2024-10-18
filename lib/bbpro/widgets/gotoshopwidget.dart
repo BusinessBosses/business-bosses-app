@@ -1,4 +1,10 @@
 import 'package:business_bosses_v2/bbpro/controllers/shop_controller.dart';
+import 'package:business_bosses_v2/bbpro/presentation/add_client.dart';
+import 'package:business_bosses_v2/bbpro/presentation/add_project.dart';
+import 'package:business_bosses_v2/bbpro/presentation/add_supplier.dart';
+import 'package:business_bosses_v2/bbpro/presentation/create_order.dart';
+import 'package:business_bosses_v2/bbpro/presentation/create_product.dart';
+import 'package:business_bosses_v2/bbpro/presentation/create_service.dart';
 import 'package:business_bosses_v2/bbpro/presentation/shopscreen.dart';
 import 'package:business_bosses_v2/common/widgets/network_image_with_placeholder.dart';
 import 'package:business_bosses_v2/navigation/routes.dart';
@@ -102,16 +108,22 @@ class _GotoshopWidgetState extends State<GotoshopWidget> {
                       onSelected: (String item) {
                         switch (item) {
                           case 'Item 1':
-                            Get.toNamed(Routes.createPost);
+                            Get.to(() => const CreateProductListing());
                             break;
                           case 'Item 2':
-                            // sellProduct(context);
+                            Get.to(() => const CreateServiceListing());
                             break;
                           case 'Item 3':
-                            Get.toNamed(Routes.createevent);
+                            Get.to(() => const Addproject());
                             break;
                           case 'Item 4':
-                            // Get.to(() => const CreatePollScreen());
+                            Get.to(() => const CreateOrder());
+                            break;
+                          case 'Item 5':
+                            Get.to(() => const Addclient());
+                            break;
+                          case 'Item 6':
+                            Get.to(() => const AddSupplier());
                             break;
                         }
                       },
