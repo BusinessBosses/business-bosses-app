@@ -459,7 +459,7 @@ class _CreateProductListingState extends State<CreateProductListing> {
                 caption: 'Status',
                 subtext:
                     'If status is active, this product will show in your shop',
-                activeColor: Colors.blue,
+                activeColor: proprimaryColor,
                 inactiveColor: Colors.grey,
               ),
             ),
