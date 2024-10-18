@@ -211,31 +211,120 @@ class _TaskWidgetState extends State<TaskWidget> {
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: <Widget>[
-                        Container(
-                          padding: const EdgeInsets.symmetric(
-                              horizontal: 10, vertical: 5),
-                          decoration: BoxDecoration(
-                              color: prosemibackColor,
-                              borderRadius: BorderRadius.circular(20)),
-                          child: Center(
-                            child: Wrap(
-                                crossAxisAlignment: WrapCrossAlignment.center,
-                                children: <Widget>[
-                                  const Text(
-                                    'Change Task Status',
-                                    style: TextStyle(
-                                        fontSize: 14,
-                                        color: proprimaryColor,
-                                        fontWeight: FontWeight.bold),
+                        GestureDetector(
+                          onTap: () {
+                            showModalBottomSheet(
+                              context: context,
+                              shape: const RoundedRectangleBorder(
+                                borderRadius: BorderRadius.vertical(
+                                  top: Radius.circular(20.0),
+                                ),
+                              ),
+                              builder: (BuildContext context) {
+                                List<ProjectStatus> availableStatuses =
+                                    <ProjectStatus>[];
+                                switch (widget.project.status) {
+                                  case ProjectStatus.todo:
+                                    availableStatuses = <ProjectStatus>[
+                                      ProjectStatus.pending,
+                                      ProjectStatus.completed
+                                    ];
+                                    break;
+                                  case ProjectStatus.pending:
+                                    availableStatuses = <ProjectStatus>[
+                                      ProjectStatus.todo,
+                                      ProjectStatus.completed
+                                    ];
+                                    break;
+                                  case ProjectStatus.completed:
+                                    availableStatuses = <ProjectStatus>[
+                                      ProjectStatus.todo,
+                                      ProjectStatus.pending
+                                    ];
+                                    break;
+                                }
+                                return SizedBox(
+                                  child: Padding(
+                                    padding: const EdgeInsets.only(
+                                        top: 20, bottom: 50),
+                                    child: Column(
+                                      mainAxisSize: MainAxisSize
+                                          .min, // Ensures the column takes only the necessary space
+                                      children: <Widget>[
+                                        const Text(
+                                          'Change Task Status to',
+                                          style: TextStyle(
+                                            fontSize: 14,
+                                            fontWeight: FontWeight.w700,
+                                          ),
+                                        ),
+                                        const SizedBox(
+                                          height: 20,
+                                        ),
+                                        ...availableStatuses
+                                            .map((ProjectStatus status) {
+                                          return ListTile(
+                                            title: Container(
+                                              decoration: BoxDecoration(
+                                                  color: prosemibackColor,
+                                                  borderRadius:
+                                                      BorderRadius.circular(
+                                                          15)),
+                                              padding:
+                                                  const EdgeInsets.symmetric(
+                                                      horizontal: 10,
+                                                      vertical: 20),
+                                              child: Text(
+                                                status.displayTitle,
+                                                style: const TextStyle(
+                                                    fontSize: 14,
+                                                    color: textColor,
+                                                    fontWeight:
+                                                        FontWeight.w600),
+                                              ),
+                                            ),
+                                            onTap: () async {
+                                              // widget.project.status = status;
+                                              // await projectController
+                                              //     .updateProject(widget.project);
+                                              // setState(() {});
+                                              // Get.back();
+                                            },
+                                          );
+                                        }).toList(),
+                                      ],
+                                    ),
                                   ),
-                                  const SizedBox(
-                                    width: 8,
-                                  ),
-                                  SvgPicture.asset(
-                                    'assets/svgs/dropdown.svg',
-                                    color: proprimaryColor,
-                                  )
-                                ]),
+                                );
+                              },
+                            );
+                          },
+                          child: Container(
+                            padding: const EdgeInsets.symmetric(
+                                horizontal: 10, vertical: 5),
+                            decoration: BoxDecoration(
+                                color: prosemibackColor,
+                                borderRadius: BorderRadius.circular(20)),
+                            child: Center(
+                              child: Wrap(
+                                  crossAxisAlignment: WrapCrossAlignment.center,
+                                  children: <Widget>[
+                                    const Text(
+                                      'Change Task Status',
+                                      style: TextStyle(
+                                          fontSize: 14,
+                                          color: proprimaryColor,
+                                          fontWeight: FontWeight.bold),
+                                    ),
+                                    const SizedBox(
+                                      width: 8,
+                                    ),
+                                    SvgPicture.asset(
+                                      'assets/svgs/dropdown.svg',
+                                      color: proprimaryColor,
+                                    )
+                                  ]),
+                            ),
                           ),
                         )
                       ],
