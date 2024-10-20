@@ -1,11 +1,13 @@
+import 'package:business_bosses_v2/bbpro/controllers/shop_controller.dart';
 import 'package:business_bosses_v2/common/widgets/network_image_with_placeholder.dart';
 import 'package:business_bosses_v2/utils/theme/theme.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
 class OrderPreviewCard extends StatelessWidget {
   final String title;
-  final String size;
-  final String color;
+  final String? size;
+  final String? color;
   final double price;
   final int deliveryDays;
   final String deliveryLocation;
@@ -14,8 +16,8 @@ class OrderPreviewCard extends StatelessWidget {
   const OrderPreviewCard({
     Key? key,
     required this.title,
-    required this.size,
-    required this.color,
+    this.size,
+    this.color,
     required this.price,
     required this.deliveryDays,
     required this.deliveryLocation,
@@ -24,6 +26,7 @@ class OrderPreviewCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final ShopController shopController = Get.find();
     return Container(
       margin: const EdgeInsets.symmetric(horizontal: 15),
       padding: const EdgeInsets.all(15.0),
@@ -33,11 +36,11 @@ class OrderPreviewCard extends StatelessWidget {
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
-          const NetworkImageWithPlaceHolder(
+          NetworkImageWithPlaceHolder(
             width: 100,
             height: 100,
             fit: BoxFit.cover,
-            imageUrl: '',
+            imageUrl: imageUrl,
           ),
           const SizedBox(width: 10.0),
           Expanded(
@@ -51,11 +54,11 @@ class OrderPreviewCard extends StatelessWidget {
                     fontWeight: FontWeight.bold,
                   ),
                 ),
-                Text('Size: $size'),
-                Text('Color: $color'),
+                if (size != null) Text('Size: $size'),
+                if (color != null) Text('Color: $color'),
                 const SizedBox(height: 5.0),
                 Text(
-                  '\$${price.toStringAsFixed(2)}',
+                  '${shopController.shop!.currency}${price.toStringAsFixed(2)}',
                   style: const TextStyle(
                     fontSize: 20.0,
                     fontWeight: FontWeight.bold,

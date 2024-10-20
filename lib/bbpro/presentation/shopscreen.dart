@@ -1,5 +1,5 @@
 import 'package:business_bosses_v2/bbpro/controllers/shop_controller.dart';
-import 'package:business_bosses_v2/bbpro/models/order_model.dart';
+import 'package:business_bosses_v2/bbpro/models/service_model.dart';
 import 'package:business_bosses_v2/bbpro/models/product_model.dart';
 import 'package:business_bosses_v2/bbpro/presentation/bookservice.dart';
 import 'package:business_bosses_v2/bbpro/presentation/orderproduct.dart';
@@ -167,30 +167,36 @@ class _ShopScreenState extends State<ShopScreen> {
               crossAxisCount: 2,
               crossAxisSpacing: 10.0,
               mainAxisSpacing: 10.0,
-              itemCount: shopController.products.length,
+              itemCount: shopController.products.length +
+                  shopController.services.length,
               itemBuilder: (BuildContext context, int index) {
-                final Product product = shopController.products[index];
-                // return index == 2
-                //     ?
-                return GestureDetector(
-                  onTap: () {
-                    Get.to(() => OrderProductScreen(
-                          product: product,
-                        ));
-                  },
-                  child: InventoryCard(
-                    product: product,
-                    myShop: true,
-                  ),
-                );
-                // : GestureDetector(
-                //     onTap: () {
-                //       Get.to(() => const BookServiceScreen());
-                //     },
-                //     child: const ServiceCard(myShop: true));
+                if (index < shopController.products.length) {
+                  final Product product = shopController.products[index];
+                  return GestureDetector(
+                    onTap: () {
+                      Get.to(() => OrderProductScreen(product: product));
+                    },
+                    child: InventoryCard(
+                      product: product,
+                      myShop: true,
+                    ),
+                  );
+                } else {
+                  final Service service = shopController
+                      .services[index - shopController.products.length];
+                  return GestureDetector(
+                    onTap: () {
+                      Get.to(() => BookServiceScreen(service: service));
+                    },
+                    child: ServiceCard(
+                      myShop: true,
+                      service: service,
+                    ),
+                  );
+                }
               },
             ),
-          ),
+          )
         ]));
   }
 }

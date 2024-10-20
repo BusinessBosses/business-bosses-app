@@ -1,3 +1,4 @@
+import 'package:business_bosses_v2/bbpro/controllers/shop_controller.dart';
 import 'package:business_bosses_v2/bbpro/widgets/button.dart';
 import 'package:business_bosses_v2/bbpro/widgets/edittext.dart';
 import 'package:business_bosses_v2/bbpro/widgets/proseardwidget.dart';
@@ -28,6 +29,8 @@ class _ChooseOrderBottomSheetState extends State<ChooseOrderBottomSheet>
   final TextEditingController nameController = TextEditingController();
   final TextEditingController priceController = TextEditingController();
   final TextEditingController descriptionController = TextEditingController();
+  final TextEditingController currencyController = TextEditingController();
+  final ShopController shopController = Get.find();
 
   @override
   void initState() {
@@ -38,6 +41,7 @@ class _ChooseOrderBottomSheetState extends State<ChooseOrderBottomSheet>
         _selectedIndex = _tabController.index;
       });
     });
+    currencyController.text = shopController.shop!.currency;
   }
 
   @override
@@ -191,7 +195,7 @@ class _ChooseOrderBottomSheetState extends State<ChooseOrderBottomSheet>
         ),
         CustomEditText(
           iscurrencyfield: true,
-          currencycontroller: descriptionController,
+          currencycontroller: currencyController,
           padding: 0,
           backgroundcolor: backgroundColor,
           caption: 'Price',
@@ -228,6 +232,7 @@ class _ChooseOrderBottomSheetState extends State<ChooseOrderBottomSheet>
         'type': 'custom'
       });
     });
+    Navigator.pop(context);
   }
 
   Widget _buildProductItem(String title, String price, String imagePath) {

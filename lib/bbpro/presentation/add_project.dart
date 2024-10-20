@@ -1,10 +1,7 @@
 import 'package:business_bosses_v2/bbpro/controllers/shop_controller.dart';
 import 'package:business_bosses_v2/bbpro/models/project_model.dart';
-import 'package:business_bosses_v2/bbpro/models/task_model.dart';
-import 'package:business_bosses_v2/bbpro/widgets/addprojectbottomsheet.dart';
 import 'package:business_bosses_v2/bbpro/widgets/button.dart';
 import 'package:business_bosses_v2/bbpro/widgets/edittext.dart';
-import 'package:business_bosses_v2/bbpro/widgets/taskitem.dart';
 import 'package:business_bosses_v2/bbpro/controllers/project_controller.dart';
 import 'package:business_bosses_v2/common/dialogs/snackbar.dart';
 import 'package:business_bosses_v2/features/marketplace/widgets/currency.dart';
@@ -13,8 +10,6 @@ import 'package:business_bosses_v2/utils/theme/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
-
-import '../widgets/iconbutton.dart';
 
 class Addproject extends StatefulWidget {
   final Project? project;
@@ -78,111 +73,111 @@ class _AddprojectState extends State<Addproject> {
     super.dispose();
   }
 
-  void _showAddTaskSheet(BuildContext context) {
-    DateTime? startDate;
-    DateTime? endDate;
-    startDate = DateTime.now();
-    endDate = DateTime.now();
-    taskNameController.clear();
-    expenseController.clear();
-    showModalBottomSheet(
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
-      context: context,
-      isScrollControlled: true,
-      builder: (BuildContext context) {
-        return AddProjectBottomSheet(
-          currencyController: currencyController,
-          taskNameController: taskNameController,
-          expenseController: expenseController,
-          startDate: startDate!,
-          endDate: endDate!,
-          onPressed: () {
-            if (startDate!.isAfter(endDate!)) {
-              showSnackbar(
-                  message: 'Start date cannot be after end date!', error: true);
-              return;
-            }
-            final Map<String, dynamic> task = <String, dynamic>{
-              'name': taskNameController.text.trim(),
-              'amount': currencyController.text + expenseController.text.trim(),
-              'startAt': startDate.toString(),
-              'endAt': endDate.toString(),
-            };
+  // void _showAddTaskSheet(BuildContext context) {
+  //   DateTime? startDate;
+  //   DateTime? endDate;
+  //   startDate = DateTime.now();
+  //   endDate = DateTime.now();
+  //   taskNameController.clear();
+  //   expenseController.clear();
+  //   showModalBottomSheet(
+  //     shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
+  //     context: context,
+  //     isScrollControlled: true,
+  //     builder: (BuildContext context) {
+  //       return AddProjectBottomSheet(
+  //         currencyController: currencyController,
+  //         taskNameController: taskNameController,
+  //         expenseController: expenseController,
+  //         startDate: startDate!,
+  //         endDate: endDate!,
+  //         onPressed: () {
+  //           if (startDate!.isAfter(endDate!)) {
+  //             showSnackbar(
+  //                 message: 'Start date cannot be after end date!', error: true);
+  //             return;
+  //           }
+  //           final Map<String, dynamic> task = <String, dynamic>{
+  //             'name': taskNameController.text.trim(),
+  //             'amount': currencyController.text + expenseController.text.trim(),
+  //             'startAt': startDate.toString(),
+  //             'endAt': endDate.toString(),
+  //           };
 
-            setState(() {
-              tasks.add(task);
-            });
+  //           setState(() {
+  //             tasks.add(task);
+  //           });
 
-            Get.back();
-          },
-          onStartDateChanged: (DateTime newDate) {
-            setState(() {
-              startDate = newDate;
-            });
-          },
-          onEndDateChanged: (DateTime newDate) {
-            setState(() {
-              endDate = newDate;
-            });
-          },
-        );
-      },
-    );
-  }
+  //           Get.back();
+  //         },
+  //         onStartDateChanged: (DateTime newDate) {
+  //           setState(() {
+  //             startDate = newDate;
+  //           });
+  //         },
+  //         onEndDateChanged: (DateTime newDate) {
+  //           setState(() {
+  //             endDate = newDate;
+  //           });
+  //         },
+  //       );
+  //     },
+  //   );
+  // }
 
-  _editTaskSheet(BuildContext context, int index) {
-    Map<String, dynamic> taskToEdit = tasks[index];
+  // _editTaskSheet(BuildContext context, int index) {
+  //   Map<String, dynamic> taskToEdit = tasks[index];
 
-    taskNameController.text = taskToEdit['name'];
-    expenseController.text = taskToEdit['amount'];
-    DateTime startDate = DateTime.parse(taskToEdit['startAt']);
-    DateTime endDate = DateTime.parse(taskToEdit['endAt']);
+  //   taskNameController.text = taskToEdit['name'];
+  //   expenseController.text = taskToEdit['amount'];
+  //   DateTime startDate = DateTime.parse(taskToEdit['startAt']);
+  //   DateTime endDate = DateTime.parse(taskToEdit['endAt']);
 
-    showModalBottomSheet(
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
-      context: context,
-      isScrollControlled: true,
-      builder: (BuildContext context) {
-        return AddProjectBottomSheet(
-          currencyController: currencyController,
-          taskNameController: taskNameController,
-          expenseController: expenseController,
-          startDate: startDate,
-          endDate: endDate,
-          onPressed: () {
-            if (startDate.isAfter(endDate)) {
-              showSnackbar(
-                  message: 'Start date cannot be after end date!', error: true);
-              return;
-            }
-            final Map<String, dynamic> updatedTask = <String, dynamic>{
-              'name': taskNameController.text.trim(),
-              'amount': currencyController.text + expenseController.text.trim(),
-              'startAt': startDate.toString(),
-              'endAt': endDate.toString(),
-            };
+  //   showModalBottomSheet(
+  //     shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
+  //     context: context,
+  //     isScrollControlled: true,
+  //     builder: (BuildContext context) {
+  //       return AddProjectBottomSheet(
+  //         currencyController: currencyController,
+  //         taskNameController: taskNameController,
+  //         expenseController: expenseController,
+  //         startDate: startDate,
+  //         endDate: endDate,
+  //         onPressed: () {
+  //           if (startDate.isAfter(endDate)) {
+  //             showSnackbar(
+  //                 message: 'Start date cannot be after end date!', error: true);
+  //             return;
+  //           }
+  //           final Map<String, dynamic> updatedTask = <String, dynamic>{
+  //             'name': taskNameController.text.trim(),
+  //             'amount': currencyController.text + expenseController.text.trim(),
+  //             'startAt': startDate.toString(),
+  //             'endAt': endDate.toString(),
+  //           };
 
-            // Update the task in the list
-            setState(() {
-              tasks[index] = updatedTask;
-            });
+  //           // Update the task in the list
+  //           setState(() {
+  //             tasks[index] = updatedTask;
+  //           });
 
-            Get.back();
-          },
-          onStartDateChanged: (DateTime newDate) {
-            setState(() {
-              startDate = newDate;
-            });
-          },
-          onEndDateChanged: (DateTime newDate) {
-            setState(() {
-              endDate = newDate;
-            });
-          },
-        );
-      },
-    );
-  }
+  //           Get.back();
+  //         },
+  //         onStartDateChanged: (DateTime newDate) {
+  //           setState(() {
+  //             startDate = newDate;
+  //           });
+  //         },
+  //         onEndDateChanged: (DateTime newDate) {
+  //           setState(() {
+  //             endDate = newDate;
+  //           });
+  //         },
+  //       );
+  //     },
+  //   );
+  // }
 
   @override
   Widget build(BuildContext context) {
@@ -243,6 +238,9 @@ class _AddprojectState extends State<Addproject> {
                     controller: budgetController,
                     inputType: TextInputType.number,
                   ),
+                const SizedBox(
+                  height: 16,
+                ),
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 15.0),
                   child: Row(
@@ -306,7 +304,7 @@ class _AddprojectState extends State<Addproject> {
                           ),
                         ),
                       ),
-                      const SizedBox(width: 10),
+                      const SizedBox(width: 16),
                       Expanded(
                         child: GestureDetector(
                           onTap: () async {
@@ -465,7 +463,6 @@ class _AddprojectState extends State<Addproject> {
                         'startAt': DateFormat('yyyy-MM-dd').format(startDate!),
                         'endAt': DateFormat('yyyy-MM-dd').format(endDate!),
                       };
-                      print(data);
 
                       final bool response;
                       if (widget.project != null) {

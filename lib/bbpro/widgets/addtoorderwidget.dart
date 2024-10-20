@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 
 class AddToOrderWidget extends StatefulWidget {
-  const AddToOrderWidget({Key? key}) : super(key: key);
+  final dynamic packages;
+  const AddToOrderWidget({Key? key, required this.packages}) : super(key: key);
 
   @override
   State<AddToOrderWidget> createState() => _AddToOrderWidgetState();

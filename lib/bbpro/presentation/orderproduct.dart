@@ -28,6 +28,7 @@ class _OrderProductScreenState extends State<OrderProductScreen>
   final TextEditingController quantityController = TextEditingController();
   final TextEditingController emailController = TextEditingController();
   final TextEditingController phoneController = TextEditingController();
+  int selectedIndex = 0;
 
   @override
   void initState() {
@@ -62,13 +63,16 @@ class _OrderProductScreenState extends State<OrderProductScreen>
         ),
         body: Column(
           children: <Widget>[
-            const Padding(
-              padding: EdgeInsets.symmetric(horizontal: 15.0, vertical: 10),
-              child: ProgressTabBar(currentIndex: 0, tabs: <String>[
-                '1. Customise Order',
-                '2. Order Summary',
-                '3. Complete Order'
-              ]),
+            Padding(
+              padding:
+                  const EdgeInsets.symmetric(horizontal: 15.0, vertical: 10),
+              child: ProgressTabBar(
+                  currentIndex: selectedIndex,
+                  tabs: const <String>[
+                    '1. Customise Order',
+                    '2. Order Summary',
+                    '3. Complete Order'
+                  ]),
             ),
             Expanded(
               child: TabBarView(
@@ -233,7 +237,11 @@ class _OrderProductScreenState extends State<OrderProductScreen>
                         SizedBox(
                           width: double.infinity,
                           child: ProCustomButton(
-                            onPressed: () {},
+                            onPressed: () {
+                              setState(() {
+                                selectedIndex++;
+                              });
+                            },
                             text: 'Next ',
                             icon: SvgPicture.asset(
                               'assets/svgs/nexticon.svg',
@@ -246,14 +254,14 @@ class _OrderProductScreenState extends State<OrderProductScreen>
                   ]),
                   Column(
                     children: <Widget>[
-                      const OrderPreviewCard(
-                        title: 'AI Robot with Intel Iris',
+                      OrderPreviewCard(
+                        title: widget.product.name,
                         size: 'Medium 24',
                         color: 'Black',
                         price: 10000,
                         deliveryDays: 5,
-                        deliveryLocation: 'In Person, London',
-                        imageUrl: '',
+                        deliveryLocation: widget.product.location,
+                        imageUrl: widget.product.images![0],
                       ),
                       const SizedBox(
                         height: 15,
@@ -269,7 +277,11 @@ class _OrderProductScreenState extends State<OrderProductScreen>
                       SizedBox(
                         width: double.infinity,
                         child: ProCustomButton(
-                          onPressed: () {},
+                          onPressed: () {
+                            setState(() {
+                              selectedIndex++;
+                            });
+                          },
                           text: 'Next ',
                           icon: SvgPicture.asset(
                             'assets/svgs/nexticon.svg',

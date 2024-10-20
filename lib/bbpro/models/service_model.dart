@@ -22,6 +22,7 @@ class Service {
   String serviceType;
   DateTime createdAt;
   Map<String, dynamic>? availability;
+  List<dynamic> packages;
 
   Service({
     this.images,
@@ -44,6 +45,7 @@ class Service {
     required this.serviceType,
     required this.createdAt,
     this.availability,
+    this.packages = const <dynamic>[],
   });
 
   factory Service.fromJson(Map<String, dynamic> json) {
@@ -71,6 +73,7 @@ class Service {
       serviceType: json['serviceType'],
       createdAt: DateTime.parse(json['createdAt']),
       availability: json['availability'],
+      packages: json['packages'],
     );
   }
 
@@ -95,6 +98,7 @@ class Service {
       'serviceType': serviceType,
       'createdAt': createdAt.toIso8601String(),
       'availability': availability.toString(),
+      'packages': packages,
     };
   }
 
@@ -121,6 +125,7 @@ Service {
   createdAt: ${createdAt.toIso8601String()},
   images: $images, 
   availability: $availability,
+  packages: $packages
 }
 ''';
   }
