@@ -256,12 +256,11 @@ class _AddprojectState extends State<Addproject> {
                               firstDate: DateTime(2000),
                               lastDate: DateTime(2101),
                             );
-                            // if (picked != null && picked != startDate) {
-                            //   setState(() {
-                            //     startDate = picked;
-                            //   });
-                            //   onStartDateChanged(picked);
-                            // }
+                            if (picked != null && picked != startDate) {
+                              setState(() {
+                                startDate = picked;
+                              });
+                            }
                           },
                           child: Container(
                             decoration: BoxDecoration(
@@ -312,12 +311,11 @@ class _AddprojectState extends State<Addproject> {
                               firstDate: DateTime(2000),
                               lastDate: DateTime(2101),
                             );
-                            // if (picked != null && picked != endDate) {
-                            //   setState(() {
-                            //     endDate = picked;
-                            //   });
-                            //   onEndDateChanged(picked); // Call the callback
-                            // }
+                            if (picked != null && picked != endDate) {
+                              setState(() {
+                                endDate = picked;
+                              }); // Call the callback
+                            }
                           },
                           child: Container(
                             decoration: BoxDecoration(

@@ -1,8 +1,11 @@
+import 'package:business_bosses_v2/bbpro/controllers/clients_controller.dart';
 import 'package:business_bosses_v2/bbpro/controllers/order_controller.dart';
 import 'package:business_bosses_v2/bbpro/controllers/shop_controller.dart';
+import 'package:business_bosses_v2/bbpro/models/client_model.dart';
 import 'package:business_bosses_v2/bbpro/models/service_model.dart';
 import 'package:business_bosses_v2/bbpro/widgets/addtoorderwidget.dart';
 import 'package:business_bosses_v2/bbpro/widgets/button.dart';
+import 'package:business_bosses_v2/bbpro/widgets/dropdown.dart';
 import 'package:business_bosses_v2/bbpro/widgets/edittext.dart';
 import 'package:business_bosses_v2/bbpro/widgets/orderpreviewcard.dart';
 import 'package:business_bosses_v2/bbpro/widgets/ordersummarycard.dart';
@@ -33,11 +36,18 @@ class _BookServiceScreenState extends State<BookServiceScreen>
   final ProfileController profileController = Get.find();
   final OrderController orderController = Get.find();
   final ShopController shopController = Get.find();
+  final ClientsController clientsController = Get.find();
   final TextEditingController quantityController = TextEditingController();
+  final TextEditingController deliveryController = TextEditingController();
   bool isSubmit = false;
 
   List<Map<String, dynamic>> selectedItems = <Map<String, dynamic>>[];
   DateTime? deliveryDate;
+  String? clientId;
+  String? selectedClient;
+
+  List<String> clientsName = <String>[];
+  List<Map<String, dynamic>> clients = <Map<String, dynamic>>[];
 
   int selectedIndex = 0;
 
@@ -52,6 +62,10 @@ class _BookServiceScreenState extends State<BookServiceScreen>
         'name': widget.service.name
       },
     );
+    for (Client client in clientsController.clients) {
+      clientsName.add(client.name);
+      clients.add(<String, dynamic>{'name': client.name, 'id': client.id});
+    }
   }
 
   @override
@@ -291,8 +305,9 @@ class _BookServiceScreenState extends State<BookServiceScreen>
                         OrderPreviewCard(
                           title: widget.service.name,
                           price: widget.service.price,
-                          deliveryDays:
-                              deliveryDate!.difference(DateTime.now()).inDays,
+                          deliveryDays: deliveryDate != null
+                              ? deliveryDate!.difference(DateTime.now()).inDays
+                              : 0,
                           deliveryLocation: widget.service.location,
                           imageUrl: widget.service.images![0],
                         ),
@@ -354,50 +369,66 @@ class _BookServiceScreenState extends State<BookServiceScreen>
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: <Widget>[
-                              Wrap(
-                                  crossAxisAlignment: WrapCrossAlignment.center,
-                                  children: <Widget>[
-                                    const Text(
-                                      'Edit your Details',
-                                      style: TextStyle(
-                                        fontSize: 14,
-                                        fontWeight: FontWeight.w600,
-                                      ),
-                                    ),
-                                    const SizedBox(
-                                      width: 10,
-                                    ),
-                                    TextFormField(
-                                      style: const TextStyle(fontSize: 13),
-                                      maxLines: 1,
-                                      decoration: InputDecoration(
-                                        border: InputBorder.none,
-                                        hintText: 'Full Name',
-                                        filled: false,
-                                        fillColor: Colors.grey.shade100,
-                                      ),
-                                    ),
-                                    TextFormField(
-                                      style: const TextStyle(fontSize: 13),
-                                      maxLines: 1,
-                                      decoration: InputDecoration(
-                                        border: InputBorder.none,
-                                        hintText: 'Email',
-                                        filled: false,
-                                        fillColor: Colors.grey.shade100,
-                                      ),
-                                    ),
-                                    TextFormField(
-                                      style: const TextStyle(fontSize: 13),
-                                      maxLines: 1,
-                                      decoration: InputDecoration(
-                                        border: InputBorder.none,
-                                        hintText: 'Phone Number',
-                                        filled: false,
-                                        fillColor: Colors.grey.shade100,
-                                      ),
-                                    ),
-                                  ]),
+                              // Wrap(
+                              //   crossAxisAlignment: WrapCrossAlignment.center,
+                              //   children: <Widget>[
+                              //     const Text(
+                              //       'Edit your Details',
+                              //       style: TextStyle(
+                              //         fontSize: 14,
+                              //         fontWeight: FontWeight.w600,
+                              //       ),
+                              //     ),
+                              //     const SizedBox(
+                              //       width: 10,
+                              //     ),
+                              //     TextFormField(
+                              //       style: const TextStyle(fontSize: 13),
+                              //       maxLines: 1,
+                              //       decoration: InputDecoration(
+                              //         border: InputBorder.none,
+                              //         hintText: 'Full Name',
+                              //         filled: false,
+                              //         fillColor: Colors.grey.shade100,
+                              //       ),
+                              //     ),
+                              //     TextFormField(
+                              //       style: const TextStyle(fontSize: 13),
+                              //       maxLines: 1,
+                              //       decoration: InputDecoration(
+                              //         border: InputBorder.none,
+                              //         hintText: 'Email',
+                              //         filled: false,
+                              //         fillColor: Colors.grey.shade100,
+                              //       ),
+                              //     ),
+                              //     TextFormField(
+                              //       style: const TextStyle(fontSize: 13),
+                              //       maxLines: 1,
+                              //       decoration: InputDecoration(
+                              //         border: InputBorder.none,
+                              //         hintText: 'Phone Number',
+                              //         filled: false,
+                              //         fillColor: Colors.grey.shade100,
+                              //       ),
+                              //     ),
+                              //   ],
+                              // ),
+                              Expanded(
+                                child: CustomDropdownWidget(
+                                  caption: 'Client\'s Name',
+                                  items: clientsName,
+                                  iconName: 'assets/svgs/dropdown.svg',
+                                  initialValue: selectedClient,
+                                  onChanged: (String? value) {
+                                    setState(() {
+                                      selectedClient = value!;
+                                      _onClientSelect(value);
+                                    });
+                                  },
+                                ),
+                              ),
+                              const SizedBox(height: 15),
                             ],
                           ),
                         ),
@@ -409,7 +440,7 @@ class _BookServiceScreenState extends State<BookServiceScreen>
                         maxLength: 300,
                         caption: 'Delivery Address',
                         hintText: 'Enter your delivery address',
-                        controller: quantityController,
+                        controller: deliveryController,
                       ),
                       const SizedBox(
                         height: 15,
@@ -426,11 +457,12 @@ class _BookServiceScreenState extends State<BookServiceScreen>
                                 <String, dynamic>{
                               'userId': profileController.myProfile.uid,
                               'shopId': shopController.shop?.id,
-                              // 'clientId': clientId,
+                              'clientId': clientId,
                               'items': selectedItems,
                               'deliveryMethod': widget.service.deliveryMethod,
                               'deliveryDate': DateTime.now(),
                               'paymentMethod': widget.service.deliveryMethod,
+                              'orderDetails': deliveryController.text,
                               'invoiceOption': 'send_with_payment_link'
                             };
                             bool response =
@@ -441,8 +473,9 @@ class _BookServiceScreenState extends State<BookServiceScreen>
                               Navigator.pop(context);
                             } else {
                               showSnackbar(
-                                  message: 'Error creating order!',
-                                  error: true);
+                                message: 'Error creating order!',
+                                error: true,
+                              );
                               setState(() {
                                 isSubmit = false;
                               });
@@ -458,5 +491,13 @@ class _BookServiceScreenState extends State<BookServiceScreen>
             ),
           ],
         ));
+  }
+
+  void _onClientSelect(String name) {
+    final dynamic clientName = clients
+        .firstWhere((Map<String, dynamic> element) => element['name'] == name);
+    setState(() {
+      clientId = clientName['id'];
+    });
   }
 }

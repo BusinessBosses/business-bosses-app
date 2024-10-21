@@ -45,7 +45,7 @@ class Service {
     required this.serviceType,
     required this.createdAt,
     this.availability,
-    this.packages = const <dynamic>[],
+    this.packages = const <Map<String, dynamic>>[],
   });
 
   factory Service.fromJson(Map<String, dynamic> json) {

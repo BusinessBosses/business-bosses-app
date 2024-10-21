@@ -6,7 +6,6 @@ import 'package:business_bosses_v2/bbpro/widgets/addpackagebottomsheet.dart';
 import 'package:business_bosses_v2/bbpro/widgets/dropdown.dart';
 import 'package:business_bosses_v2/bbpro/widgets/edittext.dart';
 import 'package:business_bosses_v2/bbpro/widgets/iconbutton.dart';
-import 'package:business_bosses_v2/bbpro/widgets/multipleedit.dart';
 import 'package:business_bosses_v2/bbpro/widgets/switchwidget.dart';
 import 'package:business_bosses_v2/bbpro/widgets/taskitem.dart';
 import 'package:business_bosses_v2/features/marketplace/widgets/currency.dart';
