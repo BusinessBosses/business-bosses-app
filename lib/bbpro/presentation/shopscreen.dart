@@ -33,40 +33,47 @@ class _ShopScreenState extends State<ShopScreen> {
             },
             icon: SvgPicture.asset('assets/svgs/backbutton.svg'),
           ),
-          title: Row(
-            children: <Widget>[
-              SizedBox(
-                height: 40.0,
-                width: 40.0,
-                child: Align(
-                  alignment: Alignment.topLeft,
-                  child: ClipRRect(
-                    borderRadius: BorderRadius.circular(1000),
-                    child: NetworkImageWithPlaceHolder(
-                      imageUrl: shopController.shop!.image ?? '',
-                      radius: radius,
-                      placeHolder: Icons.person,
-                      iconSize: 22.0,
-                      fit: BoxFit.cover,
-                    ),
-                  ),
-                ),
-              ),
-              const SizedBox(width: 10),
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: <Widget>[
-                  Text(shopController.shop!.name,
-                      style: const TextStyle(
-                          fontWeight: FontWeight.bold, fontSize: 14)),
-                  const SizedBox(height: 2),
-                  Text(shopController.shop!.description,
-                      style: const TextStyle(
-                          fontWeight: FontWeight.normal, fontSize: 12)),
-                ],
-              ),
-            ],
+          title: const Text(
+            'Shop',
+            style: TextStyle(
+              color: proprimaryColor,
+              fontWeight: FontWeight.bold,
+            ),
           ),
+          //  Row(
+          //   children: <Widget>[
+          //     SizedBox(
+          //       height: 40.0,
+          //       width: 40.0,
+          //       child: Align(
+          //         alignment: Alignment.topLeft,
+          //         child: ClipRRect(
+          //           borderRadius: BorderRadius.circular(1000),
+          //           child: NetworkImageWithPlaceHolder(
+          //             imageUrl: shopController.shop!.image ?? '',
+          //             radius: radius,
+          //             placeHolder: Icons.person,
+          //             iconSize: 22.0,
+          //             fit: BoxFit.cover,
+          //           ),
+          //         ),
+          //       ),
+          //     ),
+          //     const SizedBox(width: 10),
+          //     Column(
+          //       crossAxisAlignment: CrossAxisAlignment.start,
+          //       children: <Widget>[
+          //         Text(shopController.shop!.name,
+          //             style: const TextStyle(
+          //                 fontWeight: FontWeight.bold, fontSize: 14)),
+          //         const SizedBox(height: 2),
+          //         Text(shopController.shop!.description,
+          //             style: const TextStyle(
+          //                 fontWeight: FontWeight.normal, fontSize: 12)),
+          //       ],
+          //     ),
+          //   ],
+          // ),
           actions: <Widget>[
             Padding(
               padding: const EdgeInsets.only(right: 15.0),
@@ -125,12 +132,47 @@ class _ShopScreenState extends State<ShopScreen> {
           ],
         ),
         body: Column(children: <Widget>[
+          const SizedBox(
+            height: 20,
+          ),
+          SizedBox(
+            height: 100.0,
+            width: 100.0,
+            child: Align(
+              alignment: Alignment.topLeft,
+              child: ClipRRect(
+                borderRadius: BorderRadius.circular(1000),
+                child: NetworkImageWithPlaceHolder(
+                  imageUrl: shopController.shop!.image ?? '',
+                  radius: radius,
+                  placeHolder: Icons.person,
+                  iconSize: 22.0,
+                  fit: BoxFit.cover,
+                ),
+              ),
+            ),
+          ),
+          const SizedBox(
+            height: 10,
+          ),
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: <Widget>[
+              Text(shopController.shop!.name,
+                  style: const TextStyle(
+                      fontWeight: FontWeight.bold, fontSize: 14)),
+              const SizedBox(height: 2),
+              Text(shopController.shop!.description,
+                  style: const TextStyle(
+                      fontWeight: FontWeight.normal, fontSize: 12)),
+            ],
+          ),
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 15.0, vertical: 10),
             child: Container(
               padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 8),
               decoration: BoxDecoration(
-                color: Colors.grey[200],
+                color: prosemibackColor,
                 borderRadius: BorderRadius.circular(8),
               ),
               child: Row(

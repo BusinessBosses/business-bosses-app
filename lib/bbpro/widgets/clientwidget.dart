@@ -1,8 +1,11 @@
+import 'dart:io';
+
 import 'package:business_bosses_v2/bbpro/controllers/clients_controller.dart';
 import 'package:business_bosses_v2/bbpro/presentation/add_client.dart';
 import 'package:business_bosses_v2/bbpro/widgets/optionsbutton.dart';
 import 'package:business_bosses_v2/bbpro/models/client_model.dart';
 import 'package:business_bosses_v2/common/dialogs/snackbar.dart';
+import 'package:business_bosses_v2/common/widgets/network_image_with_placeholder.dart';
 import 'package:business_bosses_v2/utils/theme/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -55,11 +58,23 @@ class _ClientWidgetState extends State<ClientWidget> {
                   child: Wrap(
                       crossAxisAlignment: WrapCrossAlignment.center,
                       children: <Widget>[
-                        SvgPicture.asset(
-                          'assets/svgs/client.svg',
-                          height: 10,
-                          color: textColor,
-                        ),
+                        (widget.client.image.isNotEmpty)
+                            ? Container(
+                                width: 17,
+                                height: 17,
+                                decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(8),
+                                ),
+                                child: ClipRRect(
+                                    borderRadius: BorderRadius.circular(8),
+                                    child: NetworkImageWithPlaceHolder(
+                                        imageUrl: widget.client.image[0])),
+                              )
+                            : SvgPicture.asset(
+                                'assets/svgs/client.svg',
+                                height: 10,
+                                color: textColor,
+                              ),
                         const SizedBox(
                           width: 5,
                         ),

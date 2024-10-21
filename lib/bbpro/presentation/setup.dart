@@ -22,7 +22,7 @@ class _SetupState extends State<Setup> {
   final ShopController shopController = Get.find();
   final List<String> titles = <String>[
     'Edit Shop',
-    'My Inventory',
+    'Manage Product Inventory',
     'My Services',
     'Privacy Policy & Terms of Use',
     'Contact Us',

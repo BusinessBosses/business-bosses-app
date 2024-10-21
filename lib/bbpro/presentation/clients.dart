@@ -12,6 +12,7 @@ import 'package:business_bosses_v2/bbpro/widgets/topsection.dart';
 import 'package:business_bosses_v2/bbpro/controllers/clients_controller.dart';
 import 'package:business_bosses_v2/bbpro/models/client_model.dart';
 import 'package:business_bosses_v2/common/widgets/safety_model.dart';
+import 'package:business_bosses_v2/features/marketplace/presentation/supplierspage.dart';
 import 'package:business_bosses_v2/utils/theme/theme.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -194,8 +195,66 @@ class _ClientsScreenState extends State<ClientsScreen>
               print('How it works pressed');
             },
             onAddProjectPressed: () {
-              // Handle "Add Project" pressed
-              Get.to(() => const AddSupplier());
+              showModalBottomSheet<void>(
+                context: context,
+                shape: const RoundedRectangleBorder(
+                  borderRadius: BorderRadius.vertical(
+                    top: Radius.circular(20),
+                  ),
+                ),
+                builder: (BuildContext context) {
+                  return Container(
+                    padding: const EdgeInsets.all(20.0),
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: <Widget>[
+                        ListTile(
+                          leading: const Icon(Icons.person_add),
+                          title: const Text('Add a New Supplier'),
+                          onTap: () {
+                            Navigator.pop(context);
+                            Get.to(() => const AddSupplier());
+                          },
+                        ),
+                        ListTile(
+                          leading: const Icon(Icons.file_upload),
+                          title: const Text(
+                              'Import Suppliers from Business Bosses'),
+                          onTap: () {
+                            showModalBottomSheet<void>(
+                              context: context,
+                              isScrollControlled: true, // Allow resizing
+                              shape: const RoundedRectangleBorder(
+                                borderRadius: BorderRadius.only(
+                                  topLeft: Radius.circular(20),
+                                  topRight: Radius.circular(20),
+                                ),
+                              ),
+                              builder: (BuildContext context) {
+                                return DraggableScrollableSheet(
+                                  initialChildSize: 0.9, // 90% of the screen
+                                  maxChildSize: 0.9,
+                                  minChildSize: 0.9,
+                                  expand: false,
+                                  builder: (BuildContext context,
+                                      ScrollController scrollController) {
+                                    return const SizedBox.expand(
+                                      // Ensures the content takes up the available space
+                                      child: Center(
+                                        child: Text('Supplier List here'),
+                                      ),
+                                    );
+                                  },
+                                );
+                              },
+                            );
+                          },
+                        ),
+                      ],
+                    ),
+                  );
+                },
+              );
             },
           ),
           Obx(() {
@@ -290,10 +349,10 @@ class _RowStatusCardState extends State<RowStatusCard> {
     Color statusColor;
     switch (widget.clientType) {
       case ClientType.online:
-        statusColor = Colors.blue;
+        statusColor = Colors.green;
         break;
       case ClientType.inPerson:
-        statusColor = Colors.green;
+        statusColor = Colors.blue;
         break;
       case ClientType.bbUser:
         statusColor = primaryColorLT;

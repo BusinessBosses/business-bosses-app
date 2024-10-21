@@ -1,3 +1,4 @@
+import 'package:business_bosses_v2/bbpro/controllers/clients_controller.dart';
 import 'package:business_bosses_v2/bbpro/controllers/shop_controller.dart';
 import 'package:business_bosses_v2/bbpro/presentation/add_client.dart';
 import 'package:business_bosses_v2/bbpro/presentation/add_project.dart';
@@ -31,9 +32,10 @@ class _DashboardState extends State<Dashboard> {
     'Clients',
     'Expenses',
     'To-do tasks',
-    'Shop Visits'
+    // 'Shop Visits'
   ];
   final ShopController shopController = Get.put(ShopController());
+  final ClientsController clientsController = Get.put(ClientsController());
 
   void _showBottomSheet() {
     showModalBottomSheet(
@@ -166,12 +168,12 @@ class _DashboardState extends State<Dashboard> {
               padding: const EdgeInsets.symmetric(
                 horizontal: 15.0,
               ),
-              crossAxisCount: 2,
+              crossAxisCount: 3,
               crossAxisSpacing: 15.0,
               mainAxisSpacing: 15.0,
               // controller: _controller,
               shrinkWrap: true,
-              itemCount: 4,
+              itemCount: 3,
               itemBuilder: (BuildContext context, int index) {
                 return GestureDetector(
                   onTap: () {
@@ -199,7 +201,9 @@ class _DashboardState extends State<Dashboard> {
                   },
                   child: InfoCard(
                     cardName: titles[index],
-                    value: '\$20k',
+                    value: index == 0
+                        ? clientsController.allclients.length.toString()
+                        : 'value',
                   ),
                 );
               },
@@ -207,11 +211,11 @@ class _DashboardState extends State<Dashboard> {
           ],
         ),
       ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: _showBottomSheet,
-        backgroundColor: proprimaryColor,
-        child: const Icon(Icons.add),
-      ),
+      // floatingActionButton: FloatingActionButton(
+      //   onPressed: _showBottomSheet,
+      //   backgroundColor: proprimaryColor,
+      //   child: const Icon(Icons.add),
+      // ),
     );
   }
 }

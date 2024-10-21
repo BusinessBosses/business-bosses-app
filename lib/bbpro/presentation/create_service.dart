@@ -48,9 +48,12 @@ class _CreateServiceListingState extends State<CreateServiceListing>
   final TextEditingController currencyController = TextEditingController();
   final TextEditingController packageNameController = TextEditingController();
   final TextEditingController expenseController = TextEditingController();
+  final TextEditingController notesController = TextEditingController();
+  final TextEditingController addressorlinkController = TextEditingController();
+  final TextEditingController groupmembersController = TextEditingController();
 
   bool isSubmitted = false;
-  bool _isSwitched = false;
+  bool _isSwitched = true;
 
   // Form fields
   String? category;
@@ -430,9 +433,33 @@ class _CreateServiceListingState extends State<CreateServiceListing>
               onChanged: (String? newValue) {
                 setState(() {
                   deliveryMethod = newValue;
+
+                  addressorlinkController.clear();
                 });
               },
             ),
+            if (deliveryMethod != null)
+              Padding(
+                padding: const EdgeInsets.only(top: 16.0),
+                child: CustomEditText(
+                  caption: deliveryMethod == 'Online'
+                      ? 'Enter Link'
+                      : 'Enter Address',
+                  hintText: deliveryMethod == 'Online'
+                      ? 'Enter link here'
+                      : 'Enter address here',
+                  controller: addressorlinkController,
+                  validator: (String? value) {
+                    if (value == null || value.isEmpty) {
+                      return deliveryMethod == 'Online'
+                          ? 'Please enter meeting link here'
+                          : 'Please enter an address';
+                    }
+                    return null;
+                  },
+                ),
+              ),
+
             const SizedBox(height: 16),
 
             availabilityWidget(),
@@ -486,7 +513,7 @@ class _CreateServiceListingState extends State<CreateServiceListing>
               hintText: 'Choose a service type',
               items: const <String>[
                 '1:1 (Individual)',
-                '1 to Many',
+                'Group Session or Event',
               ],
               iconName: 'assets/svgs/dropdown.svg',
               onChanged: (String? newValue) {
@@ -495,6 +522,27 @@ class _CreateServiceListingState extends State<CreateServiceListing>
                 });
               },
             ),
+            if (serviceType == 'Group Session or Event')
+              Padding(
+                padding: const EdgeInsets.only(top: 16.0),
+                child: CustomEditText(
+                  caption: 'Maximum Participants',
+                  hintText: 'Enter the maximum number of participants',
+                  controller:
+                      groupmembersController, // You might want a different controller here
+                  inputType: TextInputType.number,
+                  validator: (String? value) {
+                    if (value == null || value.isEmpty) {
+                      return 'Please enter the maximum number of participants';
+                    }
+                    if (int.tryParse(value) == null) {
+                      return 'Please enter a valid number';
+                    }
+                    return null;
+                  },
+                ),
+              ),
+
             if (packages.isNotEmpty) const SizedBox(height: 16),
             if (packages.isNotEmpty)
               Padding(
@@ -543,6 +591,14 @@ class _CreateServiceListingState extends State<CreateServiceListing>
                 ),
               ),
             const SizedBox(height: 16),
+            CustomEditText(
+              caption: 'Message or Question',
+              hintText:
+                  'Enter message or question you want your clients to answer',
+              controller: notesController,
+              maxLength: 300,
+            ),
+            const SizedBox(height: 16),
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
@@ -582,7 +638,7 @@ class _CreateServiceListingState extends State<CreateServiceListing>
                 caption: 'Status',
                 subtext:
                     'If status is active, this product will show in your shop',
-                activeColor: Colors.blue,
+                activeColor: proprimaryColor,
                 inactiveColor: Colors.grey,
               ),
             ),
@@ -732,7 +788,10 @@ class _CreateServiceListingState extends State<CreateServiceListing>
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
-            const Text('Available Days'),
+            const Text(
+              'Select a Date and Time',
+              style: TextStyle(fontWeight: FontWeight.w600, fontSize: 14),
+            ),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: <Widget>[

@@ -90,7 +90,7 @@ enum ProjectStatus {
   String get displayTitle {
     switch (this) {
       case ProjectStatus.allprojects:
-        return 'All Projects';
+        return 'All Tasks';
       case ProjectStatus.todo:
         return 'To Do';
       case ProjectStatus.pending:
