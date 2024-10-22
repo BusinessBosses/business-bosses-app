@@ -161,7 +161,9 @@ class _SetupState extends State<Setup> {
                                   backgroundColor: Colors.white,
                                   textColor: proprimaryColor,
                                   text: 'View Shop',
-                                  onPressed: () {},
+                                  onPressed: () {
+                                    Get.to(() => const ShopScreen());
+                                  },
                                 ),
                                 const SizedBox(
                                   width: 5,

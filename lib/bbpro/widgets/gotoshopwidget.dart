@@ -2,6 +2,7 @@ import 'package:business_bosses_v2/bbpro/controllers/shop_controller.dart';
 import 'package:business_bosses_v2/bbpro/presentation/add_client.dart';
 import 'package:business_bosses_v2/bbpro/presentation/add_project.dart';
 import 'package:business_bosses_v2/bbpro/presentation/add_supplier.dart';
+import 'package:business_bosses_v2/bbpro/presentation/availability.dart';
 import 'package:business_bosses_v2/bbpro/presentation/create_order.dart';
 import 'package:business_bosses_v2/bbpro/presentation/create_product.dart';
 import 'package:business_bosses_v2/bbpro/presentation/create_service.dart';
@@ -80,26 +81,31 @@ class _GotoshopWidgetState extends State<GotoshopWidget> {
               Row(
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: <Widget>[
-                    Container(
-                      padding: const EdgeInsets.symmetric(
-                          horizontal: 10, vertical: 8),
-                      decoration: BoxDecoration(
-                          color: backgroundColor,
-                          borderRadius: BorderRadius.circular(50)),
-                      child: const Wrap(children: <Widget>[
-                        Icon(
-                          Icons.calendar_month,
-                          size: 15,
-                        ),
-                        SizedBox(
-                          width: 5,
-                        ),
-                        Text(
-                          'Calendar',
-                          style: TextStyle(
-                              fontSize: 13, fontWeight: FontWeight.w700),
-                        )
-                      ]),
+                    GestureDetector(
+                      onTap: () {
+                        Get.to(() => const AvailabilityScreen());
+                      },
+                      child: Container(
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 10, vertical: 8),
+                        decoration: BoxDecoration(
+                            color: backgroundColor,
+                            borderRadius: BorderRadius.circular(50)),
+                        child: const Wrap(children: <Widget>[
+                          Icon(
+                            Icons.calendar_month,
+                            size: 15,
+                          ),
+                          SizedBox(
+                            width: 5,
+                          ),
+                          Text(
+                            'Availability',
+                            style: TextStyle(
+                                fontSize: 13, fontWeight: FontWeight.w700),
+                          )
+                        ]),
+                      ),
                     ),
                     const SizedBox(
                       width: 10,
