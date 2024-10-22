@@ -461,6 +461,23 @@ class _CreateServiceListingState extends State<CreateServiceListing>
               ),
 
             const SizedBox(height: 16),
+            CustomDropdownWidget(
+              initialValue: category,
+              caption: 'Service Frequency',
+              hintText:
+                  'Select whether you offer this service once or on a regular basis',
+              items: const <String>[
+                'Design Services',
+                'Consulting',
+                'Technical Support'
+              ],
+              iconName: 'assets/svgs/dropdown.svg',
+              onChanged: (String? newValue) {
+                setState(() {
+                  category = newValue;
+                });
+              },
+            ),
 
             availabilityWidget(),
 
