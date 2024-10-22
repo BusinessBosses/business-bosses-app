@@ -85,6 +85,7 @@ class _CreateServiceListingState extends State<CreateServiceListing>
     'Sat',
     'Sun'
   ];
+  String frequency = 'Weekly';
 
   @override
   void initState() {
@@ -467,11 +468,10 @@ class _CreateServiceListingState extends State<CreateServiceListing>
             const SizedBox(height: 16),
             CustomDropdownWidget(
               caption: 'Repeat',
-              hintText:
-                  'Select whether you offer this service once or on a regular basis',
+              hintText: 'Offer this service once or regularly?',
               items: const <String>[
-                'Yes',
-                'No',
+                'Yes (One-time Service)',
+                'No (Regular Service)',
               ],
               iconName: 'assets/svgs/dropdown.svg',
               onChanged: (String? newValue) {
@@ -482,7 +482,10 @@ class _CreateServiceListingState extends State<CreateServiceListing>
             ),
             const SizedBox(height: 16),
 
-            availabilityWidget(isRecurring: category == 'Yes' ? true : false),
+            if (category != null)
+              availabilityWidget(
+                  isRecurring:
+                      category == 'Yes (One-time Service)' ? true : false),
 
             // Delivery Time Field
             // TextFormField(
@@ -497,7 +500,7 @@ class _CreateServiceListingState extends State<CreateServiceListing>
             //     });
             //   },
             // ),
-            const SizedBox(height: 16),
+            if (category != null) const SizedBox(height: 16),
 
             // Available Time Field
             // TextFormField(
@@ -869,33 +872,95 @@ class _CreateServiceListingState extends State<CreateServiceListing>
                 ],
               ),
             const SizedBox(height: 10),
-            if (isRecurring)
-              Wrap(
-                spacing: 8,
-                children: List<Widget>.generate(7, (int index) {
-                  return ChoiceChip(
-                    label: Text(_getWeekdayName(index)),
-                    selected: _selectedWeekdays[index],
-                    selectedColor: proprimaryColor,
-                    onSelected: (bool selected) {
+            if (isRecurring && !_isAlwaysAvailable)
+              Container(
+                width: 200,
+                padding: const EdgeInsets.symmetric(horizontal: 10),
+                decoration: BoxDecoration(
+                    color: probackgroundColor,
+                    borderRadius: BorderRadius.circular(10)),
+                child: DropdownButtonHideUnderline(
+                  child: DropdownButton<String>(
+                    hint: const Text('Select repeat frequency'),
+                    value: frequency,
+                    onChanged: (String? newValue) {
                       setState(() {
-                        _selectedWeekdays[index] = selected;
-                        _updateSelectedDates();
-                        if (selectedSubmitWeekdays
-                            .contains(_getWeekdayName(index))) {
-                          selectedSubmitWeekdays.remove(_getWeekdayName(
-                              index)); // Remove if already selected
-                        } else {
-                          selectedSubmitWeekdays.add(
-                              _getWeekdayName(index)); // Add if not selected
-                        }
-                        selectedSubmitWeekdays.sort((String a, String b) =>
-                            weekdays.indexOf(a).compareTo(weekdays.indexOf(b)));
+                        frequency = newValue!;
                       });
                     },
-                  );
-                }),
+                    items: const <String>[
+                      'Repeat Weekly',
+                      'Repeat Monthly',
+                    ].map((String value) {
+                      return DropdownMenuItem<String>(
+                        value: value,
+                        child: Text(value),
+                      );
+                    }).toList(),
+                    isExpanded: true,
+                    icon: SvgPicture.asset(
+                      'assets/svgs/dropdown.svg',
+                      color: proprimaryColor,
+                    ),
+                  ),
+                ),
               ),
+            const SizedBox(height: 10),
+            if (isRecurring && !_isAlwaysAvailable)
+              frequency == 'Weekly'
+                  ? Wrap(
+                      spacing: 8,
+                      children: List<Widget>.generate(7, (int index) {
+                        return ChoiceChip(
+                          label: Text(_getWeekdayName(index)),
+                          selected: _selectedWeekdays[index],
+                          selectedColor: proprimaryColor,
+                          onSelected: (bool selected) {
+                            setState(() {
+                              _selectedWeekdays[index] = selected;
+                              _updateSelectedDates();
+                              if (selectedSubmitWeekdays
+                                  .contains(_getWeekdayName(index))) {
+                                selectedSubmitWeekdays.remove(_getWeekdayName(
+                                    index)); // Remove if already selected
+                              } else {
+                                selectedSubmitWeekdays.add(_getWeekdayName(
+                                    index)); // Add if not selected
+                              }
+                              selectedSubmitWeekdays.sort(
+                                  (String a, String b) => weekdays
+                                      .indexOf(a)
+                                      .compareTo(weekdays.indexOf(b)));
+                            });
+                          },
+                        );
+                      }))
+                  : SizedBox(
+                      height: 300,
+                      child: SfCalendar(
+                        selectionDecoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(8),
+                          color: Colors.transparent,
+                        ),
+                        todayHighlightColor: proprimaryColor,
+                        view: CalendarView.month,
+                        initialDisplayDate: DateTime.now(),
+                        monthViewSettings: const MonthViewSettings(
+                          appointmentDisplayMode:
+                              MonthAppointmentDisplayMode.indicator,
+                        ),
+                        dataSource: _getCalendarDataSource(),
+                        onTap: (CalendarTapDetails details) {
+                          setState(() {
+                            if (_selectedDates.contains(details.date)) {
+                              _selectedDates.remove(details.date);
+                            } else {
+                              _selectedDates.add(details.date!);
+                            }
+                          });
+                        },
+                      ),
+                    ),
             if (!isRecurring)
               SizedBox(
                 height: 400,
