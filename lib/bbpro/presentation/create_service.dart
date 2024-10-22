@@ -392,7 +392,11 @@ class _CreateServiceListingState extends State<CreateServiceListing>
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: <Widget>[
-                        Text('Add Attachment'),
+                        Text('Add Attachment',
+                            style: TextStyle(
+                                fontSize: 13,
+                                color: Colors.black,
+                                fontWeight: FontWeight.w600)),
                         Icon(Icons.image),
                       ],
                     ),
@@ -462,14 +466,12 @@ class _CreateServiceListingState extends State<CreateServiceListing>
 
             const SizedBox(height: 16),
             CustomDropdownWidget(
-              initialValue: category,
-              caption: 'Service Frequency',
+              caption: 'Repeat',
               hintText:
                   'Select whether you offer this service once or on a regular basis',
               items: const <String>[
-                'Design Services',
-                'Consulting',
-                'Technical Support'
+                'Yes',
+                'No',
               ],
               iconName: 'assets/svgs/dropdown.svg',
               onChanged: (String? newValue) {
@@ -478,8 +480,9 @@ class _CreateServiceListingState extends State<CreateServiceListing>
                 });
               },
             ),
+            const SizedBox(height: 16),
 
-            availabilityWidget(),
+            availabilityWidget(isRecurring: category == 'Yes' ? true : false),
 
             // Delivery Time Field
             // TextFormField(
@@ -779,14 +782,14 @@ class _CreateServiceListingState extends State<CreateServiceListing>
     }
   }
 
-  Widget availabilityWidget() {
+  Widget availabilityWidget({required bool isRecurring}) {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 15.0),
       child: Container(
         decoration: BoxDecoration(
             color: Colors.white, borderRadius: BorderRadius.circular(radius)),
         padding: const EdgeInsets.all(15),
-        height: 600, // Increased height to accommodate time selection
+        // height: 600,
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
@@ -794,124 +797,149 @@ class _CreateServiceListingState extends State<CreateServiceListing>
               'Select a Date and Time',
               style: TextStyle(fontWeight: FontWeight.w600, fontSize: 14),
             ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: <Widget>[
-                const Text('I am always available to offer this service'),
-                GestureDetector(
-                  onTap: () {
-                    _isAlwaysAvailable
-                        ? _animationController.reverse()
-                        : _animationController.forward();
-                    setState(() {
-                      _isAlwaysAvailable = !_isAlwaysAvailable;
-                      if (_isAlwaysAvailable) {
-                        _selectedWeekdays.fillRange(0, 7, true);
-                        selectedSubmitWeekdays = weekdays;
-                      } else {
-                        _selectedWeekdays.fillRange(0, 7, false);
-                        selectedSubmitWeekdays = <String>[];
-                      }
-                      _updateSelectedDates();
-                    });
-                  },
-                  child: AnimatedBuilder(
-                    animation: _animation,
-                    builder: (BuildContext context, Widget? child) {
-                      return Container(
-                        width: 50,
-                        height: 30,
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(15),
-                          color: _isAlwaysAvailable
-                              ? proprimaryColor
-                              : Colors.grey,
-                        ),
-                        child: Stack(
-                          children: <Widget>[
-                            Positioned(
-                              left: _isAlwaysAvailable ? 20 : 0,
-                              right: _isAlwaysAvailable ? 0 : 20,
-                              top: 2,
-                              bottom: 2,
-                              child: Container(
-                                width: 26,
-                                height: 26,
-                                decoration: const BoxDecoration(
-                                  shape: BoxShape.circle,
-                                  color: Colors.white,
-                                ),
-                                child: Center(
-                                  child: _isAlwaysAvailable
-                                      ? const Icon(
-                                          Icons.check,
-                                          size: 12,
-                                          color: proprimaryColor,
-                                        )
-                                      : const Icon(
-                                          Icons.close,
-                                          size: 12,
-                                          color: Colors.grey,
-                                        ),
+            if (isRecurring)
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: <Widget>[
+                  const Text('I am always available to offer this service'),
+                  GestureDetector(
+                    onTap: () {
+                      _isAlwaysAvailable
+                          ? _animationController.reverse()
+                          : _animationController.forward();
+                      setState(() {
+                        _isAlwaysAvailable = !_isAlwaysAvailable;
+                        if (_isAlwaysAvailable) {
+                          _selectedWeekdays.fillRange(0, 7, true);
+                          selectedSubmitWeekdays = weekdays;
+                        } else {
+                          _selectedWeekdays.fillRange(0, 7, false);
+                          selectedSubmitWeekdays = <String>[];
+                        }
+                        _updateSelectedDates();
+                      });
+                    },
+                    child: AnimatedBuilder(
+                      animation: _animation,
+                      builder: (BuildContext context, Widget? child) {
+                        return Container(
+                          width: 50,
+                          height: 30,
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(15),
+                            color: _isAlwaysAvailable
+                                ? proprimaryColor
+                                : Colors.grey,
+                          ),
+                          child: Stack(
+                            children: <Widget>[
+                              Positioned(
+                                left: _isAlwaysAvailable ? 20 : 0,
+                                right: _isAlwaysAvailable ? 0 : 20,
+                                top: 2,
+                                bottom: 2,
+                                child: Container(
+                                  width: 26,
+                                  height: 26,
+                                  decoration: const BoxDecoration(
+                                    shape: BoxShape.circle,
+                                    color: Colors.white,
+                                  ),
+                                  child: Center(
+                                    child: _isAlwaysAvailable
+                                        ? const Icon(
+                                            Icons.check,
+                                            size: 12,
+                                            color: proprimaryColor,
+                                          )
+                                        : const Icon(
+                                            Icons.close,
+                                            size: 12,
+                                            color: Colors.grey,
+                                          ),
+                                  ),
                                 ),
                               ),
-                            ),
-                          ],
-                        ),
-                      );
-                    },
-                  ),
-                ),
-              ],
-            ),
-            const SizedBox(height: 10),
-            Wrap(
-              spacing: 8,
-              children: List<Widget>.generate(7, (int index) {
-                return ChoiceChip(
-                  label: Text(_getWeekdayName(index)),
-                  selected: _selectedWeekdays[index],
-                  selectedColor: proprimaryColor,
-                  onSelected: (bool selected) {
-                    setState(() {
-                      _selectedWeekdays[index] = selected;
-                      _updateSelectedDates();
-                      if (selectedSubmitWeekdays
-                          .contains(_getWeekdayName(index))) {
-                        selectedSubmitWeekdays.remove(_getWeekdayName(
-                            index)); // Remove if already selected
-                      } else {
-                        selectedSubmitWeekdays
-                            .add(_getWeekdayName(index)); // Add if not selected
-                      }
-                      selectedSubmitWeekdays.sort((String a, String b) =>
-                          weekdays.indexOf(a).compareTo(weekdays.indexOf(b)));
-                    });
-                  },
-                );
-              }),
-            ),
-            Expanded(
-              child: _isAlwaysAvailable
-                  ? const Center(child: Text('Always Available'))
-                  : SfCalendar(
-                      selectionDecoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(8),
-                        color: Colors.transparent,
-                      ),
-                      todayHighlightColor: proprimaryColor,
-                      view: CalendarView.month,
-                      initialDisplayDate: DateTime.now(),
-                      monthViewSettings: const MonthViewSettings(
-                        appointmentDisplayMode:
-                            MonthAppointmentDisplayMode.indicator,
-                      ),
-                      dataSource: _getCalendarDataSource(),
-                      onTap: null,
+                            ],
+                          ),
+                        );
+                      },
                     ),
-            ),
-            const SizedBox(height: 20),
-            const Text('Available Time for selected days'),
+                  ),
+                ],
+              ),
+            const SizedBox(height: 10),
+            if (isRecurring)
+              Wrap(
+                spacing: 8,
+                children: List<Widget>.generate(7, (int index) {
+                  return ChoiceChip(
+                    label: Text(_getWeekdayName(index)),
+                    selected: _selectedWeekdays[index],
+                    selectedColor: proprimaryColor,
+                    onSelected: (bool selected) {
+                      setState(() {
+                        _selectedWeekdays[index] = selected;
+                        _updateSelectedDates();
+                        if (selectedSubmitWeekdays
+                            .contains(_getWeekdayName(index))) {
+                          selectedSubmitWeekdays.remove(_getWeekdayName(
+                              index)); // Remove if already selected
+                        } else {
+                          selectedSubmitWeekdays.add(
+                              _getWeekdayName(index)); // Add if not selected
+                        }
+                        selectedSubmitWeekdays.sort((String a, String b) =>
+                            weekdays.indexOf(a).compareTo(weekdays.indexOf(b)));
+                      });
+                    },
+                  );
+                }),
+              ),
+            if (!isRecurring)
+              SizedBox(
+                height: 400,
+                child: SfCalendar(
+                  selectionDecoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(8),
+                    color: Colors.transparent,
+                  ),
+                  todayHighlightColor: proprimaryColor,
+                  view: CalendarView.month,
+                  initialDisplayDate: DateTime.now(),
+                  monthViewSettings: const MonthViewSettings(
+                    appointmentDisplayMode:
+                        MonthAppointmentDisplayMode.indicator,
+                    showAgenda: true, // Enable agenda view to select dates
+                  ),
+                  dataSource: _getCalendarDataSource(),
+                  onTap: (CalendarTapDetails details) {
+                    if (!_isAlwaysAvailable &&
+                        details.targetElement == CalendarElement.calendarCell) {
+                      setState(() {
+                        DateTime selectedDate = DateTime(details.date!.year,
+                            details.date!.month, details.date!.day);
+
+                        // Clear previously selected dates and weekdays
+                        _selectedDates.clear();
+                        _selectedWeekdays.fillRange(0, 7, false);
+                        selectedSubmitWeekdays.clear();
+
+                        // Add the newly selected date and update weekdays
+                        _selectedDates.add(selectedDate);
+                        int weekdayIndex = selectedDate.weekday - 1;
+                        _selectedWeekdays[weekdayIndex] = true;
+                        selectedSubmitWeekdays
+                            .add(_getWeekdayName(weekdayIndex));
+                      });
+                    }
+                  },
+                ),
+              ),
+            if (isRecurring) const SizedBox(height: 20),
+            Text(!isRecurring
+                ? 'Available Time for selected day'
+                : 'Available Time for selected days'),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: <Widget>[
