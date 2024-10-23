@@ -7,7 +7,9 @@ class ProIconButton extends StatelessWidget {
   final VoidCallback onPressed;
   final double? radius;
   final Color? backgroundColor;
-    final Color? textColor;
+  final Color? textColor;
+  final double? padding;
+  final Color? shadow;
 
   const ProIconButton({
     Key? key,
@@ -15,7 +17,10 @@ class ProIconButton extends StatelessWidget {
     this.icon,
     required this.onPressed,
     this.radius,
-    this.backgroundColor, this.textColor,
+    this.backgroundColor,
+    this.textColor,
+    this.padding,
+    this.shadow,
   }) : super(key: key);
 
   @override
@@ -23,9 +28,10 @@ class ProIconButton extends StatelessWidget {
     return ElevatedButton(
       onPressed: onPressed,
       style: ElevatedButton.styleFrom(
-        shadowColor: Colors.white,
+        shadowColor: shadow ?? Colors.white,
         backgroundColor: backgroundColor ?? proprimaryColor, // Background color
-        padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 10.0),
+        padding:
+            EdgeInsets.symmetric(horizontal: padding ?? 20.0, vertical: 10.0),
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(radius ?? 30.0),
         ),
@@ -34,7 +40,8 @@ class ProIconButton extends StatelessWidget {
         mainAxisSize: MainAxisSize.min,
         children: <Widget>[
           if (icon != null) icon!, // Display icon if it's not null
-          if (icon != null) const SizedBox(width: 8.0), // Space between icon and text
+          if (icon != null)
+            const SizedBox(width: 8.0), // Space between icon and text
           Text(
             text,
             style: TextStyle(

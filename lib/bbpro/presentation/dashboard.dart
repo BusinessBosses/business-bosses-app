@@ -14,6 +14,7 @@ import 'package:business_bosses_v2/bbpro/widgets/orderscard.dart';
 import 'package:business_bosses_v2/utils/theme/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 
 import '../widgets/salescard.dart';
@@ -119,7 +120,7 @@ class _DashboardState extends State<Dashboard> {
       backgroundColor: probackgroundColor,
       appBar: AppBar(
         titleSpacing: 0,
-        centerTitle: true,
+        // centerTitle: true,
         automaticallyImplyLeading: false,
         leading: Stack(
           alignment: Alignment.center,
@@ -154,7 +155,85 @@ class _DashboardState extends State<Dashboard> {
             fontWeight: FontWeight.bold,
           ),
         ),
-        actions: const <Widget>[NotificationButton()],
+        actions: <Widget>[
+          Row(
+            children: <Widget>[
+              Container(
+                margin: const EdgeInsets.only(bottom: 10),
+                padding: const EdgeInsets.only(right: 10.0),
+                child: GestureDetector(
+                  onTap: () {
+                    final RenderBox button =
+                        context.findRenderObject() as RenderBox;
+                    final RenderBox overlay = Overlay.of(context)
+                        .context
+                        .findRenderObject() as RenderBox;
+                    final RelativeRect position = RelativeRect.fromRect(
+                      Rect.fromPoints(
+                        button.localToGlobal(
+                            button.size.topRight(const Offset(0, 100)),
+                            ancestor: overlay),
+                        button.localToGlobal(
+                            button.size.bottomRight(const Offset(0, 50)),
+                            ancestor: overlay),
+                      ),
+                      Offset.zero & overlay.size,
+                    );
+
+                    showMenu(
+                      shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(10)),
+                      context: context,
+                      shadowColor: Colors.black,
+                      position: position,
+                      items: <PopupMenuEntry<String>>[
+                        const PopupMenuItem<String>(
+                          value: null,
+                          enabled: false,
+                          child: Text(
+                            'Filter Data By',
+                            style: TextStyle(
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                        ),
+                        const PopupMenuDivider(),
+                        ...<String>[
+                          'Today',
+                          'Last 7 Days',
+                          'Last 30 Days',
+                          'All Time',
+                        ].map((String option) {
+                          return PopupMenuItem<String>(
+                            value: option,
+                            child: Text(
+                              option,
+                              style: const TextStyle(
+                                  fontSize: 14, fontWeight: FontWeight.w700),
+                            ),
+                          );
+                        }).toList(),
+                      ],
+                    ).then((String? selected) {
+                      if (selected != null) {
+                        setState(() {
+                          // _selectedItem = selected;
+                        });
+                        // Implement filter logic here
+                      }
+                    });
+                  },
+                  child: CircleAvatar(
+                    backgroundColor: backgroundColor,
+                    child:
+                        SvgPicture.asset('assets/svgs/filterprosections.svg'),
+                  ),
+                ),
+              ),
+              const NotificationButton(),
+            ],
+          )
+        ],
       ),
       body: SingleChildScrollView(
         child: Column(
