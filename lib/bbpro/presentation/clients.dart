@@ -126,7 +126,12 @@ class _ClientsScreenState extends State<ClientsScreen>
                 _scrollToSection(index);
               },
               proprimaryColor: proprimaryColor,
-              backgroundColor: backgroundColor,
+              backgroundColor: <Color>[
+                backgroundColor,
+                Colors.green.withOpacity(0.1),
+                Colors.blue.withOpacity(0.1),
+                primaryColorLT.withOpacity(0.1)
+              ],
               listofitems: ClientType.values.toList(),
               itemToString: (ClientType status) =>
                   '${status.displayTitle.toString().split('.').last} (${status == ClientType.allclients ? clientsController.clients.length : (clientsController.clientsType[status] == null ? '0' : clientsController.clientsType[status]!.length.toString())})',
@@ -481,7 +486,7 @@ class _RowStatusCardState extends State<RowStatusCard> {
                       final ClientWidget clientWidget = ClientWidget(
                         client: widget.allclients[index],
                         bgcolor: widget.allclients[index].type.backgroundColor
-                            .withAlpha(100),
+                            .withOpacity(0.1),
                       );
                       return Padding(
                         padding: const EdgeInsets.only(bottom: 12),
@@ -537,7 +542,7 @@ class ListStatusColumnWidget extends StatelessWidget {
       itemBuilder: (BuildContext context, int index) {
         final ClientWidget clientWidget = ClientWidget(
           client: clients[index],
-          bgcolor: clients[index].type.backgroundColor.withAlpha(100),
+          bgcolor: clients[index].type.backgroundColor.withOpacity(0.1),
         );
 
         return Padding(

@@ -169,11 +169,11 @@ enum OrderStatus {
       case OrderStatus.allorders:
         return Colors.white;
       case OrderStatus.pending:
-        return Colors.amber.withAlpha(100);
+        return Colors.amber.withOpacity(0.1);
       case OrderStatus.paid:
-        return Colors.green.withAlpha(100);
+        return Colors.green.withOpacity(0.1);
       case OrderStatus.cancelled:
-        return Colors.red.withAlpha(100);
+        return Colors.red.withOpacity(0.1);
     }
   }
 

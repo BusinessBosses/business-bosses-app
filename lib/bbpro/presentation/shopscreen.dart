@@ -25,7 +25,7 @@ class _ShopScreenState extends State<ShopScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        backgroundColor: probackgroundColor,
+        backgroundColor: Colors.white,
         appBar: AppBar(
           leading: IconButton(
             onPressed: () {
@@ -74,62 +74,7 @@ class _ShopScreenState extends State<ShopScreen> {
           //     ),
           //   ],
           // ),
-          actions: <Widget>[
-            Padding(
-              padding: const EdgeInsets.only(right: 15.0),
-              child: GestureDetector(
-                onTap: () {
-                  final RenderBox button =
-                      context.findRenderObject() as RenderBox;
-                  final RenderBox overlay = Overlay.of(context)
-                      .context
-                      .findRenderObject() as RenderBox;
-                  final RelativeRect position = RelativeRect.fromRect(
-                    Rect.fromPoints(
-                      button.localToGlobal(
-                          button.size.topRight(const Offset(0, 110)),
-                          ancestor: overlay),
-                      button.localToGlobal(
-                          button.size.bottomRight(const Offset(0, 20)),
-                          ancestor: overlay),
-                    ),
-                    Offset.zero & overlay.size,
-                  );
-
-                  showMenu(
-                    shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(10)),
-                    context: context,
-                    shadowColor: Colors.black,
-                    position: position,
-                    items: <String>[
-                      'All Products',
-                      'Low Stock',
-                      'Out of Stock',
-                      'Most Popular',
-                      'Newest First',
-                    ].map((String option) {
-                      return PopupMenuItem<String>(
-                        value: option,
-                        child: Text(option),
-                      );
-                    }).toList(),
-                  ).then((String? selected) {
-                    if (selected != null) {
-                      setState(() {
-                        _selectedItem = selected;
-                      });
-                      // Implement filter logic here
-                    }
-                  });
-                },
-                child: CircleAvatar(
-                  backgroundColor: backgroundColor,
-                  child: SvgPicture.asset('assets/svgs/filterprosections.svg'),
-                ),
-              ),
-            ),
-          ],
+          actions: const <Widget>[],
         ),
         body: Column(children: <Widget>[
           const SizedBox(
@@ -155,31 +100,32 @@ class _ShopScreenState extends State<ShopScreen> {
           const SizedBox(
             height: 10,
           ),
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: <Widget>[
-              Text(shopController.shop!.name,
-                  style: const TextStyle(
-                      fontWeight: FontWeight.bold, fontSize: 14)),
-              const SizedBox(height: 2),
-              Text(shopController.shop!.description,
-                  style: const TextStyle(
-                      fontWeight: FontWeight.normal, fontSize: 12)),
-            ],
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 15.0),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: <Widget>[
+                Text(shopController.shop!.name,
+                    style: const TextStyle(
+                        fontWeight: FontWeight.bold, fontSize: 14)),
+                const SizedBox(height: 2),
+                Text(shopController.shop!.description,
+                    style: const TextStyle(
+                        fontWeight: FontWeight.normal, fontSize: 12)),
+              ],
+            ),
           ),
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 15.0, vertical: 10),
             child: Container(
               padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 8),
               decoration: BoxDecoration(
-                color: prosemibackColor,
+                color: backgroundColor,
                 borderRadius: BorderRadius.circular(8),
               ),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: <Widget>[
-                  Text(
-                      'Catalog(${shopController.products.length + shopController.services.length})'),
                   Row(
                     children: <Widget>[
                       const Icon(Icons.location_on,
@@ -198,6 +144,79 @@ class _ShopScreenState extends State<ShopScreen> {
                   ),
                 ],
               ),
+            ),
+          ),
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 15.0),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: <Widget>[
+                Text(
+                    'All(${shopController.products.length + shopController.services.length})'),
+                GestureDetector(
+                  onTap: () {
+                    final RenderBox button =
+                        context.findRenderObject() as RenderBox;
+                    final RenderBox overlay = Overlay.of(context)
+                        .context
+                        .findRenderObject() as RenderBox;
+                    final RelativeRect position = RelativeRect.fromRect(
+                      Rect.fromPoints(
+                        button.localToGlobal(
+                            button.size.topRight(const Offset(0, 0)),
+                            ancestor: overlay),
+                        button.localToGlobal(
+                            button.size.bottomRight(const Offset(0, 20)),
+                            ancestor: overlay),
+                      ),
+                      Offset.zero & overlay.size,
+                    );
+
+                    showMenu(
+                      shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(10)),
+                      context: context,
+                      shadowColor: Colors.black,
+                      position: position,
+                      items: <String>[
+                        'All Products',
+                        'Low Stock',
+                        'Out of Stock',
+                        'Most Popular',
+                        'Newest First',
+                      ].map((String option) {
+                        return PopupMenuItem<String>(
+                          value: option,
+                          child: Text(option),
+                        );
+                      }).toList(),
+                    ).then((String? selected) {
+                      if (selected != null) {
+                        setState(() {
+                          _selectedItem = selected;
+                        });
+                        // Implement filter logic here
+                      }
+                    });
+                  },
+                  child: Container(
+                    width: 150,
+                    decoration: BoxDecoration(
+                        color: backgroundColor,
+                        borderRadius: BorderRadius.circular(7)),
+                    child: Row(
+                      children: <Widget>[
+                        CircleAvatar(
+                          backgroundColor: backgroundColor,
+                          child: SvgPicture.asset(
+                              'assets/svgs/filterprosections.svg'),
+                        ),
+                        const Text('All')
+                      ],
+                    ),
+                  ),
+                ),
+              ],
             ),
           ),
           Expanded(

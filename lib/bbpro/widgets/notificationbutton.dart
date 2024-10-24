@@ -5,7 +5,9 @@ import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 
 class NotificationButton extends StatelessWidget {
-  const NotificationButton({super.key});
+  final double? padding;
+  final double? toppadding;
+  const NotificationButton({super.key, this.padding, this.toppadding});
 
   @override
   Widget build(BuildContext context) {
@@ -14,7 +16,8 @@ class NotificationButton extends StatelessWidget {
         Get.to(() => const ProNotifications());
       },
       child: Padding(
-        padding: const EdgeInsets.only(right: 10.0, bottom: 10),
+        padding: EdgeInsets.only(
+            right: 10.0, bottom: padding ?? 10, top: toppadding ?? 0),
         child: CircleAvatar(
             radius: 20,
             backgroundColor: prosemibackColor,

@@ -6,7 +6,7 @@ class CustomTabBarWidget<T> extends StatefulWidget {
   final TabController _tabController;
   final Function(int) _scrollToSection;
   final Color proprimaryColor;
-  final Color backgroundColor;
+  final List<Color> backgroundColor;
   final List<T> listofitems;
   final String Function(T) itemToString;
   // final int itemCount;
@@ -76,17 +76,19 @@ class _CustomTabBarWidgetState<T> extends State<CustomTabBarWidget<T>> {
                       decoration: BoxDecoration(
                         color: widget._tabController.index == index
                             ? widget.proprimaryColor
-                            : widget.backgroundColor,
+                            : widget.backgroundColor[index],
                         borderRadius: BorderRadius.circular(100),
                       ),
                       child: Padding(
                         padding: const EdgeInsets.symmetric(
                             horizontal: 10.0, vertical: 8),
                         child: index == 0
-                            ? const Icon(
-                                Icons.dashboard,
-                                size: 11,
-                              )
+                            ? Text('All',
+                                style: TextStyle(
+                                    fontSize: 11,
+                                    color: widget._tabController.index == index
+                                        ? Colors.white
+                                        : textColor))
                             : Text(
                                 widget.itemToString(status),
                                 style: TextStyle(
@@ -138,11 +140,11 @@ class _CustomTabBarWidgetState<T> extends State<CustomTabBarWidget<T>> {
               child: Container(
                 padding: const EdgeInsets.symmetric(horizontal: 10),
                 decoration: BoxDecoration(
-                  color: widget.backgroundColor,
+                  color: backgroundColor,
                   borderRadius: BorderRadius.circular(7),
                   boxShadow: <BoxShadow>[
                     BoxShadow(
-                      color: widget.backgroundColor.withOpacity(0.6),
+                      color: backgroundColor.withOpacity(0.6),
                       offset: const Offset(-5, 0),
                       blurRadius: 10,
                       spreadRadius: 2,

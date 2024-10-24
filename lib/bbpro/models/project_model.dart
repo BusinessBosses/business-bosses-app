@@ -105,11 +105,11 @@ enum ProjectStatus {
       case ProjectStatus.allprojects:
         return Colors.white;
       case ProjectStatus.todo:
-        return Colors.black12;
+        return Colors.black.withOpacity(0.1);
       case ProjectStatus.pending:
-        return Colors.yellow.withAlpha(100);
+        return Colors.amber.withOpacity(0.1);
       case ProjectStatus.completed:
-        return Colors.green.withAlpha(100);
+        return Colors.green.withOpacity(0.1);
     }
   }
 

@@ -52,7 +52,7 @@ class _CreateProductListingState extends State<CreateProductListing> {
   final TextEditingController deliverydayscontroller = TextEditingController();
 
   bool isSubmitted = false;
-  bool _isSwitched = false;
+  bool _isSwitched = true;
 
   // Form fields
   String? productName;
@@ -481,24 +481,24 @@ class _CreateProductListingState extends State<CreateProductListing> {
                       message: 'Select a delivery method', error: true);
                   return;
                 }
-                if (_selectedImages.isEmpty) {
-                  showSnackbar(message: 'Select a product image', error: true);
-                  return;
-                }
+                // if (_selectedImages.isEmpty) {
+                //   showSnackbar(message: 'Select a product image', error: true);
+                //   return;
+                // }
                 if (_formKey.currentState?.validate() ?? false) {
                   _formKey.currentState?.save();
 
                   setState(() {
                     isSubmitted = true;
                   });
-                  for (File image in _selectedImages) {
-                    dynamic response = await ApiService.uploadFile(image);
-                    if (response['success']) {
-                      setState(() {
-                        images!.add(response['fileUrl']);
-                      });
-                    }
-                  }
+                  // for (File image in _selectedImages) {
+                  //   dynamic response = await ApiService.uploadFile(image);
+                  //   if (response['success']) {
+                  //     setState(() {
+                  //       images!.add(response['fileUrl']);
+                  //     });
+                  //   }
+                  // }
                   final Map<String, dynamic> productListing = <String, dynamic>{
                     'userId': profileController.myProfile.uid,
                     'shopId': shopController.shop?.id,

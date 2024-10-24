@@ -128,7 +128,12 @@ class _OrdersScreenState extends State<OrdersScreen>
                 _scrollToSection(index);
               },
               proprimaryColor: proprimaryColor,
-              backgroundColor: backgroundColor,
+              backgroundColor: <Color>[
+                backgroundColor,
+                Colors.amber.withOpacity(0.1),
+                Colors.green.withOpacity(0.1),
+                Colors.red.withOpacity(0.1)
+              ],
               listofitems: OrderStatus.values.toList(),
               itemToString: (OrderStatus status) =>
                   '${status.displayTitle.toString().split('.').last} (${status == OrderStatus.allorders ? orderController.orders.length : (orderController.ordersStatus[status] == null ? '0' : orderController.ordersStatus[status]!.length.toString())})',

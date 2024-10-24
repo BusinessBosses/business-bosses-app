@@ -59,7 +59,7 @@ class _SetupState extends State<Setup> {
                 child: Container(
                     margin: const EdgeInsets.only(bottom: 10),
                     decoration: BoxDecoration(
-                        color: prosemibackColor,
+                        color: backgroundColor,
                         borderRadius: BorderRadius.circular(40)),
                     padding: const EdgeInsets.symmetric(
                         horizontal: 15, vertical: 12),

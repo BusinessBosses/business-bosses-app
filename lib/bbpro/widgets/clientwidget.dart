@@ -34,7 +34,7 @@ class _ClientWidgetState extends State<ClientWidget> {
     return Container(
       decoration: BoxDecoration(
           border: Border.all(
-            color: widget.bgcolor.withAlpha(50), // Border color
+            color: Colors.black12, // Border color
             width: 0.5, // Border width
           ),
           color: Colors.white,

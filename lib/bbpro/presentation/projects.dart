@@ -107,7 +107,13 @@ class _ProjectsState extends State<Projects>
               _scrollToSection(index);
             },
             proprimaryColor: proprimaryColor,
-            backgroundColor: backgroundColor,
+            // ignore: prefer_const_literals_to_create_immutables
+            backgroundColor: <Color>[
+              probackgroundColor,
+              Colors.black.withOpacity(0.1),
+              Colors.amber.withOpacity(0.1),
+              Colors.green.withOpacity(0.1)
+            ],
             listofitems: ProjectStatus.values.toList(),
             itemToString: (ProjectStatus status) =>
                 '${status.displayTitle.toString().split('.').last} (${status == ProjectStatus.allprojects ? projectController.projects.length : (projectController.statusProjects[status] == null ? '0' : projectController.statusProjects[status]!.length.toString())})',

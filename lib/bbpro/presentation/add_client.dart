@@ -55,7 +55,7 @@ class _AddclientState extends State<Addclient> {
       backgroundColor: probackgroundColor,
       appBar: AppBar(
         title: Text(
-          widget.client != null ? 'Edit CLient' : 'Add Client',
+          widget.client != null ? 'Edit CLient' : 'Add a Client',
           style: const TextStyle(
             color: proprimaryColor,
             fontWeight: FontWeight.bold,

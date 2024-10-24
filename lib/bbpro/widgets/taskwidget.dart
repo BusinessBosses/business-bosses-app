@@ -188,15 +188,14 @@ class _TaskWidgetState extends State<TaskWidget> {
                                   const TextSpan(
                                     text: 'Description: ',
                                     style: TextStyle(
-                                        fontWeight: FontWeight
-                                            .bold, // This keeps the "Description:" normal
-                                        fontSize: 10,
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: 13,
                                         color: textColor),
                                   ),
                                   TextSpan(
                                     text: widget.project.description,
                                     style: const TextStyle(
-                                        fontSize: 10, color: textColor),
+                                        fontSize: 13, color: textColor),
                                   ),
                                 ],
                               ),
@@ -336,34 +335,34 @@ class _TaskWidgetState extends State<TaskWidget> {
           ),
         ),
       ),
-      if (widget.isExpanded != false)
-        Positioned(
-          right: 20,
-          bottom: 10,
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.end,
-            children: <Widget>[
-              GestureDetector(
-                onTap: () {
-                  showDialog(
-                    context: context,
-                    builder: (BuildContext context) => ProjectPopUp(
-                      project: widget.project,
-                    ),
-                  );
-                },
-                child: CircleAvatar(
-                  backgroundColor: probackgroundColor,
-                  radius: 15,
-                  child: SvgPicture.asset(
-                    'assets/svgs/expandform.svg',
-                    color: proprimaryColor,
-                  ),
-                ),
-              )
-            ],
-          ),
-        )
+      // if (widget.isExpanded != false)
+      //   Positioned(
+      //     right: 20,
+      //     bottom: 10,
+      //     child: Row(
+      //       mainAxisAlignment: MainAxisAlignment.end,
+      //       children: <Widget>[
+      //         GestureDetector(
+      //           onTap: () {
+      //             showDialog(
+      //               context: context,
+      //               builder: (BuildContext context) => ProjectPopUp(
+      //                 project: widget.project,
+      //               ),
+      //             );
+      //           },
+      //           child: CircleAvatar(
+      //             backgroundColor: probackgroundColor,
+      //             radius: 15,
+      //             child: SvgPicture.asset(
+      //               'assets/svgs/expandform.svg',
+      //               color: proprimaryColor,
+      //             ),
+      //           ),
+      //         )
+      //       ],
+      //     ),
+      //   )
     ]);
   }
 }

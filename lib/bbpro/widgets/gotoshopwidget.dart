@@ -26,7 +26,7 @@ class _GotoshopWidgetState extends State<GotoshopWidget> {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.only(top: 15, left: 15, right: 15),
+      padding: const EdgeInsets.only(top: 15, right: 15),
       child: GestureDetector(
         onTap: () {
           Get.to(() => const ShopScreen());
@@ -78,172 +78,172 @@ class _GotoshopWidgetState extends State<GotoshopWidget> {
                       ),
                     ]),
               ),
-              Row(
+              const Row(
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: <Widget>[
-                    GestureDetector(
-                      onTap: () {
-                        Get.to(() => const AvailabilityScreen());
-                      },
-                      child: Container(
-                        padding: const EdgeInsets.symmetric(
-                            horizontal: 10, vertical: 8),
-                        decoration: BoxDecoration(
-                            color: backgroundColor,
-                            borderRadius: BorderRadius.circular(50)),
-                        child: const Wrap(children: <Widget>[
-                          Icon(
-                            Icons.calendar_month,
-                            size: 15,
-                          ),
-                          SizedBox(
-                            width: 5,
-                          ),
-                          Text(
-                            'Availability',
-                            style: TextStyle(
-                                fontSize: 13, fontWeight: FontWeight.w700),
-                          )
-                        ]),
-                      ),
-                    ),
-                    const SizedBox(
-                      width: 10,
-                    ),
-                    PopupMenuButton<String>(
-                      onSelected: (String item) {
-                        switch (item) {
-                          case 'Item 1':
-                            Get.to(() => const CreateProductListing());
-                            break;
-                          case 'Item 2':
-                            Get.to(() => const CreateServiceListing());
-                            break;
-                          case 'Item 3':
-                            Get.to(() => const Addproject());
-                            break;
-                          case 'Item 4':
-                            Get.to(() => const CreateOrder());
-                            break;
-                          case 'Item 5':
-                            Get.to(() => const Addclient());
-                            break;
-                          case 'Item 6':
-                            Get.to(() => const AddSupplier());
-                            break;
-                        }
-                      },
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(10.0),
-                      ),
-                      itemBuilder: (BuildContext context) {
-                        return <PopupMenuEntry<String>>[
-                          const PopupMenuItem<String>(
-                            value: 'Item 1',
-                            child: Row(
-                              children: <Widget>[
-                                Icon(Icons.add),
-                                SizedBox(width: 8),
-                                Text(
-                                  'Add Products',
-                                  style: TextStyle(
-                                    fontSize: 13,
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
-                          const PopupMenuItem<String>(
-                            value: 'Item 2',
-                            child: Row(
-                              children: <Widget>[
-                                Icon(Icons.add),
-                                SizedBox(width: 8),
-                                Text(
-                                  'Add Services',
-                                  style: TextStyle(
-                                    fontSize: 13,
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
-                          const PopupMenuItem<String>(
-                            value: 'Item 3',
-                            child: Row(
-                              children: <Widget>[
-                                Icon(Icons.add),
-                                SizedBox(width: 8),
-                                Text(
-                                  'Add Tasks',
-                                  style: TextStyle(
-                                    fontSize: 13,
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
-                          const PopupMenuItem<String>(
-                            value: 'Item 4',
-                            child: Row(
-                              children: <Widget>[
-                                Icon(Icons.add),
-                                SizedBox(width: 8),
-                                Text(
-                                  'Add Orders',
-                                  style: TextStyle(
-                                    fontSize: 13,
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
-                          const PopupMenuItem<String>(
-                            value: 'Item 5',
-                            child: Row(
-                              children: <Widget>[
-                                Icon(Icons.add),
-                                SizedBox(width: 8),
-                                Text(
-                                  'Add Clients',
-                                  style: TextStyle(
-                                    fontSize: 13,
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
-                          const PopupMenuItem<String>(
-                            value: 'Item 6',
-                            child: Row(
-                              children: <Widget>[
-                                Icon(Icons.add),
-                                SizedBox(width: 8),
-                                Text(
-                                  'Add Suppliers',
-                                  style: TextStyle(
-                                    fontSize: 13,
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
-                        ];
-                      },
-                      offset: const Offset(0, 40),
-                      child: Container(
-                        padding: const EdgeInsets.symmetric(
-                            horizontal: 4, vertical: 4),
-                        decoration: BoxDecoration(
-                          color: proprimaryColor,
-                          borderRadius: BorderRadius.circular(20),
-                        ),
-                        child: const Icon(
-                          Icons.add,
-                          color: Colors.white,
-                        ),
-                      ),
-                    ),
+                    // GestureDetector(
+                    //   onTap: () {
+                    //     Get.to(() => const AvailabilityScreen());
+                    //   },
+                    //   child: Container(
+                    //     padding: const EdgeInsets.symmetric(
+                    //         horizontal: 10, vertical: 8),
+                    //     decoration: BoxDecoration(
+                    //         color: backgroundColor,
+                    //         borderRadius: BorderRadius.circular(50)),
+                    //     child: const Wrap(children: <Widget>[
+                    //       Icon(
+                    //         Icons.calendar_month,
+                    //         size: 15,
+                    //       ),
+                    //       SizedBox(
+                    //         width: 5,
+                    //       ),
+                    //       Text(
+                    //         'Availability',
+                    //         style: TextStyle(
+                    //             fontSize: 13, fontWeight: FontWeight.w700),
+                    //       )
+                    //     ]),
+                    //   ),
+                    // ),
+                    // SizedBox(
+                    //   width: 10,
+                    // ),
+                    // PopupMenuButton<String>(
+                    //   onSelected: (String item) {
+                    //     switch (item) {
+                    //       case 'Item 1':
+                    //         Get.to(() => const CreateProductListing());
+                    //         break;
+                    //       case 'Item 2':
+                    //         Get.to(() => const CreateServiceListing());
+                    //         break;
+                    //       case 'Item 3':
+                    //         Get.to(() => const Addproject());
+                    //         break;
+                    //       case 'Item 4':
+                    //         Get.to(() => const CreateOrder());
+                    //         break;
+                    //       case 'Item 5':
+                    //         Get.to(() => const Addclient());
+                    //         break;
+                    //       case 'Item 6':
+                    //         Get.to(() => const AddSupplier());
+                    //         break;
+                    //     }
+                    //   },
+                    //   shape: RoundedRectangleBorder(
+                    //     borderRadius: BorderRadius.circular(10.0),
+                    //   ),
+                    //   itemBuilder: (BuildContext context) {
+                    //     return <PopupMenuEntry<String>>[
+                    //       const PopupMenuItem<String>(
+                    //         value: 'Item 1',
+                    //         child: Row(
+                    //           children: <Widget>[
+                    //             Icon(Icons.add),
+                    //             SizedBox(width: 8),
+                    //             Text(
+                    //               'Add Products',
+                    //               style: TextStyle(
+                    //                 fontSize: 13,
+                    //               ),
+                    //             ),
+                    //           ],
+                    //         ),
+                    //       ),
+                    //       const PopupMenuItem<String>(
+                    //         value: 'Item 2',
+                    //         child: Row(
+                    //           children: <Widget>[
+                    //             Icon(Icons.add),
+                    //             SizedBox(width: 8),
+                    //             Text(
+                    //               'Add Services',
+                    //               style: TextStyle(
+                    //                 fontSize: 13,
+                    //               ),
+                    //             ),
+                    //           ],
+                    //         ),
+                    //       ),
+                    //       const PopupMenuItem<String>(
+                    //         value: 'Item 3',
+                    //         child: Row(
+                    //           children: <Widget>[
+                    //             Icon(Icons.add),
+                    //             SizedBox(width: 8),
+                    //             Text(
+                    //               'Add Tasks',
+                    //               style: TextStyle(
+                    //                 fontSize: 13,
+                    //               ),
+                    //             ),
+                    //           ],
+                    //         ),
+                    //       ),
+                    //       const PopupMenuItem<String>(
+                    //         value: 'Item 4',
+                    //         child: Row(
+                    //           children: <Widget>[
+                    //             Icon(Icons.add),
+                    //             SizedBox(width: 8),
+                    //             Text(
+                    //               'Add Orders',
+                    //               style: TextStyle(
+                    //                 fontSize: 13,
+                    //               ),
+                    //             ),
+                    //           ],
+                    //         ),
+                    //       ),
+                    //       const PopupMenuItem<String>(
+                    //         value: 'Item 5',
+                    //         child: Row(
+                    //           children: <Widget>[
+                    //             Icon(Icons.add),
+                    //             SizedBox(width: 8),
+                    //             Text(
+                    //               'Add Clients',
+                    //               style: TextStyle(
+                    //                 fontSize: 13,
+                    //               ),
+                    //             ),
+                    //           ],
+                    //         ),
+                    //       ),
+                    //       const PopupMenuItem<String>(
+                    //         value: 'Item 6',
+                    //         child: Row(
+                    //           children: <Widget>[
+                    //             Icon(Icons.add),
+                    //             SizedBox(width: 8),
+                    //             Text(
+                    //               'Add Suppliers',
+                    //               style: TextStyle(
+                    //                 fontSize: 13,
+                    //               ),
+                    //             ),
+                    //           ],
+                    //         ),
+                    //       ),
+                    //     ];
+                    //   },
+                    //   offset: const Offset(0, 40),
+                    //   child: Container(
+                    //     padding: const EdgeInsets.symmetric(
+                    //         horizontal: 4, vertical: 4),
+                    //     decoration: BoxDecoration(
+                    //       color: proprimaryColor,
+                    //       borderRadius: BorderRadius.circular(20),
+                    //     ),
+                    //     child: const Icon(
+                    //       Icons.add,
+                    //       color: Colors.white,
+                    //     ),
+                    //   ),
+                    // ),
                   ]),
             ],
           ),
