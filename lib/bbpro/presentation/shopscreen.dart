@@ -24,7 +24,7 @@ class ShopScreen extends StatefulWidget {
 
 class _ShopScreenState extends State<ShopScreen> {
   final ShopController shopController = Get.find();
-  String? _selectedItem;
+  String? _selectedItem = 'All Products';
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -182,7 +182,9 @@ class _ShopScreenState extends State<ShopScreen> {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: <Widget>[
                 Text(
-                    'All(${shopController.products.length + shopController.services.length})'),
+                  'All (${shopController.products.length + shopController.services.length})',
+                  style: const TextStyle(fontSize: 14),
+                ),
                 GestureDetector(
                   onTap: () {
                     final RenderBox button =
@@ -193,7 +195,7 @@ class _ShopScreenState extends State<ShopScreen> {
                     final RelativeRect position = RelativeRect.fromRect(
                       Rect.fromPoints(
                         button.localToGlobal(
-                            button.size.topRight(const Offset(0, 0)),
+                            button.size.topRight(const Offset(0, 380)),
                             ancestor: overlay),
                         button.localToGlobal(
                             button.size.bottomRight(const Offset(0, 20)),
@@ -217,7 +219,12 @@ class _ShopScreenState extends State<ShopScreen> {
                       ].map((String option) {
                         return PopupMenuItem<String>(
                           value: option,
-                          child: Text(option),
+                          child: Text(
+                            option,
+                            style: const TextStyle(
+                              fontSize: 14,
+                            ),
+                          ),
                         );
                       }).toList(),
                     ).then((String? selected) {
@@ -225,7 +232,6 @@ class _ShopScreenState extends State<ShopScreen> {
                         setState(() {
                           _selectedItem = selected;
                         });
-                        // Implement filter logic here
                       }
                     });
                   },
@@ -241,7 +247,10 @@ class _ShopScreenState extends State<ShopScreen> {
                           child: SvgPicture.asset(
                               'assets/svgs/filterprosections.svg'),
                         ),
-                        const Text('All')
+                        Text(
+                          _selectedItem!,
+                          style: const TextStyle(fontSize: 14),
+                        )
                       ],
                     ),
                   ),

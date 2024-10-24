@@ -53,6 +53,7 @@ class _CreateProductListingState extends State<CreateProductListing> {
 
   bool isSubmitted = false;
   bool _isSwitched = true;
+  bool isExpanded = false;
 
   // Form fields
   String? productName;
@@ -289,7 +290,11 @@ class _CreateProductListingState extends State<CreateProductListing> {
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: <Widget>[
-                        Text('Add Attachment'),
+                        Text(
+                          'Add Attachment',
+                          style: TextStyle(
+                              fontSize: 13, fontWeight: FontWeight.w600),
+                        ),
                         Icon(Icons.image),
                       ],
                     ),
@@ -318,134 +323,163 @@ class _CreateProductListingState extends State<CreateProductListing> {
                   },
                 ),
               ),
-            CustomDropdownWidget(
-              caption: 'Delivery Method',
-              hintText: 'Choose a delivery method',
-              items: const <String>['Online', 'Courier', 'In-Store Pickup'],
-              iconName: 'assets/svgs/dropdown.svg',
-              onChanged: (String? newValue) {
-                setState(() {
-                  deliveryMethod = newValue;
-                });
-              },
-            ),
-            const SizedBox(height: 16),
-            CustomEditText(
-              inputType: const TextInputType.numberWithOptions(decimal: false),
-              caption: 'Delivery Duration (Days)',
-              hintText: 'Enter number of days you can deliver after purchase',
-              controller: deliverydayscontroller,
-              validator: (String? value) {
-                if (value == null || value.isEmpty) {
-                  return 'Please enter number of delivery days';
-                }
-                return null;
-              },
-            ),
-            const SizedBox(height: 16),
-            CustomDropdownWidget(
-              caption: 'Payment Method',
-              hintText: 'Choose a payment method',
-              items: paymentMethods,
-              iconName: 'assets/svgs/dropdown.svg',
-              onChanged: (String? newValue) {
-                setState(() {
-                  paymentMethod = newValue;
-                });
-              },
-            ),
-            const SizedBox(height: 16),
-            CustomEditText(
-              caption: 'Storage Location',
-              hintText: 'Enter storage location',
-              controller: storageLocationController,
-              validator: (String? value) {
-                if (value == null || value.isEmpty) {
-                  return 'Please enter a storage location';
-                }
-                return null;
-              },
-            ),
-            const SizedBox(height: 16),
-            CustomEditText(
-              caption: 'Product Number',
-              hintText: 'Enter product number',
-              inputType: TextInputType.number,
-              controller: productNumberController,
-              validator: (String? value) {
-                if (value == null || value.isEmpty) {
-                  return 'Please enter a product number';
-                }
-                return null;
-              },
-            ),
-            const SizedBox(height: 16),
-            CustomEditText(
-              caption: 'Quantity',
-              hintText: 'Enter quantity',
-              inputType: TextInputType.number,
-              controller: quantityController,
-              validator: (String? value) {
-                if (value == null || value.isEmpty) {
-                  return 'Please enter quantity available';
-                }
-                return null;
-              },
-            ),
-            const SizedBox(height: 16),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 15.0),
-              child: Container(
-                padding: const EdgeInsets.all(15),
-                decoration: BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.circular(10),
+            ExpansionTile(
+                trailing: isExpanded
+                    ? SvgPicture.asset(
+                        'assets/svgs/dropdownexpansionup.svg',
+                      )
+                    : SvgPicture.asset(
+                        'assets/svgs/dropdownexpansion.svg',
+                      ),
+                title: RichText(
+                  text: const TextSpan(
+                    style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
+                    children: <TextSpan>[
+                      TextSpan(
+                          text: 'Additional Information',
+                          style: TextStyle(color: textColor)),
+                      TextSpan(
+                          text: ' (Optional)',
+                          style: TextStyle(color: hintColor)),
+                    ],
+                  ),
                 ),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: <Widget>[
-                    const Text(
-                      'Product Variations',
-                      style: TextStyle(
-                        fontSize: 14,
-                        fontWeight: FontWeight.w700,
+                children: <Widget>[
+                  CustomDropdownWidget(
+                    caption: 'Delivery Method',
+                    hintText: 'Choose a delivery method',
+                    items: const <String>[
+                      'Online',
+                      'Courier',
+                      'In-Store Pickup'
+                    ],
+                    iconName: 'assets/svgs/dropdown.svg',
+                    onChanged: (String? newValue) {
+                      setState(() {
+                        deliveryMethod = newValue;
+                      });
+                    },
+                  ),
+                  const SizedBox(height: 16),
+                  CustomEditText(
+                    inputType:
+                        const TextInputType.numberWithOptions(decimal: false),
+                    caption: 'Delivery Duration (Days)',
+                    hintText:
+                        'Enter number of days you can deliver after purchase',
+                    controller: deliverydayscontroller,
+                    validator: (String? value) {
+                      if (value == null || value.isEmpty) {
+                        return 'Please enter number of delivery days';
+                      }
+                      return null;
+                    },
+                  ),
+                  const SizedBox(height: 16),
+                  CustomDropdownWidget(
+                    caption: 'Payment Method',
+                    hintText: 'Choose a payment method',
+                    items: paymentMethods,
+                    iconName: 'assets/svgs/dropdown.svg',
+                    onChanged: (String? newValue) {
+                      setState(() {
+                        paymentMethod = newValue;
+                      });
+                    },
+                  ),
+                  const SizedBox(height: 16),
+                  CustomEditText(
+                    caption: 'Storage Location',
+                    hintText: 'Enter storage location',
+                    controller: storageLocationController,
+                    validator: (String? value) {
+                      if (value == null || value.isEmpty) {
+                        return 'Please enter a storage location';
+                      }
+                      return null;
+                    },
+                  ),
+                  const SizedBox(height: 16),
+                  CustomEditText(
+                    caption: 'Product Number',
+                    hintText: 'Enter product number',
+                    inputType: TextInputType.number,
+                    controller: productNumberController,
+                    validator: (String? value) {
+                      if (value == null || value.isEmpty) {
+                        return 'Please enter a product number';
+                      }
+                      return null;
+                    },
+                  ),
+                  const SizedBox(height: 16),
+                  CustomEditText(
+                    caption: 'Quantity',
+                    hintText: 'Enter quantity',
+                    inputType: TextInputType.number,
+                    controller: quantityController,
+                    validator: (String? value) {
+                      if (value == null || value.isEmpty) {
+                        return 'Please enter quantity available';
+                      }
+                      return null;
+                    },
+                  ),
+                  const SizedBox(height: 16),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 15.0),
+                    child: Container(
+                      padding: const EdgeInsets.all(15),
+                      decoration: BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: <Widget>[
+                          const Text(
+                            'Product Variations',
+                            style: TextStyle(
+                              fontSize: 14,
+                              fontWeight: FontWeight.w700,
+                            ),
+                          ),
+                          const SizedBox(height: 10),
+                          Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: <Widget>[
+                              MultipleEditTextWidget(
+                                padding: const EdgeInsets.all(5),
+                                backgroundColor: backgroundColor,
+                                buttonSize: 20,
+                                caption: 'Color',
+                                hintText: 'color',
+                                onValuesChanged: (List<String> values) {
+                                  setState(() {
+                                    colors = values;
+                                  });
+                                },
+                              ),
+                              const SizedBox(height: 10),
+                              MultipleEditTextWidget(
+                                padding: const EdgeInsets.all(5),
+                                backgroundColor: backgroundColor,
+                                buttonSize: 20,
+                                caption: 'Size',
+                                hintText: 'size',
+                                onValuesChanged: (List<String> values) {
+                                  setState(() {
+                                    sizes = values;
+                                  });
+                                },
+                              ),
+                            ],
+                          ),
+                        ],
                       ),
                     ),
-                    const SizedBox(height: 10),
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: <Widget>[
-                        MultipleEditTextWidget(
-                          padding: const EdgeInsets.all(5),
-                          backgroundColor: backgroundColor,
-                          buttonSize: 20,
-                          caption: 'Color',
-                          hintText: 'color',
-                          onValuesChanged: (List<String> values) {
-                            setState(() {
-                              colors = values;
-                            });
-                          },
-                        ),
-                        const SizedBox(height: 10),
-                        MultipleEditTextWidget(
-                          padding: const EdgeInsets.all(5),
-                          backgroundColor: backgroundColor,
-                          buttonSize: 20,
-                          caption: 'Size',
-                          hintText: 'size',
-                          onValuesChanged: (List<String> values) {
-                            setState(() {
-                              sizes = values;
-                            });
-                          },
-                        ),
-                      ],
-                    ),
-                  ],
-                ),
-              ),
-            ),
+                  ),
+                ]),
             const SizedBox(height: 16),
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 15.0),

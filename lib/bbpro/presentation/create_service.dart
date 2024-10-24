@@ -53,6 +53,7 @@ class _CreateServiceListingState extends State<CreateServiceListing>
 
   bool isSubmitted = false;
   bool _isSwitched = true;
+  bool isExpanded = false;
 
   // Form fields
   String? category;
@@ -428,214 +429,238 @@ class _CreateServiceListingState extends State<CreateServiceListing>
               ),
 
             // Delivery Method Dropdown
-            CustomDropdownWidget(
-              initialValue: deliveryMethod,
-              caption: 'Delivery Method',
-              hintText: 'Choose a delivery method',
-              items: const <String>['Online', 'In-Person'],
-              iconName: 'assets/svgs/dropdown.svg',
-              onChanged: (String? newValue) {
-                setState(() {
-                  deliveryMethod = newValue;
-
-                  addressorlinkController.clear();
-                });
-              },
-            ),
-            if (deliveryMethod != null)
-              Padding(
-                padding: const EdgeInsets.only(top: 16.0),
-                child: CustomEditText(
-                  caption: deliveryMethod == 'Online'
-                      ? 'Enter Link'
-                      : 'Enter Address',
-                  hintText: deliveryMethod == 'Online'
-                      ? 'Enter link here'
-                      : 'Enter address here',
-                  controller: addressorlinkController,
-                  validator: (String? value) {
-                    if (value == null || value.isEmpty) {
-                      return deliveryMethod == 'Online'
-                          ? 'Please enter meeting link here'
-                          : 'Please enter an address';
-                    }
-                    return null;
-                  },
+            ExpansionTile(
+              trailing: isExpanded
+                  ? SvgPicture.asset(
+                      'assets/svgs/dropdownexpansionup.svg',
+                    )
+                  : SvgPicture.asset(
+                      'assets/svgs/dropdownexpansion.svg',
+                    ),
+              title: RichText(
+                text: const TextSpan(
+                  style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
+                  children: <TextSpan>[
+                    TextSpan(
+                        text: 'Additional Information',
+                        style: TextStyle(color: textColor)),
+                    TextSpan(
+                        text: ' (Optional)',
+                        style: TextStyle(color: hintColor)),
+                  ],
                 ),
               ),
-
-            const SizedBox(height: 16),
-            CustomDropdownWidget(
-              caption: 'Repeat',
-              hintText: 'Offer this service once or regularly?',
-              items: const <String>[
-                'Yes (One-time Service)',
-                'No (Regular Service)',
-              ],
-              iconName: 'assets/svgs/dropdown.svg',
-              onChanged: (String? newValue) {
-                setState(() {
-                  category = newValue;
-                });
-              },
-            ),
-            const SizedBox(height: 16),
-
-            if (category != null)
-              availabilityWidget(
-                  isRecurring:
-                      category == 'Yes (One-time Service)' ? true : false),
-
-            // Delivery Time Field
-            // TextFormField(
-            //   decoration: const InputDecoration(
-            //     labelText: 'Delivery Time',
-            //     hintText: 'e.g., 3-5 business days',
-            //     border: OutlineInputBorder(),
-            //   ),
-            //   onChanged: (String value) {
-            //     setState(() {
-            //       deliveryTime = value;
-            //     });
-            //   },
-            // ),
-            if (category != null) const SizedBox(height: 16),
-
-            // Available Time Field
-            // TextFormField(
-            //   readOnly: true,
-            //   decoration: InputDecoration(
-            //     labelText: 'Available Time',
-            //     hintText: _formatDate(availableTime),
-            //     border: const OutlineInputBorder(),
-            //   ),
-            //   onTap: () => _selectDate(context),
-            // ),
-            // const SizedBox(height: 16),
-
-            // Payment Method Dropdown
-
-            CustomDropdownWidget(
-              caption: 'Payment Method',
-              hintText: 'Choose a payment method',
-              items: paymentMethods,
-              iconName: 'assets/svgs/dropdown.svg',
-              onChanged: (String? newValue) {
-                setState(() {
-                  paymentMethod = newValue;
-                });
-              },
-            ),
-
-            const SizedBox(height: 16),
-
-            // Service Type Field
-            CustomDropdownWidget(
-              caption: 'Service Type',
-              hintText: 'Choose a service type',
-              items: const <String>[
-                '1:1 (Individual)',
-                'Group Session or Event',
-              ],
-              iconName: 'assets/svgs/dropdown.svg',
-              onChanged: (String? newValue) {
-                setState(() {
-                  serviceType = newValue;
-                });
-              },
-            ),
-            if (serviceType == 'Group Session or Event')
-              Padding(
-                padding: const EdgeInsets.only(top: 16.0),
-                child: CustomEditText(
-                  caption: 'Maximum Participants',
-                  hintText: 'Enter the maximum number of participants',
-                  controller:
-                      groupmembersController, // You might want a different controller here
-                  inputType: TextInputType.number,
-                  validator: (String? value) {
-                    if (value == null || value.isEmpty) {
-                      return 'Please enter the maximum number of participants';
-                    }
-                    if (int.tryParse(value) == null) {
-                      return 'Please enter a valid number';
-                    }
-                    return null;
-                  },
-                ),
-              ),
-
-            if (packages.isNotEmpty) const SizedBox(height: 16),
-            if (packages.isNotEmpty)
-              Padding(
-                padding: const EdgeInsets.symmetric(
-                  horizontal: 15.0,
-                ),
-                child: Container(
-                  decoration: BoxDecoration(
-                      color: Colors.white,
-                      borderRadius: BorderRadius.circular(10)),
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: 15, vertical: 15),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: <Widget>[
-                      const Text(
-                        'Additional Packages',
-                        style: TextStyle(
-                          fontSize: 14,
-                          fontWeight: FontWeight.w600,
-                        ),
-                      ),
-                      const SizedBox(height: 5),
-                      ...packages
-                          .asMap()
-                          .entries
-                          .map((MapEntry<int, Map<String, dynamic>> entry) {
-                        final int index = entry.key;
-                        final Map<String, dynamic> task = entry.value;
-                        return Taskitem(
-                          isPackage: true,
-                          taskname: task['name'],
-                          taskexpense: task['price'],
-                          editOnTap: () {
-                            _editPackageSheet(context, index);
-                          },
-                          deleteOnTap: () {
-                            setState(() {
-                              packages.removeAt(index);
-                            });
-                          },
-                        );
-                      }).toList(),
-                    ],
-                  ),
-                ),
-              ),
-            const SizedBox(height: 16),
-            CustomEditText(
-              caption: 'Message or Question',
-              hintText:
-                  'Enter message or question you want your clients to answer',
-              controller: notesController,
-              maxLength: 300,
-            ),
-            const SizedBox(height: 16),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
-                ProIconButton(
-                  backgroundColor: Colors.white,
-                  textColor: proprimaryColor,
-                  text: 'Add Additional Packages to this service',
-                  onPressed: () {
-                    _showAddPackageSheet(context);
+                CustomDropdownWidget(
+                  initialValue: deliveryMethod,
+                  caption: 'Delivery Method',
+                  hintText: 'Choose a delivery method',
+                  items: const <String>['Online', 'In-Person'],
+                  iconName: 'assets/svgs/dropdown.svg',
+                  onChanged: (String? newValue) {
+                    setState(() {
+                      deliveryMethod = newValue;
+
+                      addressorlinkController.clear();
+                    });
                   },
-                  icon: const Icon(
-                    Icons.add,
-                    size: 20,
-                    color: proprimaryColor,
+                ),
+                if (deliveryMethod != null)
+                  Padding(
+                    padding: const EdgeInsets.only(top: 16.0),
+                    child: CustomEditText(
+                      caption: deliveryMethod == 'Online'
+                          ? 'Enter Link'
+                          : 'Enter Address',
+                      hintText: deliveryMethod == 'Online'
+                          ? 'Enter link here'
+                          : 'Enter address here',
+                      controller: addressorlinkController,
+                      validator: (String? value) {
+                        if (value == null || value.isEmpty) {
+                          return deliveryMethod == 'Online'
+                              ? 'Please enter meeting link here'
+                              : 'Please enter an address';
+                        }
+                        return null;
+                      },
+                    ),
                   ),
+
+                const SizedBox(height: 16),
+                CustomDropdownWidget(
+                  caption: 'Repeat',
+                  hintText: 'Offer this service once or regularly?',
+                  items: const <String>[
+                    'Yes (One-time Service)',
+                    'No (Regular Service)',
+                  ],
+                  iconName: 'assets/svgs/dropdown.svg',
+                  onChanged: (String? newValue) {
+                    setState(() {
+                      category = newValue;
+                    });
+                  },
+                ),
+                const SizedBox(height: 16),
+
+                if (category != null)
+                  availabilityWidget(
+                      isRecurring:
+                          category == 'Yes (One-time Service)' ? true : false),
+
+                // Delivery Time Field
+                // TextFormField(
+                //   decoration: const InputDecoration(
+                //     labelText: 'Delivery Time',
+                //     hintText: 'e.g., 3-5 business days',
+                //     border: OutlineInputBorder(),
+                //   ),
+                //   onChanged: (String value) {
+                //     setState(() {
+                //       deliveryTime = value;
+                //     });
+                //   },
+                // ),
+                if (category != null) const SizedBox(height: 16),
+
+                // Available Time Field
+                // TextFormField(
+                //   readOnly: true,
+                //   decoration: InputDecoration(
+                //     labelText: 'Available Time',
+                //     hintText: _formatDate(availableTime),
+                //     border: const OutlineInputBorder(),
+                //   ),
+                //   onTap: () => _selectDate(context),
+                // ),
+                // const SizedBox(height: 16),
+
+                // Payment Method Dropdown
+
+                CustomDropdownWidget(
+                  caption: 'Payment Method',
+                  hintText: 'Choose a payment method',
+                  items: paymentMethods,
+                  iconName: 'assets/svgs/dropdown.svg',
+                  onChanged: (String? newValue) {
+                    setState(() {
+                      paymentMethod = newValue;
+                    });
+                  },
+                ),
+
+                const SizedBox(height: 16),
+
+                // Service Type Field
+                CustomDropdownWidget(
+                  caption: 'Service Type',
+                  hintText: 'Choose a service type',
+                  items: const <String>[
+                    '1:1 (Individual)',
+                    'Group Session or Event',
+                  ],
+                  iconName: 'assets/svgs/dropdown.svg',
+                  onChanged: (String? newValue) {
+                    setState(() {
+                      serviceType = newValue;
+                    });
+                  },
+                ),
+                if (serviceType == 'Group Session or Event')
+                  Padding(
+                    padding: const EdgeInsets.only(top: 16.0),
+                    child: CustomEditText(
+                      caption: 'Maximum Participants',
+                      hintText: 'Enter the maximum number of participants',
+                      controller:
+                          groupmembersController, // You might want a different controller here
+                      inputType: TextInputType.number,
+                      validator: (String? value) {
+                        if (value == null || value.isEmpty) {
+                          return 'Please enter the maximum number of participants';
+                        }
+                        if (int.tryParse(value) == null) {
+                          return 'Please enter a valid number';
+                        }
+                        return null;
+                      },
+                    ),
+                  ),
+
+                if (packages.isNotEmpty) const SizedBox(height: 16),
+                if (packages.isNotEmpty)
+                  Padding(
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 15.0,
+                    ),
+                    child: Container(
+                      decoration: BoxDecoration(
+                          color: Colors.white,
+                          borderRadius: BorderRadius.circular(10)),
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 15, vertical: 15),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: <Widget>[
+                          const Text(
+                            'Additional Packages',
+                            style: TextStyle(
+                              fontSize: 14,
+                              fontWeight: FontWeight.w600,
+                            ),
+                          ),
+                          const SizedBox(height: 5),
+                          ...packages
+                              .asMap()
+                              .entries
+                              .map((MapEntry<int, Map<String, dynamic>> entry) {
+                            final int index = entry.key;
+                            final Map<String, dynamic> task = entry.value;
+                            return Taskitem(
+                              isPackage: true,
+                              taskname: task['name'],
+                              taskexpense: task['price'],
+                              editOnTap: () {
+                                _editPackageSheet(context, index);
+                              },
+                              deleteOnTap: () {
+                                setState(() {
+                                  packages.removeAt(index);
+                                });
+                              },
+                            );
+                          }).toList(),
+                        ],
+                      ),
+                    ),
+                  ),
+                const SizedBox(height: 16),
+                CustomEditText(
+                  caption: 'Message or Question',
+                  hintText:
+                      'Enter message or question you want your clients to answer',
+                  controller: notesController,
+                  maxLength: 300,
+                ),
+                const SizedBox(height: 16),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: <Widget>[
+                    ProIconButton(
+                      backgroundColor: Colors.white,
+                      textColor: proprimaryColor,
+                      text: 'Add Additional Packages to this service',
+                      onPressed: () {
+                        _showAddPackageSheet(context);
+                      },
+                      icon: const Icon(
+                        Icons.add,
+                        size: 20,
+                        color: proprimaryColor,
+                      ),
+                    ),
+                  ],
                 ),
               ],
             ),
