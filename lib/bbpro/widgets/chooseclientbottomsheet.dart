@@ -1,6 +1,5 @@
 import 'package:business_bosses_v2/bbpro/controllers/shop_controller.dart';
-import 'package:business_bosses_v2/bbpro/presentation/create_product.dart';
-import 'package:business_bosses_v2/bbpro/presentation/create_service.dart';
+import 'package:business_bosses_v2/bbpro/presentation/add_client.dart';
 import 'package:business_bosses_v2/bbpro/widgets/button.dart';
 import 'package:business_bosses_v2/bbpro/widgets/edittext.dart';
 import 'package:business_bosses_v2/bbpro/widgets/iconbutton.dart';
@@ -10,11 +9,11 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-class ChooseOrderBottomSheet extends StatefulWidget {
+class ChooseClientBottomSheet extends StatefulWidget {
   final List<Map<String, dynamic>> products;
   final List<Map<String, dynamic>> services;
   final List<Map<String, dynamic>> selectedItems;
-  const ChooseOrderBottomSheet(
+  const ChooseClientBottomSheet(
       {Key? key,
       required this.products,
       required this.services,
@@ -22,10 +21,11 @@ class ChooseOrderBottomSheet extends StatefulWidget {
       : super(key: key);
 
   @override
-  State<ChooseOrderBottomSheet> createState() => _ChooseOrderBottomSheetState();
+  State<ChooseClientBottomSheet> createState() =>
+      _ChooseClientBottomSheetState();
 }
 
-class _ChooseOrderBottomSheetState extends State<ChooseOrderBottomSheet>
+class _ChooseClientBottomSheetState extends State<ChooseClientBottomSheet>
     with SingleTickerProviderStateMixin {
   late TabController _tabController;
   int _selectedIndex = 0;
@@ -64,32 +64,23 @@ class _ChooseOrderBottomSheetState extends State<ChooseOrderBottomSheet>
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: <Widget>[
               const Text(
-                'Select Order',
+                'Select Client',
                 style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
               ),
-              _selectedIndex == 0
-                  ? ProIconButton(
-                      icon: const Icon(Icons.add),
-                      onPressed: () {
-                        Get.to(const CreateProductListing());
-                      },
-                      text: 'New Product',
-                      radius: 10.0,
-                    )
-                  : _selectedIndex == 1
-                      ? ProIconButton(
-                          icon: const Icon(Icons.add),
-                          onPressed: () {
-                            Get.to(const CreateServiceListing());
-                          },
-                          text: 'New Service',
-                          radius: 10.0,
-                        )
-                      : GestureDetector(
-                          child: IconButton(
-                              onPressed: Get.back,
-                              icon: const Icon(Icons.close)),
-                        ),
+              Wrap(children: <Widget>[
+                ProIconButton(
+                  icon: const Icon(Icons.add),
+                  onPressed: () {
+                    Get.to(const Addclient());
+                  },
+                  text: 'New Client',
+                  radius: 10.0,
+                ),
+                // GestureDetector(
+                //   child: IconButton(
+                //       onPressed: Get.back, icon: const Icon(Icons.close)),
+                // ),
+              ])
             ],
           ),
           const SizedBox(height: 10),
@@ -100,15 +91,15 @@ class _ChooseOrderBottomSheetState extends State<ChooseOrderBottomSheet>
               0: Padding(
                   padding: EdgeInsets.symmetric(horizontal: 5, vertical: 10),
                   child: Text(
-                    'Products',
+                    'Online',
                     style: TextStyle(fontSize: 14),
                   )),
               1: Text(
-                'Services',
+                'In-person',
                 style: TextStyle(fontSize: 14),
               ),
               2: Text(
-                'Custom',
+                'BB-User',
                 style: TextStyle(fontSize: 14),
               ),
             },
@@ -132,7 +123,7 @@ class _ChooseOrderBottomSheetState extends State<ChooseOrderBottomSheet>
                       hasSearchIcon: true,
                       contentPadding: 10,
                       backgroundColor: backgroundColor,
-                      hintText: 'Search Products',
+                      hintText: 'Search Clients',
                       onChange: (String query) {
                         setState(() {});
                       },
@@ -160,7 +151,7 @@ class _ChooseOrderBottomSheetState extends State<ChooseOrderBottomSheet>
                       hasSearchIcon: true,
                       contentPadding: 10,
                       backgroundColor: backgroundColor,
-                      hintText: 'Search Services',
+                      hintText: 'Search Clients',
                       onChange: (String query) {
                         setState(() {});
                       },
@@ -182,7 +173,32 @@ class _ChooseOrderBottomSheetState extends State<ChooseOrderBottomSheet>
                 ),
 
                 // Custom Tab content
-                _buildCustomTab(),
+                Column(
+                  children: <Widget>[
+                    ProSearchbar(
+                      hasSearchIcon: true,
+                      contentPadding: 10,
+                      backgroundColor: backgroundColor,
+                      hintText: 'Search Clients',
+                      onChange: (String query) {
+                        setState(() {});
+                      },
+                      onSubmit: (String query) {},
+                    ),
+                    Column(
+                      children:
+                          widget.services.map((Map<String, dynamic> service) {
+                        return CheckboxListTile(
+                          title: Text(service['name']),
+                          value: widget.selectedItems.contains(service),
+                          onChanged: (bool? selected) {
+                            _onItemSelect(selected, service);
+                          },
+                        );
+                      }).toList(),
+                    ),
+                  ],
+                ),
               ],
             ),
           ),
