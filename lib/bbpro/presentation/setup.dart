@@ -1,4 +1,5 @@
 import 'package:business_bosses_v2/bbpro/controllers/shop_controller.dart';
+import 'package:business_bosses_v2/bbpro/presentation/availability.dart';
 import 'package:business_bosses_v2/bbpro/presentation/servicesmanagement.dart';
 import 'package:business_bosses_v2/bbpro/presentation/setupshop.dart';
 import 'package:business_bosses_v2/bbpro/presentation/shopscreen.dart';
@@ -25,6 +26,7 @@ class _SetupState extends State<Setup> {
   final List<String> titles = <String>[
     'Manage Product Inventory',
     'My Services',
+    'Appointments'
   ];
 
   final List<String> remtitles = <String>[
@@ -220,10 +222,15 @@ class _SetupState extends State<Setup> {
                                           'assets/svgs/inventory.svg',
                                           height: 18,
                                         )
-                                      : SvgPicture.asset(
-                                          'assets/svgs/myservices.svg',
-                                          height: 20,
-                                        ),
+                                      : titles[index] == 'My Services'
+                                          ? SvgPicture.asset(
+                                              'assets/svgs/myservices.svg',
+                                              height: 20,
+                                            )
+                                          : SvgPicture.asset(
+                                              'assets/svgs/calendar.svg',
+                                              height: 25,
+                                            ),
                                   title: Text(
                                     titles[index],
                                     style: const TextStyle(
@@ -239,6 +246,9 @@ class _SetupState extends State<Setup> {
                                     }
                                     if (titles[index] == 'My Services') {
                                       Get.to(() => const ManageServices());
+                                    }
+                                    if (titles[index] == 'Appointments') {
+                                      Get.to(() => const AppointmentsScreen());
                                     }
                                     if (titles[index] == 'Contact Us') {
                                       _contactUs();

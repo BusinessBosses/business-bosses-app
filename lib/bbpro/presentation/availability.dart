@@ -3,8 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:syncfusion_flutter_calendar/calendar.dart';
 
-class AvailabilityScreen extends StatelessWidget {
-  const AvailabilityScreen({super.key});
+class AppointmentsScreen extends StatelessWidget {
+  const AppointmentsScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -19,7 +19,7 @@ class AvailabilityScreen extends StatelessWidget {
           icon: SvgPicture.asset('assets/svgs/backbutton.svg'),
         ),
         title: const Text(
-          'Availability',
+          'Appointments',
           style: TextStyle(
             color: proprimaryColor,
             fontWeight: FontWeight.bold,
