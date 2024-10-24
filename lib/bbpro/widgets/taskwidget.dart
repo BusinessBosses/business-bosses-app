@@ -311,7 +311,7 @@ class _TaskWidgetState extends State<TaskWidget> {
                                     const Text(
                                       'Change Task Status',
                                       style: TextStyle(
-                                          fontSize: 14,
+                                          fontSize: 13,
                                           color: proprimaryColor,
                                           fontWeight: FontWeight.bold),
                                     ),

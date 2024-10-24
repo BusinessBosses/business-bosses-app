@@ -12,6 +12,7 @@ import 'package:business_bosses_v2/bbpro/widgets/topsection.dart';
 import 'package:business_bosses_v2/bbpro/controllers/clients_controller.dart';
 import 'package:business_bosses_v2/bbpro/models/client_model.dart';
 import 'package:business_bosses_v2/common/widgets/safety_model.dart';
+import 'package:business_bosses_v2/features/chat/chat_screen.dart';
 import 'package:business_bosses_v2/features/marketplace/presentation/supplierspage.dart';
 import 'package:business_bosses_v2/utils/theme/theme.dart';
 import 'package:flutter/cupertino.dart';
@@ -104,7 +105,31 @@ class _ClientsScreenState extends State<ClientsScreen>
             },
           ),
         ),
-        actions: const <Widget>[NotificationButton()],
+        actions: <Widget>[
+          Row(
+            children: <Widget>[
+              GestureDetector(
+                onTap: () {
+                  Get.to(() => const ChatScreen());
+                },
+                child: Padding(
+                  padding: const EdgeInsets.only(
+                    right: 10.0,
+                    bottom: 10,
+                  ),
+                  child: CircleAvatar(
+                      radius: 20,
+                      backgroundColor: prosemibackColor,
+                      child: SvgPicture.asset(
+                        'assets/svgs/prochat.svg',
+                        height: 15,
+                      )),
+                ),
+              ),
+              const NotificationButton(),
+            ],
+          )
+        ],
       ),
       body: TabBarView(controller: _viewController, children: <Widget>[
         Column(

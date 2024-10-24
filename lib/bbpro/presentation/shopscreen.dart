@@ -7,10 +7,13 @@ import 'package:business_bosses_v2/bbpro/widgets/inventorycard.dart';
 import 'package:business_bosses_v2/bbpro/widgets/servicecard.dart';
 import 'package:business_bosses_v2/common/widgets/network_image_with_placeholder.dart';
 import 'package:business_bosses_v2/utils/theme/theme.dart';
+import 'package:detectable_text_field/detector/sample_regular_expressions.dart';
+import 'package:detectable_text_field/widgets/detectable_text.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class ShopScreen extends StatefulWidget {
   const ShopScreen({super.key});
@@ -77,9 +80,6 @@ class _ShopScreenState extends State<ShopScreen> {
           actions: const <Widget>[],
         ),
         body: Column(children: <Widget>[
-          const SizedBox(
-            height: 20,
-          ),
           SizedBox(
             height: 100.0,
             width: 100.0,
@@ -109,9 +109,39 @@ class _ShopScreenState extends State<ShopScreen> {
                     style: const TextStyle(
                         fontWeight: FontWeight.bold, fontSize: 14)),
                 const SizedBox(height: 2),
-                Text(shopController.shop!.description,
-                    style: const TextStyle(
-                        fontWeight: FontWeight.normal, fontSize: 12)),
+                DetectableText(
+                  text: shopController.shop!.description,
+                  detectionRegExp: detectionRegExp(hashtag: false)!,
+                  detectedStyle: bodyText2.copyWith(
+                    color: Colors.blue,
+                  ),
+                  textAlign: TextAlign.center,
+                  moreStyle: bodyText2.copyWith(
+                    color: Colors.redAccent,
+                  ),
+                  lessStyle: bodyText2.copyWith(
+                    color: Colors.redAccent,
+                  ),
+                  trimLength: 100,
+                  trimExpandedText: '  show less',
+                  basicStyle: bodyText2.copyWith(color: textColor),
+                  onTap: (String text) async {
+                    final Uri url = Uri.parse(text);
+                    if ((url.scheme == 'http' || url.scheme == 'https')) {
+                      if (!await launchUrl(url)) {
+                        throw Exception('Could not launch $url');
+                      }
+                    } else if (text.startsWith('wa.me')) {
+                      // Handle "wa.me" links
+                      final Uri whatsappUrl = Uri.parse('https://$text');
+                      if (await launchUrl(whatsappUrl)) {
+                        await launchUrl(whatsappUrl);
+                      } else {
+                        throw Exception('Could not launch $whatsappUrl');
+                      }
+                    }
+                  },
+                ),
               ],
             ),
           ),

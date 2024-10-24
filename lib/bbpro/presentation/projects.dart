@@ -7,6 +7,7 @@ import 'package:business_bosses_v2/bbpro/widgets/taskwidget.dart';
 import 'package:business_bosses_v2/bbpro/controllers/project_controller.dart';
 import 'package:business_bosses_v2/bbpro/presentation/add_project.dart';
 import 'package:business_bosses_v2/common/widgets/safety_model.dart';
+import 'package:business_bosses_v2/features/chat/chat_screen.dart';
 import 'package:business_bosses_v2/utils/theme/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -88,7 +89,31 @@ class _ProjectsState extends State<Projects>
             fontWeight: FontWeight.bold,
           ),
         ),
-        actions: const <Widget>[NotificationButton()],
+        actions: <Widget>[
+          Row(
+            children: <Widget>[
+              GestureDetector(
+                onTap: () {
+                  Get.to(() => const ChatScreen());
+                },
+                child: Padding(
+                  padding: const EdgeInsets.only(
+                    right: 10.0,
+                    bottom: 10,
+                  ),
+                  child: CircleAvatar(
+                      radius: 20,
+                      backgroundColor: prosemibackColor,
+                      child: SvgPicture.asset(
+                        'assets/svgs/prochat.svg',
+                        height: 15,
+                      )),
+                ),
+              ),
+              const NotificationButton(),
+            ],
+          )
+        ],
       ),
       body: Column(
         children: <Widget>[
