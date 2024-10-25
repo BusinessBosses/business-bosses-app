@@ -62,42 +62,59 @@ class _OrdersWidgetState extends State<OrdersWidget> {
                       ),
                     ],
                   ),
-                  GestureDetector(
-                    onTap: () {
-                      setState(() {
-                        isHidden = !isHidden;
-                      });
-                    },
-                    child: Wrap(
-                      crossAxisAlignment: WrapCrossAlignment.center,
-                      children: <Widget>[
-                        Container(
-                          padding: const EdgeInsets.all(5),
-                          decoration: BoxDecoration(
-                            color: prosemibackColor,
-                            borderRadius: BorderRadius.circular(30),
-                          ),
-                          child: Icon(
-                            isHidden ? Icons.visibility_off : Icons.visibility,
-                            color: proprimaryColor,
-                            size: 15,
+                  Wrap(
+                    crossAxisAlignment: WrapCrossAlignment.center,
+                    children: <Widget>[
+                      Align(
+                        alignment: Alignment.centerRight,
+                        child: GestureDetector(
+                          onTap: () {
+                            Navigator.pushReplacement(
+                              context,
+                              MaterialPageRoute(
+                                builder: (BuildContext context) =>
+                                    const Bottomnavscreen(initialindex: 2),
+                              ),
+                            );
+                          },
+                          child: Container(
+                            padding: const EdgeInsets.symmetric(
+                                horizontal: 8, vertical: 8),
+                            decoration: BoxDecoration(
+                                color: prosemibackColor,
+                                borderRadius: BorderRadius.circular(8)),
+                            child: Wrap(
+                              crossAxisAlignment: WrapCrossAlignment.center,
+                              children: <Widget>[
+                                RichText(
+                                  text: TextSpan(
+                                    text: 'View All Orders ',
+                                    style: const TextStyle(
+                                      color: proprimaryColor,
+                                      fontSize: 12,
+                                    ),
+                                    children: <TextSpan>[
+                                      TextSpan(
+                                        text:
+                                            '(${orderController.orders.length})',
+                                        style: const TextStyle(
+                                          fontWeight: FontWeight.bold,
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                                const SizedBox(width: 5),
+                                SvgPicture.asset(
+                                  'assets/svgs/nexticon.svg',
+                                  color: proprimaryColor,
+                                ),
+                              ],
+                            ),
                           ),
                         ),
-                        const SizedBox(
-                          width: 10,
-                        ),
-                        Text(
-                          isHidden
-                              ? '***'
-                              : orderController.orders.length.toString(),
-                          style: const TextStyle(
-                            color: proprimaryColor,
-                            fontWeight: FontWeight.bold,
-                            fontSize: 20,
-                          ),
-                        ),
-                      ],
-                    ),
+                      ),
+                    ],
                   ),
                 ],
               ),
@@ -191,38 +208,6 @@ class _OrdersWidgetState extends State<OrdersWidget> {
                     ],
                   ),
                 ],
-              ),
-              Align(
-                alignment: Alignment.centerRight,
-                child: GestureDetector(
-                  onTap: () {
-                    Navigator.pushReplacement(
-                      context,
-                      MaterialPageRoute(
-                        builder: (BuildContext context) =>
-                            const Bottomnavscreen(initialindex: 2),
-                      ),
-                    );
-                  },
-                  child: Container(
-                    padding:
-                        const EdgeInsets.symmetric(horizontal: 8, vertical: 8),
-                    decoration: BoxDecoration(
-                        color: prosemibackColor,
-                        borderRadius: BorderRadius.circular(8)),
-                    child: Wrap(
-                      crossAxisAlignment: WrapCrossAlignment.center,
-                      children: <Widget>[
-                        const Text('View All Orders'),
-                        const SizedBox(width: 5),
-                        SvgPicture.asset(
-                          'assets/svgs/nexticon.svg',
-                          color: proprimaryColor,
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
               ),
             ],
           ),

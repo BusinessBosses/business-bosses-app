@@ -1,6 +1,7 @@
 import 'package:business_bosses_v2/bbpro/controllers/shop_controller.dart';
 import 'package:business_bosses_v2/bbpro/models/service_model.dart';
 import 'package:business_bosses_v2/bbpro/widgets/optionsbutton.dart';
+import 'package:business_bosses_v2/common/dialogs/snackbar.dart';
 import 'package:business_bosses_v2/common/widgets/network_image_with_placeholder.dart';
 import 'package:business_bosses_v2/utils/theme/theme.dart';
 import 'package:flutter/material.dart';
@@ -117,8 +118,42 @@ class _ServiceCardState extends State<ServiceCard> {
                   : OptionsButton(
                       item: widget.service,
                       onEdit: _onEdit,
+                      onDelete: onDelete,
                     ),
             ],
+          ),
+        ],
+      ),
+    );
+  }
+
+  void onDelete() {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) => AlertDialog(
+        title: const Text(
+          'Delete Service',
+          style: bodyText1,
+        ),
+        content: const Text('Are you sure you want to delete this service?'),
+        actions: <Widget>[
+          TextButton(
+            onPressed: () => Navigator.pop(context),
+            child: const Text('No'),
+          ),
+          TextButton(
+            onPressed: () async {
+              final bool delete =
+                  await shopController.deleteService(widget.service!.id);
+              if (delete) {
+                showSnackbar(message: 'Service deleted successfully!');
+              } else {
+                showSnackbar(message: 'Error deleting service!', error: true);
+              }
+              setState(() {});
+              Navigator.pop(context);
+            },
+            child: const Text('Yes'),
           ),
         ],
       ),

@@ -142,7 +142,7 @@ class _TaskWidgetState extends State<TaskWidget> {
                     Row(
                       children: <Widget>[
                         const Text(
-                          'Budget: ',
+                          'Expenses: ',
                           style: TextStyle(
                             fontWeight: FontWeight.bold,
                             fontSize: 13,
@@ -173,23 +173,6 @@ class _TaskWidgetState extends State<TaskWidget> {
                         ),
                       ],
                     ),
-                    const Row(
-                      children: <Widget>[
-                        Text(
-                          'Expenses: ',
-                          style: TextStyle(
-                            fontWeight: FontWeight.bold,
-                            fontSize: 13,
-                          ),
-                        ),
-                        Text(
-                          'expenses',
-                          style: TextStyle(
-                            fontSize: 13,
-                          ),
-                        ),
-                      ],
-                    ),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.start,
                       crossAxisAlignment: CrossAxisAlignment.start,
@@ -205,15 +188,14 @@ class _TaskWidgetState extends State<TaskWidget> {
                                   const TextSpan(
                                     text: 'Description: ',
                                     style: TextStyle(
-                                        fontWeight: FontWeight
-                                            .bold, // This keeps the "Description:" normal
-                                        fontSize: 10,
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: 13,
                                         color: textColor),
                                   ),
                                   TextSpan(
                                     text: widget.project.description,
                                     style: const TextStyle(
-                                        fontSize: 10, color: textColor),
+                                        fontSize: 13, color: textColor),
                                   ),
                                 ],
                               ),
@@ -222,6 +204,130 @@ class _TaskWidgetState extends State<TaskWidget> {
                         ),
                       ],
                     ),
+                    const SizedBox(
+                      height: 10,
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: <Widget>[
+                        GestureDetector(
+                          onTap: () {
+                            showModalBottomSheet(
+                              context: context,
+                              shape: const RoundedRectangleBorder(
+                                borderRadius: BorderRadius.vertical(
+                                  top: Radius.circular(20.0),
+                                ),
+                              ),
+                              builder: (BuildContext context) {
+                                List<ProjectStatus> availableStatuses =
+                                    <ProjectStatus>[];
+                                switch (widget.project.status) {
+                                  case ProjectStatus.todo:
+                                    availableStatuses = <ProjectStatus>[
+                                      ProjectStatus.pending,
+                                      ProjectStatus.completed
+                                    ];
+                                    break;
+                                  case ProjectStatus.pending:
+                                    availableStatuses = <ProjectStatus>[
+                                      ProjectStatus.todo,
+                                      ProjectStatus.completed
+                                    ];
+                                    break;
+                                  case ProjectStatus.completed:
+                                    availableStatuses = <ProjectStatus>[
+                                      ProjectStatus.todo,
+                                      ProjectStatus.pending
+                                    ];
+                                    break;
+                                }
+                                return SizedBox(
+                                  child: Padding(
+                                    padding: const EdgeInsets.only(
+                                        top: 20, bottom: 50),
+                                    child: Column(
+                                      mainAxisSize: MainAxisSize
+                                          .min, // Ensures the column takes only the necessary space
+                                      children: <Widget>[
+                                        const Text(
+                                          'Change Task Status to',
+                                          style: TextStyle(
+                                            fontSize: 14,
+                                            fontWeight: FontWeight.w700,
+                                          ),
+                                        ),
+                                        const SizedBox(
+                                          height: 20,
+                                        ),
+                                        ...availableStatuses
+                                            .map((ProjectStatus status) {
+                                          return ListTile(
+                                            title: Container(
+                                              decoration: BoxDecoration(
+                                                  color: prosemibackColor,
+                                                  borderRadius:
+                                                      BorderRadius.circular(
+                                                          15)),
+                                              padding:
+                                                  const EdgeInsets.symmetric(
+                                                      horizontal: 10,
+                                                      vertical: 20),
+                                              child: Text(
+                                                status.displayTitle,
+                                                style: const TextStyle(
+                                                    fontSize: 14,
+                                                    color: textColor,
+                                                    fontWeight:
+                                                        FontWeight.w600),
+                                              ),
+                                            ),
+                                            onTap: () async {
+                                              // widget.project.status = status;
+                                              // await projectController
+                                              //     .updateProject(widget.project);
+                                              // setState(() {});
+                                              // Get.back();
+                                            },
+                                          );
+                                        }).toList(),
+                                      ],
+                                    ),
+                                  ),
+                                );
+                              },
+                            );
+                          },
+                          child: Container(
+                            padding: const EdgeInsets.symmetric(
+                                horizontal: 10, vertical: 5),
+                            decoration: BoxDecoration(
+                                color: prosemibackColor,
+                                borderRadius: BorderRadius.circular(20)),
+                            child: Center(
+                              child: Wrap(
+                                  crossAxisAlignment: WrapCrossAlignment.center,
+                                  children: <Widget>[
+                                    const Text(
+                                      'Change Task Status',
+                                      style: TextStyle(
+                                          fontSize: 13,
+                                          color: proprimaryColor,
+                                          fontWeight: FontWeight.bold),
+                                    ),
+                                    const SizedBox(
+                                      width: 8,
+                                    ),
+                                    SvgPicture.asset(
+                                      'assets/svgs/dropdown.svg',
+                                      color: proprimaryColor,
+                                    )
+                                  ]),
+                            ),
+                          ),
+                        )
+                      ],
+                    )
                   ],
                 ),
               ),
@@ -229,34 +335,34 @@ class _TaskWidgetState extends State<TaskWidget> {
           ),
         ),
       ),
-      if (widget.isExpanded != false)
-        Positioned(
-          right: 20,
-          bottom: 10,
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.end,
-            children: <Widget>[
-              GestureDetector(
-                onTap: () {
-                  showDialog(
-                    context: context,
-                    builder: (BuildContext context) => ProjectPopUp(
-                      project: widget.project,
-                    ),
-                  );
-                },
-                child: CircleAvatar(
-                  backgroundColor: probackgroundColor,
-                  radius: 15,
-                  child: SvgPicture.asset(
-                    'assets/svgs/expandform.svg',
-                    color: proprimaryColor,
-                  ),
-                ),
-              )
-            ],
-          ),
-        )
+      // if (widget.isExpanded != false)
+      //   Positioned(
+      //     right: 20,
+      //     bottom: 10,
+      //     child: Row(
+      //       mainAxisAlignment: MainAxisAlignment.end,
+      //       children: <Widget>[
+      //         GestureDetector(
+      //           onTap: () {
+      //             showDialog(
+      //               context: context,
+      //               builder: (BuildContext context) => ProjectPopUp(
+      //                 project: widget.project,
+      //               ),
+      //             );
+      //           },
+      //           child: CircleAvatar(
+      //             backgroundColor: probackgroundColor,
+      //             radius: 15,
+      //             child: SvgPicture.asset(
+      //               'assets/svgs/expandform.svg',
+      //               color: proprimaryColor,
+      //             ),
+      //           ),
+      //         )
+      //       ],
+      //     ),
+      //   )
     ]);
   }
 }

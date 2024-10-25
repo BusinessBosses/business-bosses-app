@@ -1,7 +1,7 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
 
-import 'task_model.dart'; // Make sure to import the Task model
+// import 'task_model.dart'; // Make sure to import the Task model
 
 class Project {
   final String id;
@@ -11,8 +11,9 @@ class Project {
   final String? amount; // Changed from double? to String?
   final String duration;
   final DateTime createdAt;
-  final List<Task>? tasks;
   final ProjectStatus status;
+  final DateTime startAt;
+  final DateTime endAt;
 
   Project({
     required this.id,
@@ -22,7 +23,8 @@ class Project {
     this.amount,
     required this.duration,
     required this.createdAt,
-    required this.tasks,
+    required this.startAt,
+    required this.endAt,
     this.status = ProjectStatus.todo,
   });
 
@@ -40,10 +42,12 @@ class Project {
             json['amount']?.toString(), // Changed to handle amount as String
         duration: json['duration'],
         createdAt: DateTime.parse(json['createdAt']),
-        tasks: json['tasks'] == null
-            ? null
-            : List<Task>.from(
-                json['tasks'].map((dynamic x) => Task.fromMap(x))),
+        startAt: DateTime.parse(json['createdAt']),
+        endAt: DateTime.parse(json['createdAt']),
+        // tasks: json['tasks'] == null
+        //     ? null
+        //     : List<Task>.from(
+        //         json['tasks'].map((dynamic x) => Task.fromMap(x))),
       );
 
   Map<String, dynamic> toMap() => <String, dynamic>{
@@ -54,9 +58,11 @@ class Project {
         'amount': amount, // Changed to handle amount as String
         'duration': duration,
         'createdAt': createdAt.toIso8601String(),
-        'tasks': tasks == null
-            ? null
-            : List<dynamic>.from(tasks!.map((Task x) => x.toMap())),
+        'startAt': startAt.toIso8601String(),
+        'endAt': endAt.toIso8601String(),
+        // 'tasks': tasks == null
+        //     ? null
+        //     : List<dynamic>.from(tasks!.map((Task x) => x.toMap())),
       };
 }
 
@@ -84,7 +90,7 @@ enum ProjectStatus {
   String get displayTitle {
     switch (this) {
       case ProjectStatus.allprojects:
-        return 'All Projects';
+        return 'All Tasks';
       case ProjectStatus.todo:
         return 'To Do';
       case ProjectStatus.pending:
@@ -99,11 +105,11 @@ enum ProjectStatus {
       case ProjectStatus.allprojects:
         return Colors.white;
       case ProjectStatus.todo:
-        return Colors.black12;
+        return Colors.black.withOpacity(0.1);
       case ProjectStatus.pending:
-        return Colors.yellow.withAlpha(100);
+        return Colors.amber.withOpacity(0.1);
       case ProjectStatus.completed:
-        return Colors.green.withAlpha(100);
+        return Colors.green.withOpacity(0.1);
     }
   }
 

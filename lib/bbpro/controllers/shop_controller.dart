@@ -181,4 +181,43 @@ class ShopController extends GetxController {
       return false;
     }
   }
+
+// Delete Product
+  Future<bool> deleteProduct(int id) async {
+    ApiResponseModel response = await ApiService.delete(path: 'goods/$id');
+    if (response.success) {
+      products.removeWhere((Product element) => element.id == id);
+      update(); // Update the UI
+      return true;
+    } else {
+      log(response.toMap().toString());
+      return false;
+    }
+  }
+
+// Delete Service
+  Future<bool> deleteService(int id) async {
+    ApiResponseModel response = await ApiService.delete(path: 'services/$id');
+    if (response.success) {
+      services.removeWhere((Service element) => element.id == id);
+      update(); // Update the UI
+      return true;
+    } else {
+      log(response.toMap().toString());
+      return false;
+    }
+  }
+
+// Delete Supplier
+  Future<bool> deleteSupplier(String id) async {
+    ApiResponseModel response = await ApiService.delete(path: 'vendors/$id');
+    if (response.success) {
+      suppliers.removeWhere((Vendor element) => element.id == id);
+      update(); // Update the UI
+      return true;
+    } else {
+      log(response.toMap().toString());
+      return false;
+    }
+  }
 }

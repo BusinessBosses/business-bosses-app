@@ -21,6 +21,7 @@ class Order {
   final List<Product>? products;
   final List<Service>? services;
   final DateTime createdAt;
+  final String? orderDetails;
 
   Order({
     required this.id,
@@ -39,6 +40,7 @@ class Order {
     this.services,
     required this.client,
     required this.createdAt,
+    this.orderDetails,
   });
 
   factory Order.fromJson(Map<String, dynamic> json) {
@@ -53,6 +55,7 @@ class Order {
           : DateTime.parse(json['deliveryDate']),
       paymentMethod: json['paymentMethod'],
       notes: json['notes'],
+      orderDetails: json['orderDetails'],
       invoiceOption: json['invoiceOption'],
       user: json['user'] == null ? null : UserModel.fromMap(json['user']),
       status: OrderStatus.fromString(json['status']),
@@ -90,6 +93,7 @@ class Order {
       'products': products?.map((Product product) => product.toJson()).toList(),
       'services': services?.map((Service service) => service.toJson()).toList(),
       'createdAt': createdAt,
+      'orderDetails': orderDetails,
     };
   }
 }
@@ -165,11 +169,11 @@ enum OrderStatus {
       case OrderStatus.allorders:
         return Colors.white;
       case OrderStatus.pending:
-        return Colors.amber.withAlpha(100);
+        return Colors.amber.withOpacity(0.1);
       case OrderStatus.paid:
-        return Colors.green.withAlpha(100);
+        return Colors.green.withOpacity(0.1);
       case OrderStatus.cancelled:
-        return Colors.red.withAlpha(100);
+        return Colors.red.withOpacity(0.1);
     }
   }
 

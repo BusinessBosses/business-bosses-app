@@ -1,16 +1,16 @@
 import 'package:flutter/material.dart';
 
 class AddToOrderWidget extends StatefulWidget {
-  const AddToOrderWidget({Key? key}) : super(key: key);
+  final List<dynamic> packages;
+
+  const AddToOrderWidget({Key? key, required this.packages}) : super(key: key);
 
   @override
   State<AddToOrderWidget> createState() => _AddToOrderWidgetState();
 }
 
 class _AddToOrderWidgetState extends State<AddToOrderWidget> {
-  bool _package1Selected = false;
-  bool _package2Selected = true; // Initially selected
-  bool _package3Selected = true; // Initially selected
+  bool _packageSelected = false;
 
   @override
   Widget build(BuildContext context) {
@@ -29,20 +29,20 @@ class _AddToOrderWidgetState extends State<AddToOrderWidget> {
               style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
             ),
             const SizedBox(height: 16),
-            _buildPackageCheckbox(
-              'Package 1',
-              _package1Selected,
-              (bool? value) => setState(() => _package1Selected = value!),
-            ),
-            _buildPackageCheckbox(
-              'Package 2',
-              _package2Selected,
-              (bool? value) => setState(() => _package2Selected = value!),
-            ),
-            _buildPackageCheckbox(
-              'Package 3',
-              _package3Selected,
-              (bool? value) => setState(() => _package3Selected = value!),
+            ListView.builder(
+              itemBuilder: (BuildContext context, int index) {
+                final dynamic package = widget.packages[index];
+
+                return Padding(
+                  padding: const EdgeInsets.only(bottom: 12),
+                  child: _buildPackageCheckbox(
+                    package,
+                    _packageSelected,
+                    (bool? value) => setState(() => _packageSelected = value!),
+                  ),
+                );
+              },
+              itemCount: widget.packages.length,
             ),
           ],
         ),
@@ -51,7 +51,7 @@ class _AddToOrderWidgetState extends State<AddToOrderWidget> {
   }
 
   Widget _buildPackageCheckbox(
-      String title, bool isSelected, ValueChanged<bool?> onChanged) {
+      dynamic package, bool isSelected, ValueChanged<bool?> onChanged) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: <Widget>[
@@ -62,10 +62,10 @@ class _AddToOrderWidgetState extends State<AddToOrderWidget> {
               onChanged: onChanged,
               activeColor: Colors.blue, // Customize checkbox color
             ),
-            Text(title),
+            Text(package['name']),
           ],
         ),
-        const Text('\$10'), // Price
+        Text(package['price']), // Price
       ],
     );
   }

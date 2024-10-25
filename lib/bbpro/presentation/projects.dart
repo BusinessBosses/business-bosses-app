@@ -7,6 +7,7 @@ import 'package:business_bosses_v2/bbpro/widgets/taskwidget.dart';
 import 'package:business_bosses_v2/bbpro/controllers/project_controller.dart';
 import 'package:business_bosses_v2/bbpro/presentation/add_project.dart';
 import 'package:business_bosses_v2/common/widgets/safety_model.dart';
+import 'package:business_bosses_v2/features/chat/chat_screen.dart';
 import 'package:business_bosses_v2/utils/theme/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -59,7 +60,7 @@ class _ProjectsState extends State<Projects>
         });
       }
       // Log the error or show a dialog/snackbar to the user
-      print('Error loading projects: $error');
+      print('Error loading tasks: $error');
     });
   }
 
@@ -82,18 +83,42 @@ class _ProjectsState extends State<Projects>
       appBar: AppBar(
         automaticallyImplyLeading: false,
         title: const Text(
-          'Projects',
+          'Tasks',
           style: TextStyle(
             color: proprimaryColor,
             fontWeight: FontWeight.bold,
           ),
         ),
-        actions: const <Widget>[NotificationButton()],
+        actions: <Widget>[
+          Row(
+            children: <Widget>[
+              GestureDetector(
+                onTap: () {
+                  Get.to(() => const ChatScreen());
+                },
+                child: Padding(
+                  padding: const EdgeInsets.only(
+                    right: 10.0,
+                    bottom: 10,
+                  ),
+                  child: CircleAvatar(
+                      radius: 20,
+                      backgroundColor: prosemibackColor,
+                      child: SvgPicture.asset(
+                        'assets/svgs/prochat.svg',
+                        height: 15,
+                      )),
+                ),
+              ),
+              const NotificationButton(),
+            ],
+          )
+        ],
       ),
       body: Column(
         children: <Widget>[
           TopsectionWidget(
-            buttonText: 'Add Project',
+            buttonText: 'Add Tasks',
             onHowItWorksPressed: () {
               // Handle "How it works" pressed
             },
@@ -107,7 +132,13 @@ class _ProjectsState extends State<Projects>
               _scrollToSection(index);
             },
             proprimaryColor: proprimaryColor,
-            backgroundColor: backgroundColor,
+            // ignore: prefer_const_literals_to_create_immutables
+            backgroundColor: <Color>[
+              probackgroundColor,
+              Colors.black.withOpacity(0.1),
+              Colors.amber.withOpacity(0.1),
+              Colors.green.withOpacity(0.1)
+            ],
             listofitems: ProjectStatus.values.toList(),
             itemToString: (ProjectStatus status) =>
                 '${status.displayTitle.toString().split('.').last} (${status == ProjectStatus.allprojects ? projectController.projects.length : (projectController.statusProjects[status] == null ? '0' : projectController.statusProjects[status]!.length.toString())})',
@@ -128,7 +159,7 @@ class _ProjectsState extends State<Projects>
                         ? const Center(
                             child: SafetyModel(
                             isLoading: false,
-                            title: 'No Projects Found!',
+                            title: 'No Tasks Found!',
                           ))
                         : Padding(
                             padding: const EdgeInsets.only(bottom: 10),
@@ -162,9 +193,11 @@ class _ProjectsState extends State<Projects>
                                               amount: project.amount,
                                               status: newStatus,
                                               createdAt: project.createdAt,
+                                              startAt: project.startAt,
+                                              endAt: project.endAt,
                                               description: project.description,
                                               duration: project.duration,
-                                              tasks: project.tasks,
+                                              // tasks: project.tasks,
                                             ),
                                           );
                                           projectController.updateProject(
@@ -458,7 +491,7 @@ class ListStatusColumnWidget extends StatelessWidget {
                 borderRadius: BorderRadius.circular(radius)),
             child: const Center(
               child: Text(
-                'Drag a project here',
+                'Drag a task here',
                 style: TextStyle(color: Colors.black38),
               ),
             ),

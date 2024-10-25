@@ -1,13 +1,16 @@
 import 'package:business_bosses_v2/bbpro/controllers/shop_controller.dart';
+import 'package:business_bosses_v2/bbpro/presentation/availability.dart';
 import 'package:business_bosses_v2/bbpro/presentation/servicesmanagement.dart';
 import 'package:business_bosses_v2/bbpro/presentation/setupshop.dart';
 import 'package:business_bosses_v2/bbpro/presentation/shopscreen.dart';
+import 'package:business_bosses_v2/bbpro/widgets/iconbutton.dart';
 import 'package:business_bosses_v2/bbpro/widgets/notificationbutton.dart';
 import 'package:business_bosses_v2/bbpro/presentation/inventory.dart';
 import 'package:business_bosses_v2/common/dialogs/snackbar.dart';
 import 'package:business_bosses_v2/common/widgets/network_image_with_placeholder.dart';
 import 'package:business_bosses_v2/utils/theme/theme.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -21,9 +24,12 @@ class Setup extends StatefulWidget {
 class _SetupState extends State<Setup> {
   final ShopController shopController = Get.find();
   final List<String> titles = <String>[
-    'Edit Shop',
-    'My Inventory',
+    'Manage Product Inventory',
     'My Services',
+    'Appointments'
+  ];
+
+  final List<String> remtitles = <String>[
     'Privacy Policy & Terms of Use',
     'Contact Us',
     'Manage Subscription'
@@ -42,7 +48,49 @@ class _SetupState extends State<Setup> {
             fontWeight: FontWeight.bold,
           ),
         ),
-        actions: const <Widget>[NotificationButton()],
+        actions: <Widget>[
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: <Widget>[
+              GestureDetector(
+                onTap: () {
+                  Get.to(() => Setupshop(
+                        shop: shopController.shop,
+                      ));
+                },
+                child: Container(
+                    margin: const EdgeInsets.only(bottom: 10),
+                    decoration: BoxDecoration(
+                        color: backgroundColor,
+                        borderRadius: BorderRadius.circular(40)),
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 15, vertical: 12),
+                    child: Row(
+                      children: <Widget>[
+                        SvgPicture.asset(
+                          'assets/svgs/editshop.svg',
+                          height: 15,
+                        ),
+                        const SizedBox(
+                          width: 5,
+                        ),
+                        const Text(
+                          'Edit Shop',
+                          style: TextStyle(
+                              fontSize: 14,
+                              color: textColor,
+                              fontWeight: FontWeight.w700),
+                        ),
+                      ],
+                    )),
+              ),
+              const SizedBox(
+                width: 5,
+              ),
+              const NotificationButton(),
+            ],
+          )
+        ],
       ),
       body: SingleChildScrollView(
         child: Column(
@@ -83,51 +131,58 @@ class _SetupState extends State<Setup> {
                             const SizedBox(height: 10),
                             Row(
                               children: <Widget>[
-                                GestureDetector(
-                                  onTap: () {
+                                // GestureDetector(
+                                //   onTap: () {
+                                //     Get.to(() => const ShopScreen());
+                                //   },
+                                //   child: Container(
+                                //       decoration: BoxDecoration(
+                                //           color: Colors.white,
+                                //           borderRadius:
+                                //               BorderRadius.circular(40)),
+                                //       padding: const EdgeInsets.symmetric(
+                                //           horizontal: 8, vertical: 8),
+                                //       child: const Text('View Shop')),
+                                // ),
+                                // const SizedBox(width: 5),
+                                // Container(
+                                //     decoration: BoxDecoration(
+                                //         color: Colors.white,
+                                //         borderRadius:
+                                //             BorderRadius.circular(40)),
+                                //     padding: const EdgeInsets.symmetric(
+                                //         horizontal: 8, vertical: 8),
+                                //     child: const Text('Share my link')),
+                                ProIconButton(
+                                  padding: 10,
+                                  shadow: Colors.transparent,
+                                  icon: SvgPicture.asset(
+                                    'assets/svgs/expandform.svg',
+                                    height: 10,
+                                  ),
+                                  backgroundColor: Colors.white,
+                                  textColor: proprimaryColor,
+                                  text: 'View Shop',
+                                  onPressed: () {
                                     Get.to(() => const ShopScreen());
                                   },
-                                  child: Container(
-                                      decoration: BoxDecoration(
-                                          color: Colors.white,
-                                          borderRadius:
-                                              BorderRadius.circular(40)),
-                                      padding: const EdgeInsets.symmetric(
-                                          horizontal: 8, vertical: 8),
-                                      child: const Text('View Shop')),
                                 ),
-                                const SizedBox(width: 5),
-                                Container(
-                                    decoration: BoxDecoration(
-                                        color: Colors.white,
-                                        borderRadius:
-                                            BorderRadius.circular(40)),
-                                    padding: const EdgeInsets.symmetric(
-                                        horizontal: 8, vertical: 8),
-                                    child: const Text('Share my link')),
-                                // ProIconButton(
-                                //   // icon: Icon(
-                                //   //   Icons.add,
-                                //   //   size: 20,
-                                //   //   color: Colors.black,
-                                //   // ),
-                                //   backgroundColor: Colors.white,
-                                //   textColor: proprimaryColor,
-                                //   text: 'View Shop',
-                                //   onPressed: () {},
-                                // ),
-
-                                // ProIconButton(
-                                //   // icon: Icon(
-                                //   //   Icons.add,
-                                //   //   size: 20,
-                                //   //   color: Colors.black,
-                                //   // ),
-                                //   textColor: proprimaryColor,
-                                //   backgroundColor: Colors.white,
-                                //   text: 'Share my link',
-                                //   onPressed: () {},
-                                // ),
+                                const SizedBox(
+                                  width: 5,
+                                ),
+                                ProIconButton(
+                                  padding: 10,
+                                  shadow: Colors.transparent,
+                                  icon: const Icon(
+                                    Icons.share_outlined,
+                                    size: 10,
+                                    color: Colors.black,
+                                  ),
+                                  textColor: proprimaryColor,
+                                  backgroundColor: Colors.white,
+                                  text: 'Share my link',
+                                  onPressed: () {},
+                                ),
                               ],
                             )
                           ],
@@ -142,6 +197,7 @@ class _SetupState extends State<Setup> {
               width: double.infinity,
               decoration: const BoxDecoration(color: Colors.white),
               child: Column(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: <Widget>[
                   const SizedBox(height: 15),
                   ListView.builder(
@@ -160,43 +216,89 @@ class _SetupState extends State<Setup> {
                                 borderRadius: BorderRadius.circular(15),
                               ),
                               child: ListTile(
+                                  leading: titles[index] ==
+                                          'Manage Product Inventory'
+                                      ? SvgPicture.asset(
+                                          'assets/svgs/inventory.svg',
+                                          height: 18,
+                                        )
+                                      : titles[index] == 'My Services'
+                                          ? SvgPicture.asset(
+                                              'assets/svgs/myservices.svg',
+                                              height: 20,
+                                            )
+                                          : SvgPicture.asset(
+                                              'assets/svgs/calendar.svg',
+                                              height: 25,
+                                            ),
+                                  title: Text(
+                                    titles[index],
+                                    style: const TextStyle(
+                                      fontSize: 15,
+                                      fontWeight: FontWeight.w700,
+                                      color: Colors.black,
+                                    ),
+                                  ),
+                                  onTap: () {
+                                    if (titles[index] ==
+                                        'Manage Product Inventory') {
+                                      Get.to(() => const Inventory());
+                                    }
+                                    if (titles[index] == 'My Services') {
+                                      Get.to(() => const ManageServices());
+                                    }
+                                    if (titles[index] == 'Appointments') {
+                                      Get.to(() => const AppointmentsScreen());
+                                    }
+                                    if (titles[index] == 'Contact Us') {
+                                      _contactUs();
+                                    }
+                                    // Get.toNamed(
+                                    //   Routes.explorebusinessbossesscreen,
+                                    //   arguments: 'Description',
+                                    // );
+                                  },
+                                  trailing: const Icon(
+                                    Icons.chevron_right,
+                                    color: proprimaryColor,
+                                    size: 20,
+                                  )),
+                            ),
+                          ),
+                          const SizedBox(height: 15),
+                        ],
+                      );
+                    },
+                  ),
+                  const SizedBox(height: 15),
+                  ListView.builder(
+                    shrinkWrap: true,
+                    physics: const NeverScrollableScrollPhysics(),
+                    itemCount: remtitles.length,
+                    itemBuilder: (BuildContext context, int index) {
+                      return Column(
+                        children: <Widget>[
+                          Padding(
+                            padding:
+                                const EdgeInsets.symmetric(horizontal: 15.0),
+                            child: ListTile(
+                                contentPadding: EdgeInsets.zero,
                                 title: Text(
-                                  titles[index],
-                                  style: const TextStyle(
+                                  remtitles[index],
+                                  style: TextStyle(
                                     fontSize: 15,
                                     fontWeight: FontWeight.w700,
-                                    color: Colors.black,
+                                    color: textColor.withOpacity(0.7),
                                   ),
                                 ),
-                                onTap: () {
-                                  if (titles[index] == 'Edit Shop') {
-                                    Get.to(() => Setupshop(
-                                          shop: shopController.shop,
-                                        ));
-                                  }
-                                  if (titles[index] == 'My Inventory') {
-                                    Get.to(() => const Inventory());
-                                  }
-                                  if (titles[index] == 'My Services') {
-                                    Get.to(() => const ManageServices());
-                                  }
-                                  if (titles[index] == 'Contact Us') {
-                                    _contactUs();
-                                  }
-                                  // Get.toNamed(
-                                  //   Routes.explorebusinessbossesscreen,
-                                  //   arguments: 'Description',
-                                  // );
-                                },
+                                onTap: () {},
                                 trailing: const Icon(
                                   Icons.chevron_right,
                                   color: proprimaryColor,
                                   size: 20,
-                                ),
-                              ),
-                            ),
+                                )),
                           ),
-                          const SizedBox(height: 15),
+                          // const SizedBox(height: 15),
                         ],
                       );
                     },

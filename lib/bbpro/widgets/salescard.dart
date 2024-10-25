@@ -1,7 +1,9 @@
 import 'package:business_bosses_v2/bbpro/controllers/order_controller.dart';
+import 'package:business_bosses_v2/bbpro/presentation/bottomnavscreen.dart';
 import 'package:business_bosses_v2/utils/theme/theme.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 
 class SalesWidget extends StatefulWidget {
@@ -20,7 +22,7 @@ class _SalesWidgetState extends State<SalesWidget> {
       padding: const EdgeInsets.only(left: 15.0, right: 15, bottom: 15),
       child: Container(
         width: double.infinity,
-        padding: const EdgeInsets.all(16.0),
+        padding: const EdgeInsets.all(10.0),
         decoration: BoxDecoration(
           color: Colors.white,
           borderRadius: BorderRadius.circular(16.0),
@@ -47,55 +49,75 @@ class _SalesWidgetState extends State<SalesWidget> {
                     ),
                   ],
                 ),
-                GestureDetector(
-                  onTap: () {
-                    setState(() {
-                      isHidden = !isHidden;
-                    });
-                  },
-                  child: Wrap(
-                    crossAxisAlignment: WrapCrossAlignment.center,
-                    children: <Widget>[
-                      Container(
-                        padding: const EdgeInsets.all(5),
-                        decoration: BoxDecoration(
-                          color: prosemibackColor,
-                          borderRadius: BorderRadius.circular(30),
-                        ),
-                        child: Icon(
-                          isHidden ? Icons.visibility_off : Icons.visibility,
-                          color: proprimaryColor,
-                          size: 15,
+                Wrap(
+                  crossAxisAlignment: WrapCrossAlignment.center,
+                  children: <Widget>[
+                    Align(
+                      alignment: Alignment.centerRight,
+                      child: GestureDetector(
+                        onTap: () {
+                          Navigator.pushReplacement(
+                            context,
+                            MaterialPageRoute(
+                              builder: (BuildContext context) =>
+                                  const Bottomnavscreen(initialindex: 2),
+                            ),
+                          );
+                        },
+                        child: Container(
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: 8, vertical: 8),
+                          decoration: BoxDecoration(
+                              color: prosemibackColor,
+                              borderRadius: BorderRadius.circular(8)),
+                          child: Wrap(
+                            crossAxisAlignment: WrapCrossAlignment.center,
+                            children: <Widget>[
+                              RichText(
+                                text: TextSpan(
+                                  text: 'View All Sales ',
+                                  style: const TextStyle(
+                                    color: proprimaryColor,
+                                    fontSize: 12,
+                                  ),
+                                  children: <TextSpan>[
+                                    TextSpan(
+                                      text:
+                                          '(${orderController.orders.length})',
+                                      style: const TextStyle(
+                                        fontWeight: FontWeight.bold,
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                              const SizedBox(width: 5),
+                              SvgPicture.asset(
+                                'assets/svgs/nexticon.svg',
+                                color: proprimaryColor,
+                              ),
+                            ],
+                          ),
                         ),
                       ),
-                      const SizedBox(
-                        width: 10,
-                      ),
-                      Text(
-                        isHidden
-                            ? '***'
-                            : orderController.orders.length.toString(),
-                        style: const TextStyle(
-                          color: proprimaryColor,
-                          fontWeight: FontWeight.bold,
-                          fontSize: 20,
-                        ),
-                      ),
-                    ],
-                  ),
+                    ),
+                  ],
                 ),
               ],
             ),
-            const Row(
-              children: <Widget>[
-                Text(
-                  '128,7K',
-                  style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
-                ),
-              ],
+            const SizedBox(
+              height: 10,
             ),
+            // const Row(
+            //   children: <Widget>[
+            //     Text(
+            //       '128,7K',
+            //       style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
+            //     ),
+            //   ],
+            // ),
             Container(
-              padding: const EdgeInsets.only(right: 5),
+              padding: const EdgeInsets.only(right: 10),
               height: 100,
               width: double.infinity,
               child: LineChart(

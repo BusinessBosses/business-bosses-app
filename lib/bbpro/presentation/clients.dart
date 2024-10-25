@@ -12,6 +12,8 @@ import 'package:business_bosses_v2/bbpro/widgets/topsection.dart';
 import 'package:business_bosses_v2/bbpro/controllers/clients_controller.dart';
 import 'package:business_bosses_v2/bbpro/models/client_model.dart';
 import 'package:business_bosses_v2/common/widgets/safety_model.dart';
+import 'package:business_bosses_v2/features/chat/chat_screen.dart';
+import 'package:business_bosses_v2/features/marketplace/presentation/supplierspage.dart';
 import 'package:business_bosses_v2/utils/theme/theme.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -103,7 +105,31 @@ class _ClientsScreenState extends State<ClientsScreen>
             },
           ),
         ),
-        actions: const <Widget>[NotificationButton()],
+        actions: <Widget>[
+          Row(
+            children: <Widget>[
+              GestureDetector(
+                onTap: () {
+                  Get.to(() => const ChatScreen());
+                },
+                child: Padding(
+                  padding: const EdgeInsets.only(
+                    right: 10.0,
+                    bottom: 10,
+                  ),
+                  child: CircleAvatar(
+                      radius: 20,
+                      backgroundColor: prosemibackColor,
+                      child: SvgPicture.asset(
+                        'assets/svgs/prochat.svg',
+                        height: 15,
+                      )),
+                ),
+              ),
+              const NotificationButton(),
+            ],
+          )
+        ],
       ),
       body: TabBarView(controller: _viewController, children: <Widget>[
         Column(
@@ -125,7 +151,12 @@ class _ClientsScreenState extends State<ClientsScreen>
                 _scrollToSection(index);
               },
               proprimaryColor: proprimaryColor,
-              backgroundColor: backgroundColor,
+              backgroundColor: <Color>[
+                backgroundColor,
+                Colors.green.withOpacity(0.1),
+                Colors.blue.withOpacity(0.1),
+                primaryColorLT.withOpacity(0.1)
+              ],
               listofitems: ClientType.values.toList(),
               itemToString: (ClientType status) =>
                   '${status.displayTitle.toString().split('.').last} (${status == ClientType.allclients ? clientsController.clients.length : (clientsController.clientsType[status] == null ? '0' : clientsController.clientsType[status]!.length.toString())})',
@@ -194,8 +225,66 @@ class _ClientsScreenState extends State<ClientsScreen>
               print('How it works pressed');
             },
             onAddProjectPressed: () {
-              // Handle "Add Project" pressed
-              Get.to(() => const AddSupplier());
+              showModalBottomSheet<void>(
+                context: context,
+                shape: const RoundedRectangleBorder(
+                  borderRadius: BorderRadius.vertical(
+                    top: Radius.circular(20),
+                  ),
+                ),
+                builder: (BuildContext context) {
+                  return Container(
+                    padding: const EdgeInsets.all(20.0),
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: <Widget>[
+                        ListTile(
+                          leading: const Icon(Icons.person_add),
+                          title: const Text('Add a New Supplier'),
+                          onTap: () {
+                            Navigator.pop(context);
+                            Get.to(() => const AddSupplier());
+                          },
+                        ),
+                        ListTile(
+                          leading: const Icon(Icons.file_upload),
+                          title: const Text(
+                              'Import Suppliers from Business Bosses'),
+                          onTap: () {
+                            showModalBottomSheet<void>(
+                              context: context,
+                              isScrollControlled: true, // Allow resizing
+                              shape: const RoundedRectangleBorder(
+                                borderRadius: BorderRadius.only(
+                                  topLeft: Radius.circular(20),
+                                  topRight: Radius.circular(20),
+                                ),
+                              ),
+                              builder: (BuildContext context) {
+                                return DraggableScrollableSheet(
+                                  initialChildSize: 0.9, // 90% of the screen
+                                  maxChildSize: 0.9,
+                                  minChildSize: 0.9,
+                                  expand: false,
+                                  builder: (BuildContext context,
+                                      ScrollController scrollController) {
+                                    return const SizedBox.expand(
+                                      // Ensures the content takes up the available space
+                                      child: Center(
+                                        child: Text('Supplier List here'),
+                                      ),
+                                    );
+                                  },
+                                );
+                              },
+                            );
+                          },
+                        ),
+                      ],
+                    ),
+                  );
+                },
+              );
             },
           ),
           Obx(() {
@@ -290,10 +379,10 @@ class _RowStatusCardState extends State<RowStatusCard> {
     Color statusColor;
     switch (widget.clientType) {
       case ClientType.online:
-        statusColor = Colors.blue;
+        statusColor = Colors.green;
         break;
       case ClientType.inPerson:
-        statusColor = Colors.green;
+        statusColor = Colors.blue;
         break;
       case ClientType.bbUser:
         statusColor = primaryColorLT;
@@ -422,7 +511,7 @@ class _RowStatusCardState extends State<RowStatusCard> {
                       final ClientWidget clientWidget = ClientWidget(
                         client: widget.allclients[index],
                         bgcolor: widget.allclients[index].type.backgroundColor
-                            .withAlpha(100),
+                            .withOpacity(0.1),
                       );
                       return Padding(
                         padding: const EdgeInsets.only(bottom: 12),
@@ -478,7 +567,7 @@ class ListStatusColumnWidget extends StatelessWidget {
       itemBuilder: (BuildContext context, int index) {
         final ClientWidget clientWidget = ClientWidget(
           client: clients[index],
-          bgcolor: clients[index].type.backgroundColor.withAlpha(100),
+          bgcolor: clients[index].type.backgroundColor.withOpacity(0.1),
         );
 
         return Padding(

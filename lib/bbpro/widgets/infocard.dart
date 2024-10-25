@@ -30,7 +30,7 @@ class _InfoCardState extends State<InfoCard> {
           Text(
             widget.cardName,
             style: const TextStyle(
-              fontSize: 16,
+              fontSize: 14,
               fontWeight: FontWeight.bold,
             ),
           ),
@@ -40,7 +40,7 @@ class _InfoCardState extends State<InfoCard> {
             style: const TextStyle(
                 color: proprimaryColor,
                 fontWeight: FontWeight.bold,
-                fontSize: 20),
+                fontSize: 14),
           ),
         ],
       ),

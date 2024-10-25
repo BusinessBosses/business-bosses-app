@@ -54,9 +54,9 @@ class _AddclientState extends State<Addclient> {
     return Scaffold(
       backgroundColor: probackgroundColor,
       appBar: AppBar(
-        title: const Text(
-          'Add Client',
-          style: TextStyle(
+        title: Text(
+          widget.client != null ? 'Edit CLient' : 'Add a Client',
+          style: const TextStyle(
             color: proprimaryColor,
             fontWeight: FontWeight.bold,
           ),

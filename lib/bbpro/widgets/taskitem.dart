@@ -98,7 +98,7 @@ class _TaskitemState extends State<Taskitem> {
                     children: <Widget>[
                       Text(widget.taskname),
                       if (widget.isOrder != null)
-                        Text(widget.taskexpense!.toString()),
+                        Text(widget.taskexpense.toString()),
                     ],
                   )
                 ]),

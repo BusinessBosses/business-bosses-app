@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:business_bosses_v2/action/action.dart';
 import 'package:business_bosses_v2/bbpro/controllers/shop_controller.dart';
 import 'package:business_bosses_v2/common/widgets/safety_model.dart';
+import 'package:business_bosses_v2/features/chat/chat_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
@@ -77,19 +78,41 @@ class _OrdersScreenState extends State<OrdersScreen>
             ),
           ),
           actions: <Widget>[
-            Padding(
-              padding: const EdgeInsets.only(right: 10.0, bottom: 15),
-              child: CircleAvatar(
-                backgroundColor: prosemibackColor,
-                radius: 30,
-                child: Padding(
-                  padding: const EdgeInsets.all(10),
-                  child: SvgPicture.asset(
-                    'assets/svgs/notificationicon.svg',
-                    height: 20,
+            Row(
+              children: <Widget>[
+                GestureDetector(
+                  onTap: () {
+                    Get.to(() => const ChatScreen());
+                  },
+                  child: Padding(
+                    padding: const EdgeInsets.only(
+                      right: 10.0,
+                      bottom: 10,
+                    ),
+                    child: CircleAvatar(
+                        radius: 20,
+                        backgroundColor: prosemibackColor,
+                        child: SvgPicture.asset(
+                          'assets/svgs/prochat.svg',
+                          height: 15,
+                        )),
                   ),
                 ),
-              ),
+                Padding(
+                  padding: const EdgeInsets.only(right: 10.0, bottom: 15),
+                  child: CircleAvatar(
+                    backgroundColor: prosemibackColor,
+                    radius: 30,
+                    child: Padding(
+                      padding: const EdgeInsets.all(10),
+                      child: SvgPicture.asset(
+                        'assets/svgs/notificationicon.svg',
+                        height: 20,
+                      ),
+                    ),
+                  ),
+                ),
+              ],
             )
           ],
         ),
@@ -128,7 +151,12 @@ class _OrdersScreenState extends State<OrdersScreen>
                 _scrollToSection(index);
               },
               proprimaryColor: proprimaryColor,
-              backgroundColor: backgroundColor,
+              backgroundColor: <Color>[
+                backgroundColor,
+                Colors.amber.withOpacity(0.1),
+                Colors.green.withOpacity(0.1),
+                Colors.red.withOpacity(0.1)
+              ],
               listofitems: OrderStatus.values.toList(),
               itemToString: (OrderStatus status) =>
                   '${status.displayTitle.toString().split('.').last} (${status == OrderStatus.allorders ? orderController.orders.length : (orderController.ordersStatus[status] == null ? '0' : orderController.ordersStatus[status]!.length.toString())})',

@@ -6,6 +6,7 @@ import 'package:business_bosses_v2/bbpro/models/order_model.dart';
 import 'package:business_bosses_v2/bbpro/models/product_model.dart';
 import 'package:business_bosses_v2/bbpro/models/service_model.dart';
 import 'package:business_bosses_v2/bbpro/widgets/button.dart';
+import 'package:business_bosses_v2/bbpro/widgets/chooseclientbottomsheet.dart';
 import 'package:business_bosses_v2/bbpro/widgets/chooseorderbottomsheet.dart';
 import 'package:business_bosses_v2/bbpro/widgets/dropdown.dart';
 import 'package:business_bosses_v2/bbpro/widgets/edittext.dart';
@@ -72,6 +73,27 @@ class _CreateOrderState extends State<CreateOrder> {
         return SizedBox(
           height: MediaQuery.of(context).size.height * 0.9,
           child: ChooseOrderBottomSheet(
+            products: products,
+            services: services,
+            selectedItems: selectedItems,
+          ),
+        );
+      },
+    );
+  }
+
+  void _showClientSheet(BuildContext context) {
+    showModalBottomSheet(
+      backgroundColor: Colors.white,
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
+      context: context,
+      isScrollControlled: true,
+      // isDismissible: false,
+      // enableDrag: false,
+      builder: (BuildContext context) {
+        return SizedBox(
+          height: MediaQuery.of(context).size.height * 0.9,
+          child: ChooseClientBottomSheet(
             products: products,
             services: services,
             selectedItems: selectedItems,
@@ -245,17 +267,26 @@ class _CreateOrderState extends State<CreateOrder> {
                         //     });
                         //   },
                         // ),
-                        CustomDropdownWidget(
-                          caption: 'Client\'s Name',
-                          items: clientsName,
-                          iconName: 'assets/svgs/dropdown.svg',
-                          initialValue: selectedClient,
-                          onChanged: (String? value) {
-                            setState(() {
-                              selectedClient = value!;
-                              _onClientSelect(value);
-                            });
+                        GestureDetector(
+                          onTap: () {
+                            _showClientSheet(context);
                           },
+                          child: CustomTextWidget(
+                            padding: 15,
+                            textpadding: 15,
+                            caption: 'Client\'s Name',
+
+                            // items: clientsName,
+                            iconName: 'assets/svgs/dropdown.svg',
+                            text: selectedClient,
+                            // initialValue: selectedClient,
+                            // onChanged: (String? value) {
+                            //   setState(() {
+                            //     selectedClient = value!;
+                            //     _onClientSelect(value);
+                            //   });
+                            // },
+                          ),
                         ),
                         const SizedBox(height: 15),
                         if (selectedItems.isNotEmpty)
@@ -299,7 +330,7 @@ class _CreateOrderState extends State<CreateOrder> {
                                     return Taskitem(
                                       isOrder: true,
                                       taskname: task['name'],
-                                      taskexpense: task['amount'],
+                                      taskexpense: task['type'],
                                       deleteOnTap: () {
                                         setState(() {
                                           selectedItems.removeAt(index);
@@ -313,29 +344,34 @@ class _CreateOrderState extends State<CreateOrder> {
                           ),
                         if (selectedItems.isNotEmpty)
                           const SizedBox(height: 10),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: <Widget>[
-                            ProIconButton(
-                              backgroundColor: Colors.white,
-                              textColor: proprimaryColor,
-                              text: 'Choose Order',
-                              onPressed: () {
-                                _showOrderSheet(context);
-                              },
-                              icon: const Icon(
-                                Icons.add,
-                                size: 20,
-                                color: proprimaryColor,
-                              ),
-                            ),
-                          ],
+
+                        GestureDetector(
+                          onTap: () {
+                            _showOrderSheet(context);
+                          },
+                          child: const CustomTextWidget(
+                            padding: 15,
+                            textpadding: 15,
+                            text: '',
+
+                            // items: clientsName,
+                            iconName: 'assets/svgs/dropdown.svg',
+                            caption: 'Select Order',
+
+                            // initialValue: selectedClient,
+                            // onChanged: (String? value) {
+                            //   setState(() {
+                            //     selectedClient = value!;
+                            //     _onClientSelect(value);
+                            //   });
+                            // },
+                          ),
                         ),
 
                         const SizedBox(height: 15),
                         CustomDropdownWidget(
                           caption: 'Order Channel',
-                          items: const <String>['Online', 'Offline'],
+                          items: const <String>['Online', 'In-Person'],
                           iconName: 'assets/svgs/dropdown.svg',
                           initialValue: selectedOrderChannel,
                           onChanged: (String? value) {
@@ -345,10 +381,23 @@ class _CreateOrderState extends State<CreateOrder> {
                           },
                         ),
                         const SizedBox(height: 15),
-                        Container(
-                          padding: const EdgeInsets.symmetric(horizontal: 5),
-                          child: GestureDetector(
-                            onTap: () => _selectOrderDate(context),
+                        GestureDetector(
+                          onTap: () async {
+                            DateTime? picked = await showDatePicker(
+                              context: context,
+                              initialDate: DateTime.now(),
+                              firstDate: DateTime(2000),
+                              lastDate: DateTime(2101),
+                            );
+                            if (picked != null && picked != selectedOrderDate) {
+                              setState(() {
+                                selectedOrderDate =
+                                    picked.toString().split(' ')[0];
+                              });
+                            }
+                          },
+                          child: Container(
+                            padding: const EdgeInsets.symmetric(horizontal: 5),
                             child: CustomTextWidget(
                               caption: 'Order Date',
                               iconName: 'assets/svgs/calendar.svg',
@@ -366,18 +415,6 @@ class _CreateOrderState extends State<CreateOrder> {
                           onChanged: (String? value) {
                             setState(() {
                               selectedPaymentMethod = value!;
-                            });
-                          },
-                        ),
-                        const SizedBox(height: 15),
-                        CustomDropdownWidget(
-                          caption: 'Client Type',
-                          items: const <String>['Online', 'Offline'],
-                          iconName: 'assets/svgs/dropdown.svg',
-                          initialValue: selectedClientType,
-                          onChanged: (String? value) {
-                            setState(() {
-                              selectedClientType = value!;
                             });
                           },
                         ),
@@ -435,18 +472,5 @@ class _CreateOrderState extends State<CreateOrder> {
     );
   }
 
-  void _selectOrderDate(BuildContext context) async {
-    DateTime? pickedDate = await showDatePicker(
-      context: context,
-      initialDate: DateTime.now(),
-      firstDate: DateTime(2000), // Set the minimum date
-      lastDate: DateTime(2101), // Set the maximum date
-    );
-    if (pickedDate != null) {
-      setState(() {
-        selectedOrderDate =
-            pickedDate.toString().split(' ')[0]; // Store only the date part
-      });
-    }
-  }
+  void _selectOrderDate(BuildContext context) async {}
 }
