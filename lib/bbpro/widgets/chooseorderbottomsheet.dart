@@ -10,16 +10,19 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
+// ignore: must_be_immutable
 class ChooseOrderBottomSheet extends StatefulWidget {
   final List<Map<String, dynamic>> products;
   final List<Map<String, dynamic>> services;
   final List<Map<String, dynamic>> selectedItems;
-  const ChooseOrderBottomSheet(
-      {Key? key,
-      required this.products,
-      required this.services,
-      required this.selectedItems})
-      : super(key: key);
+  final ValueChanged<bool> onCanAddChange;
+  const ChooseOrderBottomSheet({
+    Key? key,
+    required this.products,
+    required this.services,
+    required this.selectedItems,
+    required this.onCanAddChange,
+  }) : super(key: key);
 
   @override
   State<ChooseOrderBottomSheet> createState() => _ChooseOrderBottomSheetState();
@@ -202,6 +205,20 @@ class _ChooseOrderBottomSheetState extends State<ChooseOrderBottomSheet>
     });
   }
 
+  void _saveCustomOrder() {
+    widget.selectedItems.add(<String, dynamic>{
+      'name': nameController.text,
+      'price': priceController.text,
+      'description': descriptionController.text,
+      'type': 'custom'
+    });
+    setState(() {
+    widget.onCanAddChange(false);
+    });
+
+    Navigator.pop(context);
+  }
+
   Widget _buildCustomTab() {
     return Column(
       children: <Widget>[
@@ -239,61 +256,53 @@ class _ChooseOrderBottomSheetState extends State<ChooseOrderBottomSheet>
           height: 15,
         ),
         SizedBox(
-            width: double.infinity,
-            child: ProCustomButton(text: 'Save', onPressed: _saveCustomOrder))
+          width: double.infinity,
+          child: ProCustomButton(
+            text: 'Save',
+            onPressed: _saveCustomOrder,
+          ),
+        )
       ],
     );
   }
 
-  void _saveCustomOrder() {
-    setState(() {
-      widget.selectedItems.add(<String, dynamic>{
-        'name': nameController.text,
-        'price': priceController.text,
-        'description': descriptionController.text,
-        'type': 'custom'
-      });
-    });
-    Navigator.pop(context);
-  }
-
-  Widget _buildProductItem(String title, String price, String imagePath) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 8.0),
-      child: Row(
-        children: <Widget>[
-          Image.asset(
-            imagePath,
-            width: 100,
-            height: 80,
-            fit: BoxFit.cover,
-          ),
-          const SizedBox(width: 20),
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: <Widget>[
-                Text(
-                  title,
-                  style: const TextStyle(
-                    fontWeight: FontWeight.bold,
-                    fontSize: 16,
-                  ),
-                ),
-                const SizedBox(height: 5),
-                Text(price),
-              ],
-            ),
-          ),
-          ElevatedButton(
-            onPressed: () {},
-            style: ElevatedButton.styleFrom(
-              backgroundColor: Colors.blue,
-            ),
-            child: const Text('Select'),
-          ),
-        ],
-      ),
-    );
-  }
+  // Widget _buildProductItem(String title, String price, String imagePath) {
+  //   return Padding(
+  //     padding: const EdgeInsets.symmetric(vertical: 8.0),
+  //     child: Row(
+  //       children: <Widget>[
+  //         Image.asset(
+  //           imagePath,
+  //           width: 100,
+  //           height: 80,
+  //           fit: BoxFit.cover,
+  //         ),
+  //         const SizedBox(width: 20),
+  //         Expanded(
+  //           child: Column(
+  //             crossAxisAlignment: CrossAxisAlignment.start,
+  //             children: <Widget>[
+  //               Text(
+  //                 title,
+  //                 style: const TextStyle(
+  //                   fontWeight: FontWeight.bold,
+  //                   fontSize: 16,
+  //                 ),
+  //               ),
+  //               const SizedBox(height: 5),
+  //               Text(price),
+  //             ],
+  //           ),
+  //         ),
+  //         ElevatedButton(
+  //           onPressed: () {},
+  //           style: ElevatedButton.styleFrom(
+  //             backgroundColor: Colors.blue,
+  //           ),
+  //           child: const Text('Select'),
+  //         ),
+  //       ],
+  //     ),
+  //   );
+  // }
 }

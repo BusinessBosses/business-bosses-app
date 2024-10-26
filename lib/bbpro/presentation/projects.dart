@@ -155,74 +155,80 @@ class _ProjectsState extends State<Projects>
                     child: CircularProgressIndicator(),
                   )
                 : Obx(
-                    () => projectController.projects.isEmpty
+                    () => projectController.loading.value
                         ? const Center(
-                            child: SafetyModel(
-                            isLoading: false,
-                            title: 'No Tasks Found!',
-                          ))
-                        : Padding(
-                            padding: const EdgeInsets.only(bottom: 10),
-                            child: CustomScrollView(
-                              scrollDirection: Axis.horizontal,
-                              controller: _mainListScrollController,
-                              slivers: <Widget>[
-                                ...ProjectStatus.values.map(
-                                  (ProjectStatus status) => SliverToBoxAdapter(
-                                    child: RowStatusCard(
-                                      allProjects:
-                                          projectController.allProjects,
-                                      projects: projectController
-                                              .statusProjects[status] ??
-                                          <Project>[],
-                                      projectStatus: status,
-                                      screenSize: screenSize,
-                                      taskAccepted: (Project project,
-                                          ProjectStatus newStatus) async {
-                                        setState(() {
-                                          projectController
-                                              .statusProjects[project.status]
-                                              ?.remove(project);
-                                          projectController
-                                              .statusProjects[newStatus]
-                                              ?.add(
-                                            Project(
-                                              id: project.id,
-                                              userId: project.userId,
-                                              name: project.name,
-                                              amount: project.amount,
-                                              status: newStatus,
-                                              createdAt: project.createdAt,
-                                              startAt: project.startAt,
-                                              endAt: project.endAt,
-                                              description: project.description,
-                                              duration: project.duration,
-                                              // tasks: project.tasks,
-                                            ),
-                                          );
-                                          projectController.updateProject(
-                                              project.id, <String, dynamic>{
-                                            'status': newStatus.toString(),
-                                          });
-                                        });
-                                      },
-                                      onDrag: (bool isRight) {
-                                        if (_lastMoveRight == isRight) {
-                                          return;
-                                        }
-                                        _lastMoveRight = isRight;
-                                        _moveMainList(isRight);
-                                      },
-                                      cancelDrag: () {
-                                        _lastMoveRight = null;
-                                        _timer?.cancel();
-                                      },
-                                    ),
-                                  ),
-                                )
-                              ],
-                            ),
-                          ),
+                            child: CircularProgressIndicator(),
+                          )
+                        : projectController.projects.isEmpty
+                            ? const Center(
+                                child: SafetyModel(
+                                isLoading: false,
+                                title: 'No Tasks Found!',
+                              ))
+                            : Padding(
+                                padding: const EdgeInsets.only(bottom: 10),
+                                child: CustomScrollView(
+                                  scrollDirection: Axis.horizontal,
+                                  controller: _mainListScrollController,
+                                  slivers: <Widget>[
+                                    ...ProjectStatus.values.map(
+                                      (ProjectStatus status) =>
+                                          SliverToBoxAdapter(
+                                        child: RowStatusCard(
+                                          allProjects:
+                                              projectController.allProjects,
+                                          projects: projectController
+                                                  .statusProjects[status] ??
+                                              <Project>[],
+                                          projectStatus: status,
+                                          screenSize: screenSize,
+                                          taskAccepted: (Project project,
+                                              ProjectStatus newStatus) async {
+                                            setState(() {
+                                              projectController.statusProjects[
+                                                      project.status]
+                                                  ?.remove(project);
+                                              projectController
+                                                  .statusProjects[newStatus]
+                                                  ?.add(
+                                                Project(
+                                                  id: project.id,
+                                                  userId: project.userId,
+                                                  name: project.name,
+                                                  amount: project.amount,
+                                                  status: newStatus,
+                                                  createdAt: project.createdAt,
+                                                  startAt: project.startAt,
+                                                  endAt: project.endAt,
+                                                  description:
+                                                      project.description,
+                                                  duration: project.duration,
+                                                  // tasks: project.tasks,
+                                                ),
+                                              );
+                                              projectController.updateProject(
+                                                  project.id, <String, dynamic>{
+                                                'status': newStatus.toString(),
+                                              });
+                                            });
+                                          },
+                                          onDrag: (bool isRight) {
+                                            if (_lastMoveRight == isRight) {
+                                              return;
+                                            }
+                                            _lastMoveRight = isRight;
+                                            _moveMainList(isRight);
+                                          },
+                                          cancelDrag: () {
+                                            _lastMoveRight = null;
+                                            _timer?.cancel();
+                                          },
+                                        ),
+                                      ),
+                                    )
+                                  ],
+                                ),
+                              ),
                   ),
           ),
         ],

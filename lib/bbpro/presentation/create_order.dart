@@ -42,6 +42,7 @@ class _CreateOrderState extends State<CreateOrder> {
   String? selectedOrderDate;
   String? selectedPaymentMethod;
   String? clientId;
+  bool canAdd = true;
   List<String> paymentMethod = <String>[];
   bool isSubmit = false;
 
@@ -76,6 +77,11 @@ class _CreateOrderState extends State<CreateOrder> {
             products: products,
             services: services,
             selectedItems: selectedItems,
+            onCanAddChange: (bool value) {
+              setState(() {
+                canAdd = value; // Updates the parent widget's `canAdd` field
+              });
+            },
           ),
         );
       },
@@ -347,6 +353,13 @@ class _CreateOrderState extends State<CreateOrder> {
 
                         GestureDetector(
                           onTap: () {
+                            if (!canAdd) {
+                              showSnackbar(
+                                message: 'Already Added Custom Order!',
+                                error: true,
+                              );
+                              return;
+                            }
                             _showOrderSheet(context);
                           },
                           child: const CustomTextWidget(

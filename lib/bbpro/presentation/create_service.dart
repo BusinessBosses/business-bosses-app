@@ -59,6 +59,7 @@ class _CreateServiceListingState extends State<CreateServiceListing>
   String? category;
   String? location;
   List<String>? images = <String>[];
+  List<String>? updateImages = <String>[];
   String? paymentMethod;
   String? deliveryMethod;
   String? deliveryTime;
@@ -107,11 +108,14 @@ class _CreateServiceListingState extends State<CreateServiceListing>
       _descriptionController.text = widget.service!.description;
       category = widget.service!.category;
       location = widget.service!.location;
+      images = widget.service!.images;
+      updateImages = widget.service!.images;
       deliveryMethod = widget.service!.deliveryMethod;
       deliveryTime = widget.service!.deliveryTime;
       availableTime = widget.service!.availableTime;
       serviceType = widget.service!.serviceType;
       paymentMethod = widget.service!.paymentMethod;
+      notesController.text = widget.service!.notes ?? '';
       // packages.addAll(widget.service!.packages!.map((Package package) => <String, >{
       //         'name': package.name,
       //         'amount': package.amount,
@@ -427,6 +431,26 @@ class _CreateServiceListingState extends State<CreateServiceListing>
                   },
                 ),
               ),
+            if (updateImages!.isNotEmpty)
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 15.0),
+                child: GridView.builder(
+                  shrinkWrap: true,
+                  physics: const NeverScrollableScrollPhysics(),
+                  gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                    crossAxisCount: 3,
+                    crossAxisSpacing: 4,
+                    mainAxisSpacing: 4,
+                  ),
+                  itemCount: updateImages!.length,
+                  itemBuilder: (BuildContext context, int index) {
+                    return Image.network(
+                      updateImages![index],
+                      fit: BoxFit.cover,
+                    );
+                  },
+                ),
+              ),
 
             // Delivery Method Dropdown
             ExpansionTile(
@@ -560,6 +584,7 @@ class _CreateServiceListingState extends State<CreateServiceListing>
                     '1:1 (Individual)',
                     'Group Session or Event',
                   ],
+                  initialValue: serviceType,
                   iconName: 'assets/svgs/dropdown.svg',
                   onChanged: (String? newValue) {
                     setState(() {
@@ -787,6 +812,7 @@ class _CreateServiceListingState extends State<CreateServiceListing>
           'endDate': '2023-10-01'
         },
         'servicePackages': packages,
+        'notes': notesController.text,
       };
 
       // For demonstration, print the map
