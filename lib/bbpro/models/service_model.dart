@@ -10,6 +10,7 @@ class Service {
   double price;
   double discount;
   String description;
+  String? notes;
   String category;
   String location;
   String paymentMethod;
@@ -38,6 +39,7 @@ class Service {
     required this.paymentMethod,
     required this.deliveryMethod,
     this.url,
+    this.notes,
     required this.itemType,
     required this.isActive,
     this.deliveryTime,
@@ -73,7 +75,8 @@ class Service {
       serviceType: json['serviceType'],
       createdAt: DateTime.parse(json['createdAt']),
       availability: json['availability'],
-      packages: json['packages'],
+      packages: json['packages'] ?? <dynamic>[],
+      notes: json['notes'],
     );
   }
 
@@ -99,6 +102,7 @@ class Service {
       'createdAt': createdAt.toIso8601String(),
       'availability': availability.toString(),
       'packages': packages,
+      'notes': notes,
     };
   }
 
@@ -125,7 +129,8 @@ Service {
   createdAt: ${createdAt.toIso8601String()},
   images: $images, 
   availability: $availability,
-  packages: $packages
+  packages: $packages,
+  notes: $notes
 }
 ''';
   }

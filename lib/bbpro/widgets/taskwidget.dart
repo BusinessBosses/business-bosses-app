@@ -4,6 +4,7 @@ import 'package:business_bosses_v2/bbpro/presentation/add_project.dart';
 import 'package:business_bosses_v2/bbpro/widgets/optionsbutton.dart';
 import 'package:business_bosses_v2/bbpro/widgets/projectpopup.dart';
 import 'package:business_bosses_v2/common/dialogs/snackbar.dart';
+import 'package:business_bosses_v2/features/profile/controller/profile_controller.dart';
 import 'package:business_bosses_v2/utils/theme/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -27,6 +28,7 @@ class TaskWidget extends StatefulWidget {
 
 class _TaskWidgetState extends State<TaskWidget> {
   final ProjectController projectController = Get.find();
+  final ProfileController profileController = Get.find();
   @override
   Widget build(BuildContext context) {
     return Stack(children: <Widget>[
@@ -283,11 +285,50 @@ class _TaskWidgetState extends State<TaskWidget> {
                                               ),
                                             ),
                                             onTap: () async {
-                                              // widget.project.status = status;
-                                              // await projectController
-                                              //     .updateProject(widget.project);
-                                              // setState(() {});
-                                              // Get.back();
+                                              setState(() {
+                                                projectController
+                                                    .statusProjects[
+                                                        widget.project.status]
+                                                    ?.remove(widget.project);
+                                                projectController
+                                                    .statusProjects[status]
+                                                    ?.add(
+                                                  Project(
+                                                    id: widget.project.id,
+                                                    userId:
+                                                        widget.project.userId,
+                                                    name: widget.project.name,
+                                                    amount:
+                                                        widget.project.amount,
+                                                    status: status,
+                                                    createdAt: widget
+                                                        .project.createdAt,
+                                                    startAt:
+                                                        widget.project.startAt,
+                                                    endAt: widget.project.endAt,
+                                                    description: widget
+                                                        .project.description,
+                                                    duration:
+                                                        widget.project.duration,
+                                                  ),
+                                                );
+                                              });
+
+                                              // Update the status in the database
+                                              await projectController
+                                                  .updateProject(
+                                                widget.project.id,
+                                                <String, dynamic>{
+                                                  'status': status.toString(),
+                                                },
+                                              );
+
+                                              await projectController
+                                                  .initProjects(
+                                                      profileController
+                                                          .myProfile.uid);
+
+                                              Get.back();
                                             },
                                           );
                                         }).toList(),

@@ -63,6 +63,7 @@ class _CreateProductListingState extends State<CreateProductListing> {
   String? category;
   String country = '';
   List<String>? images = <String>[];
+  List<String>? updateImages = <String>[];
   String? paymentMethod;
   String? deliveryMethod;
   String? deliveryDuration;
@@ -97,6 +98,8 @@ class _CreateProductListingState extends State<CreateProductListing> {
       productNumberController.text = widget.product!.productNumber.toString();
       quantityController.text = widget.product!.quantity.toString();
       colorController.text = widget.product!.color;
+      updateImages = widget.product!.images;
+      images = widget.product!.images;
       deliveryDuration = widget.product!.deliveryDuration;
       sizeController.text = widget.product!.size;
       category = widget.product!.category;
@@ -106,6 +109,7 @@ class _CreateProductListingState extends State<CreateProductListing> {
       startDate = widget.product!.startAt;
       endDate = widget.product!.endAt;
       _isSwitched = widget.product!.isActive;
+      deliverydayscontroller.text = widget.product!.deliveryDuration ?? '0';
 
       // If images exist in the product model, you can populate the image list as well
       if (widget.product!.images != null) {
@@ -227,6 +231,7 @@ class _CreateProductListingState extends State<CreateProductListing> {
               hintText: 'Choose a category',
               items: const <String>['Beauty', 'Electronics', 'Fashion', 'Home'],
               iconName: 'assets/svgs/dropdown.svg',
+              initialValue: category,
               onChanged: (String? newValue) {
                 setState(() {
                   category = newValue;
@@ -323,6 +328,26 @@ class _CreateProductListingState extends State<CreateProductListing> {
                   },
                 ),
               ),
+            if (updateImages!.isNotEmpty)
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 15.0),
+                child: GridView.builder(
+                  shrinkWrap: true,
+                  physics: const NeverScrollableScrollPhysics(),
+                  gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                    crossAxisCount: 3,
+                    crossAxisSpacing: 4,
+                    mainAxisSpacing: 4,
+                  ),
+                  itemCount: updateImages!.length,
+                  itemBuilder: (BuildContext context, int index) {
+                    return Image.network(
+                      updateImages![index],
+                      fit: BoxFit.cover,
+                    );
+                  },
+                ),
+              ),
             ExpansionTile(
                 trailing: isExpanded
                     ? SvgPicture.asset(
@@ -348,6 +373,7 @@ class _CreateProductListingState extends State<CreateProductListing> {
                   CustomDropdownWidget(
                     caption: 'Delivery Method',
                     hintText: 'Choose a delivery method',
+                    initialValue: deliveryMethod,
                     items: const <String>[
                       'Online',
                       'Courier',
@@ -380,6 +406,7 @@ class _CreateProductListingState extends State<CreateProductListing> {
                     caption: 'Payment Method',
                     hintText: 'Choose a payment method',
                     items: paymentMethods,
+                    initialValue: paymentMethod,
                     iconName: 'assets/svgs/dropdown.svg',
                     onChanged: (String? newValue) {
                       setState(() {
@@ -525,14 +552,15 @@ class _CreateProductListingState extends State<CreateProductListing> {
                   setState(() {
                     isSubmitted = true;
                   });
-                  // for (File image in _selectedImages) {
-                  //   dynamic response = await ApiService.uploadFile(image);
-                  //   if (response['success']) {
-                  //     setState(() {
-                  //       images!.add(response['fileUrl']);
-                  //     });
-                  //   }
-                  // }
+
+                  for (File image in _selectedImages) {
+                    dynamic response = await ApiService.uploadFile(image);
+                    if (response['success']) {
+                      setState(() {
+                        images!.add(response['fileUrl']);
+                      });
+                    }
+                  }
                   final Map<String, dynamic> productListing = <String, dynamic>{
                     'userId': profileController.myProfile.uid,
                     'shopId': shopController.shop?.id,
@@ -546,7 +574,7 @@ class _CreateProductListingState extends State<CreateProductListing> {
                     'paymentMethod': paymentMethod,
                     'deliveryMethod': deliveryMethod,
                     'url': 'http://example.com/product', // Example URL
-                    'deliveryDuration': deliveryDuration,
+                    'deliveryDuration': deliverydayscontroller.text,
                     'itemType': 'product',
                     'isActive': _isSwitched,
                     'supplierId': null,
@@ -555,8 +583,8 @@ class _CreateProductListingState extends State<CreateProductListing> {
                     'quantity': quantityController.text,
                     'startAt': startDate?.toIso8601String(),
                     'endAt': endDate?.toIso8601String(),
-                    'color': colorController.text,
-                    'size': sizeController.text,
+                    'color': colors,
+                    'size': sizes,
                   };
                   if (widget.product == null) {
                     bool response =
@@ -600,28 +628,28 @@ class _CreateProductListingState extends State<CreateProductListing> {
     );
   }
 
-  String _formatDate(DateTime? date) {
-    if (date == null) return 'Select Date';
-    return DateFormat('yyyy-MM-dd').format(date);
-  }
+  // String _formatDate(DateTime? date) {
+  //   if (date == null) return 'Select Date';
+  //   return DateFormat('yyyy-MM-dd').format(date);
+  // }
 
-  Future<void> _selectDate(BuildContext context, bool isStartDate) async {
-    final DateTime? pickedDate = await showDatePicker(
-      context: context,
-      initialDate: DateTime.now(),
-      firstDate: DateTime(2000),
-      lastDate: DateTime(2101),
-    );
+  // Future<void> _selectDate(BuildContext context, bool isStartDate) async {
+  //   final DateTime? pickedDate = await showDatePicker(
+  //     context: context,
+  //     initialDate: DateTime.now(),
+  //     firstDate: DateTime(2000),
+  //     lastDate: DateTime(2101),
+  //   );
 
-    if (pickedDate != null &&
-        pickedDate != (isStartDate ? startDate : endDate)) {
-      setState(() {
-        if (isStartDate) {
-          startDate = pickedDate;
-        } else {
-          endDate = pickedDate;
-        }
-      });
-    }
-  }
+  //   if (pickedDate != null &&
+  //       pickedDate != (isStartDate ? startDate : endDate)) {
+  //     setState(() {
+  //       if (isStartDate) {
+  //         startDate = pickedDate;
+  //       } else {
+  //         endDate = pickedDate;
+  //       }
+  //     });
+  //   }
+  // }
 }

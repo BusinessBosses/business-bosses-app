@@ -16,6 +16,8 @@ class ProjectController extends GetxController {
   final List<Project> allProjects = <Project>[];
 
   Future<void> initProjects(String userId) async {
+    loading(true);
+    update();
     projects.clear();
     allProjects.clear();
     ApiResponseModel response =
