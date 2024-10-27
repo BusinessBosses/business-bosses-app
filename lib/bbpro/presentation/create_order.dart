@@ -92,20 +92,17 @@ class _CreateOrderState extends State<CreateOrder> {
 
   final List<Map<String, dynamic>> online = <Map<String, dynamic>>[];
 
-  void _showClientSheet(BuildContext context) {
-    showModalBottomSheet(
+  void _showClientSheet(BuildContext context) async {
+    final String? result = await showModalBottomSheet<String>(
       backgroundColor: Colors.white,
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
       context: context,
       isScrollControlled: true,
-      // isDismissible: false,
-      // enableDrag: false,
       builder: (BuildContext context) {
         return SizedBox(
           height: MediaQuery.of(context).size.height * 0.9,
           child: ChooseClientBottomSheet(
             selectedItem: selectedClient ?? '',
-            // ignore: always_specify_types
             online: clients
                 .where((Map<String, dynamic> client) =>
                     client['type'].toString() == 'ClientType.online')
@@ -122,6 +119,12 @@ class _CreateOrderState extends State<CreateOrder> {
         );
       },
     );
+    if (result != null) {
+      setState(() {
+        selectedClient = result;
+        _onClientSelect(result); // Update clientId based on selected client
+      });
+    }
   }
 
   void _submitOrder() async {

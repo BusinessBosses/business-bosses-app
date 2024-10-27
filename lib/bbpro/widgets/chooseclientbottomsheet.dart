@@ -185,8 +185,7 @@ class _ChooseClientBottomSheetState extends State<ChooseClientBottomSheet>
                             padding: const EdgeInsets.only(left: 8.0),
                             child: ProIconButton(
                               onPressed: () {
-                                Navigator.pop(context,
-                                    selectedItem); // Return selected item
+                                Navigator.pop(context, selectedItem);
                               },
                               text: 'Done',
                             ),
