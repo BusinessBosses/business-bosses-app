@@ -13,14 +13,15 @@ class ChooseClientBottomSheet extends StatefulWidget {
   final List<Map<String, dynamic>> online;
   final List<Map<String, dynamic>> inperson;
   final List<Map<String, dynamic>> bbuser;
-  final List<Map<String, dynamic>> selectedItems;
-  const ChooseClientBottomSheet(
-      {Key? key,
-      required this.selectedItems,
-      required this.online,
-      required this.inperson,
-      required this.bbuser})
-      : super(key: key);
+  final String selectedItem;
+
+  const ChooseClientBottomSheet({
+    Key? key,
+    required this.selectedItem,
+    required this.online,
+    required this.inperson,
+    required this.bbuser,
+  }) : super(key: key);
 
   @override
   State<ChooseClientBottomSheet> createState() =>
@@ -40,6 +41,7 @@ class _ChooseClientBottomSheetState extends State<ChooseClientBottomSheet>
   String _onlineSearchQuery = '';
   String _inpersonSearchQuery = '';
   String _bbuserSearchQuery = '';
+  String? selectedItem; // Local variable to track selected item
 
   @override
   void initState() {
@@ -51,6 +53,8 @@ class _ChooseClientBottomSheetState extends State<ChooseClientBottomSheet>
       });
     });
     currencyController.text = shopController.shop!.currency;
+    selectedItem =
+        widget.selectedItem; // Initialize with widget's selected item
   }
 
   @override
@@ -165,12 +169,29 @@ class _ChooseClientBottomSheetState extends State<ChooseClientBottomSheet>
           child: filteredClients.isNotEmpty
               ? ListView(
                   children: filteredClients.map((Map<String, dynamic> client) {
-                    return CheckboxListTile(
-                      title: Text(client['name']),
-                      value: widget.selectedItems.contains(client),
-                      onChanged: (bool? selected) {
-                        _onItemSelect(selected, client);
-                      },
+                    return Column(
+                      children: <Widget>[
+                        CheckboxListTile(
+                          title: Text(client['name']),
+                          value: selectedItem == client['name'],
+                          onChanged: (bool? selected) {
+                            _onItemSelect(selected, client);
+                          },
+                          checkColor: Colors.white,
+                          activeColor: proprimaryColor,
+                        ),
+                        if (selectedItem == client['name'])
+                          Padding(
+                            padding: const EdgeInsets.only(left: 8.0),
+                            child: ProIconButton(
+                              onPressed: () {
+                                Navigator.pop(context,
+                                    selectedItem); // Return selected item
+                              },
+                              text: 'Done',
+                            ),
+                          ),
+                      ],
                     );
                   }).toList(),
                 )
@@ -185,11 +206,10 @@ class _ChooseClientBottomSheetState extends State<ChooseClientBottomSheet>
 
   void _onItemSelect(bool? selected, Map<String, dynamic> item) {
     setState(() {
-      if (selected!) {
-        widget.selectedItems.add(item);
+      if (selected == true) {
+        selectedItem = item['name'];
       } else {
-        widget.selectedItems.removeWhere(
-            (Map<String, dynamic> element) => element['id'] == item['id']);
+        selectedItem = null;
       }
     });
   }

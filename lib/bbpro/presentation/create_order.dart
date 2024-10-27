@@ -104,7 +104,7 @@ class _CreateOrderState extends State<CreateOrder> {
         return SizedBox(
           height: MediaQuery.of(context).size.height * 0.9,
           child: ChooseClientBottomSheet(
-            selectedItems: selectedItems,
+            selectedItem: selectedClient ?? '',
             // ignore: always_specify_types
             online: clients
                 .where((Map<String, dynamic> client) =>
