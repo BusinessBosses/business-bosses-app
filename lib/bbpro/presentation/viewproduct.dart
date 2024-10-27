@@ -186,7 +186,7 @@ class _ExpandedProductState extends State<ExpandedProduct> {
                   CustomTextWidget(
                     caption: 'Quantity',
                     iconName: '',
-                    text: widget.product.quantity.toString(),
+                    text: widget.product.quantity?.toString() ?? '',
                     backgroundColor: probackgroundColor,
                     padding: 0.0,
                     textpadding: 15,
@@ -197,7 +197,7 @@ class _ExpandedProductState extends State<ExpandedProduct> {
                   CustomTextWidget(
                     caption: 'Colors',
                     iconName: '',
-                    text: widget.product.color,
+                    text: widget.product.color?.join(', ') ?? '',
                     backgroundColor: probackgroundColor,
                     padding: 0.0,
                     textpadding: 15,
@@ -208,7 +208,7 @@ class _ExpandedProductState extends State<ExpandedProduct> {
                   CustomTextWidget(
                     caption: 'Sizes',
                     iconName: '',
-                    text: widget.product.size,
+                    text: widget.product.size?.join(', ') ?? '',
                     backgroundColor: probackgroundColor,
                     padding: 0.0,
                     textpadding: 15,

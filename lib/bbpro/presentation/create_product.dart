@@ -97,11 +97,11 @@ class _CreateProductListingState extends State<CreateProductListing> {
       storageLocationController.text = widget.product!.storageLocation;
       productNumberController.text = widget.product!.productNumber.toString();
       quantityController.text = widget.product!.quantity.toString();
-      colorController.text = widget.product!.color;
+      colorController.text = widget.product!.color?.join(', ') ?? '';
       updateImages = widget.product!.images;
       images = widget.product!.images;
       deliveryDuration = widget.product!.deliveryDuration;
-      sizeController.text = widget.product!.size;
+      sizeController.text = widget.product!.size?.join(', ') ?? '';
       category = widget.product!.category;
       country = widget.product!.location;
       deliveryMethod = widget.product!.deliveryMethod;
@@ -542,6 +542,12 @@ class _CreateProductListingState extends State<CreateProductListing> {
                       message: 'Select a delivery method', error: true);
                   return;
                 }
+
+                if (_discountController.text.isEmpty) {
+                  showSnackbar(message: 'Enter discount', error: true);
+                  return;
+                }
+
                 // if (_selectedImages.isEmpty) {
                 //   showSnackbar(message: 'Select a product image', error: true);
                 //   return;
@@ -566,7 +572,7 @@ class _CreateProductListingState extends State<CreateProductListing> {
                     'shopId': shopController.shop?.id,
                     'name': _productNameController.text,
                     'price': _priceController.text,
-                    'discount': _discountController.text,
+                    'discount': _discountController.text ?? 0,
                     'description': _descriptionController.text,
                     'category': category,
                     'location': shopController.shop?.location,

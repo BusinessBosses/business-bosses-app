@@ -42,8 +42,8 @@ class Project {
             json['amount']?.toString(), // Changed to handle amount as String
         duration: json['duration'],
         createdAt: DateTime.parse(json['createdAt']),
-        startAt: DateTime.parse(json['createdAt']),
-        endAt: DateTime.parse(json['createdAt']),
+        startAt: DateTime.parse(json['startAt']),
+        endAt: DateTime.parse(json['endAt']),
         // tasks: json['tasks'] == null
         //     ? null
         //     : List<Task>.from(

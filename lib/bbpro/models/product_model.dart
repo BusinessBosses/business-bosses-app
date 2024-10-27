@@ -23,8 +23,8 @@ class Product {
   int? quantity;
   DateTime? startAt;
   DateTime? endAt;
-  String color;
-  String size;
+  List<String>? color;
+  List<String>? size;
   DateTime? createdAt;
 
   Product({
@@ -49,8 +49,8 @@ class Product {
     required this.quantity,
     this.startAt,
     this.endAt,
-    required this.color,
-    required this.size,
+    this.color,
+    this.size,
     required this.createdAt,
   });
 
@@ -74,13 +74,12 @@ class Product {
       isActive: json['isActive'],
       storageLocation: json['storageLocation'],
       productNumber: json['productNumber'].toString(),
-      quantity: json['quantity'] is int && json['quantity'] != null
-          ? json['quantity']
-          : null,
+      quantity:
+          json['quantity'] != null ? int.parse(json['quantity'].toString()) : 0,
       startAt: json['startAt'] == null ? null : DateTime.parse(json['startAt']),
       endAt: json['endAt'] == null ? null : DateTime.parse(json['endAt']),
-      color: json['color'],
-      size: json['size'],
+      color: json['color'] != null ? List<String>.from(json['color']) : null,
+      size: json['size'] != null ? List<String>.from(json['size']) : null,
       createdAt: null,
     );
   }
@@ -105,7 +104,7 @@ class Product {
       'isActive': isActive,
       'storageLocation': storageLocation,
       'productNumber': productNumber,
-      'quantity': quantity,
+      'quantity': quantity ?? 0, // Ensure quantity is not null
       'startAt': startAt == null ? null : startAt!.toIso8601String(),
       'endAt': endAt == null ? null : endAt!.toIso8601String(),
       'color': color,

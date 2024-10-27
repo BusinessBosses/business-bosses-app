@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:business_bosses_v2/bbpro/controllers/shop_controller.dart';
 import 'package:business_bosses_v2/bbpro/models/project_model.dart';
 import 'package:business_bosses_v2/bbpro/widgets/button.dart';
@@ -34,8 +36,8 @@ class _AddprojectState extends State<Addproject> {
   final TextEditingController expenseController = TextEditingController();
   ShopController shopController = Get.find();
   bool isSubmit = false;
-  DateTime? startDate = DateTime.now();
-  DateTime? endDate = DateTime.now();
+  DateTime? startDate;
+  DateTime? endDate;
 
   @override
   void initState() {
@@ -271,10 +273,10 @@ class _AddprojectState extends State<Addproject> {
                               horizontal: 15,
                               vertical: 15,
                             ),
-                            child: const Column(
+                            child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: <Widget>[
-                                Text(
+                                const Text(
                                   'Start Date',
                                   style: TextStyle(
                                     fontSize: 14,
@@ -282,14 +284,17 @@ class _AddprojectState extends State<Addproject> {
                                     color: textColor,
                                   ),
                                 ),
-                                SizedBox(height: 15),
+                                const SizedBox(height: 15),
                                 Row(
                                   mainAxisAlignment:
                                       MainAxisAlignment.spaceBetween,
                                   children: <Widget>[
                                     Text(
-                                      'Start Date',
-                                      style: TextStyle(
+                                      startDate == null
+                                          ? 'Start Date'
+                                          : DateFormat('yyyy-MM-dd')
+                                              .format(startDate!),
+                                      style: const TextStyle(
                                         fontSize: 14,
                                         color: hintColor,
                                       ),
@@ -311,6 +316,7 @@ class _AddprojectState extends State<Addproject> {
                               firstDate: DateTime(2000),
                               lastDate: DateTime(2101),
                             );
+                            print('picked: $picked');
                             if (picked != null && picked != endDate) {
                               setState(() {
                                 endDate = picked;
@@ -326,10 +332,10 @@ class _AddprojectState extends State<Addproject> {
                               horizontal: 15,
                               vertical: 15,
                             ),
-                            child: const Column(
+                            child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: <Widget>[
-                                Text(
+                                const Text(
                                   'End Date',
                                   style: TextStyle(
                                     fontSize: 14,
@@ -337,14 +343,17 @@ class _AddprojectState extends State<Addproject> {
                                     color: textColor,
                                   ),
                                 ),
-                                SizedBox(height: 15),
+                                const SizedBox(height: 15),
                                 Row(
                                   mainAxisAlignment:
                                       MainAxisAlignment.spaceBetween,
                                   children: <Widget>[
                                     Text(
-                                      'End Date',
-                                      style: TextStyle(
+                                      endDate == null
+                                          ? 'End Date'
+                                          : DateFormat('yyyy-MM-dd')
+                                              .format(endDate!),
+                                      style: const TextStyle(
                                         fontSize: 14,
                                         color: hintColor,
                                       ),
@@ -402,6 +411,9 @@ class _AddprojectState extends State<Addproject> {
                         response = await projectController.addProject(data);
                       }
                       if (response) {
+                        print('response: $response');
+                        print('============startDate: $startDate');
+                        print('============endDate: $endDate');
                         showSnackbar(
                           message: widget.project != null
                               ? 'Task Updated Successfully!'
