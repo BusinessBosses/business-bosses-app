@@ -10,15 +10,18 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 class ChooseClientBottomSheet extends StatefulWidget {
-  final List<Map<String, dynamic>> products;
-  final List<Map<String, dynamic>> services;
-  final List<Map<String, dynamic>> selectedItems;
-  const ChooseClientBottomSheet(
-      {Key? key,
-      required this.products,
-      required this.services,
-      required this.selectedItems})
-      : super(key: key);
+  final List<Map<String, dynamic>> online;
+  final List<Map<String, dynamic>> inperson;
+  final List<Map<String, dynamic>> bbuser;
+  final String selectedItem;
+
+  const ChooseClientBottomSheet({
+    Key? key,
+    required this.selectedItem,
+    required this.online,
+    required this.inperson,
+    required this.bbuser,
+  }) : super(key: key);
 
   @override
   State<ChooseClientBottomSheet> createState() =>
@@ -35,6 +38,11 @@ class _ChooseClientBottomSheetState extends State<ChooseClientBottomSheet>
   final TextEditingController currencyController = TextEditingController();
   final ShopController shopController = Get.find();
 
+  String _onlineSearchQuery = '';
+  String _inpersonSearchQuery = '';
+  String _bbuserSearchQuery = '';
+  String? selectedItem; // Local variable to track selected item
+
   @override
   void initState() {
     super.initState();
@@ -45,6 +53,8 @@ class _ChooseClientBottomSheetState extends State<ChooseClientBottomSheet>
       });
     });
     currencyController.text = shopController.shop!.currency;
+    selectedItem =
+        widget.selectedItem; // Initialize with widget's selected item
   }
 
   @override
@@ -76,10 +86,6 @@ class _ChooseClientBottomSheetState extends State<ChooseClientBottomSheet>
                   text: 'New Client',
                   radius: 10.0,
                 ),
-                // GestureDetector(
-                //   child: IconButton(
-                //       onPressed: Get.back, icon: const Icon(Icons.close)),
-                // ),
               ])
             ],
           ),
@@ -112,204 +118,98 @@ class _ChooseClientBottomSheetState extends State<ChooseClientBottomSheet>
           ),
           const SizedBox(height: 20),
           Expanded(
-            // Use Expanded to make TabBarView fill the space
             child: TabBarView(
               controller: _tabController,
               children: <Widget>[
-                // Products Tab content
-                Column(
-                  children: <Widget>[
-                    ProSearchbar(
-                      hasSearchIcon: true,
-                      contentPadding: 10,
-                      backgroundColor: backgroundColor,
-                      hintText: 'Search Clients',
-                      onChange: (String query) {
-                        setState(() {});
-                      },
-                      onSubmit: (String query) {},
-                    ),
-                    Column(
-                      children:
-                          widget.products.map((Map<String, dynamic> product) {
-                        return CheckboxListTile(
-                          title: Text(product['name']),
-                          value: widget.selectedItems.contains(product),
-                          onChanged: (bool? selected) {
-                            _onItemSelect(selected, product);
-                          },
-                        );
-                      }).toList(),
-                    ),
-                  ],
-                ),
-
-                // Services Tab content
-                Column(
-                  children: <Widget>[
-                    ProSearchbar(
-                      hasSearchIcon: true,
-                      contentPadding: 10,
-                      backgroundColor: backgroundColor,
-                      hintText: 'Search Clients',
-                      onChange: (String query) {
-                        setState(() {});
-                      },
-                      onSubmit: (String query) {},
-                    ),
-                    Column(
-                      children:
-                          widget.services.map((Map<String, dynamic> service) {
-                        return CheckboxListTile(
-                          title: Text(service['name']),
-                          value: widget.selectedItems.contains(service),
-                          onChanged: (bool? selected) {
-                            _onItemSelect(selected, service);
-                          },
-                        );
-                      }).toList(),
-                    ),
-                  ],
-                ),
-
-                // Custom Tab content
-                Column(
-                  children: <Widget>[
-                    ProSearchbar(
-                      hasSearchIcon: true,
-                      contentPadding: 10,
-                      backgroundColor: backgroundColor,
-                      hintText: 'Search Clients',
-                      onChange: (String query) {
-                        setState(() {});
-                      },
-                      onSubmit: (String query) {},
-                    ),
-                    Column(
-                      children:
-                          widget.services.map((Map<String, dynamic> service) {
-                        return CheckboxListTile(
-                          title: Text(service['name']),
-                          value: widget.selectedItems.contains(service),
-                          onChanged: (bool? selected) {
-                            _onItemSelect(selected, service);
-                          },
-                        );
-                      }).toList(),
-                    ),
-                  ],
-                ),
+                _buildClientList(widget.online, _onlineSearchQuery,
+                    (String query) {
+                  setState(() {
+                    _onlineSearchQuery = query;
+                  });
+                }),
+                _buildClientList(widget.inperson, _inpersonSearchQuery,
+                    (String query) {
+                  setState(() {
+                    _inpersonSearchQuery = query;
+                  });
+                }),
+                _buildClientList(widget.bbuser, _bbuserSearchQuery,
+                    (String query) {
+                  setState(() {
+                    _bbuserSearchQuery = query;
+                  });
+                }),
               ],
             ),
           ),
         ],
       ),
+    );
+  }
+
+  Widget _buildClientList(List<Map<String, dynamic>> clients,
+      String searchQuery, Function(String) onSearchChange) {
+    final List<Map<String, dynamic>> filteredClients = clients
+        .where((Map<String, dynamic> client) =>
+            client['name'].toLowerCase().contains(searchQuery.toLowerCase()))
+        .toList();
+
+    return Column(
+      children: <Widget>[
+        ProSearchbar(
+          hasSearchIcon: true,
+          contentPadding: 10,
+          backgroundColor: backgroundColor,
+          hintText: 'Search Clients',
+          onChange: onSearchChange,
+          onSubmit: (String query) {},
+        ),
+        const SizedBox(height: 10),
+        Expanded(
+          child: filteredClients.isNotEmpty
+              ? ListView(
+                  children: filteredClients.map((Map<String, dynamic> client) {
+                    return Column(
+                      children: <Widget>[
+                        CheckboxListTile(
+                          title: Text(client['name']),
+                          value: selectedItem == client['name'],
+                          onChanged: (bool? selected) {
+                            _onItemSelect(selected, client);
+                          },
+                          checkColor: Colors.white,
+                          activeColor: proprimaryColor,
+                        ),
+                        if (selectedItem == client['name'])
+                          Padding(
+                            padding: const EdgeInsets.only(left: 8.0),
+                            child: ProIconButton(
+                              onPressed: () {
+                                Navigator.pop(context, selectedItem);
+                              },
+                              text: 'Done',
+                            ),
+                          ),
+                      ],
+                    );
+                  }).toList(),
+                )
+              : const Text(
+                  'No search results',
+                  style: TextStyle(color: Colors.grey, fontSize: 16),
+                ),
+        ),
+      ],
     );
   }
 
   void _onItemSelect(bool? selected, Map<String, dynamic> item) {
     setState(() {
-      if (selected!) {
-        widget.selectedItems.add(item);
+      if (selected == true) {
+        selectedItem = item['name'];
       } else {
-        widget.selectedItems.removeWhere(
-            (Map<String, dynamic> element) => element['id'] == item['id']);
+        selectedItem = null;
       }
     });
-  }
-
-  Widget _buildCustomTab() {
-    return Column(
-      children: <Widget>[
-        CustomEditText(
-          padding: 0,
-          backgroundcolor: backgroundColor,
-          caption: 'Order name',
-          hintText: 'Enter product/service name here',
-          controller: nameController,
-        ),
-        const SizedBox(
-          height: 15,
-        ),
-        CustomEditText(
-          iscurrencyfield: true,
-          currencycontroller: currencyController,
-          padding: 0,
-          backgroundcolor: backgroundColor,
-          caption: 'Price',
-          hintText: '0.00',
-          controller: priceController,
-        ),
-        const SizedBox(
-          height: 15,
-        ),
-        CustomEditText(
-          padding: 0,
-          backgroundcolor: backgroundColor,
-          caption: 'Description',
-          hintText: 'Add order notes here',
-          controller: descriptionController,
-          maxLength: 300,
-        ),
-        const SizedBox(
-          height: 15,
-        ),
-        SizedBox(
-            width: double.infinity,
-            child: ProCustomButton(text: 'Save', onPressed: _saveCustomOrder))
-      ],
-    );
-  }
-
-  void _saveCustomOrder() {
-    setState(() {
-      widget.selectedItems.add(<String, dynamic>{
-        'name': nameController.text,
-        'price': priceController.text,
-        'description': descriptionController.text,
-        'type': 'custom'
-      });
-    });
-    Navigator.pop(context);
-  }
-
-  Widget _buildProductItem(String title, String price, String imagePath) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 8.0),
-      child: Row(
-        children: <Widget>[
-          Image.asset(
-            imagePath,
-            width: 100,
-            height: 80,
-            fit: BoxFit.cover,
-          ),
-          const SizedBox(width: 20),
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: <Widget>[
-                Text(
-                  title,
-                  style: const TextStyle(
-                    fontWeight: FontWeight.bold,
-                    fontSize: 16,
-                  ),
-                ),
-                const SizedBox(height: 5),
-                Text(price),
-              ],
-            ),
-          ),
-          ElevatedButton(
-            onPressed: () {},
-            style: ElevatedButton.styleFrom(
-              backgroundColor: Colors.blue,
-            ),
-            child: const Text('Select'),
-          ),
-        ],
-      ),
-    );
   }
 }

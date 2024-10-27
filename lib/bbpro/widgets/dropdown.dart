@@ -147,36 +147,43 @@ class _CustomDropdownWidgetState extends State<CustomDropdownWidget> {
                 fontWeight: FontWeight.w600,
               ),
             ),
-            DropdownButtonHideUnderline(
-              child: DropdownButtonFormField<String>(
-                value:
-                    widget.items.contains(_selectedItem) ? _selectedItem : null,
-                hint: widget.hintText != null
-                    ? Text(widget.hintText!,
-                        style: const TextStyle(fontSize: 13))
-                    : null,
-                onChanged: (String? newValue) {
-                  setState(() {
-                    _selectedItem = newValue;
-                  });
-                  if (widget.onChanged != null) {
-                    widget.onChanged!(newValue);
-                  }
-                },
-                items:
-                    widget.items.map<DropdownMenuItem<String>>((String value) {
-                  return DropdownMenuItem<String>(
-                    value: value,
-                    child: Text(value, style: const TextStyle(fontSize: 13)),
-                  );
-                }).toList(),
-                isExpanded: true,
-                icon: SvgPicture.asset(
-                  widget.iconName,
-                  color: proprimaryColor,
+            DropdownButtonFormField<String>(
+              decoration: const InputDecoration(
+                enabledBorder: UnderlineInputBorder(
+                  borderSide: BorderSide(color: Colors.transparent),
                 ),
-                validator: widget.validator, // New: Use the validator
+                focusedBorder: UnderlineInputBorder(
+                  borderSide: BorderSide(color: Colors.transparent),
+                ),
               ),
+              value:
+                  widget.items.contains(_selectedItem) ? _selectedItem : null,
+              hint: widget.hintText != null
+                  ? Text(
+                      widget.hintText!,
+                      style: const TextStyle(fontSize: 13),
+                    )
+                  : null,
+              onChanged: (String? newValue) {
+                setState(() {
+                  _selectedItem = newValue;
+                });
+                if (widget.onChanged != null) {
+                  widget.onChanged!(newValue);
+                }
+              },
+              items: widget.items.map<DropdownMenuItem<String>>((String value) {
+                return DropdownMenuItem<String>(
+                  value: value,
+                  child: Text(value, style: const TextStyle(fontSize: 13)),
+                );
+              }).toList(),
+              isExpanded: true,
+              icon: SvgPicture.asset(
+                widget.iconName,
+                color: proprimaryColor,
+              ),
+              validator: widget.validator,
             )
           ],
         ),
