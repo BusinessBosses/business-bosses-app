@@ -65,14 +65,14 @@ class _ProjectPopUpState extends State<ProjectPopUp> {
               padding: EdgeInsets.all(0.0),
               child: Column(
                 children: <Widget>[
-                  Row(
-                    children: <Widget>[
-                      Padding(
-                        padding: EdgeInsets.symmetric(horizontal: 8.0),
-                        child: Text('Tasks'),
-                      ),
-                    ],
-                  ),
+                  // Row(
+                  //   children: <Widget>[
+                  //     Padding(
+                  //       padding: EdgeInsets.symmetric(horizontal: 8.0),
+                  //       child: Text('Tasks'),
+                  //     ),
+                  //   ],
+                  // ),
                   // SizedBox(
                   //   height: 300,
                   //   child: ListView.builder(

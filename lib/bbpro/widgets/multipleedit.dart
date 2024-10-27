@@ -35,6 +35,10 @@ class _MultipleEditTextWidgetState extends State<MultipleEditTextWidget> {
   }
 
   void _addTextField() {
+    // Check if the last text field is empty
+    if (_textFields.isNotEmpty && _controllers.last.text.isEmpty) {
+      return; // Do not add a new field if the last one is empty
+    }
     if (_textFields.length < _maxFields) {
       final TextEditingController controller =
           TextEditingController(); // Create a new controller

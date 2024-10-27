@@ -481,6 +481,12 @@ class _CreateServiceListingState extends State<CreateServiceListing>
                   hintText: 'Choose a delivery method',
                   items: const <String>['Online', 'In-Person'],
                   iconName: 'assets/svgs/dropdown.svg',
+                  validator: (String? value) {
+                    if (value == null || value.isEmpty) {
+                      return 'Please select a delivery method';
+                    }
+                    return null;
+                  },
                   onChanged: (String? newValue) {
                     setState(() {
                       deliveryMethod = newValue;
@@ -512,6 +518,21 @@ class _CreateServiceListingState extends State<CreateServiceListing>
                   ),
 
                 const SizedBox(height: 16),
+                // CustomDropdownWidget(
+                //   caption: 'Repeat',
+                //   hintText: 'Offer this service once or regularly?',
+                //   items: const <String>[
+                //     'Yes (One-time Service)',
+                //     'No (Regular Service)',
+                //   ],
+                //   iconName: 'assets/svgs/dropdown.svg',
+                //   onChanged: (String? newValue) {
+                //     setState(() {
+                //       category = newValue;
+                //     });
+                //   },
+                // ),
+
                 CustomDropdownWidget(
                   caption: 'Repeat',
                   hintText: 'Offer this service once or regularly?',
@@ -520,12 +541,19 @@ class _CreateServiceListingState extends State<CreateServiceListing>
                     'No (Regular Service)',
                   ],
                   iconName: 'assets/svgs/dropdown.svg',
+                  initialValue: <String>[
+                    'Yes (One-time Service)',
+                    'No (Regular Service)'
+                  ].contains(category)
+                      ? category
+                      : null,
                   onChanged: (String? newValue) {
                     setState(() {
                       category = newValue;
                     });
                   },
                 ),
+
                 const SizedBox(height: 16),
 
                 if (category != null)
@@ -572,6 +600,12 @@ class _CreateServiceListingState extends State<CreateServiceListing>
                       paymentMethod = newValue;
                     });
                   },
+                  validator: (String? value) {
+                    if (value == null || value.isEmpty) {
+                      return 'Please select a payment method';
+                    }
+                    return null;
+                  },
                 ),
 
                 const SizedBox(height: 16),
@@ -586,6 +620,12 @@ class _CreateServiceListingState extends State<CreateServiceListing>
                   ],
                   initialValue: serviceType,
                   iconName: 'assets/svgs/dropdown.svg',
+                  validator: (String? value) {
+                    if (value == null || value.isEmpty) {
+                      return 'Please select a service type';
+                    }
+                    return null;
+                  },
                   onChanged: (String? newValue) {
                     setState(() {
                       serviceType = newValue;
@@ -762,6 +802,12 @@ class _CreateServiceListingState extends State<CreateServiceListing>
     } else if (_priceController.text.isEmpty) {
       showSnackbar(
         message: 'Price is Mandatory!',
+        error: true,
+      );
+      return;
+    } else if (paymentMethod == null || paymentMethod!.isEmpty) {
+      showSnackbar(
+        message: 'Payment Method is Mandatory!',
         error: true,
       );
       return;
@@ -945,30 +991,32 @@ class _CreateServiceListingState extends State<CreateServiceListing>
                     color: probackgroundColor,
                     borderRadius: BorderRadius.circular(10)),
                 child: DropdownButtonHideUnderline(
-                  child: DropdownButton<String>(
-                    hint: const Text('Select repeat frequency'),
-                    value: frequency,
-                    onChanged: (String? newValue) {
-                      setState(() {
-                        frequency = newValue!;
-                      });
-                    },
-                    items: const <String>[
-                      'Repeat Weekly',
-                      'Repeat Monthly',
-                    ].map((String value) {
-                      return DropdownMenuItem<String>(
-                        value: value,
-                        child: Text(value),
-                      );
-                    }).toList(),
-                    isExpanded: true,
-                    icon: SvgPicture.asset(
-                      'assets/svgs/dropdown.svg',
-                      color: proprimaryColor,
-                    ),
+                    child: DropdownButton<String>(
+                  hint: const Text('Select repeat frequency'),
+                  value: <String>['Repeat Weekly', 'Repeat Monthly']
+                          .contains(frequency)
+                      ? frequency
+                      : null,
+                  onChanged: (String? newValue) {
+                    setState(() {
+                      frequency = newValue!;
+                    });
+                  },
+                  items: const <String>[
+                    'Repeat Weekly',
+                    'Repeat Monthly',
+                  ].map((String value) {
+                    return DropdownMenuItem<String>(
+                      value: value,
+                      child: Text(value),
+                    );
+                  }).toList(),
+                  isExpanded: true,
+                  icon: SvgPicture.asset(
+                    'assets/svgs/dropdown.svg',
+                    color: proprimaryColor,
                   ),
-                ),
+                )),
               ),
             const SizedBox(height: 10),
             if (isRecurring && !_isAlwaysAvailable)
