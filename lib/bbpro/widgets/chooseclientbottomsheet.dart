@@ -10,14 +10,16 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 class ChooseClientBottomSheet extends StatefulWidget {
-  final List<Map<String, dynamic>> products;
-  final List<Map<String, dynamic>> services;
+  final List<Map<String, dynamic>> online;
+  final List<Map<String, dynamic>> inperson;
+  final List<Map<String, dynamic>> bbuser;
   final List<Map<String, dynamic>> selectedItems;
   const ChooseClientBottomSheet(
       {Key? key,
-      required this.products,
-      required this.services,
-      required this.selectedItems})
+      required this.selectedItems,
+      required this.online,
+      required this.inperson,
+      required this.bbuser})
       : super(key: key);
 
   @override
@@ -131,12 +133,12 @@ class _ChooseClientBottomSheetState extends State<ChooseClientBottomSheet>
                     ),
                     Column(
                       children:
-                          widget.products.map((Map<String, dynamic> product) {
+                          widget.online.map((Map<String, dynamic> online) {
                         return CheckboxListTile(
-                          title: Text(product['name']),
-                          value: widget.selectedItems.contains(product),
+                          title: Text(online['name']),
+                          value: widget.selectedItems.contains(online),
                           onChanged: (bool? selected) {
-                            _onItemSelect(selected, product);
+                            _onItemSelect(selected, online);
                           },
                         );
                       }).toList(),
@@ -159,12 +161,12 @@ class _ChooseClientBottomSheetState extends State<ChooseClientBottomSheet>
                     ),
                     Column(
                       children:
-                          widget.services.map((Map<String, dynamic> service) {
+                          widget.inperson.map((Map<String, dynamic> inperson) {
                         return CheckboxListTile(
-                          title: Text(service['name']),
-                          value: widget.selectedItems.contains(service),
+                          title: Text(inperson['name']),
+                          value: widget.selectedItems.contains(inperson),
                           onChanged: (bool? selected) {
-                            _onItemSelect(selected, service);
+                            _onItemSelect(selected, inperson);
                           },
                         );
                       }).toList(),
@@ -187,12 +189,12 @@ class _ChooseClientBottomSheetState extends State<ChooseClientBottomSheet>
                     ),
                     Column(
                       children:
-                          widget.services.map((Map<String, dynamic> service) {
+                          widget.bbuser.map((Map<String, dynamic> bbuser) {
                         return CheckboxListTile(
-                          title: Text(service['name']),
-                          value: widget.selectedItems.contains(service),
+                          title: Text(bbuser['name']),
+                          value: widget.selectedItems.contains(bbuser),
                           onChanged: (bool? selected) {
-                            _onItemSelect(selected, service);
+                            _onItemSelect(selected, bbuser);
                           },
                         );
                       }).toList(),

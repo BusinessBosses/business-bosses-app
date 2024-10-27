@@ -1,3 +1,5 @@
+// ignore_for_file: prefer_const_literals_to_create_immutables
+
 import 'package:business_bosses_v2/bbpro/controllers/clients_controller.dart';
 import 'package:business_bosses_v2/bbpro/controllers/order_controller.dart';
 import 'package:business_bosses_v2/bbpro/controllers/shop_controller.dart';
@@ -88,6 +90,8 @@ class _CreateOrderState extends State<CreateOrder> {
     );
   }
 
+  final List<Map<String, dynamic>> online = <Map<String, dynamic>>[];
+
   void _showClientSheet(BuildContext context) {
     showModalBottomSheet(
       backgroundColor: Colors.white,
@@ -100,9 +104,20 @@ class _CreateOrderState extends State<CreateOrder> {
         return SizedBox(
           height: MediaQuery.of(context).size.height * 0.9,
           child: ChooseClientBottomSheet(
-            products: products,
-            services: services,
             selectedItems: selectedItems,
+            // ignore: always_specify_types
+            online: clients
+                .where((Map<String, dynamic> client) =>
+                    client['type'].toString() == 'ClientType.online')
+                .toList(),
+            inperson: clients
+                .where((Map<String, dynamic> client) =>
+                    client['type'].toString() == 'ClientType.inPerson')
+                .toList(),
+            bbuser: clients
+                .where((Map<String, dynamic> client) =>
+                    client['type'].toString() == 'ClientType.bbUser')
+                .toList(),
           ),
         );
       },
@@ -164,7 +179,11 @@ class _CreateOrderState extends State<CreateOrder> {
       setState(() {
         for (Client client in clientsController.clients) {
           clientsName.add(client.name);
-          clients.add(<String, dynamic>{'name': client.name, 'id': client.id});
+          clients.add(<String, dynamic>{
+            'name': client.name,
+            'id': client.id,
+            'type': client.type
+          });
         }
 
         for (Product product in shopController.products) {
