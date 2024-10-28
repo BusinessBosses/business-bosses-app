@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:business_bosses_v2/action/action.dart';
 import 'package:business_bosses_v2/bbpro/controllers/shop_controller.dart';
+import 'package:business_bosses_v2/bbpro/widgets/proseardwidget.dart';
 import 'package:business_bosses_v2/common/widgets/safety_model.dart';
 import 'package:business_bosses_v2/features/chat/chat_screen.dart';
 import 'package:flutter/material.dart';
@@ -239,7 +240,7 @@ class _OrdersScreenState extends State<OrdersScreen>
   }
 }
 
-class RowStatusCard extends StatelessWidget {
+class RowStatusCard extends StatefulWidget {
   final void Function(Order order, OrderStatus newStatus) orderAccepted;
   final void Function(bool isRight) onDrag;
   final void Function() cancelDrag;
@@ -260,10 +261,25 @@ class RowStatusCard extends StatelessWidget {
   });
 
   @override
+  State<RowStatusCard> createState() => _RowStatusCardState();
+}
+
+class _RowStatusCardState extends State<RowStatusCard> {
+  bool _showSearchBar = false;
+  List<Order> filteredOrders = <Order>[];
+  String searchQuery = '';
+
+  @override
+  void initState() {
+    super.initState();
+    filteredOrders = widget.allorders;
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Container(
-      height: screenSize.height * 0.8,
-      width: screenSize.width * 0.9,
+      height: widget.screenSize.height * 0.8,
+      width: widget.screenSize.width * 0.9,
       margin: const EdgeInsets.only(left: 10),
       decoration: BoxDecoration(
         color: Colors.white,
@@ -280,23 +296,23 @@ class RowStatusCard extends StatelessWidget {
                 Wrap(
                   crossAxisAlignment: WrapCrossAlignment.center,
                   children: <Widget>[
-                    orderStatus.index == 0
+                    widget.orderStatus.index == 0
                         ? Container()
                         : CircleAvatar(
                             backgroundColor:
-                                orderStatus.displayTitle == 'Pending'
+                                widget.orderStatus.displayTitle == 'Pending'
                                     ? Colors.amber
-                                    : orderStatus.displayTitle == 'Paid'
+                                    : widget.orderStatus.displayTitle == 'Paid'
                                         ? Colors.green
                                         : Colors.red,
                             radius: 5,
                           ),
-                    if (orderStatus.index != 0)
+                    if (widget.orderStatus.index != 0)
                       const SizedBox(
                         width: 10,
                       ),
                     Text(
-                      orderStatus.displayTitle,
+                      widget.orderStatus.displayTitle,
                       style: const TextStyle(
                         color: Colors.black,
                         fontWeight: FontWeight.bold,
@@ -305,19 +321,83 @@ class RowStatusCard extends StatelessWidget {
                     ),
                   ],
                 ),
-                GestureDetector(
-                  onTap: () {},
-                  child: Container(
-                    decoration: BoxDecoration(
-                        color: backgroundColor,
-                        borderRadius: BorderRadius.circular(30)),
-                    padding: const EdgeInsets.all(8),
-                    child: SvgPicture.asset(
-                      'assets/svgs/search.svg',
-                      height: 15,
-                    ),
+                const SizedBox(
+                  width: 50,
+                ),
+                if (widget.orderStatus.index != 0)
+                  const SizedBox(
+                    height: 31,
                   ),
-                )
+                if (widget.orderStatus.index == 0)
+                  _showSearchBar
+                      ? Expanded(
+                          child: SizedBox(
+                            height: 31,
+                            child: ProSearchbar(
+                              contentPadding: 10,
+                              backgroundColor: backgroundColor,
+                              hasSearchIcon: false,
+                              hintText: 'Search',
+                              onChange: (String query) {
+                                setState(() {
+                                  searchQuery =
+                                      query; // Update the search query
+                                  filteredOrders =
+                                      widget.allorders.where((Order order) {
+                                    return order.client.name
+                                        .toLowerCase()
+                                        .contains(query.toLowerCase());
+                                  }).toList();
+                                });
+                              },
+                              onSubmit: (String query) {},
+                            ),
+                          ),
+                        )
+                      : GestureDetector(
+                          onTap: () {
+                            setState(() {
+                              _showSearchBar = true;
+                            });
+                          },
+                          child: Container(
+                            decoration: BoxDecoration(
+                                color: backgroundColor,
+                                borderRadius: BorderRadius.circular(30)),
+                            padding: const EdgeInsets.all(8),
+                            child: SvgPicture.asset(
+                              'assets/svgs/search.svg',
+                              height: 15,
+                            ),
+                          ),
+                        ),
+                if (widget.orderStatus.index == 0)
+                  if (_showSearchBar)
+                    const SizedBox(
+                      width: 5,
+                    ),
+                if (widget.orderStatus.index == 0)
+                  if (_showSearchBar)
+                    GestureDetector(
+                      onTap: () {
+                        setState(() {
+                          _showSearchBar = false;
+                          searchQuery = '';
+                          filteredOrders = widget.allorders;
+                        });
+                      },
+                      child: Container(
+                        decoration: BoxDecoration(
+                            color: backgroundColor,
+                            borderRadius: BorderRadius.circular(30)),
+                        padding: const EdgeInsets.all(8),
+                        child: const Icon(
+                          Icons.close,
+                          color: Colors.grey,
+                          size: 15,
+                        ),
+                      ),
+                    )
               ],
             ),
           ),
@@ -328,37 +408,40 @@ class RowStatusCard extends StatelessWidget {
               color: Colors.black12,
             ),
           ),
-          orderStatus.index == 0
-              ? Expanded(
-                  child: ListView.builder(
-                    itemCount: allorders.length,
-                    shrinkWrap: true,
-                    itemBuilder: (BuildContext context, int index) {
-                      return Padding(
-                        padding: const EdgeInsets.only(bottom: 12),
-                        child: OrderWidget(
-                          order: allorders[index],
-                          bgcolor: allorders[index].status.backgroundColor,
-                        ),
-                      );
-                    },
-                  ),
-                )
+          widget.orderStatus.index == 0
+              ? filteredOrders.isNotEmpty
+                  ? Expanded(
+                      child: ListView.builder(
+                        itemCount: filteredOrders.length,
+                        shrinkWrap: true,
+                        itemBuilder: (BuildContext context, int index) {
+                          return Padding(
+                            padding: const EdgeInsets.only(bottom: 12),
+                            child: OrderWidget(
+                              order: filteredOrders[index],
+                              bgcolor:
+                                  filteredOrders[index].status.backgroundColor,
+                            ),
+                          );
+                        },
+                      ),
+                    )
+                  : const Text('No Orders found')
               : Expanded(
                   child: DragTarget<Order>(
                     builder: (BuildContext context, List<Order?> candidateData,
                         List<dynamic> rejectedData) {
                       return ListStatusColumnWidget(
-                        orders: orders,
-                        orderStatus: orderStatus,
-                        screenSize: screenSize,
-                        onDrag: onDrag,
-                        cancelDrag: cancelDrag,
+                        orders: widget.orders,
+                        orderStatus: widget.orderStatus,
+                        screenSize: widget.screenSize,
+                        onDrag: widget.onDrag,
+                        cancelDrag: widget.cancelDrag,
                       );
                     },
                     onWillAccept: (Order? details) => true,
                     onAcceptWithDetails: (DragTargetDetails<Order> details) {
-                      orderAccepted(details.data, orderStatus);
+                      widget.orderAccepted(details.data, widget.orderStatus);
                     },
                   ),
                 ),
@@ -437,9 +520,14 @@ class ListStatusColumnWidget extends StatelessWidget {
               opacity: 0.2,
               child: orderWidget,
             ),
-            feedback: SizedBox(
-              width: screenSize.width * 0.8,
-              child: orderWidget,
+            feedback: Material(
+              color: Colors.transparent,
+              child: ConstrainedBox(
+                constraints: BoxConstraints(
+                  maxWidth: screenSize.width * 0.8,
+                ),
+                child: orderWidget,
+              ),
             ),
             child: orderWidget,
           ),
