@@ -13,6 +13,8 @@ class OrderController extends GetxController {
       <OrderStatus, List<Order>>{};
 
   Future<void> initOrders(String userId) async {
+    loading(true);
+    update();
     orders.clear();
     allorders.clear();
     ApiResponseModel response = await ApiService.get(path: 'orders/all');
@@ -69,5 +71,38 @@ class OrderController extends GetxController {
     } else {
       return false;
     }
+  }
+
+  Future<bool> updateOrder(String id, Map<String, dynamic> data) async {
+    try {
+      ApiResponseModel response =
+          await ApiService.put(path: 'orders/$id', body: data);
+
+      if (response.success) {
+        // Locate the existing order by ID
+        Order? existingOrder =
+            orders.firstWhereOrNull((Order order) => order.id == id);
+
+        if (existingOrder != null) {
+          // Remove the order from all lists
+          orders.remove(existingOrder);
+          allorders.remove(existingOrder);
+          ordersStatus[existingOrder.status]?.remove(existingOrder);
+
+          // Create updated order object from response data
+          Order updatedOrder = Order.fromJson(response.data);
+
+          // Add the updated order to all lists
+          orders.add(updatedOrder);
+          allorders.add(updatedOrder);
+          ordersStatus[updatedOrder.status]?.add(updatedOrder);
+
+          update(); // Notify listeners
+          return true;
+        }
+      }
+      // ignore: empty_catches
+    } catch (e) {}
+    return false;
   }
 }

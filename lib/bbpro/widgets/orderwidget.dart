@@ -1,5 +1,8 @@
 import 'package:business_bosses_v2/bbpro/controllers/order_controller.dart';
+import 'package:business_bosses_v2/bbpro/controllers/shop_controller.dart';
 import 'package:business_bosses_v2/bbpro/models/order_model.dart';
+import 'package:business_bosses_v2/bbpro/models/product_model.dart';
+import 'package:business_bosses_v2/bbpro/models/service_model.dart';
 import 'package:business_bosses_v2/bbpro/presentation/create_order.dart';
 import 'package:business_bosses_v2/bbpro/widgets/optionsbutton.dart';
 import 'package:business_bosses_v2/bbpro/widgets/orderpopup.dart';
@@ -32,6 +35,7 @@ class OrderWidget extends StatefulWidget {
 class _OrderWidgetState extends State<OrderWidget> {
   final OrderController orderController = Get.find();
   final ProfileController profileController = Get.find();
+  final ShopController shopController = Get.find();
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -74,9 +78,9 @@ class _OrderWidgetState extends State<OrderWidget> {
                               const SizedBox(
                                 width: 5,
                               ),
-                              const Text(
-                                'name and price',
-                                style: TextStyle(
+                              Text(
+                                '${calculateTotalItems().toString()} items - ${shopController.shop!.currency} ${calculateTotalPrice().toString()}',
+                                style: const TextStyle(
                                   fontWeight: FontWeight.bold,
                                   fontSize: 13,
                                 ),
@@ -247,6 +251,9 @@ class _OrderWidgetState extends State<OrderWidget> {
                                     OrderStatus.paid
                                   ];
                                   break;
+                                case OrderStatus.allorders:
+                                  // TODO: Handle this case.
+                                  break;
                               }
                               return SizedBox(
                                 child: Padding(
@@ -286,7 +293,55 @@ class _OrderWidgetState extends State<OrderWidget> {
                                           ),
                                           onTap: () async {
                                             Get.back();
-                                            setState(() {});
+                                            setState(() {
+                                              orderController.ordersStatus[
+                                                      widget.order.status]
+                                                  ?.remove(widget.order);
+                                              orderController
+                                                  .ordersStatus[status]
+                                                  ?.add(
+                                                Order(
+                                                  id: widget.order.id,
+                                                  user: widget.order.user,
+                                                  items: widget.order.items,
+                                                  userId: widget.order.userId,
+                                                  shopId: widget.order.shopId,
+                                                  clientId:
+                                                      widget.order.clientId,
+                                                  status: status,
+                                                  createdAt:
+                                                      widget.order.createdAt,
+                                                  deliveryDate:
+                                                      widget.order.deliveryDate,
+                                                  deliveryMethod: widget
+                                                      .order.deliveryMethod,
+                                                  paymentMethod: widget
+                                                      .order.paymentMethod,
+                                                  notes: widget.order.notes,
+                                                  invoiceOption: widget
+                                                      .order.invoiceOption,
+                                                  client: widget.order.client,
+                                                  products:
+                                                      widget.order.products,
+                                                  services:
+                                                      widget.order.services,
+                                                  orderDetails:
+                                                      widget.order.orderDetails,
+                                                ),
+                                              );
+                                            });
+
+                                            // Update the status in the database
+                                            await orderController.updateOrder(
+                                              widget.order.id,
+                                              <String, dynamic>{
+                                                'status': status.toString(),
+                                              },
+                                            );
+
+                                            await orderController.initOrders(
+                                                profileController
+                                                    .myProfile.uid);
                                           },
                                         );
                                       }).toList(),
@@ -375,6 +430,17 @@ class _OrderWidgetState extends State<OrderWidget> {
         ),
       ),
     );
+  }
+
+  num calculateTotalPrice() {
+    return (widget.order.products!
+            .fold(0, (num sum, Product product) => sum + product.price)) +
+        widget.order.services!
+            .fold(0, (num sum, Service product) => sum + product.price);
+  }
+
+  num calculateTotalItems() {
+    return (widget.order.products!.length) + widget.order.services!.length;
   }
 
   void onEdit() {

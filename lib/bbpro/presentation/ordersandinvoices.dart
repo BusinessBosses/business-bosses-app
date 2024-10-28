@@ -170,84 +170,89 @@ class _OrdersScreenState extends State<OrdersScreen>
                         child: CircularProgressIndicator(),
                       )
                     : Obx(
-                        () => orderController.orders.isEmpty
+                        () => orderController.loading.value
                             ? const Center(
-                                child: SafetyModel(
-                                  isLoading: false,
-                                  title: 'No Orders Found!',
-                                ),
+                                child: CircularProgressIndicator(),
                               )
-                            : CustomScrollView(
-                                scrollDirection: Axis.horizontal,
-                                controller: _mainListScrollController,
-                                slivers: <Widget>[
-                                  ...OrderStatus.values.map(
-                                    (OrderStatus status) => SliverToBoxAdapter(
-                                      child: RowStatusCard(
-                                        orders: orderController.orders
-                                            .where((Order order) =>
-                                                order.status.displayTitle ==
-                                                status.displayTitle)
-                                            .toList(),
-                                        orderStatus: status,
-                                        screenSize: screenSize,
-                                        orderAccepted: (Order order,
-                                            OrderStatus newStatus) {
-                                          setState(() {
-                                            orderController
-                                                .ordersStatus[order.status]
-                                                ?.remove(order);
-                                            orderController
-                                                .ordersStatus[newStatus]
-                                                ?.add(
-                                              Order(
-                                                id: order.id,
-                                                user: order.user,
-                                                items: order.items,
-                                                userId: order.userId,
-                                                shopId: order.shopId,
-                                                clientId: order.clientId,
-                                                status: newStatus,
-                                                createdAt: order.createdAt,
-                                                deliveryDate:
-                                                    order.deliveryDate,
-                                                deliveryMethod:
-                                                    order.deliveryMethod,
-                                                paymentMethod:
-                                                    order.paymentMethod,
-                                                notes: order.notes,
-                                                invoiceOption:
-                                                    order.invoiceOption,
-                                                client: order.client,
-                                                products: order.products,
-                                                services: order.services,
-                                                orderDetails:
-                                                    order.orderDetails,
-                                              ),
-                                            );
-                                            // orderController.updateOrder(
-                                            //     order.id, <String, dynamic>{
-                                            //   'status': newStatus.toString(),
-                                            // });
-                                          });
-                                        },
-                                        onDrag: (bool isRight) {
-                                          if (_lastMoveRight == isRight) {
-                                            return;
-                                          }
-                                          _lastMoveRight = isRight;
-                                          _moveMainList(isRight);
-                                        },
-                                        cancelDrag: () {
-                                          _lastMoveRight = null;
-                                          _timer?.cancel();
-                                        },
-                                        allorders: orderController.orders,
-                                      ),
+                            : orderController.orders.isEmpty
+                                ? const Center(
+                                    child: SafetyModel(
+                                      isLoading: false,
+                                      title: 'No Orders Found!',
                                     ),
                                   )
-                                ],
-                              ),
+                                : CustomScrollView(
+                                    scrollDirection: Axis.horizontal,
+                                    controller: _mainListScrollController,
+                                    slivers: <Widget>[
+                                      ...OrderStatus.values.map(
+                                        (OrderStatus status) =>
+                                            SliverToBoxAdapter(
+                                          child: RowStatusCard(
+                                            orders: orderController.orders
+                                                .where((Order order) =>
+                                                    order.status.displayTitle ==
+                                                    status.displayTitle)
+                                                .toList(),
+                                            orderStatus: status,
+                                            screenSize: screenSize,
+                                            orderAccepted: (Order order,
+                                                OrderStatus newStatus) {
+                                              setState(() {
+                                                orderController
+                                                    .ordersStatus[order.status]
+                                                    ?.remove(order);
+                                                orderController
+                                                    .ordersStatus[newStatus]
+                                                    ?.add(
+                                                  Order(
+                                                    id: order.id,
+                                                    user: order.user,
+                                                    items: order.items,
+                                                    userId: order.userId,
+                                                    shopId: order.shopId,
+                                                    clientId: order.clientId,
+                                                    status: newStatus,
+                                                    createdAt: order.createdAt,
+                                                    deliveryDate:
+                                                        order.deliveryDate,
+                                                    deliveryMethod:
+                                                        order.deliveryMethod,
+                                                    paymentMethod:
+                                                        order.paymentMethod,
+                                                    notes: order.notes,
+                                                    invoiceOption:
+                                                        order.invoiceOption,
+                                                    client: order.client,
+                                                    products: order.products,
+                                                    services: order.services,
+                                                    orderDetails:
+                                                        order.orderDetails,
+                                                  ),
+                                                );
+                                                // orderController.updateOrder(
+                                                //     order.id, <String, dynamic>{
+                                                //   'status': newStatus.toString(),
+                                                // });
+                                              });
+                                            },
+                                            onDrag: (bool isRight) {
+                                              if (_lastMoveRight == isRight) {
+                                                return;
+                                              }
+                                              _lastMoveRight = isRight;
+                                              _moveMainList(isRight);
+                                            },
+                                            cancelDrag: () {
+                                              _lastMoveRight = null;
+                                              _timer?.cancel();
+                                            },
+                                            allorders: orderController.orders,
+                                          ),
+                                        ),
+                                      )
+                                    ],
+                                  ),
                       ),
               ),
             ),
