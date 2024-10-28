@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:js_util';
 
 import 'package:business_bosses_v2/action/action.dart';
 import 'package:business_bosses_v2/bbpro/controllers/shop_controller.dart';
@@ -194,7 +195,41 @@ class _OrdersScreenState extends State<OrdersScreen>
                                         orderAccepted: (Order order,
                                             OrderStatus newStatus) {
                                           setState(() {
-                                            // Update client status here
+                                            orderController
+                                                .ordersStatus[order.status]
+                                                ?.remove(order);
+                                            orderController
+                                                .ordersStatus[newStatus]
+                                                ?.add(
+                                              Order(
+                                                id: order.id,
+                                                user: order.user,
+                                                items: order.items,
+                                                userId: order.userId,
+                                                shopId: order.shopId,
+                                                clientId: order.clientId,
+                                                status: newStatus,
+                                                createdAt: order.createdAt,
+                                                deliveryDate:
+                                                    order.deliveryDate,
+                                                deliveryMethod:
+                                                    order.deliveryMethod,
+                                                paymentMethod:
+                                                    order.paymentMethod,
+                                                notes: order.notes,
+                                                invoiceOption:
+                                                    order.invoiceOption,
+                                                client: order.client,
+                                                products: order.products,
+                                                services: order.services,
+                                                orderDetails:
+                                                    order.orderDetails,
+                                              ),
+                                            );
+                                            // orderController.updateOrder(
+                                            //     order.id, <String, dynamic>{
+                                            //   'status': newStatus.toString(),
+                                            // });
                                           });
                                         },
                                         onDrag: (bool isRight) {
