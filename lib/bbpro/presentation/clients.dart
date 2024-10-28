@@ -372,6 +372,14 @@ class RowStatusCard extends StatefulWidget {
 
 class _RowStatusCardState extends State<RowStatusCard> {
   bool _showSearchBar = false;
+  List<Client> filteredClients = <Client>[];
+  String searchQuery = '';
+
+  @override
+  void initState() {
+    super.initState();
+    filteredClients = widget.allclients;
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -446,7 +454,15 @@ class _RowStatusCardState extends State<RowStatusCard> {
                               hasSearchIcon: false,
                               hintText: 'Search',
                               onChange: (String query) {
-                                if (query.isEmpty) {}
+                                setState(() {
+                                  searchQuery = query;
+                                  filteredClients =
+                                      widget.allclients.where((Client client) {
+                                    return client.name
+                                        .toLowerCase()
+                                        .contains(query.toLowerCase());
+                                  }).toList();
+                                });
                               },
                               onSubmit: (String query) {},
                             ),
@@ -478,6 +494,8 @@ class _RowStatusCardState extends State<RowStatusCard> {
                     onTap: () {
                       setState(() {
                         _showSearchBar = false;
+                        searchQuery = '';
+                        filteredClients = widget.allclients;
                       });
                     },
                     child: Container(
@@ -503,23 +521,27 @@ class _RowStatusCardState extends State<RowStatusCard> {
             ),
           ),
           widget.clientType.index == 0
-              ? Expanded(
-                  child: ListView.builder(
-                    itemCount: widget.allclients.length,
-                    shrinkWrap: true,
-                    itemBuilder: (BuildContext context, int index) {
-                      final ClientWidget clientWidget = ClientWidget(
-                        client: widget.allclients[index],
-                        bgcolor: widget.allclients[index].type.backgroundColor
-                            .withOpacity(0.1),
-                      );
-                      return Padding(
-                        padding: const EdgeInsets.only(bottom: 12),
-                        child: clientWidget,
-                      );
-                    },
-                  ),
-                )
+              ? filteredClients.isNotEmpty
+                  ? Expanded(
+                      child: ListView.builder(
+                        itemCount: filteredClients.length,
+                        shrinkWrap: true,
+                        itemBuilder: (BuildContext context, int index) {
+                          final ClientWidget clientWidget = ClientWidget(
+                            client: filteredClients[index],
+                            bgcolor: filteredClients[index]
+                                .type
+                                .backgroundColor
+                                .withOpacity(0.1),
+                          );
+                          return Padding(
+                            padding: const EdgeInsets.only(bottom: 12),
+                            child: clientWidget,
+                          );
+                        },
+                      ),
+                    )
+                  : const Text('No clients found')
               : Expanded(
                   child: ListStatusColumnWidget(
                     clients: widget.clients,
