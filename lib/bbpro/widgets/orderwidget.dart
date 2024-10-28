@@ -162,6 +162,117 @@ class _OrderWidgetState extends State<OrderWidget> {
                 ],
               ),
             ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: <Widget>[
+                GestureDetector(
+                  onTap: () {
+                    showModalBottomSheet(
+                      context: context,
+                      shape: const RoundedRectangleBorder(
+                        borderRadius: BorderRadius.vertical(
+                          top: Radius.circular(20.0),
+                        ),
+                      ),
+                      builder: (BuildContext context) {
+                        List<OrderStatus> availableStatuses = <OrderStatus>[];
+                        switch (widget.order.status) {
+                          case OrderStatus.pending:
+                            availableStatuses = <OrderStatus>[
+                              OrderStatus.paid,
+                              OrderStatus.cancelled
+                            ];
+                            break;
+                          case OrderStatus.paid:
+                            availableStatuses = <OrderStatus>[
+                              OrderStatus.pending,
+                              OrderStatus.cancelled
+                            ];
+                            break;
+                          case OrderStatus.cancelled:
+                            availableStatuses = <OrderStatus>[
+                              OrderStatus.pending,
+                              OrderStatus.paid
+                            ];
+                            break;
+                        }
+                        return SizedBox(
+                          child: Padding(
+                            padding: const EdgeInsets.only(top: 20, bottom: 50),
+                            child: Column(
+                              mainAxisSize: MainAxisSize
+                                  .min, // Ensures the column takes only the necessary space
+                              children: <Widget>[
+                                const Text(
+                                  'Change Order Status to',
+                                  style: TextStyle(
+                                    fontSize: 14,
+                                    fontWeight: FontWeight.w700,
+                                  ),
+                                ),
+                                const SizedBox(
+                                  height: 20,
+                                ),
+                                ...availableStatuses.map((OrderStatus status) {
+                                  return ListTile(
+                                    title: Container(
+                                      decoration: BoxDecoration(
+                                          color: prosemibackColor,
+                                          borderRadius:
+                                              BorderRadius.circular(15)),
+                                      padding: const EdgeInsets.symmetric(
+                                          horizontal: 10, vertical: 20),
+                                      child: Text(
+                                        status.displayTitle,
+                                        style: const TextStyle(
+                                            fontSize: 14,
+                                            color: textColor,
+                                            fontWeight: FontWeight.w600),
+                                      ),
+                                    ),
+                                    onTap: () async {
+                                      Get.back();
+                                      setState(() {});
+                                    },
+                                  );
+                                }).toList(),
+                              ],
+                            ),
+                          ),
+                        );
+                      },
+                    );
+                  },
+                  child: Container(
+                    padding:
+                        const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+                    decoration: BoxDecoration(
+                        color: prosemibackColor,
+                        borderRadius: BorderRadius.circular(20)),
+                    child: Center(
+                      child: Wrap(
+                          crossAxisAlignment: WrapCrossAlignment.center,
+                          children: <Widget>[
+                            const Text(
+                              'Change Order Status',
+                              style: TextStyle(
+                                  fontSize: 13,
+                                  color: proprimaryColor,
+                                  fontWeight: FontWeight.bold),
+                            ),
+                            const SizedBox(
+                              width: 8,
+                            ),
+                            SvgPicture.asset(
+                              'assets/svgs/dropdown.svg',
+                              color: proprimaryColor,
+                            )
+                          ]),
+                    ),
+                  ),
+                )
+              ],
+            ),
             if (widget.isExpanded != false)
               Row(
                 mainAxisAlignment: MainAxisAlignment.end,
