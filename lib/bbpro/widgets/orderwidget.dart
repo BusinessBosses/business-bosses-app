@@ -4,6 +4,7 @@ import 'package:business_bosses_v2/bbpro/presentation/create_order.dart';
 import 'package:business_bosses_v2/bbpro/widgets/optionsbutton.dart';
 import 'package:business_bosses_v2/bbpro/widgets/orderpopup.dart';
 import 'package:business_bosses_v2/common/dialogs/snackbar.dart';
+import 'package:business_bosses_v2/common/widgets/network_image_with_placeholder.dart';
 import 'package:business_bosses_v2/features/profile/controller/profile_controller.dart';
 import 'package:business_bosses_v2/features/profile/presentation/myprofilescreen.dart';
 import 'package:business_bosses_v2/utils/theme/theme.dart';
@@ -44,307 +45,332 @@ class _OrderWidgetState extends State<OrderWidget> {
       margin: const EdgeInsets.symmetric(horizontal: 10),
       child: Padding(
         padding: const EdgeInsets.all(10.0),
-        child: Column(
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.start,
           crossAxisAlignment: CrossAxisAlignment.start,
-          mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: <Widget>[
-                Container(
-                  decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(3),
-                      color: widget.bgcolor),
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
-                  child: Wrap(
-                      crossAxisAlignment: WrapCrossAlignment.center,
-                      children: <Widget>[
-                        SvgPicture.asset(
-                          'assets/svgs/ordersinvoices.svg',
-                          height: 13,
-                          color: textColor,
-                        ),
-                        const SizedBox(
-                          width: 5,
-                        ),
-                        const Text(
-                          'name and price',
-                          style: TextStyle(
-                            fontWeight: FontWeight.bold,
-                            fontSize: 13,
-                          ),
-                        ),
-                      ]),
-                ),
-                if (widget.isExpanded != true)
-                  OptionsButton(
-                    padding: const EdgeInsets.all(0),
-                    borderColor: Colors.white,
-                    onEdit: onEdit,
-                    onDelete: () async {
-                      final bool delete =
-                          await orderController.deleteOrder(widget.order.id);
-                      if (delete) {
-                        showSnackbar(message: 'Order deleted successfully!');
-                      } else {
-                        showSnackbar(
-                          message: 'Error deleting order!',
-                          error: true,
-                        );
-                      }
-                      setState(() {});
-                      orderController
-                          .initOrders(profileController.myProfile.uid);
-                    },
-                  ),
-              ],
-            ),
-            Padding(
-              padding: const EdgeInsets.symmetric(vertical: 10.0),
+            Expanded(
               child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisAlignment: MainAxisAlignment.start,
                 children: <Widget>[
                   Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: <Widget>[
-                      const Text(
-                        'Client: ',
-                        style: TextStyle(
-                          fontWeight: FontWeight.normal,
-                          fontSize: 13,
-                        ),
+                      Container(
+                        decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(3),
+                            color: widget.bgcolor),
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 10, vertical: 5),
+                        child: Wrap(
+                            crossAxisAlignment: WrapCrossAlignment.center,
+                            children: <Widget>[
+                              SvgPicture.asset(
+                                'assets/svgs/ordersinvoices.svg',
+                                height: 13,
+                                color: textColor,
+                              ),
+                              const SizedBox(
+                                width: 5,
+                              ),
+                              const Text(
+                                'name and price',
+                                style: TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 13,
+                                ),
+                              ),
+                            ]),
                       ),
-                      Text(
-                        widget.order.client.name,
-                        style: const TextStyle(
-                          fontWeight: FontWeight.bold,
-                          fontSize: 13,
+                      if (widget.isExpanded != true)
+                        OptionsButton(
+                          padding: const EdgeInsets.all(0),
+                          borderColor: Colors.white,
+                          onEdit: onEdit,
+                          onDelete: () async {
+                            final bool delete = await orderController
+                                .deleteOrder(widget.order.id);
+                            if (delete) {
+                              showSnackbar(
+                                  message: 'Order deleted successfully!');
+                            } else {
+                              showSnackbar(
+                                message: 'Error deleting order!',
+                                error: true,
+                              );
+                            }
+                            setState(() {});
+                            orderController
+                                .initOrders(profileController.myProfile.uid);
+                          },
                         ),
-                      ),
                     ],
                   ),
-                  Row(
-                    children: <Widget>[
-                      const Text(
-                        'Delivery: ',
-                        style: TextStyle(
-                          fontWeight: FontWeight.normal,
-                          fontSize: 13,
-                        ),
-                      ),
-                      Text(
-                        widget.order.deliveryMethod == 'in_person'
-                            ? 'In Person'
-                            : 'Online',
-                        style: const TextStyle(
-                          fontWeight: FontWeight.bold,
-                          fontSize: 13,
-                        ),
-                      ),
-                    ],
-                  ),
-                  Row(
-                    children: <Widget>[
-                      const Text(
-                        'Order Date: ',
-                        style: TextStyle(
-                          fontWeight: FontWeight.normal,
-                          fontSize: 13,
-                        ),
-                      ),
-                      Text(
-                        DateFormat('dd MMM yyyy')
-                            .format(widget.order.deliveryDate ??
-                                widget.order.createdAt)
-                            .toString(),
-                        style: const TextStyle(
-                          fontWeight: FontWeight.bold,
-                          fontSize: 13,
-                        ),
-                      ),
-                    ],
-                  ),
-                  if (widget.isExpanded == true)
-                    Row(
+                  Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 10.0),
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      crossAxisAlignment: CrossAxisAlignment.start,
                       children: <Widget>[
-                        const Text(
-                          'Order Channel: ',
-                          style: TextStyle(
-                            fontWeight: FontWeight.normal,
-                            fontSize: 13,
-                          ),
+                        Row(
+                          children: <Widget>[
+                            const Text(
+                              'Client: ',
+                              style: TextStyle(
+                                fontWeight: FontWeight.normal,
+                                fontSize: 13,
+                              ),
+                            ),
+                            Text(
+                              widget.order.client.name,
+                              style: const TextStyle(
+                                fontWeight: FontWeight.bold,
+                                fontSize: 13,
+                              ),
+                            ),
+                          ],
                         ),
-                        Text(
-                          DateFormat('dd MMM yyyy')
-                              .format(widget.order.deliveryDate ??
-                                  widget.order.createdAt)
-                              .toString(),
-                          style: const TextStyle(
-                            fontWeight: FontWeight.bold,
-                            fontSize: 13,
-                          ),
+                        Row(
+                          children: <Widget>[
+                            const Text(
+                              'Delivery: ',
+                              style: TextStyle(
+                                fontWeight: FontWeight.normal,
+                                fontSize: 13,
+                              ),
+                            ),
+                            Text(
+                              widget.order.deliveryMethod == 'in_person'
+                                  ? 'In Person'
+                                  : 'Online',
+                              style: const TextStyle(
+                                fontWeight: FontWeight.bold,
+                                fontSize: 13,
+                              ),
+                            ),
+                          ],
                         ),
+                        Row(
+                          children: <Widget>[
+                            const Text(
+                              'Order Date: ',
+                              style: TextStyle(
+                                fontWeight: FontWeight.normal,
+                                fontSize: 13,
+                              ),
+                            ),
+                            Text(
+                              DateFormat('dd MMM yyyy')
+                                  .format(widget.order.deliveryDate ??
+                                      widget.order.createdAt)
+                                  .toString(),
+                              style: const TextStyle(
+                                fontWeight: FontWeight.bold,
+                                fontSize: 13,
+                              ),
+                            ),
+                          ],
+                        ),
+                        if (widget.isExpanded == true)
+                          Row(
+                            children: <Widget>[
+                              const Text(
+                                'Order Channel: ',
+                                style: TextStyle(
+                                  fontWeight: FontWeight.normal,
+                                  fontSize: 13,
+                                ),
+                              ),
+                              Text(
+                                widget.order.deliveryMethod ?? 'N/A',
+                                style: const TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 13,
+                                ),
+                              ),
+                            ],
+                          ),
+                        if (widget.isExpanded == true)
+                          Row(
+                            children: <Widget>[
+                              const Text(
+                                'Payment Method: ',
+                                style: TextStyle(
+                                  fontWeight: FontWeight.normal,
+                                  fontSize: 13,
+                                ),
+                              ),
+                              Text(
+                                widget.order.paymentMethod ?? 'N/A',
+                                style: const TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 13,
+                                ),
+                              ),
+                            ],
+                          ),
                       ],
                     ),
-                  if (widget.isExpanded == true)
+                  ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: <Widget>[
+                      GestureDetector(
+                        onTap: () {
+                          showModalBottomSheet(
+                            context: context,
+                            shape: const RoundedRectangleBorder(
+                              borderRadius: BorderRadius.vertical(
+                                top: Radius.circular(20.0),
+                              ),
+                            ),
+                            builder: (BuildContext context) {
+                              List<OrderStatus> availableStatuses =
+                                  <OrderStatus>[];
+                              switch (widget.order.status) {
+                                case OrderStatus.pending:
+                                  availableStatuses = <OrderStatus>[
+                                    OrderStatus.paid,
+                                    OrderStatus.cancelled
+                                  ];
+                                  break;
+                                case OrderStatus.paid:
+                                  availableStatuses = <OrderStatus>[
+                                    OrderStatus.pending,
+                                    OrderStatus.cancelled
+                                  ];
+                                  break;
+                                case OrderStatus.cancelled:
+                                  availableStatuses = <OrderStatus>[
+                                    OrderStatus.pending,
+                                    OrderStatus.paid
+                                  ];
+                                  break;
+                              }
+                              return SizedBox(
+                                child: Padding(
+                                  padding: const EdgeInsets.only(
+                                      top: 20, bottom: 50),
+                                  child: Column(
+                                    mainAxisSize: MainAxisSize
+                                        .min, // Ensures the column takes only the necessary space
+                                    children: <Widget>[
+                                      const Text(
+                                        'Change Order Status to',
+                                        style: TextStyle(
+                                          fontSize: 14,
+                                          fontWeight: FontWeight.w700,
+                                        ),
+                                      ),
+                                      const SizedBox(
+                                        height: 20,
+                                      ),
+                                      ...availableStatuses
+                                          .map((OrderStatus status) {
+                                        return ListTile(
+                                          title: Container(
+                                            decoration: BoxDecoration(
+                                                color: prosemibackColor,
+                                                borderRadius:
+                                                    BorderRadius.circular(15)),
+                                            padding: const EdgeInsets.symmetric(
+                                                horizontal: 10, vertical: 20),
+                                            child: Text(
+                                              status.displayTitle,
+                                              style: const TextStyle(
+                                                  fontSize: 14,
+                                                  color: textColor,
+                                                  fontWeight: FontWeight.w600),
+                                            ),
+                                          ),
+                                          onTap: () async {
+                                            Get.back();
+                                            setState(() {});
+                                          },
+                                        );
+                                      }).toList(),
+                                    ],
+                                  ),
+                                ),
+                              );
+                            },
+                          );
+                        },
+                        child: Container(
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: 10, vertical: 5),
+                          decoration: BoxDecoration(
+                              color: prosemibackColor,
+                              borderRadius: BorderRadius.circular(20)),
+                          child: Center(
+                            child: Wrap(
+                                crossAxisAlignment: WrapCrossAlignment.center,
+                                children: <Widget>[
+                                  const Text(
+                                    'Change Order Status',
+                                    style: TextStyle(
+                                        fontSize: 13,
+                                        color: proprimaryColor,
+                                        fontWeight: FontWeight.bold),
+                                  ),
+                                  const SizedBox(
+                                    width: 8,
+                                  ),
+                                  SvgPicture.asset(
+                                    'assets/svgs/dropdown.svg',
+                                    color: proprimaryColor,
+                                  )
+                                ]),
+                          ),
+                        ),
+                      )
+                    ],
+                  ),
+                  if (widget.isExpanded != true)
                     Row(
+                      mainAxisAlignment: MainAxisAlignment.end,
                       children: <Widget>[
-                        const Text(
-                          'Payment Method: ',
-                          style: TextStyle(
-                            fontWeight: FontWeight.normal,
-                            fontSize: 13,
+                        GestureDetector(
+                          onTap: () {
+                            showDialog(
+                              context: context,
+                              builder: (BuildContext context) => OrderPopUp(
+                                order: widget.order,
+                              ),
+                            );
+                          },
+                          child: CircleAvatar(
+                            backgroundColor: probackgroundColor,
+                            radius: 15,
+                            child: SvgPicture.asset(
+                              'assets/svgs/expandform.svg',
+                              color: proprimaryColor,
+                            ),
                           ),
-                        ),
-                        Text(
-                          DateFormat('dd MMM yyyy')
-                              .format(widget.order.deliveryDate ??
-                                  widget.order.createdAt)
-                              .toString(),
-                          style: const TextStyle(
-                            fontWeight: FontWeight.bold,
-                            fontSize: 13,
-                          ),
-                        ),
+                        )
                       ],
-                    ),
+                    )
                 ],
               ),
             ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: <Widget>[
-                GestureDetector(
-                  onTap: () {
-                    showModalBottomSheet(
-                      context: context,
-                      shape: const RoundedRectangleBorder(
-                        borderRadius: BorderRadius.vertical(
-                          top: Radius.circular(20.0),
-                        ),
-                      ),
-                      builder: (BuildContext context) {
-                        List<OrderStatus> availableStatuses = <OrderStatus>[];
-                        switch (widget.order.status) {
-                          case OrderStatus.pending:
-                            availableStatuses = <OrderStatus>[
-                              OrderStatus.paid,
-                              OrderStatus.cancelled
-                            ];
-                            break;
-                          case OrderStatus.paid:
-                            availableStatuses = <OrderStatus>[
-                              OrderStatus.pending,
-                              OrderStatus.cancelled
-                            ];
-                            break;
-                          case OrderStatus.cancelled:
-                            availableStatuses = <OrderStatus>[
-                              OrderStatus.pending,
-                              OrderStatus.paid
-                            ];
-                            break;
-                        }
-                        return SizedBox(
-                          child: Padding(
-                            padding: const EdgeInsets.only(top: 20, bottom: 50),
-                            child: Column(
-                              mainAxisSize: MainAxisSize
-                                  .min, // Ensures the column takes only the necessary space
-                              children: <Widget>[
-                                const Text(
-                                  'Change Order Status to',
-                                  style: TextStyle(
-                                    fontSize: 14,
-                                    fontWeight: FontWeight.w700,
-                                  ),
-                                ),
-                                const SizedBox(
-                                  height: 20,
-                                ),
-                                ...availableStatuses.map((OrderStatus status) {
-                                  return ListTile(
-                                    title: Container(
-                                      decoration: BoxDecoration(
-                                          color: prosemibackColor,
-                                          borderRadius:
-                                              BorderRadius.circular(15)),
-                                      padding: const EdgeInsets.symmetric(
-                                          horizontal: 10, vertical: 20),
-                                      child: Text(
-                                        status.displayTitle,
-                                        style: const TextStyle(
-                                            fontSize: 14,
-                                            color: textColor,
-                                            fontWeight: FontWeight.w600),
-                                      ),
-                                    ),
-                                    onTap: () async {
-                                      Get.back();
-                                      setState(() {});
-                                    },
-                                  );
-                                }).toList(),
-                              ],
-                            ),
-                          ),
-                        );
-                      },
-                    );
-                  },
-                  child: Container(
-                    padding:
-                        const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
-                    decoration: BoxDecoration(
-                        color: prosemibackColor,
-                        borderRadius: BorderRadius.circular(20)),
-                    child: Center(
-                      child: Wrap(
-                          crossAxisAlignment: WrapCrossAlignment.center,
-                          children: <Widget>[
-                            const Text(
-                              'Change Order Status',
-                              style: TextStyle(
-                                  fontSize: 13,
-                                  color: proprimaryColor,
-                                  fontWeight: FontWeight.bold),
-                            ),
-                            const SizedBox(
-                              width: 8,
-                            ),
-                            SvgPicture.asset(
-                              'assets/svgs/dropdown.svg',
-                              color: proprimaryColor,
-                            )
-                          ]),
-                    ),
+            if (widget.isExpanded == true) const SizedBox(width: 16),
+            if (widget.isExpanded == true)
+              Container(
+                width: 100,
+                height: 100,
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(8),
+                  border: Border.all(
+                    color:
+                        const Color(0xff4680A6).withAlpha(50), // Border color
+                    width: 0.5, // Border width
                   ),
-                )
-              ],
-            ),
-            if (widget.isExpanded != true)
-              Row(
-                mainAxisAlignment: MainAxisAlignment.end,
-                children: <Widget>[
-                  GestureDetector(
-                    onTap: () {
-                      showDialog(
-                        context: context,
-                        builder: (BuildContext context) => OrderPopUp(
-                          order: widget.order,
-                        ),
-                      );
-                    },
-                    child: CircleAvatar(
-                      backgroundColor: probackgroundColor,
-                      radius: 15,
-                      child: SvgPicture.asset(
-                        'assets/svgs/expandform.svg',
-                        color: proprimaryColor,
-                      ),
-                    ),
-                  )
-                ],
-              )
+                ),
+                child: ClipRRect(
+                    borderRadius: BorderRadius.circular(8),
+                    child: const NetworkImageWithPlaceHolder(imageUrl: '')),
+              ),
           ],
         ),
       ),
