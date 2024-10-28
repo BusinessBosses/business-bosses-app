@@ -2,8 +2,10 @@ import 'package:business_bosses_v2/bbpro/controllers/order_controller.dart';
 import 'package:business_bosses_v2/bbpro/models/order_model.dart';
 import 'package:business_bosses_v2/bbpro/presentation/create_order.dart';
 import 'package:business_bosses_v2/bbpro/widgets/optionsbutton.dart';
+import 'package:business_bosses_v2/bbpro/widgets/orderpopup.dart';
 import 'package:business_bosses_v2/common/dialogs/snackbar.dart';
 import 'package:business_bosses_v2/features/profile/controller/profile_controller.dart';
+import 'package:business_bosses_v2/features/profile/presentation/myprofilescreen.dart';
 import 'package:business_bosses_v2/utils/theme/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -75,25 +77,27 @@ class _OrderWidgetState extends State<OrderWidget> {
                         ),
                       ]),
                 ),
-                OptionsButton(
-                  padding: const EdgeInsets.all(0),
-                  borderColor: Colors.white,
-                  onEdit: onEdit,
-                  onDelete: () async {
-                    final bool delete =
-                        await orderController.deleteOrder(widget.order.id);
-                    if (delete) {
-                      showSnackbar(message: 'Order deleted successfully!');
-                    } else {
-                      showSnackbar(
-                        message: 'Error deleting order!',
-                        error: true,
-                      );
-                    }
-                    setState(() {});
-                    orderController.initOrders(profileController.myProfile.uid);
-                  },
-                ),
+                if (widget.isExpanded != true)
+                  OptionsButton(
+                    padding: const EdgeInsets.all(0),
+                    borderColor: Colors.white,
+                    onEdit: onEdit,
+                    onDelete: () async {
+                      final bool delete =
+                          await orderController.deleteOrder(widget.order.id);
+                      if (delete) {
+                        showSnackbar(message: 'Order deleted successfully!');
+                      } else {
+                        showSnackbar(
+                          message: 'Error deleting order!',
+                          error: true,
+                        );
+                      }
+                      setState(() {});
+                      orderController
+                          .initOrders(profileController.myProfile.uid);
+                    },
+                  ),
               ],
             ),
             Padding(
@@ -159,6 +163,50 @@ class _OrderWidgetState extends State<OrderWidget> {
                       ),
                     ],
                   ),
+                  if (widget.isExpanded == true)
+                    Row(
+                      children: <Widget>[
+                        const Text(
+                          'Order Channel: ',
+                          style: TextStyle(
+                            fontWeight: FontWeight.normal,
+                            fontSize: 13,
+                          ),
+                        ),
+                        Text(
+                          DateFormat('dd MMM yyyy')
+                              .format(widget.order.deliveryDate ??
+                                  widget.order.createdAt)
+                              .toString(),
+                          style: const TextStyle(
+                            fontWeight: FontWeight.bold,
+                            fontSize: 13,
+                          ),
+                        ),
+                      ],
+                    ),
+                  if (widget.isExpanded == true)
+                    Row(
+                      children: <Widget>[
+                        const Text(
+                          'Payment Method: ',
+                          style: TextStyle(
+                            fontWeight: FontWeight.normal,
+                            fontSize: 13,
+                          ),
+                        ),
+                        Text(
+                          DateFormat('dd MMM yyyy')
+                              .format(widget.order.deliveryDate ??
+                                  widget.order.createdAt)
+                              .toString(),
+                          style: const TextStyle(
+                            fontWeight: FontWeight.bold,
+                            fontSize: 13,
+                          ),
+                        ),
+                      ],
+                    ),
                 ],
               ),
             ),
@@ -273,7 +321,7 @@ class _OrderWidgetState extends State<OrderWidget> {
                 )
               ],
             ),
-            if (widget.isExpanded != false)
+            if (widget.isExpanded != true)
               Row(
                 mainAxisAlignment: MainAxisAlignment.end,
                 children: <Widget>[
@@ -281,7 +329,9 @@ class _OrderWidgetState extends State<OrderWidget> {
                     onTap: () {
                       showDialog(
                         context: context,
-                        builder: (BuildContext context) => Container(),
+                        builder: (BuildContext context) => OrderPopUp(
+                          order: widget.order,
+                        ),
                       );
                     },
                     child: CircleAvatar(
