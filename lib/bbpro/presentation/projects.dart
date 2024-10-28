@@ -34,6 +34,8 @@ class _ProjectsState extends State<Projects>
   late TabController _tabController;
   List<Project> filteredProjects = <Project>[];
 
+  String selectedFilterOption = 'None';
+
   @override
   void initState() {
     super.initState();
@@ -77,6 +79,7 @@ class _ProjectsState extends State<Projects>
   @override
   Widget build(BuildContext context) {
     final Size screenSize = MediaQuery.of(context).size;
+
     return Scaffold(
       resizeToAvoidBottomInset: true,
       backgroundColor: probackgroundColor,
@@ -132,22 +135,25 @@ class _ProjectsState extends State<Projects>
               _scrollToSection(index);
             },
             proprimaryColor: proprimaryColor,
-            // ignore: prefer_const_literals_to_create_immutables
             backgroundColor: <Color>[
               probackgroundColor,
               Colors.black.withOpacity(0.1),
               Colors.amber.withOpacity(0.1),
-              Colors.green.withOpacity(0.1)
+              Colors.green.withOpacity(0.1),
             ],
             listofitems: ProjectStatus.values.toList(),
             itemToString: (ProjectStatus status) =>
                 '${status.displayTitle.toString().split('.').last} (${status == ProjectStatus.allprojects ? projectController.projects.length : (projectController.statusProjects[status] == null ? '0' : projectController.statusProjects[status]!.length.toString())})',
             filterOptions: const <String>[
               'Newest first',
-              'Most Completed',
               'Highest Budget',
               'None'
             ],
+            onFilterSelected: (String? selectedFilter) {
+              setState(() {
+                selectedFilterOption = selectedFilter!;
+              });
+            },
           ),
           Expanded(
             child: loading
@@ -175,6 +181,8 @@ class _ProjectsState extends State<Projects>
                                       (ProjectStatus status) =>
                                           SliverToBoxAdapter(
                                         child: RowStatusCard(
+                                          selectedFilterOption:
+                                              selectedFilterOption,
                                           allProjects:
                                               projectController.allProjects,
                                           projects: projectController
@@ -263,6 +271,7 @@ class RowStatusCard extends StatefulWidget {
   final List<Project> projects;
   final Size screenSize;
   final List<Project> allProjects;
+  final String selectedFilterOption;
 
   const RowStatusCard({
     required this.projects,
@@ -273,6 +282,7 @@ class RowStatusCard extends StatefulWidget {
     required this.cancelDrag,
     super.key,
     required this.allProjects,
+    required this.selectedFilterOption,
   });
 
   @override
@@ -428,21 +438,21 @@ class _RowStatusCardState extends State<RowStatusCard> {
               ? filteredProjects.isNotEmpty
                   ? Expanded(
                       child: ListView.builder(
-                        itemCount: filteredProjects.length,
-                        shrinkWrap: true,
-                        itemBuilder: (BuildContext context, int index) {
-                          return Padding(
-                            padding: const EdgeInsets.only(bottom: 12),
-                            child: TaskWidget(
-                              project: filteredProjects[index],
-                              bgcolor: filteredProjects[index]
-                                  .status
-                                  .backgroundColor,
-                            ),
-                          );
-                        },
-                      ),
-                    )
+                      itemCount:
+                          filteredProjects.length, // Use filteredProjects
+                      shrinkWrap: true,
+                      itemBuilder: (BuildContext context, int index) {
+                        return Padding(
+                          padding: const EdgeInsets.only(bottom: 12),
+                          child: TaskWidget(
+                            project:
+                                filteredProjects[index], // Use filteredProjects
+                            bgcolor:
+                                filteredProjects[index].status.backgroundColor,
+                          ),
+                        );
+                      },
+                    ))
                   : const Text('No projects found')
               : Expanded(
                   child: DragTarget<Project>(

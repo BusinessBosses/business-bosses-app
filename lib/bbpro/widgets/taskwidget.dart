@@ -140,6 +140,8 @@ class _TaskWidgetState extends State<TaskWidget> {
               Padding(
                 padding: const EdgeInsets.symmetric(vertical: 10.0),
                 child: Column(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: <Widget>[
                     Row(
                       children: <Widget>[
@@ -168,41 +170,30 @@ class _TaskWidgetState extends State<TaskWidget> {
                           ),
                         ),
                         Text(
-                          widget.project.duration.toString(),
+                          widget.project.endAt != null ||
+                                  widget.project.startAt != null
+                              ? '${widget.project.endAt.difference(widget.project.startAt).inDays} days'
+                              : 'N/A',
                           style: const TextStyle(
                             fontSize: 13,
                           ),
                         ),
                       ],
                     ),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      crossAxisAlignment: CrossAxisAlignment.start,
+                    Wrap(
+                      crossAxisAlignment: WrapCrossAlignment.center,
                       children: <Widget>[
-                        Expanded(
-                          child: Padding(
-                            padding: const EdgeInsets.only(right: 40.0),
-                            child: RichText(
-                              overflow: TextOverflow.ellipsis,
-                              maxLines: 4,
-                              text: TextSpan(
-                                children: <InlineSpan>[
-                                  const TextSpan(
-                                    text: 'Description: ',
-                                    style: TextStyle(
-                                        fontWeight: FontWeight.bold,
-                                        fontSize: 13,
-                                        color: textColor),
-                                  ),
-                                  TextSpan(
-                                    text: widget.project.description,
-                                    style: const TextStyle(
-                                        fontSize: 13, color: textColor),
-                                  ),
-                                ],
-                              ),
-                            ),
-                          ),
+                        const Text(
+                          'Description: ',
+                          style: TextStyle(
+                              fontWeight: FontWeight.bold,
+                              fontSize: 13,
+                              color: textColor),
+                        ),
+                        Text(
+                          widget.project.description,
+                          style:
+                              const TextStyle(fontSize: 13, color: textColor),
                         ),
                       ],
                     ),
@@ -285,6 +276,7 @@ class _TaskWidgetState extends State<TaskWidget> {
                                               ),
                                             ),
                                             onTap: () async {
+                                              Get.back();
                                               setState(() {
                                                 projectController
                                                     .statusProjects[
@@ -327,8 +319,6 @@ class _TaskWidgetState extends State<TaskWidget> {
                                                   .initProjects(
                                                       profileController
                                                           .myProfile.uid);
-
-                                              Get.back();
                                             },
                                           );
                                         }).toList(),
