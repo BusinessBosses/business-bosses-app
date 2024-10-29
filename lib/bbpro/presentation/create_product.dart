@@ -92,7 +92,9 @@ class _CreateProductListingState extends State<CreateProductListing> {
       _priceController.text = widget.product!.price.toString();
       _descriptionController.text = widget.product!.description;
       _discountController.text = widget.product!.discount.toString();
-      storageLocationController.text = widget.product!.storageLocation;
+      storageLocationController.text = widget.product!.storageLocation != null
+          ? widget.product!.storageLocation!
+          : '';
       productNumberController.text = widget.product!.productNumber.toString();
       quantityController.text = widget.product!.quantity.toString();
       colorController.text = widget.product!.color?.join(', ') ?? '';
@@ -101,13 +103,15 @@ class _CreateProductListingState extends State<CreateProductListing> {
       deliveryDuration = widget.product!.deliveryDuration;
       sizeController.text = widget.product!.size?.join(', ') ?? '';
       category = widget.product!.category;
-      country = widget.product!.location;
+      country = widget.product!.location != null
+          ? widget.product!.location!
+          : shopController.shop!.location;
       deliveryMethod = widget.product!.deliveryMethod;
       paymentMethod = widget.product!.paymentMethod;
       startDate = widget.product!.startAt;
       endDate = widget.product!.endAt;
       _isSwitched = widget.product!.isActive;
-      deliverydayscontroller.text = widget.product!.deliveryDuration ?? '0';
+      deliverydayscontroller.text = widget.product!.deliveryDuration ?? '';
 
       // If images exist in the product model, you can populate the image list as well
       if (widget.product!.images != null) {

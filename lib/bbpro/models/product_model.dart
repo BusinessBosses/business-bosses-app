@@ -8,17 +8,17 @@ class Product {
   Shop? shop;
   String name;
   double price;
-  double discount;
+  double? discount;
   String description;
   String category;
-  String location;
-  String paymentMethod;
-  String deliveryMethod;
-  String url;
+  String? location;
+  String? paymentMethod;
+  String? deliveryMethod;
+  String? url;
   String? deliveryDuration;
   String itemType;
   bool isActive;
-  String storageLocation;
+  String? storageLocation;
   String? productNumber;
   int? quantity;
   DateTime? startAt;
@@ -34,19 +34,19 @@ class Product {
     this.shop,
     required this.name,
     required this.price,
-    required this.discount,
+    this.discount = 0,
     required this.description,
     required this.category,
-    required this.location,
-    required this.paymentMethod,
-    required this.deliveryMethod,
-    required this.url,
+    this.location,
+    this.paymentMethod,
+    this.deliveryMethod,
+    this.url,
     this.deliveryDuration,
     required this.itemType,
     required this.isActive,
-    required this.storageLocation,
-    required this.productNumber,
-    required this.quantity,
+    this.storageLocation,
+    this.productNumber,
+    this.quantity,
     this.startAt,
     this.endAt,
     this.color,
@@ -62,7 +62,8 @@ class Product {
       shop: json['shop'] != null ? Shop.fromMap(json['shop']) : null,
       name: json['name'],
       price: double.parse(json['price'].toString()),
-      discount: double.parse(json['discount'].toString()),
+      discount: double.parse(
+          json['discount'] ? json['discount'].toString() : 0.toString()),
       description: json['description'],
       category: json['category'],
       location: json['location'] ?? 'Nigeria',

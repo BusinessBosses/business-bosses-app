@@ -116,22 +116,24 @@ class _ExpandedProductState extends State<ExpandedProduct> {
                           fontSize: 16,
                         ),
                       ),
-                      Text(
-                        widget.product.deliveryMethod,
-                        style: const TextStyle(
-                          color: proprimaryColor,
-                          fontWeight: FontWeight.bold,
-                          fontSize: 16,
+                      if (widget.product.deliveryMethod != null)
+                        Text(
+                          widget.product.deliveryMethod!,
+                          style: const TextStyle(
+                            color: proprimaryColor,
+                            fontWeight: FontWeight.bold,
+                            fontSize: 16,
+                          ),
                         ),
-                      ),
-                      Text(
-                        widget.product.location,
-                        style: const TextStyle(
-                          color: proprimaryColor,
-                          fontWeight: FontWeight.bold,
-                          fontSize: 16,
+                      if (widget.product.location != null)
+                        Text(
+                          widget.product.location!,
+                          style: const TextStyle(
+                            color: proprimaryColor,
+                            fontWeight: FontWeight.bold,
+                            fontSize: 16,
+                          ),
                         ),
-                      ),
                     ],
                   ),
                   const SizedBox(

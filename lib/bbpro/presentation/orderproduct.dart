@@ -168,22 +168,24 @@ class _OrderProductScreenState extends State<OrderProductScreen>
                                     fontSize: 16,
                                   ),
                                 ),
-                                Text(
-                                  widget.product.deliveryMethod,
-                                  style: const TextStyle(
-                                    color: proprimaryColor,
-                                    fontWeight: FontWeight.bold,
-                                    fontSize: 16,
+                                if (widget.product.deliveryMethod != null)
+                                  Text(
+                                    widget.product.deliveryMethod!,
+                                    style: const TextStyle(
+                                      color: proprimaryColor,
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: 16,
+                                    ),
                                   ),
-                                ),
-                                Text(
-                                  widget.product.location,
-                                  style: const TextStyle(
-                                    color: proprimaryColor,
-                                    fontWeight: FontWeight.bold,
-                                    fontSize: 16,
+                                if (widget.product.location != null)
+                                  Text(
+                                    widget.product.location!,
+                                    style: const TextStyle(
+                                      color: proprimaryColor,
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: 16,
+                                    ),
                                   ),
-                                ),
                               ],
                             ),
                             const SizedBox(
@@ -293,7 +295,7 @@ class _OrderProductScreenState extends State<OrderProductScreen>
                       color: 'Black',
                       price: 10000,
                       deliveryDays: 5,
-                      deliveryLocation: widget.product.location,
+                      deliveryLocation: widget.product.location!,
                       imageUrl: widget.product.images![0],
                     ),
                     const SizedBox(
