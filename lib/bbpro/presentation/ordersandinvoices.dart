@@ -312,6 +312,7 @@ class _RowStatusCardState extends State<RowStatusCard> {
   @override
   void initState() {
     super.initState();
+    filteredOrders.clear();
     filteredOrders = widget.allorders;
   }
 

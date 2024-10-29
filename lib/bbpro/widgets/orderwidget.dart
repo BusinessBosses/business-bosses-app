@@ -104,6 +104,7 @@ class _OrderWidgetState extends State<OrderWidget> {
                                 error: true,
                               );
                             }
+
                             setState(() {});
                             orderController
                                 .initOrders(profileController.myProfile.uid);
