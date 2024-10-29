@@ -1,4 +1,5 @@
 import 'package:business_bosses_v2/bbpro/controllers/project_controller.dart';
+import 'package:business_bosses_v2/bbpro/controllers/shop_controller.dart';
 import 'package:business_bosses_v2/bbpro/models/project_model.dart';
 import 'package:business_bosses_v2/bbpro/presentation/add_project.dart';
 import 'package:business_bosses_v2/bbpro/widgets/optionsbutton.dart';
@@ -29,6 +30,7 @@ class TaskWidget extends StatefulWidget {
 class _TaskWidgetState extends State<TaskWidget> {
   final ProjectController projectController = Get.find();
   final ProfileController profileController = Get.find();
+  final ShopController shopController = Get.find();
   @override
   Widget build(BuildContext context) {
     return Stack(children: <Widget>[
@@ -145,9 +147,9 @@ class _TaskWidgetState extends State<TaskWidget> {
                   children: <Widget>[
                     Row(
                       children: <Widget>[
-                        const Text(
-                          'Expenses: ',
-                          style: TextStyle(
+                        Text(
+                          'Expenses: ${shopController.shop!.currency} ',
+                          style: const TextStyle(
                             fontWeight: FontWeight.bold,
                             fontSize: 13,
                           ),

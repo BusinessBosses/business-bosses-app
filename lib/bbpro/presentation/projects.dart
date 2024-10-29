@@ -153,6 +153,8 @@ class _ProjectsState extends State<Projects>
               setState(() {
                 selectedFilterOption = selectedFilter!;
               });
+              print(selectedFilter);
+              filterProjects();
             },
           ),
           Expanded(
@@ -183,8 +185,7 @@ class _ProjectsState extends State<Projects>
                                         child: RowStatusCard(
                                           selectedFilterOption:
                                               selectedFilterOption,
-                                          allProjects:
-                                              projectController.allProjects,
+                                          allProjects: filteredProjects,
                                           projects: projectController
                                                   .statusProjects[status] ??
                                               <Project>[],
@@ -242,6 +243,29 @@ class _ProjectsState extends State<Projects>
         ],
       ),
     );
+  }
+
+  void filterProjects() {
+    setState(() {
+      filteredProjects = List<Project>.from(projectController.allProjects);
+
+      switch (selectedFilterOption) {
+        case 'Newest first':
+          filteredProjects.sort(
+              (Project a, Project b) => b.createdAt.compareTo(a.createdAt));
+          break;
+
+        case 'Highest Budget':
+          filteredProjects
+              .sort((Project a, Project b) => b.amount.compareTo(a.amount));
+          break;
+
+        case 'None':
+          // Reset to default ordering or initial project list
+          filteredProjects = List<Project>.from(projectController.allProjects);
+          break;
+      }
+    });
   }
 
   void _moveMainList(bool isRight) {

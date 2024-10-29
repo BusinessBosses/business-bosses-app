@@ -8,7 +8,7 @@ class Project {
   final String userId;
   final String name;
   final String description;
-  final String? amount; // Changed from double? to String?
+  final num amount; // Changed from double? to String?
   final String duration;
   final DateTime createdAt;
   final ProjectStatus status;
@@ -20,7 +20,7 @@ class Project {
     required this.userId,
     required this.name,
     required this.description,
-    this.amount,
+    required this.amount,
     required this.duration,
     required this.createdAt,
     required this.startAt,
@@ -38,8 +38,8 @@ class Project {
         status: ProjectStatus.fromString(json['status']),
         name: json['name'],
         description: json['description'],
-        amount:
-            json['amount']?.toString(), // Changed to handle amount as String
+        amount: num.parse(
+            json['amount'].toString()), // Changed to handle amount as String
         duration: json['duration'],
         createdAt: DateTime.parse(json['createdAt']),
         startAt: DateTime.parse(json['startAt']),

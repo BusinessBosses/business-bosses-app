@@ -230,10 +230,11 @@ class _OrdersScreenState extends State<OrdersScreen>
                                                         order.orderDetails,
                                                   ),
                                                 );
-                                                // orderController.updateOrder(
-                                                //     order.id, <String, dynamic>{
-                                                //   'status': newStatus.toString(),
-                                                // });
+                                                orderController.updateOrder(
+                                                    order.id, <String, dynamic>{
+                                                  'status':
+                                                      newStatus.toString(),
+                                                });
                                               });
                                             },
                                             onDrag: (bool isRight) {

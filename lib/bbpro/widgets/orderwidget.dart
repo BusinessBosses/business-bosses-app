@@ -79,7 +79,7 @@ class _OrderWidgetState extends State<OrderWidget> {
                                 width: 5,
                               ),
                               Text(
-                                '${calculateTotalItems().toString()} items - ${shopController.shop!.currency} ${calculateTotalPrice().toString()}',
+                                '${calculateTotalItems().toString()} item(s) - ${shopController.shop!.currency} ${calculateTotalPrice().toString()}',
                                 style: const TextStyle(
                                   fontWeight: FontWeight.bold,
                                   fontSize: 13,
