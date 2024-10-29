@@ -62,8 +62,9 @@ class Product {
       shop: json['shop'] != null ? Shop.fromMap(json['shop']) : null,
       name: json['name'],
       price: double.parse(json['price'].toString()),
-      discount: double.parse(
-          json['discount'] ? json['discount'].toString() : 0.toString()),
+      discount: double.parse(json['discount'] != null
+          ? json['discount'].toString()
+          : 0.toString()),
       description: json['description'],
       category: json['category'],
       location: json['location'] ?? 'Nigeria',
