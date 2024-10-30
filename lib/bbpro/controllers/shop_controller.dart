@@ -1,5 +1,6 @@
 import 'dart:developer';
 
+import 'package:business_bosses_v2/bbpro/models/order_stats_model.dart';
 import 'package:business_bosses_v2/bbpro/models/product_model.dart';
 import 'package:business_bosses_v2/bbpro/models/service_model.dart';
 import 'package:business_bosses_v2/bbpro/models/shop_model.dart';
@@ -16,6 +17,7 @@ class ShopController extends GetxController {
   RxList<Product> products = RxList<Product>(<Product>[]);
   RxList<Service> services = RxList<Service>(<Service>[]);
   RxList<Vendor> suppliers = RxList<Vendor>(<Vendor>[]);
+  OrderStats? orderStats;
 
   Future<bool> initShop() async {
     ApiResponseModel response = await ApiService.get(
@@ -218,6 +220,17 @@ class ShopController extends GetxController {
     } else {
       log(response.toMap().toString());
       return false;
+    }
+  }
+
+  Future<void> loadStatistics() async {
+    ApiResponseModel ordersResponse = await ApiService.get(
+      path: 'dashboard/shop-orders/${shop?.id}',
+    );
+    if (ordersResponse.success) {
+      for (int i = 0; i < ordersResponse.data['rows'].length; i++) {
+        orderStats = OrderStats.fromJson(ordersResponse.data);
+      }
     }
   }
 }

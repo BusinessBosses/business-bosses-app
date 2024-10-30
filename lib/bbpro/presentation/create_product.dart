@@ -566,7 +566,9 @@ class _CreateProductListingState extends State<CreateProductListing> {
                     'supplierId': null,
                     'storageLocation': storageLocationController.text,
                     'productNumber': productNumberController.text,
-                    'quantity': quantityController.text,
+                    'quantity': quantityController.text.isEmpty
+                        ? 0
+                        : quantityController.text,
                     'startAt': startDate?.toIso8601String(),
                     'endAt': endDate?.toIso8601String(),
                     'color': colors,

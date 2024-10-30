@@ -481,12 +481,6 @@ class _CreateServiceListingState extends State<CreateServiceListing>
                   hintText: 'Choose a delivery method',
                   items: const <String>['Online', 'In-Person'],
                   iconName: 'assets/svgs/dropdown.svg',
-                  validator: (String? value) {
-                    if (value == null || value.isEmpty) {
-                      return 'Please select a delivery method';
-                    }
-                    return null;
-                  },
                   onChanged: (String? newValue) {
                     setState(() {
                       deliveryMethod = newValue;
@@ -600,12 +594,6 @@ class _CreateServiceListingState extends State<CreateServiceListing>
                       paymentMethod = newValue;
                     });
                   },
-                  validator: (String? value) {
-                    if (value == null || value.isEmpty) {
-                      return 'Please select a payment method';
-                    }
-                    return null;
-                  },
                 ),
 
                 const SizedBox(height: 16),
@@ -620,12 +608,6 @@ class _CreateServiceListingState extends State<CreateServiceListing>
                   ],
                   initialValue: serviceType,
                   iconName: 'assets/svgs/dropdown.svg',
-                  validator: (String? value) {
-                    if (value == null || value.isEmpty) {
-                      return 'Please select a service type';
-                    }
-                    return null;
-                  },
                   onChanged: (String? newValue) {
                     setState(() {
                       serviceType = newValue;
@@ -642,10 +624,12 @@ class _CreateServiceListingState extends State<CreateServiceListing>
                           groupmembersController, // You might want a different controller here
                       inputType: TextInputType.number,
                       validator: (String? value) {
-                        if (value == null || value.isEmpty) {
+                        if (serviceType == 'Group Session or Event' &&
+                            (value == null || value.isEmpty)) {
                           return 'Please enter the maximum number of participants';
                         }
-                        if (int.tryParse(value) == null) {
+                        if (serviceType == 'Group Session or Event' &&
+                            (int.tryParse(value!) == null)) {
                           return 'Please enter a valid number';
                         }
                         return null;
@@ -802,12 +786,6 @@ class _CreateServiceListingState extends State<CreateServiceListing>
     } else if (_priceController.text.isEmpty) {
       showSnackbar(
         message: 'Price is Mandatory!',
-        error: true,
-      );
-      return;
-    } else if (paymentMethod == null || paymentMethod!.isEmpty) {
-      showSnackbar(
-        message: 'Payment Method is Mandatory!',
         error: true,
       );
       return;

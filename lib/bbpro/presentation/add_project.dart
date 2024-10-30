@@ -316,7 +316,6 @@ class _AddprojectState extends State<Addproject> {
                               firstDate: DateTime(2000),
                               lastDate: DateTime(2101),
                             );
-                            print('picked: $picked');
                             if (picked != null && picked != endDate) {
                               setState(() {
                                 endDate = picked;
@@ -390,6 +389,18 @@ class _AddprojectState extends State<Addproject> {
                       //       message: 'Adding tasks is mandatory!', error: true);
                       //   return;
                       // }
+                      if (endDate == null || startDate == null) {
+                        showSnackbar(
+                            message: 'You have to select task duration!',
+                            error: true);
+                        return;
+                      }
+                      if (endDate!.isBefore(startDate!)) {
+                        showSnackbar(
+                            message: 'End date cannot be before start date!',
+                            error: true);
+                        return;
+                      }
                       setState(() {
                         isSubmit = true;
                       });
@@ -398,7 +409,8 @@ class _AddprojectState extends State<Addproject> {
                         'name': nameController.text,
                         'amount': budgetController.text,
                         'description': descriptionController.text,
-                        'duration': '60days',
+                        'duration':
+                            '${endDate!.difference(startDate!).inDays} day(s)',
                         'startAt': DateFormat('yyyy-MM-dd').format(startDate!),
                         'endAt': DateFormat('yyyy-MM-dd').format(endDate!),
                       };
@@ -411,9 +423,6 @@ class _AddprojectState extends State<Addproject> {
                         response = await projectController.addProject(data);
                       }
                       if (response) {
-                        print('response: $response');
-                        print('============startDate: $startDate');
-                        print('============endDate: $endDate');
                         showSnackbar(
                           message: widget.project != null
                               ? 'Task Updated Successfully!'

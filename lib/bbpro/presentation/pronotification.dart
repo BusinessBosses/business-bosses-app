@@ -1,4 +1,3 @@
-import 'package:business_bosses_v2/bbpro/presentation/pronotificationsettings.dart';
 import 'package:business_bosses_v2/common/widgets/safety_model.dart';
 import 'package:business_bosses_v2/features/notifications/controller/notification_controller.dart';
 import 'package:business_bosses_v2/features/notifications/models/my_notification.dart';

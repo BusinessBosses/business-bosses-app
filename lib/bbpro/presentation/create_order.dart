@@ -102,6 +102,9 @@ class _CreateOrderState extends State<CreateOrder> {
         return SizedBox(
           height: MediaQuery.of(context).size.height * 0.9,
           child: ChooseClientBottomSheet(
+            onClientAdded: () {
+              _loadClients();
+            },
             selectedItem: selectedClient ?? '',
             online: clients
                 .where((Map<String, dynamic> client) =>
@@ -180,14 +183,7 @@ class _CreateOrderState extends State<CreateOrder> {
     if (mounted) {
       // Check if the widget is still mounted
       setState(() {
-        for (Client client in clientsController.clients) {
-          clientsName.add(client.name);
-          clients.add(<String, dynamic>{
-            'name': client.name,
-            'id': client.id,
-            'type': client.type
-          });
-        }
+        _loadClients();
 
         for (Product product in shopController.products) {
           products.add(
@@ -239,6 +235,19 @@ class _CreateOrderState extends State<CreateOrder> {
             (Map<String, dynamic> element) => element['id'] == item['id']);
       }
     });
+  }
+
+  void _loadClients() {
+    clients.clear();
+    clientsName.clear();
+    for (Client client in clientsController.clients) {
+      clientsName.add(client.name);
+      clients.add(<String, dynamic>{
+        'name': client.name,
+        'id': client.id,
+        'type': client.type
+      });
+    }
   }
 
   void _onClientSelect(String name) {
