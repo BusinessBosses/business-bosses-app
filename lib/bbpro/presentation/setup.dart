@@ -75,7 +75,7 @@ class _SetupState extends State<Setup> {
                           width: 5,
                         ),
                         const Text(
-                          'Edit Shop',
+                          'Edit',
                           style: TextStyle(
                               fontSize: 14,
                               color: textColor,

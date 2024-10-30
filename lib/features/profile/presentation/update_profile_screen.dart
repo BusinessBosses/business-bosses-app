@@ -2,6 +2,8 @@
 
 import 'dart:io';
 
+import 'package:business_bosses_v2/bbpro/presentation/bottomnavscreen.dart';
+import 'package:business_bosses_v2/bbpro/presentation/dashboard.dart';
 import 'package:business_bosses_v2/common/dialogs/snackbar.dart';
 import 'package:business_bosses_v2/common/models/user_model.dart';
 import 'package:business_bosses_v2/features/profile/controller/profile_controller.dart';
@@ -34,7 +36,9 @@ bool isExpanded = false;
 
 class UpdateProfileScreen extends StatefulWidget {
   final UserModel? user;
-  const UpdateProfileScreen({Key? key, this.user}) : super(key: key);
+  final bool? isShopedit;
+  const UpdateProfileScreen({Key? key, this.user, this.isShopedit})
+      : super(key: key);
 
   @override
   State<UpdateProfileScreen> createState() => _UpdateProfileScreenState();
@@ -139,34 +143,34 @@ class _UpdateProfileScreenState extends State<UpdateProfileScreen> {
     } catch (e) {}
   }
 
-  void setVariableValues(UserModel args) {
-    _email = args.email;
-    _location = args.location;
-    _category = args.category;
-    _industry = args.industry;
-    _photoUrl = args.photoUrl;
-    _companyName = args.companyName;
-    _username = args.username;
-    _name = args.name;
-    _surname = args.surname;
-    _bio = args.bio;
-    _website = args.website;
-    _instagram = args.instagram;
-    _twitter = args.twitter;
-    _ageRange = args.ageRange;
-    _gender = args.gender;
-    achievements = args.achievements ?? [];
-    productsandservices = args.productsandservices ?? [];
+  void setVariableValues(UserModel user) {
+    _email = user.email;
+    _location = user.location;
+    _category = user.category;
+    _industry = user.industry;
+    _photoUrl = user.photoUrl;
+    _companyName = user.companyName;
+    _username = user.username;
+    _name = user.name;
+    _surname = user.surname;
+    _bio = user.bio;
+    _website = user.website;
+    _instagram = user.instagram;
+    _twitter = user.twitter;
+    _ageRange = user.ageRange;
+    _gender = user.gender;
+    achievements = user.achievements ?? [];
+    productsandservices = user.productsandservices ?? [];
 
-    // print(args.achievements);
+    // print(user.achievements);
   }
 
   @override
   void initState() {
     super.initState();
     _scrollController = ScrollController();
-    if (Get.arguments != null) {
-      setVariableValues(Get.arguments);
+    if (widget.user != null) {
+      setVariableValues(widget.user!);
     }
   }
 
@@ -215,23 +219,27 @@ class _UpdateProfileScreenState extends State<UpdateProfileScreen> {
       onTap: () => unFocusKeyboard(context),
       child: Scaffold(
         backgroundColor: Colors.white,
-        appBar: AppBar(
-          leading: currentRoute!.isFirst
-              ? Container()
-              : IconButton(
-                  onPressed: () async {
-                    Navigator.pop(context);
-                  },
-                  icon: SvgPicture.asset('assets/svgs/backbutton.svg'),
+        appBar: widget.isShopedit != null
+            ? null
+            : AppBar(
+                leading: currentRoute!.isFirst
+                    ? Container()
+                    : IconButton(
+                        onPressed: () async {
+                          Navigator.pop(context);
+                        },
+                        icon: SvgPicture.asset('assets/svgs/backbutton.svg'),
+                      ),
+                centerTitle: true,
+                // ignore: prefer_const_constructors
+                title: Text(
+                  currentRoute.isFirst
+                      ? 'Complete your Profile'
+                      : 'Edit Profile',
+                  textAlign: TextAlign.center,
+                  style: const TextStyle(fontSize: 16),
                 ),
-          centerTitle: true,
-          // ignore: prefer_const_constructors
-          title: Text(
-            currentRoute.isFirst ? 'Complete your Profile' : 'Edit Profile',
-            textAlign: TextAlign.center,
-            style: const TextStyle(fontSize: 16),
-          ),
-        ),
+              ),
         body: Column(
           children: [
             Expanded(
@@ -244,11 +252,12 @@ class _UpdateProfileScreenState extends State<UpdateProfileScreen> {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      const SizedBox(
-                        width: double.infinity,
-                        height: 20,
-                        child: ColoredBox(color: backgroundcolorinterface),
-                      ),
+                      if (widget.isShopedit == null)
+                        const SizedBox(
+                          width: double.infinity,
+                          height: 20,
+                          child: ColoredBox(color: backgroundcolorinterface),
+                        ),
                       const SizedBox(
                         height: 40,
                       ),
@@ -1419,7 +1428,15 @@ class _UpdateProfileScreenState extends State<UpdateProfileScreen> {
         };
         ApiService.post(path: 'users/add-device-token', body: data);
       });
-      Get.toNamed(Routes.home);
+      widget.isShopedit == null
+          ? Get.toNamed(Routes.home)
+          : Navigator.pushReplacement(
+              context,
+              MaterialPageRoute(
+                builder: (BuildContext context) =>
+                    const Bottomnavscreen(initialindex: 0),
+              ),
+            );
     } else {
       showSnackbar(
           title: 'OOPS!',

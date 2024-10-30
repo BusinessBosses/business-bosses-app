@@ -91,6 +91,10 @@
 			<string>twitter</string>
 			<string>whatsapp</string>
 			<string>tg</string>
+			<string>mailto</string>
+			<string>tel</string>
+			<string>http</string>
+			<string>https</string>
 		</array>
 		<key>NSContactsUsageDescription</key>
 		<string>Contact-usage</string>

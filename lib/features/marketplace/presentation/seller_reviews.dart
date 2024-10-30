@@ -448,20 +448,26 @@ class _SellerReviewScreenState extends State<SellerReviewScreen> {
                       },
                     ),
                     reviews == null
-                        ? const Column(
+                        ? Column(
                             children: <Widget>[
-                              SizedBox(
+                              const SizedBox(
                                 height: 60,
                               ),
                               Center(
                                 child: SafetyModel(
                                   isLoading: false,
-                                  icon: Icon(
+                                  icon: const Icon(
                                     Icons.warning,
                                     size: 100,
                                   ),
-                                  title: 'No Review For This Seller',
-                                  subTitle: 'Be the first to review',
+                                  title: widget.user.uid !=
+                                          _profileController.myProfile.uid
+                                      ? 'No Review For This Seller'
+                                      : 'No Reviews Yet',
+                                  subTitle: widget.user.uid !=
+                                          _profileController.myProfile.uid
+                                      ? 'Be the first to review'
+                                      : '',
                                 ),
                               ),
                             ],
