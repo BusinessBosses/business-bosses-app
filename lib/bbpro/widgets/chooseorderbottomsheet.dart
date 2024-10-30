@@ -5,6 +5,7 @@ import 'package:business_bosses_v2/bbpro/widgets/button.dart';
 import 'package:business_bosses_v2/bbpro/widgets/edittext.dart';
 import 'package:business_bosses_v2/bbpro/widgets/iconbutton.dart';
 import 'package:business_bosses_v2/bbpro/widgets/proseardwidget.dart';
+import 'package:business_bosses_v2/common/widgets/network_image_with_placeholder.dart';
 import 'package:business_bosses_v2/utils/theme/theme.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -143,6 +144,22 @@ class _ChooseOrderBottomSheetState extends State<ChooseOrderBottomSheet>
                       children: <Widget>[
                         CheckboxListTile(
                           title: Text(product['name']),
+                          secondary: (product['images'] != null &&
+                                  product['images'].isNotEmpty)
+                              ? Container(
+                                  width: 50,
+                                  height: 50,
+                                  decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(8),
+                                  ),
+                                  child: ClipRRect(
+                                      borderRadius: BorderRadius.circular(8),
+                                      child: NetworkImageWithPlaceHolder(
+                                          imageUrl: product['images'])),
+                                )
+                              : null,
+                          subtitle: Text('${shopController.shop!.currency} ' +
+                              product['price']),
                           value: _tempSelectedItems.contains(product),
                           onChanged: (bool? selected) {
                             setState(() {

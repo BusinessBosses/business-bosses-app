@@ -197,7 +197,9 @@ class _CreateOrderState extends State<CreateOrder> {
             <String, dynamic>{
               'type': 'product',
               'id': product.id,
-              'name': product.name
+              'name': product.name,
+              'price': product.price.toString(),
+              'images': product.images![0],
             },
           );
         }
@@ -206,7 +208,8 @@ class _CreateOrderState extends State<CreateOrder> {
             <String, dynamic>{
               'type': 'service',
               'id': service.id,
-              'name': service.name
+              'name': service.name,
+              'price': service.price.toString()
             },
           );
         }
@@ -364,7 +367,10 @@ class _CreateOrderState extends State<CreateOrder> {
                                     return Taskitem(
                                       isOrder: true,
                                       taskname: task['name'],
-                                      taskexpense: task['type'],
+                                      taskexpense:
+                                          '${shopController.shop!.currency} ' +
+                                              task['price'],
+                                      imageurl: task['images'],
                                       deleteOnTap: () {
                                         setState(() {
                                           selectedItems!.removeAt(index);
