@@ -38,6 +38,11 @@ class _ChooseOrderBottomSheetState extends State<ChooseOrderBottomSheet>
   final TextEditingController currencyController = TextEditingController();
   final ShopController shopController = Get.find();
 
+  List<Map<String, dynamic>>? selectedItems;
+
+  final List<Map<String, dynamic>> _tempSelectedItems =
+      <Map<String, dynamic>>[];
+
   @override
   void initState() {
     super.initState();
@@ -48,6 +53,7 @@ class _ChooseOrderBottomSheetState extends State<ChooseOrderBottomSheet>
       });
     });
     currencyController.text = shopController.shop!.currency;
+    selectedItems = widget.selectedItems;
   }
 
   @override
@@ -130,30 +136,44 @@ class _ChooseOrderBottomSheetState extends State<ChooseOrderBottomSheet>
               children: <Widget>[
                 // Products Tab content
                 Column(
-                  children: <Widget>[
-                    ProSearchbar(
-                      hasSearchIcon: true,
-                      contentPadding: 10,
-                      backgroundColor: backgroundColor,
-                      hintText: 'Search Products',
-                      onChange: (String query) {
-                        setState(() {});
-                      },
-                      onSubmit: (String query) {},
-                    ),
-                    Column(
-                      children:
-                          widget.products.map((Map<String, dynamic> product) {
-                        return CheckboxListTile(
+                  children: widget.products.map((Map<String, dynamic> product) {
+                    bool isLastSelected = _tempSelectedItems.isNotEmpty &&
+                        _tempSelectedItems.last == product;
+                    return Column(
+                      children: <Widget>[
+                        CheckboxListTile(
                           title: Text(product['name']),
-                          value: widget.selectedItems.contains(product),
+                          value: _tempSelectedItems.contains(product),
                           onChanged: (bool? selected) {
-                            _onItemSelect(selected, product);
+                            setState(() {
+                              if (selected == true) {
+                                _tempSelectedItems.add(product);
+                              } else {
+                                _tempSelectedItems.remove(product);
+                              }
+                            });
                           },
-                        );
-                      }).toList(),
-                    ),
-                  ],
+                          checkColor: Colors.white,
+                          activeColor: proprimaryColor,
+                        ),
+                        if (isLastSelected)
+                          Padding(
+                            padding: const EdgeInsets.only(left: 8.0),
+                            child: ProIconButton(
+                              onPressed: () {
+                                setState(() {
+                                  widget.selectedItems
+                                      .addAll(_tempSelectedItems);
+                                  _tempSelectedItems.clear();
+                                });
+                                Navigator.pop(context, widget.selectedItems);
+                              },
+                              text: 'Done',
+                            ),
+                          ),
+                      ],
+                    );
+                  }).toList(),
                 ),
 
                 // Services Tab content
@@ -172,12 +192,36 @@ class _ChooseOrderBottomSheetState extends State<ChooseOrderBottomSheet>
                     Column(
                       children:
                           widget.services.map((Map<String, dynamic> service) {
-                        return CheckboxListTile(
-                          title: Text(service['name']),
-                          value: widget.selectedItems.contains(service),
-                          onChanged: (bool? selected) {
-                            _onItemSelect(selected, service);
-                          },
+                        bool isLastSelected = widget.selectedItems.isNotEmpty &&
+                            widget.selectedItems.last == service;
+                        return Column(
+                          children: <Widget>[
+                            CheckboxListTile(
+                              title: Text(service['name']),
+                              value: widget.selectedItems.contains(service),
+                              onChanged: (bool? selected) {
+                                _onItemSelect(selected, service);
+                              },
+                              checkColor: Colors.white,
+                              activeColor: proprimaryColor,
+                            ),
+                            if (isLastSelected)
+                              Padding(
+                                padding: const EdgeInsets.only(left: 8.0),
+                                child: ProIconButton(
+                                  onPressed: () {
+                                    setState(() {
+                                      widget.selectedItems
+                                          .addAll(_tempSelectedItems);
+                                      _tempSelectedItems.clear();
+                                    });
+                                    Navigator.pop(
+                                        context, widget.selectedItems);
+                                  },
+                                  text: 'Done',
+                                ),
+                              ),
+                          ],
                         );
                       }).toList(),
                     ),
@@ -196,11 +240,10 @@ class _ChooseOrderBottomSheetState extends State<ChooseOrderBottomSheet>
 
   void _onItemSelect(bool? selected, Map<String, dynamic> item) {
     setState(() {
-      if (selected!) {
-        widget.selectedItems.add(item);
+      if (selected == true) {
+        _tempSelectedItems.add(item);
       } else {
-        widget.selectedItems.removeWhere(
-            (Map<String, dynamic> element) => element['id'] == item['id']);
+        _tempSelectedItems.remove(item);
       }
     });
   }
@@ -213,7 +256,7 @@ class _ChooseOrderBottomSheetState extends State<ChooseOrderBottomSheet>
       'type': 'custom'
     });
     setState(() {
-    widget.onCanAddChange(false);
+      widget.onCanAddChange(false);
     });
 
     Navigator.pop(context);

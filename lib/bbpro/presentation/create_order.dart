@@ -36,9 +36,9 @@ class _CreateOrderState extends State<CreateOrder> {
   bool loading = false;
 
   String? selectedClient;
-  String selectedOrder = 'Online';
-  String selectedOrderChannel = 'Online';
-  String selectedClientType = 'Online';
+  String selectedOrder = '';
+  String selectedOrderChannel = '';
+  String selectedClientType = '';
   String? selectedDeliveryMethod;
   String? initialDeliveryMethod;
   String? selectedOrderDate;
@@ -62,10 +62,11 @@ class _CreateOrderState extends State<CreateOrder> {
 
   final List<Map<String, dynamic>> services = <Map<String, dynamic>>[];
 
-  List<Map<String, dynamic>> selectedItems = <Map<String, dynamic>>[];
+  List<Map<String, dynamic>>? selectedItems = <Map<String, dynamic>>[];
 
-  void _showOrderSheet(BuildContext context) {
-    showModalBottomSheet(
+  void _showOrderSheet(BuildContext context) async {
+    final List<Map<String, dynamic>>? result =
+        await showModalBottomSheet<List<Map<String, dynamic>>>(
       backgroundColor: Colors.white,
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
       context: context,
@@ -78,7 +79,7 @@ class _CreateOrderState extends State<CreateOrder> {
           child: ChooseOrderBottomSheet(
             products: products,
             services: services,
-            selectedItems: selectedItems,
+            selectedItems: selectedItems ?? <Map<String, dynamic>>[],
             onCanAddChange: (bool value) {
               setState(() {
                 canAdd = value; // Updates the parent widget's `canAdd` field
@@ -88,6 +89,12 @@ class _CreateOrderState extends State<CreateOrder> {
         );
       },
     );
+    if (result != null) {
+      setState(() {
+        selectedItems = result;
+        // Update clientId based on selected client
+      });
+    }
   }
 
   final List<Map<String, dynamic>> online = <Map<String, dynamic>>[];
@@ -134,7 +141,7 @@ class _CreateOrderState extends State<CreateOrder> {
     if (clientId == null) {
       showSnackbar(message: 'Please select a valid client', error: true);
       return;
-    } else if (selectedItems.isEmpty) {
+    } else if (selectedItems!.isEmpty) {
       showSnackbar(message: 'Please select an item', error: true);
       return;
     } else if (selectedDeliveryMethod == null) {
@@ -229,9 +236,9 @@ class _CreateOrderState extends State<CreateOrder> {
   void _onItemSelect(bool? selected, Map<String, dynamic> item) {
     setState(() {
       if (selected!) {
-        selectedItems.add(item);
+        selectedItems!.add(item);
       } else {
-        selectedItems.removeWhere(
+        selectedItems!.removeWhere(
             (Map<String, dynamic> element) => element['id'] == item['id']);
       }
     });
@@ -326,7 +333,7 @@ class _CreateOrderState extends State<CreateOrder> {
                           ),
                         ),
                         const SizedBox(height: 15),
-                        if (selectedItems.isNotEmpty)
+                        if (selectedItems!.isNotEmpty)
                           Padding(
                             padding: const EdgeInsets.symmetric(
                               horizontal: 15.0,
@@ -347,18 +354,8 @@ class _CreateOrderState extends State<CreateOrder> {
                                       fontWeight: FontWeight.w600,
                                     ),
                                   ),
-                                  const SizedBox(height: 5),
-                                  // Taskitem(
-                                  //   isOrder: true,
-                                  //   taskname: 'dndkdkd',
-                                  //   taskexpense: 'dldldld',
-                                  //   deleteOnTap: () {
-                                  //     setState(() {
-                                  //       // selectedItems.removeAt(index);
-                                  //     });
-                                  //   },
-                                  // ),
-                                  ...selectedItems.asMap().entries.map(
+                                  const SizedBox(height: 20),
+                                  ...selectedItems!.asMap().entries.map(
                                       (MapEntry<int, Map<String, dynamic>>
                                           entry) {
                                     final int index = entry.key;
@@ -370,7 +367,7 @@ class _CreateOrderState extends State<CreateOrder> {
                                       taskexpense: task['type'],
                                       deleteOnTap: () {
                                         setState(() {
-                                          selectedItems.removeAt(index);
+                                          selectedItems!.removeAt(index);
                                         });
                                       },
                                     );
@@ -379,7 +376,7 @@ class _CreateOrderState extends State<CreateOrder> {
                               ),
                             ),
                           ),
-                        if (selectedItems.isNotEmpty)
+                        if (selectedItems!.isNotEmpty)
                           const SizedBox(height: 10),
 
                         GestureDetector(
