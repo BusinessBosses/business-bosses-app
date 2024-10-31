@@ -1,6 +1,5 @@
 import 'package:business_bosses_v2/utils/theme/theme.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 
 class SwitchWidget extends StatefulWidget {
   final bool value;
@@ -21,6 +20,7 @@ class SwitchWidget extends StatefulWidget {
   }) : super(key: key);
 
   @override
+  // ignore: library_private_types_in_public_api
   _SwitchWidgetState createState() => _SwitchWidgetState();
 }
 

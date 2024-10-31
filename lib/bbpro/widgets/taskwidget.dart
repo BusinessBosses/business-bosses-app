@@ -238,6 +238,9 @@ class _TaskWidgetState extends State<TaskWidget> {
                                       ProjectStatus.pending
                                     ];
                                     break;
+                                  case ProjectStatus.allprojects:
+                                    // TODO: Handle this case.
+                                    break;
                                 }
                                 return SizedBox(
                                   child: Padding(
