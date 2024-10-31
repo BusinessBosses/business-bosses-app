@@ -1,3 +1,4 @@
+import 'package:business_bosses_v2/bbpro/controllers/shop_controller.dart';
 import 'package:business_bosses_v2/bbpro/models/order_model.dart';
 import 'package:business_bosses_v2/common/models/api_response_model.dart';
 import 'package:business_bosses_v2/features/profile/controller/profile_controller.dart';
@@ -6,6 +7,7 @@ import 'package:get/get.dart';
 
 class OrderController extends GetxController {
   final ProfileController profileController = Get.find();
+  final ShopController shopController = Get.find();
   RxList<Order> orders = RxList<Order>(<Order>[]);
   RxBool loading = RxBool(true);
   final List<Order> allorders = <Order>[];
@@ -50,6 +52,7 @@ class OrderController extends GetxController {
       ordersStatus[newClient.status]?.add(newClient);
       allorders.add(newClient); // Add to all orders
       update();
+      shopController.loadStatistics();
       return true;
     } else {
       return false;
@@ -67,6 +70,7 @@ class OrderController extends GetxController {
       ordersStatus[deletedOrder?.status]?.remove(deletedOrder);
       allorders.remove(deletedOrder); // Remove from all orders
       update();
+      shopController.loadStatistics();
       return true;
     } else {
       return false;
@@ -98,6 +102,7 @@ class OrderController extends GetxController {
           ordersStatus[updatedOrder.status]?.add(updatedOrder);
 
           update(); // Notify listeners
+          shopController.loadStatistics();
           return true;
         }
       }
