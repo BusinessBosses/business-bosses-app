@@ -36,28 +36,40 @@ class _InventoryCardState extends State<InventoryCard> {
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(16.0),
+        border: Border.all(
+          color: Colors.black12,
+          width: 0.5,
+        ),
       ),
       child: Column(
         mainAxisAlignment: MainAxisAlignment.start,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
-          SizedBox(
-            height: 120.0,
-            width: double.infinity,
-            child: ClipRRect(
-              borderRadius: BorderRadius.circular(10),
-              child: NetworkImageWithPlaceHolder(
-                imageUrl: widget.product?.images?[0],
-                radius: radius,
-                placeHolder: Icons.person,
-                iconSize: 0.0,
-                fit: BoxFit.cover,
+          if (widget.product?.images?[0] != null &&
+              widget.product!.images![0].isNotEmpty)
+            SizedBox(
+              height: 120.0,
+              width: double.infinity,
+              child: ClipRRect(
+                borderRadius: BorderRadius.circular(10),
+                child: NetworkImageWithPlaceHolder(
+                  imageUrl: widget.product?.images?[0],
+                  radius: radius,
+                  placeHolder: Icons.person,
+                  iconSize: 0.0,
+                  fit: BoxFit.cover,
+                ),
               ),
             ),
-          ),
-          const SizedBox(height: 5),
-          const Divider(),
-          const SizedBox(height: 5),
+          if (widget.product?.images?[0] != null &&
+              widget.product!.images![0].isNotEmpty)
+            const SizedBox(height: 5),
+          if (widget.product?.images?[0] != null &&
+              widget.product!.images![0].isNotEmpty)
+            const Divider(),
+          if (widget.product?.images?[0] != null &&
+              widget.product!.images![0].isNotEmpty)
+            const SizedBox(height: 5),
           Row(
             crossAxisAlignment: CrossAxisAlignment.end,
             children: <Widget>[
@@ -103,7 +115,7 @@ class _InventoryCardState extends State<InventoryCard> {
                                   ? widget.product!.quantity! > 0
                                       ? '${widget.product?.quantity.toString()} in Stock'
                                       : 'Out of stock'
-                                  : 'Out of stock',
+                                  : '',
                               style: const TextStyle(fontSize: 10),
                             ),
                           ],

@@ -98,9 +98,16 @@ class _TaskitemState extends State<Taskitem> {
                     mainAxisAlignment: MainAxisAlignment.start,
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: <Widget>[
-                      Text(widget.taskname),
+                      Text(
+                        widget.taskname,
+                        style: const TextStyle(
+                            fontSize: 13, fontWeight: FontWeight.w600),
+                      ),
                       if (widget.isOrder != null)
-                        Text(widget.taskexpense.toString()),
+                        Text(
+                          widget.taskexpense.toString(),
+                          style: const TextStyle(fontSize: 12),
+                        ),
                     ],
                   )
                 ]),

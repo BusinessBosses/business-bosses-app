@@ -294,6 +294,9 @@ class _ShopScreenState extends State<ShopScreen> {
               ],
             ),
           ),
+          const SizedBox(
+            height: 10,
+          ),
           Expanded(
             child: StaggeredGridView.countBuilder(
               physics: const AlwaysScrollableScrollPhysics(),

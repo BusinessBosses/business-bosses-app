@@ -34,6 +34,7 @@ class _OrderProductScreenState extends State<OrderProductScreen>
   final TextEditingController quantityController = TextEditingController();
   final TextEditingController emailController = TextEditingController();
   final TextEditingController phoneController = TextEditingController();
+  final TextEditingController fullNameController = TextEditingController();
   final ProfileController profileController = Get.find();
   final ShopController shopController = Get.find();
   final OrderController orderController = Get.find();
@@ -114,19 +115,20 @@ class _OrderProductScreenState extends State<OrderProductScreen>
                         padding: const EdgeInsets.symmetric(horizontal: 15.0),
                         child: Column(
                           children: <Widget>[
-                            Container(
-                              height: 250,
-                              decoration: const BoxDecoration(
-                                color: Colors.black,
-                                borderRadius: BorderRadius.all(
-                                  Radius.circular(15),
+                            if (widget.product.images?[0] != null &&
+                                widget.product.images![0].isNotEmpty)
+                              Container(
+                                height: 250,
+                                decoration: const BoxDecoration(
+                                  color: Colors.black,
+                                  borderRadius: BorderRadius.all(
+                                    Radius.circular(15),
+                                  ),
+                                ),
+                                child: GenericSlider(
+                                  images: widget.product.images!,
                                 ),
                               ),
-                              child: GenericSlider(
-                                images: widget.product.images ??
-                                    <String>['', '', ''],
-                              ),
-                            ),
                             const SizedBox(
                               height: 15,
                             ),
@@ -239,30 +241,36 @@ class _OrderProductScreenState extends State<OrderProductScreen>
                       const SizedBox(
                         height: 15,
                       ),
-                      CustomDropdownWidget(
-                        caption: 'Choose Color',
-                        items: const <String>['test', 'testfdg', 'testghgjm'],
-                        initialValue: 'test',
-                        iconName: 'assets/svgs/dropdown.svg',
-                        onChanged: (String? value) => setState(() {
-                          // category = value!;
-                        }),
-                      ),
-                      const SizedBox(
-                        height: 15,
-                      ),
-                      CustomDropdownWidget(
-                        caption: 'Choose Size',
-                        items: const <String>['test', 'testfdg', 'testghgjm'],
-                        initialValue: 'test',
-                        iconName: 'assets/svgs/dropdown.svg',
-                        onChanged: (String? value) => setState(() {
-                          // category = value!;
-                        }),
-                      ),
-                      const SizedBox(
-                        height: 15,
-                      ),
+                      if (widget.product.size![0].isNotEmpty)
+                        CustomDropdownWidget(
+                          caption: 'Choose Color',
+                          items: widget.product.color!
+                              .map((String e) => e)
+                              .toList(),
+                          iconName: 'assets/svgs/dropdown.svg',
+                          onChanged: (String? value) => setState(() {
+                            // category = value!;
+                          }),
+                        ),
+                      if (widget.product.color![0].isNotEmpty)
+                        const SizedBox(
+                          height: 15,
+                        ),
+                      if (widget.product.size![0].isNotEmpty)
+                        CustomDropdownWidget(
+                          caption: 'Choose Size',
+                          items: widget.product.size!
+                              .map((String e) => e)
+                              .toList(),
+                          iconName: 'assets/svgs/dropdown.svg',
+                          onChanged: (String? value) => setState(() {
+                            // category = value!;
+                          }),
+                        ),
+                      if (widget.product.size![0].isNotEmpty)
+                        const SizedBox(
+                          height: 15,
+                        ),
                       SizedBox(
                         width: double.infinity,
                         child: ProCustomButton(
@@ -291,9 +299,9 @@ class _OrderProductScreenState extends State<OrderProductScreen>
                   children: <Widget>[
                     OrderPreviewCard(
                       title: widget.product.name,
-                      size: 'Medium 24',
-                      color: 'Black',
-                      price: 10000,
+                      size: widget.product.size![0],
+                      color: widget.product.color![0],
+                      price: widget.product.price,
                       deliveryDays: 5,
                       deliveryLocation: widget.product.location!,
                       imageUrl: widget.product.images![0],
@@ -345,65 +353,67 @@ class _OrderProductScreenState extends State<OrderProductScreen>
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: <Widget>[
-                            // Wrap(
-                            //   crossAxisAlignment: WrapCrossAlignment.center,
-                            //   children: <Widget>[
-                            //     const Text(
-                            //       'Edit your Details',
-                            //       style: TextStyle(
-                            //         fontSize: 14,
-                            //         fontWeight: FontWeight.w600,
-                            //       ),
-                            //     ),
-                            //     const SizedBox(
-                            //       width: 10,
-                            //     ),
-                            //     TextFormField(
-                            //       style: const TextStyle(fontSize: 13),
-                            //       maxLines: 1,
-                            //       decoration: InputDecoration(
-                            //         border: InputBorder.none,
-                            //         hintText: 'Full Name',
-                            //         filled: false,
-                            //         fillColor: Colors.grey.shade100,
-                            //       ),
-                            //     ),
-                            //     TextFormField(
-                            //       style: const TextStyle(fontSize: 13),
-                            //       maxLines: 1,
-                            //       decoration: InputDecoration(
-                            //         border: InputBorder.none,
-                            //         hintText: 'Email',
-                            //         filled: false,
-                            //         fillColor: Colors.grey.shade100,
-                            //       ),
-                            //     ),
-                            //     TextFormField(
-                            //       style: const TextStyle(fontSize: 13),
-                            //       maxLines: 1,
-                            //       decoration: InputDecoration(
-                            //         border: InputBorder.none,
-                            //         hintText: 'Phone Number',
-                            //         filled: false,
-                            //         fillColor: Colors.grey.shade100,
-                            //       ),
-                            //     ),
-                            //   ],
-                            // ),
-                            Expanded(
-                              child: CustomDropdownWidget(
-                                caption: 'Select Client',
-                                items: clientsName,
-                                iconName: 'assets/svgs/dropdown.svg',
-                                initialValue: selectedClient,
-                                onChanged: (String? value) {
-                                  setState(() {
-                                    selectedClient = value!;
-                                    _onClientSelect(value);
-                                  });
-                                },
-                              ),
+                            Wrap(
+                              crossAxisAlignment: WrapCrossAlignment.center,
+                              children: <Widget>[
+                                const Text(
+                                  'Edit your Details',
+                                  style: TextStyle(
+                                    fontSize: 14,
+                                    fontWeight: FontWeight.w600,
+                                  ),
+                                ),
+                                const SizedBox(
+                                  width: 10,
+                                ),
+                                TextFormField(
+                                  style: const TextStyle(fontSize: 13),
+                                  maxLines: 1,
+                                  controller: fullNameController,
+                                  decoration: InputDecoration(
+                                    border: InputBorder.none,
+                                    hintText: 'Full Name',
+                                    filled: false,
+                                    fillColor: Colors.grey.shade100,
+                                  ),
+                                ),
+                                TextFormField(
+                                  controller: emailController,
+                                  style: const TextStyle(fontSize: 13),
+                                  maxLines: 1,
+                                  decoration: InputDecoration(
+                                    border: InputBorder.none,
+                                    hintText: 'Email',
+                                    filled: false,
+                                    fillColor: Colors.grey.shade100,
+                                  ),
+                                ),
+                                TextFormField(
+                                  style: const TextStyle(fontSize: 13),
+                                  maxLines: 1,
+                                  decoration: InputDecoration(
+                                    border: InputBorder.none,
+                                    hintText: 'Phone Number',
+                                    filled: false,
+                                    fillColor: Colors.grey.shade100,
+                                  ),
+                                ),
+                              ],
                             ),
+                            // Expanded(
+                            //   child: CustomDropdownWidget(
+                            //     caption: 'Select Client',
+                            //     items: clientsName,
+                            //     iconName: 'assets/svgs/dropdown.svg',
+                            //     initialValue: selectedClient,
+                            //     onChanged: (String? value) {
+                            //       setState(() {
+                            //         selectedClient = value!;
+                            //         _onClientSelect(value);
+                            //       });
+                            //     },
+                            //   ),
+                            // ),
                           ],
                         ),
                       ),
@@ -421,7 +431,7 @@ class _OrderProductScreenState extends State<OrderProductScreen>
                       height: 15,
                     ),
                     SizedBox(
-                      width: double.infinity,
+                      width: 200,
                       child: ProCustomButton(
                         onPressed: () async {
                           setState(() {
@@ -443,7 +453,6 @@ class _OrderProductScreenState extends State<OrderProductScreen>
                               await orderController.addOrders(orderData);
                           if (response) {
                             showSnackbar(message: 'Order Added Successfully!');
-                            // ignore: use_build_context_synchronously
                             Navigator.pop(context);
                           } else {
                             showSnackbar(
