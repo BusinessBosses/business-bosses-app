@@ -1,17 +1,7 @@
 import 'package:business_bosses_v2/bbpro/controllers/shop_controller.dart';
-import 'package:business_bosses_v2/bbpro/presentation/add_client.dart';
-import 'package:business_bosses_v2/bbpro/presentation/add_project.dart';
-import 'package:business_bosses_v2/bbpro/presentation/add_supplier.dart';
-import 'package:business_bosses_v2/bbpro/presentation/availability.dart';
-import 'package:business_bosses_v2/bbpro/presentation/create_order.dart';
-import 'package:business_bosses_v2/bbpro/presentation/create_product.dart';
-import 'package:business_bosses_v2/bbpro/presentation/create_service.dart';
 import 'package:business_bosses_v2/bbpro/presentation/shopscreen.dart';
 import 'package:business_bosses_v2/common/widgets/network_image_with_placeholder.dart';
-import 'package:business_bosses_v2/navigation/routes.dart';
-import 'package:business_bosses_v2/utils/theme/theme.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 
 class GotoshopWidget extends StatefulWidget {

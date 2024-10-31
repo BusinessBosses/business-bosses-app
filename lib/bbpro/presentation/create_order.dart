@@ -12,7 +12,6 @@ import 'package:business_bosses_v2/bbpro/widgets/chooseclientbottomsheet.dart';
 import 'package:business_bosses_v2/bbpro/widgets/chooseorderbottomsheet.dart';
 import 'package:business_bosses_v2/bbpro/widgets/dropdown.dart';
 import 'package:business_bosses_v2/bbpro/widgets/edittext.dart';
-import 'package:business_bosses_v2/bbpro/widgets/iconbutton.dart';
 import 'package:business_bosses_v2/bbpro/widgets/invoiceoptionswidget.dart';
 import 'package:business_bosses_v2/bbpro/widgets/taskitem.dart';
 import 'package:business_bosses_v2/bbpro/widgets/textfield.dart';
@@ -270,7 +269,7 @@ class _CreateOrderState extends State<CreateOrder> {
 
   @override
   Widget build(BuildContext context) {
-    int selectedOption = 0;
+    // int selectedOption = 0;
     return Scaffold(
       backgroundColor: probackgroundColor,
       appBar: AppBar(

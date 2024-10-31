@@ -12,6 +12,7 @@ import 'package:business_bosses_v2/bbpro/widgets/infocard.dart';
 import 'package:business_bosses_v2/bbpro/widgets/notificationbutton.dart';
 import 'package:business_bosses_v2/bbpro/widgets/orderscard.dart';
 import 'package:business_bosses_v2/bbpro/widgets/quickactioncard.dart';
+import 'package:business_bosses_v2/common/widgets/safety_model.dart';
 import 'package:business_bosses_v2/features/chat/chat_screen.dart';
 import 'package:business_bosses_v2/utils/theme/theme.dart';
 import 'package:flutter/material.dart';
@@ -125,6 +126,12 @@ class _DashboardState extends State<Dashboard> {
   }
 
   @override
+  void initState() {
+    shopController.loadStatistics();
+    super.initState();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: probackgroundColor,
@@ -177,239 +184,265 @@ class _DashboardState extends State<Dashboard> {
           ),
         ),
       ),
-      body: SingleChildScrollView(
-        child: Container(
-          color: probackgroundColor,
-          child: Column(
-            children: <Widget>[
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                crossAxisAlignment: CrossAxisAlignment.center,
+      body: Obx(
+        () => shopController.loadingData.value
+            ? const Column(
+                mainAxisAlignment: MainAxisAlignment.center,
                 children: <Widget>[
-                  GestureDetector(
-                    onTap: () {
-                      Get.back();
-                    },
-                    child: Container(
-                      margin: const EdgeInsets.only(top: 10, left: 15),
-                      padding: const EdgeInsets.symmetric(
-                          horizontal: 10, vertical: 5),
-                      decoration: BoxDecoration(
-                          color: primaryColorLT.withAlpha(20),
-                          borderRadius: BorderRadius.circular(100)),
-                      child: Wrap(
-                        crossAxisAlignment: WrapCrossAlignment.center,
+                  SafetyModel(),
+                  Text('Loading Statistics..'),
+                ],
+              )
+            : SingleChildScrollView(
+                child: Container(
+                  color: probackgroundColor,
+                  child: Column(
+                    children: <Widget>[
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        crossAxisAlignment: CrossAxisAlignment.center,
                         children: <Widget>[
-                          const Icon(
-                            Icons.chevron_left,
-                            color: primaryColorLT,
-                            size: 24,
+                          GestureDetector(
+                            onTap: () {
+                              Get.back();
+                            },
+                            child: Container(
+                              margin: const EdgeInsets.only(top: 10, left: 15),
+                              padding: const EdgeInsets.symmetric(
+                                  horizontal: 10, vertical: 5),
+                              decoration: BoxDecoration(
+                                  color: primaryColorLT.withAlpha(20),
+                                  borderRadius: BorderRadius.circular(100)),
+                              child: Wrap(
+                                crossAxisAlignment: WrapCrossAlignment.center,
+                                children: <Widget>[
+                                  const Icon(
+                                    Icons.chevron_left,
+                                    color: primaryColorLT,
+                                    size: 24,
+                                  ),
+                                  Image.asset(
+                                    'assets/images/app_logo_2.png',
+                                    height: 25,
+                                  ),
+                                  const Text(
+                                    '  Go back to BB',
+                                    style: TextStyle(fontSize: 13),
+                                  )
+                                ],
+                              ),
+                            ),
                           ),
-                          Image.asset(
-                            'assets/images/app_logo_2.png',
-                            height: 25,
-                          ),
-                          const Text(
-                            '  Go back to BB',
-                            style: TextStyle(fontSize: 13),
-                          )
-                        ],
-                      ),
-                    ),
-                  ),
-                  Container(
-                    margin: const EdgeInsets.only(top: 10),
-                    padding: const EdgeInsets.only(right: 15.0),
-                    child: GestureDetector(
-                      onTap: () {
-                        final RenderBox button =
-                            context.findRenderObject() as RenderBox;
-                        final RenderBox overlay = Overlay.of(context)
-                            .context
-                            .findRenderObject() as RenderBox;
-                        final RelativeRect position = RelativeRect.fromRect(
-                          Rect.fromPoints(
-                            button.localToGlobal(
-                                button.size.topRight(const Offset(0, 170)),
-                                ancestor: overlay),
-                            button.localToGlobal(
-                                button.size.bottomRight(const Offset(0, 50)),
-                                ancestor: overlay),
-                          ),
-                          Offset.zero & overlay.size,
-                        );
+                          Container(
+                            margin: const EdgeInsets.only(top: 10),
+                            padding: const EdgeInsets.only(right: 15.0),
+                            child: GestureDetector(
+                              onTap: () {
+                                final RenderBox button =
+                                    context.findRenderObject() as RenderBox;
+                                final RenderBox overlay = Overlay.of(context)
+                                    .context
+                                    .findRenderObject() as RenderBox;
+                                final RelativeRect position =
+                                    RelativeRect.fromRect(
+                                  Rect.fromPoints(
+                                    button.localToGlobal(
+                                        button.size
+                                            .topRight(const Offset(0, 170)),
+                                        ancestor: overlay),
+                                    button.localToGlobal(
+                                        button.size
+                                            .bottomRight(const Offset(0, 50)),
+                                        ancestor: overlay),
+                                  ),
+                                  Offset.zero & overlay.size,
+                                );
 
-                        showMenu(
-                          shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(10)),
-                          context: context,
-                          shadowColor: Colors.black,
-                          position: position,
-                          items: <PopupMenuEntry<String>>[
-                            const PopupMenuItem<String>(
-                              value: null,
-                              enabled: false,
-                              child: Text(
-                                'Filter Data By',
-                                style: TextStyle(
-                                  fontWeight: FontWeight.bold,
+                                showMenu(
+                                  shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(10)),
+                                  context: context,
+                                  shadowColor: Colors.black,
+                                  position: position,
+                                  items: <PopupMenuEntry<String>>[
+                                    const PopupMenuItem<String>(
+                                      value: null,
+                                      enabled: false,
+                                      child: Text(
+                                        'Filter Data By',
+                                        style: TextStyle(
+                                          fontWeight: FontWeight.bold,
+                                        ),
+                                      ),
+                                    ),
+                                    const PopupMenuDivider(),
+                                    ...<String>[
+                                      'Today',
+                                      'Last 7 Days',
+                                      'Last 30 Days',
+                                      'All Time',
+                                    ].map((String option) {
+                                      return PopupMenuItem<String>(
+                                        value: option,
+                                        child: Text(
+                                          option,
+                                          style: const TextStyle(
+                                              fontSize: 14,
+                                              fontWeight: FontWeight.w700),
+                                        ),
+                                      );
+                                    }).toList(),
+                                  ],
+                                ).then((String? selected) {
+                                  if (selected != null) {
+                                    setState(() {
+                                      _selectedfilteritem = selected;
+                                    });
+                                    // Implement filter logic here
+                                  }
+                                });
+                              },
+                              child: Container(
+                                padding: const EdgeInsets.symmetric(
+                                    horizontal: 15, vertical: 10),
+                                decoration: BoxDecoration(
+                                    color: Colors.white,
+                                    borderRadius: BorderRadius.circular(8)),
+                                child: Row(
+                                  children: <Widget>[
+                                    SvgPicture.asset(
+                                        'assets/svgs/filterprosections.svg'),
+                                    const SizedBox(
+                                      width: 10,
+                                    ),
+                                    Text(
+                                      _selectedfilteritem,
+                                      style: const TextStyle(fontSize: 13),
+                                    ),
+                                    const SizedBox(
+                                      width: 10,
+                                    ),
+                                    SvgPicture.asset(
+                                        'assets/svgs/dropdown.svg'),
+                                  ],
                                 ),
                               ),
                             ),
-                            const PopupMenuDivider(),
-                            ...<String>[
-                              'Today',
-                              'Last 7 Days',
-                              'Last 30 Days',
-                              'All Time',
-                            ].map((String option) {
-                              return PopupMenuItem<String>(
-                                value: option,
-                                child: Text(
-                                  option,
-                                  style: const TextStyle(
-                                      fontSize: 14,
-                                      fontWeight: FontWeight.w700),
-                                ),
-                              );
-                            }).toList(),
-                          ],
-                        ).then((String? selected) {
-                          if (selected != null) {
-                            setState(() {
-                              _selectedfilteritem = selected;
-                            });
-                            // Implement filter logic here
-                          }
-                        });
-                      },
-                      child: Container(
-                        padding: const EdgeInsets.symmetric(
-                            horizontal: 15, vertical: 10),
-                        decoration: BoxDecoration(
-                            color: Colors.white,
-                            borderRadius: BorderRadius.circular(8)),
-                        child: Row(
-                          children: <Widget>[
-                            SvgPicture.asset(
-                                'assets/svgs/filterprosections.svg'),
-                            const SizedBox(
-                              width: 10,
-                            ),
-                            Text(
-                              _selectedfilteritem,
-                              style: const TextStyle(fontSize: 13),
-                            ),
-                            const SizedBox(
-                              width: 10,
-                            ),
-                            SvgPicture.asset('assets/svgs/dropdown.svg'),
-                          ],
-                        ),
+                          ),
+                        ],
                       ),
-                    ),
+                      const OrdersWidget(),
+                      const SalesWidget(),
+                      StaggeredGridView.countBuilder(
+                        physics: const NeverScrollableScrollPhysics(),
+                        staggeredTileBuilder: (int index) =>
+                            const StaggeredTile.fit(1),
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 15.0,
+                        ),
+                        crossAxisCount: 3,
+                        crossAxisSpacing: 15.0,
+                        mainAxisSpacing: 15.0,
+                        // controller: _controller,
+                        shrinkWrap: true,
+                        itemCount: 3,
+                        itemBuilder: (BuildContext context, int index) {
+                          return GestureDetector(
+                              onTap: () {
+                                if (index == 0) {
+                                  Navigator.pushReplacement(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (BuildContext context) =>
+                                          const Bottomnavscreen(
+                                              initialindex: 3),
+                                    ),
+                                  );
+                                } else if (index == 1) {
+                                  // Add navigation for Expenses
+                                } else if (index == 2) {
+                                  Navigator.pushReplacement(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (BuildContext context) =>
+                                          const Bottomnavscreen(
+                                              initialindex: 1),
+                                    ),
+                                  );
+                                } else if (index == 3) {
+                                  Get.to(() => const CreateOrder());
+                                }
+                              },
+                              child: InfoCard(
+                                cardName: titles[index],
+                                value: index == 0
+                                    ? clientsController.allclients.length
+                                        .toString()
+                                    : index == 1
+                                        ? shopController.shopStats!.totalAmount
+                                            .toString()
+                                        : index == 2
+                                            ? shopController
+                                                .shopStats!.projectCount
+                                                .toString()
+                                            : '0',
+                              ));
+                        },
+                      ),
+                      StaggeredGridView.countBuilder(
+                        physics: const NeverScrollableScrollPhysics(),
+                        staggeredTileBuilder: (int index) =>
+                            const StaggeredTile.fit(1),
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 15.0,
+                        ),
+                        crossAxisCount: 4,
+                        crossAxisSpacing: 15.0,
+                        mainAxisSpacing: 15.0,
+                        shrinkWrap: true,
+                        itemCount: 4,
+                        itemBuilder: (BuildContext context, int index) {
+                          return GestureDetector(
+                            onTap: () {
+                              if (index == 0) {
+                                Get.to(const CreateProductListing());
+                              } else if (index == 1) {
+                                Get.to(const CreateServiceListing());
+                              } else if (index == 2) {
+                                Get.to(const CreateOrder());
+                              } else if (index == 3) {
+                                Get.to(const Addclient());
+                              }
+                            },
+                            child: QuickActionCard(
+                                cardName: quickactions[index],
+                                value: index == 0
+                                    ? clientsController.allclients.length
+                                        .toString()
+                                    : 'value',
+                                color: index == 0
+                                    ? Colors.blue
+                                    : index == 1
+                                        ? Colors.green
+                                        : index == 2
+                                            ? Colors.orange
+                                            : Colors.purple,
+                                assetlocation: index == 0
+                                    ? 'assets/svgs/addproduct.svg'
+                                    : index == 1
+                                        ? 'assets/svgs/addservice.svg'
+                                        : index == 2
+                                            ? 'assets/svgs/addorder.svg'
+                                            : index == 3
+                                                ? 'assets/svgs/addclient.svg'
+                                                : ''),
+                          );
+                        },
+                      ),
+                    ],
                   ),
-                ],
-              ),
-              const OrdersWidget(),
-              const SalesWidget(),
-              StaggeredGridView.countBuilder(
-                physics: const NeverScrollableScrollPhysics(),
-                staggeredTileBuilder: (int index) => const StaggeredTile.fit(1),
-                padding: const EdgeInsets.symmetric(
-                  horizontal: 15.0,
                 ),
-                crossAxisCount: 3,
-                crossAxisSpacing: 15.0,
-                mainAxisSpacing: 15.0,
-                // controller: _controller,
-                shrinkWrap: true,
-                itemCount: 3,
-                itemBuilder: (BuildContext context, int index) {
-                  return GestureDetector(
-                    onTap: () {
-                      if (index == 0) {
-                        Navigator.pushReplacement(
-                          context,
-                          MaterialPageRoute(
-                            builder: (BuildContext context) =>
-                                const Bottomnavscreen(initialindex: 3),
-                          ),
-                        );
-                      } else if (index == 1) {
-                        // Add navigation for Expenses
-                      } else if (index == 2) {
-                        Navigator.pushReplacement(
-                          context,
-                          MaterialPageRoute(
-                            builder: (BuildContext context) =>
-                                const Bottomnavscreen(initialindex: 1),
-                          ),
-                        );
-                      } else if (index == 3) {
-                        Get.to(() => const CreateOrder());
-                      }
-                    },
-                    child: InfoCard(
-                      cardName: titles[index],
-                      value: index == 0
-                          ? clientsController.allclients.length.toString()
-                          : 'value',
-                    ),
-                  );
-                },
               ),
-              StaggeredGridView.countBuilder(
-                physics: const NeverScrollableScrollPhysics(),
-                staggeredTileBuilder: (int index) => const StaggeredTile.fit(1),
-                padding: const EdgeInsets.symmetric(
-                  horizontal: 15.0,
-                ),
-                crossAxisCount: 4,
-                crossAxisSpacing: 15.0,
-                mainAxisSpacing: 15.0,
-                shrinkWrap: true,
-                itemCount: 4,
-                itemBuilder: (BuildContext context, int index) {
-                  return GestureDetector(
-                    onTap: () {
-                      if (index == 0) {
-                        Get.to(const CreateProductListing());
-                      } else if (index == 1) {
-                        Get.to(const CreateServiceListing());
-                      } else if (index == 2) {
-                        Get.to(const CreateOrder());
-                      } else if (index == 3) {
-                        Get.to(const Addclient());
-                      }
-                    },
-                    child: QuickActionCard(
-                        cardName: quickactions[index],
-                        value: index == 0
-                            ? clientsController.allclients.length.toString()
-                            : 'value',
-                        color: index == 0
-                            ? Colors.blue
-                            : index == 1
-                                ? Colors.green
-                                : index == 2
-                                    ? Colors.orange
-                                    : Colors.purple,
-                        assetlocation: index == 0
-                            ? 'assets/svgs/addproduct.svg'
-                            : index == 1
-                                ? 'assets/svgs/addservice.svg'
-                                : index == 2
-                                    ? 'assets/svgs/addorder.svg'
-                                    : index == 3
-                                        ? 'assets/svgs/addclient.svg'
-                                        : ''),
-                  );
-                },
-              ),
-            ],
-          ),
-        ),
       ),
     );
   }

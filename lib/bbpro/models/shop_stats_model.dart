@@ -7,9 +7,9 @@ class ShopStats {
   final num totalAmount;
   ShopStats({
     required this.views,
-    required this.clientCount,
-    required this.projectCount,
-    required this.totalAmount,
+    this.clientCount = 0,
+    this.projectCount = 0,
+    this.totalAmount = 0,
   });
 
   ShopStats copyWith({

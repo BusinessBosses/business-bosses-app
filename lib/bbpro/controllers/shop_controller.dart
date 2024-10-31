@@ -3,7 +3,9 @@ import 'dart:developer';
 import 'package:business_bosses_v2/bbpro/models/order_stats_model.dart';
 import 'package:business_bosses_v2/bbpro/models/product_model.dart';
 import 'package:business_bosses_v2/bbpro/models/service_model.dart';
+import 'package:business_bosses_v2/bbpro/models/shop_graph_model.dart';
 import 'package:business_bosses_v2/bbpro/models/shop_model.dart';
+import 'package:business_bosses_v2/bbpro/models/shop_stats_model.dart';
 import 'package:business_bosses_v2/bbpro/models/supplier_model.dart';
 import 'package:business_bosses_v2/common/models/api_response_model.dart';
 import 'package:business_bosses_v2/features/profile/controller/profile_controller.dart';
@@ -14,10 +16,13 @@ class ShopController extends GetxController {
   final ProfileController profileController = Get.find();
   Shop? shop;
   RxBool loading = RxBool(true);
+  RxBool loadingData = RxBool(true);
   RxList<Product> products = RxList<Product>(<Product>[]);
   RxList<Service> services = RxList<Service>(<Service>[]);
   RxList<Vendor> suppliers = RxList<Vendor>(<Vendor>[]);
   OrderStats? orderStats;
+  ShopStats? shopStats;
+  ShopGraphData? shopGraph;
 
   Future<bool> initShop() async {
     ApiResponseModel response = await ApiService.get(
@@ -224,13 +229,37 @@ class ShopController extends GetxController {
   }
 
   Future<void> loadStatistics() async {
+    await loadOrderData();
+    await loadShopData();
+    await loadShopGraph();
+    loadingData(false);
+    update();
+  }
+
+  Future<void> loadOrderData() async {
     ApiResponseModel ordersResponse = await ApiService.get(
       path: 'dashboard/shop-orders/${shop?.id}',
     );
     if (ordersResponse.success) {
-      for (int i = 0; i < ordersResponse.data['rows'].length; i++) {
-        orderStats = OrderStats.fromJson(ordersResponse.data);
-      }
+      orderStats = OrderStats.fromJson(ordersResponse.data);
+    }
+  }
+
+  Future<void> loadShopData() async {
+    ApiResponseModel shopDataResponse = await ApiService.get(
+      path: 'dashboard/shop-statistics/${profileController.myProfile.uid}',
+    );
+    if (shopDataResponse.success) {
+      shopStats = ShopStats.fromMap(shopDataResponse.data);
+    }
+  }
+
+  Future<void> loadShopGraph() async {
+    ApiResponseModel shopGraphResponse = await ApiService.get(
+      path: 'dashboard/shop-graph-data/${shop?.id}',
+    );
+    if (shopGraphResponse.success) {
+      shopGraph = ShopGraphData.fromJson(shopGraphResponse.data);
     }
   }
 }
