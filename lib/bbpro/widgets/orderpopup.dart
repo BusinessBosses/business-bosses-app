@@ -1,12 +1,9 @@
 import 'package:business_bosses_v2/bbpro/controllers/order_controller.dart';
-import 'package:business_bosses_v2/bbpro/controllers/project_controller.dart';
 import 'package:business_bosses_v2/bbpro/models/order_model.dart';
-import 'package:business_bosses_v2/bbpro/models/project_model.dart';
 import 'package:business_bosses_v2/bbpro/widgets/orderwidget.dart';
 // import 'package:business_bosses_v2/bbpro/models/task_model.dart';
 // import 'package:business_bosses_v2/bbpro/widgets/statswidget.dart';
 // import 'package:business_bosses_v2/bbpro/widgets/taskdisplayitem.dart';
-import 'package:business_bosses_v2/bbpro/widgets/taskwidget.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -67,7 +64,7 @@ class _OrderPopUpState extends State<OrderPopUp> {
                     ),
                   ),
                   Text(
-                    widget.order.notes ?? '',
+                    widget.order.notes,
                     style: const TextStyle(
                       fontWeight: FontWeight.bold,
                       fontSize: 13,
