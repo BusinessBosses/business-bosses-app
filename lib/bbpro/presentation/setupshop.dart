@@ -106,10 +106,6 @@ class _SetupshopState extends State<Setupshop> with TickerProviderStateMixin {
       _populatePaymentMethods(widget.shop!.payments);
     } else {
       shopController.initShop().then((bool value) {
-        if (value) {
-          Get.off(() => const Bottomnavscreen());
-          return;
-        }
         if (mounted) {
           loading = false;
           setState(() {});
@@ -218,7 +214,7 @@ class _SetupshopState extends State<Setupshop> with TickerProviderStateMixin {
                   const SizedBox(height: 20),
                   ProCustomButton(
                     onPressed: () {
-                      Get.off(() => const Bottomnavscreen());
+                      Get.back();
                     },
                     text: 'My Dashboard',
                     icon: const Icon(
