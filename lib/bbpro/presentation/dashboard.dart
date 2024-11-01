@@ -48,6 +48,7 @@ class _DashboardState extends State<Dashboard> {
   final ShopController shopController = Get.put(ShopController());
   final ClientsController clientsController = Get.put(ClientsController());
   String _selectedfilteritem = 'All Time';
+  String _selectedDateFilter = 'all_time';
 
   void _showBottomSheet() {
     showModalBottomSheet(
@@ -293,11 +294,22 @@ class _DashboardState extends State<Dashboard> {
                                       );
                                     }).toList(),
                                   ],
-                                ).then((String? selected) {
+                                ).then((String? selected) async {
                                   if (selected != null) {
                                     setState(() {
+                                      if (selected == 'Today') {
+                                        _selectedDateFilter = 'today';
+                                      } else if (selected == 'Last 7 Days') {
+                                        _selectedDateFilter = 'last_7_days';
+                                      } else if (selected == 'Last 30 Days') {
+                                        _selectedDateFilter = 'last_30_days';
+                                      } else if (selected == 'All Time') {
+                                        _selectedDateFilter = 'all_time';
+                                      }
                                       _selectedfilteritem = selected;
                                     });
+                                    await shopController
+                                        .filterData(_selectedDateFilter);
                                     // Implement filter logic here
                                   }
                                 });

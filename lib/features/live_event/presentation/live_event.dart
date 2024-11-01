@@ -3,7 +3,6 @@
 import 'dart:math';
 
 import 'package:business_bosses_v2/common/widgets/network_image_with_placeholder.dart';
-import 'package:business_bosses_v2/features/home/widgets/bottom_bar.dart';
 import 'package:business_bosses_v2/features/home/widgets/floatingbutton.dart';
 import 'package:business_bosses_v2/features/live_event/controller/live_event_controller.dart';
 import 'package:business_bosses_v2/features/live_event/models/events_model.dart';
@@ -153,7 +152,10 @@ class _LiveEventState extends State<LiveEvent> {
                           ),
                           child: SvgPicture.asset(
                             'assets/svgs/search.svg',
-                            color: Colors.white,
+                            colorFilter: const ColorFilter.mode(
+                              Colors.white,
+                              BlendMode.srcIn,
+                            ),
                             width: 20,
                           ),
                         ),

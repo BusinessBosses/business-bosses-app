@@ -5,8 +5,6 @@ import 'package:business_bosses_v2/features/donations/presentation/filterdonatio
 import 'package:business_bosses_v2/features/forum/presentation/bossup_challenge.dart';
 import 'package:business_bosses_v2/features/forum/widgets/forum_item.dart';
 import 'package:business_bosses_v2/features/home/controller/commumities_controller.dart';
-import 'package:business_bosses_v2/features/home/widgets/all_learning_posts.dart';
-import 'package:business_bosses_v2/features/home/widgets/bossuptopsection.dart';
 import 'package:business_bosses_v2/features/home/widgets/bottom_bar.dart';
 import 'package:business_bosses_v2/features/home/widgets/challengessection.dart';
 import 'package:business_bosses_v2/features/home/widgets/crowdfundsection.dart';
@@ -15,14 +13,11 @@ import 'package:business_bosses_v2/features/home/widgets/industriessearch.dart';
 import 'package:business_bosses_v2/features/home/widgets/learningpage.dart';
 import 'package:business_bosses_v2/features/home/widgets/learningsection.dart';
 import 'package:business_bosses_v2/features/live_event/presentation/live_event.dart';
-import 'package:business_bosses_v2/utils/constants/constants.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 
 import '../../common/widgets/safety_model.dart';
-import '../../common/widgets/tiles/custom_tile.dart';
-import '../../navigation/routes.dart';
 import '../../utils/theme/theme.dart';
 
 import '../forum/models/industry.dart';

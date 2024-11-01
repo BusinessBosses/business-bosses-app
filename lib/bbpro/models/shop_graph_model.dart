@@ -1,6 +1,6 @@
 class ShopGraphData {
   final int totalSales;
-  final List<GraphDataPoint> graphData;
+  final List<GraphDataPoint>? graphData;
   final String xAxis;
 
   ShopGraphData({
@@ -11,20 +11,24 @@ class ShopGraphData {
 
   factory ShopGraphData.fromJson(Map<String, dynamic> json) {
     return ShopGraphData(
-      totalSales: json['totalSales'],
-      graphData: (json['graphData'] as List<dynamic>)
-          .map((dynamic dataPoint) => GraphDataPoint.fromJson(dataPoint))
-          .toList(),
-      xAxis: json['xAxis'],
+      totalSales: json['totalSales'] ?? 0,
+      graphData: json['graphData'] == null
+          ? null
+          : (json['graphData'] as List<dynamic>)
+              .map((dynamic dataPoint) => GraphDataPoint.fromJson(dataPoint))
+              .toList(),
+      xAxis: json['xAxis'] ?? '',
     );
   }
 
   Map<String, dynamic> toJson() {
     return <String, dynamic>{
       'totalSales': totalSales,
-      'graphData': graphData
-          .map((GraphDataPoint dataPoint) => dataPoint.toJson())
-          .toList(),
+      'graphData': graphData == null
+          ? null
+          : graphData!
+              .map((GraphDataPoint dataPoint) => dataPoint.toJson())
+              .toList(),
       'xAxis': xAxis,
     };
   }

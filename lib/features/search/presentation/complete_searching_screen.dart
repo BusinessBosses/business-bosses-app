@@ -2,7 +2,6 @@ import 'package:business_bosses_v2/common/widgets/safety_model.dart';
 import 'package:business_bosses_v2/common/widgets/text_widget.dart';
 import 'package:business_bosses_v2/features/forum/models/forum_model.dart';
 import 'package:business_bosses_v2/features/forum/widgets/forum_item.dart';
-import 'package:business_bosses_v2/features/home/widgets/discoversection.dart';
 import 'package:business_bosses_v2/features/search/controller/search_controller.dart';
 import 'package:business_bosses_v2/features/search/widgets/search_bar.dart';
 import 'package:business_bosses_v2/features/search/widgets/filterusers.dart';
@@ -20,6 +19,7 @@ class CompleteSearchingScreen extends StatefulWidget {
   const CompleteSearchingScreen({Key? key}) : super(key: key);
 
   @override
+  // ignore: library_private_types_in_public_api
   _CompleteSearchingScreenState createState() =>
       _CompleteSearchingScreenState();
 }
@@ -32,7 +32,6 @@ class _CompleteSearchingScreenState extends State<CompleteSearchingScreen>
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     _tabController = TabController(vsync: this, length: 2);
   }
@@ -205,14 +204,17 @@ class FilterForum extends StatelessWidget {
             icon: SvgPicture.asset(
               'assets/svgs/group.svg',
               height: 80.0,
-              color: hintColor,
+              colorFilter: const ColorFilter.mode(
+                hintColor,
+                BlendMode.srcIn,
+              ),
             ),
             title: 'No forum to show you',
             subTitle: 'Your search forums will be displayed here!',
             isLoading: isLoading,
           )
         : ListView.separated(
-            key: ValueKey(filterItems),
+            key: ValueKey<List<ForumModel>>(filterItems),
             separatorBuilder: (_, __) => const SizedBox(height: 8.0),
             itemCount: filterItems.length,
             itemBuilder: (BuildContext context, int i) {
