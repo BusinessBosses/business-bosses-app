@@ -2,11 +2,13 @@ import 'package:business_bosses_v2/bbpro/controllers/shop_controller.dart';
 import 'package:business_bosses_v2/bbpro/models/service_model.dart';
 import 'package:business_bosses_v2/bbpro/models/product_model.dart';
 import 'package:business_bosses_v2/bbpro/presentation/bookservice.dart';
+import 'package:business_bosses_v2/bbpro/presentation/create_product.dart';
 import 'package:business_bosses_v2/bbpro/presentation/orderproduct.dart';
 import 'package:business_bosses_v2/bbpro/widgets/inventorycard.dart';
 import 'package:business_bosses_v2/bbpro/widgets/servicecard.dart';
 import 'package:business_bosses_v2/common/widgets/network_image_with_placeholder.dart';
 import 'package:business_bosses_v2/features/marketplace/presentation/seller_reviews.dart';
+import 'package:business_bosses_v2/features/profile/controller/profile_controller.dart';
 import 'package:business_bosses_v2/utils/theme/theme.dart';
 import 'package:detectable_text_field/detector/sample_regular_expressions.dart';
 import 'package:detectable_text_field/widgets/detectable_text.dart';
@@ -17,7 +19,8 @@ import 'package:get/get.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class ShopScreen extends StatefulWidget {
-  const ShopScreen({super.key});
+  final bool? isPro;
+  const ShopScreen({super.key, this.isPro});
 
   @override
   State<ShopScreen> createState() => _ShopScreenState();
@@ -25,32 +28,42 @@ class ShopScreen extends StatefulWidget {
 
 class _ShopScreenState extends State<ShopScreen> {
   final ShopController shopController = Get.find();
+  final ProfileController profileController = Get.find();
   String? _selectedItem = 'All Products';
   @override
   Widget build(BuildContext context) {
     return Scaffold(
         backgroundColor: Colors.white,
-        appBar: AppBar(
-          leading: IconButton(
-            onPressed: () {
-              Get.back();
-            },
-            icon: SvgPicture.asset('assets/svgs/backbutton.svg'),
-          ),
-          title: const Text(
-            'Shop',
-            style: TextStyle(
-              color: proprimaryColor,
-              fontWeight: FontWeight.bold,
-            ),
-          ),
-          actions: const <Widget>[],
-        ),
+        appBar: widget.isPro == null
+            ? AppBar(
+                leading: IconButton(
+                  onPressed: () {
+                    Get.back();
+                  },
+                  icon: SvgPicture.asset('assets/svgs/backbutton.svg'),
+                ),
+                title: Text(
+                  profileController.myProfile.uid ==
+                          shopController.shop!.user!.uid
+                      ? 'My Shop'
+                      : 'Shop',
+                  style: const TextStyle(
+                    color: proprimaryColor,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+                actions: const <Widget>[],
+              )
+            : null,
         body: CustomScrollView(
           slivers: <Widget>[
             SliverToBoxAdapter(
               child: Column(
                 children: <Widget>[
+                  if (widget.isPro != null)
+                    const SizedBox(
+                      height: 10.0,
+                    ),
                   SizedBox(
                     height: 100.0,
                     width: 100.0,
@@ -268,7 +281,7 @@ class _ShopScreenState extends State<ShopScreen> {
             ),
             SliverPadding(
               padding:
-                  const EdgeInsets.symmetric(horizontal: 15.0, vertical: 0),
+                  const EdgeInsets.only(left: 15.0, right: 15.0, bottom: 100),
               sliver: SliverStaggeredGrid.countBuilder(
                 crossAxisCount: 2,
                 staggeredTileBuilder: (int index) => const StaggeredTile.fit(1),
@@ -281,7 +294,15 @@ class _ShopScreenState extends State<ShopScreen> {
                     final Product product = shopController.products[index];
                     return GestureDetector(
                       onTap: () {
-                        Get.to(() => OrderProductScreen(product: product));
+                        profileController.myProfile.uid ==
+                                shopController.shop!.user!.uid
+                            ? Get.to(
+                                () => CreateProductListing(
+                                  product: product,
+                                ),
+                              )
+                            : Get.to(
+                                () => OrderProductScreen(product: product));
                       },
                       child: InventoryCard(
                         product: product,

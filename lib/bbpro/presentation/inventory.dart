@@ -1,10 +1,12 @@
 import 'package:business_bosses_v2/bbpro/controllers/shop_controller.dart';
 import 'package:business_bosses_v2/bbpro/models/product_model.dart';
 import 'package:business_bosses_v2/bbpro/presentation/create_product.dart';
+import 'package:business_bosses_v2/bbpro/presentation/orderproduct.dart';
 import 'package:business_bosses_v2/bbpro/widgets/button.dart';
 import 'package:business_bosses_v2/bbpro/widgets/inventorycard.dart';
 import 'package:business_bosses_v2/bbpro/presentation/viewproduct.dart';
 import 'package:business_bosses_v2/common/widgets/safety_model.dart';
+import 'package:business_bosses_v2/features/profile/controller/profile_controller.dart';
 import 'package:business_bosses_v2/utils/theme/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
@@ -20,6 +22,7 @@ class Inventory extends StatefulWidget {
 
 class _InventoryState extends State<Inventory> {
   final ShopController shopController = Get.find();
+  final ProfileController profileController = Get.find();
   // ignore: unused_field
   String? _selectedItem;
 
@@ -151,9 +154,15 @@ class _InventoryState extends State<Inventory> {
                         final Product product = shopController.products[index];
                         return GestureDetector(
                           onTap: () {
-                            Get.to(() => ExpandedProduct(
-                                  product: product,
-                                ));
+                            profileController.myProfile.uid ==
+                                    shopController.shop!.user!.uid
+                                ? Get.to(
+                                    () => CreateProductListing(
+                                      product: product,
+                                    ),
+                                  )
+                                : Get.to(
+                                    () => OrderProductScreen(product: product));
                           },
                           child: InventoryCard(
                             product: product,
