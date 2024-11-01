@@ -1,6 +1,8 @@
 import 'package:business_bosses_v2/bbpro/presentation/bottomnavscreen.dart';
 import 'package:business_bosses_v2/bbpro/presentation/setupshop.dart';
 import 'package:business_bosses_v2/bbpro/presentation/shopscreen.dart';
+import 'package:business_bosses_v2/bbpro/widgets/button.dart';
+import 'package:business_bosses_v2/common/widgets/buttons/subscribe_to_premium_button.dart';
 import 'package:business_bosses_v2/features/forum/widgets/forum_item.dart';
 import 'package:business_bosses_v2/features/home/controller/home_controller.dart';
 import 'package:business_bosses_v2/features/donations/widgets/donation_item.dart';
@@ -19,6 +21,7 @@ import 'package:flutter_sticky_header/flutter_sticky_header.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:business_bosses_v2/features/live_event/widgets/my_events.dart';
 import 'package:get/get.dart';
+import 'package:lottie/lottie.dart';
 import '../../../common/widgets/tiles/outlinebuttonheader.dart';
 import '../../../navigation/routes.dart';
 import '../../marketplace/controllers/market_controller.dart';
@@ -628,7 +631,48 @@ class _MyProfileScreenState extends State<MyProfileScreen> {
                 SizedBox(
                   height: MediaQuery.of(context).size.height,
                   width: MediaQuery.of(context).size.width,
-                  child: const Bottomnavscreen(),
+                  child: profileController.myProfile.isSubscribed
+                      ? Center(
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: <Widget>[
+                              const Text(
+                                'Upgrade now to unlock \nBiz-Centre',
+                                style: TextStyle(
+                                  fontSize: 18,
+                                  fontWeight: FontWeight.w700,
+                                ),
+                                textAlign: TextAlign.center,
+                              ),
+                              const SizedBox(
+                                height: 30,
+                              ),
+                              Lottie.asset(
+                                'assets/anim/padlock.json',
+                                fit: BoxFit.cover,
+                                height: 140,
+                                width: 140,
+                              ),
+                              const SizedBox(
+                                height: 30,
+                              ),
+                              Padding(
+                                  padding: const EdgeInsets.only(
+                                      left: 0.0, top: 10, bottom: 10),
+                                  child: Container(
+                                    width: double.infinity,
+                                    padding: const EdgeInsets.symmetric(
+                                        horizontal: 30),
+                                    child: ProCustomButton(
+                                        color: primaryColorLT,
+                                        text: 'Start Free Trial',
+                                        onPressed: () {}),
+                                  )),
+                            ],
+                          ),
+                        )
+                      : const Bottomnavscreen(),
                 )
               ]),
         );
