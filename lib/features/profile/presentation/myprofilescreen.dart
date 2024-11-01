@@ -67,112 +67,82 @@ class _MyProfileScreenState extends State<MyProfileScreen> {
           backgroundColor: Colors.white,
           appBar: PreferredSize(
             preferredSize: const Size.fromHeight(kToolbarHeight - 10),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.end,
-              children: <Widget>[
-                Align(
-                  alignment: Alignment.bottomCenter,
-                  child: CupertinoSlidingSegmentedControl<int>(
-                    backgroundColor: Colors.grey[200]!,
-                    padding: const EdgeInsets.all(5),
-                    children: <int, Widget>{
-                      0: Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 15),
-                        child: Text('Profile',
-                            style: _currentIndex == 0
+            child: Stack(children: <Widget>[
+              Column(
+                mainAxisAlignment: MainAxisAlignment.end,
+                children: <Widget>[
+                  Align(
+                    alignment: Alignment.bottomCenter,
+                    child: CupertinoSlidingSegmentedControl<int>(
+                      backgroundColor: Colors.grey[200]!,
+                      padding: const EdgeInsets.all(5),
+                      children: <int, Widget>{
+                        0: Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 15),
+                          child: Text('Profile',
+                              style: _currentIndex == 0
+                                  ? const TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: 14,
+                                    )
+                                  : const TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: 14,
+                                      color: Colors.grey)),
+                        ),
+                        1: Text('My-Biz',
+                            style: _currentIndex == 1
                                 ? const TextStyle(
-                                    fontWeight: FontWeight.bold,
-                                    fontSize: 14,
-                                  )
+                                    fontWeight: FontWeight.bold, fontSize: 14)
                                 : const TextStyle(
                                     fontWeight: FontWeight.bold,
                                     fontSize: 14,
                                     color: Colors.grey)),
-                      ),
-                      1: Text('My-Biz',
-                          style: _currentIndex == 1
-                              ? const TextStyle(
-                                  fontWeight: FontWeight.bold, fontSize: 14)
-                              : const TextStyle(
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: 14,
-                                  color: Colors.grey)),
-                    },
-                    onValueChanged: (int? value) {
-                      if (value != null) {
-                        setState(() {
-                          _currentIndex = value;
-                          _pageController.animateToPage(
-                            _currentIndex,
-                            duration: const Duration(milliseconds: 300),
-                            curve: Curves.ease,
-                          );
-                        });
-                      }
-                    },
-                    groupValue: _currentIndex,
+                      },
+                      onValueChanged: (int? value) {
+                        if (value != null) {
+                          setState(() {
+                            _currentIndex = value;
+                            _pageController.animateToPage(
+                              _currentIndex,
+                              duration: const Duration(milliseconds: 300),
+                              curve: Curves.ease,
+                            );
+                          });
+                        }
+                      },
+                      groupValue: _currentIndex,
+                    ),
                   ),
-                ),
-                const SizedBox(height: 10.0),
-                // Row(
-                //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                //   children: <Widget>[
-                //     Padding(
-                //       padding: const EdgeInsets.only(left: 15.0),
-                //       child: Text(
-                //         '@${profileController.myProfile.username}',
-                //         style: const TextStyle(
-                //             fontSize: 18.0, fontWeight: FontWeight.w700),
-                //       ),
-                //     ),
-                //     Wrap(
-                //       children: <Widget>[
-                //         IconButton(
-                //           onPressed: () {
-                //             Get.to(() => const MyEvents(
-                //                   toHome: true,
-                //                 ));
-                //           },
-                //           icon: const Icon(Icons.calendar_month),
-                //         ),
-                //         IconButton(
-                //           icon: SvgPicture.asset(
-                //             'assets/svgs/settings.svg',
-                //             height: 24.0,
-                //           ),
-                //           onPressed: () {
-                //             Get.toNamed(Routes.settings);
-                //           },
-                //         ),
-                //       ],
-                //     )
-                //   ],
-                // ),
-                // AppBar(
-                //   automaticallyImplyLeading: false,
-                //   title: Text('@${profileController.myProfile.username}'),
-                //   actions: <Widget>[
-                //     IconButton(
-                //       onPressed: () {
-                //         Get.to(() => const MyEvents(
-                //               toHome: true,
-                //             ));
-                //       },
-                //       icon: const Icon(Icons.calendar_month),
-                //     ),
-                //     IconButton(
-                //       icon: SvgPicture.asset(
-                //         'assets/svgs/settings.svg',
-                //         height: 24.0,
-                //       ),
-                //       onPressed: () {
-                //         Get.toNamed(Routes.settings);
-                //       },
-                //     )
-                //   ],
-                // ),
-              ],
-            ),
+                  const SizedBox(height: 10.0),
+                ],
+              ),
+              if (_currentIndex == 0)
+                Positioned(
+                    bottom: 10,
+                    right: 0,
+                    child: IconButton(
+                      icon: SvgPicture.asset(
+                        'assets/svgs/settings.svg',
+                        height: 24.0,
+                      ),
+                      onPressed: () {
+                        Get.toNamed(Routes.settings);
+                      },
+                    )),
+              if (_currentIndex == 0)
+                Positioned(
+                    bottom: 10,
+                    left: 0,
+                    child: IconButton(
+                      onPressed: () {
+                        Get.to(() => const MyEvents(
+                              toHome: true,
+                            ));
+                      },
+                      icon: const Icon(Icons.calendar_month),
+                    )),
+            ]),
           ),
           body: PageView(
               controller: _pageController,

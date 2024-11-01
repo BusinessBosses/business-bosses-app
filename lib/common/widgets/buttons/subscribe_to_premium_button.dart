@@ -9,27 +9,28 @@ Widget subscribetopremiumbutton() {
       color: primaryColorLT,
       borderRadius: BorderRadius.circular(100.0),
     ),
-    child: IntrinsicWidth(
+    child: const IntrinsicWidth(
       child: Padding(
-        padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 15),
+        padding: EdgeInsets.symmetric(vertical: 8, horizontal: 15),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
-            const Text(
-              'Subscribe to Pro',
+            Text(
+              'Upgrade',
               style: TextStyle(
                 fontWeight: FontWeight.w700,
                 fontSize: 15,
                 color: Colors.white,
               ),
             ),
-            const SizedBox(
-              width: 15,
+            SizedBox(
+              width: 5,
             ),
-            SvgPicture.asset(
-              'assets/svgs/nextbutton.svg',
+            Icon(
+              Icons.add,
               color: Colors.white,
-            ),
+              size: 15,
+            )
           ],
         ),
       ),
