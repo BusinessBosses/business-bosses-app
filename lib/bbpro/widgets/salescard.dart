@@ -132,70 +132,83 @@ class _SalesWidgetState extends State<SalesWidget> {
                     //     ),
                     //   ],
                     // ),
-                    Container(
-                      padding: const EdgeInsets.only(right: 10),
-                      height: 100,
-                      width: double.infinity,
-                      child: LineChart(
-                        LineChartData(
-                          minX: 0,
-                          maxX: (shopController.shopGraph!.graphData.length - 1)
-                              .toDouble(), // Dynamically set maxX based on data length
-                          minY: 0,
-                          maxY: shopController.shopGraph!.totalSales
-                              .toDouble(), // Dynamically set maxY based on totalSales
-                          titlesData: FlTitlesData(
-                            leftTitles: SideTitles(
-                                showTitles: true,
-                                interval:
-                                    shopController.shopGraph!.totalSales / 5),
-                            bottomTitles: SideTitles(
-                              showTitles: true,
-                              getTitles: (double value) {
-                                // Ensure value index is within bounds and map date label to the X-axis
-                                int index = value.toInt();
-                                if (index >= 0 &&
-                                    index <
-                                        shopController
-                                            .shopGraph!.graphData.length) {
-                                  return shopController
-                                      .shopGraph!.graphData[index].date
-                                      .substring(
-                                          5); // Display date part "MM-DD"
-                                }
-                                return '';
-                              },
+                    shopController.shopGraph!.graphData == null
+                        ? const Padding(
+                            padding: EdgeInsets.all(15),
+                            child: Center(
+                              child: Text('No Data To Show On Graph!'),
+                            ),
+                          )
+                        : Container(
+                            padding: const EdgeInsets.only(right: 10),
+                            height: 100,
+                            width: double.infinity,
+                            child: LineChart(
+                              LineChartData(
+                                minX: 0,
+                                maxX: (shopController
+                                            .shopGraph!.graphData!.length -
+                                        1)
+                                    .toDouble(), // Dynamically set maxX based on data length
+                                minY: 0,
+                                maxY: shopController.shopGraph!.totalSales
+                                    .toDouble(), // Dynamically set maxY based on totalSales
+                                titlesData: FlTitlesData(
+                                  leftTitles: SideTitles(
+                                      showTitles: true,
+                                      interval:
+                                          shopController.shopGraph!.totalSales /
+                                              5),
+                                  bottomTitles: SideTitles(
+                                    showTitles: true,
+                                    getTitles: (double value) {
+                                      // Ensure value index is within bounds and map date label to the X-axis
+                                      int index = value.toInt();
+                                      if (index >= 0 &&
+                                          index <
+                                              shopController.shopGraph!
+                                                  .graphData!.length) {
+                                        return shopController
+                                            .shopGraph!.graphData![index].date
+                                            .substring(
+                                                5); // Display date part "MM-DD"
+                                      }
+                                      return '';
+                                    },
+                                  ),
+                                ),
+                                gridData: FlGridData(show: false),
+                                borderData: FlBorderData(show: false),
+                                lineBarsData: <LineChartBarData>[
+                                  LineChartBarData(
+                                    isStrokeCapRound: true,
+                                    spots: shopController.shopGraph!.graphData!
+                                        .asMap()
+                                        .entries
+                                        .map((MapEntry<int, GraphDataPoint>
+                                                entry) =>
+                                            FlSpot(
+                                                entry.key.toDouble(),
+                                                entry.value.totalAmount
+                                                    .toDouble()))
+                                        .toList(),
+                                    isCurved: true,
+                                    colors: <Color>[
+                                      Colors.blue
+                                    ], // Use your custom colors
+                                    barWidth: 4,
+                                    belowBarData: BarAreaData(
+                                      show: true,
+                                      colors: <Color>[
+                                        Colors.blue.withAlpha(100)
+                                      ], // Use your custom colors
+                                    ),
+                                    dotData: FlDotData(show: false),
+                                  ),
+                                ],
+                              ),
                             ),
                           ),
-                          gridData: FlGridData(show: false),
-                          borderData: FlBorderData(show: false),
-                          lineBarsData: <LineChartBarData>[
-                            LineChartBarData(
-                              isStrokeCapRound: true,
-                              spots: shopController.shopGraph!.graphData
-                                  .asMap()
-                                  .entries
-                                  .map((MapEntry<int, GraphDataPoint> entry) =>
-                                      FlSpot(entry.key.toDouble(),
-                                          entry.value.totalAmount.toDouble()))
-                                  .toList(),
-                              isCurved: true,
-                              colors: <Color>[
-                                Colors.blue
-                              ], // Use your custom colors
-                              barWidth: 4,
-                              belowBarData: BarAreaData(
-                                show: true,
-                                colors: <Color>[
-                                  Colors.blue.withAlpha(100)
-                                ], // Use your custom colors
-                              ),
-                              dotData: FlDotData(show: false),
-                            ),
-                          ],
-                        ),
-                      ),
-                    ),
                   ],
                 ),
               ),

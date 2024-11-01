@@ -236,10 +236,17 @@ class ShopController extends GetxController {
     update();
   }
 
-  Future<void> loadOrderData() async {
-    ApiResponseModel ordersResponse = await ApiService.get(
-      path: 'dashboard/shop-orders/${shop?.id}',
-    );
+  Future<void> loadOrderData({String? date}) async {
+    ApiResponseModel ordersResponse;
+    if (date != null) {
+      ordersResponse = await ApiService.get(
+        path: 'dashboard/shop-orders/${shop?.id}?date=$date',
+      );
+    } else {
+      ordersResponse = await ApiService.get(
+        path: 'dashboard/shop-orders/${shop?.id}',
+      );
+    }
     if (ordersResponse.success) {
       orderStats = OrderStats.fromJson(ordersResponse.data);
     }
@@ -254,12 +261,33 @@ class ShopController extends GetxController {
     }
   }
 
-  Future<void> loadShopGraph() async {
-    ApiResponseModel shopGraphResponse = await ApiService.get(
-      path: 'dashboard/shop-graph-data/${shop?.id}',
-    );
+  Future<void> loadShopGraph({String? date}) async {
+    ApiResponseModel shopGraphResponse;
+    if (date != null) {
+      shopGraphResponse = await ApiService.get(
+        path: 'dashboard/shop-graph-data/${shop?.id}?date=$date',
+      );
+    } else {
+      shopGraphResponse = await ApiService.get(
+        path: 'dashboard/shop-graph-data/${shop?.id}',
+      );
+    }
     if (shopGraphResponse.success) {
       shopGraph = ShopGraphData.fromJson(shopGraphResponse.data);
     }
+  }
+
+  Future<void> filterData(String date) async {
+    loadingData(true);
+    update();
+    if (date == 'all_time') {
+      await loadOrderData();
+      await loadShopGraph();
+    } else {
+      await loadOrderData(date: date);
+      await loadShopGraph(date: date);
+    }
+    loadingData(false);
+    update();
   }
 }
