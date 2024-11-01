@@ -305,9 +305,7 @@ class _BookServiceScreenState extends State<BookServiceScreen>
                         OrderPreviewCard(
                           title: widget.service.name,
                           price: widget.service.price,
-                          deliveryDays: deliveryDate != null
-                              ? deliveryDate!.difference(DateTime.now()).inDays
-                              : 0,
+                          deliveryDays: widget.service.deliveryTime!,
                           deliveryLocation: widget.service.location,
                           imageUrl: widget.service.images![0],
                         ),
@@ -324,7 +322,7 @@ class _BookServiceScreenState extends State<BookServiceScreen>
                         const SizedBox(
                           height: 15,
                         ),
-                        const OrderSummaryWidget(),
+                        // const OrderSummaryWidget(),
                         const SizedBox(
                           height: 15,
                         ),

@@ -531,13 +531,13 @@ class _CreateServiceListingState extends State<CreateServiceListing>
                   caption: 'Repeat',
                   hintText: 'Offer this service once or regularly?',
                   items: const <String>[
-                    'Yes (One-time Service)',
-                    'No (Regular Service)',
+                    'Yes (Regular Service)',
+                    'No (One-time Service)',
                   ],
                   iconName: 'assets/svgs/dropdown.svg',
                   initialValue: <String>[
-                    'Yes (One-time Service)',
-                    'No (Regular Service)'
+                    'Yes (Regular Service)',
+                    'No (One-time Service)'
                   ].contains(category)
                       ? category
                       : null,

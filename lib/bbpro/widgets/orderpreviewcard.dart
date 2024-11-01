@@ -9,9 +9,10 @@ class OrderPreviewCard extends StatelessWidget {
   final String? size;
   final String? color;
   final double price;
-  final int deliveryDays;
+  final String deliveryDays;
   final String deliveryLocation;
   final String imageUrl;
+  final Function? OnTap;
 
   const OrderPreviewCard({
     Key? key,
@@ -22,6 +23,7 @@ class OrderPreviewCard extends StatelessWidget {
     required this.deliveryDays,
     required this.deliveryLocation,
     required this.imageUrl,
+    this.OnTap,
   }) : super(key: key);
 
   @override
@@ -36,13 +38,14 @@ class OrderPreviewCard extends StatelessWidget {
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
-          NetworkImageWithPlaceHolder(
-            width: 100,
-            height: 100,
-            fit: BoxFit.cover,
-            imageUrl: imageUrl,
-          ),
-          const SizedBox(width: 10.0),
+          if (imageUrl.isNotEmpty)
+            NetworkImageWithPlaceHolder(
+              width: 100,
+              height: 100,
+              fit: BoxFit.cover,
+              imageUrl: imageUrl,
+            ),
+          if (imageUrl.isNotEmpty) const SizedBox(width: 10.0),
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -54,8 +57,8 @@ class OrderPreviewCard extends StatelessWidget {
                     fontWeight: FontWeight.bold,
                   ),
                 ),
-                if (size != null) Text('Size: $size'),
-                if (color != null) Text('Color: $color'),
+                if (size != null && size!.isNotEmpty) Text('Size: $size'),
+                if (color != null && color!.isNotEmpty) Text('Color: $color'),
                 const SizedBox(height: 5.0),
                 Text(
                   '${shopController.shop!.currency}${price.toStringAsFixed(2)}',
@@ -65,16 +68,17 @@ class OrderPreviewCard extends StatelessWidget {
                   ),
                 ),
                 const SizedBox(height: 8.0),
-                Row(
-                  children: <Widget>[
-                    const Icon(
-                      Icons.access_time,
-                      size: 12,
-                    ),
-                    const SizedBox(width: 4.0),
-                    Text('$deliveryDays Days Delivery'),
-                  ],
-                ),
+                if (deliveryDays.isNotEmpty)
+                  Row(
+                    children: <Widget>[
+                      const Icon(
+                        Icons.access_time,
+                        size: 12,
+                      ),
+                      const SizedBox(width: 4.0),
+                      Text('$deliveryDays Days Delivery'),
+                    ],
+                  ),
                 Row(
                   children: <Widget>[
                     const Icon(
@@ -90,19 +94,25 @@ class OrderPreviewCard extends StatelessWidget {
           ),
           Align(
             alignment: Alignment.topRight,
-            child: Container(
-              padding: const EdgeInsets.symmetric(
-                horizontal: 10,
-                vertical: 5,
-              ),
-              decoration: BoxDecoration(
-                  color: backgroundColor,
-                  borderRadius: BorderRadius.circular(5)),
-              child: const Row(
-                children: <Widget>[
-                  Text('Edit'),
-                  Icon(Icons.edit, size: 12),
-                ],
+            child: GestureDetector(
+              onTap: OnTap!(),
+              child: Container(
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 10,
+                  vertical: 5,
+                ),
+                decoration: BoxDecoration(
+                    color: backgroundColor,
+                    borderRadius: BorderRadius.circular(5)),
+                child: const Row(
+                  children: <Widget>[
+                    Text(
+                      'Edit',
+                      style: TextStyle(fontSize: 14),
+                    ),
+                    Icon(Icons.edit, size: 12),
+                  ],
+                ),
               ),
             ),
           ),

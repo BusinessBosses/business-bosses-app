@@ -44,299 +44,268 @@ class _ShopScreenState extends State<ShopScreen> {
               fontWeight: FontWeight.bold,
             ),
           ),
-          //  Row(
-          //   children: <Widget>[
-          //     SizedBox(
-          //       height: 40.0,
-          //       width: 40.0,
-          //       child: Align(
-          //         alignment: Alignment.topLeft,
-          //         child: ClipRRect(
-          //           borderRadius: BorderRadius.circular(1000),
-          //           child: NetworkImageWithPlaceHolder(
-          //             imageUrl: shopController.shop!.image ?? '',
-          //             radius: radius,
-          //             placeHolder: Icons.person,
-          //             iconSize: 22.0,
-          //             fit: BoxFit.cover,
-          //           ),
-          //         ),
-          //       ),
-          //     ),
-          //     const SizedBox(width: 10),
-          //     Column(
-          //       crossAxisAlignment: CrossAxisAlignment.start,
-          //       children: <Widget>[
-          //         Text(shopController.shop!.name,
-          //             style: const TextStyle(
-          //                 fontWeight: FontWeight.bold, fontSize: 14)),
-          //         const SizedBox(height: 2),
-          //         Text(shopController.shop!.description,
-          //             style: const TextStyle(
-          //                 fontWeight: FontWeight.normal, fontSize: 12)),
-          //       ],
-          //     ),
-          //   ],
-          // ),
           actions: const <Widget>[],
         ),
-        body: Column(children: <Widget>[
-          SizedBox(
-            height: 100.0,
-            width: 100.0,
-            child: Align(
-              alignment: Alignment.topLeft,
-              child: ClipRRect(
-                borderRadius: BorderRadius.circular(1000),
-                child: NetworkImageWithPlaceHolder(
-                  imageUrl: shopController.shop!.image ?? '',
-                  radius: radius,
-                  placeHolder: Icons.person,
-                  iconSize: 22.0,
-                  fit: BoxFit.cover,
-                ),
-              ),
-            ),
-          ),
-          const SizedBox(
-            height: 10,
-          ),
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 15.0),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: <Widget>[
-                Text(shopController.shop!.name,
-                    style: const TextStyle(
-                        fontWeight: FontWeight.bold, fontSize: 14)),
-                const SizedBox(height: 2),
-                DetectableText(
-                  text: shopController.shop!.description,
-                  detectionRegExp: detectionRegExp(hashtag: false)!,
-                  detectedStyle: bodyText2.copyWith(
-                    color: Colors.blue,
-                  ),
-                  textAlign: TextAlign.center,
-                  moreStyle: bodyText2.copyWith(
-                    color: Colors.redAccent,
-                  ),
-                  lessStyle: bodyText2.copyWith(
-                    color: Colors.redAccent,
-                  ),
-                  trimLength: 100,
-                  trimExpandedText: '  show less',
-                  basicStyle: bodyText2.copyWith(color: textColor),
-                  onTap: (String text) async {
-                    final Uri url = Uri.parse(text);
-                    if ((url.scheme == 'http' || url.scheme == 'https')) {
-                      if (!await launchUrl(url)) {
-                        throw Exception('Could not launch $url');
-                      }
-                    } else if (text.startsWith('wa.me')) {
-                      // Handle "wa.me" links
-                      final Uri whatsappUrl = Uri.parse('https://$text');
-                      if (await launchUrl(whatsappUrl)) {
-                        await launchUrl(whatsappUrl);
-                      } else {
-                        throw Exception('Could not launch $whatsappUrl');
-                      }
-                    }
-                  },
-                ),
-              ],
-            ),
-          ),
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 15.0, vertical: 10),
-            child: Container(
-              padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 8),
-              decoration: BoxDecoration(
-                color: backgroundColor,
-                borderRadius: BorderRadius.circular(8),
-              ),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        body: CustomScrollView(
+          slivers: <Widget>[
+            SliverToBoxAdapter(
+              child: Column(
                 children: <Widget>[
-                  Row(
-                    children: <Widget>[
-                      const Icon(Icons.location_on,
-                          color: Colors.red, size: 18),
-                      const SizedBox(width: 8),
-                      Text(
-                        shopController.shop!.location.length > 15
-                            ? '${shopController.shop!.location.substring(0, 15)}...'
-                            : shopController.shop!.location,
-                        style: const TextStyle(
-                            fontWeight: FontWeight.w700, fontSize: 14),
-                      ),
-                    ],
-                  ),
-                  GestureDetector(
-                    onTap: () {
-                      showModalBottomSheet<void>(
-                        context: context,
-                        shape: const RoundedRectangleBorder(
-                          borderRadius: BorderRadius.vertical(
-                            top: Radius.circular(20),
-                          ),
+                  SizedBox(
+                    height: 100.0,
+                    width: 100.0,
+                    child: Align(
+                      alignment: Alignment.topLeft,
+                      child: ClipRRect(
+                        borderRadius: BorderRadius.circular(1000),
+                        child: NetworkImageWithPlaceHolder(
+                          imageUrl: shopController.shop!.image ?? '',
+                          radius: radius,
+                          placeHolder: Icons.person,
+                          iconSize: 22.0,
+                          fit: BoxFit.cover,
                         ),
-                        builder: (BuildContext context) {
-                          return _buildContactInfo();
-                        },
-                      );
-                    },
-                    child: const Text(
-                      'Contact',
-                      style:
-                          TextStyle(fontWeight: FontWeight.w700, fontSize: 14),
+                      ),
                     ),
                   ),
-                  Row(
-                    children: <Widget>[
-                      const Icon(Icons.star, color: Colors.amber, size: 18),
-                      const SizedBox(width: 4),
-                      GestureDetector(
-                        onTap: () {
-                          Get.to(() => SellerReviewScreen(
-                              user: shopController.shop!.user!));
-                        },
-                        child: const Text(
-                          '0.0 Reviews',
-                          style: TextStyle(
-                              fontWeight: FontWeight.w700, fontSize: 14),
-                        ),
-                      ),
-                    ],
-                  ),
-                ],
-              ),
-            ),
-          ),
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 15.0),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: <Widget>[
-                Text(
-                  'All (${shopController.products.length + shopController.services.length})',
-                  style: const TextStyle(fontSize: 14),
-                ),
-                GestureDetector(
-                  onTap: () {
-                    final RenderBox button =
-                        context.findRenderObject() as RenderBox;
-                    final RenderBox overlay = Overlay.of(context)
-                        .context
-                        .findRenderObject() as RenderBox;
-                    final RelativeRect position = RelativeRect.fromRect(
-                      Rect.fromPoints(
-                        button.localToGlobal(
-                            button.size.topRight(const Offset(0, 380)),
-                            ancestor: overlay),
-                        button.localToGlobal(
-                            button.size.bottomRight(const Offset(0, 20)),
-                            ancestor: overlay),
-                      ),
-                      Offset.zero & overlay.size,
-                    );
-
-                    showMenu(
-                      shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(10)),
-                      context: context,
-                      shadowColor: Colors.black,
-                      position: position,
-                      items: <String>[
-                        'All Products',
-                        'Low Stock',
-                        'Out of Stock',
-                        'Most Popular',
-                        'Newest First',
-                      ].map((String option) {
-                        return PopupMenuItem<String>(
-                          value: option,
-                          child: Text(
-                            option,
-                            style: const TextStyle(
-                              fontSize: 14,
-                            ),
-                          ),
-                        );
-                      }).toList(),
-                    ).then((String? selected) {
-                      if (selected != null) {
-                        setState(() {
-                          _selectedItem = selected;
-                        });
-                      }
-                    });
-                  },
-                  child: Container(
-                    width: 150,
-                    decoration: BoxDecoration(
-                        color: backgroundColor,
-                        borderRadius: BorderRadius.circular(7)),
-                    child: Row(
+                  const SizedBox(height: 10),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 15.0),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.center,
                       children: <Widget>[
-                        CircleAvatar(
-                          backgroundColor: backgroundColor,
-                          child: SvgPicture.asset(
-                              'assets/svgs/filterprosections.svg'),
+                        Text(shopController.shop!.name,
+                            style: const TextStyle(
+                                fontWeight: FontWeight.bold, fontSize: 14)),
+                        const SizedBox(height: 2),
+                        DetectableText(
+                          text: shopController.shop!.description,
+                          detectionRegExp: detectionRegExp(hashtag: false)!,
+                          detectedStyle: bodyText2.copyWith(color: Colors.blue),
+                          textAlign: TextAlign.center,
+                          moreStyle:
+                              bodyText2.copyWith(color: Colors.redAccent),
+                          lessStyle:
+                              bodyText2.copyWith(color: Colors.redAccent),
+                          trimLength: 100,
+                          trimExpandedText: '  show less',
+                          basicStyle: bodyText2.copyWith(color: textColor),
+                          onTap: (String text) async {
+                            final Uri url = Uri.parse(text);
+                            if ((url.scheme == 'http' ||
+                                url.scheme == 'https')) {
+                              if (!await launchUrl(url)) {
+                                throw Exception('Could not launch $url');
+                              }
+                            } else if (text.startsWith('wa.me')) {
+                              final Uri whatsappUrl =
+                                  Uri.parse('https://$text');
+                              if (await launchUrl(whatsappUrl)) {
+                                await launchUrl(whatsappUrl);
+                              } else {
+                                throw Exception(
+                                    'Could not launch $whatsappUrl');
+                              }
+                            }
+                          },
                         ),
-                        Text(
-                          _selectedItem!,
-                          style: const TextStyle(fontSize: 14),
-                        )
                       ],
                     ),
                   ),
-                ),
-              ],
+                  Padding(
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 15.0, vertical: 10),
+                    child: Container(
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 15, vertical: 8),
+                      decoration: BoxDecoration(
+                        color: backgroundColor,
+                        borderRadius: BorderRadius.circular(8),
+                      ),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: <Widget>[
+                          Row(
+                            children: <Widget>[
+                              const Icon(Icons.location_on,
+                                  color: Colors.red, size: 18),
+                              const SizedBox(width: 8),
+                              Text(
+                                shopController.shop!.location.length > 15
+                                    ? '${shopController.shop!.location.substring(0, 15)}...'
+                                    : shopController.shop!.location,
+                                style: const TextStyle(
+                                    fontWeight: FontWeight.w700, fontSize: 14),
+                              ),
+                            ],
+                          ),
+                          GestureDetector(
+                            onTap: () {
+                              showModalBottomSheet<void>(
+                                context: context,
+                                shape: const RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.vertical(
+                                      top: Radius.circular(20)),
+                                ),
+                                builder: (BuildContext context) {
+                                  return _buildContactInfo();
+                                },
+                              );
+                            },
+                            child: const Text(
+                              'Contact',
+                              style: TextStyle(
+                                  fontWeight: FontWeight.w700, fontSize: 14),
+                            ),
+                          ),
+                          Row(
+                            children: <Widget>[
+                              const Icon(Icons.star,
+                                  color: Colors.amber, size: 18),
+                              const SizedBox(width: 4),
+                              GestureDetector(
+                                onTap: () {
+                                  Get.to(() => SellerReviewScreen(
+                                      user: shopController.shop!.user!));
+                                },
+                                child: const Text(
+                                  '0.0 Reviews',
+                                  style: TextStyle(
+                                      fontWeight: FontWeight.w700,
+                                      fontSize: 14),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 15.0),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: <Widget>[
+                        Text(
+                          'All (${shopController.products.length + shopController.services.length})',
+                          style: const TextStyle(fontSize: 14),
+                        ),
+                        GestureDetector(
+                          onTap: () {
+                            final RenderBox button =
+                                context.findRenderObject() as RenderBox;
+                            final RenderBox overlay = Overlay.of(context)
+                                .context
+                                .findRenderObject() as RenderBox;
+                            final RelativeRect position = RelativeRect.fromRect(
+                              Rect.fromPoints(
+                                button.localToGlobal(
+                                    button.size.topRight(const Offset(0, 380)),
+                                    ancestor: overlay),
+                                button.localToGlobal(
+                                    button.size
+                                        .bottomRight(const Offset(0, 20)),
+                                    ancestor: overlay),
+                              ),
+                              Offset.zero & overlay.size,
+                            );
+
+                            showMenu(
+                              shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(10)),
+                              context: context,
+                              shadowColor: Colors.black,
+                              position: position,
+                              items: <String>[
+                                'All Products',
+                                'Low Stock',
+                                'Out of Stock',
+                                'Most Popular',
+                                'Newest First',
+                              ].map((String option) {
+                                return PopupMenuItem<String>(
+                                  value: option,
+                                  child: Text(
+                                    option,
+                                    style: const TextStyle(fontSize: 14),
+                                  ),
+                                );
+                              }).toList(),
+                            ).then((String? selected) {
+                              if (selected != null) {
+                                setState(() {
+                                  _selectedItem = selected;
+                                });
+                              }
+                            });
+                          },
+                          child: Container(
+                            width: 150,
+                            decoration: BoxDecoration(
+                                color: backgroundColor,
+                                borderRadius: BorderRadius.circular(7)),
+                            child: Row(
+                              children: <Widget>[
+                                CircleAvatar(
+                                  backgroundColor: backgroundColor,
+                                  child: SvgPicture.asset(
+                                      'assets/svgs/filterprosections.svg'),
+                                ),
+                                Text(
+                                  _selectedItem!,
+                                  style: const TextStyle(fontSize: 14),
+                                )
+                              ],
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  const SizedBox(height: 10),
+                ],
+              ),
             ),
-          ),
-          const SizedBox(
-            height: 10,
-          ),
-          Expanded(
-            child: StaggeredGridView.countBuilder(
-              physics: const AlwaysScrollableScrollPhysics(),
-              staggeredTileBuilder: (int index) => const StaggeredTile.fit(1),
+            SliverPadding(
               padding:
                   const EdgeInsets.symmetric(horizontal: 15.0, vertical: 0),
-              crossAxisCount: 2,
-              crossAxisSpacing: 10.0,
-              mainAxisSpacing: 10.0,
-              itemCount: shopController.products.length +
-                  shopController.services.length,
-              itemBuilder: (BuildContext context, int index) {
-                if (index < shopController.products.length) {
-                  final Product product = shopController.products[index];
-                  return GestureDetector(
-                    onTap: () {
-                      Get.to(() => OrderProductScreen(product: product));
-                    },
-                    child: InventoryCard(
-                      product: product,
-                      myShop: true,
-                    ),
-                  );
-                } else {
-                  final Service service = shopController
-                      .services[index - shopController.products.length];
-                  return GestureDetector(
-                    onTap: () {
-                      Get.to(() => BookServiceScreen(service: service));
-                    },
-                    child: ServiceCard(
-                      myShop: true,
-                      service: service,
-                    ),
-                  );
-                }
-              },
-            ),
-          )
-        ]));
+              sliver: SliverStaggeredGrid.countBuilder(
+                crossAxisCount: 2,
+                staggeredTileBuilder: (int index) => const StaggeredTile.fit(1),
+                mainAxisSpacing: 10.0,
+                crossAxisSpacing: 10.0,
+                itemCount: shopController.products.length +
+                    shopController.services.length,
+                itemBuilder: (BuildContext context, int index) {
+                  if (index < shopController.products.length) {
+                    final Product product = shopController.products[index];
+                    return GestureDetector(
+                      onTap: () {
+                        Get.to(() => OrderProductScreen(product: product));
+                      },
+                      child: InventoryCard(
+                        product: product,
+                        myShop: true,
+                      ),
+                    );
+                  } else {
+                    final Service service = shopController
+                        .services[index - shopController.products.length];
+                    return GestureDetector(
+                      onTap: () {
+                        Get.to(() => BookServiceScreen(service: service));
+                      },
+                      child: ServiceCard(
+                        myShop: true,
+                        service: service,
+                      ),
+                    );
+                  }
+                },
+              ),
+            )
+          ],
+        ));
   }
 
   Widget _buildContactInfo() {
