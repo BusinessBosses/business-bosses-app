@@ -110,7 +110,10 @@ class _InventoryState extends State<Inventory> {
                 Wrap(children: <Widget>[
                   const Text(
                     'Products List',
-                    style: TextStyle(color: Colors.black),
+                    style: TextStyle(
+                        color: Colors.black,
+                        fontWeight: FontWeight.bold,
+                        fontSize: 16),
                   ),
                   const SizedBox(
                     width: 3,
@@ -118,7 +121,10 @@ class _InventoryState extends State<Inventory> {
                   Obx(
                     () => Text(
                       '(${shopController.products.length})',
-                      style: const TextStyle(color: Colors.black),
+                      style: const TextStyle(
+                          color: Colors.black,
+                          fontWeight: FontWeight.bold,
+                          fontSize: 16),
                     ),
                   ),
                 ]),

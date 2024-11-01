@@ -44,6 +44,20 @@ class _ChooseOrderBottomSheetState extends State<ChooseOrderBottomSheet>
   final List<Map<String, dynamic>> _tempSelectedItems =
       <Map<String, dynamic>>[];
 
+  String _searchQuery = '';
+
+  List<Map<String, dynamic>> get filteredProducts {
+    if (_searchQuery.isEmpty) {
+      return widget.products;
+    }
+    return widget.products.where((Map<String, dynamic> product) {
+      final String name = product['name'].toString().toLowerCase();
+      final String searchLower = _searchQuery.toLowerCase();
+
+      return name.contains(searchLower);
+    }).toList();
+  }
+
   @override
   void initState() {
     super.initState();
@@ -136,61 +150,96 @@ class _ChooseOrderBottomSheetState extends State<ChooseOrderBottomSheet>
               controller: _tabController,
               children: <Widget>[
                 // Products Tab content
+
                 Column(
-                  children: widget.products.map((Map<String, dynamic> product) {
-                    bool isLastSelected = _tempSelectedItems.isNotEmpty &&
-                        _tempSelectedItems.last == product;
-                    return Column(
-                      children: <Widget>[
-                        CheckboxListTile(
-                          title: Text(product['name']),
-                          secondary: (product['images'] != null &&
-                                  product['images'].isNotEmpty)
-                              ? Container(
-                                  width: 50,
-                                  height: 50,
-                                  decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(8),
+                  children: <Widget>[
+                    ProSearchbar(
+                      hasSearchIcon: true,
+                      contentPadding: 10,
+                      backgroundColor: backgroundColor,
+                      hintText: 'Search Products',
+                      onChange: (String query) {
+                        setState(() {
+                          _searchQuery = query;
+                        });
+                      },
+                      onSubmit: (String query) {
+                        setState(() {
+                          _searchQuery = query;
+                        });
+                      },
+                    ),
+                    const SizedBox(height: 10),
+                    filteredProducts.isNotEmpty
+                        ? Column(
+                            children: filteredProducts
+                                .map((Map<String, dynamic> product) {
+                              bool isLastSelected =
+                                  _tempSelectedItems.isNotEmpty &&
+                                      _tempSelectedItems.last == product;
+                              return Column(
+                                children: <Widget>[
+                                  CheckboxListTile(
+                                    title: Text(product['name']),
+                                    secondary: (product['images'] != null &&
+                                            product['images'].isNotEmpty)
+                                        ? Container(
+                                            width: 50,
+                                            height: 50,
+                                            decoration: BoxDecoration(
+                                              borderRadius:
+                                                  BorderRadius.circular(8),
+                                            ),
+                                            child: ClipRRect(
+                                                borderRadius:
+                                                    BorderRadius.circular(8),
+                                                child:
+                                                    NetworkImageWithPlaceHolder(
+                                                        imageUrl:
+                                                            product['images'])),
+                                          )
+                                        : null,
+                                    subtitle: Text(
+                                        '${shopController.shop!.currency} ' +
+                                            product['price']),
+                                    value: _tempSelectedItems.contains(product),
+                                    onChanged: (bool? selected) {
+                                      setState(() {
+                                        if (selected == true) {
+                                          _tempSelectedItems.add(product);
+                                        } else {
+                                          _tempSelectedItems.remove(product);
+                                        }
+                                      });
+                                    },
+                                    checkColor: Colors.white,
+                                    activeColor: proprimaryColor,
                                   ),
-                                  child: ClipRRect(
-                                      borderRadius: BorderRadius.circular(8),
-                                      child: NetworkImageWithPlaceHolder(
-                                          imageUrl: product['images'])),
-                                )
-                              : null,
-                          subtitle: Text('${shopController.shop!.currency} ' +
-                              product['price']),
-                          value: _tempSelectedItems.contains(product),
-                          onChanged: (bool? selected) {
-                            setState(() {
-                              if (selected == true) {
-                                _tempSelectedItems.add(product);
-                              } else {
-                                _tempSelectedItems.remove(product);
-                              }
-                            });
-                          },
-                          checkColor: Colors.white,
-                          activeColor: proprimaryColor,
-                        ),
-                        if (isLastSelected)
-                          Padding(
-                            padding: const EdgeInsets.only(left: 8.0),
-                            child: ProIconButton(
-                              onPressed: () {
-                                setState(() {
-                                  widget.selectedItems
-                                      .addAll(_tempSelectedItems);
-                                  _tempSelectedItems.clear();
-                                });
-                                Navigator.pop(context, widget.selectedItems);
-                              },
-                              text: 'Done',
-                            ),
+                                  if (isLastSelected)
+                                    Padding(
+                                      padding: const EdgeInsets.only(left: 8.0),
+                                      child: ProIconButton(
+                                        onPressed: () {
+                                          setState(() {
+                                            widget.selectedItems
+                                                .addAll(_tempSelectedItems);
+                                            _tempSelectedItems.clear();
+                                          });
+                                          Navigator.pop(
+                                              context, widget.selectedItems);
+                                        },
+                                        text: 'Done',
+                                      ),
+                                    ),
+                                ],
+                              );
+                            }).toList(),
+                          )
+                        : const Text(
+                            'No search results',
+                            style: TextStyle(color: Colors.grey, fontSize: 16),
                           ),
-                      ],
-                    );
-                  }).toList(),
+                  ],
                 ),
 
                 // Services Tab content
