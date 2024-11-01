@@ -105,17 +105,17 @@ class _InventoryCardState extends State<InventoryCard> {
                         Wrap(
                           crossAxisAlignment: WrapCrossAlignment.center,
                           children: <Widget>[
-                            const CircleAvatar(
+                            CircleAvatar(
                               radius: 3,
-                              backgroundColor: Colors.green,
+                              backgroundColor: widget.product!.quantity! > 0
+                                  ? Colors.green
+                                  : Colors.red,
                             ),
                             const SizedBox(width: 3),
                             Text(
-                              widget.product?.quantity != null
-                                  ? widget.product!.quantity! > 0
-                                      ? '${widget.product?.quantity.toString()} in Stock'
-                                      : 'Out of stock'
-                                  : '',
+                              widget.product!.quantity! > 0
+                                  ? '${widget.product?.quantity.toString()} in Stock'
+                                  : 'Out of stock',
                               style: const TextStyle(fontSize: 10),
                             ),
                           ],

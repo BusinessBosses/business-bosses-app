@@ -240,7 +240,7 @@ class _SetupshopState extends State<Setupshop> with TickerProviderStateMixin {
     return Scaffold(
       backgroundColor: probackgroundColor,
       appBar: AppBar(
-        backgroundColor: Colors.transparent,
+        backgroundColor: probackgroundColor,
         leading: widget.shop != null
             ? IconButton(
                 onPressed: () {
