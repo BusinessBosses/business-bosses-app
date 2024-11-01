@@ -4,6 +4,7 @@ import 'package:business_bosses_v2/bbpro/models/order_model.dart';
 import 'package:business_bosses_v2/bbpro/models/product_model.dart';
 import 'package:business_bosses_v2/bbpro/models/service_model.dart';
 import 'package:business_bosses_v2/bbpro/presentation/create_order.dart';
+import 'package:business_bosses_v2/bbpro/presentation/expandedorders.dart';
 import 'package:business_bosses_v2/bbpro/widgets/optionsbutton.dart';
 import 'package:business_bosses_v2/bbpro/widgets/orderpopup.dart';
 import 'package:business_bosses_v2/common/dialogs/snackbar.dart';
@@ -86,29 +87,28 @@ class _OrderWidgetState extends State<OrderWidget> {
                               ),
                             ]),
                       ),
-                      if (widget.isExpanded != true)
-                        OptionsButton(
-                          padding: const EdgeInsets.all(0),
-                          borderColor: Colors.white,
-                          onEdit: onEdit,
-                          onDelete: () async {
-                            final bool delete = await orderController
-                                .deleteOrder(widget.order.id);
-                            if (delete) {
-                              showSnackbar(
-                                  message: 'Order deleted successfully!');
-                            } else {
-                              showSnackbar(
-                                message: 'Error deleting order!',
-                                error: true,
-                              );
-                            }
+                      OptionsButton(
+                        padding: const EdgeInsets.all(0),
+                        borderColor: Colors.white,
+                        onEdit: onEdit,
+                        onDelete: () async {
+                          final bool delete = await orderController
+                              .deleteOrder(widget.order.id);
+                          if (delete) {
+                            showSnackbar(
+                                message: 'Order deleted successfully!');
+                          } else {
+                            showSnackbar(
+                              message: 'Error deleting order!',
+                              error: true,
+                            );
+                          }
 
-                            setState(() {});
-                            orderController
-                                .initOrders(profileController.myProfile.uid);
-                          },
-                        ),
+                          setState(() {});
+                          orderController
+                              .initOrders(profileController.myProfile.uid);
+                        },
+                      ),
                     ],
                   ),
                   Padding(
@@ -388,12 +388,15 @@ class _OrderWidgetState extends State<OrderWidget> {
                       children: <Widget>[
                         GestureDetector(
                           onTap: () {
-                            showDialog(
-                              context: context,
-                              builder: (BuildContext context) => OrderPopUp(
-                                order: widget.order,
-                              ),
-                            );
+                            Get.to(() => ExpandedOrders(
+                                  order: widget.order,
+                                ));
+                            // showDialog(
+                            //   context: context,
+                            //   builder: (BuildContext context) => OrderPopUp(
+                            //     order: widget.order,
+                            //   ),
+                            // );
                           },
                           child: CircleAvatar(
                             backgroundColor: probackgroundColor,
@@ -409,23 +412,6 @@ class _OrderWidgetState extends State<OrderWidget> {
                 ],
               ),
             ),
-            if (widget.isExpanded == true) const SizedBox(width: 16),
-            if (widget.isExpanded == true)
-              Container(
-                width: 100,
-                height: 100,
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(8),
-                  border: Border.all(
-                    color:
-                        const Color(0xff4680A6).withAlpha(50), // Border color
-                    width: 0.5, // Border width
-                  ),
-                ),
-                child: ClipRRect(
-                    borderRadius: BorderRadius.circular(8),
-                    child: const NetworkImageWithPlaceHolder(imageUrl: '')),
-              ),
           ],
         ),
       ),

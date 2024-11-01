@@ -2,6 +2,8 @@ import 'dart:async';
 
 import 'package:business_bosses_v2/action/action.dart';
 import 'package:business_bosses_v2/bbpro/controllers/shop_controller.dart';
+import 'package:business_bosses_v2/bbpro/widgets/iconbutton.dart';
+import 'package:business_bosses_v2/bbpro/widgets/notificationbutton.dart';
 import 'package:business_bosses_v2/bbpro/widgets/proseardwidget.dart';
 import 'package:business_bosses_v2/common/widgets/safety_model.dart';
 import 'package:business_bosses_v2/features/chat/chat_screen.dart';
@@ -68,6 +70,7 @@ class _OrdersScreenState extends State<OrdersScreen>
   Widget build(BuildContext context) {
     final Size screenSize = MediaQuery.of(context).size;
     return Scaffold(
+        resizeToAvoidBottomInset: true,
         backgroundColor: probackgroundColor,
         appBar: AppBar(
           automaticallyImplyLeading: false,
@@ -81,9 +84,30 @@ class _OrdersScreenState extends State<OrdersScreen>
           actions: <Widget>[
             Row(
               children: <Widget>[
+                Padding(
+                  padding: const EdgeInsets.only(
+                    right: 10.0,
+                    bottom: 10,
+                  ),
+                  child: ProIconButton(
+                    radius: 50,
+                    icon: const Icon(Icons.add),
+                    onPressed: () {
+                      Get.to(() => const CreateOrder());
+                    },
+                    text: 'Create Order',
+                  ),
+                ),
                 GestureDetector(
                   onTap: () {
-                    Get.to(() => const ChatScreen());
+                    if (clientsController.clients.isEmpty) {
+                      showSnackBar(
+                        context,
+                        message: 'You have to add a client to create order!',
+                      );
+                      return;
+                    }
+                    Get.to(() => const CreateOrder());
                   },
                   child: Padding(
                     padding: const EdgeInsets.only(
@@ -99,52 +123,15 @@ class _OrdersScreenState extends State<OrdersScreen>
                         )),
                   ),
                 ),
-                Padding(
-                  padding: const EdgeInsets.only(right: 10.0, bottom: 15),
-                  child: CircleAvatar(
-                    backgroundColor: prosemibackColor,
-                    radius: 30,
-                    child: Padding(
-                      padding: const EdgeInsets.all(10),
-                      child: SvgPicture.asset(
-                        'assets/svgs/notificationicon.svg',
-                        height: 20,
-                      ),
-                    ),
-                  ),
-                ),
+                const NotificationButton(),
               ],
             )
           ],
         ),
         body: Column(
           children: <Widget>[
-            TopsectionWidget(
-              buttonText: 'Create New Order',
-              onHowItWorksPressed: () {
-                // Handle "How it works" pressed
-                print('How it works pressed');
-              },
-              onAddProjectPressed: () {
-                // Handle "Add Project" pressed
-                if (clientsController.clients.isEmpty) {
-                  showSnackBar(
-                    context,
-                    message: 'You have to add a client to create order!',
-                  );
-                  return;
-                }
-                // if (shopController.products.isEmpty &&
-                //     shopController.products.isEmpty) {
-                //   showSnackBar(
-                //     context,
-                //     message:
-                //         'You have to add a product or service to create order!',
-                //   );
-                //   return;
-                // }
-                Get.to(() => const CreateOrder());
-              },
+            const SizedBox(
+              height: 10,
             ),
             CustomTabBarWidget<OrderStatus>(
               tabController: _tabController,
@@ -164,7 +151,7 @@ class _OrdersScreenState extends State<OrdersScreen>
             ),
             Expanded(
               child: Padding(
-                padding: const EdgeInsets.only(bottom: 15),
+                padding: const EdgeInsets.only(bottom: 10),
                 child: loading
                     ? const Center(
                         child: CircularProgressIndicator(),

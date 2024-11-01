@@ -16,7 +16,7 @@ class _GotoshopWidgetState extends State<GotoshopWidget> {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.only(top: 15, right: 15),
+      padding: const EdgeInsets.only(right: 15),
       child: GestureDetector(
         onTap: () {
           Get.to(() => const ShopScreen());
@@ -34,8 +34,8 @@ class _GotoshopWidgetState extends State<GotoshopWidget> {
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: <Widget>[
                       SizedBox(
-                        height: 40.0,
-                        width: 40.0,
+                        height: 35.0,
+                        width: 35.0,
                         child: ClipRRect(
                           borderRadius: BorderRadius.circular(10),
                           child: NetworkImageWithPlaceHolder(

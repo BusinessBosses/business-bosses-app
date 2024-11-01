@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'package:business_bosses_v2/bbpro/models/project_model.dart';
 import 'package:business_bosses_v2/bbpro/widgets/customtabbar.dart';
+import 'package:business_bosses_v2/bbpro/widgets/iconbutton.dart';
 import 'package:business_bosses_v2/bbpro/widgets/notificationbutton.dart';
 import 'package:business_bosses_v2/bbpro/widgets/proseardwidget.dart';
 import 'package:business_bosses_v2/bbpro/widgets/taskwidget.dart';
@@ -95,6 +96,18 @@ class _ProjectsState extends State<Projects>
         actions: <Widget>[
           Row(
             children: <Widget>[
+              Padding(
+                padding: const EdgeInsets.only(
+                  right: 10.0,
+                  bottom: 10,
+                ),
+                child: ProIconButton(
+                  radius: 50,
+                  icon: const Icon(Icons.add),
+                  onPressed: () {},
+                  text: 'Add Tasks',
+                ),
+              ),
               GestureDetector(
                 onTap: () {
                   Get.to(() => const ChatScreen());
@@ -120,14 +133,8 @@ class _ProjectsState extends State<Projects>
       ),
       body: Column(
         children: <Widget>[
-          TopsectionWidget(
-            buttonText: 'Add Tasks',
-            onHowItWorksPressed: () {
-              // Handle "How it works" pressed
-            },
-            onAddProjectPressed: () {
-              Get.to(() => const Addproject());
-            },
+          const SizedBox(
+            height: 10,
           ),
           CustomTabBarWidget<ProjectStatus>(
             tabController: _tabController,

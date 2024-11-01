@@ -8,6 +8,7 @@ import 'package:business_bosses_v2/bbpro/presentation/create_product.dart';
 import 'package:business_bosses_v2/bbpro/presentation/create_service.dart';
 import 'package:business_bosses_v2/bbpro/presentation/create_order.dart';
 import 'package:business_bosses_v2/bbpro/widgets/gotoshopwidget.dart';
+import 'package:business_bosses_v2/bbpro/widgets/iconbutton.dart';
 import 'package:business_bosses_v2/bbpro/widgets/infocard.dart';
 import 'package:business_bosses_v2/bbpro/widgets/notificationbutton.dart';
 import 'package:business_bosses_v2/bbpro/widgets/orderscard.dart';
@@ -152,33 +153,29 @@ class _DashboardState extends State<Dashboard> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: <Widget>[
                   const Expanded(child: GotoshopWidget()),
-                  Container(
-                    color: Colors.white,
-                    child: Row(
-                      children: <Widget>[
-                        GestureDetector(
-                          onTap: () {
-                            Get.to(() => const ChatScreen());
-                          },
-                          child: Padding(
-                            padding: const EdgeInsets.only(
-                                right: 10.0, bottom: 0, top: 10),
-                            child: CircleAvatar(
-                                radius: 20,
-                                backgroundColor: prosemibackColor,
-                                child: SvgPicture.asset(
-                                  'assets/svgs/prochat.svg',
-                                  height: 15,
-                                )),
+                  Row(
+                    children: <Widget>[
+                      GestureDetector(
+                        onTap: () {
+                          Get.to(() => const ChatScreen());
+                        },
+                        child: Padding(
+                          padding: const EdgeInsets.only(
+                            right: 10.0,
+                            bottom: 10,
                           ),
+                          child: CircleAvatar(
+                              radius: 20,
+                              backgroundColor: prosemibackColor,
+                              child: SvgPicture.asset(
+                                'assets/svgs/prochat.svg',
+                                height: 15,
+                              )),
                         ),
-                        const NotificationButton(
-                          padding: 0,
-                          toppadding: 10,
-                        ),
-                      ],
-                    ),
-                  ),
+                      ),
+                      const NotificationButton(),
+                    ],
+                  )
                 ],
               ),
             ],
