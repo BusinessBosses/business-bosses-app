@@ -315,7 +315,7 @@ class _ShopScreenState extends State<ShopScreen> {
                         .services[index - shopController.products.length];
                     return GestureDetector(
                       onTap: () {
-                        profileController.myProfile.uid !=
+                        profileController.myProfile.uid ==
                                 shopController.shop!.user!.uid
                             ? Get.to(
                                 () => CreateServiceListing(
