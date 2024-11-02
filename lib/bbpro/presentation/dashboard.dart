@@ -387,8 +387,18 @@ class _DashboardState extends State<Dashboard> {
                                     ? clientsController.allclients.length
                                         .toString()
                                     : index == 1
-                                        ? shopController.shopStats!.totalAmount
-                                            .toString()
+                                        ? shopController.shop!.currency +
+                                            (shopController.shopStats!
+                                                        .totalAmount >=
+                                                    1000000
+                                                ? '${(shopController.shopStats!.totalAmount / 1000000).toStringAsFixed(1)}M'
+                                                : shopController.shopStats!
+                                                            .totalAmount >=
+                                                        1000
+                                                    ? '${(shopController.shopStats!.totalAmount / 1000).toStringAsFixed(1)}K'
+                                                    : shopController
+                                                        .shopStats!.totalAmount
+                                                        .toStringAsFixed(1))
                                         : index == 2
                                             ? shopController
                                                 .shopStats!.projectCount

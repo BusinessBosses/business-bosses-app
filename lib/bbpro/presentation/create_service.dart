@@ -65,6 +65,7 @@ class _CreateServiceListingState extends State<CreateServiceListing>
   String? deliveryTime;
   DateTime? availableTime;
   String? serviceType;
+  Map<String, dynamic>? availability;
 
   late AnimationController _animationController;
   late Animation<double> _animation;
@@ -116,10 +117,36 @@ class _CreateServiceListingState extends State<CreateServiceListing>
       serviceType = widget.service!.serviceType;
       paymentMethod = widget.service!.paymentMethod;
       notesController.text = widget.service!.notes ?? '';
-      // packages.addAll(widget.service!.packages!.map((Package package) => <String, >{
-      //         'name': package.name,
-      //         'amount': package.amount,
-      //       }));
+      packages
+          .addAll(widget.service!.packages.map((package) => <String, dynamic>{
+                'name': package['name'],
+                'price': package['price'],
+              }));
+      availability = widget.service!.availability;
+      _startTime = TimeOfDay(
+          hour: int.parse(
+              widget.service!.availability!['startTime'].substring(0, 2)),
+          minute: int.parse(
+              widget.service!.availability!['startTime'].substring(3, 5)));
+      _endTime = TimeOfDay(
+          hour: int.parse(widget.service!.availability!['endTime']
+              .substring(0, 2)), // Extract hour
+          minute: int.parse(widget.service!.availability!['endTime']
+              .substring(3, 5))); // Extract minute
+
+      // selectedSubmitWeekdays =
+      //     List<String>.from(widget.service!.availability!['dayOfWeek']);
+      // _selectedWeekdays = List<bool>.filled(7, false);
+
+      for (int i = 0; i < weekdays.length; i++) {
+        if (selectedSubmitWeekdays.contains(weekdays[i])) {
+          _selectedWeekdays[i] = true;
+        }
+      }
+
+      _updateSelectedDates();
+      _startTimeSelected = true;
+      _endTimeSelected = true;
     }
     currencyController.text = shopController.shop?.location != null
         ? '${currencyValues[shopController.shop!.location.toString()]}'
@@ -553,7 +580,7 @@ class _CreateServiceListingState extends State<CreateServiceListing>
                 if (category != null)
                   availabilityWidget(
                       isRecurring:
-                          category == 'Yes (One-time Service)' ? true : false),
+                          category == 'Yes (Regular Service)' ? true : false),
 
                 // Delivery Time Field
                 // TextFormField(
@@ -588,6 +615,7 @@ class _CreateServiceListingState extends State<CreateServiceListing>
                   caption: 'Payment Method',
                   hintText: 'Choose a payment method',
                   items: paymentMethods,
+                  initialValue: paymentMethod,
                   iconName: 'assets/svgs/dropdown.svg',
                   onChanged: (String? newValue) {
                     setState(() {
@@ -669,7 +697,8 @@ class _CreateServiceListingState extends State<CreateServiceListing>
                             return Taskitem(
                               isPackage: true,
                               taskname: task['name'],
-                              taskexpense: task['price'],
+                              taskexpense:
+                                  shopController.shop!.currency + task['price'],
                               editOnTap: () {
                                 _editPackageSheet(context, index);
                               },
@@ -836,8 +865,8 @@ class _CreateServiceListingState extends State<CreateServiceListing>
           'category': category,
           'location': shopController.shop!.location,
           'images': images!.isEmpty ? null : images,
-          'paymentMethod': paymentMethod ?? 'Cash',
-          'deliveryMethod': deliveryMethod ?? 'In-Person',
+          'paymentMethod': paymentMethod ?? '',
+          'deliveryMethod': deliveryMethod ?? '',
           'deliveryTime': deliveryTime ?? '',
           'availableTime': availableTime?.toIso8601String(),
           'serviceType': serviceType ?? '1:1',

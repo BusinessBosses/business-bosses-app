@@ -155,12 +155,18 @@ class _SalesWidgetState extends State<SalesWidget> {
                                     .toDouble(), // Dynamically set maxY based on totalSales
                                 titlesData: FlTitlesData(
                                   leftTitles: SideTitles(
-                                      showTitles: true,
-                                      interval:
-                                          shopController.shopGraph!.totalSales /
-                                              5),
-                                  bottomTitles: SideTitles(
                                     showTitles: true,
+                                    interval:
+                                        shopController.shopGraph!.totalSales > 0
+                                            ? shopController
+                                                    .shopGraph!.totalSales /
+                                                5
+                                            : 100,
+                                  ),
+                                  bottomTitles: SideTitles(
+                                    showTitles:
+                                        shopController.shopGraph!.totalSales >
+                                            0, // Only show if totalSales > 0
                                     getTitles: (double value) {
                                       // Ensure value index is within bounds and map date label to the X-axis
                                       int index = value.toInt();
