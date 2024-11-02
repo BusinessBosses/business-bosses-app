@@ -887,10 +887,11 @@ class _CreateServiceListingState extends State<CreateServiceListing>
             'endTime':
                 '${_endTime.hour.toString().padLeft(2, '0')}:${_endTime.minute.toString().padLeft(2, '0')}:00',
             'startDate': '2023-10-01',
-            'endDate': '2023-10-01'
+            'endDate': '2023-10-01',
           },
           'servicePackages':
               packages.isEmpty ? <Map<String, dynamic>>[] : packages,
+          'url': addressorlinkController.text,
           'notes': notesController.text.trim().isEmpty
               ? null
               : notesController.text.trim(),
@@ -903,6 +904,13 @@ class _CreateServiceListingState extends State<CreateServiceListing>
           final bool result = await shopController.addService(serviceData);
           if (result) {
             showSnackbar(message: 'Service Added Successfully!');
+            Navigator.pop(context);
+          }
+        } else {
+          final bool result = await shopController.updateService(
+              widget.service!.id, serviceData);
+          if (result) {
+            showSnackbar(message: 'Service Updated Successfully!');
             Navigator.pop(context);
           }
         }

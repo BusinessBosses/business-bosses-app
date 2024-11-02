@@ -21,6 +21,8 @@ class Service {
   String? deliveryTime;
   DateTime? availableTime;
   String? serviceType;
+  String? participants;
+  String? repeat;
   DateTime createdAt;
   Map<String, dynamic>? availability;
   List<dynamic> packages;
@@ -38,6 +40,8 @@ class Service {
     required this.location,
     this.paymentMethod,
     this.deliveryMethod,
+    this.participants,
+    this.repeat,
     this.url,
     this.notes,
     required this.itemType,
@@ -69,6 +73,8 @@ class Service {
       paymentMethod: json['paymentMethod'],
       deliveryMethod: json['deliveryMethod'],
       url: json['url'],
+      participants: json['participants'],
+      repeat: json['repeat'],
       itemType: json['itemType'],
       isActive: json['isActive'],
       deliveryTime: json['deliveryTime'],
@@ -103,6 +109,8 @@ class Service {
       'availability': availability.toString(),
       'packages': packages,
       'notes': notes,
+      'participants': participants,
+      'repeat': repeat,
     };
   }
 
@@ -130,7 +138,9 @@ Service {
   images: $images, 
   availability: $availability,
   packages: $packages,
-  notes: $notes
+  notes: $notes,
+  participants: $participants,
+  repeat: $repeat,
 }
 ''';
   }

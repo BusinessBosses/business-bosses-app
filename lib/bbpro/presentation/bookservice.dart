@@ -5,7 +5,6 @@ import 'package:business_bosses_v2/bbpro/models/client_model.dart';
 import 'package:business_bosses_v2/bbpro/models/service_model.dart';
 import 'package:business_bosses_v2/bbpro/widgets/addtoorderwidget.dart';
 import 'package:business_bosses_v2/bbpro/widgets/button.dart';
-import 'package:business_bosses_v2/bbpro/widgets/dropdown.dart';
 import 'package:business_bosses_v2/bbpro/widgets/edittext.dart';
 import 'package:business_bosses_v2/bbpro/widgets/orderpreviewcard.dart';
 import 'package:business_bosses_v2/bbpro/widgets/ordersummarycard.dart';
@@ -321,7 +320,10 @@ class _BookServiceScreenState extends State<BookServiceScreen>
                               text: 'Next ',
                               icon: SvgPicture.asset(
                                 'assets/svgs/nexticon.svg',
-                                color: Colors.white,
+                                colorFilter: const ColorFilter.mode(
+                                  Colors.white,
+                                  BlendMode.srcIn,
+                                ),
                               ),
                             ),
                           )
@@ -391,7 +393,10 @@ class _BookServiceScreenState extends State<BookServiceScreen>
                             text: 'Next ',
                             icon: SvgPicture.asset(
                               'assets/svgs/nexticon.svg',
-                              color: Colors.white,
+                              colorFilter: const ColorFilter.mode(
+                                Colors.white,
+                                BlendMode.srcIn,
+                              ),
                             ),
                           ),
                         ),
@@ -514,6 +519,7 @@ class _BookServiceScreenState extends State<BookServiceScreen>
                               if (response) {
                                 showSnackbar(
                                     message: 'Order Added Successfully!');
+                                // ignore: use_build_context_synchronously
                                 Navigator.pop(context);
                               } else {
                                 showSnackbar(
@@ -538,11 +544,11 @@ class _BookServiceScreenState extends State<BookServiceScreen>
     );
   }
 
-  void _onClientSelect(String name) {
-    final dynamic clientName = clients
-        .firstWhere((Map<String, dynamic> element) => element['name'] == name);
-    setState(() {
-      clientId = clientName['id'];
-    });
-  }
+  // void _onClientSelect(String name) {
+  //   final dynamic clientName = clients
+  //       .firstWhere((Map<String, dynamic> element) => element['name'] == name);
+  //   setState(() {
+  //     clientId = clientName['id'];
+  //   });
+  // }
 }
