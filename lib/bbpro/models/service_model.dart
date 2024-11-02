@@ -13,14 +13,14 @@ class Service {
   String? notes;
   String category;
   String location;
-  String paymentMethod;
-  String deliveryMethod;
+  String? paymentMethod;
+  String? deliveryMethod;
   String? url;
   String itemType;
   bool isActive;
   String? deliveryTime;
   DateTime? availableTime;
-  String serviceType;
+  String? serviceType;
   DateTime createdAt;
   Map<String, dynamic>? availability;
   List<dynamic> packages;
@@ -36,15 +36,15 @@ class Service {
     required this.description,
     required this.category,
     required this.location,
-    required this.paymentMethod,
-    required this.deliveryMethod,
+    this.paymentMethod,
+    this.deliveryMethod,
     this.url,
     this.notes,
     required this.itemType,
     required this.isActive,
     this.deliveryTime,
     this.availableTime,
-    required this.serviceType,
+    this.serviceType,
     required this.createdAt,
     this.availability,
     this.packages = const <Map<String, dynamic>>[],

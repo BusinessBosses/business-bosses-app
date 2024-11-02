@@ -172,14 +172,15 @@ class _BookServiceScreenState extends State<BookServiceScreen>
                                       fontSize: 16,
                                     ),
                                   ),
-                                  Text(
-                                    widget.service.deliveryMethod,
-                                    style: const TextStyle(
-                                      color: proprimaryColor,
-                                      fontWeight: FontWeight.bold,
-                                      fontSize: 16,
+                                  if (widget.service.deliveryMethod != null)
+                                    Text(
+                                      widget.service.deliveryMethod!,
+                                      style: const TextStyle(
+                                        color: proprimaryColor,
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: 16,
+                                      ),
                                     ),
-                                  ),
                                   Text(
                                     widget.service.location,
                                     style: const TextStyle(

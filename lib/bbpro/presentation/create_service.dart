@@ -789,13 +789,14 @@ class _CreateServiceListingState extends State<CreateServiceListing>
         error: true,
       );
       return;
-    } else if (selectedSubmitWeekdays.isEmpty) {
-      showSnackbar(
-        message: 'Selecting a day is Mandatory!',
-        error: true,
-      );
-      return;
     }
+    // else if (selectedSubmitWeekdays.isEmpty) {
+    //   showSnackbar(
+    //     message: 'Selecting a day is Mandatory!',
+    //     error: true,
+    //   );
+    //   return;
+    // }
 
     if (_formKey.currentState?.validate() ?? false) {
       _formKey.currentState?.save();
