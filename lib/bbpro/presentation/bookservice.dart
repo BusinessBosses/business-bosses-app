@@ -544,11 +544,11 @@ class _BookServiceScreenState extends State<BookServiceScreen>
     );
   }
 
-  // void _onClientSelect(String name) {
-  //   final dynamic clientName = clients
-  //       .firstWhere((Map<String, dynamic> element) => element['name'] == name);
-  //   setState(() {
-  //     clientId = clientName['id'];
-  //   });
-  // }
+  void _onClientSelect(String name) {
+    final dynamic clientName = clients
+        .firstWhere((Map<String, dynamic> element) => element['name'] == name);
+    setState(() {
+      clientId = clientName['id'];
+    });
+  }
 }
