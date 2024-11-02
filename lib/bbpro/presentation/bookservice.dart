@@ -298,59 +298,62 @@ class _BookServiceScreenState extends State<BookServiceScreen>
                       ],
                     ),
                   ]),
-                  SingleChildScrollView(
-                    child: Column(
-                      children: <Widget>[
-                        OrderPreviewCard(
-                          title: widget.service.name,
-                          price: widget.service.price,
-                          deliveryDays: widget.service.deliveryTime!,
-                          deliveryLocation: widget.service.location,
-                          imageUrl: widget.service.images![0],
-                        ),
-                        const SizedBox(
-                          height: 15,
-                        ),
-                        const ServicetypeSectionWidget(),
-                        const SizedBox(
-                          height: 15,
-                        ),
-                        AddToOrderWidget(
-                          packages: widget.service.packages,
-                        ),
-                        const SizedBox(
-                          height: 15,
-                        ),
-                        // const OrderSummaryWidget(),
-                        const SizedBox(
-                          height: 15,
-                        ),
-                        SizedBox(
-                          width: double.infinity,
-                          child: ProCustomButton(
-                            onPressed: () {
-                              // Check if the current index is less than the total tabs - 1
-                              if (_tabController.index <
-                                  _tabController.length - 1) {
-                                // Move to the next tab
-                                setState(() {
-                                  _tabController.index +=
-                                      1; // Go to the next tab
-                                  selectedIndex++;
-                                });
-                              }
-                            },
-                            text: 'Next ',
-                            icon: SvgPicture.asset(
-                              'assets/svgs/nexticon.svg',
-                              color: Colors.white,
+                  Expanded(
+                    child: SingleChildScrollView(
+                      child: Column(
+                        children: <Widget>[
+                          OrderPreviewCard(
+                            title: widget.service.name,
+                            price: widget.service.price,
+                            deliveryDays:
+                                widget.service.deliveryTime ?? 0.toString(),
+                            deliveryLocation: widget.service.location,
+                            imageUrl: widget.service.images![0],
+                          ),
+                          const SizedBox(
+                            height: 15,
+                          ),
+                          const ServicetypeSectionWidget(),
+                          const SizedBox(
+                            height: 15,
+                          ),
+                          AddToOrderWidget(
+                            packages: widget.service.packages,
+                          ),
+                          const SizedBox(
+                            height: 15,
+                          ),
+                          // const OrderSummaryWidget(),
+                          const SizedBox(
+                            height: 15,
+                          ),
+                          SizedBox(
+                            width: double.infinity,
+                            child: ProCustomButton(
+                              onPressed: () {
+                                // Check if the current index is less than the total tabs - 1
+                                if (_tabController.index <
+                                    _tabController.length - 1) {
+                                  // Move to the next tab
+                                  setState(() {
+                                    _tabController.index +=
+                                        1; // Go to the next tab
+                                    selectedIndex++;
+                                  });
+                                }
+                              },
+                              text: 'Next ',
+                              icon: SvgPicture.asset(
+                                'assets/svgs/nexticon.svg',
+                                color: Colors.white,
+                              ),
                             ),
                           ),
-                        ),
-                        const SizedBox(
-                          height: 50,
-                        ),
-                      ],
+                          const SizedBox(
+                            height: 50,
+                          ),
+                        ],
+                      ),
                     ),
                   ),
                   Column(

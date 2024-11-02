@@ -167,15 +167,27 @@ class _CreateOrderState extends State<CreateOrder> {
       'notes': notesController.text,
       'invoiceOption': 'send_with_payment_link'
     };
-
+    bool response;
     // Call the addOrder method from the GetX controller
-    bool response = await orderController.addOrders(orderData);
+    if (widget.order != null) {
+      response = await orderController.updateOrder(widget.order!.id, orderData);
+    } else {
+      response = await orderController.addOrders(orderData);
+    }
     if (response) {
-      showSnackbar(message: 'Order Added Successfully!');
+      showSnackbar(
+          message: widget.order != null
+              ? 'Order Updated Successfully'
+              : 'Order Added Successfully!');
       await orderController.initOrders(profileController.myProfile.uid);
+      // ignore: use_build_context_synchronously
       Navigator.pop(context);
     } else {
-      showSnackbar(message: 'Error creating order!', error: true);
+      showSnackbar(
+          message: widget.order != null
+              ? 'Error Updating Order!'
+              : 'Error creating order!',
+          error: true);
       setState(() {
         isSubmit = false;
       });
@@ -223,7 +235,11 @@ class _CreateOrderState extends State<CreateOrder> {
       notesController.text = widget.order!.notes;
       clientId = widget.order!.clientId;
       selectedClient = clients.firstWhere(
-          (Map<String, dynamic> element) => element['id'] == clientId)['name'];
+        (Map<String, dynamic> element) => element['id'] == clientId,
+        orElse: () => <String, dynamic>{
+          'name': ''
+        }, // Provide a default value if no match is found
+      )['name'];
       selectedDeliveryMethod = widget.order!.deliveryMethod;
       if (widget.order!.deliveryMethod == 'online') {
         initialDeliveryMethod = 'Online';
@@ -232,19 +248,57 @@ class _CreateOrderState extends State<CreateOrder> {
       }
       selectedOrderDate = widget.order!.deliveryDate.toString();
       selectedPaymentMethod = widget.order!.paymentMethod;
+      if (widget.order!.services != null) {
+        for (Service service1 in widget.order!.services!) {
+          selectedItems!.add(
+            <String, dynamic>{
+              'type': 'service',
+              'id': service1.id,
+              'name': service1.name,
+              'price': service1.price.toString()
+            },
+          );
+        }
+      }
+
+      if (widget.order!.products != null) {
+        for (Product product1 in widget.order!.products!) {
+          selectedItems!.add(
+            <String, dynamic>{
+              'type': 'service',
+              'id': product1.id,
+              'name': product1.name,
+              'price': product1.price.toString()
+            },
+          );
+        }
+      }
+
+      if (widget.order!.customItems != null) {
+        for (dynamic custom in widget.order!.customItems!) {
+          selectedItems!.add(
+            <String, dynamic>{
+              'type': 'custom',
+              'id': custom['id'],
+              'name': custom['name'],
+              'price': custom['amount'].toString()
+            },
+          );
+        }
+      }
     }
   }
 
-  void _onItemSelect(bool? selected, Map<String, dynamic> item) {
-    setState(() {
-      if (selected!) {
-        selectedItems!.add(item);
-      } else {
-        selectedItems!.removeWhere(
-            (Map<String, dynamic> element) => element['id'] == item['id']);
-      }
-    });
-  }
+  // void _onItemSelect(bool? selected, Map<String, dynamic> item) {
+  //   setState(() {
+  //     if (selected!) {
+  //       selectedItems!.add(item);
+  //     } else {
+  //       selectedItems!.removeWhere(
+  //           (Map<String, dynamic> element) => element['id'] == item['id']);
+  //     }
+  //   });
+  // }
 
   void _loadClients() {
     clients.clear();
@@ -367,8 +421,7 @@ class _CreateOrderState extends State<CreateOrder> {
                                       isOrder: true,
                                       taskname: task['name'],
                                       taskexpense:
-                                          '${shopController.shop!.currency} ' +
-                                              task['price'],
+                                          '${shopController.shop!.currency} ${task['price']}',
                                       imageurl: task['images'],
                                       deleteOnTap: () {
                                         setState(() {
@@ -508,7 +561,7 @@ class _CreateOrderState extends State<CreateOrder> {
                     width: MediaQuery.of(context).size.width,
                     child: ProCustomButton(
                       loading: isSubmit,
-                      text: 'Create',
+                      text: widget.order != null ? 'Update' : 'Create',
                       onPressed: _submitOrder,
                     ),
                   ),

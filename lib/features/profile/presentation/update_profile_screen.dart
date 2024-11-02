@@ -3,7 +3,6 @@
 import 'dart:io';
 
 import 'package:business_bosses_v2/bbpro/presentation/bottomnavscreen.dart';
-import 'package:business_bosses_v2/bbpro/presentation/dashboard.dart';
 import 'package:business_bosses_v2/common/dialogs/snackbar.dart';
 import 'package:business_bosses_v2/common/models/user_model.dart';
 import 'package:business_bosses_v2/features/profile/controller/profile_controller.dart';
@@ -1430,6 +1429,7 @@ class _UpdateProfileScreenState extends State<UpdateProfileScreen> {
       });
       widget.isShopedit == null
           ? Get.toNamed(Routes.home)
+          // ignore: use_build_context_synchronously
           : Navigator.pushReplacement(
               context,
               MaterialPageRoute(

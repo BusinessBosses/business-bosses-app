@@ -1,19 +1,15 @@
 import 'package:business_bosses_v2/bbpro/presentation/bottomnavscreen.dart';
-import 'package:business_bosses_v2/bbpro/presentation/setupshop.dart';
 import 'package:business_bosses_v2/bbpro/presentation/shopscreen.dart';
 import 'package:business_bosses_v2/bbpro/widgets/button.dart';
-import 'package:business_bosses_v2/common/widgets/buttons/subscribe_to_premium_button.dart';
 import 'package:business_bosses_v2/features/forum/widgets/forum_item.dart';
 import 'package:business_bosses_v2/features/home/controller/home_controller.dart';
 import 'package:business_bosses_v2/features/donations/widgets/donation_item.dart';
 import 'package:business_bosses_v2/features/home/widgets/bottom_bar.dart';
 import 'package:business_bosses_v2/features/home/widgets/course_item.dart';
-import 'package:business_bosses_v2/features/home/widgets/home_appbar.dart';
 import 'package:business_bosses_v2/features/profile/controller/profile_controller.dart';
 import 'package:business_bosses_v2/features/profile/widgets/profileinfodisplay.dart';
 import 'package:business_bosses_v2/features/live_event/controller/live_event_controller.dart';
 import 'package:business_bosses_v2/features/profile/widgets/profilepostsdisplay.dart';
-import 'package:business_bosses_v2/features/withdrawal/presentation/withdrawalscreen.dart';
 import 'package:business_bosses_v2/utils/theme/theme.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -353,7 +349,12 @@ class _MyProfileScreenState extends State<MyProfileScreen> {
                                                           SvgPicture.asset(
                                                             'assets/svgs/store.svg',
                                                             height: 40,
-                                                            color: Colors.grey,
+                                                            colorFilter:
+                                                                const ColorFilter
+                                                                    .mode(
+                                                              Colors.grey,
+                                                              BlendMode.srcIn,
+                                                            ),
                                                           ),
                                                           const SizedBox(
                                                             height: 10,
@@ -413,7 +414,8 @@ class _MyProfileScreenState extends State<MyProfileScreen> {
                                                                   post: market,
                                                                   controller:
                                                                       marketController,
-                                                                  key: ValueKey(
+                                                                  key: ValueKey<
+                                                                          String>(
                                                                       market
                                                                           .marketId),
                                                                 )
@@ -421,7 +423,8 @@ class _MyProfileScreenState extends State<MyProfileScreen> {
                                                                   post: market,
                                                                   controller:
                                                                       marketController,
-                                                                  key: ValueKey(
+                                                                  key: ValueKey<
+                                                                          String>(
                                                                       market
                                                                           .marketId),
                                                                 );
@@ -472,7 +475,12 @@ class _MyProfileScreenState extends State<MyProfileScreen> {
                                                       SvgPicture.asset(
                                                         'assets/svgs/supporter.svg',
                                                         height: 40,
-                                                        color: Colors.grey,
+                                                        colorFilter:
+                                                            const ColorFilter
+                                                                .mode(
+                                                          Colors.grey,
+                                                          BlendMode.srcIn,
+                                                        ),
                                                       ),
                                                       const SizedBox(
                                                         height: 10,
@@ -544,7 +552,12 @@ class _MyProfileScreenState extends State<MyProfileScreen> {
                                                         SvgPicture.asset(
                                                           'assets/svgs/courses.svg',
                                                           height: 40,
-                                                          color: Colors.grey,
+                                                          colorFilter:
+                                                              const ColorFilter
+                                                                  .mode(
+                                                            Colors.grey,
+                                                            BlendMode.srcIn,
+                                                          ),
                                                         ),
                                                         const SizedBox(
                                                           height: 10,
@@ -575,8 +588,12 @@ class _MyProfileScreenState extends State<MyProfileScreen> {
                                                             SvgPicture.asset(
                                                               'assets/svgs/courses.svg',
                                                               height: 40,
-                                                              color:
-                                                                  Colors.grey,
+                                                              colorFilter:
+                                                                  const ColorFilter
+                                                                      .mode(
+                                                                Colors.grey,
+                                                                BlendMode.srcIn,
+                                                              ),
                                                             ),
                                                             const SizedBox(
                                                               height: 10,

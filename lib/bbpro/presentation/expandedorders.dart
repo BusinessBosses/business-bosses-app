@@ -1,6 +1,7 @@
 import 'package:business_bosses_v2/bbpro/controllers/shop_controller.dart';
 import 'package:business_bosses_v2/bbpro/models/order_model.dart';
 import 'package:business_bosses_v2/bbpro/models/product_model.dart';
+import 'package:business_bosses_v2/bbpro/models/service_model.dart';
 import 'package:business_bosses_v2/bbpro/widgets/orderwidget.dart';
 import 'package:business_bosses_v2/common/widgets/network_image_with_placeholder.dart';
 import 'package:business_bosses_v2/utils/theme/theme.dart';
@@ -61,14 +62,55 @@ class _ExpandedOrdersState extends State<ExpandedOrders> {
           ...widget.order.products!.map<Widget>((Product product) {
             return ListTile(
               title: Text(
-                product.name ?? 'Unknown Product',
+                product.name,
                 style: const TextStyle(
                   fontWeight: FontWeight.w500,
                 ),
               ),
               leading: _buildProductImage(product),
               subtitle: Text(
-                '${shopController.shop?.currency ?? ''} ${product.price.toString() ?? '0'}',
+                '${shopController.shop?.currency ?? ''} ${product.price.toString()}',
+                style: const TextStyle(
+                  fontSize: 14,
+                ),
+              ),
+              contentPadding: const EdgeInsets.symmetric(
+                horizontal: 16,
+                vertical: 8,
+              ),
+            );
+          }).toList(),
+          ...widget.order.services!.map<Widget>((Service service) {
+            return ListTile(
+              title: Text(
+                service.name,
+                style: const TextStyle(
+                  fontWeight: FontWeight.w500,
+                ),
+              ),
+              leading: _buildServiceImage(service),
+              subtitle: Text(
+                '${shopController.shop?.currency ?? ''} ${service.price.toString()}',
+                style: const TextStyle(
+                  fontSize: 14,
+                ),
+              ),
+              contentPadding: const EdgeInsets.symmetric(
+                horizontal: 16,
+                vertical: 8,
+              ),
+            );
+          }).toList(),
+          ...widget.order.customItems!.map<Widget>((dynamic custom) {
+            return ListTile(
+              title: Text(
+                custom['name'],
+                style: const TextStyle(
+                  fontWeight: FontWeight.w500,
+                ),
+              ),
+              subtitle: Text(
+                '${shopController.shop?.currency ?? ''} ${custom['amount'].toString()}',
                 style: const TextStyle(
                   fontSize: 14,
                 ),
@@ -86,6 +128,27 @@ class _ExpandedOrdersState extends State<ExpandedOrders> {
 
   Widget? _buildProductImage(Product product) {
     final List<String>? images = product.images;
+    if (images == null || images.isEmpty) {
+      return null;
+    }
+
+    return Container(
+      width: 50,
+      height: 50,
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(8),
+      ),
+      child: ClipRRect(
+        borderRadius: BorderRadius.circular(8),
+        child: NetworkImageWithPlaceHolder(
+          imageUrl: images.first,
+        ),
+      ),
+    );
+  }
+
+  Widget? _buildServiceImage(Service service) {
+    final List<String>? images = service.images;
     if (images == null || images.isEmpty) {
       return null;
     }
