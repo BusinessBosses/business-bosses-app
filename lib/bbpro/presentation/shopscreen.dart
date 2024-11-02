@@ -3,6 +3,7 @@ import 'package:business_bosses_v2/bbpro/models/service_model.dart';
 import 'package:business_bosses_v2/bbpro/models/product_model.dart';
 import 'package:business_bosses_v2/bbpro/presentation/bookservice.dart';
 import 'package:business_bosses_v2/bbpro/presentation/create_product.dart';
+import 'package:business_bosses_v2/bbpro/presentation/create_service.dart';
 import 'package:business_bosses_v2/bbpro/presentation/orderproduct.dart';
 import 'package:business_bosses_v2/bbpro/widgets/inventorycard.dart';
 import 'package:business_bosses_v2/bbpro/widgets/servicecard.dart';
@@ -314,7 +315,14 @@ class _ShopScreenState extends State<ShopScreen> {
                         .services[index - shopController.products.length];
                     return GestureDetector(
                       onTap: () {
-                        Get.to(() => BookServiceScreen(service: service));
+                        profileController.myProfile.uid !=
+                                shopController.shop!.user!.uid
+                            ? Get.to(
+                                () => CreateServiceListing(
+                                  service: service,
+                                ),
+                              )
+                            : Get.to(() => BookServiceScreen(service: service));
                       },
                       child: ServiceCard(
                         myShop: true,

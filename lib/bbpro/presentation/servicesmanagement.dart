@@ -106,7 +106,10 @@ class _ManageServicesState extends State<ManageServices> {
                 Wrap(children: <Widget>[
                   const Text(
                     'Services List',
-                    style: TextStyle(color: Colors.black),
+                    style: TextStyle(
+                        color: Colors.black,
+                        fontWeight: FontWeight.bold,
+                        fontSize: 16),
                   ),
                   const SizedBox(
                     width: 3,
@@ -114,7 +117,10 @@ class _ManageServicesState extends State<ManageServices> {
                   Obx(
                     () => Text(
                       '(${shopController.services.length})',
-                      style: const TextStyle(color: Colors.black),
+                      style: const TextStyle(
+                          color: Colors.black,
+                          fontWeight: FontWeight.bold,
+                          fontSize: 16),
                     ),
                   ),
                 ]),

@@ -225,7 +225,7 @@ class _CreateServiceListingState extends State<CreateServiceListing>
           children: <Widget>[
             const SizedBox(height: 16),
             CustomEditText(
-              caption: 'Service Name',
+              caption: 'Service Name *',
               hintText: 'Enter service name here',
               controller: _serviceNameController,
               validator: (String? value) {
@@ -243,7 +243,7 @@ class _CreateServiceListingState extends State<CreateServiceListing>
                   child: CustomEditText(
                     iscurrencyfield: true,
                     currencycontroller: currencyController,
-                    caption: 'Price',
+                    caption: 'Price *',
                     hintText: 'Enter price',
                     controller: _priceController,
                     inputType: TextInputType.number,
@@ -283,7 +283,7 @@ class _CreateServiceListingState extends State<CreateServiceListing>
             const SizedBox(height: 16),
 
             CustomEditText(
-              caption: 'Describe your Service',
+              caption: 'Describe your Service *',
               hintText: 'Add service description here',
               controller: _descriptionController,
               maxLength: 300,
@@ -297,7 +297,7 @@ class _CreateServiceListingState extends State<CreateServiceListing>
             const SizedBox(height: 16),
             CustomDropdownWidget(
               initialValue: category,
-              caption: 'Select Category',
+              caption: 'Select Category *',
               hintText: 'Choose a category',
               items: const <String>[
                 'Design Services',
@@ -812,66 +812,79 @@ class _CreateServiceListingState extends State<CreateServiceListing>
         }
       }
       // Create a map to hold form data
-      final Map<String, dynamic> serviceData = <String, dynamic>{
-        'userId': profileController.myProfile.uid,
-        'shopId': shopController.shop?.id,
-        'name': _serviceNameController.text,
-        'price': _priceController.text,
-        'description': _descriptionController.text,
-        'discount': _discountController.text,
-        'category': category,
-        'location': shopController.shop!.location,
-        'images': images,
-        'paymentMethod': paymentMethod,
-        'deliveryMethod': deliveryMethod,
-        'deliveryTime': deliveryTime,
-        'availableTime': availableTime?.toIso8601String(),
-        'serviceType': serviceType,
-        'itemType': 'service',
-        'isActive': _isSwitched,
-        'serviceAvailability': <String, dynamic>{
-          'dayOfWeek': selectedSubmitWeekdays,
-          'startTime': '${_startTime.hour}:${_startTime.minute}:00',
-          'endTime': '${_endTime.hour}:${_endTime.minute}:00',
-          'startDate': '2023-10-01',
-          'endDate': '2023-10-01'
-        },
-        'servicePackages': packages,
-        'notes': notesController.text,
-      };
+      try {
+        // First validate required fields
+        if (_serviceNameController.text.isEmpty ||
+            _priceController.text.isEmpty ||
+            _descriptionController.text.isEmpty ||
+            category == null) {
+          // Check if days are selected
+          showSnackbar(
+              message: 'Please fill in all required fields', error: true);
+          return;
+        }
 
-      // For demonstration, print the map
-      // You can now send this data to your API or database
-      // Example:
-      if (widget.service == null) {
-        await shopController.addService(serviceData).then((bool response) {
-          if (response) {
-            // Handle success
-            showSnackbar(message: 'Service Added Succesfully!');
+        final Map<String, dynamic> serviceData = <String, dynamic>{
+          'userId': profileController.myProfile.uid,
+          'shopId': shopController.shop?.id,
+          'name': _serviceNameController.text.trim(),
+          'price': _priceController.text.trim(),
+          'description': _descriptionController.text.trim(),
+          'discount': _discountController.text.isEmpty
+              ? '0'
+              : _discountController.text.trim(),
+          'category': category,
+          'location': shopController.shop!.location,
+          'images': images!.isEmpty ? null : images,
+          'paymentMethod': paymentMethod ?? 'Cash',
+          'deliveryMethod': deliveryMethod ?? 'In-Person',
+          'deliveryTime': deliveryTime ?? '',
+          'availableTime': availableTime?.toIso8601String(),
+          'serviceType': serviceType ?? '1:1',
+          'itemType': 'service',
+          'isActive': _isSwitched,
+          'serviceAvailability': <String, dynamic>{
+            'dayOfWeek': selectedSubmitWeekdays.isEmpty
+                ? <String>[
+                    'Monday',
+                    'Tuesday',
+                    'Wednesday',
+                    'Thursday',
+                    'Friday'
+                  ]
+                : selectedSubmitWeekdays,
+            'startTime':
+                '${_startTime.hour.toString().padLeft(2, '0')}:${_startTime.minute.toString().padLeft(2, '0')}:00',
+            'endTime':
+                '${_endTime.hour.toString().padLeft(2, '0')}:${_endTime.minute.toString().padLeft(2, '0')}:00',
+            'startDate': '2023-10-01',
+            'endDate': '2023-10-01'
+          },
+          'servicePackages':
+              packages.isEmpty ? <Map<String, dynamic>>[] : packages,
+          'notes': notesController.text.trim().isEmpty
+              ? null
+              : notesController.text.trim(),
+        };
+
+        // Log the cleaned data
+        print('Sending cleaned service data: $serviceData');
+
+        if (widget.service == null) {
+          final bool result = await shopController.addService(serviceData);
+          if (result) {
+            showSnackbar(message: 'Service Added Successfully!');
             Navigator.pop(context);
-          } else {
-            // Handle error
-            showSnackbar(message: 'Error Adding Service!', error: true);
           }
-        });
-      } else {
-        await shopController
-            .updateService(widget.service!.id, serviceData)
-            .then((bool response) {
-          if (response) {
-            // Handle success
-            showSnackbar(message: 'Service Updated Succesfully!');
-            Navigator.pop(context);
-          } else {
-            // Handle error
-            showSnackbar(message: 'Error Updating Service!', error: true);
-          }
+        }
+      } catch (e) {
+        String errorMessage = 'Failed to add service';
+        showSnackbar(message: errorMessage, error: true);
+      } finally {
+        setState(() {
+          isSubmitted = false;
         });
       }
-      setState(() {
-        isSubmitted = false;
-      });
-      // Clear the form or navigate to another screen if needed
     }
   }
 

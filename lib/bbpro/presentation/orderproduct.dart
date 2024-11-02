@@ -256,7 +256,7 @@ class _OrderProductScreenState extends State<OrderProductScreen>
                                   lessStyle: bodyText2.copyWith(
                                     color: proprimaryColor,
                                   ),
-                                  trimLength: 10,
+                                  trimLength: 100,
                                   trimExpandedText: '  show less',
                                   basicStyle:
                                       bodyText2.copyWith(color: textColor),
@@ -312,6 +312,13 @@ class _OrderProductScreenState extends State<OrderProductScreen>
                           width: double.infinity,
                           child: ProCustomButton(
                             onPressed: () {
+                              if (quantityController.text.isEmpty) {
+                                showSnackbar(
+                                  message: 'Delivery Date is required!',
+                                  error: true,
+                                );
+                                return;
+                              }
                               // Check if the current index is less than the total tabs - 1
                               if (_tabController.index <
                                   _tabController.length - 1) {

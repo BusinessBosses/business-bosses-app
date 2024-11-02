@@ -38,30 +38,42 @@ class _ServiceCardState extends State<ServiceCard> {
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(16.0),
+        border: Border.all(
+          color: Colors.black12,
+          width: 0.5,
+        ),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.center,
         children: <Widget>[
-          SizedBox(
-            height: 120.0,
-            width: double.infinity,
-            child: ClipRRect(
-              borderRadius: BorderRadius.circular(10),
-              child: NetworkImageWithPlaceHolder(
-                imageUrl: (widget.service?.images == null ||
-                        widget.service!.images!.isEmpty)
-                    ? ''
-                    : widget.service?.images![0],
-                radius: radius,
-                placeHolder: Icons.person,
-                iconSize: 0.0,
-                fit: BoxFit.cover,
+          if (widget.service?.images != null &&
+              widget.service!.images!.isNotEmpty)
+            SizedBox(
+              height: 120.0,
+              width: double.infinity,
+              child: ClipRRect(
+                borderRadius: BorderRadius.circular(10),
+                child: NetworkImageWithPlaceHolder(
+                  imageUrl: (widget.service?.images == null ||
+                          widget.service!.images!.isEmpty)
+                      ? ''
+                      : widget.service?.images![0],
+                  radius: radius,
+                  placeHolder: Icons.person,
+                  iconSize: 0.0,
+                  fit: BoxFit.cover,
+                ),
               ),
             ),
-          ),
-          const SizedBox(height: 5),
-          const Divider(),
-          const SizedBox(height: 5),
+          if (widget.service?.images != null &&
+              widget.service!.images!.isNotEmpty)
+            const SizedBox(height: 5),
+          if (widget.service?.images != null &&
+              widget.service!.images!.isNotEmpty)
+            const Divider(),
+          if (widget.service?.images != null &&
+              widget.service!.images!.isNotEmpty)
+            const SizedBox(height: 5),
           Row(
             crossAxisAlignment: CrossAxisAlignment.end,
             children: <Widget>[
@@ -89,6 +101,25 @@ class _ServiceCardState extends State<ServiceCard> {
                       style: const TextStyle(fontSize: 11),
                       maxLines: 2,
                       overflow: TextOverflow.ellipsis,
+                    ),
+                    const Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: <Widget>[
+                        Wrap(
+                          crossAxisAlignment: WrapCrossAlignment.center,
+                          children: <Widget>[
+                            CircleAvatar(
+                              radius: 3,
+                              backgroundColor: Colors.green,
+                            ),
+                            SizedBox(width: 3),
+                            Text(
+                              'Upcoming',
+                              style: TextStyle(fontSize: 10),
+                            ),
+                          ],
+                        ),
+                      ],
                     ),
                   ],
                 ),
