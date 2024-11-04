@@ -17,6 +17,7 @@ class ShopController extends GetxController {
   Shop? shop;
   RxBool loading = RxBool(true);
   RxBool loadingData = RxBool(true);
+  RxBool supploerAddLoading = RxBool(false);
   RxList<Product> products = RxList<Product>(<Product>[]);
   RxList<Service> services = RxList<Service>(<Service>[]);
   RxList<Vendor> suppliers = RxList<Vendor>(<Vendor>[]);

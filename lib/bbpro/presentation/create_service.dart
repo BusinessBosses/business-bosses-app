@@ -255,12 +255,6 @@ class _CreateServiceListingState extends State<CreateServiceListing>
               caption: 'Service Name *',
               hintText: 'Enter service name here',
               controller: _serviceNameController,
-              validator: (String? value) {
-                if (value == null || value.isEmpty) {
-                  return 'Please enter a service name';
-                }
-                return null;
-              },
             ),
             const SizedBox(height: 16),
 
@@ -274,15 +268,6 @@ class _CreateServiceListingState extends State<CreateServiceListing>
                     hintText: 'Enter price',
                     controller: _priceController,
                     inputType: TextInputType.number,
-                    validator: (String? value) {
-                      if (value == null || value.isEmpty) {
-                        return 'Please enter a price';
-                      }
-                      if (double.tryParse(value) == null) {
-                        return 'Please enter a valid number';
-                      }
-                      return null;
-                    },
                   ),
                 ),
                 Expanded(
@@ -294,14 +279,6 @@ class _CreateServiceListingState extends State<CreateServiceListing>
                       hintText: 'Enter discount',
                       controller: _discountController,
                       inputType: TextInputType.number,
-                      validator: (String? value) {
-                        if (value != null && value.isNotEmpty) {
-                          if (double.tryParse(value) == null) {
-                            return 'Please enter a valid number';
-                          }
-                        }
-                        return null;
-                      },
                     ),
                   ),
                 ),
@@ -314,12 +291,6 @@ class _CreateServiceListingState extends State<CreateServiceListing>
               hintText: 'Add service description here',
               controller: _descriptionController,
               maxLength: 300,
-              validator: (String? value) {
-                if (value == null || value.isEmpty) {
-                  return 'Please enter a description';
-                }
-                return null;
-              },
             ),
             const SizedBox(height: 16),
             CustomDropdownWidget(
@@ -818,6 +789,12 @@ class _CreateServiceListingState extends State<CreateServiceListing>
         error: true,
       );
       return;
+    } else if (_descriptionController.text.isEmpty) {
+      showSnackbar(
+        message: 'Description is Mandatory!',
+        error: true,
+      );
+      return;
     }
     // else if (selectedSubmitWeekdays.isEmpty) {
     //   showSnackbar(
@@ -898,7 +875,6 @@ class _CreateServiceListingState extends State<CreateServiceListing>
         };
 
         // Log the cleaned data
-        print('Sending cleaned service data: $serviceData');
 
         if (widget.service == null) {
           final bool result = await shopController.addService(serviceData);

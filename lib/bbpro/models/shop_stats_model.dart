@@ -37,9 +37,13 @@ class ShopStats {
 
   factory ShopStats.fromMap(Map<String, dynamic> map) {
     return ShopStats(
-      views: num.parse(map['views'].toString()),
-      clientCount: num.parse(map['clientCount'].toString()),
-      projectCount: num.parse(map['projectCount'].toString()),
+      views: map['views'] == null ? 0 : num.parse(map['views'].toString()),
+      clientCount: map['clientCount'] == null
+          ? 0
+          : num.parse(map['clientCount'].toString()),
+      projectCount: map['projectCount'] == null
+          ? 0
+          : num.parse(map['projectCount'].toString()),
       totalAmount: map['totalAmount'] == null
           ? 0
           : num.parse(map['totalAmount'].toString()),

@@ -40,7 +40,7 @@ class GraphDataPoint {
 
   GraphDataPoint({
     required this.date,
-    required this.totalAmount,
+    this.totalAmount = 0,
   });
 
   factory GraphDataPoint.fromJson(Map<String, dynamic> json) {

@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'package:business_bosses_v2/bbpro/controllers/shop_controller.dart';
+import 'package:business_bosses_v2/bbpro/models/supplier_model.dart';
 import 'package:business_bosses_v2/bbpro/presentation/add_client.dart';
 import 'package:business_bosses_v2/bbpro/presentation/add_supplier.dart';
 import 'package:business_bosses_v2/bbpro/presentation/expandedprosupplierpage.dart';
@@ -12,11 +13,13 @@ import 'package:business_bosses_v2/bbpro/widgets/supplierscard.dart';
 import 'package:business_bosses_v2/bbpro/widgets/topsection.dart';
 import 'package:business_bosses_v2/bbpro/controllers/clients_controller.dart';
 import 'package:business_bosses_v2/bbpro/models/client_model.dart';
+import 'package:business_bosses_v2/common/dialogs/snackbar.dart';
 import 'package:business_bosses_v2/common/widgets/network_image_with_placeholder.dart';
 import 'package:business_bosses_v2/common/widgets/safety_model.dart';
 import 'package:business_bosses_v2/features/chat/chat_screen.dart';
 import 'package:business_bosses_v2/features/marketplace/controllers/supplier_controller.dart';
 import 'package:business_bosses_v2/features/marketplace/models/suppliers_model.dart';
+import 'package:business_bosses_v2/features/profile/controller/profile_controller.dart';
 import 'package:business_bosses_v2/utils/theme/theme.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -40,6 +43,8 @@ class _ClientsScreenState extends State<ClientsScreen>
   late TabController _tabController;
   late TabController _viewController;
   bool loading = true;
+  bool loadingSupplier = false;
+  final ProfileController profileController = Get.find();
 
   final ClientsController clientsController = Get.put(ClientsController());
   final ShopController shopController = Get.find();
@@ -303,79 +308,87 @@ class _ClientsScreenState extends State<ClientsScreen>
                                                       Expanded(
                                                         child: ListView(
                                                           shrinkWrap: true,
-                                                          children:
-                                                              supplierController
-                                                                  .suppliers
-                                                                  .map((SuppliersModel
-                                                                      supplier) {
-                                                            return Column(
-                                                              children: <Widget>[
-                                                                const SizedBox(
-                                                                  height: 20,
-                                                                ),
-                                                                CheckboxListTile(
-                                                                  secondary: (supplier.images !=
-                                                                              null &&
+                                                          children: supplierController
+                                                              .suppliers
+                                                              .map((SuppliersModel
+                                                                      supplier) =>
+                                                                  shopController.suppliers.any((Vendor
+                                                                              element) =>
+                                                                          element
+                                                                              .name ==
                                                                           supplier
-                                                                              .images!
-                                                                              .isNotEmpty)
-                                                                      ? Container(
-                                                                          width:
-                                                                              50,
-                                                                          height:
-                                                                              50,
-                                                                          decoration:
-                                                                              BoxDecoration(
-                                                                            borderRadius:
-                                                                                BorderRadius.circular(8),
+                                                                              .name)
+                                                                      ? const SizedBox()
+                                                                      : ListTile(
+                                                                          leading: (supplier.images != null && supplier.images!.isNotEmpty)
+                                                                              ? Container(
+                                                                                  width: 50,
+                                                                                  height: 50,
+                                                                                  decoration: BoxDecoration(
+                                                                                    borderRadius: BorderRadius.circular(8),
+                                                                                  ),
+                                                                                  child: ClipRRect(
+                                                                                    borderRadius: BorderRadius.circular(8),
+                                                                                    child: Image.network(
+                                                                                      supplier.images![0],
+                                                                                      fit: BoxFit.cover,
+                                                                                      errorBuilder: (BuildContext context, Object error, StackTrace? stackTrace) => const Icon(Icons.error),
+                                                                                      loadingBuilder: (BuildContext context, Widget child, ImageChunkEvent? loadingProgress) {
+                                                                                        if (loadingProgress == null) return child;
+                                                                                        return const Center(child: CircularProgressIndicator());
+                                                                                      },
+                                                                                    ),
+                                                                                  ),
+                                                                                )
+                                                                              : null,
+                                                                          title:
+                                                                              Text(supplier.name),
+                                                                          trailing:
+                                                                              ElevatedButton(
+                                                                            onPressed:
+                                                                                () async {
+                                                                              Navigator.pop(context);
+                                                                              setState(() {
+                                                                                loadingSupplier = true;
+                                                                              });
+                                                                              Map<String, dynamic> supplierData = <String, dynamic>{
+                                                                                'userId': profileController.myProfile.uid,
+                                                                                'name': supplier.name,
+                                                                                'email': supplier.email,
+                                                                                'phone': supplier.phone,
+                                                                                'description': supplier.description,
+                                                                                'url': supplier.url,
+                                                                                'category': supplier.category,
+                                                                                'images': supplier.images,
+                                                                                'location': supplier.location,
+                                                                              };
+
+                                                                              try {
+                                                                                bool success = await shopController.addSupplier(supplierData);
+                                                                                if (success) {
+                                                                                  showSnackbar(message: 'Supplier Added Successfully!');
+                                                                                  await Future.delayed(const Duration(seconds: 1)); // Optional delay for visibility
+                                                                                  // ignore: use_build_context_synchronously
+                                                                                } else {
+                                                                                  showSnackbar(message: 'Error Adding Supplier!', error: true);
+                                                                                }
+                                                                              } catch (e) {
+                                                                                showSnackbar(message: 'An error occurred: $e', error: true);
+                                                                              } finally {
+                                                                                setState(() {
+                                                                                  loadingSupplier = false;
+                                                                                });
+                                                                              }
+                                                                            },
+                                                                            style:
+                                                                                ElevatedButton.styleFrom(
+                                                                              backgroundColor: proprimaryColor,
+                                                                            ),
+                                                                            child:
+                                                                                const Text('Select'),
                                                                           ),
-                                                                          child: ClipRRect(
-                                                                              borderRadius: BorderRadius.circular(8),
-                                                                              child: NetworkImageWithPlaceHolder(imageUrl: supplier.images![0])),
-                                                                        )
-                                                                      : null,
-                                                                  title: Text(
-                                                                      supplier
-                                                                          .name),
-                                                                  value: _selectedSupplier ==
-                                                                      supplier,
-                                                                  onChanged: (bool?
-                                                                      selected) {
-                                                                    setState(
-                                                                        () {
-                                                                      _onItemSelect(
-                                                                          selected,
-                                                                          supplier);
-                                                                    });
-                                                                  },
-                                                                  checkColor:
-                                                                      Colors
-                                                                          .white,
-                                                                  activeColor:
-                                                                      proprimaryColor,
-                                                                ),
-                                                                if (_selectedSupplier ==
-                                                                    supplier)
-                                                                  Padding(
-                                                                    padding: const EdgeInsets
-                                                                        .only(
-                                                                        left:
-                                                                            8.0),
-                                                                    child:
-                                                                        ProIconButton(
-                                                                      onPressed:
-                                                                          () {
-                                                                        Navigator.pop(
-                                                                            context,
-                                                                            _selectedSupplier?.name);
-                                                                      },
-                                                                      text:
-                                                                          'Done',
-                                                                    ),
-                                                                  ),
-                                                              ],
-                                                            );
-                                                          }).toList(),
+                                                                        ))
+                                                              .toList(),
                                                         ),
                                                       ),
                                                     ],
@@ -397,30 +410,32 @@ class _ClientsScreenState extends State<ClientsScreen>
           ),
           Obx(() {
             if (shopController.suppliers.isNotEmpty) {
-              return Expanded(
-                child: StaggeredGridView.countBuilder(
-                  staggeredTileBuilder: (int index) =>
-                      const StaggeredTile.fit(1),
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: 15.0,
-                  ),
-                  crossAxisCount: 2,
-                  crossAxisSpacing: 8.0,
-                  mainAxisSpacing: 8.0,
-                  itemCount: shopController.suppliers.length,
-                  shrinkWrap: true,
-                  physics: null,
-                  itemBuilder: (BuildContext context, int index) {
-                    return SuppliersCard(
-                      onTap: () {
-                        Get.to(() => ExpandedProSuppliersPage(
-                            supplier: shopController.suppliers[index]));
-                      },
-                      supplier: shopController.suppliers[index],
+              return loadingSupplier
+                  ? const SafetyModel()
+                  : Expanded(
+                      child: StaggeredGridView.countBuilder(
+                        staggeredTileBuilder: (int index) =>
+                            const StaggeredTile.fit(1),
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 15.0,
+                        ),
+                        crossAxisCount: 2,
+                        crossAxisSpacing: 8.0,
+                        mainAxisSpacing: 8.0,
+                        itemCount: shopController.suppliers.length,
+                        shrinkWrap: true,
+                        physics: null,
+                        itemBuilder: (BuildContext context, int index) {
+                          return SuppliersCard(
+                            onTap: () {
+                              Get.to(() => ExpandedProSuppliersPage(
+                                  supplier: shopController.suppliers[index]));
+                            },
+                            supplier: shopController.suppliers[index],
+                          );
+                        },
+                      ),
                     );
-                  },
-                ),
-              );
             } else {
               return const Center(
                 child: SafetyModel(
@@ -435,17 +450,17 @@ class _ClientsScreenState extends State<ClientsScreen>
     );
   }
 
-  SuppliersModel? _selectedSupplier;
+  // SuppliersModel? _selectedSupplier;
 
-  void _onItemSelect(bool? selected, SuppliersModel supplier) {
-    setState(() {
-      if (selected == true) {
-        _selectedSupplier = supplier;
-      } else {
-        _selectedSupplier = null;
-      }
-    });
-  }
+  // void _onItemSelect(bool? selected, SuppliersModel supplier) {
+  //   setState(() {
+  //     if (selected == true) {
+  //       _selectedSupplier = supplier;
+  //     } else {
+  //       _selectedSupplier = null;
+  //     }
+  //   });
+  // }
 
   void _moveMainList(bool isRight) {
     _timer?.cancel();

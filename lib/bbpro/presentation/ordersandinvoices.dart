@@ -6,7 +6,6 @@ import 'package:business_bosses_v2/bbpro/widgets/iconbutton.dart';
 import 'package:business_bosses_v2/bbpro/widgets/notificationbutton.dart';
 import 'package:business_bosses_v2/bbpro/widgets/proseardwidget.dart';
 import 'package:business_bosses_v2/common/widgets/safety_model.dart';
-import 'package:business_bosses_v2/features/chat/chat_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
@@ -18,7 +17,6 @@ import 'package:business_bosses_v2/bbpro/models/order_model.dart';
 import 'package:business_bosses_v2/bbpro/presentation/create_order.dart';
 import 'package:business_bosses_v2/bbpro/widgets/customtabbar.dart';
 import 'package:business_bosses_v2/bbpro/widgets/orderwidget.dart';
-import 'package:business_bosses_v2/bbpro/widgets/topsection.dart';
 import 'package:business_bosses_v2/utils/theme/theme.dart';
 
 class OrdersScreen extends StatefulWidget {
@@ -46,9 +44,7 @@ class _OrdersScreenState extends State<OrdersScreen>
         TabController(length: ClientType.values.length, vsync: this);
 
     // Initialize tasks
-    orderController
-        .initOrders(shopController.shop!.id)
-        .then((_) {
+    orderController.initOrders(shopController.shop!.id).then((_) {
       setState(() {
         loading = false;
         orderController.loading.value = false;
