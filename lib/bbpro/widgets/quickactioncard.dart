@@ -41,6 +41,7 @@ class _QuickActionCardState extends State<QuickActionCard> {
         ),
         Text(
           widget.cardName,
+          textAlign: TextAlign.center,
           style: const TextStyle(
             fontSize: 12,
             fontWeight: FontWeight.bold,
