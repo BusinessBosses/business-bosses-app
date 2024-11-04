@@ -132,11 +132,12 @@ class _SalesWidgetState extends State<SalesWidget> {
                     //     ),
                     //   ],
                     // ),
-                    shopController.shopGraph!.graphData == null
+
+                    shopController.shopGraph!.totalSales == 0
                         ? const Padding(
                             padding: EdgeInsets.all(15),
                             child: Center(
-                              child: Text('No Data To Show On Graph!'),
+                              child: Text('No Data To Show'),
                             ),
                           )
                         : Container(
