@@ -13,6 +13,8 @@ import 'package:business_bosses_v2/bbpro/controllers/clients_controller.dart';
 import 'package:business_bosses_v2/bbpro/models/client_model.dart';
 import 'package:business_bosses_v2/common/widgets/safety_model.dart';
 import 'package:business_bosses_v2/features/chat/chat_screen.dart';
+import 'package:business_bosses_v2/features/marketplace/controllers/supplier_controller.dart';
+import 'package:business_bosses_v2/features/marketplace/models/suppliers_model.dart';
 import 'package:business_bosses_v2/utils/theme/theme.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -30,6 +32,7 @@ class ClientsScreen extends StatefulWidget {
 class _ClientsScreenState extends State<ClientsScreen>
     with TickerProviderStateMixin {
   final ScrollController _mainListScrollController = ScrollController();
+  final SupplierController supplierController = Get.put(SupplierController());
   Timer? _timer;
   bool? _lastMoveRight;
   late TabController _tabController;
@@ -55,7 +58,7 @@ class _ClientsScreenState extends State<ClientsScreen>
     _tabController =
         TabController(length: ClientType.values.length, vsync: this);
     _viewController = TabController(length: 2, vsync: this);
-
+    supplierController.initMySuppliers();
     clientsController
         .initClients(clientsController.profileController.myProfile.uid)
         .then((_) {
@@ -267,10 +270,40 @@ class _ClientsScreenState extends State<ClientsScreen>
                                   expand: false,
                                   builder: (BuildContext context,
                                       ScrollController scrollController) {
-                                    return const SizedBox.expand(
+                                    return SizedBox.expand(
                                       // Ensures the content takes up the available space
-                                      child: Center(
-                                        child: Text('Supplier List here'),
+                                      child: Obx(
+                                        () => supplierController.loading.value
+                                            ? const SafetyModel()
+                                            : supplierController
+                                                    .mySuppliers.isEmpty
+                                                ? const SafetyModel(
+                                                    isLoading: false,
+                                                    title: 'No Supplier Found!',
+                                                  )
+                                                : ListView.builder(
+                                                    itemCount:
+                                                        supplierController
+                                                            .mySuppliers.length,
+                                                    shrinkWrap: true,
+                                                    itemBuilder:
+                                                        (BuildContext context,
+                                                            int index) {
+                                                      SuppliersModel supplier =
+                                                          supplierController
+                                                                  .mySuppliers[
+                                                              index];
+
+                                                      return Padding(
+                                                        padding:
+                                                            const EdgeInsets
+                                                                .only(
+                                                                bottom: 12),
+                                                        child:
+                                                            Text(supplier.name),
+                                                      );
+                                                    },
+                                                  ),
                                       ),
                                     );
                                   },

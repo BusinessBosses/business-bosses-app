@@ -340,8 +340,7 @@ class _OrderWidgetState extends State<OrderWidget> {
                                             );
 
                                             await orderController.initOrders(
-                                                profileController
-                                                    .myProfile.uid);
+                                                shopController.shop!.id);
                                           },
                                         );
                                       }).toList(),

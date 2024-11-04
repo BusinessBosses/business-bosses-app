@@ -40,7 +40,9 @@ class ShopStats {
       views: num.parse(map['views'].toString()),
       clientCount: num.parse(map['clientCount'].toString()),
       projectCount: num.parse(map['projectCount'].toString()),
-      totalAmount: num.parse(map['totalAmount'].toString()),
+      totalAmount: map['totalAmount'] == null
+          ? 0
+          : num.parse(map['totalAmount'].toString()),
     );
   }
 

@@ -47,7 +47,7 @@ class _OrdersScreenState extends State<OrdersScreen>
 
     // Initialize tasks
     orderController
-        .initOrders(orderController.profileController.myProfile.uid)
+        .initOrders(shopController.shop!.id)
         .then((_) {
       setState(() {
         loading = false;
