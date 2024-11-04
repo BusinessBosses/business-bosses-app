@@ -10,16 +10,19 @@ class OrderController extends GetxController {
   final ShopController shopController = Get.find();
   RxList<Order> orders = RxList<Order>(<Order>[]);
   RxBool loading = RxBool(true);
+  RxBool orderLoading = RxBool(true);
+  Order? orderView;
   final List<Order> allorders = <Order>[];
   final Map<OrderStatus, List<Order>> ordersStatus =
       <OrderStatus, List<Order>>{};
 
-  Future<void> initOrders(String userId) async {
+  Future<void> initOrders(String shopId) async {
     loading(true);
     update();
     orders.clear();
     allorders.clear();
-    ApiResponseModel response = await ApiService.get(path: 'orders/all');
+    ApiResponseModel response = await ApiService.get(
+        path: 'orders/user-orders/${profileController.myProfile.uid}');
     if (response.success) {
       for (int i = 0; i < response.data['rows'].length; i++) {
         orders.add(Order.fromJson(response.data['rows'][i]));
@@ -35,6 +38,18 @@ class OrderController extends GetxController {
       allorders.addAll(statusOrders); // Add tasks to alltasks
     }
     loading(false);
+    update();
+  }
+
+  Future<void> loadOrder(String orderId) async {
+    orderView = null;
+    orderLoading(true);
+    update();
+    ApiResponseModel response = await ApiService.get(path: 'orders/$orderId');
+    if (response.success) {
+      orderView = Order.fromJson(response.data);
+    }
+    orderLoading(false);
     update();
   }
 

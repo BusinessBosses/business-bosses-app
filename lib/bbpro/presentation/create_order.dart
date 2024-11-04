@@ -179,7 +179,7 @@ class _CreateOrderState extends State<CreateOrder> {
           message: widget.order != null
               ? 'Order Updated Successfully'
               : 'Order Added Successfully!');
-      await orderController.initOrders(profileController.myProfile.uid);
+      await orderController.initOrders(shopController.shop!.id);
       // ignore: use_build_context_synchronously
       Navigator.pop(context);
     } else {
