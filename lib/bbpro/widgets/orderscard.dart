@@ -123,11 +123,18 @@ class _OrdersWidgetState extends State<OrdersWidget> {
                   ),
                 ],
               ),
-              orderController.orders.length == 0
+              orderController.orders.isEmpty
                   ? const Padding(
                       padding: EdgeInsets.all(15),
                       child: Center(
-                        child: Text('No Data To Show'),
+                        child: Text(
+                          'No Data To Show',
+                          style: TextStyle(
+                            fontSize: 14,
+                            fontWeight: FontWeight.w700,
+                            color: Colors.grey,
+                          ),
+                        ),
                       ),
                     )
                   : Row(
