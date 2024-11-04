@@ -23,24 +23,24 @@ class OrderStats {
 
   factory OrderStats.fromJson(Map<String, dynamic> json) {
     return OrderStats(
-      totalOrders: json['totalOrders'] != null
+      totalOrders: json['totalOrders'] == null
           ? 0
           : num.parse(json['totalOrders'].toString()),
-      online: json['online'] != null ? 0 : num.parse(json['online'].toString()),
-      inPerson: json['inPerson'] != null
+      online: json['online'] == null ? 0 : num.parse(json['online'].toString()),
+      inPerson: json['in_person'] != null
           ? 0
           : num.parse(json['in_person'].toString()),
-      pickup: json['pickup'] != null ? 0 : num.parse(json['pickup'].toString()),
-      failed: json['failed'] != null ? 0 : num.parse(json['failed'].toString()),
+      pickup: json['pickup'] == null ? 0 : num.parse(json['pickup'].toString()),
+      failed: json['failed'] == null ? 0 : num.parse(json['failed'].toString()),
       pending:
-          json['pending'] != null ? 0 : num.parse(json['pending'].toString()),
-      processed: json['processed'] != null
+          json['pending'] == null ? 0 : num.parse(json['pending'].toString()),
+      processed: json['processed'] == null
           ? 0
           : num.parse(json['processed'].toString()),
-      cancelled: json['cancelled'] != null
+      cancelled: json['cancelled'] == null
           ? 0
           : num.parse(json['cancelled'].toString()),
-      paid: json['paid'] != null ? 0 : num.parse(json['paid'].toString()),
+      paid: json['paid'] == null ? 0 : num.parse(json['paid'].toString()),
     );
   }
 

@@ -123,7 +123,23 @@ class _OrdersWidgetState extends State<OrdersWidget> {
                   ),
                 ],
               ),
-              orderController.orders.isEmpty
+              // orderController.orders.isEmpty
+              //     ? const Padding(
+              //         padding: EdgeInsets.all(15),
+              //         child: Center(
+              //           child: Text(
+              //             'No Data To Show',
+              //             style: TextStyle(
+              //               fontSize: 14,
+              //               fontWeight: FontWeight.w700,
+              //               color: Colors.grey,
+              //             ),
+              //           ),
+              //         ),
+              //       )
+              //     :
+              shopController.orderStats != null &&
+                      shopController.orderStats!.totalOrders == 0
                   ? const Padding(
                       padding: EdgeInsets.all(15),
                       child: Center(
