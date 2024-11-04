@@ -12,6 +12,7 @@ import 'package:business_bosses_v2/bbpro/widgets/supplierscard.dart';
 import 'package:business_bosses_v2/bbpro/widgets/topsection.dart';
 import 'package:business_bosses_v2/bbpro/controllers/clients_controller.dart';
 import 'package:business_bosses_v2/bbpro/models/client_model.dart';
+import 'package:business_bosses_v2/common/widgets/network_image_with_placeholder.dart';
 import 'package:business_bosses_v2/common/widgets/safety_model.dart';
 import 'package:business_bosses_v2/features/chat/chat_screen.dart';
 import 'package:business_bosses_v2/features/marketplace/controllers/supplier_controller.dart';
@@ -39,7 +40,6 @@ class _ClientsScreenState extends State<ClientsScreen>
   late TabController _tabController;
   late TabController _viewController;
   bool loading = true;
-  String? selectedItem;
 
   final ClientsController clientsController = Get.put(ClientsController());
   final ShopController shopController = Get.find();
@@ -284,52 +284,101 @@ class _ClientsScreenState extends State<ClientsScreen>
                                                     isLoading: false,
                                                     title: 'No Supplier Found!',
                                                   )
-                                                : ListView(
-                                                    children: supplierController
-                                                        .suppliers
-                                                        .map((SuppliersModel
-                                                            supplier) {
-                                                      return Column(
-                                                        children: <Widget>[
-                                                          CheckboxListTile(
-                                                            title: Text(
-                                                                supplier.name),
-                                                            value:
-                                                                _selectedSupplier ==
-                                                                    supplier,
-                                                            onChanged: (bool?
-                                                                selected) {
-                                                              _onItemSelect(
-                                                                  selected,
-                                                                  supplier);
-                                                            },
-                                                            checkColor:
-                                                                Colors.white,
-                                                            activeColor:
-                                                                proprimaryColor,
-                                                          ),
-                                                          if (_selectedSupplier ==
-                                                              supplier)
-                                                            Padding(
-                                                              padding:
-                                                                  const EdgeInsets
-                                                                      .only(
-                                                                      left:
-                                                                          8.0),
-                                                              child:
-                                                                  ProIconButton(
-                                                                onPressed: () {
-                                                                  Navigator.pop(
-                                                                      context,
-                                                                      _selectedSupplier
-                                                                          ?.name);
-                                                                },
-                                                                text: 'Done',
-                                                              ),
-                                                            ),
-                                                        ],
-                                                      );
-                                                    }).toList(),
+                                                : Column(
+                                                    children: <Widget>[
+                                                      const SizedBox(
+                                                        height: 20,
+                                                      ),
+                                                      const Text(
+                                                        'Select a Supplier',
+                                                        style: TextStyle(
+                                                            fontSize: 16,
+                                                            fontWeight:
+                                                                FontWeight
+                                                                    .bold),
+                                                      ),
+                                                      const SizedBox(
+                                                        height: 20,
+                                                      ),
+                                                      Expanded(
+                                                        child: ListView(
+                                                          shrinkWrap: true,
+                                                          children:
+                                                              supplierController
+                                                                  .suppliers
+                                                                  .map((SuppliersModel
+                                                                      supplier) {
+                                                            return Column(
+                                                              children: <Widget>[
+                                                                const SizedBox(
+                                                                  height: 20,
+                                                                ),
+                                                                CheckboxListTile(
+                                                                  secondary: (supplier.images !=
+                                                                              null &&
+                                                                          supplier
+                                                                              .images!
+                                                                              .isNotEmpty)
+                                                                      ? Container(
+                                                                          width:
+                                                                              50,
+                                                                          height:
+                                                                              50,
+                                                                          decoration:
+                                                                              BoxDecoration(
+                                                                            borderRadius:
+                                                                                BorderRadius.circular(8),
+                                                                          ),
+                                                                          child: ClipRRect(
+                                                                              borderRadius: BorderRadius.circular(8),
+                                                                              child: NetworkImageWithPlaceHolder(imageUrl: supplier.images![0])),
+                                                                        )
+                                                                      : null,
+                                                                  title: Text(
+                                                                      supplier
+                                                                          .name),
+                                                                  value: _selectedSupplier ==
+                                                                      supplier,
+                                                                  onChanged: (bool?
+                                                                      selected) {
+                                                                    setState(
+                                                                        () {
+                                                                      _onItemSelect(
+                                                                          selected,
+                                                                          supplier);
+                                                                    });
+                                                                  },
+                                                                  checkColor:
+                                                                      Colors
+                                                                          .white,
+                                                                  activeColor:
+                                                                      proprimaryColor,
+                                                                ),
+                                                                if (_selectedSupplier ==
+                                                                    supplier)
+                                                                  Padding(
+                                                                    padding: const EdgeInsets
+                                                                        .only(
+                                                                        left:
+                                                                            8.0),
+                                                                    child:
+                                                                        ProIconButton(
+                                                                      onPressed:
+                                                                          () {
+                                                                        Navigator.pop(
+                                                                            context,
+                                                                            _selectedSupplier?.name);
+                                                                      },
+                                                                      text:
+                                                                          'Done',
+                                                                    ),
+                                                                  ),
+                                                              ],
+                                                            );
+                                                          }).toList(),
+                                                        ),
+                                                      ),
+                                                    ],
                                                   ),
                                       ),
                                     );
