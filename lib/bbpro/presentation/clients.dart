@@ -5,6 +5,7 @@ import 'package:business_bosses_v2/bbpro/presentation/add_supplier.dart';
 import 'package:business_bosses_v2/bbpro/presentation/expandedprosupplierpage.dart';
 import 'package:business_bosses_v2/bbpro/widgets/clientwidget.dart';
 import 'package:business_bosses_v2/bbpro/widgets/customtabbar.dart';
+import 'package:business_bosses_v2/bbpro/widgets/iconbutton.dart';
 import 'package:business_bosses_v2/bbpro/widgets/notificationbutton.dart';
 import 'package:business_bosses_v2/bbpro/widgets/proseardwidget.dart';
 import 'package:business_bosses_v2/bbpro/widgets/supplierscard.dart';
@@ -38,6 +39,7 @@ class _ClientsScreenState extends State<ClientsScreen>
   late TabController _tabController;
   late TabController _viewController;
   bool loading = true;
+  String? selectedItem;
 
   final ClientsController clientsController = Get.put(ClientsController());
   final ShopController shopController = Get.find();
@@ -59,6 +61,7 @@ class _ClientsScreenState extends State<ClientsScreen>
         TabController(length: ClientType.values.length, vsync: this);
     _viewController = TabController(length: 2, vsync: this);
     supplierController.initMySuppliers();
+    supplierController.initSuppliers();
     clientsController
         .initClients(clientsController.profileController.myProfile.uid)
         .then((_) {
@@ -250,9 +253,9 @@ class _ClientsScreenState extends State<ClientsScreen>
                         ),
                         ListTile(
                           leading: const Icon(Icons.file_upload),
-                          title: const Text(
-                              'Import Suppliers from Business Bosses'),
+                          title: const Text('Import from Business Bosses'),
                           onTap: () {
+                            Navigator.pop(context);
                             showModalBottomSheet<void>(
                               context: context,
                               isScrollControlled: true, // Allow resizing
@@ -276,33 +279,57 @@ class _ClientsScreenState extends State<ClientsScreen>
                                         () => supplierController.loading.value
                                             ? const SafetyModel()
                                             : supplierController
-                                                    .mySuppliers.isEmpty
+                                                    .suppliers.isEmpty
                                                 ? const SafetyModel(
                                                     isLoading: false,
                                                     title: 'No Supplier Found!',
                                                   )
-                                                : ListView.builder(
-                                                    itemCount:
-                                                        supplierController
-                                                            .mySuppliers.length,
-                                                    shrinkWrap: true,
-                                                    itemBuilder:
-                                                        (BuildContext context,
-                                                            int index) {
-                                                      SuppliersModel supplier =
-                                                          supplierController
-                                                                  .mySuppliers[
-                                                              index];
-
-                                                      return Padding(
-                                                        padding:
-                                                            const EdgeInsets
-                                                                .only(
-                                                                bottom: 12),
-                                                        child:
-                                                            Text(supplier.name),
+                                                : ListView(
+                                                    children: supplierController
+                                                        .suppliers
+                                                        .map((SuppliersModel
+                                                            supplier) {
+                                                      return Column(
+                                                        children: <Widget>[
+                                                          CheckboxListTile(
+                                                            title: Text(
+                                                                supplier.name),
+                                                            value:
+                                                                _selectedSupplier ==
+                                                                    supplier,
+                                                            onChanged: (bool?
+                                                                selected) {
+                                                              _onItemSelect(
+                                                                  selected,
+                                                                  supplier);
+                                                            },
+                                                            checkColor:
+                                                                Colors.white,
+                                                            activeColor:
+                                                                proprimaryColor,
+                                                          ),
+                                                          if (_selectedSupplier ==
+                                                              supplier)
+                                                            Padding(
+                                                              padding:
+                                                                  const EdgeInsets
+                                                                      .only(
+                                                                      left:
+                                                                          8.0),
+                                                              child:
+                                                                  ProIconButton(
+                                                                onPressed: () {
+                                                                  Navigator.pop(
+                                                                      context,
+                                                                      _selectedSupplier
+                                                                          ?.name);
+                                                                },
+                                                                text: 'Done',
+                                                              ),
+                                                            ),
+                                                        ],
                                                       );
-                                                    },
+                                                    }).toList(),
                                                   ),
                                       ),
                                     );
@@ -357,6 +384,18 @@ class _ClientsScreenState extends State<ClientsScreen>
         ]),
       ]),
     );
+  }
+
+  SuppliersModel? _selectedSupplier;
+
+  void _onItemSelect(bool? selected, SuppliersModel supplier) {
+    setState(() {
+      if (selected == true) {
+        _selectedSupplier = supplier;
+      } else {
+        _selectedSupplier = null;
+      }
+    });
   }
 
   void _moveMainList(bool isRight) {
