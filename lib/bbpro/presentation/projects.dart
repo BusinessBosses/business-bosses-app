@@ -104,7 +104,9 @@ class _ProjectsState extends State<Projects>
                 child: ProIconButton(
                   radius: 50,
                   icon: const Icon(Icons.add),
-                  onPressed: () {},
+                  onPressed: () {
+                    Get.to(const Addproject());
+                  },
                   text: 'Add Tasks',
                 ),
               ),
