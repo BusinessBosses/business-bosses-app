@@ -200,23 +200,25 @@ class _AllCommunitiesScreenState extends State<AllCommunitiesScreen>
                                 children: <Widget>[
                                   Container(
                                     padding: const EdgeInsets.only(
-                                        top: 0, bottom: 10, left: 16),
+                                        top: 0, bottom: 0, left: 0),
                                     constraints:
                                         const BoxConstraints.expand(height: 40),
                                     child: TabBar(
                                       labelStyle: const TextStyle(
-                                          fontWeight: FontWeight.w400),
+                                          fontWeight: FontWeight.w400,
+                                          fontSize: 13),
                                       controller: _bossupTabController,
-                                      isScrollable: true,
-                                      indicator: BoxDecoration(
-                                        borderRadius: BorderRadius.circular(
-                                            50), // Creates border
-                                        color: Colors.black87.withAlpha(180),
-                                      ),
-                                      unselectedLabelColor: Colors.grey,
-                                      labelColor: Colors.white,
+                                      isScrollable: false,
+
+                                      // indicator: BoxDecoration(
+                                      //   borderRadius: BorderRadius.circular(
+                                      //       50), // Creates border
+                                      //   color: Colors.black87.withAlpha(180),
+                                      // ),
+                                      // unselectedLabelColor: Colors.grey,
+                                      // labelColor: Colors.white,
                                       labelPadding: const EdgeInsets.symmetric(
-                                          horizontal: 20.0),
+                                          horizontal: 0.0),
                                       tabs: const <Widget>[
                                         Tab(
                                           text: 'All',

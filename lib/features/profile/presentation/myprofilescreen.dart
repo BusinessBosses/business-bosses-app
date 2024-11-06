@@ -65,7 +65,7 @@ class _MyProfileScreenState extends State<MyProfileScreen> {
         return Scaffold(
           backgroundColor: Colors.white,
           appBar: PreferredSize(
-            preferredSize: const Size.fromHeight(kToolbarHeight - 10),
+            preferredSize: const Size.fromHeight(kToolbarHeight),
             child: Stack(children: <Widget>[
               Column(
                 mainAxisAlignment: MainAxisAlignment.end,
@@ -118,7 +118,7 @@ class _MyProfileScreenState extends State<MyProfileScreen> {
               ),
               if (_currentIndex == 0)
                 Positioned(
-                    bottom: 10,
+                    bottom: 0,
                     right: 0,
                     child: IconButton(
                       icon: SvgPicture.asset(
@@ -131,7 +131,7 @@ class _MyProfileScreenState extends State<MyProfileScreen> {
                     )),
               if (_currentIndex == 0)
                 Positioned(
-                    bottom: 10,
+                    bottom: 0,
                     left: 0,
                     child: IconButton(
                       onPressed: () {

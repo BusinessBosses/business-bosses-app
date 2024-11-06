@@ -127,7 +127,7 @@ class _ProScreenState extends State<ProScreen> with TickerProviderStateMixin {
       appBar: AppBar(
         automaticallyImplyLeading: false,
         title: const Text(
-          'Grow',
+          'Everything you need to grow',
         ),
         actions: <Widget>[
           IconButton(
@@ -143,12 +143,6 @@ class _ProScreenState extends State<ProScreen> with TickerProviderStateMixin {
           mainAxisAlignment: MainAxisAlignment.start,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
-            const Center(
-                child: Text(
-              'Everything you need to grow your business',
-              style: TextStyle(
-                  fontSize: 14, fontWeight: FontWeight.w700, color: textColor),
-            )),
             Padding(
               padding:
                   const EdgeInsets.symmetric(horizontal: 0.0, vertical: 15),
