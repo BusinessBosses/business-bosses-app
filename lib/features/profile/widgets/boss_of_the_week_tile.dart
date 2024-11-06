@@ -592,28 +592,50 @@ class _BossOfWeekProfileTileState extends State<BossOfWeekProfileTile> {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: <Widget>[
-                            Padding(
-                              padding: const EdgeInsets.only(
-                                  left: 8.0, right: 8, top: 8, bottom: 5),
-                              child: SizedBox(
-                                height: 35.0,
-                                width: 35.0,
-                                child: Container(
-                                  decoration: BoxDecoration(
-                                    border: Border.all(
-                                        width: 0.5, color: Colors.black12),
-                                    color: backgroundColor,
-                                    borderRadius: BorderRadius.circular(100.0),
-                                  ),
-                                  child: NetworkImageWithPlaceHolder(
-                                    imageUrl: item['companyPhoto'] ?? '',
-                                    radius: 200,
-                                    placeHolder: Icons.person,
-                                    iconSize: 15.0,
-                                    fit: BoxFit.cover,
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: <Widget>[
+                                Padding(
+                                  padding: const EdgeInsets.only(
+                                      left: 8.0, right: 8, top: 8, bottom: 5),
+                                  child: SizedBox(
+                                    height: 35.0,
+                                    width: 35.0,
+                                    child: Container(
+                                      decoration: BoxDecoration(
+                                        border: Border.all(
+                                            width: 0.5, color: Colors.black12),
+                                        color: backgroundColor,
+                                        borderRadius:
+                                            BorderRadius.circular(100.0),
+                                      ),
+                                      child: NetworkImageWithPlaceHolder(
+                                        imageUrl: item['companyPhoto'] ?? '',
+                                        radius: 200,
+                                        placeHolder: Icons.person,
+                                        iconSize: 15.0,
+                                        fit: BoxFit.cover,
+                                      ),
+                                    ),
                                   ),
                                 ),
-                              ),
+                                Padding(
+                                  padding:
+                                      const EdgeInsets.only(right: 8.0, top: 8),
+                                  child: Container(
+                                    decoration: const BoxDecoration(
+                                        color: Colors.white70,
+                                        shape: BoxShape.circle),
+                                    padding: const EdgeInsets.all(4),
+                                    child: SvgPicture.asset(
+                                      'assets/svgs/upicon.svg',
+                                      color: const Color(0xFF0F132D),
+                                      height: 8,
+                                    ),
+                                  ),
+                                ),
+                              ],
                             ),
                             const SizedBox(
                               height: 3,
@@ -633,41 +655,43 @@ class _BossOfWeekProfileTileState extends State<BossOfWeekProfileTile> {
                                         fontSize: 12,
                                         fontWeight: FontWeight.w700,
                                       ),
-                                      overflow: TextOverflow
-                                          .ellipsis, // Add this line to handle overflow
+                                      overflow: TextOverflow.ellipsis,
+                                    ),
+                                    const SizedBox(
+                                      height: 8,
                                     ),
                                   ],
                                 )),
-                            Padding(
-                              padding: const EdgeInsets.all(8),
-                              child: SizedBox(
-                                width: double.infinity,
-                                child: Wrap(
-                                    crossAxisAlignment:
-                                        WrapCrossAlignment.center,
-                                    children: <Widget>[
-                                      Container(
-                                        decoration: const BoxDecoration(
-                                            color: Colors.white,
-                                            shape: BoxShape.circle),
-                                        padding: const EdgeInsets.all(4),
-                                        child: SvgPicture.asset(
-                                          'assets/svgs/upicon.svg',
-                                          color: const Color(0xFF0F132D),
-                                          height: 8,
-                                        ),
-                                      ),
-                                      const SizedBox(
-                                        width: 5,
-                                      ),
-                                      const Text(
-                                        'Learn more',
-                                        style: TextStyle(
-                                            fontSize: 11, color: textColor),
-                                      ),
-                                    ]),
-                              ),
-                            ),
+                            // Padding(
+                            //   padding: const EdgeInsets.all(8),
+                            //   child: SizedBox(
+                            //     width: double.infinity,
+                            //     child: Wrap(
+                            //         crossAxisAlignment:
+                            //             WrapCrossAlignment.center,
+                            //         children: <Widget>[
+                            //           Container(
+                            //             decoration: const BoxDecoration(
+                            //                 color: Colors.white,
+                            //                 shape: BoxShape.circle),
+                            //             padding: const EdgeInsets.all(4),
+                            //             child: SvgPicture.asset(
+                            //               'assets/svgs/upicon.svg',
+                            //               color: const Color(0xFF0F132D),
+                            //               height: 8,
+                            //             ),
+                            //           ),
+                            //           const SizedBox(
+                            //             width: 5,
+                            //           ),
+                            //           const Text(
+                            //             'Learn more',
+                            //             style: TextStyle(
+                            //                 fontSize: 11, color: textColor),
+                            //           ),
+                            //         ]),
+                            //   ),
+                            // ),
                           ],
                         ),
                       ),
