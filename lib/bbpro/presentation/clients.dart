@@ -125,7 +125,6 @@ class _ClientsScreenState extends State<ClientsScreen>
                 child: Padding(
                   padding: const EdgeInsets.only(
                     right: 10.0,
-                    bottom: 10,
                   ),
                   child: CircleAvatar(
                       radius: 20,

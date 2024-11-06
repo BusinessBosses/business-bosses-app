@@ -145,7 +145,7 @@ class _DashboardState extends State<Dashboard> {
         child: Container(
           color: Colors.white,
           child: Column(
-            mainAxisAlignment: MainAxisAlignment.end,
+            mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
               Row(
                 crossAxisAlignment: CrossAxisAlignment.center,
@@ -161,7 +161,6 @@ class _DashboardState extends State<Dashboard> {
                         child: Padding(
                           padding: const EdgeInsets.only(
                             right: 10.0,
-                            bottom: 10,
                           ),
                           child: CircleAvatar(
                               radius: 20,
