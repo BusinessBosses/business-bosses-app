@@ -22,7 +22,7 @@ class _GotoshopWidgetState extends State<GotoshopWidget> {
           Get.to(() => const ShopScreen());
         },
         child: Container(
-          padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
+          padding: const EdgeInsets.only(left: 10, right: 10, bottom: 10),
           decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(10), color: Colors.white),
           child: Row(
@@ -61,9 +61,9 @@ class _GotoshopWidgetState extends State<GotoshopWidget> {
                                   fontSize: 14, fontWeight: FontWeight.w700),
                             ),
                             Text(
-                                'Shop Visits: ${shopController.shopStats != null ? shopController.shopStats!.views : 0}',
+                                'Visits: ${shopController.shopStats != null ? shopController.shopStats!.views : 0}',
                                 style: const TextStyle(
-                                    fontSize: 13, fontWeight: FontWeight.w500)),
+                                    fontSize: 12, fontWeight: FontWeight.w500)),
                           ],
                         ),
                       ),

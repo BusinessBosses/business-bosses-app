@@ -98,7 +98,7 @@ class _OrdersWidgetState extends State<OrdersWidget> {
                                     children: <TextSpan>[
                                       TextSpan(
                                         text:
-                                            '(${shopController.orderStats!.totalOrders})',
+                                            '${shopController.orderStats!.totalOrders}',
                                         style: const TextStyle(
                                           fontWeight: FontWeight.bold,
                                         ),

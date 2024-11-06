@@ -19,6 +19,20 @@ class _SalesWidgetState extends State<SalesWidget> {
   bool isHidden = false;
   final OrderController orderController = Get.put(OrderController());
   final ShopController shopController = Get.find();
+
+  String _formatNumber(int number) {
+    if (number >= 1000) {
+      double numberInK = number / 1000;
+      if (numberInK >= 1000) {
+        return '${(numberInK / 1000).toStringAsFixed(1)}K';
+      } else {
+        return '${numberInK.toStringAsFixed(1)}K';
+      }
+    } else {
+      return number.toString();
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Obx(
@@ -96,7 +110,7 @@ class _SalesWidgetState extends State<SalesWidget> {
                                           children: <TextSpan>[
                                             TextSpan(
                                               text:
-                                                  '(${orderController.orders.length})',
+                                                  '${shopController.shop!.currency}${_formatNumber(shopController.shopGraph!.totalSales)}',
                                               style: const TextStyle(
                                                 fontWeight: FontWeight.bold,
                                               ),
@@ -182,10 +196,10 @@ class _SalesWidgetState extends State<SalesWidget> {
                                           index <
                                               shopController.shopGraph!
                                                   .graphData!.length) {
-                                        return shopController
-                                            .shopGraph!.graphData![index].date
-                                            .substring(
-                                                5); // Display date part "MM-DD"
+                                        DateTime date = DateTime.parse(
+                                            shopController.shopGraph!
+                                                .graphData![index].date);
+                                        return date.day.toString();
                                       }
                                       return '';
                                     },
