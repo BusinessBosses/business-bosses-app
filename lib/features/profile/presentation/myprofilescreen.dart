@@ -51,10 +51,13 @@ class _MyProfileScreenState extends State<MyProfileScreen> {
   int _currentIndex = 0;
   late PageController _pageController;
 
+  int? _selectedIndex;
+
   @override
   void initState() {
     super.initState();
     _pageController = PageController(initialPage: _currentIndex);
+    _selectedIndex = 0;
   }
 
   @override
@@ -65,55 +68,61 @@ class _MyProfileScreenState extends State<MyProfileScreen> {
         return Scaffold(
           backgroundColor: Colors.white,
           appBar: PreferredSize(
-            preferredSize: const Size.fromHeight(kToolbarHeight),
+            preferredSize: Size.fromHeight(
+                (_selectedIndex == 0 || _selectedIndex == 4)
+                    ? kToolbarHeight
+                    : 0),
             child: Stack(children: <Widget>[
               Column(
                 mainAxisAlignment: MainAxisAlignment.end,
                 children: <Widget>[
-                  Align(
-                    alignment: Alignment.bottomCenter,
-                    child: CupertinoSlidingSegmentedControl<int>(
-                      backgroundColor: Colors.grey[200]!,
-                      padding: const EdgeInsets.all(5),
-                      children: <int, Widget>{
-                        0: Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 15),
-                          child: Text('Profile',
-                              style: _currentIndex == 0
+                  if (_selectedIndex == 0 || _selectedIndex == 4)
+                    Align(
+                      alignment: Alignment.bottomCenter,
+                      child: CupertinoSlidingSegmentedControl<int>(
+                        backgroundColor: Colors.grey[200]!,
+                        padding: const EdgeInsets.all(5),
+                        children: <int, Widget>{
+                          0: Padding(
+                            padding: const EdgeInsets.symmetric(horizontal: 15),
+                            child: Text('Profile',
+                                style: _currentIndex == 0
+                                    ? const TextStyle(
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: 14,
+                                      )
+                                    : const TextStyle(
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: 14,
+                                        color: Colors.grey)),
+                          ),
+                          1: Text('My-Biz',
+                              style: _currentIndex == 1
                                   ? const TextStyle(
-                                      fontWeight: FontWeight.bold,
-                                      fontSize: 14,
-                                    )
+                                      fontWeight: FontWeight.bold, fontSize: 14)
                                   : const TextStyle(
                                       fontWeight: FontWeight.bold,
                                       fontSize: 14,
                                       color: Colors.grey)),
-                        ),
-                        1: Text('My-Biz',
-                            style: _currentIndex == 1
-                                ? const TextStyle(
-                                    fontWeight: FontWeight.bold, fontSize: 14)
-                                : const TextStyle(
-                                    fontWeight: FontWeight.bold,
-                                    fontSize: 14,
-                                    color: Colors.grey)),
-                      },
-                      onValueChanged: (int? value) {
-                        if (value != null) {
-                          setState(() {
-                            _currentIndex = value;
-                            _pageController.animateToPage(
-                              _currentIndex,
-                              duration: const Duration(milliseconds: 300),
-                              curve: Curves.ease,
-                            );
-                          });
-                        }
-                      },
-                      groupValue: _currentIndex,
+                        },
+                        onValueChanged: (int? value) {
+                          if (value != null) {
+                            setState(() {
+                              _selectedIndex == 0;
+                              _currentIndex = value;
+                              _pageController.animateToPage(
+                                _currentIndex,
+                                duration: const Duration(milliseconds: 300),
+                                curve: Curves.ease,
+                              );
+                            });
+                          }
+                        },
+                        groupValue: _currentIndex,
+                      ),
                     ),
-                  ),
-                  const SizedBox(height: 10.0),
+                  if (_selectedIndex == 0 || _selectedIndex == 4)
+                    const SizedBox(height: 10.0),
                 ],
               ),
               if (_currentIndex == 0)
@@ -144,6 +153,7 @@ class _MyProfileScreenState extends State<MyProfileScreen> {
             ]),
           ),
           body: PageView(
+              physics: const NeverScrollableScrollPhysics(),
               controller: _pageController,
               onPageChanged: (int index) {
                 setState(() {
@@ -689,7 +699,14 @@ class _MyProfileScreenState extends State<MyProfileScreen> {
                             ],
                           ),
                         )
-                      : const Bottomnavscreen(),
+                      : Bottomnavscreen(
+                          initialindex: 0,
+                          onTabChanged: (int index) {
+                            setState(() {
+                              _selectedIndex = index;
+                            });
+                          },
+                        ),
                 )
               ]),
         );

@@ -15,7 +15,8 @@ import 'package:get/get.dart';
 
 class Bottomnavscreen extends StatefulWidget {
   final int? initialindex;
-  const Bottomnavscreen({super.key, this.initialindex});
+  final void Function(int)? onTabChanged;
+  const Bottomnavscreen({super.key, this.initialindex, this.onTabChanged});
 
   @override
   _BottomnavscreenState createState() => _BottomnavscreenState();
@@ -52,6 +53,10 @@ class _BottomnavscreenState extends State<Bottomnavscreen> {
     setState(() {
       _selectedIndex = index;
     });
+
+    if (widget.onTabChanged != null) {
+      widget.onTabChanged!(index);
+    }
   }
 
   Future<bool> _onWillPop() async {
