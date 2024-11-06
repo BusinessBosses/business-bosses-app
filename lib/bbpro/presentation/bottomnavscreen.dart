@@ -16,7 +16,11 @@ import 'package:get/get.dart';
 class Bottomnavscreen extends StatefulWidget {
   final int? initialindex;
   final void Function(int)? onTabChanged;
-  const Bottomnavscreen({super.key, this.initialindex, this.onTabChanged});
+  const Bottomnavscreen(
+      {super.key, bottomNavScreenKey, this.initialindex, this.onTabChanged});
+
+  static _BottomnavscreenState? of(BuildContext context) =>
+      context.findAncestorStateOfType<_BottomnavscreenState>();
 
   @override
   _BottomnavscreenState createState() => _BottomnavscreenState();
@@ -27,6 +31,23 @@ class _BottomnavscreenState extends State<Bottomnavscreen> {
   final ClientsController clientsController = Get.put(ClientsController());
   final ProfileController profileController = Get.put(ProfileController());
   late int _selectedIndex;
+
+  void _onItemTapped(int index) {
+    setState(() {
+      _selectedIndex = index;
+    });
+
+    if (widget.onTabChanged != null) {
+      widget.onTabChanged!(index);
+    }
+  }
+
+  void onTabTapped(int index) {
+    setState(() {
+      _selectedIndex = index;
+      _onItemTapped(index);
+    });
+  }
 
   static const List<Widget> _widgetOptions = <Widget>[
     Dashboard(),
@@ -47,16 +68,6 @@ class _BottomnavscreenState extends State<Bottomnavscreen> {
         Get.to(const Setupshop());
       }
     });
-  }
-
-  void _onItemTapped(int index) {
-    setState(() {
-      _selectedIndex = index;
-    });
-
-    if (widget.onTabChanged != null) {
-      widget.onTabChanged!(index);
-    }
   }
 
   Future<bool> _onWillPop() async {
