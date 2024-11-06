@@ -198,40 +198,40 @@ class _DashboardState extends State<Dashboard> {
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         crossAxisAlignment: CrossAxisAlignment.center,
                         children: <Widget>[
-                          GestureDetector(
-                            onTap: () {
-                              Get.back();
-                            },
-                            child: Container(
-                              margin: const EdgeInsets.only(top: 10, left: 15),
-                              padding: const EdgeInsets.symmetric(
-                                  horizontal: 10, vertical: 5),
-                              decoration: BoxDecoration(
-                                  color: primaryColorLT.withAlpha(20),
-                                  borderRadius: BorderRadius.circular(100)),
-                              child: Wrap(
-                                crossAxisAlignment: WrapCrossAlignment.center,
-                                children: <Widget>[
-                                  const Icon(
-                                    Icons.chevron_left,
-                                    color: primaryColorLT,
-                                    size: 24,
-                                  ),
-                                  Image.asset(
-                                    'assets/images/app_logo_2.png',
-                                    height: 25,
-                                  ),
-                                  const Text(
-                                    '  Go back to BB',
-                                    style: TextStyle(fontSize: 13),
-                                  )
-                                ],
-                              ),
-                            ),
-                          ),
+                          // GestureDetector(
+                          //   onTap: () {
+                          //     Get.back();
+                          //   },
+                          //   child: Container(
+                          //     margin: const EdgeInsets.only(top: 10, left: 15),
+                          //     padding: const EdgeInsets.symmetric(
+                          //         horizontal: 10, vertical: 5),
+                          //     decoration: BoxDecoration(
+                          //         color: primaryColorLT.withAlpha(20),
+                          //         borderRadius: BorderRadius.circular(100)),
+                          //     child: Wrap(
+                          //       crossAxisAlignment: WrapCrossAlignment.center,
+                          //       children: <Widget>[
+                          //         const Icon(
+                          //           Icons.chevron_left,
+                          //           color: primaryColorLT,
+                          //           size: 24,
+                          //         ),
+                          //         Image.asset(
+                          //           'assets/images/app_logo_2.png',
+                          //           height: 25,
+                          //         ),
+                          //         const Text(
+                          //           '  Go back to BB',
+                          //           style: TextStyle(fontSize: 13),
+                          //         )
+                          //       ],
+                          //     ),
+                          //   ),
+                          // ),
                           Container(
                             margin: const EdgeInsets.only(top: 10),
-                            padding: const EdgeInsets.only(right: 15.0),
+                            padding: const EdgeInsets.only(left: 15.0),
                             child: GestureDetector(
                               onTap: () {
                                 final RenderBox button =
