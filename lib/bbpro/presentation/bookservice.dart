@@ -39,6 +39,7 @@ class _BookServiceScreenState extends State<BookServiceScreen>
   final TextEditingController quantityController = TextEditingController();
   final TextEditingController deliveryController = TextEditingController();
   final TextEditingController fullNameController = TextEditingController();
+  final TextEditingController phoneController = TextEditingController();
   final TextEditingController emailController = TextEditingController();
   bool isSubmit = false;
 
@@ -454,6 +455,7 @@ class _BookServiceScreenState extends State<BookServiceScreen>
                                       ),
                                     ),
                                     TextFormField(
+                                      controller: phoneController,
                                       style: const TextStyle(fontSize: 13),
                                       maxLines: 1,
                                       decoration: InputDecoration(
@@ -511,7 +513,8 @@ class _BookServiceScreenState extends State<BookServiceScreen>
                                 'deliveryMethod': widget.service.deliveryMethod,
                                 'deliveryDate': DateTime.now(),
                                 'paymentMethod': widget.service.deliveryMethod,
-                                'orderDetails': deliveryController.text,
+                                'orderDetails':
+                                    'Name: ${fullNameController.text} \n Email: ${emailController.text} \n Phone: ${phoneController.text} \n Delivery Details: ${deliveryController.text}',
                                 'invoiceOption': 'send_with_payment_link'
                               };
                               bool response =
@@ -544,11 +547,11 @@ class _BookServiceScreenState extends State<BookServiceScreen>
     );
   }
 
-  void _onClientSelect(String name) {
-    final dynamic clientName = clients
-        .firstWhere((Map<String, dynamic> element) => element['name'] == name);
-    setState(() {
-      clientId = clientName['id'];
-    });
-  }
+  // void _onClientSelect(String name) {
+  //   final dynamic clientName = clients
+  //       .firstWhere((Map<String, dynamic> element) => element['name'] == name);
+  //   setState(() {
+  //     clientId = clientName['id'];
+  //   });
+  // }
 }

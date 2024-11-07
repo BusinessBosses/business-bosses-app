@@ -333,7 +333,10 @@ class _OrderProductScreenState extends State<OrderProductScreen>
                             text: 'Next ',
                             icon: SvgPicture.asset(
                               'assets/svgs/nexticon.svg',
-                              color: Colors.white,
+                              colorFilter: const ColorFilter.mode(
+                                Colors.white,
+                                BlendMode.srcIn,
+                              ),
                             ),
                           ),
                         )
@@ -394,7 +397,10 @@ class _OrderProductScreenState extends State<OrderProductScreen>
                           text: 'Next ',
                           icon: SvgPicture.asset(
                             'assets/svgs/nexticon.svg',
-                            color: Colors.white,
+                            colorFilter: const ColorFilter.mode(
+                              Colors.white,
+                              BlendMode.srcIn,
+                            ),
                           ),
                         ),
                       )
@@ -449,6 +455,7 @@ class _OrderProductScreenState extends State<OrderProductScreen>
                                     ),
                                   ),
                                   TextFormField(
+                                    controller: phoneController,
                                     style: const TextStyle(fontSize: 13),
                                     maxLines: 1,
                                     decoration: InputDecoration(
@@ -506,7 +513,8 @@ class _OrderProductScreenState extends State<OrderProductScreen>
                               'deliveryMethod': widget.product.deliveryMethod,
                               'deliveryDate': DateTime.now(),
                               'paymentMethod': widget.product.deliveryMethod,
-                              'orderDetails': deliveryController.text,
+                              'orderDetails':
+                                  'Name: ${fullNameController.text} \n Email: ${emailController.text} \n Phone: ${phoneController.text} \n Delivery Details: ${deliveryController.text}',
                               'invoiceOption': 'send_with_payment_link'
                             };
                             bool response =
@@ -514,6 +522,7 @@ class _OrderProductScreenState extends State<OrderProductScreen>
                             if (response) {
                               showSnackbar(
                                   message: 'Order Added Successfully!');
+                              // ignore: use_build_context_synchronously
                               Navigator.pop(context);
                             } else {
                               showSnackbar(
@@ -539,11 +548,11 @@ class _OrderProductScreenState extends State<OrderProductScreen>
     );
   }
 
-  void _onClientSelect(String name) {
-    final dynamic clientName = clients
-        .firstWhere((Map<String, dynamic> element) => element['name'] == name);
-    setState(() {
-      clientId = clientName['id'];
-    });
-  }
+  // void _onClientSelect(String name) {
+  //   final dynamic clientName = clients
+  //       .firstWhere((Map<String, dynamic> element) => element['name'] == name);
+  //   setState(() {
+  //     clientId = clientName['id'];
+  //   });
+  // }
 }

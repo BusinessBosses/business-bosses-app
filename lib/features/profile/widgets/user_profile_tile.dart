@@ -7,7 +7,6 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 
 import '../../../common/widgets/network_image_with_placeholder.dart';
-import '../../../navigation/routes.dart';
 import '../controller/profile_controller.dart';
 
 // ignore: public_member_api_docs
@@ -97,117 +96,118 @@ class _UserProfileTileState extends State<UserProfileTile> {
             ],
           ),
           Expanded(
-            child: Container(
-              child: Column(
-                // mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: <Widget>[
-                  const SizedBox(height: 6.0),
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: <Widget>[
-                      widget.myProfile.isSubscribed
-                          ? Row(
-                              children: <Widget>[
-                                Text(
-                                  widget.myProfile.name != null &&
-                                          widget.myProfile.name!.length <= 20
-                                      ? widget.myProfile.name!
-                                      : widget.myProfile.name != null
-                                          ? '${widget.myProfile.name!.substring(0, 20)}...'
-                                          : widget.myProfile.username,
-                                  style: Theme.of(context).textTheme.bodyLarge,
+            child: Column(
+              // mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: <Widget>[
+                const SizedBox(height: 6.0),
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: <Widget>[
+                    widget.myProfile.isSubscribed
+                        ? Row(
+                            children: <Widget>[
+                              Text(
+                                widget.myProfile.name != null &&
+                                        widget.myProfile.name!.length <= 20
+                                    ? widget.myProfile.name!
+                                    : widget.myProfile.name != null
+                                        ? '${widget.myProfile.name!.substring(0, 20)}...'
+                                        : widget.myProfile.username,
+                                style: Theme.of(context).textTheme.bodyLarge,
+                              ),
+                              const SizedBox(width: 5),
+                              SvgPicture.asset(
+                                'assets/svgs/premiumbadge.svg',
+                                height: 9,
+                                colorFilter: const ColorFilter.mode(
+                                  primaryColorLT,
+                                  BlendMode.srcIn,
                                 ),
-                                const SizedBox(width: 5),
-                                SvgPicture.asset(
-                                  'assets/svgs/premiumbadge.svg',
-                                  height: 9,
-                                  color: primaryColorLT,
-                                )
-                              ],
-                            )
-                          : Text(
-                              widget.myProfile.name != null &&
-                                      widget.myProfile.name!.length <= 20
-                                  ? widget.myProfile.name!
-                                  : widget.myProfile.name != null
-                                      ? '${widget.myProfile.name!.substring(0, 20)}...'
-                                      : '',
-                              maxLines: 1,
-                              overflow: TextOverflow.ellipsis,
-                              style: Theme.of(context)
-                                  .textTheme
-                                  .titleLarge
-                                  ?.copyWith(
-                                    fontWeight: FontWeight.bold,
-                                  ),
-                            ),
-                      Text(
-                        widget.myProfile.category ?? '',
-                        maxLines: 1,
-                        overflow: TextOverflow.ellipsis,
-                        style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                            fontWeight: FontWeight.bold,
-                            color: textColor.withOpacity(0.8)),
-                      ),
-                      widget.myProfile.companyName != null &&
-                              widget.myProfile.companyName != ''
-                          ? Text(
-                              widget.myProfile.companyName!,
-                              maxLines: 1,
-                              overflow: TextOverflow.ellipsis,
-                              style: TextStyle(
-                                  fontSize: 15,
-                                  fontWeight: FontWeight.normal,
-                                  color: textColor.withOpacity(
-                                    0.8,
-                                  )),
-                            )
-                          : Container(),
-                      widget.myProfile.location != null &&
-                              widget.myProfile.location != ''
-                          ? Text(
-                              widget.myProfile.location ?? '',
-                              maxLines: 1,
-                              overflow: TextOverflow.ellipsis,
-                              style: Theme.of(context)
-                                  .textTheme
-                                  .bodyMedium
-                                  ?.copyWith(
-                                    color: textColor.withOpacity(0.6),
-                                  ),
-                            )
-                          : Container(),
-                    ],
-                  ),
-                  if (!widget.myProfile.isSubscribed)
-                    GestureDetector(
-                      onTap: () {},
-                      child: Container(
-                          decoration: BoxDecoration(
-                            boxShadow: <BoxShadow>[
-                              BoxShadow(
-                                color: Colors.black.withOpacity(0.09),
-                                blurRadius: 500.0,
-                                spreadRadius: 0.0,
-                              ),
+                              )
                             ],
+                          )
+                        : Text(
+                            widget.myProfile.name != null &&
+                                    widget.myProfile.name!.length <= 20
+                                ? widget.myProfile.name!
+                                : widget.myProfile.name != null
+                                    ? '${widget.myProfile.name!.substring(0, 20)}...'
+                                    : '',
+                            maxLines: 1,
+                            overflow: TextOverflow.ellipsis,
+                            style: Theme.of(context)
+                                .textTheme
+                                .titleLarge
+                                ?.copyWith(
+                                  fontWeight: FontWeight.bold,
+                                ),
                           ),
-                          child: Padding(
-                            padding: const EdgeInsets.only(
-                              top: 2.0,
+                    Text(
+                      widget.myProfile.category ?? '',
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                      style: Theme.of(context).textTheme.bodyLarge?.copyWith(
+                          fontWeight: FontWeight.bold,
+                          color: textColor.withOpacity(0.8)),
+                    ),
+                    widget.myProfile.companyName != null &&
+                            widget.myProfile.companyName != ''
+                        ? Text(
+                            widget.myProfile.companyName!,
+                            maxLines: 1,
+                            overflow: TextOverflow.ellipsis,
+                            style: TextStyle(
+                                fontSize: 15,
+                                fontWeight: FontWeight.normal,
+                                color: textColor.withOpacity(
+                                  0.8,
+                                )),
+                          )
+                        : Container(),
+                    widget.myProfile.location != null &&
+                            widget.myProfile.location != ''
+                        ? Text(
+                            widget.myProfile.location ?? '',
+                            maxLines: 1,
+                            overflow: TextOverflow.ellipsis,
+                            style: Theme.of(context)
+                                .textTheme
+                                .bodyMedium
+                                ?.copyWith(
+                                  color: textColor.withOpacity(0.6),
+                                ),
+                          )
+                        : Container(),
+                  ],
+                ),
+                if (!widget.myProfile.isSubscribed)
+                  GestureDetector(
+                    onTap: () {},
+                    child: Container(
+                        decoration: BoxDecoration(
+                          boxShadow: <BoxShadow>[
+                            BoxShadow(
+                              color: Colors.black.withOpacity(0.09),
+                              blurRadius: 500.0,
+                              spreadRadius: 0.0,
                             ),
-                            child: Transform.translate(
-                              offset: const Offset(-15, 0),
-                              child: Padding(
-                                padding: const EdgeInsets.only(top: 2.0),
-                                child: subscribetopremiumbutton(),
-                              ),
+                          ],
+                        ),
+                        child: Padding(
+                          padding: const EdgeInsets.only(
+                            top: 2.0,
+                          ),
+                          child: Transform.translate(
+                            offset: const Offset(-15, 0),
+                            child: Padding(
+                              padding: const EdgeInsets.only(top: 2.0),
+                              child: subscribetopremiumbutton(),
                             ),
-                          )),
-                    )
-                ],
-              ),
+                          ),
+                        )),
+                  )
+              ],
             ),
           )
         ],

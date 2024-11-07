@@ -288,6 +288,7 @@ class _AddclientState extends State<Addclient> {
                       if (widget.onClientAdded != null) {
                         widget.onClientAdded?.call();
                       }
+                      // ignore: use_build_context_synchronously
                       Navigator.pop(context);
                     } else {
                       showSnackbar(

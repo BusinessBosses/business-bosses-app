@@ -18,6 +18,7 @@ class Bottomnavscreen extends StatefulWidget {
   const Bottomnavscreen({super.key, this.initialindex});
 
   @override
+  // ignore: library_private_types_in_public_api
   _BottomnavscreenState createState() => _BottomnavscreenState();
 }
 

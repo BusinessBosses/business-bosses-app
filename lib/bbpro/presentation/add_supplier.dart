@@ -121,6 +121,7 @@ class _AddSupplierState extends State<AddSupplier> {
         bool success = await shopController.addSupplier(supplierData);
         if (success) {
           showSnackbar(message: 'Supplier Added Successfully!');
+          // ignore: always_specify_types
           await Future.delayed(
               const Duration(seconds: 1)); // Optional delay for visibility
           // ignore: use_build_context_synchronously

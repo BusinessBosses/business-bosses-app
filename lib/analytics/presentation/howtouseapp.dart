@@ -25,7 +25,10 @@ class _HowToUseAppScreenState extends State<HowToUseAppScreen> {
         'icon': SvgPicture.asset(
           'assets/svgs/cartu.svg',
           height: 35,
-          color: Colors.grey,
+          colorFilter: const ColorFilter.mode(
+            Colors.grey,
+            BlendMode.srcIn,
+          ),
         ),
         'title': 'Marketplace',
         'description':
@@ -36,7 +39,10 @@ class _HowToUseAppScreenState extends State<HowToUseAppScreen> {
         'icon': SvgPicture.asset(
           'assets/svgs/grow.svg',
           height: 35,
-          color: Colors.grey,
+          colorFilter: const ColorFilter.mode(
+            Colors.grey,
+            BlendMode.srcIn,
+          ),
         ),
         'title': 'Grow',
         'description':
@@ -70,7 +76,10 @@ class _HowToUseAppScreenState extends State<HowToUseAppScreen> {
         'icon': SvgPicture.asset(
           'assets/svgs/bossupu.svg',
           height: 35,
-          color: Colors.grey,
+          colorFilter: const ColorFilter.mode(
+            Colors.grey,
+            BlendMode.srcIn,
+          ),
         ),
         'title': 'Boss Up',
         'description':
@@ -81,7 +90,10 @@ class _HowToUseAppScreenState extends State<HowToUseAppScreen> {
         'icon': SvgPicture.asset(
           'assets/svgs/messages.svg',
           height: 35,
-          color: Colors.grey,
+          colorFilter: const ColorFilter.mode(
+            Colors.grey,
+            BlendMode.srcIn,
+          ),
         ),
         'title': 'Messages',
         'description':
@@ -92,7 +104,10 @@ class _HowToUseAppScreenState extends State<HowToUseAppScreen> {
         'icon': SvgPicture.asset(
           'assets/svgs/calendar.svg',
           height: 35,
-          color: Colors.grey,
+          colorFilter: const ColorFilter.mode(
+            Colors.grey,
+            BlendMode.srcIn,
+          ),
         ),
         'title': 'Events',
         'description':
@@ -103,7 +118,10 @@ class _HowToUseAppScreenState extends State<HowToUseAppScreen> {
         'icon': SvgPicture.asset(
           'assets/svgs/supporter.svg',
           height: 35,
-          color: Colors.grey,
+          colorFilter: const ColorFilter.mode(
+            Colors.grey,
+            BlendMode.srcIn,
+          ),
         ),
         'title': 'Crowdfund',
         'description':
