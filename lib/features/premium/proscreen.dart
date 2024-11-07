@@ -28,6 +28,7 @@ class _ProScreenState extends State<ProScreen> with TickerProviderStateMixin {
   late final TabController protabbarcontroller;
   bool isCoin = false;
   bool isSubscribed = false;
+  bool loading = false;
   final ProfileController profileController = Get.find();
   final List<String> reviews = <String>[
     'Best app ever! So easy to use and manage everything.',
@@ -400,15 +401,56 @@ class _ProScreenState extends State<ProScreen> with TickerProviderStateMixin {
                                                   top: 10,
                                                   bottom: 0),
                                               child: Container(
-                                                width: double.infinity,
-                                                padding:
-                                                    const EdgeInsets.symmetric(
-                                                        horizontal: 0),
-                                                child: ProCustomButton(
+                                                  width: double.infinity,
+                                                  padding: const EdgeInsets
+                                                      .symmetric(horizontal: 0),
+                                                  child: ProCustomButton(
                                                     color: primaryColorLT,
                                                     text: 'Start Free Trial',
-                                                    onPressed: () {}),
-                                              )),
+                                                    onPressed: () async {
+                                                      try {
+                                                        setState(() {
+                                                          loading = true;
+                                                        });
+                                                        final List<StoreProduct>
+                                                            product =
+                                                            await Purchases
+                                                                .getProducts(<String>[
+                                                          'xyz.codexia.businessbosses.promonth'
+                                                        ]);
+                                                        final CustomerInfo
+                                                            customerInfo =
+                                                            await Purchases
+                                                                .purchaseStoreProduct(
+                                                                    product[0]);
+                                                        if ((customerInfo
+                                                                    .entitlements
+                                                                    .all[
+                                                                        'xyz.codexia.businessbosses.promonth']
+                                                                    ?.isActive ??
+                                                                false) ||
+                                                            (customerInfo
+                                                                    .entitlements
+                                                                    .all[
+                                                                        'xyz.codexia.businessbosses.monthly']
+                                                                    ?.isActive ??
+                                                                false)) {
+                                                          // Grant access to pro features
+                                                          print(
+                                                              'User subscribed!');
+                                                        }
+                                                      } catch (e) {
+                                                        // Handle error
+                                                        print(
+                                                            'Error purchasing product: $e');
+                                                      } finally {
+                                                        setState(() {
+                                                          loading = false;
+                                                        });
+                                                      }
+                                                    },
+                                                    loading: loading,
+                                                  ))),
                                         ],
                                       ),
                                     ),
@@ -517,15 +559,56 @@ class _ProScreenState extends State<ProScreen> with TickerProviderStateMixin {
                                                   top: 10,
                                                   bottom: 0),
                                               child: Container(
-                                                width: double.infinity,
-                                                padding:
-                                                    const EdgeInsets.symmetric(
-                                                        horizontal: 0),
-                                                child: ProCustomButton(
+                                                  width: double.infinity,
+                                                  padding: const EdgeInsets
+                                                      .symmetric(horizontal: 0),
+                                                  child: ProCustomButton(
                                                     color: primaryColorLT,
                                                     text: 'Subscribe Now',
-                                                    onPressed: () {}),
-                                              )),
+                                                    onPressed: () async {
+                                                      try {
+                                                        setState(() {
+                                                          loading = true;
+                                                        });
+                                                        final List<StoreProduct>
+                                                            product =
+                                                            await Purchases
+                                                                .getProducts(<String>[
+                                                          'xyz.codexia.businessbosses.monthly'
+                                                        ]);
+                                                        final CustomerInfo
+                                                            customerInfo =
+                                                            await Purchases
+                                                                .purchaseStoreProduct(
+                                                                    product[0]);
+                                                        if ((customerInfo
+                                                                    .entitlements
+                                                                    .all[
+                                                                        'xyz.codexia.businessbosses.promonth']
+                                                                    ?.isActive ??
+                                                                false) ||
+                                                            (customerInfo
+                                                                    .entitlements
+                                                                    .all[
+                                                                        'xyz.codexia.businessbosses.monthly']
+                                                                    ?.isActive ??
+                                                                false)) {
+                                                          // Grant access to premium features
+                                                          print(
+                                                              'User subscribed!');
+                                                        }
+                                                      } catch (e) {
+                                                        // Handle error
+                                                        print(
+                                                            'Error purchasing product: $e');
+                                                      } finally {
+                                                        setState(() {
+                                                          loading = false;
+                                                        });
+                                                      }
+                                                    },
+                                                    loading: loading,
+                                                  ))),
                                         ],
                                       ),
                                     ),
