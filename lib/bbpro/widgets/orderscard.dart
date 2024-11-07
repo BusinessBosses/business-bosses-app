@@ -1,6 +1,7 @@
 import 'package:business_bosses_v2/bbpro/controllers/order_controller.dart';
 import 'package:business_bosses_v2/bbpro/controllers/shop_controller.dart';
 import 'package:business_bosses_v2/bbpro/presentation/bottomnavscreen.dart';
+import 'package:business_bosses_v2/features/home/bottom_nav.dart';
 import 'package:business_bosses_v2/utils/theme/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:fl_chart/fl_chart.dart';
@@ -18,17 +19,21 @@ class _OrdersWidgetState extends State<OrdersWidget> {
   bool isHidden = false;
   final ShopController shopController = Get.find();
   final OrderController orderController = Get.put(OrderController());
+
+  @override
+  void initState() {
+    super.initState();
+  }
+
+  void _navigateToOrders() {
+    Bottomnavscreen.of(context)?.onTabTapped(2);
+  }
+
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
-        Navigator.pushReplacement(
-          context,
-          MaterialPageRoute(
-            builder: (BuildContext context) =>
-                const Bottomnavscreen(initialindex: 2),
-          ),
-        );
+        _navigateToOrders();
       },
       child: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 15.0, vertical: 15),
@@ -71,13 +76,7 @@ class _OrdersWidgetState extends State<OrdersWidget> {
                         alignment: Alignment.centerRight,
                         child: GestureDetector(
                           onTap: () {
-                            Navigator.pushReplacement(
-                              context,
-                              MaterialPageRoute(
-                                builder: (BuildContext context) =>
-                                    const Bottomnavscreen(initialindex: 2),
-                              ),
-                            );
+                            _navigateToOrders();
                           },
                           child: Container(
                             padding: const EdgeInsets.symmetric(
@@ -98,7 +97,7 @@ class _OrdersWidgetState extends State<OrdersWidget> {
                                     children: <TextSpan>[
                                       TextSpan(
                                         text:
-                                            '(${shopController.orderStats!.totalOrders})',
+                                            '${shopController.orderStats!.totalOrders}',
                                         style: const TextStyle(
                                           fontWeight: FontWeight.bold,
                                         ),

@@ -59,12 +59,12 @@ class _SetupState extends State<Setup> {
                       ));
                 },
                 child: Container(
-                    margin: const EdgeInsets.only(bottom: 10),
+                    margin: const EdgeInsets.only(bottom: 0),
                     decoration: BoxDecoration(
                         color: backgroundColor,
                         borderRadius: BorderRadius.circular(40)),
                     padding: const EdgeInsets.symmetric(
-                        horizontal: 15, vertical: 12),
+                        horizontal: 15, vertical: 10),
                     child: Row(
                       children: <Widget>[
                         SvgPicture.asset(

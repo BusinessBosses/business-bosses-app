@@ -32,7 +32,7 @@ class _ProCustomButtonState extends State<ProCustomButton> {
       child: SizedBox(
         height: 50,
         child: ElevatedButton(
-          onPressed: !widget.loading ? widget.onPressed : () {},
+          onPressed: !widget.loading ? widget.onPressed : null,
           style: ElevatedButton.styleFrom(
             backgroundColor:
                 widget.color ?? proprimaryColor, // Background color
@@ -42,29 +42,28 @@ class _ProCustomButtonState extends State<ProCustomButton> {
               borderRadius: BorderRadius.circular(10.0),
             ),
           ),
-          child: Row(
-            mainAxisSize: MainAxisSize.min,
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: <Widget>[
-              if (widget.back)
-                if (widget.icon != null) widget.icon!,
-              if (widget.loading)
-                const CircularProgressIndicator(
+          child: widget.loading
+              ? const CircularProgressIndicator(
                   color: Colors.white,
+                )
+              : Row(
+                  mainAxisSize: MainAxisSize.min,
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: <Widget>[
+                    if (widget.back)
+                      if (widget.icon != null) widget.icon!,
+                    if (!widget.back)
+                      if (widget.icon != null)
+                        widget.icon!, // Display icon if it's not null
+                    Text(
+                      widget.text,
+                      style: const TextStyle(
+                          color: Colors.white, // Text color
+                          fontSize: 16.0,
+                          fontWeight: FontWeight.w700),
+                    ),
+                  ],
                 ),
-              if (!widget.loading)
-                Text(
-                  widget.text,
-                  style: const TextStyle(
-                      color: Colors.white, // Text color
-                      fontSize: 16.0,
-                      fontWeight: FontWeight.w700),
-                ),
-              if (widget.back == false)
-                if (widget.icon != null)
-                  widget.icon!, // Display icon if it's not null
-            ],
-          ),
         ),
       ),
     );

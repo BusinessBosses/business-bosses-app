@@ -21,21 +21,21 @@ Widget subscribetopremiumbutton() {
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
               Text(
-                'Upgrade',
+                'Upgrade to Pro',
                 style: TextStyle(
                   fontWeight: FontWeight.w700,
                   fontSize: 15,
                   color: Colors.white,
                 ),
               ),
-              SizedBox(
-                width: 5,
-              ),
-              Icon(
-                Icons.add,
-                color: Colors.white,
-                size: 15,
-              )
+              // SizedBox(
+              //   width: 5,
+              // ),
+              // Icon(
+              //   Icons.add,
+              //   color: Colors.white,
+              //   size: 15,
+              // )
             ],
           ),
         ),

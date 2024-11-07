@@ -97,7 +97,6 @@ class _ProjectsState extends State<Projects>
               Padding(
                 padding: const EdgeInsets.only(
                   right: 10.0,
-                  bottom: 10,
                 ),
                 child: ProIconButton(
                   radius: 50,
@@ -115,7 +114,6 @@ class _ProjectsState extends State<Projects>
                 child: Padding(
                   padding: const EdgeInsets.only(
                     right: 10.0,
-                    bottom: 10,
                   ),
                   child: CircleAvatar(
                       radius: 20,

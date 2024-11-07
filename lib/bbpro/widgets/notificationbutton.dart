@@ -17,7 +17,7 @@ class NotificationButton extends StatelessWidget {
       },
       child: Padding(
         padding: EdgeInsets.only(
-            right: 10.0, bottom: padding ?? 10, top: toppadding ?? 0),
+            right: 10.0, bottom: padding ?? 0, top: toppadding ?? 0),
         child: CircleAvatar(
             radius: 20,
             backgroundColor: prosemibackColor,

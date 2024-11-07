@@ -78,7 +78,9 @@ class _CustomTabBarWidgetState<T> extends State<CustomTabBarWidget<T>> {
                     child: Container(
                       decoration: BoxDecoration(
                         color: widget._tabController.index == index
-                            ? widget.proprimaryColor
+                            ? index == 0
+                                ? Colors.black54
+                                : widget.backgroundColor[index].withOpacity(1)
                             : widget.backgroundColor[index],
                         borderRadius: BorderRadius.circular(100),
                       ),
