@@ -410,7 +410,7 @@ class _CreateOrderState extends State<CreateOrder> {
                             padding: 15,
                             textpadding: 15,
                             iconName: 'assets/svgs/dropdown.svg',
-                            caption: 'Select Order',
+                            caption: 'Select Order *',
                             selectedarea: Column(
                               children: selectedItems!
                                   .map((Map<String, dynamic> task) => Taskitem(
@@ -435,18 +435,6 @@ class _CreateOrderState extends State<CreateOrder> {
                         ),
 
                         const SizedBox(height: 15),
-                        CustomDropdownWidget(
-                          caption: 'Order Channel',
-                          items: const <String>['Online', 'In-Person'],
-                          iconName: 'assets/svgs/dropdown.svg',
-                          initialValue: selectedOrderChannel,
-                          onChanged: (String? value) {
-                            setState(() {
-                              selectedOrderChannel = value!;
-                            });
-                          },
-                        ),
-                        const SizedBox(height: 15),
                         GestureDetector(
                           onTap: () async {
                             DateTime? picked = await showDatePicker(
@@ -465,7 +453,7 @@ class _CreateOrderState extends State<CreateOrder> {
                           child: Container(
                             padding: const EdgeInsets.symmetric(horizontal: 5),
                             child: CustomTextWidget(
-                              caption: 'Order Date',
+                              caption: 'Order Date *',
                               iconName: 'assets/svgs/calendar.svg',
                               text: selectedOrderDate,
                               textpadding: 15,
@@ -474,7 +462,7 @@ class _CreateOrderState extends State<CreateOrder> {
                         ),
                         const SizedBox(height: 15),
                         CustomDropdownWidget(
-                          caption: 'Payment Method',
+                          caption: 'Payment Method *',
                           items: paymentMethod,
                           iconName: 'assets/svgs/dropdown.svg',
                           initialValue: selectedPaymentMethod,
@@ -486,7 +474,7 @@ class _CreateOrderState extends State<CreateOrder> {
                         ),
                         const SizedBox(height: 15),
                         CustomDropdownWidget(
-                          caption: 'Delivery Method',
+                          caption: 'Delivery Method *',
                           items: const <String>['Online', 'In-Person'],
                           iconName: 'assets/svgs/dropdown.svg',
                           initialValue: initialDeliveryMethod,
@@ -497,6 +485,18 @@ class _CreateOrderState extends State<CreateOrder> {
                               } else {
                                 selectedDeliveryMethod = 'in_person';
                               }
+                            });
+                          },
+                        ),
+                        const SizedBox(height: 15),
+                        CustomDropdownWidget(
+                          caption: 'Order Channel ',
+                          items: const <String>['Online', 'In-Person'],
+                          iconName: 'assets/svgs/dropdown.svg',
+                          initialValue: selectedOrderChannel,
+                          onChanged: (String? value) {
+                            setState(() {
+                              selectedOrderChannel = value!;
                             });
                           },
                         ),
