@@ -560,14 +560,44 @@ class _MarketplaceScreenState extends State<MarketplaceScreen>
                                                               ),
                                                             ),
                                                             Tab(
-                                                                text:
-                                                                    'Products'),
+                                                              child: FittedBox(
+                                                                child: Text(
+                                                                  'Products',
+                                                                  style: TextStyle(
+                                                                      fontWeight:
+                                                                          FontWeight
+                                                                              .w700,
+                                                                      fontSize:
+                                                                          14),
+                                                                ),
+                                                              ),
+                                                            ),
                                                             Tab(
-                                                                text:
-                                                                    'Services'),
+                                                              child: FittedBox(
+                                                                child: Text(
+                                                                  'Services',
+                                                                  style: TextStyle(
+                                                                      fontWeight:
+                                                                          FontWeight
+                                                                              .w700,
+                                                                      fontSize:
+                                                                          14),
+                                                                ),
+                                                              ),
+                                                            ),
                                                             Tab(
-                                                                text:
-                                                                    'Suppliers'),
+                                                              child: FittedBox(
+                                                                child: Text(
+                                                                  'Suppliers',
+                                                                  style: TextStyle(
+                                                                      fontWeight:
+                                                                          FontWeight
+                                                                              .w700,
+                                                                      fontSize:
+                                                                          14),
+                                                                ),
+                                                              ),
+                                                            ),
                                                           ],
                                                         ),
                                                       ),
