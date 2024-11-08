@@ -482,32 +482,34 @@ class _CreateServiceListingState extends State<CreateServiceListing>
                   onChanged: (String? newValue) {
                     setState(() {
                       deliveryMethod = newValue;
-
                       addressorlinkController.clear();
                     });
                   },
+                  secondarysection: deliveryMethod != null
+                      ? TextFormField(
+                          style: const TextStyle(fontSize: 13),
+                          maxLines: 1,
+                          decoration: InputDecoration(
+                            border: InputBorder.none,
+                            hintText: deliveryMethod == 'Online'
+                                ? 'Enter link here'
+                                : 'Enter address here',
+                            filled: false,
+                            fillColor: Colors.grey.shade100,
+                            counterText: null,
+                          ),
+                          controller: addressorlinkController,
+                          validator: (String? value) {
+                            if (value == null || value.isEmpty) {
+                              return deliveryMethod == 'Online'
+                                  ? 'Please enter meeting link here'
+                                  : 'Please enter an address';
+                            }
+                            return null;
+                          },
+                        )
+                      : null,
                 ),
-                if (deliveryMethod != null)
-                  Padding(
-                    padding: const EdgeInsets.only(top: 16.0),
-                    child: CustomEditText(
-                      caption: deliveryMethod == 'Online'
-                          ? 'Enter Link'
-                          : 'Enter Address',
-                      hintText: deliveryMethod == 'Online'
-                          ? 'Enter link here'
-                          : 'Enter address here',
-                      controller: addressorlinkController,
-                      validator: (String? value) {
-                        if (value == null || value.isEmpty) {
-                          return deliveryMethod == 'Online'
-                              ? 'Please enter meeting link here'
-                              : 'Please enter an address';
-                        }
-                        return null;
-                      },
-                    ),
-                  ),
 
                 const SizedBox(height: 16),
                 // CustomDropdownWidget(

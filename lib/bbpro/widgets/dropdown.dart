@@ -98,7 +98,8 @@ class CustomDropdownWidget extends StatefulWidget {
   final String? initialValue;
   final ValueChanged<String?>? onChanged;
   final String? hintText;
-  final FormFieldValidator<String>? validator; // New: Optional validator field
+  final FormFieldValidator<String>? validator;
+  final Widget? secondarysection;
 
   const CustomDropdownWidget({
     super.key,
@@ -108,7 +109,8 @@ class CustomDropdownWidget extends StatefulWidget {
     this.initialValue,
     this.onChanged,
     this.hintText,
-    this.validator, // New: Optional validator field
+    this.validator,
+    this.secondarysection, // New: Optional validator field
   });
 
   @override
@@ -184,7 +186,8 @@ class _CustomDropdownWidgetState extends State<CustomDropdownWidget> {
                 color: proprimaryColor,
               ),
               validator: widget.validator,
-            )
+            ),
+            if (widget.secondarysection != null) widget.secondarysection!,
           ],
         ),
       ),
