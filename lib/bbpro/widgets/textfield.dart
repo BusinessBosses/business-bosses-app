@@ -6,11 +6,13 @@ class CustomTextWidget extends StatefulWidget {
   final String caption;
   final String iconName;
   final String? text;
+  final bool? hashint;
   final Color? backgroundColor;
   final double? padding;
   final double? textpadding;
   final bool? isSupplier;
   final String? buttontext;
+  final Widget? selectedarea;
 
   const CustomTextWidget(
       {super.key,
@@ -21,7 +23,9 @@ class CustomTextWidget extends StatefulWidget {
       this.padding,
       this.textpadding,
       this.isSupplier,
-      this.buttontext});
+      this.buttontext,
+      this.selectedarea,
+      this.hashint});
 
   @override
   // ignore: library_private_types_in_public_api
@@ -66,9 +70,7 @@ class _CustomTextWidgetState extends State<CustomTextWidget> {
                     widget.text == null ? '' : widget.text!,
                     style: TextStyle(
                         fontSize: 13,
-                        color: widget.text == 'Choose Shop Location'
-                            ? hintColor
-                            : textColor),
+                        color: widget.hashint == true ? hintColor : textColor),
                   ),
                 ),
                 widget.isSupplier == true
@@ -105,7 +107,12 @@ class _CustomTextWidgetState extends State<CustomTextWidget> {
                         color: proprimaryColor,
                       ),
               ],
-            )
+            ),
+            if (widget.selectedarea != null)
+              const SizedBox(
+                height: 10,
+              ),
+            widget.selectedarea ?? const SizedBox.shrink()
           ],
         ),
       ),

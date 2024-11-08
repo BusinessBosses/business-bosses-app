@@ -398,6 +398,7 @@ class _SetupshopState extends State<Setupshop> with TickerProviderStateMixin {
                                     BorderRadius.circular(radiusValue),
                               ),
                               child: CustomTextWidget(
+                                hashint: true,
                                 caption: 'Location',
                                 iconName: 'assets/svgs/nexticon.svg',
                                 text:
