@@ -47,12 +47,6 @@ class _SetupshopState extends State<Setupshop> with TickerProviderStateMixin {
   bool loading = true;
   bool isSubmit = false;
   String? image;
-  Map<String, bool> selectedOptions = <String, bool>{
-    'Bank': false,
-    'Paypal': false,
-    'Wallet': false,
-    'Cash': false
-  };
 
   Map<String, bool> selections = <String, bool>{
     'Bank': false,
@@ -61,8 +55,17 @@ class _SetupshopState extends State<Setupshop> with TickerProviderStateMixin {
     'Cash': false,
   };
 
+  Map<String, bool> selectedOptions = <String, bool>{
+    'Bank': false,
+    'Paypal': false,
+    'Wallet': false,
+    'Cash': false
+  };
+
   void _onSelectionChanged(Map<String, bool> newSelections) {
     setState(() {
+      selections = newSelections;
+      selectedOptions = Map.from(newSelections);
       if (newSelections['Bank'] == false) {
         bankController.clear();
       }
@@ -75,7 +78,99 @@ class _SetupshopState extends State<Setupshop> with TickerProviderStateMixin {
       if (newSelections['Cash'] == false) {
         cashController.clear();
       }
-      selections = newSelections;
+    });
+  }
+
+  void _showBottomSheet(BuildContext context, Function callback) {
+    showModalBottomSheet(
+      isScrollControlled: true,
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.only(
+          topLeft: Radius.circular(20.0),
+          topRight: Radius.circular(20.0),
+        ),
+      ),
+      context: context,
+      builder: (BuildContext context) {
+        return StatefulBuilder(
+          builder: (BuildContext context, StateSetter setModalState) {
+            return SizedBox(
+              height: MediaQuery.of(context).size.height * 0.9,
+              child: ListView(
+                children: <Widget>[
+                  SelectionSection(
+                    onSelectionChanged: (Map<String, bool> newSelections) {
+                      setModalState(() {
+                        selections = newSelections;
+                        selectedOptions = Map.from(newSelections);
+                        if (newSelections['Bank'] == false) {
+                          bankController.clear();
+                        }
+                        if (newSelections['Paypal'] == false) {
+                          paypalController.clear();
+                        }
+                        if (newSelections['Wallet'] == false) {
+                          walletController.clear();
+                        }
+                        if (newSelections['Cash'] == false) {
+                          cashController.clear();
+                        }
+                      });
+                    },
+                    options: const <String>['Bank', 'Paypal', 'Wallet', 'Cash'],
+                    selectedOptions: selectedOptions,
+                  ),
+                  const SizedBox(height: 15),
+                  Visibility(
+                    visible: selections['Bank'] ?? false,
+                    child: CustomEditText(
+                      maxLength: 300,
+                      caption:
+                          'Enter Bank Details - FULL NAME: COUNTRY: BANK NAME: ACCOUNT NUMBER:',
+                      hintText: 'Enter account information here',
+                      controller: bankController,
+                    ),
+                  ),
+                  const SizedBox(height: 15),
+                  Visibility(
+                    visible: selections['Paypal'] ?? false,
+                    child: CustomEditText(
+                      maxLength: 300,
+                      caption:
+                          'Enter Paypal Details - FULL NAME: PAYPAL EMAIL ADDRESS:',
+                      hintText: 'Enter account information here',
+                      controller: paypalController,
+                    ),
+                  ),
+                  const SizedBox(height: 15),
+                  Visibility(
+                    visible: selections['Wallet'] ?? false,
+                    child: CustomEditText(
+                      maxLength: 300,
+                      caption:
+                          'Enter Wallet Details - FULL NAME: WALLET EMAIL ADDRESS: or WALLET NUMBER',
+                      hintText: 'Enter account information here',
+                      controller: walletController,
+                    ),
+                  ),
+                  const SizedBox(height: 15),
+                  Visibility(
+                    visible: selections['Cash'] ?? false,
+                    child: CustomEditText(
+                      maxLength: 300,
+                      caption: 'Enter Cash Payment Details',
+                      hintText: 'Enter payment information here',
+                      controller: cashController,
+                    ),
+                  ),
+                ],
+              ),
+            );
+          },
+        );
+      },
+    ).whenComplete(() {
+      callback(); // Call the callback after the BottomSheet is closed
     });
   }
 
@@ -423,106 +518,23 @@ class _SetupshopState extends State<Setupshop> with TickerProviderStateMixin {
                           useSafeArea: false,
                         ),
                       ),
-                      const SizedBox(height: 8),
                       GestureDetector(
                         onTap: () {
-                          showModalBottomSheet<void>(
-                            context: context,
-                            isScrollControlled:
-                                true, // Makes the sheet take up the available space
-                            shape: const RoundedRectangleBorder(
-                              borderRadius: BorderRadius.only(
-                                topLeft: Radius.circular(20.0),
-                                topRight: Radius.circular(20.0),
-                              ),
-                            ),
-                            builder: (BuildContext context) {
-                              return SizedBox(
-                                height:
-                                    MediaQuery.of(context).size.height * 0.9,
-                                child: Column(
-                                  children: <Widget>[
-                                    if (widget.shop == null) ...<Widget>{
-                                      SelectionSection(
-                                        onSelectionChanged: _onSelectionChanged,
-                                        options: const <String>[
-                                          'Bank',
-                                          'Paypal',
-                                          'Wallet',
-                                          'Cash'
-                                        ],
-                                      ),
-                                    } else ...<Widget>{
-                                      SelectionSection(
-                                        options: const <String>[
-                                          'Bank',
-                                          'Paypal',
-                                          'Wallet',
-                                          'Cash'
-                                        ],
-                                        onSelectionChanged: _onSelectionChanged,
-                                        selectedOptions: selectedOptions,
-                                      ),
-                                    },
-                                    const SizedBox(height: 15),
-                                    Visibility(
-                                      visible: selections['Bank'] ?? false,
-                                      child: CustomEditText(
-                                        maxLength: 300,
-                                        caption:
-                                            'Enter Bank Details - FULL NAME: COUNTRY: BANK NAME: ACCOUNT NUMBER:',
-                                        hintText:
-                                            'Enter account information here',
-                                        controller: bankController,
-                                      ),
-                                    ),
-                                    const SizedBox(height: 15),
-                                    Visibility(
-                                      visible: selections['Paypal'] ?? false,
-                                      child: CustomEditText(
-                                        maxLength: 300,
-                                        caption:
-                                            'Enter Paypal Details - FULL NAME: PAYPAL EMAIL ADDRESS:',
-                                        hintText:
-                                            'Enter account information here',
-                                        controller: paypalController,
-                                      ),
-                                    ),
-                                    const SizedBox(height: 15),
-                                    Visibility(
-                                      visible: selections['Wallet'] ?? false,
-                                      child: CustomEditText(
-                                        maxLength: 300,
-                                        caption:
-                                            'Enter Wallet Details - FULL NAME: WALLET EMAIL ADDRESS: or WALLET NUMBER',
-                                        hintText:
-                                            'Enter account information here',
-                                        controller: walletController,
-                                      ),
-                                    ),
-                                    const SizedBox(height: 15),
-                                    Visibility(
-                                      visible: selections['Cash'] ?? false,
-                                      child: CustomEditText(
-                                        maxLength: 300,
-                                        caption: 'Enter Cash Payment Details',
-                                        hintText:
-                                            'Enter payment information here',
-                                        controller: cashController,
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              );
-                            },
-                          );
+                          _showBottomSheet(context, () {
+                            setState(() {});
+                          });
                         },
                         child: CustomTextWidget(
                           padding: 15,
                           textpadding: 15,
                           caption: 'Select Payment Method *',
                           iconName: 'assets/svgs/dropdown.svg',
-                          text: selectedOptions.toString(),
+                          text: selections.entries
+                              .where((MapEntry<String, bool> entry) =>
+                                  entry.value == true)
+                              .map((MapEntry<String, bool> entry) => entry.key)
+                              .toList()
+                              .join(', '),
                         ),
                       ),
                       const SizedBox(
