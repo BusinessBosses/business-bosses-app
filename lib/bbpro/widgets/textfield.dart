@@ -68,9 +68,7 @@ class _CustomTextWidgetState extends State<CustomTextWidget> {
                 Expanded(
                   child: Text(
                     widget.text == null ? '' : widget.text!,
-                    style: TextStyle(
-                        fontSize: 13,
-                        color: widget.hashint == true ? hintColor : textColor),
+                    style: const TextStyle(fontSize: 13, color: textColor),
                   ),
                 ),
                 widget.isSupplier == true
