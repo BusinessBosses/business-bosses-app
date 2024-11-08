@@ -680,11 +680,52 @@ class _CreateServiceListingState extends State<CreateServiceListing>
                               },
                             );
                           }).toList(),
+                          const SizedBox(height: 10),
+                          if (packages.isNotEmpty)
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: <Widget>[
+                                ProIconButton(
+                                  backgroundColor: Colors.white,
+                                  textColor: proprimaryColor,
+                                  text:
+                                      'Add Additional Packages to this service',
+                                  onPressed: () {
+                                    _showAddPackageSheet(context);
+                                  },
+                                  icon: const Icon(
+                                    Icons.add,
+                                    size: 20,
+                                    color: proprimaryColor,
+                                  ),
+                                ),
+                              ],
+                            ),
                         ],
                       ),
                     ),
                   ),
                 const SizedBox(height: 16),
+                if (packages.isEmpty)
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: <Widget>[
+                      ProIconButton(
+                        backgroundColor: Colors.white,
+                        textColor: proprimaryColor,
+                        text: 'Add Additional Packages to this service',
+                        onPressed: () {
+                          _showAddPackageSheet(context);
+                        },
+                        icon: const Icon(
+                          Icons.add,
+                          size: 20,
+                          color: proprimaryColor,
+                        ),
+                      ),
+                    ],
+                  ),
+                if (packages.isEmpty) const SizedBox(height: 16),
                 CustomEditText(
                   caption: 'Message or Question',
                   hintText:
@@ -693,24 +734,6 @@ class _CreateServiceListingState extends State<CreateServiceListing>
                   maxLength: 300,
                 ),
                 const SizedBox(height: 16),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: <Widget>[
-                    ProIconButton(
-                      backgroundColor: Colors.white,
-                      textColor: proprimaryColor,
-                      text: 'Add Additional Packages to this service',
-                      onPressed: () {
-                        _showAddPackageSheet(context);
-                      },
-                      icon: const Icon(
-                        Icons.add,
-                        size: 20,
-                        color: proprimaryColor,
-                      ),
-                    ),
-                  ],
-                ),
               ],
             ),
 
