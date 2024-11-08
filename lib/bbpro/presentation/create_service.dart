@@ -499,14 +499,14 @@ class _CreateServiceListingState extends State<CreateServiceListing>
                             counterText: null,
                           ),
                           controller: addressorlinkController,
-                          validator: (String? value) {
-                            if (value == null || value.isEmpty) {
-                              return deliveryMethod == 'Online'
-                                  ? 'Please enter meeting link here'
-                                  : 'Please enter an address';
-                            }
-                            return null;
-                          },
+                          // validator: (String? value) {
+                          //   if (value == null || value.isEmpty) {
+                          //     return deliveryMethod == 'Online'
+                          //         ? 'Please enter meeting link here'
+                          //         : 'Please enter an address';
+                          //   }
+                          //   return null;
+                          // },
                         )
                       : null,
                 ),

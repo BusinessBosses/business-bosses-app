@@ -367,7 +367,7 @@ class _SetupshopState extends State<Setupshop> with TickerProviderStateMixin {
                         hintText: 'example@business.com',
                         controller: emailController,
                       ),
-                      const SizedBox(height: 15),
+                      const SizedBox(height: 8),
                       Padding(
                         padding: const EdgeInsets.symmetric(horizontal: 8.0),
                         child: CountryListPick(
@@ -423,80 +423,110 @@ class _SetupshopState extends State<Setupshop> with TickerProviderStateMixin {
                           useSafeArea: false,
                         ),
                       ),
-                      const SizedBox(height: 15),
-                      CustomCard(
-                        caption: 'Add a Payment Method',
-                        subText: 'Choose how clients pay you',
-                        buttonText: 'Choose Photo',
-                        onPressed: () {},
-                        imagePath: 'assets/images/paymentplaceholder.png',
-                        iconpath: 'assets/svgs/uploadicon.svg',
+                      const SizedBox(height: 8),
+                      GestureDetector(
+                        onTap: () {
+                          showModalBottomSheet<void>(
+                            context: context,
+                            isScrollControlled:
+                                true, // Makes the sheet take up the available space
+                            shape: const RoundedRectangleBorder(
+                              borderRadius: BorderRadius.only(
+                                topLeft: Radius.circular(20.0),
+                                topRight: Radius.circular(20.0),
+                              ),
+                            ),
+                            builder: (BuildContext context) {
+                              return SizedBox(
+                                height:
+                                    MediaQuery.of(context).size.height * 0.9,
+                                child: Column(
+                                  children: <Widget>[
+                                    if (widget.shop == null) ...<Widget>{
+                                      SelectionSection(
+                                        onSelectionChanged: _onSelectionChanged,
+                                        options: const <String>[
+                                          'Bank',
+                                          'Paypal',
+                                          'Wallet',
+                                          'Cash'
+                                        ],
+                                      ),
+                                    } else ...<Widget>{
+                                      SelectionSection(
+                                        options: const <String>[
+                                          'Bank',
+                                          'Paypal',
+                                          'Wallet',
+                                          'Cash'
+                                        ],
+                                        onSelectionChanged: _onSelectionChanged,
+                                        selectedOptions: selectedOptions,
+                                      ),
+                                    },
+                                    const SizedBox(height: 15),
+                                    Visibility(
+                                      visible: selections['Bank'] ?? false,
+                                      child: CustomEditText(
+                                        maxLength: 300,
+                                        caption:
+                                            'Enter Bank Details - FULL NAME: COUNTRY: BANK NAME: ACCOUNT NUMBER:',
+                                        hintText:
+                                            'Enter account information here',
+                                        controller: bankController,
+                                      ),
+                                    ),
+                                    const SizedBox(height: 15),
+                                    Visibility(
+                                      visible: selections['Paypal'] ?? false,
+                                      child: CustomEditText(
+                                        maxLength: 300,
+                                        caption:
+                                            'Enter Paypal Details - FULL NAME: PAYPAL EMAIL ADDRESS:',
+                                        hintText:
+                                            'Enter account information here',
+                                        controller: paypalController,
+                                      ),
+                                    ),
+                                    const SizedBox(height: 15),
+                                    Visibility(
+                                      visible: selections['Wallet'] ?? false,
+                                      child: CustomEditText(
+                                        maxLength: 300,
+                                        caption:
+                                            'Enter Wallet Details - FULL NAME: WALLET EMAIL ADDRESS: or WALLET NUMBER',
+                                        hintText:
+                                            'Enter account information here',
+                                        controller: walletController,
+                                      ),
+                                    ),
+                                    const SizedBox(height: 15),
+                                    Visibility(
+                                      visible: selections['Cash'] ?? false,
+                                      child: CustomEditText(
+                                        maxLength: 300,
+                                        caption: 'Enter Cash Payment Details',
+                                        hintText:
+                                            'Enter payment information here',
+                                        controller: cashController,
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              );
+                            },
+                          );
+                        },
+                        child: CustomTextWidget(
+                          padding: 15,
+                          textpadding: 15,
+                          caption: 'Select Payment Method *',
+                          iconName: 'assets/svgs/dropdown.svg',
+                          text: selectedOptions.toString(),
+                        ),
                       ),
-                      const SizedBox(height: 15),
-                      if (widget.shop == null) ...<Widget>{
-                        SelectionSection(
-                          onSelectionChanged: _onSelectionChanged,
-                          options: const <String>[
-                            'Bank',
-                            'Paypal',
-                            'Wallet',
-                            'Cash'
-                          ],
-                        ),
-                      } else ...<Widget>{
-                        SelectionSection(
-                          options: const <String>[
-                            'Bank',
-                            'Paypal',
-                            'Wallet',
-                            'Cash'
-                          ],
-                          onSelectionChanged: _onSelectionChanged,
-                          selectedOptions: selectedOptions,
-                        ),
-                      },
-                      const SizedBox(height: 15),
-                      Visibility(
-                        visible: selections['Bank'] ?? false,
-                        child: CustomEditText(
-                          maxLength: 300,
-                          caption:
-                              'Enter Bank Details - FULL NAME: COUNTRY: BANK NAME: ACCOUNT NUMBER:',
-                          hintText: 'Enter account information here',
-                          controller: bankController,
-                        ),
-                      ),
-                      const SizedBox(height: 15),
-                      Visibility(
-                        visible: selections['Paypal'] ?? false,
-                        child: CustomEditText(
-                          maxLength: 300,
-                          caption:
-                              'Enter Paypal Details - FULL NAME: PAYPAL EMAIL ADDRESS:',
-                          hintText: 'Enter account information here',
-                          controller: paypalController,
-                        ),
-                      ),
-                      const SizedBox(height: 15),
-                      Visibility(
-                        visible: selections['Wallet'] ?? false,
-                        child: CustomEditText(
-                          maxLength: 300,
-                          caption:
-                              'Enter Wallet Details - FULL NAME: WALLET EMAIL ADDRESS: or WALLET NUMBER',
-                          hintText: 'Enter account information here',
-                          controller: walletController,
-                        ),
-                      ),
-                      const SizedBox(height: 15),
-                      Visibility(
-                        visible: selections['Cash'] ?? false,
-                        child: CustomEditText(
-                          maxLength: 300,
-                          caption: 'Enter Cash Payment Details',
-                          hintText: 'Enter payment information here',
-                          controller: cashController,
-                        ),
+                      const SizedBox(
+                        height: 30,
                       ),
                       SizedBox(
                         width: double.infinity,
