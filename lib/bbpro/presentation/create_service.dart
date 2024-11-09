@@ -498,14 +498,6 @@ class _CreateServiceListingState extends State<CreateServiceListing>
                           ? 'Enter link here'
                           : 'Enter address here',
                       controller: addressorlinkController,
-                      validator: (String? value) {
-                        if (value == null || value.isEmpty) {
-                          return deliveryMethod == 'Online'
-                              ? 'Please enter meeting link here'
-                              : 'Please enter an address';
-                        }
-                        return null;
-                      },
                     ),
                   ),
 
@@ -668,8 +660,8 @@ class _CreateServiceListingState extends State<CreateServiceListing>
                             return Taskitem(
                               isPackage: true,
                               taskname: task['name'],
-                              taskexpense:
-                                  shopController.shop!.currency + task['price'],
+                              taskexpense: shopController.shop!.currency +
+                                  task['price'].toString(),
                               editOnTap: () {
                                 _editPackageSheet(context, index);
                               },
@@ -795,6 +787,15 @@ class _CreateServiceListingState extends State<CreateServiceListing>
         error: true,
       );
       return;
+    }
+    if (!(_endTime.hour > _startTime.hour ||
+        (_endTime.hour == _startTime.hour &&
+            _endTime.minute >= _startTime.minute))) {
+      showSnackbar(
+        message: 'End Time cannot be before Start Time!',
+        error: true,
+      );
+      return; // Or handle the error as needed
     }
     // else if (selectedSubmitWeekdays.isEmpty) {
     //   showSnackbar(

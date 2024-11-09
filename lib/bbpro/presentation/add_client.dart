@@ -170,7 +170,6 @@ class _AddclientState extends State<Addclient> {
                   // Manual validation
                   final String name = nameController.text;
                   final String email = emailController.text;
-                  final String phone = phoneController.text;
 
                   // if (_selectedImage == null && updateImage == null) {
                   //   showSnackbar(
@@ -214,15 +213,15 @@ class _AddclientState extends State<Addclient> {
                     return;
                   }
 
-                  if (phone.isEmpty) {
-                    showSnackbar(
-                        message: 'Please enter the client\'s phone number',
-                        error: true);
-                    setState(() {
-                      isSubmit = false;
-                    });
-                    return;
-                  }
+                  // if (phone.isEmpty) {
+                  //   showSnackbar(
+                  //       message: 'Please enter the client\'s phone number',
+                  //       error: true);
+                  //   setState(() {
+                  //     isSubmit = false;
+                  //   });
+                  //   return;
+                  // }
 
                   if (selectedType == null) {
                     showSnackbar(

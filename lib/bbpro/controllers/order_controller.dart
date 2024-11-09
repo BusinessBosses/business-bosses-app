@@ -21,8 +21,8 @@ class OrderController extends GetxController {
     update();
     orders.clear();
     allorders.clear();
-    ApiResponseModel response = await ApiService.get(
-        path: 'orders/user-orders/${profileController.myProfile.uid}');
+    ApiResponseModel response =
+        await ApiService.get(path: 'orders/shop-orders/$shopId');
     if (response.success) {
       for (int i = 0; i < response.data['rows'].length; i++) {
         orders.add(Order.fromJson(response.data['rows'][i]));

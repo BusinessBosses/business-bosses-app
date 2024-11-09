@@ -46,6 +46,7 @@ class _CreateOrderState extends State<CreateOrder> {
   bool canAdd = true;
   List<String> paymentMethod = <String>[];
   bool isSubmit = false;
+  String invoiceOption = 'dont_send';
 
   List<String> clientsName = <String>[];
   List<Map<String, dynamic>> clients = <Map<String, dynamic>>[];
@@ -165,7 +166,7 @@ class _CreateOrderState extends State<CreateOrder> {
       'deliveryDate': selectedOrderDate,
       'paymentMethod': selectedPaymentMethod,
       'notes': notesController.text,
-      'invoiceOption': 'send_with_payment_link'
+      'invoiceOption': invoiceOption
     };
     bool response;
     // Call the addOrder method from the GetX controller
@@ -543,7 +544,15 @@ class _CreateOrderState extends State<CreateOrder> {
                         const SizedBox(height: 15),
                         InvoiceOptionsWidget(
                           onOptionSelected: (int selectedOption) {
-                            // print('Selected option: $selectedOption');
+                            setState(() {
+                              if (selectedOption == 0) {
+                                invoiceOption = 'dont_send';
+                              } else if (selectedOption == 1) {
+                                invoiceOption = 'send_with_payment_link';
+                              } else if (selectedOption == 2) {
+                                invoiceOption = 'send_without_payment_link';
+                              }
+                            });
                           },
                         ),
                         const SizedBox(
@@ -571,5 +580,5 @@ class _CreateOrderState extends State<CreateOrder> {
     );
   }
 
-  void _selectOrderDate(BuildContext context) async {}
+  // void _selectOrderDate(BuildContext context) async {}
 }

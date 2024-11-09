@@ -46,7 +46,7 @@ class Product {
     required this.isActive,
     this.storageLocation,
     this.productNumber,
-    this.quantity,
+    this.quantity = 0,
     this.startAt,
     this.endAt,
     this.color,

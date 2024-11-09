@@ -112,6 +112,8 @@ class _CreateProductListingState extends State<CreateProductListing> {
       endDate = widget.product!.endAt;
       _isSwitched = widget.product!.isActive;
       deliverydayscontroller.text = widget.product!.deliveryDuration ?? '';
+      sizes = widget.product!.size!;
+      colors = widget.product!.color!;
 
       // If images exist in the product model, you can populate the image list as well
       if (widget.product!.images != null) {
@@ -459,6 +461,7 @@ class _CreateProductListingState extends State<CreateProductListing> {
                                 buttonSize: 20,
                                 caption: 'Color',
                                 hintText: 'color',
+                                initialValues: colors,
                                 onValuesChanged: (List<String> values) {
                                   setState(() {
                                     colors = values;
@@ -472,6 +475,7 @@ class _CreateProductListingState extends State<CreateProductListing> {
                                 buttonSize: 20,
                                 caption: 'Size',
                                 hintText: 'size',
+                                initialValues: sizes,
                                 onValuesChanged: (List<String> values) {
                                   setState(() {
                                     sizes = values;

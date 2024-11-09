@@ -4,19 +4,22 @@ import 'package:flutter/material.dart';
 class MultipleEditTextWidget extends StatefulWidget {
   final String caption;
   final String hintText;
+  final List<String> initialValues; // New parameter for initial values
   final EdgeInsetsGeometry? padding;
   final double? buttonSize;
   final Color? backgroundColor;
-  final Function(List<String>)? onValuesChanged; // New callback
+  final Function(List<String>)? onValuesChanged;
 
   const MultipleEditTextWidget({
     super.key,
     required this.caption,
     required this.hintText,
+    this.initialValues =
+        const <String>[], // Default to an empty list if not provided
     this.padding = const EdgeInsets.symmetric(horizontal: 15.0, vertical: 10),
     this.buttonSize = 20,
     this.backgroundColor,
-    this.onValuesChanged, // Initialize the callback
+    this.onValuesChanged,
   });
 
   @override
@@ -31,30 +34,36 @@ class _MultipleEditTextWidgetState extends State<MultipleEditTextWidget> {
   @override
   void initState() {
     super.initState();
-    _addTextField(); // Initialize with one text field
+    // Initialize text fields with initial values if provided
+    for (String value in widget.initialValues) {
+      _addTextField(value: value);
+    }
+    // Ensure at least one text field is present
+    if (_textFields.isEmpty) {
+      _addTextField();
+    }
   }
 
-  void _addTextField() {
-    // Check if the last text field is empty
+  void _addTextField({String value = ''}) {
     if (_textFields.isNotEmpty && _controllers.last.text.isEmpty) {
-      return; // Do not add a new field if the last one is empty
+      return; // Prevent adding a new field if the last one is empty
     }
     if (_textFields.length < _maxFields) {
       final TextEditingController controller =
-          TextEditingController(); // Create a new controller
-      _controllers.add(controller); // Add controller to the list
+          TextEditingController(text: value);
+      _controllers.add(controller);
       setState(() {
-        _textFields.add(_buildTextField(controller)); // Pass the new controller
+        _textFields.add(_buildTextField(controller));
       });
     }
   }
 
   void _removeTextField(int index) {
     if (_textFields.isNotEmpty) {
-      _controllers[index].dispose(); // Dispose the controller
-      _controllers.removeAt(index); // Remove the controller
+      _controllers[index].dispose();
+      _controllers.removeAt(index);
       setState(() {
-        _textFields.removeAt(index); // Remove the text field
+        _textFields.removeAt(index);
       });
     }
   }
@@ -69,24 +78,22 @@ class _MultipleEditTextWidgetState extends State<MultipleEditTextWidget> {
                 hintText: widget.hintText, border: InputBorder.none),
             controller: controller,
             style: const TextStyle(fontSize: 13),
-            onChanged: (_) => _notifyParent(), // Notify parent on change
+            onChanged: (_) => _notifyParent(),
           ),
         ),
-        if (_textFields.isNotEmpty)
-          Container(
-            padding: widget.padding,
-            decoration: BoxDecoration(
-                color: prosemibackColor,
-                borderRadius: BorderRadius.circular(10)),
-            child: GestureDetector(
-              onTap: () => _removeTextField(index),
-              child: Icon(
-                Icons.remove,
-                size: widget.buttonSize,
-              ),
+        Container(
+          padding: widget.padding,
+          decoration: BoxDecoration(
+              color: prosemibackColor, borderRadius: BorderRadius.circular(10)),
+          child: GestureDetector(
+            onTap: () => _removeTextField(index),
+            child: Icon(
+              Icons.remove,
+              size: widget.buttonSize,
             ),
           ),
-        if (_textFields.isNotEmpty) const SizedBox(width: 10),
+        ),
+        const SizedBox(width: 10),
         if (_textFields.length < _maxFields)
           Container(
             padding: widget.padding,
@@ -110,14 +117,14 @@ class _MultipleEditTextWidgetState extends State<MultipleEditTextWidget> {
       final List<String> values = _controllers
           .map((TextEditingController controller) => controller.text)
           .toList();
-      widget.onValuesChanged!(values); // Call the callback with current values
+      widget.onValuesChanged!(values);
     }
   }
 
   @override
   void dispose() {
     for (TextEditingController controller in _controllers) {
-      controller.dispose(); // Dispose all controllers
+      controller.dispose();
     }
     super.dispose();
   }

@@ -214,6 +214,8 @@ class _SetupshopState extends State<Setupshop> with TickerProviderStateMixin {
                   ProCustomButton(
                     onPressed: () {
                       Get.back();
+                      Get.back();
+                      setState(() {});
                     },
                     text: 'My Dashboard',
                     icon: const Icon(

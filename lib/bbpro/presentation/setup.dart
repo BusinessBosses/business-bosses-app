@@ -111,12 +111,15 @@ class _SetupState extends State<Setup> {
                             alignment: Alignment.topLeft,
                             child: ClipRRect(
                               borderRadius: BorderRadius.circular(1000),
-                              child: NetworkImageWithPlaceHolder(
-                                imageUrl: shopController.shop!.image ?? '',
-                                radius: radius,
-                                placeHolder: Icons.person,
-                                iconSize: 22.0,
-                                fit: BoxFit.cover,
+                              child: GetBuilder<ShopController>(
+                                builder: (ShopController controller) =>
+                                    NetworkImageWithPlaceHolder(
+                                  imageUrl: controller.shop?.image ?? '',
+                                  radius: radius,
+                                  placeHolder: Icons.person,
+                                  iconSize: 22.0,
+                                  fit: BoxFit.cover,
+                                ),
                               ),
                             ),
                           ),
@@ -125,9 +128,15 @@ class _SetupState extends State<Setup> {
                         Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: <Widget>[
-                            Text(shopController.shop!.name,
+                            GetBuilder<ShopController>(
+                              builder: (ShopController controller) => Text(
+                                controller.shop?.name ?? '',
                                 style: const TextStyle(
-                                    fontWeight: FontWeight.bold, fontSize: 20)),
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 20,
+                                ),
+                              ),
+                            ),
                             const SizedBox(height: 10),
                             Row(
                               children: <Widget>[
