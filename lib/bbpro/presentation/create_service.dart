@@ -482,24 +482,34 @@ class _CreateServiceListingState extends State<CreateServiceListing>
                   onChanged: (String? newValue) {
                     setState(() {
                       deliveryMethod = newValue;
-
                       addressorlinkController.clear();
                     });
                   },
+                  secondarysection: deliveryMethod != null
+                      ? TextFormField(
+                          style: const TextStyle(fontSize: 13),
+                          maxLines: 1,
+                          decoration: InputDecoration(
+                            border: InputBorder.none,
+                            hintText: deliveryMethod == 'Online'
+                                ? 'Enter link here'
+                                : 'Enter address here',
+                            filled: false,
+                            fillColor: Colors.grey.shade100,
+                            counterText: null,
+                          ),
+                          controller: addressorlinkController,
+                          // validator: (String? value) {
+                          //   if (value == null || value.isEmpty) {
+                          //     return deliveryMethod == 'Online'
+                          //         ? 'Please enter meeting link here'
+                          //         : 'Please enter an address';
+                          //   }
+                          //   return null;
+                          // },
+                        )
+                      : null,
                 ),
-                if (deliveryMethod != null)
-                  Padding(
-                    padding: const EdgeInsets.only(top: 16.0),
-                    child: CustomEditText(
-                      caption: deliveryMethod == 'Online'
-                          ? 'Enter Link'
-                          : 'Enter Address',
-                      hintText: deliveryMethod == 'Online'
-                          ? 'Enter link here'
-                          : 'Enter address here',
-                      controller: addressorlinkController,
-                    ),
-                  ),
 
                 const SizedBox(height: 16),
                 // CustomDropdownWidget(
@@ -672,11 +682,52 @@ class _CreateServiceListingState extends State<CreateServiceListing>
                               },
                             );
                           }).toList(),
+                          const SizedBox(height: 10),
+                          if (packages.isNotEmpty)
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: <Widget>[
+                                ProIconButton(
+                                  backgroundColor: Colors.white,
+                                  textColor: proprimaryColor,
+                                  text:
+                                      'Add Additional Packages to this service',
+                                  onPressed: () {
+                                    _showAddPackageSheet(context);
+                                  },
+                                  icon: const Icon(
+                                    Icons.add,
+                                    size: 20,
+                                    color: proprimaryColor,
+                                  ),
+                                ),
+                              ],
+                            ),
                         ],
                       ),
                     ),
                   ),
                 const SizedBox(height: 16),
+                if (packages.isEmpty)
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: <Widget>[
+                      ProIconButton(
+                        backgroundColor: Colors.white,
+                        textColor: proprimaryColor,
+                        text: 'Add Additional Packages to this service',
+                        onPressed: () {
+                          _showAddPackageSheet(context);
+                        },
+                        icon: const Icon(
+                          Icons.add,
+                          size: 20,
+                          color: proprimaryColor,
+                        ),
+                      ),
+                    ],
+                  ),
+                if (packages.isEmpty) const SizedBox(height: 16),
                 CustomEditText(
                   caption: 'Message or Question',
                   hintText:
@@ -685,24 +736,6 @@ class _CreateServiceListingState extends State<CreateServiceListing>
                   maxLength: 300,
                 ),
                 const SizedBox(height: 16),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: <Widget>[
-                    ProIconButton(
-                      backgroundColor: Colors.white,
-                      textColor: proprimaryColor,
-                      text: 'Add Additional Packages to this service',
-                      onPressed: () {
-                        _showAddPackageSheet(context);
-                      },
-                      icon: const Icon(
-                        Icons.add,
-                        size: 20,
-                        color: proprimaryColor,
-                      ),
-                    ),
-                  ],
-                ),
               ],
             ),
 

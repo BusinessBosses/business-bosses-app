@@ -375,7 +375,7 @@ class _CreateOrderState extends State<CreateOrder> {
                           child: CustomTextWidget(
                             padding: 15,
                             textpadding: 15,
-                            caption: 'Client\'s Name',
+                            caption: 'Client\'s Name *',
 
                             // items: clientsName,
                             iconName: 'assets/svgs/dropdown.svg',
@@ -390,57 +390,13 @@ class _CreateOrderState extends State<CreateOrder> {
                           ),
                         ),
                         const SizedBox(height: 15),
-                        if (selectedItems!.isNotEmpty)
-                          Padding(
-                            padding: const EdgeInsets.symmetric(
-                              horizontal: 15.0,
-                            ),
-                            child: Container(
-                              decoration: BoxDecoration(
-                                  color: Colors.white,
-                                  borderRadius: BorderRadius.circular(10)),
-                              padding: const EdgeInsets.symmetric(
-                                  horizontal: 15, vertical: 15),
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: <Widget>[
-                                  const Text(
-                                    'Selected Orders',
-                                    style: TextStyle(
-                                      fontSize: 14,
-                                      fontWeight: FontWeight.w600,
-                                    ),
-                                  ),
-                                  const SizedBox(height: 20),
-                                  ...selectedItems!.asMap().entries.map(
-                                      (MapEntry<int, Map<String, dynamic>>
-                                          entry) {
-                                    final int index = entry.key;
-                                    final Map<String, dynamic> task =
-                                        entry.value;
-                                    return Taskitem(
-                                      isOrder: true,
-                                      taskname: task['name'],
-                                      taskexpense:
-                                          '${shopController.shop!.currency} ${task['price']}',
-                                      imageurl: task['images'],
-                                      deleteOnTap: () {
-                                        setState(() {
-                                          selectedItems!.removeAt(index);
-                                        });
-                                      },
-                                    );
-                                  }).toList(),
-                                ],
-                              ),
-                            ),
-                          ),
-                        if (selectedItems!.isNotEmpty)
-                          const SizedBox(height: 10),
 
                         GestureDetector(
                           onTap: () {
-                            if (!canAdd) {
+                            if (!canAdd &&
+                                selectedItems!.any(
+                                    (Map<String, dynamic> item) =>
+                                        item['type'] == 'custom')) {
                               showSnackbar(
                                 message: 'Already Added Custom Order!',
                                 error: true,
@@ -449,37 +405,36 @@ class _CreateOrderState extends State<CreateOrder> {
                             }
                             _showOrderSheet(context);
                           },
-                          child: const CustomTextWidget(
+                          child: CustomTextWidget(
+                            text: 'Select product/service',
+                            hashint: true,
                             padding: 15,
                             textpadding: 15,
-                            text: '',
-
-                            // items: clientsName,
                             iconName: 'assets/svgs/dropdown.svg',
-                            caption: 'Select Order',
-
-                            // initialValue: selectedClient,
-                            // onChanged: (String? value) {
-                            //   setState(() {
-                            //     selectedClient = value!;
-                            //     _onClientSelect(value);
-                            //   });
-                            // },
+                            caption: 'Select Order *',
+                            selectedarea: Column(
+                              children: selectedItems!
+                                  .map((Map<String, dynamic> task) => Taskitem(
+                                        isOrder: true,
+                                        taskname: task['name'],
+                                        taskexpense:
+                                            '${shopController.shop!.currency} ${task['price']}',
+                                        imageurl: task['images'],
+                                        deleteOnTap: () {
+                                          setState(() {
+                                            selectedItems!.removeWhere(
+                                                (Map<String, dynamic>
+                                                        element) =>
+                                                    element['id'] ==
+                                                    task['id']);
+                                          });
+                                        },
+                                      ))
+                                  .toList(),
+                            ),
                           ),
                         ),
 
-                        const SizedBox(height: 15),
-                        CustomDropdownWidget(
-                          caption: 'Order Channel',
-                          items: const <String>['Online', 'In-Person'],
-                          iconName: 'assets/svgs/dropdown.svg',
-                          initialValue: selectedOrderChannel,
-                          onChanged: (String? value) {
-                            setState(() {
-                              selectedOrderChannel = value!;
-                            });
-                          },
-                        ),
                         const SizedBox(height: 15),
                         GestureDetector(
                           onTap: () async {
@@ -499,7 +454,7 @@ class _CreateOrderState extends State<CreateOrder> {
                           child: Container(
                             padding: const EdgeInsets.symmetric(horizontal: 5),
                             child: CustomTextWidget(
-                              caption: 'Order Date',
+                              caption: 'Order Date *',
                               iconName: 'assets/svgs/calendar.svg',
                               text: selectedOrderDate,
                               textpadding: 15,
@@ -508,7 +463,7 @@ class _CreateOrderState extends State<CreateOrder> {
                         ),
                         const SizedBox(height: 15),
                         CustomDropdownWidget(
-                          caption: 'Payment Method',
+                          caption: 'Payment Method *',
                           items: paymentMethod,
                           iconName: 'assets/svgs/dropdown.svg',
                           initialValue: selectedPaymentMethod,
@@ -520,7 +475,7 @@ class _CreateOrderState extends State<CreateOrder> {
                         ),
                         const SizedBox(height: 15),
                         CustomDropdownWidget(
-                          caption: 'Delivery Method',
+                          caption: 'Delivery Method *',
                           items: const <String>['Online', 'In-Person'],
                           iconName: 'assets/svgs/dropdown.svg',
                           initialValue: initialDeliveryMethod,
@@ -531,6 +486,18 @@ class _CreateOrderState extends State<CreateOrder> {
                               } else {
                                 selectedDeliveryMethod = 'in_person';
                               }
+                            });
+                          },
+                        ),
+                        const SizedBox(height: 15),
+                        CustomDropdownWidget(
+                          caption: 'Order Channel ',
+                          items: const <String>['Online', 'In-Person'],
+                          iconName: 'assets/svgs/dropdown.svg',
+                          initialValue: selectedOrderChannel,
+                          onChanged: (String? value) {
+                            setState(() {
+                              selectedOrderChannel = value!;
                             });
                           },
                         ),

@@ -658,7 +658,7 @@ class _MyProfileScreenState extends State<MyProfileScreen> {
                 SizedBox(
                   height: MediaQuery.of(context).size.height,
                   width: MediaQuery.of(context).size.width,
-                  child: profileController.myProfile.isSubscribed
+                  child: !profileController.myProfile.isSubscribed
                       ? Center(
                           child: Column(
                             mainAxisAlignment: MainAxisAlignment.center,

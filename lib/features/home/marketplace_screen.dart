@@ -520,11 +520,6 @@ class _MarketplaceScreenState extends State<MarketplaceScreen>
                                                   child: Column(
                                                     children: <Widget>[
                                                       Container(
-                                                        padding:
-                                                            const EdgeInsets
-                                                                .only(
-                                                                bottom: 10,
-                                                                left: 16),
                                                         constraints:
                                                             const BoxConstraints
                                                                 .expand(
@@ -537,21 +532,21 @@ class _MarketplaceScreenState extends State<MarketplaceScreen>
                                                                           .w400),
                                                           controller:
                                                               _marketplaceTabController,
-                                                          isScrollable: true,
-                                                          indicator:
-                                                              BoxDecoration(
-                                                            borderRadius:
-                                                                BorderRadius
-                                                                    .circular(
-                                                                        50), // Creates border
-                                                            color: Colors
-                                                                .black87
-                                                                .withAlpha(180),
-                                                          ),
-                                                          unselectedLabelColor:
-                                                              Colors.grey,
-                                                          labelColor:
-                                                              Colors.white,
+                                                          isScrollable: false,
+                                                          // indicator:
+                                                          //     BoxDecoration(
+                                                          //   borderRadius:
+                                                          //       BorderRadius
+                                                          //           .circular(
+                                                          //               50), // Creates border
+                                                          //   color: Colors
+                                                          //       .black87
+                                                          //       .withAlpha(180),
+                                                          // ),
+                                                          // unselectedLabelColor:
+                                                          //     Colors.grey,
+                                                          // labelColor:
+                                                          //     Colors.white,
                                                           labelPadding:
                                                               const EdgeInsets
                                                                   .symmetric(
@@ -565,14 +560,44 @@ class _MarketplaceScreenState extends State<MarketplaceScreen>
                                                               ),
                                                             ),
                                                             Tab(
-                                                                text:
-                                                                    'Products'),
+                                                              child: FittedBox(
+                                                                child: Text(
+                                                                  'Products',
+                                                                  style: TextStyle(
+                                                                      fontWeight:
+                                                                          FontWeight
+                                                                              .w700,
+                                                                      fontSize:
+                                                                          14),
+                                                                ),
+                                                              ),
+                                                            ),
                                                             Tab(
-                                                                text:
-                                                                    'Services'),
+                                                              child: FittedBox(
+                                                                child: Text(
+                                                                  'Services',
+                                                                  style: TextStyle(
+                                                                      fontWeight:
+                                                                          FontWeight
+                                                                              .w700,
+                                                                      fontSize:
+                                                                          14),
+                                                                ),
+                                                              ),
+                                                            ),
                                                             Tab(
-                                                                text:
-                                                                    'Suppliers'),
+                                                              child: FittedBox(
+                                                                child: Text(
+                                                                  'Suppliers',
+                                                                  style: TextStyle(
+                                                                      fontWeight:
+                                                                          FontWeight
+                                                                              .w700,
+                                                                      fontSize:
+                                                                          14),
+                                                                ),
+                                                              ),
+                                                            ),
                                                           ],
                                                         ),
                                                       ),

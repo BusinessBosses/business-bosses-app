@@ -194,7 +194,7 @@ class _ProScreenState extends State<ProScreen> with TickerProviderStateMixin {
                   Tab(
                     child: FittedBox(
                       child: Text(
-                        'Become a Partner',
+                        'Partner with us',
                         style: TextStyle(
                             fontWeight: FontWeight.w700, fontSize: 14),
                       ),
@@ -614,7 +614,7 @@ class _ProScreenState extends State<ProScreen> with TickerProviderStateMixin {
                                     ),
                                   ],
                                   options: CarouselOptions(
-                                    height: 450,
+                                    height: 470,
                                     // aspectRatio: 16 / 9,
                                     viewportFraction: 0.85,
                                     initialPage: 0,

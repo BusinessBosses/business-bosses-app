@@ -108,6 +108,14 @@ class _TaskitemState extends State<Taskitem> {
                           widget.taskexpense.toString(),
                           style: const TextStyle(fontSize: 12),
                         ),
+                      if (widget.isOrder == null)
+                        Text(widget.isPackage == null
+                            ? 'Expense: ${widget.taskexpense}'
+                            : 'Price: ${widget.taskexpense}'),
+                      if (startDateTime != null)
+                        Text('Start Date: ${formatDate(startDateTime)}'),
+                      if (endDateTime != null)
+                        Text('End Date: ${formatDate(endDateTime)}'),
                     ],
                   )
                 ]),
@@ -144,13 +152,7 @@ class _TaskitemState extends State<Taskitem> {
             ),
           ],
         ),
-        if (widget.isOrder == null)
-          Text(widget.isPackage == null
-              ? 'Expense: ${widget.taskexpense}'
-              : 'Price: ${widget.taskexpense}'),
-        if (startDateTime != null)
-          Text('Start Date: ${formatDate(startDateTime)}'),
-        if (endDateTime != null) Text('End Date: ${formatDate(endDateTime)}'),
+
         const SizedBox(height: 10),
         // Container(
         //   height: 0.5,
