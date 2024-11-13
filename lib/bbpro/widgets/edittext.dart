@@ -10,12 +10,21 @@ class CustomEditText extends StatelessWidget {
   final bool isPassword;
   final TextEditingController controller;
   final TextEditingController? currencycontroller;
+  final TextEditingController? pm1controller;
+  final TextEditingController? pm2controller;
+  final TextEditingController? pm3controller;
+  final TextEditingController? pm4controller;
+  final String? pmh1;
+  final String? pmh2;
+  final String? pmh3;
+  final String? pmh4;
   final Color? backgroundcolor;
   final bool? iscurrencyfield;
   final Color? currencyfieldcolor;
   final String? Function(String?)? validator;
   final void Function(String)? onChanged;
   final double? padding;
+  final bool? ispaymentfield;
 
   const CustomEditText({
     super.key,
@@ -33,6 +42,15 @@ class CustomEditText extends StatelessWidget {
     this.onChanged,
     this.padding,
     this.currencycontroller,
+    this.ispaymentfield,
+    this.pm1controller,
+    this.pm2controller,
+    this.pm3controller,
+    this.pm4controller,
+    this.pmh1,
+    this.pmh2,
+    this.pmh3,
+    this.pmh4,
   });
 
   @override
@@ -63,81 +81,118 @@ class CustomEditText extends StatelessWidget {
                   ),
                   optionalText ?? Container()
                 ]),
-            (iscurrencyfield == true)
-                ? Row(
-                    children: <Widget>[
-                      SizedBox(
-                        height: 30,
-                        width: 40,
-                        child: TextFormField(
-                          controller: currencycontroller,
-                          style: const TextStyle(fontSize: 13),
-                          decoration: InputDecoration(
-                            hintText: 'USD',
-                            fillColor: currencyfieldcolor ?? prosemibackColor,
-                            filled: true,
-                            contentPadding: const EdgeInsets.symmetric(
-                              horizontal: 5.0,
-                              vertical: 0.0,
+            if (ispaymentfield == null)
+              (iscurrencyfield == true)
+                  ? Row(
+                      children: <Widget>[
+                        SizedBox(
+                          height: 30,
+                          width: 40,
+                          child: TextFormField(
+                            controller: currencycontroller,
+                            style: const TextStyle(fontSize: 13),
+                            decoration: InputDecoration(
+                              hintText: 'USD',
+                              fillColor: currencyfieldcolor ?? prosemibackColor,
+                              filled: true,
+                              contentPadding: const EdgeInsets.symmetric(
+                                horizontal: 5.0,
+                                vertical: 0.0,
+                              ),
+                              counterText: '',
+                              border: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(5.0),
+                                borderSide: BorderSide.none,
+                              ),
                             ),
-                            counterText: '',
-                            border: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(5.0),
-                              borderSide: BorderSide.none,
+                            textAlign: TextAlign.left,
+                            textInputAction: TextInputAction.next,
+                            keyboardType: TextInputType.text,
+                            maxLength: 3,
+                          ),
+                        ),
+                        const SizedBox(
+                          width: 10,
+                        ),
+                        Expanded(
+                          flex: 6,
+                          child: TextFormField(
+                            style: const TextStyle(fontSize: 13),
+                            maxLines:
+                                maxLength != null && maxLength! > 30 ? 5 : 1,
+                            decoration: InputDecoration(
+                              border: InputBorder.none,
+                              hintText: hintText,
+                              filled: false,
+                              fillColor: Colors.grey.shade100,
+                              counterText: maxLength != null && maxLength! > 30
+                                  ? null
+                                  : '',
                             ),
+                            maxLength: maxLength,
+                            keyboardType: inputType,
+                            obscureText: isPassword,
+                            controller: controller,
+                            validator: validator,
+                            onChanged: onChanged,
                           ),
-                          textAlign: TextAlign.left,
-                          textInputAction: TextInputAction.next,
-                          keyboardType: TextInputType.text,
-                          maxLength: 3,
                         ),
+                      ],
+                    )
+                  : TextFormField(
+                      style: const TextStyle(fontSize: 13),
+                      maxLines: maxLength != null && maxLength! > 30 ? 5 : 1,
+                      decoration: InputDecoration(
+                        border: InputBorder.none,
+                        hintText: hintText,
+                        filled: false,
+                        fillColor: Colors.grey.shade100,
+                        counterText:
+                            maxLength != null && maxLength! > 30 ? null : '',
                       ),
-                      const SizedBox(
-                        width: 10,
-                      ),
-                      Expanded(
-                        flex: 6,
-                        child: TextFormField(
-                          style: const TextStyle(fontSize: 13),
-                          maxLines:
-                              maxLength != null && maxLength! > 30 ? 5 : 1,
-                          decoration: InputDecoration(
-                            border: InputBorder.none,
-                            hintText: hintText,
-                            filled: false,
-                            fillColor: Colors.grey.shade100,
-                            counterText: maxLength != null && maxLength! > 30
-                                ? null
-                                : '',
-                          ),
-                          maxLength: maxLength,
-                          keyboardType: inputType,
-                          obscureText: isPassword,
-                          controller: controller,
-                          validator: validator,
-                          onChanged: onChanged,
-                        ),
-                      ),
-                    ],
-                  )
-                : TextFormField(
-                    style: const TextStyle(fontSize: 13),
-                    maxLines: maxLength != null && maxLength! > 30 ? 5 : 1,
-                    decoration: InputDecoration(
-                      border: InputBorder.none,
-                      hintText: hintText,
-                      filled: false,
-                      fillColor: Colors.grey.shade100,
-                      counterText:
-                          maxLength != null && maxLength! > 30 ? null : '',
+                      maxLength: maxLength,
+                      keyboardType: inputType,
+                      obscureText: isPassword,
+                      controller: controller,
+                      validator: validator,
+                      onChanged: onChanged,
                     ),
-                    maxLength: maxLength,
-                    keyboardType: inputType,
-                    obscureText: isPassword,
-                    controller: controller,
-                    validator: validator,
-                    onChanged: onChanged,
+            if (ispaymentfield == true)
+              Column(children: <Widget>[
+                const SizedBox(
+                  height: 20,
+                ),
+                TextFormField(
+                  style: const TextStyle(fontSize: 13),
+                  maxLines: 1,
+                  decoration: InputDecoration(
+                    hintText: pmh1,
+                    border: InputBorder.none,
                   ),
+                ),
+                TextFormField(
+                  style: const TextStyle(fontSize: 13),
+                  maxLines: 1,
+                  decoration: InputDecoration(
+                    hintText: pmh2,
+                    border: InputBorder.none,
+                  ),
+                ),
+                TextFormField(
+                    style: const TextStyle(fontSize: 13),
+                    maxLines: 1,
+                    decoration: InputDecoration(
+                      hintText: pmh3,
+                      border: InputBorder.none,
+                    )),
+                TextFormField(
+                    style: const TextStyle(fontSize: 13),
+                    maxLines: 1,
+                    decoration: InputDecoration(
+                      hintText: pmh4,
+                      border: InputBorder.none,
+                    ))
+              ])
           ],
         ),
       ),

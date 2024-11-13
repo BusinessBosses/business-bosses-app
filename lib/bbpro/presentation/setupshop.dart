@@ -125,32 +125,40 @@ class _SetupshopState extends State<Setupshop> with TickerProviderStateMixin {
                     visible: selections['Bank'] ?? false,
                     child: CustomEditText(
                       maxLength: 300,
-                      caption:
-                          'Enter Bank Details - FULL NAME: COUNTRY: BANK NAME: ACCOUNT NUMBER:',
+                      ispaymentfield: true,
+                      caption: 'Enter Bank Details',
                       hintText: 'Enter account information here',
                       controller: bankController,
+                      pmh1: 'Full Name',
+                      pmh2: 'Country',
+                      pmh3: 'Bank Name',
+                      pmh4: 'Account Number',
                     ),
                   ),
                   const SizedBox(height: 15),
                   Visibility(
                     visible: selections['Paypal'] ?? false,
                     child: CustomEditText(
+                      ispaymentfield: true,
                       maxLength: 300,
-                      caption:
-                          'Enter Paypal Details - FULL NAME: PAYPAL EMAIL ADDRESS:',
+                      caption: 'Enter Paypal Details',
                       hintText: 'Enter account information here',
                       controller: paypalController,
+                      pmh1: 'Full Name',
+                      pmh2: 'Paypal Email Address',
                     ),
                   ),
                   const SizedBox(height: 15),
                   Visibility(
                     visible: selections['Wallet'] ?? false,
                     child: CustomEditText(
+                      ispaymentfield: true,
                       maxLength: 300,
-                      caption:
-                          'Enter Wallet Details - FULL NAME: WALLET EMAIL ADDRESS: or WALLET NUMBER',
+                      caption: 'Enter Wallet Details',
                       hintText: 'Enter account information here',
                       controller: walletController,
+                      pmh1: 'Full Name',
+                      pmh2: 'Wallet Email Address or Wallet Number',
                     ),
                   ),
                   const SizedBox(height: 15),
