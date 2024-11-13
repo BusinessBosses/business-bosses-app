@@ -5,8 +5,6 @@ import 'package:business_bosses_v2/features/donations/presentation/filterdonatio
 import 'package:business_bosses_v2/features/forum/presentation/bossup_challenge.dart';
 import 'package:business_bosses_v2/features/forum/widgets/forum_item.dart';
 import 'package:business_bosses_v2/features/home/controller/commumities_controller.dart';
-import 'package:business_bosses_v2/features/home/widgets/all_learning_posts.dart';
-import 'package:business_bosses_v2/features/home/widgets/bossuptopsection.dart';
 import 'package:business_bosses_v2/features/home/widgets/bottom_bar.dart';
 import 'package:business_bosses_v2/features/home/widgets/challengessection.dart';
 import 'package:business_bosses_v2/features/home/widgets/crowdfundsection.dart';
@@ -15,14 +13,11 @@ import 'package:business_bosses_v2/features/home/widgets/industriessearch.dart';
 import 'package:business_bosses_v2/features/home/widgets/learningpage.dart';
 import 'package:business_bosses_v2/features/home/widgets/learningsection.dart';
 import 'package:business_bosses_v2/features/live_event/presentation/live_event.dart';
-import 'package:business_bosses_v2/utils/constants/constants.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 
 import '../../common/widgets/safety_model.dart';
-import '../../common/widgets/tiles/custom_tile.dart';
-import '../../navigation/routes.dart';
 import '../../utils/theme/theme.dart';
 
 import '../forum/models/industry.dart';
@@ -205,23 +200,25 @@ class _AllCommunitiesScreenState extends State<AllCommunitiesScreen>
                                 children: <Widget>[
                                   Container(
                                     padding: const EdgeInsets.only(
-                                        top: 0, bottom: 10, left: 16),
+                                        top: 0, bottom: 0, left: 0),
                                     constraints:
                                         const BoxConstraints.expand(height: 40),
                                     child: TabBar(
                                       labelStyle: const TextStyle(
-                                          fontWeight: FontWeight.w400),
+                                          fontWeight: FontWeight.w400,
+                                          fontSize: 13),
                                       controller: _bossupTabController,
-                                      isScrollable: true,
-                                      indicator: BoxDecoration(
-                                        borderRadius: BorderRadius.circular(
-                                            50), // Creates border
-                                        color: Colors.black87.withAlpha(180),
-                                      ),
-                                      unselectedLabelColor: Colors.grey,
-                                      labelColor: Colors.white,
+                                      isScrollable: false,
+
+                                      // indicator: BoxDecoration(
+                                      //   borderRadius: BorderRadius.circular(
+                                      //       50), // Creates border
+                                      //   color: Colors.black87.withAlpha(180),
+                                      // ),
+                                      // unselectedLabelColor: Colors.grey,
+                                      // labelColor: Colors.white,
                                       labelPadding: const EdgeInsets.symmetric(
-                                          horizontal: 20.0),
+                                          horizontal: 0.0),
                                       tabs: const <Widget>[
                                         Tab(
                                           text: 'All',

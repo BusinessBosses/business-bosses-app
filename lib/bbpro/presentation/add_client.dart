@@ -16,7 +16,8 @@ import 'package:image_picker/image_picker.dart';
 
 class Addclient extends StatefulWidget {
   final Client? client;
-  const Addclient({super.key, this.client});
+  final VoidCallback? onClientAdded;
+  const Addclient({super.key, this.client, this.onClientAdded});
 
   @override
   State<Addclient> createState() => _AddclientState();
@@ -169,7 +170,6 @@ class _AddclientState extends State<Addclient> {
                   // Manual validation
                   final String name = nameController.text;
                   final String email = emailController.text;
-                  final String phone = phoneController.text;
 
                   // if (_selectedImage == null && updateImage == null) {
                   //   showSnackbar(
@@ -213,15 +213,15 @@ class _AddclientState extends State<Addclient> {
                     return;
                   }
 
-                  if (phone.isEmpty) {
-                    showSnackbar(
-                        message: 'Please enter the client\'s phone number',
-                        error: true);
-                    setState(() {
-                      isSubmit = false;
-                    });
-                    return;
-                  }
+                  // if (phone.isEmpty) {
+                  //   showSnackbar(
+                  //       message: 'Please enter the client\'s phone number',
+                  //       error: true);
+                  //   setState(() {
+                  //     isSubmit = false;
+                  //   });
+                  //   return;
+                  // }
 
                   if (selectedType == null) {
                     showSnackbar(
@@ -281,8 +281,13 @@ class _AddclientState extends State<Addclient> {
                             : 'Client Added Successfully!',
                       );
                       // ignore: use_build_context_synchronously
+
                       await clientsController
                           .initClients(profileController.myProfile.uid);
+                      if (widget.onClientAdded != null) {
+                        widget.onClientAdded?.call();
+                      }
+                      // ignore: use_build_context_synchronously
                       Navigator.pop(context);
                     } else {
                       showSnackbar(

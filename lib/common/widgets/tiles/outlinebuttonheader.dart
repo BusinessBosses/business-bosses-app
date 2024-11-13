@@ -1,4 +1,5 @@
 import 'package:business_bosses_v2/common/models/user_model.dart';
+import 'package:business_bosses_v2/features/profile/presentation/update_profile_screen.dart';
 import 'package:business_bosses_v2/navigation/routes.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
@@ -21,7 +22,11 @@ Container OutlineButtonHeader(BuildContext context, UserModel myProfile) {
         Expanded(
           child: OutlinedButton(
             onPressed: () async {
-              Get.toNamed(Routes.updateProfile, arguments: myProfile);
+              Get.to(
+                UpdateProfileScreen(
+                  user: myProfile,
+                ),
+              );
             },
             child: Row(
               mainAxisSize: MainAxisSize.min,

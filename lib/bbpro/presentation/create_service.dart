@@ -65,6 +65,7 @@ class _CreateServiceListingState extends State<CreateServiceListing>
   String? deliveryTime;
   DateTime? availableTime;
   String? serviceType;
+  Map<String, dynamic>? availability;
 
   late AnimationController _animationController;
   late Animation<double> _animation;
@@ -116,10 +117,36 @@ class _CreateServiceListingState extends State<CreateServiceListing>
       serviceType = widget.service!.serviceType;
       paymentMethod = widget.service!.paymentMethod;
       notesController.text = widget.service!.notes ?? '';
-      // packages.addAll(widget.service!.packages!.map((Package package) => <String, >{
-      //         'name': package.name,
-      //         'amount': package.amount,
-      //       }));
+      packages
+          .addAll(widget.service!.packages.map((package) => <String, dynamic>{
+                'name': package['name'],
+                'price': package['price'],
+              }));
+      availability = widget.service!.availability;
+      _startTime = TimeOfDay(
+          hour: int.parse(
+              widget.service!.availability!['startTime'].substring(0, 2)),
+          minute: int.parse(
+              widget.service!.availability!['startTime'].substring(3, 5)));
+      _endTime = TimeOfDay(
+          hour: int.parse(widget.service!.availability!['endTime']
+              .substring(0, 2)), // Extract hour
+          minute: int.parse(widget.service!.availability!['endTime']
+              .substring(3, 5))); // Extract minute
+
+      // selectedSubmitWeekdays =
+      //     List<String>.from(widget.service!.availability!['dayOfWeek']);
+      // _selectedWeekdays = List<bool>.filled(7, false);
+
+      for (int i = 0; i < weekdays.length; i++) {
+        if (selectedSubmitWeekdays.contains(weekdays[i])) {
+          _selectedWeekdays[i] = true;
+        }
+      }
+
+      _updateSelectedDates();
+      _startTimeSelected = true;
+      _endTimeSelected = true;
     }
     currencyController.text = shopController.shop?.location != null
         ? '${currencyValues[shopController.shop!.location.toString()]}'
@@ -225,15 +252,9 @@ class _CreateServiceListingState extends State<CreateServiceListing>
           children: <Widget>[
             const SizedBox(height: 16),
             CustomEditText(
-              caption: 'Service Name',
+              caption: 'Service Name *',
               hintText: 'Enter service name here',
               controller: _serviceNameController,
-              validator: (String? value) {
-                if (value == null || value.isEmpty) {
-                  return 'Please enter a service name';
-                }
-                return null;
-              },
             ),
             const SizedBox(height: 16),
 
@@ -243,19 +264,10 @@ class _CreateServiceListingState extends State<CreateServiceListing>
                   child: CustomEditText(
                     iscurrencyfield: true,
                     currencycontroller: currencyController,
-                    caption: 'Price',
+                    caption: 'Price *',
                     hintText: 'Enter price',
                     controller: _priceController,
                     inputType: TextInputType.number,
-                    validator: (String? value) {
-                      if (value == null || value.isEmpty) {
-                        return 'Please enter a price';
-                      }
-                      if (double.tryParse(value) == null) {
-                        return 'Please enter a valid number';
-                      }
-                      return null;
-                    },
                   ),
                 ),
                 Expanded(
@@ -267,14 +279,6 @@ class _CreateServiceListingState extends State<CreateServiceListing>
                       hintText: 'Enter discount',
                       controller: _discountController,
                       inputType: TextInputType.number,
-                      validator: (String? value) {
-                        if (value != null && value.isNotEmpty) {
-                          if (double.tryParse(value) == null) {
-                            return 'Please enter a valid number';
-                          }
-                        }
-                        return null;
-                      },
                     ),
                   ),
                 ),
@@ -283,21 +287,15 @@ class _CreateServiceListingState extends State<CreateServiceListing>
             const SizedBox(height: 16),
 
             CustomEditText(
-              caption: 'Describe your Service',
+              caption: 'Describe your Service *',
               hintText: 'Add service description here',
               controller: _descriptionController,
               maxLength: 300,
-              validator: (String? value) {
-                if (value == null || value.isEmpty) {
-                  return 'Please enter a description';
-                }
-                return null;
-              },
             ),
             const SizedBox(height: 16),
             CustomDropdownWidget(
               initialValue: category,
-              caption: 'Select Category',
+              caption: 'Select Category *',
               hintText: 'Choose a category',
               items: const <String>[
                 'Design Services',
@@ -481,41 +479,37 @@ class _CreateServiceListingState extends State<CreateServiceListing>
                   hintText: 'Choose a delivery method',
                   items: const <String>['Online', 'In-Person'],
                   iconName: 'assets/svgs/dropdown.svg',
-                  validator: (String? value) {
-                    if (value == null || value.isEmpty) {
-                      return 'Please select a delivery method';
-                    }
-                    return null;
-                  },
                   onChanged: (String? newValue) {
                     setState(() {
                       deliveryMethod = newValue;
-
                       addressorlinkController.clear();
                     });
                   },
+                  secondarysection: deliveryMethod != null
+                      ? TextFormField(
+                          style: const TextStyle(fontSize: 13),
+                          maxLines: 1,
+                          decoration: InputDecoration(
+                            border: InputBorder.none,
+                            hintText: deliveryMethod == 'Online'
+                                ? 'Enter link here'
+                                : 'Enter address here',
+                            filled: false,
+                            fillColor: Colors.grey.shade100,
+                            counterText: null,
+                          ),
+                          controller: addressorlinkController,
+                          // validator: (String? value) {
+                          //   if (value == null || value.isEmpty) {
+                          //     return deliveryMethod == 'Online'
+                          //         ? 'Please enter meeting link here'
+                          //         : 'Please enter an address';
+                          //   }
+                          //   return null;
+                          // },
+                        )
+                      : null,
                 ),
-                if (deliveryMethod != null)
-                  Padding(
-                    padding: const EdgeInsets.only(top: 16.0),
-                    child: CustomEditText(
-                      caption: deliveryMethod == 'Online'
-                          ? 'Enter Link'
-                          : 'Enter Address',
-                      hintText: deliveryMethod == 'Online'
-                          ? 'Enter link here'
-                          : 'Enter address here',
-                      controller: addressorlinkController,
-                      validator: (String? value) {
-                        if (value == null || value.isEmpty) {
-                          return deliveryMethod == 'Online'
-                              ? 'Please enter meeting link here'
-                              : 'Please enter an address';
-                        }
-                        return null;
-                      },
-                    ),
-                  ),
 
                 const SizedBox(height: 16),
                 // CustomDropdownWidget(
@@ -537,13 +531,13 @@ class _CreateServiceListingState extends State<CreateServiceListing>
                   caption: 'Repeat',
                   hintText: 'Offer this service once or regularly?',
                   items: const <String>[
-                    'Yes (One-time Service)',
-                    'No (Regular Service)',
+                    'Yes (Regular Service)',
+                    'No (One-time Service)',
                   ],
                   iconName: 'assets/svgs/dropdown.svg',
                   initialValue: <String>[
-                    'Yes (One-time Service)',
-                    'No (Regular Service)'
+                    'Yes (Regular Service)',
+                    'No (One-time Service)'
                   ].contains(category)
                       ? category
                       : null,
@@ -559,7 +553,7 @@ class _CreateServiceListingState extends State<CreateServiceListing>
                 if (category != null)
                   availabilityWidget(
                       isRecurring:
-                          category == 'Yes (One-time Service)' ? true : false),
+                          category == 'Yes (Regular Service)' ? true : false),
 
                 // Delivery Time Field
                 // TextFormField(
@@ -594,17 +588,12 @@ class _CreateServiceListingState extends State<CreateServiceListing>
                   caption: 'Payment Method',
                   hintText: 'Choose a payment method',
                   items: paymentMethods,
+                  initialValue: paymentMethod,
                   iconName: 'assets/svgs/dropdown.svg',
                   onChanged: (String? newValue) {
                     setState(() {
                       paymentMethod = newValue;
                     });
-                  },
-                  validator: (String? value) {
-                    if (value == null || value.isEmpty) {
-                      return 'Please select a payment method';
-                    }
-                    return null;
                   },
                 ),
 
@@ -620,12 +609,6 @@ class _CreateServiceListingState extends State<CreateServiceListing>
                   ],
                   initialValue: serviceType,
                   iconName: 'assets/svgs/dropdown.svg',
-                  validator: (String? value) {
-                    if (value == null || value.isEmpty) {
-                      return 'Please select a service type';
-                    }
-                    return null;
-                  },
                   onChanged: (String? newValue) {
                     setState(() {
                       serviceType = newValue;
@@ -642,10 +625,12 @@ class _CreateServiceListingState extends State<CreateServiceListing>
                           groupmembersController, // You might want a different controller here
                       inputType: TextInputType.number,
                       validator: (String? value) {
-                        if (value == null || value.isEmpty) {
+                        if (serviceType == 'Group Session or Event' &&
+                            (value == null || value.isEmpty)) {
                           return 'Please enter the maximum number of participants';
                         }
-                        if (int.tryParse(value) == null) {
+                        if (serviceType == 'Group Session or Event' &&
+                            (int.tryParse(value!) == null)) {
                           return 'Please enter a valid number';
                         }
                         return null;
@@ -685,7 +670,8 @@ class _CreateServiceListingState extends State<CreateServiceListing>
                             return Taskitem(
                               isPackage: true,
                               taskname: task['name'],
-                              taskexpense: task['price'],
+                              taskexpense: shopController.shop!.currency +
+                                  task['price'].toString(),
                               editOnTap: () {
                                 _editPackageSheet(context, index);
                               },
@@ -696,11 +682,52 @@ class _CreateServiceListingState extends State<CreateServiceListing>
                               },
                             );
                           }).toList(),
+                          const SizedBox(height: 10),
+                          if (packages.isNotEmpty)
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: <Widget>[
+                                ProIconButton(
+                                  backgroundColor: Colors.white,
+                                  textColor: proprimaryColor,
+                                  text:
+                                      'Add Additional Packages to this service',
+                                  onPressed: () {
+                                    _showAddPackageSheet(context);
+                                  },
+                                  icon: const Icon(
+                                    Icons.add,
+                                    size: 20,
+                                    color: proprimaryColor,
+                                  ),
+                                ),
+                              ],
+                            ),
                         ],
                       ),
                     ),
                   ),
                 const SizedBox(height: 16),
+                if (packages.isEmpty)
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: <Widget>[
+                      ProIconButton(
+                        backgroundColor: Colors.white,
+                        textColor: proprimaryColor,
+                        text: 'Add Additional Packages to this service',
+                        onPressed: () {
+                          _showAddPackageSheet(context);
+                        },
+                        icon: const Icon(
+                          Icons.add,
+                          size: 20,
+                          color: proprimaryColor,
+                        ),
+                      ),
+                    ],
+                  ),
+                if (packages.isEmpty) const SizedBox(height: 16),
                 CustomEditText(
                   caption: 'Message or Question',
                   hintText:
@@ -709,24 +736,6 @@ class _CreateServiceListingState extends State<CreateServiceListing>
                   maxLength: 300,
                 ),
                 const SizedBox(height: 16),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: <Widget>[
-                    ProIconButton(
-                      backgroundColor: Colors.white,
-                      textColor: proprimaryColor,
-                      text: 'Add Additional Packages to this service',
-                      onPressed: () {
-                        _showAddPackageSheet(context);
-                      },
-                      icon: const Icon(
-                        Icons.add,
-                        size: 20,
-                        color: proprimaryColor,
-                      ),
-                    ),
-                  ],
-                ),
               ],
             ),
 
@@ -805,19 +814,29 @@ class _CreateServiceListingState extends State<CreateServiceListing>
         error: true,
       );
       return;
-    } else if (paymentMethod == null || paymentMethod!.isEmpty) {
+    } else if (_descriptionController.text.isEmpty) {
       showSnackbar(
-        message: 'Payment Method is Mandatory!',
-        error: true,
-      );
-      return;
-    } else if (selectedSubmitWeekdays.isEmpty) {
-      showSnackbar(
-        message: 'Selecting a day is Mandatory!',
+        message: 'Description is Mandatory!',
         error: true,
       );
       return;
     }
+    if (!(_endTime.hour > _startTime.hour ||
+        (_endTime.hour == _startTime.hour &&
+            _endTime.minute >= _startTime.minute))) {
+      showSnackbar(
+        message: 'End Time cannot be before Start Time!',
+        error: true,
+      );
+      return; // Or handle the error as needed
+    }
+    // else if (selectedSubmitWeekdays.isEmpty) {
+    //   showSnackbar(
+    //     message: 'Selecting a day is Mandatory!',
+    //     error: true,
+    //   );
+    //   return;
+    // }
 
     if (_formKey.currentState?.validate() ?? false) {
       _formKey.currentState?.save();
@@ -833,66 +852,86 @@ class _CreateServiceListingState extends State<CreateServiceListing>
         }
       }
       // Create a map to hold form data
-      final Map<String, dynamic> serviceData = <String, dynamic>{
-        'userId': profileController.myProfile.uid,
-        'shopId': shopController.shop?.id,
-        'name': _serviceNameController.text,
-        'price': _priceController.text,
-        'description': _descriptionController.text,
-        'discount': _discountController.text,
-        'category': category,
-        'location': shopController.shop!.location,
-        'images': images,
-        'paymentMethod': paymentMethod,
-        'deliveryMethod': deliveryMethod,
-        'deliveryTime': deliveryTime,
-        'availableTime': availableTime?.toIso8601String(),
-        'serviceType': serviceType,
-        'itemType': 'service',
-        'isActive': _isSwitched,
-        'serviceAvailability': <String, dynamic>{
-          'dayOfWeek': selectedSubmitWeekdays,
-          'startTime': '${_startTime.hour}:${_startTime.minute}:00',
-          'endTime': '${_endTime.hour}:${_endTime.minute}:00',
-          'startDate': '2023-10-01',
-          'endDate': '2023-10-01'
-        },
-        'servicePackages': packages,
-        'notes': notesController.text,
-      };
+      try {
+        // First validate required fields
+        if (_serviceNameController.text.isEmpty ||
+            _priceController.text.isEmpty ||
+            _descriptionController.text.isEmpty ||
+            category == null) {
+          // Check if days are selected
+          showSnackbar(
+              message: 'Please fill in all required fields', error: true);
+          return;
+        }
 
-      // For demonstration, print the map
-      // You can now send this data to your API or database
-      // Example:
-      if (widget.service == null) {
-        await shopController.addService(serviceData).then((bool response) {
-          if (response) {
-            // Handle success
-            showSnackbar(message: 'Service Added Succesfully!');
+        final Map<String, dynamic> serviceData = <String, dynamic>{
+          'userId': profileController.myProfile.uid,
+          'shopId': shopController.shop?.id,
+          'name': _serviceNameController.text.trim(),
+          'price': _priceController.text.trim(),
+          'description': _descriptionController.text.trim(),
+          'discount': _discountController.text.isEmpty
+              ? '0'
+              : _discountController.text.trim(),
+          'category': category,
+          'location': shopController.shop!.location,
+          'images': images!.isEmpty ? null : images,
+          'paymentMethod': paymentMethod ?? '',
+          'deliveryMethod': deliveryMethod ?? '',
+          'deliveryTime': deliveryTime ?? '',
+          'availableTime': availableTime?.toIso8601String(),
+          'serviceType': serviceType ?? '1:1',
+          'itemType': 'service',
+          'isActive': _isSwitched,
+          'serviceAvailability': <String, dynamic>{
+            'dayOfWeek': selectedSubmitWeekdays.isEmpty
+                ? <String>[
+                    'Monday',
+                    'Tuesday',
+                    'Wednesday',
+                    'Thursday',
+                    'Friday'
+                  ]
+                : selectedSubmitWeekdays,
+            'startTime':
+                '${_startTime.hour.toString().padLeft(2, '0')}:${_startTime.minute.toString().padLeft(2, '0')}:00',
+            'endTime':
+                '${_endTime.hour.toString().padLeft(2, '0')}:${_endTime.minute.toString().padLeft(2, '0')}:00',
+            'startDate': '2023-10-01',
+            'endDate': '2023-10-01',
+          },
+          'servicePackages':
+              packages.isEmpty ? <Map<String, dynamic>>[] : packages,
+          'url': addressorlinkController.text,
+          'notes': notesController.text.trim().isEmpty
+              ? null
+              : notesController.text.trim(),
+        };
+
+        // Log the cleaned data
+
+        if (widget.service == null) {
+          final bool result = await shopController.addService(serviceData);
+          if (result) {
+            showSnackbar(message: 'Service Added Successfully!');
             Navigator.pop(context);
-          } else {
-            // Handle error
-            showSnackbar(message: 'Error Adding Service!', error: true);
           }
-        });
-      } else {
-        await shopController
-            .updateService(widget.service!.id, serviceData)
-            .then((bool response) {
-          if (response) {
-            // Handle success
-            showSnackbar(message: 'Service Updated Succesfully!');
+        } else {
+          final bool result = await shopController.updateService(
+              widget.service!.id, serviceData);
+          if (result) {
+            showSnackbar(message: 'Service Updated Successfully!');
             Navigator.pop(context);
-          } else {
-            // Handle error
-            showSnackbar(message: 'Error Updating Service!', error: true);
           }
+        }
+      } catch (e) {
+        String errorMessage = 'Failed to add service';
+        showSnackbar(message: errorMessage, error: true);
+      } finally {
+        setState(() {
+          isSubmitted = false;
         });
       }
-      setState(() {
-        isSubmitted = false;
-      });
-      // Clear the form or navigate to another screen if needed
     }
   }
 

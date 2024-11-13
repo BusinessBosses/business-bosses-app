@@ -14,6 +14,7 @@ class Taskitem extends StatefulWidget {
   final VoidCallback? deleteOnTap;
   final bool? isPackage;
   final bool? isOrder;
+  final String? imageurl;
 
   const Taskitem({
     super.key,
@@ -25,6 +26,7 @@ class Taskitem extends StatefulWidget {
     this.deleteOnTap,
     this.isPackage,
     this.isOrder,
+    this.imageurl,
   });
 
   @override
@@ -75,15 +77,15 @@ class _TaskitemState extends State<Taskitem> {
             Wrap(
                 crossAxisAlignment: WrapCrossAlignment.center,
                 children: <Widget>[
-                  if (widget.isOrder != null)
-                    const SizedBox(
+                  if (widget.imageurl != null && widget.imageurl!.isNotEmpty)
+                    SizedBox(
                       height: 50.0,
                       width: 50.0,
                       child: Align(
                         alignment: Alignment.topLeft,
                         child: ClipRRect(
                           child: NetworkImageWithPlaceHolder(
-                            imageUrl: '',
+                            imageUrl: widget.imageurl ?? '',
                             placeHolder: Icons.image,
                             iconSize: 22.0,
                             fit: BoxFit.cover,
@@ -96,9 +98,24 @@ class _TaskitemState extends State<Taskitem> {
                     mainAxisAlignment: MainAxisAlignment.start,
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: <Widget>[
-                      Text(widget.taskname),
+                      Text(
+                        widget.taskname,
+                        style: const TextStyle(
+                            fontSize: 13, fontWeight: FontWeight.w600),
+                      ),
                       if (widget.isOrder != null)
-                        Text(widget.taskexpense.toString()),
+                        Text(
+                          widget.taskexpense.toString(),
+                          style: const TextStyle(fontSize: 12),
+                        ),
+                      if (widget.isOrder == null)
+                        Text(widget.isPackage == null
+                            ? 'Expense: ${widget.taskexpense}'
+                            : 'Price: ${widget.taskexpense}'),
+                      if (startDateTime != null)
+                        Text('Start Date: ${formatDate(startDateTime)}'),
+                      if (endDateTime != null)
+                        Text('End Date: ${formatDate(endDateTime)}'),
                     ],
                   )
                 ]),
@@ -135,19 +152,12 @@ class _TaskitemState extends State<Taskitem> {
             ),
           ],
         ),
-        if (widget.isOrder == null)
-          Text(widget.isPackage == null
-              ? 'Expense: ${widget.taskexpense}'
-              : 'Price: ${widget.taskexpense}'),
-        if (startDateTime != null)
-          Text('Start Date: ${formatDate(startDateTime)}'),
-        if (endDateTime != null) Text('End Date: ${formatDate(endDateTime)}'),
+
         const SizedBox(height: 10),
-        Container(
-          height: 0.5,
-          color: Colors.black12,
-        ),
-        const SizedBox(height: 10),
+        // Container(
+        //   height: 0.5,
+        //   color: Colors.black12,
+        // ),
       ],
     );
   }

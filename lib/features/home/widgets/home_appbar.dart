@@ -1,6 +1,5 @@
 import 'package:business_bosses_v2/features/home/discoverscreen.dart';
 import 'package:business_bosses_v2/features/home/sellProduct.dart';
-import 'package:business_bosses_v2/features/home/widgets/searchsection.dart';
 import 'package:business_bosses_v2/features/marketplace/widgets/products.dart';
 import 'package:business_bosses_v2/features/posts/presentation/create_poll_screen.dart';
 import 'package:business_bosses_v2/navigation/routes.dart';
@@ -112,7 +111,10 @@ class HomeAppBar extends StatelessWidget {
                         backgroundColor: backgroundColor,
                         child: SvgPicture.asset(
                           'assets/svgs/homesearch.svg',
-                          color: textColor,
+                          colorFilter: const ColorFilter.mode(
+                            textColor,
+                            BlendMode.srcIn,
+                          ),
                           height: 20,
                         ),
                       ),
@@ -161,7 +163,10 @@ class HomeAppBar extends StatelessWidget {
                               children: <Widget>[
                                 SvgPicture.asset(
                                   'assets/svgs/text.svg',
-                                  color: textColor,
+                                  colorFilter: const ColorFilter.mode(
+                                    textColor,
+                                    BlendMode.srcIn,
+                                  ),
                                   height: 15,
                                 ),
                                 const SizedBox(width: 8),
@@ -181,7 +186,10 @@ class HomeAppBar extends StatelessWidget {
                                 SvgPicture.asset(
                                   'assets/svgs/sellicon.svg',
                                   height: 20,
-                                  color: textColor,
+                                  colorFilter: const ColorFilter.mode(
+                                    textColor,
+                                    BlendMode.srcIn,
+                                  ),
                                 ),
                                 const SizedBox(width: 8),
                                 const Text(
@@ -199,7 +207,10 @@ class HomeAppBar extends StatelessWidget {
                               children: <Widget>[
                                 SvgPicture.asset(
                                   'assets/svgs/eventu.svg',
-                                  color: textColor,
+                                  colorFilter: const ColorFilter.mode(
+                                    textColor,
+                                    BlendMode.srcIn,
+                                  ),
                                   height: 15,
                                 ),
                                 const SizedBox(width: 8),
@@ -281,9 +292,13 @@ class HomeAppBar extends StatelessWidget {
                           child: CircleAvatar(
                             backgroundColor: Colors.transparent,
                             child: SvgPicture.asset(
-                                'assets/svgs/messagefilled.svg',
-                                height: 18,
-                                color: primaryColorLT),
+                              'assets/svgs/messagefilled.svg',
+                              height: 18,
+                              colorFilter: const ColorFilter.mode(
+                                primaryColorLT,
+                                BlendMode.srcIn,
+                              ),
+                            ),
                           ),
                         ),
                         if (hasBadge)
@@ -313,9 +328,13 @@ class HomeAppBar extends StatelessWidget {
                           child: CircleAvatar(
                             backgroundColor: Colors.transparent,
                             child: SvgPicture.asset(
-                                'assets/svgs/notificationfilled.svg',
-                                height: 20,
-                                color: primaryColorLT),
+                              'assets/svgs/notificationfilled.svg',
+                              height: 20,
+                              colorFilter: const ColorFilter.mode(
+                                primaryColorLT,
+                                BlendMode.srcIn,
+                              ),
+                            ),
                           ),
                         ),
                         if (hasUnreadNotification)

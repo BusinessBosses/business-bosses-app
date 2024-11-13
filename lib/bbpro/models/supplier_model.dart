@@ -69,8 +69,8 @@ class Vendor {
 
   factory Vendor.fromMap(Map<String, dynamic> map) {
     return Vendor(
-      images:
-          List<String>.from((map['images'] as List).map((e) => e.toString())),
+      images: List<String>.from(
+          (map['images'] as List<dynamic>).map((dynamic e) => e.toString())),
       id: map['id'] as String,
       userId: map['userId'] as String,
       name: map['name'] as String,

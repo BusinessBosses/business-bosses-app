@@ -1,3 +1,4 @@
+import 'package:business_bosses_v2/bbpro/presentation/shopscreen.dart';
 import 'package:business_bosses_v2/common/models/api_response_model.dart';
 import 'package:business_bosses_v2/common/models/user_model.dart';
 import 'package:business_bosses_v2/features/marketplace/widgets/service_item.dart';
@@ -456,74 +457,83 @@ class _PublicProfileScreenState extends State<PublicProfileScreen> {
                                   loading: isLoading,
                                 ),
 
-                                SingleChildScrollView(
-                                  child: Stack(
-                                    children: <Widget>[
-                                      Container(
-                                        padding: const EdgeInsets.all(0),
-                                        height: 100,
-                                        width: double.infinity,
-                                        child: ClipRRect(
-                                          child: FittedBox(
-                                            fit: BoxFit.fill,
-                                            child: Image.asset(
-                                                'assets/images/sellerbackground.jpg'),
-                                          ),
+                                publicUser.isSubscribed
+                                    ? const ShopScreen()
+                                    : SingleChildScrollView(
+                                        child: Stack(
+                                          children: <Widget>[
+                                            Container(
+                                              padding: const EdgeInsets.all(0),
+                                              height: 100,
+                                              width: double.infinity,
+                                              child: ClipRRect(
+                                                child: FittedBox(
+                                                  fit: BoxFit.fill,
+                                                  child: Image.asset(
+                                                      'assets/images/sellerbackground.jpg'),
+                                                ),
+                                              ),
+                                            ),
+                                            Column(
+                                              crossAxisAlignment:
+                                                  CrossAxisAlignment.start,
+                                              children: <Widget>[
+                                                filteredMarkets.isEmpty
+                                                    ? const SafetyModel(
+                                                        isLoading: false,
+                                                        icon: Icon(
+                                                          Icons.warning,
+                                                          color: Colors.grey,
+                                                          size: 80.0,
+                                                        ),
+                                                        title:
+                                                            'This user has no items in store',
+                                                        // subTitle: '',
+                                                      )
+                                                    : ListView.builder(
+                                                        shrinkWrap: true,
+                                                        physics:
+                                                            const NeverScrollableScrollPhysics(),
+                                                        itemCount:
+                                                            filteredMarkets
+                                                                .length,
+                                                        itemBuilder:
+                                                            (BuildContext
+                                                                    context,
+                                                                int index) {
+                                                          final MarketModel
+                                                              market =
+                                                              filteredMarkets[
+                                                                  index];
+
+                                                          return market
+                                                                  .isProduct
+                                                              ? MarketTile(
+                                                                  post: market,
+                                                                  controller:
+                                                                      _marketController,
+                                                                  key: ValueKey(
+                                                                      market
+                                                                          .marketId),
+                                                                )
+                                                              : ServiceTile(
+                                                                  post: market,
+                                                                  controller:
+                                                                      _marketController,
+                                                                  key: ValueKey(
+                                                                      market
+                                                                          .marketId),
+                                                                );
+                                                        },
+                                                      ),
+                                                const SizedBox(
+                                                  height: 200,
+                                                )
+                                              ],
+                                            ),
+                                          ],
                                         ),
                                       ),
-                                      Column(
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.start,
-                                        children: <Widget>[
-                                          filteredMarkets.isEmpty
-                                              ? const SafetyModel(
-                                                  isLoading: false,
-                                                  icon: Icon(
-                                                    Icons.warning,
-                                                    color: Colors.grey,
-                                                    size: 80.0,
-                                                  ),
-                                                  title:
-                                                      'This user has no items in store',
-                                                  // subTitle: '',
-                                                )
-                                              : ListView.builder(
-                                                  shrinkWrap: true,
-                                                  physics:
-                                                      const NeverScrollableScrollPhysics(),
-                                                  itemCount:
-                                                      filteredMarkets.length,
-                                                  itemBuilder:
-                                                      (BuildContext context,
-                                                          int index) {
-                                                    final MarketModel market =
-                                                        filteredMarkets[index];
-
-                                                    return market.isProduct
-                                                        ? MarketTile(
-                                                            post: market,
-                                                            controller:
-                                                                _marketController,
-                                                            key: ValueKey(market
-                                                                .marketId),
-                                                          )
-                                                        : ServiceTile(
-                                                            post: market,
-                                                            controller:
-                                                                _marketController,
-                                                            key: ValueKey(market
-                                                                .marketId),
-                                                          );
-                                                  },
-                                                ),
-                                          const SizedBox(
-                                            height: 200,
-                                          )
-                                        ],
-                                      ),
-                                    ],
-                                  ),
-                                ),
                               ],
                       ),
                     ),

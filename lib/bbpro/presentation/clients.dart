@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'package:business_bosses_v2/bbpro/controllers/shop_controller.dart';
+import 'package:business_bosses_v2/bbpro/models/supplier_model.dart';
 import 'package:business_bosses_v2/bbpro/presentation/add_client.dart';
 import 'package:business_bosses_v2/bbpro/presentation/add_supplier.dart';
 import 'package:business_bosses_v2/bbpro/presentation/expandedprosupplierpage.dart';
@@ -11,9 +12,12 @@ import 'package:business_bosses_v2/bbpro/widgets/supplierscard.dart';
 import 'package:business_bosses_v2/bbpro/widgets/topsection.dart';
 import 'package:business_bosses_v2/bbpro/controllers/clients_controller.dart';
 import 'package:business_bosses_v2/bbpro/models/client_model.dart';
+import 'package:business_bosses_v2/common/dialogs/snackbar.dart';
 import 'package:business_bosses_v2/common/widgets/safety_model.dart';
 import 'package:business_bosses_v2/features/chat/chat_screen.dart';
-import 'package:business_bosses_v2/features/marketplace/presentation/supplierspage.dart';
+import 'package:business_bosses_v2/features/marketplace/controllers/supplier_controller.dart';
+import 'package:business_bosses_v2/features/marketplace/models/suppliers_model.dart';
+import 'package:business_bosses_v2/features/profile/controller/profile_controller.dart';
 import 'package:business_bosses_v2/utils/theme/theme.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -31,11 +35,14 @@ class ClientsScreen extends StatefulWidget {
 class _ClientsScreenState extends State<ClientsScreen>
     with TickerProviderStateMixin {
   final ScrollController _mainListScrollController = ScrollController();
+  final SupplierController supplierController = Get.put(SupplierController());
   Timer? _timer;
   bool? _lastMoveRight;
   late TabController _tabController;
   late TabController _viewController;
   bool loading = true;
+  bool loadingSupplier = false;
+  final ProfileController profileController = Get.find();
 
   final ClientsController clientsController = Get.put(ClientsController());
   final ShopController shopController = Get.find();
@@ -56,7 +63,8 @@ class _ClientsScreenState extends State<ClientsScreen>
     _tabController =
         TabController(length: ClientType.values.length, vsync: this);
     _viewController = TabController(length: 2, vsync: this);
-
+    supplierController.initMySuppliers();
+    supplierController.initSuppliers();
     clientsController
         .initClients(clientsController.profileController.myProfile.uid)
         .then((_) {
@@ -83,12 +91,11 @@ class _ClientsScreenState extends State<ClientsScreen>
         automaticallyImplyLeading: false,
         title: Container(
           padding: const EdgeInsets.only(bottom: 5),
-          width: 200,
           child: CupertinoSlidingSegmentedControl<int>(
             groupValue: _viewController.index,
             children: const <int, Widget>{
               0: Padding(
-                padding: EdgeInsets.symmetric(horizontal: 5, vertical: 10),
+                padding: EdgeInsets.symmetric(horizontal: 0, vertical: 10),
                 child: Text('Clients', style: TextStyle(fontSize: 14)),
               ),
               1: Padding(
@@ -108,6 +115,267 @@ class _ClientsScreenState extends State<ClientsScreen>
         actions: <Widget>[
           Row(
             children: <Widget>[
+              PopupMenuButton<String>(
+                onSelected: (String item) {
+                  switch (item) {
+                    case 'Item 1':
+                      Get.to(const Addclient());
+                      break;
+                    case 'Item 2':
+                      showModalBottomSheet<void>(
+                        context: context,
+                        shape: const RoundedRectangleBorder(
+                          borderRadius: BorderRadius.vertical(
+                            top: Radius.circular(20),
+                          ),
+                        ),
+                        builder: (BuildContext context) {
+                          return Container(
+                            padding: const EdgeInsets.all(20.0),
+                            child: Column(
+                              mainAxisSize: MainAxisSize.min,
+                              children: <Widget>[
+                                ListTile(
+                                  leading: SvgPicture.asset(
+                                    'assets/svgs/cors.svg',
+                                    height: 18,
+                                  ),
+                                  title: const Text(
+                                    'Add a New Supplier',
+                                    style: TextStyle(
+                                      fontSize: 14,
+                                    ),
+                                  ),
+                                  onTap: () {
+                                    Navigator.pop(context);
+                                    Get.to(() => const AddSupplier());
+                                  },
+                                ),
+                                ListTile(
+                                  leading: SvgPicture.asset(
+                                    'assets/svgs/import.svg',
+                                    height: 16,
+                                  ),
+                                  title: const Text(
+                                    'Import from Business Bosses',
+                                    style: TextStyle(
+                                      fontSize: 14,
+                                    ),
+                                  ),
+                                  onTap: () {
+                                    Navigator.pop(context);
+                                    showModalBottomSheet<void>(
+                                      context: context,
+                                      isScrollControlled:
+                                          true, // Allow resizing
+                                      shape: const RoundedRectangleBorder(
+                                        borderRadius: BorderRadius.only(
+                                          topLeft: Radius.circular(20),
+                                          topRight: Radius.circular(20),
+                                        ),
+                                      ),
+                                      builder: (BuildContext context) {
+                                        return DraggableScrollableSheet(
+                                          initialChildSize:
+                                              0.9, // 90% of the screen
+                                          maxChildSize: 0.9,
+                                          minChildSize: 0.9,
+                                          expand: false,
+                                          builder: (BuildContext context,
+                                              ScrollController
+                                                  scrollController) {
+                                            return SizedBox.expand(
+                                              // Ensures the content takes up the available space
+                                              child: Obx(
+                                                () =>
+                                                    supplierController
+                                                            .loading.value
+                                                        ? const SafetyModel()
+                                                        : supplierController
+                                                                .suppliers
+                                                                .isEmpty
+                                                            ? const SafetyModel(
+                                                                isLoading:
+                                                                    false,
+                                                                title:
+                                                                    'No Supplier Found!',
+                                                              )
+                                                            : Column(
+                                                                children: <Widget>[
+                                                                  const SizedBox(
+                                                                    height: 20,
+                                                                  ),
+                                                                  const Text(
+                                                                    'Select a Supplier',
+                                                                    style: TextStyle(
+                                                                        fontSize:
+                                                                            16,
+                                                                        fontWeight:
+                                                                            FontWeight.bold),
+                                                                  ),
+                                                                  const SizedBox(
+                                                                    height: 20,
+                                                                  ),
+                                                                  Expanded(
+                                                                    child:
+                                                                        ListView(
+                                                                      shrinkWrap:
+                                                                          true,
+                                                                      children: supplierController
+                                                                          .suppliers
+                                                                          .map((SuppliersModel supplier) => shopController.suppliers.any((Vendor element) => element.name == supplier.name)
+                                                                              ? const SizedBox()
+                                                                              : ListTile(
+                                                                                  leading: (supplier.images != null && supplier.images!.isNotEmpty)
+                                                                                      ? Container(
+                                                                                          width: 50,
+                                                                                          height: 50,
+                                                                                          decoration: BoxDecoration(
+                                                                                            borderRadius: BorderRadius.circular(8),
+                                                                                          ),
+                                                                                          child: ClipRRect(
+                                                                                            borderRadius: BorderRadius.circular(8),
+                                                                                            child: Image.network(
+                                                                                              supplier.images![0],
+                                                                                              fit: BoxFit.cover,
+                                                                                              errorBuilder: (BuildContext context, Object error, StackTrace? stackTrace) => const Icon(Icons.error),
+                                                                                              loadingBuilder: (BuildContext context, Widget child, ImageChunkEvent? loadingProgress) {
+                                                                                                if (loadingProgress == null) return child;
+                                                                                                return const Center(child: CircularProgressIndicator());
+                                                                                              },
+                                                                                            ),
+                                                                                          ),
+                                                                                        )
+                                                                                      : null,
+                                                                                  title: Text(supplier.name),
+                                                                                  trailing: ElevatedButton(
+                                                                                    onPressed: () async {
+                                                                                      Navigator.pop(context);
+                                                                                      setState(() {
+                                                                                        loadingSupplier = true;
+                                                                                      });
+                                                                                      Map<String, dynamic> supplierData = <String, dynamic>{
+                                                                                        'userId': profileController.myProfile.uid,
+                                                                                        'name': supplier.name,
+                                                                                        'email': supplier.email,
+                                                                                        'phone': supplier.phone,
+                                                                                        'description': supplier.description,
+                                                                                        'url': supplier.url,
+                                                                                        'category': supplier.category,
+                                                                                        'images': supplier.images,
+                                                                                        'location': supplier.location,
+                                                                                      };
+
+                                                                                      try {
+                                                                                        bool success = await shopController.addSupplier(supplierData);
+                                                                                        if (success) {
+                                                                                          showSnackbar(message: 'Supplier Added Successfully!');
+                                                                                          await Future.delayed(const Duration(seconds: 1)); // Optional delay for visibility
+                                                                                          // ignore: use_build_context_synchronously
+                                                                                        } else {
+                                                                                          showSnackbar(message: 'Error Adding Supplier!', error: true);
+                                                                                        }
+                                                                                      } catch (e) {
+                                                                                        showSnackbar(message: 'An error occurred: $e', error: true);
+                                                                                      } finally {
+                                                                                        setState(() {
+                                                                                          loadingSupplier = false;
+                                                                                        });
+                                                                                      }
+                                                                                    },
+                                                                                    style: ElevatedButton.styleFrom(
+                                                                                      backgroundColor: proprimaryColor,
+                                                                                    ),
+                                                                                    child: const Text('Select'),
+                                                                                  ),
+                                                                                ))
+                                                                          .toList(),
+                                                                    ),
+                                                                  ),
+                                                                ],
+                                                              ),
+                                              ),
+                                            );
+                                          },
+                                        );
+                                      },
+                                    );
+                                  },
+                                ),
+                              ],
+                            ),
+                          );
+                        },
+                      );
+                      break;
+                  }
+                },
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(10.0),
+                ),
+                itemBuilder: (BuildContext context) {
+                  return <PopupMenuEntry<String>>[
+                    PopupMenuItem<String>(
+                      value: 'Item 1',
+                      child: Row(
+                        children: <Widget>[
+                          SvgPicture.asset(
+                            'assets/svgs/cors.svg',
+                            colorFilter: const ColorFilter.mode(
+                              textColor,
+                              BlendMode.srcIn,
+                            ),
+                            height: 18,
+                          ),
+                          const SizedBox(width: 8),
+                          const Text(
+                            'Add a Client',
+                            style: TextStyle(
+                              fontSize: 13,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                    PopupMenuItem<String>(
+                      value: 'Item 2',
+                      child: Row(
+                        children: <Widget>[
+                          SvgPicture.asset(
+                            'assets/svgs/cors.svg',
+                            height: 18,
+                            colorFilter: const ColorFilter.mode(
+                              textColor,
+                              BlendMode.srcIn,
+                            ),
+                          ),
+                          const SizedBox(width: 8),
+                          const Text(
+                            'Add a Supplier',
+                            style: TextStyle(
+                              fontSize: 13,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ];
+                },
+                offset: const Offset(50, 50),
+                child: const Padding(
+                  padding: EdgeInsets.only(
+                    right: 10.0,
+                  ),
+                  child: CircleAvatar(
+                    radius: 20,
+                    backgroundColor: proprimaryColor,
+                    child: Icon(
+                      Icons.add,
+                      color: Colors.white,
+                    ),
+                  ),
+                ),
+              ),
               GestureDetector(
                 onTap: () {
                   Get.to(() => const ChatScreen());
@@ -115,7 +383,6 @@ class _ClientsScreenState extends State<ClientsScreen>
                 child: Padding(
                   padding: const EdgeInsets.only(
                     right: 10.0,
-                    bottom: 10,
                   ),
                   child: CircleAvatar(
                       radius: 20,
@@ -134,16 +401,19 @@ class _ClientsScreenState extends State<ClientsScreen>
       body: TabBarView(controller: _viewController, children: <Widget>[
         Column(
           children: <Widget>[
-            TopsectionWidget(
-              buttonText: 'Add Client',
-              onHowItWorksPressed: () {
-                // Handle "How it works" pressed
-                print('How it works pressed');
-              },
-              onAddProjectPressed: () {
-                // Handle "Add Project" pressed
-                Get.to(() => const Addclient());
-              },
+            // TopsectionWidget(
+            //   buttonText: 'Add Client',
+            //   onHowItWorksPressed: () {
+            //     // Handle "How it works" pressed
+            //     print('How it works pressed');
+            //   },
+            //   onAddProjectPressed: () {
+            //     // Handle "Add Project" pressed
+            //     Get.to(() => const Addclient());
+            //   },
+            // ),
+            const SizedBox(
+              height: 10,
             ),
             CustomTabBarWidget<ClientType>(
               tabController: _tabController,
@@ -218,101 +488,37 @@ class _ClientsScreenState extends State<ClientsScreen>
           ],
         ),
         Column(children: <Widget>[
-          TopsectionWidget(
-            buttonText: 'Add Supplier',
-            onHowItWorksPressed: () {
-              // Handle "How it works" pressed
-              print('How it works pressed');
-            },
-            onAddProjectPressed: () {
-              showModalBottomSheet<void>(
-                context: context,
-                shape: const RoundedRectangleBorder(
-                  borderRadius: BorderRadius.vertical(
-                    top: Radius.circular(20),
-                  ),
-                ),
-                builder: (BuildContext context) {
-                  return Container(
-                    padding: const EdgeInsets.all(20.0),
-                    child: Column(
-                      mainAxisSize: MainAxisSize.min,
-                      children: <Widget>[
-                        ListTile(
-                          leading: const Icon(Icons.person_add),
-                          title: const Text('Add a New Supplier'),
-                          onTap: () {
-                            Navigator.pop(context);
-                            Get.to(() => const AddSupplier());
-                          },
-                        ),
-                        ListTile(
-                          leading: const Icon(Icons.file_upload),
-                          title: const Text(
-                              'Import Suppliers from Business Bosses'),
-                          onTap: () {
-                            showModalBottomSheet<void>(
-                              context: context,
-                              isScrollControlled: true, // Allow resizing
-                              shape: const RoundedRectangleBorder(
-                                borderRadius: BorderRadius.only(
-                                  topLeft: Radius.circular(20),
-                                  topRight: Radius.circular(20),
-                                ),
-                              ),
-                              builder: (BuildContext context) {
-                                return DraggableScrollableSheet(
-                                  initialChildSize: 0.9, // 90% of the screen
-                                  maxChildSize: 0.9,
-                                  minChildSize: 0.9,
-                                  expand: false,
-                                  builder: (BuildContext context,
-                                      ScrollController scrollController) {
-                                    return const SizedBox.expand(
-                                      // Ensures the content takes up the available space
-                                      child: Center(
-                                        child: Text('Supplier List here'),
-                                      ),
-                                    );
-                                  },
-                                );
-                              },
-                            );
-                          },
-                        ),
-                      ],
-                    ),
-                  );
-                },
-              );
-            },
+          const SizedBox(
+            height: 10,
           ),
           Obx(() {
             if (shopController.suppliers.isNotEmpty) {
-              return Expanded(
-                child: StaggeredGridView.countBuilder(
-                  staggeredTileBuilder: (int index) =>
-                      const StaggeredTile.fit(1),
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: 15.0,
-                  ),
-                  crossAxisCount: 2,
-                  crossAxisSpacing: 8.0,
-                  mainAxisSpacing: 8.0,
-                  itemCount: shopController.suppliers.length,
-                  shrinkWrap: true,
-                  physics: null,
-                  itemBuilder: (BuildContext context, int index) {
-                    return SuppliersCard(
-                      onTap: () {
-                        Get.to(() => ExpandedProSuppliersPage(
-                            supplier: shopController.suppliers[index]));
-                      },
-                      supplier: shopController.suppliers[index],
+              return loadingSupplier
+                  ? const SafetyModel()
+                  : Expanded(
+                      child: StaggeredGridView.countBuilder(
+                        staggeredTileBuilder: (int index) =>
+                            const StaggeredTile.fit(1),
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 15.0,
+                        ),
+                        crossAxisCount: 2,
+                        crossAxisSpacing: 8.0,
+                        mainAxisSpacing: 8.0,
+                        itemCount: shopController.suppliers.length,
+                        shrinkWrap: true,
+                        physics: null,
+                        itemBuilder: (BuildContext context, int index) {
+                          return SuppliersCard(
+                            onTap: () {
+                              Get.to(() => ExpandedProSuppliersPage(
+                                  supplier: shopController.suppliers[index]));
+                            },
+                            supplier: shopController.suppliers[index],
+                          );
+                        },
+                      ),
                     );
-                  },
-                ),
-              );
             } else {
               return const Center(
                 child: SafetyModel(
@@ -326,6 +532,18 @@ class _ClientsScreenState extends State<ClientsScreen>
       ]),
     );
   }
+
+  // SuppliersModel? _selectedSupplier;
+
+  // void _onItemSelect(bool? selected, SuppliersModel supplier) {
+  //   setState(() {
+  //     if (selected == true) {
+  //       _selectedSupplier = supplier;
+  //     } else {
+  //       _selectedSupplier = null;
+  //     }
+  //   });
+  // }
 
   void _moveMainList(bool isRight) {
     _timer?.cancel();
@@ -372,6 +590,14 @@ class RowStatusCard extends StatefulWidget {
 
 class _RowStatusCardState extends State<RowStatusCard> {
   bool _showSearchBar = false;
+  List<Client> filteredClients = <Client>[];
+  String searchQuery = '';
+
+  @override
+  void initState() {
+    super.initState();
+    filteredClients = widget.allclients;
+  }
 
   @override
   Widget build(BuildContext context) {

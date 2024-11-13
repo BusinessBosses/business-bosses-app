@@ -19,6 +19,7 @@ class Order {
   final Client client;
   final OrderStatus status;
   final List<Product>? products;
+  final List<dynamic>? customItems;
   final List<Service>? services;
   final DateTime createdAt;
   final String? orderDetails;
@@ -38,6 +39,7 @@ class Order {
     required this.status,
     this.products,
     this.services,
+    this.customItems,
     required this.client,
     required this.createdAt,
     this.orderDetails,
@@ -64,6 +66,11 @@ class Order {
               .map((dynamic item) => Product.fromJson(item))
               .toList()
           : <Product>[],
+      customItems: json['customItems'] != null
+          ? (json['customItems'] as List<dynamic>)
+              .map((dynamic item) => item)
+              .toList()
+          : <dynamic>[],
       services: json['services'] != null
           ? (json['services'] as List<dynamic>)
               .map((dynamic item) => Service.fromJson(item))

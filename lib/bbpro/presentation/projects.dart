@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'package:business_bosses_v2/bbpro/models/project_model.dart';
 import 'package:business_bosses_v2/bbpro/widgets/customtabbar.dart';
+import 'package:business_bosses_v2/bbpro/widgets/iconbutton.dart';
 import 'package:business_bosses_v2/bbpro/widgets/notificationbutton.dart';
 import 'package:business_bosses_v2/bbpro/widgets/proseardwidget.dart';
 import 'package:business_bosses_v2/bbpro/widgets/taskwidget.dart';
@@ -12,8 +13,6 @@ import 'package:business_bosses_v2/utils/theme/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
-
-import '../widgets/topsection.dart';
 
 class Projects extends StatefulWidget {
   const Projects({
@@ -33,6 +32,8 @@ class _ProjectsState extends State<Projects>
   bool? _lastMoveRight;
   late TabController _tabController;
   List<Project> filteredProjects = <Project>[];
+
+  String selectedFilterOption = 'None';
 
   @override
   void initState() {
@@ -77,6 +78,7 @@ class _ProjectsState extends State<Projects>
   @override
   Widget build(BuildContext context) {
     final Size screenSize = MediaQuery.of(context).size;
+
     return Scaffold(
       resizeToAvoidBottomInset: true,
       backgroundColor: probackgroundColor,
@@ -92,6 +94,19 @@ class _ProjectsState extends State<Projects>
         actions: <Widget>[
           Row(
             children: <Widget>[
+              Padding(
+                padding: const EdgeInsets.only(
+                  right: 10.0,
+                ),
+                child: ProIconButton(
+                  radius: 50,
+                  icon: const Icon(Icons.add),
+                  onPressed: () {
+                    Get.to(const Addproject());
+                  },
+                  text: 'Add Tasks',
+                ),
+              ),
               GestureDetector(
                 onTap: () {
                   Get.to(() => const ChatScreen());
@@ -99,7 +114,6 @@ class _ProjectsState extends State<Projects>
                 child: Padding(
                   padding: const EdgeInsets.only(
                     right: 10.0,
-                    bottom: 10,
                   ),
                   child: CircleAvatar(
                       radius: 20,
@@ -117,14 +131,8 @@ class _ProjectsState extends State<Projects>
       ),
       body: Column(
         children: <Widget>[
-          TopsectionWidget(
-            buttonText: 'Add Tasks',
-            onHowItWorksPressed: () {
-              // Handle "How it works" pressed
-            },
-            onAddProjectPressed: () {
-              Get.to(() => const Addproject());
-            },
+          const SizedBox(
+            height: 10,
           ),
           CustomTabBarWidget<ProjectStatus>(
             tabController: _tabController,
@@ -132,22 +140,27 @@ class _ProjectsState extends State<Projects>
               _scrollToSection(index);
             },
             proprimaryColor: proprimaryColor,
-            // ignore: prefer_const_literals_to_create_immutables
             backgroundColor: <Color>[
               probackgroundColor,
               Colors.black.withOpacity(0.1),
               Colors.amber.withOpacity(0.1),
-              Colors.green.withOpacity(0.1)
+              Colors.green.withOpacity(0.1),
             ],
             listofitems: ProjectStatus.values.toList(),
             itemToString: (ProjectStatus status) =>
                 '${status.displayTitle.toString().split('.').last} (${status == ProjectStatus.allprojects ? projectController.projects.length : (projectController.statusProjects[status] == null ? '0' : projectController.statusProjects[status]!.length.toString())})',
             filterOptions: const <String>[
               'Newest first',
-              'Most Completed',
               'Highest Budget',
               'None'
             ],
+            onFilterSelected: (String? selectedFilter) {
+              setState(() {
+                selectedFilterOption = selectedFilter!;
+              });
+              print(selectedFilter);
+              filterProjects();
+            },
           ),
           Expanded(
             child: loading
@@ -175,8 +188,9 @@ class _ProjectsState extends State<Projects>
                                       (ProjectStatus status) =>
                                           SliverToBoxAdapter(
                                         child: RowStatusCard(
-                                          allProjects:
-                                              projectController.allProjects,
+                                          selectedFilterOption:
+                                              selectedFilterOption,
+                                          allProjects: filteredProjects,
                                           projects: projectController
                                                   .statusProjects[status] ??
                                               <Project>[],
@@ -236,6 +250,29 @@ class _ProjectsState extends State<Projects>
     );
   }
 
+  void filterProjects() {
+    setState(() {
+      filteredProjects = List<Project>.from(projectController.allProjects);
+
+      switch (selectedFilterOption) {
+        case 'Newest first':
+          filteredProjects.sort(
+              (Project a, Project b) => b.createdAt.compareTo(a.createdAt));
+          break;
+
+        case 'Highest Budget':
+          filteredProjects
+              .sort((Project a, Project b) => b.amount.compareTo(a.amount));
+          break;
+
+        case 'None':
+          // Reset to default ordering or initial project list
+          filteredProjects = List<Project>.from(projectController.allProjects);
+          break;
+      }
+    });
+  }
+
   void _moveMainList(bool isRight) {
     _timer?.cancel();
     _timer = Timer(const Duration(milliseconds: 100), () {
@@ -263,6 +300,7 @@ class RowStatusCard extends StatefulWidget {
   final List<Project> projects;
   final Size screenSize;
   final List<Project> allProjects;
+  final String selectedFilterOption;
 
   const RowStatusCard({
     required this.projects,
@@ -273,6 +311,7 @@ class RowStatusCard extends StatefulWidget {
     required this.cancelDrag,
     super.key,
     required this.allProjects,
+    required this.selectedFilterOption,
   });
 
   @override
@@ -428,21 +467,21 @@ class _RowStatusCardState extends State<RowStatusCard> {
               ? filteredProjects.isNotEmpty
                   ? Expanded(
                       child: ListView.builder(
-                        itemCount: filteredProjects.length,
-                        shrinkWrap: true,
-                        itemBuilder: (BuildContext context, int index) {
-                          return Padding(
-                            padding: const EdgeInsets.only(bottom: 12),
-                            child: TaskWidget(
-                              project: filteredProjects[index],
-                              bgcolor: filteredProjects[index]
-                                  .status
-                                  .backgroundColor,
-                            ),
-                          );
-                        },
-                      ),
-                    )
+                      itemCount:
+                          filteredProjects.length, // Use filteredProjects
+                      shrinkWrap: true,
+                      itemBuilder: (BuildContext context, int index) {
+                        return Padding(
+                          padding: const EdgeInsets.only(bottom: 12),
+                          child: TaskWidget(
+                            project:
+                                filteredProjects[index], // Use filteredProjects
+                            bgcolor:
+                                filteredProjects[index].status.backgroundColor,
+                          ),
+                        );
+                      },
+                    ))
                   : const Text('No projects found')
               : Expanded(
                   child: DragTarget<Project>(

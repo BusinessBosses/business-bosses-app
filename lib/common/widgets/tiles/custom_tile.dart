@@ -11,6 +11,7 @@ class CustomTile extends StatelessWidget {
   final bool hideIcon;
   final bool showBorder;
   final bool? ishome;
+  final bool? isbossup;
 
   const CustomTile({
     Key? key,
@@ -20,6 +21,7 @@ class CustomTile extends StatelessWidget {
     this.hideIcon = false,
     this.showBorder = false,
     this.ishome,
+    this.isbossup,
   }) : super(key: key);
 
   @override
@@ -83,50 +85,52 @@ class CustomTile extends StatelessWidget {
                                       width: 0.5, color: Colors.black12)),
                               child: ClipRRect(
                                 borderRadius: BorderRadius.circular(15.0),
-                                child: CachedNetworkImage(
-                                  imageUrl: photo,
-                                  memCacheHeight: 512,
-                                  memCacheWidth: 512,
-                                  placeholder:
-                                      (BuildContext context, String photo) =>
-                                          const CircularProgressIndicator(),
-                                  errorWidget: (BuildContext context,
-                                          String photo, Object error) =>
-                                      const Icon(Icons.error),
-                                ),
+                                child: isbossup == true
+                                    ? Image.asset(photo)
+                                    : CachedNetworkImage(
+                                        imageUrl: photo,
+                                        memCacheHeight: 512,
+                                        memCacheWidth: 512,
+                                        placeholder: (BuildContext context,
+                                                String photo) =>
+                                            const CircularProgressIndicator(),
+                                        errorWidget: (BuildContext context,
+                                                String photo, Object error) =>
+                                            const Icon(Icons.error),
+                                      ),
                               ),
                             ),
                           ),
-                          if (ishome == true)
-                            Positioned(
-                                bottom: 10,
-                                left: 20,
-                                child: Container(
-                                  padding: const EdgeInsets.symmetric(
-                                      horizontal: 5, vertical: 5),
-                                  decoration: BoxDecoration(
-                                      color: primaryColorLT,
-                                      borderRadius: BorderRadius.circular(100)),
-                                  child: Wrap(
-                                      crossAxisAlignment:
-                                          WrapCrossAlignment.center,
-                                      children: <Widget>[
-                                        SvgPicture.asset(
-                                          'assets/svgs/playicon.svg',
-                                          height: 20,
-                                        ),
-                                        const SizedBox(
-                                          width: 5,
-                                        ),
-                                        const Text(
-                                          'Watch Videos',
-                                          style: TextStyle(
-                                              color: Colors.white,
-                                              fontSize: 12,
-                                              fontWeight: FontWeight.w700),
-                                        ),
-                                      ]),
-                                ))
+                          // if (ishome == true)
+                          //   Positioned(
+                          //       bottom: 10,
+                          //       left: 20,
+                          //       child: Container(
+                          //         padding: const EdgeInsets.symmetric(
+                          //             horizontal: 5, vertical: 5),
+                          //         decoration: BoxDecoration(
+                          //             color: primaryColorLT,
+                          //             borderRadius: BorderRadius.circular(100)),
+                          //         child: Wrap(
+                          //             crossAxisAlignment:
+                          //                 WrapCrossAlignment.center,
+                          //             children: <Widget>[
+                          //               SvgPicture.asset(
+                          //                 'assets/svgs/playicon.svg',
+                          //                 height: 20,
+                          //               ),
+                          //               const SizedBox(
+                          //                 width: 5,
+                          //               ),
+                          //               const Text(
+                          //                 'Watch Videos',
+                          //                 style: TextStyle(
+                          //                     color: Colors.white,
+                          //                     fontSize: 12,
+                          //                     fontWeight: FontWeight.w700),
+                          //               ),
+                          //             ]),
+                          //       ))
                         ],
                       ),
                       ishome == true

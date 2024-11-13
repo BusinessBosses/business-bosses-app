@@ -6,7 +6,6 @@ import 'package:business_bosses_v2/bbpro/models/product_model.dart';
 import 'package:business_bosses_v2/bbpro/widgets/button.dart';
 import 'package:business_bosses_v2/bbpro/widgets/dropdown.dart';
 import 'package:business_bosses_v2/bbpro/widgets/edittext.dart';
-import 'package:business_bosses_v2/bbpro/widgets/iconbutton.dart';
 import 'package:business_bosses_v2/bbpro/widgets/multipleedit.dart';
 import 'package:business_bosses_v2/bbpro/widgets/switchwidget.dart';
 import 'package:business_bosses_v2/bbpro/widgets/textfield.dart';
@@ -20,7 +19,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:intl/intl.dart';
 
 class CreateProductListing extends StatefulWidget {
   final Product? product;
@@ -94,7 +92,9 @@ class _CreateProductListingState extends State<CreateProductListing> {
       _priceController.text = widget.product!.price.toString();
       _descriptionController.text = widget.product!.description;
       _discountController.text = widget.product!.discount.toString();
-      storageLocationController.text = widget.product!.storageLocation;
+      storageLocationController.text = widget.product!.storageLocation != null
+          ? widget.product!.storageLocation!
+          : '';
       productNumberController.text = widget.product!.productNumber.toString();
       quantityController.text = widget.product!.quantity.toString();
       colorController.text = widget.product!.color?.join(', ') ?? '';
@@ -103,13 +103,17 @@ class _CreateProductListingState extends State<CreateProductListing> {
       deliveryDuration = widget.product!.deliveryDuration;
       sizeController.text = widget.product!.size?.join(', ') ?? '';
       category = widget.product!.category;
-      country = widget.product!.location;
+      country = widget.product!.location != null
+          ? widget.product!.location!
+          : shopController.shop!.location;
       deliveryMethod = widget.product!.deliveryMethod;
       paymentMethod = widget.product!.paymentMethod;
       startDate = widget.product!.startAt;
       endDate = widget.product!.endAt;
       _isSwitched = widget.product!.isActive;
-      deliverydayscontroller.text = widget.product!.deliveryDuration ?? '0';
+      deliverydayscontroller.text = widget.product!.deliveryDuration ?? '';
+      sizes = widget.product!.size!;
+      colors = widget.product!.color!;
 
       // If images exist in the product model, you can populate the image list as well
       if (widget.product!.images != null) {
@@ -394,12 +398,6 @@ class _CreateProductListingState extends State<CreateProductListing> {
                     hintText:
                         'Enter number of days you can deliver after purchase',
                     controller: deliverydayscontroller,
-                    validator: (String? value) {
-                      if (value == null || value.isEmpty) {
-                        return 'Please enter number of delivery days';
-                      }
-                      return null;
-                    },
                   ),
                   const SizedBox(height: 16),
                   CustomDropdownWidget(
@@ -419,12 +417,6 @@ class _CreateProductListingState extends State<CreateProductListing> {
                     caption: 'Storage Location',
                     hintText: 'Enter storage location',
                     controller: storageLocationController,
-                    validator: (String? value) {
-                      if (value == null || value.isEmpty) {
-                        return 'Please enter a storage location';
-                      }
-                      return null;
-                    },
                   ),
                   const SizedBox(height: 16),
                   CustomEditText(
@@ -432,12 +424,6 @@ class _CreateProductListingState extends State<CreateProductListing> {
                     hintText: 'Enter product number',
                     inputType: TextInputType.number,
                     controller: productNumberController,
-                    validator: (String? value) {
-                      if (value == null || value.isEmpty) {
-                        return 'Please enter a product number';
-                      }
-                      return null;
-                    },
                   ),
                   const SizedBox(height: 16),
                   CustomEditText(
@@ -445,12 +431,6 @@ class _CreateProductListingState extends State<CreateProductListing> {
                     hintText: 'Enter quantity',
                     inputType: TextInputType.number,
                     controller: quantityController,
-                    validator: (String? value) {
-                      if (value == null || value.isEmpty) {
-                        return 'Please enter quantity available';
-                      }
-                      return null;
-                    },
                   ),
                   const SizedBox(height: 16),
                   Padding(
@@ -481,6 +461,7 @@ class _CreateProductListingState extends State<CreateProductListing> {
                                 buttonSize: 20,
                                 caption: 'Color',
                                 hintText: 'color',
+                                initialValues: colors,
                                 onValuesChanged: (List<String> values) {
                                   setState(() {
                                     colors = values;
@@ -494,6 +475,7 @@ class _CreateProductListingState extends State<CreateProductListing> {
                                 buttonSize: 20,
                                 caption: 'Size',
                                 hintText: 'size',
+                                initialValues: sizes,
                                 onValuesChanged: (List<String> values) {
                                   setState(() {
                                     sizes = values;
@@ -529,17 +511,18 @@ class _CreateProductListingState extends State<CreateProductListing> {
               loading: isSubmitted,
               text: widget.product != null ? 'Save Changes' : 'Create',
               onPressed: () async {
+                if (_productNameController.text.isEmpty) {
+                  showSnackbar(message: 'Enter product name', error: true);
+                  return;
+                }
+
                 if (category == null) {
                   showSnackbar(message: 'Select a category', error: true);
                   return;
                 }
-                if (paymentMethod == null) {
-                  showSnackbar(message: 'Select a payment method', error: true);
-                  return;
-                }
-                if (deliveryMethod == null) {
-                  showSnackbar(
-                      message: 'Select a delivery method', error: true);
+
+                if (_priceController.text.isEmpty) {
+                  showSnackbar(message: 'Enter price', error: true);
                   return;
                 }
 
@@ -558,13 +541,14 @@ class _CreateProductListingState extends State<CreateProductListing> {
                   setState(() {
                     isSubmitted = true;
                   });
-
-                  for (File image in _selectedImages) {
-                    dynamic response = await ApiService.uploadFile(image);
-                    if (response['success']) {
-                      setState(() {
-                        images!.add(response['fileUrl']);
-                      });
+                  if (_selectedImages.isNotEmpty) {
+                    for (File image in _selectedImages) {
+                      dynamic response = await ApiService.uploadFile(image);
+                      if (response['success']) {
+                        setState(() {
+                          images!.add(response['fileUrl']);
+                        });
+                      }
                     }
                   }
                   final Map<String, dynamic> productListing = <String, dynamic>{
@@ -572,7 +556,7 @@ class _CreateProductListingState extends State<CreateProductListing> {
                     'shopId': shopController.shop?.id,
                     'name': _productNameController.text,
                     'price': _priceController.text,
-                    'discount': _discountController.text ?? 0,
+                    'discount': _discountController.text,
                     'description': _descriptionController.text,
                     'category': category,
                     'location': shopController.shop?.location,
@@ -586,7 +570,9 @@ class _CreateProductListingState extends State<CreateProductListing> {
                     'supplierId': null,
                     'storageLocation': storageLocationController.text,
                     'productNumber': productNumberController.text,
-                    'quantity': quantityController.text,
+                    'quantity': quantityController.text.isEmpty
+                        ? 0
+                        : quantityController.text,
                     'startAt': startDate?.toIso8601String(),
                     'endAt': endDate?.toIso8601String(),
                     'color': colors,

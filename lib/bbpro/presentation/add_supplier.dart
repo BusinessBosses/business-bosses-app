@@ -12,7 +12,6 @@ import 'package:flutter/material.dart';
 import 'package:business_bosses_v2/bbpro/widgets/button.dart';
 import 'package:business_bosses_v2/bbpro/widgets/dropdown.dart';
 import 'package:business_bosses_v2/bbpro/widgets/edittext.dart';
-import 'package:business_bosses_v2/bbpro/widgets/multipleedit.dart';
 import 'package:business_bosses_v2/utils/theme/theme.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
@@ -122,6 +121,7 @@ class _AddSupplierState extends State<AddSupplier> {
         bool success = await shopController.addSupplier(supplierData);
         if (success) {
           showSnackbar(message: 'Supplier Added Successfully!');
+          // ignore: always_specify_types
           await Future.delayed(
               const Duration(seconds: 1)); // Optional delay for visibility
           // ignore: use_build_context_synchronously

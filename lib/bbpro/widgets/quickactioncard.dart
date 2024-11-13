@@ -17,6 +17,7 @@ class QuickActionCard extends StatefulWidget {
   }) : super(key: key);
 
   @override
+  // ignore: library_private_types_in_public_api
   _QuickActionCardState createState() => _QuickActionCardState();
 }
 
@@ -27,7 +28,9 @@ class _QuickActionCardState extends State<QuickActionCard> {
       children: <Widget>[
         CircleAvatar(
             radius: 30,
-            backgroundColor: widget.color!.withOpacity(0.1) ?? prosemibackColor,
+            backgroundColor: widget.color != null
+                ? widget.color!.withOpacity(0.1)
+                : prosemibackColor,
             child: SvgPicture.asset(
               widget.assetlocation!,
               color: widget.color ?? Colors.black,
@@ -38,6 +41,7 @@ class _QuickActionCardState extends State<QuickActionCard> {
         ),
         Text(
           widget.cardName,
+          textAlign: TextAlign.center,
           style: const TextStyle(
             fontSize: 12,
             fontWeight: FontWeight.bold,

@@ -1,7 +1,5 @@
 import 'package:business_bosses_v2/bbpro/controllers/shop_controller.dart';
 import 'package:business_bosses_v2/bbpro/presentation/add_client.dart';
-import 'package:business_bosses_v2/bbpro/widgets/button.dart';
-import 'package:business_bosses_v2/bbpro/widgets/edittext.dart';
 import 'package:business_bosses_v2/bbpro/widgets/iconbutton.dart';
 import 'package:business_bosses_v2/bbpro/widgets/proseardwidget.dart';
 import 'package:business_bosses_v2/utils/theme/theme.dart';
@@ -14,6 +12,7 @@ class ChooseClientBottomSheet extends StatefulWidget {
   final List<Map<String, dynamic>> inperson;
   final List<Map<String, dynamic>> bbuser;
   final String selectedItem;
+  final VoidCallback? onClientAdded;
 
   const ChooseClientBottomSheet({
     Key? key,
@@ -21,6 +20,7 @@ class ChooseClientBottomSheet extends StatefulWidget {
     required this.online,
     required this.inperson,
     required this.bbuser,
+    this.onClientAdded,
   }) : super(key: key);
 
   @override
@@ -81,7 +81,9 @@ class _ChooseClientBottomSheetState extends State<ChooseClientBottomSheet>
                 ProIconButton(
                   icon: const Icon(Icons.add),
                   onPressed: () {
-                    Get.to(const Addclient());
+                    Get.to(Addclient(
+                      onClientAdded: widget.onClientAdded,
+                    ));
                   },
                   text: 'New Client',
                   radius: 10.0,

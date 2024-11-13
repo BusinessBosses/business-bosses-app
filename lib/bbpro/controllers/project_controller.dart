@@ -1,3 +1,4 @@
+import 'package:business_bosses_v2/bbpro/controllers/shop_controller.dart';
 import 'package:business_bosses_v2/bbpro/models/project_model.dart';
 import 'package:business_bosses_v2/bbpro/models/task_model.dart';
 import 'package:business_bosses_v2/common/dialogs/snackbar.dart';
@@ -8,6 +9,7 @@ import 'package:get/get.dart';
 
 class ProjectController extends GetxController {
   final ProfileController profileController = Get.find();
+  final ShopController shopController = Get.find();
   RxList<Task> tasks = RxList<Task>(<Task>[]);
   RxList<Project> projects = RxList<Project>(<Project>[]);
   RxBool loading = RxBool(true);
@@ -57,6 +59,7 @@ class ProjectController extends GetxController {
     ApiResponseModel response =
         await ApiService.post(path: 'projects', body: data);
     if (response.success) {
+      shopController.loadShopData();
       return true;
     } else {
       return false;
@@ -67,6 +70,7 @@ class ProjectController extends GetxController {
     try {
       // Call your API to update the task's status in the backend
       await ApiService.put(path: 'tasks/$taskId', body: data);
+      shopController.loadShopData();
       // You can also handle local state or cache updates if necessary
     } catch (e) {
       // Handle any errors that occur during the update
@@ -81,6 +85,7 @@ class ProjectController extends GetxController {
       final ApiResponseModel response =
           await ApiService.put(path: 'projects/$projectId', body: data);
       if (response.success) {
+        shopController.loadShopData();
         return true;
       }
       return false;
@@ -99,6 +104,7 @@ class ProjectController extends GetxController {
 
       if (response.success) {
         initProjects(profileController.myProfile.uid);
+        shopController.loadShopData();
         return true;
       } else {
         showSnackbar(message: 'Error deleting project');

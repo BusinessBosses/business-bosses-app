@@ -24,6 +24,7 @@ class RelevantUsersScreen extends StatefulWidget {
   const RelevantUsersScreen({Key? key}) : super(key: key);
 
   @override
+  // ignore: library_private_types_in_public_api
   _RelevantUsersScreenState createState() => _RelevantUsersScreenState();
 }
 
@@ -44,7 +45,7 @@ class _RelevantUsersScreenState extends State<RelevantUsersScreen> {
               element.category.toString() == _filtertitle)
           .toList();
 
-      void _refreshScreen() {
+      void refreshScreen() {
         setState(() {
           _filtertitle = '';
         });
@@ -190,7 +191,7 @@ class _RelevantUsersScreenState extends State<RelevantUsersScreen> {
                                       child: MCustomButton(
                                         buttonType: ButtonType.outlinegrey,
                                         onPressed: () {
-                                          _refreshScreen();
+                                          refreshScreen();
                                           Get.back();
                                         },
                                         height: 40,
@@ -316,6 +317,7 @@ class _RelevantUsersScreenState extends State<RelevantUsersScreen> {
     required List<ForDataPicker> list,
   }) async {
     final MyResponse? res = await Navigator.of(context).push(
+      // ignore: always_specify_types
       MaterialPageRoute(
         builder: (BuildContext context) => DataSelectionScreen(
           analyser: analyser,
@@ -357,7 +359,10 @@ class _RelevantUsersScreenState extends State<RelevantUsersScreen> {
     return SafetyModel(
       icon: SvgPicture.asset(
         'assets/svgs/group.svg',
-        color: hintColor,
+        colorFilter: const ColorFilter.mode(
+          hintColor,
+          BlendMode.srcIn,
+        ),
         height: 80.0,
       ),
       isLoading: !_isLoading,

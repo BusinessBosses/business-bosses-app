@@ -1,5 +1,6 @@
+import 'package:business_bosses_v2/features/premium/premiumscreen.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/svg.dart';
+import 'package:get/get.dart';
 
 import '../../../utils/theme/theme.dart';
 
@@ -10,27 +11,33 @@ Widget subscribetopremiumbutton() {
       borderRadius: BorderRadius.circular(100.0),
     ),
     child: IntrinsicWidth(
-      child: Padding(
-        padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 15),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            const Text(
-              'Subscribe to Pro',
-              style: TextStyle(
-                fontWeight: FontWeight.w700,
-                fontSize: 15,
-                color: Colors.white,
+      child: GestureDetector(
+        onTap: () {
+          Get.to(() => const PremiumScreen());
+        },
+        child: const Padding(
+          padding: EdgeInsets.symmetric(vertical: 8, horizontal: 15),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: <Widget>[
+              Text(
+                'Upgrade to Pro',
+                style: TextStyle(
+                  fontWeight: FontWeight.w700,
+                  fontSize: 15,
+                  color: Colors.white,
+                ),
               ),
-            ),
-            const SizedBox(
-              width: 15,
-            ),
-            SvgPicture.asset(
-              'assets/svgs/nextbutton.svg',
-              color: Colors.white,
-            ),
-          ],
+              // SizedBox(
+              //   width: 5,
+              // ),
+              // Icon(
+              //   Icons.add,
+              //   color: Colors.white,
+              //   size: 15,
+              // )
+            ],
+          ),
         ),
       ),
     ),

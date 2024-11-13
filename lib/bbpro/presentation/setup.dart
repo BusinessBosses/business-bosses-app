@@ -59,12 +59,12 @@ class _SetupState extends State<Setup> {
                       ));
                 },
                 child: Container(
-                    margin: const EdgeInsets.only(bottom: 10),
+                    margin: const EdgeInsets.only(bottom: 0),
                     decoration: BoxDecoration(
                         color: backgroundColor,
                         borderRadius: BorderRadius.circular(40)),
                     padding: const EdgeInsets.symmetric(
-                        horizontal: 15, vertical: 12),
+                        horizontal: 15, vertical: 10),
                     child: Row(
                       children: <Widget>[
                         SvgPicture.asset(
@@ -75,7 +75,7 @@ class _SetupState extends State<Setup> {
                           width: 5,
                         ),
                         const Text(
-                          'Edit Shop',
+                          'Edit',
                           style: TextStyle(
                               fontSize: 14,
                               color: textColor,
@@ -111,12 +111,15 @@ class _SetupState extends State<Setup> {
                             alignment: Alignment.topLeft,
                             child: ClipRRect(
                               borderRadius: BorderRadius.circular(1000),
-                              child: NetworkImageWithPlaceHolder(
-                                imageUrl: shopController.shop!.image ?? '',
-                                radius: radius,
-                                placeHolder: Icons.person,
-                                iconSize: 22.0,
-                                fit: BoxFit.cover,
+                              child: GetBuilder<ShopController>(
+                                builder: (ShopController controller) =>
+                                    NetworkImageWithPlaceHolder(
+                                  imageUrl: controller.shop?.image ?? '',
+                                  radius: radius,
+                                  placeHolder: Icons.person,
+                                  iconSize: 22.0,
+                                  fit: BoxFit.cover,
+                                ),
                               ),
                             ),
                           ),
@@ -125,9 +128,15 @@ class _SetupState extends State<Setup> {
                         Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: <Widget>[
-                            Text(shopController.shop!.name,
+                            GetBuilder<ShopController>(
+                              builder: (ShopController controller) => Text(
+                                controller.shop?.name ?? '',
                                 style: const TextStyle(
-                                    fontWeight: FontWeight.bold, fontSize: 20)),
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 20,
+                                ),
+                              ),
+                            ),
                             const SizedBox(height: 10),
                             Row(
                               children: <Widget>[

@@ -7,8 +7,8 @@ import 'package:business_bosses_v2/navigation/routes.dart';
 import 'package:business_bosses_v2/utils/constants/constants.dart';
 import 'package:business_bosses_v2/utils/theme/theme.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class LearningPage extends StatefulWidget {
   const LearningPage({super.key});
@@ -18,6 +18,7 @@ class LearningPage extends StatefulWidget {
 }
 
 class _LearningPageState extends State<LearningPage> {
+  // ignore: unused_field
   final CommunitiesController _communitiesController =
       Get.put(CommunitiesController());
   @override
@@ -62,9 +63,23 @@ class _LearningPageState extends State<LearningPage> {
                               .toList();
 
                           return GridView.builder(
-                            itemCount: activeIndustries.length,
+                            itemCount: activeIndustries.length + 1,
                             itemBuilder: (BuildContext context, int index) {
-                              Industry industry = activeIndustries[index];
+                              if (index == 0) {
+                                return CustomTile(
+                                  label: 'Launch a Venture 10x Faster',
+                                  onTap: () async {
+                                    final Uri url =
+                                        Uri.parse('https://business-school.io');
+                                    if (!await launchUrl(url)) {
+                                      throw Exception('Could not launch $url');
+                                    }
+                                  },
+                                  photo: 'assets/images/bbschool.png',
+                                  isbossup: true,
+                                );
+                              }
+                              Industry industry = activeIndustries[index - 1];
                               return CustomTile(
                                 label: industry.industry!,
                                 photo: industry.photo!,

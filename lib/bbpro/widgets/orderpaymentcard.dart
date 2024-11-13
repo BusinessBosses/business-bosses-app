@@ -1,8 +1,17 @@
+import 'package:business_bosses_v2/utils/theme/theme.dart';
 import 'package:flutter/material.dart';
 
-class OrderPaymentMethodsWidget extends StatelessWidget {
-  const OrderPaymentMethodsWidget({Key? key}) : super(key: key);
+class OrderPaymentMethodsWidget extends StatefulWidget {
+  final List<dynamic>? paymentMethods;
+  const OrderPaymentMethodsWidget({Key? key, this.paymentMethods})
+      : super(key: key);
 
+  @override
+  State<OrderPaymentMethodsWidget> createState() =>
+      _OrderPaymentMethodsWidgetState();
+}
+
+class _OrderPaymentMethodsWidgetState extends State<OrderPaymentMethodsWidget> {
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -16,18 +25,19 @@ class OrderPaymentMethodsWidget extends StatelessWidget {
           children: <Widget>[
             const Text(
               "Seller's Accepted Payment Methods",
-              style: TextStyle(fontWeight: FontWeight.bold),
+              style: TextStyle(
+                  fontSize: 14,
+                  fontWeight: FontWeight.w700,
+                  color: proprimaryColor),
             ),
             const SizedBox(height: 16.0),
-            _buildPaymentMethod(
-              title: 'Bank Payment',
-              details:
-                  '123456789012, ABC Bank, 4567 Market St, Apt 12, San Francisco, CA 94103',
-            ),
-            const SizedBox(height: 16.0),
-            _buildPaymentMethod(
-              title: 'Cash',
-            ),
+            if (widget.paymentMethods != null)
+              ...widget.paymentMethods!
+                  .map((dynamic payment) => _buildPaymentMethod(
+                        title: payment['paymentMethod'],
+                        details: 'Details: ' + payment['details'],
+                      ))
+                  .toList(),
           ],
         ),
       ),
@@ -35,19 +45,25 @@ class OrderPaymentMethodsWidget extends StatelessWidget {
   }
 
   Widget _buildPaymentMethod({required String title, String? details}) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: <Widget>[
-        Text(
-          title,
-          style: const TextStyle(fontWeight: FontWeight.w500),
-        ),
-        if (details != null)
-          Padding(
-            padding: const EdgeInsets.only(top: 4.0),
-            child: Text(details),
+    return SizedBox(
+      width: double.infinity,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: <Widget>[
+          Text(
+            title,
+            style: const TextStyle(fontWeight: FontWeight.w600, fontSize: 13),
           ),
-      ],
+          if (details != null)
+            Padding(
+              padding: const EdgeInsets.only(top: 4.0),
+              child: Text(
+                details,
+                style: const TextStyle(fontSize: 13),
+              ),
+            ),
+        ],
+      ),
     );
   }
 }

@@ -5,6 +5,8 @@ import 'package:business_bosses_v2/bbpro/presentation/dashboard.dart';
 import 'package:business_bosses_v2/bbpro/presentation/ordersandinvoices.dart';
 import 'package:business_bosses_v2/bbpro/presentation/projects.dart';
 import 'package:business_bosses_v2/bbpro/presentation/setup.dart';
+import 'package:business_bosses_v2/bbpro/presentation/setupshop.dart';
+import 'package:business_bosses_v2/common/widgets/safety_model.dart';
 import 'package:business_bosses_v2/features/profile/controller/profile_controller.dart';
 import 'package:business_bosses_v2/utils/theme/theme.dart';
 import 'package:flutter/material.dart';
@@ -13,9 +15,15 @@ import 'package:get/get.dart';
 
 class Bottomnavscreen extends StatefulWidget {
   final int? initialindex;
-  const Bottomnavscreen({super.key, this.initialindex});
+  final void Function(int)? onTabChanged;
+  const Bottomnavscreen(
+      {super.key, bottomNavScreenKey, this.initialindex, this.onTabChanged});
+
+  static _BottomnavscreenState? of(BuildContext context) =>
+      context.findAncestorStateOfType<_BottomnavscreenState>();
 
   @override
+  // ignore: library_private_types_in_public_api
   _BottomnavscreenState createState() => _BottomnavscreenState();
 }
 
@@ -24,6 +32,23 @@ class _BottomnavscreenState extends State<Bottomnavscreen> {
   final ClientsController clientsController = Get.put(ClientsController());
   final ProfileController profileController = Get.put(ProfileController());
   late int _selectedIndex;
+
+  void _onItemTapped(int index) {
+    setState(() {
+      _selectedIndex = index;
+    });
+
+    if (widget.onTabChanged != null) {
+      widget.onTabChanged!(index);
+    }
+  }
+
+  void onTabTapped(int index) {
+    setState(() {
+      _selectedIndex = index;
+      _onItemTapped(index);
+    });
+  }
 
   static const List<Widget> _widgetOptions = <Widget>[
     Dashboard(),
@@ -37,16 +62,17 @@ class _BottomnavscreenState extends State<Bottomnavscreen> {
   void initState() {
     super.initState();
     _selectedIndex = widget.initialindex ?? 0;
-  }
-
-  void _onItemTapped(int index) {
-    setState(() {
-      _selectedIndex = index;
+    shopController.initShop().then((bool value) {
+      if (value) {
+        shopController.loading(false);
+      } else {
+        Get.to(const Setupshop());
+      }
     });
   }
 
   Future<bool> _onWillPop() async {
-    final newIndex = Get.arguments;
+    final dynamic newIndex = Get.arguments;
     if (newIndex != null && newIndex is int) {
       setState(() {
         _selectedIndex = newIndex;
@@ -57,66 +83,68 @@ class _BottomnavscreenState extends State<Bottomnavscreen> {
 
   @override
   Widget build(BuildContext context) {
-    return WillPopScope(
-      onWillPop: _onWillPop,
-      child: Scaffold(
-        body: Center(
-          child: _widgetOptions.elementAt(_selectedIndex),
-        ),
-        bottomNavigationBar: BottomNavigationBar(
-          backgroundColor: Colors.white,
-          type: BottomNavigationBarType.fixed,
-          items: <BottomNavigationBarItem>[
-            BottomNavigationBarItem(
-              icon: SvgPicture.asset(
-                'assets/svgs/dashboard.svg',
-                height: 20,
-                color: _selectedIndex == 0
-                    ? proprimaryColor
-                    : const Color(0xffBDBEC0),
+    return Obx(() => shopController.loading.value
+        ? const SafetyModel(isLoading: true)
+        : WillPopScope(
+            onWillPop: _onWillPop,
+            child: Scaffold(
+              body: Center(
+                child: _widgetOptions.elementAt(_selectedIndex),
               ),
-              label: 'Dashboard',
+              bottomNavigationBar: BottomNavigationBar(
+                backgroundColor: Colors.white,
+                type: BottomNavigationBarType.fixed,
+                items: <BottomNavigationBarItem>[
+                  BottomNavigationBarItem(
+                    icon: SvgPicture.asset(
+                      'assets/svgs/dashboard.svg',
+                      height: 20,
+                      color: _selectedIndex == 0
+                          ? proprimaryColor
+                          : const Color(0xffBDBEC0),
+                    ),
+                    label: 'Dashboard',
+                  ),
+                  BottomNavigationBarItem(
+                    icon: SvgPicture.asset('assets/svgs/projects.svg',
+                        height: 20,
+                        color: _selectedIndex == 1
+                            ? proprimaryColor
+                            : const Color(0xffBDBEC0)),
+                    label: 'Tasks',
+                  ),
+                  BottomNavigationBarItem(
+                    icon: SvgPicture.asset('assets/svgs/ordersinvoices.svg',
+                        height: 20,
+                        color: _selectedIndex == 2
+                            ? proprimaryColor
+                            : const Color(0xffBDBEC0)),
+                    label: 'Orders',
+                  ),
+                  BottomNavigationBarItem(
+                    icon: SvgPicture.asset('assets/svgs/clients.svg',
+                        height: 20,
+                        color: _selectedIndex == 3
+                            ? proprimaryColor
+                            : const Color(0xffBDBEC0)),
+                    label: 'Clients',
+                  ),
+                  BottomNavigationBarItem(
+                    icon: SvgPicture.asset('assets/svgs/setupshop.svg',
+                        height: 20,
+                        color: _selectedIndex == 4
+                            ? proprimaryColor
+                            : const Color(0xffBDBEC0)),
+                    label: 'Set Up',
+                  ),
+                ],
+                currentIndex: _selectedIndex,
+                selectedItemColor: proprimaryColor,
+                unselectedItemColor: Colors.grey,
+                onTap: _onItemTapped,
+              ),
             ),
-            BottomNavigationBarItem(
-              icon: SvgPicture.asset('assets/svgs/projects.svg',
-                  height: 20,
-                  color: _selectedIndex == 1
-                      ? proprimaryColor
-                      : const Color(0xffBDBEC0)),
-              label: 'Tasks',
-            ),
-            BottomNavigationBarItem(
-              icon: SvgPicture.asset('assets/svgs/ordersinvoices.svg',
-                  height: 20,
-                  color: _selectedIndex == 2
-                      ? proprimaryColor
-                      : const Color(0xffBDBEC0)),
-              label: 'Orders',
-            ),
-            BottomNavigationBarItem(
-              icon: SvgPicture.asset('assets/svgs/clients.svg',
-                  height: 20,
-                  color: _selectedIndex == 3
-                      ? proprimaryColor
-                      : const Color(0xffBDBEC0)),
-              label: 'Clients',
-            ),
-            BottomNavigationBarItem(
-              icon: SvgPicture.asset('assets/svgs/setupshop.svg',
-                  height: 20,
-                  color: _selectedIndex == 4
-                      ? proprimaryColor
-                      : const Color(0xffBDBEC0)),
-              label: 'Set Up',
-            ),
-          ],
-          currentIndex: _selectedIndex,
-          selectedItemColor: proprimaryColor,
-          unselectedItemColor: Colors.grey,
-          onTap: _onItemTapped,
-        ),
-      ),
-    );
+          ));
   }
 
   @override

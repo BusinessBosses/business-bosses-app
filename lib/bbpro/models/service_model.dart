@@ -13,14 +13,16 @@ class Service {
   String? notes;
   String category;
   String location;
-  String paymentMethod;
-  String deliveryMethod;
+  String? paymentMethod;
+  String? deliveryMethod;
   String? url;
   String itemType;
   bool isActive;
   String? deliveryTime;
   DateTime? availableTime;
-  String serviceType;
+  String? serviceType;
+  String? participants;
+  String? repeat;
   DateTime createdAt;
   Map<String, dynamic>? availability;
   List<dynamic> packages;
@@ -36,15 +38,17 @@ class Service {
     required this.description,
     required this.category,
     required this.location,
-    required this.paymentMethod,
-    required this.deliveryMethod,
+    this.paymentMethod,
+    this.deliveryMethod,
+    this.participants,
+    this.repeat,
     this.url,
     this.notes,
     required this.itemType,
     required this.isActive,
     this.deliveryTime,
     this.availableTime,
-    required this.serviceType,
+    this.serviceType,
     required this.createdAt,
     this.availability,
     this.packages = const <Map<String, dynamic>>[],
@@ -69,6 +73,8 @@ class Service {
       paymentMethod: json['paymentMethod'],
       deliveryMethod: json['deliveryMethod'],
       url: json['url'],
+      participants: json['participants'],
+      repeat: json['repeat'],
       itemType: json['itemType'],
       isActive: json['isActive'],
       deliveryTime: json['deliveryTime'],
@@ -103,6 +109,8 @@ class Service {
       'availability': availability.toString(),
       'packages': packages,
       'notes': notes,
+      'participants': participants,
+      'repeat': repeat,
     };
   }
 
@@ -130,7 +138,9 @@ Service {
   images: $images, 
   availability: $availability,
   packages: $packages,
-  notes: $notes
+  notes: $notes,
+  participants: $participants,
+  repeat: $repeat,
 }
 ''';
   }

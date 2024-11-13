@@ -1,5 +1,7 @@
 import 'package:business_bosses_v2/bbpro/controllers/order_controller.dart';
+import 'package:business_bosses_v2/bbpro/controllers/shop_controller.dart';
 import 'package:business_bosses_v2/bbpro/presentation/bottomnavscreen.dart';
+import 'package:business_bosses_v2/features/home/bottom_nav.dart';
 import 'package:business_bosses_v2/utils/theme/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:fl_chart/fl_chart.dart';
@@ -15,18 +17,23 @@ class OrdersWidget extends StatefulWidget {
 
 class _OrdersWidgetState extends State<OrdersWidget> {
   bool isHidden = false;
+  final ShopController shopController = Get.find();
   final OrderController orderController = Get.put(OrderController());
+
+  @override
+  void initState() {
+    super.initState();
+  }
+
+  void _navigateToOrders() {
+    Bottomnavscreen.of(context)?.onTabTapped(2);
+  }
+
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
-        Navigator.pushReplacement(
-          context,
-          MaterialPageRoute(
-            builder: (BuildContext context) =>
-                const Bottomnavscreen(initialindex: 2),
-          ),
-        );
+        _navigateToOrders();
       },
       child: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 15.0, vertical: 15),
@@ -69,13 +76,7 @@ class _OrdersWidgetState extends State<OrdersWidget> {
                         alignment: Alignment.centerRight,
                         child: GestureDetector(
                           onTap: () {
-                            Navigator.pushReplacement(
-                              context,
-                              MaterialPageRoute(
-                                builder: (BuildContext context) =>
-                                    const Bottomnavscreen(initialindex: 2),
-                              ),
-                            );
+                            _navigateToOrders();
                           },
                           child: Container(
                             padding: const EdgeInsets.symmetric(
@@ -96,7 +97,7 @@ class _OrdersWidgetState extends State<OrdersWidget> {
                                     children: <TextSpan>[
                                       TextSpan(
                                         text:
-                                            '(${orderController.orders.length})',
+                                            '${shopController.orderStats!.totalOrders}',
                                         style: const TextStyle(
                                           fontWeight: FontWeight.bold,
                                         ),
@@ -107,7 +108,10 @@ class _OrdersWidgetState extends State<OrdersWidget> {
                                 const SizedBox(width: 5),
                                 SvgPicture.asset(
                                   'assets/svgs/nexticon.svg',
-                                  color: proprimaryColor,
+                                  colorFilter: const ColorFilter.mode(
+                                    proprimaryColor,
+                                    BlendMode.srcIn,
+                                  ),
                                 ),
                               ],
                             ),
@@ -118,97 +122,170 @@ class _OrdersWidgetState extends State<OrdersWidget> {
                   ),
                 ],
               ),
-              Row(
-                children: <Widget>[
-                  SizedBox(
-                    width: 165,
-                    height: 165,
-                    child: PieChart(
-                      PieChartData(
-                        sections: <PieChartSectionData>[
-                          PieChartSectionData(
-                            color: Colors.blue,
-                            value: 430,
-                            title: '',
-                            radius: 40, // Reduced radius
+              // orderController.orders.isEmpty
+              //     ? const Padding(
+              //         padding: EdgeInsets.all(15),
+              //         child: Center(
+              //           child: Text(
+              //             'No Data To Show',
+              //             style: TextStyle(
+              //               fontSize: 14,
+              //               fontWeight: FontWeight.w700,
+              //               color: Colors.grey,
+              //             ),
+              //           ),
+              //         ),
+              //       )
+              //     :
+              shopController.orderStats != null &&
+                      shopController.orderStats!.totalOrders == 0
+                  ? const Padding(
+                      padding: EdgeInsets.all(15),
+                      child: Center(
+                        child: Text(
+                          'No Data To Show',
+                          style: TextStyle(
+                            fontSize: 14,
+                            fontWeight: FontWeight.w700,
+                            color: Colors.grey,
                           ),
-                          PieChartSectionData(
-                            color: Colors.purple,
-                            value: 430,
-                            title: '',
-                            radius: 40, // Reduced radius
-                          ),
-                          PieChartSectionData(
-                            color: Colors.yellow,
-                            value: 430,
-                            title: '',
-                            radius: 40, // Reduced radius
-                          ),
-                          PieChartSectionData(
-                            color: Colors.green,
-                            value: 430,
-                            title: '',
-                            radius: 40, // Reduced radius
-                          ),
-                          PieChartSectionData(
-                            color: Colors.red,
-                            value: 430,
-                            title: '',
-                            radius: 40, // Reduced radius
-                          ),
-                        ],
-                        sectionsSpace: 0,
-                        centerSpaceRadius: 35, // Reduced center space radius
+                        ),
                       ),
+                    )
+                  : Row(
+                      children: <Widget>[
+                        SizedBox(
+                          width: 165,
+                          height: 165,
+                          child: PieChart(
+                            PieChartData(
+                              sections: <PieChartSectionData>[
+                                PieChartSectionData(
+                                  color: Colors.blue,
+                                  value: double.parse(
+                                      shopController.orderStats?.online != null
+                                          ? shopController.orderStats!.online
+                                              .toString()
+                                          : '0'),
+                                  title: '',
+                                  radius: 40, // Reduced radius
+                                ),
+                                PieChartSectionData(
+                                  color: Colors.purple,
+                                  value: double.parse(
+                                      shopController.orderStats?.inPerson !=
+                                              null
+                                          ? shopController.orderStats!.inPerson
+                                              .toString()
+                                          : '0'),
+                                  title: '',
+                                  radius: 40, // Reduced radius
+                                ),
+                                PieChartSectionData(
+                                  color: Colors.yellow,
+                                  value: double.parse(
+                                      shopController.orderStats?.pending != null
+                                          ? shopController.orderStats!.pending
+                                              .toString()
+                                          : '0'),
+                                  title: '',
+                                  radius: 40, // Reduced radius
+                                ),
+                                PieChartSectionData(
+                                  color: Colors.green,
+                                  value: double.parse(
+                                      shopController.orderStats?.paid != null
+                                          ? shopController.orderStats!.paid
+                                              .toString()
+                                          : '0'),
+                                  title: '',
+                                  radius: 40, // Reduced radius
+                                ),
+                                PieChartSectionData(
+                                  color: Colors.red,
+                                  value: double.parse(
+                                      shopController.orderStats?.cancelled !=
+                                              null
+                                          ? shopController.orderStats!.cancelled
+                                              .toString()
+                                          : '0'),
+                                  title: '',
+                                  radius: 40, // Reduced radius
+                                ),
+                              ],
+                              sectionsSpace: 0,
+                              centerSpaceRadius:
+                                  35, // Reduced center space radius
+                            ),
+                          ),
+                        ),
+                        const SizedBox(
+                          width: 10,
+                        ),
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: <Widget>[
+                            Indicator(
+                              color: Colors.blue,
+                              text: 'Online',
+                              value: int.parse(
+                                  shopController.orderStats?.online != null
+                                      ? shopController.orderStats!.online
+                                          .toString()
+                                      : '0'),
+                            ),
+                            const SizedBox(
+                              height: 3,
+                            ),
+                            Indicator(
+                              color: Colors.purple,
+                              text: 'In Person',
+                              value: int.parse(
+                                  shopController.orderStats?.online != null
+                                      ? shopController.orderStats!.inPerson
+                                          .toString()
+                                      : '0'),
+                            ),
+                            const SizedBox(
+                              height: 3,
+                            ),
+                            Indicator(
+                              color: Colors.yellow,
+                              text: 'Pending',
+                              value: int.parse(
+                                  shopController.orderStats?.online != null
+                                      ? shopController.orderStats!.pending
+                                          .toString()
+                                      : '0'),
+                            ),
+                            const SizedBox(
+                              height: 3,
+                            ),
+                            Indicator(
+                              color: Colors.green,
+                              text: 'Paid',
+                              value: int.parse(
+                                  shopController.orderStats?.online != null
+                                      ? shopController.orderStats!.paid
+                                          .toString()
+                                      : '0'),
+                            ),
+                            const SizedBox(
+                              height: 3,
+                            ),
+                            Indicator(
+                              color: Colors.red,
+                              text: 'Cancelled',
+                              value: int.parse(
+                                  shopController.orderStats?.online != null
+                                      ? shopController.orderStats!.cancelled
+                                          .toString()
+                                      : '0'),
+                            ),
+                          ],
+                        ),
+                      ],
                     ),
-                  ),
-                  const SizedBox(
-                    width: 10,
-                  ),
-                  const Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: <Widget>[
-                      Indicator(
-                        color: Colors.blue,
-                        text: 'Online',
-                        value: 430,
-                      ),
-                      SizedBox(
-                        height: 3,
-                      ),
-                      Indicator(
-                        color: Colors.purple,
-                        text: 'In Person',
-                        value: 430,
-                      ),
-                      SizedBox(
-                        height: 3,
-                      ),
-                      Indicator(
-                        color: Colors.yellow,
-                        text: 'Pending',
-                        value: 430,
-                      ),
-                      SizedBox(
-                        height: 3,
-                      ),
-                      Indicator(
-                        color: Colors.green,
-                        text: 'Paid',
-                        value: 430,
-                      ),
-                      SizedBox(
-                        height: 3,
-                      ),
-                      Indicator(
-                        color: Colors.red,
-                        text: 'Cancelled',
-                        value: 430,
-                      ),
-                    ],
-                  ),
-                ],
-              ),
             ],
           ),
         ),

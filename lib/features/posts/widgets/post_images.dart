@@ -377,7 +377,7 @@ class PostImages extends StatelessWidget {
                               )
                             : post.images!.length == 2
                                 ? Row(
-                                    children: [
+                                    children: <Widget>[
                                       Expanded(
                                         child: GestureDetector(
                                           onTap: () {
@@ -406,7 +406,7 @@ class PostImages extends StatelessWidget {
                                           ),
                                         ),
                                       ),
-                                      SizedBox(
+                                      const SizedBox(
                                           width:
                                               8.0), // Add spacing between images if needed
                                       Expanded(
@@ -441,7 +441,7 @@ class PostImages extends StatelessWidget {
                                     ],
                                   )
                                 : Row(
-                                    children: [
+                                    children: <Widget>[
                                       Expanded(
                                         child: GestureDetector(
                                           onTap: () {
@@ -470,12 +470,12 @@ class PostImages extends StatelessWidget {
                                           ),
                                         ),
                                       ),
-                                      SizedBox(width: 8.0),
+                                      const SizedBox(width: 8.0),
                                       Expanded(
                                         child: Column(
                                           crossAxisAlignment: CrossAxisAlignment
                                               .stretch, // Make sure Column takes up full width
-                                          children: [
+                                          children: <Widget>[
                                             GestureDetector(
                                               onTap: () {
                                                 Navigator.of(context).push(
@@ -506,7 +506,7 @@ class PostImages extends StatelessWidget {
                                                 ),
                                               ),
                                             ),
-                                            SizedBox(height: 8.0),
+                                            const SizedBox(height: 8.0),
                                             GestureDetector(
                                               onTap: () {
                                                 Navigator.of(context).push(

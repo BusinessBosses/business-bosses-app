@@ -5,6 +5,7 @@ import 'package:business_bosses_v2/bbpro/widgets/button.dart';
 import 'package:business_bosses_v2/bbpro/widgets/edittext.dart';
 import 'package:business_bosses_v2/bbpro/widgets/iconbutton.dart';
 import 'package:business_bosses_v2/bbpro/widgets/proseardwidget.dart';
+import 'package:business_bosses_v2/common/widgets/network_image_with_placeholder.dart';
 import 'package:business_bosses_v2/utils/theme/theme.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -38,6 +39,25 @@ class _ChooseOrderBottomSheetState extends State<ChooseOrderBottomSheet>
   final TextEditingController currencyController = TextEditingController();
   final ShopController shopController = Get.find();
 
+  List<Map<String, dynamic>>? selectedItems;
+
+  final List<Map<String, dynamic>> _tempSelectedItems =
+      <Map<String, dynamic>>[];
+
+  String _searchQuery = '';
+
+  List<Map<String, dynamic>> get filteredProducts {
+    if (_searchQuery.isEmpty) {
+      return widget.products;
+    }
+    return widget.products.where((Map<String, dynamic> product) {
+      final String name = product['name'].toString().toLowerCase();
+      final String searchLower = _searchQuery.toLowerCase();
+
+      return name.contains(searchLower);
+    }).toList();
+  }
+
   @override
   void initState() {
     super.initState();
@@ -48,6 +68,7 @@ class _ChooseOrderBottomSheetState extends State<ChooseOrderBottomSheet>
       });
     });
     currencyController.text = shopController.shop!.currency;
+    selectedItems = widget.selectedItems;
   }
 
   @override
@@ -129,6 +150,7 @@ class _ChooseOrderBottomSheetState extends State<ChooseOrderBottomSheet>
               controller: _tabController,
               children: <Widget>[
                 // Products Tab content
+
                 Column(
                   children: <Widget>[
                     ProSearchbar(
@@ -137,22 +159,86 @@ class _ChooseOrderBottomSheetState extends State<ChooseOrderBottomSheet>
                       backgroundColor: backgroundColor,
                       hintText: 'Search Products',
                       onChange: (String query) {
-                        setState(() {});
+                        setState(() {
+                          _searchQuery = query;
+                        });
                       },
-                      onSubmit: (String query) {},
+                      onSubmit: (String query) {
+                        setState(() {
+                          _searchQuery = query;
+                        });
+                      },
                     ),
-                    Column(
-                      children:
-                          widget.products.map((Map<String, dynamic> product) {
-                        return CheckboxListTile(
-                          title: Text(product['name']),
-                          value: widget.selectedItems.contains(product),
-                          onChanged: (bool? selected) {
-                            _onItemSelect(selected, product);
-                          },
-                        );
-                      }).toList(),
-                    ),
+                    const SizedBox(height: 10),
+                    filteredProducts.isNotEmpty
+                        ? Column(
+                            children: filteredProducts
+                                .map((Map<String, dynamic> product) {
+                              bool isLastSelected =
+                                  _tempSelectedItems.isNotEmpty &&
+                                      _tempSelectedItems.last == product;
+                              return Column(
+                                children: <Widget>[
+                                  CheckboxListTile(
+                                    title: Text(product['name']),
+                                    secondary: (product['images'] != null &&
+                                            product['images'].isNotEmpty)
+                                        ? Container(
+                                            width: 50,
+                                            height: 50,
+                                            decoration: BoxDecoration(
+                                              borderRadius:
+                                                  BorderRadius.circular(8),
+                                            ),
+                                            child: ClipRRect(
+                                                borderRadius:
+                                                    BorderRadius.circular(8),
+                                                child:
+                                                    NetworkImageWithPlaceHolder(
+                                                        imageUrl:
+                                                            product['images'])),
+                                          )
+                                        : null,
+                                    subtitle: Text(
+                                        '${shopController.shop!.currency} ' +
+                                            product['price']),
+                                    value: _tempSelectedItems.contains(product),
+                                    onChanged: (bool? selected) {
+                                      setState(() {
+                                        if (selected == true) {
+                                          _tempSelectedItems.add(product);
+                                        } else {
+                                          _tempSelectedItems.remove(product);
+                                        }
+                                      });
+                                    },
+                                    checkColor: Colors.white,
+                                    activeColor: proprimaryColor,
+                                  ),
+                                  if (isLastSelected)
+                                    Padding(
+                                      padding: const EdgeInsets.only(left: 8.0),
+                                      child: ProIconButton(
+                                        onPressed: () {
+                                          setState(() {
+                                            widget.selectedItems
+                                                .addAll(_tempSelectedItems);
+                                            _tempSelectedItems.clear();
+                                          });
+                                          Navigator.pop(
+                                              context, widget.selectedItems);
+                                        },
+                                        text: 'Done',
+                                      ),
+                                    ),
+                                ],
+                              );
+                            }).toList(),
+                          )
+                        : const Text(
+                            'No search results',
+                            style: TextStyle(color: Colors.grey, fontSize: 16),
+                          ),
                   ],
                 ),
 
@@ -172,12 +258,36 @@ class _ChooseOrderBottomSheetState extends State<ChooseOrderBottomSheet>
                     Column(
                       children:
                           widget.services.map((Map<String, dynamic> service) {
-                        return CheckboxListTile(
-                          title: Text(service['name']),
-                          value: widget.selectedItems.contains(service),
-                          onChanged: (bool? selected) {
-                            _onItemSelect(selected, service);
-                          },
+                        bool isLastSelected = widget.selectedItems.isNotEmpty &&
+                            widget.selectedItems.last == service;
+                        return Column(
+                          children: <Widget>[
+                            CheckboxListTile(
+                              title: Text(service['name']),
+                              value: widget.selectedItems.contains(service),
+                              onChanged: (bool? selected) {
+                                _onItemSelect(selected, service);
+                              },
+                              checkColor: Colors.white,
+                              activeColor: proprimaryColor,
+                            ),
+                            if (isLastSelected)
+                              Padding(
+                                padding: const EdgeInsets.only(left: 8.0),
+                                child: ProIconButton(
+                                  onPressed: () {
+                                    setState(() {
+                                      widget.selectedItems
+                                          .addAll(_tempSelectedItems);
+                                      _tempSelectedItems.clear();
+                                    });
+                                    Navigator.pop(
+                                        context, widget.selectedItems);
+                                  },
+                                  text: 'Done',
+                                ),
+                              ),
+                          ],
                         );
                       }).toList(),
                     ),
@@ -196,11 +306,10 @@ class _ChooseOrderBottomSheetState extends State<ChooseOrderBottomSheet>
 
   void _onItemSelect(bool? selected, Map<String, dynamic> item) {
     setState(() {
-      if (selected!) {
-        widget.selectedItems.add(item);
+      if (selected == true) {
+        _tempSelectedItems.add(item);
       } else {
-        widget.selectedItems.removeWhere(
-            (Map<String, dynamic> element) => element['id'] == item['id']);
+        _tempSelectedItems.remove(item);
       }
     });
   }
@@ -213,7 +322,7 @@ class _ChooseOrderBottomSheetState extends State<ChooseOrderBottomSheet>
       'type': 'custom'
     });
     setState(() {
-    widget.onCanAddChange(false);
+      widget.onCanAddChange(false);
     });
 
     Navigator.pop(context);

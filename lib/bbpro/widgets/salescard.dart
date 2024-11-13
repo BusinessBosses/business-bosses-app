@@ -1,4 +1,6 @@
 import 'package:business_bosses_v2/bbpro/controllers/order_controller.dart';
+import 'package:business_bosses_v2/bbpro/controllers/shop_controller.dart';
+import 'package:business_bosses_v2/bbpro/models/shop_graph_model.dart';
 import 'package:business_bosses_v2/bbpro/presentation/bottomnavscreen.dart';
 import 'package:business_bosses_v2/utils/theme/theme.dart';
 import 'package:fl_chart/fl_chart.dart';
@@ -16,171 +18,226 @@ class SalesWidget extends StatefulWidget {
 class _SalesWidgetState extends State<SalesWidget> {
   bool isHidden = false;
   final OrderController orderController = Get.put(OrderController());
+  final ShopController shopController = Get.find();
+
+  String _formatNumber(int number) {
+    if (number >= 1000) {
+      double numberInK = number / 1000;
+      if (numberInK >= 1000) {
+        return '${(numberInK / 1000).toStringAsFixed(1)}K';
+      } else {
+        return '${numberInK.toStringAsFixed(1)}K';
+      }
+    } else {
+      return number.toString();
+    }
+  }
+
+  @override
+  void initState() {
+    super.initState();
+  }
+
+  void _navigateToOrders() {
+    Bottomnavscreen.of(context)?.onTabTapped(2);
+  }
+
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.only(left: 15.0, right: 15, bottom: 15),
-      child: Container(
-        width: double.infinity,
-        padding: const EdgeInsets.all(10.0),
-        decoration: BoxDecoration(
-          color: Colors.white,
-          borderRadius: BorderRadius.circular(16.0),
-        ),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: <Widget>[
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: <Widget>[
-                const Wrap(
-                  children: <Widget>[
-                    Text(
-                      'Sales',
-                      style:
-                          TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
-                    ),
-                    Text(
-                      ' - Breakdown',
-                      style: TextStyle(
-                          fontSize: 15,
-                          color: proprimaryColor,
-                          fontWeight: FontWeight.w700),
-                    ),
-                  ],
-                ),
-                Wrap(
-                  crossAxisAlignment: WrapCrossAlignment.center,
-                  children: <Widget>[
-                    Align(
-                      alignment: Alignment.centerRight,
-                      child: GestureDetector(
-                        onTap: () {
-                          Navigator.pushReplacement(
-                            context,
-                            MaterialPageRoute(
-                              builder: (BuildContext context) =>
-                                  const Bottomnavscreen(initialindex: 2),
+    return GetBuilder<ShopController>(
+      builder: (_) {
+        if (shopController.shopGraph == null) {
+          return const Padding(
+            padding: EdgeInsets.all(15),
+            child: Center(
+              child: Text('No Data To Show On Graph!'),
+            ),
+          );
+        }
+
+        return GestureDetector(
+          onTap: () {
+            _navigateToOrders();
+          },
+          child: Padding(
+            padding: const EdgeInsets.only(left: 15.0, right: 15, bottom: 15),
+            child: Container(
+              width: double.infinity,
+              padding: const EdgeInsets.all(10.0),
+              decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.circular(16.0),
+              ),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: <Widget>[
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: <Widget>[
+                      const Wrap(
+                        children: <Widget>[
+                          Text(
+                            'Sales',
+                            style: TextStyle(
+                              fontSize: 16,
+                              fontWeight: FontWeight.bold,
                             ),
-                          );
-                        },
-                        child: Container(
-                          padding: const EdgeInsets.symmetric(
-                              horizontal: 8, vertical: 8),
-                          decoration: BoxDecoration(
-                              color: prosemibackColor,
-                              borderRadius: BorderRadius.circular(8)),
-                          child: Wrap(
-                            crossAxisAlignment: WrapCrossAlignment.center,
-                            children: <Widget>[
-                              RichText(
-                                text: TextSpan(
-                                  text: 'View All Sales ',
-                                  style: const TextStyle(
-                                    color: proprimaryColor,
-                                    fontSize: 12,
-                                  ),
-                                  children: <TextSpan>[
-                                    TextSpan(
-                                      text:
-                                          '(${orderController.orders.length})',
-                                      style: const TextStyle(
-                                        fontWeight: FontWeight.bold,
+                          ),
+                          Text(
+                            ' - Breakdown',
+                            style: TextStyle(
+                              fontSize: 15,
+                              color: proprimaryColor,
+                              fontWeight: FontWeight.w700,
+                            ),
+                          ),
+                        ],
+                      ),
+                      Wrap(
+                        crossAxisAlignment: WrapCrossAlignment.center,
+                        children: <Widget>[
+                          Align(
+                            alignment: Alignment.centerRight,
+                            child: GestureDetector(
+                              onTap: () {
+                                _navigateToOrders();
+                              },
+                              child: Container(
+                                padding: const EdgeInsets.symmetric(
+                                  horizontal: 8,
+                                  vertical: 8,
+                                ),
+                                decoration: BoxDecoration(
+                                  color: prosemibackColor,
+                                  borderRadius: BorderRadius.circular(8),
+                                ),
+                                child: Wrap(
+                                  crossAxisAlignment: WrapCrossAlignment.center,
+                                  children: <Widget>[
+                                    RichText(
+                                      text: TextSpan(
+                                        text: 'View All Sales ',
+                                        style: const TextStyle(
+                                          color: proprimaryColor,
+                                          fontSize: 12,
+                                        ),
+                                        children: <TextSpan>[
+                                          TextSpan(
+                                            text:
+                                                '${shopController.shop!.currency}${_formatNumber(shopController.shopGraph!.totalSales)}',
+                                            style: const TextStyle(
+                                              fontWeight: FontWeight.bold,
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                    const SizedBox(width: 5),
+                                    SvgPicture.asset(
+                                      'assets/svgs/nexticon.svg',
+                                      colorFilter: const ColorFilter.mode(
+                                        proprimaryColor,
+                                        BlendMode.srcIn,
                                       ),
                                     ),
                                   ],
                                 ),
                               ),
-                              const SizedBox(width: 5),
-                              SvgPicture.asset(
-                                'assets/svgs/nexticon.svg',
-                                color: proprimaryColor,
-                              ),
-                            ],
+                            ),
+                          ),
+                        ],
+                      ),
+                    ],
+                  ),
+                  const SizedBox(height: 10),
+                  if (shopController.shopGraph!.totalSales == 0)
+                    const Padding(
+                      padding: EdgeInsets.all(15),
+                      child: Center(
+                        child: Text(
+                          'No Data To Show',
+                          style: TextStyle(
+                            fontSize: 14,
+                            fontWeight: FontWeight.w700,
+                            color: Colors.grey,
                           ),
                         ),
                       ),
-                    ),
-                  ],
-                ),
-              ],
-            ),
-            const SizedBox(
-              height: 10,
-            ),
-            // const Row(
-            //   children: <Widget>[
-            //     Text(
-            //       '128,7K',
-            //       style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
-            //     ),
-            //   ],
-            // ),
-            Container(
-              padding: const EdgeInsets.only(right: 10),
-              height: 100,
-              width: double.infinity,
-              child: LineChart(
-                LineChartData(
-                  minX: 0,
-                  maxX: 6,
-                  minY: 0,
-                  maxY: 1000,
-                  titlesData: FlTitlesData(
-                    leftTitles: SideTitles(showTitles: true, interval: 200),
-                    bottomTitles: SideTitles(
-                        showTitles: true,
-                        getTitles: (double value) {
-                          switch (value.toInt()) {
-                            case 0:
-                              return 'Mon';
-                            case 1:
-                              return 'Tue';
-                            case 2:
-                              return 'Wed';
-                            case 3:
-                              return 'Thu';
-                            case 4:
-                              return 'Fri';
-                            case 5:
-                              return 'Sat';
-                            case 6:
-                              return 'Sun';
-                            default:
-                              return '';
-                          }
-                        }),
-                  ),
-                  gridData: FlGridData(show: false),
-                  borderData: FlBorderData(show: false),
-                  lineBarsData: <LineChartBarData>[
-                    LineChartBarData(
-                      isStrokeCapRound: true,
-                      spots: <FlSpot>[
-                        FlSpot(0, 150),
-                        FlSpot(1, 250),
-                        FlSpot(2, 100),
-                        FlSpot(3, 300),
-                        FlSpot(4, 500),
-                        FlSpot(5, 400),
-                        FlSpot(6, 700),
-                      ],
-                      isCurved: true,
-                      colors: <Color>[proprimaryColor],
-                      barWidth: 4,
-                      belowBarData: BarAreaData(
-                        show: true,
-                        colors: <Color>[prosemibackColor.withAlpha(150)],
+                    )
+                  else
+                    Container(
+                      padding: const EdgeInsets.only(right: 10),
+                      height: 100,
+                      width: double.infinity,
+                      child: LineChart(
+                        LineChartData(
+                          minX: 0,
+                          maxX: (shopController.shopGraph!.graphData!.length -
+                                  1)
+                              .toDouble(), // Dynamically set maxX based on data length
+                          minY: 0,
+                          maxY: shopController.shopGraph!.totalSales
+                              .toDouble(), // Dynamically set maxY based on totalSales
+                          titlesData: FlTitlesData(
+                            leftTitles: SideTitles(
+                              showTitles: true,
+                              interval: shopController.shopGraph!.totalSales > 0
+                                  ? shopController.shopGraph!.totalSales / 5
+                                  : 100,
+                            ),
+                            bottomTitles: SideTitles(
+                              showTitles: shopController.shopGraph!.totalSales >
+                                  0, // Only show if totalSales > 0
+                              getTitles: (double value) {
+                                // Ensure value index is within bounds and map date label to the X-axis
+                                int index = value.toInt();
+                                if (index >= 0 &&
+                                    index <
+                                        shopController
+                                            .shopGraph!.graphData!.length) {
+                                  DateTime date = DateTime.parse(shopController
+                                      .shopGraph!.graphData![index].date);
+                                  return date.day.toString();
+                                }
+                                return '';
+                              },
+                            ),
+                          ),
+                          gridData: FlGridData(show: false),
+                          borderData: FlBorderData(show: false),
+                          lineBarsData: <LineChartBarData>[
+                            LineChartBarData(
+                              isStrokeCapRound: true,
+                              spots: shopController.shopGraph!.graphData!
+                                  .asMap()
+                                  .entries
+                                  .map((MapEntry<int, GraphDataPoint> entry) =>
+                                      FlSpot(entry.key.toDouble(),
+                                          entry.value.totalAmount.toDouble()))
+                                  .toList(),
+                              isCurved: true,
+                              colors: <Color>[
+                                proprimaryColor
+                              ], // Use your custom colors
+                              barWidth: 4,
+                              belowBarData: BarAreaData(
+                                show: true,
+                                colors: <Color>[
+                                  proprimaryColor.withAlpha(100)
+                                ], // Use your custom colors
+                              ),
+                              dotData: FlDotData(show: false),
+                            ),
+                          ],
+                        ),
                       ),
-                      dotData: FlDotData(show: false),
                     ),
-                  ],
-                ),
+                ],
               ),
             ),
-          ],
-        ),
-      ),
+          ),
+        );
+      },
     );
   }
 }

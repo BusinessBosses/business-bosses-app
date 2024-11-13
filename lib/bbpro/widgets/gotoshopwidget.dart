@@ -1,17 +1,7 @@
 import 'package:business_bosses_v2/bbpro/controllers/shop_controller.dart';
-import 'package:business_bosses_v2/bbpro/presentation/add_client.dart';
-import 'package:business_bosses_v2/bbpro/presentation/add_project.dart';
-import 'package:business_bosses_v2/bbpro/presentation/add_supplier.dart';
-import 'package:business_bosses_v2/bbpro/presentation/availability.dart';
-import 'package:business_bosses_v2/bbpro/presentation/create_order.dart';
-import 'package:business_bosses_v2/bbpro/presentation/create_product.dart';
-import 'package:business_bosses_v2/bbpro/presentation/create_service.dart';
 import 'package:business_bosses_v2/bbpro/presentation/shopscreen.dart';
 import 'package:business_bosses_v2/common/widgets/network_image_with_placeholder.dart';
-import 'package:business_bosses_v2/navigation/routes.dart';
-import 'package:business_bosses_v2/utils/theme/theme.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 
 class GotoshopWidget extends StatefulWidget {
@@ -26,13 +16,16 @@ class _GotoshopWidgetState extends State<GotoshopWidget> {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.only(top: 15, right: 15),
+      padding: const EdgeInsets.only(right: 15),
       child: GestureDetector(
         onTap: () {
           Get.to(() => const ShopScreen());
         },
         child: Container(
-          padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
+          padding: const EdgeInsets.only(
+            left: 10,
+            right: 10,
+          ),
           decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(10), color: Colors.white),
           child: Row(
@@ -44,8 +37,8 @@ class _GotoshopWidgetState extends State<GotoshopWidget> {
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: <Widget>[
                       SizedBox(
-                        height: 40.0,
-                        width: 40.0,
+                        height: 35.0,
+                        width: 35.0,
                         child: ClipRRect(
                           borderRadius: BorderRadius.circular(10),
                           child: NetworkImageWithPlaceHolder(
@@ -70,9 +63,10 @@ class _GotoshopWidgetState extends State<GotoshopWidget> {
                               style: const TextStyle(
                                   fontSize: 14, fontWeight: FontWeight.w700),
                             ),
-                            const Text('Shop Visits',
-                                style: TextStyle(
-                                    fontSize: 13, fontWeight: FontWeight.w500)),
+                            Text(
+                                'Visits: ${shopController.shopStats != null ? shopController.shopStats!.views : 0}',
+                                style: const TextStyle(
+                                    fontSize: 12, fontWeight: FontWeight.w500)),
                           ],
                         ),
                       ),

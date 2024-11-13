@@ -9,9 +9,11 @@ class CustomTabBarWidget<T> extends StatefulWidget {
   final List<Color> backgroundColor;
   final List<T> listofitems;
   final String Function(T) itemToString;
-  // final int itemCount;
-  final List<String>? filterOptions; // List of filter options
+  final String? selectedFilter;
+  final List<String>? filterOptions;
   final VoidCallback? filterontap;
+  final ValueChanged<String?>?
+      onFilterSelected; // New callback for selected filter
 
   const CustomTabBarWidget({
     super.key,
@@ -21,9 +23,10 @@ class CustomTabBarWidget<T> extends StatefulWidget {
     required this.backgroundColor,
     required this.listofitems,
     required this.itemToString,
-    // required this.itemCount,
-    this.filterOptions, // Add filter options
+    this.filterOptions,
     this.filterontap,
+    this.selectedFilter,
+    this.onFilterSelected, // Initialize the new callback
   })  : _tabController = tabController,
         _scrollToSection = scrollToSection;
 
@@ -75,7 +78,9 @@ class _CustomTabBarWidgetState<T> extends State<CustomTabBarWidget<T>> {
                     child: Container(
                       decoration: BoxDecoration(
                         color: widget._tabController.index == index
-                            ? widget.proprimaryColor
+                            ? index == 0
+                                ? Colors.black54
+                                : widget.backgroundColor[index].withOpacity(1)
                             : widget.backgroundColor[index],
                         borderRadius: BorderRadius.circular(100),
                       ),
@@ -115,7 +120,8 @@ class _CustomTabBarWidgetState<T> extends State<CustomTabBarWidget<T>> {
               onTap: () {
                 showMenu(
                   shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(10)),
+                    borderRadius: BorderRadius.circular(10),
+                  ),
                   context: context,
                   shadowColor: Colors.black,
                   position:
@@ -131,6 +137,8 @@ class _CustomTabBarWidgetState<T> extends State<CustomTabBarWidget<T>> {
                     setState(() {
                       selectedFilter = selected;
                     });
+                    widget.onFilterSelected?.call(selected);
+
                     if (widget.filterontap != null) {
                       widget.filterontap!();
                     }

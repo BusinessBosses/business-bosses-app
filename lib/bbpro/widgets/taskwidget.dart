@@ -1,4 +1,7 @@
+// ignore_for_file: unnecessary_null_comparison
+
 import 'package:business_bosses_v2/bbpro/controllers/project_controller.dart';
+import 'package:business_bosses_v2/bbpro/controllers/shop_controller.dart';
 import 'package:business_bosses_v2/bbpro/models/project_model.dart';
 import 'package:business_bosses_v2/bbpro/presentation/add_project.dart';
 import 'package:business_bosses_v2/bbpro/widgets/optionsbutton.dart';
@@ -29,6 +32,7 @@ class TaskWidget extends StatefulWidget {
 class _TaskWidgetState extends State<TaskWidget> {
   final ProjectController projectController = Get.find();
   final ProfileController profileController = Get.find();
+  final ShopController shopController = Get.find();
   @override
   Widget build(BuildContext context) {
     return Stack(children: <Widget>[
@@ -140,12 +144,14 @@ class _TaskWidgetState extends State<TaskWidget> {
               Padding(
                 padding: const EdgeInsets.symmetric(vertical: 10.0),
                 child: Column(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: <Widget>[
                     Row(
                       children: <Widget>[
-                        const Text(
-                          'Expenses: ',
-                          style: TextStyle(
+                        Text(
+                          'Expenses: ${shopController.shop!.currency} ',
+                          style: const TextStyle(
                             fontWeight: FontWeight.bold,
                             fontSize: 13,
                           ),
@@ -168,41 +174,30 @@ class _TaskWidgetState extends State<TaskWidget> {
                           ),
                         ),
                         Text(
-                          widget.project.duration.toString(),
+                          widget.project.endAt != null ||
+                                  widget.project.startAt != null
+                              ? '${widget.project.endAt.difference(widget.project.startAt).inDays} days'
+                              : 'N/A',
                           style: const TextStyle(
                             fontSize: 13,
                           ),
                         ),
                       ],
                     ),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      crossAxisAlignment: CrossAxisAlignment.start,
+                    Wrap(
+                      crossAxisAlignment: WrapCrossAlignment.center,
                       children: <Widget>[
-                        Expanded(
-                          child: Padding(
-                            padding: const EdgeInsets.only(right: 40.0),
-                            child: RichText(
-                              overflow: TextOverflow.ellipsis,
-                              maxLines: 4,
-                              text: TextSpan(
-                                children: <InlineSpan>[
-                                  const TextSpan(
-                                    text: 'Description: ',
-                                    style: TextStyle(
-                                        fontWeight: FontWeight.bold,
-                                        fontSize: 13,
-                                        color: textColor),
-                                  ),
-                                  TextSpan(
-                                    text: widget.project.description,
-                                    style: const TextStyle(
-                                        fontSize: 13, color: textColor),
-                                  ),
-                                ],
-                              ),
-                            ),
-                          ),
+                        const Text(
+                          'Description: ',
+                          style: TextStyle(
+                              fontWeight: FontWeight.bold,
+                              fontSize: 13,
+                              color: textColor),
+                        ),
+                        Text(
+                          widget.project.description,
+                          style:
+                              const TextStyle(fontSize: 13, color: textColor),
                         ),
                       ],
                     ),
@@ -242,6 +237,9 @@ class _TaskWidgetState extends State<TaskWidget> {
                                       ProjectStatus.todo,
                                       ProjectStatus.pending
                                     ];
+                                    break;
+                                  case ProjectStatus.allprojects:
+                                    // TODO: Handle this case.
                                     break;
                                 }
                                 return SizedBox(
@@ -285,6 +283,7 @@ class _TaskWidgetState extends State<TaskWidget> {
                                               ),
                                             ),
                                             onTap: () async {
+                                              Get.back();
                                               setState(() {
                                                 projectController
                                                     .statusProjects[
@@ -327,8 +326,6 @@ class _TaskWidgetState extends State<TaskWidget> {
                                                   .initProjects(
                                                       profileController
                                                           .myProfile.uid);
-
-                                              Get.back();
                                             },
                                           );
                                         }).toList(),

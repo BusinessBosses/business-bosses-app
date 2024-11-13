@@ -2,8 +2,10 @@ import 'dart:async';
 
 import 'package:business_bosses_v2/action/action.dart';
 import 'package:business_bosses_v2/bbpro/controllers/shop_controller.dart';
+import 'package:business_bosses_v2/bbpro/widgets/iconbutton.dart';
+import 'package:business_bosses_v2/bbpro/widgets/notificationbutton.dart';
+import 'package:business_bosses_v2/bbpro/widgets/proseardwidget.dart';
 import 'package:business_bosses_v2/common/widgets/safety_model.dart';
-import 'package:business_bosses_v2/features/chat/chat_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
@@ -15,7 +17,6 @@ import 'package:business_bosses_v2/bbpro/models/order_model.dart';
 import 'package:business_bosses_v2/bbpro/presentation/create_order.dart';
 import 'package:business_bosses_v2/bbpro/widgets/customtabbar.dart';
 import 'package:business_bosses_v2/bbpro/widgets/orderwidget.dart';
-import 'package:business_bosses_v2/bbpro/widgets/topsection.dart';
 import 'package:business_bosses_v2/utils/theme/theme.dart';
 
 class OrdersScreen extends StatefulWidget {
@@ -43,9 +44,7 @@ class _OrdersScreenState extends State<OrdersScreen>
         TabController(length: ClientType.values.length, vsync: this);
 
     // Initialize tasks
-    orderController
-        .initOrders(orderController.profileController.myProfile.uid)
-        .then((_) {
+    orderController.initOrders(shopController.shop!.id).then((_) {
       setState(() {
         loading = false;
         orderController.loading.value = false;
@@ -67,6 +66,7 @@ class _OrdersScreenState extends State<OrdersScreen>
   Widget build(BuildContext context) {
     final Size screenSize = MediaQuery.of(context).size;
     return Scaffold(
+        resizeToAvoidBottomInset: true,
         backgroundColor: probackgroundColor,
         appBar: AppBar(
           automaticallyImplyLeading: false,
@@ -80,14 +80,33 @@ class _OrdersScreenState extends State<OrdersScreen>
           actions: <Widget>[
             Row(
               children: <Widget>[
+                Padding(
+                  padding: const EdgeInsets.only(
+                    right: 10.0,
+                  ),
+                  child: ProIconButton(
+                    radius: 50,
+                    icon: const Icon(Icons.add),
+                    onPressed: () {
+                      Get.to(() => const CreateOrder());
+                    },
+                    text: 'Create Order',
+                  ),
+                ),
                 GestureDetector(
                   onTap: () {
-                    Get.to(() => const ChatScreen());
+                    if (clientsController.clients.isEmpty) {
+                      showSnackBar(
+                        context,
+                        message: 'You have to add a client to create order!',
+                      );
+                      return;
+                    }
+                    Get.to(() => const CreateOrder());
                   },
                   child: Padding(
                     padding: const EdgeInsets.only(
                       right: 10.0,
-                      bottom: 10,
                     ),
                     child: CircleAvatar(
                         radius: 20,
@@ -98,52 +117,15 @@ class _OrdersScreenState extends State<OrdersScreen>
                         )),
                   ),
                 ),
-                Padding(
-                  padding: const EdgeInsets.only(right: 10.0, bottom: 15),
-                  child: CircleAvatar(
-                    backgroundColor: prosemibackColor,
-                    radius: 30,
-                    child: Padding(
-                      padding: const EdgeInsets.all(10),
-                      child: SvgPicture.asset(
-                        'assets/svgs/notificationicon.svg',
-                        height: 20,
-                      ),
-                    ),
-                  ),
-                ),
+                const NotificationButton(),
               ],
             )
           ],
         ),
         body: Column(
           children: <Widget>[
-            TopsectionWidget(
-              buttonText: 'Create New Order',
-              onHowItWorksPressed: () {
-                // Handle "How it works" pressed
-                print('How it works pressed');
-              },
-              onAddProjectPressed: () {
-                // Handle "Add Project" pressed
-                if (clientsController.clients.isEmpty) {
-                  showSnackBar(
-                    context,
-                    message: 'You have to add a client to create order!',
-                  );
-                  return;
-                }
-                // if (shopController.products.isEmpty &&
-                //     shopController.products.isEmpty) {
-                //   showSnackBar(
-                //     context,
-                //     message:
-                //         'You have to add a product or service to create order!',
-                //   );
-                //   return;
-                // }
-                Get.to(() => const CreateOrder());
-              },
+            const SizedBox(
+              height: 10,
             ),
             CustomTabBarWidget<OrderStatus>(
               tabController: _tabController,
@@ -163,56 +145,96 @@ class _OrdersScreenState extends State<OrdersScreen>
             ),
             Expanded(
               child: Padding(
-                padding: const EdgeInsets.only(bottom: 15),
+                padding: const EdgeInsets.only(bottom: 10),
                 child: loading
                     ? const Center(
                         child: CircularProgressIndicator(),
                       )
                     : Obx(
-                        () => orderController.orders.isEmpty
+                        () => orderController.loading.value
                             ? const Center(
-                                child: SafetyModel(
-                                  isLoading: false,
-                                  title: 'No Orders Found!',
-                                ),
+                                child: CircularProgressIndicator(),
                               )
-                            : CustomScrollView(
-                                scrollDirection: Axis.horizontal,
-                                controller: _mainListScrollController,
-                                slivers: <Widget>[
-                                  ...OrderStatus.values.map(
-                                    (OrderStatus status) => SliverToBoxAdapter(
-                                      child: RowStatusCard(
-                                        orders: orderController.orders
-                                            .where((Order order) =>
-                                                order.status.displayTitle ==
-                                                status.displayTitle)
-                                            .toList(),
-                                        orderStatus: status,
-                                        screenSize: screenSize,
-                                        orderAccepted: (Order order,
-                                            OrderStatus newStatus) {
-                                          setState(() {
-                                            // Update client status here
-                                          });
-                                        },
-                                        onDrag: (bool isRight) {
-                                          if (_lastMoveRight == isRight) {
-                                            return;
-                                          }
-                                          _lastMoveRight = isRight;
-                                          _moveMainList(isRight);
-                                        },
-                                        cancelDrag: () {
-                                          _lastMoveRight = null;
-                                          _timer?.cancel();
-                                        },
-                                        allorders: orderController.orders,
-                                      ),
+                            : orderController.orders.isEmpty
+                                ? const Center(
+                                    child: SafetyModel(
+                                      isLoading: false,
+                                      title: 'No Orders Found!',
                                     ),
                                   )
-                                ],
-                              ),
+                                : CustomScrollView(
+                                    scrollDirection: Axis.horizontal,
+                                    controller: _mainListScrollController,
+                                    slivers: <Widget>[
+                                      ...OrderStatus.values.map(
+                                        (OrderStatus status) =>
+                                            SliverToBoxAdapter(
+                                          child: RowStatusCard(
+                                            orders: orderController.orders
+                                                .where((Order order) =>
+                                                    order.status.displayTitle ==
+                                                    status.displayTitle)
+                                                .toList(),
+                                            orderStatus: status,
+                                            screenSize: screenSize,
+                                            orderAccepted: (Order order,
+                                                OrderStatus newStatus) {
+                                              setState(() {
+                                                orderController
+                                                    .ordersStatus[order.status]
+                                                    ?.remove(order);
+                                                orderController
+                                                    .ordersStatus[newStatus]
+                                                    ?.add(
+                                                  Order(
+                                                    id: order.id,
+                                                    user: order.user,
+                                                    items: order.items,
+                                                    userId: order.userId,
+                                                    shopId: order.shopId,
+                                                    clientId: order.clientId,
+                                                    status: newStatus,
+                                                    createdAt: order.createdAt,
+                                                    deliveryDate:
+                                                        order.deliveryDate,
+                                                    deliveryMethod:
+                                                        order.deliveryMethod,
+                                                    paymentMethod:
+                                                        order.paymentMethod,
+                                                    notes: order.notes,
+                                                    invoiceOption:
+                                                        order.invoiceOption,
+                                                    client: order.client,
+                                                    products: order.products,
+                                                    services: order.services,
+                                                    orderDetails:
+                                                        order.orderDetails,
+                                                  ),
+                                                );
+                                                orderController.updateOrder(
+                                                    order.id, <String, dynamic>{
+                                                  'status':
+                                                      newStatus.toString(),
+                                                });
+                                              });
+                                            },
+                                            onDrag: (bool isRight) {
+                                              if (_lastMoveRight == isRight) {
+                                                return;
+                                              }
+                                              _lastMoveRight = isRight;
+                                              _moveMainList(isRight);
+                                            },
+                                            cancelDrag: () {
+                                              _lastMoveRight = null;
+                                              _timer?.cancel();
+                                            },
+                                            allorders: orderController.orders,
+                                          ),
+                                        ),
+                                      )
+                                    ],
+                                  ),
                       ),
               ),
             ),
@@ -239,7 +261,7 @@ class _OrdersScreenState extends State<OrdersScreen>
   }
 }
 
-class RowStatusCard extends StatelessWidget {
+class RowStatusCard extends StatefulWidget {
   final void Function(Order order, OrderStatus newStatus) orderAccepted;
   final void Function(bool isRight) onDrag;
   final void Function() cancelDrag;
@@ -260,10 +282,26 @@ class RowStatusCard extends StatelessWidget {
   });
 
   @override
+  State<RowStatusCard> createState() => _RowStatusCardState();
+}
+
+class _RowStatusCardState extends State<RowStatusCard> {
+  bool _showSearchBar = false;
+  List<Order> filteredOrders = <Order>[];
+  String searchQuery = '';
+
+  @override
+  void initState() {
+    super.initState();
+    filteredOrders.clear();
+    filteredOrders = widget.allorders;
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Container(
-      height: screenSize.height * 0.8,
-      width: screenSize.width * 0.9,
+      height: widget.screenSize.height * 0.8,
+      width: widget.screenSize.width * 0.9,
       margin: const EdgeInsets.only(left: 10),
       decoration: BoxDecoration(
         color: Colors.white,
@@ -280,23 +318,23 @@ class RowStatusCard extends StatelessWidget {
                 Wrap(
                   crossAxisAlignment: WrapCrossAlignment.center,
                   children: <Widget>[
-                    orderStatus.index == 0
+                    widget.orderStatus.index == 0
                         ? Container()
                         : CircleAvatar(
                             backgroundColor:
-                                orderStatus.displayTitle == 'Pending'
+                                widget.orderStatus.displayTitle == 'Pending'
                                     ? Colors.amber
-                                    : orderStatus.displayTitle == 'Paid'
+                                    : widget.orderStatus.displayTitle == 'Paid'
                                         ? Colors.green
                                         : Colors.red,
                             radius: 5,
                           ),
-                    if (orderStatus.index != 0)
+                    if (widget.orderStatus.index != 0)
                       const SizedBox(
                         width: 10,
                       ),
                     Text(
-                      orderStatus.displayTitle,
+                      widget.orderStatus.displayTitle,
                       style: const TextStyle(
                         color: Colors.black,
                         fontWeight: FontWeight.bold,
@@ -305,19 +343,83 @@ class RowStatusCard extends StatelessWidget {
                     ),
                   ],
                 ),
-                GestureDetector(
-                  onTap: () {},
-                  child: Container(
-                    decoration: BoxDecoration(
-                        color: backgroundColor,
-                        borderRadius: BorderRadius.circular(30)),
-                    padding: const EdgeInsets.all(8),
-                    child: SvgPicture.asset(
-                      'assets/svgs/search.svg',
-                      height: 15,
-                    ),
+                const SizedBox(
+                  width: 50,
+                ),
+                if (widget.orderStatus.index != 0)
+                  const SizedBox(
+                    height: 31,
                   ),
-                )
+                if (widget.orderStatus.index == 0)
+                  _showSearchBar
+                      ? Expanded(
+                          child: SizedBox(
+                            height: 31,
+                            child: ProSearchbar(
+                              contentPadding: 10,
+                              backgroundColor: backgroundColor,
+                              hasSearchIcon: false,
+                              hintText: 'Search',
+                              onChange: (String query) {
+                                setState(() {
+                                  searchQuery =
+                                      query; // Update the search query
+                                  filteredOrders =
+                                      widget.allorders.where((Order order) {
+                                    return order.client.name
+                                        .toLowerCase()
+                                        .contains(query.toLowerCase());
+                                  }).toList();
+                                });
+                              },
+                              onSubmit: (String query) {},
+                            ),
+                          ),
+                        )
+                      : GestureDetector(
+                          onTap: () {
+                            setState(() {
+                              _showSearchBar = true;
+                            });
+                          },
+                          child: Container(
+                            decoration: BoxDecoration(
+                                color: backgroundColor,
+                                borderRadius: BorderRadius.circular(30)),
+                            padding: const EdgeInsets.all(8),
+                            child: SvgPicture.asset(
+                              'assets/svgs/search.svg',
+                              height: 15,
+                            ),
+                          ),
+                        ),
+                if (widget.orderStatus.index == 0)
+                  if (_showSearchBar)
+                    const SizedBox(
+                      width: 5,
+                    ),
+                if (widget.orderStatus.index == 0)
+                  if (_showSearchBar)
+                    GestureDetector(
+                      onTap: () {
+                        setState(() {
+                          _showSearchBar = false;
+                          searchQuery = '';
+                          filteredOrders = widget.allorders;
+                        });
+                      },
+                      child: Container(
+                        decoration: BoxDecoration(
+                            color: backgroundColor,
+                            borderRadius: BorderRadius.circular(30)),
+                        padding: const EdgeInsets.all(8),
+                        child: const Icon(
+                          Icons.close,
+                          color: Colors.grey,
+                          size: 15,
+                        ),
+                      ),
+                    )
               ],
             ),
           ),
@@ -328,37 +430,40 @@ class RowStatusCard extends StatelessWidget {
               color: Colors.black12,
             ),
           ),
-          orderStatus.index == 0
-              ? Expanded(
-                  child: ListView.builder(
-                    itemCount: allorders.length,
-                    shrinkWrap: true,
-                    itemBuilder: (BuildContext context, int index) {
-                      return Padding(
-                        padding: const EdgeInsets.only(bottom: 12),
-                        child: OrderWidget(
-                          order: allorders[index],
-                          bgcolor: allorders[index].status.backgroundColor,
-                        ),
-                      );
-                    },
-                  ),
-                )
+          widget.orderStatus.index == 0
+              ? filteredOrders.isNotEmpty
+                  ? Expanded(
+                      child: ListView.builder(
+                        itemCount: filteredOrders.length,
+                        shrinkWrap: true,
+                        itemBuilder: (BuildContext context, int index) {
+                          return Padding(
+                            padding: const EdgeInsets.only(bottom: 12),
+                            child: OrderWidget(
+                              order: filteredOrders[index],
+                              bgcolor:
+                                  filteredOrders[index].status.backgroundColor,
+                            ),
+                          );
+                        },
+                      ),
+                    )
+                  : const Text('No Orders found')
               : Expanded(
                   child: DragTarget<Order>(
                     builder: (BuildContext context, List<Order?> candidateData,
                         List<dynamic> rejectedData) {
                       return ListStatusColumnWidget(
-                        orders: orders,
-                        orderStatus: orderStatus,
-                        screenSize: screenSize,
-                        onDrag: onDrag,
-                        cancelDrag: cancelDrag,
+                        orders: widget.orders,
+                        orderStatus: widget.orderStatus,
+                        screenSize: widget.screenSize,
+                        onDrag: widget.onDrag,
+                        cancelDrag: widget.cancelDrag,
                       );
                     },
                     onWillAccept: (Order? details) => true,
                     onAcceptWithDetails: (DragTargetDetails<Order> details) {
-                      orderAccepted(details.data, orderStatus);
+                      widget.orderAccepted(details.data, widget.orderStatus);
                     },
                   ),
                 ),
@@ -437,9 +542,14 @@ class ListStatusColumnWidget extends StatelessWidget {
               opacity: 0.2,
               child: orderWidget,
             ),
-            feedback: SizedBox(
-              width: screenSize.width * 0.8,
-              child: orderWidget,
+            feedback: Material(
+              color: Colors.transparent,
+              child: ConstrainedBox(
+                constraints: BoxConstraints(
+                  maxWidth: screenSize.width * 0.8,
+                ),
+                child: orderWidget,
+              ),
             ),
             child: orderWidget,
           ),
