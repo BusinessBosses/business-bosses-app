@@ -84,21 +84,44 @@ class _InventoryCardState extends State<InventoryCard> {
                         fontWeight: FontWeight.bold,
                       ),
                     ),
-                    Text(
-                      '${shopController.shop!.currency}${widget.product?.price.toString()}',
-                      style: const TextStyle(
-                        color: proprimaryColor,
-                        fontWeight: FontWeight.bold,
-                        fontSize: 13,
+                    if (widget.product?.discount != null &&
+                        widget.product!.discount! > 0)
+                      Row(
+                        children: <Widget>[
+                          Text(
+                            '${shopController.shop!.currency}${widget.product!.price * (1 - widget.product!.discount! / 100)}',
+                            style: const TextStyle(
+                              color: proprimaryColor,
+                              fontWeight: FontWeight.bold,
+                              fontSize: 13,
+                            ),
+                          ),
+                          const SizedBox(width: 5),
+                          Text(
+                            '${shopController.shop!.currency}${widget.product?.price.toString()}',
+                            style: const TextStyle(
+                              color: Colors.grey,
+                              decoration: TextDecoration.lineThrough,
+                              fontSize: 11,
+                            ),
+                          ),
+                        ],
+                      )
+                    else
+                      Text(
+                        '${shopController.shop!.currency}${widget.product?.price.toString()}',
+                        style: const TextStyle(
+                          color: proprimaryColor,
+                          fontWeight: FontWeight.bold,
+                          fontSize: 13,
+                        ),
                       ),
-                    ),
                     Text(
                       widget.product?.description ?? 'Product description',
                       style: const TextStyle(fontSize: 11),
                       maxLines: 2,
                       overflow: TextOverflow.ellipsis,
                     ),
-                    // if (widget.isProduct == true)
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: <Widget>[
