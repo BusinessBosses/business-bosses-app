@@ -62,24 +62,24 @@ class _SetupshopState extends State<Setupshop> with TickerProviderStateMixin {
     'Cash': false
   };
 
-  void _onSelectionChanged(Map<String, bool> newSelections) {
-    setState(() {
-      selections = newSelections;
-      selectedOptions = Map.from(newSelections);
-      if (newSelections['Bank'] == false) {
-        bankController.clear();
-      }
-      if (newSelections['Paypal'] == false) {
-        paypalController.clear();
-      }
-      if (newSelections['Wallet'] == false) {
-        walletController.clear();
-      }
-      if (newSelections['Cash'] == false) {
-        cashController.clear();
-      }
-    });
-  }
+  // void _onSelectionChanged(Map<String, bool> newSelections) {
+  //   setState(() {
+  //     selections = newSelections;
+  //     selectedOptions = Map.from(newSelections);
+  //     if (newSelections['Bank'] == false) {
+  //       bankController.clear();
+  //     }
+  //     if (newSelections['Paypal'] == false) {
+  //       paypalController.clear();
+  //     }
+  //     if (newSelections['Wallet'] == false) {
+  //       walletController.clear();
+  //     }
+  //     if (newSelections['Cash'] == false) {
+  //       cashController.clear();
+  //     }
+  //   });
+  // }
 
   void _showBottomSheet(BuildContext context, Function callback) {
     showModalBottomSheet(
@@ -102,7 +102,7 @@ class _SetupshopState extends State<Setupshop> with TickerProviderStateMixin {
                     onSelectionChanged: (Map<String, bool> newSelections) {
                       setModalState(() {
                         selections = newSelections;
-                        selectedOptions = Map.from(newSelections);
+                        selectedOptions = Map<String, bool>.from(newSelections);
                         if (newSelections['Bank'] == false) {
                           bankController.clear();
                         }
@@ -162,15 +162,15 @@ class _SetupshopState extends State<Setupshop> with TickerProviderStateMixin {
                     ),
                   ),
                   const SizedBox(height: 15),
-                  Visibility(
-                    visible: selections['Cash'] ?? false,
-                    child: CustomEditText(
-                      maxLength: 300,
-                      caption: 'Enter Cash Payment Details',
-                      hintText: 'Enter payment information here',
-                      controller: cashController,
-                    ),
-                  ),
+                  // Visibility(
+                  //   visible: selections['Cash'] ?? false,
+                  //   child: CustomEditText(
+                  //     maxLength: 300,
+                  //     caption: 'Enter Cash Payment Details',
+                  //     hintText: 'Enter payment information here',
+                  //     controller: cashController,
+                  //   ),
+                  // ),
                 ],
               ),
             );
@@ -249,10 +249,10 @@ class _SetupshopState extends State<Setupshop> with TickerProviderStateMixin {
       showSnackbar(message: 'Wallet payment details are required', error: true);
       return false;
     }
-    if (selections['Cash'] == true && cashController.text.isEmpty) {
-      showSnackbar(message: 'Cash payment details are required', error: true);
-      return false;
-    }
+    // if (selections['Cash'] == true && cashController.text.isEmpty) {
+    //   showSnackbar(message: 'Cash payment details are required', error: true);
+    //   return false;
+    // }
     return true;
   }
 
@@ -523,7 +523,9 @@ class _SetupshopState extends State<Setupshop> with TickerProviderStateMixin {
                                   'country', code!.name!);
                               await marketplaceCountry.setString(
                                   'currency', code.code!);
-                            } catch (e) {}
+                            } catch (e) {
+                              //
+                            }
                           },
                           useSafeArea: false,
                         ),
