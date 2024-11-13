@@ -154,15 +154,15 @@ class _SetupshopState extends State<Setupshop> with TickerProviderStateMixin {
                     ),
                   ),
                   const SizedBox(height: 15),
-                  Visibility(
-                    visible: selections['Cash'] ?? false,
-                    child: CustomEditText(
-                      maxLength: 300,
-                      caption: 'Enter Cash Payment Details',
-                      hintText: 'Enter payment information here',
-                      controller: cashController,
-                    ),
-                  ),
+                  // Visibility(
+                  //   visible: selections['Cash'] ?? false,
+                  //   child: CustomEditText(
+                  //     maxLength: 300,
+                  //     caption: 'Enter Cash Payment Details',
+                  //     hintText: 'Enter payment information here',
+                  //     controller: cashController,
+                  //   ),
+                  // ),
                 ],
               ),
             );
@@ -241,10 +241,10 @@ class _SetupshopState extends State<Setupshop> with TickerProviderStateMixin {
       showSnackbar(message: 'Wallet payment details are required', error: true);
       return false;
     }
-    if (selections['Cash'] == true && cashController.text.isEmpty) {
-      showSnackbar(message: 'Cash payment details are required', error: true);
-      return false;
-    }
+    // if (selections['Cash'] == true && cashController.text.isEmpty) {
+    //   showSnackbar(message: 'Cash payment details are required', error: true);
+    //   return false;
+    // }
     return true;
   }
 

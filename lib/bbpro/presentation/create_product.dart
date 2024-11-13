@@ -526,11 +526,6 @@ class _CreateProductListingState extends State<CreateProductListing> {
                   return;
                 }
 
-                if (_discountController.text.isEmpty) {
-                  showSnackbar(message: 'Enter discount', error: true);
-                  return;
-                }
-
                 // if (_selectedImages.isEmpty) {
                 //   showSnackbar(message: 'Select a product image', error: true);
                 //   return;

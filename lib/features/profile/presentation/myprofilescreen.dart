@@ -658,55 +658,56 @@ class _MyProfileScreenState extends State<MyProfileScreen> {
                 SizedBox(
                   height: MediaQuery.of(context).size.height,
                   width: MediaQuery.of(context).size.width,
-                  child: !profileController.myProfile.isSubscribed
-                      ? Center(
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            crossAxisAlignment: CrossAxisAlignment.center,
-                            children: <Widget>[
-                              const Text(
-                                'Upgrade now to unlock \nBiz-Centre',
-                                style: TextStyle(
-                                  fontSize: 18,
-                                  fontWeight: FontWeight.w700,
-                                ),
-                                textAlign: TextAlign.center,
-                              ),
-                              const SizedBox(
-                                height: 30,
-                              ),
-                              Lottie.asset(
-                                'assets/anim/padlock.json',
-                                fit: BoxFit.cover,
-                                height: 140,
-                                width: 140,
-                              ),
-                              const SizedBox(
-                                height: 30,
-                              ),
-                              Padding(
-                                  padding: const EdgeInsets.only(
-                                      left: 0.0, top: 10, bottom: 10),
-                                  child: Container(
-                                    width: double.infinity,
-                                    padding: const EdgeInsets.symmetric(
-                                        horizontal: 30),
-                                    child: ProCustomButton(
-                                        color: primaryColorLT,
-                                        text: 'Start Free Trial',
-                                        onPressed: () {}),
-                                  )),
-                            ],
-                          ),
-                        )
-                      : Bottomnavscreen(
-                          initialindex: 0,
-                          onTabChanged: (int index) {
-                            setState(() {
-                              _selectedIndex = index;
-                            });
-                          },
-                        ),
+                  child: Bottomnavscreen(
+                    initialindex: 0,
+                    onTabChanged: (int index) {
+                      setState(() {
+                        _selectedIndex = index;
+                      });
+                    },
+                  ),
+                  // !profileController.myProfile.isSubscribed
+                  //     ? Center(
+                  //         child: Column(
+                  //           mainAxisAlignment: MainAxisAlignment.center,
+                  //           crossAxisAlignment: CrossAxisAlignment.center,
+                  //           children: <Widget>[
+                  //             const Text(
+                  //               'Upgrade now to unlock \nBiz-Centre',
+                  //               style: TextStyle(
+                  //                 fontSize: 18,
+                  //                 fontWeight: FontWeight.w700,
+                  //               ),
+                  //               textAlign: TextAlign.center,
+                  //             ),
+                  //             const SizedBox(
+                  //               height: 30,
+                  //             ),
+                  //             Lottie.asset(
+                  //               'assets/anim/padlock.json',
+                  //               fit: BoxFit.cover,
+                  //               height: 140,
+                  //               width: 140,
+                  //             ),
+                  //             const SizedBox(
+                  //               height: 30,
+                  //             ),
+                  //             Padding(
+                  //                 padding: const EdgeInsets.only(
+                  //                     left: 0.0, top: 10, bottom: 10),
+                  //                 child: Container(
+                  //                   width: double.infinity,
+                  //                   padding: const EdgeInsets.symmetric(
+                  //                       horizontal: 30),
+                  //                   child: ProCustomButton(
+                  //                       color: primaryColorLT,
+                  //                       text: 'Start Free Trial',
+                  //                       onPressed: () {}),
+                  //                 )),
+                  //           ],
+                  //         ),
+                  //       )
+                  //     :
                 )
               ]),
         );

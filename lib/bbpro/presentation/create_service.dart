@@ -124,15 +124,23 @@ class _CreateServiceListingState extends State<CreateServiceListing>
               }));
       availability = widget.service!.availability;
       _startTime = TimeOfDay(
-          hour: int.parse(
-              widget.service!.availability!['startTime'].substring(0, 2)),
-          minute: int.parse(
-              widget.service!.availability!['startTime'].substring(3, 5)));
+          hour: widget.service!.availability == null
+              ? 0
+              : int.parse(
+                  widget.service!.availability!['startTime'].substring(0, 2)),
+          minute: widget.service!.availability == null
+              ? 0
+              : int.parse(
+                  widget.service!.availability!['startTime'].substring(3, 5)));
       _endTime = TimeOfDay(
-          hour: int.parse(widget.service!.availability!['endTime']
-              .substring(0, 2)), // Extract hour
-          minute: int.parse(widget.service!.availability!['endTime']
-              .substring(3, 5))); // Extract minute
+          hour: widget.service!.availability == null
+              ? 0
+              : int.parse(widget.service!.availability!['endTime']
+                  .substring(0, 2)), // Extract hour
+          minute: widget.service!.availability == null
+              ? 0
+              : int.parse(widget.service!.availability!['endTime']
+                  .substring(3, 5))); // Extract minute
 
       // selectedSubmitWeekdays =
       //     List<String>.from(widget.service!.availability!['dayOfWeek']);
