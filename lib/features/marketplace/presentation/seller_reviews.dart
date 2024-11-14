@@ -17,7 +17,9 @@ import '../widgets/review_item.dart';
 
 class SellerReviewScreen extends StatefulWidget {
   final UserModel user;
-  const SellerReviewScreen({Key? key, required this.user}) : super(key: key);
+  final bool? isShop;
+  const SellerReviewScreen({Key? key, required this.user, this.isShop})
+      : super(key: key);
 
   @override
   State<SellerReviewScreen> createState() => _SellerReviewScreenState();
@@ -107,16 +109,21 @@ class _SellerReviewScreenState extends State<SellerReviewScreen> {
     if (cUser == null) {
       return Scaffold(
         resizeToAvoidBottomInset: false,
-        appBar: AppBar(
-          leading: IconButton(
-            onPressed: () {
-              Navigator.pop(context);
-            },
-            icon: SvgPicture.asset('assets/svgs/backbutton.svg'),
-          ),
-          title: const Text('Seller Reviews'),
-          centerTitle: true,
-        ),
+        appBar: widget.isShop == null
+            ? AppBar(
+                leading: IconButton(
+                  onPressed: () {
+                    Navigator.pop(context);
+                  },
+                  icon: SvgPicture.asset('assets/svgs/backbutton.svg'),
+                ),
+                title: const Text('Seller Reviews'),
+                centerTitle: true,
+              )
+            : PreferredSize(
+                preferredSize: const Size.fromHeight(0),
+                child: Container(),
+              ),
         body: const Center(
           child: CircularProgressIndicator(),
         ),
@@ -124,23 +131,29 @@ class _SellerReviewScreenState extends State<SellerReviewScreen> {
     } else {
       return Scaffold(
         backgroundColor: Colors.white,
-        appBar: AppBar(
-          title: const Text('Seller Reviews'),
-          centerTitle: true,
-          leading: IconButton(
-            onPressed: () {
-              Navigator.pop(context);
-            },
-            icon: SvgPicture.asset('assets/svgs/backbutton.svg'),
-          ),
-        ),
+        appBar: widget.isShop == null
+            ? AppBar(
+                leading: IconButton(
+                  onPressed: () {
+                    Navigator.pop(context);
+                  },
+                  icon: SvgPicture.asset('assets/svgs/backbutton.svg'),
+                ),
+                title: const Text('Seller Reviews'),
+                centerTitle: true,
+              )
+            : PreferredSize(
+                preferredSize: const Size.fromHeight(0),
+                child: Container(),
+              ),
         body: SingleChildScrollView(
           child: Column(
             children: <Widget>[
-              Container(
-                height: 20,
-                color: backgroundcolorinterface,
-              ),
+              if (widget.isShop == null)
+                Container(
+                  height: 20,
+                  color: backgroundcolorinterface,
+                ),
               Container(
                 color: Colors.white,
                 padding: const EdgeInsets.symmetric(
@@ -151,12 +164,14 @@ class _SellerReviewScreenState extends State<SellerReviewScreen> {
                 ),
                 child: Column(
                   children: <Widget>[
-                    PublicProfileTile(
-                      myProfile: cUser!,
-                    ),
-                    const SizedBox(
-                      height: 10,
-                    ),
+                    if (widget.isShop == null)
+                      PublicProfileTile(
+                        myProfile: cUser!,
+                      ),
+                    if (widget.isShop == null)
+                      const SizedBox(
+                        height: 10,
+                      ),
                     if ((reviews == null ||
                             reviews!
                                 .where((ReviewModel review) =>
@@ -299,7 +314,7 @@ class _SellerReviewScreenState extends State<SellerReviewScreen> {
                                                 ? 0
                                                 : fiveStar / reviews!.length,
                                             minHeight: 10,
-                                            backgroundColor: Colors.grey,
+                                            backgroundColor: Colors.grey[300],
                                             valueColor:
                                                 const AlwaysStoppedAnimation<
                                                         Color>(
@@ -331,7 +346,7 @@ class _SellerReviewScreenState extends State<SellerReviewScreen> {
                                                 ? 0
                                                 : fourStar / reviews!.length,
                                             minHeight: 10,
-                                            backgroundColor: Colors.grey,
+                                            backgroundColor: Colors.grey[300],
                                             valueColor:
                                                 const AlwaysStoppedAnimation<
                                                         Color>(
@@ -363,7 +378,7 @@ class _SellerReviewScreenState extends State<SellerReviewScreen> {
                                                 ? 0
                                                 : threeStar / reviews!.length,
                                             minHeight: 10,
-                                            backgroundColor: Colors.grey,
+                                            backgroundColor: Colors.grey[300],
                                             valueColor:
                                                 const AlwaysStoppedAnimation<
                                                         Color>(
@@ -395,7 +410,7 @@ class _SellerReviewScreenState extends State<SellerReviewScreen> {
                                                 ? 0
                                                 : twoStar / reviews!.length,
                                             minHeight: 10,
-                                            backgroundColor: Colors.grey,
+                                            backgroundColor: Colors.grey[300],
                                             valueColor:
                                                 const AlwaysStoppedAnimation<
                                                         Color>(
@@ -429,7 +444,7 @@ class _SellerReviewScreenState extends State<SellerReviewScreen> {
                                                 ? 0
                                                 : oneStar / reviews!.length,
                                             minHeight: 10,
-                                            backgroundColor: Colors.grey,
+                                            backgroundColor: Colors.grey[300],
                                             valueColor:
                                                 const AlwaysStoppedAnimation<
                                                         Color>(
