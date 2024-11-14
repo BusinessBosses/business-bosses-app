@@ -162,7 +162,7 @@ class _PublicProfileScreenState extends State<PublicProfileScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
         backgroundColor: Colors.white,
-        appBar: 1 == 1
+        appBar: publicUser.isSubscribed
             ? PreferredSize(
                 preferredSize: Size.fromHeight(
                     (_selectedIndex == 0 || _selectedIndex == 4)
@@ -193,7 +193,7 @@ class _PublicProfileScreenState extends State<PublicProfileScreen> {
                                             fontSize: 14,
                                             color: Colors.grey)),
                               ),
-                              1: Text('My-Biz',
+                              1: Text('Biz-Center',
                                   style: _currentIndex == 1
                                       ? const TextStyle(
                                           fontWeight: FontWeight.bold,
