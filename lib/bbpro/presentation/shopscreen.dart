@@ -138,7 +138,7 @@ class _ShopScreenState extends State<ShopScreen> {
                             Row(
                               children: <Widget>[
                                 const Icon(Icons.location_on,
-                                    color: Colors.red, size: 18),
+                                    color: Colors.red, size: 15),
                                 // const SizedBox(width: 5),
                                 Text(
                                   shopController.shop!.location.length > 15
@@ -154,7 +154,7 @@ class _ShopScreenState extends State<ShopScreen> {
                               width: 5,
                             ),
                             const CircleAvatar(
-                              radius: 3,
+                              radius: 2,
                               backgroundColor: Colors.black87,
                             ),
                             const SizedBox(
@@ -166,10 +166,7 @@ class _ShopScreenState extends State<ShopScreen> {
                                     color: Colors.amber, size: 18),
                                 const SizedBox(width: 4),
                                 GestureDetector(
-                                  onTap: () {
-                                    Get.to(() => SellerReviewScreen(
-                                        user: shopController.shop!.user!));
-                                  },
+                                  onTap: () {},
                                   child: const Text(
                                     '0.0 Reviews',
                                     style: TextStyle(
