@@ -1,11 +1,14 @@
 import 'package:business_bosses_v2/bbpro/presentation/shopscreen.dart';
 import 'package:business_bosses_v2/common/models/api_response_model.dart';
 import 'package:business_bosses_v2/common/models/user_model.dart';
+import 'package:business_bosses_v2/features/live_event/widgets/my_events.dart';
 import 'package:business_bosses_v2/features/marketplace/widgets/service_item.dart';
 import 'package:business_bosses_v2/features/posts/models/post_model.dart';
 import 'package:business_bosses_v2/features/profile/widgets/profileinfodisplay.dart';
 import 'package:business_bosses_v2/features/profile/widgets/profilepostsdisplay.dart';
+import 'package:business_bosses_v2/navigation/routes.dart';
 import 'package:business_bosses_v2/services/api_service.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_sticky_header/flutter_sticky_header.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -43,6 +46,11 @@ class _PublicProfileScreenState extends State<PublicProfileScreen> {
 
   bool hasUser = true;
   List<MarketModel> filteredMarkets = <MarketModel>[];
+
+  late PageController _pageController;
+
+  int? _selectedIndex;
+  int _currentIndex = 0;
 
   Future<void> loadData() async {
     setState(() {
@@ -135,6 +143,8 @@ class _PublicProfileScreenState extends State<PublicProfileScreen> {
   @override
   void initState() {
     super.initState();
+    _selectedIndex = 0;
+    _pageController = PageController(initialPage: _currentIndex);
     if (Get.arguments == null) {
       // print("back");
       Get.back();
@@ -151,397 +161,527 @@ class _PublicProfileScreenState extends State<PublicProfileScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white,
-      appBar: AppBar(
-        leading: IconButton(
-          onPressed: () {
-            Get.back();
-          },
-          icon: SvgPicture.asset('assets/svgs/backbutton.svg'),
-        ),
-        title: Text('@${publicUser.username}'),
-        actions: <Widget>[
-          publicUser.uid != _profileController.myProfile.uid
-              ? Padding(
-                  padding: const EdgeInsets.only(right: 15.0),
-                  child: InkWell(
-                      onTap: () {
-                        showDialog(
-                          context: context,
-                          builder: (BuildContext context) => AlertDialog(
-                            content: Column(
-                              mainAxisSize: MainAxisSize.min,
-                              children: <Widget>[
-                                ListTile(
+        backgroundColor: Colors.white,
+        appBar: 1 == 1
+            ? PreferredSize(
+                preferredSize: Size.fromHeight(
+                    (_selectedIndex == 0 || _selectedIndex == 4)
+                        ? kToolbarHeight
+                        : 0),
+                child: Stack(children: <Widget>[
+                  Column(
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    children: <Widget>[
+                      if (_selectedIndex == 0 || _selectedIndex == 4)
+                        Align(
+                          alignment: Alignment.bottomCenter,
+                          child: CupertinoSlidingSegmentedControl<int>(
+                            backgroundColor: Colors.grey[200]!,
+                            padding: const EdgeInsets.all(5),
+                            children: <int, Widget>{
+                              0: Padding(
+                                padding:
+                                    const EdgeInsets.symmetric(horizontal: 15),
+                                child: Text('Profile',
+                                    style: _currentIndex == 0
+                                        ? const TextStyle(
+                                            fontWeight: FontWeight.bold,
+                                            fontSize: 14,
+                                          )
+                                        : const TextStyle(
+                                            fontWeight: FontWeight.bold,
+                                            fontSize: 14,
+                                            color: Colors.grey)),
+                              ),
+                              1: Text('My-Biz',
+                                  style: _currentIndex == 1
+                                      ? const TextStyle(
+                                          fontWeight: FontWeight.bold,
+                                          fontSize: 14)
+                                      : const TextStyle(
+                                          fontWeight: FontWeight.bold,
+                                          fontSize: 14,
+                                          color: Colors.grey)),
+                            },
+                            onValueChanged: (int? value) {
+                              if (value != null) {
+                                setState(() {
+                                  _selectedIndex == 0;
+                                  _currentIndex = value;
+                                  _pageController.animateToPage(
+                                    _currentIndex,
+                                    duration: const Duration(milliseconds: 300),
+                                    curve: Curves.ease,
+                                  );
+                                });
+                              }
+                            },
+                            groupValue: _currentIndex,
+                          ),
+                        ),
+                      if (_selectedIndex == 0 || _selectedIndex == 4)
+                        const SizedBox(height: 10.0),
+                    ],
+                  ),
+                  Positioned(
+                      bottom: 10,
+                      right: 0,
+                      child: publicUser.uid != _profileController.myProfile.uid
+                          ? Padding(
+                              padding: const EdgeInsets.only(right: 15.0),
+                              child: InkWell(
                                   onTap: () {
-                                    navigateTo(context);
                                     showDialog(
                                       context: context,
                                       builder: (BuildContext context) =>
                                           AlertDialog(
-                                        title: const TextWidget(
-                                          text: 'Do you want to block user?',
-                                          centralize: true,
-                                          fontWeight: FontWeight.w700,
-                                          size: 20,
-                                        ),
-                                        content: TextWidget(
-                                          text: blocked == true
-                                              ? 'You will see posts and comments related to user on your feed'
-                                              : 'You will no longer see undefined posts and comments on your feed',
-                                          centralize: true,
-                                          color: Colors.black.withOpacity(.6),
-                                        ),
-                                        actions: <Widget>[
-                                          TextButton(
-                                            onPressed: () =>
-                                                navigateTo(context),
-                                            child: const TextWidget(
-                                              text: 'Cancel',
-                                              fontWeight: FontWeight.w700,
-                                              size: 18,
-                                              color: Colors.grey,
-                                            ),
-                                          ),
-                                          GestureDetector(
-                                            onTap: () {
-                                              navigateTo(context);
-                                              // print(_post.user.uid);
-
-                                              // widget
-                                              //     .onBlock(_post.user.uid);
-                                              showSnackBar(context,
-                                                  message: blocked == true
-                                                      ? 'User has been blocked'
-                                                      : 'User has been unblocked');
-                                            },
-                                            child: Container(
-                                              padding:
-                                                  const EdgeInsets.symmetric(
-                                                vertical: 7,
-                                                horizontal: 14,
-                                              ),
-                                              decoration: BoxDecoration(
-                                                color: primaryColorLT,
-                                                borderRadius:
-                                                    BorderRadius.circular(5),
-                                              ),
-                                              child: TextWidget(
-                                                text: blocked == true
-                                                    ? 'Unblock'
-                                                    : 'Block',
-                                                color: Colors.white,
-                                                fontWeight: FontWeight.bold,
-                                              ),
-                                            ),
-                                          )
-                                        ],
-                                      ),
-                                    );
-                                  },
-                                  contentPadding: EdgeInsets.zero,
-                                  title: publicUser.isSubscribed == true
-                                      ? Row(
+                                        content: Column(
+                                          mainAxisSize: MainAxisSize.min,
                                           children: <Widget>[
-                                            TextWidget(
-                                              text: blocked == true
-                                                  ? 'Unblock @${publicUser.name}'
-                                                  : 'Block @${publicUser.name}',
-                                              color: Colors.blue,
+                                            ListTile(
+                                              onTap: () {
+                                                navigateTo(context);
+                                                showDialog(
+                                                  context: context,
+                                                  builder:
+                                                      (BuildContext context) =>
+                                                          AlertDialog(
+                                                    title: const TextWidget(
+                                                      text:
+                                                          'Do you want to block user?',
+                                                      centralize: true,
+                                                      fontWeight:
+                                                          FontWeight.w700,
+                                                      size: 20,
+                                                    ),
+                                                    content: TextWidget(
+                                                      text: blocked == true
+                                                          ? 'You will see posts and comments related to user on your feed'
+                                                          : 'You will no longer see undefined posts and comments on your feed',
+                                                      centralize: true,
+                                                      color: Colors.black
+                                                          .withOpacity(.6),
+                                                    ),
+                                                    actions: <Widget>[
+                                                      TextButton(
+                                                        onPressed: () =>
+                                                            navigateTo(context),
+                                                        child: const TextWidget(
+                                                          text: 'Cancel',
+                                                          fontWeight:
+                                                              FontWeight.w700,
+                                                          size: 18,
+                                                          color: Colors.grey,
+                                                        ),
+                                                      ),
+                                                      GestureDetector(
+                                                        onTap: () {
+                                                          navigateTo(context);
+                                                          // print(_post.user.uid);
+
+                                                          // widget
+                                                          //     .onBlock(_post.user.uid);
+                                                          showSnackBar(context,
+                                                              message: blocked ==
+                                                                      true
+                                                                  ? 'User has been blocked'
+                                                                  : 'User has been unblocked');
+                                                        },
+                                                        child: Container(
+                                                          padding:
+                                                              const EdgeInsets
+                                                                  .symmetric(
+                                                            vertical: 7,
+                                                            horizontal: 14,
+                                                          ),
+                                                          decoration:
+                                                              BoxDecoration(
+                                                            color:
+                                                                primaryColorLT,
+                                                            borderRadius:
+                                                                BorderRadius
+                                                                    .circular(
+                                                                        5),
+                                                          ),
+                                                          child: TextWidget(
+                                                            text:
+                                                                blocked == true
+                                                                    ? 'Unblock'
+                                                                    : 'Block',
+                                                            color: Colors.white,
+                                                            fontWeight:
+                                                                FontWeight.bold,
+                                                          ),
+                                                        ),
+                                                      )
+                                                    ],
+                                                  ),
+                                                );
+                                              },
+                                              contentPadding: EdgeInsets.zero,
+                                              title: publicUser.isSubscribed ==
+                                                      true
+                                                  ? Row(
+                                                      children: <Widget>[
+                                                        TextWidget(
+                                                          text: blocked == true
+                                                              ? 'Unblock @${publicUser.name}'
+                                                              : 'Block @${publicUser.name}',
+                                                          color: Colors.blue,
+                                                        ),
+                                                        const SizedBox(
+                                                            width: 5),
+                                                        SvgPicture.asset(
+                                                          'assets/svgs/premiumbadge.svg',
+                                                          height: 9,
+                                                          color: primaryColorLT,
+                                                        )
+                                                      ],
+                                                    )
+                                                  : TextWidget(
+                                                      text: blocked == true
+                                                          ? 'Unblock @${publicUser.name}'
+                                                          : 'Block @${publicUser.name}',
+                                                      color: Colors.blue,
+                                                    ),
                                             ),
-                                            const SizedBox(width: 5),
-                                            SvgPicture.asset(
-                                              'assets/svgs/premiumbadge.svg',
-                                              height: 9,
-                                              color: primaryColorLT,
+                                            ListTile(
+                                              onTap: () {
+                                                navigateTo(context);
+                                                showDialog(
+                                                  context: context,
+                                                  builder:
+                                                      (BuildContext context) =>
+                                                          AlertDialog(
+                                                    title: const TextWidget(
+                                                      text:
+                                                          'Do you want to report user?',
+                                                      centralize: true,
+                                                      fontWeight:
+                                                          FontWeight.w700,
+                                                      size: 20,
+                                                    ),
+                                                    content: TextWidget(
+                                                      text:
+                                                          'The user will be reported to admin to evaluate if it violates any community policy',
+                                                      centralize: true,
+                                                      color: Colors.black
+                                                          .withOpacity(.6),
+                                                    ),
+                                                    actions: <Widget>[
+                                                      TextButton(
+                                                        onPressed: () =>
+                                                            navigateTo(context),
+                                                        child: const TextWidget(
+                                                          text: 'Cancel',
+                                                          fontWeight:
+                                                              FontWeight.w700,
+                                                          size: 18,
+                                                          color: Colors.grey,
+                                                        ),
+                                                      ),
+                                                      GestureDetector(
+                                                        onTap: () async {
+                                                          navigateTo(context);
+                                                          await report(
+                                                            context,
+                                                            'accountReport',
+                                                            publicUser.uid,
+                                                          );
+                                                        },
+                                                        child: Container(
+                                                          padding:
+                                                              const EdgeInsets
+                                                                  .symmetric(
+                                                            vertical: 7,
+                                                            horizontal: 14,
+                                                          ),
+                                                          decoration:
+                                                              BoxDecoration(
+                                                            color:
+                                                                primaryColorLT,
+                                                            borderRadius:
+                                                                BorderRadius
+                                                                    .circular(
+                                                                        5),
+                                                          ),
+                                                          child:
+                                                              const TextWidget(
+                                                            text: 'Report',
+                                                            color: Colors.white,
+                                                            fontWeight:
+                                                                FontWeight.bold,
+                                                          ),
+                                                        ),
+                                                      )
+                                                    ],
+                                                  ),
+                                                );
+                                              },
+                                              contentPadding: EdgeInsets.zero,
+                                              title: const TextWidget(
+                                                text: 'Report this user',
+                                                color: Colors.red,
+                                              ),
                                             )
                                           ],
-                                        )
-                                      : TextWidget(
-                                          text: blocked == true
-                                              ? 'Unblock @${publicUser.name}'
-                                              : 'Block @${publicUser.name}',
-                                          color: Colors.blue,
                                         ),
-                                ),
-                                ListTile(
-                                  onTap: () {
-                                    navigateTo(context);
-                                    showDialog(
-                                      context: context,
-                                      builder: (BuildContext context) =>
-                                          AlertDialog(
-                                        title: const TextWidget(
-                                          text: 'Do you want to report user?',
-                                          centralize: true,
-                                          fontWeight: FontWeight.w700,
-                                          size: 20,
-                                        ),
-                                        content: TextWidget(
-                                          text:
-                                              'The user will be reported to admin to evaluate if it violates any community policy',
-                                          centralize: true,
-                                          color: Colors.black.withOpacity(.6),
-                                        ),
-                                        actions: <Widget>[
-                                          TextButton(
-                                            onPressed: () =>
-                                                navigateTo(context),
-                                            child: const TextWidget(
-                                              text: 'Cancel',
-                                              fontWeight: FontWeight.w700,
-                                              size: 18,
-                                              color: Colors.grey,
-                                            ),
-                                          ),
-                                          GestureDetector(
-                                            onTap: () async {
-                                              navigateTo(context);
-                                              await report(
-                                                context,
-                                                'accountReport',
-                                                publicUser.uid,
-                                              );
-                                            },
-                                            child: Container(
-                                              padding:
-                                                  const EdgeInsets.symmetric(
-                                                vertical: 7,
-                                                horizontal: 14,
-                                              ),
-                                              decoration: BoxDecoration(
-                                                color: primaryColorLT,
-                                                borderRadius:
-                                                    BorderRadius.circular(5),
-                                              ),
-                                              child: const TextWidget(
-                                                text: 'Report',
-                                                color: Colors.white,
-                                                fontWeight: FontWeight.bold,
-                                              ),
-                                            ),
-                                          )
-                                        ],
                                       ),
                                     );
                                   },
-                                  contentPadding: EdgeInsets.zero,
-                                  title: const TextWidget(
-                                    text: 'Report this user',
-                                    color: Colors.red,
-                                  ),
-                                )
-                              ],
-                            ),
-                          ),
-                        );
+                                  child: CircleAvatar(
+                                      backgroundColor: backgroundColor,
+                                      child: SvgPicture.asset(
+                                          'assets/svgs/more.svg'))),
+                            )
+                          : Container()),
+                  Positioned(
+                    bottom: 5,
+                    left: 0,
+                    child: IconButton(
+                      onPressed: () {
+                        Get.back();
                       },
-                      child: SvgPicture.asset('assets/svgs/more.svg')),
-                )
-              : Container()
-        ],
-      ),
-      body: isLoading
-          ? const Center(child: CircularProgressIndicator.adaptive())
-          : NestedScrollView(
-              headerSliverBuilder:
-                  (BuildContext context, bool innerBoxIsScrolled) {
-                return <Widget>[
-                  SliverStickyHeader(
-                    sticky: false,
-                    header: FriendProfileHeader(publicUser),
-                  )
-                ];
-              },
-              body: DefaultTabController(
-                length: filteredMarkets.isEmpty ? 2 : 3,
-                initialIndex: widget.store != null ? 2 : 0,
-                child: Column(
-                  children: <Widget>[
-                    OutlineButtonHeader(
-                      publicUser,
-                      _profileController.myProfile,
-                      connectToUser,
-                      context,
+                      icon: SvgPicture.asset('assets/svgs/backbutton.svg'),
                     ),
-                    const SizedBox(height: 15.0),
-                    // },
-                    const SizedBox(
-                      width: double.infinity,
-                      height: 1.5,
-                      child: ColoredBox(color: backgroundcolorinterface),
-                    ),
+                  ),
+                ]),
+              )
+            : AppBar(
+                leading: IconButton(
+                  onPressed: () {
+                    Get.back();
+                  },
+                  icon: SvgPicture.asset('assets/svgs/backbutton.svg'),
+                ),
+                title: Text('@${publicUser.username}'),
+                actions: const <Widget>[],
+              ),
+        body: isLoading
+            ? const Center(child: CircularProgressIndicator.adaptive())
+            : PageView(
+                physics: const NeverScrollableScrollPhysics(),
+                controller: _pageController,
+                onPageChanged: (int index) {
+                  setState(() {
+                    _currentIndex = index;
+                  });
+                },
+                children: <Widget>[
+                    NestedScrollView(
+                      headerSliverBuilder:
+                          (BuildContext context, bool innerBoxIsScrolled) {
+                        return <Widget>[
+                          SliverStickyHeader(
+                            sticky: false,
+                            header: FriendProfileHeader(publicUser),
+                          )
+                        ];
+                      },
+                      body: DefaultTabController(
+                        length: filteredMarkets.isEmpty ? 2 : 3,
+                        initialIndex: widget.store != null ? 2 : 0,
+                        child: Column(
+                          children: <Widget>[
+                            OutlineButtonHeader(
+                              publicUser,
+                              _profileController.myProfile,
+                              connectToUser,
+                              context,
+                            ),
+                            const SizedBox(height: 15.0),
+                            // },
+                            const SizedBox(
+                              width: double.infinity,
+                              height: 1.5,
+                              child:
+                                  ColoredBox(color: backgroundcolorinterface),
+                            ),
 
-                    Material(
-                      color: const Color(0xFFF9F9F9),
-                      child: TabBar(
-                        indicatorColor: primaryColorLT,
-                        labelStyle:
-                            const TextStyle(fontWeight: FontWeight.w500),
-                        labelColor: Colors.black,
-                        tabs: filteredMarkets.isEmpty
-                            ? <Widget>[
-                                const Tab(
-                                  text: 'About',
-                                ),
-                                const Tab(
-                                  text: 'Posts',
-                                ),
-                              ]
-                            : <Widget>[
-                                const Tab(
-                                  text: 'About',
-                                ),
-                                const Tab(
-                                  text: 'Posts',
-                                ),
-                                const Tab(
-                                  text: 'Shop',
-                                ),
-                              ],
-                      ),
-                    ),
-                    const SizedBox(
-                      width: double.infinity,
-                      height: 1.5,
-                      child: ColoredBox(color: backgroundcolorinterface),
-                    ), // Container(
+                            Material(
+                              color: const Color(0xFFF9F9F9),
+                              child: TabBar(
+                                indicatorColor: primaryColorLT,
+                                labelStyle: const TextStyle(
+                                    fontWeight: FontWeight.w500),
+                                labelColor: Colors.black,
+                                tabs: filteredMarkets.isEmpty
+                                    ? <Widget>[
+                                        const Tab(
+                                          text: 'About',
+                                        ),
+                                        const Tab(
+                                          text: 'Posts',
+                                        ),
+                                      ]
+                                    : <Widget>[
+                                        const Tab(
+                                          text: 'About',
+                                        ),
+                                        const Tab(
+                                          text: 'Posts',
+                                        ),
+                                        const Tab(
+                                          text: 'Shop',
+                                        ),
+                                      ],
+                              ),
+                            ),
+                            const SizedBox(
+                              width: double.infinity,
+                              height: 1.5,
+                              child:
+                                  ColoredBox(color: backgroundcolorinterface),
+                            ), // Container(
 
-                    Expanded(
-                      child: TabBarView(
-                        children: filteredMarkets.isEmpty
-                            ? <Widget>[
-                                SingleChildScrollView(
-                                  child: Column(
-                                    mainAxisAlignment: MainAxisAlignment.start,
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: <Widget>[
-                                      const SizedBox(
-                                        height: 30,
-                                      ),
-                                      profileinfodisplay(context, publicUser),
-                                    ],
-                                  ),
-                                ),
-                                // Container()
-                                profilepostsdisplay(
-                                  ispublicposts: true,
-                                  context,
-                                  publicUser,
-                                  _posts,
-                                  loading: isLoading,
-                                ),
-                              ]
-                            : <Widget>[
-                                // Container(),
-                                SingleChildScrollView(
-                                  child: Column(
-                                    mainAxisAlignment: MainAxisAlignment.start,
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: <Widget>[
-                                      const SizedBox(
-                                        height: 30,
-                                      ),
-                                      profileinfodisplay(context, publicUser),
-                                    ],
-                                  ),
-                                ),
-                                // Container()
-                                profilepostsdisplay(
-                                  ispublicposts: true,
-                                  context,
-                                  publicUser,
-                                  _posts,
-                                  loading: isLoading,
-                                ),
+                            Expanded(
+                              child: TabBarView(
+                                children: filteredMarkets.isEmpty
+                                    ? <Widget>[
+                                        SingleChildScrollView(
+                                          child: Column(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.start,
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.start,
+                                            children: <Widget>[
+                                              const SizedBox(
+                                                height: 30,
+                                              ),
+                                              profileinfodisplay(
+                                                  context, publicUser),
+                                            ],
+                                          ),
+                                        ),
+                                        // Container()
+                                        profilepostsdisplay(
+                                          ispublicposts: true,
+                                          context,
+                                          publicUser,
+                                          _posts,
+                                          loading: isLoading,
+                                        ),
+                                      ]
+                                    : <Widget>[
+                                        // Container(),
+                                        SingleChildScrollView(
+                                          child: Column(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.start,
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.start,
+                                            children: <Widget>[
+                                              const SizedBox(
+                                                height: 30,
+                                              ),
+                                              profileinfodisplay(
+                                                  context, publicUser),
+                                            ],
+                                          ),
+                                        ),
+                                        // Container()
+                                        profilepostsdisplay(
+                                          ispublicposts: true,
+                                          context,
+                                          publicUser,
+                                          _posts,
+                                          loading: isLoading,
+                                        ),
 
-                                publicUser.isSubscribed
-                                    ? const ShopScreen()
-                                    : SingleChildScrollView(
-                                        child: Stack(
-                                          children: <Widget>[
-                                            Container(
-                                              padding: const EdgeInsets.all(0),
-                                              height: 100,
-                                              width: double.infinity,
-                                              child: ClipRRect(
-                                                child: FittedBox(
-                                                  fit: BoxFit.fill,
-                                                  child: Image.asset(
-                                                      'assets/images/sellerbackground.jpg'),
+                                        publicUser.isSubscribed
+                                            ? const ShopScreen()
+                                            : SingleChildScrollView(
+                                                child: Stack(
+                                                  children: <Widget>[
+                                                    Container(
+                                                      padding:
+                                                          const EdgeInsets.all(
+                                                              0),
+                                                      height: 100,
+                                                      width: double.infinity,
+                                                      child: ClipRRect(
+                                                        child: FittedBox(
+                                                          fit: BoxFit.fill,
+                                                          child: Image.asset(
+                                                              'assets/images/sellerbackground.jpg'),
+                                                        ),
+                                                      ),
+                                                    ),
+                                                    Column(
+                                                      crossAxisAlignment:
+                                                          CrossAxisAlignment
+                                                              .start,
+                                                      children: <Widget>[
+                                                        filteredMarkets.isEmpty
+                                                            ? const SafetyModel(
+                                                                isLoading:
+                                                                    false,
+                                                                icon: Icon(
+                                                                  Icons.warning,
+                                                                  color: Colors
+                                                                      .grey,
+                                                                  size: 80.0,
+                                                                ),
+                                                                title:
+                                                                    'This user has no items in store',
+                                                                // subTitle: '',
+                                                              )
+                                                            : ListView.builder(
+                                                                shrinkWrap:
+                                                                    true,
+                                                                physics:
+                                                                    const NeverScrollableScrollPhysics(),
+                                                                itemCount:
+                                                                    filteredMarkets
+                                                                        .length,
+                                                                itemBuilder:
+                                                                    (BuildContext
+                                                                            context,
+                                                                        int index) {
+                                                                  final MarketModel
+                                                                      market =
+                                                                      filteredMarkets[
+                                                                          index];
+
+                                                                  return market
+                                                                          .isProduct
+                                                                      ? MarketTile(
+                                                                          post:
+                                                                              market,
+                                                                          controller:
+                                                                              _marketController,
+                                                                          key: ValueKey(
+                                                                              market.marketId),
+                                                                        )
+                                                                      : ServiceTile(
+                                                                          post:
+                                                                              market,
+                                                                          controller:
+                                                                              _marketController,
+                                                                          key: ValueKey(
+                                                                              market.marketId),
+                                                                        );
+                                                                },
+                                                              ),
+                                                        const SizedBox(
+                                                          height: 200,
+                                                        )
+                                                      ],
+                                                    ),
+                                                  ],
                                                 ),
                                               ),
-                                            ),
-                                            Column(
-                                              crossAxisAlignment:
-                                                  CrossAxisAlignment.start,
-                                              children: <Widget>[
-                                                filteredMarkets.isEmpty
-                                                    ? const SafetyModel(
-                                                        isLoading: false,
-                                                        icon: Icon(
-                                                          Icons.warning,
-                                                          color: Colors.grey,
-                                                          size: 80.0,
-                                                        ),
-                                                        title:
-                                                            'This user has no items in store',
-                                                        // subTitle: '',
-                                                      )
-                                                    : ListView.builder(
-                                                        shrinkWrap: true,
-                                                        physics:
-                                                            const NeverScrollableScrollPhysics(),
-                                                        itemCount:
-                                                            filteredMarkets
-                                                                .length,
-                                                        itemBuilder:
-                                                            (BuildContext
-                                                                    context,
-                                                                int index) {
-                                                          final MarketModel
-                                                              market =
-                                                              filteredMarkets[
-                                                                  index];
-
-                                                          return market
-                                                                  .isProduct
-                                                              ? MarketTile(
-                                                                  post: market,
-                                                                  controller:
-                                                                      _marketController,
-                                                                  key: ValueKey(
-                                                                      market
-                                                                          .marketId),
-                                                                )
-                                                              : ServiceTile(
-                                                                  post: market,
-                                                                  controller:
-                                                                      _marketController,
-                                                                  key: ValueKey(
-                                                                      market
-                                                                          .marketId),
-                                                                );
-                                                        },
-                                                      ),
-                                                const SizedBox(
-                                                  height: 200,
-                                                )
-                                              ],
-                                            ),
-                                          ],
-                                        ),
-                                      ),
-                              ],
+                                      ],
+                              ),
+                            ),
+                          ],
+                        ),
                       ),
                     ),
-                  ],
-                ),
-              ),
-            ),
-    );
+                    const ShopScreen(
+                      isPro: true,
+                    )
+                  ]));
   }
 
   @override

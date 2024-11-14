@@ -340,7 +340,7 @@ class _SetupshopState extends State<Setupshop> with TickerProviderStateMixin {
     return Scaffold(
       backgroundColor: probackgroundColor,
       appBar: AppBar(
-        backgroundColor: probackgroundColor,
+        // backgroundColor: probackgroundColor,
         leading: widget.shop != null
             ? IconButton(
                 onPressed: () {
@@ -357,222 +357,220 @@ class _SetupshopState extends State<Setupshop> with TickerProviderStateMixin {
             fontWeight: FontWeight.bold,
           ),
         ),
-        bottom: widget.shop != null
-            ? PreferredSize(
-                preferredSize: const Size.fromHeight(30),
-                child: CupertinoSlidingSegmentedControl<int>(
-                  groupValue: _viewController.index,
-                  children: const <int, Widget>{
-                    0: Padding(
-                      padding:
-                          EdgeInsets.symmetric(horizontal: 15, vertical: 10),
-                      child: Text('Shop', style: TextStyle(fontSize: 14)),
-                    ),
-                    1: Padding(
-                      padding:
-                          EdgeInsets.symmetric(horizontal: 15, vertical: 10),
-                      child: Text(' Profile', style: TextStyle(fontSize: 14)),
-                    ),
-                  },
-                  onValueChanged: (int? value) {
-                    if (value != null) {
-                      setState(() {
-                        _viewController.index = value;
-                      });
-                    }
-                  },
-                ),
-              )
-            : null,
+        // bottom: widget.shop != null
+        //     ? PreferredSize(
+        //         preferredSize: const Size.fromHeight(30),
+        //         child: CupertinoSlidingSegmentedControl<int>(
+        //           groupValue: _viewController.index,
+        //           children: const <int, Widget>{
+        //             0: Padding(
+        //               padding:
+        //                   EdgeInsets.symmetric(horizontal: 15, vertical: 10),
+        //               child: Text('Shop', style: TextStyle(fontSize: 14)),
+        //             ),
+        //             1: Padding(
+        //               padding:
+        //                   EdgeInsets.symmetric(horizontal: 15, vertical: 10),
+        //               child: Text(' Profile', style: TextStyle(fontSize: 14)),
+        //             ),
+        //           },
+        //           onValueChanged: (int? value) {
+        //             if (value != null) {
+        //               setState(() {
+        //                 _viewController.index = value;
+        //               });
+        //             }
+        //           },
+        //         ),
+        //       )
+        //     : null,
       ),
       body: widget.shop == null && loading
           ? const Center(
               child: CircularProgressIndicator(),
             )
-          : TabBarView(controller: _viewController, children: <Widget>[
-              SingleChildScrollView(
-                child: Padding(
-                  padding: const EdgeInsets.only(top: 15.0),
-                  child: Column(
-                    children: <Widget>[
-                      CustomCard(
-                        buttonvisible: true,
-                        caption: 'Customize your Shop',
-                        subText: 'Add a photo for your shop',
-                        buttonText: 'Choose Photo',
-                        onPressed: _pickImage,
-                        imagePath: _selectedImage != null
-                            ? _selectedImage!.path
-                            : widget.shop != null && widget.shop!.image != null
-                                ? widget.shop!.image!
-                                : 'assets/images/shopplaceholder.png',
-                        iconpath: 'assets/svgs/uploadicon.svg',
-                      ),
-                      const SizedBox(height: 15),
-                      CustomEditText(
-                        caption: 'Shop name *',
-                        hintText: 'Enter shop name here',
-                        controller: nameController,
-                      ),
-                      const SizedBox(height: 15),
-                      CustomEditText(
-                        optionalText: RichText(
-                          text: const TextSpan(
-                            children: <InlineSpan>[
-                              TextSpan(
-                                text: '(Description)',
-                                style: TextStyle(
-                                  color: subtextColor,
-                                  fontSize: 12,
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                        maxLength: 300,
-                        caption: 'Shop Message *',
-                        hintText: 'Enter shop description here',
-                        controller: descriptionController,
-                      ),
-                      const SizedBox(height: 15),
-                      CustomEditText(
-                        optionalText: RichText(
-                          text: const TextSpan(
-                            children: <InlineSpan>[
-                              TextSpan(
-                                text: '(Optional)',
-                                style: TextStyle(
-                                  color: subtextColor,
-                                  fontSize: 12,
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                        hintText: '+234 000 000 000',
-                        controller: phoneController,
-                        caption: 'Phone Number',
-                      ),
-                      const SizedBox(height: 15),
-                      CustomEditText(
-                        optionalText: RichText(
-                          text: const TextSpan(
-                            children: <InlineSpan>[
-                              TextSpan(
-                                text: '(Optional)',
-                                style: TextStyle(
-                                  color: subtextColor,
-                                  fontSize: 12,
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                        caption: 'Business Email Address',
-                        hintText: 'example@business.com',
-                        controller: emailController,
-                      ),
-                      const SizedBox(height: 8),
-                      Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                        child: CountryListPick(
-                          appBar: AppBar(
-                            leading: IconButton(
-                              onPressed: () {
-                                Navigator.pop(context);
-                              },
-                              icon: SvgPicture.asset(
-                                  'assets/svgs/backbutton.svg'),
-                            ),
-                            centerTitle: true,
-                            title: const Text(
-                              'Select Location',
-                              textAlign: TextAlign.center,
+          : SingleChildScrollView(
+              child: Padding(
+                padding: const EdgeInsets.only(top: 15.0),
+                child: Column(
+                  children: <Widget>[
+                    CustomCard(
+                      buttonvisible: true,
+                      caption: 'Customise your Shop',
+                      subText: 'Add a photo for your shop',
+                      buttonText: 'Choose Photo',
+                      onPressed: _pickImage,
+                      imagePath: _selectedImage != null
+                          ? _selectedImage!.path
+                          : widget.shop != null && widget.shop!.image != null
+                              ? widget.shop!.image!
+                              : 'assets/images/shopplaceholder.png',
+                      iconpath: 'assets/svgs/uploadicon.svg',
+                    ),
+                    const SizedBox(height: 15),
+                    CustomEditText(
+                      maxLength: 30,
+                      caption: 'Shop name *',
+                      hintText: 'Enter shop name here',
+                      controller: nameController,
+                    ),
+                    const SizedBox(height: 15),
+                    CustomEditText(
+                      optionalText: RichText(
+                        text: const TextSpan(
+                          children: <InlineSpan>[
+                            TextSpan(
+                              text: '(Description)',
                               style: TextStyle(
-                                fontSize: 16,
+                                color: subtextColor,
+                                fontSize: 12,
                               ),
                             ),
+                          ],
+                        ),
+                      ),
+                      maxLength: 300,
+                      caption: 'Shop Message *',
+                      hintText: 'Enter shop description here',
+                      controller: descriptionController,
+                    ),
+                    const SizedBox(height: 15),
+                    CustomEditText(
+                      optionalText: RichText(
+                        text: const TextSpan(
+                          children: <InlineSpan>[
+                            TextSpan(
+                              text: '(Optional)',
+                              style: TextStyle(
+                                color: subtextColor,
+                                fontSize: 12,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                      hintText: '+234 000 000 000',
+                      controller: phoneController,
+                      caption: 'Phone Number',
+                    ),
+                    const SizedBox(height: 15),
+                    CustomEditText(
+                      optionalText: RichText(
+                        text: const TextSpan(
+                          children: <InlineSpan>[
+                            TextSpan(
+                              text: '(Optional)',
+                              style: TextStyle(
+                                color: subtextColor,
+                                fontSize: 12,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                      caption: 'Business Email Address',
+                      hintText: 'example@business.com',
+                      controller: emailController,
+                    ),
+                    const SizedBox(height: 8),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                      child: CountryListPick(
+                        appBar: AppBar(
+                          leading: IconButton(
+                            onPressed: () {
+                              Navigator.pop(context);
+                            },
+                            icon:
+                                SvgPicture.asset('assets/svgs/backbutton.svg'),
                           ),
-                          initialSelection: _selectedLocation,
-                          pickerBuilder:
-                              (BuildContext context, CountryCode? countryCode) {
-                            return Container(
-                              decoration: BoxDecoration(
-                                color: Colors.white,
-                                borderRadius:
-                                    BorderRadius.circular(radiusValue),
-                              ),
-                              child: CustomTextWidget(
-                                hashint: true,
-                                caption: 'Location',
-                                iconName: 'assets/svgs/nexticon.svg',
-                                text:
-                                    _selectedLocation ?? 'Choose Shop Location',
-                              ),
-                            );
-                          },
-                          onChanged: (CountryCode? code) async {
-                            setState(() {
-                              _selectedLocation = code!.name;
-                            });
-
-                            try {
-                              SharedPreferences marketplaceCountry =
-                                  await SharedPreferences.getInstance();
-                              await marketplaceCountry.setString(
-                                  'country', code!.name!);
-                              await marketplaceCountry.setString(
-                                  'currency', code.code!);
-                            } catch (e) {
-                              //
-                            }
-                          },
-                          useSafeArea: false,
+                          centerTitle: true,
+                          title: const Text(
+                            'Select Location',
+                            textAlign: TextAlign.center,
+                            style: TextStyle(
+                              fontSize: 16,
+                            ),
+                          ),
                         ),
-                      ),
-                      GestureDetector(
-                        onTap: () {
-                          _showBottomSheet(context, () {
-                            setState(() {});
-                          });
+                        initialSelection: _selectedLocation,
+                        pickerBuilder:
+                            (BuildContext context, CountryCode? countryCode) {
+                          return Container(
+                            decoration: BoxDecoration(
+                              color: Colors.white,
+                              borderRadius: BorderRadius.circular(radiusValue),
+                            ),
+                            child: CustomTextWidget(
+                              hashint: true,
+                              caption: 'Location',
+                              iconName: 'assets/svgs/nexticon.svg',
+                              text: _selectedLocation ?? 'Choose Shop Location',
+                            ),
+                          );
                         },
-                        child: CustomTextWidget(
-                          padding: 15,
-                          textpadding: 15,
-                          caption: 'Select Payment Method *',
-                          iconName: 'assets/svgs/dropdown.svg',
-                          text: selections.entries
-                              .where((MapEntry<String, bool> entry) =>
-                                  entry.value == true)
-                              .map((MapEntry<String, bool> entry) => entry.key)
-                              .toList()
-                              .join(', '),
-                        ),
+                        onChanged: (CountryCode? code) async {
+                          setState(() {
+                            _selectedLocation = code!.name;
+                          });
+
+                          try {
+                            SharedPreferences marketplaceCountry =
+                                await SharedPreferences.getInstance();
+                            await marketplaceCountry.setString(
+                                'country', code!.name!);
+                            await marketplaceCountry.setString(
+                                'currency', code.code!);
+                          } catch (e) {
+                            //
+                          }
+                        },
+                        useSafeArea: false,
                       ),
-                      const SizedBox(
-                        height: 30,
+                    ),
+                    GestureDetector(
+                      onTap: () {
+                        _showBottomSheet(context, () {
+                          setState(() {});
+                        });
+                      },
+                      child: CustomTextWidget(
+                        padding: 15,
+                        textpadding: 15,
+                        caption: 'Select Payment Method *',
+                        iconName: 'assets/svgs/dropdown.svg',
+                        text: selections.entries
+                            .where((MapEntry<String, bool> entry) =>
+                                entry.value == true)
+                            .map((MapEntry<String, bool> entry) => entry.key)
+                            .toList()
+                            .join(', '),
                       ),
-                      SizedBox(
-                        width: double.infinity,
-                        child: ProCustomButton(
-                          loading: isSubmit,
-                          onPressed: submitForm,
-                          text: widget.shop != null
-                              ? 'Save Changes'
-                              : 'Complete Setup',
-                        ),
+                    ),
+                    const SizedBox(
+                      height: 30,
+                    ),
+                    SizedBox(
+                      width: double.infinity,
+                      child: ProCustomButton(
+                        loading: isSubmit,
+                        onPressed: submitForm,
+                        text: widget.shop != null
+                            ? 'Save Changes'
+                            : 'Complete Setup',
                       ),
-                      const SizedBox(height: 30),
-                    ],
-                  ),
+                    ),
+                    const SizedBox(height: 30),
+                  ],
                 ),
               ),
-              if (widget.shop != null)
-                UpdateProfileScreen(
-                  isShopedit: true,
-                  user: widget.shop?.user,
-                )
-            ]),
+            ),
+      //   if (widget.shop != null)
+      //     UpdateProfileScreen(
+      //       isShopedit: true,
+      //       user: widget.shop?.user,
+      //     )
+      // ]),
     );
   }
 

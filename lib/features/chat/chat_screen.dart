@@ -221,14 +221,14 @@ class _ChatItemState extends State<ChatItem> {
   final ProfileController _profileController = Get.find();
   final HomeController _homeController = Get.find();
 
-  bool getUnreadMessages() {
+  int getUnreadMessagesCount() {
     final List<MessageModel> unread = widget.chatController.chatMessages
         .where((MessageModel element) =>
             element.receiverUid == _profileController.myProfile.uid &&
             element.senderUid == widget.myChatUser.user!.uid &&
             !element.seen)
         .toList();
-    return unread.isNotEmpty;
+    return unread.length;
   }
 
   @override
@@ -248,22 +248,40 @@ class _ChatItemState extends State<ChatItem> {
             child: Container(
               key: widget.key,
               padding:
-                  const EdgeInsets.only(right: 15.0, top: 10.0, bottom: 10.0),
+                  const EdgeInsets.only(right: 15.0, top: 10.0, bottom: 10),
               child: Row(
                 children: <Widget>[
-                  if (getUnreadMessages()) const UnReadDot() else Container(),
-                  Container(
-                    width: 80.0,
-                    alignment: Alignment.center,
-                    child: UserAvatarWithBadge(
-                      user: widget.myChatUser.user,
-                      height: 52.0,
-                      width: 52.0,
-                      radius: 50.0,
-                      placeHolder: Icons.person,
-                      iconSize: 36.0,
+                  Stack(children: <Widget>[
+                    Container(
+                      width: 80.0,
+                      alignment: Alignment.center,
+                      child: UserAvatarWithBadge(
+                        user: widget.myChatUser.user,
+                        height: 52.0,
+                        width: 52.0,
+                        radius: 50.0,
+                        placeHolder: Icons.person,
+                        iconSize: 36.0,
+                      ),
                     ),
-                  ),
+                    if (getUnreadMessagesCount() > 0)
+                      Positioned(
+                        bottom: 0,
+                        right: 10,
+                        child: CircleAvatar(
+                          radius: 8,
+                          backgroundColor: primaryColorLT,
+                          child: Text(
+                            '${getUnreadMessagesCount()}',
+                            style: bodyText2.copyWith(
+                              color: Colors.white,
+                              fontWeight: FontWeight.bold,
+                              fontSize: 10,
+                            ),
+                          ),
+                        ),
+                      ),
+                  ]),
                   Expanded(
                     child: Column(
                       children: <Widget>[
@@ -316,25 +334,6 @@ class _ChatItemState extends State<ChatItem> {
                                           Theme.of(context).textTheme.bodyLarge,
                                     ),
                             ),
-                            Text(
-                              TimeFormat.formatString(
-                                  widget.myChatUser.timestamp),
-                              style: bodyText2.copyWith(
-                                color: hintColor,
-                              ),
-                            ),
-                            SizedBox(
-                              // color: Colors.redAccent,
-                              height: 22,
-                              width: 22,
-                              child: MyPopupMenuButton(
-                                popupItems: _popupItemForumMore,
-                                icon: const Icon(Icons.more_vert),
-                                onSelected: (String val) {
-                                  deleteChat();
-                                },
-                              ),
-                            )
                           ],
                         ),
                         Row(
@@ -366,6 +365,28 @@ class _ChatItemState extends State<ChatItem> {
                         ),
                       ],
                     ),
+                  ),
+                  Row(
+                    children: <Widget>[
+                      Text(
+                        TimeFormat.formatString(widget.myChatUser.timestamp),
+                        style: bodyText2.copyWith(
+                          color: hintColor,
+                        ),
+                      ),
+                      SizedBox(
+                        // color: Colors.redAccent,
+                        height: 22,
+                        width: 22,
+                        child: MyPopupMenuButton(
+                          popupItems: _popupItemForumMore,
+                          icon: const Icon(Icons.more_vert),
+                          onSelected: (String val) {
+                            deleteChat();
+                          },
+                        ),
+                      ),
+                    ],
                   )
                 ],
               ),
