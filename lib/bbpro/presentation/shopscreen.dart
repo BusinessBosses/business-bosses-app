@@ -8,6 +8,7 @@ import 'package:business_bosses_v2/bbpro/presentation/orderproduct.dart';
 import 'package:business_bosses_v2/bbpro/widgets/inventorycard.dart';
 import 'package:business_bosses_v2/bbpro/widgets/servicecard.dart';
 import 'package:business_bosses_v2/common/widgets/network_image_with_placeholder.dart';
+import 'package:business_bosses_v2/features/chat/chat_room_screen.dart';
 import 'package:business_bosses_v2/features/marketplace/presentation/seller_reviews.dart';
 import 'package:business_bosses_v2/features/profile/controller/profile_controller.dart';
 import 'package:business_bosses_v2/utils/theme/theme.dart';
@@ -74,23 +75,64 @@ class _ShopScreenState extends State<ShopScreen> {
                     const SizedBox(
                       height: 10.0,
                     ),
-                  SizedBox(
-                    height: 80.0,
-                    width: 80.0,
-                    child: Align(
-                      alignment: Alignment.topLeft,
-                      child: ClipRRect(
-                        borderRadius: BorderRadius.circular(1000),
-                        child: NetworkImageWithPlaceHolder(
-                          imageUrl: shopController.shop!.image ?? '',
-                          radius: radius,
-                          placeHolder: Icons.person,
-                          iconSize: 22.0,
-                          fit: BoxFit.cover,
+                  Stack(children: <Widget>[
+                    SizedBox(
+                      height: 100,
+                      width: 100,
+                      child: SizedBox(
+                        height: 80.0,
+                        width: 80.0,
+                        child: Align(
+                          alignment: Alignment.topLeft,
+                          child: ClipRRect(
+                            borderRadius: BorderRadius.circular(1000),
+                            child: NetworkImageWithPlaceHolder(
+                              imageUrl: shopController.shop!.image ?? '',
+                              radius: radius,
+                              placeHolder: Icons.person,
+                              iconSize: 22.0,
+                              fit: BoxFit.cover,
+                            ),
+                          ),
                         ),
                       ),
                     ),
-                  ),
+                    Positioned(
+                        bottom: 0,
+                        right: 0,
+                        child: GestureDetector(
+                          onTap: () {
+                            Get.to(
+                              () => const ChatRoomScreen(
+                                frommarketplace: false,
+                              ),
+                              arguments: shopController.shop!.user,
+                            );
+                          },
+                          child: Container(
+                            decoration: BoxDecoration(
+                              shape: BoxShape.circle,
+                              boxShadow: <BoxShadow>[
+                                BoxShadow(
+                                  color: Colors.grey.withOpacity(0.3),
+                                  spreadRadius: 2,
+                                  blurRadius: 5,
+                                  offset: const Offset(
+                                      0, 3), // changes position of shadow
+                                ),
+                              ],
+                            ),
+                            child: CircleAvatar(
+                              backgroundColor: Colors.white,
+                              child: SvgPicture.asset(
+                                'assets/svgs/shopchat.svg',
+                                color: proprimaryColor,
+                                height: 24.0,
+                              ),
+                            ),
+                          ),
+                        )),
+                  ]),
                   const SizedBox(height: 10),
                   Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 15.0),
