@@ -15,6 +15,7 @@ import 'package:detectable_text_field/detector/sample_regular_expressions.dart';
 import 'package:detectable_text_field/widgets/detectable_text.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
+import 'package:flutter_sticky_header/flutter_sticky_header.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -34,40 +35,41 @@ class _ShopScreenState extends State<ShopScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        backgroundColor: Colors.white,
-        appBar: widget.isPro == null
-            ? AppBar(
-                leading: IconButton(
-                  onPressed: () {
-                    Get.back();
-                  },
-                  icon: SvgPicture.asset('assets/svgs/backbutton.svg'),
+      backgroundColor: Colors.white,
+      appBar: widget.isPro == null
+          ? AppBar(
+              leading: IconButton(
+                onPressed: () {
+                  Get.back();
+                },
+                icon: SvgPicture.asset('assets/svgs/backbutton.svg'),
+              ),
+              title: Text(
+                profileController.myProfile.uid ==
+                        shopController.shop!.user!.uid
+                    ? 'My Shop'
+                    : 'Shop',
+                style: const TextStyle(
+                  color: proprimaryColor,
+                  fontWeight: FontWeight.bold,
                 ),
-                title: Text(
-                  profileController.myProfile.uid ==
-                          shopController.shop!.user!.uid
-                      ? 'My Shop'
-                      : 'Shop',
-                  style: const TextStyle(
-                    color: proprimaryColor,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-                actions: <Widget>[
-                  CircleAvatar(
-                    backgroundColor: Colors.transparent,
-                    child: IconButton(
-                        onPressed: () {},
-                        icon: SvgPicture.asset('assets/svgs/shopshare.svg')),
-                  )
-                ],
-              )
-            : null,
-        body: CustomScrollView(
-          slivers: <Widget>[
-            SliverToBoxAdapter(
-              child: Column(
-                children: <Widget>[
+              ),
+              actions: <Widget>[
+                CircleAvatar(
+                  backgroundColor: Colors.transparent,
+                  child: IconButton(
+                      onPressed: () {},
+                      icon: SvgPicture.asset('assets/svgs/shopshare.svg')),
+                )
+              ],
+            )
+          : null,
+      body: NestedScrollView(
+        headerSliverBuilder: (BuildContext context, bool innerBoxIsScrolled) {
+          return <Widget>[
+            SliverStickyHeader(
+                sticky: false,
+                header: Column(children: <Widget>[
                   if (widget.isPro != null)
                     const SizedBox(
                       height: 10.0,
@@ -182,272 +184,194 @@ class _ShopScreenState extends State<ShopScreen> {
                       ],
                     ),
                   ),
-                  const SizedBox(height: 20),
-                  DefaultTabController(
-                    length: 3,
-                    child: Column(
+                ]))
+          ];
+        },
+        body: DefaultTabController(
+          length: 3,
+          child: Column(
+            children: <Widget>[
+              const TabBar(
+                  labelColor: Colors.black,
+                  unselectedLabelColor: Colors.grey,
+                  indicatorColor: proprimaryColor,
+                  tabs: <Widget>[
+                    Tab(text: 'Items'),
+                    Tab(text: 'Reviews'),
+                    Tab(text: 'About'),
+                  ]),
+              const Divider(
+                height: 1,
+                // thickness: 1,
+              ),
+              SizedBox(
+                height: 500,
+                child: TabBarView(
+                  children: <Widget>[
+                    ///Tab 1 Content
+                    Column(
                       children: <Widget>[
-                        const TabBar(
-                            labelColor: Colors.black,
-                            unselectedLabelColor: Colors.grey,
-                            indicatorColor: proprimaryColor,
-                            tabs: <Widget>[
-                              Tab(text: 'Items'),
-                              Tab(text: 'Reviews'),
-                              Tab(text: 'About'),
-                            ]),
-                        const Divider(
-                          height: 1,
-                          // thickness: 1,
-                        ),
-                        SizedBox(
-                          height: 500,
-                          child: TabBarView(
+                        Padding(
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: 15.0, vertical: 10),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: <Widget>[
-                              ///Tab 1 Content
-                              Column(
-                                children: <Widget>[
-                                  Padding(
-                                    padding: const EdgeInsets.symmetric(
-                                        horizontal: 15.0),
-                                    child: Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.spaceBetween,
-                                      children: <Widget>[
-                                        Text(
-                                          'All (${shopController.products.length + shopController.services.length})',
+                              Text(
+                                'All (${shopController.products.length + shopController.services.length})',
+                                style: const TextStyle(fontSize: 14),
+                              ),
+                              GestureDetector(
+                                onTap: () {
+                                  final RenderBox button =
+                                      context.findRenderObject() as RenderBox;
+                                  final RenderBox overlay = Overlay.of(context)
+                                      .context
+                                      .findRenderObject() as RenderBox;
+                                  final RelativeRect position =
+                                      RelativeRect.fromRect(
+                                    Rect.fromPoints(
+                                      button.localToGlobal(
+                                          button.size
+                                              .topRight(const Offset(0, 380)),
+                                          ancestor: overlay),
+                                      button.localToGlobal(
+                                          button.size
+                                              .bottomRight(const Offset(0, 20)),
+                                          ancestor: overlay),
+                                    ),
+                                    Offset.zero & overlay.size,
+                                  );
+
+                                  showMenu(
+                                    shape: RoundedRectangleBorder(
+                                        borderRadius:
+                                            BorderRadius.circular(10)),
+                                    context: context,
+                                    shadowColor: Colors.black,
+                                    position: position,
+                                    items: <String>[
+                                      'All Products',
+                                      'Low Stock',
+                                      'Out of Stock',
+                                      'Most Popular',
+                                      'Newest First',
+                                    ].map((String option) {
+                                      return PopupMenuItem<String>(
+                                        value: option,
+                                        child: Text(
+                                          option,
                                           style: const TextStyle(fontSize: 14),
                                         ),
-                                        GestureDetector(
-                                          onTap: () {
-                                            final RenderBox button =
-                                                context.findRenderObject()
-                                                    as RenderBox;
-                                            final RenderBox overlay =
-                                                Overlay.of(context)
-                                                        .context
-                                                        .findRenderObject()
-                                                    as RenderBox;
-                                            final RelativeRect position =
-                                                RelativeRect.fromRect(
-                                              Rect.fromPoints(
-                                                button.localToGlobal(
-                                                    button.size.topRight(
-                                                        const Offset(0, 380)),
-                                                    ancestor: overlay),
-                                                button.localToGlobal(
-                                                    button.size.bottomRight(
-                                                        const Offset(0, 20)),
-                                                    ancestor: overlay),
-                                              ),
-                                              Offset.zero & overlay.size,
-                                            );
-
-                                            showMenu(
-                                              shape: RoundedRectangleBorder(
-                                                  borderRadius:
-                                                      BorderRadius.circular(
-                                                          10)),
-                                              context: context,
-                                              shadowColor: Colors.black,
-                                              position: position,
-                                              items: <String>[
-                                                'All Products',
-                                                'Low Stock',
-                                                'Out of Stock',
-                                                'Most Popular',
-                                                'Newest First',
-                                              ].map((String option) {
-                                                return PopupMenuItem<String>(
-                                                  value: option,
-                                                  child: Text(
-                                                    option,
-                                                    style: const TextStyle(
-                                                        fontSize: 14),
-                                                  ),
-                                                );
-                                              }).toList(),
-                                            ).then((String? selected) {
-                                              if (selected != null) {
-                                                setState(() {
-                                                  _selectedItem = selected;
-                                                });
-                                              }
-                                            });
-                                          },
-                                          child: Container(
-                                            width: 150,
-                                            decoration: BoxDecoration(
-                                                color: backgroundColor,
-                                                borderRadius:
-                                                    BorderRadius.circular(7)),
-                                            child: Row(
-                                              children: <Widget>[
-                                                CircleAvatar(
-                                                  backgroundColor:
-                                                      backgroundColor,
-                                                  child: SvgPicture.asset(
-                                                      'assets/svgs/filterprosections.svg'),
-                                                ),
-                                                Text(
-                                                  _selectedItem,
-                                                  style: const TextStyle(
-                                                      fontSize: 14),
-                                                )
-                                              ],
-                                            ),
-                                          ),
-                                        ),
-                                      ],
-                                    ),
+                                      );
+                                    }).toList(),
+                                  ).then((String? selected) {
+                                    if (selected != null) {
+                                      setState(() {
+                                        _selectedItem = selected;
+                                      });
+                                    }
+                                  });
+                                },
+                                child: Container(
+                                  width: 150,
+                                  decoration: BoxDecoration(
+                                      color: backgroundColor,
+                                      borderRadius: BorderRadius.circular(7)),
+                                  child: Row(
+                                    children: <Widget>[
+                                      CircleAvatar(
+                                        backgroundColor: backgroundColor,
+                                        child: SvgPicture.asset(
+                                            'assets/svgs/filterprosections.svg'),
+                                      ),
+                                      Text(
+                                        _selectedItem,
+                                        style: const TextStyle(fontSize: 14),
+                                      )
+                                    ],
                                   ),
-                                  Expanded(
-                                    child: Padding(
-                                      padding: const EdgeInsets.symmetric(
-                                          horizontal: 15.0),
-                                      child: StaggeredGridView.countBuilder(
-                                        crossAxisCount: 2,
-                                        staggeredTileBuilder: (int index) =>
-                                            const StaggeredTile.fit(1),
-                                        mainAxisSpacing: 10.0,
-                                        crossAxisSpacing: 10.0,
-                                        itemCount:
-                                            shopController.products.length +
-                                                shopController.services.length,
-                                        itemBuilder:
-                                            (BuildContext context, int index) {
-                                          if (index <
-                                              shopController.products.length) {
-                                            final Product product =
-                                                shopController.products[index];
-                                            return GestureDetector(
-                                              onTap: () {
-                                                profileController
-                                                            .myProfile.uid ==
-                                                        shopController
-                                                            .shop!.user!.uid
-                                                    ? Get.to(
-                                                        () =>
-                                                            CreateProductListing(
-                                                          product: product,
-                                                        ),
-                                                      )
-                                                    : Get.to(() =>
-                                                        OrderProductScreen(
-                                                            product: product));
-                                              },
-                                              child: InventoryCard(
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                        Expanded(
+                          child: Padding(
+                            padding:
+                                const EdgeInsets.symmetric(horizontal: 15.0),
+                            child: StaggeredGridView.countBuilder(
+                              crossAxisCount: 2,
+                              staggeredTileBuilder: (int index) =>
+                                  const StaggeredTile.fit(1),
+                              mainAxisSpacing: 10.0,
+                              crossAxisSpacing: 10.0,
+                              itemCount: shopController.products.length +
+                                  shopController.services.length,
+                              itemBuilder: (BuildContext context, int index) {
+                                if (index < shopController.products.length) {
+                                  final Product product =
+                                      shopController.products[index];
+                                  return GestureDetector(
+                                    onTap: () {
+                                      profileController.myProfile.uid ==
+                                              shopController.shop!.user!.uid
+                                          ? Get.to(
+                                              () => CreateProductListing(
                                                 product: product,
-                                                myShop: true,
                                               ),
-                                            );
-                                          } else {
-                                            final Service service =
-                                                shopController.services[index -
-                                                    shopController
-                                                        .products.length];
-                                            return GestureDetector(
-                                              onTap: () {
-                                                profileController
-                                                            .myProfile.uid ==
-                                                        shopController
-                                                            .shop!.user!.uid
-                                                    ? Get.to(
-                                                        () =>
-                                                            CreateServiceListing(
-                                                          service: service,
-                                                        ),
-                                                      )
-                                                    : Get.to(() =>
-                                                        BookServiceScreen(
-                                                            service: service));
-                                              },
-                                              child: ServiceCard(
-                                                myShop: true,
+                                            )
+                                          : Get.to(() => OrderProductScreen(
+                                              product: product));
+                                    },
+                                    child: InventoryCard(
+                                      product: product,
+                                      myShop: true,
+                                    ),
+                                  );
+                                } else {
+                                  final Service service = shopController
+                                          .services[
+                                      index - shopController.products.length];
+                                  return GestureDetector(
+                                    onTap: () {
+                                      profileController.myProfile.uid ==
+                                              shopController.shop!.user!.uid
+                                          ? Get.to(
+                                              () => CreateServiceListing(
                                                 service: service,
                                               ),
-                                            );
-                                          }
-                                        },
-                                      ),
+                                            )
+                                          : Get.to(() => BookServiceScreen(
+                                              service: service));
+                                    },
+                                    child: ServiceCard(
+                                      myShop: true,
+                                      service: service,
                                     ),
-                                  ),
-                                ],
-                              ),
-
-                              ///Tab 2 Content
-                              SellerReviewScreen(
-                                  isShop: true,
-                                  user: profileController.myProfile),
-
-                              ///Tab 3 Content
-                              Center(child: _buildContactInfo()),
-                            ],
+                                  );
+                                }
+                              },
+                            ),
                           ),
                         ),
                       ],
                     ),
-                  ),
-                  const SizedBox(height: 20),
-                  const SizedBox(height: 10),
-                ],
+
+                    ///Tab 2 Content
+                    SellerReviewScreen(
+                        isShop: true, user: profileController.myProfile),
+
+                    ///Tab 3 Content
+                    Center(child: _buildContactInfo()),
+                  ],
+                ),
               ),
-            ),
-            // SliverPadding(
-            //   padding:
-            //       const EdgeInsets.only(left: 15.0, right: 15.0, bottom: 100),
-            //   sliver: SliverStaggeredGrid.countBuilder(
-            //     crossAxisCount: 2,
-            //     staggeredTileBuilder: (int index) => const StaggeredTile.fit(1),
-            //     mainAxisSpacing: 10.0,
-            //     crossAxisSpacing: 10.0,
-            //     itemCount: shopController.products.length +
-            //         shopController.services.length,
-            //     itemBuilder: (BuildContext context, int index) {
-            //       if (index < shopController.products.length) {
-            //         final Product product = shopController.products[index];
-            //         return GestureDetector(
-            //           onTap: () {
-            //             profileController.myProfile.uid ==
-            //                     shopController.shop!.user!.uid
-            //                 ? Get.to(
-            //                     () => CreateProductListing(
-            //                       product: product,
-            //                     ),
-            //                   )
-            //                 : Get.to(
-            //                     () => OrderProductScreen(product: product));
-            //           },
-            //           child: InventoryCard(
-            //             product: product,
-            //             myShop: true,
-            //           ),
-            //         );
-            //       } else {
-            //         final Service service = shopController
-            //             .services[index - shopController.products.length];
-            //         return GestureDetector(
-            //           onTap: () {
-            //             profileController.myProfile.uid ==
-            //                     shopController.shop!.user!.uid
-            //                 ? Get.to(
-            //                     () => CreateServiceListing(
-            //                       service: service,
-            //                     ),
-            //                   )
-            //                 : Get.to(() => BookServiceScreen(service: service));
-            //           },
-            //           child: ServiceCard(
-            //             myShop: true,
-            //             service: service,
-            //           ),
-            //         );
-            //       }
-            //     },
-            //   ),
-            // )
-          ],
-        ));
+            ],
+          ),
+        ),
+      ),
+    );
   }
 
   Widget _buildContactInfo() {
