@@ -150,7 +150,8 @@ class _SalesWidgetState extends State<SalesWidget> {
                     ],
                   ),
                   const SizedBox(height: 10),
-                  if (shopController.shopGraph!.totalSales == 0)
+                  if (shopController.shopGraph!.graphData != null &&
+                      shopController.shopGraph!.graphData!.isEmpty)
                     const Padding(
                       padding: EdgeInsets.all(15),
                       child: Center(

@@ -74,6 +74,17 @@ class OrderController extends GetxController {
     }
   }
 
+  Future<bool> addOrder(Map<String, dynamic> data) async {
+    ApiResponseModel response =
+        await ApiService.post(path: 'orders', body: data);
+    if (response.success) {
+      // Convert the response data to a Client object and add it to the list
+      return true;
+    } else {
+      return false;
+    }
+  }
+
   Future<bool> deleteOrder(String id) async {
     ApiResponseModel response = await ApiService.delete(path: 'orders/$id');
     if (response.success) {

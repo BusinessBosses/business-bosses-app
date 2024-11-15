@@ -162,8 +162,10 @@ class _PublicProfileScreenState extends State<PublicProfileScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
         backgroundColor: Colors.white,
-        appBar: publicUser.isSubscribed
-            ? PreferredSize(
+        appBar: 
+        // publicUser.isSubscribed
+        //     ? 
+            PreferredSize(
                 preferredSize: Size.fromHeight(
                     (_selectedIndex == 0 || _selectedIndex == 4)
                         ? kToolbarHeight
@@ -449,17 +451,17 @@ class _PublicProfileScreenState extends State<PublicProfileScreen> {
                     ),
                   ),
                 ]),
-              )
-            : AppBar(
-                leading: IconButton(
-                  onPressed: () {
-                    Get.back();
-                  },
-                  icon: SvgPicture.asset('assets/svgs/backbutton.svg'),
-                ),
-                title: Text('@${publicUser.username}'),
-                actions: <Widget>[optionsButton()],
               ),
+            // : AppBar(
+            //     leading: IconButton(
+            //       onPressed: () {
+            //         Get.back();
+            //       },
+            //       icon: SvgPicture.asset('assets/svgs/backbutton.svg'),
+            //     ),
+            //     title: Text('@${publicUser.username}'),
+            //     actions: <Widget>[optionsButton()],
+            //   ),
         body: isLoading
             ? const Center(child: CircularProgressIndicator.adaptive())
             : PageView(

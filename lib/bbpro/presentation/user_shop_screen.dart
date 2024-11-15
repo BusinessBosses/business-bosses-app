@@ -457,8 +457,9 @@ class _UserShopScreenState extends State<UserShopScreen> {
 
                                   ///Tab 2 Content
                                   SellerReviewScreen(
-                                      isShop: true,
-                                      user: profileController.myProfile),
+                                    isShop: true,
+                                    user: profileController.myProfile,
+                                  ),
 
                                   ///Tab 3 Content
                                   Center(child: _buildContactInfo()),

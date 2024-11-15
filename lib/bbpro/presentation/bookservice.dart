@@ -1,4 +1,3 @@
-import 'package:business_bosses_v2/bbpro/controllers/clients_controller.dart';
 import 'package:business_bosses_v2/bbpro/controllers/order_controller.dart';
 import 'package:business_bosses_v2/bbpro/controllers/shop_controller.dart';
 import 'package:business_bosses_v2/bbpro/models/service_model.dart';
@@ -498,6 +497,7 @@ class _BookServiceScreenState extends State<BookServiceScreen>
                         SizedBox(
                           width: 200,
                           child: ProCustomButton(
+                            loading: isSubmit,
                             onPressed: () async {
                               setState(() {
                                 isSubmit = true;
@@ -507,15 +507,23 @@ class _BookServiceScreenState extends State<BookServiceScreen>
                                 'userId': profileController.myProfile.uid,
                                 'shopId': widget.shop.id,
                                 'items': selectedItems,
-                                'deliveryMethod': widget.service.deliveryMethod,
-                                'deliveryDate': deliveryDate,
-                                'paymentMethod': widget.service.deliveryMethod,
+                                'deliveryMethod':
+                                    widget.service.deliveryMethod != null
+                                        ? widget.service.deliveryMethod!
+                                            .toLowerCase()
+                                        : 'online',
+                                'deliveryDate': deliveryDate.toString(),
+                                'paymentMethod':
+                                    widget.service.paymentMethod != null
+                                        ? widget.service.paymentMethod!
+                                        : 'Cash',
                                 'orderDetails':
                                     'Name: ${fullNameController.text} \n Email: ${emailController.text} \n Phone: ${phoneController.text} \n Delivery Details: ${deliveryController.text}',
-                                'invoiceOption': 'send_with_payment_link'
+                                'invoiceOption': 'send_with_payment_link',
+                                'status': 'pending'
                               };
                               bool response =
-                                  await orderController.addOrders(orderData);
+                                  await orderController.addOrder(orderData);
                               if (response) {
                                 showSnackbar(
                                     message: 'Order Added Successfully!');

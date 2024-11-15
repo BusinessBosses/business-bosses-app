@@ -46,7 +46,7 @@ class GraphDataPoint {
   factory GraphDataPoint.fromJson(Map<String, dynamic> json) {
     return GraphDataPoint(
       date: json['date'],
-      totalAmount: json['totalAmount'],
+      totalAmount: json['totalAmount'] ?? 0,
     );
   }
 
