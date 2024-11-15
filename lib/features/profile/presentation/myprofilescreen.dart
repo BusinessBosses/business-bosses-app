@@ -1,5 +1,5 @@
 import 'package:business_bosses_v2/bbpro/presentation/bottomnavscreen.dart';
-import 'package:business_bosses_v2/bbpro/presentation/shopscreen.dart';
+import 'package:business_bosses_v2/bbpro/presentation/shop_screen.dart';
 import 'package:business_bosses_v2/bbpro/widgets/button.dart';
 import 'package:business_bosses_v2/features/forum/widgets/forum_item.dart';
 import 'package:business_bosses_v2/features/home/controller/home_controller.dart';

@@ -1,7 +1,6 @@
 import 'package:business_bosses_v2/bbpro/controllers/shop_controller.dart';
 import 'package:business_bosses_v2/bbpro/models/product_model.dart';
 import 'package:business_bosses_v2/bbpro/presentation/create_product.dart';
-import 'package:business_bosses_v2/bbpro/presentation/orderproduct.dart';
 import 'package:business_bosses_v2/bbpro/widgets/button.dart';
 import 'package:business_bosses_v2/bbpro/widgets/inventorycard.dart';
 import 'package:business_bosses_v2/common/widgets/safety_model.dart';
@@ -159,15 +158,11 @@ class _InventoryState extends State<Inventory> {
                         final Product product = shopController.products[index];
                         return GestureDetector(
                           onTap: () {
-                            profileController.myProfile.uid ==
-                                    shopController.shop!.user!.uid
-                                ? Get.to(
-                                    () => CreateProductListing(
-                                      product: product,
-                                    ),
-                                  )
-                                : Get.to(
-                                    () => OrderProductScreen(product: product));
+                            Get.to(
+                              () => CreateProductListing(
+                                product: product,
+                              ),
+                            );
                           },
                           child: InventoryCard(
                             product: product,

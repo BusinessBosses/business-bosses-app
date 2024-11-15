@@ -1,8 +1,8 @@
 import 'package:business_bosses_v2/bbpro/controllers/clients_controller.dart';
 import 'package:business_bosses_v2/bbpro/controllers/order_controller.dart';
 import 'package:business_bosses_v2/bbpro/controllers/shop_controller.dart';
-import 'package:business_bosses_v2/bbpro/models/client_model.dart';
 import 'package:business_bosses_v2/bbpro/models/service_model.dart';
+import 'package:business_bosses_v2/bbpro/models/shop_model.dart';
 import 'package:business_bosses_v2/bbpro/widgets/addtoorderwidget.dart';
 import 'package:business_bosses_v2/bbpro/widgets/button.dart';
 import 'package:business_bosses_v2/bbpro/widgets/edittext.dart';
@@ -23,7 +23,9 @@ import 'package:syncfusion_flutter_calendar/calendar.dart';
 
 class BookServiceScreen extends StatefulWidget {
   final Service service;
-  const BookServiceScreen({super.key, required this.service});
+  final Shop shop;
+  const BookServiceScreen(
+      {super.key, required this.service, required this.shop});
 
   @override
   State<BookServiceScreen> createState() => _BookServiceScreenState();
@@ -33,9 +35,8 @@ class _BookServiceScreenState extends State<BookServiceScreen>
     with SingleTickerProviderStateMixin {
   late TabController _tabController;
   final ProfileController profileController = Get.find();
-  final OrderController orderController = Get.find();
+  final OrderController orderController = Get.put(OrderController());
   final ShopController shopController = Get.find();
-  final ClientsController clientsController = Get.find();
   final TextEditingController quantityController = TextEditingController();
   final TextEditingController deliveryController = TextEditingController();
   final TextEditingController fullNameController = TextEditingController();
@@ -44,7 +45,7 @@ class _BookServiceScreenState extends State<BookServiceScreen>
   bool isSubmit = false;
 
   List<Map<String, dynamic>> selectedItems = <Map<String, dynamic>>[];
-  DateTime? deliveryDate;
+  DateTime? deliveryDate = DateTime.now();
   String? clientId;
   String? selectedClient;
 
@@ -70,10 +71,6 @@ class _BookServiceScreenState extends State<BookServiceScreen>
         'name': widget.service.name
       },
     );
-    for (Client client in clientsController.clients) {
-      clientsName.add(client.name);
-      clients.add(<String, dynamic>{'name': client.name, 'id': client.id});
-    }
   }
 
   @override
@@ -184,7 +181,7 @@ class _BookServiceScreenState extends State<BookServiceScreen>
                                     Wrap(
                                       children: <Widget>[
                                         Text(
-                                          shopController.shop!.currency,
+                                          widget.shop.currency,
                                           style: const TextStyle(
                                             color: proprimaryColor,
                                             fontWeight: FontWeight.bold,
@@ -334,6 +331,7 @@ class _BookServiceScreenState extends State<BookServiceScreen>
                     ListView(
                       children: <Widget>[
                         OrderPreviewCard(
+                          shop: widget.shop,
                           title: widget.service.name,
                           price: widget.service.price,
                           OnTap: () {
@@ -371,7 +369,7 @@ class _BookServiceScreenState extends State<BookServiceScreen>
                           total: (1 - widget.service.discount) *
                               (int.parse(quantityController.text) *
                                   widget.service.price),
-                          currency: shopController.shop!.currency,
+                          currency: widget.shop.currency,
                         ),
                         const SizedBox(
                           height: 15,
@@ -507,11 +505,10 @@ class _BookServiceScreenState extends State<BookServiceScreen>
                               final Map<String, dynamic> orderData =
                                   <String, dynamic>{
                                 'userId': profileController.myProfile.uid,
-                                'shopId': shopController.shop?.id,
-                                'clientId': clientId,
+                                'shopId': widget.shop.id,
                                 'items': selectedItems,
                                 'deliveryMethod': widget.service.deliveryMethod,
-                                'deliveryDate': DateTime.now(),
+                                'deliveryDate': deliveryDate,
                                 'paymentMethod': widget.service.deliveryMethod,
                                 'orderDetails':
                                     'Name: ${fullNameController.text} \n Email: ${emailController.text} \n Phone: ${phoneController.text} \n Delivery Details: ${deliveryController.text}',

@@ -1,4 +1,5 @@
 import 'package:business_bosses_v2/bbpro/controllers/shop_controller.dart';
+import 'package:business_bosses_v2/bbpro/models/shop_model.dart';
 import 'package:business_bosses_v2/common/widgets/network_image_with_placeholder.dart';
 import 'package:business_bosses_v2/utils/theme/theme.dart';
 import 'package:flutter/material.dart';
@@ -13,6 +14,7 @@ class OrderPreviewCard extends StatelessWidget {
   final String deliveryLocation;
   final String imageUrl;
   final Function? OnTap;
+  final Shop? shop;
 
   const OrderPreviewCard({
     Key? key,
@@ -24,6 +26,7 @@ class OrderPreviewCard extends StatelessWidget {
     required this.deliveryLocation,
     required this.imageUrl,
     this.OnTap,
+    this.shop,
   }) : super(key: key);
 
   @override
@@ -61,7 +64,7 @@ class OrderPreviewCard extends StatelessWidget {
                 if (color != null && color!.isNotEmpty) Text('Color: $color'),
                 const SizedBox(height: 5.0),
                 Text(
-                  '${shopController.shop!.currency}${price.toStringAsFixed(2)}',
+                  '${shop == null ? shopController.shop!.currency : shop!.currency}${price.toStringAsFixed(2)}',
                   style: const TextStyle(
                     fontSize: 20.0,
                     fontWeight: FontWeight.bold,

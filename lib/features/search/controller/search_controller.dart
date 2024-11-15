@@ -40,25 +40,28 @@ class CompleteSearchController extends GetxController {
         await SearchRepository.search(query.trim());
     if (response.success) {
       for (int i = 0; i < response.data['users'].length; i++) {
-        final mapData = response.data['users'][i];
+        final dynamic mapData = response.data['users'][i];
         final UserModel modelizedData = UserModel.fromMap(mapData);
-
         searchedUsers.add(modelizedData);
       }
 
       for (int i = 0; i < response.data['posts']['rows'].length; i++) {
-        final mapData = response.data['posts']['rows'][i];
+        final dynamic mapData = response.data['posts']['rows'][i];
         // final PostModel modelizedData = PostModel.fromMap(mapData);
 
-        searchedPosts.add(PostModel.fromMap(<String, dynamic>{
-          ...mapData,
-          'likes': mapData['likes']
-              .map((dynamic like) => like['userId'].toString())
-              .toList(),
-          'coins': mapData['likes']
-              .map((dynamic coin) => coin['userId'].toString())
-              .toList()
-        }));
+        searchedPosts.add(
+          PostModel.fromMap(
+            <String, dynamic>{
+              ...mapData,
+              'likes': mapData['likes']
+                  .map((dynamic like) => like['userId'].toString())
+                  .toList(),
+              'coins': mapData['likes']
+                  .map((dynamic coin) => coin['userId'].toString())
+                  .toList()
+            },
+          ),
+        );
       }
     }
 
@@ -200,7 +203,6 @@ class CompleteSearchController extends GetxController {
 
   @override
   void onClose() {
-    // TODO: implement onClose
     searchedForums.clear();
     searchedPosts.clear();
     searchedUsers.clear();
@@ -210,7 +212,6 @@ class CompleteSearchController extends GetxController {
 
   @override
   void onInit() {
-    // TODO: implement onInit
     getData();
     super.onInit();
   }

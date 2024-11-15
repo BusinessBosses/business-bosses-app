@@ -1,5 +1,6 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'package:business_bosses_v2/bbpro/controllers/shop_controller.dart';
+import 'package:business_bosses_v2/bbpro/models/shop_model.dart';
 import 'package:business_bosses_v2/bbpro/presentation/create_product.dart';
 import 'package:business_bosses_v2/common/dialogs/snackbar.dart';
 import 'package:flutter/material.dart';
@@ -13,6 +14,7 @@ import 'package:get/get.dart';
 class InventoryCard extends StatefulWidget {
   final Product? product;
   final bool? myShop;
+  final Shop? shop;
   final bool? isProduct;
 
   const InventoryCard({
@@ -20,6 +22,7 @@ class InventoryCard extends StatefulWidget {
     this.product,
     this.isProduct,
     this.myShop,
+    this.shop,
   }) : super(key: key);
 
   @override
@@ -89,7 +92,7 @@ class _InventoryCardState extends State<InventoryCard> {
                       Row(
                         children: <Widget>[
                           Text(
-                            '${shopController.shop!.currency}${widget.product!.price * (1 - widget.product!.discount! / 100)}',
+                            '${widget.shop == null ? shopController.shop!.currency : widget.shop!.currency}${widget.product!.price * (1 - widget.product!.discount! / 100)}',
                             style: const TextStyle(
                               color: proprimaryColor,
                               fontWeight: FontWeight.bold,
@@ -98,7 +101,7 @@ class _InventoryCardState extends State<InventoryCard> {
                           ),
                           const SizedBox(width: 5),
                           Text(
-                            '${shopController.shop!.currency}${widget.product?.price.toString()}',
+                            '${widget.shop == null ? shopController.shop!.currency : widget.shop!.currency}${widget.product?.price.toString()}',
                             style: const TextStyle(
                               color: Colors.grey,
                               decoration: TextDecoration.lineThrough,
@@ -109,7 +112,7 @@ class _InventoryCardState extends State<InventoryCard> {
                       )
                     else
                       Text(
-                        '${shopController.shop!.currency}${widget.product?.price.toString()}',
+                        '${widget.shop == null ? shopController.shop!.currency : widget.shop!.currency}${widget.product?.price.toString()}',
                         style: const TextStyle(
                           color: proprimaryColor,
                           fontWeight: FontWeight.bold,

@@ -1,5 +1,5 @@
 import 'package:business_bosses_v2/bbpro/controllers/shop_controller.dart';
-import 'package:business_bosses_v2/bbpro/presentation/shopscreen.dart';
+import 'package:business_bosses_v2/bbpro/presentation/shop_screen.dart';
 import 'package:business_bosses_v2/common/widgets/network_image_with_placeholder.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';

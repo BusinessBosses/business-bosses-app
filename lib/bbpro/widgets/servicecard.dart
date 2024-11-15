@@ -1,5 +1,6 @@
 import 'package:business_bosses_v2/bbpro/controllers/shop_controller.dart';
 import 'package:business_bosses_v2/bbpro/models/service_model.dart';
+import 'package:business_bosses_v2/bbpro/models/shop_model.dart';
 import 'package:business_bosses_v2/bbpro/widgets/optionsbutton.dart';
 import 'package:business_bosses_v2/common/dialogs/snackbar.dart';
 import 'package:business_bosses_v2/common/widgets/network_image_with_placeholder.dart';
@@ -11,11 +12,13 @@ import 'package:business_bosses_v2/bbpro/presentation/create_service.dart';
 class ServiceCard extends StatefulWidget {
   final Service? service;
   final bool? myShop;
+  final Shop? shop;
 
   const ServiceCard({
     Key? key,
     this.service,
     this.myShop,
+    this.shop,
   }) : super(key: key);
 
   @override
@@ -54,7 +57,7 @@ class _ServiceCardState extends State<ServiceCard> {
               child: ClipRRect(
                 borderRadius: BorderRadius.circular(10),
                 child: NetworkImageWithPlaceHolder(
-                  imageUrl: (widget.service?.images == null ||
+                  imageUrl: (widget.service?.images == null &&
                           widget.service!.images!.isEmpty)
                       ? ''
                       : widget.service?.images![0],
@@ -89,7 +92,7 @@ class _ServiceCardState extends State<ServiceCard> {
                       ),
                     ),
                     Text(
-                      '${shopController.shop!.currency}${widget.service?.price.toString()}',
+                      '${widget.shop == null ? shopController.shop!.currency : widget.shop!.currency}${widget.service?.price.toString()}',
                       style: const TextStyle(
                         color: proprimaryColor,
                         fontWeight: FontWeight.bold,
@@ -174,15 +177,17 @@ class _ServiceCardState extends State<ServiceCard> {
           ),
           TextButton(
             onPressed: () async {
-              final bool delete =
-                  await shopController.deleteService(widget.service!.id);
-              if (delete) {
-                showSnackbar(message: 'Service deleted successfully!');
-              } else {
-                showSnackbar(message: 'Error deleting service!', error: true);
+              if (widget.shop != null) {
+                final bool delete =
+                    await shopController.deleteService(widget.service!.id);
+                if (delete) {
+                  showSnackbar(message: 'Service deleted successfully!');
+                } else {
+                  showSnackbar(message: 'Error deleting service!', error: true);
+                }
+                setState(() {});
+                Navigator.pop(context);
               }
-              setState(() {});
-              Navigator.pop(context);
             },
             child: const Text('Yes'),
           ),

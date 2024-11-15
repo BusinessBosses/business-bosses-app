@@ -1,12 +1,12 @@
-import 'package:business_bosses_v2/bbpro/presentation/shopscreen.dart';
+import 'package:business_bosses_v2/bbpro/presentation/shop_screen.dart';
+import 'package:business_bosses_v2/bbpro/presentation/user_shop_screen.dart';
 import 'package:business_bosses_v2/common/models/api_response_model.dart';
 import 'package:business_bosses_v2/common/models/user_model.dart';
-import 'package:business_bosses_v2/features/live_event/widgets/my_events.dart';
 import 'package:business_bosses_v2/features/marketplace/widgets/service_item.dart';
 import 'package:business_bosses_v2/features/posts/models/post_model.dart';
 import 'package:business_bosses_v2/features/profile/widgets/profileinfodisplay.dart';
 import 'package:business_bosses_v2/features/profile/widgets/profilepostsdisplay.dart';
-import 'package:business_bosses_v2/navigation/routes.dart';
+
 import 'package:business_bosses_v2/services/api_service.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -193,15 +193,18 @@ class _PublicProfileScreenState extends State<PublicProfileScreen> {
                                             fontSize: 14,
                                             color: Colors.grey)),
                               ),
-                              1: Text('Biz-Center',
-                                  style: _currentIndex == 1
-                                      ? const TextStyle(
-                                          fontWeight: FontWeight.bold,
-                                          fontSize: 14)
-                                      : const TextStyle(
-                                          fontWeight: FontWeight.bold,
-                                          fontSize: 14,
-                                          color: Colors.grey)),
+                              1: Text(
+                                'Biz-Center',
+                                style: _currentIndex == 1
+                                    ? const TextStyle(
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: 14)
+                                    : const TextStyle(
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: 14,
+                                        color: Colors.grey,
+                                      ),
+                              ),
                             },
                             onValueChanged: (int? value) {
                               if (value != null) {
@@ -678,8 +681,8 @@ class _PublicProfileScreenState extends State<PublicProfileScreen> {
                         ),
                       ),
                     ),
-                    const ShopScreen(
-                      isPro: true,
+                    UserShopScreen(
+                      user: publicUser,
                     )
                   ]));
   }

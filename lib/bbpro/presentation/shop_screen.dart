@@ -33,6 +33,12 @@ class _ShopScreenState extends State<ShopScreen> {
   final ShopController shopController = Get.find();
   final ProfileController profileController = Get.find();
   String _selectedItem = 'All Products';
+
+  @override
+  void initState() {
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -209,9 +215,9 @@ class _ShopScreenState extends State<ShopScreen> {
                                 const SizedBox(width: 4),
                                 GestureDetector(
                                   onTap: () {},
-                                  child: const Text(
-                                    '0.0 Reviews',
-                                    style: TextStyle(
+                                  child: Text(
+                                    '${shopController.shop!.user?.averageRating} Reviews',
+                                    style: const TextStyle(
                                         fontWeight: FontWeight.w700,
                                         fontSize: 14),
                                   ),
@@ -353,15 +359,11 @@ class _ShopScreenState extends State<ShopScreen> {
                                       shopController.products[index];
                                   return GestureDetector(
                                     onTap: () {
-                                      profileController.myProfile.uid ==
-                                              shopController.shop!.user!.uid
-                                          ? Get.to(
-                                              () => CreateProductListing(
-                                                product: product,
-                                              ),
-                                            )
-                                          : Get.to(() => OrderProductScreen(
-                                              product: product));
+                                      Get.to(
+                                        () => CreateProductListing(
+                                          product: product,
+                                        ),
+                                      );
                                     },
                                     child: InventoryCard(
                                       product: product,
@@ -374,15 +376,11 @@ class _ShopScreenState extends State<ShopScreen> {
                                       index - shopController.products.length];
                                   return GestureDetector(
                                     onTap: () {
-                                      profileController.myProfile.uid ==
-                                              shopController.shop!.user!.uid
-                                          ? Get.to(
-                                              () => CreateServiceListing(
-                                                service: service,
-                                              ),
-                                            )
-                                          : Get.to(() => BookServiceScreen(
-                                              service: service));
+                                      Get.to(
+                                        () => CreateServiceListing(
+                                          service: service,
+                                        ),
+                                      );
                                     },
                                     child: ServiceCard(
                                       myShop: true,

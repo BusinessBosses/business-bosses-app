@@ -3,6 +3,7 @@ import 'package:business_bosses_v2/bbpro/controllers/order_controller.dart';
 import 'package:business_bosses_v2/bbpro/controllers/shop_controller.dart';
 import 'package:business_bosses_v2/bbpro/models/client_model.dart';
 import 'package:business_bosses_v2/bbpro/models/product_model.dart';
+import 'package:business_bosses_v2/bbpro/models/shop_model.dart';
 import 'package:business_bosses_v2/bbpro/widgets/button.dart';
 import 'package:business_bosses_v2/bbpro/widgets/dropdown.dart';
 import 'package:business_bosses_v2/bbpro/widgets/edittext.dart';
@@ -22,7 +23,9 @@ import 'package:get/get.dart';
 
 class OrderProductScreen extends StatefulWidget {
   final Product product;
-  const OrderProductScreen({super.key, required this.product});
+  final Shop shop;
+  const OrderProductScreen(
+      {super.key, required this.product, required this.shop});
 
   @override
   State<OrderProductScreen> createState() => _OrderProductScreenState();
@@ -38,7 +41,6 @@ class _OrderProductScreenState extends State<OrderProductScreen>
   final ProfileController profileController = Get.find();
   final ShopController shopController = Get.find();
   final OrderController orderController = Get.put(OrderController());
-  final ClientsController clientsController = Get.find();
   final TextEditingController deliveryController = TextEditingController();
   int selectedIndex = 0;
   List<Map<String, dynamic>> selectedItems = <Map<String, dynamic>>[];
@@ -67,10 +69,6 @@ class _OrderProductScreenState extends State<OrderProductScreen>
         'name': widget.product.name
       },
     );
-    for (Client client in clientsController.clients) {
-      clientsName.add(client.name);
-      clients.add(<String, dynamic>{'name': client.name, 'id': client.id});
-    }
   }
 
   @override
@@ -179,7 +177,7 @@ class _OrderProductScreenState extends State<OrderProductScreen>
                                   Wrap(
                                     children: <Widget>[
                                       Text(
-                                        shopController.shop!.currency,
+                                        widget.shop.currency,
                                         style: const TextStyle(
                                           color: proprimaryColor,
                                           fontWeight: FontWeight.bold,
@@ -346,6 +344,7 @@ class _OrderProductScreenState extends State<OrderProductScreen>
                   ListView(
                     children: <Widget>[
                       OrderPreviewCard(
+                        shop: shopController.userShop!,
                         title: widget.product.name,
                         size: widget.product.size![0],
                         color: widget.product.color![0],
@@ -363,7 +362,7 @@ class _OrderProductScreenState extends State<OrderProductScreen>
                         height: 15,
                       ),
                       OrderPaymentMethodsWidget(
-                        paymentMethods: shopController.shop!.payments,
+                        paymentMethods: widget.shop.payments,
                       ),
                       const SizedBox(
                         height: 15,
@@ -375,7 +374,7 @@ class _OrderProductScreenState extends State<OrderProductScreen>
                         total: (1 - widget.product.discount!) *
                             (int.parse(quantityController.text) *
                                 widget.product.price),
-                        currency: shopController.shop!.currency,
+                        currency: widget.shop.currency,
                       ),
                       const SizedBox(
                         height: 15,
@@ -507,8 +506,7 @@ class _OrderProductScreenState extends State<OrderProductScreen>
                             final Map<String, dynamic> orderData =
                                 <String, dynamic>{
                               'userId': profileController.myProfile.uid,
-                              'shopId': shopController.shop?.id,
-                              'clientId': clientId,
+                              'shopId': widget.shop.id,
                               'items': selectedItems,
                               'deliveryMethod': widget.product.deliveryMethod,
                               'deliveryDate': DateTime.now(),
