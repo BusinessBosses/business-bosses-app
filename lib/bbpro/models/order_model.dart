@@ -13,7 +13,7 @@ class Order {
   final String deliveryMethod;
   final DateTime? deliveryDate;
   final String paymentMethod;
-  final String notes;
+  final String? notes;
   final String invoiceOption;
   final UserModel? user;
   final Client? client;
@@ -28,19 +28,19 @@ class Order {
     required this.id,
     required this.userId,
     required this.shopId,
-     this.clientId,
+    this.clientId,
     this.items,
     required this.deliveryMethod,
     this.deliveryDate,
     required this.paymentMethod,
-    required this.notes,
+    this.notes,
     required this.invoiceOption,
     this.user,
     required this.status,
     this.products,
     this.services,
     this.customItems,
-     this.client,
+    this.client,
     required this.createdAt,
     this.orderDetails,
   });
@@ -76,7 +76,7 @@ class Order {
               .map((dynamic item) => Service.fromJson(item))
               .toList()
           : <Service>[],
-      client: Client.fromMap(json['client']),
+      client: json['client'] == null ? null : Client.fromMap(json['client']),
       createdAt: DateTime.parse(json['createdAt']),
     );
   }

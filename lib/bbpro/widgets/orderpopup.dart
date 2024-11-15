@@ -64,7 +64,7 @@ class _OrderPopUpState extends State<OrderPopUp> {
                     ),
                   ),
                   Text(
-                    widget.order.notes,
+                    widget.order.notes ?? 'No note added!',
                     style: const TextStyle(
                       fontWeight: FontWeight.bold,
                       fontSize: 13,

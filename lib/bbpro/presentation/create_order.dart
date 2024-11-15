@@ -233,7 +233,7 @@ class _CreateOrderState extends State<CreateOrder> {
       });
     }
     if (widget.order != null) {
-      notesController.text = widget.order!.notes;
+      notesController.text = widget.order!.notes ?? '';
       clientId = widget.order!.clientId;
       selectedClient = clients.firstWhere(
         (Map<String, dynamic> element) => element['id'] == clientId,
