@@ -124,8 +124,9 @@ class _OrderWidgetState extends State<OrderWidget> {
                                 fontSize: 13,
                               ),
                             ),
+                            if(widget.order.client != null)
                             Text(
-                              widget.order.client.name,
+                              widget.order.client!.name,
                               style: const TextStyle(
                                 fontWeight: FontWeight.bold,
                                 fontSize: 13,

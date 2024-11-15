@@ -8,7 +8,7 @@ class Order {
   final String id;
   final String userId;
   final String shopId;
-  final String clientId;
+  final String? clientId;
   final List<OrderItem>? items;
   final String deliveryMethod;
   final DateTime? deliveryDate;
@@ -16,7 +16,7 @@ class Order {
   final String notes;
   final String invoiceOption;
   final UserModel? user;
-  final Client client;
+  final Client? client;
   final OrderStatus status;
   final List<Product>? products;
   final List<dynamic>? customItems;
@@ -28,7 +28,7 @@ class Order {
     required this.id,
     required this.userId,
     required this.shopId,
-    required this.clientId,
+     this.clientId,
     this.items,
     required this.deliveryMethod,
     this.deliveryDate,
@@ -40,7 +40,7 @@ class Order {
     this.products,
     this.services,
     this.customItems,
-    required this.client,
+     this.client,
     required this.createdAt,
     this.orderDetails,
   });
