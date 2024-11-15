@@ -508,15 +508,18 @@ class _BookServiceScreenState extends State<BookServiceScreen>
                                 'shopId': widget.shop.id,
                                 'items': selectedItems,
                                 'deliveryMethod':
-                                    widget.service.deliveryMethod != null
+                                    widget.service.deliveryMethod != null &&
+                                            widget.service.deliveryMethod!
+                                                .isNotEmpty
                                         ? widget.service.deliveryMethod!
                                             .toLowerCase()
                                         : 'online',
                                 'deliveryDate': deliveryDate.toString(),
-                                'paymentMethod':
-                                    widget.service.paymentMethod != null
-                                        ? widget.service.paymentMethod!
-                                        : 'Cash',
+                                'paymentMethod': widget.service.paymentMethod !=
+                                            null &&
+                                        widget.service.paymentMethod!.isNotEmpty
+                                    ? widget.service.paymentMethod!
+                                    : 'Cash',
                                 'orderDetails':
                                     'Name: ${fullNameController.text} \n Email: ${emailController.text} \n Phone: ${phoneController.text} \n Delivery Details: ${deliveryController.text}',
                                 'invoiceOption': 'send_with_payment_link',

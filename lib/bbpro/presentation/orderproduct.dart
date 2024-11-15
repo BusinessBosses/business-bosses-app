@@ -508,12 +508,12 @@ class _OrderProductScreenState extends State<OrderProductScreen>
                               'shopId': widget.shop.id,
                               'items': selectedItems,
                               'deliveryMethod': widget.product.deliveryMethod !=
-                                      null
+                                      null && widget.product.deliveryMethod!.isNotEmpty
                                   ? widget.product.deliveryMethod!.toLowerCase()
                                   : 'online',
                               'deliveryDate': DateTime.now().toString(),
                               'paymentMethod':
-                                  widget.product.paymentMethod != null
+                                  widget.product.paymentMethod != null && widget.product.paymentMethod!.isNotEmpty
                                       ? widget.product.paymentMethod!
                                       : 'Cash',
                               'orderDetails':
