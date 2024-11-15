@@ -373,73 +373,85 @@ class _UserShopScreenState extends State<UserShopScreen> {
                                           ],
                                         ),
                                       ),
-                                      Expanded(
-                                        child: Padding(
-                                          padding: const EdgeInsets.symmetric(
-                                              horizontal: 15.0),
-                                          child: StaggeredGridView.countBuilder(
-                                            crossAxisCount: 2,
-                                            staggeredTileBuilder: (int index) =>
-                                                const StaggeredTile.fit(1),
-                                            mainAxisSpacing: 10.0,
-                                            crossAxisSpacing: 10.0,
-                                            itemCount: shopController
-                                                    .userProducts.length +
-                                                shopController
-                                                    .userServices.length,
-                                            itemBuilder: (BuildContext context,
-                                                int index) {
-                                              if (index <
+                                      if ((shopController.userProducts.length +
+                                              shopController
+                                                  .userServices.length) ==
+                                          0) ...<Widget>{
+                                        const SafetyModel(
+                                          isLoading: false,
+                                          title: 'No Items In Shop!',
+                                        )
+                                      } else
+                                        Expanded(
+                                          child: Padding(
+                                            padding: const EdgeInsets.symmetric(
+                                                horizontal: 15.0),
+                                            child:
+                                                StaggeredGridView.countBuilder(
+                                              crossAxisCount: 2,
+                                              staggeredTileBuilder: (int
+                                                      index) =>
+                                                  const StaggeredTile.fit(1),
+                                              mainAxisSpacing: 10.0,
+                                              crossAxisSpacing: 10.0,
+                                              itemCount: shopController
+                                                      .userProducts.length +
                                                   shopController
-                                                      .userProducts.length) {
-                                                final Product product =
+                                                      .userServices.length,
+                                              itemBuilder:
+                                                  (BuildContext context,
+                                                      int index) {
+                                                if (index <
                                                     shopController
-                                                        .userProducts[index];
-                                                return GestureDetector(
-                                                  onTap: () {
-                                                    Get.to(() =>
-                                                        OrderProductScreen(
-                                                          product: product,
-                                                          shop: shopController
-                                                              .userShop!,
-                                                        ));
-                                                  },
-                                                  child: InventoryCard(
-                                                    shop: shopController
-                                                        .userShop!,
-                                                    product: product,
-                                                    myShop: false,
-                                                  ),
-                                                );
-                                              } else {
-                                                final Service service =
-                                                    shopController.userServices[
-                                                        index -
-                                                            shopController
-                                                                .userProducts
-                                                                .length];
-                                                return GestureDetector(
-                                                  onTap: () {
-                                                    Get.to(
-                                                        () => BookServiceScreen(
-                                                              service: service,
-                                                              shop:
-                                                                  shopController
-                                                                      .userShop!,
-                                                            ));
-                                                  },
-                                                  child: ServiceCard(
-                                                    shop: shopController
-                                                        .userShop!,
-                                                    myShop: false,
-                                                    service: service,
-                                                  ),
-                                                );
-                                              }
-                                            },
+                                                        .userProducts.length) {
+                                                  final Product product =
+                                                      shopController
+                                                          .userProducts[index];
+                                                  return GestureDetector(
+                                                    onTap: () {
+                                                      Get.to(() =>
+                                                          OrderProductScreen(
+                                                            product: product,
+                                                            shop: shopController
+                                                                .userShop!,
+                                                          ));
+                                                    },
+                                                    child: InventoryCard(
+                                                      shop: shopController
+                                                          .userShop!,
+                                                      product: product,
+                                                      myShop: false,
+                                                    ),
+                                                  );
+                                                } else {
+                                                  final Service service =
+                                                      shopController
+                                                              .userServices[
+                                                          index -
+                                                              shopController
+                                                                  .userProducts
+                                                                  .length];
+                                                  return GestureDetector(
+                                                    onTap: () {
+                                                      Get.to(() =>
+                                                          BookServiceScreen(
+                                                            service: service,
+                                                            shop: shopController
+                                                                .userShop!,
+                                                          ));
+                                                    },
+                                                    child: ServiceCard(
+                                                      shop: shopController
+                                                          .userShop!,
+                                                      myShop: false,
+                                                      service: service,
+                                                    ),
+                                                  );
+                                                }
+                                              },
+                                            ),
                                           ),
                                         ),
-                                      ),
                                     ],
                                   ),
 
