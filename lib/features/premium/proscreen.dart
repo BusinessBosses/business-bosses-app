@@ -810,7 +810,8 @@ class _ProSubscribeSectionState extends State<ProSubscribeSection> {
     'Manage expenses, tasks, and appointments',
     'Access exclusive partners\' offers',
   ];
-  String paymentMethodId = '';
+  String paymentMethodId = 'Proyear';
+  bool loading = false;
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -985,13 +986,13 @@ class _ProSubscribeSectionState extends State<ProSubscribeSection> {
                                 InkWell(
                                   onTap: () {
                                     setState(() {
-                                      paymentMethodId = 'Pro';
+                                      paymentMethodId = 'Promonth';
                                     });
                                   },
                                   child: Container(
                                     decoration: BoxDecoration(
                                       border: Border.all(
-                                        color: paymentMethodId == 'Pro'
+                                        color: paymentMethodId == 'Promonth'
                                             ? primaryColorLT
                                             : Colors.transparent,
                                         width: 2,
@@ -1015,7 +1016,7 @@ class _ProSubscribeSectionState extends State<ProSubscribeSection> {
                                                   fontSize: 16)),
                                         ],
                                       ),
-                                      value: 'Pro',
+                                      value: 'Promonth',
                                       groupValue: paymentMethodId,
                                       onChanged: (String? value) {
                                         setState(() {
@@ -1028,7 +1029,7 @@ class _ProSubscribeSectionState extends State<ProSubscribeSection> {
                                 Container(
                                   decoration: BoxDecoration(
                                     border: Border.all(
-                                      color: paymentMethodId == 'Premium'
+                                      color: paymentMethodId == 'Proyear'
                                           ? primaryColorLT
                                           : Colors.transparent,
                                       width: 2,
@@ -1052,7 +1053,7 @@ class _ProSubscribeSectionState extends State<ProSubscribeSection> {
                                                 fontSize: 16)),
                                       ],
                                     ),
-                                    value: 'Premium',
+                                    value: 'Proyear',
                                     groupValue: paymentMethodId,
                                     onChanged: (String? value) {
                                       setState(() {
@@ -1067,10 +1068,75 @@ class _ProSubscribeSectionState extends State<ProSubscribeSection> {
                                 SizedBox(
                                     width: double.infinity,
                                     child: ProCustomButton(
-                                        padding: 0,
-                                        color: primaryColorLT,
-                                        text: 'Start 7-day free trial',
-                                        onPressed: () async {})),
+                                      padding: 0,
+                                      color: primaryColorLT,
+                                      text: 'Start 7-day free trial',
+                                      loading: loading,
+                                      onPressed: () async {
+                                        setState(() {
+                                          loading = true;
+                                        });
+                                        if (paymentMethodId == 'Proyear') {
+                                          try {
+                                            final List<StoreProduct> product =
+                                                await Purchases
+                                                    .getProducts(<String>[
+                                              'xyz.codexia.businessbosses.proyear'
+                                            ]);
+                                            final CustomerInfo customerInfo =
+                                                await Purchases
+                                                    .purchaseStoreProduct(
+                                                        product[0]);
+                                            if (customerInfo
+                                                    .entitlements
+                                                    .all[
+                                                        'xyz.codexia.businessbosses.proyear']
+                                                    ?.isActive ??
+                                                false) {
+                                              // Grant access to premium features
+                                              print('User subscribed!');
+                                            }
+                                          } catch (e) {
+                                            // Handle error
+                                            print(
+                                                'Error purchasing product: $e');
+                                          } finally {
+                                            setState(() {
+                                              loading = false;
+                                            });
+                                          }
+                                        } else {
+                                          try {
+                                            final List<StoreProduct> product =
+                                                await Purchases
+                                                    .getProducts(<String>[
+                                              'xyz.codexia.businessbosses.promonth'
+                                            ]);
+                                            final CustomerInfo customerInfo =
+                                                await Purchases
+                                                    .purchaseStoreProduct(
+                                                        product[0]);
+                                            if (customerInfo
+                                                    .entitlements
+                                                    .all[
+                                                        'xyz.codexia.businessbosses.promonth']
+                                                    ?.isActive ??
+                                                false) {
+                                              // Grant access to premium features
+                                              print('User subscribed!');
+                                            }
+                                          } catch (e) {
+                                            // Handle error
+                                            print(
+                                                'Error purchasing product: $e');
+                                          } finally {
+                                            setState(() {
+                                              loading = false;
+                                            });
+                                          }
+                                        }
+                                      },
+                                    )),
                                 const SizedBox(
                                   height: 50,
                                 ),
