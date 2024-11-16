@@ -9,6 +9,7 @@ class ProCustomButton extends StatefulWidget {
   bool back;
   bool loading;
   final Color? color;
+  final double? padding;
 
   ProCustomButton({
     Key? key,
@@ -18,6 +19,7 @@ class ProCustomButton extends StatefulWidget {
     this.back = false,
     this.loading = false,
     this.color,
+    this.padding,
   }) : super(key: key);
 
   @override
@@ -28,7 +30,7 @@ class _ProCustomButtonState extends State<ProCustomButton> {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 15.0),
+      padding: EdgeInsets.symmetric(horizontal: widget.padding ?? 15.0),
       child: SizedBox(
         height: 50,
         child: ElevatedButton(

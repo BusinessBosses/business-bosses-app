@@ -37,13 +37,15 @@ class _ProScreenState extends State<ProScreen> with TickerProviderStateMixin {
   ];
 
   static final List<String> _profeatures = <String>[
+    'Recognition in search results',
+    'Earn 100 coins per month',
+    'Boost posts for free with coins',
     'Create custom business links',
-    'Launch products/services quickly',
-    'Reach customers in-person, online, or on-the-go',
-    'Track sales with Seamless POS system',
-    'Manage budget, expenses, tasks, and inventory',
-    'Schedule appointments and set reminders',
-    'Access real-time revenue and analytics'
+    'Launch new products/services quickly',
+    'Reach more customers online and in-person',
+    'Turn clicks into sales and multiple income streams',
+    'Manage expenses, tasks, and appointments',
+    'Access exclusive partners\' offers',
   ];
 
   static final List<String> _premiumfeatures = <String>[
@@ -217,492 +219,792 @@ class _ProScreenState extends State<ProScreen> with TickerProviderStateMixin {
                     controller: protabbarcontroller,
                     children: <Widget>[
                   Container(
-                    color: backgroundColor,
-                    child: Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 0.0),
-                      child: SingleChildScrollView(
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          children: <Widget>[
-                            Padding(
-                              padding: const EdgeInsets.only(top: 15),
-                              child: CarouselSlider(
-                                  // ignore: prefer_const_literals_to_create_immutables
-                                  items: <Widget>[
-                                    Container(
-                                      decoration: BoxDecoration(
-                                        borderRadius: BorderRadius.circular(20),
-                                        color: Colors.white,
-                                        border: Border.all(
-                                          color: Colors.grey.withOpacity(0.2),
-                                          width: 1,
-                                        ),
-                                      ),
-                                      padding: const EdgeInsets.all(16),
-                                      child: Column(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.spaceBetween,
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.start,
-                                        children: <Widget>[
-                                          FeatureTile(
-                                            feature: FeatureItem(
-                                              iconPath:
-                                                  'assets/svgs/upgrade.svg',
-                                              caption: 'Pro Plan',
-                                              subtext:
-                                                  'Save time, grow your business 10x faster',
-                                              color: Colors.grey.withOpacity(
-                                                  0.2), // Changed color
-                                            ),
-                                          ),
-                                          // Container(
-                                          //     padding:
-                                          //         const EdgeInsets.symmetric(
-                                          //             horizontal: 10,
-                                          //             vertical: 5),
-                                          //     decoration: BoxDecoration(
-                                          //         borderRadius:
-                                          //             BorderRadius.circular(10),
-                                          //         border: Border.all(
-                                          //             width: 1,
-                                          //             color: Colors.black12),
-                                          //         color: Colors.white),
-                                          //     child: const Text('Pro')),
-                                          Row(
-                                            mainAxisAlignment:
-                                                MainAxisAlignment.spaceBetween,
-                                            children: <Widget>[
-                                              const Wrap(children: <Widget>[
-                                                Text('\$9.99',
-                                                    style: TextStyle(
-                                                        fontSize: 28,
-                                                        fontWeight:
-                                                            FontWeight.bold)),
-                                                Text(' per month',
-                                                    style: TextStyle(
-                                                        fontSize: 14,
-                                                        fontWeight:
-                                                            FontWeight.w600)),
-                                              ]),
-                                              Column(
+                      decoration: const BoxDecoration(
+                        gradient: LinearGradient(
+                          begin: Alignment.topCenter,
+                          end: Alignment.bottomCenter,
+                          colors: <Color>[
+                            probackgroundColor,
+                            Colors.white,
+                          ],
+                          stops: <double>[0.0, 0.5],
+                        ),
+                      ),
+                      padding: const EdgeInsets.symmetric(horizontal: 15),
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: <Widget>[
+                          const Column(
+                            children: <Widget>[
+                              SizedBox(
+                                height: 50,
+                              ),
+                              Text('Upgrade to a Pro Boss Experience',
+                                  style: TextStyle(
+                                      fontSize: 20,
+                                      fontWeight: FontWeight.bold)),
+                              Text(
+                                'Sell everywhere, mange easier, and grow 10x faster,',
+                                style: TextStyle(
+                                    fontSize: 15, fontWeight: FontWeight.w600),
+                              ),
+                              Text(
+                                'with one simple link',
+                                style: TextStyle(
+                                    color: primaryColorLT,
+                                    fontSize: 15,
+                                    fontWeight: FontWeight.w600),
+                              ),
+                            ],
+                          ),
+                          Container(
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(15),
+                              color: Colors.white,
+                              border: Border.all(
+                                color: Colors.grey.withOpacity(0.2),
+                                width: 1,
+                              ),
+                            ),
+                            padding: const EdgeInsets.all(16),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: <Widget>[
+                                const SizedBox(
+                                  height: 10,
+                                ),
+                                const Text(
+                                  'What\'s included',
+                                  style: TextStyle(
+                                      fontWeight: FontWeight.w700,
+                                      color: textColor,
+                                      fontSize: 14),
+                                ),
+                                const SizedBox(
+                                  height: 20,
+                                ),
+                                Column(
+                                  children: _profeatures
+                                      .asMap()
+                                      .entries
+                                      .map((MapEntry<int, String> entry) =>
+                                          Padding(
+                                            padding: const EdgeInsets.only(
+                                                bottom: 8.0),
+                                            child: Row(
+                                                mainAxisAlignment:
+                                                    MainAxisAlignment.start,
+                                                crossAxisAlignment:
+                                                    CrossAxisAlignment.start,
                                                 children: <Widget>[
-                                                  SizedBox(
-                                                    width: 70,
-                                                    height: 40,
-                                                    child: Stack(
-                                                      alignment:
-                                                          Alignment.center,
-                                                      children: <Widget>[
-                                                        Positioned(
-                                                          left: 0.0,
-                                                          child: CircleAvatar(
-                                                            radius: 15,
-                                                            backgroundColor:
-                                                                Colors.black
-                                                                    .withAlpha(
-                                                                        100),
-                                                            child: SvgPicture
-                                                                .asset(
-                                                              'assets/svgs/rocket.svg',
-                                                              color:
-                                                                  Colors.black,
-                                                              height: 18,
-                                                            ),
-                                                          ),
-                                                        ),
-                                                        Positioned(
-                                                          left: 20.0,
-                                                          child: CircleAvatar(
-                                                            radius: 15,
-                                                            backgroundColor:
-                                                                Colors
-                                                                    .orangeAccent,
-                                                            child: SvgPicture
-                                                                .asset(
-                                                              'assets/svgs/coin.svg',
-                                                              height: 20,
-                                                            ),
-                                                          ),
-                                                        ),
-                                                        Positioned(
-                                                          left: 40.0,
-                                                          child: CircleAvatar(
-                                                            radius: 15,
-                                                            backgroundColor:
-                                                                Colors
-                                                                    .redAccent,
-                                                            child: SvgPicture
-                                                                .asset(
-                                                              'assets/svgs/premiumbadgered.svg',
-                                                              color:
-                                                                  Colors.white,
-                                                              height: 15,
-                                                            ),
-                                                          ),
-                                                        ),
-                                                      ],
+                                                  SvgPicture.asset(
+                                                    entry.key == 0
+                                                        ? 'assets/svgs/premiumbadgered.svg'
+                                                        : entry.key == 1
+                                                            ? 'assets/svgs/coin.svg'
+                                                            : entry.key == 2
+                                                                ? 'assets/svgs/rocket.svg'
+                                                                : entry.key == 3
+                                                                    ? 'assets/svgs/links.svg'
+                                                                    : entry.key ==
+                                                                            4
+                                                                        ? 'assets/svgs/launchnew.svg'
+                                                                        : entry.key ==
+                                                                                5
+                                                                            ? 'assets/svgs/team.svg'
+                                                                            : entry.key == 6
+                                                                                ? 'assets/svgs/clicks.svg'
+                                                                                : entry.key == 7
+                                                                                    ? 'assets/svgs/manageexpense.svg'
+                                                                                    : 'assets/svgs/partner.svg',
+                                                    height: 15,
+                                                    color: entry.key > 2
+                                                        ? Colors.black54
+                                                        : null,
+                                                  ),
+                                                  const SizedBox(
+                                                    width: 10,
+                                                  ),
+                                                  Flexible(
+                                                    child: Text(
+                                                      entry.value,
+                                                      style: const TextStyle(
+                                                          fontSize: 14),
                                                     ),
                                                   ),
+                                                ]),
+                                          ))
+                                      .toList(),
+                                ),
+                                const SizedBox(
+                                  height: 10,
+                                ),
+                              ],
+                            ),
+                          ),
+                          Container(
+                            width: double.infinity,
+                            padding: const EdgeInsets.symmetric(horizontal: 0),
+                            child: ProCustomButton(
+                              color: primaryColorLT,
+                              text: 'Start Free Trial',
+                              onPressed: () {
+                                showModalBottomSheet<void>(
+                                  context: context,
+                                  shape: const RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.vertical(
+                                      top: Radius.circular(25.0),
+                                    ),
+                                  ),
+                                  builder: (BuildContext context) {
+                                    return StatefulBuilder(
+                                      // Wrap the entire bottom sheet content with StatefulBuilder
+                                      builder: (BuildContext context,
+                                          StateSetter setState) {
+                                        return Container(
+                                          padding: const EdgeInsets.symmetric(
+                                              horizontal: 20, vertical: 20),
+                                          child: Column(
+                                            mainAxisSize: MainAxisSize.min,
+                                            children: <Widget>[
+                                              Row(
+                                                mainAxisAlignment:
+                                                    MainAxisAlignment
+                                                        .spaceBetween,
+                                                children: <Widget>[
                                                   const Text(
-                                                      '+ Premium features',
-                                                      style: TextStyle(
-                                                          fontSize: 12,
-                                                          color: Colors.grey)),
+                                                    'Choose your plan',
+                                                    style: TextStyle(
+                                                      fontSize: 16,
+                                                      fontWeight:
+                                                          FontWeight.bold,
+                                                    ),
+                                                  ),
+                                                  IconButton(
+                                                    icon: const Icon(
+                                                      Icons.close,
+                                                      color: Colors.black54,
+                                                    ),
+                                                    onPressed: () {
+                                                      Navigator.pop(context);
+                                                    },
+                                                  ),
                                                 ],
+                                              ),
+                                              const SizedBox(
+                                                height: 20,
+                                              ),
+                                              InkWell(
+                                                onTap: () {
+                                                  setState(() {
+                                                    paymentMethodId = 'Pro';
+                                                  });
+                                                },
+                                                child: Container(
+                                                  decoration: BoxDecoration(
+                                                    border: Border.all(
+                                                      color: paymentMethodId ==
+                                                              'Pro'
+                                                          ? primaryColorLT
+                                                          : Colors.transparent,
+                                                      width: 2,
+                                                    ),
+                                                    borderRadius:
+                                                        BorderRadius.circular(
+                                                            15),
+                                                  ),
+                                                  child: RadioListTile<String>(
+                                                    title: const Row(
+                                                      mainAxisAlignment:
+                                                          MainAxisAlignment
+                                                              .spaceBetween,
+                                                      children: <Widget>[
+                                                        Text(
+                                                          'Pro Monthly',
+                                                          style: TextStyle(
+                                                              fontWeight:
+                                                                  FontWeight
+                                                                      .w600,
+                                                              fontSize: 16),
+                                                        ),
+                                                        Text('\$14.99/month',
+                                                            style: TextStyle(
+                                                                fontWeight:
+                                                                    FontWeight
+                                                                        .w200,
+                                                                fontSize: 16)),
+                                                      ],
+                                                    ),
+                                                    value: 'Pro',
+                                                    groupValue: paymentMethodId,
+                                                    onChanged: (String? value) {
+                                                      setState(() {
+                                                        paymentMethodId =
+                                                            value!;
+                                                      });
+                                                    },
+                                                  ),
+                                                ),
+                                              ),
+                                              Container(
+                                                decoration: BoxDecoration(
+                                                  border: Border.all(
+                                                    color: paymentMethodId ==
+                                                            'Premium'
+                                                        ? primaryColorLT
+                                                        : Colors.transparent,
+                                                    width: 2,
+                                                  ),
+                                                  borderRadius:
+                                                      BorderRadius.circular(15),
+                                                ),
+                                                child: RadioListTile<String>(
+                                                  title: const Row(
+                                                    mainAxisAlignment:
+                                                        MainAxisAlignment
+                                                            .spaceBetween,
+                                                    children: <Widget>[
+                                                      Text(
+                                                        'Pro Yearly',
+                                                        style: TextStyle(
+                                                            fontWeight:
+                                                                FontWeight.w600,
+                                                            fontSize: 16),
+                                                      ),
+                                                      Text(
+                                                          '\$9.99/month ( 33% off )',
+                                                          style: TextStyle(
+                                                              fontWeight:
+                                                                  FontWeight
+                                                                      .w200,
+                                                              fontSize: 16)),
+                                                    ],
+                                                  ),
+                                                  value: 'Premium',
+                                                  groupValue: paymentMethodId,
+                                                  onChanged: (String? value) {
+                                                    setState(() {
+                                                      paymentMethodId = value!;
+                                                    });
+                                                  },
+                                                ),
+                                              ),
+                                              const SizedBox(
+                                                height: 20,
+                                              ),
+                                              SizedBox(
+                                                  width: double.infinity,
+                                                  child: ProCustomButton(
+                                                      padding: 0,
+                                                      color: primaryColorLT,
+                                                      text:
+                                                          'Start 7-day free trial',
+                                                      onPressed: () async {})),
+                                              const SizedBox(
+                                                height: 50,
                                               ),
                                             ],
                                           ),
-                                          const Divider(
-                                            color: Colors.black12,
-                                          ),
-                                          Column(
-                                            children: _profeatures
-                                                .map((String feature) =>
-                                                    Padding(
-                                                      padding:
-                                                          const EdgeInsets.only(
-                                                              bottom: 8.0),
-                                                      child: Row(
-                                                        mainAxisAlignment:
-                                                            MainAxisAlignment
-                                                                .start,
-                                                        crossAxisAlignment:
-                                                            CrossAxisAlignment
-                                                                .start,
-                                                        children: <Widget>[
-                                                          SvgPicture.asset(
-                                                            'assets/svgs/procheck.svg',
-                                                            height: 15,
-                                                            color:
-                                                                Colors.black45,
-                                                          ),
-                                                          const SizedBox(
-                                                            width: 5,
-                                                          ),
-                                                          Flexible(
-                                                            child: Text(
-                                                              feature,
-                                                              style:
-                                                                  const TextStyle(
-                                                                      fontSize:
-                                                                          14),
-                                                            ),
-                                                          ),
-                                                        ],
-                                                      ),
-                                                    ))
-                                                .toList(),
-                                          ),
-                                          Padding(
-                                              padding: const EdgeInsets.only(
-                                                  left: 0.0,
-                                                  top: 10,
-                                                  bottom: 0),
-                                              child: Container(
-                                                  width: double.infinity,
-                                                  padding: const EdgeInsets
-                                                      .symmetric(horizontal: 0),
-                                                  child: ProCustomButton(
-                                                    color: primaryColorLT,
-                                                    text: 'Start Free Trial',
-                                                    onPressed: () async {
-                                                      try {
-                                                        setState(() {
-                                                          loading = true;
-                                                        });
-                                                        final List<StoreProduct>
-                                                            product =
-                                                            await Purchases
-                                                                .getProducts(<String>[
-                                                          'xyz.codexia.businessbosses.promonth'
-                                                        ]);
-                                                        final CustomerInfo
-                                                            customerInfo =
-                                                            await Purchases
-                                                                .purchaseStoreProduct(
-                                                                    product[0]);
-                                                        if ((customerInfo
-                                                                    .entitlements
-                                                                    .all[
-                                                                        'xyz.codexia.businessbosses.promonth']
-                                                                    ?.isActive ??
-                                                                false) ||
-                                                            (customerInfo
-                                                                    .entitlements
-                                                                    .all[
-                                                                        'xyz.codexia.businessbosses.monthly']
-                                                                    ?.isActive ??
-                                                                false)) {
-                                                          // Grant access to pro features
-                                                          print(
-                                                              'User subscribed!');
-                                                        }
-                                                      } catch (e) {
-                                                        // Handle error
-                                                        print(
-                                                            'Error purchasing product: $e');
-                                                      } finally {
-                                                        setState(() {
-                                                          loading = false;
-                                                        });
-                                                      }
-                                                    },
-                                                    loading: loading,
-                                                  ))),
-                                        ],
-                                      ),
-                                    ),
-                                    Container(
-                                      decoration: BoxDecoration(
-                                        borderRadius: BorderRadius.circular(20),
-                                        color: Colors.white,
-                                        border: Border.all(
-                                          color: Colors.grey.withOpacity(0.2),
-                                          width: 1,
-                                        ),
-                                      ),
-                                      padding: const EdgeInsets.all(16),
-                                      child: Column(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.spaceBetween,
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.start,
-                                        children: <Widget>[
-                                          FeatureTile(
-                                            feature: FeatureItem(
-                                              iconPath:
-                                                  'assets/svgs/upgrade.svg',
-                                              caption: 'Premium Plan',
-                                              subtext:
-                                                  'Upgrade to a premium boss experience',
-                                              color: Colors.grey.withOpacity(
-                                                  0.2), // Changed color
-                                            ),
-                                          ),
-                                          // Container(
-                                          //     padding:
-                                          //         const EdgeInsets.symmetric(
-                                          //             horizontal: 10,
-                                          //             vertical: 5),
-                                          //     decoration: BoxDecoration(
-                                          //         borderRadius:
-                                          //             BorderRadius.circular(10),
-                                          //         border: Border.all(
-                                          //             width: 1,
-                                          //             color: Colors.black12),
-                                          //         color: Colors.white),
-                                          //     child: const Text('Premium')),
-                                          const Row(
-                                            mainAxisAlignment:
-                                                MainAxisAlignment.spaceBetween,
-                                            children: <Widget>[
-                                              Wrap(children: <Widget>[
-                                                Text('\$4.99',
-                                                    style: TextStyle(
-                                                        fontSize: 28,
-                                                        fontWeight:
-                                                            FontWeight.bold)),
-                                                Text(' per month',
-                                                    style: TextStyle(
-                                                        fontSize: 14,
-                                                        fontWeight:
-                                                            FontWeight.w600)),
-                                              ]),
-                                            ],
-                                          ),
-                                          const Divider(
-                                            color: Colors.black12,
-                                          ),
-                                          Column(
-                                            children: _premiumfeatures
-                                                .map((String feature) =>
-                                                    Padding(
-                                                      padding:
-                                                          const EdgeInsets.only(
-                                                              bottom: 8.0),
-                                                      child: Row(
-                                                        mainAxisAlignment:
-                                                            MainAxisAlignment
-                                                                .start,
-                                                        crossAxisAlignment:
-                                                            CrossAxisAlignment
-                                                                .start,
-                                                        children: <Widget>[
-                                                          SvgPicture.asset(
-                                                            'assets/svgs/procheck.svg',
-                                                            height: 15,
-                                                            color:
-                                                                Colors.black45,
-                                                          ),
-                                                          const SizedBox(
-                                                            width: 5,
-                                                          ),
-                                                          Flexible(
-                                                            child: Text(
-                                                              feature,
-                                                              style:
-                                                                  const TextStyle(
-                                                                      fontSize:
-                                                                          14),
-                                                            ),
-                                                          ),
-                                                        ],
-                                                      ),
-                                                    ))
-                                                .toList(),
-                                          ),
-                                          Padding(
-                                              padding: const EdgeInsets.only(
-                                                  left: 0.0,
-                                                  top: 10,
-                                                  bottom: 0),
-                                              child: Container(
-                                                  width: double.infinity,
-                                                  padding: const EdgeInsets
-                                                      .symmetric(horizontal: 0),
-                                                  child: ProCustomButton(
-                                                    color: primaryColorLT,
-                                                    text: 'Subscribe Now',
-                                                    onPressed: () async {
-                                                      try {
-                                                        setState(() {
-                                                          loading = true;
-                                                        });
-                                                        final List<StoreProduct>
-                                                            product =
-                                                            await Purchases
-                                                                .getProducts(<String>[
-                                                          'xyz.codexia.businessbosses.monthly'
-                                                        ]);
-                                                        final CustomerInfo
-                                                            customerInfo =
-                                                            await Purchases
-                                                                .purchaseStoreProduct(
-                                                                    product[0]);
-                                                        if ((customerInfo
-                                                                    .entitlements
-                                                                    .all[
-                                                                        'xyz.codexia.businessbosses.promonth']
-                                                                    ?.isActive ??
-                                                                false) ||
-                                                            (customerInfo
-                                                                    .entitlements
-                                                                    .all[
-                                                                        'xyz.codexia.businessbosses.monthly']
-                                                                    ?.isActive ??
-                                                                false)) {
-                                                          // Grant access to premium features
-                                                          print(
-                                                              'User subscribed!');
-                                                        }
-                                                      } catch (e) {
-                                                        // Handle error
-                                                        print(
-                                                            'Error purchasing product: $e');
-                                                      } finally {
-                                                        setState(() {
-                                                          loading = false;
-                                                        });
-                                                      }
-                                                    },
-                                                    loading: loading,
-                                                  ))),
-                                        ],
-                                      ),
-                                    ),
-                                  ],
-                                  options: CarouselOptions(
-                                    height: 470,
-                                    // aspectRatio: 16 / 9,
-                                    viewportFraction: 0.85,
-                                    initialPage: 0,
-                                    enableInfiniteScroll: false,
-                                    reverse: false,
-                                    autoPlay: false,
-                                    enlargeCenterPage: true,
-                                    padEnds: false,
-                                    enlargeFactor: 0.3,
-                                    scrollDirection: Axis.horizontal,
-                                  )),
+                                        );
+                                      },
+                                    );
+                                  },
+                                );
+                              },
                             ),
-                            Padding(
-                              padding:
-                                  const EdgeInsets.only(bottom: 100.0, top: 10),
-                              child: SizedBox(
-                                width: double.infinity,
-                                child: Column(
-                                  mainAxisAlignment: MainAxisAlignment.start,
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: <Widget>[
-                                    const Center(
-                                      child: Text(
-                                        'Our Happy Customers',
-                                        style: TextStyle(
-                                            color: textColor,
-                                            fontWeight: FontWeight.bold),
-                                      ),
-                                    ),
-                                    SizedBox(
-                                      width: double
-                                          .infinity, // Occupy the available width
-                                      height: 80, // Adjust height as needed
-                                      child: ListView.builder(
-                                        scrollDirection: Axis.horizontal,
-                                        itemCount: reviews.length + 2,
-                                        itemBuilder:
-                                            (BuildContext context, int index) {
-                                          return index == 0
-                                              ? const SizedBox(
-                                                  width: 5,
-                                                )
-                                              : index == reviews.length + 1
-                                                  ? const SizedBox(
-                                                      width: 15,
-                                                    )
-                                                  : SizedBox(
-                                                      width:
-                                                          MediaQuery.of(context)
-                                                                  .size
-                                                                  .width /
-                                                              2.8,
-                                                      child: Container(
-                                                        margin: const EdgeInsets
-                                                            .only(
-                                                            top: 10, left: 10),
-                                                        padding:
-                                                            const EdgeInsets
-                                                                .all(10),
-                                                        decoration:
-                                                            BoxDecoration(
-                                                          borderRadius:
-                                                              BorderRadius
-                                                                  .circular(10),
-                                                          color: Colors.white,
-                                                        ),
-                                                        child: Text(
-                                                          reviews[index - 1],
-                                                          style:
-                                                              const TextStyle(
-                                                                  fontSize: 12),
-                                                          textAlign:
-                                                              TextAlign.center,
-                                                        ),
-                                                      ),
-                                                    );
-                                        },
-                                      ),
-                                    )
-                                  ],
-                                ),
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                    ),
-                  ),
+                          ),
+                          const SizedBox(
+                            height: 100,
+                          )
+                        ],
+                      )),
+                  // Container(
+                  //   color: backgroundColor,
+                  //   child: Padding(
+                  //     padding: const EdgeInsets.symmetric(horizontal: 0.0),
+                  //     child: SingleChildScrollView(
+                  //       child: Column(
+                  //         mainAxisAlignment: MainAxisAlignment.start,
+                  //         crossAxisAlignment: CrossAxisAlignment.center,
+                  //         children: <Widget>[
+                  //           Padding(
+                  //             padding: const EdgeInsets.only(top: 15),
+                  //             child: CarouselSlider(
+                  //                 // ignore: prefer_const_literals_to_create_immutables
+                  //                 items: <Widget>[
+                  //                   Container(
+                  //                     decoration: BoxDecoration(
+                  //                       borderRadius: BorderRadius.circular(20),
+                  //                       color: Colors.white,
+                  //                       border: Border.all(
+                  //                         color: Colors.grey.withOpacity(0.2),
+                  //                         width: 1,
+                  //                       ),
+                  //                     ),
+                  //                     padding: const EdgeInsets.all(16),
+                  //                     child: Column(
+                  //                       mainAxisAlignment:
+                  //                           MainAxisAlignment.spaceBetween,
+                  //                       crossAxisAlignment:
+                  //                           CrossAxisAlignment.start,
+                  //                       children: <Widget>[
+                  //                         FeatureTile(
+                  //                           feature: FeatureItem(
+                  //                             iconPath:
+                  //                                 'assets/svgs/upgrade.svg',
+                  //                             caption: 'Pro Plan',
+                  //                             subtext:
+                  //                                 'Save time, grow your business 10x faster',
+                  //                             color: Colors.grey.withOpacity(
+                  //                                 0.2), // Changed color
+                  //                           ),
+                  //                         ),
+                  //                         // Container(
+                  //                         //     padding:
+                  //                         //         const EdgeInsets.symmetric(
+                  //                         //             horizontal: 10,
+                  //                         //             vertical: 5),
+                  //                         //     decoration: BoxDecoration(
+                  //                         //         borderRadius:
+                  //                         //             BorderRadius.circular(10),
+                  //                         //         border: Border.all(
+                  //                         //             width: 1,
+                  //                         //             color: Colors.black12),
+                  //                         //         color: Colors.white),
+                  //                         //     child: const Text('Pro')),
+                  //                         Row(
+                  //                           mainAxisAlignment:
+                  //                               MainAxisAlignment.spaceBetween,
+                  //                           children: <Widget>[
+                  //                             const Wrap(children: <Widget>[
+                  //                               Text('\$9.99',
+                  //                                   style: TextStyle(
+                  //                                       fontSize: 28,
+                  //                                       fontWeight:
+                  //                                           FontWeight.bold)),
+                  //                               Text(' per month',
+                  //                                   style: TextStyle(
+                  //                                       fontSize: 14,
+                  //                                       fontWeight:
+                  //                                           FontWeight.w600)),
+                  //                             ]),
+                  //                             Column(
+                  //                               children: <Widget>[
+                  //                                 SizedBox(
+                  //                                   width: 70,
+                  //                                   height: 40,
+                  //                                   child: Stack(
+                  //                                     alignment:
+                  //                                         Alignment.center,
+                  //                                     children: <Widget>[
+                  //                                       Positioned(
+                  //                                         left: 0.0,
+                  //                                         child: CircleAvatar(
+                  //                                           radius: 15,
+                  //                                           backgroundColor:
+                  //                                               Colors.black
+                  //                                                   .withAlpha(
+                  //                                                       100),
+                  //                                           child: SvgPicture
+                  //                                               .asset(
+                  //                                             'assets/svgs/rocket.svg',
+                  //                                             color:
+                  //                                                 Colors.black,
+                  //                                             height: 18,
+                  //                                           ),
+                  //                                         ),
+                  //                                       ),
+                  //                                       Positioned(
+                  //                                         left: 20.0,
+                  //                                         child: CircleAvatar(
+                  //                                           radius: 15,
+                  //                                           backgroundColor:
+                  //                                               Colors
+                  //                                                   .orangeAccent,
+                  //                                           child: SvgPicture
+                  //                                               .asset(
+                  //                                             'assets/svgs/coin.svg',
+                  //                                             height: 20,
+                  //                                           ),
+                  //                                         ),
+                  //                                       ),
+                  //                                       Positioned(
+                  //                                         left: 40.0,
+                  //                                         child: CircleAvatar(
+                  //                                           radius: 15,
+                  //                                           backgroundColor:
+                  //                                               Colors
+                  //                                                   .redAccent,
+                  //                                           child: SvgPicture
+                  //                                               .asset(
+                  //                                             'assets/svgs/premiumbadgered.svg',
+                  //                                             color:
+                  //                                                 Colors.white,
+                  //                                             height: 15,
+                  //                                           ),
+                  //                                         ),
+                  //                                       ),
+                  //                                     ],
+                  //                                   ),
+                  //                                 ),
+                  //                                 const Text(
+                  //                                     '+ Premium features',
+                  //                                     style: TextStyle(
+                  //                                         fontSize: 12,
+                  //                                         color: Colors.grey)),
+                  //                               ],
+                  //                             ),
+                  //                           ],
+                  //                         ),
+                  //                         const Divider(
+                  //                           color: Colors.black12,
+                  //                         ),
+                  //                         Column(
+                  //                           children: _profeatures
+                  //                               .map((String feature) =>
+                  //                                   Padding(
+                  //                                     padding:
+                  //                                         const EdgeInsets.only(
+                  //                                             bottom: 8.0),
+                  //                                     child: Row(
+                  //                                       mainAxisAlignment:
+                  //                                           MainAxisAlignment
+                  //                                               .start,
+                  //                                       crossAxisAlignment:
+                  //                                           CrossAxisAlignment
+                  //                                               .start,
+                  //                                       children: <Widget>[
+                  //                                         SvgPicture.asset(
+                  //                                           'assets/svgs/procheck.svg',
+                  //                                           height: 15,
+                  //                                           color:
+                  //                                               Colors.black45,
+                  //                                         ),
+                  //                                         const SizedBox(
+                  //                                           width: 5,
+                  //                                         ),
+                  //                                         Flexible(
+                  //                                           child: Text(
+                  //                                             feature,
+                  //                                             style:
+                  //                                                 const TextStyle(
+                  //                                                     fontSize:
+                  //                                                         14),
+                  //                                           ),
+                  //                                         ),
+                  //                                       ],
+                  //                                     ),
+                  //                                   ))
+                  //                               .toList(),
+                  //                         ),
+                  //                         Padding(
+                  //                             padding: const EdgeInsets.only(
+                  //                                 left: 0.0,
+                  //                                 top: 10,
+                  //                                 bottom: 0),
+                  //                             child: Container(
+                  //                                 width: double.infinity,
+                  //                                 padding: const EdgeInsets
+                  //                                     .symmetric(horizontal: 0),
+                  //                                 child: ProCustomButton(
+                  //                                   color: primaryColorLT,
+                  //                                   text: 'Start Free Trial',
+                  //                                   onPressed: () async {
+                  //                                     try {
+                  //                                       setState(() {
+                  //                                         loading = true;
+                  //                                       });
+                  //                                       final List<StoreProduct>
+                  //                                           product =
+                  //                                           await Purchases
+                  //                                               .getProducts(<String>[
+                  //                                         'xyz.codexia.businessbosses.promonth'
+                  //                                       ]);
+                  //                                       final CustomerInfo
+                  //                                           customerInfo =
+                  //                                           await Purchases
+                  //                                               .purchaseStoreProduct(
+                  //                                                   product[0]);
+                  //                                       if ((customerInfo
+                  //                                                   .entitlements
+                  //                                                   .all[
+                  //                                                       'xyz.codexia.businessbosses.promonth']
+                  //                                                   ?.isActive ??
+                  //                                               false) ||
+                  //                                           (customerInfo
+                  //                                                   .entitlements
+                  //                                                   .all[
+                  //                                                       'xyz.codexia.businessbosses.monthly']
+                  //                                                   ?.isActive ??
+                  //                                               false)) {
+                  //                                         // Grant access to pro features
+                  //                                         print(
+                  //                                             'User subscribed!');
+                  //                                       }
+                  //                                     } catch (e) {
+                  //                                       // Handle error
+                  //                                       print(
+                  //                                           'Error purchasing product: $e');
+                  //                                     } finally {
+                  //                                       setState(() {
+                  //                                         loading = false;
+                  //                                       });
+                  //                                     }
+                  //                                   },
+                  //                                   loading: loading,
+                  //                                 ))),
+                  //                       ],
+                  //                     ),
+                  //                   ),
+                  //                   Container(
+                  //                     decoration: BoxDecoration(
+                  //                       borderRadius: BorderRadius.circular(20),
+                  //                       color: Colors.white,
+                  //                       border: Border.all(
+                  //                         color: Colors.grey.withOpacity(0.2),
+                  //                         width: 1,
+                  //                       ),
+                  //                     ),
+                  //                     padding: const EdgeInsets.all(16),
+                  //                     child: Column(
+                  //                       mainAxisAlignment:
+                  //                           MainAxisAlignment.spaceBetween,
+                  //                       crossAxisAlignment:
+                  //                           CrossAxisAlignment.start,
+                  //                       children: <Widget>[
+                  //                         FeatureTile(
+                  //                           feature: FeatureItem(
+                  //                             iconPath:
+                  //                                 'assets/svgs/upgrade.svg',
+                  //                             caption: 'Premium Plan',
+                  //                             subtext:
+                  //                                 'Upgrade to a premium boss experience',
+                  //                             color: Colors.grey.withOpacity(
+                  //                                 0.2), // Changed color
+                  //                           ),
+                  //                         ),
+                  //                         // Container(
+                  //                         //     padding:
+                  //                         //         const EdgeInsets.symmetric(
+                  //                         //             horizontal: 10,
+                  //                         //             vertical: 5),
+                  //                         //     decoration: BoxDecoration(
+                  //                         //         borderRadius:
+                  //                         //             BorderRadius.circular(10),
+                  //                         //         border: Border.all(
+                  //                         //             width: 1,
+                  //                         //             color: Colors.black12),
+                  //                         //         color: Colors.white),
+                  //                         //     child: const Text('Premium')),
+                  //                         const Row(
+                  //                           mainAxisAlignment:
+                  //                               MainAxisAlignment.spaceBetween,
+                  //                           children: <Widget>[
+                  //                             Wrap(children: <Widget>[
+                  //                               Text('\$4.99',
+                  //                                   style: TextStyle(
+                  //                                       fontSize: 28,
+                  //                                       fontWeight:
+                  //                                           FontWeight.bold)),
+                  //                               Text(' per month',
+                  //                                   style: TextStyle(
+                  //                                       fontSize: 14,
+                  //                                       fontWeight:
+                  //                                           FontWeight.w600)),
+                  //                             ]),
+                  //                           ],
+                  //                         ),
+                  //                         const Divider(
+                  //                           color: Colors.black12,
+                  //                         ),
+                  //                         Column(
+                  //                           children: _premiumfeatures
+                  //                               .map((String feature) =>
+                  //                                   Padding(
+                  //                                     padding:
+                  //                                         const EdgeInsets.only(
+                  //                                             bottom: 8.0),
+                  //                                     child: Row(
+                  //                                       mainAxisAlignment:
+                  //                                           MainAxisAlignment
+                  //                                               .start,
+                  //                                       crossAxisAlignment:
+                  //                                           CrossAxisAlignment
+                  //                                               .start,
+                  //                                       children: <Widget>[
+                  //                                         SvgPicture.asset(
+                  //                                           'assets/svgs/procheck.svg',
+                  //                                           height: 15,
+                  //                                           color:
+                  //                                               Colors.black45,
+                  //                                         ),
+                  //                                         const SizedBox(
+                  //                                           width: 5,
+                  //                                         ),
+                  //                                         Flexible(
+                  //                                           child: Text(
+                  //                                             feature,
+                  //                                             style:
+                  //                                                 const TextStyle(
+                  //                                                     fontSize:
+                  //                                                         14),
+                  //                                           ),
+                  //                                         ),
+                  //                                       ],
+                  //                                     ),
+                  //                                   ))
+                  //                               .toList(),
+                  //                         ),
+                  //                         Padding(
+                  //                             padding: const EdgeInsets.only(
+                  //                                 left: 0.0,
+                  //                                 top: 10,
+                  //                                 bottom: 0),
+                  //                             child: Container(
+                  //                                 width: double.infinity,
+                  //                                 padding: const EdgeInsets
+                  //                                     .symmetric(horizontal: 0),
+                  //                                 child: ProCustomButton(
+                  //                                   color: primaryColorLT,
+                  //                                   text: 'Subscribe Now',
+                  //                                   onPressed: () async {
+                  //                                     try {
+                  //                                       setState(() {
+                  //                                         loading = true;
+                  //                                       });
+                  //                                       final List<StoreProduct>
+                  //                                           product =
+                  //                                           await Purchases
+                  //                                               .getProducts(<String>[
+                  //                                         'xyz.codexia.businessbosses.monthly'
+                  //                                       ]);
+                  //                                       final CustomerInfo
+                  //                                           customerInfo =
+                  //                                           await Purchases
+                  //                                               .purchaseStoreProduct(
+                  //                                                   product[0]);
+                  //                                       if ((customerInfo
+                  //                                                   .entitlements
+                  //                                                   .all[
+                  //                                                       'xyz.codexia.businessbosses.promonth']
+                  //                                                   ?.isActive ??
+                  //                                               false) ||
+                  //                                           (customerInfo
+                  //                                                   .entitlements
+                  //                                                   .all[
+                  //                                                       'xyz.codexia.businessbosses.monthly']
+                  //                                                   ?.isActive ??
+                  //                                               false)) {
+                  //                                         // Grant access to premium features
+                  //                                         print(
+                  //                                             'User subscribed!');
+                  //                                       }
+                  //                                     } catch (e) {
+                  //                                       // Handle error
+                  //                                       print(
+                  //                                           'Error purchasing product: $e');
+                  //                                     } finally {
+                  //                                       setState(() {
+                  //                                         loading = false;
+                  //                                       });
+                  //                                     }
+                  //                                   },
+                  //                                   loading: loading,
+                  //                                 ))),
+                  //                       ],
+                  //                     ),
+                  //                   ),
+                  //                 ],
+                  //                 options: CarouselOptions(
+                  //                   height: 470,
+                  //                   // aspectRatio: 16 / 9,
+                  //                   viewportFraction: 0.85,
+                  //                   initialPage: 0,
+                  //                   enableInfiniteScroll: false,
+                  //                   reverse: false,
+                  //                   autoPlay: false,
+                  //                   enlargeCenterPage: true,
+                  //                   padEnds: false,
+                  //                   enlargeFactor: 0.3,
+                  //                   scrollDirection: Axis.horizontal,
+                  //                 )),
+                  //           ),
+                  //           Padding(
+                  //             padding:
+                  //                 const EdgeInsets.only(bottom: 100.0, top: 10),
+                  //             child: SizedBox(
+                  //               width: double.infinity,
+                  //               child: Column(
+                  //                 mainAxisAlignment: MainAxisAlignment.start,
+                  //                 crossAxisAlignment: CrossAxisAlignment.start,
+                  //                 children: <Widget>[
+                  //                   const Center(
+                  //                     child: Text(
+                  //                       'Our Happy Customers',
+                  //                       style: TextStyle(
+                  //                           color: textColor,
+                  //                           fontWeight: FontWeight.bold),
+                  //                     ),
+                  //                   ),
+                  //                   SizedBox(
+                  //                     width: double
+                  //                         .infinity, // Occupy the available width
+                  //                     height: 80, // Adjust height as needed
+                  //                     child: ListView.builder(
+                  //                       scrollDirection: Axis.horizontal,
+                  //                       itemCount: reviews.length + 2,
+                  //                       itemBuilder:
+                  //                           (BuildContext context, int index) {
+                  //                         return index == 0
+                  //                             ? const SizedBox(
+                  //                                 width: 5,
+                  //                               )
+                  //                             : index == reviews.length + 1
+                  //                                 ? const SizedBox(
+                  //                                     width: 15,
+                  //                                   )
+                  //                                 : SizedBox(
+                  //                                     width:
+                  //                                         MediaQuery.of(context)
+                  //                                                 .size
+                  //                                                 .width /
+                  //                                             2.8,
+                  //                                     child: Container(
+                  //                                       margin: const EdgeInsets
+                  //                                           .only(
+                  //                                           top: 10, left: 10),
+                  //                                       padding:
+                  //                                           const EdgeInsets
+                  //                                               .all(10),
+                  //                                       decoration:
+                  //                                           BoxDecoration(
+                  //                                         borderRadius:
+                  //                                             BorderRadius
+                  //                                                 .circular(10),
+                  //                                         color: Colors.white,
+                  //                                       ),
+                  //                                       child: Text(
+                  //                                         reviews[index - 1],
+                  //                                         style:
+                  //                                             const TextStyle(
+                  //                                                 fontSize: 12),
+                  //                                         textAlign:
+                  //                                             TextAlign.center,
+                  //                                       ),
+                  //                                     ),
+                  //                                   );
+                  //                       },
+                  //                     ),
+                  //                   )
+                  //                 ],
+                  //               ),
+                  //             ),
+                  //           ),
+                  //         ],
+                  //       ),
+                  //     ),
+                  //   ),
+                  // ),
                   Column(
                     children: <Widget>[
                       Padding(
@@ -710,7 +1012,7 @@ class _ProScreenState extends State<ProScreen> with TickerProviderStateMixin {
                         child: FeatureTile(
                           feature: FeatureItem(
                             iconPath: 'assets/svgs/partner.svg',
-                            caption: 'Exclusive Partners Awaits You',
+                            caption: 'Exclusive Partner Offers Await You',
                             subtext:
                                 'Partner with us, list your deals and gets customers',
                             color:
