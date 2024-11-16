@@ -24,7 +24,6 @@ class ProScreen extends StatefulWidget {
 }
 
 class _ProScreenState extends State<ProScreen> with TickerProviderStateMixin {
-  String paymentMethodId = '';
   late final TabController protabbarcontroller;
   bool isCoin = false;
   bool isSubscribed = false;
@@ -34,18 +33,6 @@ class _ProScreenState extends State<ProScreen> with TickerProviderStateMixin {
     'Best app ever! So easy to use and manage everything.',
     'This app transformed my business! Highly recommend.',
     'Streamline operations and grow your business with this app!'
-  ];
-
-  static final List<String> _profeatures = <String>[
-    'Recognition in search results',
-    'Earn 100 coins per month',
-    'Boost posts for free with coins',
-    'Create custom business links',
-    'Launch new products/services quickly',
-    'Reach more customers online and in-person',
-    'Turn clicks into sales and multiple income streams',
-    'Manage expenses, tasks, and appointments',
-    'Access exclusive partners\' offers',
   ];
 
   static final List<String> _premiumfeatures = <String>[
@@ -218,306 +205,7 @@ class _ProScreenState extends State<ProScreen> with TickerProviderStateMixin {
                 child: TabBarView(
                     controller: protabbarcontroller,
                     children: <Widget>[
-                  Container(
-                      decoration: const BoxDecoration(
-                        gradient: LinearGradient(
-                          begin: Alignment.topCenter,
-                          end: Alignment.bottomCenter,
-                          colors: <Color>[
-                            probackgroundColor,
-                            Colors.white,
-                          ],
-                          stops: <double>[0.0, 0.5],
-                        ),
-                      ),
-                      padding: const EdgeInsets.symmetric(horizontal: 15),
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: <Widget>[
-                          const Column(
-                            children: <Widget>[
-                              SizedBox(
-                                height: 50,
-                              ),
-                              Text('Upgrade to a Pro Boss Experience',
-                                  style: TextStyle(
-                                      fontSize: 20,
-                                      fontWeight: FontWeight.bold)),
-                              Text(
-                                'Sell everywhere, mange easier, and grow 10x faster,',
-                                style: TextStyle(
-                                    fontSize: 15, fontWeight: FontWeight.w600),
-                              ),
-                              Text(
-                                'with one simple link',
-                                style: TextStyle(
-                                    color: primaryColorLT,
-                                    fontSize: 15,
-                                    fontWeight: FontWeight.w600),
-                              ),
-                            ],
-                          ),
-                          Container(
-                            decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(15),
-                              color: Colors.white,
-                              border: Border.all(
-                                color: Colors.grey.withOpacity(0.2),
-                                width: 1,
-                              ),
-                            ),
-                            padding: const EdgeInsets.all(16),
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: <Widget>[
-                                const SizedBox(
-                                  height: 10,
-                                ),
-                                const Text(
-                                  'What\'s included',
-                                  style: TextStyle(
-                                      fontWeight: FontWeight.w700,
-                                      color: textColor,
-                                      fontSize: 14),
-                                ),
-                                const SizedBox(
-                                  height: 20,
-                                ),
-                                Column(
-                                  children: _profeatures
-                                      .asMap()
-                                      .entries
-                                      .map((MapEntry<int, String> entry) =>
-                                          Padding(
-                                            padding: const EdgeInsets.only(
-                                                bottom: 8.0),
-                                            child: Row(
-                                                mainAxisAlignment:
-                                                    MainAxisAlignment.start,
-                                                crossAxisAlignment:
-                                                    CrossAxisAlignment.start,
-                                                children: <Widget>[
-                                                  SvgPicture.asset(
-                                                    entry.key == 0
-                                                        ? 'assets/svgs/premiumbadgered.svg'
-                                                        : entry.key == 1
-                                                            ? 'assets/svgs/coin.svg'
-                                                            : entry.key == 2
-                                                                ? 'assets/svgs/rocket.svg'
-                                                                : entry.key == 3
-                                                                    ? 'assets/svgs/links.svg'
-                                                                    : entry.key ==
-                                                                            4
-                                                                        ? 'assets/svgs/launchnew.svg'
-                                                                        : entry.key ==
-                                                                                5
-                                                                            ? 'assets/svgs/team.svg'
-                                                                            : entry.key == 6
-                                                                                ? 'assets/svgs/clicks.svg'
-                                                                                : entry.key == 7
-                                                                                    ? 'assets/svgs/manageexpense.svg'
-                                                                                    : 'assets/svgs/partner.svg',
-                                                    height: 15,
-                                                    color: entry.key > 2
-                                                        ? Colors.black54
-                                                        : null,
-                                                  ),
-                                                  const SizedBox(
-                                                    width: 10,
-                                                  ),
-                                                  Flexible(
-                                                    child: Text(
-                                                      entry.value,
-                                                      style: const TextStyle(
-                                                          fontSize: 14),
-                                                    ),
-                                                  ),
-                                                ]),
-                                          ))
-                                      .toList(),
-                                ),
-                                const SizedBox(
-                                  height: 10,
-                                ),
-                              ],
-                            ),
-                          ),
-                          Container(
-                            width: double.infinity,
-                            padding: const EdgeInsets.symmetric(horizontal: 0),
-                            child: ProCustomButton(
-                              color: primaryColorLT,
-                              text: 'Start Free Trial',
-                              onPressed: () {
-                                showModalBottomSheet<void>(
-                                  context: context,
-                                  shape: const RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.vertical(
-                                      top: Radius.circular(25.0),
-                                    ),
-                                  ),
-                                  builder: (BuildContext context) {
-                                    return StatefulBuilder(
-                                      // Wrap the entire bottom sheet content with StatefulBuilder
-                                      builder: (BuildContext context,
-                                          StateSetter setState) {
-                                        return Container(
-                                          padding: const EdgeInsets.symmetric(
-                                              horizontal: 20, vertical: 20),
-                                          child: Column(
-                                            mainAxisSize: MainAxisSize.min,
-                                            children: <Widget>[
-                                              Row(
-                                                mainAxisAlignment:
-                                                    MainAxisAlignment
-                                                        .spaceBetween,
-                                                children: <Widget>[
-                                                  const Text(
-                                                    'Choose your plan',
-                                                    style: TextStyle(
-                                                      fontSize: 16,
-                                                      fontWeight:
-                                                          FontWeight.bold,
-                                                    ),
-                                                  ),
-                                                  IconButton(
-                                                    icon: const Icon(
-                                                      Icons.close,
-                                                      color: Colors.black54,
-                                                    ),
-                                                    onPressed: () {
-                                                      Navigator.pop(context);
-                                                    },
-                                                  ),
-                                                ],
-                                              ),
-                                              const SizedBox(
-                                                height: 20,
-                                              ),
-                                              InkWell(
-                                                onTap: () {
-                                                  setState(() {
-                                                    paymentMethodId = 'Pro';
-                                                  });
-                                                },
-                                                child: Container(
-                                                  decoration: BoxDecoration(
-                                                    border: Border.all(
-                                                      color: paymentMethodId ==
-                                                              'Pro'
-                                                          ? primaryColorLT
-                                                          : Colors.transparent,
-                                                      width: 2,
-                                                    ),
-                                                    borderRadius:
-                                                        BorderRadius.circular(
-                                                            15),
-                                                  ),
-                                                  child: RadioListTile<String>(
-                                                    title: const Row(
-                                                      mainAxisAlignment:
-                                                          MainAxisAlignment
-                                                              .spaceBetween,
-                                                      children: <Widget>[
-                                                        Text(
-                                                          'Pro Monthly',
-                                                          style: TextStyle(
-                                                              fontWeight:
-                                                                  FontWeight
-                                                                      .w600,
-                                                              fontSize: 16),
-                                                        ),
-                                                        Text('\$14.99/month',
-                                                            style: TextStyle(
-                                                                fontWeight:
-                                                                    FontWeight
-                                                                        .w200,
-                                                                fontSize: 16)),
-                                                      ],
-                                                    ),
-                                                    value: 'Pro',
-                                                    groupValue: paymentMethodId,
-                                                    onChanged: (String? value) {
-                                                      setState(() {
-                                                        paymentMethodId =
-                                                            value!;
-                                                      });
-                                                    },
-                                                  ),
-                                                ),
-                                              ),
-                                              Container(
-                                                decoration: BoxDecoration(
-                                                  border: Border.all(
-                                                    color: paymentMethodId ==
-                                                            'Premium'
-                                                        ? primaryColorLT
-                                                        : Colors.transparent,
-                                                    width: 2,
-                                                  ),
-                                                  borderRadius:
-                                                      BorderRadius.circular(15),
-                                                ),
-                                                child: RadioListTile<String>(
-                                                  title: const Row(
-                                                    mainAxisAlignment:
-                                                        MainAxisAlignment
-                                                            .spaceBetween,
-                                                    children: <Widget>[
-                                                      Text(
-                                                        'Pro Yearly',
-                                                        style: TextStyle(
-                                                            fontWeight:
-                                                                FontWeight.w600,
-                                                            fontSize: 16),
-                                                      ),
-                                                      Text(
-                                                          '\$9.99/month ( 33% off )',
-                                                          style: TextStyle(
-                                                              fontWeight:
-                                                                  FontWeight
-                                                                      .w200,
-                                                              fontSize: 16)),
-                                                    ],
-                                                  ),
-                                                  value: 'Premium',
-                                                  groupValue: paymentMethodId,
-                                                  onChanged: (String? value) {
-                                                    setState(() {
-                                                      paymentMethodId = value!;
-                                                    });
-                                                  },
-                                                ),
-                                              ),
-                                              const SizedBox(
-                                                height: 20,
-                                              ),
-                                              SizedBox(
-                                                  width: double.infinity,
-                                                  child: ProCustomButton(
-                                                      padding: 0,
-                                                      color: primaryColorLT,
-                                                      text:
-                                                          'Start 7-day free trial',
-                                                      onPressed: () async {})),
-                                              const SizedBox(
-                                                height: 50,
-                                              ),
-                                            ],
-                                          ),
-                                        );
-                                      },
-                                    );
-                                  },
-                                );
-                              },
-                            ),
-                          ),
-                          const SizedBox(
-                            height: 100,
-                          )
-                        ],
-                      )),
+                  const ProSubscribeSection(),
                   // Container(
                   //   color: backgroundColor,
                   //   child: Padding(
@@ -1099,5 +787,308 @@ class _ProScreenState extends State<ProScreen> with TickerProviderStateMixin {
         const BottomBar(activeIndex: 2),
       ]),
     );
+  }
+}
+
+class ProSubscribeSection extends StatefulWidget {
+  final bool? isGrow;
+  const ProSubscribeSection({Key? key, this.isGrow}) : super(key: key);
+
+  @override
+  State<ProSubscribeSection> createState() => _ProSubscribeSectionState();
+}
+
+class _ProSubscribeSectionState extends State<ProSubscribeSection> {
+  static final List<String> _profeatures = <String>[
+    'Recognition in search results',
+    'Earn 100 coins per month',
+    'Boost posts for free with coins',
+    'Create custom business links',
+    'Launch new products/services quickly',
+    'Reach more customers online and in-person',
+    'Turn clicks into sales and multiple income streams',
+    'Manage expenses, tasks, and appointments',
+    'Access exclusive partners\' offers',
+  ];
+  String paymentMethodId = '';
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+        decoration: BoxDecoration(
+          gradient: LinearGradient(
+            begin: Alignment.topCenter,
+            end: Alignment.bottomCenter,
+            colors: <Color>[
+              widget.isGrow == null ? probackgroundColor : Colors.white,
+              Colors.white,
+            ],
+            stops: const <double>[0.0, 0.5],
+          ),
+        ),
+        padding: const EdgeInsets.symmetric(horizontal: 15),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: <Widget>[
+            if (widget.isGrow == null)
+              const Column(
+                children: <Widget>[
+                  SizedBox(
+                    height: 50,
+                  ),
+                  Text('Upgrade to a Pro Boss Experience',
+                      style:
+                          TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
+                  Text(
+                    'Sell everywhere, mange easier, and grow 10x faster,',
+                    style: TextStyle(fontSize: 15, fontWeight: FontWeight.w600),
+                  ),
+                  Text(
+                    'with one simple link',
+                    style: TextStyle(
+                        color: primaryColorLT,
+                        fontSize: 15,
+                        fontWeight: FontWeight.w600),
+                  ),
+                ],
+              ),
+            Container(
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(15),
+                color: Colors.white,
+                border: Border.all(
+                  color: Colors.grey.withOpacity(0.2),
+                  width: 1,
+                ),
+              ),
+              padding: const EdgeInsets.all(16),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: <Widget>[
+                  const SizedBox(
+                    height: 10,
+                  ),
+                  const Text(
+                    'What\'s included',
+                    style: TextStyle(
+                        fontWeight: FontWeight.w700,
+                        color: textColor,
+                        fontSize: 14),
+                  ),
+                  const SizedBox(
+                    height: 20,
+                  ),
+                  Column(
+                    children: _profeatures
+                        .asMap()
+                        .entries
+                        .map((MapEntry<int, String> entry) => Padding(
+                              padding: const EdgeInsets.only(bottom: 8.0),
+                              child: Row(
+                                  mainAxisAlignment: MainAxisAlignment.start,
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: <Widget>[
+                                    SvgPicture.asset(
+                                      entry.key == 0
+                                          ? 'assets/svgs/premiumbadgered.svg'
+                                          : entry.key == 1
+                                              ? 'assets/svgs/coin.svg'
+                                              : entry.key == 2
+                                                  ? 'assets/svgs/rocket.svg'
+                                                  : entry.key == 3
+                                                      ? 'assets/svgs/links.svg'
+                                                      : entry.key == 4
+                                                          ? 'assets/svgs/launchnew.svg'
+                                                          : entry.key == 5
+                                                              ? 'assets/svgs/team.svg'
+                                                              : entry.key == 6
+                                                                  ? 'assets/svgs/clicks.svg'
+                                                                  : entry.key ==
+                                                                          7
+                                                                      ? 'assets/svgs/manageexpense.svg'
+                                                                      : 'assets/svgs/partner.svg',
+                                      height: 15,
+                                      color:
+                                          entry.key > 2 ? Colors.black54 : null,
+                                    ),
+                                    const SizedBox(
+                                      width: 10,
+                                    ),
+                                    Flexible(
+                                      child: Text(
+                                        entry.value,
+                                        style: const TextStyle(fontSize: 14),
+                                      ),
+                                    ),
+                                  ]),
+                            ))
+                        .toList(),
+                  ),
+                  const SizedBox(
+                    height: 10,
+                  ),
+                ],
+              ),
+            ),
+            if (widget.isGrow != null)
+              const SizedBox(
+                height: 30,
+              ),
+            Container(
+              width: double.infinity,
+              padding: const EdgeInsets.symmetric(horizontal: 0),
+              child: ProCustomButton(
+                color: primaryColorLT,
+                text: 'Start Free Trial',
+                onPressed: () {
+                  showModalBottomSheet<void>(
+                    context: context,
+                    shape: const RoundedRectangleBorder(
+                      borderRadius: BorderRadius.vertical(
+                        top: Radius.circular(25.0),
+                      ),
+                    ),
+                    builder: (BuildContext context) {
+                      return StatefulBuilder(
+                        // Wrap the entire bottom sheet content with StatefulBuilder
+                        builder: (BuildContext context, StateSetter setState) {
+                          return Container(
+                            padding: const EdgeInsets.symmetric(
+                                horizontal: 20, vertical: 20),
+                            child: Column(
+                              mainAxisSize: MainAxisSize.min,
+                              children: <Widget>[
+                                Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: <Widget>[
+                                    const Text(
+                                      'Choose your plan',
+                                      style: TextStyle(
+                                        fontSize: 16,
+                                        fontWeight: FontWeight.bold,
+                                      ),
+                                    ),
+                                    IconButton(
+                                      icon: const Icon(
+                                        Icons.close,
+                                        color: Colors.black54,
+                                      ),
+                                      onPressed: () {
+                                        Navigator.pop(context);
+                                      },
+                                    ),
+                                  ],
+                                ),
+                                const SizedBox(
+                                  height: 20,
+                                ),
+                                InkWell(
+                                  onTap: () {
+                                    setState(() {
+                                      paymentMethodId = 'Pro';
+                                    });
+                                  },
+                                  child: Container(
+                                    decoration: BoxDecoration(
+                                      border: Border.all(
+                                        color: paymentMethodId == 'Pro'
+                                            ? primaryColorLT
+                                            : Colors.transparent,
+                                        width: 2,
+                                      ),
+                                      borderRadius: BorderRadius.circular(15),
+                                    ),
+                                    child: RadioListTile<String>(
+                                      title: const Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.spaceBetween,
+                                        children: <Widget>[
+                                          Text(
+                                            'Pro Monthly',
+                                            style: TextStyle(
+                                                fontWeight: FontWeight.w600,
+                                                fontSize: 16),
+                                          ),
+                                          Text('\$14.99/month',
+                                              style: TextStyle(
+                                                  fontWeight: FontWeight.w200,
+                                                  fontSize: 16)),
+                                        ],
+                                      ),
+                                      value: 'Pro',
+                                      groupValue: paymentMethodId,
+                                      onChanged: (String? value) {
+                                        setState(() {
+                                          paymentMethodId = value!;
+                                        });
+                                      },
+                                    ),
+                                  ),
+                                ),
+                                Container(
+                                  decoration: BoxDecoration(
+                                    border: Border.all(
+                                      color: paymentMethodId == 'Premium'
+                                          ? primaryColorLT
+                                          : Colors.transparent,
+                                      width: 2,
+                                    ),
+                                    borderRadius: BorderRadius.circular(15),
+                                  ),
+                                  child: RadioListTile<String>(
+                                    title: const Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceBetween,
+                                      children: <Widget>[
+                                        Text(
+                                          'Pro Yearly',
+                                          style: TextStyle(
+                                              fontWeight: FontWeight.w600,
+                                              fontSize: 16),
+                                        ),
+                                        Text('\$9.99/month ( 33% off )',
+                                            style: TextStyle(
+                                                fontWeight: FontWeight.w200,
+                                                fontSize: 16)),
+                                      ],
+                                    ),
+                                    value: 'Premium',
+                                    groupValue: paymentMethodId,
+                                    onChanged: (String? value) {
+                                      setState(() {
+                                        paymentMethodId = value!;
+                                      });
+                                    },
+                                  ),
+                                ),
+                                const SizedBox(
+                                  height: 20,
+                                ),
+                                SizedBox(
+                                    width: double.infinity,
+                                    child: ProCustomButton(
+                                        padding: 0,
+                                        color: primaryColorLT,
+                                        text: 'Start 7-day free trial',
+                                        onPressed: () async {})),
+                                const SizedBox(
+                                  height: 50,
+                                ),
+                              ],
+                            ),
+                          );
+                        },
+                      );
+                    },
+                  );
+                },
+              ),
+            ),
+            if (widget.isGrow == null)
+              const SizedBox(
+                height: 100,
+              )
+          ],
+        ));
   }
 }
