@@ -366,9 +366,9 @@ class _RowStatusCardState extends State<RowStatusCard> {
                                       query; // Update the search query
                                   filteredOrders =
                                       widget.allorders.where((Order order) {
-                                    return order.client.name
+                                    return order.client != null ? order.client!.name
                                         .toLowerCase()
-                                        .contains(query.toLowerCase());
+                                        .contains(query.toLowerCase()) : false;
                                   }).toList();
                                 });
                               },

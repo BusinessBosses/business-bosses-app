@@ -115,24 +115,46 @@ class _OrderWidgetState extends State<OrderWidget> {
                       mainAxisAlignment: MainAxisAlignment.start,
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: <Widget>[
-                        Row(
-                          children: <Widget>[
-                            const Text(
-                              'Client: ',
-                              style: TextStyle(
-                                fontWeight: FontWeight.normal,
-                                fontSize: 13,
+                        if (widget.order.client != null)
+                          Row(
+                            children: <Widget>[
+                              const Text(
+                                'Client: ',
+                                style: TextStyle(
+                                  fontWeight: FontWeight.normal,
+                                  fontSize: 13,
+                                ),
                               ),
-                            ),
-                            Text(
-                              widget.order.client.name,
-                              style: const TextStyle(
-                                fontWeight: FontWeight.bold,
-                                fontSize: 13,
+                              Text(
+                                widget.order.client!.name,
+                                style: const TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 13,
+                                ),
                               ),
-                            ),
-                          ],
-                        ),
+                            ],
+                          ),
+                        if (widget.order.user != null &&
+                            widget.order.client == null)
+                          Row(
+                            children: <Widget>[
+                              const Text(
+                                'User: ',
+                                style: TextStyle(
+                                  fontWeight: FontWeight.normal,
+                                  fontSize: 13,
+                                ),
+                              ),
+                              Text(
+                                widget.order.user!.name ??
+                                    widget.order.user!.username,
+                                style: const TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 13,
+                                ),
+                              ),
+                            ],
+                          ),
                         Row(
                           children: <Widget>[
                             const Text(
