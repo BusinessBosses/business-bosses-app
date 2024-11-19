@@ -57,7 +57,7 @@ class _TaskWidgetState extends State<TaskWidget> {
                   Container(
                     decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(3),
-                        color: widget.bgcolor),
+                        color: probackgroundColor),
                     padding:
                         const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
                     child: Wrap(
@@ -340,15 +340,15 @@ class _TaskWidgetState extends State<TaskWidget> {
                             padding: const EdgeInsets.symmetric(
                                 horizontal: 10, vertical: 5),
                             decoration: BoxDecoration(
-                                color: prosemibackColor,
+                                color: widget.project.status.backgroundColor,
                                 borderRadius: BorderRadius.circular(20)),
                             child: Center(
                               child: Wrap(
                                   crossAxisAlignment: WrapCrossAlignment.center,
                                   children: <Widget>[
-                                    const Text(
-                                      'Change Task Status',
-                                      style: TextStyle(
+                                    Text(
+                                      'Status - ${widget.project.status.displayTitle}',
+                                      style: const TextStyle(
                                           fontSize: 13,
                                           color: proprimaryColor,
                                           fontWeight: FontWeight.bold),
