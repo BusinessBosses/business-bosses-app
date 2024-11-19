@@ -200,8 +200,7 @@ class _ChooseOrderBottomSheetState extends State<ChooseOrderBottomSheet>
                                           )
                                         : null,
                                     subtitle: Text(
-                                        '${shopController.shop!.currency} ' +
-                                            product['price']),
+                                        '${shopController.shop!.currency} ${product['price']}'),
                                     value: _tempSelectedItems.contains(product),
                                     onChanged: (bool? selected) {
                                       setState(() {
@@ -258,15 +257,21 @@ class _ChooseOrderBottomSheetState extends State<ChooseOrderBottomSheet>
                     Column(
                       children:
                           widget.services.map((Map<String, dynamic> service) {
-                        bool isLastSelected = widget.selectedItems.isNotEmpty &&
-                            widget.selectedItems.last == service;
+                        bool isLastSelected = _tempSelectedItems.isNotEmpty &&
+                            _tempSelectedItems.last == service;
                         return Column(
                           children: <Widget>[
                             CheckboxListTile(
                               title: Text(service['name']),
-                              value: widget.selectedItems.contains(service),
+                              value: _tempSelectedItems.contains(service),
                               onChanged: (bool? selected) {
-                                _onItemSelect(selected, service);
+                                setState(() {
+                                  if (selected == true) {
+                                    _tempSelectedItems.add(service);
+                                  } else {
+                                    _tempSelectedItems.remove(service);
+                                  }
+                                });
                               },
                               checkColor: Colors.white,
                               activeColor: proprimaryColor,
@@ -302,16 +307,6 @@ class _ChooseOrderBottomSheetState extends State<ChooseOrderBottomSheet>
         ],
       ),
     );
-  }
-
-  void _onItemSelect(bool? selected, Map<String, dynamic> item) {
-    setState(() {
-      if (selected == true) {
-        _tempSelectedItems.add(item);
-      } else {
-        _tempSelectedItems.remove(item);
-      }
-    });
   }
 
   void _saveCustomOrder() {

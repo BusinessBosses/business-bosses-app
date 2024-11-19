@@ -395,18 +395,34 @@ class _UserShopScreenState extends State<UserShopScreen> {
                                               mainAxisSpacing: 10.0,
                                               crossAxisSpacing: 10.0,
                                               itemCount: shopController
-                                                      .userProducts.length +
-                                                  shopController
-                                                      .userServices.length,
+                                                      .userProducts
+                                                      .where((Product p) =>
+                                                          p.isActive)
+                                                      .length +
+                                                  shopController.userServices
+                                                      .where((Service s) =>
+                                                          s.isActive)
+                                                      .length,
                                               itemBuilder:
                                                   (BuildContext context,
                                                       int index) {
+                                                final List<Product>
+                                                    activeProducts =
+                                                    shopController.userProducts
+                                                        .where((Product p) =>
+                                                            p.isActive)
+                                                        .toList();
+                                                final List<Service>
+                                                    activeServices =
+                                                    shopController.userServices
+                                                        .where((Service s) =>
+                                                            s.isActive)
+                                                        .toList();
+
                                                 if (index <
-                                                    shopController
-                                                        .userProducts.length) {
+                                                    activeProducts.length) {
                                                   final Product product =
-                                                      shopController
-                                                          .userProducts[index];
+                                                      activeProducts[index];
                                                   return GestureDetector(
                                                     onTap: () {
                                                       Get.to(() =>
@@ -425,12 +441,9 @@ class _UserShopScreenState extends State<UserShopScreen> {
                                                   );
                                                 } else {
                                                   final Service service =
-                                                      shopController
-                                                              .userServices[
-                                                          index -
-                                                              shopController
-                                                                  .userProducts
-                                                                  .length];
+                                                      activeServices[index -
+                                                          -activeProducts
+                                                              .length];
                                                   return GestureDetector(
                                                     onTap: () {
                                                       Get.to(() =>
