@@ -171,7 +171,9 @@ class _ClientWidgetState extends State<ClientWidget> {
                         ),
                       ),
                       Text(
-                        widget.client.phone,
+                        widget.client.phone.isNotEmpty
+                            ? widget.client.phone
+                            : 'N/A',
                         style: const TextStyle(
                           fontWeight: FontWeight.bold,
                           fontSize: 13,
