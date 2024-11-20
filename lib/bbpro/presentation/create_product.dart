@@ -352,6 +352,13 @@ class _CreateProductListingState extends State<CreateProductListing> {
                   },
                 ),
               ),
+            CustomEditText(
+              caption: 'Quantity',
+              hintText: 'Enter quantity',
+              inputType: TextInputType.number,
+              controller: quantityController,
+            ),
+            const SizedBox(height: 16),
             ExpansionTile(
                 trailing: isExpanded
                     ? SvgPicture.asset(
@@ -424,13 +431,6 @@ class _CreateProductListingState extends State<CreateProductListing> {
                     hintText: 'Enter product number',
                     inputType: TextInputType.number,
                     controller: productNumberController,
-                  ),
-                  const SizedBox(height: 16),
-                  CustomEditText(
-                    caption: 'Quantity',
-                    hintText: 'Enter quantity',
-                    inputType: TextInputType.number,
-                    controller: quantityController,
                   ),
                   const SizedBox(height: 16),
                   Padding(
@@ -523,6 +523,11 @@ class _CreateProductListingState extends State<CreateProductListing> {
 
                 if (_priceController.text.isEmpty) {
                   showSnackbar(message: 'Enter price', error: true);
+                  return;
+                }
+
+                if (quantityController.text.isEmpty) {
+                  showSnackbar(message: 'Enter quantity', error: true);
                   return;
                 }
 

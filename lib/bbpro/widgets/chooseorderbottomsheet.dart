@@ -198,7 +198,7 @@ class _ChooseOrderBottomSheetState extends State<ChooseOrderBottomSheet>
                                                         imageUrl:
                                                             product['images'])),
                                           )
-                                        : null,
+                                        : SizedBox(),
                                     subtitle: Text(
                                         '${shopController.shop!.currency} ${product['price']}'),
                                     value: _tempSelectedItems.contains(product),

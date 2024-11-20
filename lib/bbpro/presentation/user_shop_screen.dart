@@ -442,7 +442,7 @@ class _UserShopScreenState extends State<UserShopScreen> {
                                                 } else {
                                                   final Service service =
                                                       activeServices[index -
-                                                          -activeProducts
+                                                          activeProducts
                                                               .length];
                                                   return GestureDetector(
                                                     onTap: () {

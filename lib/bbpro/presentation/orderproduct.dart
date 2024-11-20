@@ -508,19 +508,22 @@ class _OrderProductScreenState extends State<OrderProductScreen>
                               'shopId': widget.shop.id,
                               'items': selectedItems,
                               'deliveryMethod': widget.product.deliveryMethod !=
-                                      null && widget.product.deliveryMethod!.isNotEmpty
+                                          null &&
+                                      widget.product.deliveryMethod!.isNotEmpty
                                   ? widget.product.deliveryMethod!.toLowerCase()
                                   : 'online',
                               'deliveryDate': DateTime.now().toString(),
-                              'paymentMethod':
-                                  widget.product.paymentMethod != null && widget.product.paymentMethod!.isNotEmpty
-                                      ? widget.product.paymentMethod!
-                                      : 'Cash',
+                              'paymentMethod': widget.product.paymentMethod !=
+                                          null &&
+                                      widget.product.paymentMethod!.isNotEmpty
+                                  ? widget.product.paymentMethod!
+                                  : 'Cash',
                               'orderDetails':
                                   'Name: ${fullNameController.text} \n Email: ${emailController.text} \n Phone: ${phoneController.text} \n Delivery Details: ${deliveryController.text}',
                               'invoiceOption': 'send_with_payment_link',
                               'status': 'pending'
                             };
+                            print(orderData);
                             bool response =
                                 await orderController.addOrder(orderData);
                             if (response) {
