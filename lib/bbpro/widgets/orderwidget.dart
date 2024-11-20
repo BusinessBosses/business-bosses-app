@@ -383,9 +383,11 @@ class _OrderWidgetState extends State<OrderWidget> {
                                 children: <Widget>[
                                   Text(
                                     'Status - ${widget.order.status.displayTitle}',
-                                    style: const TextStyle(
+                                    style: TextStyle(
                                         fontSize: 13,
-                                        color: proprimaryColor,
+                                        color: widget
+                                            .order.status.backgroundColor
+                                            .withOpacity(1.0),
                                         fontWeight: FontWeight.bold),
                                   ),
                                   const SizedBox(
@@ -393,7 +395,8 @@ class _OrderWidgetState extends State<OrderWidget> {
                                   ),
                                   SvgPicture.asset(
                                     'assets/svgs/dropdown.svg',
-                                    color: proprimaryColor,
+                                    color: widget.order.status.backgroundColor
+                                        .withOpacity(1.0),
                                   )
                                 ]),
                           ),

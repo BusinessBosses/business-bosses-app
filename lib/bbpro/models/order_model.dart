@@ -163,7 +163,7 @@ enum OrderStatus {
       case OrderStatus.allorders:
         return 'All Orders';
       case OrderStatus.pending:
-        return 'In-Progress';
+        return 'Pending';
       case OrderStatus.paid:
         return 'Paid';
       case OrderStatus.cancelled:
@@ -178,9 +178,9 @@ enum OrderStatus {
       case OrderStatus.pending:
         return Colors.amber.withOpacity(0.1);
       case OrderStatus.paid:
-        return Colors.green.withOpacity(0.1);
+        return Colors.blue.withOpacity(0.1);
       case OrderStatus.cancelled:
-        return Colors.red.withOpacity(0.1);
+        return Colors.green.withOpacity(0.1);
     }
   }
 

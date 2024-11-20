@@ -136,8 +136,8 @@ class _OrdersScreenState extends State<OrdersScreen>
               backgroundColor: <Color>[
                 backgroundColor,
                 Colors.amber.withOpacity(0.1),
-                Colors.green.withOpacity(0.1),
-                Colors.red.withOpacity(0.1)
+                Colors.blue.withOpacity(0.1),
+                Colors.green.withOpacity(0.1)
               ],
               listofitems: OrderStatus.values.toList(),
               itemToString: (OrderStatus status) =>
@@ -325,8 +325,8 @@ class _RowStatusCardState extends State<RowStatusCard> {
                                 widget.orderStatus.displayTitle == 'Pending'
                                     ? Colors.amber
                                     : widget.orderStatus.displayTitle == 'Paid'
-                                        ? Colors.green
-                                        : Colors.red,
+                                        ? Colors.blue
+                                        : Colors.green,
                             radius: 5,
                           ),
                     if (widget.orderStatus.index != 0)
@@ -366,9 +366,11 @@ class _RowStatusCardState extends State<RowStatusCard> {
                                       query; // Update the search query
                                   filteredOrders =
                                       widget.allorders.where((Order order) {
-                                    return order.client != null ? order.client!.name
-                                        .toLowerCase()
-                                        .contains(query.toLowerCase()) : false;
+                                    return order.client != null
+                                        ? order.client!.name
+                                            .toLowerCase()
+                                            .contains(query.toLowerCase())
+                                        : false;
                                   }).toList();
                                 });
                               },

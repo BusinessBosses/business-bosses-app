@@ -348,9 +348,11 @@ class _TaskWidgetState extends State<TaskWidget> {
                                   children: <Widget>[
                                     Text(
                                       'Status - ${widget.project.status.displayTitle}',
-                                      style: const TextStyle(
+                                      style: TextStyle(
                                           fontSize: 13,
-                                          color: proprimaryColor,
+                                          color: widget
+                                              .project.status.backgroundColor
+                                              .withOpacity(1.0),
                                           fontWeight: FontWeight.bold),
                                     ),
                                     const SizedBox(
@@ -358,7 +360,9 @@ class _TaskWidgetState extends State<TaskWidget> {
                                     ),
                                     SvgPicture.asset(
                                       'assets/svgs/dropdown.svg',
-                                      color: proprimaryColor,
+                                      color: widget
+                                          .project.status.backgroundColor
+                                          .withOpacity(1.0),
                                     )
                                   ]),
                             ),

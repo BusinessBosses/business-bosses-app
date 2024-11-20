@@ -356,13 +356,13 @@ class _RowStatusCardState extends State<RowStatusCard> {
                     widget.projectStatus.index == 0
                         ? Container()
                         : CircleAvatar(
-                            backgroundColor: widget
-                                        .projectStatus.displayTitle ==
-                                    'To Do'
-                                ? Colors.black
-                                : widget.projectStatus.displayTitle == 'Pending'
-                                    ? Colors.amber
-                                    : Colors.green,
+                            backgroundColor:
+                                widget.projectStatus.displayTitle == 'To Do'
+                                    ? Colors.black
+                                    : widget.projectStatus.displayTitle ==
+                                            'In-Progress'
+                                        ? Colors.amber
+                                        : Colors.green,
                             radius: 5,
                           ),
                     if (widget.projectStatus.index != 0)
