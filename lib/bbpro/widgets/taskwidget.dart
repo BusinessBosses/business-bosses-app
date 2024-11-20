@@ -141,237 +141,225 @@ class _TaskWidgetState extends State<TaskWidget> {
                   ),
                 ],
               ),
-              Padding(
-                padding: const EdgeInsets.symmetric(vertical: 10.0),
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: <Widget>[
-                    Row(
-                      children: <Widget>[
-                        Text(
-                          'Expenses: ${shopController.shop!.currency} ',
-                          style: const TextStyle(
+              Column(
+                mainAxisAlignment: MainAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: <Widget>[
+                  const SizedBox(height: 10),
+                  Row(
+                    children: <Widget>[
+                      Text(
+                        'Expenses: ${shopController.shop!.currency} ',
+                        style: const TextStyle(
+                          fontWeight: FontWeight.bold,
+                          fontSize: 13,
+                        ),
+                      ),
+                      Text(
+                        widget.project.amount.toString(),
+                        style: const TextStyle(
+                          fontSize: 13,
+                        ),
+                      ),
+                    ],
+                  ),
+                  Row(
+                    children: <Widget>[
+                      const Text(
+                        'Duration: ',
+                        style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                          fontSize: 13,
+                        ),
+                      ),
+                      Text(
+                        widget.project.endAt != null ||
+                                widget.project.startAt != null
+                            ? '${widget.project.endAt.difference(widget.project.startAt).inDays} days'
+                            : 'N/A',
+                        style: const TextStyle(
+                          fontSize: 13,
+                        ),
+                      ),
+                    ],
+                  ),
+                  Wrap(
+                    crossAxisAlignment: WrapCrossAlignment.center,
+                    children: <Widget>[
+                      const Text(
+                        'Description: ',
+                        style: TextStyle(
                             fontWeight: FontWeight.bold,
                             fontSize: 13,
-                          ),
-                        ),
-                        Text(
-                          widget.project.amount.toString(),
-                          style: const TextStyle(
-                            fontSize: 13,
-                          ),
-                        ),
-                      ],
-                    ),
-                    Row(
-                      children: <Widget>[
-                        const Text(
-                          'Duration: ',
-                          style: TextStyle(
-                            fontWeight: FontWeight.bold,
-                            fontSize: 13,
-                          ),
-                        ),
-                        Text(
-                          widget.project.endAt != null ||
-                                  widget.project.startAt != null
-                              ? '${widget.project.endAt.difference(widget.project.startAt).inDays} days'
-                              : 'N/A',
-                          style: const TextStyle(
-                            fontSize: 13,
-                          ),
-                        ),
-                      ],
-                    ),
-                    Wrap(
-                      crossAxisAlignment: WrapCrossAlignment.center,
-                      children: <Widget>[
-                        const Text(
-                          'Description: ',
-                          style: TextStyle(
-                              fontWeight: FontWeight.bold,
-                              fontSize: 13,
-                              color: textColor),
-                        ),
-                        Text(
-                          widget.project.description,
-                          style:
-                              const TextStyle(fontSize: 13, color: textColor),
-                        ),
-                      ],
-                    ),
-                    const SizedBox(
-                      height: 10,
-                    ),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: <Widget>[
-                        GestureDetector(
-                          onTap: () {
-                            showModalBottomSheet(
-                              context: context,
-                              shape: const RoundedRectangleBorder(
-                                borderRadius: BorderRadius.vertical(
-                                  top: Radius.circular(20.0),
-                                ),
+                            color: textColor),
+                      ),
+                      Text(
+                        widget.project.description,
+                        style: const TextStyle(fontSize: 13, color: textColor),
+                      ),
+                    ],
+                  ),
+                  const SizedBox(
+                    height: 10,
+                  ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: <Widget>[
+                      GestureDetector(
+                        onTap: () {
+                          showModalBottomSheet(
+                            context: context,
+                            shape: const RoundedRectangleBorder(
+                              borderRadius: BorderRadius.vertical(
+                                top: Radius.circular(20.0),
                               ),
-                              builder: (BuildContext context) {
-                                List<ProjectStatus> availableStatuses =
-                                    <ProjectStatus>[];
-                                switch (widget.project.status) {
-                                  case ProjectStatus.todo:
-                                    availableStatuses = <ProjectStatus>[
-                                      ProjectStatus.pending,
-                                      ProjectStatus.completed
-                                    ];
-                                    break;
-                                  case ProjectStatus.pending:
-                                    availableStatuses = <ProjectStatus>[
-                                      ProjectStatus.todo,
-                                      ProjectStatus.completed
-                                    ];
-                                    break;
-                                  case ProjectStatus.completed:
-                                    availableStatuses = <ProjectStatus>[
-                                      ProjectStatus.todo,
-                                      ProjectStatus.pending
-                                    ];
-                                    break;
-                                  case ProjectStatus.allprojects:
-                                    // TODO: Handle this case.
-                                    break;
-                                }
-                                return SizedBox(
-                                  child: Padding(
-                                    padding: const EdgeInsets.only(
-                                        top: 20, bottom: 50),
-                                    child: Column(
-                                      mainAxisSize: MainAxisSize
-                                          .min, // Ensures the column takes only the necessary space
-                                      children: <Widget>[
-                                        const Text(
-                                          'Change Task Status to',
-                                          style: TextStyle(
-                                            fontSize: 14,
-                                            fontWeight: FontWeight.w700,
-                                          ),
-                                        ),
-                                        const SizedBox(
-                                          height: 20,
-                                        ),
-                                        ...availableStatuses
-                                            .map((ProjectStatus status) {
-                                          return ListTile(
-                                            title: Container(
-                                              decoration: BoxDecoration(
-                                                  color: prosemibackColor,
-                                                  borderRadius:
-                                                      BorderRadius.circular(
-                                                          15)),
-                                              padding:
-                                                  const EdgeInsets.symmetric(
-                                                      horizontal: 10,
-                                                      vertical: 20),
-                                              child: Text(
-                                                status.displayTitle,
-                                                style: const TextStyle(
-                                                    fontSize: 14,
-                                                    color: textColor,
-                                                    fontWeight:
-                                                        FontWeight.w600),
-                                              ),
-                                            ),
-                                            onTap: () async {
-                                              Get.back();
-                                              setState(() {
-                                                projectController
-                                                    .statusProjects[
-                                                        widget.project.status]
-                                                    ?.remove(widget.project);
-                                                projectController
-                                                    .statusProjects[status]
-                                                    ?.add(
-                                                  Project(
-                                                    id: widget.project.id,
-                                                    userId:
-                                                        widget.project.userId,
-                                                    name: widget.project.name,
-                                                    amount:
-                                                        widget.project.amount,
-                                                    status: status,
-                                                    createdAt: widget
-                                                        .project.createdAt,
-                                                    startAt:
-                                                        widget.project.startAt,
-                                                    endAt: widget.project.endAt,
-                                                    description: widget
-                                                        .project.description,
-                                                    duration:
-                                                        widget.project.duration,
-                                                  ),
-                                                );
-                                              });
-
-                                              // Update the status in the database
-                                              await projectController
-                                                  .updateProject(
-                                                widget.project.id,
-                                                <String, dynamic>{
-                                                  'status': status.toString(),
-                                                },
-                                              );
-
-                                              await projectController
-                                                  .initProjects(
-                                                      profileController
-                                                          .myProfile.uid);
-                                            },
-                                          );
-                                        }).toList(),
-                                      ],
-                                    ),
-                                  ),
-                                );
-                              },
-                            );
-                          },
-                          child: Container(
-                            padding: const EdgeInsets.symmetric(
-                                horizontal: 10, vertical: 5),
-                            decoration: BoxDecoration(
-                                color: widget.project.status.backgroundColor,
-                                borderRadius: BorderRadius.circular(20)),
-                            child: Center(
-                              child: Wrap(
-                                  crossAxisAlignment: WrapCrossAlignment.center,
-                                  children: <Widget>[
-                                    Text(
-                                      'Status - ${widget.project.status.displayTitle}',
-                                      style: TextStyle(
-                                          fontSize: 13,
-                                          color: widget
-                                              .project.status.backgroundColor
-                                              .withOpacity(1.0),
-                                          fontWeight: FontWeight.bold),
-                                    ),
-                                    const SizedBox(
-                                      width: 8,
-                                    ),
-                                    SvgPicture.asset(
-                                      'assets/svgs/dropdown.svg',
-                                      color: widget
-                                          .project.status.backgroundColor
-                                          .withOpacity(1.0),
-                                    )
-                                  ]),
                             ),
+                            builder: (BuildContext context) {
+                              List<ProjectStatus> availableStatuses =
+                                  <ProjectStatus>[];
+                              switch (widget.project.status) {
+                                case ProjectStatus.todo:
+                                  availableStatuses = <ProjectStatus>[
+                                    ProjectStatus.pending,
+                                    ProjectStatus.completed
+                                  ];
+                                  break;
+                                case ProjectStatus.pending:
+                                  availableStatuses = <ProjectStatus>[
+                                    ProjectStatus.todo,
+                                    ProjectStatus.completed
+                                  ];
+                                  break;
+                                case ProjectStatus.completed:
+                                  availableStatuses = <ProjectStatus>[
+                                    ProjectStatus.todo,
+                                    ProjectStatus.pending
+                                  ];
+                                  break;
+                                case ProjectStatus.allprojects:
+                                  // TODO: Handle this case.
+                                  break;
+                              }
+                              return SizedBox(
+                                child: Padding(
+                                  padding: const EdgeInsets.only(
+                                      top: 20, bottom: 50),
+                                  child: Column(
+                                    mainAxisSize: MainAxisSize
+                                        .min, // Ensures the column takes only the necessary space
+                                    children: <Widget>[
+                                      const Text(
+                                        'Change Task Status to',
+                                        style: TextStyle(
+                                          fontSize: 14,
+                                          fontWeight: FontWeight.w700,
+                                        ),
+                                      ),
+                                      const SizedBox(
+                                        height: 20,
+                                      ),
+                                      ...availableStatuses
+                                          .map((ProjectStatus status) {
+                                        return ListTile(
+                                          title: Container(
+                                            decoration: BoxDecoration(
+                                                color: prosemibackColor,
+                                                borderRadius:
+                                                    BorderRadius.circular(15)),
+                                            padding: const EdgeInsets.symmetric(
+                                                horizontal: 10, vertical: 20),
+                                            child: Text(
+                                              status.displayTitle,
+                                              style: const TextStyle(
+                                                  fontSize: 14,
+                                                  color: textColor,
+                                                  fontWeight: FontWeight.w600),
+                                            ),
+                                          ),
+                                          onTap: () async {
+                                            Get.back();
+                                            setState(() {
+                                              projectController.statusProjects[
+                                                      widget.project.status]
+                                                  ?.remove(widget.project);
+                                              projectController
+                                                  .statusProjects[status]
+                                                  ?.add(
+                                                Project(
+                                                  id: widget.project.id,
+                                                  userId: widget.project.userId,
+                                                  name: widget.project.name,
+                                                  amount: widget.project.amount,
+                                                  status: status,
+                                                  createdAt:
+                                                      widget.project.createdAt,
+                                                  startAt:
+                                                      widget.project.startAt,
+                                                  endAt: widget.project.endAt,
+                                                  description: widget
+                                                      .project.description,
+                                                  duration:
+                                                      widget.project.duration,
+                                                ),
+                                              );
+                                            });
+
+                                            // Update the status in the database
+                                            await projectController
+                                                .updateProject(
+                                              widget.project.id,
+                                              <String, dynamic>{
+                                                'status': status.toString(),
+                                              },
+                                            );
+
+                                            await projectController
+                                                .initProjects(profileController
+                                                    .myProfile.uid);
+                                          },
+                                        );
+                                      }).toList(),
+                                    ],
+                                  ),
+                                ),
+                              );
+                            },
+                          );
+                        },
+                        child: Container(
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: 10, vertical: 5),
+                          decoration: BoxDecoration(
+                              color: widget.project.status.backgroundColor,
+                              borderRadius: BorderRadius.circular(20)),
+                          child: Center(
+                            child: Wrap(
+                                crossAxisAlignment: WrapCrossAlignment.center,
+                                children: <Widget>[
+                                  Text(
+                                    'Status - ${widget.project.status.displayTitle}',
+                                    style: TextStyle(
+                                        fontSize: 13,
+                                        color: widget
+                                            .project.status.backgroundColor
+                                            .withOpacity(1.0),
+                                        fontWeight: FontWeight.bold),
+                                  ),
+                                  const SizedBox(
+                                    width: 8,
+                                  ),
+                                  SvgPicture.asset(
+                                    'assets/svgs/dropdown.svg',
+                                    color: widget.project.status.backgroundColor
+                                        .withOpacity(1.0),
+                                  )
+                                ]),
                           ),
-                        )
-                      ],
-                    )
-                  ],
-                ),
+                        ),
+                      )
+                    ],
+                  )
+                ],
               ),
             ],
           ),
