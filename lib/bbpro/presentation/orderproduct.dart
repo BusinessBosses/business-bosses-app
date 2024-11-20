@@ -523,7 +523,6 @@ class _OrderProductScreenState extends State<OrderProductScreen>
                               'invoiceOption': 'send_with_payment_link',
                               'status': 'pending'
                             };
-                            print(orderData);
                             bool response =
                                 await orderController.addOrder(orderData);
                             if (response) {
