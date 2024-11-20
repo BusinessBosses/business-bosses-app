@@ -510,7 +510,8 @@ class _OrderProductScreenState extends State<OrderProductScreen>
                               'deliveryMethod': widget.product.deliveryMethod !=
                                           null &&
                                       widget.product.deliveryMethod!.isNotEmpty
-                                  ? widget.product.deliveryMethod!.toLowerCase()
+                                  ? getDeliveryMethod(
+                                      widget.product.deliveryMethod!)
                                   : 'online',
                               'deliveryDate': DateTime.now().toString(),
                               'paymentMethod': widget.product.paymentMethod !=
@@ -552,6 +553,16 @@ class _OrderProductScreenState extends State<OrderProductScreen>
         ),
       ),
     );
+  }
+
+  String getDeliveryMethod(String method) {
+    if (method == 'Online') {
+      return 'online';
+    } else if (method == 'Courier') {
+      return 'in_person';
+    } else {
+      return 'pickup';
+    }
   }
 
   // void _onClientSelect(String name) {

@@ -555,6 +555,14 @@ class _BookServiceScreenState extends State<BookServiceScreen>
     );
   }
 
+  String getDeliveryMethod(String method) {
+    if (method == 'Online') {
+      return 'online';
+    } else {
+      return 'in_person';
+    }
+  }
+
   // void _onClientSelect(String name) {
   //   final dynamic clientName = clients
   //       .firstWhere((Map<String, dynamic> element) => element['name'] == name);
