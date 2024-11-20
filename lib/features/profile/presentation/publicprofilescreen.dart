@@ -663,6 +663,7 @@ class _PublicProfileScreenState extends State<PublicProfileScreen> {
                     ),
                     UserShopScreen(
                       user: publicUser,
+                      ismyshop: false,
                     )
                   ]));
   }

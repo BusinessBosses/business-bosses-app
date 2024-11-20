@@ -23,7 +23,8 @@ import 'package:url_launcher/url_launcher.dart';
 
 class UserShopScreen extends StatefulWidget {
   final UserModel user;
-  const UserShopScreen({super.key, required this.user});
+  final bool? ismyshop;
+  const UserShopScreen({super.key, required this.user, this.ismyshop});
 
   @override
   State<UserShopScreen> createState() => _UserShopScreenState();
@@ -54,12 +55,14 @@ class _UserShopScreenState extends State<UserShopScreen> {
       appBar: AppBar(
         automaticallyImplyLeading: false,
         actions: <Widget>[
-          CircleAvatar(
-            backgroundColor: Colors.transparent,
-            child: IconButton(
-                onPressed: () {},
-                icon: SvgPicture.asset('assets/svgs/shopshare.svg')),
-          )
+          widget.ismyshop != null
+              ? Container()
+              : CircleAvatar(
+                  backgroundColor: Colors.transparent,
+                  child: IconButton(
+                      onPressed: () {},
+                      icon: SvgPicture.asset('assets/svgs/shopshare.svg')),
+                )
         ],
       ),
       body: loading
