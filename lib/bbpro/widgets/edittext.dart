@@ -65,7 +65,9 @@ class CustomEditText extends StatelessWidget {
             left: 15.0,
             top: 15,
             right: 15,
-            bottom: maxLength != null && maxLength! > 15 ? 15 : 0),
+            bottom: maxLength != null && maxLength! > 14 && maxLength! != 300
+                ? 0
+                : 15),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[

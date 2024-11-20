@@ -97,11 +97,13 @@ class _AddclientState extends State<Addclient> {
                     const SizedBox(height: 15),
                     CustomEditText(
                       caption: 'Client\'s Name',
+                      maxLength: 30,
                       hintText: 'Enter name here',
                       controller: nameController,
                     ),
                     const SizedBox(height: 15),
                     CustomEditText(
+                      maxLength: 30,
                       caption: 'Client\'s Email',
                       hintText: 'example@business.com',
                       controller: emailController,
@@ -111,6 +113,7 @@ class _AddclientState extends State<Addclient> {
                       caption: 'Client\'s Phone number',
                       hintText: '+448908654321',
                       controller: phoneController,
+                      maxLength: 30,
                     ),
                     const SizedBox(height: 15),
                     // CustomDropdownWidget(

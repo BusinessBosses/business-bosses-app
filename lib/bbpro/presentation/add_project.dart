@@ -225,6 +225,7 @@ class _AddprojectState extends State<Addproject> {
                   CustomEditText(
                     iscurrencyfield: true,
                     caption: 'Task Expenses',
+                    maxLength: 15,
                     hintText: '0.00',
                     controller: budgetController,
                     inputType: TextInputType.number,
@@ -234,6 +235,7 @@ class _AddprojectState extends State<Addproject> {
                     currencycontroller: currencyController,
                     iscurrencyfield: true,
                     caption: 'Task Expenses',
+                    maxLength: 15,
                     hintText: '0.00',
                     controller: budgetController,
                     inputType: TextInputType.number,

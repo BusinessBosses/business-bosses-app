@@ -184,6 +184,7 @@ class _AddSupplierState extends State<AddSupplier> {
                     ),
                     const SizedBox(height: 15),
                     CustomEditText(
+                      maxLength: 30,
                       caption: 'Supplier\'s Name',
                       hintText: 'Enter name here',
                       controller: nameController,
