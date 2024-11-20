@@ -141,6 +141,7 @@ class _CampaignpageState extends State<Campaignpage> {
         return SizedBox(
           height: MediaQuery.of(context).size.height * 0.9,
           child: ChooseClientBottomSheet(
+            isCampaign: true,
             onClientAdded: () {
               _loadClients();
             },

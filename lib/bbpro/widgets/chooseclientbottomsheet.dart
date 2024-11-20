@@ -14,6 +14,7 @@ class ChooseClientBottomSheet extends StatefulWidget {
   final List<Map<String, dynamic>> all;
   final String selectedItem;
   final VoidCallback? onClientAdded;
+  final bool? isCampaign;
 
   const ChooseClientBottomSheet({
     Key? key,
@@ -23,6 +24,7 @@ class ChooseClientBottomSheet extends StatefulWidget {
     required this.bbuser,
     this.onClientAdded,
     required this.all,
+    this.isCampaign,
   }) : super(key: key);
 
   @override
@@ -40,11 +42,16 @@ class _ChooseClientBottomSheetState extends State<ChooseClientBottomSheet>
   final TextEditingController currencyController = TextEditingController();
   final ShopController shopController = Get.find();
 
+  List<Map<String, dynamic>>? selectedItems = <Map<String, dynamic>>[];
+
   String _onlineSearchQuery = '';
   String _allSearchQuery = '';
   String _inpersonSearchQuery = '';
   String _bbuserSearchQuery = '';
-  String? selectedItem; // Local variable to track selected item
+  String? selectedItem;
+
+  final List<Map<String, dynamic>> _tempSelectedItems =
+      <Map<String, dynamic>>[];
 
   @override
   void initState() {
@@ -95,39 +102,40 @@ class _ChooseClientBottomSheetState extends State<ChooseClientBottomSheet>
             ],
           ),
           const SizedBox(height: 10),
-          CupertinoSlidingSegmentedControl<int>(
-            backgroundColor: probackgroundColor,
-            groupValue: _selectedIndex,
-            children: const <int, Widget>{
-              0: Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 5, vertical: 10),
-                  child: Text(
-                    'All',
-                    style: TextStyle(fontSize: 14),
-                  )),
-              1: Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 5, vertical: 10),
-                  child: Text(
-                    'Online',
-                    style: TextStyle(fontSize: 14),
-                  )),
-              2: Text(
-                'In-person',
-                style: TextStyle(fontSize: 14),
-              ),
-              3: Text(
-                'BB-User',
-                style: TextStyle(fontSize: 14),
-              ),
-            },
-            onValueChanged: (int? value) {
-              setState(() {
-                _selectedIndex = value!;
-                _tabController.animateTo(value);
-              });
-            },
-          ),
-          const SizedBox(height: 20),
+          if (widget.isCampaign == null)
+            CupertinoSlidingSegmentedControl<int>(
+              backgroundColor: probackgroundColor,
+              groupValue: _selectedIndex,
+              children: const <int, Widget>{
+                0: Padding(
+                    padding: EdgeInsets.symmetric(horizontal: 5, vertical: 10),
+                    child: Text(
+                      'All',
+                      style: TextStyle(fontSize: 14),
+                    )),
+                1: Padding(
+                    padding: EdgeInsets.symmetric(horizontal: 5, vertical: 10),
+                    child: Text(
+                      'Online',
+                      style: TextStyle(fontSize: 14),
+                    )),
+                2: Text(
+                  'In-person',
+                  style: TextStyle(fontSize: 14),
+                ),
+                3: Text(
+                  'BB-User',
+                  style: TextStyle(fontSize: 14),
+                ),
+              },
+              onValueChanged: (int? value) {
+                setState(() {
+                  _selectedIndex = value!;
+                  _tabController.animateTo(value);
+                });
+              },
+            ),
+          if (widget.isCampaign == null) const SizedBox(height: 20),
           Expanded(
             child: TabBarView(
               controller: _tabController,
@@ -137,24 +145,27 @@ class _ChooseClientBottomSheetState extends State<ChooseClientBottomSheet>
                     _allSearchQuery = query;
                   });
                 }),
-                _buildClientList(widget.online, _onlineSearchQuery,
-                    (String query) {
-                  setState(() {
-                    _onlineSearchQuery = query;
-                  });
-                }),
-                _buildClientList(widget.inperson, _inpersonSearchQuery,
-                    (String query) {
-                  setState(() {
-                    _inpersonSearchQuery = query;
-                  });
-                }),
-                _buildClientList(widget.bbuser, _bbuserSearchQuery,
-                    (String query) {
-                  setState(() {
-                    _bbuserSearchQuery = query;
-                  });
-                }),
+                if (widget.isCampaign == null)
+                  _buildClientList(widget.online, _onlineSearchQuery,
+                      (String query) {
+                    setState(() {
+                      _onlineSearchQuery = query;
+                    });
+                  }),
+                if (widget.isCampaign == null)
+                  _buildClientList(widget.inperson, _inpersonSearchQuery,
+                      (String query) {
+                    setState(() {
+                      _inpersonSearchQuery = query;
+                    });
+                  }),
+                if (widget.isCampaign == null)
+                  _buildClientList(widget.bbuser, _bbuserSearchQuery,
+                      (String query) {
+                    setState(() {
+                      _bbuserSearchQuery = query;
+                    });
+                  }),
               ],
             ),
           ),
