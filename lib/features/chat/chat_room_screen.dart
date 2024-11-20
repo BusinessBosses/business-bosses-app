@@ -668,8 +668,8 @@ class _ChatRoomScreenState extends State<ChatRoomScreen> {
                                 : const SizedBox(),
                             ListView.builder(
                               padding: const EdgeInsets.only(
-                                  left: 16.0,
-                                  right: 16.0,
+                                  left: 7.0,
+                                  right: 15.0,
                                   bottom: 75.0,
                                   top: 16.0),
                               reverse: true,
@@ -1059,13 +1059,12 @@ class SendMessageBox extends StatelessWidget {
           width: double.infinity,
           height: 70.0,
           alignment: Alignment.bottomCenter,
-          margin: const EdgeInsets.all(8.0),
+          margin: const EdgeInsets.all(0.0),
           child: Container(
             decoration: BoxDecoration(
-              color: hintColor,
+              color: Colors.white,
               borderRadius: BorderRadius.circular(25.0),
             ),
-            padding: const EdgeInsets.symmetric(horizontal: 5.0),
             child: Row(
               crossAxisAlignment: CrossAxisAlignment.end,
               children: <Widget>[
@@ -1085,6 +1084,8 @@ class SendMessageBox extends StatelessWidget {
                       maxLines: null,
                       decoration: messageBoxDecoration.copyWith(
                         hintText: 'Type your messages ...',
+                        filled: true,
+                        fillColor: Colors.white,
                       )),
                 ),
                 IconButton(
