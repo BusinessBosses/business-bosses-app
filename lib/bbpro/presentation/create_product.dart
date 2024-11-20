@@ -181,6 +181,7 @@ class _CreateProductListingState extends State<CreateProductListing> {
                     currencycontroller: currencycontroller,
                     caption: 'Price',
                     iscurrencyfield: true,
+                    maxLength: 15,
                     hintText: 'Enter price',
                     controller: _priceController,
                     inputType: TextInputType.number,
@@ -202,6 +203,7 @@ class _CreateProductListingState extends State<CreateProductListing> {
                       padding: 0,
                       caption: 'Discount',
                       hintText: 'Enter discount',
+                      maxLength: 15,
                       controller: _discountController,
                       inputType: TextInputType.number,
                       validator: (String? value) {
@@ -354,6 +356,7 @@ class _CreateProductListingState extends State<CreateProductListing> {
                 ),
               ),
             CustomEditText(
+              maxLength: 30,
               caption: 'Quantity',
               hintText: 'Enter quantity',
               inputType: TextInputType.number,
@@ -400,6 +403,7 @@ class _CreateProductListingState extends State<CreateProductListing> {
                   ),
                   const SizedBox(height: 16),
                   CustomEditText(
+                    maxLength: 30,
                     inputType:
                         const TextInputType.numberWithOptions(decimal: false),
                     caption: 'Delivery Duration (Days)',
@@ -422,12 +426,14 @@ class _CreateProductListingState extends State<CreateProductListing> {
                   ),
                   const SizedBox(height: 16),
                   CustomEditText(
+                    maxLength: 30,
                     caption: 'Storage Location',
                     hintText: 'Enter storage location',
                     controller: storageLocationController,
                   ),
                   const SizedBox(height: 16),
                   CustomEditText(
+                    maxLength: 30,
                     caption: 'Product Number',
                     hintText: 'Enter product number',
                     inputType: TextInputType.number,

@@ -271,6 +271,7 @@ class _CreateServiceListingState extends State<CreateServiceListing>
               children: <Widget>[
                 Expanded(
                   child: CustomEditText(
+                    maxLength: 15,
                     iscurrencyfield: true,
                     currencycontroller: currencyController,
                     caption: 'Price *',
@@ -283,6 +284,7 @@ class _CreateServiceListingState extends State<CreateServiceListing>
                   child: Padding(
                     padding: const EdgeInsets.only(right: 15.0),
                     child: CustomEditText(
+                      maxLength: 15,
                       padding: 0,
                       caption: 'Discount',
                       hintText: 'Enter discount',

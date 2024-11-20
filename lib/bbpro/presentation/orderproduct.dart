@@ -266,6 +266,7 @@ class _OrderProductScreenState extends State<OrderProductScreen>
                           height: 15,
                         ),
                         CustomEditText(
+                          maxLength: 30,
                           caption: 'Enter Quantity',
                           hintText: '1',
                           controller: quantityController,
