@@ -251,7 +251,7 @@ class _OrdersWidgetState extends State<OrdersWidget> {
                             ),
                             Indicator(
                               color: Colors.yellow,
-                              text: 'Pending',
+                              text: 'In-Progress',
                               value: int.parse(
                                   shopController.orderStats?.online != null
                                       ? shopController.orderStats!.pending

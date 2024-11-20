@@ -163,7 +163,7 @@ enum OrderStatus {
       case OrderStatus.allorders:
         return 'All Orders';
       case OrderStatus.pending:
-        return 'Pending';
+        return 'In-Progress';
       case OrderStatus.paid:
         return 'Paid';
       case OrderStatus.cancelled:
