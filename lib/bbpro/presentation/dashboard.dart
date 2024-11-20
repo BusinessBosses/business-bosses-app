@@ -244,11 +244,11 @@ class _DashboardState extends State<Dashboard> {
                                   Rect.fromPoints(
                                     button.localToGlobal(
                                         button.size
-                                            .topRight(const Offset(0, 170)),
+                                            .topRight(const Offset(0, 110)),
                                         ancestor: overlay),
                                     button.localToGlobal(
                                         button.size
-                                            .bottomRight(const Offset(0, 50)),
+                                            .bottomLeft(const Offset(0, 0)),
                                         ancestor: overlay),
                                   ),
                                   Offset.zero & overlay.size,
