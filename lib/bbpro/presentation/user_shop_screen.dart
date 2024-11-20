@@ -52,19 +52,22 @@ class _UserShopScreenState extends State<UserShopScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
-      appBar: AppBar(
-        automaticallyImplyLeading: false,
-        actions: <Widget>[
-          widget.ismyshop != null
-              ? Container()
-              : CircleAvatar(
-                  backgroundColor: Colors.transparent,
-                  child: IconButton(
-                      onPressed: () {},
-                      icon: SvgPicture.asset('assets/svgs/shopshare.svg')),
-                )
-        ],
-      ),
+      appBar: widget.ismyshop != null
+          ? null
+          : AppBar(
+              automaticallyImplyLeading: false,
+              actions: <Widget>[
+                widget.ismyshop != null
+                    ? Container()
+                    : CircleAvatar(
+                        backgroundColor: Colors.transparent,
+                        child: IconButton(
+                            onPressed: () {},
+                            icon:
+                                SvgPicture.asset('assets/svgs/shopshare.svg')),
+                      )
+              ],
+            ),
       body: loading
           ? const SafetyModel()
           : Obx(
@@ -80,9 +83,9 @@ class _UserShopScreenState extends State<UserShopScreen> {
                           SliverStickyHeader(
                               sticky: false,
                               header: Column(children: <Widget>[
-                                const SizedBox(
-                                  height: 10.0,
-                                ),
+                                // const SizedBox(
+                                //   height: 10.0,
+                                // ),
                                 Stack(children: <Widget>[
                                   SizedBox(
                                     height: 100,
