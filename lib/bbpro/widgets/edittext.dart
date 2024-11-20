@@ -1,5 +1,6 @@
 import 'package:business_bosses_v2/utils/theme/theme.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/svg.dart';
 
 class CustomEditText extends StatelessWidget {
   final String caption;
@@ -25,6 +26,7 @@ class CustomEditText extends StatelessWidget {
   final void Function(String)? onChanged;
   final double? padding;
   final bool? ispaymentfield;
+  final bool? issl;
 
   const CustomEditText({
     super.key,
@@ -51,6 +53,7 @@ class CustomEditText extends StatelessWidget {
     this.pmh2,
     this.pmh3,
     this.pmh4,
+    this.issl,
   });
 
   @override
@@ -165,38 +168,106 @@ class CustomEditText extends StatelessWidget {
             if (ispaymentfield == true)
               Column(children: <Widget>[
                 const SizedBox(
-                  height: 20,
+                  height: 10,
                 ),
-                TextFormField(
-                  style: const TextStyle(fontSize: 13),
-                  maxLines: 1,
-                  decoration: InputDecoration(
-                    hintText: pmh1,
-                    border: InputBorder.none,
+                if (pmh1 != null)
+                  Row(
+                    children: <Widget>[
+                      if (issl != null)
+                        SvgPicture.asset(
+                          'assets/svgs/igsl.svg',
+                          height: 15,
+                        ),
+                      if (issl != null)
+                        const SizedBox(
+                          width: 10,
+                        ),
+                      Expanded(
+                        child: TextFormField(
+                          controller: pm1controller,
+                          style: const TextStyle(fontSize: 13),
+                          maxLines: 1,
+                          decoration: InputDecoration(
+                            hintText: pmh1,
+                            border: InputBorder.none,
+                          ),
+                        ),
+                      ),
+                    ],
                   ),
-                ),
-                TextFormField(
-                  style: const TextStyle(fontSize: 13),
-                  maxLines: 1,
-                  decoration: InputDecoration(
-                    hintText: pmh2,
-                    border: InputBorder.none,
+                if (pmh2 != null)
+                  Row(
+                    children: <Widget>[
+                      if (issl != null)
+                        SvgPicture.asset(
+                          'assets/svgs/fbsl.svg',
+                          height: 15,
+                        ),
+                      if (issl != null)
+                        const SizedBox(
+                          width: 10,
+                        ),
+                      Expanded(
+                        child: TextFormField(
+                          controller: pm2controller,
+                          style: const TextStyle(fontSize: 13),
+                          maxLines: 1,
+                          decoration: InputDecoration(
+                            hintText: pmh2,
+                            border: InputBorder.none,
+                          ),
+                        ),
+                      ),
+                    ],
                   ),
-                ),
-                TextFormField(
-                    style: const TextStyle(fontSize: 13),
-                    maxLines: 1,
-                    decoration: InputDecoration(
-                      hintText: pmh3,
-                      border: InputBorder.none,
-                    )),
-                TextFormField(
-                    style: const TextStyle(fontSize: 13),
-                    maxLines: 1,
-                    decoration: InputDecoration(
-                      hintText: pmh4,
-                      border: InputBorder.none,
-                    ))
+                if (pmh3 != null)
+                  Row(
+                    children: <Widget>[
+                      if (issl != null)
+                        SvgPicture.asset(
+                          'assets/svgs/lsl.svg',
+                          height: 15,
+                        ),
+                      if (issl != null)
+                        const SizedBox(
+                          width: 10,
+                        ),
+                      Expanded(
+                        child: TextFormField(
+                            controller: pm3controller,
+                            style: const TextStyle(fontSize: 13),
+                            maxLines: 1,
+                            decoration: InputDecoration(
+                              hintText: pmh3,
+                              border: InputBorder.none,
+                            )),
+                      ),
+                    ],
+                  ),
+                if (pmh4 != null)
+                  Row(
+                    children: <Widget>[
+                      if (issl != null)
+                        SvgPicture.asset(
+                          'assets/svgs/xsl.svg',
+                          height: 15,
+                        ),
+                      if (issl != null)
+                        const SizedBox(
+                          width: 10,
+                        ),
+                      Expanded(
+                        child: TextFormField(
+                            controller: pm4controller,
+                            style: const TextStyle(fontSize: 13),
+                            maxLines: 1,
+                            decoration: InputDecoration(
+                              hintText: pmh4,
+                              border: InputBorder.none,
+                            )),
+                      ),
+                    ],
+                  )
               ])
           ],
         ),

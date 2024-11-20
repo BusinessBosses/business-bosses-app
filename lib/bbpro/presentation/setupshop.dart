@@ -8,6 +8,7 @@ import 'package:business_bosses_v2/bbpro/widgets/selectionboxes.dart';
 import 'package:business_bosses_v2/bbpro/widgets/textfield.dart';
 import 'package:business_bosses_v2/bbpro/controllers/shop_controller.dart';
 import 'package:business_bosses_v2/common/dialogs/snackbar.dart';
+import 'package:business_bosses_v2/common/models/api_response_model.dart';
 import 'package:business_bosses_v2/features/marketplace/widgets/currency.dart';
 import 'package:business_bosses_v2/features/profile/controller/profile_controller.dart';
 import 'package:business_bosses_v2/features/profile/presentation/update_profile_screen.dart';
@@ -42,6 +43,11 @@ class _SetupshopState extends State<Setupshop> with TickerProviderStateMixin {
   final TextEditingController phoneController = TextEditingController();
   final TextEditingController emailController = TextEditingController();
   final TextEditingController cashController = TextEditingController();
+
+  final TextEditingController igslController = TextEditingController();
+  final TextEditingController fbslController = TextEditingController();
+  final TextEditingController lslController = TextEditingController();
+  final TextEditingController xslController = TextEditingController();
   String? _selectedLocation;
   File? _selectedImage;
   bool loading = true;
@@ -197,7 +203,10 @@ class _SetupshopState extends State<Setupshop> with TickerProviderStateMixin {
     super.initState();
     _viewController =
         TabController(length: widget.shop != null ? 2 : 1, vsync: this);
-
+    fbslController.text = widget.shop!.user!.instagram!;
+    igslController.text = widget.shop!.user!.instagram!;
+    lslController.text = widget.shop!.user!.instagram!;
+    xslController.text = widget.shop!.user!.twitter!;
     if (widget.shop != null) {
       nameController.text = widget.shop!.name;
       descriptionController.text = widget.shop!.description;
@@ -452,9 +461,11 @@ class _SetupshopState extends State<Setupshop> with TickerProviderStateMixin {
                       hintText: '+448908654321',
                       controller: phoneController,
                       caption: 'Phone Number',
+                      maxLength: 30,
                     ),
                     const SizedBox(height: 15),
                     CustomEditText(
+                      maxLength: 30,
                       optionalText: RichText(
                         text: const TextSpan(
                           children: <InlineSpan>[
@@ -528,6 +539,9 @@ class _SetupshopState extends State<Setupshop> with TickerProviderStateMixin {
                         useSafeArea: false,
                       ),
                     ),
+                    const SizedBox(
+                      height: 10,
+                    ),
                     GestureDetector(
                       onTap: () {
                         _showBottomSheet(context, () {
@@ -546,6 +560,25 @@ class _SetupshopState extends State<Setupshop> with TickerProviderStateMixin {
                             .toList()
                             .join(', '),
                       ),
+                    ),
+                    const SizedBox(
+                      height: 15,
+                    ),
+                    CustomEditText(
+                      maxLength: 300,
+                      ispaymentfield: true,
+                      issl: true,
+                      caption: 'Social Links',
+                      hintText: '',
+                      controller: bankController,
+                      pmh1: 'Instagram',
+                      pmh2: 'Facebook',
+                      pmh3: 'Linkedin',
+                      pmh4: 'X',
+                      pm1controller: igslController,
+                      pm2controller: fbslController,
+                      pm3controller: lslController,
+                      pm4controller: xslController,
                     ),
                     const SizedBox(
                       height: 30,
@@ -652,7 +685,18 @@ class _SetupshopState extends State<Setupshop> with TickerProviderStateMixin {
           : 'USD',
       'paymentMethods': paymentMethods,
     };
+
+    Map<String, dynamic> sociallinkupdateData = <String, dynamic>{
+      'instagram': igslController.text,
+      'twitter': xslController.text,
+      'facebook': fbslController.text,
+      'linkedin': lslController.text,
+    };
+
+    final String userId = profileController.myProfile.uid;
+
     bool response = false;
+
     if (widget.shop != null) {
       response = await shopController.updateShop(widget.shop!.id, dataUpdate);
     } else {

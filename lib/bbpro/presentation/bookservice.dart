@@ -455,6 +455,7 @@ class _BookServiceScreenState extends State<BookServiceScreen>
                                       controller: phoneController,
                                       style: const TextStyle(fontSize: 13),
                                       maxLines: 1,
+                                      maxLength: 30,
                                       decoration: InputDecoration(
                                         border: InputBorder.none,
                                         hintText: 'Phone Number',

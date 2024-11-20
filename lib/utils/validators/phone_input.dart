@@ -73,6 +73,7 @@ class PhoneNumberInput extends StatelessWidget {
           validator: Validator.phoneValidator,
           keyboardType: TextInputType.phone,
           textInputAction: TextInputAction.next,
+          maxLength: 30,
           decoration: inputDecoration.copyWith(
             hintText: 'Enter phone number',
             hintStyle: const TextStyle(

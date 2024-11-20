@@ -269,6 +269,7 @@ class _AddSupplierState extends State<AddSupplier> {
                       caption: 'Phone number',
                       hintText: '+448908654321',
                       controller: phoneController,
+                      maxLength: 30,
                     ),
                     const SizedBox(height: 15),
                     const SizedBox(height: 150),
