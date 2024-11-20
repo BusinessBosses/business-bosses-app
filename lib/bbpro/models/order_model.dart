@@ -167,7 +167,7 @@ enum OrderStatus {
       case OrderStatus.paid:
         return 'Paid';
       case OrderStatus.cancelled:
-        return 'Cancelled';
+        return 'Completed';
     }
   }
 

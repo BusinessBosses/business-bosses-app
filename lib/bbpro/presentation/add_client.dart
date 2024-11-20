@@ -109,7 +109,7 @@ class _AddclientState extends State<Addclient> {
                     const SizedBox(height: 15),
                     CustomEditText(
                       caption: 'Client\'s Phone number',
-                      hintText: '+234 000 000 000',
+                      hintText: '+448908654321',
                       controller: phoneController,
                     ),
                     const SizedBox(height: 15),

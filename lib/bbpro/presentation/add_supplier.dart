@@ -266,7 +266,7 @@ class _AddSupplierState extends State<AddSupplier> {
                     const SizedBox(height: 15),
                     CustomEditText(
                       caption: 'Phone number',
-                      hintText: '+234 000 000 000',
+                      hintText: '+448908654321',
                       controller: phoneController,
                     ),
                     const SizedBox(height: 15),

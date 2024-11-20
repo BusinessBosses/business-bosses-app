@@ -223,7 +223,7 @@ class _MyProfileScreenState extends State<MyProfileScreen> {
                                               market.userId ==
                                               profileController.myProfile.uid)
                                           .isNotEmpty)
-                                        const Tab(text: 'Shop'),
+                                        const Tab(text: 'Listing'),
                                       if (homeController
                                           .userresources.isNotEmpty)
                                         const Tab(text: 'Resources'),
@@ -371,7 +371,7 @@ class _MyProfileScreenState extends State<MyProfileScreen> {
                                                             height: 10,
                                                           ),
                                                           const Text(
-                                                            'No Items Found in your Shop',
+                                                            'No items found in your listing',
                                                             style: TextStyle(
                                                               fontWeight:
                                                                   FontWeight

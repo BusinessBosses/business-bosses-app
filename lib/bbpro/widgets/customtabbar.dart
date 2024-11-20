@@ -11,6 +11,7 @@ class CustomTabBarWidget<T> extends StatefulWidget {
   final String Function(T) itemToString;
   final String? selectedFilter;
   final List<String>? filterOptions;
+  final int? initialposition;
   final VoidCallback? filterontap;
   final ValueChanged<String?>?
       onFilterSelected; // New callback for selected filter
@@ -26,7 +27,8 @@ class CustomTabBarWidget<T> extends StatefulWidget {
     this.filterOptions,
     this.filterontap,
     this.selectedFilter,
-    this.onFilterSelected, // Initialize the new callback
+    this.onFilterSelected,
+    this.initialposition, // Initialize the new callback
   })  : _tabController = tabController,
         _scrollToSection = scrollToSection;
 
@@ -36,6 +38,15 @@ class CustomTabBarWidget<T> extends StatefulWidget {
 
 class _CustomTabBarWidgetState<T> extends State<CustomTabBarWidget<T>> {
   String? selectedFilter;
+
+  @override
+  void initState() {
+    super.initState();
+    selectedFilter = widget.selectedFilter;
+    if (widget.initialposition != null) {
+      widget._tabController.animateTo(widget.initialposition!);
+    }
+  }
 
   @override
   Widget build(BuildContext context) {

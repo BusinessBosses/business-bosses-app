@@ -449,7 +449,7 @@ class _SetupshopState extends State<Setupshop> with TickerProviderStateMixin {
                           ],
                         ),
                       ),
-                      hintText: '+234 000 000 000',
+                      hintText: '+448908654321',
                       controller: phoneController,
                       caption: 'Phone Number',
                     ),

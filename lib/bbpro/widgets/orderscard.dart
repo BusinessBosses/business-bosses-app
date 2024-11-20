@@ -275,7 +275,7 @@ class _OrdersWidgetState extends State<OrdersWidget> {
                             ),
                             Indicator(
                               color: Colors.red,
-                              text: 'Cancelled',
+                              text: 'Completed',
                               value: int.parse(
                                   shopController.orderStats?.online != null
                                       ? shopController.orderStats!.cancelled

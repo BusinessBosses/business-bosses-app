@@ -15,8 +15,10 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 
 class Projects extends StatefulWidget {
+  final int? initialposition;
   const Projects({
     super.key,
+    this.initialposition,
   });
 
   @override
@@ -135,6 +137,7 @@ class _ProjectsState extends State<Projects>
             height: 10,
           ),
           CustomTabBarWidget<ProjectStatus>(
+            initialposition: widget.initialposition ?? 0,
             tabController: _tabController,
             scrollToSection: (int index) {
               _scrollToSection(index);

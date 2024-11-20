@@ -62,7 +62,7 @@ class _OrderWidgetState extends State<OrderWidget> {
                       Container(
                         decoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(3),
-                            color: widget.bgcolor),
+                            color: probackgroundColor),
                         padding: const EdgeInsets.symmetric(
                             horizontal: 10, vertical: 5),
                         child: Wrap(
@@ -375,15 +375,15 @@ class _OrderWidgetState extends State<OrderWidget> {
                           padding: const EdgeInsets.symmetric(
                               horizontal: 10, vertical: 5),
                           decoration: BoxDecoration(
-                              color: prosemibackColor,
+                              color: widget.order.status.backgroundColor,
                               borderRadius: BorderRadius.circular(20)),
                           child: Center(
                             child: Wrap(
                                 crossAxisAlignment: WrapCrossAlignment.center,
                                 children: <Widget>[
-                                  const Text(
-                                    'Change Order Status',
-                                    style: TextStyle(
+                                  Text(
+                                    'Status - ${widget.order.status.displayTitle}',
+                                    style: const TextStyle(
                                         fontSize: 13,
                                         color: proprimaryColor,
                                         fontWeight: FontWeight.bold),

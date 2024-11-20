@@ -94,7 +94,7 @@ enum ProjectStatus {
       case ProjectStatus.todo:
         return 'To Do';
       case ProjectStatus.pending:
-        return 'Pending';
+        return 'In-Progress';
       case ProjectStatus.completed:
         return 'Completed';
     }
