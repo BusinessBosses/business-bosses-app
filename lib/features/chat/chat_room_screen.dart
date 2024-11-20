@@ -114,7 +114,7 @@ class _ChatRoomScreenState extends State<ChatRoomScreen> {
               ],
               leading: previousScreen == '/bottomNavScreen'
                   ? Padding(
-                      padding: const EdgeInsets.only(top: 20.0),
+                      padding: const EdgeInsets.only(top: 0.0),
                       child: Container(
                         alignment: Alignment.topCenter,
                         child: IconButton(
@@ -238,8 +238,8 @@ class _ChatRoomScreenState extends State<ChatRoomScreen> {
                     ),
                     leading: UserAvatarWithBadge(
                       user: args,
-                      height: 52.0,
-                      width: 52.0,
+                      height: 40.0,
+                      width: 40.0,
                       radius: 50.0,
                       placeHolder: Icons.person,
                       iconSize: 36.0,
