@@ -4,6 +4,7 @@ import 'package:business_bosses_v2/bbpro/presentation/add_client.dart';
 import 'package:business_bosses_v2/bbpro/presentation/add_project.dart';
 import 'package:business_bosses_v2/bbpro/presentation/add_supplier.dart';
 import 'package:business_bosses_v2/bbpro/presentation/bottomnavscreen.dart';
+import 'package:business_bosses_v2/bbpro/presentation/campaignpage.dart';
 import 'package:business_bosses_v2/bbpro/presentation/create_product.dart';
 import 'package:business_bosses_v2/bbpro/presentation/create_service.dart';
 import 'package:business_bosses_v2/bbpro/presentation/create_order.dart';
@@ -154,10 +155,69 @@ class _DashboardState extends State<Dashboard> {
                   const Expanded(child: GotoshopWidget()),
                   Row(
                     children: <Widget>[
-                      GestureDetector(
-                        onTap: () {
-                          Get.to(() => const ChatScreen());
+                      PopupMenuButton(
+                        onSelected: (String item) {
+                          switch (item) {
+                            case 'Item 1':
+                              Get.to(const ChatScreen());
+                              break;
+                            case 'Item 2':
+                              Get.to(const Campaignpage());
+                              break;
+                          }
                         },
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(10.0),
+                        ),
+                        itemBuilder: (BuildContext context) {
+                          return <PopupMenuEntry<String>>[
+                            PopupMenuItem<String>(
+                              value: 'Item 1',
+                              child: Row(
+                                children: <Widget>[
+                                  SvgPicture.asset(
+                                    'assets/svgs/newchat.svg',
+                                    colorFilter: const ColorFilter.mode(
+                                      textColor,
+                                      BlendMode.srcIn,
+                                    ),
+                                    height: 18,
+                                  ),
+                                  const SizedBox(width: 8),
+                                  const Text(
+                                    'Start a chat',
+                                    style: TextStyle(
+                                      fontSize: 13,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                            PopupMenuItem<String>(
+                              value: 'Item 2',
+                              child: Row(
+                                children: <Widget>[
+                                  SvgPicture.asset(
+                                    'assets/svgs/megaphone.svg',
+                                    height: 18,
+                                    colorFilter: const ColorFilter.mode(
+                                      textColor,
+                                      BlendMode.srcIn,
+                                    ),
+                                  ),
+                                  const SizedBox(width: 8),
+                                  const Text(
+                                    'Create new Campaign',
+                                    style: TextStyle(
+                                      fontSize: 13,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ];
+                        },
+                        offset: const Offset(50, 50),
                         child: Padding(
                           padding: const EdgeInsets.only(
                             right: 10.0,

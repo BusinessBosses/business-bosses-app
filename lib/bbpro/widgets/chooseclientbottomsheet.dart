@@ -11,6 +11,7 @@ class ChooseClientBottomSheet extends StatefulWidget {
   final List<Map<String, dynamic>> online;
   final List<Map<String, dynamic>> inperson;
   final List<Map<String, dynamic>> bbuser;
+  final List<Map<String, dynamic>> all;
   final String selectedItem;
   final VoidCallback? onClientAdded;
 
@@ -21,6 +22,7 @@ class ChooseClientBottomSheet extends StatefulWidget {
     required this.inperson,
     required this.bbuser,
     this.onClientAdded,
+    required this.all,
   }) : super(key: key);
 
   @override
@@ -39,6 +41,7 @@ class _ChooseClientBottomSheetState extends State<ChooseClientBottomSheet>
   final ShopController shopController = Get.find();
 
   String _onlineSearchQuery = '';
+  String _allSearchQuery = '';
   String _inpersonSearchQuery = '';
   String _bbuserSearchQuery = '';
   String? selectedItem; // Local variable to track selected item
@@ -46,7 +49,7 @@ class _ChooseClientBottomSheetState extends State<ChooseClientBottomSheet>
   @override
   void initState() {
     super.initState();
-    _tabController = TabController(length: 3, vsync: this);
+    _tabController = TabController(length: 4, vsync: this);
     _tabController.addListener(() {
       setState(() {
         _selectedIndex = _tabController.index;
@@ -99,14 +102,20 @@ class _ChooseClientBottomSheetState extends State<ChooseClientBottomSheet>
               0: Padding(
                   padding: EdgeInsets.symmetric(horizontal: 5, vertical: 10),
                   child: Text(
+                    'All',
+                    style: TextStyle(fontSize: 14),
+                  )),
+              1: Padding(
+                  padding: EdgeInsets.symmetric(horizontal: 5, vertical: 10),
+                  child: Text(
                     'Online',
                     style: TextStyle(fontSize: 14),
                   )),
-              1: Text(
+              2: Text(
                 'In-person',
                 style: TextStyle(fontSize: 14),
               ),
-              2: Text(
+              3: Text(
                 'BB-User',
                 style: TextStyle(fontSize: 14),
               ),
@@ -123,6 +132,11 @@ class _ChooseClientBottomSheetState extends State<ChooseClientBottomSheet>
             child: TabBarView(
               controller: _tabController,
               children: <Widget>[
+                _buildClientList(widget.all, _allSearchQuery, (String query) {
+                  setState(() {
+                    _allSearchQuery = query;
+                  });
+                }),
                 _buildClientList(widget.online, _onlineSearchQuery,
                     (String query) {
                   setState(() {

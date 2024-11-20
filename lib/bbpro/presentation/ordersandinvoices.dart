@@ -2,10 +2,12 @@ import 'dart:async';
 
 import 'package:business_bosses_v2/action/action.dart';
 import 'package:business_bosses_v2/bbpro/controllers/shop_controller.dart';
+import 'package:business_bosses_v2/bbpro/presentation/campaignpage.dart';
 import 'package:business_bosses_v2/bbpro/widgets/iconbutton.dart';
 import 'package:business_bosses_v2/bbpro/widgets/notificationbutton.dart';
 import 'package:business_bosses_v2/bbpro/widgets/proseardwidget.dart';
 import 'package:business_bosses_v2/common/widgets/safety_model.dart';
+import 'package:business_bosses_v2/features/chat/chat_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
@@ -93,17 +95,69 @@ class _OrdersScreenState extends State<OrdersScreen>
                     text: 'Create Order',
                   ),
                 ),
-                GestureDetector(
-                  onTap: () {
-                    if (clientsController.clients.isEmpty) {
-                      showSnackBar(
-                        context,
-                        message: 'You have to add a client to create order!',
-                      );
-                      return;
+                PopupMenuButton(
+                  onSelected: (String item) {
+                    switch (item) {
+                      case 'Item 1':
+                        Get.to(const ChatScreen());
+                        break;
+                      case 'Item 2':
+                        Get.to(const Campaignpage());
+                        break;
                     }
-                    Get.to(() => const CreateOrder());
                   },
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(10.0),
+                  ),
+                  itemBuilder: (BuildContext context) {
+                    return <PopupMenuEntry<String>>[
+                      PopupMenuItem<String>(
+                        value: 'Item 1',
+                        child: Row(
+                          children: <Widget>[
+                            SvgPicture.asset(
+                              'assets/svgs/newchat.svg',
+                              colorFilter: const ColorFilter.mode(
+                                textColor,
+                                BlendMode.srcIn,
+                              ),
+                              height: 18,
+                            ),
+                            const SizedBox(width: 8),
+                            const Text(
+                              'Start a chat',
+                              style: TextStyle(
+                                fontSize: 13,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                      PopupMenuItem<String>(
+                        value: 'Item 2',
+                        child: Row(
+                          children: <Widget>[
+                            SvgPicture.asset(
+                              'assets/svgs/megaphone.svg',
+                              height: 18,
+                              colorFilter: const ColorFilter.mode(
+                                textColor,
+                                BlendMode.srcIn,
+                              ),
+                            ),
+                            const SizedBox(width: 8),
+                            const Text(
+                              'Create new Campaign',
+                              style: TextStyle(
+                                fontSize: 13,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ];
+                  },
+                  offset: const Offset(50, 50),
                   child: Padding(
                     padding: const EdgeInsets.only(
                       right: 10.0,

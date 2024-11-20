@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'package:business_bosses_v2/bbpro/models/project_model.dart';
+import 'package:business_bosses_v2/bbpro/presentation/campaignpage.dart';
 import 'package:business_bosses_v2/bbpro/widgets/customtabbar.dart';
 import 'package:business_bosses_v2/bbpro/widgets/iconbutton.dart';
 import 'package:business_bosses_v2/bbpro/widgets/notificationbutton.dart';
@@ -109,10 +110,69 @@ class _ProjectsState extends State<Projects>
                   text: 'Add Tasks',
                 ),
               ),
-              GestureDetector(
-                onTap: () {
-                  Get.to(() => const ChatScreen());
+              PopupMenuButton(
+                onSelected: (String item) {
+                  switch (item) {
+                    case 'Item 1':
+                      Get.to(const ChatScreen());
+                      break;
+                    case 'Item 2':
+                      Get.to(const Campaignpage());
+                      break;
+                  }
                 },
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(10.0),
+                ),
+                itemBuilder: (BuildContext context) {
+                  return <PopupMenuEntry<String>>[
+                    PopupMenuItem<String>(
+                      value: 'Item 1',
+                      child: Row(
+                        children: <Widget>[
+                          SvgPicture.asset(
+                            'assets/svgs/newchat.svg',
+                            colorFilter: const ColorFilter.mode(
+                              textColor,
+                              BlendMode.srcIn,
+                            ),
+                            height: 18,
+                          ),
+                          const SizedBox(width: 8),
+                          const Text(
+                            'Start a chat',
+                            style: TextStyle(
+                              fontSize: 13,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                    PopupMenuItem<String>(
+                      value: 'Item 2',
+                      child: Row(
+                        children: <Widget>[
+                          SvgPicture.asset(
+                            'assets/svgs/megaphone.svg',
+                            height: 18,
+                            colorFilter: const ColorFilter.mode(
+                              textColor,
+                              BlendMode.srcIn,
+                            ),
+                          ),
+                          const SizedBox(width: 8),
+                          const Text(
+                            'Create new Campaign',
+                            style: TextStyle(
+                              fontSize: 13,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ];
+                },
+                offset: const Offset(50, 50),
                 child: Padding(
                   padding: const EdgeInsets.only(
                     right: 10.0,

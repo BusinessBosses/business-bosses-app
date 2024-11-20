@@ -125,6 +125,7 @@ class _CreateOrderState extends State<CreateOrder> {
                 .where((Map<String, dynamic> client) =>
                     client['type'].toString() == 'ClientType.bbUser')
                 .toList(),
+            all: clients,
           ),
         );
       },
