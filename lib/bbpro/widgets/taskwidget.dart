@@ -57,7 +57,7 @@ class _TaskWidgetState extends State<TaskWidget> {
                   Container(
                     decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(3),
-                        color: probackgroundColor),
+                        color: backgroundColor),
                     padding:
                         const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
                     child: Wrap(
@@ -73,13 +73,6 @@ class _TaskWidgetState extends State<TaskWidget> {
                           ),
                           Text(
                             widget.project.name,
-                            style: const TextStyle(
-                              fontWeight: FontWeight.bold,
-                              fontSize: 13,
-                            ),
-                          ),
-                          Text(
-                            ' - ${widget.project.status.displayTitle}',
                             style: const TextStyle(
                               fontWeight: FontWeight.bold,
                               fontSize: 13,
