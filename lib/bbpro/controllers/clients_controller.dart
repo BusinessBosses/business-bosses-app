@@ -61,6 +61,16 @@ class ClientsController extends GetxController {
     }
   }
 
+  Future<bool> sendCampaign(Map<String, dynamic> data) async {
+    ApiResponseModel response = await ApiService.post(
+        path: 'client-notifications/broadcast', body: data);
+    if (response.success) {
+      return true;
+    } else {
+      return false;
+    }
+  }
+
   Future<bool> updateClient(String id, Map<String, dynamic> data) async {
     ApiResponseModel response =
         await ApiService.put(path: 'clients/$id', body: data);

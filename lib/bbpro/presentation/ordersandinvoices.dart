@@ -2,7 +2,7 @@ import 'dart:async';
 
 import 'package:business_bosses_v2/action/action.dart';
 import 'package:business_bosses_v2/bbpro/controllers/shop_controller.dart';
-import 'package:business_bosses_v2/bbpro/presentation/campaignpage.dart';
+import 'package:business_bosses_v2/bbpro/presentation/campaign_page.dart';
 import 'package:business_bosses_v2/bbpro/widgets/iconbutton.dart';
 import 'package:business_bosses_v2/bbpro/widgets/notificationbutton.dart';
 import 'package:business_bosses_v2/bbpro/widgets/proseardwidget.dart';

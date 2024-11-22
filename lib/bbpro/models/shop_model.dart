@@ -15,6 +15,10 @@ class Shop {
   final int? promotionDuration;
   final bool? approved;
   final String? plan;
+  final String? facebook;
+  final String? twitter;
+  final String? linkedin;
+  final String? instagram;
   final DateTime createdAt;
   final String currency;
   final UserModel? user;
@@ -37,6 +41,10 @@ class Shop {
     required this.currency,
     required this.createdAt,
     this.user,
+    this.facebook,
+    this.twitter,
+    this.linkedin,
+    this.instagram,
   });
 
   factory Shop.fromMap(Map<String, dynamic> json) {
@@ -57,6 +65,10 @@ class Shop {
       approved: json['approved'] ?? false,
       plan: json['plan'],
       currency: json['currency'],
+      facebook: json['facebook'],
+      twitter: json['twitter'],
+      linkedin: json['linkedin'],
+      instagram: json['instagram'],
       createdAt: DateTime.parse(json['createdAt']),
       user: json['user'] != null ? UserModel.fromMap(json['user']) : null,
     );
@@ -79,6 +91,10 @@ class Shop {
       'approved': approved,
       'plan': plan,
       'currency': currency,
+      'facebook': facebook,
+      'twitter': twitter,
+      'instagram': instagram,
+      'linkedin': linkedin,
       'createdAt': createdAt.toIso8601String(),
       'user': user?.toMap(),
     };

@@ -8,14 +8,11 @@ import 'package:business_bosses_v2/bbpro/widgets/selectionboxes.dart';
 import 'package:business_bosses_v2/bbpro/widgets/textfield.dart';
 import 'package:business_bosses_v2/bbpro/controllers/shop_controller.dart';
 import 'package:business_bosses_v2/common/dialogs/snackbar.dart';
-import 'package:business_bosses_v2/common/models/api_response_model.dart';
 import 'package:business_bosses_v2/features/marketplace/widgets/currency.dart';
 import 'package:business_bosses_v2/features/profile/controller/profile_controller.dart';
-import 'package:business_bosses_v2/features/profile/presentation/update_profile_screen.dart';
 import 'package:business_bosses_v2/services/api_service.dart';
 import 'package:business_bosses_v2/utils/theme/theme.dart';
 import 'package:country_list_pick/country_list_pick.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
@@ -33,6 +30,7 @@ class Setupshop extends StatefulWidget {
 
 class _SetupshopState extends State<Setupshop> with TickerProviderStateMixin {
   final ShopController shopController = Get.find();
+  // ignore: unused_field
   late TabController _viewController;
   final ProfileController profileController = Get.find();
   final TextEditingController nameController = TextEditingController();
@@ -203,10 +201,6 @@ class _SetupshopState extends State<Setupshop> with TickerProviderStateMixin {
     super.initState();
     _viewController =
         TabController(length: widget.shop != null ? 2 : 1, vsync: this);
-    fbslController.text = widget.shop!.user!.instagram!;
-    igslController.text = widget.shop!.user!.instagram!;
-    lslController.text = widget.shop!.user!.instagram!;
-    xslController.text = widget.shop!.user!.twitter!;
     if (widget.shop != null) {
       nameController.text = widget.shop!.name;
       descriptionController.text = widget.shop!.description;
@@ -214,6 +208,10 @@ class _SetupshopState extends State<Setupshop> with TickerProviderStateMixin {
       emailController.text = widget.shop!.email;
       _selectedLocation = widget.shop!.location;
       image = widget.shop!.image;
+      fbslController.text = widget.shop!.facebook ?? '';
+      igslController.text = widget.shop!.instagram ?? '';
+      lslController.text = widget.shop!.linkedin ?? '';
+      xslController.text = widget.shop!.twitter ?? '';
       _populatePaymentMethods(widget.shop!.payments);
     } else {
       shopController.initShop().then((bool value) {
@@ -670,7 +668,11 @@ class _SetupshopState extends State<Setupshop> with TickerProviderStateMixin {
       'currency': _selectedLocation != null
           ? '${currencyValues[_selectedLocation.toString()]}'
           : 'USD',
-      'details': 'Some additional details about the shop'
+      'details': 'Some additional details about the shop',
+      'instagram': igslController.text,
+      'twitter': xslController.text,
+      'facebook': fbslController.text,
+      'linkedin': lslController.text,
     };
 
     final Map<String, dynamic> dataUpdate = <String, dynamic>{
@@ -684,16 +686,11 @@ class _SetupshopState extends State<Setupshop> with TickerProviderStateMixin {
           ? '${currencyValues[_selectedLocation.toString()]}'
           : 'USD',
       'paymentMethods': paymentMethods,
-    };
-
-    Map<String, dynamic> sociallinkupdateData = <String, dynamic>{
       'instagram': igslController.text,
       'twitter': xslController.text,
       'facebook': fbslController.text,
       'linkedin': lslController.text,
     };
-
-    final String userId = profileController.myProfile.uid;
 
     bool response = false;
 
