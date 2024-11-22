@@ -93,6 +93,12 @@ class ShopController extends GetxController {
           ...response.data['rows'][0],
           'user': user.toMap()
         });
+        ApiService.put(
+          path: 'shops/${userShop!.id}',
+          body: <String, dynamic>{
+            'views': userShop!.views + 1,
+          },
+        );
       }
     } else {
       return false;
