@@ -100,7 +100,7 @@ class _ClientsScreenState extends State<ClientsScreen>
               ),
               1: Padding(
                 padding: EdgeInsets.symmetric(horizontal: 5, vertical: 10),
-                child: Text('Suppliers', style: TextStyle(fontSize: 14)),
+                child: Text('Campaign', style: TextStyle(fontSize: 14)),
               ),
             },
             onValueChanged: (int? value) {
@@ -538,7 +538,68 @@ class _ClientsScreenState extends State<ClientsScreen>
                                         allclients: clientsController.clients,
                                       ),
                                     ),
-                                  )
+                                  ),
+                                  SliverToBoxAdapter(
+                                    child: SizedBox(
+                                      width: screenSize.width * 0.9,
+                                      child: Column(children: <Widget>[
+                                        const SizedBox(
+                                          height: 10,
+                                        ),
+                                        Obx(() {
+                                          if (shopController
+                                              .suppliers.isNotEmpty) {
+                                            return loadingSupplier
+                                                ? const SafetyModel()
+                                                : Expanded(
+                                                    child: StaggeredGridView
+                                                        .countBuilder(
+                                                      staggeredTileBuilder: (int
+                                                              index) =>
+                                                          const StaggeredTile
+                                                              .fit(1),
+                                                      padding: const EdgeInsets
+                                                          .symmetric(
+                                                        horizontal: 15.0,
+                                                      ),
+                                                      crossAxisCount: 2,
+                                                      crossAxisSpacing: 8.0,
+                                                      mainAxisSpacing: 8.0,
+                                                      itemCount: shopController
+                                                          .suppliers.length,
+                                                      shrinkWrap: true,
+                                                      physics: null,
+                                                      itemBuilder:
+                                                          (BuildContext context,
+                                                              int index) {
+                                                        return SuppliersCard(
+                                                          onTap: () {
+                                                            Get.to(() => ExpandedProSuppliersPage(
+                                                                supplier:
+                                                                    shopController
+                                                                            .suppliers[
+                                                                        index]));
+                                                          },
+                                                          supplier:
+                                                              shopController
+                                                                      .suppliers[
+                                                                  index],
+                                                        );
+                                                      },
+                                                    ),
+                                                  );
+                                          } else {
+                                            return const Center(
+                                              child: SafetyModel(
+                                                isLoading: false,
+                                                title: 'No Suppliers Found!',
+                                              ),
+                                            );
+                                          }
+                                        }),
+                                      ]),
+                                    ),
+                                  ),
                                 ],
                               ),
                       ),
@@ -546,48 +607,7 @@ class _ClientsScreenState extends State<ClientsScreen>
             ),
           ],
         ),
-        Column(children: <Widget>[
-          const SizedBox(
-            height: 10,
-          ),
-          Obx(() {
-            if (shopController.suppliers.isNotEmpty) {
-              return loadingSupplier
-                  ? const SafetyModel()
-                  : Expanded(
-                      child: StaggeredGridView.countBuilder(
-                        staggeredTileBuilder: (int index) =>
-                            const StaggeredTile.fit(1),
-                        padding: const EdgeInsets.symmetric(
-                          horizontal: 15.0,
-                        ),
-                        crossAxisCount: 2,
-                        crossAxisSpacing: 8.0,
-                        mainAxisSpacing: 8.0,
-                        itemCount: shopController.suppliers.length,
-                        shrinkWrap: true,
-                        physics: null,
-                        itemBuilder: (BuildContext context, int index) {
-                          return SuppliersCard(
-                            onTap: () {
-                              Get.to(() => ExpandedProSuppliersPage(
-                                  supplier: shopController.suppliers[index]));
-                            },
-                            supplier: shopController.suppliers[index],
-                          );
-                        },
-                      ),
-                    );
-            } else {
-              return const Center(
-                child: SafetyModel(
-                  isLoading: false,
-                  title: 'No Suppliers Found!',
-                ),
-              );
-            }
-          }),
-        ]),
+        const Text('jdjd'),
       ]),
     );
   }

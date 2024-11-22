@@ -6,6 +6,7 @@ import 'package:business_bosses_v2/bbpro/widgets/button.dart';
 import 'package:business_bosses_v2/bbpro/widgets/edittext.dart';
 import 'package:business_bosses_v2/bbpro/widgets/iconbutton.dart';
 import 'package:business_bosses_v2/bbpro/widgets/proseardwidget.dart';
+import 'package:business_bosses_v2/bbpro/widgets/taskitem.dart';
 import 'package:business_bosses_v2/bbpro/widgets/textfield.dart';
 import 'package:business_bosses_v2/common/dialogs/snackbar.dart';
 import 'package:business_bosses_v2/utils/theme/theme.dart';
@@ -49,7 +50,7 @@ class _CampaignpageState extends State<Campaignpage> {
       appBar: AppBar(
         automaticallyImplyLeading: false,
         title: const Text(
-          'Create Campaign',
+          'Create New Campaign',
           style: TextStyle(
             color: proprimaryColor,
             fontWeight: FontWeight.bold,
@@ -72,36 +73,44 @@ class _CampaignpageState extends State<Campaignpage> {
           onTap: () {
             _showClientSheet(context);
           },
-          child: const CustomTextWidget(
+          child: CustomTextWidget(
             padding: 15,
             textpadding: 15,
             hashint: true,
-            caption: 'Client\'s Name *',
+            caption: 'Select Customers *',
             iconName: 'assets/svgs/dropdown.svg',
-            text: 'Select Customers',
+            text: '',
+            selectedarea: Column(
+              children: selectedClientsName
+                  .asMap()
+                  .entries
+                  .map((MapEntry<int, String> entry) {
+                final int index = entry.key;
+                final String clientName = entry.value;
+                final Map<String, dynamic> client = clients.firstWhere(
+                  (Map<String, dynamic> element) =>
+                      element['name'] == clientName,
+                  orElse: () => <String, dynamic>{},
+                );
+                return Taskitem(
+                  isOrder: true,
+                  taskname: clientName,
+                  taskexpense: '',
+                  deleteOnTap: () {
+                    setState(() {
+                      _removeClient(clientName);
+                    });
+                  },
+                );
+              }).toList(),
+            ),
           ),
         ),
         const SizedBox(height: 15),
-        if (clientsName.isNotEmpty)
-          ListView.builder(
-            shrinkWrap: true,
-            itemCount: selectedClientsName.length,
-            itemBuilder: (BuildContext context, int index) {
-              return ListTile(
-                title: Text(selectedClientsName[index]),
-                trailing: IconButton(
-                  icon: const Icon(Icons.close, color: Colors.red),
-                  onPressed: () {
-                    _removeClient(clientsName[index]);
-                  },
-                ),
-              );
-            },
-          ),
         CustomEditText(
           maxLength: 30,
           caption: 'Campaign Name',
-          hintText: 'Eg Black Friday Promotion ',
+          hintText: 'e.g. Black Friday Promotion ',
           controller: nameController,
         ),
         const SizedBox(
@@ -112,6 +121,35 @@ class _CampaignpageState extends State<Campaignpage> {
           hintText: 'Enter Campaign message / content',
           controller: notesController,
           maxLength: 300,
+        ),
+        const SizedBox(
+          height: 15,
+        ),
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 15.0),
+          child: GestureDetector(
+            onTap: () {},
+            child: Container(
+              decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.circular(radiusValue),
+              ),
+              child: const Padding(
+                padding: EdgeInsets.all(15.0),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: <Widget>[
+                    Text(
+                      'Add Image (Optional)',
+                      style:
+                          TextStyle(fontSize: 13, fontWeight: FontWeight.w600),
+                    ),
+                    Icon(Icons.image),
+                  ],
+                ),
+              ),
+            ),
+          ),
         ),
         const SizedBox(
           height: 15,
@@ -298,7 +336,7 @@ class _ChooseClientBottomSheetState extends State<ChooseClientsBottomSheet>
   @override
   void initState() {
     super.initState();
-    _tabController = TabController(length: 4, vsync: this);
+    _tabController = TabController(length: 1, vsync: this);
     _tabController.addListener(() {
       setState(() {
         _selectedIndex = _tabController.index;
@@ -326,7 +364,7 @@ class _ChooseClientBottomSheetState extends State<ChooseClientsBottomSheet>
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: <Widget>[
               const Text(
-                'Select Client',
+                'Select Customer',
                 style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
               ),
               Wrap(children: <Widget>[
