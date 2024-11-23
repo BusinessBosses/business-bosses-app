@@ -55,11 +55,12 @@ class _UserShopScreenState extends State<UserShopScreen> {
         return GestureDetector(
           onTap: () {
             if (action['text'] == 'Chat') {
+              print('object');
               Get.to(
                 () => const ChatRoomScreen(
                   frommarketplace: false,
                 ),
-                arguments: shopController.shop!.user,
+                arguments: shopController.userShop!.user,
               );
             } else if (action['text'] == 'Call') {
               final Uri launchUri = Uri(
@@ -71,8 +72,7 @@ class _UserShopScreenState extends State<UserShopScreen> {
               // TODO: Implement share functionality
             } else if (action['text'] == 'Review') {
               Get.to(() => SellerReviewScreen(
-                    isShop: true,
-                    user: shopController.shop!.user!,
+                    user: shopController.userShop!.user!,
                   ));
             }
           },
@@ -83,12 +83,9 @@ class _UserShopScreenState extends State<UserShopScreen> {
                 CircleAvatar(
                   radius: 18,
                   backgroundColor: backgroundColor,
-                  child: IconButton(
-                    onPressed: () {},
-                    icon: SvgPicture.asset(
-                      action['icon']!,
-                      height: 17,
-                    ),
+                  child: SvgPicture.asset(
+                    action['icon']!,
+                    height: 17,
                   ),
                 ),
                 const SizedBox(height: 3),

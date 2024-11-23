@@ -222,8 +222,9 @@ class _ShopScreenState extends State<ShopScreen> {
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: <Widget>[
                               Text(
-                                'All (${shopController.products.length + shopController.services.length})',
-                                style: const TextStyle(fontSize: 14),
+                                'Showcase (${shopController.products.length + shopController.services.length})',
+                                style: const TextStyle(
+                                    fontSize: 14, fontWeight: FontWeight.w700),
                               ),
                               GestureDetector(
                                 onTap: () {
