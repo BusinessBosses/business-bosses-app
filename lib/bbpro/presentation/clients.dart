@@ -61,7 +61,7 @@ class _ClientsScreenState extends State<ClientsScreen>
   void initState() {
     super.initState();
     _tabController =
-        TabController(length: ClientType.values.length, vsync: this);
+        TabController(length: ClientType.values.length + 1, vsync: this);
     _viewController = TabController(length: 2, vsync: this);
     supplierController.initMySuppliers();
     supplierController.initSuppliers();
@@ -308,6 +308,9 @@ class _ClientsScreenState extends State<ClientsScreen>
                         },
                       );
                       break;
+                    case 'Item 3':
+                      Get.to(const Campaignpage());
+                      break;
                   }
                 },
                 shape: RoundedRectangleBorder(
@@ -352,6 +355,28 @@ class _ClientsScreenState extends State<ClientsScreen>
                           const SizedBox(width: 8),
                           const Text(
                             'Add a Supplier',
+                            style: TextStyle(
+                              fontSize: 13,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                    PopupMenuItem<String>(
+                      value: 'Item 3',
+                      child: Row(
+                        children: <Widget>[
+                          SvgPicture.asset(
+                            'assets/svgs/megaphone.svg',
+                            height: 18,
+                            colorFilter: const ColorFilter.mode(
+                              textColor,
+                              BlendMode.srcIn,
+                            ),
+                          ),
+                          const SizedBox(width: 8),
+                          const Text(
+                            'Create a Campaign',
                             style: TextStyle(
                               fontSize: 13,
                             ),
@@ -415,7 +440,7 @@ class _ClientsScreenState extends State<ClientsScreen>
             const SizedBox(
               height: 10,
             ),
-            CustomTabBarWidget<ClientType>(
+            CustomTabBarWidget<String>(
               tabController: _tabController,
               scrollToSection: (int index) {
                 _scrollToSection(index);
@@ -425,11 +450,20 @@ class _ClientsScreenState extends State<ClientsScreen>
                 backgroundColor,
                 Colors.green.withOpacity(0.1),
                 Colors.blue.withOpacity(0.1),
-                primaryColorLT.withOpacity(0.1)
+                primaryColorLT.withOpacity(0.1),
               ],
-              listofitems: ClientType.values.toList(),
-              itemToString: (ClientType status) =>
-                  '${status.displayTitle.toString().split('.').last} (${status == ClientType.allclients ? clientsController.clients.length : (clientsController.clientsType[status] == null ? '0' : clientsController.clientsType[status]!.length.toString())})',
+              listofitems: <String>[
+                ...ClientType.values.map((ClientType e) => e.name).toList(),
+                'Suppliers',
+              ],
+              itemToString: (String status) {
+                if (status == 'Suppliers') {
+                  return 'Suppliers (${shopController.suppliers.length})';
+                }
+                final ClientType clientType = ClientType.values
+                    .firstWhere((ClientType element) => element.name == status);
+                return '${clientType.displayTitle.toString().split('.').last} (${clientType == ClientType.allclients ? clientsController.clients.length : (clientsController.clientsType[clientType] == null ? '0' : clientsController.clientsType[clientType]!.length.toString())})';
+              },
             ),
             Expanded(
               child: Padding(
