@@ -314,8 +314,7 @@ class _UserShopScreenState extends State<UserShopScreen> {
                               height: 1,
                               // thickness: 1,
                             ),
-                            SizedBox(
-                              height: 500,
+                            Expanded(
                               child: TabBarView(
                                 children: <Widget>[
                                   ///Tab 1 Content
@@ -549,11 +548,11 @@ class _UserShopScreenState extends State<UserShopScreen> {
             'Contact Information',
             style: TextStyle(
               fontWeight: FontWeight.w700,
-              fontSize: 18,
+              fontSize: 16,
               color: textColor,
             ),
           ),
-          const SizedBox(height: 30),
+          const SizedBox(height: 20),
           if (shopController.userShop?.user?.website?.isNotEmpty ?? false)
             _buildContactRow(
               'assets/svgs/website.svg',
@@ -605,14 +604,25 @@ class _UserShopScreenState extends State<UserShopScreen> {
               },
             ),
           Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[
-              const Text('Social Links'),
+              const SizedBox(height: 40),
+              const Text(
+                'Social Links',
+                style: TextStyle(
+                  fontWeight: FontWeight.w700,
+                  fontSize: 18,
+                  color: textColor,
+                ),
+              ),
+              const SizedBox(height: 20),
               GestureDetector(
                 onTap: () {},
                 child: Row(
                   children: <Widget>[
                     CircleAvatar(
-                      child: SvgPicture.asset('assetName'),
+                      backgroundColor: backgroundColor,
+                      child: SvgPicture.asset('assets/svgs/facebook.svg'),
                     )
                   ],
                 ),
