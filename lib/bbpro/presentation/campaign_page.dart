@@ -81,25 +81,13 @@ class _CampaignpageState extends State<Campaignpage> {
             iconName: 'assets/svgs/dropdown.svg',
             text: '',
             selectedarea: Column(
-              children: selectedClientsName
-                  .asMap()
-                  .entries
-                  .map((MapEntry<int, String> entry) {
-                final int index = entry.key;
-                final String clientName = entry.value;
-                final Map<String, dynamic> client = clients.firstWhere(
-                  (Map<String, dynamic> element) =>
-                      element['name'] == clientName,
-                  orElse: () => <String, dynamic>{},
-                );
+              children: selectedClientsName.map((String clientName) {
                 return Taskitem(
                   isOrder: true,
                   taskname: clientName,
                   taskexpense: '',
                   deleteOnTap: () {
-                    setState(() {
-                      _removeClient(clientName);
-                    });
+                    _removeClient(clientName);
                   },
                 );
               }).toList(),
@@ -225,11 +213,13 @@ class _CampaignpageState extends State<Campaignpage> {
   }
 
   void _onClientSelect(String name) {
-    final Map<String, dynamic> clientName = clients
-        .firstWhere((Map<String, dynamic> client) => client['name'] == name);
-    if (!selectedClient.contains(clientName['id'])) {
+    final Map<String, dynamic>? client = clients.firstWhereOrNull(
+      (Map<String, dynamic> client) => client['name'] == name,
+    );
+
+    if (client != null && !selectedClient.contains(client['id'])) {
       setState(() {
-        selectedClient.add(clientName['id']);
+        selectedClient.add(client['id']);
         selectedClientsName.add(name);
       });
     }
@@ -264,15 +254,15 @@ class _CampaignpageState extends State<Campaignpage> {
             selectedItem: selectedClient,
             online: clients
                 .where((Map<String, dynamic> client) =>
-                    client['type'].toString() == 'ClientType.online')
+                    client['type'] == 'ClientType.online')
                 .toList(),
             inperson: clients
                 .where((Map<String, dynamic> client) =>
-                    client['type'].toString() == 'ClientType.inPerson')
+                    client['type'] == 'ClientType.inPerson')
                 .toList(),
             bbuser: clients
                 .where((Map<String, dynamic> client) =>
-                    client['type'].toString() == 'ClientType.bbUser')
+                    client['type'] == 'ClientType.bbUser')
                 .toList(),
             all: clients,
             selectedName: selectedClientsName,
@@ -280,10 +270,9 @@ class _CampaignpageState extends State<Campaignpage> {
         );
       },
     );
+
     if (result != null) {
-      setState(() {
-        _onClientSelect(result); // Update clientId based on selected client
-      });
+      _onClientSelect(result);
     }
   }
 }
