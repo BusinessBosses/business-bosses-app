@@ -443,7 +443,7 @@ class _DashboardState extends State<Dashboard> {
                               child: InfoCard(
                                 cardName: titles[index],
                                 value: index == 0
-                                    ? clientsController.allclients.length
+                                    ? shopController.shopStats!.clientCount
                                         .toString()
                                     : index == 1
                                         ? shopController.shop!.currency +
