@@ -481,64 +481,122 @@ class _ClientsScreenState extends State<ClientsScreen>
                                     ),
                                   ),
                                   SliverToBoxAdapter(
-                                    child: SizedBox(
-                                      width: screenSize.width * 0.9,
-                                      child: Column(children: <Widget>[
-                                        const SizedBox(
-                                          height: 10,
+                                    child: Padding(
+                                      padding:
+                                          const EdgeInsets.only(left: 10.0),
+                                      child: Container(
+                                        width: screenSize.width * 0.9,
+                                        height: screenSize.height * 0.8,
+                                        decoration: BoxDecoration(
+                                          color: Colors.white,
+                                          borderRadius:
+                                              BorderRadius.circular(15),
                                         ),
-                                        Obx(() {
-                                          if (shopController
-                                              .suppliers.isNotEmpty) {
-                                            return loadingSupplier
-                                                ? const SafetyModel()
-                                                : Expanded(
-                                                    child: StaggeredGridView
-                                                        .countBuilder(
-                                                      staggeredTileBuilder: (int
-                                                              index) =>
-                                                          const StaggeredTile
-                                                              .fit(1),
-                                                      padding: const EdgeInsets
-                                                          .symmetric(
-                                                        horizontal: 15.0,
-                                                      ),
-                                                      crossAxisCount: 2,
-                                                      crossAxisSpacing: 8.0,
-                                                      mainAxisSpacing: 8.0,
-                                                      itemCount: shopController
-                                                          .suppliers.length,
-                                                      shrinkWrap: true,
-                                                      physics: null,
-                                                      itemBuilder:
-                                                          (BuildContext context,
-                                                              int index) {
-                                                        return SuppliersCard(
-                                                          onTap: () {
-                                                            Get.to(() => ExpandedProSuppliersPage(
-                                                                supplier:
-                                                                    shopController
-                                                                            .suppliers[
-                                                                        index]));
-                                                          },
-                                                          supplier:
-                                                              shopController
-                                                                      .suppliers[
-                                                                  index],
-                                                        );
-                                                      },
+                                        child: Column(children: <Widget>[
+                                          const SizedBox(
+                                            height: 10,
+                                          ),
+                                          const Padding(
+                                            padding: EdgeInsets.symmetric(
+                                                horizontal: 10.0, vertical: 5),
+                                            child: Row(
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment
+                                                      .spaceBetween,
+                                              children: <Widget>[
+                                                Wrap(
+                                                  crossAxisAlignment:
+                                                      WrapCrossAlignment.center,
+                                                  children: <Widget>[
+                                                    CircleAvatar(
+                                                      backgroundColor:
+                                                          primaryColorLT,
+                                                      radius: 5,
                                                     ),
-                                                  );
-                                          } else {
-                                            return const Center(
-                                              child: SafetyModel(
-                                                isLoading: false,
-                                                title: 'No Suppliers Found!',
-                                              ),
-                                            );
-                                          }
-                                        }),
-                                      ]),
+                                                    SizedBox(
+                                                      width: 10,
+                                                    ),
+                                                    Text(
+                                                      'Suppliers',
+                                                      style: TextStyle(
+                                                        color: Colors.black,
+                                                        fontWeight:
+                                                            FontWeight.bold,
+                                                        fontSize: 14,
+                                                      ),
+                                                    ),
+                                                  ],
+                                                ),
+                                                SizedBox(
+                                                  width: 50,
+                                                ),
+                                              ],
+                                            ),
+                                          ),
+                                          const Padding(
+                                            padding: EdgeInsets.symmetric(
+                                                vertical: 10),
+                                            child: Divider(
+                                              height: 1,
+                                              color: Colors.black12,
+                                            ),
+                                          ),
+                                          Obx(() {
+                                            if (shopController
+                                                .suppliers.isNotEmpty) {
+                                              return loadingSupplier
+                                                  ? const SafetyModel()
+                                                  : Expanded(
+                                                      child: StaggeredGridView
+                                                          .countBuilder(
+                                                        staggeredTileBuilder: (int
+                                                                index) =>
+                                                            const StaggeredTile
+                                                                .fit(1),
+                                                        padding:
+                                                            const EdgeInsets
+                                                                .symmetric(
+                                                          horizontal: 15.0,
+                                                        ),
+                                                        crossAxisCount: 2,
+                                                        crossAxisSpacing: 8.0,
+                                                        mainAxisSpacing: 8.0,
+                                                        itemCount:
+                                                            shopController
+                                                                .suppliers
+                                                                .length,
+                                                        shrinkWrap: true,
+                                                        physics: null,
+                                                        itemBuilder:
+                                                            (BuildContext
+                                                                    context,
+                                                                int index) {
+                                                          return SuppliersCard(
+                                                            onTap: () {
+                                                              Get.to(() => ExpandedProSuppliersPage(
+                                                                  supplier: shopController
+                                                                          .suppliers[
+                                                                      index]));
+                                                            },
+                                                            supplier:
+                                                                shopController
+                                                                        .suppliers[
+                                                                    index],
+                                                          );
+                                                        },
+                                                      ),
+                                                    );
+                                            } else {
+                                              return const Center(
+                                                child: SafetyModel(
+                                                  isLoading: false,
+                                                  title: 'No Suppliers Found!',
+                                                ),
+                                              );
+                                            }
+                                          }),
+                                        ]),
+                                      ),
                                     ),
                                   ),
                                 ],
@@ -630,9 +688,9 @@ class _RowStatusCardState extends State<RowStatusCard> {
       case ClientType.inPerson:
         statusColor = Colors.blue;
         break;
-      case ClientType.bbUser:
-        statusColor = primaryColorLT;
-        break;
+      // case ClientType.bbUser:
+      //   statusColor = primaryColorLT;
+      //   break;
       default:
         statusColor = Colors.grey;
     }

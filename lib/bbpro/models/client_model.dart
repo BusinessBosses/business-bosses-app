@@ -6,8 +6,8 @@ import 'package:flutter/material.dart';
 enum ClientType {
   allclients('All Clients', Colors.black),
   online('Online', Colors.green),
-  inPerson('In-Person', Colors.blue),
-  bbUser('Bb-User', primaryColorLT);
+  inPerson('In-Person', Colors.blue);
+  // bbUser('Bb-User', primaryColorLT);
 
   const ClientType(this.displayTitle, this.backgroundColor);
 
@@ -21,8 +21,8 @@ enum ClientType {
         return ClientType.online;
       case 'in-person':
         return ClientType.inPerson;
-      case 'bb-user':
-        return ClientType.bbUser;
+      // case 'bb-user':
+      //   return ClientType.bbUser;
       default:
         return ClientType.online; // default value if the type doesn't match
     }
@@ -40,8 +40,8 @@ enum ClientType {
         return 'on-line';
       case ClientType.inPerson:
         return 'in-person';
-      case ClientType.bbUser:
-        return 'bb-user';
+      // case ClientType.bbUser:
+      //   return 'bb-user';
       default:
         return 'on-line'; // default value, if needed
     }
