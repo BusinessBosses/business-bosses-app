@@ -407,17 +407,48 @@ class _ChooseClientBottomSheetState extends State<ChooseClientsBottomSheet>
             client['name'].toLowerCase().contains(searchQuery.toLowerCase()))
         .toList();
 
+    bool selectAll = filteredClients.length == selectedItem.length;
+
     return Column(
       children: <Widget>[
         ProSearchbar(
           hasSearchIcon: true,
           contentPadding: 10,
           backgroundColor: backgroundColor,
-          hintText: 'Search Customers',
+          hintText: 'Search Customer',
           onChange: onSearchChange,
           onSubmit: (String query) {},
         ),
         const SizedBox(height: 10),
+        CheckboxListTile(
+          title: const Text('Select all customers',
+              style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
+          value: selectAll,
+          onChanged: (bool? value) {
+            setState(() {
+              if (value == true) {
+                selectedItem = filteredClients
+                    .map(
+                        (Map<String, dynamic> client) => client['id'] as String)
+                    .toList();
+                // Create a new list instead of modifying the final one
+                final List<String> newSelectedNames = filteredClients
+                    .map((Map<String, dynamic> client) =>
+                        client['name'] as String)
+                    .toList();
+
+                if (widget.onClientAdded != null) {
+                  widget.onClientAdded!();
+                }
+              } else {
+                selectedItem.clear();
+                if (widget.onClientAdded != null) {
+                  widget.onClientAdded!();
+                }
+              }
+            });
+          },
+        ),
         Expanded(
           child: filteredClients.isNotEmpty
               ? ListView(
