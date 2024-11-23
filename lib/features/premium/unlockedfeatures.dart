@@ -9,7 +9,6 @@ class FeatureTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ListTile(
-      contentPadding: const EdgeInsets.symmetric(horizontal: 0, vertical: 0),
       leading: Container(
         padding: const EdgeInsets.all(8),
         decoration: BoxDecoration(
@@ -18,7 +17,6 @@ class FeatureTile extends StatelessWidget {
         ),
         child: SvgPicture.asset(
           feature.iconPath,
-          // color: iconColor, // Assuming your SVGs are white
           height: 24,
           width: 24,
         ),
@@ -31,7 +29,7 @@ class FeatureTile extends StatelessWidget {
         ),
       ),
       subtitle: Text(
-        feature.subtext,
+        feature.subtext!,
         style: const TextStyle(fontSize: 12),
       ),
     );
@@ -41,15 +39,15 @@ class FeatureTile extends StatelessWidget {
 class FeatureItem {
   final String iconPath;
   final String caption;
-  final String subtext;
-  final Color color;
+  final String? subtext;
+  final Color? color;
   final Color? iconcolor;
 
   FeatureItem({
     required this.iconPath,
     required this.caption,
-    required this.subtext,
-    required this.color,
+    this.subtext,
+    this.color,
     this.iconcolor,
   });
 }

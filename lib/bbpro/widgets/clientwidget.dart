@@ -181,38 +181,38 @@ class _ClientWidgetState extends State<ClientWidget> {
                       ),
                     ],
                   ),
-                  const Row(
-                    children: <Widget>[
-                      Text(
-                        'Total Orders: ',
-                        style: TextStyle(
-                          fontWeight: FontWeight.normal,
-                          fontSize: 13,
-                        ),
-                      ),
-                      Text(
-                        '2 Orders',
-                        style: TextStyle(
-                          fontWeight: FontWeight.bold,
-                          fontSize: 13,
-                        ),
-                      ),
-                      Text(
-                        ' - GHS',
-                        style: TextStyle(
-                          fontWeight: FontWeight.bold,
-                          fontSize: 13,
-                        ),
-                      ),
-                      Text(
-                        '200',
-                        style: TextStyle(
-                          fontWeight: FontWeight.bold,
-                          fontSize: 13,
-                        ),
-                      ),
-                    ],
-                  ),
+                  // const Row(
+                  //   children: <Widget>[
+                  //     Text(
+                  //       'Total Orders: ',
+                  //       style: TextStyle(
+                  //         fontWeight: FontWeight.normal,
+                  //         fontSize: 13,
+                  //       ),
+                  //     ),
+                  //     Text(
+                  //       '2 Orders',
+                  //       style: TextStyle(
+                  //         fontWeight: FontWeight.bold,
+                  //         fontSize: 13,
+                  //       ),
+                  //     ),
+                  //     Text(
+                  //       ' - GHS',
+                  //       style: TextStyle(
+                  //         fontWeight: FontWeight.bold,
+                  //         fontSize: 13,
+                  //       ),
+                  //     ),
+                  //     Text(
+                  //       '200',
+                  //       style: TextStyle(
+                  //         fontWeight: FontWeight.bold,
+                  //         fontSize: 13,
+                  //       ),
+                  //     ),
+                  //   ],
+                  // ),
                 ],
               ),
             ),

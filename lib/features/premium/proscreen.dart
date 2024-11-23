@@ -2,6 +2,7 @@ import 'package:business_bosses_v2/bbpro/widgets/button.dart';
 import 'package:business_bosses_v2/features/home/widgets/bottom_bar.dart';
 import 'package:business_bosses_v2/features/live_event/presentation/live_event.dart';
 import 'package:business_bosses_v2/features/posts/presentation/create_post_screen.dart';
+import 'package:business_bosses_v2/features/premium/profeatures.dart';
 import 'package:business_bosses_v2/features/premium/unlockedfeatures.dart';
 import 'package:business_bosses_v2/features/profile/widgets/boss_of_the_week_tile.dart';
 import 'package:carousel_slider/carousel_slider.dart';
@@ -35,15 +36,6 @@ class _ProScreenState extends State<ProScreen> with TickerProviderStateMixin {
     'Streamline operations and grow your business with this app!'
   ];
 
-  static final List<String> _premiumfeatures = <String>[
-    'Premium Badge',
-    'Earn 100 coins per month',
-    'Boost post free with coins',
-    'Get more connections and referrals',
-    'Recognition on posts search',
-    'Exclusive Partner Offers',
-  ];
-
   static final List<String> _partnerfeatures = <String>[
     'More Customers',
     'Selected Referrals',
@@ -51,87 +43,6 @@ class _ProScreenState extends State<ProScreen> with TickerProviderStateMixin {
     'Entrepreneurial Support',
     'Listed across multiple media',
     'Community Engagement',
-  ];
-
-  final List<FeatureItem> features = <FeatureItem>[
-    FeatureItem(
-      iconPath: 'assets/svgs/bizcenter.svg',
-      caption: 'Biz-Centre Website',
-      subtext: 'Easily build your online presence',
-      color: Colors.pink.withOpacity(0.2), // Changed color
-    ),
-    FeatureItem(
-      iconPath: 'assets/svgs/pos.svg',
-      caption: 'POS Management',
-      subtext: 'Quick POS for seamless transactions',
-      color: Colors.orange.withOpacity(0.2), // Changed color
-    ),
-    FeatureItem(
-      iconPath: 'assets/svgs/payment.svg',
-      caption: 'Payment Management',
-      subtext: 'Online or cash payments for orders & invoices',
-      color: Colors.yellow.withOpacity(0.2), // Changed color
-    ),
-    FeatureItem(
-      iconPath: 'assets/svgs/business.svg',
-      caption: 'Bundled Business Management',
-      subtext: 'Track projects, expenses, orders, & inventory',
-      color: Colors.green.withOpacity(0.2), // Changed color
-    ),
-    FeatureItem(
-      iconPath: 'assets/svgs/appointment.svg',
-      caption: 'Appointment Management',
-      subtext: 'Book, manage, and send reminders',
-      color: Colors.blue.withOpacity(0.2), // Changed color
-    ),
-    FeatureItem(
-      iconPath: 'assets/svgs/crm.svg',
-      caption: 'Customer Relationship Management',
-      subtext: 'Manage contacts and client interactions with CRM',
-      color: Colors.indigo.withOpacity(0.2), // Changed color
-    ),
-    FeatureItem(
-      iconPath: 'assets/svgs/analytics.svg',
-      caption: 'Performance Analytics',
-      subtext: 'Access real-time revenue and analytics',
-      color: Colors.purple.withOpacity(0.2), // Changed color
-    ),
-    FeatureItem(
-      iconPath: 'assets/svgs/premiumbadgered.svg',
-      caption: 'Premium Badge',
-      subtext: 'Showcase your Pro status',
-      color: Colors.red.withOpacity(0.2), // Changed color
-    ),
-    FeatureItem(
-      iconPath: 'assets/svgs/coin.svg',
-      caption: 'Coin Rewards',
-      subtext: 'Get 100 coins per month',
-      color: Colors.orange.withOpacity(0.2), // Changed color
-    ),
-    FeatureItem(
-      iconPath: 'assets/svgs/rocket.svg',
-      caption: 'Boosted Posts',
-      subtext: 'Reach more customers with no fees',
-      color: Colors.lime.withOpacity(0.2), // Changed color
-    ),
-    FeatureItem(
-      iconPath: 'assets/svgs/networkgrowth.svg',
-      caption: 'Network Growth',
-      subtext: 'Get more connections and referrals',
-      color: Colors.cyan.withOpacity(0.2), // Changed color
-    ),
-    FeatureItem(
-      iconPath: 'assets/svgs/visibility.svg',
-      caption: 'Increased Visibility',
-      subtext: 'Get discovered in post searches',
-      color: Colors.brown.withOpacity(0.2), // Changed color
-    ),
-    FeatureItem(
-      iconPath: 'assets/svgs/partner.svg',
-      caption: 'Exclusive Partner Offers',
-      subtext: 'Access special deals and benefits',
-      color: Colors.grey.withOpacity(0.2), // Changed color
-    ),
   ];
 
   @override
@@ -799,16 +710,33 @@ class ProSubscribeSection extends StatefulWidget {
 }
 
 class _ProSubscribeSectionState extends State<ProSubscribeSection> {
-  static final List<String> _profeatures = <String>[
-    'Recognition in search results',
-    'Earn 100 coins per month',
-    'Boost posts for free with coins',
-    'Create custom business links',
-    'Launch new products/services quickly',
-    'Reach more customers online and in-person',
-    'Turn clicks into sales and multiple income streams',
-    'Manage expenses, tasks, and appointments',
-    'Access exclusive partners\' offers',
+  static final List<ProFeatureItem> _profeatures = <ProFeatureItem>[
+    ProFeatureItem(
+        iconPath: 'assets/svgs/premiumbadgered.svg',
+        caption: 'Premium Access',
+        subtext: 'Boost business FREE with coins'),
+    ProFeatureItem(
+        iconPath: 'assets/svgs/bizcentericon.svg',
+        caption: 'Get Your Own Biz-Center',
+        subtext: 'Boost business FREE with coins'),
+    ProFeatureItem(
+        iconPath: 'assets/svgs/connections.svg',
+        caption: 'More Connections & Referrals',
+        subtext: 'Get discovered in global markets & searches'),
+    ProFeatureItem(
+      iconPath: 'assets/svgs/income.svg',
+      caption: 'Mutiple Income',
+      subtext: 'Manage orders from multiple sales channel',
+    ),
+    ProFeatureItem(
+      iconPath: 'assets/svgs/assistant.svg',
+      caption: 'Digital Assistant',
+      subtext: 'Manage inventory, tasks, schedules, expenses',
+    ),
+    ProFeatureItem(
+        iconPath: 'assets/svgs/campaign.svg',
+        caption: 'Campaign & Broadcast',
+        subtext: 'Send marketing campaigns & broadcasts'),
   ];
   String paymentMethodId = 'Proyear';
   bool loading = false;
@@ -880,48 +808,11 @@ class _ProSubscribeSectionState extends State<ProSubscribeSection> {
                   ),
                   Column(
                     children: _profeatures
-                        .asMap()
-                        .entries
-                        .map((MapEntry<int, String> entry) => Padding(
-                              padding: const EdgeInsets.only(bottom: 8.0),
-                              child: Row(
-                                  mainAxisAlignment: MainAxisAlignment.start,
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: <Widget>[
-                                    SvgPicture.asset(
-                                      entry.key == 0
-                                          ? 'assets/svgs/premiumbadgered.svg'
-                                          : entry.key == 1
-                                              ? 'assets/svgs/coin.svg'
-                                              : entry.key == 2
-                                                  ? 'assets/svgs/rocket.svg'
-                                                  : entry.key == 3
-                                                      ? 'assets/svgs/links.svg'
-                                                      : entry.key == 4
-                                                          ? 'assets/svgs/launchnew.svg'
-                                                          : entry.key == 5
-                                                              ? 'assets/svgs/team.svg'
-                                                              : entry.key == 6
-                                                                  ? 'assets/svgs/clicks.svg'
-                                                                  : entry.key ==
-                                                                          7
-                                                                      ? 'assets/svgs/manageexpense.svg'
-                                                                      : 'assets/svgs/partner.svg',
-                                      height: 15,
-                                      color:
-                                          entry.key > 2 ? Colors.black54 : null,
-                                    ),
-                                    const SizedBox(
-                                      width: 10,
-                                    ),
-                                    Flexible(
-                                      child: Text(
-                                        entry.value,
-                                        style: const TextStyle(fontSize: 14),
-                                      ),
-                                    ),
-                                  ]),
-                            ))
+                        .map((ProFeatureItem feature) => Padding(
+                            padding: const EdgeInsets.only(bottom: 12.0),
+                            child: ProfeatureTile(
+                              feature: feature,
+                            )))
                         .toList(),
                   ),
                   const SizedBox(

@@ -70,7 +70,7 @@ class _OrderWidgetState extends State<OrderWidget> {
                         Container(
                           decoration: BoxDecoration(
                               borderRadius: BorderRadius.circular(3),
-                              color: probackgroundColor),
+                              color: backgroundcolorinterface),
                           padding: const EdgeInsets.symmetric(
                               horizontal: 10, vertical: 5),
                           child: Wrap(

@@ -130,10 +130,14 @@ class _SetupState extends State<Setup> {
                           children: <Widget>[
                             GetBuilder<ShopController>(
                               builder: (ShopController controller) => Text(
-                                controller.shop?.name ?? '',
+                                (controller.shop?.name ?? '').length > 30
+                                    ? '${(controller.shop?.name ?? '').substring(0, 30)}...'
+                                    : controller.shop?.name ?? '',
+                                maxLines: 1,
+                                overflow: TextOverflow.ellipsis,
                                 style: const TextStyle(
                                   fontWeight: FontWeight.bold,
-                                  fontSize: 20,
+                                  fontSize: 16,
                                 ),
                               ),
                             ),

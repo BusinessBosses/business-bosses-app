@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'package:business_bosses_v2/bbpro/presentation/campaign_page.dart';
 import 'package:business_bosses_v2/common/models/user_model.dart';
 import 'package:business_bosses_v2/common/widgets/text_widget.dart';
 import 'package:business_bosses_v2/features/chat/chat_room_screen.dart';
@@ -34,6 +35,7 @@ class ChatScreen extends StatefulWidget {
 
 class _ChatScreenState extends State<ChatScreen> {
   final ChatController _chatController = Get.find();
+  final ProfileController _profileController = Get.find();
 
   bool _isSearching = false;
   final List<LastMessage> _myChats = <LastMessage>[];
@@ -72,9 +74,41 @@ class _ChatScreenState extends State<ChatScreen> {
                     centerTitle: true,
                     title: const Text('Chats'),
                     actions: <Widget>[
-                      IconButton(
-                        onPressed: _onChangeSearching,
-                        icon: SvgPicture.asset('assets/svgs/search.svg'),
+                      Row(
+                        children: <Widget>[
+                          if (_profileController.myProfile.isSubscribed == true)
+                            Padding(
+                              padding: const EdgeInsets.only(right: 5.0),
+                              child: GestureDetector(
+                                onTap: () {
+                                  Get.to(const Campaignpage());
+                                },
+                                child: CircleAvatar(
+                                    radius: 20,
+                                    backgroundColor: backgroundColor,
+                                    child: SvgPicture.asset(
+                                      'assets/svgs/megaphone.svg',
+                                      height: 20,
+                                    )),
+                              ),
+                            ),
+                          Padding(
+                            padding: const EdgeInsets.only(right: 15.0),
+                            child: GestureDetector(
+                              onTap: () {
+                                _onChangeSearching();
+                              },
+                              child: CircleAvatar(
+                                  backgroundColor: backgroundColor,
+                                  radius: 20,
+                                  child: SvgPicture.asset(
+                                    'assets/svgs/homesearch.svg',
+                                    height: 18,
+                                    color: textColor,
+                                  )),
+                            ),
+                          ),
+                        ],
                       )
                     ],
                   ),

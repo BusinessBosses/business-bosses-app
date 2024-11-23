@@ -61,7 +61,7 @@ class _ClientsScreenState extends State<ClientsScreen>
   void initState() {
     super.initState();
     _tabController =
-        TabController(length: ClientType.values.length, vsync: this);
+        TabController(length: ClientType.values.length + 1, vsync: this);
     _viewController = TabController(length: 2, vsync: this);
     supplierController.initMySuppliers();
     supplierController.initSuppliers();
@@ -100,7 +100,7 @@ class _ClientsScreenState extends State<ClientsScreen>
               ),
               1: Padding(
                 padding: EdgeInsets.symmetric(horizontal: 5, vertical: 10),
-                child: Text('Suppliers', style: TextStyle(fontSize: 14)),
+                child: Text('Campaign', style: TextStyle(fontSize: 14)),
               ),
             },
             onValueChanged: (int? value) {
@@ -308,6 +308,9 @@ class _ClientsScreenState extends State<ClientsScreen>
                         },
                       );
                       break;
+                    case 'Item 3':
+                      Get.to(const Campaignpage());
+                      break;
                   }
                 },
                 shape: RoundedRectangleBorder(
@@ -359,6 +362,28 @@ class _ClientsScreenState extends State<ClientsScreen>
                         ],
                       ),
                     ),
+                    PopupMenuItem<String>(
+                      value: 'Item 3',
+                      child: Row(
+                        children: <Widget>[
+                          SvgPicture.asset(
+                            'assets/svgs/megaphone.svg',
+                            height: 18,
+                            colorFilter: const ColorFilter.mode(
+                              textColor,
+                              BlendMode.srcIn,
+                            ),
+                          ),
+                          const SizedBox(width: 8),
+                          const Text(
+                            'Create a Campaign',
+                            style: TextStyle(
+                              fontSize: 13,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
                   ];
                 },
                 offset: const Offset(50, 50),
@@ -376,69 +401,10 @@ class _ClientsScreenState extends State<ClientsScreen>
                   ),
                 ),
               ),
-              PopupMenuButton(
-                onSelected: (String item) {
-                  switch (item) {
-                    case 'Item 1':
-                      Get.to(const ChatScreen());
-                      break;
-                    case 'Item 2':
-                      Get.to(const Campaignpage());
-                      break;
-                  }
+              GestureDetector(
+                onTap: () {
+                  Get.to(const ChatScreen());
                 },
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(10.0),
-                ),
-                itemBuilder: (BuildContext context) {
-                  return <PopupMenuEntry<String>>[
-                    PopupMenuItem<String>(
-                      value: 'Item 1',
-                      child: Row(
-                        children: <Widget>[
-                          SvgPicture.asset(
-                            'assets/svgs/newchat.svg',
-                            colorFilter: const ColorFilter.mode(
-                              textColor,
-                              BlendMode.srcIn,
-                            ),
-                            height: 18,
-                          ),
-                          const SizedBox(width: 8),
-                          const Text(
-                            'Start a chat',
-                            style: TextStyle(
-                              fontSize: 13,
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                    PopupMenuItem<String>(
-                      value: 'Item 2',
-                      child: Row(
-                        children: <Widget>[
-                          SvgPicture.asset(
-                            'assets/svgs/megaphone.svg',
-                            height: 18,
-                            colorFilter: const ColorFilter.mode(
-                              textColor,
-                              BlendMode.srcIn,
-                            ),
-                          ),
-                          const SizedBox(width: 8),
-                          const Text(
-                            'Create new Campaign',
-                            style: TextStyle(
-                              fontSize: 13,
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ];
-                },
-                offset: const Offset(50, 50),
                 child: Padding(
                   padding: const EdgeInsets.only(
                     right: 10.0,
@@ -474,7 +440,7 @@ class _ClientsScreenState extends State<ClientsScreen>
             const SizedBox(
               height: 10,
             ),
-            CustomTabBarWidget<ClientType>(
+            CustomTabBarWidget<String>(
               tabController: _tabController,
               scrollToSection: (int index) {
                 _scrollToSection(index);
@@ -484,11 +450,20 @@ class _ClientsScreenState extends State<ClientsScreen>
                 backgroundColor,
                 Colors.green.withOpacity(0.1),
                 Colors.blue.withOpacity(0.1),
-                primaryColorLT.withOpacity(0.1)
+                primaryColorLT.withOpacity(0.1),
               ],
-              listofitems: ClientType.values.toList(),
-              itemToString: (ClientType status) =>
-                  '${status.displayTitle.toString().split('.').last} (${status == ClientType.allclients ? clientsController.clients.length : (clientsController.clientsType[status] == null ? '0' : clientsController.clientsType[status]!.length.toString())})',
+              listofitems: <String>[
+                ...ClientType.values.map((ClientType e) => e.name).toList(),
+                'Suppliers',
+              ],
+              itemToString: (String status) {
+                if (status == 'Suppliers') {
+                  return 'Suppliers (${shopController.suppliers.length})';
+                }
+                final ClientType clientType = ClientType.values
+                    .firstWhere((ClientType element) => element.name == status);
+                return '${clientType.displayTitle.toString().split('.').last} (${clientType == ClientType.allclients ? clientsController.clients.length : (clientsController.clientsType[clientType] == null ? '0' : clientsController.clientsType[clientType]!.length.toString())})';
+              },
             ),
             Expanded(
               child: Padding(
@@ -538,7 +513,126 @@ class _ClientsScreenState extends State<ClientsScreen>
                                         allclients: clientsController.clients,
                                       ),
                                     ),
-                                  )
+                                  ),
+                                  SliverToBoxAdapter(
+                                    child: Padding(
+                                      padding:
+                                          const EdgeInsets.only(left: 10.0),
+                                      child: Container(
+                                        width: screenSize.width * 0.9,
+                                        height: screenSize.height * 0.8,
+                                        decoration: BoxDecoration(
+                                          color: Colors.white,
+                                          borderRadius:
+                                              BorderRadius.circular(15),
+                                        ),
+                                        child: Column(children: <Widget>[
+                                          const SizedBox(
+                                            height: 10,
+                                          ),
+                                          const Padding(
+                                            padding: EdgeInsets.symmetric(
+                                                horizontal: 10.0, vertical: 5),
+                                            child: Row(
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment
+                                                      .spaceBetween,
+                                              children: <Widget>[
+                                                Wrap(
+                                                  crossAxisAlignment:
+                                                      WrapCrossAlignment.center,
+                                                  children: <Widget>[
+                                                    CircleAvatar(
+                                                      backgroundColor:
+                                                          primaryColorLT,
+                                                      radius: 5,
+                                                    ),
+                                                    SizedBox(
+                                                      width: 10,
+                                                    ),
+                                                    Text(
+                                                      'Suppliers',
+                                                      style: TextStyle(
+                                                        color: Colors.black,
+                                                        fontWeight:
+                                                            FontWeight.bold,
+                                                        fontSize: 14,
+                                                      ),
+                                                    ),
+                                                  ],
+                                                ),
+                                                SizedBox(
+                                                  width: 50,
+                                                ),
+                                              ],
+                                            ),
+                                          ),
+                                          const Padding(
+                                            padding: EdgeInsets.symmetric(
+                                                vertical: 10),
+                                            child: Divider(
+                                              height: 1,
+                                              color: Colors.black12,
+                                            ),
+                                          ),
+                                          Obx(() {
+                                            if (shopController
+                                                .suppliers.isNotEmpty) {
+                                              return loadingSupplier
+                                                  ? const SafetyModel()
+                                                  : Expanded(
+                                                      child: StaggeredGridView
+                                                          .countBuilder(
+                                                        staggeredTileBuilder: (int
+                                                                index) =>
+                                                            const StaggeredTile
+                                                                .fit(1),
+                                                        padding:
+                                                            const EdgeInsets
+                                                                .symmetric(
+                                                          horizontal: 15.0,
+                                                        ),
+                                                        crossAxisCount: 2,
+                                                        crossAxisSpacing: 8.0,
+                                                        mainAxisSpacing: 8.0,
+                                                        itemCount:
+                                                            shopController
+                                                                .suppliers
+                                                                .length,
+                                                        shrinkWrap: true,
+                                                        physics: null,
+                                                        itemBuilder:
+                                                            (BuildContext
+                                                                    context,
+                                                                int index) {
+                                                          return SuppliersCard(
+                                                            onTap: () {
+                                                              Get.to(() => ExpandedProSuppliersPage(
+                                                                  supplier: shopController
+                                                                          .suppliers[
+                                                                      index]));
+                                                            },
+                                                            supplier:
+                                                                shopController
+                                                                        .suppliers[
+                                                                    index],
+                                                          );
+                                                        },
+                                                      ),
+                                                    );
+                                            } else {
+                                              return const Center(
+                                                child: SafetyModel(
+                                                  isLoading: false,
+                                                  title: 'No Suppliers Found!',
+                                                ),
+                                              );
+                                            }
+                                          }),
+                                        ]),
+                                      ),
+                                    ),
+                                  ),
                                 ],
                               ),
                       ),
@@ -546,48 +640,7 @@ class _ClientsScreenState extends State<ClientsScreen>
             ),
           ],
         ),
-        Column(children: <Widget>[
-          const SizedBox(
-            height: 10,
-          ),
-          Obx(() {
-            if (shopController.suppliers.isNotEmpty) {
-              return loadingSupplier
-                  ? const SafetyModel()
-                  : Expanded(
-                      child: StaggeredGridView.countBuilder(
-                        staggeredTileBuilder: (int index) =>
-                            const StaggeredTile.fit(1),
-                        padding: const EdgeInsets.symmetric(
-                          horizontal: 15.0,
-                        ),
-                        crossAxisCount: 2,
-                        crossAxisSpacing: 8.0,
-                        mainAxisSpacing: 8.0,
-                        itemCount: shopController.suppliers.length,
-                        shrinkWrap: true,
-                        physics: null,
-                        itemBuilder: (BuildContext context, int index) {
-                          return SuppliersCard(
-                            onTap: () {
-                              Get.to(() => ExpandedProSuppliersPage(
-                                  supplier: shopController.suppliers[index]));
-                            },
-                            supplier: shopController.suppliers[index],
-                          );
-                        },
-                      ),
-                    );
-            } else {
-              return const Center(
-                child: SafetyModel(
-                  isLoading: false,
-                  title: 'No Suppliers Found!',
-                ),
-              );
-            }
-          }),
-        ]),
+        const Text('jdjd'),
       ]),
     );
   }
@@ -669,9 +722,9 @@ class _RowStatusCardState extends State<RowStatusCard> {
       case ClientType.inPerson:
         statusColor = Colors.blue;
         break;
-      case ClientType.bbUser:
-        statusColor = primaryColorLT;
-        break;
+      // case ClientType.bbUser:
+      //   statusColor = primaryColorLT;
+      //   break;
       default:
         statusColor = Colors.grey;
     }
