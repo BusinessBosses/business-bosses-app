@@ -327,10 +327,10 @@ class _ChooseClientBottomSheetState extends State<ChooseClientsBottomSheet>
 
   List<Map<String, dynamic>>? selectedItems = <Map<String, dynamic>>[];
 
-  String _onlineSearchQuery = '';
+  final String _onlineSearchQuery = '';
   String _allSearchQuery = '';
-  String _inpersonSearchQuery = '';
-  String _bbuserSearchQuery = '';
+  final String _inpersonSearchQuery = '';
+  final String _bbuserSearchQuery = '';
   List<String> selectedItem = <String>[];
 
   @override
@@ -383,40 +383,6 @@ class _ChooseClientBottomSheetState extends State<ChooseClientsBottomSheet>
             ],
           ),
           const SizedBox(height: 10),
-          if (widget.isCampaign == null)
-            CupertinoSlidingSegmentedControl<int>(
-              backgroundColor: probackgroundColor,
-              groupValue: _selectedIndex,
-              children: const <int, Widget>{
-                0: Padding(
-                    padding: EdgeInsets.symmetric(horizontal: 5, vertical: 10),
-                    child: Text(
-                      'All',
-                      style: TextStyle(fontSize: 14),
-                    )),
-                1: Padding(
-                    padding: EdgeInsets.symmetric(horizontal: 5, vertical: 10),
-                    child: Text(
-                      'Online',
-                      style: TextStyle(fontSize: 14),
-                    )),
-                2: Text(
-                  'In-person',
-                  style: TextStyle(fontSize: 14),
-                ),
-                3: Text(
-                  'BB-User',
-                  style: TextStyle(fontSize: 14),
-                ),
-              },
-              onValueChanged: (int? value) {
-                setState(() {
-                  _selectedIndex = value!;
-                  _tabController.animateTo(value);
-                });
-              },
-            ),
-          if (widget.isCampaign == null) const SizedBox(height: 20),
           Expanded(
             child: TabBarView(
               controller: _tabController,
@@ -426,27 +392,6 @@ class _ChooseClientBottomSheetState extends State<ChooseClientsBottomSheet>
                     _allSearchQuery = query;
                   });
                 }),
-                if (widget.isCampaign == null)
-                  _buildClientList(widget.online, _onlineSearchQuery,
-                      (String query) {
-                    setState(() {
-                      _onlineSearchQuery = query;
-                    });
-                  }),
-                if (widget.isCampaign == null)
-                  _buildClientList(widget.inperson, _inpersonSearchQuery,
-                      (String query) {
-                    setState(() {
-                      _inpersonSearchQuery = query;
-                    });
-                  }),
-                if (widget.isCampaign == null)
-                  _buildClientList(widget.bbuser, _bbuserSearchQuery,
-                      (String query) {
-                    setState(() {
-                      _bbuserSearchQuery = query;
-                    });
-                  }),
               ],
             ),
           ),
@@ -468,7 +413,7 @@ class _ChooseClientBottomSheetState extends State<ChooseClientsBottomSheet>
           hasSearchIcon: true,
           contentPadding: 10,
           backgroundColor: backgroundColor,
-          hintText: 'Search Clients',
+          hintText: 'Search Customers',
           onChange: onSearchChange,
           onSubmit: (String query) {},
         ),
