@@ -238,7 +238,9 @@ class _CampaignpageState extends State<Campaignpage> {
   }
 
   void _showClientSheet(BuildContext context) async {
-    final String? result = await showModalBottomSheet<String>(
+    final Map<String, List<String>>? result =
+        await showModalBottomSheet<Map<String, List<String>>>(
+      // Changed return type
       backgroundColor: Colors.white,
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
       context: context,
@@ -272,7 +274,10 @@ class _CampaignpageState extends State<Campaignpage> {
     );
 
     if (result != null) {
-      _onClientSelect(result);
+      setState(() {
+        selectedClient = result['ids'] ?? <String>[];
+        selectedClientsName = result['names'] ?? <String>[];
+      });
     }
   }
 }
@@ -322,6 +327,8 @@ class _ChooseClientBottomSheetState extends State<ChooseClientsBottomSheet>
   final String _bbuserSearchQuery = '';
   List<String> selectedItem = <String>[];
 
+  List<String> selectedNames = <String>[];
+
   @override
   void initState() {
     super.initState();
@@ -360,10 +367,11 @@ class _ChooseClientBottomSheetState extends State<ChooseClientsBottomSheet>
                 ProIconButton(
                   icon: const Icon(Icons.check),
                   onPressed: () {
-                    Get.back();
-                    // Get.to(Addclient(
-                    //   onClientAdded: widget.onClientAdded,
-                    // ));
+                    // ignore: always_specify_types
+                    Navigator.pop(context, {
+                      'ids': selectedItem,
+                      'names': selectedNames,
+                    });
                   },
                   text: 'Done',
                   radius: 10.0,
@@ -420,20 +428,13 @@ class _ChooseClientBottomSheetState extends State<ChooseClientsBottomSheet>
                     .map(
                         (Map<String, dynamic> client) => client['id'] as String)
                     .toList();
-                // Create a new list instead of modifying the final one
-                final List<String> newSelectedNames = filteredClients
+                selectedNames = filteredClients
                     .map((Map<String, dynamic> client) =>
                         client['name'] as String)
                     .toList();
-
-                if (widget.onClientAdded != null) {
-                  widget.onClientAdded!();
-                }
               } else {
                 selectedItem.clear();
-                if (widget.onClientAdded != null) {
-                  widget.onClientAdded!();
-                }
+                selectedNames.clear();
               }
             });
           },
@@ -451,24 +452,14 @@ class _ChooseClientBottomSheetState extends State<ChooseClientsBottomSheet>
                             setState(() {
                               if (value == true) {
                                 selectedItem.add(client['id']);
-                                widget.selectedName.add(client['name']);
+                                selectedNames.add(client['name']);
                               } else {
                                 selectedItem.remove(client['id']);
-                                widget.selectedName.remove(client['name']);
+                                selectedNames.remove(client['name']);
                               }
                             });
                           },
                         ),
-                        if (selectedItem == client['name'])
-                          Padding(
-                            padding: const EdgeInsets.only(left: 8.0),
-                            child: ProIconButton(
-                              onPressed: () {
-                                Navigator.pop(context, selectedItem);
-                              },
-                              text: 'Done',
-                            ),
-                          ),
                       ],
                     );
                   }).toList(),
