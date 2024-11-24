@@ -3,11 +3,11 @@ import 'package:business_bosses_v2/bbpro/controllers/shop_controller.dart';
 import 'package:business_bosses_v2/bbpro/presentation/add_client.dart';
 import 'package:business_bosses_v2/bbpro/presentation/add_project.dart';
 import 'package:business_bosses_v2/bbpro/presentation/add_supplier.dart';
-import 'package:business_bosses_v2/bbpro/presentation/bottomnavscreen.dart';
+import 'package:business_bosses_v2/bbpro/presentation/bottom_nav_screen.dart';
 import 'package:business_bosses_v2/bbpro/presentation/create_product.dart';
 import 'package:business_bosses_v2/bbpro/presentation/create_service.dart';
 import 'package:business_bosses_v2/bbpro/presentation/create_order.dart';
-import 'package:business_bosses_v2/bbpro/widgets/financialanalysiscard.dart';
+import 'package:business_bosses_v2/bbpro/widgets/financial_analysis_card.dart';
 import 'package:business_bosses_v2/bbpro/widgets/gotoshopwidget.dart';
 import 'package:business_bosses_v2/bbpro/widgets/infocard.dart';
 import 'package:business_bosses_v2/bbpro/widgets/notificationbutton.dart';
@@ -20,8 +20,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
-
-import '../widgets/salescard.dart';
 
 class Dashboard extends StatefulWidget {
   const Dashboard({
@@ -157,7 +155,7 @@ class _DashboardState extends State<Dashboard> {
                     children: <Widget>[
                       GestureDetector(
                         onTap: () {
-                          Get.to(const ChatScreen());
+                          Get.to(() => const ChatScreen());
                         },
                         child: Padding(
                           padding: const EdgeInsets.only(
@@ -360,7 +358,7 @@ class _DashboardState extends State<Dashboard> {
                                 if (index == 0) {
                                   Navigator.pushReplacement(
                                     context,
-                                    MaterialPageRoute(
+                                    MaterialPageRoute<dynamic>(
                                       builder: (BuildContext context) =>
                                           const Bottomnavscreen(
                                               initialindex: 3),
@@ -371,7 +369,7 @@ class _DashboardState extends State<Dashboard> {
                                 } else if (index == 2) {
                                   Navigator.pushReplacement(
                                     context,
-                                    MaterialPageRoute(
+                                    MaterialPageRoute<dynamic>(
                                       builder: (BuildContext context) =>
                                           const Bottomnavscreen(
                                               initialindex: 1),
@@ -413,13 +411,13 @@ class _DashboardState extends State<Dashboard> {
                           return GestureDetector(
                             onTap: () {
                               if (index == 0) {
-                                Get.to(const CreateProductListing());
+                                Get.to(() => const CreateProductListing());
                               } else if (index == 1) {
-                                Get.to(const CreateServiceListing());
+                                Get.to(() => const CreateServiceListing());
                               } else if (index == 2) {
-                                Get.to(const CreateOrder());
+                                Get.to(() => const CreateOrder());
                               } else if (index == 3) {
-                                Get.to(const Addclient());
+                                Get.to(() => const Addclient());
                               }
                             },
                             child: QuickActionCard(
@@ -427,7 +425,7 @@ class _DashboardState extends State<Dashboard> {
                                 value: index == 0
                                     ? clientsController.allclients.length
                                         .toString()
-                                    : 'value',
+                                    : '0',
                                 color: index == 0
                                     ? Colors.blue
                                     : index == 1

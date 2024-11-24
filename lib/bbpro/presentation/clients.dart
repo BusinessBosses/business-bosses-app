@@ -119,7 +119,7 @@ class _ClientsScreenState extends State<ClientsScreen>
                 onSelected: (String item) {
                   switch (item) {
                     case 'Item 1':
-                      Get.to(const Addclient());
+                      Get.to(() => const Addclient());
                       break;
                     case 'Item 2':
                       showModalBottomSheet<void>(
@@ -309,7 +309,7 @@ class _ClientsScreenState extends State<ClientsScreen>
                       );
                       break;
                     case 'Item 3':
-                      Get.to(const Campaignpage());
+                      Get.to(() => const Campaignpage());
                       break;
                   }
                 },
@@ -403,7 +403,7 @@ class _ClientsScreenState extends State<ClientsScreen>
               ),
               GestureDetector(
                 onTap: () {
-                  Get.to(const ChatScreen());
+                  Get.to(() => const ChatScreen());
                 },
                 child: Padding(
                   padding: const EdgeInsets.only(

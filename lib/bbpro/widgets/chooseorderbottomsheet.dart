@@ -95,7 +95,7 @@ class _ChooseOrderBottomSheetState extends State<ChooseOrderBottomSheet>
                   ? ProIconButton(
                       icon: const Icon(Icons.add),
                       onPressed: () {
-                        Get.to(const CreateProductListing());
+                        Get.to(() => const CreateProductListing());
                       },
                       text: 'New Product',
                       radius: 10.0,
@@ -104,7 +104,7 @@ class _ChooseOrderBottomSheetState extends State<ChooseOrderBottomSheet>
                       ? ProIconButton(
                           icon: const Icon(Icons.add),
                           onPressed: () {
-                            Get.to(const CreateServiceListing());
+                            Get.to(() => const CreateServiceListing());
                           },
                           text: 'New Service',
                           radius: 10.0,
@@ -198,7 +198,7 @@ class _ChooseOrderBottomSheetState extends State<ChooseOrderBottomSheet>
                                                         imageUrl:
                                                             product['images'])),
                                           )
-                                        : SizedBox(),
+                                        : const SizedBox(),
                                     subtitle: Text(
                                         '${shopController.shop!.currency} ${product['price']}'),
                                     value: _tempSelectedItems.contains(product),

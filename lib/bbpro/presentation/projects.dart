@@ -105,14 +105,14 @@ class _ProjectsState extends State<Projects>
                   radius: 50,
                   icon: const Icon(Icons.add),
                   onPressed: () {
-                    Get.to(const Addproject());
+                    Get.to(() => const Addproject());
                   },
                   text: 'Add Tasks',
                 ),
               ),
               GestureDetector(
                 onTap: () {
-                  Get.to(const ChatScreen());
+                  Get.to(() => const ChatScreen());
                 },
                 child: Padding(
                   padding: const EdgeInsets.only(

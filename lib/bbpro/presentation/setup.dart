@@ -1,7 +1,7 @@
 import 'package:business_bosses_v2/bbpro/controllers/shop_controller.dart';
 import 'package:business_bosses_v2/bbpro/presentation/availability.dart';
-import 'package:business_bosses_v2/bbpro/presentation/servicesmanagement.dart';
-import 'package:business_bosses_v2/bbpro/presentation/setupshop.dart';
+import 'package:business_bosses_v2/bbpro/presentation/services_management.dart';
+import 'package:business_bosses_v2/bbpro/presentation/setup_shop.dart';
 import 'package:business_bosses_v2/bbpro/presentation/shop_screen.dart';
 import 'package:business_bosses_v2/bbpro/widgets/iconbutton.dart';
 import 'package:business_bosses_v2/bbpro/widgets/notificationbutton.dart';

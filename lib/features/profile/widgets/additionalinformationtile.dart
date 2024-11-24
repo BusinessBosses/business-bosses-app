@@ -8,7 +8,7 @@ import '../../../common/models/my_response.dart';
 import '../../../common/widgets/data_selection_screen.dart';
 import '../../../utils/theme/theme.dart';
 import '../../../analytics/presentation/analysescreen.dart';
-import '../presentation/myprofilescreen.dart';
+import '../presentation/my_profile_screen.dart';
 
 class AdditionalInfoTile extends StatefulWidget {
   const AdditionalInfoTile({Key? key}) : super(key: key);

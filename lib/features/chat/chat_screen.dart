@@ -81,7 +81,7 @@ class _ChatScreenState extends State<ChatScreen> {
                               padding: const EdgeInsets.only(right: 5.0),
                               child: GestureDetector(
                                 onTap: () {
-                                  Get.to(const Campaignpage());
+                                  Get.to(() => const Campaignpage());
                                 },
                                 child: CircleAvatar(
                                     radius: 20,

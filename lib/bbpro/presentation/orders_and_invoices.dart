@@ -96,7 +96,7 @@ class _OrdersScreenState extends State<OrdersScreen>
                 ),
                 GestureDetector(
                   onTap: () {
-                    Get.to(const ChatScreen());
+                    Get.to(() => const ChatScreen());
                   },
                   child: Padding(
                     padding: const EdgeInsets.only(

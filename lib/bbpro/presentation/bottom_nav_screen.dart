@@ -2,10 +2,10 @@ import 'package:business_bosses_v2/bbpro/controllers/clients_controller.dart';
 import 'package:business_bosses_v2/bbpro/controllers/shop_controller.dart';
 import 'package:business_bosses_v2/bbpro/presentation/clients.dart';
 import 'package:business_bosses_v2/bbpro/presentation/dashboard.dart';
-import 'package:business_bosses_v2/bbpro/presentation/ordersandinvoices.dart';
+import 'package:business_bosses_v2/bbpro/presentation/orders_and_invoices.dart';
 import 'package:business_bosses_v2/bbpro/presentation/projects.dart';
 import 'package:business_bosses_v2/bbpro/presentation/setup.dart';
-import 'package:business_bosses_v2/bbpro/presentation/setupshop.dart';
+import 'package:business_bosses_v2/bbpro/presentation/setup_shop.dart';
 import 'package:business_bosses_v2/common/widgets/safety_model.dart';
 import 'package:business_bosses_v2/features/profile/controller/profile_controller.dart';
 import 'package:business_bosses_v2/utils/theme/theme.dart';
@@ -66,7 +66,7 @@ class _BottomnavscreenState extends State<Bottomnavscreen> {
       if (value) {
         shopController.loading(false);
       } else {
-        Get.to(const Setupshop());
+        Get.to(() => const Setupshop());
       }
     });
   }

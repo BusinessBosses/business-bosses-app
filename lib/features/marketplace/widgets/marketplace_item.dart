@@ -23,7 +23,7 @@ import '../../../common/models/api_response_model.dart';
 import '../../../common/models/comment_model.dart';
 import '../../../common/models/user_model.dart';
 import '../../chat/chat_room_screen.dart';
-import '../../profile/presentation/publicprofilescreen.dart';
+import '../../profile/presentation/public_profile_screen.dart';
 import '../../profile/widgets/premium_profile_tile.dart';
 import '../controllers/market_controller.dart';
 import '../models/market_model.dart';
