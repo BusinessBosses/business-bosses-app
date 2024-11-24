@@ -2,11 +2,8 @@ import 'package:business_bosses_v2/bbpro/controllers/order_controller.dart';
 import 'package:business_bosses_v2/bbpro/controllers/shop_controller.dart';
 import 'package:business_bosses_v2/bbpro/models/service_model.dart';
 import 'package:business_bosses_v2/bbpro/models/shop_model.dart';
-import 'package:business_bosses_v2/bbpro/widgets/addtoorderwidget.dart';
 import 'package:business_bosses_v2/bbpro/widgets/button.dart';
-import 'package:business_bosses_v2/bbpro/widgets/edittext.dart';
 import 'package:business_bosses_v2/bbpro/widgets/orderpaymentcard.dart';
-import 'package:business_bosses_v2/bbpro/widgets/orderpreviewcard.dart';
 import 'package:business_bosses_v2/bbpro/widgets/ordersummarycard.dart';
 import 'package:business_bosses_v2/bbpro/widgets/servicetypesection.dart';
 import 'package:business_bosses_v2/common/dialogs/snackbar.dart';
@@ -348,7 +345,7 @@ class _BookServiceScreenState extends State<BookServiceScreen> {
                       'paymentMethod': widget.service.paymentMethod != null &&
                               widget.service.paymentMethod!.isNotEmpty
                           ? widget.service.paymentMethod!
-                          : 'Cash',
+                          : 'cash',
                       'orderDetails':
                           'Name: ${fullNameController.text} \n Email: ${emailController.text} \n Phone: ${phoneController.text} \n Delivery Details: ${deliveryController.text}',
                       'invoiceOption': 'send_with_payment_link',
@@ -379,5 +376,15 @@ class _BookServiceScreenState extends State<BookServiceScreen> {
         ),
       ),
     );
+  }
+
+  String getDeliveryMethod(String method) {
+    if (method == 'Online') {
+      return 'online';
+    } else if (method == 'Courier') {
+      return 'in_person';
+    } else {
+      return 'pickup';
+    }
   }
 }
