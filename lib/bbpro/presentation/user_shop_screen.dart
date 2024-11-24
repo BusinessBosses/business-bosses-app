@@ -1,3 +1,4 @@
+import 'package:business_bosses_v2/action/action.dart';
 import 'package:business_bosses_v2/bbpro/controllers/shop_controller.dart';
 import 'package:business_bosses_v2/bbpro/models/service_model.dart';
 import 'package:business_bosses_v2/bbpro/models/product_model.dart';
@@ -48,6 +49,13 @@ class _UserShopScreenState extends State<UserShopScreen> {
     });
   }
 
+  void _shareBizCenter() {
+    String message =
+        'Have a look at ${shopController.userShop!.user?.username ?? 'Business Bosses'}\'s BizCenter on Business Bosses\n'
+        'https://vm.businessbosses.co.uk/share/post';
+    socialShare(message);
+  }
+
   @override
   Widget build(BuildContext context) {
     List<Widget> _buildActionButtons(List<Map<String, String>> actions) {
@@ -69,7 +77,7 @@ class _UserShopScreenState extends State<UserShopScreen> {
               );
               launchUrl(launchUri);
             } else if (action['text'] == 'Share') {
-              // TODO: Implement share functionality
+              _shareBizCenter();
             } else if (action['text'] == 'Review') {
               Get.to(() => SellerReviewScreen(
                     user: shopController.userShop!.user!,
