@@ -152,25 +152,22 @@ class _InventoryCardState extends State<InventoryCard> {
                 ),
               ),
               widget.myShop == false
-                  ? GestureDetector(
-                      onTap: () {},
-                      child: Container(
-                        padding: const EdgeInsets.symmetric(
-                            horizontal: 5, vertical: 3),
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(70),
-                          color: primaryColorLT,
-                          // border: Border.all(
-                          //   color: proprimaryColor,
-                          // ),
-                        ),
-                        child: const Text(
-                          'Order',
-                          style: TextStyle(
-                            color: Colors.white,
-                            fontWeight: FontWeight.bold,
-                            fontSize: 11,
-                          ),
+                  ? Container(
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 5, vertical: 3),
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(70),
+                        color: primaryColorLT,
+                        // border: Border.all(
+                        //   color: proprimaryColor,
+                        // ),
+                      ),
+                      child: const Text(
+                        'Order',
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontWeight: FontWeight.bold,
+                          fontSize: 11,
                         ),
                       ),
                     )
