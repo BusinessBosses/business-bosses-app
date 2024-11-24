@@ -37,7 +37,7 @@ class _OrdersWidgetState extends State<OrdersWidget> {
       child: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 15.0, vertical: 15),
         child: Container(
-          padding: const EdgeInsets.all(10.0),
+          padding: const EdgeInsets.all(15.0),
           decoration: BoxDecoration(
             color: Colors.white,
             borderRadius: BorderRadius.circular(16.0),

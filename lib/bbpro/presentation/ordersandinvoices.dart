@@ -42,8 +42,7 @@ class _OrdersScreenState extends State<OrdersScreen>
   @override
   void initState() {
     super.initState();
-    _tabController =
-        TabController(length: ClientType.values.length, vsync: this);
+    _tabController = TabController(length: 4, vsync: this);
 
     // Initialize tasks
     orderController.initOrders(shopController.shop!.id).then((_) {

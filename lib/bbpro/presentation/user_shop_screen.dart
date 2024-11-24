@@ -50,6 +50,57 @@ class _UserShopScreenState extends State<UserShopScreen> {
 
   @override
   Widget build(BuildContext context) {
+    List<Widget> _buildActionButtons(List<Map<String, String>> actions) {
+      return actions.map((Map<String, String> action) {
+        return GestureDetector(
+          onTap: () {
+            if (action['text'] == 'Chat') {
+              print('object');
+              Get.to(
+                () => const ChatRoomScreen(
+                  frommarketplace: false,
+                ),
+                arguments: shopController.userShop!.user,
+              );
+            } else if (action['text'] == 'Call') {
+              final Uri launchUri = Uri(
+                scheme: 'tel',
+                path: shopController.shop!.phone,
+              );
+              launchUrl(launchUri);
+            } else if (action['text'] == 'Share') {
+              // TODO: Implement share functionality
+            } else if (action['text'] == 'Review') {
+              Get.to(() => SellerReviewScreen(
+                    user: shopController.userShop!.user!,
+                  ));
+            }
+          },
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 5.0),
+            child: Column(
+              children: <Widget>[
+                CircleAvatar(
+                  radius: 18,
+                  backgroundColor: backgroundColor,
+                  child: SvgPicture.asset(
+                    action['icon']!,
+                    height: 17,
+                  ),
+                ),
+                const SizedBox(height: 3),
+                Text(
+                  action['text']!,
+                  style: const TextStyle(
+                      fontSize: 12, fontWeight: FontWeight.bold),
+                ),
+              ],
+            ),
+          ),
+        );
+      }).toList();
+    }
+
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: widget.ismyshop != null
@@ -111,43 +162,6 @@ class _UserShopScreenState extends State<UserShopScreen> {
                                       ),
                                     ),
                                   ),
-                                  Positioned(
-                                      bottom: 0,
-                                      right: 0,
-                                      child: GestureDetector(
-                                        onTap: () {
-                                          Get.to(
-                                            () => const ChatRoomScreen(
-                                              frommarketplace: false,
-                                            ),
-                                            arguments:
-                                                shopController.userShop!.user,
-                                          );
-                                        },
-                                        child: Container(
-                                          decoration: BoxDecoration(
-                                            shape: BoxShape.circle,
-                                            boxShadow: <BoxShadow>[
-                                              BoxShadow(
-                                                color: Colors.grey
-                                                    .withOpacity(0.3),
-                                                spreadRadius: 2,
-                                                blurRadius: 5,
-                                                offset: const Offset(0,
-                                                    3), // changes position of shadow
-                                              ),
-                                            ],
-                                          ),
-                                          child: CircleAvatar(
-                                            backgroundColor: Colors.white,
-                                            child: SvgPicture.asset(
-                                              'assets/svgs/shopchat.svg',
-                                              color: proprimaryColor,
-                                              height: 24.0,
-                                            ),
-                                          ),
-                                        ),
-                                      )),
                                 ]),
                                 const SizedBox(height: 10),
                                 Padding(
@@ -171,9 +185,9 @@ class _UserShopScreenState extends State<UserShopScreen> {
                                             color: Colors.blue),
                                         textAlign: TextAlign.center,
                                         moreStyle: bodyText2.copyWith(
-                                            color: Colors.redAccent),
+                                            color: Colors.black),
                                         lessStyle: bodyText2.copyWith(
-                                            color: Colors.redAccent),
+                                            color: Colors.black),
                                         trimLength: 40,
                                         trimExpandedText: '  show less',
                                         basicStyle: bodyText2.copyWith(
@@ -250,6 +264,33 @@ class _UserShopScreenState extends State<UserShopScreen> {
                                           ),
                                         ],
                                       ),
+                                      const SizedBox(
+                                        height: 10,
+                                      ),
+                                      Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.center,
+                                        children: _buildActionButtons(<Map<
+                                            String, String>>[
+                                          <String, String>{
+                                            'icon': 'assets/svgs/shopchat.svg',
+                                            'text': 'Chat'
+                                          },
+                                          <String, String>{
+                                            'icon': 'assets/svgs/shopcall.svg',
+                                            'text': 'Call'
+                                          },
+                                          <String, String>{
+                                            'icon': 'assets/svgs/shopshare.svg',
+                                            'text': 'Share'
+                                          },
+                                          <String, String>{
+                                            'icon':
+                                                'assets/svgs/shopreview.svg',
+                                            'text': 'Review'
+                                          },
+                                        ]),
+                                      )
                                     ],
                                   ),
                                 ),
@@ -263,7 +304,7 @@ class _UserShopScreenState extends State<UserShopScreen> {
                             const TabBar(
                                 labelColor: Colors.black,
                                 unselectedLabelColor: Colors.grey,
-                                indicatorColor: proprimaryColor,
+                                indicatorColor: Colors.black,
                                 tabs: <Widget>[
                                   Tab(text: 'Items'),
                                   Tab(text: 'Reviews'),
@@ -273,8 +314,7 @@ class _UserShopScreenState extends State<UserShopScreen> {
                               height: 1,
                               // thickness: 1,
                             ),
-                            SizedBox(
-                              height: 500,
+                            Expanded(
                               child: TabBarView(
                                 children: <Widget>[
                                   ///Tab 1 Content
@@ -288,9 +328,10 @@ class _UserShopScreenState extends State<UserShopScreen> {
                                               MainAxisAlignment.spaceBetween,
                                           children: <Widget>[
                                             Text(
-                                              'All (${shopController.userProducts.length + shopController.userServices.length})',
-                                              style:
-                                                  const TextStyle(fontSize: 14),
+                                              'Showcase (${shopController.userProducts.length + shopController.userServices.length})',
+                                              style: const TextStyle(
+                                                  fontSize: 14,
+                                                  fontWeight: FontWeight.w700),
                                             ),
                                             GestureDetector(
                                               onTap: () {
@@ -507,11 +548,11 @@ class _UserShopScreenState extends State<UserShopScreen> {
             'Contact Information',
             style: TextStyle(
               fontWeight: FontWeight.w700,
-              fontSize: 18,
+              fontSize: 16,
               color: textColor,
             ),
           ),
-          const SizedBox(height: 50),
+          const SizedBox(height: 20),
           if (shopController.userShop?.user?.website?.isNotEmpty ?? false)
             _buildContactRow(
               'assets/svgs/website.svg',
@@ -562,6 +603,32 @@ class _UserShopScreenState extends State<UserShopScreen> {
                 }
               },
             ),
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: <Widget>[
+              const SizedBox(height: 40),
+              const Text(
+                'Social Links',
+                style: TextStyle(
+                  fontWeight: FontWeight.w700,
+                  fontSize: 18,
+                  color: textColor,
+                ),
+              ),
+              const SizedBox(height: 20),
+              GestureDetector(
+                onTap: () {},
+                child: Row(
+                  children: <Widget>[
+                    CircleAvatar(
+                      backgroundColor: backgroundColor,
+                      child: SvgPicture.asset('assets/svgs/facebook.svg'),
+                    )
+                  ],
+                ),
+              )
+            ],
+          )
         ],
       ),
     );

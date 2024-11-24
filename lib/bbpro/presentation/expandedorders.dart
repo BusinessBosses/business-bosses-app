@@ -63,15 +63,14 @@ class _ExpandedOrdersState extends State<ExpandedOrders> {
             return ListTile(
               title: Text(
                 product.name,
-                style: const TextStyle(
-                  fontWeight: FontWeight.w500,
-                ),
+                style:
+                    const TextStyle(fontWeight: FontWeight.w600, fontSize: 14),
               ),
               leading: _buildProductImage(product),
               subtitle: Text(
                 '${shopController.shop?.currency ?? ''} ${product.price.toString()}',
                 style: const TextStyle(
-                  fontSize: 14,
+                  fontSize: 13,
                 ),
               ),
               contentPadding: const EdgeInsets.symmetric(

@@ -63,10 +63,11 @@ class _GotoshopWidgetState extends State<GotoshopWidget> {
                               style: const TextStyle(
                                   fontSize: 14, fontWeight: FontWeight.w700),
                             ),
-                            Text(
-                                'Visits: ${shopController.shop != null ? shopController.shop!.views : 0}',
-                                style: const TextStyle(
-                                    fontSize: 12, fontWeight: FontWeight.w500)),
+                            const Text('View Biz-Center',
+                                style: TextStyle(
+                                    fontSize: 12,
+                                    fontWeight: FontWeight.w500,
+                                    decoration: TextDecoration.underline)),
                           ],
                         ),
                       ),

@@ -7,6 +7,7 @@ import 'package:business_bosses_v2/bbpro/presentation/bottomnavscreen.dart';
 import 'package:business_bosses_v2/bbpro/presentation/create_product.dart';
 import 'package:business_bosses_v2/bbpro/presentation/create_service.dart';
 import 'package:business_bosses_v2/bbpro/presentation/create_order.dart';
+import 'package:business_bosses_v2/bbpro/widgets/financialanalysiscard.dart';
 import 'package:business_bosses_v2/bbpro/widgets/gotoshopwidget.dart';
 import 'package:business_bosses_v2/bbpro/widgets/infocard.dart';
 import 'package:business_bosses_v2/bbpro/widgets/notificationbutton.dart';
@@ -34,7 +35,7 @@ class Dashboard extends StatefulWidget {
 class _DashboardState extends State<Dashboard> {
   final List<String> titles = <String>[
     'Clients',
-    'Expenses',
+    'Visits',
     'To-do tasks',
     // 'Shop Visits'
   ];
@@ -339,7 +340,7 @@ class _DashboardState extends State<Dashboard> {
                         ],
                       ),
                       const OrdersWidget(),
-                      const SalesWidget(),
+                      const FinancialanalysisWidget(),
                       StaggeredGridView.countBuilder(
                         physics: const NeverScrollableScrollPhysics(),
                         staggeredTileBuilder: (int index) =>
@@ -386,18 +387,8 @@ class _DashboardState extends State<Dashboard> {
                                     ? shopController.shopStats!.clientCount
                                         .toString()
                                     : index == 1
-                                        ? shopController.shop!.currency +
-                                            (shopController.shopStats!
-                                                        .totalAmount >=
-                                                    1000000
-                                                ? '${(shopController.shopStats!.totalAmount / 1000000).toStringAsFixed(1)}M'
-                                                : shopController.shopStats!
-                                                            .totalAmount >=
-                                                        1000
-                                                    ? '${(shopController.shopStats!.totalAmount / 1000).toStringAsFixed(1)}K'
-                                                    : shopController
-                                                        .shopStats!.totalAmount
-                                                        .toStringAsFixed(1))
+                                        ? shopController.shopStats!.views
+                                            .toString()
                                         : index == 2
                                             ? shopController
                                                 .shopStats!.projectCount

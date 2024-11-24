@@ -156,17 +156,18 @@ class _InventoryCardState extends State<InventoryCard> {
                       onTap: () {},
                       child: Container(
                         padding: const EdgeInsets.symmetric(
-                            horizontal: 10, vertical: 7),
+                            horizontal: 5, vertical: 3),
                         decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(7),
-                          border: Border.all(
-                            color: proprimaryColor,
-                          ),
+                          borderRadius: BorderRadius.circular(70),
+                          color: primaryColorLT,
+                          // border: Border.all(
+                          //   color: proprimaryColor,
+                          // ),
                         ),
                         child: const Text(
                           'Order',
                           style: TextStyle(
-                            color: proprimaryColor,
+                            color: Colors.white,
                             fontWeight: FontWeight.bold,
                             fontSize: 11,
                           ),

@@ -79,64 +79,27 @@ class _ShopScreenState extends State<ShopScreen> {
                     const SizedBox(
                       height: 10.0,
                     ),
-                  Stack(children: <Widget>[
-                    SizedBox(
-                      height: 100,
-                      width: 100,
-                      child: SizedBox(
-                        height: 80.0,
-                        width: 80.0,
-                        child: Align(
-                          alignment: Alignment.topLeft,
-                          child: ClipRRect(
-                            borderRadius: BorderRadius.circular(1000),
-                            child: NetworkImageWithPlaceHolder(
-                              imageUrl: shopController.shop!.image ?? '',
-                              radius: radius,
-                              placeHolder: Icons.person,
-                              iconSize: 22.0,
-                              fit: BoxFit.cover,
-                            ),
+                  SizedBox(
+                    height: 100,
+                    width: 100,
+                    child: SizedBox(
+                      height: 80.0,
+                      width: 80.0,
+                      child: Align(
+                        alignment: Alignment.topLeft,
+                        child: ClipRRect(
+                          borderRadius: BorderRadius.circular(1000),
+                          child: NetworkImageWithPlaceHolder(
+                            imageUrl: shopController.shop!.image ?? '',
+                            radius: radius,
+                            placeHolder: Icons.person,
+                            iconSize: 22.0,
+                            fit: BoxFit.cover,
                           ),
                         ),
                       ),
                     ),
-                    Positioned(
-                        bottom: 0,
-                        right: 0,
-                        child: GestureDetector(
-                          onTap: () {
-                            Get.to(
-                              () => const ChatRoomScreen(
-                                frommarketplace: false,
-                              ),
-                              arguments: shopController.shop!.user,
-                            );
-                          },
-                          child: Container(
-                            decoration: BoxDecoration(
-                              shape: BoxShape.circle,
-                              boxShadow: <BoxShadow>[
-                                BoxShadow(
-                                  color: Colors.grey.withOpacity(0.3),
-                                  spreadRadius: 2,
-                                  blurRadius: 5,
-                                  offset: const Offset(
-                                      0, 3), // changes position of shadow
-                                ),
-                              ],
-                            ),
-                            child: CircleAvatar(
-                              backgroundColor: Colors.white,
-                              child: SvgPicture.asset(
-                                'assets/svgs/shopchat.svg',
-                                color: proprimaryColor,
-                                height: 24.0,
-                              ),
-                            ),
-                          ),
-                        )),
-                  ]),
+                  ),
                   const SizedBox(height: 10),
                   Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 15.0),
@@ -152,10 +115,8 @@ class _ShopScreenState extends State<ShopScreen> {
                           detectionRegExp: detectionRegExp(hashtag: false)!,
                           detectedStyle: bodyText2.copyWith(color: Colors.blue),
                           textAlign: TextAlign.center,
-                          moreStyle:
-                              bodyText2.copyWith(color: Colors.redAccent),
-                          lessStyle:
-                              bodyText2.copyWith(color: Colors.redAccent),
+                          moreStyle: bodyText2.copyWith(color: Colors.black),
+                          lessStyle: bodyText2.copyWith(color: Colors.black),
                           trimLength: 40,
                           trimExpandedText: '  show less',
                           basicStyle: bodyText2.copyWith(color: textColor),
@@ -237,7 +198,7 @@ class _ShopScreenState extends State<ShopScreen> {
               const TabBar(
                   labelColor: Colors.black,
                   unselectedLabelColor: Colors.grey,
-                  indicatorColor: proprimaryColor,
+                  indicatorColor: Colors.black,
                   tabs: <Widget>[
                     Tab(text: 'Items'),
                     Tab(text: 'Reviews'),
@@ -261,8 +222,9 @@ class _ShopScreenState extends State<ShopScreen> {
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: <Widget>[
                               Text(
-                                'All (${shopController.products.length + shopController.services.length})',
-                                style: const TextStyle(fontSize: 14),
+                                'Showcase (${shopController.products.length + shopController.services.length})',
+                                style: const TextStyle(
+                                    fontSize: 14, fontWeight: FontWeight.w700),
                               ),
                               GestureDetector(
                                 onTap: () {

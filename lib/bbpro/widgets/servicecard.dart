@@ -132,17 +132,18 @@ class _ServiceCardState extends State<ServiceCard> {
                       onTap: () {},
                       child: Container(
                         padding: const EdgeInsets.symmetric(
-                            horizontal: 10, vertical: 7),
+                            horizontal: 5, vertical: 3),
                         decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(7),
-                          border: Border.all(
-                            color: proprimaryColor,
-                          ),
+                          color: primaryColorLT,
+                          borderRadius: BorderRadius.circular(70),
+                          // border: Border.all(
+                          //   color: primaryColorLT,
+                          // ),
                         ),
                         child: const Text(
                           'Book',
                           style: TextStyle(
-                            color: proprimaryColor,
+                            color: Colors.white,
                             fontWeight: FontWeight.bold,
                             fontSize: 11,
                           ),
