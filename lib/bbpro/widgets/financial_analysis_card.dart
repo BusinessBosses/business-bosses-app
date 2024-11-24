@@ -132,16 +132,19 @@ class _FinancialanalysisWidgetState extends State<FinancialanalysisWidget> {
                           padding: const EdgeInsets.all(8.0),
                           child: Center(
                             child: Text(
-                              shopController.shop!.currency +
-                                  (shopController.shopStats!.totalAmount >=
-                                          1000000
-                                      ? '${(shopController.shopStats!.totalAmount / 1000000).toStringAsFixed(1)}M'
-                                      : shopController.shopStats!.totalAmount >=
-                                              1000
-                                          ? '${(shopController.shopStats!.totalAmount / 1000).toStringAsFixed(1)}K'
+                              shopController.shopStats != null
+                                  ? shopController.shop!.currency +
+                                      (shopController.shopStats!.totalAmount >=
+                                              1000000
+                                          ? '${(shopController.shopStats!.totalAmount / 1000000).toStringAsFixed(1)}M'
                                           : shopController
-                                              .shopStats!.totalAmount
-                                              .toStringAsFixed(1)),
+                                                      .shopStats!.totalAmount >=
+                                                  1000
+                                              ? '${(shopController.shopStats!.totalAmount / 1000).toStringAsFixed(1)}K'
+                                              : shopController
+                                                  .shopStats!.totalAmount
+                                                  .toStringAsFixed(1))
+                                  : '0',
                               style: const TextStyle(
                                 fontWeight: FontWeight.bold,
                                 fontSize: 14,
@@ -154,16 +157,20 @@ class _FinancialanalysisWidgetState extends State<FinancialanalysisWidget> {
                           padding: const EdgeInsets.all(8.0),
                           child: Center(
                             child: Text(
-                              shopController.shop!.currency +
-                                  (shopController.shopStats!.totalAmount >=
-                                          1000000
-                                      ? '${(shopController.shopStats!.totalAmount / 1000000).toStringAsFixed(1)}M'
-                                      : shopController.shopStats!.totalAmount >=
-                                              1000
-                                          ? '${(shopController.shopStats!.totalAmount / 1000).toStringAsFixed(1)}K'
-                                          : shopController
-                                              .shopStats!.totalAmount
-                                              .toStringAsFixed(1)),
+                              shopController.shopStats != null
+                                  ? shopController.shop!.currency +
+                                      (shopController
+                                                  .shopStats!.totalExpenses >=
+                                              1000000
+                                          ? '${(shopController.shopStats!.totalExpenses / 1000000).toStringAsFixed(1)}M'
+                                          : shopController.shopStats!
+                                                      .totalExpenses >=
+                                                  1000
+                                              ? '${(shopController.shopStats!.totalExpenses / 1000).toStringAsFixed(1)}K'
+                                              : shopController
+                                                  .shopStats!.totalExpenses
+                                                  .toStringAsFixed(1))
+                                  : '0',
                               style: const TextStyle(
                                 fontWeight: FontWeight.bold,
                                 fontSize: 14,
@@ -176,16 +183,23 @@ class _FinancialanalysisWidgetState extends State<FinancialanalysisWidget> {
                           padding: const EdgeInsets.all(8.0),
                           child: Center(
                             child: Text(
-                              shopController.shop!.currency +
-                                  (shopController.shopStats!.totalAmount >=
-                                          1000000
-                                      ? '${(shopController.shopStats!.totalAmount / 1000000).toStringAsFixed(1)}M'
-                                      : shopController.shopStats!.totalAmount >=
-                                              1000
-                                          ? '${(shopController.shopStats!.totalAmount / 1000).toStringAsFixed(1)}K'
-                                          : shopController
-                                              .shopStats!.totalAmount
-                                              .toStringAsFixed(1)),
+                              shopController.shopStats != null
+                                  ? shopController.shop!.currency +
+                                      ((shopController.shopStats!.totalAmount -
+                                                  shopController.shopStats!
+                                                      .totalExpenses) >=
+                                              1000000
+                                          ? '${((shopController.shopStats!.totalAmount - shopController.shopStats!.totalExpenses) / 1000000).toStringAsFixed(1)}M'
+                                          : (shopController.shopStats!
+                                                          .totalAmount -
+                                                      shopController.shopStats!
+                                                          .totalExpenses) >=
+                                                  1000
+                                              ? '${((shopController.shopStats!.totalAmount - shopController.shopStats!.totalExpenses) / 1000).toStringAsFixed(1)}K'
+                                              : shopController
+                                                  .shopStats!.totalAmount
+                                                  .toStringAsFixed(1))
+                                  : '0',
                               style: const TextStyle(
                                 fontWeight: FontWeight.bold,
                                 fontSize: 14,

@@ -2,9 +2,9 @@ import 'dart:io';
 
 import 'package:business_bosses_v2/bbpro/controllers/shop_controller.dart';
 import 'package:business_bosses_v2/bbpro/models/service_model.dart';
-import 'package:business_bosses_v2/bbpro/widgets/addpackagebottomsheet.dart';
+import 'package:business_bosses_v2/bbpro/widgets/add_package_bottomsheet.dart';
 import 'package:business_bosses_v2/bbpro/widgets/dropdown.dart';
-import 'package:business_bosses_v2/bbpro/widgets/edittext.dart';
+import 'package:business_bosses_v2/bbpro/widgets/edit_text.dart';
 import 'package:business_bosses_v2/bbpro/widgets/iconbutton.dart';
 import 'package:business_bosses_v2/bbpro/widgets/switchwidget.dart';
 import 'package:business_bosses_v2/bbpro/widgets/taskitem.dart';
