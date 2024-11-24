@@ -8,6 +8,7 @@ import 'package:business_bosses_v2/bbpro/presentation/campaign_page.dart';
 import 'package:business_bosses_v2/bbpro/presentation/create_product.dart';
 import 'package:business_bosses_v2/bbpro/presentation/create_service.dart';
 import 'package:business_bosses_v2/bbpro/presentation/create_order.dart';
+import 'package:business_bosses_v2/bbpro/widgets/financialanalysiscard.dart';
 import 'package:business_bosses_v2/bbpro/widgets/gotoshopwidget.dart';
 import 'package:business_bosses_v2/bbpro/widgets/infocard.dart';
 import 'package:business_bosses_v2/bbpro/widgets/notificationbutton.dart';
@@ -340,7 +341,7 @@ class _DashboardState extends State<Dashboard> {
                         ],
                       ),
                       const OrdersWidget(),
-                      const SalesWidget(),
+                      const FinancialanalysisWidget(),
                       StaggeredGridView.countBuilder(
                         physics: const NeverScrollableScrollPhysics(),
                         staggeredTileBuilder: (int index) =>
