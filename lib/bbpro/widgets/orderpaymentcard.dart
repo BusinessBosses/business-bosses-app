@@ -26,9 +26,7 @@ class _OrderPaymentMethodsWidgetState extends State<OrderPaymentMethodsWidget> {
             const Text(
               "Seller's Accepted Payment Methods",
               style: TextStyle(
-                  fontSize: 14,
-                  fontWeight: FontWeight.w700,
-                  color: proprimaryColor),
+                  fontSize: 16, fontWeight: FontWeight.w700, color: textColor),
             ),
             const SizedBox(height: 16.0),
             if (widget.paymentMethods != null)

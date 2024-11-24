@@ -8,7 +8,6 @@ import 'package:business_bosses_v2/bbpro/widgets/edittext.dart';
 import 'package:business_bosses_v2/bbpro/widgets/orderpaymentcard.dart';
 import 'package:business_bosses_v2/bbpro/widgets/orderpreviewcard.dart';
 import 'package:business_bosses_v2/bbpro/widgets/ordersummarycard.dart';
-import 'package:business_bosses_v2/bbpro/widgets/progresstabbar.dart';
 import 'package:business_bosses_v2/common/dialogs/snackbar.dart';
 import 'package:business_bosses_v2/common/generic_slider.dart';
 import 'package:business_bosses_v2/features/profile/controller/profile_controller.dart';
@@ -29,9 +28,7 @@ class OrderProductScreen extends StatefulWidget {
   State<OrderProductScreen> createState() => _OrderProductScreenState();
 }
 
-class _OrderProductScreenState extends State<OrderProductScreen>
-    with SingleTickerProviderStateMixin {
-  late TabController _tabController;
+class _OrderProductScreenState extends State<OrderProductScreen> {
   final TextEditingController quantityController = TextEditingController();
   final TextEditingController emailController = TextEditingController();
   final TextEditingController phoneController = TextEditingController();
@@ -40,7 +37,6 @@ class _OrderProductScreenState extends State<OrderProductScreen>
   final ShopController shopController = Get.find();
   final OrderController orderController = Get.put(OrderController());
   final TextEditingController deliveryController = TextEditingController();
-  int selectedIndex = 0;
   List<Map<String, dynamic>> selectedItems = <Map<String, dynamic>>[];
 
   List<String> clientsName = <String>[];
@@ -55,7 +51,6 @@ class _OrderProductScreenState extends State<OrderProductScreen>
   @override
   void initState() {
     super.initState();
-    _tabController = TabController(length: 3, vsync: this);
     _focusNode = FocusNode();
     quantityController.text = '1';
     fullNameController.text = profileController.myProfile.name!;
@@ -71,7 +66,6 @@ class _OrderProductScreenState extends State<OrderProductScreen>
 
   @override
   void dispose() {
-    _tabController.dispose();
     _focusNode.dispose();
     super.dispose();
   }
@@ -99,456 +93,339 @@ class _OrderProductScreenState extends State<OrderProductScreen>
             ),
           ),
         ),
-        body: Column(
+        body: ListView(
           children: <Widget>[
-            Padding(
-              padding:
-                  const EdgeInsets.symmetric(horizontal: 15.0, vertical: 10),
-              child: ProgressTabBar(
-                  currentIndex: selectedIndex,
-                  tabs: const <String>[
-                    '1. Customise Order',
-                    '2. Order Summary',
-                    '3. Complete Order'
-                  ]),
-            ),
-            Expanded(
-              child: TabBarView(
-                controller: _tabController,
-                children: <Widget>[
-                  ListView(children: <Widget>[
-                    Column(
-                      children: <Widget>[
-                        Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 15.0),
-                          child: Column(
+            Column(
+              children: <Widget>[
+                if (widget.product.images?[0] != null &&
+                    widget.product.images![0].isNotEmpty)
+                  SizedBox(
+                    height: 250,
+                    child: GenericSlider(
+                      images: widget.product.images!,
+                    ),
+                  ),
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 15.0),
+                  child: Column(
+                    children: <Widget>[
+                      const SizedBox(
+                        height: 15,
+                      ),
+                      Column(
+                        children: <Widget>[
+                          Row(
                             children: <Widget>[
-                              if (widget.product.images?[0] != null &&
-                                  widget.product.images![0].isNotEmpty)
-                                Container(
-                                  height: 250,
-                                  decoration: const BoxDecoration(
-                                    color: Colors.black,
-                                    borderRadius: BorderRadius.all(
-                                      Radius.circular(15),
-                                    ),
-                                  ),
-                                  child: GenericSlider(
-                                    images: widget.product.images!,
-                                  ),
+                              Text(
+                                widget.product.name,
+                                style: const TextStyle(
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.bold,
                                 ),
-                              const SizedBox(
-                                height: 15,
-                              ),
-                              Row(
-                                children: <Widget>[
-                                  Text(
-                                    widget.product.name,
-                                    style: const TextStyle(
-                                      fontSize: 16,
-                                      fontWeight: FontWeight.bold,
-                                    ),
-                                  ),
-                                  const SizedBox(
-                                    width: 5,
-                                  ),
-                                  Container(
-                                    decoration: BoxDecoration(
-                                        color: Colors.green.withAlpha(50),
-                                        borderRadius:
-                                            BorderRadius.circular(30)),
-                                    padding: const EdgeInsets.symmetric(
-                                        horizontal: 5, vertical: 5),
-                                    child: const Text(
-                                      'Active',
-                                      style: TextStyle(
-                                        color: Colors.green,
-                                      ),
-                                    ),
-                                  )
-                                ],
-                              ),
-                              Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
-                                children: <Widget>[
-                                  Wrap(
-                                    children: <Widget>[
-                                      Text(
-                                        widget.shop.currency,
-                                        style: const TextStyle(
-                                          color: proprimaryColor,
-                                          fontWeight: FontWeight.bold,
-                                          fontSize: 16,
-                                        ),
-                                      ),
-                                      Text(
-                                        widget.product.price.toString(),
-                                        style: const TextStyle(
-                                          color: proprimaryColor,
-                                          fontWeight: FontWeight.bold,
-                                          fontSize: 16,
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                  if (widget.product.deliveryMethod != null)
-                                    Text(
-                                      widget.product.deliveryMethod!,
-                                      style: const TextStyle(
-                                        color: proprimaryColor,
-                                        fontWeight: FontWeight.bold,
-                                        fontSize: 16,
-                                      ),
-                                    ),
-                                  if (widget.product.location != null)
-                                    Row(
-                                      children: <Widget>[
-                                        const Icon(
-                                          Icons.location_on,
-                                          color: proprimaryColor,
-                                          size: 16,
-                                        ),
-                                        const SizedBox(width: 4),
-                                        Text(
-                                          widget.product.location!,
-                                          style: const TextStyle(
-                                            color: proprimaryColor,
-                                            fontWeight: FontWeight.bold,
-                                            fontSize: 16,
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                ],
                               ),
                               const SizedBox(
-                                height: 15,
-                              ),
-                              const Row(
-                                children: <Widget>[
-                                  Text(
-                                    'Description',
-                                    style: TextStyle(
-                                      fontSize: 16,
-                                      fontWeight: FontWeight.w600,
-                                      color: textColor,
-                                    ),
-                                  ),
-                                ],
-                              ),
-                              Align(
-                                alignment: Alignment.centerLeft,
-                                child: DetectableText(
-                                  text: widget.product.description,
-                                  detectionRegExp:
-                                      detectionRegExp(hashtag: false)!,
-                                  detectedStyle: bodyText2.copyWith(
-                                    color: Colors.blue,
-                                  ),
-                                  moreStyle: bodyText2.copyWith(
-                                    color: proprimaryColor,
-                                  ),
-                                  lessStyle: bodyText2.copyWith(
-                                    color: proprimaryColor,
-                                  ),
-                                  trimLength: 100,
-                                  trimExpandedText: '  show less',
-                                  basicStyle:
-                                      bodyText2.copyWith(color: textColor),
-                                  onTap: (_) {},
-                                ),
+                                width: 5,
                               ),
                             ],
                           ),
-                        ),
-                        const SizedBox(
-                          height: 15,
-                        ),
-                        CustomEditText(
-                          maxLength: 30,
-                          caption: 'Enter Quantity',
-                          hintText: '1',
-                          controller: quantityController,
-                          inputType: TextInputType.number,
-                        ),
-                        const SizedBox(
-                          height: 15,
-                        ),
-                        if (widget.product.size![0].isNotEmpty)
-                          CustomDropdownWidget(
-                            caption: 'Choose Color',
-                            items: widget.product.color!
-                                .map((String e) => e)
-                                .toList(),
-                            iconName: 'assets/svgs/dropdown.svg',
-                            onChanged: (String? value) => setState(() {
-                              // category = value!;
-                            }),
-                          ),
-                        if (widget.product.color![0].isNotEmpty)
-                          const SizedBox(
-                            height: 15,
-                          ),
-                        if (widget.product.size![0].isNotEmpty)
-                          CustomDropdownWidget(
-                            caption: 'Choose Size',
-                            items: widget.product.size!
-                                .map((String e) => e)
-                                .toList(),
-                            iconName: 'assets/svgs/dropdown.svg',
-                            onChanged: (String? value) => setState(() {
-                              // category = value!;
-                            }),
-                          ),
-                        if (widget.product.size![0].isNotEmpty)
-                          const SizedBox(
-                            height: 15,
-                          ),
-                        SizedBox(
-                          width: double.infinity,
-                          child: ProCustomButton(
-                            onPressed: () {
-                              if (quantityController.text.isEmpty) {
-                                showSnackbar(
-                                  message: 'Delivery Date is required!',
-                                  error: true,
-                                );
-                                return;
-                              }
-                              // Check if the current index is less than the total tabs - 1
-                              if (_tabController.index <
-                                  _tabController.length - 1) {
-                                // Move to the next tab
-                                setState(() {
-                                  _tabController.index +=
-                                      1; // Go to the next tab
-                                  selectedIndex++;
-                                });
-                              }
-                            },
-                            text: 'Next ',
-                            icon: SvgPicture.asset(
-                              'assets/svgs/nexticon.svg',
-                              colorFilter: const ColorFilter.mode(
-                                Colors.white,
-                                BlendMode.srcIn,
-                              ),
-                            ),
-                          ),
-                        )
-                      ],
-                    ),
-                  ]),
-                  ListView(
-                    children: <Widget>[
-                      OrderPreviewCard(
-                        shop: shopController.userShop!,
-                        title: widget.product.name,
-                        size: widget.product.size![0],
-                        color: widget.product.color![0],
-                        price: widget.product.price,
-                        deliveryDays: widget.product.deliveryDuration!,
-                        deliveryLocation: widget.product.location!,
-                        imageUrl: widget.product.images![0],
-                        OnTap: () {
-                          // Get.to(() => OrderProductScreen(
-                          //     product: widget.product,
-                          //     isEdit: true));
-                        },
-                      ),
-                      const SizedBox(
-                        height: 15,
-                      ),
-                      OrderPaymentMethodsWidget(
-                        paymentMethods: widget.shop.payments,
-                      ),
-                      const SizedBox(
-                        height: 15,
-                      ),
-                      OrderSummaryWidget(
-                        quantity: int.parse(quantityController.text),
-                        price: widget.product.price,
-                        discount: widget.product.discount!,
-                        total: (1 - widget.product.discount!) *
-                            (int.parse(quantityController.text) *
-                                widget.product.price),
-                        currency: widget.shop.currency,
-                      ),
-                      const SizedBox(
-                        height: 15,
-                      ),
-                      SizedBox(
-                        width: double.infinity,
-                        child: ProCustomButton(
-                          onPressed: () {
-                            // Check if the current index is less than the total tabs - 1
-                            if (_tabController.index <
-                                _tabController.length - 1) {
-                              // Move to the next tab
-                              setState(() {
-                                _tabController.index += 1; // Go to the next tab
-                                selectedIndex++;
-                              });
-                            }
-                          },
-                          text: 'Next ',
-                          icon: SvgPicture.asset(
-                            'assets/svgs/nexticon.svg',
-                            colorFilter: const ColorFilter.mode(
-                              Colors.white,
-                              BlendMode.srcIn,
-                            ),
-                          ),
-                        ),
-                      )
-                    ],
-                  ),
-                  Column(
-                    children: <Widget>[
-                      Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 15.0),
-                        child: Container(
-                          decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(10),
-                              color: Colors.white),
-                          padding: const EdgeInsets.only(
-                              left: 15.0, top: 15, right: 15, bottom: 0),
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: <Widget>[
                               Wrap(
-                                crossAxisAlignment: WrapCrossAlignment.center,
                                 children: <Widget>[
-                                  const Text(
-                                    'Edit your Details',
-                                    style: TextStyle(
-                                      fontSize: 14,
-                                      fontWeight: FontWeight.w600,
+                                  Text(
+                                    widget.shop.currency,
+                                    style: const TextStyle(
+                                      color: proprimaryColor,
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: 16,
                                     ),
                                   ),
-                                  const SizedBox(
-                                    width: 10,
-                                  ),
-                                  TextFormField(
-                                    style: const TextStyle(fontSize: 13),
-                                    maxLines: 1,
-                                    controller: fullNameController,
-                                    decoration: InputDecoration(
-                                      border: InputBorder.none,
-                                      hintText: 'Full Name',
-                                      filled: false,
-                                      fillColor: Colors.grey.shade100,
-                                    ),
-                                  ),
-                                  TextFormField(
-                                    controller: emailController,
-                                    style: const TextStyle(fontSize: 13),
-                                    maxLines: 1,
-                                    decoration: InputDecoration(
-                                      border: InputBorder.none,
-                                      hintText: 'Email',
-                                      filled: false,
-                                      fillColor: Colors.grey.shade100,
-                                    ),
-                                  ),
-                                  TextFormField(
-                                    controller: phoneController,
-                                    style: const TextStyle(fontSize: 13),
-                                    maxLines: 1,
-                                    decoration: InputDecoration(
-                                      border: InputBorder.none,
-                                      hintText: 'Phone Number',
-                                      filled: false,
-                                      fillColor: Colors.grey.shade100,
+                                  Text(
+                                    widget.product.price.toString(),
+                                    style: const TextStyle(
+                                      color: proprimaryColor,
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: 16,
                                     ),
                                   ),
                                 ],
                               ),
-                              // Expanded(
-                              //   child: CustomDropdownWidget(
-                              //     caption: 'Select Client',
-                              //     items: clientsName,
-                              //     iconName: 'assets/svgs/dropdown.svg',
-                              //     initialValue: selectedClient,
-                              //     onChanged: (String? value) {
-                              //       setState(() {
-                              //         selectedClient = value!;
-                              //         _onClientSelect(value);
-                              //       });
-                              //     },
-                              //   ),
-                              // ),
+                              if (widget.product.deliveryMethod != null)
+                                Text(
+                                  widget.product.deliveryMethod!,
+                                  style: const TextStyle(
+                                    color: proprimaryColor,
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 16,
+                                  ),
+                                ),
                             ],
+                          ),
+                          const SizedBox(
+                            height: 15,
+                          ),
+                          const Row(
+                            children: <Widget>[
+                              Text(
+                                'Product Description',
+                                style: TextStyle(
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.w600,
+                                  color: textColor,
+                                ),
+                              ),
+                            ],
+                          ),
+                          Align(
+                            alignment: Alignment.centerLeft,
+                            child: DetectableText(
+                              text: widget.product.description,
+                              detectionRegExp: detectionRegExp(hashtag: false)!,
+                              detectedStyle: bodyText2.copyWith(
+                                color: Colors.blue,
+                              ),
+                              moreStyle: bodyText2.copyWith(
+                                color: proprimaryColor,
+                              ),
+                              lessStyle: bodyText2.copyWith(
+                                color: proprimaryColor,
+                              ),
+                              trimLength: 100,
+                              trimExpandedText: '  show less',
+                              basicStyle: bodyText2.copyWith(color: textColor),
+                              onTap: (_) {},
+                            ),
+                          ),
+                        ],
+                      ),
+                    ],
+                  ),
+                ),
+                const SizedBox(
+                  height: 15,
+                ),
+                Container(
+                  margin: const EdgeInsets.only(left: 15, right: 15),
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(10),
+                    color: Colors.white,
+                  ),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: <Widget>[
+                      const Padding(
+                        padding: EdgeInsets.symmetric(
+                            horizontal: 15.0, vertical: 15),
+                        child: Text(
+                          'Customise Order',
+                          style: TextStyle(
+                            fontWeight: FontWeight.w700,
+                            fontSize: 16,
+                            color: textColor,
                           ),
                         ),
                       ),
-                      const SizedBox(
-                        height: 15,
-                      ),
                       CustomEditText(
-                        maxLength: 300,
-                        caption: 'Delivery Address',
-                        hintText: 'Enter your delivery address',
-                        controller: deliveryController,
+                        isorder: true,
+                        maxLength: 30,
+                        padding: 0,
+                        caption: 'Select Quantity',
+                        hintText: '1',
+                        controller: quantityController,
+                        inputType: TextInputType.number,
+                        onChanged: (String value) {
+                          quantityController.text = value;
+                          setState(() {});
+                        },
                       ),
-                      const SizedBox(
-                        height: 15,
-                      ),
-                      SizedBox(
-                        width: 200,
-                        child: ProCustomButton(
-                          loading: isSubmit,
-                          onPressed: () async {
-                            setState(() {
-                              isSubmit = true;
-                            });
-                            final Map<String, dynamic> orderData =
-                                <String, dynamic>{
-                              'userId': profileController.myProfile.uid,
-                              'shopId': widget.shop.id,
-                              'items': selectedItems,
-                              'deliveryMethod': widget.product.deliveryMethod !=
-                                          null &&
-                                      widget.product.deliveryMethod!.isNotEmpty
-                                  ? getDeliveryMethod(
-                                      widget.product.deliveryMethod!)
-                                  : 'online',
-                              'deliveryDate': DateTime.now().toString(),
-                              'paymentMethod': widget.product.paymentMethod !=
-                                          null &&
-                                      widget.product.paymentMethod!.isNotEmpty
-                                  ? widget.product.paymentMethod!
-                                  : 'Cash',
-                              'orderDetails':
-                                  'Name: ${fullNameController.text} \n Email: ${emailController.text} \n Phone: ${phoneController.text} \n Delivery Details: ${deliveryController.text}',
-                              'invoiceOption': 'send_with_payment_link',
-                              'status': 'pending'
-                            };
-                            bool response =
-                                await orderController.addOrder(orderData);
-                            if (response) {
-                              showSnackbar(
-                                  message: 'Order Added Successfully!');
-                              // ignore: use_build_context_synchronously
-                              Navigator.pop(context);
-                            } else {
-                              showSnackbar(
-                                message: 'Error creating order!',
-                                error: true,
-                              );
-                              setState(() {
-                                isSubmit = false;
-                              });
-                            }
-                          },
-                          text: 'Done ',
+                      if (widget.product.size![0].isNotEmpty)
+                        CustomDropdownWidget(
+                          padding: 0,
+                          isorder: true,
+                          caption: 'Choose Color',
+                          items: widget.product.color!
+                              .map((String e) => e)
+                              .toList(),
+                          iconName: 'assets/svgs/dropdown.svg',
+                          onChanged: (String? value) => setState(() {
+                            // category = value!;
+                          }),
                         ),
-                      )
+                      if (widget.product.size![0].isNotEmpty)
+                        CustomDropdownWidget(
+                          padding: 0,
+                          isorder: true,
+                          caption: 'Choose Size',
+                          items: widget.product.size!
+                              .map((String e) => e)
+                              .toList(),
+                          iconName: 'assets/svgs/dropdown.svg',
+                          onChanged: (String? value) => setState(() {
+                            // category = value!;
+                          }),
+                        ),
+                      if (widget.product.size![0].isNotEmpty)
+                        const SizedBox(
+                          height: 15,
+                        ),
                     ],
                   ),
-                ],
-              ),
+                ),
+                const SizedBox(
+                  height: 15,
+                ),
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 15.0),
+                  child: Container(
+                    decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(10),
+                        color: Colors.white),
+                    padding: const EdgeInsets.only(
+                        left: 15.0, top: 15, right: 15, bottom: 0),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: <Widget>[
+                        const Text(
+                          'Edit your Details',
+                          style: TextStyle(
+                            fontSize: 16,
+                            fontWeight: FontWeight.w700,
+                          ),
+                        ),
+                        const SizedBox(
+                          width: 10,
+                        ),
+                        TextFormField(
+                          style: const TextStyle(fontSize: 13),
+                          maxLines: 1,
+                          controller: fullNameController,
+                          decoration: InputDecoration(
+                            border: InputBorder.none,
+                            hintText: 'Full Name',
+                            filled: false,
+                            fillColor: Colors.grey.shade100,
+                          ),
+                        ),
+                        TextFormField(
+                          controller: emailController,
+                          style: const TextStyle(fontSize: 13),
+                          maxLines: 1,
+                          decoration: InputDecoration(
+                            border: InputBorder.none,
+                            hintText: 'Email',
+                            filled: false,
+                            fillColor: Colors.grey.shade100,
+                          ),
+                        ),
+                        TextFormField(
+                          controller: phoneController,
+                          style: const TextStyle(fontSize: 13),
+                          maxLines: 1,
+                          decoration: InputDecoration(
+                            border: InputBorder.none,
+                            hintText: 'Phone Number',
+                            filled: false,
+                            fillColor: Colors.grey.shade100,
+                          ),
+                        ),
+                        TextFormField(
+                          controller: deliveryController,
+                          style: const TextStyle(fontSize: 13),
+                          maxLength: 300,
+                          maxLines: 3,
+                          decoration: InputDecoration(
+                            border: InputBorder.none,
+                            hintText: 'Delivery address',
+                            filled: false,
+                            fillColor: Colors.grey.shade100,
+                          ),
+                        ),
+                        const SizedBox(
+                          height: 15,
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+                const SizedBox(
+                  height: 15,
+                ),
+                OrderPaymentMethodsWidget(
+                  paymentMethods: widget.shop.payments,
+                ),
+                const SizedBox(
+                  height: 15,
+                ),
+                OrderSummaryWidget(
+                  quantity: int.tryParse(quantityController.text) ?? 0,
+                  price: widget.product.price,
+                  discount: widget.product.discount ?? 0,
+                  total: calculateTotal(
+                    quantity: int.tryParse(quantityController.text) ?? 0,
+                    price: widget.product.price,
+                    discount: widget.product.discount ?? 0,
+                  ),
+                  currency: widget.shop.currency,
+                ),
+                const SizedBox(
+                  height: 15,
+                ),
+                const SizedBox(
+                  height: 15,
+                ),
+                const SizedBox(
+                  height: 15,
+                ),
+                SizedBox(
+                  width: double.infinity,
+                  child: ProCustomButton(
+                    loading: isSubmit,
+                    onPressed: () async {
+                      setState(() {
+                        isSubmit = true;
+                      });
+                      final Map<String, dynamic> orderData = <String, dynamic>{
+                        'userId': profileController.myProfile.uid,
+                        'shopId': widget.shop.id,
+                        'items': selectedItems,
+                        'deliveryMethod': widget.product.deliveryMethod !=
+                                    null &&
+                                widget.product.deliveryMethod!.isNotEmpty
+                            ? getDeliveryMethod(widget.product.deliveryMethod!)
+                            : 'online',
+                        'deliveryDate': DateTime.now().toString(),
+                        'paymentMethod': widget.product.paymentMethod != null &&
+                                widget.product.paymentMethod!.isNotEmpty
+                            ? widget.product.paymentMethod!
+                            : 'Cash',
+                        'orderDetails':
+                            'Name: ${fullNameController.text} \n Email: ${emailController.text} \n Phone: ${phoneController.text} \n Delivery Details: ${deliveryController.text}',
+                        'invoiceOption': 'send_with_payment_link',
+                        'status': 'pending'
+                      };
+                      bool response = await orderController.addOrder(orderData);
+                      if (response) {
+                        showSnackbar(message: 'Order Added Successfully!');
+                        // ignore: use_build_context_synchronously
+                        Navigator.pop(context);
+                      } else {
+                        showSnackbar(
+                          message: 'Error creating order!',
+                          error: true,
+                        );
+                        setState(() {
+                          isSubmit = false;
+                        });
+                      }
+                    },
+                    text: 'Done ',
+                  ),
+                ),
+                const SizedBox(
+                  height: 15,
+                ),
+              ],
             ),
           ],
         ),
@@ -566,11 +443,22 @@ class _OrderProductScreenState extends State<OrderProductScreen>
     }
   }
 
-  // void _onClientSelect(String name) {
-  //   final dynamic clientName = clients
-  //       .firstWhere((Map<String, dynamic> element) => element['name'] == name);
-  //   setState(() {
-  //     clientId = clientName['id'];
-  //   });
-  // }
+  double calculateTotal({
+    required int quantity,
+    required double price,
+    required double discount,
+  }) {
+    // Ensure positive values
+    if (quantity <= 0) return 0;
+
+    // Calculate base total
+    final double baseTotal = quantity * price;
+
+    // Calculate discount amount
+    final double discountAmount =
+        baseTotal * (discount / 100); // Assuming discount is in percentage
+
+    // Final total after discount
+    return baseTotal - discountAmount;
+  }
 }

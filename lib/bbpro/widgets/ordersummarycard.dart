@@ -33,11 +33,12 @@ class _OrderSummaryWidgetState extends State<OrderSummaryWidget> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
             const Text(
-              'Order Total',
+              'Order Summary',
               style: TextStyle(
-                  fontSize: 14,
-                  fontWeight: FontWeight.w700,
-                  color: proprimaryColor),
+                fontWeight: FontWeight.w700,
+                fontSize: 16,
+                color: proprimaryColor,
+              ),
             ),
             const SizedBox(height: 16),
             Row(
@@ -76,7 +77,7 @@ class _OrderSummaryWidgetState extends State<OrderSummaryWidget> {
                   style: TextStyle(fontSize: 13),
                 ),
                 Text(
-                  widget.discount.toString(),
+                  '${widget.discount.toString()}%',
                   style: const TextStyle(fontSize: 13),
                 ),
               ],
@@ -90,7 +91,7 @@ class _OrderSummaryWidgetState extends State<OrderSummaryWidget> {
                   style: TextStyle(fontWeight: FontWeight.bold),
                 ),
                 Text(
-                  widget.currency + widget.total.toString(),
+                  '${widget.currency} ${widget.total}',
                   style: const TextStyle(
                       fontWeight: FontWeight.bold,
                       color: proprimaryColor,

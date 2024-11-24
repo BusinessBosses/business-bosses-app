@@ -27,6 +27,8 @@ class CustomEditText extends StatelessWidget {
   final double? padding;
   final bool? ispaymentfield;
   final bool? issl;
+  final bool? isorder;
+  final Function(String)? onTextChanged;
 
   const CustomEditText({
     super.key,
@@ -54,7 +56,17 @@ class CustomEditText extends StatelessWidget {
     this.pmh3,
     this.pmh4,
     this.issl,
+    this.isorder,
+    this.onTextChanged,
   });
+
+  void _updateQuantity(BuildContext context, int newValue) {
+    if (newValue >= 1) {
+      controller.text = newValue.toString();
+      onTextChanged?.call(newValue.toString());
+      onChanged?.call(newValue.toString());
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -62,216 +74,232 @@ class CustomEditText extends StatelessWidget {
       padding: EdgeInsets.symmetric(horizontal: padding ?? 15.0),
       child: Container(
         decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(10),
-            color: backgroundcolor ?? Colors.white),
+          borderRadius: BorderRadius.circular(10),
+          color: backgroundcolor ?? Colors.white,
+        ),
         padding: EdgeInsets.only(
-            left: 15.0,
-            top: 15,
-            right: 15,
-            bottom: maxLength != null && maxLength! > 14 && maxLength! != 300
-                ? 0
-                : 15),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: <Widget>[
-            Wrap(
-                crossAxisAlignment: WrapCrossAlignment.center,
+          left: 15.0,
+          top: isorder != null ? 0 : 15,
+          right: 15,
+          bottom: maxLength != null && maxLength! > 14 && maxLength! != 300
+              ? 0
+              : 15,
+        ),
+        child: isorder != null
+            ? Row(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: <Widget>[
-                  Text(
-                    caption,
-                    style: const TextStyle(
-                      fontSize: 14,
-                      fontWeight: FontWeight.w600,
+                  Expanded(
+                    child: Text(
+                      caption,
+                      style: const TextStyle(
+                        fontSize: 14,
+                        fontWeight: FontWeight.w600,
+                      ),
                     ),
                   ),
-                  const SizedBox(
-                    width: 10,
-                  ),
-                  optionalText ?? Container()
-                ]),
-            if (ispaymentfield == null)
-              (iscurrencyfield == true)
-                  ? Row(
+                  Expanded(
+                    child: Row(
                       children: <Widget>[
-                        SizedBox(
-                          height: 30,
-                          width: 40,
-                          child: TextFormField(
-                            controller: currencycontroller,
-                            style: const TextStyle(fontSize: 13),
-                            decoration: InputDecoration(
-                              hintText: 'USD',
-                              fillColor: currencyfieldcolor ?? prosemibackColor,
-                              filled: true,
-                              contentPadding: const EdgeInsets.symmetric(
-                                horizontal: 5.0,
-                                vertical: 0.0,
-                              ),
-                              counterText: '',
-                              border: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(5.0),
-                                borderSide: BorderSide.none,
-                              ),
+                        InkWell(
+                          onTap: () {
+                            final int currentValue =
+                                int.tryParse(controller.text) ?? 0;
+                            if (currentValue > 1) {
+                              _updateQuantity(context, currentValue - 1);
+                            }
+                          },
+                          child: Container(
+                            padding: const EdgeInsets.all(5.0),
+                            decoration: BoxDecoration(
+                              color: Colors.grey[300],
+                              borderRadius: BorderRadius.circular(40.0),
                             ),
-                            textAlign: TextAlign.left,
-                            textInputAction: TextInputAction.next,
-                            keyboardType: TextInputType.text,
-                            maxLength: 3,
+                            child: const Icon(
+                              Icons.remove,
+                              size: 15,
+                            ),
                           ),
                         ),
-                        const SizedBox(
-                          width: 10,
-                        ),
                         Expanded(
-                          flex: 6,
                           child: TextFormField(
+                            onChanged: (String value) {
+                              final int intValue = int.tryParse(value) ?? 0;
+                              if (intValue >= 1) {
+                                _updateQuantity(context, intValue);
+                              }
+                            },
+                            textAlign: TextAlign.center,
                             style: const TextStyle(fontSize: 13),
-                            maxLines:
-                                maxLength != null && maxLength! > 30 ? 5 : 1,
+                            maxLines: 1,
                             decoration: InputDecoration(
                               border: InputBorder.none,
                               hintText: hintText,
                               filled: false,
                               fillColor: Colors.grey.shade100,
-                              counterText: maxLength != null && maxLength! > 30
-                                  ? null
-                                  : '',
+                              counterText: '',
                             ),
-                            maxLength: maxLength,
-                            keyboardType: inputType,
-                            obscureText: isPassword,
+                            keyboardType: TextInputType.number,
                             controller: controller,
-                            validator: validator,
-                            onChanged: onChanged,
+                            validator: (String? value) {
+                              if (value == null || value.isEmpty) {
+                                return 'Please enter a value';
+                              }
+                              final int intValue = int.tryParse(value) ?? 0;
+                              if (intValue < 1) {
+                                return 'Value cannot be less than 1';
+                              }
+                              return null;
+                            },
+                          ),
+                        ),
+                        InkWell(
+                          onTap: () {
+                            final int currentValue =
+                                int.tryParse(controller.text) ?? 0;
+                            _updateQuantity(context, currentValue + 1);
+                          },
+                          child: Container(
+                            padding: const EdgeInsets.all(5.0),
+                            decoration: BoxDecoration(
+                              color: Colors.grey[300],
+                              borderRadius: BorderRadius.circular(40.0),
+                            ),
+                            child: const Icon(
+                              Icons.add,
+                              size: 15,
+                            ),
                           ),
                         ),
                       ],
-                    )
-                  : TextFormField(
-                      style: const TextStyle(fontSize: 13),
-                      maxLines: maxLength != null && maxLength! > 30 ? 5 : 1,
-                      decoration: InputDecoration(
-                        border: InputBorder.none,
-                        hintText: hintText,
-                        filled: false,
-                        fillColor: Colors.grey.shade100,
-                        counterText:
-                            maxLength != null && maxLength! > 30 ? null : '',
-                      ),
-                      maxLength: maxLength,
-                      keyboardType: inputType,
-                      obscureText: isPassword,
-                      controller: controller,
-                      validator: validator,
-                      onChanged: onChanged,
                     ),
-            if (ispaymentfield == true)
-              Column(children: <Widget>[
-                const SizedBox(
-                  height: 10,
-                ),
-                if (pmh1 != null)
-                  Row(
+                  ),
+                ],
+              )
+            : Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: <Widget>[
+                  Wrap(
+                    crossAxisAlignment: WrapCrossAlignment.center,
                     children: <Widget>[
-                      if (issl != null)
-                        SvgPicture.asset(
-                          'assets/svgs/igsl.svg',
-                          height: 15,
-                        ),
-                      if (issl != null)
-                        const SizedBox(
-                          width: 10,
-                        ),
-                      Expanded(
-                        child: TextFormField(
-                          controller: pm1controller,
-                          style: const TextStyle(fontSize: 13),
-                          maxLines: 1,
-                          decoration: InputDecoration(
-                            hintText: pmh1,
-                            border: InputBorder.none,
-                          ),
+                      Text(
+                        caption,
+                        style: const TextStyle(
+                          fontSize: 14,
+                          fontWeight: FontWeight.w600,
                         ),
                       ),
+                      const SizedBox(width: 10),
+                      optionalText ?? Container(),
                     ],
                   ),
-                if (pmh2 != null)
-                  Row(
-                    children: <Widget>[
-                      if (issl != null)
-                        SvgPicture.asset(
-                          'assets/svgs/fbsl.svg',
-                          height: 15,
-                        ),
-                      if (issl != null)
-                        const SizedBox(
-                          width: 10,
-                        ),
-                      Expanded(
-                        child: TextFormField(
-                          controller: pm2controller,
-                          style: const TextStyle(fontSize: 13),
-                          maxLines: 1,
-                          decoration: InputDecoration(
-                            hintText: pmh2,
-                            border: InputBorder.none,
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-                if (pmh3 != null)
-                  Row(
-                    children: <Widget>[
-                      if (issl != null)
-                        SvgPicture.asset(
-                          'assets/svgs/lsl.svg',
-                          height: 15,
-                        ),
-                      if (issl != null)
-                        const SizedBox(
-                          width: 10,
-                        ),
-                      Expanded(
-                        child: TextFormField(
-                            controller: pm3controller,
-                            style: const TextStyle(fontSize: 13),
-                            maxLines: 1,
-                            decoration: InputDecoration(
-                              hintText: pmh3,
-                              border: InputBorder.none,
-                            )),
-                      ),
-                    ],
-                  ),
-                if (pmh4 != null)
-                  Row(
-                    children: <Widget>[
-                      if (issl != null)
-                        SvgPicture.asset(
-                          'assets/svgs/xsl.svg',
-                          height: 15,
-                        ),
-                      if (issl != null)
-                        const SizedBox(
-                          width: 10,
-                        ),
-                      Expanded(
-                        child: TextFormField(
-                            controller: pm4controller,
-                            style: const TextStyle(fontSize: 13),
-                            maxLines: 1,
-                            decoration: InputDecoration(
-                              hintText: pmh4,
-                              border: InputBorder.none,
-                            )),
-                      ),
-                    ],
-                  )
-              ])
-          ],
-        ),
+                  if (ispaymentfield == null)
+                    _buildInputField()
+                  else
+                    _buildPaymentFields(),
+                ],
+              ),
       ),
+    );
+  }
+
+  Widget _buildInputField() {
+    if (iscurrencyfield == true) {
+      return Row(
+        children: <Widget>[
+          SizedBox(
+            height: 30,
+            width: 40,
+            child: TextFormField(
+              controller: currencycontroller,
+              style: const TextStyle(fontSize: 13),
+              decoration: InputDecoration(
+                hintText: 'USD',
+                fillColor: currencyfieldcolor ?? prosemibackColor,
+                filled: true,
+                contentPadding: const EdgeInsets.symmetric(
+                  horizontal: 5.0,
+                  vertical: 0.0,
+                ),
+                counterText: '',
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(5.0),
+                  borderSide: BorderSide.none,
+                ),
+              ),
+              textAlign: TextAlign.left,
+              textInputAction: TextInputAction.next,
+              keyboardType: TextInputType.text,
+              maxLength: 3,
+            ),
+          ),
+          const SizedBox(width: 10),
+          Expanded(
+            flex: 6,
+            child: _buildMainTextField(),
+          ),
+        ],
+      );
+    }
+    return _buildMainTextField();
+  }
+
+  Widget _buildMainTextField() {
+    return TextFormField(
+      style: const TextStyle(fontSize: 13),
+      maxLines: maxLength != null && maxLength! > 30 ? 5 : 1,
+      decoration: InputDecoration(
+        border: InputBorder.none,
+        hintText: hintText,
+        filled: false,
+        fillColor: Colors.grey.shade100,
+        counterText: maxLength != null && maxLength! > 30 ? null : '',
+      ),
+      maxLength: maxLength,
+      keyboardType: inputType,
+      obscureText: isPassword,
+      controller: controller,
+      validator: validator,
+      onChanged: onChanged,
+    );
+  }
+
+  Widget _buildPaymentFields() {
+    return Column(
+      children: <Widget>[
+        const SizedBox(height: 10),
+        if (pmh1 != null) _buildPaymentField(pm1controller, pmh1!, 'igsl'),
+        if (pmh2 != null) _buildPaymentField(pm2controller, pmh2!, 'fbsl'),
+        if (pmh3 != null) _buildPaymentField(pm3controller, pmh3!, 'lsl'),
+        if (pmh4 != null) _buildPaymentField(pm4controller, pmh4!, 'xsl'),
+      ],
+    );
+  }
+
+  Widget _buildPaymentField(
+      TextEditingController? controller, String hint, String svgAsset) {
+    return Row(
+      children: <Widget>[
+        if (issl != null) ...<Widget>[
+          SvgPicture.asset(
+            'assets/svgs/$svgAsset.svg',
+            height: 15,
+          ),
+          const SizedBox(width: 10),
+        ],
+        Expanded(
+          child: TextFormField(
+            controller: controller,
+            style: const TextStyle(fontSize: 13),
+            maxLines: 1,
+            decoration: InputDecoration(
+              hintText: hint,
+              border: InputBorder.none,
+            ),
+          ),
+        ),
+      ],
     );
   }
 }
