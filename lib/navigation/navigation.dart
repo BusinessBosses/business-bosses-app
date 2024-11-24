@@ -1,7 +1,7 @@
 // ignore_for_file: always_specify_types
 
 import 'package:business_bosses_v2/analytics/presentation/explorebusinessbosses_screen.dart';
-import 'package:business_bosses_v2/bbpro/presentation/setupshop.dart';
+import 'package:business_bosses_v2/bbpro/presentation/setup_shop.dart';
 import 'package:business_bosses_v2/features/bottomnavigationscreen.dart';
 import 'package:business_bosses_v2/features/connects/controller/referrals_controller.dart';
 import 'package:business_bosses_v2/features/connects/presentation/referals_screen.dart';
@@ -44,9 +44,9 @@ import 'package:business_bosses_v2/features/notifications/notificationsscreen.da
 import 'package:business_bosses_v2/features/posts/presentation/create_post_screen.dart';
 import 'package:business_bosses_v2/analytics/presentation/analysescreen.dart';
 import 'package:business_bosses_v2/features/profile/change_password_screen.dart';
-import 'package:business_bosses_v2/features/profile/presentation/myprofilescreen.dart';
+import 'package:business_bosses_v2/features/profile/presentation/my_profile_screen.dart';
 import 'package:business_bosses_v2/features/promotions/presentation/promotionscreen.dart';
-import 'package:business_bosses_v2/features/profile/presentation/publicprofilescreen.dart';
+import 'package:business_bosses_v2/features/profile/presentation/public_profile_screen.dart';
 import 'package:business_bosses_v2/features/profile/presentation/update_profile_screen.dart';
 import 'package:business_bosses_v2/features/referrals/refer_screen.dart';
 import 'package:business_bosses_v2/features/search/controller/search_controller.dart';

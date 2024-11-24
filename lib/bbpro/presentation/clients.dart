@@ -5,8 +5,8 @@ import 'package:business_bosses_v2/bbpro/presentation/add_client.dart';
 import 'package:business_bosses_v2/bbpro/presentation/add_supplier.dart';
 import 'package:business_bosses_v2/bbpro/presentation/campaign_page.dart';
 import 'package:business_bosses_v2/bbpro/presentation/expandedprosupplierpage.dart';
-import 'package:business_bosses_v2/bbpro/widgets/clientwidget.dart';
-import 'package:business_bosses_v2/bbpro/widgets/customtabbar.dart';
+import 'package:business_bosses_v2/bbpro/widgets/client_widget.dart';
+import 'package:business_bosses_v2/bbpro/widgets/custom_tabbar.dart';
 import 'package:business_bosses_v2/bbpro/widgets/notificationbutton.dart';
 import 'package:business_bosses_v2/bbpro/widgets/proseardwidget.dart';
 import 'package:business_bosses_v2/bbpro/widgets/supplierscard.dart';
@@ -119,7 +119,7 @@ class _ClientsScreenState extends State<ClientsScreen>
                 onSelected: (String item) {
                   switch (item) {
                     case 'Item 1':
-                      Get.to(const Addclient());
+                      Get.to(() => const Addclient());
                       break;
                     case 'Item 2':
                       showModalBottomSheet<void>(
@@ -309,7 +309,7 @@ class _ClientsScreenState extends State<ClientsScreen>
                       );
                       break;
                     case 'Item 3':
-                      Get.to(const Campaignpage());
+                      Get.to(() => const Campaignpage());
                       break;
                   }
                 },
@@ -403,7 +403,7 @@ class _ClientsScreenState extends State<ClientsScreen>
               ),
               GestureDetector(
                 onTap: () {
-                  Get.to(const ChatScreen());
+                  Get.to(() => const ChatScreen());
                 },
                 child: Padding(
                   padding: const EdgeInsets.only(

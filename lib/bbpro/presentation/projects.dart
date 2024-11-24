@@ -1,7 +1,6 @@
 import 'dart:async';
 import 'package:business_bosses_v2/bbpro/models/project_model.dart';
-import 'package:business_bosses_v2/bbpro/presentation/campaign_page.dart';
-import 'package:business_bosses_v2/bbpro/widgets/customtabbar.dart';
+import 'package:business_bosses_v2/bbpro/widgets/custom_tabbar.dart';
 import 'package:business_bosses_v2/bbpro/widgets/iconbutton.dart';
 import 'package:business_bosses_v2/bbpro/widgets/notificationbutton.dart';
 import 'package:business_bosses_v2/bbpro/widgets/proseardwidget.dart';
@@ -105,14 +104,14 @@ class _ProjectsState extends State<Projects>
                   radius: 50,
                   icon: const Icon(Icons.add),
                   onPressed: () {
-                    Get.to(const Addproject());
+                    Get.to(() => const Addproject());
                   },
                   text: 'Add Tasks',
                 ),
               ),
               GestureDetector(
                 onTap: () {
-                  Get.to(const ChatScreen());
+                  Get.to(() => const ChatScreen());
                 },
                 child: Padding(
                   padding: const EdgeInsets.only(

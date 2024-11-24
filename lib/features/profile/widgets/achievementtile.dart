@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
-import '../presentation/myprofilescreen.dart';
+import '../presentation/my_profile_screen.dart';
 
 class AchievementsExpansionTile extends StatefulWidget {
   const AchievementsExpansionTile({Key? key}) : super(key: key);

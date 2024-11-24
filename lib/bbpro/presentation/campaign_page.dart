@@ -3,7 +3,7 @@ import 'package:business_bosses_v2/bbpro/controllers/shop_controller.dart';
 import 'package:business_bosses_v2/bbpro/models/client_model.dart';
 // import 'package:business_bosses_v2/bbpro/presentation/add_client.dart';
 import 'package:business_bosses_v2/bbpro/widgets/button.dart';
-import 'package:business_bosses_v2/bbpro/widgets/edittext.dart';
+import 'package:business_bosses_v2/bbpro/widgets/edit_text.dart';
 import 'package:business_bosses_v2/bbpro/widgets/iconbutton.dart';
 import 'package:business_bosses_v2/bbpro/widgets/proseardwidget.dart';
 import 'package:business_bosses_v2/bbpro/widgets/taskitem.dart';
@@ -312,7 +312,6 @@ class ChooseClientsBottomSheet extends StatefulWidget {
 class _ChooseClientBottomSheetState extends State<ChooseClientsBottomSheet>
     with SingleTickerProviderStateMixin {
   late TabController _tabController;
-  int _selectedIndex = 0;
   final TextEditingController nameController = TextEditingController();
   final TextEditingController priceController = TextEditingController();
   final TextEditingController descriptionController = TextEditingController();
@@ -321,10 +320,7 @@ class _ChooseClientBottomSheetState extends State<ChooseClientsBottomSheet>
 
   List<Map<String, dynamic>>? selectedItems = <Map<String, dynamic>>[];
 
-  final String _onlineSearchQuery = '';
   String _allSearchQuery = '';
-  final String _inpersonSearchQuery = '';
-  final String _bbuserSearchQuery = '';
   List<String> selectedItem = <String>[];
 
   List<String> selectedNames = <String>[];
@@ -334,9 +330,7 @@ class _ChooseClientBottomSheetState extends State<ChooseClientsBottomSheet>
     super.initState();
     _tabController = TabController(length: 1, vsync: this);
     _tabController.addListener(() {
-      setState(() {
-        _selectedIndex = _tabController.index;
-      });
+      setState(() {});
     });
     currencyController.text = shopController.shop!.currency;
     selectedItem =

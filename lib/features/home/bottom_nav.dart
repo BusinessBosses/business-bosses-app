@@ -10,7 +10,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import '../../utils/theme/theme.dart';
 import '../posts/presentation/create_post_screen.dart';
-import '../profile/presentation/myprofilescreen.dart';
+import '../profile/presentation/my_profile_screen.dart';
 import 'all_communities_screen.dart';
 import 'home_screen.dart';
 import 'marketplace_screen.dart';

@@ -67,11 +67,11 @@ class _AllLearningPostsScreenState extends State<AllLearningPostsScreen> {
                           .industry!,
                       onTap: () {
                         if (widget.isCoursesTile == true) {
-                          Get.to(const AllForumScreen(isCourses: false),
+                          Get.to(() => const AllForumScreen(isCourses: false),
                               arguments: controller.getCategoryIndustries(
                                   Constants.LEARNINGID)[index]);
                         } else {
-                          Get.to(const AllForumScreen(isCourses: true),
+                          Get.to(() => const AllForumScreen(isCourses: true),
                               arguments: controller.getCategoryIndustries(
                                   Constants.LEARNINGID)[index]);
                         }

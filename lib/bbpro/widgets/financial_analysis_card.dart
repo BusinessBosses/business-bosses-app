@@ -1,11 +1,8 @@
 import 'package:business_bosses_v2/bbpro/controllers/order_controller.dart';
 import 'package:business_bosses_v2/bbpro/controllers/shop_controller.dart';
-import 'package:business_bosses_v2/bbpro/models/shop_graph_model.dart';
-import 'package:business_bosses_v2/bbpro/presentation/bottomnavscreen.dart';
+import 'package:business_bosses_v2/bbpro/presentation/bottom_nav_screen.dart';
 import 'package:business_bosses_v2/utils/theme/theme.dart';
-import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 
 class FinancialanalysisWidget extends StatefulWidget {
@@ -135,16 +132,19 @@ class _FinancialanalysisWidgetState extends State<FinancialanalysisWidget> {
                           padding: const EdgeInsets.all(8.0),
                           child: Center(
                             child: Text(
-                              shopController.shop!.currency +
-                                  (shopController.shopStats!.totalAmount >=
-                                          1000000
-                                      ? '${(shopController.shopStats!.totalAmount / 1000000).toStringAsFixed(1)}M'
-                                      : shopController.shopStats!.totalAmount >=
-                                              1000
-                                          ? '${(shopController.shopStats!.totalAmount / 1000).toStringAsFixed(1)}K'
+                              shopController.shopStats != null
+                                  ? shopController.shop!.currency +
+                                      (shopController.shopStats!.totalAmount >=
+                                              1000000
+                                          ? '${(shopController.shopStats!.totalAmount / 1000000).toStringAsFixed(1)}M'
                                           : shopController
-                                              .shopStats!.totalAmount
-                                              .toStringAsFixed(1)),
+                                                      .shopStats!.totalAmount >=
+                                                  1000
+                                              ? '${(shopController.shopStats!.totalAmount / 1000).toStringAsFixed(1)}K'
+                                              : shopController
+                                                  .shopStats!.totalAmount
+                                                  .toStringAsFixed(1))
+                                  : '0',
                               style: const TextStyle(
                                 fontWeight: FontWeight.bold,
                                 fontSize: 14,
@@ -157,16 +157,20 @@ class _FinancialanalysisWidgetState extends State<FinancialanalysisWidget> {
                           padding: const EdgeInsets.all(8.0),
                           child: Center(
                             child: Text(
-                              shopController.shop!.currency +
-                                  (shopController.shopStats!.totalAmount >=
-                                          1000000
-                                      ? '${(shopController.shopStats!.totalAmount / 1000000).toStringAsFixed(1)}M'
-                                      : shopController.shopStats!.totalAmount >=
-                                              1000
-                                          ? '${(shopController.shopStats!.totalAmount / 1000).toStringAsFixed(1)}K'
-                                          : shopController
-                                              .shopStats!.totalAmount
-                                              .toStringAsFixed(1)),
+                              shopController.shopStats != null
+                                  ? shopController.shop!.currency +
+                                      (shopController
+                                                  .shopStats!.totalExpenses >=
+                                              1000000
+                                          ? '${(shopController.shopStats!.totalExpenses / 1000000).toStringAsFixed(1)}M'
+                                          : shopController.shopStats!
+                                                      .totalExpenses >=
+                                                  1000
+                                              ? '${(shopController.shopStats!.totalExpenses / 1000).toStringAsFixed(1)}K'
+                                              : shopController
+                                                  .shopStats!.totalExpenses
+                                                  .toStringAsFixed(1))
+                                  : '0',
                               style: const TextStyle(
                                 fontWeight: FontWeight.bold,
                                 fontSize: 14,
@@ -179,16 +183,23 @@ class _FinancialanalysisWidgetState extends State<FinancialanalysisWidget> {
                           padding: const EdgeInsets.all(8.0),
                           child: Center(
                             child: Text(
-                              shopController.shop!.currency +
-                                  (shopController.shopStats!.totalAmount >=
-                                          1000000
-                                      ? '${(shopController.shopStats!.totalAmount / 1000000).toStringAsFixed(1)}M'
-                                      : shopController.shopStats!.totalAmount >=
-                                              1000
-                                          ? '${(shopController.shopStats!.totalAmount / 1000).toStringAsFixed(1)}K'
-                                          : shopController
-                                              .shopStats!.totalAmount
-                                              .toStringAsFixed(1)),
+                              shopController.shopStats != null
+                                  ? shopController.shop!.currency +
+                                      ((shopController.shopStats!.totalAmount -
+                                                  shopController.shopStats!
+                                                      .totalExpenses) >=
+                                              1000000
+                                          ? '${((shopController.shopStats!.totalAmount - shopController.shopStats!.totalExpenses) / 1000000).toStringAsFixed(1)}M'
+                                          : (shopController.shopStats!
+                                                          .totalAmount -
+                                                      shopController.shopStats!
+                                                          .totalExpenses) >=
+                                                  1000
+                                              ? '${((shopController.shopStats!.totalAmount - shopController.shopStats!.totalExpenses) / 1000).toStringAsFixed(1)}K'
+                                              : shopController
+                                                  .shopStats!.totalAmount
+                                                  .toStringAsFixed(1))
+                                  : '0',
                               style: const TextStyle(
                                 fontWeight: FontWeight.bold,
                                 fontSize: 14,
