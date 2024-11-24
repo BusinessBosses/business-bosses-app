@@ -57,6 +57,7 @@ class Client {
   final ClientType type;
   final DateTime createdAt;
   final List<String> image;
+  final num orderCount;
 
   Client({
     required this.id,
@@ -67,6 +68,7 @@ class Client {
     required this.type,
     required this.createdAt,
     required this.image,
+    this.orderCount = 0,
   });
 
   factory Client.fromJson(String str) => Client.fromMap(json.decode(str));
@@ -82,6 +84,8 @@ class Client {
         type: ClientType.fromString(json['type']),
         createdAt: DateTime.parse(json['createdAt']),
         image: List<String>.from(json['image']),
+        orderCount: num.parse(
+            json['orderCount'] != null ? json['orderCount'].toString() : '0'),
       );
 
   Map<String, dynamic> toMap() => <String, dynamic>{
@@ -93,5 +97,6 @@ class Client {
         'type': type.toShortString(),
         'createdAt': createdAt.toIso8601String(),
         'image': image,
+        'orderCount': orderCount,
       };
 }
