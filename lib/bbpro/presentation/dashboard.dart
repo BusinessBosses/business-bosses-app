@@ -35,7 +35,7 @@ class Dashboard extends StatefulWidget {
 class _DashboardState extends State<Dashboard> {
   final List<String> titles = <String>[
     'Clients',
-    'Expenses',
+    'Visits',
     'To-do tasks',
     // 'Shop Visits'
   ];
@@ -387,18 +387,8 @@ class _DashboardState extends State<Dashboard> {
                                     ? clientsController.allclients.length
                                         .toString()
                                     : index == 1
-                                        ? shopController.shop!.currency +
-                                            (shopController.shopStats!
-                                                        .totalAmount >=
-                                                    1000000
-                                                ? '${(shopController.shopStats!.totalAmount / 1000000).toStringAsFixed(1)}M'
-                                                : shopController.shopStats!
-                                                            .totalAmount >=
-                                                        1000
-                                                    ? '${(shopController.shopStats!.totalAmount / 1000).toStringAsFixed(1)}K'
-                                                    : shopController
-                                                        .shopStats!.totalAmount
-                                                        .toStringAsFixed(1))
+                                        ? shopController.shopStats!.views
+                                            .toString()
                                         : index == 2
                                             ? shopController
                                                 .shopStats!.projectCount
