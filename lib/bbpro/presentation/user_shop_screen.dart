@@ -628,84 +628,77 @@ class _UserShopScreenState extends State<UserShopScreen> {
                   ),
                 ),
                 const SizedBox(height: 20),
-                GestureDetector(
-                  onTap: () {},
-                  child: Column(
-                    children: <Widget>[
-                      if (shopController.userShop!.facebook !=
-                          null) ...<Widget>{
-                        Row(
-                          children: <Widget>[
-                            CircleAvatar(
-                              backgroundColor: backgroundColor,
-                              child:
-                                  SvgPicture.asset('assets/svgs/facebook.svg'),
-                            ),
-                            const SizedBox(
-                              width: 5,
-                            ),
-                            Text(shopController.userShop!.facebook!),
-                          ],
-                        ),
-                        const SizedBox(
-                          height: 5,
-                        ),
-                      },
-                      if (shopController.userShop!.twitter != null) ...<Widget>{
-                        Row(
-                          children: <Widget>[
-                            CircleAvatar(
-                              backgroundColor: backgroundColor,
-                              child: SvgPicture.asset('assets/svgs/xsl.svg'),
-                            ),
-                            const SizedBox(
-                              width: 5,
-                            ),
-                            Text(shopController.userShop!.twitter!),
-                          ],
-                        ),
-                        const SizedBox(
-                          height: 5,
-                        ),
-                      },
-                      if (shopController.userShop!.instagram !=
-                          null) ...<Widget>{
-                        Row(
-                          children: <Widget>[
-                            CircleAvatar(
-                              backgroundColor: backgroundColor,
-                              child: SvgPicture.asset('assets/svgs/insta.svg'),
-                            ),
-                            const SizedBox(
-                              width: 5,
-                            ),
-                            Text(shopController.userShop!.instagram!),
-                          ],
-                        ),
-                        const SizedBox(
-                          height: 5,
-                        ),
-                      },
-                      if (shopController.userShop!.linkedin !=
-                          null) ...<Widget>{
-                        Row(
-                          children: <Widget>[
-                            CircleAvatar(
-                              backgroundColor: backgroundColor,
-                              child: SvgPicture.asset('assets/svgs/lsl.svg'),
-                            ),
-                            const SizedBox(
-                              width: 5,
-                            ),
-                            Text(shopController.userShop!.linkedin!),
-                          ],
-                        ),
-                        const SizedBox(
-                          height: 5,
-                        ),
-                      },
-                    ],
-                  ),
+                Column(
+                  children: <Widget>[
+                    if (shopController.userShop!.facebook != null) ...<Widget>{
+                      Row(
+                        children: <Widget>[
+                          CircleAvatar(
+                            backgroundColor: backgroundColor,
+                            child: SvgPicture.asset('assets/svgs/facebook.svg'),
+                          ),
+                          const SizedBox(
+                            width: 5,
+                          ),
+                          Text(shopController.userShop!.facebook!),
+                        ],
+                      ),
+                      const SizedBox(
+                        height: 5,
+                      ),
+                    },
+                    if (shopController.userShop!.twitter != null) ...<Widget>{
+                      Row(
+                        children: <Widget>[
+                          CircleAvatar(
+                            backgroundColor: backgroundColor,
+                            child: SvgPicture.asset('assets/svgs/xsl.svg'),
+                          ),
+                          const SizedBox(
+                            width: 5,
+                          ),
+                          Text(shopController.userShop!.twitter!),
+                        ],
+                      ),
+                      const SizedBox(
+                        height: 5,
+                      ),
+                    },
+                    if (shopController.userShop!.instagram != null) ...<Widget>{
+                      Row(
+                        children: <Widget>[
+                          CircleAvatar(
+                            backgroundColor: backgroundColor,
+                            child: SvgPicture.asset('assets/svgs/insta.svg'),
+                          ),
+                          const SizedBox(
+                            width: 5,
+                          ),
+                          Text(shopController.userShop!.instagram!),
+                        ],
+                      ),
+                      const SizedBox(
+                        height: 5,
+                      ),
+                    },
+                    if (shopController.userShop!.linkedin != null) ...<Widget>{
+                      Row(
+                        children: <Widget>[
+                          CircleAvatar(
+                            backgroundColor: backgroundColor,
+                            child: SvgPicture.asset('assets/svgs/lsl.svg'),
+                          ),
+                          const SizedBox(
+                            width: 5,
+                          ),
+                          Text(shopController.userShop!.linkedin!),
+                        ],
+                      ),
+                      const SizedBox(
+                        height: 5,
+                      ),
+                    },
+                  ],
                 )
               ],
             )

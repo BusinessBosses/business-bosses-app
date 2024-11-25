@@ -438,6 +438,97 @@ class _ShopScreenState extends State<ShopScreen> {
                 }
               },
             ),
+          if (shopController.shop!.facebook != null ||
+              shopController.shop!.twitter != null ||
+              shopController.shop!.linkedin != null ||
+              shopController.shop!.facebook != null)
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: <Widget>[
+                const SizedBox(height: 40),
+                const Text(
+                  'Social Links',
+                  style: TextStyle(
+                    fontWeight: FontWeight.w700,
+                    fontSize: 18,
+                    color: textColor,
+                  ),
+                ),
+                const SizedBox(height: 20),
+                Column(
+                  children: <Widget>[
+                    if (shopController.shop!.facebook != null) ...<Widget>{
+                      Row(
+                        children: <Widget>[
+                          CircleAvatar(
+                            backgroundColor: backgroundColor,
+                            child: SvgPicture.asset('assets/svgs/facebook.svg'),
+                          ),
+                          const SizedBox(
+                            width: 5,
+                          ),
+                          Text(shopController.shop!.facebook!),
+                        ],
+                      ),
+                      const SizedBox(
+                        height: 5,
+                      ),
+                    },
+                    if (shopController.shop!.twitter != null) ...<Widget>{
+                      Row(
+                        children: <Widget>[
+                          CircleAvatar(
+                            backgroundColor: backgroundColor,
+                            child: SvgPicture.asset('assets/svgs/xsl.svg'),
+                          ),
+                          const SizedBox(
+                            width: 5,
+                          ),
+                          Text(shopController.shop!.twitter!),
+                        ],
+                      ),
+                      const SizedBox(
+                        height: 5,
+                      ),
+                    },
+                    if (shopController.shop!.instagram != null) ...<Widget>{
+                      Row(
+                        children: <Widget>[
+                          CircleAvatar(
+                            backgroundColor: backgroundColor,
+                            child: SvgPicture.asset('assets/svgs/insta.svg'),
+                          ),
+                          const SizedBox(
+                            width: 5,
+                          ),
+                          Text(shopController.shop!.instagram!),
+                        ],
+                      ),
+                      const SizedBox(
+                        height: 5,
+                      ),
+                    },
+                    if (shopController.shop!.linkedin != null) ...<Widget>{
+                      Row(
+                        children: <Widget>[
+                          CircleAvatar(
+                            backgroundColor: backgroundColor,
+                            child: SvgPicture.asset('assets/svgs/lsl.svg'),
+                          ),
+                          const SizedBox(
+                            width: 5,
+                          ),
+                          Text(shopController.shop!.linkedin!),
+                        ],
+                      ),
+                      const SizedBox(
+                        height: 5,
+                      ),
+                    },
+                  ],
+                )
+              ],
+            )
         ],
       ),
     );
