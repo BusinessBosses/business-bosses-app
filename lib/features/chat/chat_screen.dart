@@ -14,7 +14,6 @@ import '../../action/action.dart';
 import '../../common/dialogs/snackbar.dart';
 import '../../common/widgets/popup/my_popup_menu_button.dart';
 import '../../common/widgets/safety_model.dart';
-import '../../common/widgets/un_read_dot.dart';
 import '../../common/widgets/user_avatar_with_badge.dart';
 import '../../utils/theme/theme.dart';
 import '../../utils/time_format.dart';

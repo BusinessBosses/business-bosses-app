@@ -50,8 +50,8 @@ class _ChooseClientBottomSheetState extends State<ChooseClientBottomSheet>
   String _bbuserSearchQuery = '';
   String? selectedItem;
 
-  final List<Map<String, dynamic>> _tempSelectedItems =
-      <Map<String, dynamic>>[];
+  // final List<Map<String, dynamic>> _tempSelectedItems =
+  //     <Map<String, dynamic>>[];
 
   @override
   void initState() {

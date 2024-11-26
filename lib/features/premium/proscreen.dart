@@ -5,7 +5,6 @@ import 'package:business_bosses_v2/features/posts/presentation/create_post_scree
 import 'package:business_bosses_v2/features/premium/profeatures.dart';
 import 'package:business_bosses_v2/features/premium/unlockedfeatures.dart';
 import 'package:business_bosses_v2/features/profile/widgets/boss_of_the_week_tile.dart';
-import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
