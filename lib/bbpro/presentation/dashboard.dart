@@ -7,6 +7,7 @@ import 'package:business_bosses_v2/bbpro/presentation/bottom_nav_screen.dart';
 import 'package:business_bosses_v2/bbpro/presentation/create_product.dart';
 import 'package:business_bosses_v2/bbpro/presentation/create_service.dart';
 import 'package:business_bosses_v2/bbpro/presentation/create_order.dart';
+import 'package:business_bosses_v2/bbpro/presentation/todo_tasks_view.dart';
 import 'package:business_bosses_v2/bbpro/widgets/financial_analysis_card.dart';
 import 'package:business_bosses_v2/bbpro/widgets/gotoshopwidget.dart';
 import 'package:business_bosses_v2/bbpro/widgets/infocard.dart';
@@ -367,14 +368,7 @@ class _DashboardState extends State<Dashboard> {
                                 } else if (index == 1) {
                                   // Add navigation for Expenses
                                 } else if (index == 2) {
-                                  Navigator.pushReplacement(
-                                    context,
-                                    MaterialPageRoute<dynamic>(
-                                      builder: (BuildContext context) =>
-                                          const Bottomnavscreen(
-                                              initialindex: 1),
-                                    ),
-                                  );
+                                  Get.to(() => const TodoTaskView());
                                 } else if (index == 3) {
                                   Get.to(() => const CreateOrder());
                                 }
