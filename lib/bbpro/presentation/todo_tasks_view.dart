@@ -33,40 +33,48 @@ class _TodoTaskViewState extends State<TodoTaskView> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('To-do Tasks'),
-      ),
-      body: loading
-          ? const SafetyModel()
-          : projectController.projects.isEmpty
-              ? const Center(
-                  child: SafetyModel(
-                    isLoading: false,
-                    title: 'No Tasks Found!',
-                  ),
-                )
-              : Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: ListView.builder(
-                    itemCount: projectController.projects.length,
-                    shrinkWrap: true,
-                    itemBuilder: (BuildContext context, int index) {
-                      if (projectController.projects[index].status ==
-                          ProjectStatus.todo) {
-                        return Padding(
-                          padding: const EdgeInsets.only(bottom: 12),
-                          child: TaskWidget(
-                            project: projectController.projects[index],
-                            bgcolor: projectController
-                                .projects[index].status.backgroundColor,
+        appBar: AppBar(
+          title: const Text('To-do Tasks'),
+        ),
+        body: loading
+            ? const SafetyModel()
+            : Obx(
+                () => projectController.loading.value
+                    ? const SafetyModel()
+                    : projectController.projects
+                            .where((Project project) =>
+                                project.status == ProjectStatus.todo)
+                            .isEmpty
+                        ? const Center(
+                            child: SafetyModel(
+                              isLoading: false,
+                              icon: Icon(Icons.warning),
+                              title: 'No To-do Tasks Found!',
+                            ),
+                          )
+                        : Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: ListView.builder(
+                              itemCount: projectController.projects.length,
+                              shrinkWrap: true,
+                              itemBuilder: (BuildContext context, int index) {
+                                if (projectController.projects[index].status ==
+                                    ProjectStatus.todo) {
+                                  return Padding(
+                                    padding: const EdgeInsets.only(bottom: 12),
+                                    child: TaskWidget(
+                                      project:
+                                          projectController.projects[index],
+                                      bgcolor: projectController.projects[index]
+                                          .status.backgroundColor,
+                                    ),
+                                  );
+                                } else {
+                                  return const SizedBox();
+                                }
+                              },
+                            ),
                           ),
-                        );
-                      } else {
-                        return const SizedBox();
-                      }
-                    },
-                  ),
-                ),
-    );
+              ));
   }
 }
