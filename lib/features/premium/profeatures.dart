@@ -27,7 +27,6 @@ class ProfeatureTile extends StatelessWidget {
                 child: SvgPicture.asset(
                   feature.iconPath,
                   height: 15,
-                  width: 15,
                 ),
               ),
               const SizedBox(width: 8),

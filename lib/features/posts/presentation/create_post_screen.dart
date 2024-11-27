@@ -145,8 +145,12 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
                 child: Column(
                   children: <Widget>[
                     if (widget.isGrow == true)
+                      const SizedBox(
+                        height: 10,
+                      ),
+                    if (widget.isGrow == true)
                       Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 15.0),
+                        padding: const EdgeInsets.symmetric(horizontal: 0.0),
                         child: FeatureTile(
                           feature: FeatureItem(
                             iconPath: 'assets/svgs/rocketblack.svg',
@@ -164,6 +168,10 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
                         height: 20,
                         child: ColoredBox(color: backgroundcolorinterface),
                       ),
+                    if (widget.isGrow == true)
+                      const SizedBox(
+                        height: 10,
+                      ),
                     Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 20.0),
                       child: Column(
@@ -180,6 +188,7 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
                     const SizedBox(
                       height: 10,
                     ),
+
                     title != null
                         ? Container()
                         : Padding(
