@@ -5,6 +5,7 @@ import 'package:business_bosses_v2/bbpro/presentation/add_client.dart';
 import 'package:business_bosses_v2/bbpro/presentation/add_supplier.dart';
 import 'package:business_bosses_v2/bbpro/presentation/campaign_page.dart';
 import 'package:business_bosses_v2/bbpro/presentation/expandedprosupplierpage.dart';
+import 'package:business_bosses_v2/bbpro/widgets/campaign_item.dart';
 import 'package:business_bosses_v2/bbpro/widgets/client_widget.dart';
 import 'package:business_bosses_v2/bbpro/widgets/custom_tabbar.dart';
 import 'package:business_bosses_v2/bbpro/widgets/notificationbutton.dart';
@@ -65,12 +66,14 @@ class _ClientsScreenState extends State<ClientsScreen>
     _viewController = TabController(length: 2, vsync: this);
     supplierController.initMySuppliers();
     supplierController.initSuppliers();
-    clientsController
-        .initClients(clientsController.profileController.myProfile.uid)
-        .then((_) {
-      setState(() {
-        loading = false;
-      });
+    clientsController.initClients(profileController.myProfile.uid).then((_) {
+      clientsController.initCampaigns(profileController.myProfile.uid).then(
+        (__) {
+          setState(() {
+            loading = false;
+          });
+        },
+      );
     });
   }
 
@@ -640,7 +643,21 @@ class _ClientsScreenState extends State<ClientsScreen>
             ),
           ],
         ),
-        const Text('jdjd'),
+        loading
+            ? const SafetyModel()
+            : clientsController.campaigns.isEmpty
+                ? const SafetyModel(
+                    isLoading: false,
+                    icon: Icon(Icons.warning),
+                    title: 'No Campaigns Yet!',
+                  )
+                : ListView.builder(
+                    itemCount: clientsController.campaigns.length,
+                    itemBuilder: ((BuildContext context, int index) {
+                      return CampaignItem(
+                          campaign: clientsController.campaigns[index]);
+                    }),
+                  ),
       ]),
     );
   }

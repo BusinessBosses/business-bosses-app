@@ -1,5 +1,6 @@
 import 'dart:developer';
 
+import 'package:business_bosses_v2/bbpro/models/campaign_model.dart';
 import 'package:business_bosses_v2/bbpro/models/client_model.dart';
 import 'package:business_bosses_v2/common/models/api_response_model.dart';
 import 'package:business_bosses_v2/features/profile/controller/profile_controller.dart';
@@ -10,9 +11,11 @@ class ClientsController extends GetxController {
   final ProfileController profileController = Get.find();
   RxList<Client> clients = RxList<Client>(<Client>[]);
   RxBool loading = RxBool(true);
+  RxBool cLoading = RxBool(true);
   final Map<ClientType, List<Client>> clientsType =
       <ClientType, List<Client>>{};
   final List<Client> allclients = <Client>[];
+  final List<Campaign> campaigns = <Campaign>[];
 
   Future<void> initClients(String userId) async {
     loading(true);
@@ -71,6 +74,20 @@ class ClientsController extends GetxController {
     }
   }
 
+  Future<void> initCampaigns(String userId) async {
+    cLoading(true);
+    campaigns.clear();
+    ApiResponseModel response =
+        await ApiService.get(path: 'campaign-history/user/$userId');
+    if (response.success) {
+      for (int i = 0; i < response.data.length; i++) {
+        campaigns.add(Campaign.fromMap(response.data[i]));
+      }
+    }
+    cLoading(false);
+    update();
+  }
+
   Future<bool> updateClient(String id, Map<String, dynamic> data) async {
     ApiResponseModel response =
         await ApiService.put(path: 'clients/$id', body: data);
@@ -115,6 +132,7 @@ class ClientsController extends GetxController {
   @override
   void onInit() {
     initClients(profileController.myProfile.uid);
+    initCampaigns(profileController.myProfile.uid);
     super.onInit();
   }
 }
