@@ -62,12 +62,12 @@ class _CampaignItemState extends State<CampaignItem> {
                     ],
                   ),
                 ),
-                OptionsButton(
-                  onEdit: () {},
-                  onDelete: () {},
-                  padding: const EdgeInsets.all(0),
-                  borderColor: Colors.white,
-                ),
+                // OptionsButton(
+                //   onEdit: () {},
+                //   onDelete: () {},
+                //   padding: const EdgeInsets.all(0),
+                //   borderColor: Colors.white,
+                // ),
               ],
             ),
             Padding(
