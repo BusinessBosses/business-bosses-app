@@ -10,9 +10,12 @@ import 'package:business_bosses_v2/bbpro/widgets/taskitem.dart';
 import 'package:business_bosses_v2/bbpro/widgets/textfield.dart';
 import 'package:business_bosses_v2/common/dialogs/snackbar.dart';
 import 'package:business_bosses_v2/features/profile/controller/profile_controller.dart';
+import 'package:business_bosses_v2/services/api_service.dart';
 import 'package:business_bosses_v2/utils/theme/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'dart:io';
+import 'package:image_picker/image_picker.dart';
 
 class Campaignpage extends StatefulWidget {
   const Campaignpage({super.key});
@@ -32,6 +35,19 @@ class _CampaignpageState extends State<Campaignpage> {
   final ClientsController clientsController = Get.put(ClientsController());
   final ProfileController profileController = Get.find();
   String? clientId;
+
+  File? _selectedImage; // To store the selected image
+
+  final ImagePicker _picker = ImagePicker();
+
+  Future<void> _pickImage() async {
+    final XFile? image = await _picker.pickImage(source: ImageSource.gallery);
+    if (image != null) {
+      setState(() {
+        _selectedImage = File(image.path);
+      });
+    }
+  }
 
   @override
   void initState() {
@@ -98,7 +114,7 @@ class _CampaignpageState extends State<Campaignpage> {
         const SizedBox(height: 15),
         CustomEditText(
           maxLength: 30,
-          caption: 'Campaign Name',
+          caption: 'Campaign Name *',
           hintText: 'e.g. Black Friday Promotion ',
           controller: nameController,
         ),
@@ -106,7 +122,7 @@ class _CampaignpageState extends State<Campaignpage> {
           height: 15,
         ),
         CustomEditText(
-          caption: 'Message',
+          caption: 'Message *',
           hintText: 'Enter Campaign message / content',
           controller: notesController,
           maxLength: 300,
@@ -123,18 +139,21 @@ class _CampaignpageState extends State<Campaignpage> {
                 color: Colors.white,
                 borderRadius: BorderRadius.circular(radiusValue),
               ),
-              child: const Padding(
-                padding: EdgeInsets.all(15.0),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: <Widget>[
-                    Text(
-                      'Add Image (Optional)',
-                      style:
-                          TextStyle(fontSize: 13, fontWeight: FontWeight.w600),
-                    ),
-                    Icon(Icons.image),
-                  ],
+              child: Padding(
+                padding: const EdgeInsets.all(15.0),
+                child: GestureDetector(
+                  onTap: _pickImage,
+                  child: const Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: <Widget>[
+                      Text(
+                        'Add Image (Optional)',
+                        style: TextStyle(
+                            fontSize: 13, fontWeight: FontWeight.w600),
+                      ),
+                      Icon(Icons.image),
+                    ],
+                  ),
                 ),
               ),
             ),
@@ -143,12 +162,30 @@ class _CampaignpageState extends State<Campaignpage> {
         const SizedBox(
           height: 15,
         ),
+        if (_selectedImage != null) ...<Widget>{
+          Image.file(
+            _selectedImage!,
+            fit: BoxFit.cover,
+            width: double.infinity,
+          ),
+          const SizedBox(
+            height: 15,
+          ),
+        },
         SizedBox(
           width: MediaQuery.of(context).size.width,
           child: ProCustomButton(
             loading: isSubmit,
             text: 'Send Campaign',
             onPressed: () async {
+              if (selectedClient.isEmpty ||
+                  nameController.text.isEmpty ||
+                  notesController.text.isEmpty) {
+                showSnackbar(
+                    message: 'Please fill in all required fields!',
+                    error: true);
+                return;
+              }
               final bool? result = await showDialog<bool>(
                 context: context,
                 builder: (BuildContext context) => AlertDialog(
@@ -171,10 +208,28 @@ class _CampaignpageState extends State<Campaignpage> {
                 setState(() {
                   isSubmit = true;
                 });
+                String? image;
+                if (_selectedImage != null) {
+                  dynamic response =
+                      await ApiService.uploadFile(_selectedImage!);
+                  if (response['success']) {
+                    image = response['fileUrl'];
+                  } else {
+                    showSnackbar(
+                      message: 'Error Uploading Thumbnail!',
+                      error: true,
+                    );
+                    setState(() {
+                      isSubmit = false;
+                    });
+                    return;
+                  }
+                }
                 final Map<String, dynamic> data = <String, dynamic>{
                   'clientIds': selectedClient,
                   'campaignName': nameController.text,
                   'message': notesController.text,
+                  'imageUrl': image,
                 };
                 final bool response =
                     await clientsController.sendCampaign(data);

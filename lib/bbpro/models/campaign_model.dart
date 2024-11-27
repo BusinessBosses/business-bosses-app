@@ -24,10 +24,10 @@ class Campaign {
     return Campaign(
       clientIds: List<String>.from(map['clientIds']),
       id: map['id'] as int,
-      userId: map['userId'] as String,
-      campaignName: map['campaignName'] as String,
-      message: map['message'] as String,
-      imageUrl: map['imageUrl'] as String?,
+      userId: map['userId'],
+      campaignName: map['campaignName'],
+      message: map['message'],
+      imageUrl: map['imageUrl'],
       createdAt: DateTime.parse(map['createdAt']),
       updatedAt: DateTime.parse(map['updatedAt']),
     );
