@@ -143,15 +143,6 @@ class _BookServiceScreenState extends State<BookServiceScreen> {
                           ),
                         ],
                       ),
-                      if (widget.service.deliveryMethod != null)
-                        Text(
-                          widget.service.deliveryMethod!,
-                          style: const TextStyle(
-                            color: proprimaryColor,
-                            fontWeight: FontWeight.bold,
-                            fontSize: 16,
-                          ),
-                        ),
                     ],
                   ),
                   const SizedBox(height: 15),
@@ -174,6 +165,28 @@ class _BookServiceScreenState extends State<BookServiceScreen> {
                     basicStyle: bodyText2.copyWith(color: textColor),
                     onTap: (_) {},
                   ),
+                  const SizedBox(height: 15),
+                  if (widget.service.notes != null)
+                    const Text(
+                      'Seller\'s Notes',
+                      style: TextStyle(
+                        fontSize: 16,
+                        fontWeight: FontWeight.w600,
+                        color: textColor,
+                      ),
+                    ),
+                  if (widget.service.notes != null)
+                    DetectableText(
+                      text: widget.service.notes ?? 'No note added!',
+                      detectionRegExp: detectionRegExp(hashtag: false)!,
+                      detectedStyle: bodyText2.copyWith(color: Colors.blue),
+                      moreStyle: bodyText2.copyWith(color: proprimaryColor),
+                      lessStyle: bodyText2.copyWith(color: proprimaryColor),
+                      trimLength: 100,
+                      trimExpandedText: '  show less',
+                      basicStyle: bodyText2.copyWith(color: textColor),
+                      onTap: (_) {},
+                    ),
                 ],
               ),
             ),

@@ -48,6 +48,7 @@ class _CreateProductListingState extends State<CreateProductListing> {
   final TextEditingController sizeController = TextEditingController();
   final TextEditingController currencycontroller = TextEditingController();
   final TextEditingController deliverydayscontroller = TextEditingController();
+  final TextEditingController notesController = TextEditingController();
 
   bool isSubmitted = false;
   bool _isSwitched = true;
@@ -494,6 +495,13 @@ class _CreateProductListingState extends State<CreateProductListing> {
                         ],
                       ),
                     ),
+                  ),
+                  const SizedBox(height: 16),
+                  CustomEditText(
+                    caption: 'Notes',
+                    hintText: 'Add order notes here',
+                    controller: notesController,
+                    maxLength: 300,
                   ),
                 ]),
             const SizedBox(height: 16),
