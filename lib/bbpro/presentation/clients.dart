@@ -655,12 +655,15 @@ class _ClientsScreenState extends State<ClientsScreen>
                     ),
                     title: 'No Campaigns Yet!',
                   )
-                : ListView.builder(
-                    itemCount: clientsController.campaigns.length,
-                    itemBuilder: ((BuildContext context, int index) {
-                      return CampaignItem(
-                          campaign: clientsController.campaigns[index]);
-                    }),
+                : Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 10),
+                    child: ListView.builder(
+                      itemCount: clientsController.campaigns.length,
+                      itemBuilder: ((BuildContext context, int index) {
+                        return CampaignItem(
+                            campaign: clientsController.campaigns[index]);
+                      }),
+                    ),
                   ),
       ]),
     );
