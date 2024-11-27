@@ -9,8 +9,8 @@ import 'package:business_bosses_v2/bbpro/widgets/proseardwidget.dart';
 import 'package:business_bosses_v2/bbpro/widgets/taskitem.dart';
 import 'package:business_bosses_v2/bbpro/widgets/textfield.dart';
 import 'package:business_bosses_v2/common/dialogs/snackbar.dart';
+import 'package:business_bosses_v2/features/profile/controller/profile_controller.dart';
 import 'package:business_bosses_v2/utils/theme/theme.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -30,6 +30,7 @@ class _CampaignpageState extends State<Campaignpage> {
   List<String> clientsName = <String>[];
   List<String> selectedClientsName = <String>[];
   final ClientsController clientsController = Get.put(ClientsController());
+  final ProfileController profileController = Get.find();
   String? clientId;
 
   @override
@@ -179,6 +180,8 @@ class _CampaignpageState extends State<Campaignpage> {
                     await clientsController.sendCampaign(data);
                 if (response) {
                   showSnackbar(message: 'Campaign Sent Successfully!');
+                  await clientsController
+                      .initCampaigns(profileController.myProfile.uid);
                   Navigator.pop(context);
                 } else {
                   showSnackbar(message: 'Error sending campaign!', error: true);
