@@ -160,7 +160,7 @@ class _OrdersWidgetState extends State<OrdersWidget> {
                             PieChartData(
                               sections: <PieChartSectionData>[
                                 PieChartSectionData(
-                                  color: Colors.blue,
+                                  color: Colors.lightGreenAccent,
                                   value: double.parse(
                                       shopController.orderStats?.online != null
                                           ? shopController.orderStats!.online
@@ -191,7 +191,7 @@ class _OrdersWidgetState extends State<OrdersWidget> {
                                   radius: 40, // Reduced radius
                                 ),
                                 PieChartSectionData(
-                                  color: Colors.green,
+                                  color: Colors.blue,
                                   value: double.parse(
                                       shopController.orderStats?.paid != null
                                           ? shopController.orderStats!.paid
@@ -201,7 +201,7 @@ class _OrdersWidgetState extends State<OrdersWidget> {
                                   radius: 40, // Reduced radius
                                 ),
                                 PieChartSectionData(
-                                  color: Colors.red,
+                                  color: Colors.green,
                                   value: double.parse(
                                       shopController.orderStats?.cancelled !=
                                               null
@@ -225,7 +225,7 @@ class _OrdersWidgetState extends State<OrdersWidget> {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: <Widget>[
                             Indicator(
-                              color: Colors.blue,
+                              color: Colors.lightGreenAccent,
                               text: 'Online',
                               value: int.parse(
                                   shopController.orderStats?.online != null
@@ -250,7 +250,7 @@ class _OrdersWidgetState extends State<OrdersWidget> {
                             ),
                             Indicator(
                               color: Colors.yellow,
-                              text: 'In-Progress',
+                              text: 'Pending',
                               value: int.parse(
                                   shopController.orderStats?.online != null
                                       ? shopController.orderStats!.pending
@@ -261,7 +261,7 @@ class _OrdersWidgetState extends State<OrdersWidget> {
                               height: 3,
                             ),
                             Indicator(
-                              color: Colors.green,
+                              color: Colors.blue,
                               text: 'Paid',
                               value: int.parse(
                                   shopController.orderStats?.online != null
@@ -273,7 +273,7 @@ class _OrdersWidgetState extends State<OrdersWidget> {
                               height: 3,
                             ),
                             Indicator(
-                              color: Colors.red,
+                              color: Colors.green,
                               text: 'Completed',
                               value: int.parse(
                                   shopController.orderStats?.online != null
