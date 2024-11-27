@@ -166,25 +166,27 @@ class _BookServiceScreenState extends State<BookServiceScreen> {
                     onTap: (_) {},
                   ),
                   const SizedBox(height: 15),
-                  const Text(
-                    'Seller\'s Notes',
-                    style: TextStyle(
-                      fontSize: 16,
-                      fontWeight: FontWeight.w600,
-                      color: textColor,
+                  if (widget.service.notes != null)
+                    const Text(
+                      'Seller\'s Notes',
+                      style: TextStyle(
+                        fontSize: 16,
+                        fontWeight: FontWeight.w600,
+                        color: textColor,
+                      ),
                     ),
-                  ),
-                  DetectableText(
-                    text: widget.service.notes ?? 'No note added!',
-                    detectionRegExp: detectionRegExp(hashtag: false)!,
-                    detectedStyle: bodyText2.copyWith(color: Colors.blue),
-                    moreStyle: bodyText2.copyWith(color: proprimaryColor),
-                    lessStyle: bodyText2.copyWith(color: proprimaryColor),
-                    trimLength: 100,
-                    trimExpandedText: '  show less',
-                    basicStyle: bodyText2.copyWith(color: textColor),
-                    onTap: (_) {},
-                  ),
+                  if (widget.service.notes != null)
+                    DetectableText(
+                      text: widget.service.notes ?? 'No note added!',
+                      detectionRegExp: detectionRegExp(hashtag: false)!,
+                      detectedStyle: bodyText2.copyWith(color: Colors.blue),
+                      moreStyle: bodyText2.copyWith(color: proprimaryColor),
+                      lessStyle: bodyText2.copyWith(color: proprimaryColor),
+                      trimLength: 100,
+                      trimExpandedText: '  show less',
+                      basicStyle: bodyText2.copyWith(color: textColor),
+                      onTap: (_) {},
+                    ),
                 ],
               ),
             ),

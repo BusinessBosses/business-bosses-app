@@ -199,38 +199,42 @@ class _OrderProductScreenState extends State<OrderProductScreen> {
                           const SizedBox(
                             height: 10,
                           ),
-                          const Row(
-                            children: <Widget>[
-                              Text(
-                                'Seller\'s Notes',
-                                style: TextStyle(
-                                  fontSize: 16,
-                                  fontWeight: FontWeight.w600,
-                                  color: textColor,
+                          if (widget.product.notes != null)
+                            const Row(
+                              children: <Widget>[
+                                Text(
+                                  'Seller\'s Notes',
+                                  style: TextStyle(
+                                    fontSize: 16,
+                                    fontWeight: FontWeight.w600,
+                                    color: textColor,
+                                  ),
                                 ),
-                              ),
-                            ],
-                          ),
-                          Align(
-                            alignment: Alignment.centerLeft,
-                            child: DetectableText(
-                              text: widget.product.description,
-                              detectionRegExp: detectionRegExp(hashtag: false)!,
-                              detectedStyle: bodyText2.copyWith(
-                                color: Colors.blue,
-                              ),
-                              moreStyle: bodyText2.copyWith(
-                                color: proprimaryColor,
-                              ),
-                              lessStyle: bodyText2.copyWith(
-                                color: proprimaryColor,
-                              ),
-                              trimLength: 100,
-                              trimExpandedText: '  show less',
-                              basicStyle: bodyText2.copyWith(color: textColor),
-                              onTap: (_) {},
+                              ],
                             ),
-                          ),
+                          if (widget.product.notes != null)
+                            Align(
+                              alignment: Alignment.centerLeft,
+                              child: DetectableText(
+                                text: widget.product.notes ?? '',
+                                detectionRegExp:
+                                    detectionRegExp(hashtag: false)!,
+                                detectedStyle: bodyText2.copyWith(
+                                  color: Colors.blue,
+                                ),
+                                moreStyle: bodyText2.copyWith(
+                                  color: proprimaryColor,
+                                ),
+                                lessStyle: bodyText2.copyWith(
+                                  color: proprimaryColor,
+                                ),
+                                trimLength: 100,
+                                trimExpandedText: '  show less',
+                                basicStyle:
+                                    bodyText2.copyWith(color: textColor),
+                                onTap: (_) {},
+                              ),
+                            ),
                         ],
                       ),
                     ],
