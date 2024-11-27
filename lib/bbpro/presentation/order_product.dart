@@ -196,6 +196,41 @@ class _OrderProductScreenState extends State<OrderProductScreen> {
                               onTap: (_) {},
                             ),
                           ),
+                          const SizedBox(
+                            height: 10,
+                          ),
+                          const Row(
+                            children: <Widget>[
+                              Text(
+                                'Seller\'s Notes',
+                                style: TextStyle(
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.w600,
+                                  color: textColor,
+                                ),
+                              ),
+                            ],
+                          ),
+                          Align(
+                            alignment: Alignment.centerLeft,
+                            child: DetectableText(
+                              text: widget.product.description,
+                              detectionRegExp: detectionRegExp(hashtag: false)!,
+                              detectedStyle: bodyText2.copyWith(
+                                color: Colors.blue,
+                              ),
+                              moreStyle: bodyText2.copyWith(
+                                color: proprimaryColor,
+                              ),
+                              lessStyle: bodyText2.copyWith(
+                                color: proprimaryColor,
+                              ),
+                              trimLength: 100,
+                              trimExpandedText: '  show less',
+                              basicStyle: bodyText2.copyWith(color: textColor),
+                              onTap: (_) {},
+                            ),
+                          ),
                         ],
                       ),
                     ],
@@ -274,6 +309,26 @@ class _OrderProductScreenState extends State<OrderProductScreen> {
                 const SizedBox(
                   height: 15,
                 ),
+                OrderPaymentMethodsWidget(
+                  paymentMethods: widget.shop.payments,
+                ),
+                const SizedBox(
+                  height: 15,
+                ),
+                OrderSummaryWidget(
+                  quantity: int.tryParse(quantityController.text) ?? 0,
+                  price: widget.product.price,
+                  discount: widget.product.discount ?? 0,
+                  total: calculateTotal(
+                    quantity: int.tryParse(quantityController.text) ?? 0,
+                    price: widget.product.price,
+                    discount: widget.product.discount ?? 0,
+                  ),
+                  currency: widget.shop.currency,
+                ),
+                const SizedBox(
+                  height: 15,
+                ),
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 15.0),
                   child: Container(
@@ -346,26 +401,6 @@ class _OrderProductScreenState extends State<OrderProductScreen> {
                       ],
                     ),
                   ),
-                ),
-                const SizedBox(
-                  height: 15,
-                ),
-                OrderPaymentMethodsWidget(
-                  paymentMethods: widget.shop.payments,
-                ),
-                const SizedBox(
-                  height: 15,
-                ),
-                OrderSummaryWidget(
-                  quantity: int.tryParse(quantityController.text) ?? 0,
-                  price: widget.product.price,
-                  discount: widget.product.discount ?? 0,
-                  total: calculateTotal(
-                    quantity: int.tryParse(quantityController.text) ?? 0,
-                    price: widget.product.price,
-                    discount: widget.product.discount ?? 0,
-                  ),
-                  currency: widget.shop.currency,
                 ),
                 const SizedBox(
                   height: 15,

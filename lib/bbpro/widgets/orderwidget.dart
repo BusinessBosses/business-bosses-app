@@ -242,6 +242,25 @@ class _OrderWidgetState extends State<OrderWidget> {
                                 ),
                               ],
                             ),
+                          if (widget.isExpanded == true)
+                            Row(
+                              children: <Widget>[
+                                const Text(
+                                  'Notes: ',
+                                  style: TextStyle(
+                                    fontWeight: FontWeight.normal,
+                                    fontSize: 13,
+                                  ),
+                                ),
+                                Text(
+                                  widget.order.notes ?? 'N/A',
+                                  style: const TextStyle(
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 13,
+                                  ),
+                                ),
+                              ],
+                            ),
                         ],
                       ),
                     ),
