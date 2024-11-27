@@ -646,9 +646,13 @@ class _ClientsScreenState extends State<ClientsScreen>
         loading
             ? const SafetyModel()
             : clientsController.campaigns.isEmpty
-                ? const SafetyModel(
+                ? SafetyModel(
                     isLoading: false,
-                    icon: Icon(Icons.warning),
+                    icon: SvgPicture.asset(
+                      'assets/svgs/campaign.svg',
+                      height: 50,
+                      color: Colors.black12,
+                    ),
                     title: 'No Campaigns Yet!',
                   )
                 : ListView.builder(
