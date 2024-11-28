@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'package:business_bosses_v2/bbpro/controllers/shop_controller.dart';
+import 'package:business_bosses_v2/bbpro/models/campaign_model.dart';
 import 'package:business_bosses_v2/bbpro/models/supplier_model.dart';
 import 'package:business_bosses_v2/bbpro/presentation/add_client.dart';
 import 'package:business_bosses_v2/bbpro/presentation/add_supplier.dart';
@@ -48,6 +49,9 @@ class _ClientsScreenState extends State<ClientsScreen>
   final ClientsController clientsController = Get.put(ClientsController());
   final ShopController shopController = Get.find();
 
+  String searchQuery = '';
+  List<Campaign> filteredCampaign = <Campaign>[];
+
   void _scrollToSection(int index) {
     final double offset = index * MediaQuery.of(context).size.width * 0.9;
     _mainListScrollController.animateTo(
@@ -61,6 +65,7 @@ class _ClientsScreenState extends State<ClientsScreen>
   @override
   void initState() {
     super.initState();
+    filteredCampaign.clear();
     _tabController =
         TabController(length: ClientType.values.length + 1, vsync: this);
     _viewController = TabController(length: 2, vsync: this);
@@ -71,6 +76,7 @@ class _ClientsScreenState extends State<ClientsScreen>
         (__) {
           setState(() {
             loading = false;
+            filteredCampaign.addAll(clientsController.campaigns);
           });
         },
       );
@@ -659,23 +665,119 @@ class _ClientsScreenState extends State<ClientsScreen>
                     padding: const EdgeInsets.symmetric(vertical: 10),
                     child: Column(
                       children: <Widget>[
-                        const Row(
-                          children: <Widget>[],
+                        SizedBox(
+                          height: 50,
+                          child: Stack(
+                            children: <Widget>[
+                              Padding(
+                                padding: const EdgeInsets.only(
+                                    left: 10.0, right: 10, bottom: 10),
+                                child: SizedBox(
+                                  width: double.infinity,
+                                  child: DecoratedBox(
+                                    decoration: BoxDecoration(
+                                      color: Colors.white,
+                                      borderRadius: BorderRadius.circular(10),
+                                    ),
+                                    child: Padding(
+                                      padding: const EdgeInsets.symmetric(
+                                          horizontal: 10),
+                                      child: ProSearchbar(
+                                        contentPadding: 10,
+                                        hasSearchIcon: false,
+                                        hintText: 'Search Campaigns',
+                                        onChange: (String query) {
+                                          setState(() {
+                                            searchQuery = query;
+                                            filteredCampaign = clientsController
+                                                .campaigns
+                                                .where((Campaign campaign) =>
+                                                    campaign.campaignName
+                                                        .toLowerCase()
+                                                        .contains(searchQuery
+                                                            .toLowerCase()))
+                                                .toList();
+                                          });
+                                        },
+                                        onSubmit: (String query) {},
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ),
+                              Positioned(
+                                right: 10,
+                                top: 0,
+                                bottom: 10,
+                                child: Padding(
+                                  padding: const EdgeInsets.all(5.0),
+                                  child: GestureDetector(
+                                    onTap: () {
+                                      showMenu(
+                                          shape: RoundedRectangleBorder(
+                                            borderRadius:
+                                                BorderRadius.circular(10),
+                                          ),
+                                          context: context,
+                                          shadowColor: Colors.black,
+                                          position: const RelativeRect.fromLTRB(
+                                              double.infinity, 130, 15, 0),
+                                          items: <String>[
+                                            'None',
+                                            'Latest',
+                                            'A-Z'
+                                          ].map((String option) {
+                                            return PopupMenuItem<String>(
+                                              value: option,
+                                              child: Text(option),
+                                            );
+                                          }).toList());
+                                    },
+                                    child: DecoratedBox(
+                                      decoration: BoxDecoration(
+                                        color: backgroundColor,
+                                        borderRadius: BorderRadius.circular(7),
+                                        boxShadow: <BoxShadow>[
+                                          BoxShadow(
+                                            color: backgroundColor
+                                                .withOpacity(0.6),
+                                            offset: const Offset(-5, 0),
+                                            blurRadius: 10,
+                                            spreadRadius: 2,
+                                          ),
+                                        ],
+                                      ),
+                                      child: Padding(
+                                        padding: const EdgeInsets.symmetric(
+                                            horizontal: 10),
+                                        child: SvgPicture.asset(
+                                            'assets/svgs/filterprosections.svg'),
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
                         ),
-                        ListView.builder(
-                          itemCount: clientsController.campaigns.length,
-                          itemBuilder: ((BuildContext context, int index) {
-                            return CampaignItem(
-                                campaign: clientsController.campaigns[index]);
-                          }),
-                        ),
+                        filteredCampaign.isNotEmpty
+                            ? Expanded(
+                                child: ListView.builder(
+                                  itemCount: filteredCampaign.length,
+                                  itemBuilder:
+                                      ((BuildContext context, int index) {
+                                    return CampaignItem(
+                                        campaign: filteredCampaign[index]);
+                                  }),
+                                ),
+                              )
+                            : const Text('No Orders found'),
                       ],
                     ),
                   ),
       ]),
     );
   }
-
   // SuppliersModel? _selectedSupplier;
 
   // void _onItemSelect(bool? selected, SuppliersModel supplier) {
