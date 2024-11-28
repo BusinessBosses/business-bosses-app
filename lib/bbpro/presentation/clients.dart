@@ -682,24 +682,37 @@ class _ClientsScreenState extends State<ClientsScreen>
                                     child: Padding(
                                       padding: const EdgeInsets.symmetric(
                                           horizontal: 10),
-                                      child: ProSearchbar(
-                                        contentPadding: 10,
-                                        hasSearchIcon: false,
-                                        hintText: 'Search Campaigns',
-                                        onChange: (String query) {
-                                          setState(() {
-                                            searchQuery = query;
-                                            filteredCampaign = clientsController
-                                                .campaigns
-                                                .where((Campaign campaign) =>
-                                                    campaign.campaignName
-                                                        .toLowerCase()
-                                                        .contains(searchQuery
-                                                            .toLowerCase()))
-                                                .toList();
-                                          });
-                                        },
-                                        onSubmit: (String query) {},
+                                      child: Row(
+                                        children: <Widget>[
+                                          SvgPicture.asset(
+                                            'assets/svgs/search.svg',
+                                            height: 20,
+                                            color: hintColor,
+                                          ),
+                                          Expanded(
+                                            child: ProSearchbar(
+                                              contentPadding: 10,
+                                              hasSearchIcon: false,
+                                              hintText: 'Search Campaigns',
+                                              autofocus: false,
+                                              onChange: (String query) {
+                                                setState(() {
+                                                  searchQuery = query;
+                                                  filteredCampaign = clientsController
+                                                      .campaigns
+                                                      .where((Campaign
+                                                              campaign) =>
+                                                          campaign.campaignName
+                                                              .toLowerCase()
+                                                              .contains(searchQuery
+                                                                  .toLowerCase()))
+                                                      .toList();
+                                                });
+                                              },
+                                              onSubmit: (String query) {},
+                                            ),
+                                          ),
+                                        ],
                                       ),
                                     ),
                                   ),
@@ -771,7 +784,7 @@ class _ClientsScreenState extends State<ClientsScreen>
                                   }),
                                 ),
                               )
-                            : const Text('No Orders found'),
+                            : const Text('No Campaigns found'),
                       ],
                     ),
                   ),
