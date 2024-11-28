@@ -4,7 +4,9 @@ import 'package:business_bosses_v2/bbpro/models/project_model.dart';
 import 'package:business_bosses_v2/bbpro/widgets/taskwidget.dart';
 import 'package:business_bosses_v2/common/widgets/safety_model.dart';
 import 'package:business_bosses_v2/features/profile/controller/profile_controller.dart';
+import 'package:business_bosses_v2/utils/theme/theme.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 
 class TodoTaskView extends StatefulWidget {
@@ -33,8 +35,16 @@ class _TodoTaskViewState extends State<TodoTaskView> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+        backgroundColor: probackgroundColor,
         appBar: AppBar(
+          automaticallyImplyLeading: false,
           title: const Text('To-do Tasks'),
+          leading: IconButton(
+            onPressed: () {
+              Navigator.pop(context);
+            },
+            icon: SvgPicture.asset('assets/svgs/backbutton.svg'),
+          ),
         ),
         body: loading
             ? const SafetyModel()
@@ -53,7 +63,7 @@ class _TodoTaskViewState extends State<TodoTaskView> {
                             ),
                           )
                         : Padding(
-                            padding: const EdgeInsets.all(8.0),
+                            padding: const EdgeInsets.symmetric(vertical: 10.0),
                             child: ListView.builder(
                               itemCount: projectController.projects.length,
                               shrinkWrap: true,
