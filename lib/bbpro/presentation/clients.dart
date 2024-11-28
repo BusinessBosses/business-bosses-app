@@ -657,12 +657,19 @@ class _ClientsScreenState extends State<ClientsScreen>
                   )
                 : Padding(
                     padding: const EdgeInsets.symmetric(vertical: 10),
-                    child: ListView.builder(
-                      itemCount: clientsController.campaigns.length,
-                      itemBuilder: ((BuildContext context, int index) {
-                        return CampaignItem(
-                            campaign: clientsController.campaigns[index]);
-                      }),
+                    child: Column(
+                      children: <Widget>[
+                        const Row(
+                          children: <Widget>[],
+                        ),
+                        ListView.builder(
+                          itemCount: clientsController.campaigns.length,
+                          itemBuilder: ((BuildContext context, int index) {
+                            return CampaignItem(
+                                campaign: clientsController.campaigns[index]);
+                          }),
+                        ),
+                      ],
                     ),
                   ),
       ]),
