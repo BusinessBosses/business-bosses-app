@@ -1,3 +1,5 @@
+import 'package:business_bosses_v2/bbpro/models/product_model.dart';
+import 'package:business_bosses_v2/bbpro/models/service_model.dart';
 import 'package:business_bosses_v2/common/models/api_response_model.dart';
 import 'package:business_bosses_v2/features/home/controller/home_controller.dart';
 import 'package:business_bosses_v2/features/profile/controller/profile_controller.dart';
@@ -16,6 +18,8 @@ class MarketController extends GetxController {
   late IO.Socket socket;
   List<MarketModel> allmarkets = <MarketModel>[];
   RxList<MarketModel> markets = RxList<MarketModel>(<MarketModel>[]);
+  RxList<Product> proProducts = RxList<Product>(<Product>[]);
+  RxList<Service> proServices = RxList<Service>(<Service>[]);
   RxList<MarketModel> products = RxList<MarketModel>(<MarketModel>[]);
   RxList<MarketModel> services = RxList<MarketModel>(<MarketModel>[]);
   RxList<MarketModel> searchResult = RxList<MarketModel>(<MarketModel>[]);
@@ -414,6 +418,7 @@ class MarketController extends GetxController {
         await HomeRepository.fetchMarketDescription();
     if (response.success) {
       processPostsToState(response.data['rows']);
+      await initProItems();
       if (description.success) {
         // Find the "market" entry and extract its description
         final List<dynamic> rows = description.data['rows'];
@@ -436,6 +441,30 @@ class MarketController extends GetxController {
         _homeController.notificationDescription = popUpEntry?['description'];
       } else {
         marketDescription = '';
+      }
+    } else {
+      error(true);
+    }
+    loading(false);
+
+    update();
+  }
+
+  ///  INITIALIZE MARKETPLACE LISTINGS
+  Future<void> initProItems() async {
+    final ApiResponseModel response = await ApiService.get(path: 'goods/all');
+    final ApiResponseModel responseServices =
+        await ApiService.get(path: 'services/all');
+    if (response.success) {
+      for (int i = 0; i < response.data['rows'].length; i++) {
+        proProducts.add(Product.fromJson(response.data['rows'][i]));
+      }
+      if (responseServices.success) {
+        for (int i = 0; i < responseServices.data['rows'].length; i++) {
+          proServices.add(Service.fromJson(responseServices.data['rows'][i]));
+        }
+      } else {
+        error(true);
       }
     } else {
       error(true);

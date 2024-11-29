@@ -122,10 +122,11 @@ class _ServicesPageState extends State<ServicesPage> {
                 ),
               );
             } else if (index == 1) {
-              return const Padding(
-                padding: EdgeInsets.only(bottom: 10.0),
+              return Padding(
+                padding: const EdgeInsets.only(bottom: 10.0),
                 child: ProshopdealsWidget(
                   title: 'NEW SERVICES',
+                  services: _marketController.proServices,
                 ),
               );
             } else if (index <=

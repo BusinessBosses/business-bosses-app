@@ -121,10 +121,11 @@ class _ProductsPageState extends State<ProductsPage> {
                 ),
               );
             } else if (index == 1) {
-              return const Padding(
-                padding: EdgeInsets.only(bottom: 10.0),
+              return Padding(
+                padding: const EdgeInsets.only(bottom: 10.0),
                 child: ProshopdealsWidget(
                   title: 'NEW PRODUCTS',
+                  products: _marketController.proProducts,
                 ),
               ); // Return the widget instead of just referencing it
             } else if (index <=
