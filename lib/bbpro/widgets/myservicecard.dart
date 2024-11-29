@@ -1,0 +1,241 @@
+// ignore_for_file: public_member_api_docs, sort_constructors_first
+import 'package:business_bosses_v2/bbpro/controllers/shop_controller.dart';
+import 'package:business_bosses_v2/bbpro/models/service_model.dart';
+import 'package:business_bosses_v2/bbpro/models/shop_model.dart';
+import 'package:business_bosses_v2/bbpro/presentation/create_service.dart';
+import 'package:business_bosses_v2/bbpro/widgets/optionsbutton.dart';
+import 'package:business_bosses_v2/common/dialogs/snackbar.dart';
+import 'package:business_bosses_v2/common/widgets/network_image_with_placeholder.dart';
+import 'package:business_bosses_v2/utils/theme/theme.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
+import 'package:get/get.dart';
+
+class MyServiceCard extends StatefulWidget {
+  final Service? service;
+  final bool? myShop;
+  final Shop? shop;
+  final bool? isService;
+
+  const MyServiceCard({
+    Key? key,
+    this.service,
+    this.isService,
+    this.myShop,
+    this.shop,
+  }) : super(key: key);
+
+  @override
+  // ignore: library_private_types_in_public_api
+  _MyServiceCardState createState() => _MyServiceCardState();
+}
+
+class _MyServiceCardState extends State<MyServiceCard> {
+  final ShopController shopController = Get.find();
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      decoration: BoxDecoration(
+          border: Border.all(
+            color: Colors.black12,
+            width: 0.5,
+          ),
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(10)),
+      margin: const EdgeInsets.symmetric(horizontal: 10),
+      child: Padding(
+        padding: const EdgeInsets.all(10.0),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: <Widget>[
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: <Widget>[
+                Container(
+                  decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(3),
+                      color: backgroundColor),
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+                  child: Wrap(
+                    crossAxisAlignment: WrapCrossAlignment.center,
+                    children: <Widget>[
+                      SvgPicture.asset(
+                        'assets/svgs/product.svg',
+                        height: 10,
+                        color: textColor,
+                      ),
+                      const SizedBox(
+                        width: 5,
+                      ),
+                      Text(
+                        widget.service?.name ?? 'Service Name',
+                        style: const TextStyle(
+                          fontWeight: FontWeight.bold,
+                          fontSize: 13,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                widget.myShop == false
+                    ? Container(
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 5, vertical: 3),
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(70),
+                          color: primaryColorLT,
+                        ),
+                        child: const Text(
+                          'Book',
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontWeight: FontWeight.bold,
+                            fontSize: 11,
+                          ),
+                        ),
+                      )
+                    : OptionsButton(
+                        item: widget.service,
+                        onEdit: () => Get.to(
+                          () => CreateServiceListing(
+                            service: widget.service,
+                          ),
+                        ),
+                        onDelete: onDelete,
+                        padding: const EdgeInsets.all(0),
+                        borderColor: Colors.white,
+                      ),
+              ],
+            ),
+            if (widget.service?.images != null &&
+                widget.service!.images!.isNotEmpty)
+              Padding(
+                padding: const EdgeInsets.symmetric(vertical: 10.0),
+                child: SizedBox(
+                  height: 120.0,
+                  width: double.infinity,
+                  child: ClipRRect(
+                    borderRadius: BorderRadius.circular(10),
+                    child: NetworkImageWithPlaceHolder(
+                      imageUrl: widget.service?.images?[0],
+                      radius: radius,
+                      placeHolder: Icons.person,
+                      iconSize: 0.0,
+                      fit: BoxFit.cover,
+                    ),
+                  ),
+                ),
+              ),
+            Padding(
+              padding: const EdgeInsets.symmetric(vertical: 10.0),
+              child: Column(
+                children: <Widget>[
+                  Row(
+                    children: <Widget>[
+                      const Text(
+                        'Description: ',
+                        style: TextStyle(
+                          fontWeight: FontWeight.normal,
+                          fontSize: 13,
+                        ),
+                      ),
+                      Expanded(
+                        child: Text(
+                          widget.service?.description ?? 'Service description',
+                          style: const TextStyle(
+                            fontWeight: FontWeight.bold,
+                            fontSize: 13,
+                          ),
+                          maxLines: 2,
+                          overflow: TextOverflow.ellipsis,
+                        ),
+                      ),
+                    ],
+                  ),
+                  Row(
+                    children: <Widget>[
+                      const Text(
+                        'Price: ',
+                        style: TextStyle(
+                          fontWeight: FontWeight.normal,
+                          fontSize: 13,
+                        ),
+                      ),
+                      if (widget.service?.discount != null &&
+                          widget.service!.discount > 0)
+                        Row(
+                          children: <Widget>[
+                            Text(
+                              '${widget.shop == null ? shopController.shop!.currency : widget.shop!.currency}${widget.service!.price * (1 - widget.service!.discount / 100)}',
+                              style: const TextStyle(
+                                color: proprimaryColor,
+                                fontWeight: FontWeight.bold,
+                                fontSize: 13,
+                              ),
+                            ),
+                            const SizedBox(width: 5),
+                            Text(
+                              '${widget.shop == null ? shopController.shop!.currency : widget.shop!.currency}${widget.service?.price.toString()}',
+                              style: const TextStyle(
+                                color: Colors.grey,
+                                decoration: TextDecoration.lineThrough,
+                                fontSize: 11,
+                              ),
+                            ),
+                          ],
+                        )
+                      else
+                        Text(
+                          '${widget.shop == null ? shopController.shop!.currency : widget.shop!.currency}${widget.service?.price.toString()}',
+                          style: const TextStyle(
+                            color: proprimaryColor,
+                            fontWeight: FontWeight.bold,
+                            fontSize: 13,
+                          ),
+                        ),
+                    ],
+                  ),
+                ],
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  void onDelete() {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) => AlertDialog(
+        title: const Text(
+          'Delete Service',
+          style: bodyText1,
+        ),
+        content: const Text('Are you sure you want to delete this service?'),
+        actions: <Widget>[
+          TextButton(
+            onPressed: () => Navigator.pop(context),
+            child: const Text('No'),
+          ),
+          TextButton(
+            onPressed: () async {
+              final bool delete =
+                  await shopController.deleteService(widget.service!.id);
+              if (delete) {
+                showSnackbar(message: 'Service deleted successfully!');
+              } else {
+                showSnackbar(message: 'Error deleting service!', error: true);
+              }
+              setState(() {});
+              Navigator.pop(context);
+            },
+            child: const Text('Yes'),
+          ),
+        ],
+      ),
+    );
+  }
+}

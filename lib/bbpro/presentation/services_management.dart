@@ -2,18 +2,16 @@ import 'package:business_bosses_v2/bbpro/controllers/shop_controller.dart';
 import 'package:business_bosses_v2/bbpro/models/service_model.dart';
 import 'package:business_bosses_v2/bbpro/presentation/create_service.dart';
 import 'package:business_bosses_v2/bbpro/widgets/button.dart';
+import 'package:business_bosses_v2/bbpro/widgets/myservicecard.dart';
 import 'package:business_bosses_v2/bbpro/widgets/servicecard.dart';
-import 'package:business_bosses_v2/common/widgets/safety_model.dart';
-
+import 'package:business_bosses_v2/bbpro/widgets/proseardwidget.dart';
 import 'package:business_bosses_v2/utils/theme/theme.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 
 class ManageServices extends StatefulWidget {
-  final bool? isService;
-  const ManageServices({super.key, this.isService});
+  const ManageServices({super.key});
 
   @override
   State<ManageServices> createState() => _ManageServicesState();
@@ -21,8 +19,42 @@ class ManageServices extends StatefulWidget {
 
 class _ManageServicesState extends State<ManageServices> {
   final ShopController shopController = Get.find();
-  // ignore: unused_field
   String? _selectedItem;
+  String searchQuery = '';
+  List<Service> filteredServices = <Service>[];
+
+  @override
+  void initState() {
+    super.initState();
+    filteredServices = shopController.services;
+  }
+
+  void _showFilterMenu(BuildContext context, Offset position) {
+    showMenu(
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+      context: context,
+      shadowColor: Colors.black,
+      position: RelativeRect.fromLTRB(position.dx, position.dy,
+          MediaQuery.of(context).size.width - position.dx, 0),
+      items: <String>[
+        'All Services',
+        'Most Popular',
+        'Newest First',
+      ].map((String option) {
+        return PopupMenuItem<String>(
+          value: option,
+          child: Text(option),
+        );
+      }).toList(),
+    ).then((String? selected) {
+      if (selected != null) {
+        setState(() {
+          _selectedItem = selected;
+        });
+        // Implement filter logic here
+      }
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -35,131 +67,169 @@ class _ManageServicesState extends State<ManageServices> {
           },
           icon: SvgPicture.asset('assets/svgs/backbutton.svg'),
         ),
-        title: const Text(
-          'My Services',
-          style: TextStyle(
+        title: Text(
+          'My Sevices (${filteredServices.length})',
+          style: const TextStyle(
             color: proprimaryColor,
             fontWeight: FontWeight.bold,
           ),
         ),
         actions: <Widget>[
-          Padding(
-            padding: const EdgeInsets.only(right: 15.0),
-            child: GestureDetector(
-              onTap: () {
-                final RenderBox button =
-                    context.findRenderObject() as RenderBox;
-                final RenderBox overlay =
-                    Overlay.of(context).context.findRenderObject() as RenderBox;
-                final RelativeRect position = RelativeRect.fromRect(
-                  Rect.fromPoints(
-                    button.localToGlobal(
-                        button.size.topRight(const Offset(0, 110)),
-                        ancestor: overlay),
-                    button.localToGlobal(
-                        button.size.bottomRight(const Offset(0, 20)),
-                        ancestor: overlay),
-                  ),
-                  Offset.zero & overlay.size,
-                );
-
-                showMenu(
-                  shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(10)),
-                  context: context,
-                  shadowColor: Colors.black,
-                  position: position,
-                  items: <String>[
-                    'All Services',
-                    'Most Popular',
-                    'Newest First',
-                  ].map((String option) {
-                    return PopupMenuItem<String>(
-                      value: option,
-                      child: Text(option),
-                    );
-                  }).toList(),
-                ).then((String? selected) {
-                  if (selected != null) {
-                    setState(() {
-                      _selectedItem = selected;
-                    });
-                    // Implement filter logic here
-                  }
-                });
-              },
+          GestureDetector(
+            onTap: () {
+              Get.to(() => const CreateServiceListing());
+            },
+            child: const Padding(
+              padding: EdgeInsets.only(right: 10.0),
               child: CircleAvatar(
-                backgroundColor: backgroundColor,
-                child: SvgPicture.asset('assets/svgs/filterprosections.svg'),
+                radius: 20,
+                backgroundColor: proprimaryColor,
+                child: Icon(
+                  Icons.add,
+                  color: Colors.white,
+                ),
               ),
             ),
           ),
         ],
       ),
-      body: Column(
-        children: <Widget>[
-          Padding(
-            padding: const EdgeInsets.only(left: 15.0, top: 10, bottom: 10),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      body: SafeArea(
+        child: Column(
+          children: <Widget>[
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[
-                Wrap(children: <Widget>[
-                  const Text(
-                    'Services List',
-                    style: TextStyle(
-                        color: Colors.black,
-                        fontWeight: FontWeight.bold,
-                        fontSize: 16),
+                const SizedBox(
+                  height: 10,
+                ),
+                // Search Bar
+                SizedBox(
+                  height: 55,
+                  child: Stack(
+                    children: <Widget>[
+                      Padding(
+                        padding: const EdgeInsets.only(
+                            left: 10.0, right: 10, bottom: 10),
+                        child: SizedBox(
+                          width: double.infinity,
+                          child: DecoratedBox(
+                            decoration: BoxDecoration(
+                              color: Colors.white,
+                              borderRadius: BorderRadius.circular(10),
+                            ),
+                            child: Padding(
+                              padding:
+                                  const EdgeInsets.symmetric(horizontal: 10),
+                              child: Row(
+                                children: <Widget>[
+                                  SvgPicture.asset(
+                                    'assets/svgs/search.svg',
+                                    height: 20,
+                                    color: hintColor,
+                                  ),
+                                  Expanded(
+                                    child: ProSearchbar(
+                                      contentPadding: 10,
+                                      hasSearchIcon: false,
+                                      hintText: 'Search Services',
+                                      autofocus: false,
+                                      onChange: (String query) {
+                                        setState(() {
+                                          searchQuery = query;
+                                          filteredServices = shopController
+                                              .services
+                                              .where((Service service) =>
+                                                  service.name
+                                                      .toLowerCase()
+                                                      .contains(searchQuery
+                                                          .toLowerCase()))
+                                              .toList();
+                                        });
+                                      },
+                                      onSubmit: (String query) {},
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ),
+                        ),
+                      ),
+                      Positioned(
+                        right: 10,
+                        top: 0,
+                        bottom: 10,
+                        child: Padding(
+                          padding: const EdgeInsets.all(5.0),
+                          child: GestureDetector(
+                            onTap: () {
+                              _showFilterMenu(
+                                context,
+                                Offset(
+                                  MediaQuery.of(context).size.width,
+                                  120,
+                                ),
+                              );
+                            },
+                            child: DecoratedBox(
+                              decoration: BoxDecoration(
+                                color: backgroundColor,
+                                borderRadius: BorderRadius.circular(7),
+                                boxShadow: <BoxShadow>[
+                                  BoxShadow(
+                                    color: backgroundColor.withOpacity(0.6),
+                                    offset: const Offset(-5, 0),
+                                    blurRadius: 10,
+                                    spreadRadius: 2,
+                                  ),
+                                ],
+                              ),
+                              child: Padding(
+                                padding:
+                                    const EdgeInsets.symmetric(horizontal: 10),
+                                child: SvgPicture.asset(
+                                    'assets/svgs/filterprosections.svg'),
+                              ),
+                            ),
+                          ),
+                        ),
+                      ),
+                    ],
                   ),
-                  const SizedBox(
-                    width: 3,
-                  ),
-                  Obx(
-                    () => Text(
-                      '(${shopController.services.length})',
-                      style: const TextStyle(
-                          color: Colors.black,
-                          fontWeight: FontWeight.bold,
-                          fontSize: 16),
-                    ),
-                  ),
-                ]),
-                ProCustomButton(
-                  text: 'Add Service',
-                  onPressed: () {
-                    Get.to(() => const CreateServiceListing());
-                  },
-                  icon: const Icon(Icons.add),
                 ),
               ],
             ),
-          ),
-          Obx(
-            () => shopController.services.isEmpty
-                ? const SafetyModel(
-                    isLoading: false,
-                    title: 'No Services Added!',
-                  )
-                : Expanded(
-                    child: StaggeredGridView.countBuilder(
+
+            // Product List
+            Expanded(
+              child: filteredServices.isNotEmpty
+                  ? ListView.builder(
                       physics: const AlwaysScrollableScrollPhysics(),
-                      staggeredTileBuilder: (int index) =>
-                          const StaggeredTile.fit(1),
-                      padding: const EdgeInsets.symmetric(
-                        horizontal: 15.0,
-                      ),
-                      crossAxisCount: 2,
-                      crossAxisSpacing: 10.0,
-                      mainAxisSpacing: 10.0,
-                      itemCount: shopController.services.length,
+                      itemCount: filteredServices.length,
                       itemBuilder: (BuildContext context, int index) {
-                        final Service service = shopController.services[index];
-                        return ServiceCard(service: service);
+                        final Service service = filteredServices[index];
+
+                        return GestureDetector(
+                          onTap: () {
+                            Get.to(
+                              () => CreateServiceListing(
+                                service: service,
+                              ),
+                            );
+                          },
+                          child: Padding(
+                            padding: const EdgeInsets.only(bottom: 10.0),
+                            child: MyServiceCard(
+                              service: service,
+                            ),
+                          ),
+                        );
                       },
-                    ),
-                  ),
-          ),
-        ],
+                    )
+                  : const Center(child: Text('No Services found')),
+            )
+          ],
+        ),
       ),
     );
   }
