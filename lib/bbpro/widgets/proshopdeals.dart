@@ -1,8 +1,15 @@
 import 'package:flutter/material.dart';
 
-class ProshopdealsWidget extends StatelessWidget {
-  const ProshopdealsWidget({Key? key}) : super(key: key);
+class ProshopdealsWidget extends StatefulWidget {
+  final String? title;
 
+  const ProshopdealsWidget({Key? key, this.title}) : super(key: key);
+
+  @override
+  State<ProshopdealsWidget> createState() => _ProshopdealsWidgetState();
+}
+
+class _ProshopdealsWidgetState extends State<ProshopdealsWidget> {
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -32,9 +39,9 @@ class ProshopdealsWidget extends StatelessWidget {
                       color: Colors.black,
                       borderRadius: BorderRadius.circular(4.0),
                     ),
-                    child: const Text(
-                      'NEW OFFERS',
-                      style: TextStyle(fontSize: 12, color: Colors.white),
+                    child: Text(
+                      widget.title ?? '',
+                      style: const TextStyle(fontSize: 12, color: Colors.white),
                     ),
                   ),
                 ],

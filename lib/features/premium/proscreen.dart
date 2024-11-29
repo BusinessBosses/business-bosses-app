@@ -227,17 +227,9 @@ class ProSubscribeSection extends StatefulWidget {
 class _ProSubscribeSectionState extends State<ProSubscribeSection> {
   static final List<ProFeatureItem> _profeatures = <ProFeatureItem>[
     ProFeatureItem(
-        iconPath: 'assets/svgs/premiumbadgered.svg',
-        caption: 'Premium Access',
-        subtext: 'Boost business FREE with coins'),
-    ProFeatureItem(
         iconPath: 'assets/svgs/bizcentericon.svg',
-        caption: 'Get Your Own Biz-Center',
+        caption: 'Get Your Own Business Center',
         subtext: 'Sell everywhere, convert visits into sales'),
-    ProFeatureItem(
-        iconPath: 'assets/svgs/connections.svg',
-        caption: 'More Connections & Referrals',
-        subtext: 'Get discovered in global markets & searches'),
     ProFeatureItem(
       iconPath: 'assets/svgs/income.svg',
       caption: 'Mutiple Income',
@@ -246,12 +238,20 @@ class _ProSubscribeSectionState extends State<ProSubscribeSection> {
     ProFeatureItem(
       iconPath: 'assets/svgs/assistant.svg',
       caption: 'Digital Assistant',
-      subtext: 'Manage inventory, tasks, schedules, expenses',
+      subtext: 'Manage inventory, tasks, schedules & expenses',
     ),
+    ProFeatureItem(
+        iconPath: 'assets/svgs/connections.svg',
+        caption: 'More Customers & Referrals',
+        subtext: 'Get discovered in global markets & searches'),
     ProFeatureItem(
         iconPath: 'assets/svgs/campaign.svg',
         caption: 'Campaign & Broadcast',
         subtext: 'Send marketing campaigns & broadcasts'),
+    ProFeatureItem(
+        iconPath: 'assets/svgs/premiumbadgered.svg',
+        caption: 'Premium Access',
+        subtext: 'Boost business FREE with coins'),
   ];
   String paymentMethodId = 'Proyear';
   bool loading = false;

@@ -1,3 +1,4 @@
+import 'package:business_bosses_v2/bbpro/widgets/proshopdeals.dart';
 import 'package:business_bosses_v2/features/home/controller/home_controller.dart';
 import 'package:business_bosses_v2/features/home/widgets/sellingpopup.dart';
 import 'package:business_bosses_v2/features/marketplace/controllers/market_controller.dart';
@@ -8,6 +9,7 @@ import 'package:business_bosses_v2/utils/theme/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
+import 'package:visibility_detector/visibility_detector.dart';
 
 class ServicesPage extends StatefulWidget {
   const ServicesPage({super.key});
@@ -35,15 +37,13 @@ class _ServicesPageState extends State<ServicesPage> {
 
   @override
   Widget build(BuildContext context) {
-    // int userCount = _marketController.users.length;
-    // String formattedUserCount = formatCount(userCount);
     return Scaffold(
       backgroundColor: backgroundColor,
       body: Obx(() {
         return ListView.builder(
           itemCount: _marketController.isfiltered.value
-              ? _marketController.searchResult.length + 1
-              : _marketController.services.length + 1 + 1,
+              ? _marketController.searchResult.length + 2
+              : _marketController.services.length + 3,
           itemBuilder: (BuildContext context, int index) {
             if (index == 0) {
               return Container(
@@ -121,17 +121,40 @@ class _ServicesPageState extends State<ServicesPage> {
                   ],
                 ),
               );
+            } else if (index == 1) {
+              return const Padding(
+                padding: EdgeInsets.only(bottom: 10.0),
+                child: ProshopdealsWidget(
+                  title: 'NEW SERVICES',
+                ),
+              );
             } else if (index <=
                 (_marketController.isfiltered.value
-                    ? _marketController.searchResult.length
-                    : _marketController.services.length)) {
+                    ? _marketController.searchResult.length + 1
+                    : _marketController.services.length + 2)) {
               final MarketModel market = _marketController.isfiltered.value
-                  ? _marketController.searchResult[index - 1]
-                  : _marketController.services[index - 1];
-              return ServiceTile(
-                post: market,
-                controller: _marketController,
-                key: ValueKey(market.marketId),
+                  ? _marketController.searchResult[index - 2]
+                  : _marketController.services[index - 2];
+              return VisibilityDetector(
+                key: Key(index.toString()),
+                onVisibilityChanged: (VisibilityInfo info) {
+                  final bool hasIncrementedView = hmeController
+                      .itemsWithIncrementedViews
+                      .contains(_marketController.services[index - 2].marketId);
+                  if (info.visibleFraction == 1.0 && !hasIncrementedView) {
+                    _marketController.updatemarketViews(
+                        _marketController.services[index - 2]);
+                    setState(() {
+                      hmeController.itemsWithIncrementedViews
+                          .add(_marketController.services[index - 2].marketId);
+                    });
+                  }
+                },
+                child: ServiceTile(
+                  post: market,
+                  controller: _marketController,
+                  key: ValueKey(_marketController.services[index - 2].marketId),
+                ),
               );
             } else {
               // Display a loading indicator at the end of the list

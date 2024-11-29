@@ -1,3 +1,4 @@
+import 'package:business_bosses_v2/features/chat/chat_screen.dart';
 import 'package:business_bosses_v2/features/donations/presentation/filtersuppliers.dart';
 import 'package:business_bosses_v2/features/forum/models/industry.dart';
 import 'package:business_bosses_v2/features/home/widgets/bottom_bar.dart';
@@ -205,24 +206,59 @@ class _MarketplaceScreenState extends State<MarketplaceScreen>
               ]
             : <Widget>[
                 if (!_ismarketplaceSearching)
-                  IconButton(
-                    onPressed: () {
-                      Get.to(() => const LiveEvent());
+                  GestureDetector(
+                    onTap: () {
+                      Get.to(() => const ChatScreen());
                     },
-                    icon: const Icon(Icons.calendar_month),
+                    child: Padding(
+                      padding: const EdgeInsets.only(
+                        right: 10.0,
+                      ),
+                      child: CircleAvatar(
+                          radius: 20,
+                          backgroundColor: backgroundColor,
+                          child: SvgPicture.asset(
+                            'assets/svgs/prochat.svg',
+                            height: 15,
+                          )),
+                    ),
                   ),
-                IconButton(
-                  icon: _ismarketplaceSearching
-                      ? const Icon(Icons.close)
-                      : SvgPicture.asset('assets/svgs/search.svg'),
-                  onPressed: () {
+                GestureDetector(
+                  onTap: () {
                     _ismarketplaceSearching = !_ismarketplaceSearching;
                     setState(() {});
                     _marketController.searchedPosts.clear();
                     _marketController.searchedServices.clear();
                     supplierController.searchedSuppliers.clear();
                   },
-                )
+                  child: Padding(
+                    padding: const EdgeInsets.only(
+                      right: 10.0,
+                    ),
+                    child: _ismarketplaceSearching
+                        ? const Icon(Icons.close)
+                        : CircleAvatar(
+                            radius: 20,
+                            backgroundColor: backgroundColor,
+                            child: SvgPicture.asset(
+                              'assets/svgs/homesearch.svg',
+                              height: 20,
+                              color: textColor,
+                            )),
+                  ),
+                ),
+                // IconButton(
+                //   icon: _ismarketplaceSearching
+                //       ? const Icon(Icons.close)
+                //       : SvgPicture.asset('assets/svgs/search.svg'),
+                //   onPressed: () {
+                //     _ismarketplaceSearching = !_ismarketplaceSearching;
+                //     setState(() {});
+                //     _marketController.searchedPosts.clear();
+                //     _marketController.searchedServices.clear();
+                //     supplierController.searchedSuppliers.clear();
+                //   },
+                // )
               ],
       ),
       body: _marketController.isLoading

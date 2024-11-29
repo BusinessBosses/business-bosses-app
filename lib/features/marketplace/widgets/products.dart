@@ -38,6 +38,7 @@ class _ProductsPageState extends State<ProductsPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: backgroundColor,
       body: Obx(() {
         return ListView.builder(
           itemCount: _marketController.isfiltered.value
@@ -122,7 +123,9 @@ class _ProductsPageState extends State<ProductsPage> {
             } else if (index == 1) {
               return const Padding(
                 padding: EdgeInsets.only(bottom: 10.0),
-                child: ProshopdealsWidget(),
+                child: ProshopdealsWidget(
+                  title: 'NEW PRODUCTS',
+                ),
               ); // Return the widget instead of just referencing it
             } else if (index <=
                 (_marketController.isfiltered.value
