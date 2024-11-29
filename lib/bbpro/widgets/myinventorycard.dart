@@ -138,28 +138,6 @@ class _MyInventoryCardState extends State<MyInventoryCard> {
                   Row(
                     children: <Widget>[
                       const Text(
-                        'Description: ',
-                        style: TextStyle(
-                          fontWeight: FontWeight.normal,
-                          fontSize: 13,
-                        ),
-                      ),
-                      Expanded(
-                        child: Text(
-                          widget.product?.description ?? 'Product description',
-                          style: const TextStyle(
-                            fontWeight: FontWeight.bold,
-                            fontSize: 13,
-                          ),
-                          maxLines: 2,
-                          overflow: TextOverflow.ellipsis,
-                        ),
-                      ),
-                    ],
-                  ),
-                  Row(
-                    children: <Widget>[
-                      const Text(
                         'Price: ',
                         style: TextStyle(
                           fontWeight: FontWeight.normal,
@@ -203,6 +181,28 @@ class _MyInventoryCardState extends State<MyInventoryCard> {
                   Row(
                     children: <Widget>[
                       const Text(
+                        'Description: ',
+                        style: TextStyle(
+                          fontWeight: FontWeight.normal,
+                          fontSize: 13,
+                        ),
+                      ),
+                      Expanded(
+                        child: Text(
+                          widget.product?.description ?? 'Product description',
+                          style: const TextStyle(
+                            fontWeight: FontWeight.bold,
+                            fontSize: 13,
+                          ),
+                          maxLines: 2,
+                          overflow: TextOverflow.ellipsis,
+                        ),
+                      ),
+                    ],
+                  ),
+                  Row(
+                    children: <Widget>[
+                      const Text(
                         'Quantity: ',
                         style: TextStyle(
                           fontWeight: FontWeight.normal,
@@ -214,6 +214,80 @@ class _MyInventoryCardState extends State<MyInventoryCard> {
                         style: const TextStyle(
                           fontWeight: FontWeight.bold,
                           fontSize: 13,
+                        ),
+                      ),
+                    ],
+                  ),
+                  Row(
+                    children: <Widget>[
+                      const Text(
+                        'Storage Location: ',
+                        style: TextStyle(
+                          fontWeight: FontWeight.normal,
+                          fontSize: 13,
+                        ),
+                      ),
+                      Expanded(
+                        child: Text(
+                          widget.product?.storageLocation == null ||
+                                  widget.product!.storageLocation!.isEmpty
+                              ? 'N/A'
+                              : widget.product?.storageLocation ?? 'N/A',
+                          style: const TextStyle(
+                            fontWeight: FontWeight.bold,
+                            fontSize: 13,
+                          ),
+                          maxLines: 2,
+                          overflow: TextOverflow.ellipsis,
+                        ),
+                      ),
+                    ],
+                  ),
+                  Row(
+                    children: <Widget>[
+                      const Text(
+                        'Product Number: ',
+                        style: TextStyle(
+                          fontWeight: FontWeight.normal,
+                          fontSize: 13,
+                        ),
+                      ),
+                      Expanded(
+                        child: Text(
+                          widget.product?.productNumber == null ||
+                                  widget.product!.productNumber!.isEmpty
+                              ? 'N/A'
+                              : widget.product?.productNumber ?? 'N/A',
+                          style: const TextStyle(
+                            fontWeight: FontWeight.bold,
+                            fontSize: 13,
+                          ),
+                          maxLines: 2,
+                          overflow: TextOverflow.ellipsis,
+                        ),
+                      ),
+                    ],
+                  ),
+                  Row(
+                    children: <Widget>[
+                      const Text(
+                        'Status: ',
+                        style: TextStyle(
+                          fontWeight: FontWeight.normal,
+                          fontSize: 13,
+                        ),
+                      ),
+                      Expanded(
+                        child: Text(
+                          widget.product?.isActive == true
+                              ? 'Active'
+                              : 'Inactive',
+                          style: const TextStyle(
+                            fontWeight: FontWeight.bold,
+                            fontSize: 13,
+                          ),
+                          maxLines: 2,
+                          overflow: TextOverflow.ellipsis,
                         ),
                       ),
                     ],

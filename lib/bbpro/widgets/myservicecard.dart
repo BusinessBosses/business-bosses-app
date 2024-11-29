@@ -62,7 +62,7 @@ class _MyServiceCardState extends State<MyServiceCard> {
                     crossAxisAlignment: WrapCrossAlignment.center,
                     children: <Widget>[
                       SvgPicture.asset(
-                        'assets/svgs/product.svg',
+                        'assets/svgs/myservices.svg',
                         height: 10,
                         color: textColor,
                       ),
@@ -135,28 +135,6 @@ class _MyServiceCardState extends State<MyServiceCard> {
                   Row(
                     children: <Widget>[
                       const Text(
-                        'Description: ',
-                        style: TextStyle(
-                          fontWeight: FontWeight.normal,
-                          fontSize: 13,
-                        ),
-                      ),
-                      Expanded(
-                        child: Text(
-                          widget.service?.description ?? 'Service description',
-                          style: const TextStyle(
-                            fontWeight: FontWeight.bold,
-                            fontSize: 13,
-                          ),
-                          maxLines: 2,
-                          overflow: TextOverflow.ellipsis,
-                        ),
-                      ),
-                    ],
-                  ),
-                  Row(
-                    children: <Widget>[
-                      const Text(
                         'Price: ',
                         style: TextStyle(
                           fontWeight: FontWeight.normal,
@@ -195,6 +173,112 @@ class _MyServiceCardState extends State<MyServiceCard> {
                             fontSize: 13,
                           ),
                         ),
+                    ],
+                  ),
+                  Row(
+                    children: <Widget>[
+                      const Text(
+                        'Description: ',
+                        style: TextStyle(
+                          fontWeight: FontWeight.normal,
+                          fontSize: 13,
+                        ),
+                      ),
+                      Expanded(
+                        child: Text(
+                          widget.service?.description ?? 'Service description',
+                          style: const TextStyle(
+                            fontWeight: FontWeight.bold,
+                            fontSize: 13,
+                          ),
+                          maxLines: 2,
+                          overflow: TextOverflow.ellipsis,
+                        ),
+                      ),
+                    ],
+                  ),
+                  Row(
+                    children: <Widget>[
+                      const Text(
+                        'Delivery Method: ',
+                        style: TextStyle(
+                          fontWeight: FontWeight.normal,
+                          fontSize: 13,
+                        ),
+                      ),
+                      Expanded(
+                        child: Text(
+                          widget.service?.deliveryMethod ?? 'N/A',
+                          style: const TextStyle(
+                            fontWeight: FontWeight.bold,
+                            fontSize: 13,
+                          ),
+                          maxLines: 2,
+                          overflow: TextOverflow.ellipsis,
+                        ),
+                      ),
+                    ],
+                  ),
+                  Row(
+                    children: <Widget>[
+                      const Text(
+                        'Service Type: ',
+                        style: TextStyle(
+                          fontWeight: FontWeight.normal,
+                          fontSize: 13,
+                        ),
+                      ),
+                      Expanded(
+                        child: Row(
+                          children: <Widget>[
+                            Text(
+                              widget.service?.serviceType ??
+                                  'Service description',
+                              style: const TextStyle(
+                                fontWeight: FontWeight.bold,
+                                fontSize: 13,
+                              ),
+                              maxLines: 2,
+                              overflow: TextOverflow.ellipsis,
+                            ),
+                            // Expanded(
+                            //   child: Text(
+                            //     widget.service?.participants ??
+                            //         'Service description',
+                            //     style: const TextStyle(
+                            //       fontSize: 13,
+                            //     ),
+                            //     maxLines: 2,
+                            //     overflow: TextOverflow.ellipsis,
+                            //   ),
+                            // ),
+                          ],
+                        ),
+                      ),
+                    ],
+                  ),
+                  Row(
+                    children: <Widget>[
+                      const Text(
+                        'Status: ',
+                        style: TextStyle(
+                          fontWeight: FontWeight.normal,
+                          fontSize: 13,
+                        ),
+                      ),
+                      Expanded(
+                        child: Text(
+                          widget.service?.isActive == true
+                              ? 'Active'
+                              : 'Inactive',
+                          style: const TextStyle(
+                            fontWeight: FontWeight.bold,
+                            fontSize: 13,
+                          ),
+                          maxLines: 2,
+                          overflow: TextOverflow.ellipsis,
+                        ),
+                      ),
                     ],
                   ),
                 ],

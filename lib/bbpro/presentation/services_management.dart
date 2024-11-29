@@ -93,143 +93,140 @@ class _ManageServicesState extends State<ManageServices> {
           ),
         ],
       ),
-      body: SafeArea(
-        child: Column(
-          children: <Widget>[
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: <Widget>[
-                const SizedBox(
-                  height: 10,
-                ),
-                // Search Bar
-                SizedBox(
-                  height: 55,
-                  child: Stack(
-                    children: <Widget>[
-                      Padding(
-                        padding: const EdgeInsets.only(
-                            left: 10.0, right: 10, bottom: 10),
-                        child: SizedBox(
-                          width: double.infinity,
+      body: Column(
+        children: <Widget>[
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: <Widget>[
+              const SizedBox(
+                height: 10,
+              ),
+              // Search Bar
+              SizedBox(
+                height: 55,
+                child: Stack(
+                  children: <Widget>[
+                    Padding(
+                      padding: const EdgeInsets.only(
+                          left: 10.0, right: 10, bottom: 10),
+                      child: SizedBox(
+                        width: double.infinity,
+                        child: DecoratedBox(
+                          decoration: BoxDecoration(
+                            color: Colors.white,
+                            borderRadius: BorderRadius.circular(10),
+                          ),
+                          child: Padding(
+                            padding: const EdgeInsets.symmetric(horizontal: 10),
+                            child: Row(
+                              children: <Widget>[
+                                SvgPicture.asset(
+                                  'assets/svgs/search.svg',
+                                  height: 20,
+                                  color: hintColor,
+                                ),
+                                Expanded(
+                                  child: ProSearchbar(
+                                    contentPadding: 10,
+                                    hasSearchIcon: false,
+                                    hintText: 'Search Services',
+                                    autofocus: false,
+                                    onChange: (String query) {
+                                      setState(() {
+                                        searchQuery = query;
+                                        filteredServices = shopController
+                                            .services
+                                            .where((Service service) => service
+                                                .name
+                                                .toLowerCase()
+                                                .contains(
+                                                    searchQuery.toLowerCase()))
+                                            .toList();
+                                      });
+                                    },
+                                    onSubmit: (String query) {},
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
+                    Positioned(
+                      right: 10,
+                      top: 0,
+                      bottom: 10,
+                      child: Padding(
+                        padding: const EdgeInsets.all(5.0),
+                        child: GestureDetector(
+                          onTap: () {
+                            _showFilterMenu(
+                              context,
+                              Offset(
+                                MediaQuery.of(context).size.width,
+                                120,
+                              ),
+                            );
+                          },
                           child: DecoratedBox(
                             decoration: BoxDecoration(
-                              color: Colors.white,
-                              borderRadius: BorderRadius.circular(10),
+                              color: backgroundColor,
+                              borderRadius: BorderRadius.circular(7),
+                              boxShadow: <BoxShadow>[
+                                BoxShadow(
+                                  color: backgroundColor.withOpacity(0.6),
+                                  offset: const Offset(-5, 0),
+                                  blurRadius: 10,
+                                  spreadRadius: 2,
+                                ),
+                              ],
                             ),
                             child: Padding(
                               padding:
                                   const EdgeInsets.symmetric(horizontal: 10),
-                              child: Row(
-                                children: <Widget>[
-                                  SvgPicture.asset(
-                                    'assets/svgs/search.svg',
-                                    height: 20,
-                                    color: hintColor,
-                                  ),
-                                  Expanded(
-                                    child: ProSearchbar(
-                                      contentPadding: 10,
-                                      hasSearchIcon: false,
-                                      hintText: 'Search Services',
-                                      autofocus: false,
-                                      onChange: (String query) {
-                                        setState(() {
-                                          searchQuery = query;
-                                          filteredServices = shopController
-                                              .services
-                                              .where((Service service) =>
-                                                  service.name
-                                                      .toLowerCase()
-                                                      .contains(searchQuery
-                                                          .toLowerCase()))
-                                              .toList();
-                                        });
-                                      },
-                                      onSubmit: (String query) {},
-                                    ),
-                                  ),
-                                ],
-                              ),
+                              child: SvgPicture.asset(
+                                  'assets/svgs/filterprosections.svg'),
                             ),
                           ),
                         ),
                       ),
-                      Positioned(
-                        right: 10,
-                        top: 0,
-                        bottom: 10,
-                        child: Padding(
-                          padding: const EdgeInsets.all(5.0),
-                          child: GestureDetector(
-                            onTap: () {
-                              _showFilterMenu(
-                                context,
-                                Offset(
-                                  MediaQuery.of(context).size.width,
-                                  120,
-                                ),
-                              );
-                            },
-                            child: DecoratedBox(
-                              decoration: BoxDecoration(
-                                color: backgroundColor,
-                                borderRadius: BorderRadius.circular(7),
-                                boxShadow: <BoxShadow>[
-                                  BoxShadow(
-                                    color: backgroundColor.withOpacity(0.6),
-                                    offset: const Offset(-5, 0),
-                                    blurRadius: 10,
-                                    spreadRadius: 2,
-                                  ),
-                                ],
-                              ),
-                              child: Padding(
-                                padding:
-                                    const EdgeInsets.symmetric(horizontal: 10),
-                                child: SvgPicture.asset(
-                                    'assets/svgs/filterprosections.svg'),
-                              ),
-                            ),
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
+                    ),
+                  ],
                 ),
-              ],
-            ),
+              ),
+            ],
+          ),
 
-            // Product List
-            Expanded(
-              child: filteredServices.isNotEmpty
-                  ? ListView.builder(
-                      physics: const AlwaysScrollableScrollPhysics(),
-                      itemCount: filteredServices.length,
-                      itemBuilder: (BuildContext context, int index) {
-                        final Service service = filteredServices[index];
+          // Product List
+          Expanded(
+            child: filteredServices.isNotEmpty
+                ? ListView.builder(
+                    physics: const AlwaysScrollableScrollPhysics(),
+                    itemCount: filteredServices.length,
+                    itemBuilder: (BuildContext context, int index) {
+                      final Service service = filteredServices[index];
 
-                        return GestureDetector(
-                          onTap: () {
-                            Get.to(
-                              () => CreateServiceListing(
-                                service: service,
-                              ),
-                            );
-                          },
-                          child: Padding(
-                            padding: const EdgeInsets.only(bottom: 10.0),
-                            child: MyServiceCard(
+                      return GestureDetector(
+                        onTap: () {
+                          Get.to(
+                            () => CreateServiceListing(
                               service: service,
                             ),
+                          );
+                        },
+                        child: Padding(
+                          padding: const EdgeInsets.only(bottom: 10.0),
+                          child: MyServiceCard(
+                            service: service,
                           ),
-                        );
-                      },
-                    )
-                  : const Center(child: Text('No Services found')),
-            )
-          ],
-        ),
+                        ),
+                      );
+                    },
+                  )
+                : const Center(child: Text('No Services found')),
+          )
+        ],
       ),
     );
   }
