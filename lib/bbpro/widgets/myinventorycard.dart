@@ -112,25 +112,25 @@ class _MyInventoryCardState extends State<MyInventoryCard> {
                       ),
               ],
             ),
-            if (widget.product?.images?[0] != null &&
-                widget.product!.images![0].isNotEmpty)
-              Padding(
-                padding: const EdgeInsets.symmetric(vertical: 10.0),
-                child: SizedBox(
-                  height: 120.0,
-                  width: double.infinity,
-                  child: ClipRRect(
-                    borderRadius: BorderRadius.circular(10),
-                    child: NetworkImageWithPlaceHolder(
-                      imageUrl: widget.product?.images?[0],
-                      radius: radius,
-                      placeHolder: Icons.person,
-                      iconSize: 0.0,
-                      fit: BoxFit.cover,
-                    ),
-                  ),
-                ),
-              ),
+            // if (widget.product?.images?[0] != null &&
+            //     widget.product!.images![0].isNotEmpty)
+            //   Padding(
+            //     padding: const EdgeInsets.symmetric(vertical: 10.0),
+            //     child: SizedBox(
+            //       height: 120.0,
+            //       width: double.infinity,
+            //       child: ClipRRect(
+            //         borderRadius: BorderRadius.circular(10),
+            //         child: NetworkImageWithPlaceHolder(
+            //           imageUrl: widget.product?.images?[0],
+            //           radius: radius,
+            //           placeHolder: Icons.person,
+            //           iconSize: 0.0,
+            //           fit: BoxFit.cover,
+            //         ),
+            //       ),
+            //     ),
+            //   ),
             Padding(
               padding: const EdgeInsets.symmetric(vertical: 10.0),
               child: Column(

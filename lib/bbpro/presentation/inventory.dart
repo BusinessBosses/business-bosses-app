@@ -69,7 +69,7 @@ class _InventoryState extends State<Inventory> {
           icon: SvgPicture.asset('assets/svgs/backbutton.svg'),
         ),
         title: Text(
-          'My Services (${filteredProducts.length})',
+          'Inventory (${filteredProducts.length})',
           style: const TextStyle(
             color: proprimaryColor,
             fontWeight: FontWeight.bold,

@@ -109,25 +109,25 @@ class _MyServiceCardState extends State<MyServiceCard> {
                       ),
               ],
             ),
-            if (widget.service?.images != null &&
-                widget.service!.images!.isNotEmpty)
-              Padding(
-                padding: const EdgeInsets.symmetric(vertical: 10.0),
-                child: SizedBox(
-                  height: 120.0,
-                  width: double.infinity,
-                  child: ClipRRect(
-                    borderRadius: BorderRadius.circular(10),
-                    child: NetworkImageWithPlaceHolder(
-                      imageUrl: widget.service?.images?[0],
-                      radius: radius,
-                      placeHolder: Icons.person,
-                      iconSize: 0.0,
-                      fit: BoxFit.cover,
-                    ),
-                  ),
-                ),
-              ),
+            // if (widget.service?.images != null &&
+            //     widget.service!.images!.isNotEmpty)
+            //   Padding(
+            //     padding: const EdgeInsets.symmetric(vertical: 10.0),
+            //     child: SizedBox(
+            //       height: 120.0,
+            //       width: double.infinity,
+            //       child: ClipRRect(
+            //         borderRadius: BorderRadius.circular(10),
+            //         child: NetworkImageWithPlaceHolder(
+            //           imageUrl: widget.service?.images?[0],
+            //           radius: radius,
+            //           placeHolder: Icons.person,
+            //           iconSize: 0.0,
+            //           fit: BoxFit.cover,
+            //         ),
+            //       ),
+            //     ),
+            //   ),
             Padding(
               padding: const EdgeInsets.symmetric(vertical: 10.0),
               child: Column(
