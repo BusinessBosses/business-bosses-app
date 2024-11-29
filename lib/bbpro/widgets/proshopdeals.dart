@@ -77,18 +77,18 @@ class _ProshopdealsWidgetState extends State<ProshopdealsWidget> {
                           item.images!.isNotEmpty
                               ? item.images![0]
                               : 'assets/placeholder.png',
-                          item.name ?? 'Unknown Product',
+                          item.name,
                           '-${item.discount ?? '0%'}',
-                          '${item.price ?? '£0.00'}',
+                          '${item.price}',
                         );
                       } else if (item is Service) {
                         return _buildDealItem(
                           item.images!.isNotEmpty
                               ? item.images![0]
                               : 'assets/placeholder.png',
-                          item.name ?? 'Unknown Service',
-                          '-${item.discount ?? '0%'}',
-                          '${item.price ?? '£0.00'}',
+                          item.name,
+                          '-${item.discount}',
+                          '${item.price}',
                         );
                       }
                       return const SizedBox();
@@ -108,7 +108,11 @@ class _ProshopdealsWidgetState extends State<ProshopdealsWidget> {
       margin: const EdgeInsets.only(right: 16.0),
       child: Column(
         children: <Widget>[
-          NetworkImageWithPlaceHolder(imageUrl: imagePath),
+          NetworkImageWithPlaceHolder(
+            imageUrl: imagePath,
+            height: 80,
+            width: 80,
+          ),
           const SizedBox(height: 8.0),
           Text(
             title,
