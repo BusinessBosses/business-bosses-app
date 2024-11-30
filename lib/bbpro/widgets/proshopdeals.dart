@@ -1,7 +1,10 @@
 import 'package:business_bosses_v2/bbpro/models/product_model.dart';
 import 'package:business_bosses_v2/bbpro/models/service_model.dart';
+import 'package:business_bosses_v2/bbpro/presentation/book_service.dart';
+import 'package:business_bosses_v2/bbpro/presentation/order_product.dart';
 import 'package:business_bosses_v2/common/widgets/network_image_with_placeholder.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
 class ProshopdealsWidget extends StatefulWidget {
   final String? title;
@@ -107,26 +110,40 @@ class _ProshopdealsWidgetState extends State<ProshopdealsWidget> {
                     itemBuilder: (BuildContext context, int index) {
                       final Object item = items[index];
                       if (item is Product) {
-                        return _buildDealItem(
-                          item.images!.isNotEmpty
-                              ? item.images![0]
-                              : 'assets/placeholder.png',
-                          item.name,
-                          '${item.discount ?? '0%'}',
-                          '${item.price}',
-                          item.discount != null && item.discount! > 0,
-                          item.shop!.currency,
+                        return GestureDetector(
+                          onTap: () {
+                            Get.to(OrderProductScreen(
+                              product: item,
+                              shop: item.shop!,
+                            ));
+                          },
+                          child: _buildDealItem(
+                            item.images!.isNotEmpty
+                                ? item.images![0]
+                                : 'assets/placeholder.png',
+                            item.name,
+                            '${item.discount ?? '0%'}',
+                            '${item.price}',
+                            item.discount != null && item.discount! > 0,
+                            item.shop!.currency,
+                          ),
                         );
                       } else if (item is Service) {
-                        return _buildDealItem(
-                          item.images!.isNotEmpty
-                              ? item.images![0]
-                              : 'assets/placeholder.png',
-                          item.name,
-                          '${item.discount}',
-                          '${item.price}',
-                          item.discount > 0,
-                          item.shop!.currency,
+                        return GestureDetector(
+                          onTap: () {
+                            Get.to(BookServiceScreen(
+                                shop: item.shop!, service: item));
+                          },
+                          child: _buildDealItem(
+                            item.images!.isNotEmpty
+                                ? item.images![0]
+                                : 'assets/placeholder.png',
+                            item.name,
+                            '${item.discount}',
+                            '${item.price}',
+                            item.discount > 0,
+                            item.shop!.currency,
+                          ),
                         );
                       }
                       return const SizedBox();

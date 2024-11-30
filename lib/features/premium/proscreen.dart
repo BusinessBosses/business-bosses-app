@@ -476,7 +476,7 @@ class _ProSubscribeSectionState extends State<ProSubscribeSection> {
                                     child: ProCustomButton(
                                       padding: 0,
                                       color: primaryColorLT,
-                                      text: 'Start 7-day free trial',
+                                      text: 'Start your \$1/month trial',
                                       loading: loading,
                                       onPressed: () async {
                                         setState(() {
