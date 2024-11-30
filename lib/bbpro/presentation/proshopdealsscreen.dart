@@ -1,4 +1,15 @@
+import 'package:business_bosses_v2/bbpro/models/product_model.dart';
+import 'package:business_bosses_v2/bbpro/models/service_model.dart';
+import 'package:business_bosses_v2/bbpro/presentation/book_service.dart';
+import 'package:business_bosses_v2/bbpro/presentation/create_product.dart';
+import 'package:business_bosses_v2/bbpro/presentation/create_service.dart';
+import 'package:business_bosses_v2/bbpro/presentation/order_product.dart';
+import 'package:business_bosses_v2/bbpro/widgets/inventorycard.dart';
+import 'package:business_bosses_v2/bbpro/widgets/servicecard.dart';
+import 'package:business_bosses_v2/features/marketplace/controllers/market_controller.dart';
+import 'package:business_bosses_v2/features/profile/controller/profile_controller.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 
@@ -12,6 +23,8 @@ class ProshopdealsScreen extends StatefulWidget {
 class _ProshopdealsScreenState extends State<ProshopdealsScreen>
     with SingleTickerProviderStateMixin {
   late TabController _tabController;
+  final MarketController marketController = Get.find();
+  final ProfileController profileController = Get.find();
 
   @override
   void initState() {
@@ -47,10 +60,137 @@ class _ProshopdealsScreenState extends State<ProshopdealsScreen>
       ),
       body: TabBarView(
         controller: _tabController,
-        children: const <Widget>[
-          Center(child: Text('All Deals')),
-          Center(child: Text('Product Deals')),
-          Center(child: Text('Service Deals')),
+        children: <Widget>[
+          // ALL ITEMS
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 15.0),
+            child: StaggeredGridView.countBuilder(
+              crossAxisCount: 2,
+              staggeredTileBuilder: (int index) => const StaggeredTile.fit(1),
+              mainAxisSpacing: 10.0,
+              crossAxisSpacing: 10.0,
+              itemCount: marketController.proProducts.length +
+                  marketController.proServices.length,
+              itemBuilder: (BuildContext context, int index) {
+                if (index < marketController.proProducts.length) {
+                  final Product product = marketController.proProducts[index];
+                  return GestureDetector(
+                    onTap: () {
+                      if (product.user!.uid ==
+                          profileController.myProfile.uid) {
+                        Get.to(
+                          () => CreateProductListing(
+                            product: product,
+                          ),
+                        );
+                      } else {
+                        Get.to(() => OrderProductScreen(
+                              product: product,
+                              shop: product.shop!,
+                            ));
+                      }
+                    },
+                    child: InventoryCard(
+                      product: product,
+                      shop: product.shop!,
+                    ),
+                  );
+                } else {
+                  final Service service = marketController
+                      .proServices[index - marketController.proProducts.length];
+                  return GestureDetector(
+                    onTap: () {
+                      if (service.user!.uid ==
+                          profileController.myProfile.uid) {
+                        Get.to(
+                          () => CreateServiceListing(
+                            service: service,
+                          ),
+                        );
+                      } else {
+                        BookServiceScreen(
+                          service: service,
+                          shop: service.shop!,
+                        );
+                      }
+                    },
+                    child: ServiceCard(
+                      shop: service.shop!,
+                      service: service,
+                    ),
+                  );
+                }
+              },
+            ),
+          ),
+          // PRODUCTS
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 15.0),
+            child: StaggeredGridView.countBuilder(
+              crossAxisCount: 2,
+              staggeredTileBuilder: (int index) => const StaggeredTile.fit(1),
+              mainAxisSpacing: 10.0,
+              crossAxisSpacing: 10.0,
+              itemCount: marketController.proProducts.length,
+              itemBuilder: (BuildContext context, int index) {
+                final Product product = marketController.proProducts[index];
+                return GestureDetector(
+                  onTap: () {
+                    if (product.user!.uid == profileController.myProfile.uid) {
+                      Get.to(
+                        () => CreateProductListing(
+                          product: product,
+                        ),
+                      );
+                    } else {
+                      Get.to(() => OrderProductScreen(
+                            product: product,
+                            shop: product.shop!,
+                          ));
+                    }
+                  },
+                  child: InventoryCard(
+                    product: product,
+                    shop: product.shop!,
+                  ),
+                );
+              },
+            ),
+          ),
+          // SERVICES
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 15.0),
+            child: StaggeredGridView.countBuilder(
+              crossAxisCount: 2,
+              staggeredTileBuilder: (int index) => const StaggeredTile.fit(1),
+              mainAxisSpacing: 10.0,
+              crossAxisSpacing: 10.0,
+              itemCount: marketController.proServices.length,
+              itemBuilder: (BuildContext context, int index) {
+                final Service service = marketController.proServices[index];
+                return GestureDetector(
+                  onTap: () {
+                    if (service.user!.uid == profileController.myProfile.uid) {
+                      Get.to(
+                        () => CreateServiceListing(
+                          service: service,
+                        ),
+                      );
+                    } else {
+                      BookServiceScreen(
+                        service: service,
+                        shop: service.shop!,
+                      );
+                    }
+                  },
+                  child: ServiceCard(
+                    shop: service.shop!,
+                    service: service,
+                  ),
+                );
+              },
+            ),
+          ),
         ],
       ),
     );

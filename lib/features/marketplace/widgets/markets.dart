@@ -182,8 +182,8 @@ class _MarketsPageState extends State<MarketsPage> {
                         child: ProshopdealsWidget(
                           title: 'NEW',
                           combinedList: <Object>[
-                            ..._marketController.proProducts,
-                            ..._marketController.proServices
+                            ..._marketController.proProducts.take(5).toList(),
+                            ..._marketController.proServices.take(5).toList(),
                           ],
                         ),
 

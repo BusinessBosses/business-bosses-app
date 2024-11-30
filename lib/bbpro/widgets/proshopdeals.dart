@@ -27,34 +27,12 @@ class ProshopdealsWidget extends StatefulWidget {
 class _ProshopdealsWidgetState extends State<ProshopdealsWidget> {
   @override
   Widget build(BuildContext context) {
-    List<Object> items = <Object>[];
-
+    final List<Object>? items;
     if (widget.combinedList != null) {
-      items.addAll(widget.combinedList!);
+      items = widget.combinedList;
     } else {
-      final List<Product> products = widget.products ?? <Product>[];
-      final List<Service> services = widget.services ?? <Service>[];
-
-      int productIndex = 0;
-      int serviceIndex = 0;
-      int productCount = 0;
-      int serviceCount = 0;
-
-      // Alternate between products and services until we have 5 of each or run out
-      while ((productCount < 5 || serviceCount < 5) &&
-          (productIndex < products.length || serviceIndex < services.length)) {
-        if (productCount < 5 && productIndex < products.length) {
-          items.add(products[productIndex]);
-          productIndex++;
-          productCount++;
-        }
-
-        if (serviceCount < 5 && serviceIndex < services.length) {
-          items.add(services[serviceIndex]);
-          serviceIndex++;
-          serviceCount++;
-        }
-      }
+      items = widget.products?.take(10).toList() ??
+          widget.services?.take(10).toList();
     }
 
     return GestureDetector(
@@ -108,12 +86,12 @@ class _ProshopdealsWidgetState extends State<ProshopdealsWidget> {
             const SizedBox(height: 5.0),
             SizedBox(
               height: 150,
-              child: items.isNotEmpty
+              child: items!.isNotEmpty
                   ? ListView.builder(
                       scrollDirection: Axis.horizontal,
                       itemCount: items.length,
                       itemBuilder: (BuildContext context, int index) {
-                        final Object item = items[index];
+                        final Object item = items![index];
                         if (item is Product) {
                           return GestureDetector(
                             onTap: () {
