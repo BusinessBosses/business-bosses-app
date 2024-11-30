@@ -631,68 +631,108 @@ class _UserShopScreenState extends State<UserShopScreen> {
                 Column(
                   children: <Widget>[
                     if (shopController.userShop!.facebook != null) ...<Widget>{
-                      Row(
-                        children: <Widget>[
-                          CircleAvatar(
-                            backgroundColor: backgroundColor,
-                            child: SvgPicture.asset('assets/svgs/facebook.svg'),
-                          ),
-                          const SizedBox(
-                            width: 5,
-                          ),
-                          Text(shopController.userShop!.facebook!),
-                        ],
+                      GestureDetector(
+                        onTap: () async {
+                          final Uri uri =
+                              Uri.parse(shopController.userShop!.facebook!);
+                          if (await canLaunchUrl(uri)) {
+                            await launchUrl(uri,
+                                mode: LaunchMode.externalApplication);
+                          }
+                        },
+                        child: Row(
+                          children: <Widget>[
+                            CircleAvatar(
+                              backgroundColor: backgroundColor,
+                              child: SvgPicture.asset('assets/svgs/fbsl.svg'),
+                            ),
+                            const SizedBox(
+                              width: 5,
+                            ),
+                            Text(shopController.userShop!.facebook!),
+                          ],
+                        ),
                       ),
                       const SizedBox(
                         height: 5,
                       ),
                     },
                     if (shopController.userShop!.twitter != null) ...<Widget>{
-                      Row(
-                        children: <Widget>[
-                          CircleAvatar(
-                            backgroundColor: backgroundColor,
-                            child: SvgPicture.asset('assets/svgs/xsl.svg'),
-                          ),
-                          const SizedBox(
-                            width: 5,
-                          ),
-                          Text(shopController.userShop!.twitter!),
-                        ],
+                      GestureDetector(
+                        onTap: () async {
+                          final Uri uri =
+                              Uri.parse(shopController.userShop!.twitter!);
+                          if (await canLaunchUrl(uri)) {
+                            await launchUrl(uri,
+                                mode: LaunchMode.externalApplication);
+                          }
+                        },
+                        child: Row(
+                          children: <Widget>[
+                            CircleAvatar(
+                              backgroundColor: backgroundColor,
+                              child: SvgPicture.asset('assets/svgs/xsl.svg'),
+                            ),
+                            const SizedBox(
+                              width: 5,
+                            ),
+                            Text(shopController.userShop!.twitter!),
+                          ],
+                        ),
                       ),
                       const SizedBox(
                         height: 5,
                       ),
                     },
                     if (shopController.userShop!.instagram != null) ...<Widget>{
-                      Row(
-                        children: <Widget>[
-                          CircleAvatar(
-                            backgroundColor: backgroundColor,
-                            child: SvgPicture.asset('assets/svgs/insta.svg'),
-                          ),
-                          const SizedBox(
-                            width: 5,
-                          ),
-                          Text(shopController.userShop!.instagram!),
-                        ],
+                      GestureDetector(
+                        onTap: () async {
+                          final Uri uri =
+                              Uri.parse(shopController.userShop!.instagram!);
+                          if (await canLaunchUrl(uri)) {
+                            await launchUrl(uri,
+                                mode: LaunchMode.externalApplication);
+                          }
+                        },
+                        child: Row(
+                          children: <Widget>[
+                            CircleAvatar(
+                              backgroundColor: backgroundColor,
+                              child: SvgPicture.asset('assets/svgs/insta.svg'),
+                            ),
+                            const SizedBox(
+                              width: 5,
+                            ),
+                            Text(shopController.userShop!.instagram!),
+                          ],
+                        ),
                       ),
                       const SizedBox(
                         height: 5,
                       ),
                     },
                     if (shopController.userShop!.linkedin != null) ...<Widget>{
-                      Row(
-                        children: <Widget>[
-                          CircleAvatar(
-                            backgroundColor: backgroundColor,
-                            child: SvgPicture.asset('assets/svgs/lsl.svg'),
-                          ),
-                          const SizedBox(
-                            width: 5,
-                          ),
-                          Text(shopController.userShop!.linkedin!),
-                        ],
+                      GestureDetector(
+                        onTap: () async {
+                          final Uri uri =
+                              Uri.parse(shopController.userShop!.linkedin!);
+                          if (await canLaunchUrl(uri)) {
+                            await launchUrl(uri,
+                                mode: LaunchMode.externalApplication);
+                          }
+                        },
+                        child: Row(
+                          children: <Widget>[
+                            CircleAvatar(
+                              backgroundColor: backgroundColor,
+                              child: SvgPicture.asset('assets/svgs/lsl.svg'),
+                            ),
+                            const SizedBox(
+                              width: 5,
+                            ),
+                            Text(shopController.userShop!.linkedin!),
+                          ],
+                        ),
                       ),
                       const SizedBox(
                         height: 5,
