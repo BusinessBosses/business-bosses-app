@@ -195,7 +195,7 @@ class _PublicProfileScreenState extends State<PublicProfileScreen> {
                                       color: Colors.grey)),
                         ),
                         1: Text(
-                          'Biz-Center',
+                          'Business Center',
                           style: _currentIndex == 1
                               ? const TextStyle(
                                   fontWeight: FontWeight.bold, fontSize: 14)

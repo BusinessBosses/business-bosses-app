@@ -63,7 +63,7 @@ class _GotoshopWidgetState extends State<GotoshopWidget> {
                               style: const TextStyle(
                                   fontSize: 14, fontWeight: FontWeight.w700),
                             ),
-                            const Text('View Biz-Center',
+                            const Text('View Business Center',
                                 style: TextStyle(
                                     fontSize: 12,
                                     fontWeight: FontWeight.w500,

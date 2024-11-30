@@ -2,6 +2,7 @@ import 'package:business_bosses_v2/bbpro/models/product_model.dart';
 import 'package:business_bosses_v2/bbpro/models/service_model.dart';
 import 'package:business_bosses_v2/bbpro/presentation/book_service.dart';
 import 'package:business_bosses_v2/bbpro/presentation/order_product.dart';
+import 'package:business_bosses_v2/bbpro/presentation/proshopdealsscreen.dart';
 import 'package:business_bosses_v2/common/widgets/network_image_with_placeholder.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -56,102 +57,107 @@ class _ProshopdealsWidgetState extends State<ProshopdealsWidget> {
       }
     }
 
-    return Container(
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(15),
-      ),
-      padding: const EdgeInsets.all(0.0),
-      margin: const EdgeInsets.symmetric(horizontal: 10),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: <Widget>[
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: <Widget>[
-              Padding(
-                padding: const EdgeInsets.all(10.0),
-                child: Row(
-                  children: <Widget>[
-                    const Text(
-                      'Pro Users\' Deals',
-                      style:
-                          TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
-                    ),
-                    const SizedBox(width: 10),
-                    Container(
-                      padding: const EdgeInsets.symmetric(
-                          horizontal: 8.0, vertical: 4.0),
-                      decoration: BoxDecoration(
-                        color: Colors.black,
-                        borderRadius: BorderRadius.circular(4.0),
+    return GestureDetector(
+      onTap: () {
+        Get.to(const ProshopdealsScreen());
+      },
+      child: Container(
+        decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(15),
+        ),
+        padding: const EdgeInsets.all(0.0),
+        margin: const EdgeInsets.symmetric(horizontal: 10),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: <Widget>[
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: <Widget>[
+                Padding(
+                  padding: const EdgeInsets.all(10.0),
+                  child: Row(
+                    children: <Widget>[
+                      const Text(
+                        'Pro Users\' Deals',
+                        style: TextStyle(
+                            fontSize: 16, fontWeight: FontWeight.bold),
                       ),
-                      child: Text(
-                        widget.title ?? '',
-                        style: const TextStyle(
-                            fontSize: 10,
-                            color: Colors.white,
-                            fontWeight: FontWeight.w700),
+                      const SizedBox(width: 10),
+                      Container(
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 8.0, vertical: 4.0),
+                        decoration: BoxDecoration(
+                          color: Colors.black,
+                          borderRadius: BorderRadius.circular(4.0),
+                        ),
+                        child: Text(
+                          widget.title ?? '',
+                          style: const TextStyle(
+                              fontSize: 10,
+                              color: Colors.white,
+                              fontWeight: FontWeight.w700),
+                        ),
                       ),
-                    ),
-                  ],
+                    ],
+                  ),
                 ),
-              ),
-              const Icon(Icons.chevron_right),
-            ],
-          ),
-          const SizedBox(height: 5.0),
-          SizedBox(
-            height: 150,
-            child: items.isNotEmpty
-                ? ListView.builder(
-                    scrollDirection: Axis.horizontal,
-                    itemCount: items.length,
-                    itemBuilder: (BuildContext context, int index) {
-                      final Object item = items[index];
-                      if (item is Product) {
-                        return GestureDetector(
-                          onTap: () {
-                            Get.to(OrderProductScreen(
-                              product: item,
-                              shop: item.shop!,
-                            ));
-                          },
-                          child: _buildDealItem(
-                            item.images!.isNotEmpty
-                                ? item.images![0]
-                                : 'assets/placeholder.png',
-                            item.name,
-                            '${item.discount ?? '0%'}',
-                            '${item.price}',
-                            item.discount != null && item.discount! > 0,
-                            item.shop!.currency,
-                          ),
-                        );
-                      } else if (item is Service) {
-                        return GestureDetector(
-                          onTap: () {
-                            Get.to(BookServiceScreen(
-                                shop: item.shop!, service: item));
-                          },
-                          child: _buildDealItem(
-                            item.images!.isNotEmpty
-                                ? item.images![0]
-                                : 'assets/placeholder.png',
-                            item.name,
-                            '${item.discount}',
-                            '${item.price}',
-                            item.discount > 0,
-                            item.shop!.currency,
-                          ),
-                        );
-                      }
-                      return const SizedBox();
-                    },
-                  )
-                : const Center(child: Text('No deals available')),
-          ),
-        ],
+                const Icon(Icons.chevron_right),
+              ],
+            ),
+            const SizedBox(height: 5.0),
+            SizedBox(
+              height: 150,
+              child: items.isNotEmpty
+                  ? ListView.builder(
+                      scrollDirection: Axis.horizontal,
+                      itemCount: items.length,
+                      itemBuilder: (BuildContext context, int index) {
+                        final Object item = items[index];
+                        if (item is Product) {
+                          return GestureDetector(
+                            onTap: () {
+                              Get.to(OrderProductScreen(
+                                product: item,
+                                shop: item.shop!,
+                              ));
+                            },
+                            child: _buildDealItem(
+                              item.images!.isNotEmpty
+                                  ? item.images![0]
+                                  : 'assets/placeholder.png',
+                              item.name,
+                              '${item.discount ?? '0%'}',
+                              '${item.price}',
+                              item.discount != null && item.discount! > 0,
+                              item.shop!.currency,
+                            ),
+                          );
+                        } else if (item is Service) {
+                          return GestureDetector(
+                            onTap: () {
+                              Get.to(BookServiceScreen(
+                                  shop: item.shop!, service: item));
+                            },
+                            child: _buildDealItem(
+                              item.images!.isNotEmpty
+                                  ? item.images![0]
+                                  : 'assets/placeholder.png',
+                              item.name,
+                              '${item.discount}',
+                              '${item.price}',
+                              item.discount > 0,
+                              item.shop!.currency,
+                            ),
+                          );
+                        }
+                        return const SizedBox();
+                      },
+                    )
+                  : const Center(child: Text('No deals available')),
+            ),
+          ],
+        ),
       ),
     );
   }
