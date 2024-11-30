@@ -2,6 +2,7 @@ import 'package:business_bosses_v2/bbpro/controllers/order_controller.dart';
 import 'package:business_bosses_v2/bbpro/controllers/shop_controller.dart';
 import 'package:business_bosses_v2/bbpro/models/service_model.dart';
 import 'package:business_bosses_v2/bbpro/models/shop_model.dart';
+import 'package:business_bosses_v2/bbpro/presentation/user_shop_screen.dart';
 import 'package:business_bosses_v2/bbpro/widgets/button.dart';
 import 'package:business_bosses_v2/bbpro/widgets/orderpaymentcard.dart';
 import 'package:business_bosses_v2/bbpro/widgets/ordersummarycard.dart';
@@ -85,11 +86,26 @@ class _BookServiceScreenState extends State<BookServiceScreen> {
             },
             icon: SvgPicture.asset('assets/svgs/backbutton.svg'),
           ),
-          title: const Text(
-            'Book Service',
-            style: TextStyle(
-              color: proprimaryColor,
-              fontWeight: FontWeight.bold,
+          title: GestureDetector(
+            onTap: () {
+              Get.to(UserShopScreen(
+                user: widget.service.user!,
+              ));
+            },
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: <Widget>[
+                Text(
+                  widget.service.shop!.name,
+                  style: const TextStyle(
+                    color: proprimaryColor,
+                    fontWeight: FontWeight.bold,
+                    fontSize: 14,
+                  ),
+                ),
+                const Text('Visit Shop', style: TextStyle(fontSize: 10)),
+              ],
             ),
           ),
         ),
