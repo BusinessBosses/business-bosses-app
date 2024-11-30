@@ -71,6 +71,8 @@ class _ProshopdealsWidgetState extends State<ProshopdealsWidget> {
                         ),
                         child: Text(
                           widget.title ?? '',
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
                           style: const TextStyle(
                               fontSize: 10,
                               color: Colors.white,
