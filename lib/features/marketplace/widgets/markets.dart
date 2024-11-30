@@ -1,3 +1,4 @@
+import 'package:business_bosses_v2/bbpro/widgets/proshopdeals.dart';
 import 'package:business_bosses_v2/features/home/controller/home_controller.dart';
 import 'package:business_bosses_v2/features/home/widgets/sellingpopup.dart';
 import 'package:business_bosses_v2/features/marketplace/controllers/market_controller.dart';
@@ -177,186 +178,186 @@ class _MarketsPageState extends State<MarketsPage> {
                         ),
                       ),
                       Container(
-                        decoration: BoxDecoration(
-                          boxShadow: <BoxShadow>[
-                            BoxShadow(
-                              color: Colors.black.withOpacity(0.09),
-                              blurRadius: 100.0, // soften the shadow
-                              spreadRadius: 5, //extend the shadow
-                            )
+                        margin: const EdgeInsets.symmetric(vertical: 10),
+                        child: ProshopdealsWidget(
+                          title: 'NEW',
+                          combinedList: <Object>[
+                            ..._marketController.proProducts,
+                            ..._marketController.proServices
                           ],
                         ),
-                        child: Stack(
-                          children: <Widget>[
-                            Container(
-                              margin: const EdgeInsets.only(
-                                  bottom: 10, top: 10, right: 15, left: 15),
-                              height: 150,
-                              width: double.infinity,
-                              child: ClipRRect(
-                                borderRadius: BorderRadius.circular(15.0),
-                                child: const ColoredBox(color: Colors.white),
-                              ),
-                            ),
-                            Column(
-                              children: <Widget>[
-                                Row(
-                                  children: <Widget>[
-                                    Container(
-                                      margin: const EdgeInsets.only(
-                                          top: 25, right: 15, left: 30),
-                                      height: 86,
-                                      width: 142,
-                                      child: ClipRRect(
-                                        borderRadius:
-                                            BorderRadius.circular(10.0),
-                                        child: FittedBox(
-                                          child: CachedNetworkImage(
-                                            memCacheWidth: 256,
-                                            imageUrl:
-                                                'https://businessbosses.com.ng/learningImages/marketplace.jpg',
-                                            placeholder: (BuildContext context,
-                                                    String photo) =>
-                                                const CircularProgressIndicator(),
-                                            errorWidget: (BuildContext context,
-                                                    String photo,
-                                                    dynamic error) =>
-                                                const Icon(Icons.error),
-                                          ),
-                                        ),
-                                      ),
-                                    ),
-                                    Expanded(
-                                      child: Padding(
-                                        padding:
-                                            const EdgeInsets.only(right: 30),
-                                        child: Text(
-                                          _marketController.marketDescription,
-                                          style: const TextStyle(
-                                            fontSize: 15,
-                                            fontWeight: FontWeight.w700,
-                                          ),
-                                          softWrap: true,
-                                          maxLines: 5,
-                                        ),
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                                Padding(
-                                  padding: const EdgeInsets.only(
-                                    left: 27,
-                                    top: 0,
-                                    right: 15,
-                                  ),
-                                  child: Row(
-                                    children: <Widget>[
-                                      Row(
-                                        children: <Widget>[
-                                          Padding(
-                                            padding: const EdgeInsets.only(
-                                                right: 2, top: 5),
-                                            child: SvgPicture.asset(
-                                              'assets/svgs/members.svg',
-                                              height: 15,
-                                              color: primaryColorLT,
-                                            ),
-                                          ),
-                                          GestureDetector(
-                                            onTap: () {
-                                              Get.to(() => MarketMembersScreen(
-                                                    users:
-                                                        _marketController.users,
-                                                  ));
-                                            },
-                                            child: Padding(
-                                              padding: const EdgeInsets.only(
-                                                  top: 5.0),
-                                              child: RichText(
-                                                text: TextSpan(
-                                                  children: <InlineSpan>[
-                                                    TextSpan(
-                                                        text:
-                                                            'Members ($formattedUserCount)',
-                                                        style: const TextStyle(
-                                                          fontSize: 12,
-                                                          fontWeight:
-                                                              FontWeight.w600,
-                                                          color: primaryColorLT,
-                                                          decoration:
-                                                              TextDecoration
-                                                                  .underline,
-                                                        )),
-                                                  ],
-                                                ),
-                                              ),
-                                            ),
-                                          ),
-                                        ],
-                                      ),
-                                      Row(
-                                        children: <Widget>[
-                                          Padding(
-                                            padding: const EdgeInsets.only(
-                                                left: 8, top: 5, right: 3),
-                                            child: SvgPicture.asset(
-                                              'assets/svgs/marketplace.svg',
-                                              color: textColor,
-                                              height: 15,
-                                            ),
-                                          ),
-                                          Obx(
-                                            () {
-                                              int postCount = _marketController
-                                                  .markets.length;
-                                              String formattedpostCount =
-                                                  formatCount(postCount);
-                                              return Padding(
-                                                padding: const EdgeInsets.only(
-                                                    top: 5.0),
-                                                child: RichText(
-                                                  text: TextSpan(
-                                                    children: <InlineSpan>[
-                                                      TextSpan(
-                                                        text:
-                                                            'Listings ($formattedpostCount)',
-                                                        style: const TextStyle(
-                                                          fontSize: 12,
-                                                          color: textColor,
-                                                          fontWeight:
-                                                              FontWeight.w600,
-                                                        ),
-                                                      ),
-                                                    ],
-                                                  ),
-                                                ),
-                                              );
-                                            },
-                                          ),
-                                        ],
-                                      ),
-                                      const Spacer(),
-                                      const Align(
-                                          alignment: Alignment.centerRight,
-                                          child: Row(
-                                            crossAxisAlignment:
-                                                CrossAxisAlignment.center,
-                                            mainAxisAlignment:
-                                                MainAxisAlignment.end,
-                                            children: <Widget>[
-                                              JoinedButton(),
-                                            ],
-                                          ))
-                                    ],
-                                  ),
-                                ),
-                                const SizedBox(
-                                  height: 10,
-                                ),
-                              ],
-                            )
-                          ],
-                        ),
+
+                        // child: Stack(
+                        //   children: <Widget>[
+                        //     Container(
+                        //       margin: const EdgeInsets.only(
+                        //           bottom: 10, top: 10, right: 15, left: 15),
+                        //       height: 150,
+                        //       width: double.infinity,
+                        //       child: ClipRRect(
+                        //         borderRadius: BorderRadius.circular(15.0),
+                        //         child: const ColoredBox(color: Colors.white),
+                        //       ),
+                        //     ),
+                        //     Column(
+                        //       children: <Widget>[
+                        //         Row(
+                        //           children: <Widget>[
+                        //             Container(
+                        //               margin: const EdgeInsets.only(
+                        //                   top: 25, right: 15, left: 30),
+                        //               height: 86,
+                        //               width: 142,
+                        //               child: ClipRRect(
+                        //                 borderRadius:
+                        //                     BorderRadius.circular(10.0),
+                        //                 child: FittedBox(
+                        //                   child: CachedNetworkImage(
+                        //                     memCacheWidth: 256,
+                        //                     imageUrl:
+                        //                         'https://businessbosses.com.ng/learningImages/marketplace.jpg',
+                        //                     placeholder: (BuildContext context,
+                        //                             String photo) =>
+                        //                         const CircularProgressIndicator(),
+                        //                     errorWidget: (BuildContext context,
+                        //                             String photo,
+                        //                             dynamic error) =>
+                        //                         const Icon(Icons.error),
+                        //                   ),
+                        //                 ),
+                        //               ),
+                        //             ),
+                        //             Expanded(
+                        //               child: Padding(
+                        //                 padding:
+                        //                     const EdgeInsets.only(right: 30),
+                        //                 child: Text(
+                        //                   _marketController.marketDescription,
+                        //                   style: const TextStyle(
+                        //                     fontSize: 15,
+                        //                     fontWeight: FontWeight.w700,
+                        //                   ),
+                        //                   softWrap: true,
+                        //                   maxLines: 5,
+                        //                 ),
+                        //               ),
+                        //             ),
+                        //           ],
+                        //         ),
+                        //         Padding(
+                        //           padding: const EdgeInsets.only(
+                        //             left: 27,
+                        //             top: 0,
+                        //             right: 15,
+                        //           ),
+                        //           child: Row(
+                        //             children: <Widget>[
+                        //               Row(
+                        //                 children: <Widget>[
+                        //                   Padding(
+                        //                     padding: const EdgeInsets.only(
+                        //                         right: 2, top: 5),
+                        //                     child: SvgPicture.asset(
+                        //                       'assets/svgs/members.svg',
+                        //                       height: 15,
+                        //                       color: primaryColorLT,
+                        //                     ),
+                        //                   ),
+                        //                   GestureDetector(
+                        //                     onTap: () {
+                        //                       Get.to(() => MarketMembersScreen(
+                        //                             users:
+                        //                                 _marketController.users,
+                        //                           ));
+                        //                     },
+                        //                     child: Padding(
+                        //                       padding: const EdgeInsets.only(
+                        //                           top: 5.0),
+                        //                       child: RichText(
+                        //                         text: TextSpan(
+                        //                           children: <InlineSpan>[
+                        //                             TextSpan(
+                        //                                 text:
+                        //                                     'Members ($formattedUserCount)',
+                        //                                 style: const TextStyle(
+                        //                                   fontSize: 12,
+                        //                                   fontWeight:
+                        //                                       FontWeight.w600,
+                        //                                   color: primaryColorLT,
+                        //                                   decoration:
+                        //                                       TextDecoration
+                        //                                           .underline,
+                        //                                 )),
+                        //                           ],
+                        //                         ),
+                        //                       ),
+                        //                     ),
+                        //                   ),
+                        //                 ],
+                        //               ),
+                        //               Row(
+                        //                 children: <Widget>[
+                        //                   Padding(
+                        //                     padding: const EdgeInsets.only(
+                        //                         left: 8, top: 5, right: 3),
+                        //                     child: SvgPicture.asset(
+                        //                       'assets/svgs/marketplace.svg',
+                        //                       color: textColor,
+                        //                       height: 15,
+                        //                     ),
+                        //                   ),
+                        //                   Obx(
+                        //                     () {
+                        //                       int postCount = _marketController
+                        //                           .markets.length;
+                        //                       String formattedpostCount =
+                        //                           formatCount(postCount);
+                        //                       return Padding(
+                        //                         padding: const EdgeInsets.only(
+                        //                             top: 5.0),
+                        //                         child: RichText(
+                        //                           text: TextSpan(
+                        //                             children: <InlineSpan>[
+                        //                               TextSpan(
+                        //                                 text:
+                        //                                     'Listings ($formattedpostCount)',
+                        //                                 style: const TextStyle(
+                        //                                   fontSize: 12,
+                        //                                   color: textColor,
+                        //                                   fontWeight:
+                        //                                       FontWeight.w600,
+                        //                                 ),
+                        //                               ),
+                        //                             ],
+                        //                           ),
+                        //                         ),
+                        //                       );
+                        //                     },
+                        //                   ),
+                        //                 ],
+                        //               ),
+                        //               const Spacer(),
+                        //               const Align(
+                        //                   alignment: Alignment.centerRight,
+                        //                   child: Row(
+                        //                     crossAxisAlignment:
+                        //                         CrossAxisAlignment.center,
+                        //                     mainAxisAlignment:
+                        //                         MainAxisAlignment.end,
+                        //                     children: <Widget>[
+                        //                       JoinedButton(),
+                        //                     ],
+                        //                   ))
+                        //             ],
+                        //           ),
+                        //         ),
+                        //         const SizedBox(
+                        //           height: 10,
+                        //         ),
+                        //       ],
+                        //     )
+                        //   ],
+                        // ),
                       ),
                     ]),
                   ],

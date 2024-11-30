@@ -7,12 +7,13 @@ class ProshopdealsWidget extends StatefulWidget {
   final String? title;
   final List<Service>? services;
   final List<Product>? products;
-
+  final List<Object>? combinedList;
   const ProshopdealsWidget({
     Key? key,
     this.title,
     this.services,
     this.products,
+    this.combinedList,
   }) : super(key: key);
 
   @override
@@ -22,51 +23,84 @@ class ProshopdealsWidget extends StatefulWidget {
 class _ProshopdealsWidgetState extends State<ProshopdealsWidget> {
   @override
   Widget build(BuildContext context) {
-    // Determine which data to use and limit to the first 4 items
-    final List<Object>? items =
-        widget.products?.take(4).toList() ?? widget.services?.take(4).toList();
+    List<Object> items = <Object>[];
+
+    if (widget.combinedList != null) {
+      items.addAll(widget.combinedList!);
+    } else {
+      final List<Product> products = widget.products ?? <Product>[];
+      final List<Service> services = widget.services ?? <Service>[];
+
+      int productIndex = 0;
+      int serviceIndex = 0;
+      int productCount = 0;
+      int serviceCount = 0;
+
+      // Alternate between products and services until we have 5 of each or run out
+      while ((productCount < 5 || serviceCount < 5) &&
+          (productIndex < products.length || serviceIndex < services.length)) {
+        if (productCount < 5 && productIndex < products.length) {
+          items.add(products[productIndex]);
+          productIndex++;
+          productCount++;
+        }
+
+        if (serviceCount < 5 && serviceIndex < services.length) {
+          items.add(services[serviceIndex]);
+          serviceIndex++;
+          serviceCount++;
+        }
+      }
+    }
 
     return Container(
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(15),
       ),
-      padding: const EdgeInsets.all(13.0),
-      margin: const EdgeInsets.symmetric(horizontal: 15),
+      padding: const EdgeInsets.all(0.0),
+      margin: const EdgeInsets.symmetric(horizontal: 10),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: <Widget>[
-              Row(
-                children: <Widget>[
-                  const Text(
-                    'Pro users deals',
-                    style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
-                  ),
-                  const SizedBox(width: 10),
-                  Container(
-                    padding: const EdgeInsets.symmetric(
-                        horizontal: 8.0, vertical: 4.0),
-                    decoration: BoxDecoration(
-                      color: Colors.black,
-                      borderRadius: BorderRadius.circular(4.0),
+              Padding(
+                padding: const EdgeInsets.all(10.0),
+                child: Row(
+                  children: <Widget>[
+                    const Text(
+                      'Pro Users\' Deals',
+                      style:
+                          TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
                     ),
-                    child: Text(
-                      widget.title ?? '',
-                      style: const TextStyle(fontSize: 12, color: Colors.white),
+                    const SizedBox(width: 10),
+                    Container(
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 8.0, vertical: 4.0),
+                      decoration: BoxDecoration(
+                        color: Colors.black,
+                        borderRadius: BorderRadius.circular(4.0),
+                      ),
+                      child: Text(
+                        widget.title ?? '',
+                        style: const TextStyle(
+                            fontSize: 10,
+                            color: Colors.white,
+                            fontWeight: FontWeight.w700),
+                      ),
                     ),
-                  ),
-                ],
+                  ],
+                ),
               ),
               const Icon(Icons.chevron_right),
             ],
           ),
-          const SizedBox(height: 16.0),
+          const SizedBox(height: 5.0),
           SizedBox(
-            height: 150, // Adjust height as needed for proper display
-            child: items != null && items.isNotEmpty
+            height: 130,
+            child: items.isNotEmpty
                 ? ListView.builder(
                     scrollDirection: Axis.horizontal,
                     itemCount: items.length,
@@ -78,8 +112,10 @@ class _ProshopdealsWidgetState extends State<ProshopdealsWidget> {
                               ? item.images![0]
                               : 'assets/placeholder.png',
                           item.name,
-                          '-${item.discount ?? '0%'}',
+                          '${item.discount ?? '0%'}',
                           '${item.price}',
+                          item.discount != null && item.discount! > 0,
+                          item.shop!.currency,
                         );
                       } else if (item is Service) {
                         return _buildDealItem(
@@ -87,8 +123,10 @@ class _ProshopdealsWidgetState extends State<ProshopdealsWidget> {
                               ? item.images![0]
                               : 'assets/placeholder.png',
                           item.name,
-                          '-${item.discount}',
+                          '${item.discount}',
                           '${item.price}',
+                          item.discount > 0,
+                          item.shop!.currency,
                         );
                       }
                       return const SizedBox();
@@ -102,10 +140,15 @@ class _ProshopdealsWidgetState extends State<ProshopdealsWidget> {
   }
 
   Widget _buildDealItem(
-      String imagePath, String title, String discount, String price) {
-    return Container(
+    String imagePath,
+    String title,
+    String discount,
+    String originalPrice,
+    bool hasDiscount,
+    String? currency,
+  ) {
+    return SizedBox(
       width: 100,
-      margin: const EdgeInsets.only(right: 16.0),
       child: Column(
         children: <Widget>[
           NetworkImageWithPlaceHolder(
@@ -113,23 +156,48 @@ class _ProshopdealsWidgetState extends State<ProshopdealsWidget> {
             height: 80,
             width: 80,
           ),
-          const SizedBox(height: 8.0),
+          const SizedBox(height: 10.0),
           Text(
             title,
-            style: const TextStyle(fontSize: 12, fontWeight: FontWeight.bold),
+            maxLines: 1,
             overflow: TextOverflow.ellipsis,
-            textAlign: TextAlign.center,
+            style: const TextStyle(
+              fontSize: 12,
+              fontWeight: FontWeight.w500,
+            ),
           ),
-          const SizedBox(height: 4.0),
-          Text(
-            discount,
-            style: const TextStyle(fontSize: 12, color: Colors.red),
-          ),
-          const SizedBox(height: 4.0),
-          Text(
-            price,
-            style: const TextStyle(fontSize: 14, fontWeight: FontWeight.bold),
-          ),
+          if (hasDiscount)
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: <Widget>[
+                Text(
+                  '$currency${double.parse(originalPrice) * (1 - (double.tryParse(discount.replaceAll(RegExp(r'[^0-9.]'), '')) ?? 0) / 100)}',
+                  style: const TextStyle(
+                    color: Colors.black,
+                    fontWeight: FontWeight.bold,
+                    fontSize: 13,
+                  ),
+                ),
+                const SizedBox(width: 5),
+                Text(
+                  '$currency$originalPrice',
+                  style: const TextStyle(
+                    color: Colors.grey,
+                    decoration: TextDecoration.lineThrough,
+                    fontSize: 11,
+                  ),
+                ),
+              ],
+            )
+          else
+            Text(
+              '$currency$originalPrice',
+              style: const TextStyle(
+                color: Colors.black,
+                fontWeight: FontWeight.bold,
+                fontSize: 13,
+              ),
+            ),
         ],
       ),
     );

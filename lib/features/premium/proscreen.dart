@@ -250,8 +250,8 @@ class _ProSubscribeSectionState extends State<ProSubscribeSection> {
         subtext: 'Send marketing campaigns & broadcasts'),
     ProFeatureItem(
         iconPath: 'assets/svgs/premiumbadgered.svg',
-        caption: 'Premium Access',
-        subtext: 'Boost business FREE with coins'),
+        caption: 'Professional Virtual Office Address',
+        subtext: 'Virtual Business Address to boost your credibility'),
   ];
   String paymentMethodId = 'Proyear';
   bool loading = false;
@@ -345,7 +345,7 @@ class _ProSubscribeSectionState extends State<ProSubscribeSection> {
               padding: const EdgeInsets.symmetric(horizontal: 0),
               child: ProCustomButton(
                 color: primaryColorLT,
-                text: 'Start Free Trial',
+                text: 'Start your \$1/Month Trial',
                 onPressed: () {
                   showModalBottomSheet<void>(
                     context: context,
