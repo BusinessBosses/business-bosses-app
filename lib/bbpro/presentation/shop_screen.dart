@@ -440,7 +440,7 @@ class _ShopScreenState extends State<ShopScreen> {
           if (shopController.shop!.facebook != null ||
               shopController.shop!.twitter != null ||
               shopController.shop!.linkedin != null ||
-              shopController.shop!.facebook != null)
+              shopController.shop!.instagram != null)
             Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[
@@ -456,69 +456,107 @@ class _ShopScreenState extends State<ShopScreen> {
                 const SizedBox(height: 20),
                 Column(
                   children: <Widget>[
-                    if (shopController.shop!.facebook != null) ...<Widget>{
-                      Row(
-                        children: <Widget>[
+                    if (shopController.shop!.facebook!.isNotEmpty) ...<Widget>{
+                      GestureDetector(
+                        onTap: () async {
+                          final Uri uri =
+                              Uri.parse(shopController.shop!.facebook!);
+                          if (await canLaunchUrl(uri)) {
+                            await launchUrl(uri,
+                                mode: LaunchMode.externalApplication);
+                          }
+                        },
+                        child: Row(children: <Widget>[
                           CircleAvatar(
                             backgroundColor: backgroundColor,
-                            child: SvgPicture.asset('assets/svgs/facebook.svg'),
+                            child: SvgPicture.asset('assets/svgs/fbsl.svg'),
                           ),
                           const SizedBox(
                             width: 5,
                           ),
                           Text(shopController.shop!.facebook!),
-                        ],
+                        ]),
                       ),
                       const SizedBox(
                         height: 5,
                       ),
                     },
-                    if (shopController.shop!.twitter != null) ...<Widget>{
-                      Row(
-                        children: <Widget>[
-                          CircleAvatar(
-                            backgroundColor: backgroundColor,
-                            child: SvgPicture.asset('assets/svgs/xsl.svg'),
-                          ),
-                          const SizedBox(
-                            width: 5,
-                          ),
-                          Text(shopController.shop!.twitter!),
-                        ],
+                    if (shopController.shop!.twitter!.isNotEmpty) ...<Widget>{
+                      GestureDetector(
+                        onTap: () async {
+                          final Uri uri =
+                              Uri.parse(shopController.shop!.twitter!);
+                          if (await canLaunchUrl(uri)) {
+                            await launchUrl(uri,
+                                mode: LaunchMode.externalApplication);
+                          }
+                        },
+                        child: Row(
+                          children: <Widget>[
+                            CircleAvatar(
+                              backgroundColor: backgroundColor,
+                              child: SvgPicture.asset('assets/svgs/xsl.svg'),
+                            ),
+                            const SizedBox(
+                              width: 5,
+                            ),
+                            Text(shopController.shop!.twitter!),
+                          ],
+                        ),
                       ),
                       const SizedBox(
                         height: 5,
                       ),
                     },
-                    if (shopController.shop!.instagram != null) ...<Widget>{
-                      Row(
-                        children: <Widget>[
-                          CircleAvatar(
-                            backgroundColor: backgroundColor,
-                            child: SvgPicture.asset('assets/svgs/insta.svg'),
-                          ),
-                          const SizedBox(
-                            width: 5,
-                          ),
-                          Text(shopController.shop!.instagram!),
-                        ],
+                    if (shopController.shop!.instagram!.isNotEmpty) ...<Widget>{
+                      GestureDetector(
+                        onTap: () async {
+                          final Uri uri =
+                              Uri.parse(shopController.shop!.instagram!);
+                          if (await canLaunchUrl(uri)) {
+                            await launchUrl(uri,
+                                mode: LaunchMode.externalApplication);
+                          }
+                        },
+                        child: Row(
+                          children: <Widget>[
+                            CircleAvatar(
+                              backgroundColor: backgroundColor,
+                              child: SvgPicture.asset('assets/svgs/insta.svg'),
+                            ),
+                            const SizedBox(
+                              width: 5,
+                            ),
+                            Text(shopController.shop!.instagram!),
+                          ],
+                        ),
                       ),
                       const SizedBox(
                         height: 5,
                       ),
                     },
                     if (shopController.shop!.linkedin != null) ...<Widget>{
-                      Row(
-                        children: <Widget>[
-                          CircleAvatar(
-                            backgroundColor: backgroundColor,
-                            child: SvgPicture.asset('assets/svgs/lsl.svg'),
-                          ),
-                          const SizedBox(
-                            width: 5,
-                          ),
-                          Text(shopController.shop!.linkedin!),
-                        ],
+                      GestureDetector(
+                        onTap: () async {
+                          final Uri uri =
+                              Uri.parse(shopController.shop!.linkedin!);
+                          if (await canLaunchUrl(uri)) {
+                            await launchUrl(uri,
+                                mode: LaunchMode.externalApplication);
+                          }
+                        },
+                        child: Row(
+                          children: <Widget>[
+                            CircleAvatar(
+                              backgroundColor: backgroundColor,
+                              child: SvgPicture.asset('assets/svgs/lsl.svg'),
+                            ),
+                            const SizedBox(
+                              width: 5,
+                            ),
+                            Text(shopController.shop!.linkedin!),
+                          ],
+                        ),
                       ),
                       const SizedBox(
                         height: 5,
