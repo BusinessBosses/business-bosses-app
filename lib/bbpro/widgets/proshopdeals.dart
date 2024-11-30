@@ -99,7 +99,7 @@ class _ProshopdealsWidgetState extends State<ProshopdealsWidget> {
           ),
           const SizedBox(height: 5.0),
           SizedBox(
-            height: 130,
+            height: 150,
             child: items.isNotEmpty
                 ? ListView.builder(
                     scrollDirection: Axis.horizontal,
@@ -167,36 +167,28 @@ class _ProshopdealsWidgetState extends State<ProshopdealsWidget> {
             ),
           ),
           if (hasDiscount)
-            Row(
+            Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
+                if (hasDiscount)
+                  Text(
+                    '$currency${(double.parse(originalPrice)).toStringAsFixed(2)}',
+                    style: const TextStyle(
+                      color: Colors.grey,
+                      decoration: TextDecoration.lineThrough,
+                      fontSize: 11,
+                    ),
+                  ),
+                const SizedBox(width: 5),
                 Text(
-                  '$currency${double.parse(originalPrice) * (1 - (double.tryParse(discount.replaceAll(RegExp(r'[^0-9.]'), '')) ?? 0) / 100)}',
-                  style: const TextStyle(
-                    color: Colors.black,
+                  '$currency${(double.parse(originalPrice) * (1 - (double.tryParse(discount.replaceAll(RegExp(r'[^0-9.]'), '')) ?? 0) / 100)).toStringAsFixed(2)}',
+                  style: TextStyle(
+                    color: hasDiscount ? Colors.black : Colors.grey,
                     fontWeight: FontWeight.bold,
                     fontSize: 13,
                   ),
                 ),
-                const SizedBox(width: 5),
-                Text(
-                  '$currency$originalPrice',
-                  style: const TextStyle(
-                    color: Colors.grey,
-                    decoration: TextDecoration.lineThrough,
-                    fontSize: 11,
-                  ),
-                ),
               ],
-            )
-          else
-            Text(
-              '$currency$originalPrice',
-              style: const TextStyle(
-                color: Colors.black,
-                fontWeight: FontWeight.bold,
-                fontSize: 13,
-              ),
             ),
         ],
       ),
