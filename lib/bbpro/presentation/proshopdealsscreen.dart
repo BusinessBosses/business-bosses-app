@@ -53,6 +53,9 @@ class _ProshopdealsScreenState extends State<ProshopdealsScreen>
         title: const Text('Pro Users\' Shop'),
         bottom: TabBar(
           controller: _tabController,
+          labelStyle: const TextStyle(fontWeight: FontWeight.w500),
+          labelColor: Colors.black,
+          indicatorColor: primaryColorLT,
           tabs: const <Widget>[
             Tab(text: 'All'),
             Tab(text: 'Products'),
