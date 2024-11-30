@@ -86,13 +86,15 @@ class _InventoryCardState extends State<InventoryCard> {
                         fontSize: 13,
                         fontWeight: FontWeight.bold,
                       ),
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
                     ),
                     if (widget.product?.discount != null &&
                         widget.product!.discount! > 0)
                       Row(
                         children: <Widget>[
                           Text(
-                            '${widget.shop == null ? shopController.shop!.currency : widget.shop!.currency}${widget.product!.price * (1 - widget.product!.discount! / 100)}',
+                            '${widget.shop?.currency ?? shopController.shop!.currency}${((widget.product!.price * (1 - widget.product!.discount! / 100)) * 100).round() / 100}',
                             style: const TextStyle(
                               color: proprimaryColor,
                               fontWeight: FontWeight.bold,
@@ -101,7 +103,7 @@ class _InventoryCardState extends State<InventoryCard> {
                           ),
                           const SizedBox(width: 5),
                           Text(
-                            '${widget.shop == null ? shopController.shop!.currency : widget.shop!.currency}${widget.product?.price.toString()}',
+                            '${widget.shop?.currency ?? shopController.shop!.currency}${widget.product!.price.toStringAsFixed(2)}',
                             style: const TextStyle(
                               color: Colors.grey,
                               decoration: TextDecoration.lineThrough,
@@ -112,7 +114,7 @@ class _InventoryCardState extends State<InventoryCard> {
                       )
                     else
                       Text(
-                        '${widget.shop == null ? shopController.shop!.currency : widget.shop!.currency}${widget.product?.price.toString()}',
+                        '${widget.shop?.currency ?? shopController.shop!.currency}${widget.product!.price.toStringAsFixed(2)}',
                         style: const TextStyle(
                           color: proprimaryColor,
                           fontWeight: FontWeight.bold,

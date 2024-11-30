@@ -146,7 +146,7 @@ class _MyServiceCardState extends State<MyServiceCard> {
                         Row(
                           children: <Widget>[
                             Text(
-                              '${widget.shop == null ? shopController.shop!.currency : widget.shop!.currency}${widget.service!.price * (1 - widget.service!.discount / 100)}',
+                              '${widget.shop == null ? shopController.shop!.currency : widget.shop!.currency}${((widget.service!.price ?? 0) * (1 - (widget.service!.discount ?? 0) / 100)).toStringAsFixed(2)}',
                               style: const TextStyle(
                                 color: proprimaryColor,
                                 fontWeight: FontWeight.bold,
@@ -155,7 +155,7 @@ class _MyServiceCardState extends State<MyServiceCard> {
                             ),
                             const SizedBox(width: 5),
                             Text(
-                              '${widget.shop == null ? shopController.shop!.currency : widget.shop!.currency}${widget.service?.price.toString()}',
+                              '${widget.shop == null ? shopController.shop!.currency : widget.shop!.currency}${(widget.service?.price ?? 0).toStringAsFixed(2)}',
                               style: const TextStyle(
                                 color: Colors.grey,
                                 decoration: TextDecoration.lineThrough,
@@ -166,7 +166,7 @@ class _MyServiceCardState extends State<MyServiceCard> {
                         )
                       else
                         Text(
-                          '${widget.shop == null ? shopController.shop!.currency : widget.shop!.currency}${widget.service?.price.toString()}',
+                          '${widget.shop == null ? shopController.shop!.currency : widget.shop!.currency}${(widget.service?.price ?? 0).toStringAsFixed(2)}',
                           style: const TextStyle(
                             color: proprimaryColor,
                             fontWeight: FontWeight.bold,

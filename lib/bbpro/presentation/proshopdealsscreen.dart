@@ -8,6 +8,7 @@ import 'package:business_bosses_v2/bbpro/widgets/inventorycard.dart';
 import 'package:business_bosses_v2/bbpro/widgets/servicecard.dart';
 import 'package:business_bosses_v2/features/marketplace/controllers/market_controller.dart';
 import 'package:business_bosses_v2/features/profile/controller/profile_controller.dart';
+import 'package:business_bosses_v2/utils/theme/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:flutter_svg/svg.dart';
@@ -41,6 +42,7 @@ class _ProshopdealsScreenState extends State<ProshopdealsScreen>
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: backgroundColor,
       appBar: AppBar(
         leading: IconButton(
           onPressed: () {
@@ -63,7 +65,8 @@ class _ProshopdealsScreenState extends State<ProshopdealsScreen>
         children: <Widget>[
           // ALL ITEMS
           Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 15.0),
+            padding:
+                const EdgeInsets.symmetric(horizontal: 10.0, vertical: 10.0),
             child: StaggeredGridView.countBuilder(
               crossAxisCount: 2,
               staggeredTileBuilder: (int index) => const StaggeredTile.fit(1),
@@ -93,6 +96,10 @@ class _ProshopdealsScreenState extends State<ProshopdealsScreen>
                     child: InventoryCard(
                       product: product,
                       shop: product.shop!,
+                      myShop:
+                          product.user!.uid == profileController.myProfile.uid
+                              ? true
+                              : false,
                     ),
                   );
                 } else {
@@ -117,6 +124,10 @@ class _ProshopdealsScreenState extends State<ProshopdealsScreen>
                     child: ServiceCard(
                       shop: service.shop!,
                       service: service,
+                      myShop:
+                          service.user!.uid == profileController.myProfile.uid
+                              ? true
+                              : false,
                     ),
                   );
                 }
@@ -125,7 +136,8 @@ class _ProshopdealsScreenState extends State<ProshopdealsScreen>
           ),
           // PRODUCTS
           Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 15.0),
+            padding:
+                const EdgeInsets.symmetric(horizontal: 10.0, vertical: 10.0),
             child: StaggeredGridView.countBuilder(
               crossAxisCount: 2,
               staggeredTileBuilder: (int index) => const StaggeredTile.fit(1),
@@ -152,6 +164,9 @@ class _ProshopdealsScreenState extends State<ProshopdealsScreen>
                   child: InventoryCard(
                     product: product,
                     shop: product.shop!,
+                    myShop: product.user!.uid == profileController.myProfile.uid
+                        ? true
+                        : false,
                   ),
                 );
               },
@@ -159,7 +174,8 @@ class _ProshopdealsScreenState extends State<ProshopdealsScreen>
           ),
           // SERVICES
           Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 15.0),
+            padding:
+                const EdgeInsets.symmetric(horizontal: 10.0, vertical: 10.0),
             child: StaggeredGridView.countBuilder(
               crossAxisCount: 2,
               staggeredTileBuilder: (int index) => const StaggeredTile.fit(1),
@@ -186,6 +202,9 @@ class _ProshopdealsScreenState extends State<ProshopdealsScreen>
                   child: ServiceCard(
                     shop: service.shop!,
                     service: service,
+                    myShop: service.user!.uid == profileController.myProfile.uid
+                        ? true
+                        : false,
                   ),
                 );
               },

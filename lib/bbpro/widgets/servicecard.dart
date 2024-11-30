@@ -90,6 +90,8 @@ class _ServiceCardState extends State<ServiceCard> {
                         fontSize: 13,
                         fontWeight: FontWeight.bold,
                       ),
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
                     ),
                     Text(
                       '${widget.shop == null ? shopController.shop!.currency : widget.shop!.currency}${widget.service?.price.toString()}',
