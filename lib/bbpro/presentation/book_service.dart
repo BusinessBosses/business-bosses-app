@@ -319,12 +319,14 @@ class _BookServiceScreenState extends State<BookServiceScreen> {
             const SizedBox(
               height: 15,
             ),
-            OrderPaymentMethodsWidget(
-              paymentMethods: widget.shop.payments,
-            ),
-            const SizedBox(
-              height: 15,
-            ),
+            if (widget.shop.payments.isNotEmpty)
+              OrderPaymentMethodsWidget(
+                paymentMethods: widget.shop.payments,
+              ),
+            if (widget.shop.payments.isNotEmpty)
+              const SizedBox(
+                height: 15,
+              ),
 
             const ServicetypeSectionWidget(),
             const SizedBox(height: 15),

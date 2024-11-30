@@ -167,15 +167,15 @@ class _OrderProductScreenState extends State<OrderProductScreen> {
                                   ),
                                 ],
                               ),
-                              if (widget.product.deliveryMethod != null)
-                                Text(
-                                  widget.product.deliveryMethod!,
-                                  style: const TextStyle(
-                                    color: proprimaryColor,
-                                    fontWeight: FontWeight.bold,
-                                    fontSize: 16,
-                                  ),
-                                ),
+                              // if (widget.product.deliveryMethod != null)
+                              //   Text(
+                              //     widget.product.deliveryMethod!,
+                              //     style: const TextStyle(
+                              //       color: proprimaryColor,
+                              //       fontWeight: FontWeight.bold,
+                              //       fontSize: 16,
+                              //     ),
+                              //   ),
                             ],
                           ),
                           const SizedBox(
@@ -330,12 +330,14 @@ class _OrderProductScreenState extends State<OrderProductScreen> {
                 const SizedBox(
                   height: 15,
                 ),
-                OrderPaymentMethodsWidget(
-                  paymentMethods: widget.shop.payments,
-                ),
-                const SizedBox(
-                  height: 15,
-                ),
+                if (widget.shop.payments.isNotEmpty)
+                  OrderPaymentMethodsWidget(
+                    paymentMethods: widget.shop.payments,
+                  ),
+                if (widget.shop.payments.isNotEmpty)
+                  const SizedBox(
+                    height: 15,
+                  ),
                 OrderSummaryWidget(
                   quantity: int.tryParse(quantityController.text) ?? 0,
                   price: widget.product.price,
