@@ -9,12 +9,14 @@ import 'package:get/get.dart';
 
 class ProshopdealsWidget extends StatefulWidget {
   final String? title;
+  final String? caption;
   final List<Service>? services;
   final List<Product>? products;
   final List<Object>? combinedList;
   const ProshopdealsWidget({
     Key? key,
     this.title,
+    this.caption,
     this.services,
     this.products,
     this.combinedList,
@@ -56,29 +58,30 @@ class _ProshopdealsWidgetState extends State<ProshopdealsWidget> {
                   padding: const EdgeInsets.all(10.0),
                   child: Row(
                     children: <Widget>[
-                      const Text(
-                        'Pro Users\' Deals',
-                        style: TextStyle(
+                      Text(
+                        widget.caption ?? 'Pro Users\' Deals',
+                        style: const TextStyle(
                             fontSize: 16, fontWeight: FontWeight.bold),
                       ),
                       const SizedBox(width: 10),
-                      Container(
-                        padding: const EdgeInsets.symmetric(
-                            horizontal: 8.0, vertical: 4.0),
-                        decoration: BoxDecoration(
-                          color: Colors.black,
-                          borderRadius: BorderRadius.circular(4.0),
+                      if (widget.title != null && widget.title != '')
+                        Container(
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: 8.0, vertical: 4.0),
+                          decoration: BoxDecoration(
+                            color: Colors.black,
+                            borderRadius: BorderRadius.circular(4.0),
+                          ),
+                          child: Text(
+                            widget.title ?? '',
+                            maxLines: 1,
+                            overflow: TextOverflow.ellipsis,
+                            style: const TextStyle(
+                                fontSize: 10,
+                                color: Colors.white,
+                                fontWeight: FontWeight.w700),
+                          ),
                         ),
-                        child: Text(
-                          widget.title ?? '',
-                          maxLines: 1,
-                          overflow: TextOverflow.ellipsis,
-                          style: const TextStyle(
-                              fontSize: 10,
-                              color: Colors.white,
-                              fontWeight: FontWeight.w700),
-                        ),
-                      ),
                     ],
                   ),
                 ),

@@ -1,3 +1,4 @@
+import 'package:business_bosses_v2/bbpro/presentation/myordersscreen.dart';
 import 'package:business_bosses_v2/features/chat/chat_screen.dart';
 import 'package:business_bosses_v2/features/donations/presentation/filtersuppliers.dart';
 import 'package:business_bosses_v2/features/forum/models/industry.dart';
@@ -205,6 +206,24 @@ class _MarketplaceScreenState extends State<MarketplaceScreen>
                 ),
               ]
             : <Widget>[
+                if (!_ismarketplaceSearching)
+                  GestureDetector(
+                    onTap: () {
+                      Get.to(() => const MyOrdersScreen());
+                    },
+                    child: Padding(
+                      padding: const EdgeInsets.only(
+                        right: 10.0,
+                      ),
+                      child: CircleAvatar(
+                          radius: 20,
+                          backgroundColor: backgroundColor,
+                          child: SvgPicture.asset(
+                            'assets/svgs/ordersinvoices.svg',
+                            height: 19,
+                          )),
+                    ),
+                  ),
                 if (!_ismarketplaceSearching)
                   GestureDetector(
                     onTap: () {
