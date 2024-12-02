@@ -7,6 +7,7 @@ import 'package:get/get.dart';
 class EventCall extends StatefulWidget {
   const EventCall(
       {super.key, this.ongoing = false, this.full = false, this.ishome});
+
   final bool ongoing;
   final bool full;
   final bool? ishome;
@@ -20,30 +21,15 @@ class _EventCallState extends State<EventCall> {
 
   @override
   Widget build(BuildContext context) {
-    EventModel event = liveEventController.events[0];
     if (widget.ishome == true) {
       return liveEventController.events.isNotEmpty
-          ?
-          // SizedBox(
-          //     height: 260,
-          //     child: ListView.builder(
-          //       physics: const NeverScrollableScrollPhysics(),
-          //       shrinkWrap: false,
-          //       itemCount: 1,
-          //       itemBuilder: (BuildContext context, int index) {
-
-          //       },
-          //     ),
-          //   )
-
-          Column(
+          ? Column(
               children: <Widget>[
                 EventItem(
                   ishomeview: true,
-                  event: event,
-                  ongoing: liveEventController.ongoing.contains(event)
-                      ? true
-                      : false,
+                  event: liveEventController.events[0],
+                  ongoing: liveEventController.ongoing
+                      .contains(liveEventController.events[0]),
                 ),
               ],
             )
@@ -61,9 +47,7 @@ class _EventCallState extends State<EventCall> {
                   EventModel event = liveEventController.events[index];
                   return EventItem(
                     event: event,
-                    ongoing: liveEventController.ongoing.contains(event)
-                        ? true
-                        : false,
+                    ongoing: liveEventController.ongoing.contains(event),
                   );
                 },
               ),
