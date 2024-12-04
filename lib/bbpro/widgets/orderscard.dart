@@ -159,27 +159,27 @@ class _OrdersWidgetState extends State<OrdersWidget> {
                           child: PieChart(
                             PieChartData(
                               sections: <PieChartSectionData>[
-                                PieChartSectionData(
-                                  color: Colors.lightGreenAccent,
-                                  value: double.parse(
-                                      shopController.orderStats?.online != null
-                                          ? shopController.orderStats!.online
-                                              .toString()
-                                          : '0'),
-                                  title: '',
-                                  radius: 40, // Reduced radius
-                                ),
-                                PieChartSectionData(
-                                  color: Colors.purple,
-                                  value: double.parse(
-                                      shopController.orderStats?.inPerson !=
-                                              null
-                                          ? shopController.orderStats!.inPerson
-                                              .toString()
-                                          : '0'),
-                                  title: '',
-                                  radius: 40, // Reduced radius
-                                ),
+                                // PieChartSectionData(
+                                //   color: Colors.lightGreenAccent,
+                                //   value: double.parse(
+                                //       shopController.orderStats?.online != null
+                                //           ? shopController.orderStats!.online
+                                //               .toString()
+                                //           : '0'),
+                                //   title: '',
+                                //   radius: 40, // Reduced radius
+                                // ),
+                                // PieChartSectionData(
+                                //   color: Colors.purple,
+                                //   value: double.parse(
+                                //       shopController.orderStats?.inPerson !=
+                                //               null
+                                //           ? shopController.orderStats!.inPerson
+                                //               .toString()
+                                //           : '0'),
+                                //   title: '',
+                                //   radius: 40, // Reduced radius
+                                // ),
                                 PieChartSectionData(
                                   color: Colors.yellow,
                                   value: double.parse(
@@ -224,30 +224,30 @@ class _OrdersWidgetState extends State<OrdersWidget> {
                         Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: <Widget>[
-                            Indicator(
-                              color: Colors.lightGreenAccent,
-                              text: 'Online',
-                              value: int.parse(
-                                  shopController.orderStats?.online != null
-                                      ? shopController.orderStats!.online
-                                          .toString()
-                                      : '0'),
-                            ),
-                            const SizedBox(
-                              height: 3,
-                            ),
-                            Indicator(
-                              color: Colors.purple,
-                              text: 'In Person',
-                              value: int.parse(
-                                  shopController.orderStats?.online != null
-                                      ? shopController.orderStats!.inPerson
-                                          .toString()
-                                      : '0'),
-                            ),
-                            const SizedBox(
-                              height: 3,
-                            ),
+                            // Indicator(
+                            //   color: Colors.lightGreenAccent,
+                            //   text: 'Online',
+                            //   value: int.parse(
+                            //       shopController.orderStats?.online != null
+                            //           ? shopController.orderStats!.online
+                            //               .toString()
+                            //           : '0'),
+                            // ),
+                            // const SizedBox(
+                            //   height: 3,
+                            // ),
+                            // Indicator(
+                            //   color: Colors.purple,
+                            //   text: 'In Person',
+                            //   value: int.parse(
+                            //       shopController.orderStats?.online != null
+                            //           ? shopController.orderStats!.inPerson
+                            //               .toString()
+                            //           : '0'),
+                            // ),
+                            // const SizedBox(
+                            //   height: 3,
+                            // ),
                             Indicator(
                               color: Colors.yellow,
                               text: 'Pending',
