@@ -30,6 +30,7 @@ class _MarketsPageState extends State<MarketsPage> {
     int userCount = _marketController.users.length;
     String formattedUserCount = formatCount(userCount);
     return Scaffold(
+      backgroundColor: backgroundColor,
       body: Obx(
         () {
           return ListView.builder(
