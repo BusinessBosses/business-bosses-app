@@ -16,6 +16,7 @@ class HomeAppBar extends StatelessWidget {
     this.hasUnreadNotification = false,
     this.isTabVisible = false,
     required this.controller,
+    this.hasevent,
   }) : super(key: key);
 
   final bool hasBadge;
@@ -23,6 +24,7 @@ class HomeAppBar extends StatelessWidget {
   final String coinsCount;
   final bool hasUnreadNotification;
   final TabController controller;
+  final bool? hasevent;
 
   String getGreeting() {
     final int hour = DateTime.now().hour;
@@ -44,8 +46,7 @@ class HomeAppBar extends StatelessWidget {
           preferredSize: const Size.fromHeight(50.0),
           child: Container(
             color: Colors.white,
-            padding:
-                const EdgeInsets.symmetric(horizontal: 16.0, vertical: 10.0),
+            padding: const EdgeInsets.only(top: 10.0, bottom: 10.0, left: 10),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: <Widget>[
@@ -256,7 +257,7 @@ class HomeAppBar extends StatelessWidget {
                       ),
                     ),
                     const SizedBox(
-                      width: 10,
+                      width: 8,
                     ),
                     GestureDetector(
                       onTap: () => Get.toNamed(Routes.promotionscreen),
@@ -284,7 +285,43 @@ class HomeAppBar extends StatelessWidget {
                         ),
                       ),
                     ),
-                    const SizedBox(width: 10),
+                    const SizedBox(width: 5),
+                    Stack(
+                      children: <Widget>[
+                        GestureDetector(
+                          onTap: () => Get.toNamed(Routes.liveEvents),
+                          child: CircleAvatar(
+                            backgroundColor: Colors.transparent,
+                            child: SvgPicture.asset(
+                              'assets/svgs/events.svg',
+                              height: 19,
+                              colorFilter: const ColorFilter.mode(
+                                primaryColorLT,
+                                BlendMode.srcIn,
+                              ),
+                            ),
+                          ),
+                        ),
+                        if (hasevent == true)
+                          Positioned(
+                            top: 5,
+                            right: 3,
+                            child: Container(
+                              decoration: BoxDecoration(
+                                shape: BoxShape.circle,
+                                border: Border.all(
+                                  color: Colors.white, // Border color
+                                  width: 2.0, // Border width
+                                ),
+                              ),
+                              child: const CircleAvatar(
+                                backgroundColor: primaryColorLT,
+                                radius: 5,
+                              ),
+                            ),
+                          )
+                      ],
+                    ),
                     Stack(
                       children: <Widget>[
                         GestureDetector(

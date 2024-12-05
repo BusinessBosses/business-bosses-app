@@ -261,9 +261,6 @@ class _AllCommunitiesScreenState extends State<AllCommunitiesScreen>
                                                         height: 20,
                                                       ),
                                                       const LearningSection(),
-                                                      const SizedBox(
-                                                        height: 20,
-                                                      ),
                                                       const EventsSection(),
                                                       const SizedBox(
                                                         height: 25,

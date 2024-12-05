@@ -46,6 +46,7 @@ class _SetupshopState extends State<Setupshop> with TickerProviderStateMixin {
   final TextEditingController fbslController = TextEditingController();
   final TextEditingController lslController = TextEditingController();
   final TextEditingController xslController = TextEditingController();
+  final TextEditingController cslController = TextEditingController();
   String? _selectedLocation;
   File? _selectedImage;
   bool loading = true;
@@ -567,16 +568,18 @@ class _SetupshopState extends State<Setupshop> with TickerProviderStateMixin {
                       ispaymentfield: true,
                       issl: true,
                       caption: 'Social Links',
-                      hintText: '',
+                      hintText: 'Enter links below',
                       controller: bankController,
-                      pmh1: 'Instagram',
-                      pmh2: 'Facebook',
-                      pmh3: 'Linkedin',
-                      pmh4: 'X',
+                      pmh1: 'Enter Instagram URL',
+                      pmh2: 'Enter Facebook URL',
+                      pmh3: 'Enter Linkedin URL',
+                      pmh4: 'Enter X URL',
+                      pmh5: 'Enter Custom URL',
                       pm1controller: igslController,
                       pm2controller: fbslController,
                       pm3controller: lslController,
                       pm4controller: xslController,
+                      pm5controller: cslController,
                     ),
                     const SizedBox(
                       height: 30,
