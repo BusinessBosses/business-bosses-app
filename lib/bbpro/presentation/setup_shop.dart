@@ -213,6 +213,7 @@ class _SetupshopState extends State<Setupshop> with TickerProviderStateMixin {
       igslController.text = widget.shop!.instagram ?? '';
       lslController.text = widget.shop!.linkedin ?? '';
       xslController.text = widget.shop!.twitter ?? '';
+      cslController.text = '';
       _populatePaymentMethods(widget.shop!.payments);
     } else {
       shopController.initShop().then((bool value) {
@@ -568,7 +569,7 @@ class _SetupshopState extends State<Setupshop> with TickerProviderStateMixin {
                       ispaymentfield: true,
                       issl: true,
                       caption: 'Social Links',
-                      hintText: 'Enter links below',
+                      hintText: '',
                       controller: bankController,
                       pmh1: 'Enter Instagram URL',
                       pmh2: 'Enter Facebook URL',
