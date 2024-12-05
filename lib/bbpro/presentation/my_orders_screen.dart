@@ -192,11 +192,14 @@ class _MyOrdersScreenState extends State<MyOrdersScreen> {
                       itemCount: filteredOrders.length,
                       itemBuilder: (BuildContext context, int index) {
                         final Order order = filteredOrders[index];
-                        return OrderWidget(
-                          order: order,
-                          bgcolor: order.status.backgroundColor,
-                          shop: order.shop,
-                          showChange: false,
+                        return Padding(
+                          padding: const EdgeInsets.only(bottom: 10.0),
+                          child: OrderWidget(
+                            order: order,
+                            bgcolor: order.status.backgroundColor,
+                            shop: order.shop,
+                            showChange: false,
+                          ),
                         );
                       },
                     )
