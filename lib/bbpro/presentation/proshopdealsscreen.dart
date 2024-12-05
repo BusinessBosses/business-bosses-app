@@ -50,7 +50,7 @@ class _ProshopdealsScreenState extends State<ProshopdealsScreen>
           },
           icon: SvgPicture.asset('assets/svgs/backbutton.svg'),
         ),
-        title: const Text('Pro Users\' Shop'),
+        title: const Text('Featured Listing'),
         bottom: TabBar(
           controller: _tabController,
           labelStyle: const TextStyle(fontWeight: FontWeight.w500),

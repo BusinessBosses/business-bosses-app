@@ -105,8 +105,8 @@ class _SetupState extends State<Setup> {
                     Row(
                       children: <Widget>[
                         SizedBox(
-                          height: 100.0,
-                          width: 100.0,
+                          height: 70.0,
+                          width: 70.0,
                           child: Align(
                             alignment: Alignment.topLeft,
                             child: ClipRRect(
@@ -167,6 +167,7 @@ class _SetupState extends State<Setup> {
                                 //         horizontal: 8, vertical: 8),
                                 //     child: const Text('Share my link')),
                                 ProIconButton(
+                                  textsize: 12,
                                   padding: 10,
                                   shadow: Colors.transparent,
                                   icon: SvgPicture.asset(
@@ -175,7 +176,7 @@ class _SetupState extends State<Setup> {
                                   ),
                                   backgroundColor: Colors.white,
                                   textColor: proprimaryColor,
-                                  text: 'View Shop',
+                                  text: 'View Biz-Center',
                                   onPressed: () {
                                     Get.to(() => const ShopScreen());
                                   },
@@ -184,6 +185,7 @@ class _SetupState extends State<Setup> {
                                   width: 5,
                                 ),
                                 ProIconButton(
+                                  textsize: 12,
                                   padding: 10,
                                   shadow: Colors.transparent,
                                   icon: const Icon(

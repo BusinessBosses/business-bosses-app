@@ -124,7 +124,7 @@ class _ProductsPageState extends State<ProductsPage> {
               return Padding(
                 padding: const EdgeInsets.only(bottom: 10.0),
                 child: ProshopdealsWidget(
-                  title: 'NEW PRODUCTS',
+                  title: 'NEW',
                   products: _marketController.proProducts,
                 ),
               ); // Return the widget instead of just referencing it

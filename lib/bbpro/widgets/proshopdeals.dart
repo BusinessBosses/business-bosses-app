@@ -59,7 +59,7 @@ class _ProshopdealsWidgetState extends State<ProshopdealsWidget> {
                   child: Row(
                     children: <Widget>[
                       Text(
-                        widget.caption ?? 'Pro Users\' Deals',
+                        widget.caption ?? 'Featured Listing',
                         style: const TextStyle(
                             fontSize: 16, fontWeight: FontWeight.bold),
                       ),

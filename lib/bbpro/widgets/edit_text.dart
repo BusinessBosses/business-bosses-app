@@ -15,10 +15,14 @@ class CustomEditText extends StatelessWidget {
   final TextEditingController? pm2controller;
   final TextEditingController? pm3controller;
   final TextEditingController? pm4controller;
+
+  final TextEditingController? pm5controller;
   final String? pmh1;
   final String? pmh2;
   final String? pmh3;
   final String? pmh4;
+  final String? pmh5;
+
   final Color? backgroundcolor;
   final bool? iscurrencyfield;
   final Color? currencyfieldcolor;
@@ -51,10 +55,12 @@ class CustomEditText extends StatelessWidget {
     this.pm2controller,
     this.pm3controller,
     this.pm4controller,
+    this.pm5controller,
     this.pmh1,
     this.pmh2,
     this.pmh3,
     this.pmh4,
+    this.pmh5,
     this.issl,
     this.isorder,
     this.onTextChanged,
@@ -273,6 +279,7 @@ class CustomEditText extends StatelessWidget {
         if (pmh2 != null) _buildPaymentField(pm2controller, pmh2!, 'fbsl'),
         if (pmh3 != null) _buildPaymentField(pm3controller, pmh3!, 'lsl'),
         if (pmh4 != null) _buildPaymentField(pm4controller, pmh4!, 'xsl'),
+        if (pmh5 != null) _buildPaymentField(pm5controller, pmh4!, 'xsl'),
       ],
     );
   }

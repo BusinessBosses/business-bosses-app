@@ -71,7 +71,7 @@ class _MyOrdersScreenState extends State<MyOrdersScreen> {
           icon: SvgPicture.asset('assets/svgs/backbutton.svg'),
         ),
         title: Text(
-          'MyOrdersScreen (${filteredOrders.length})',
+          'My Orders (${filteredOrders.length})',
           style: const TextStyle(
             color: proprimaryColor,
             fontWeight: FontWeight.bold,

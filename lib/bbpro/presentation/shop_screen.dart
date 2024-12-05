@@ -51,8 +51,8 @@ class _ShopScreenState extends State<ShopScreen> {
               title: Text(
                 profileController.myProfile.uid ==
                         shopController.shop!.user!.uid
-                    ? 'My Shop'
-                    : 'Shop',
+                    ? 'Biz-Center'
+                    : 'Biz-Center',
                 style: const TextStyle(
                   color: proprimaryColor,
                   fontWeight: FontWeight.bold,
@@ -388,7 +388,7 @@ class _ShopScreenState extends State<ShopScreen> {
               color: textColor,
             ),
           ),
-          const SizedBox(height: 50),
+          const SizedBox(height: 30),
           if (shopController.shop?.user?.website?.isNotEmpty ?? false)
             _buildContactRow(
               'assets/svgs/website.svg',
@@ -437,6 +437,20 @@ class _ShopScreenState extends State<ShopScreen> {
                 }
               },
             ),
+          // if (shopController.shop?.user?.location?.isNotEmpty ?? false)
+          _buildContactRow(
+            'assets/svgs/website.svg',
+            'Address',
+            'Ghana',
+            12,
+            () async {
+              final Uri uri =
+                  Uri.parse('https://${shopController.shop!.user!.website}');
+              if (await canLaunchUrl(uri)) {
+                await launchUrl(uri, mode: LaunchMode.externalApplication);
+              }
+            },
+          ),
           if (shopController.shop!.facebook != null ||
               shopController.shop!.twitter != null ||
               shopController.shop!.linkedin != null ||
@@ -444,7 +458,7 @@ class _ShopScreenState extends State<ShopScreen> {
             Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[
-                const SizedBox(height: 40),
+                const SizedBox(height: 30),
                 const Text(
                   'Social Links',
                   style: TextStyle(

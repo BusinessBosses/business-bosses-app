@@ -125,7 +125,7 @@ class _ServicesPageState extends State<ServicesPage> {
               return Padding(
                 padding: const EdgeInsets.only(bottom: 10.0),
                 child: ProshopdealsWidget(
-                  title: 'NEW SERVICES',
+                  title: 'NEW',
                   services: _marketController.proServices,
                 ),
               );
