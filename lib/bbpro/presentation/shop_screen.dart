@@ -468,112 +468,119 @@ class _ShopScreenState extends State<ShopScreen> {
                   ),
                 ),
                 const SizedBox(height: 20),
-                Column(
+                Row(
                   children: <Widget>[
-                    if (shopController.shop!.facebook!.isNotEmpty) ...<Widget>{
+                    if (shopController.shop!.facebook != null) ...<Widget>{
                       GestureDetector(
                         onTap: () async {
-                          final Uri uri =
-                              Uri.parse(shopController.shop!.facebook!);
-                          if (await canLaunchUrl(uri)) {
-                            await launchUrl(uri,
-                                mode: LaunchMode.externalApplication);
-                          }
-                        },
-                        child: Row(children: <Widget>[
-                          CircleAvatar(
-                            backgroundColor: backgroundColor,
-                            child: SvgPicture.asset('assets/svgs/fbsl.svg'),
-                          ),
-                          const SizedBox(
-                            width: 5,
-                          ),
-                          Text(shopController.shop!.facebook!),
-                        ]),
-                      ),
-                      const SizedBox(
-                        height: 5,
-                      ),
-                    },
-                    if (shopController.shop!.twitter!.isNotEmpty) ...<Widget>{
-                      GestureDetector(
-                        onTap: () async {
-                          final Uri uri =
-                              Uri.parse(shopController.shop!.twitter!);
-                          if (await canLaunchUrl(uri)) {
-                            await launchUrl(uri,
-                                mode: LaunchMode.externalApplication);
-                          }
+                          String? website = shopController.shop!.facebook;
+                          try {
+                            if (!website!.startsWith('http://') &&
+                                !website.startsWith('https://')) {
+                              website = 'https://$website';
+                            }
+                            final Uri uri = Uri.parse(website);
+                            final bool launched = await launchUrl(uri,
+                                mode: LaunchMode.platformDefault,
+                                webOnlyWindowName: '_self');
+                          } catch (e) {}
                         },
                         child: Row(
                           children: <Widget>[
-                            CircleAvatar(
-                              backgroundColor: backgroundColor,
-                              child: SvgPicture.asset('assets/svgs/xsl.svg'),
+                            Padding(
+                              padding: const EdgeInsets.only(right: 8.0),
+                              child: CircleAvatar(
+                                backgroundColor: backgroundColor,
+                                child: SvgPicture.asset('assets/svgs/fbsl.svg'),
+                              ),
                             ),
-                            const SizedBox(
-                              width: 5,
-                            ),
-                            Text(shopController.shop!.twitter!),
                           ],
                         ),
                       ),
-                      const SizedBox(
-                        height: 5,
-                      ),
                     },
-                    if (shopController.shop!.instagram!.isNotEmpty) ...<Widget>{
+                    if (shopController.shop!.twitter != null) ...<Widget>{
                       GestureDetector(
                         onTap: () async {
-                          final Uri uri =
-                              Uri.parse(shopController.shop!.instagram!);
-                          if (await canLaunchUrl(uri)) {
-                            await launchUrl(uri,
-                                mode: LaunchMode.externalApplication);
-                          }
+                          String? website = shopController.shop!.twitter;
+                          try {
+                            if (!website!.startsWith('http://') &&
+                                !website.startsWith('https://')) {
+                              website = 'https://$website';
+                            }
+                            final Uri uri = Uri.parse(website);
+                            final bool launched = await launchUrl(uri,
+                                mode: LaunchMode.platformDefault,
+                                webOnlyWindowName: '_self');
+                          } catch (e) {}
                         },
                         child: Row(
                           children: <Widget>[
-                            CircleAvatar(
-                              backgroundColor: backgroundColor,
-                              child: SvgPicture.asset('assets/svgs/insta.svg'),
+                            Padding(
+                              padding: const EdgeInsets.only(right: 8.0),
+                              child: CircleAvatar(
+                                backgroundColor: backgroundColor,
+                                child: SvgPicture.asset('assets/svgs/xsl.svg'),
+                              ),
                             ),
-                            const SizedBox(
-                              width: 5,
-                            ),
-                            Text(shopController.shop!.instagram!),
                           ],
                         ),
                       ),
-                      const SizedBox(
-                        height: 5,
+                    },
+                    if (shopController.shop!.instagram != null) ...<Widget>{
+                      GestureDetector(
+                        onTap: () async {
+                          String? website = shopController.shop!.instagram;
+                          try {
+                            if (!website!.startsWith('http://') &&
+                                !website.startsWith('https://')) {
+                              website = 'https://$website';
+                            }
+                            final Uri uri = Uri.parse(website);
+                            final bool launched = await launchUrl(uri,
+                                mode: LaunchMode.platformDefault,
+                                webOnlyWindowName: '_self');
+                          } catch (e) {}
+                        },
+                        child: Row(
+                          children: <Widget>[
+                            Padding(
+                              padding: const EdgeInsets.only(right: 8.0),
+                              child: CircleAvatar(
+                                backgroundColor: backgroundColor,
+                                child:
+                                    SvgPicture.asset('assets/svgs/insta.svg'),
+                              ),
+                            ),
+                          ],
+                        ),
                       ),
                     },
                     if (shopController.shop!.linkedin != null) ...<Widget>{
                       GestureDetector(
                         onTap: () async {
-                          final Uri uri =
-                              Uri.parse(shopController.shop!.linkedin!);
-                          if (await canLaunchUrl(uri)) {
-                            await launchUrl(uri,
-                                mode: LaunchMode.externalApplication);
-                          }
+                          String? website = shopController.shop!.linkedin;
+                          try {
+                            if (!website!.startsWith('http://') &&
+                                !website.startsWith('https://')) {
+                              website = 'https://$website';
+                            }
+                            final Uri uri = Uri.parse(website);
+                            final bool launched = await launchUrl(uri,
+                                mode: LaunchMode.platformDefault,
+                                webOnlyWindowName: '_self');
+                          } catch (e) {}
                         },
                         child: Row(
                           children: <Widget>[
-                            CircleAvatar(
-                              backgroundColor: backgroundColor,
-                              child: SvgPicture.asset('assets/svgs/lsl.svg'),
+                            Padding(
+                              padding: const EdgeInsets.only(right: 8.0),
+                              child: CircleAvatar(
+                                backgroundColor: backgroundColor,
+                                child: SvgPicture.asset('assets/svgs/lsl.svg'),
+                              ),
                             ),
-                            const SizedBox(
-                              width: 5,
-                            ),
-                            Text(shopController.shop!.linkedin!),
                           ],
                         ),
-                      ),
-                      const SizedBox(
-                        height: 5,
                       ),
                     },
                   ],
