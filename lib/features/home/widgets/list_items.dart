@@ -1,3 +1,4 @@
+import 'package:business_bosses_v2/bbpro/widgets/proshopdeals.dart';
 import 'package:business_bosses_v2/common/widgets/text_widget.dart';
 import 'package:business_bosses_v2/features/courses/controller/course_controller.dart';
 import 'package:business_bosses_v2/features/courses/models/course_model.dart';
@@ -145,8 +146,25 @@ class _PostsWidgetState extends State<PostsWidget> {
     // List to hold multiple widgets (ChallengeSection + Post)
     List<Widget> widgets = <Widget>[];
 
-    // Insert ChallengesSection every 6th item without replacing the original post
     if (postIndex == 3) {
+      widgets.add(Column(
+        children: <Widget>[
+          Padding(
+            padding: const EdgeInsets.only(bottom: 7.0),
+            child: ProshopdealsWidget(
+              isHome: true,
+              caption: 'Featured Listing',
+              combinedList: <Object>[
+                ...marketController.proProducts.take(5).toList(),
+                ...marketController.proServices.take(5).toList(),
+              ],
+            ),
+          ),
+        ],
+      ));
+    }
+
+    if (postIndex == 8) {
       widgets.add(Column(
         children: <Widget>[
           const ChallengesSection(backgroundColor: backgroundColor),

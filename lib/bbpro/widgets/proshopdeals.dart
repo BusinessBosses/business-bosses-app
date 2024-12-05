@@ -13,6 +13,7 @@ class ProshopdealsWidget extends StatefulWidget {
   final List<Service>? services;
   final List<Product>? products;
   final List<Object>? combinedList;
+  final bool? isHome;
   const ProshopdealsWidget({
     Key? key,
     this.title,
@@ -20,6 +21,7 @@ class ProshopdealsWidget extends StatefulWidget {
     this.services,
     this.products,
     this.combinedList,
+    this.isHome,
   }) : super(key: key);
 
   @override
@@ -44,10 +46,12 @@ class _ProshopdealsWidgetState extends State<ProshopdealsWidget> {
       child: Container(
         decoration: BoxDecoration(
           color: Colors.white,
-          borderRadius: BorderRadius.circular(15),
+          borderRadius: BorderRadius.circular(
+              widget.isHome != null && widget.isHome! ? 0 : 15),
         ),
         padding: const EdgeInsets.all(0.0),
-        margin: const EdgeInsets.symmetric(horizontal: 10),
+        margin: EdgeInsets.symmetric(
+            horizontal: widget.isHome != null && widget.isHome! ? 0 : 10),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[

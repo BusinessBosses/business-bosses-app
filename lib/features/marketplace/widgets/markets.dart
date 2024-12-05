@@ -49,22 +49,26 @@ class _MarketsPageState extends State<MarketsPage> {
                         padding: const EdgeInsets.only(left: 15, top: 25),
                         child: GestureDetector(
                           onTap: (() {
-                            showDialog(
-                              context: context,
-                              builder: (BuildContext context) =>
-                                  sellingGuide(context),
-                            );
+                            // showDialog(
+                            //   context: context,
+                            //   builder: (BuildContext context) =>
+                            //       sellingGuide(context),
+                            // );
                           }),
                           child: Row(
                             children: <Widget>[
-                              const Text(
-                                'Guidelines ',
-                                style: TextStyle(
-                                    fontSize: 12, fontWeight: FontWeight.w700),
-                              ),
                               SvgPicture.asset(
-                                'assets/svgs/info.svg',
-                                height: 20,
+                                'assets/svgs/marketplace.svg',
+                                height: 16,
+                                color: textColor,
+                              ),
+                              const SizedBox(
+                                width: 5,
+                              ),
+                              Text(
+                                'Listings (${formatCount(_marketController.markets.length)})',
+                                style: const TextStyle(
+                                    fontSize: 14, fontWeight: FontWeight.w700),
                               ),
                             ],
                           ),
@@ -83,9 +87,7 @@ class _MarketsPageState extends State<MarketsPage> {
                               ),
                               child: ElevatedButton(
                                 style: ElevatedButton.styleFrom(
-                                    minimumSize: const Size(150,
-                                        45) // put the width and height you want
-                                    ),
+                                    minimumSize: const Size(150, 45)),
                                 onPressed: () {
                                   showModalBottomSheet(
                                       context: context,
@@ -176,7 +178,9 @@ class _MarketsPageState extends State<MarketsPage> {
                                       width: 5,
                                     ),
                                     SvgPicture.asset(
-                                        'assets/svgs/startatopic.svg')
+                                      'assets/svgs/startatopic.svg',
+                                      height: 15,
+                                    )
                                   ],
                                 ),
                               ),
