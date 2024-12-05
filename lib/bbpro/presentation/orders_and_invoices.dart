@@ -200,6 +200,7 @@ class _OrdersScreenState extends State<OrdersScreen>
                                                     services: order.services,
                                                     orderDetails:
                                                         order.orderDetails,
+                                                    shop: order.shop,
                                                   ),
                                                 );
                                                 orderController.updateOrder(

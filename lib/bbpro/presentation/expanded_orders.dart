@@ -2,6 +2,7 @@ import 'package:business_bosses_v2/bbpro/controllers/shop_controller.dart';
 import 'package:business_bosses_v2/bbpro/models/order_model.dart';
 import 'package:business_bosses_v2/bbpro/models/product_model.dart';
 import 'package:business_bosses_v2/bbpro/models/service_model.dart';
+import 'package:business_bosses_v2/bbpro/models/shop_model.dart';
 import 'package:business_bosses_v2/bbpro/widgets/orderwidget.dart';
 import 'package:business_bosses_v2/common/widgets/network_image_with_placeholder.dart';
 import 'package:business_bosses_v2/utils/theme/theme.dart';
@@ -11,10 +12,12 @@ import 'package:get/get.dart';
 
 class ExpandedOrders extends StatefulWidget {
   final Order order;
+  final Shop? shop;
 
   const ExpandedOrders({
     super.key,
     required this.order,
+    this.shop,
   });
 
   @override
@@ -50,6 +53,7 @@ class _ExpandedOrdersState extends State<ExpandedOrders> {
             order: widget.order,
             bgcolor: widget.order.status.backgroundColor,
             isExpanded: true,
+            shop: widget.shop,
           ),
           const SizedBox(height: 30),
           const Padding(
@@ -68,7 +72,7 @@ class _ExpandedOrdersState extends State<ExpandedOrders> {
               ),
               leading: _buildProductImage(product),
               subtitle: Text(
-                '${shopController.shop?.currency ?? ''} ${product.price.toString()}',
+                '${widget.shop != null ? widget.shop!.currency : shopController.shop?.currency ?? ''} ${product.price.toString()}',
                 style: const TextStyle(
                   fontSize: 13,
                 ),
@@ -89,7 +93,7 @@ class _ExpandedOrdersState extends State<ExpandedOrders> {
               ),
               leading: _buildServiceImage(service),
               subtitle: Text(
-                '${shopController.shop?.currency ?? ''} ${service.price.toString()}',
+                '${widget.shop != null ? widget.shop!.currency : shopController.shop?.currency ?? ''} ${service.price.toString()}',
                 style: const TextStyle(
                   fontSize: 14,
                 ),
@@ -109,7 +113,7 @@ class _ExpandedOrdersState extends State<ExpandedOrders> {
                 ),
               ),
               subtitle: Text(
-                '${shopController.shop?.currency ?? ''} ${custom['amount'].toString()}',
+                '${widget.shop != null ? widget.shop!.currency : shopController.shop?.currency ?? ''} ${custom['amount'].toString()}',
                 style: const TextStyle(
                   fontSize: 14,
                 ),

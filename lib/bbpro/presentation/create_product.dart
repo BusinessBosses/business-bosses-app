@@ -10,6 +10,7 @@ import 'package:business_bosses_v2/bbpro/widgets/multipleedit.dart';
 import 'package:business_bosses_v2/bbpro/widgets/switchwidget.dart';
 import 'package:business_bosses_v2/bbpro/widgets/textfield.dart';
 import 'package:business_bosses_v2/common/dialogs/snackbar.dart';
+import 'package:business_bosses_v2/common/widgets/safety_model.dart';
 import 'package:business_bosses_v2/features/marketplace/widgets/currency.dart';
 import 'package:business_bosses_v2/features/profile/controller/profile_controller.dart';
 import 'package:business_bosses_v2/services/api_service.dart';
@@ -53,6 +54,7 @@ class _CreateProductListingState extends State<CreateProductListing> {
   bool isSubmitted = false;
   bool _isSwitched = true;
   bool isExpanded = false;
+  bool loading = false;
 
   // Form fields
   String? productName;
@@ -80,6 +82,13 @@ class _CreateProductListingState extends State<CreateProductListing> {
   @override
   void initState() {
     super.initState();
+    if (shopController.shop == null) {
+      loading = true;
+      shopController.initShop().then((bool value) {
+        loading = false;
+        shopController.loading(false);
+      });
+    }
     for (dynamic payments in shopController.shop!.payments) {
       paymentMethods.add(payments['paymentMethod']);
     }
@@ -157,480 +166,500 @@ class _CreateProductListingState extends State<CreateProductListing> {
           ),
         ],
       ),
-      body: Form(
-        key: _formKey,
-        child: ListView(
-          children: <Widget>[
-            const SizedBox(height: 16),
-            CustomEditText(
-              caption: 'Product Name',
-              maxLength: 15,
-              hintText: 'Enter product name here',
-              controller: _productNameController,
-              validator: (String? value) {
-                if (value == null || value.isEmpty) {
-                  return 'Please enter a product name';
-                }
-                return null;
-              },
-            ),
-            const SizedBox(height: 16),
-            Row(
-              children: <Widget>[
-                Expanded(
-                  child: CustomEditText(
-                    currencycontroller: currencycontroller,
-                    caption: 'Price',
-                    iscurrencyfield: true,
-                    maxLength: 15,
-                    hintText: 'Enter price',
-                    controller: _priceController,
-                    inputType: TextInputType.number,
-                    validator: (String? value) {
-                      if (value == null || value.isEmpty) {
-                        return 'Please enter a price';
-                      }
-                      if (double.tryParse(value) == null) {
-                        return 'Please enter a valid number';
-                      }
-                      return null;
-                    },
-                  ),
-                ),
-                Expanded(
-                  child: Padding(
-                    padding: const EdgeInsets.only(right: 15.0),
-                    child: CustomEditText(
-                      padding: 0,
-                      caption: 'Discount',
-                      hintText: 'Enter discount',
+      body: Obx(
+        () => shopController.loading.value
+            ? const SafetyModel()
+            : Form(
+                key: _formKey,
+                child: ListView(
+                  children: <Widget>[
+                    const SizedBox(height: 16),
+                    CustomEditText(
+                      caption: 'Product Name',
                       maxLength: 15,
-                      controller: _discountController,
-                      inputType: TextInputType.number,
+                      hintText: 'Enter product name here',
+                      controller: _productNameController,
                       validator: (String? value) {
-                        if (value != null && value.isNotEmpty) {
-                          if (double.tryParse(value) == null) {
-                            return 'Please enter a valid number';
-                          }
+                        if (value == null || value.isEmpty) {
+                          return 'Please enter a product name';
                         }
                         return null;
                       },
                     ),
-                  ),
-                ),
-              ],
-            ),
-            const SizedBox(height: 16),
-            CustomEditText(
-              caption: 'Describe your Product',
-              hintText: 'Add product description here',
-              controller: _descriptionController,
-              maxLength: 300,
-              validator: (String? value) {
-                if (value == null || value.isEmpty) {
-                  return 'Please enter a description';
-                }
-                return null;
-              },
-            ),
-            const SizedBox(height: 16),
-            CustomDropdownWidget(
-              caption: 'Select Category',
-              hintText: 'Choose a category',
-              items: const <String>['Beauty', 'Electronics', 'Fashion', 'Home'],
-              iconName: 'assets/svgs/dropdown.svg',
-              initialValue: category,
-              onChanged: (String? newValue) {
-                setState(() {
-                  category = newValue;
-                });
-              },
-            ),
-            const SizedBox(height: 16),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 7.0),
-              child: CountryListPick(
-                appBar: AppBar(
-                  leading: IconButton(
-                    onPressed: () {
-                      Navigator.pop(context);
-                    },
-                    icon: SvgPicture.asset('assets/svgs/backbutton.svg'),
-                  ),
-                  centerTitle: true,
-                  title: const Text(
-                    'Select Location',
-                    textAlign: TextAlign.center,
-                  ),
-                ),
-                initialSelection: shopController.shop!.location,
-                pickerBuilder:
-                    (BuildContext context, CountryCode? countryCode) {
-                  return Container(
-                    decoration: BoxDecoration(
-                      color: Colors.white,
-                      borderRadius: BorderRadius.circular(radiusValue),
-                    ),
-                    child: CustomTextWidget(
-                      caption: 'Location',
-                      iconName: 'assets/svgs/nexticon.svg',
-                      text: shopController.shop!.location,
-                    ),
-                  );
-                },
-                onChanged: (CountryCode? code) async {
-                  setState(() {
-                    country = code!.name!;
-                    currencycontroller.text =
-                        '${currencyValues[code.name.toString()]}';
-                  });
-                },
-                useSafeArea: false,
-              ),
-            ),
-            const SizedBox(height: 16),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 15.0),
-              child: GestureDetector(
-                onTap: _pickImage,
-                child: Container(
-                  decoration: BoxDecoration(
-                    color: Colors.white,
-                    borderRadius: BorderRadius.circular(radiusValue),
-                  ),
-                  child: const Padding(
-                    padding: EdgeInsets.all(15.0),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    const SizedBox(height: 16),
+                    Row(
                       children: <Widget>[
-                        Text(
-                          'Add Attachment',
-                          style: TextStyle(
-                              fontSize: 13, fontWeight: FontWeight.w600),
+                        Expanded(
+                          child: CustomEditText(
+                            currencycontroller: currencycontroller,
+                            caption: 'Price',
+                            iscurrencyfield: true,
+                            maxLength: 15,
+                            hintText: 'Enter price',
+                            controller: _priceController,
+                            inputType: TextInputType.number,
+                            validator: (String? value) {
+                              if (value == null || value.isEmpty) {
+                                return 'Please enter a price';
+                              }
+                              if (double.tryParse(value) == null) {
+                                return 'Please enter a valid number';
+                              }
+                              return null;
+                            },
+                          ),
                         ),
-                        Icon(Icons.image),
-                      ],
-                    ),
-                  ),
-                ),
-              ),
-            ),
-            const SizedBox(height: 16),
-            if (_selectedImages.isNotEmpty)
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 15.0),
-                child: GridView.builder(
-                  shrinkWrap: true,
-                  physics: const NeverScrollableScrollPhysics(),
-                  gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                    crossAxisCount: 3,
-                    crossAxisSpacing: 4,
-                    mainAxisSpacing: 4,
-                  ),
-                  itemCount: _selectedImages.length,
-                  itemBuilder: (BuildContext context, int index) {
-                    return Image.file(
-                      _selectedImages[index],
-                      fit: BoxFit.cover,
-                    );
-                  },
-                ),
-              ),
-            if (updateImages!.isNotEmpty)
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 15.0),
-                child: GridView.builder(
-                  shrinkWrap: true,
-                  physics: const NeverScrollableScrollPhysics(),
-                  gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                    crossAxisCount: 3,
-                    crossAxisSpacing: 4,
-                    mainAxisSpacing: 4,
-                  ),
-                  itemCount: updateImages!.length,
-                  itemBuilder: (BuildContext context, int index) {
-                    return Image.network(
-                      updateImages![index],
-                      fit: BoxFit.cover,
-                    );
-                  },
-                ),
-              ),
-            CustomEditText(
-              maxLength: 30,
-              caption: 'Quantity',
-              hintText: 'Enter quantity',
-              inputType: TextInputType.number,
-              controller: quantityController,
-            ),
-            const SizedBox(height: 16),
-            ExpansionTile(
-                trailing: isExpanded
-                    ? SvgPicture.asset(
-                        'assets/svgs/dropdownexpansionup.svg',
-                      )
-                    : SvgPicture.asset(
-                        'assets/svgs/dropdownexpansion.svg',
-                      ),
-                title: RichText(
-                  text: const TextSpan(
-                    style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
-                    children: <TextSpan>[
-                      TextSpan(
-                          text: 'Additional Information',
-                          style: TextStyle(color: textColor)),
-                      TextSpan(
-                          text: ' (Optional)',
-                          style: TextStyle(color: hintColor)),
-                    ],
-                  ),
-                ),
-                children: <Widget>[
-                  CustomDropdownWidget(
-                    caption: 'Delivery Method',
-                    hintText: 'Choose a delivery method',
-                    initialValue: deliveryMethod,
-                    items: const <String>[
-                      'Online',
-                      'Courier',
-                      'In-Store Pickup'
-                    ],
-                    iconName: 'assets/svgs/dropdown.svg',
-                    onChanged: (String? newValue) {
-                      setState(() {
-                        deliveryMethod = newValue;
-                      });
-                    },
-                  ),
-                  const SizedBox(height: 16),
-                  CustomEditText(
-                    maxLength: 30,
-                    inputType:
-                        const TextInputType.numberWithOptions(decimal: false),
-                    caption: 'Delivery Duration (Days)',
-                    hintText:
-                        'Enter number of days you can deliver after purchase',
-                    controller: deliverydayscontroller,
-                  ),
-                  const SizedBox(height: 16),
-                  CustomDropdownWidget(
-                    caption: 'Payment Method',
-                    hintText: 'Choose a payment method',
-                    items: paymentMethods,
-                    initialValue: paymentMethod,
-                    iconName: 'assets/svgs/dropdown.svg',
-                    onChanged: (String? newValue) {
-                      setState(() {
-                        paymentMethod = newValue;
-                      });
-                    },
-                  ),
-                  const SizedBox(height: 16),
-                  CustomEditText(
-                    maxLength: 30,
-                    caption: 'Storage Location',
-                    hintText: 'Enter storage location',
-                    controller: storageLocationController,
-                  ),
-                  const SizedBox(height: 16),
-                  CustomEditText(
-                    maxLength: 30,
-                    caption: 'Product Number',
-                    hintText: 'Enter product number',
-                    inputType: TextInputType.number,
-                    controller: productNumberController,
-                  ),
-                  const SizedBox(height: 16),
-                  Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 15.0),
-                    child: Container(
-                      padding: const EdgeInsets.all(15),
-                      decoration: BoxDecoration(
-                        color: Colors.white,
-                        borderRadius: BorderRadius.circular(10),
-                      ),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: <Widget>[
-                          const Text(
-                            'Product Variations',
-                            style: TextStyle(
-                              fontSize: 14,
-                              fontWeight: FontWeight.w700,
+                        Expanded(
+                          child: Padding(
+                            padding: const EdgeInsets.only(right: 15.0),
+                            child: CustomEditText(
+                              padding: 0,
+                              caption: 'Discount',
+                              hintText: 'Enter discount',
+                              maxLength: 15,
+                              controller: _discountController,
+                              inputType: TextInputType.number,
+                              validator: (String? value) {
+                                if (value != null && value.isNotEmpty) {
+                                  if (double.tryParse(value) == null) {
+                                    return 'Please enter a valid number';
+                                  }
+                                }
+                                return null;
+                              },
                             ),
                           ),
-                          const SizedBox(height: 10),
-                          Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: <Widget>[
-                              MultipleEditTextWidget(
-                                padding: const EdgeInsets.all(5),
-                                backgroundColor: backgroundColor,
-                                buttonSize: 20,
-                                caption: 'Color',
-                                hintText: 'color',
-                                initialValues: colors,
-                                onValuesChanged: (List<String> values) {
-                                  setState(() {
-                                    colors = values;
-                                  });
-                                },
-                              ),
-                              const SizedBox(height: 10),
-                              MultipleEditTextWidget(
-                                padding: const EdgeInsets.all(5),
-                                backgroundColor: backgroundColor,
-                                buttonSize: 20,
-                                caption: 'Size',
-                                hintText: 'size',
-                                initialValues: sizes,
-                                onValuesChanged: (List<String> values) {
-                                  setState(() {
-                                    sizes = values;
-                                  });
-                                },
-                              ),
-                            ],
+                        ),
+                      ],
+                    ),
+                    const SizedBox(height: 16),
+                    CustomEditText(
+                      caption: 'Describe your Product',
+                      hintText: 'Add product description here',
+                      controller: _descriptionController,
+                      maxLength: 300,
+                      validator: (String? value) {
+                        if (value == null || value.isEmpty) {
+                          return 'Please enter a description';
+                        }
+                        return null;
+                      },
+                    ),
+                    const SizedBox(height: 16),
+                    CustomDropdownWidget(
+                      caption: 'Select Category',
+                      hintText: 'Choose a category',
+                      items: const <String>[
+                        'Beauty',
+                        'Electronics',
+                        'Fashion',
+                        'Home'
+                      ],
+                      iconName: 'assets/svgs/dropdown.svg',
+                      initialValue: category,
+                      onChanged: (String? newValue) {
+                        setState(() {
+                          category = newValue;
+                        });
+                      },
+                    ),
+                    const SizedBox(height: 16),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 7.0),
+                      child: CountryListPick(
+                        appBar: AppBar(
+                          leading: IconButton(
+                            onPressed: () {
+                              Navigator.pop(context);
+                            },
+                            icon:
+                                SvgPicture.asset('assets/svgs/backbutton.svg'),
                           ),
-                        ],
+                          centerTitle: true,
+                          title: const Text(
+                            'Select Location',
+                            textAlign: TextAlign.center,
+                          ),
+                        ),
+                        initialSelection: shopController.shop!.location,
+                        pickerBuilder:
+                            (BuildContext context, CountryCode? countryCode) {
+                          return Container(
+                            decoration: BoxDecoration(
+                              color: Colors.white,
+                              borderRadius: BorderRadius.circular(radiusValue),
+                            ),
+                            child: CustomTextWidget(
+                              caption: 'Location',
+                              iconName: 'assets/svgs/nexticon.svg',
+                              text: shopController.shop!.location,
+                            ),
+                          );
+                        },
+                        onChanged: (CountryCode? code) async {
+                          setState(() {
+                            country = code!.name!;
+                            currencycontroller.text =
+                                '${currencyValues[code.name.toString()]}';
+                          });
+                        },
+                        useSafeArea: false,
                       ),
                     ),
-                  ),
-                  const SizedBox(height: 16),
-                  CustomEditText(
-                    caption: 'Notes',
-                    hintText: 'Add order notes here',
-                    controller: notesController,
-                    maxLength: 300,
-                  ),
-                ]),
-            const SizedBox(height: 16),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 15.0),
-              child: SwitchWidget(
-                value: _isSwitched,
-                onChanged: (bool value) {
-                  setState(() {
-                    _isSwitched = value;
-                  });
-                },
-                caption: 'Status',
-                subtext:
-                    'If status is active, this product will show in your shop',
-                activeColor: proprimaryColor,
-                inactiveColor: Colors.grey,
+                    const SizedBox(height: 16),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 15.0),
+                      child: GestureDetector(
+                        onTap: _pickImage,
+                        child: Container(
+                          decoration: BoxDecoration(
+                            color: Colors.white,
+                            borderRadius: BorderRadius.circular(radiusValue),
+                          ),
+                          child: const Padding(
+                            padding: EdgeInsets.all(15.0),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: <Widget>[
+                                Text(
+                                  'Add Attachment',
+                                  style: TextStyle(
+                                      fontSize: 13,
+                                      fontWeight: FontWeight.w600),
+                                ),
+                                Icon(Icons.image),
+                              ],
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
+                    const SizedBox(height: 16),
+                    if (_selectedImages.isNotEmpty)
+                      Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 15.0),
+                        child: GridView.builder(
+                          shrinkWrap: true,
+                          physics: const NeverScrollableScrollPhysics(),
+                          gridDelegate:
+                              const SliverGridDelegateWithFixedCrossAxisCount(
+                            crossAxisCount: 3,
+                            crossAxisSpacing: 4,
+                            mainAxisSpacing: 4,
+                          ),
+                          itemCount: _selectedImages.length,
+                          itemBuilder: (BuildContext context, int index) {
+                            return Image.file(
+                              _selectedImages[index],
+                              fit: BoxFit.cover,
+                            );
+                          },
+                        ),
+                      ),
+                    if (updateImages!.isNotEmpty)
+                      Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 15.0),
+                        child: GridView.builder(
+                          shrinkWrap: true,
+                          physics: const NeverScrollableScrollPhysics(),
+                          gridDelegate:
+                              const SliverGridDelegateWithFixedCrossAxisCount(
+                            crossAxisCount: 3,
+                            crossAxisSpacing: 4,
+                            mainAxisSpacing: 4,
+                          ),
+                          itemCount: updateImages!.length,
+                          itemBuilder: (BuildContext context, int index) {
+                            return Image.network(
+                              updateImages![index],
+                              fit: BoxFit.cover,
+                            );
+                          },
+                        ),
+                      ),
+                    CustomEditText(
+                      maxLength: 30,
+                      caption: 'Quantity',
+                      hintText: 'Enter quantity',
+                      inputType: TextInputType.number,
+                      controller: quantityController,
+                    ),
+                    const SizedBox(height: 16),
+                    ExpansionTile(
+                        trailing: isExpanded
+                            ? SvgPicture.asset(
+                                'assets/svgs/dropdownexpansionup.svg',
+                              )
+                            : SvgPicture.asset(
+                                'assets/svgs/dropdownexpansion.svg',
+                              ),
+                        title: RichText(
+                          text: const TextSpan(
+                            style: TextStyle(
+                                fontSize: 15, fontWeight: FontWeight.bold),
+                            children: <TextSpan>[
+                              TextSpan(
+                                  text: 'Additional Information',
+                                  style: TextStyle(color: textColor)),
+                              TextSpan(
+                                  text: ' (Optional)',
+                                  style: TextStyle(color: hintColor)),
+                            ],
+                          ),
+                        ),
+                        children: <Widget>[
+                          CustomDropdownWidget(
+                            caption: 'Delivery Method',
+                            hintText: 'Choose a delivery method',
+                            initialValue: deliveryMethod,
+                            items: const <String>[
+                              'Online',
+                              'Courier',
+                              'In-Store Pickup'
+                            ],
+                            iconName: 'assets/svgs/dropdown.svg',
+                            onChanged: (String? newValue) {
+                              setState(() {
+                                deliveryMethod = newValue;
+                              });
+                            },
+                          ),
+                          const SizedBox(height: 16),
+                          CustomEditText(
+                            maxLength: 30,
+                            inputType: const TextInputType.numberWithOptions(
+                                decimal: false),
+                            caption: 'Delivery Duration (Days)',
+                            hintText:
+                                'Enter number of days you can deliver after purchase',
+                            controller: deliverydayscontroller,
+                          ),
+                          const SizedBox(height: 16),
+                          CustomDropdownWidget(
+                            caption: 'Payment Method',
+                            hintText: 'Choose a payment method',
+                            items: paymentMethods,
+                            initialValue: paymentMethod,
+                            iconName: 'assets/svgs/dropdown.svg',
+                            onChanged: (String? newValue) {
+                              setState(() {
+                                paymentMethod = newValue;
+                              });
+                            },
+                          ),
+                          const SizedBox(height: 16),
+                          CustomEditText(
+                            maxLength: 30,
+                            caption: 'Storage Location',
+                            hintText: 'Enter storage location',
+                            controller: storageLocationController,
+                          ),
+                          const SizedBox(height: 16),
+                          CustomEditText(
+                            maxLength: 30,
+                            caption: 'Product Number',
+                            hintText: 'Enter product number',
+                            inputType: TextInputType.number,
+                            controller: productNumberController,
+                          ),
+                          const SizedBox(height: 16),
+                          Padding(
+                            padding:
+                                const EdgeInsets.symmetric(horizontal: 15.0),
+                            child: Container(
+                              padding: const EdgeInsets.all(15),
+                              decoration: BoxDecoration(
+                                color: Colors.white,
+                                borderRadius: BorderRadius.circular(10),
+                              ),
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: <Widget>[
+                                  const Text(
+                                    'Product Variations',
+                                    style: TextStyle(
+                                      fontSize: 14,
+                                      fontWeight: FontWeight.w700,
+                                    ),
+                                  ),
+                                  const SizedBox(height: 10),
+                                  Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: <Widget>[
+                                      MultipleEditTextWidget(
+                                        padding: const EdgeInsets.all(5),
+                                        backgroundColor: backgroundColor,
+                                        buttonSize: 20,
+                                        caption: 'Color',
+                                        hintText: 'color',
+                                        initialValues: colors,
+                                        onValuesChanged: (List<String> values) {
+                                          setState(() {
+                                            colors = values;
+                                          });
+                                        },
+                                      ),
+                                      const SizedBox(height: 10),
+                                      MultipleEditTextWidget(
+                                        padding: const EdgeInsets.all(5),
+                                        backgroundColor: backgroundColor,
+                                        buttonSize: 20,
+                                        caption: 'Size',
+                                        hintText: 'size',
+                                        initialValues: sizes,
+                                        onValuesChanged: (List<String> values) {
+                                          setState(() {
+                                            sizes = values;
+                                          });
+                                        },
+                                      ),
+                                    ],
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ),
+                          const SizedBox(height: 16),
+                          CustomEditText(
+                            caption: 'Notes',
+                            hintText: 'Add order notes here',
+                            controller: notesController,
+                            maxLength: 300,
+                          ),
+                        ]),
+                    const SizedBox(height: 16),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 15.0),
+                      child: SwitchWidget(
+                        value: _isSwitched,
+                        onChanged: (bool value) {
+                          setState(() {
+                            _isSwitched = value;
+                          });
+                        },
+                        caption: 'Status',
+                        subtext:
+                            'If status is active, this product will show in your shop',
+                        activeColor: proprimaryColor,
+                        inactiveColor: Colors.grey,
+                      ),
+                    ),
+                    const SizedBox(height: 16),
+                    ProCustomButton(
+                      loading: isSubmitted,
+                      text: widget.product != null ? 'Save Changes' : 'Create',
+                      onPressed: () async {
+                        if (_productNameController.text.isEmpty) {
+                          showSnackbar(
+                              message: 'Enter product name', error: true);
+                          return;
+                        }
+
+                        if (category == null) {
+                          showSnackbar(
+                              message: 'Select a category', error: true);
+                          return;
+                        }
+
+                        if (_priceController.text.isEmpty) {
+                          showSnackbar(message: 'Enter price', error: true);
+                          return;
+                        }
+
+                        if (quantityController.text.isEmpty) {
+                          showSnackbar(message: 'Enter quantity', error: true);
+                          return;
+                        }
+
+                        // if (_selectedImages.isEmpty) {
+                        //   showSnackbar(message: 'Select a product image', error: true);
+                        //   return;
+                        // }
+                        if (_formKey.currentState?.validate() ?? false) {
+                          _formKey.currentState?.save();
+
+                          setState(() {
+                            isSubmitted = true;
+                          });
+                          if (_selectedImages.isNotEmpty) {
+                            for (File image in _selectedImages) {
+                              dynamic response =
+                                  await ApiService.uploadFile(image);
+                              if (response['success']) {
+                                setState(() {
+                                  images!.add(response['fileUrl']);
+                                });
+                              }
+                            }
+                          }
+                          final Map<String, dynamic> productListing =
+                              <String, dynamic>{
+                            'userId': profileController.myProfile.uid,
+                            'shopId': shopController.shop?.id,
+                            'name': _productNameController.text,
+                            'price': _priceController.text,
+                            'discount': _discountController.text,
+                            'description': _descriptionController.text,
+                            'category': category,
+                            'location': shopController.shop?.location,
+                            'images': images,
+                            'paymentMethod': paymentMethod,
+                            'deliveryMethod': deliveryMethod,
+                            'url': 'http://example.com/product', // Example URL
+                            'deliveryDuration': deliverydayscontroller.text,
+                            'itemType': 'product',
+                            'isActive': _isSwitched,
+                            'supplierId': null,
+                            'storageLocation': storageLocationController.text,
+                            'productNumber': productNumberController.text,
+                            'quantity': quantityController.text.isEmpty
+                                ? 0
+                                : quantityController.text,
+                            'startAt': startDate?.toIso8601String(),
+                            'endAt': endDate?.toIso8601String(),
+                            'color': colors,
+                            'size': sizes,
+                          };
+                          if (widget.product == null) {
+                            bool response = await shopController
+                                .addProducts(productListing);
+                            if (response) {
+                              showSnackbar(
+                                message: 'Product Added Successfully!',
+                              );
+                              Navigator.pop(context);
+                            } else {
+                              showSnackbar(
+                                message: 'Error While Adding Product',
+                                error: true,
+                              );
+                            }
+                          } else {
+                            bool response = await shopController.updateProduct(
+                                widget.product!.id, productListing);
+                            if (response) {
+                              showSnackbar(
+                                message: 'Product Updated Successfully!',
+                              );
+                              Navigator.pop(context);
+                            } else {
+                              showSnackbar(
+                                message: 'Error While Updating Product',
+                                error: true,
+                              );
+                            }
+                          }
+                          setState(() {
+                            isSubmitted = false;
+                          });
+                        }
+                      },
+                    ),
+                    const SizedBox(height: 16),
+                  ],
+                ),
               ),
-            ),
-            const SizedBox(height: 16),
-            ProCustomButton(
-              loading: isSubmitted,
-              text: widget.product != null ? 'Save Changes' : 'Create',
-              onPressed: () async {
-                if (_productNameController.text.isEmpty) {
-                  showSnackbar(message: 'Enter product name', error: true);
-                  return;
-                }
-
-                if (category == null) {
-                  showSnackbar(message: 'Select a category', error: true);
-                  return;
-                }
-
-                if (_priceController.text.isEmpty) {
-                  showSnackbar(message: 'Enter price', error: true);
-                  return;
-                }
-
-                if (quantityController.text.isEmpty) {
-                  showSnackbar(message: 'Enter quantity', error: true);
-                  return;
-                }
-
-                // if (_selectedImages.isEmpty) {
-                //   showSnackbar(message: 'Select a product image', error: true);
-                //   return;
-                // }
-                if (_formKey.currentState?.validate() ?? false) {
-                  _formKey.currentState?.save();
-
-                  setState(() {
-                    isSubmitted = true;
-                  });
-                  if (_selectedImages.isNotEmpty) {
-                    for (File image in _selectedImages) {
-                      dynamic response = await ApiService.uploadFile(image);
-                      if (response['success']) {
-                        setState(() {
-                          images!.add(response['fileUrl']);
-                        });
-                      }
-                    }
-                  }
-                  final Map<String, dynamic> productListing = <String, dynamic>{
-                    'userId': profileController.myProfile.uid,
-                    'shopId': shopController.shop?.id,
-                    'name': _productNameController.text,
-                    'price': _priceController.text,
-                    'discount': _discountController.text,
-                    'description': _descriptionController.text,
-                    'category': category,
-                    'location': shopController.shop?.location,
-                    'images': images,
-                    'paymentMethod': paymentMethod,
-                    'deliveryMethod': deliveryMethod,
-                    'url': 'http://example.com/product', // Example URL
-                    'deliveryDuration': deliverydayscontroller.text,
-                    'itemType': 'product',
-                    'isActive': _isSwitched,
-                    'supplierId': null,
-                    'storageLocation': storageLocationController.text,
-                    'productNumber': productNumberController.text,
-                    'quantity': quantityController.text.isEmpty
-                        ? 0
-                        : quantityController.text,
-                    'startAt': startDate?.toIso8601String(),
-                    'endAt': endDate?.toIso8601String(),
-                    'color': colors,
-                    'size': sizes,
-                  };
-                  if (widget.product == null) {
-                    bool response =
-                        await shopController.addProducts(productListing);
-                    if (response) {
-                      showSnackbar(
-                        message: 'Product Added Successfully!',
-                      );
-                      Navigator.pop(context);
-                    } else {
-                      showSnackbar(
-                        message: 'Error While Adding Product',
-                        error: true,
-                      );
-                    }
-                  } else {
-                    bool response = await shopController.updateProduct(
-                        widget.product!.id, productListing);
-                    if (response) {
-                      showSnackbar(
-                        message: 'Product Updated Successfully!',
-                      );
-                      Navigator.pop(context);
-                    } else {
-                      showSnackbar(
-                        message: 'Error While Updating Product',
-                        error: true,
-                      );
-                    }
-                  }
-                  setState(() {
-                    isSubmitted = false;
-                  });
-                }
-              },
-            ),
-            const SizedBox(height: 16),
-          ],
-        ),
       ),
     );
   }

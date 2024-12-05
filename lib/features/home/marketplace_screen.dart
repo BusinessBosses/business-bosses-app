@@ -1,4 +1,4 @@
-import 'package:business_bosses_v2/bbpro/presentation/myordersscreen.dart';
+import 'package:business_bosses_v2/bbpro/presentation/my_orders_screen.dart';
 import 'package:business_bosses_v2/features/chat/chat_screen.dart';
 import 'package:business_bosses_v2/features/donations/presentation/filtersuppliers.dart';
 import 'package:business_bosses_v2/features/forum/models/industry.dart';
@@ -68,7 +68,7 @@ class _MarketplaceScreenState extends State<MarketplaceScreen>
     super.initState();
     _marketplacesearchTabController = TabController(length: 3, vsync: this);
     _marketplaceTabController = TabController(length: 4, vsync: this);
-
+    _marketController.initProItems();
     supplierController.initSuppliers();
     _scrollController.addListener(() {
       double percentageScrolled =

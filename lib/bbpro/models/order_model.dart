@@ -1,6 +1,7 @@
 import 'package:business_bosses_v2/bbpro/models/client_model.dart';
 import 'package:business_bosses_v2/bbpro/models/product_model.dart';
 import 'package:business_bosses_v2/bbpro/models/service_model.dart';
+import 'package:business_bosses_v2/bbpro/models/shop_model.dart';
 import 'package:business_bosses_v2/common/models/user_model.dart';
 import 'package:flutter/material.dart';
 
@@ -23,6 +24,7 @@ class Order {
   final List<Service>? services;
   final DateTime createdAt;
   final String? orderDetails;
+  final Shop shop;
 
   Order({
     required this.id,
@@ -43,6 +45,7 @@ class Order {
     this.client,
     required this.createdAt,
     this.orderDetails,
+    required this.shop,
   });
 
   factory Order.fromJson(Map<String, dynamic> json) {
@@ -78,6 +81,7 @@ class Order {
           : <Service>[],
       client: json['client'] == null ? null : Client.fromMap(json['client']),
       createdAt: DateTime.parse(json['createdAt']),
+      shop: Shop.fromMap(json['shop']),
     );
   }
 

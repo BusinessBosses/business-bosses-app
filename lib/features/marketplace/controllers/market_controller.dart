@@ -1,3 +1,4 @@
+import 'package:business_bosses_v2/bbpro/models/order_model.dart';
 import 'package:business_bosses_v2/bbpro/models/product_model.dart';
 import 'package:business_bosses_v2/bbpro/models/service_model.dart';
 import 'package:business_bosses_v2/common/models/api_response_model.dart';
@@ -20,7 +21,9 @@ class MarketController extends GetxController {
   RxList<MarketModel> markets = RxList<MarketModel>(<MarketModel>[]);
   RxList<Product> proProducts = RxList<Product>(<Product>[]);
   RxList<Service> proServices = RxList<Service>(<Service>[]);
+  RxList<Object> proItems = RxList<Object>(<Object>[]);
   RxList<MarketModel> products = RxList<MarketModel>(<MarketModel>[]);
+  RxList<Order> orders = RxList<Order>(<Order>[]);
   RxList<MarketModel> services = RxList<MarketModel>(<MarketModel>[]);
   RxList<MarketModel> searchResult = RxList<MarketModel>(<MarketModel>[]);
   RxList<UserModel> users = RxList<UserModel>(<UserModel>[]);
@@ -42,6 +45,7 @@ class MarketController extends GetxController {
   RxBool loadingMore = RxBool(false);
   RxBool isJoined = RxBool(false);
   bool isLoading = true;
+
   RxBool isfiltered = RxBool(false);
   final HomeController _homeController = Get.find();
   final ProfileController _profileController = Get.find();
@@ -151,7 +155,6 @@ class MarketController extends GetxController {
       // update();
     } else {
       final List psts = post;
-      markets.clear();
       for (int i = 0; i < psts.length; i++) {
         markets.add(MarketModel.fromMap(<String, dynamic>{
           ...psts[i],
@@ -409,6 +412,7 @@ class MarketController extends GetxController {
 
   ///  INITIALIZE MARKETPLACE LISTINGS
   Future<void> initMarket() async {
+    markets.clear();
     loading(true);
     error(false);
     update();
@@ -452,26 +456,52 @@ class MarketController extends GetxController {
 
   ///  INITIALIZE MARKETPLACE LISTINGS
   Future<void> initProItems() async {
+    proProducts.clear();
+    proServices.clear();
+    proItems.clear();
+    orders.clear();
+    loading(true);
+    error(false);
+
     final ApiResponseModel response = await ApiService.get(path: 'goods/all');
     final ApiResponseModel responseServices =
         await ApiService.get(path: 'services/all');
+    final ApiResponseModel responseOrders = await ApiService.get(
+        path: 'orders/user-orders/${_profileController.myProfile.uid}');
     if (response.success) {
       for (int i = 0; i < response.data['rows'].length; i++) {
-        proProducts.add(Product.fromJson(response.data['rows'][i]));
+        if (Product.fromJson(response.data['rows'][i]).isActive) {
+          proProducts.add(Product.fromJson(response.data['rows'][i]));
+        }
       }
       if (responseServices.success) {
         for (int i = 0; i < responseServices.data['rows'].length; i++) {
-          proServices.add(Service.fromJson(responseServices.data['rows'][i]));
+          if (Service.fromJson(responseServices.data['rows'][i]).isActive) {
+            proServices.add(Service.fromJson(responseServices.data['rows'][i]));
+          }
+        }
+        if (responseOrders.success) {
+          for (int i = 0; i < responseOrders.data['rows'].length; i++) {
+            orders.add(Order.fromJson(responseOrders.data['rows'][i]));
+          }
+        } else {
+          error(true);
         }
       } else {
         error(true);
       }
+
+      proItems.addAll(<Object>[...proProducts, ...proServices]);
+      proItems.sort((Object a, Object b) {
+        // Assuming both Product and Service have a createdAt property.
+        DateTime aDate = a is Product ? a.createdAt : (a as Service).createdAt;
+        DateTime bDate = b is Product ? b.createdAt : (b as Service).createdAt;
+        return bDate.compareTo(aDate);
+      });
     } else {
       error(true);
     }
     loading(false);
-
-    update();
   }
 
   void connectToUser(UserModel user) async {
