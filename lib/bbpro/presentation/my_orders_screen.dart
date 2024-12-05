@@ -1,7 +1,6 @@
 import 'package:business_bosses_v2/bbpro/controllers/shop_controller.dart';
-import 'package:business_bosses_v2/bbpro/models/product_model.dart';
-import 'package:business_bosses_v2/bbpro/presentation/create_product.dart';
-import 'package:business_bosses_v2/bbpro/widgets/button.dart';
+import 'package:business_bosses_v2/bbpro/models/order_model.dart';
+import 'package:business_bosses_v2/bbpro/widgets/orderwidget.dart';
 import 'package:business_bosses_v2/bbpro/widgets/proseardwidget.dart';
 import 'package:business_bosses_v2/bbpro/widgets/proshopdeals.dart';
 import 'package:business_bosses_v2/features/marketplace/controllers/market_controller.dart';
@@ -21,13 +20,13 @@ class _MyOrdersScreenState extends State<MyOrdersScreen> {
   final ShopController shopController = Get.find();
   String? _selectedItem;
   String searchQuery = '';
-  List<Product> filteredOrders = <Product>[];
+  List<Order> filteredOrders = <Order>[];
   final MarketController _marketController = Get.find();
 
   @override
   void initState() {
     super.initState();
-    filteredOrders = shopController.products;
+    filteredOrders = _marketController.orders;
   }
 
   void _showFilterMenu(BuildContext context, Offset position) {
@@ -121,13 +120,13 @@ class _MyOrdersScreenState extends State<MyOrdersScreen> {
                                       onChange: (String query) {
                                         setState(() {
                                           searchQuery = query;
-                                          filteredOrders = shopController
-                                              .products
-                                              .where((Product product) =>
-                                                  product.name
-                                                      .toLowerCase()
-                                                      .contains(searchQuery
-                                                          .toLowerCase()))
+                                          filteredOrders = _marketController
+                                              .orders
+                                              .where((Order order) => order
+                                                  .user!.username
+                                                  .toLowerCase()
+                                                  .contains(searchQuery
+                                                      .toLowerCase()))
                                               .toList();
                                         });
                                       },
@@ -192,16 +191,13 @@ class _MyOrdersScreenState extends State<MyOrdersScreen> {
                       physics: const AlwaysScrollableScrollPhysics(),
                       itemCount: filteredOrders.length,
                       itemBuilder: (BuildContext context, int index) {
-                        final Product product = filteredOrders[index];
-                        return GestureDetector(
-                            onTap: () {
-                              Get.to(
-                                () => CreateProductListing(
-                                  product: product,
-                                ),
-                              );
-                            },
-                            child: Container());
+                        final Order order = filteredOrders[index];
+                        return OrderWidget(
+                          order: order,
+                          bgcolor: order.status.backgroundColor,
+                          shop: order.shop,
+                          showChange: false,
+                        );
                       },
                     )
                   : Center(

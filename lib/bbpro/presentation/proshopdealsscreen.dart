@@ -75,11 +75,11 @@ class _ProshopdealsScreenState extends State<ProshopdealsScreen>
               staggeredTileBuilder: (int index) => const StaggeredTile.fit(1),
               mainAxisSpacing: 10.0,
               crossAxisSpacing: 10.0,
-              itemCount: marketController.proProducts.length +
-                  marketController.proServices.length,
+              itemCount: marketController.proItems.length,
               itemBuilder: (BuildContext context, int index) {
-                if (index < marketController.proProducts.length) {
-                  final Product product = marketController.proProducts[index];
+                if (marketController.proItems[index] is Product) {
+                  final Product product =
+                      marketController.proItems[index] as Product;
                   return GestureDetector(
                     onTap: () {
                       if (product.user!.uid ==
@@ -106,8 +106,8 @@ class _ProshopdealsScreenState extends State<ProshopdealsScreen>
                     ),
                   );
                 } else {
-                  final Service service = marketController
-                      .proServices[index - marketController.proProducts.length];
+                  final Service service =
+                      marketController.proItems[index] as Service;
                   return GestureDetector(
                     onTap: () {
                       if (service.user!.uid ==

@@ -26,7 +26,7 @@ class Product {
   DateTime? endAt;
   List<String>? color;
   List<String>? size;
-  DateTime? createdAt;
+  DateTime createdAt;
 
   Product({
     this.images,
@@ -85,7 +85,7 @@ class Product {
       endAt: json['endAt'] == null ? null : DateTime.parse(json['endAt']),
       color: json['color'] != null ? List<String>.from(json['color']) : null,
       size: json['size'] != null ? List<String>.from(json['size']) : null,
-      createdAt: null,
+      createdAt: DateTime.parse(json['createdAt']),
     );
   }
 

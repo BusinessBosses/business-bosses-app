@@ -2,6 +2,7 @@ import 'package:business_bosses_v2/common/models/user_model.dart';
 
 class Shop {
   final String id;
+  final String userId;
   final String name;
   final String description;
   final String? image;
@@ -25,6 +26,7 @@ class Shop {
 
   Shop({
     required this.id,
+    required this.userId,
     required this.name,
     required this.description,
     this.image,
@@ -50,6 +52,7 @@ class Shop {
   factory Shop.fromMap(Map<String, dynamic> json) {
     return Shop(
       id: json['id'],
+      userId: json['userId'],
       name: json['name'],
       description: json['description'],
       image: json['image'],
@@ -77,6 +80,7 @@ class Shop {
   Map<String, dynamic> toMap() {
     return <String, dynamic>{
       'id': id,
+      'userId': userId,
       'name': name,
       'description': description,
       'image': image,
