@@ -336,8 +336,9 @@ class _BookServiceScreenState extends State<BookServiceScreen> {
               quantity: int.parse(quantityController.text),
               price: widget.service.price,
               discount: widget.service.discount,
-              total: (1 - widget.service.discount) *
-                  (int.parse(quantityController.text) * widget.service.price),
+              total:
+                  (int.parse(quantityController.text) * widget.service.price) *
+                      (1 - (widget.service.discount / 100)),
               currency: widget.shop.currency,
             ),
 

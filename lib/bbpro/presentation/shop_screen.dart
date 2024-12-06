@@ -389,22 +389,15 @@ class _ShopScreenState extends State<ShopScreen> {
             ),
           ),
           const SizedBox(height: 30),
-          if (shopController.shop?.user?.website?.isNotEmpty ?? false)
-            _buildContactRow(
-              'assets/svgs/website.svg',
-              'Shop Url',
-              shopController.shop!.user!.website,
-              12,
-              () async {
-                final Uri uri =
-                    Uri.parse('https://${shopController.shop!.user!.website}');
-                if (await canLaunchUrl(uri)) {
-                  await launchUrl(uri, mode: LaunchMode.externalApplication);
-                }
-              },
-            ),
-          if (shopController.shop?.user?.website?.isNotEmpty ?? false)
-            _buildDivider(),
+          // if (shopController.shop?.user?.virtualAddress?.isNotEmpty ?? false)
+          _buildContactRow(
+            'assets/svgs/website.svg',
+            'Virtual Address',
+            'jdnjsnkjdnskjjdnsndnsj',
+            12,
+            null,
+          ),
+          _buildDivider(),
           if (shopController.shop?.user?.website?.isNotEmpty ?? false)
             const SizedBox(height: 20),
           if (shopController.shop?.email.isNotEmpty ?? false)
@@ -593,7 +586,7 @@ class _ShopScreenState extends State<ShopScreen> {
   }
 
   Widget _buildContactRow(String iconPath, String label, String? value,
-      double height, Function() onTap) {
+      double height, Function()? onTap) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: <Widget>[

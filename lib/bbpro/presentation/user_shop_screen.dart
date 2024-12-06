@@ -561,28 +561,14 @@ class _UserShopScreenState extends State<UserShopScreen> {
             ),
           ),
           const SizedBox(height: 20),
-          if (shopController.userShop?.user?.website?.isNotEmpty ?? false)
-            _buildContactRow(
-              'assets/svgs/website.svg',
-              'Shop Url',
-              shopController.userShop!.user!.website!,
-              12,
-              () async {
-                String? website = shopController.userShop!.user!.website;
-                try {
-                  if (!website!.startsWith('http://') &&
-                      !website.startsWith('https://')) {
-                    website = 'https://$website';
-                  }
-                  final Uri uri = Uri.parse(website);
-                  final bool launched = await launchUrl(uri,
-                      mode: LaunchMode.platformDefault,
-                      webOnlyWindowName: '_self');
-                } catch (e) {}
-              },
-            ),
-          if (shopController.userShop?.user?.website?.isNotEmpty ?? false)
-            _buildDivider(),
+          _buildContactRow(
+            'assets/svgs/website.svg',
+            'Virtual Address',
+            'jdnjsnkjdnskjjdnsndnsj',
+            12,
+            null,
+          ),
+          _buildDivider(),
           if (shopController.userShop?.user?.website?.isNotEmpty ?? false)
             const SizedBox(height: 20),
           if (shopController.userShop?.email.isNotEmpty ?? false)
@@ -759,7 +745,7 @@ class _UserShopScreenState extends State<UserShopScreen> {
   }
 
   Widget _buildContactRow(String iconPath, String label, String? value,
-      double height, Function() onTap) {
+      double height, Function()? onTap) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: <Widget>[
