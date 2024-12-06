@@ -75,7 +75,7 @@ class ClientsController extends GetxController {
   }
 
   Future<void> initCampaigns(String userId) async {
-    cLoading(true);
+    loading(true);
     campaigns.clear();
     ApiResponseModel response =
         await ApiService.get(path: 'campaign-history/user/$userId');
@@ -84,7 +84,17 @@ class ClientsController extends GetxController {
         campaigns.add(Campaign.fromMap(response.data[i]));
       }
     }
-    cLoading(false);
+    loading(false);
+    update();
+  }
+
+  Future<void> deleteCampaign(int id) async {
+    loading(true);
+    ApiResponseModel response =
+        await ApiService.delete(path: 'campaign-history/$id');
+    if (response.success) {
+      campaigns.removeWhere((Campaign element) => element.id == id);
+    }
     update();
   }
 

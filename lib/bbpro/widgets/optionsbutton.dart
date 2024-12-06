@@ -5,6 +5,7 @@ class OptionsButton extends StatelessWidget {
   final EdgeInsetsGeometry? padding;
   final Color? borderColor;
   final bool? isExpanded;
+  final bool? isEdit;
   final dynamic item;
   final VoidCallback? onEdit;
   final VoidCallback? onDelete;
@@ -15,6 +16,7 @@ class OptionsButton extends StatelessWidget {
     this.padding,
     this.borderColor,
     this.isExpanded = false,
+    this.isEdit = true,
     this.item,
     this.onEdit,
     this.onDelete,
@@ -37,17 +39,19 @@ class OptionsButton extends StatelessWidget {
         const PopupMenuDivider(
           height: 0.0,
         ),
-      PopupMenuItem<String>(
-        value: 'Edit',
-        onTap: onEdit,
-        child: const Text(
-          'Edit',
-          style: bodyText2,
+      if (isEdit == true)
+        PopupMenuItem<String>(
+          value: 'Edit',
+          onTap: onEdit,
+          child: const Text(
+            'Edit',
+            style: bodyText2,
+          ),
         ),
-      ),
-      const PopupMenuDivider(
-        height: 0.0,
-      ),
+      if (isEdit == true)
+        const PopupMenuDivider(
+          height: 0.0,
+        ),
       PopupMenuItem<String>(
         value: 'Delete',
         onTap: onDelete,
