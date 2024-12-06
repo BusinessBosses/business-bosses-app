@@ -4,6 +4,7 @@ import 'package:business_bosses_v2/bbpro/presentation/book_service.dart';
 import 'package:business_bosses_v2/bbpro/presentation/order_product.dart';
 import 'package:business_bosses_v2/bbpro/presentation/proshopdealsscreen.dart';
 import 'package:business_bosses_v2/common/widgets/network_image_with_placeholder.dart';
+import 'package:business_bosses_v2/utils/theme/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -45,7 +46,9 @@ class _ProshopdealsWidgetState extends State<ProshopdealsWidget> {
       },
       child: Container(
         decoration: BoxDecoration(
-          color: Colors.white,
+          color: widget.isHome != null && widget.isHome == true
+              ? backgroundColor
+              : Colors.white,
           borderRadius: BorderRadius.circular(
               widget.isHome != null && widget.isHome! ? 0 : 15),
         ),

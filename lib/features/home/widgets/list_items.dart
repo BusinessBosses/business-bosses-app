@@ -149,16 +149,13 @@ class _PostsWidgetState extends State<PostsWidget> {
     if (postIndex == 3) {
       widgets.add(Column(
         children: <Widget>[
-          Padding(
-            padding: const EdgeInsets.only(bottom: 7.0),
-            child: ProshopdealsWidget(
-              isHome: true,
-              caption: 'Featured Listing',
-              combinedList: <Object>[
-                ...marketController.proProducts.take(5).toList(),
-                ...marketController.proServices.take(5).toList(),
-              ],
-            ),
+          ProshopdealsWidget(
+            isHome: true,
+            caption: 'Featured Listing',
+            combinedList: <Object>[
+              ...marketController.proProducts.take(5).toList(),
+              ...marketController.proServices.take(5).toList(),
+            ],
           ),
         ],
       ));

@@ -857,6 +857,15 @@ class _MarketTileState extends State<MarketTile> {
                                             ),
                                       ),
                                     ),
+                                    GestureDetector(
+                                      onTap: () => showOptions(),
+                                      child: SvgPicture.asset(
+                                        'assets/svgs/share.svg',
+                                        height: 15.0,
+                                        width: 15.0,
+                                        color: textColor.withOpacity(1.0),
+                                      ),
+                                    ),
                                     const SizedBox(width: 10.0),
                                     _post.userId ==
                                             profileController.myProfile.uid
@@ -1153,6 +1162,89 @@ class _MarketTileState extends State<MarketTile> {
       // connecteds.removeAt(checkConnected);
       await disconnect(_post.user!.uid);
     }
+  }
+
+  void showOptions() {
+    showModalBottomSheet(
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+      context: context,
+      backgroundColor: Colors.white,
+      builder: (BuildContext context) => Padding(
+        padding: const EdgeInsets.all(15.0),
+        child: SizedBox(
+          height: 150,
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: <Widget>[
+              GestureDetector(
+                onTap: () => Get.toNamed(
+                  Routes.createPost,
+                  arguments: <String, dynamic>{
+                    'sharemessage': 'Hey there! Check out this post',
+                    'title': widget.post.title,
+                    'forumdata': widget.post,
+                  },
+                ),
+                child: Container(
+                  width: double.infinity,
+                  padding: const EdgeInsets.symmetric(vertical: 15),
+                  child: Row(
+                    children: <Widget>[
+                      SvgPicture.asset(
+                        'assets/svgs/text.svg',
+                        color: textColor,
+                      ),
+                      const SizedBox(
+                        width: 10,
+                      ),
+                      const Text(
+                        'Post on Business Bosses',
+                        style: TextStyle(
+                            fontWeight: FontWeight.bold, fontSize: 18),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+              Container(
+                height: 1,
+                color: backgroundColor,
+              ),
+              GestureDetector(
+                onTap: () {
+                  String message =
+                      'Have a look at ${widget.post.user?.username ?? 'Business Bosses'}\'s marketplace post on Business Bosses\n'
+                      'https://businessbosses.onelink.me/xLWk/36a2ff16';
+                  logEvent(widget.post.marketId, 'marketplace');
+                  socialShare(message);
+                },
+                child: Container(
+                  width: double.infinity,
+                  padding: const EdgeInsets.symmetric(vertical: 15),
+                  child: Row(
+                    children: <Widget>[
+                      SvgPicture.asset(
+                        'assets/svgs/share.svg',
+                        color: textColor,
+                        height: 16,
+                      ),
+                      const SizedBox(
+                        width: 10,
+                      ),
+                      const Text(
+                        'Share',
+                        style: TextStyle(
+                            fontWeight: FontWeight.bold, fontSize: 18),
+                      ),
+                    ],
+                  ),
+                ),
+              )
+            ],
+          ),
+        ),
+      ),
+    );
   }
 }
 
