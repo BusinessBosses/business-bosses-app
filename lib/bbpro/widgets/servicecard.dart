@@ -134,16 +134,17 @@ class _ServiceCardState extends State<ServiceCard> {
                       padding: const EdgeInsets.symmetric(
                           horizontal: 5, vertical: 3),
                       decoration: BoxDecoration(
-                        color: primaryColorLT,
+                        // color: primaryColorLT,
                         borderRadius: BorderRadius.circular(70),
-                        // border: Border.all(
-                        //   color: primaryColorLT,
-                        // ),
+                        border: Border.all(
+                          color: primaryColorLT,
+                          width: 1,
+                        ),
                       ),
                       child: const Text(
                         'Book',
                         style: TextStyle(
-                          color: Colors.white,
+                          color: primaryColorLT,
                           fontWeight: FontWeight.bold,
                           fontSize: 11,
                         ),

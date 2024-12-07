@@ -156,18 +156,20 @@ class _InventoryCardState extends State<InventoryCard> {
               widget.myShop == false
                   ? Container(
                       padding: const EdgeInsets.symmetric(
-                          horizontal: 5, vertical: 3),
+                        horizontal: 5,
+                        vertical: 3,
+                      ),
                       decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(70),
-                        color: primaryColorLT,
-                        // border: Border.all(
-                        //   color: proprimaryColor,
-                        // ),
+                        color: Colors.transparent,
+                        border: Border.all(
+                          color: primaryColorLT,
+                        ),
                       ),
                       child: const Text(
                         'Order',
                         style: TextStyle(
-                          color: Colors.white,
+                          color: primaryColorLT,
                           fontWeight: FontWeight.bold,
                           fontSize: 11,
                         ),

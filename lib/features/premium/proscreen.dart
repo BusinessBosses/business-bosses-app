@@ -60,14 +60,14 @@ class _ProScreenState extends State<ProScreen> with TickerProviderStateMixin {
         title: const Text(
           'Everything you need to grow',
         ),
-        actions: <Widget>[
-          IconButton(
-            onPressed: () {
-              Get.to(() => const LiveEvent());
-            },
-            icon: const Icon(Icons.calendar_month),
-          ),
-        ],
+        // actions: <Widget>[
+        //   IconButton(
+        //     onPressed: () {
+        //       Get.to(() => const LiveEvent());
+        //     },
+        //     icon: const Icon(Icons.calendar_month),
+        //   ),
+        // ],
       ),
       body: Stack(children: <Widget>[
         Column(

@@ -600,165 +600,219 @@ class _ServiceTileState extends State<ServiceTile> {
                                       left: 15.0, right: 15),
                                   child: PostImagesMarket(post: _post),
                                 ),
-                                Row(
-                                  children: <Widget>[
-                                    TextButton.icon(
-                                      onPressed: () async {
-                                        _marketController.like(
-                                            profileController.myProfile.uid,
-                                            _post.marketId,
-                                            'market',
-                                            _post.userId);
-                                        setState(() {});
-                                      },
-                                      icon: _post.likes?.contains(
+                                Padding(
+                                  padding: const EdgeInsets.symmetric(
+                                      horizontal: 15.0),
+                                  child: Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
+                                    children: <Widget>[
+                                      TextButton.icon(
+                                        onPressed: () async {
+                                          _marketController.like(
+                                              profileController.myProfile.uid,
+                                              _post.marketId,
+                                              'market',
+                                              _post.userId);
+                                          setState(() {});
+                                        },
+                                        style: TextButton.styleFrom(
+                                          padding: const EdgeInsets.symmetric(
+                                              horizontal: 3, vertical: 5),
+                                          minimumSize: Size.zero,
+                                          tapTargetSize:
+                                              MaterialTapTargetSize.shrinkWrap,
+                                        ),
+                                        icon: _post.likes?.contains(
+                                                    profileController
+                                                        .myProfile.uid) ==
+                                                true
+                                            ? SvgPicture.asset(
+                                                'assets/svgs/likefilled.svg',
+                                                height: 15,
+                                              )
+                                            : SvgPicture.asset(
+                                                'assets/svgs/like.svg',
+                                                height: 15,
+                                              ),
+                                        label: Text(
+                                          '${_post.likes?.length ?? 0}',
+                                          style: Theme.of(context)
+                                              .textTheme
+                                              .bodyMedium
+                                              ?.copyWith(
+                                                fontWeight: FontWeight.w700,
+                                                color:
+                                                    textColor.withOpacity(0.8),
+                                              ),
+                                        ),
+                                      ),
+                                      TextButton.icon(
+                                        onPressed: () {
+                                          showModalBottomSheet(
+                                            context: context,
+                                            builder: (BuildContext context) =>
+                                                PostLikeCommentItem(
+                                              post: _post,
+                                              onComment: (CommentModel
+                                                  newComment) async {
+                                                setState(() {});
+                                              },
+                                            ),
+                                          );
+                                        },
+                                        style: TextButton.styleFrom(
+                                          padding: const EdgeInsets.symmetric(
+                                              horizontal: 3, vertical: 5),
+                                          minimumSize: Size.zero,
+                                          tapTargetSize:
+                                              MaterialTapTargetSize.shrinkWrap,
+                                        ),
+                                        icon: SvgPicture.asset(
+                                          'assets/svgs/comment.svg',
+                                          height: 15,
+                                        ),
+                                        label: Text(
+                                          '${_post.comments?.length ?? 0}',
+                                          style: Theme.of(context)
+                                              .textTheme
+                                              .bodyMedium
+                                              ?.copyWith(
+                                                fontWeight: FontWeight.w700,
+                                                color:
+                                                    textColor.withOpacity(0.8),
+                                              ),
+                                        ),
+                                      ),
+                                      _post.user!.uid !=
+                                              profileController.myProfile.uid
+                                          ? TextButton.icon(
+                                              onPressed: () async {
+                                                _marketController.coin(
                                                   profileController
-                                                      .myProfile.uid) ==
-                                              true
-                                          ? SvgPicture.asset(
-                                              'assets/svgs/likefilled.svg',
-                                              height: 15,
-                                            )
-                                          : SvgPicture.asset(
-                                              'assets/svgs/like.svg',
-                                              height: 15,
-                                            ),
-                                      label: Text(
-                                        '${_post.likes?.length ?? 0}',
-                                        style: Theme.of(context)
-                                            .textTheme
-                                            .bodyMedium
-                                            ?.copyWith(
-                                              fontWeight: FontWeight.w700,
-                                              color: textColor.withOpacity(0.8),
-                                            ),
-                                      ),
-                                    ),
-                                    TextButton.icon(
-                                      onPressed: () {
-                                        showModalBottomSheet(
-                                          context: context,
-                                          builder: (BuildContext context) =>
-                                              PostLikeCommentItem(
-                                            post: _post,
-                                            onComment: (CommentModel
-                                                newComment) async {
-                                              setState(() {});
-                                            },
-                                          ),
-                                        );
-                                      },
-                                      icon: SvgPicture.asset(
-                                        'assets/svgs/comment.svg',
-                                        height: 15,
-                                      ),
-                                      label: Text(
-                                        '${_post.comments?.length ?? 0}',
-                                        style: Theme.of(context)
-                                            .textTheme
-                                            .bodyMedium
-                                            ?.copyWith(
-                                              fontWeight: FontWeight.w700,
-                                              color: textColor.withOpacity(0.8),
-                                            ),
-                                      ),
-                                    ),
-                                    _post.user!.uid !=
-                                            profileController.myProfile.uid
-                                        ? TextButton.icon(
-                                            onPressed: () async {
-                                              _marketController.coin(
-                                                profileController.myProfile.uid,
-                                                _post.marketId,
-                                                profileController,
-                                                'market',
-                                                _post.user!.uid,
-                                              );
-                                              setState(() {});
-                                            },
-                                            icon: _post.coins?.contains(
-                                                        profileController
-                                                            .myProfile.uid) ==
-                                                    true
-                                                ? SvgPicture.asset(
-                                                    'assets/svgs/coin.svg',
-                                                    height: 20,
-                                                  )
-                                                : SvgPicture.asset(
-                                                    'assets/svgs/coin.svg',
-                                                    height: 20,
-                                                  ),
-                                            label: Text(
-                                              '${_post.coins?.length ?? 0}',
-                                              style: Theme.of(context)
-                                                  .textTheme
-                                                  .bodyMedium
-                                                  ?.copyWith(
-                                                    fontWeight: FontWeight.w700,
-                                                    color: textColor
-                                                        .withOpacity(0.8),
-                                                  ),
-                                            ),
-                                          )
-                                        : Padding(
-                                            padding: const EdgeInsets.only(
-                                                left: 8.0, right: 10.0),
-                                            child: Row(
-                                              children: <Widget>[
-                                                SvgPicture.asset(
-                                                    'assets/svgs/coin.svg'),
-                                                const SizedBox(width: 5),
-                                                Text(
-                                                  '${_post.coins?.length ?? 0}',
-                                                  style: Theme.of(context)
-                                                      .textTheme
-                                                      .bodyLarge
-                                                      ?.copyWith(
-                                                        fontWeight:
-                                                            FontWeight.w700,
-                                                        color: textColor
-                                                            .withOpacity(0.8),
-                                                      ),
-                                                ),
-                                              ],
-                                            ),
-                                          ),
-                                    TextButton.icon(
-                                      onPressed: () async {},
-                                      icon: const Icon(
-                                          Icons.remove_red_eye_outlined,
-                                          size: 19,
-                                          color: Colors.black),
-                                      label: Text(
-                                        formatCount(_post.views!),
-                                        style: Theme.of(context)
-                                            .textTheme
-                                            .bodyMedium
-                                            ?.copyWith(
-                                              fontWeight: FontWeight.w700,
-                                              color: textColor.withOpacity(0.8),
-                                            ),
-                                      ),
-                                    ),
-                                    const SizedBox(width: 10.0),
-                                    _post.userId ==
-                                            profileController.myProfile.uid
-                                        ? const SizedBox()
-                                        : Expanded(
-                                            child: Padding(
-                                              padding: const EdgeInsets.only(
-                                                  right: 15.0),
-                                              child: GestureDetector(
-                                                onTap: () {
-                                                  Get.to(
-                                                    () => ChatRoomScreen(
-                                                      frommarketplace: true,
-                                                      market: _post,
+                                                      .myProfile.uid,
+                                                  _post.marketId,
+                                                  profileController,
+                                                  'market',
+                                                  _post.user!.uid,
+                                                );
+                                                setState(() {});
+                                              },
+                                              style: TextButton.styleFrom(
+                                                padding:
+                                                    const EdgeInsets.symmetric(
+                                                        horizontal: 3,
+                                                        vertical: 5),
+                                                minimumSize: Size.zero,
+                                                tapTargetSize:
+                                                    MaterialTapTargetSize
+                                                        .shrinkWrap,
+                                              ),
+                                              icon: _post.coins?.contains(
+                                                          profileController
+                                                              .myProfile.uid) ==
+                                                      true
+                                                  ? SvgPicture.asset(
+                                                      'assets/svgs/coin.svg',
+                                                      height: 20,
+                                                    )
+                                                  : SvgPicture.asset(
+                                                      'assets/svgs/coin.svg',
+                                                      height: 20,
                                                     ),
-                                                    arguments: _post.user,
-                                                  );
-                                                },
+                                              label: Text(
+                                                '${_post.coins?.length ?? 0}',
+                                                style: Theme.of(context)
+                                                    .textTheme
+                                                    .bodyMedium
+                                                    ?.copyWith(
+                                                      fontWeight:
+                                                          FontWeight.w700,
+                                                      color: textColor
+                                                          .withOpacity(0.8),
+                                                    ),
+                                              ),
+                                            )
+                                          : Padding(
+                                              padding: const EdgeInsets.only(
+                                                  left: 8.0, right: 10.0),
+                                              child: Row(
+                                                children: <Widget>[
+                                                  SvgPicture.asset(
+                                                      'assets/svgs/coin.svg'),
+                                                  const SizedBox(width: 5),
+                                                  Text(
+                                                    '${_post.coins?.length ?? 0}',
+                                                    style: Theme.of(context)
+                                                        .textTheme
+                                                        .bodyLarge
+                                                        ?.copyWith(
+                                                          fontWeight:
+                                                              FontWeight.w700,
+                                                          color: textColor
+                                                              .withOpacity(0.8),
+                                                        ),
+                                                  ),
+                                                ],
+                                              ),
+                                            ),
+                                      TextButton.icon(
+                                        onPressed: () async {},
+                                        style: TextButton.styleFrom(
+                                          padding: const EdgeInsets.symmetric(
+                                              horizontal: 3, vertical: 5),
+                                          minimumSize: Size.zero,
+                                          tapTargetSize:
+                                              MaterialTapTargetSize.shrinkWrap,
+                                        ),
+                                        icon: const Icon(
+                                            Icons.remove_red_eye_outlined,
+                                            size: 19,
+                                            color: Colors.black),
+                                        label: Text(
+                                          formatCount(_post.views!),
+                                          style: Theme.of(context)
+                                              .textTheme
+                                              .bodyMedium
+                                              ?.copyWith(
+                                                fontWeight: FontWeight.w700,
+                                                color:
+                                                    textColor.withOpacity(0.8),
+                                              ),
+                                        ),
+                                      ),
+                                      Padding(
+                                        padding: const EdgeInsets.symmetric(
+                                            horizontal: 10.0),
+                                        child: GestureDetector(
+                                          onTap: () => showOptions(),
+                                          child: SvgPicture.asset(
+                                            'assets/svgs/share.svg',
+                                            height: 13.0,
+                                            color: textColor.withOpacity(1.0),
+                                          ),
+                                        ),
+                                      ),
+                                      const SizedBox(width: 10.0),
+                                      _post.userId ==
+                                              profileController.myProfile.uid
+                                          ? const SizedBox()
+                                          : GestureDetector(
+                                              onTap: () {
+                                                Get.to(
+                                                  () => ChatRoomScreen(
+                                                    frommarketplace: true,
+                                                    market: _post,
+                                                  ),
+                                                  arguments: _post.user,
+                                                );
+                                              },
+                                              child: Padding(
+                                                padding:
+                                                    const EdgeInsets.symmetric(
+                                                        vertical: 10.0),
                                                 child: Container(
+                                                  width: 50,
                                                   decoration: BoxDecoration(
                                                       borderRadius:
                                                           BorderRadius.circular(
@@ -770,14 +824,15 @@ class _ServiceTileState extends State<ServiceTile> {
                                                   child: const Center(
                                                     child: Padding(
                                                       padding:
-                                                          EdgeInsets.all(5.0),
+                                                          EdgeInsets.symmetric(
+                                                              vertical: 5.0),
                                                       child: Text(
-                                                        'Message Seller',
+                                                        'Chat',
                                                         style: TextStyle(
                                                           color: primaryColorLT,
                                                           fontWeight:
                                                               FontWeight.w700,
-                                                          fontSize: 11,
+                                                          fontSize: 12,
                                                         ),
                                                       ),
                                                     ),
@@ -785,8 +840,8 @@ class _ServiceTileState extends State<ServiceTile> {
                                                 ),
                                               ),
                                             ),
-                                          ),
-                                  ],
+                                    ],
+                                  ),
                                 )
                               ],
                             ),
@@ -1036,6 +1091,89 @@ class _ServiceTileState extends State<ServiceTile> {
       // connecteds.removeAt(checkConnected);
       await disconnect(_post.user!.uid);
     }
+  }
+
+  void showOptions() {
+    showModalBottomSheet(
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+      context: context,
+      backgroundColor: Colors.white,
+      builder: (BuildContext context) => Padding(
+        padding: const EdgeInsets.all(15.0),
+        child: SizedBox(
+          height: 150,
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: <Widget>[
+              GestureDetector(
+                onTap: () => Get.toNamed(
+                  Routes.createPost,
+                  arguments: <String, dynamic>{
+                    'sharemessage': 'Hey there! Check out this post',
+                    'title': widget.post.title,
+                    'marketdata': widget.post,
+                  },
+                ),
+                child: Container(
+                  width: double.infinity,
+                  padding: const EdgeInsets.symmetric(vertical: 15),
+                  child: Row(
+                    children: <Widget>[
+                      SvgPicture.asset(
+                        'assets/svgs/text.svg',
+                        color: textColor,
+                      ),
+                      const SizedBox(
+                        width: 10,
+                      ),
+                      const Text(
+                        'Post on Business Bosses',
+                        style: TextStyle(
+                            fontWeight: FontWeight.bold, fontSize: 18),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+              Container(
+                height: 1,
+                color: backgroundColor,
+              ),
+              GestureDetector(
+                onTap: () {
+                  String message =
+                      'Have a look at ${widget.post.user?.username ?? 'Business Bosses'}\'s marketplace post on Business Bosses\n'
+                      'https://businessbosses.onelink.me/xLWk/36a2ff16';
+                  logEvent(widget.post.marketId, 'marketplace');
+                  socialShare(message);
+                },
+                child: Container(
+                  width: double.infinity,
+                  padding: const EdgeInsets.symmetric(vertical: 15),
+                  child: Row(
+                    children: <Widget>[
+                      SvgPicture.asset(
+                        'assets/svgs/share.svg',
+                        color: textColor,
+                        height: 16,
+                      ),
+                      const SizedBox(
+                        width: 10,
+                      ),
+                      const Text(
+                        'Share',
+                        style: TextStyle(
+                            fontWeight: FontWeight.bold, fontSize: 18),
+                      ),
+                    ],
+                  ),
+                ),
+              )
+            ],
+          ),
+        ),
+      ),
+    );
   }
 }
 

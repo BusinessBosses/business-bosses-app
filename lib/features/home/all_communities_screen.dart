@@ -13,6 +13,7 @@ import 'package:business_bosses_v2/features/home/widgets/industriessearch.dart';
 import 'package:business_bosses_v2/features/home/widgets/learningpage.dart';
 import 'package:business_bosses_v2/features/home/widgets/learningsection.dart';
 import 'package:business_bosses_v2/features/live_event/presentation/live_event.dart';
+import 'package:business_bosses_v2/navigation/routes.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
@@ -54,30 +55,69 @@ class _AllCommunitiesScreenState extends State<AllCommunitiesScreen>
   List<Widget> get mActions {
     return <Widget>[
       if (!_isSearching)
-        IconButton(
-          onPressed: () {
-            Get.to(() => const LiveEvent());
-          },
-          icon: const Icon(Icons.calendar_month),
+        Padding(
+          padding: const EdgeInsets.only(right: 8.0, bottom: 8, top: 8),
+          child: GestureDetector(
+            onTap: () => Get.toNamed(Routes.relevantusersscreen),
+            child: Container(
+              padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+              decoration: BoxDecoration(
+                color: backgroundcolorinterface,
+                borderRadius: BorderRadius.circular(20),
+              ),
+              child: Row(
+                children: <Widget>[
+                  SvgPicture.asset('assets/svgs/collaborator.svg', height: 15),
+                  const SizedBox(width: 5),
+                  const Text(
+                    'Find Collaborators',
+                    style: TextStyle(
+                      color: textColor,
+                      fontSize: 15,
+                      fontWeight: FontWeight.w700,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ),
         ),
       _pageTabController.index != 2
-          ? IconButton(
-              icon: _isSearching
-                  ? const Icon(Icons.close)
-                  : SvgPicture.asset('assets/svgs/search.svg'),
-              onPressed: () {
+          ? GestureDetector(
+              onTap: () {
                 _isSearching = !_isSearching;
                 setState(() {});
                 _communitiesController.clearSearch();
               },
+              child: Padding(
+                padding: const EdgeInsets.only(right: 10.0),
+                child: _isSearching
+                    ? const Icon(Icons.close)
+                    : CircleAvatar(
+                        radius: 20,
+                        backgroundColor: backgroundColor,
+                        child: SvgPicture.asset(
+                          'assets/svgs/homesearch.svg',
+                          height: 20,
+                          color: textColor,
+                        )),
+              ),
             )
-          : IconButton(
-              icon: _isSearchingDonations
-                  ? const Icon(Icons.close)
-                  : SvgPicture.asset(
-                      'assets/svgs/search.svg',
-                    ),
-              onPressed: () {
+          : GestureDetector(
+              child: Padding(
+                padding: const EdgeInsets.only(right: 10.0),
+                child: _isSearchingDonations
+                    ? const Icon(Icons.close)
+                    : CircleAvatar(
+                        radius: 20,
+                        backgroundColor: backgroundColor,
+                        child: SvgPicture.asset(
+                          'assets/svgs/homesearch.svg',
+                          height: 20,
+                          color: textColor,
+                        )),
+              ),
+              onTap: () {
                 _isSearchingDonations = !_isSearchingDonations;
                 setState(() {});
                 donationsController.searchedPosts.clear();

@@ -104,161 +104,167 @@ class HomeAppBar extends StatelessWidget {
                 Expanded(
                     child: GestureDetector(
                   onTap: () {
-                    Get.to(() => const DiscoverScreen());
+                    Get.toNamed(Routes.completesearchingscreen);
                   },
-                  child: Row(
-                    children: <Widget>[
-                      CircleAvatar(
-                        backgroundColor: backgroundColor,
-                        child: SvgPicture.asset(
-                          'assets/svgs/homesearch.svg',
-                          colorFilter: const ColorFilter.mode(
-                            textColor,
-                            BlendMode.srcIn,
+                  child: Container(
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(8),
+                      color: backgroundColor,
+                    ),
+                    child: Row(
+                      children: <Widget>[
+                        CircleAvatar(
+                          backgroundColor: backgroundColor,
+                          child: SvgPicture.asset(
+                            'assets/svgs/homesearch.svg',
+                            colorFilter: const ColorFilter.mode(
+                              textColor,
+                              BlendMode.srcIn,
+                            ),
+                            height: 15,
                           ),
-                          height: 20,
                         ),
-                      ),
-                      const SizedBox(
-                        width: 5,
-                      ),
-                      const Text(
-                        'Discover',
-                        style: TextStyle(
-                          color: textColor,
-                          fontSize: 16.0,
-                          fontWeight: FontWeight.w700,
+                        const Text(
+                          'Search',
+                          style: TextStyle(
+                            color: textColor,
+                            fontSize: 14.0,
+                            fontWeight: FontWeight.w700,
+                          ),
                         ),
-                      ),
-                    ],
+                      ],
+                    ),
                   ),
                 )),
+                const SizedBox(
+                  width: 15,
+                ),
 
                 Row(
                   children: <Widget>[
-                    PopupMenuButton<String>(
-                      onSelected: (String item) {
-                        switch (item) {
-                          case 'Item 1':
-                            Get.toNamed(Routes.createPost);
-                            break;
-                          case 'Item 2':
-                            sellProduct(context);
-                            break;
-                          case 'Item 3':
-                            Get.toNamed(Routes.createevent);
-                            break;
-                          case 'Item 4':
-                            Get.to(() => const CreatePollScreen());
-                            break;
-                        }
-                      },
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(10.0),
-                      ),
-                      itemBuilder: (BuildContext context) {
-                        return <PopupMenuEntry<String>>[
-                          PopupMenuItem<String>(
-                            value: 'Item 1',
-                            child: Row(
-                              children: <Widget>[
-                                SvgPicture.asset(
-                                  'assets/svgs/text.svg',
-                                  colorFilter: const ColorFilter.mode(
-                                    textColor,
-                                    BlendMode.srcIn,
-                                  ),
-                                  height: 15,
-                                ),
-                                const SizedBox(width: 8),
-                                const Text(
-                                  'Create a Post',
-                                  style: TextStyle(
-                                    fontSize: 13,
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
-                          PopupMenuItem<String>(
-                            value: 'Item 2',
-                            child: Row(
-                              children: <Widget>[
-                                SvgPicture.asset(
-                                  'assets/svgs/sellicon.svg',
-                                  height: 20,
-                                  colorFilter: const ColorFilter.mode(
-                                    textColor,
-                                    BlendMode.srcIn,
-                                  ),
-                                ),
-                                const SizedBox(width: 8),
-                                const Text(
-                                  'Sell your products & services',
-                                  style: TextStyle(
-                                    fontSize: 13,
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
-                          PopupMenuItem<String>(
-                            value: 'Item 3',
-                            child: Row(
-                              children: <Widget>[
-                                SvgPicture.asset(
-                                  'assets/svgs/eventu.svg',
-                                  colorFilter: const ColorFilter.mode(
-                                    textColor,
-                                    BlendMode.srcIn,
-                                  ),
-                                  height: 15,
-                                ),
-                                const SizedBox(width: 8),
-                                const Text(
-                                  'Create an Event',
-                                  style: TextStyle(
-                                    fontSize: 13,
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
-                          const PopupMenuItem<String>(
-                            value: 'Item 4',
-                            child: Row(
-                              children: <Widget>[
-                                Icon(
-                                  Icons.poll,
-                                  color: textColor,
-                                  size: 18,
-                                ),
-                                SizedBox(width: 8),
-                                Text(
-                                  'Create Polls & Surveys',
-                                  style: TextStyle(
-                                    fontSize: 13,
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
-                        ];
-                      },
-                      offset: const Offset(0, 40),
-                      child: Container(
-                        padding: const EdgeInsets.symmetric(
-                            horizontal: 4, vertical: 4),
-                        decoration: BoxDecoration(
-                          color: backgroundcolorinterface,
-                          borderRadius: BorderRadius.circular(20),
-                        ),
-                        child: const Icon(Icons.add),
-                      ),
-                    ),
-                    const SizedBox(
-                      width: 8,
-                    ),
+                    // PopupMenuButton<String>(
+                    //   onSelected: (String item) {
+                    //     switch (item) {
+                    //       case 'Item 1':
+                    //         Get.toNamed(Routes.createPost);
+                    //         break;
+                    //       case 'Item 2':
+                    //         sellProduct(context);
+                    //         break;
+                    //       case 'Item 3':
+                    //         Get.toNamed(Routes.createevent);
+                    //         break;
+                    //       case 'Item 4':
+                    //         Get.to(() => const CreatePollScreen());
+                    //         break;
+                    //     }
+                    //   },
+                    //   shape: RoundedRectangleBorder(
+                    //     borderRadius: BorderRadius.circular(10.0),
+                    //   ),
+                    //   itemBuilder: (BuildContext context) {
+                    //     return <PopupMenuEntry<String>>[
+                    //       PopupMenuItem<String>(
+                    //         value: 'Item 1',
+                    //         child: Row(
+                    //           children: <Widget>[
+                    //             SvgPicture.asset(
+                    //               'assets/svgs/text.svg',
+                    //               colorFilter: const ColorFilter.mode(
+                    //                 textColor,
+                    //                 BlendMode.srcIn,
+                    //               ),
+                    //               height: 15,
+                    //             ),
+                    //             const SizedBox(width: 8),
+                    //             const Text(
+                    //               'Create a Post',
+                    //               style: TextStyle(
+                    //                 fontSize: 13,
+                    //               ),
+                    //             ),
+                    //           ],
+                    //         ),
+                    //       ),
+                    //       PopupMenuItem<String>(
+                    //         value: 'Item 2',
+                    //         child: Row(
+                    //           children: <Widget>[
+                    //             SvgPicture.asset(
+                    //               'assets/svgs/sellicon.svg',
+                    //               height: 20,
+                    //               colorFilter: const ColorFilter.mode(
+                    //                 textColor,
+                    //                 BlendMode.srcIn,
+                    //               ),
+                    //             ),
+                    //             const SizedBox(width: 8),
+                    //             const Text(
+                    //               'Sell your products & services',
+                    //               style: TextStyle(
+                    //                 fontSize: 13,
+                    //               ),
+                    //             ),
+                    //           ],
+                    //         ),
+                    //       ),
+                    //       PopupMenuItem<String>(
+                    //         value: 'Item 3',
+                    //         child: Row(
+                    //           children: <Widget>[
+                    //             SvgPicture.asset(
+                    //               'assets/svgs/eventu.svg',
+                    //               colorFilter: const ColorFilter.mode(
+                    //                 textColor,
+                    //                 BlendMode.srcIn,
+                    //               ),
+                    //               height: 15,
+                    //             ),
+                    //             const SizedBox(width: 8),
+                    //             const Text(
+                    //               'Create an Event',
+                    //               style: TextStyle(
+                    //                 fontSize: 13,
+                    //               ),
+                    //             ),
+                    //           ],
+                    //         ),
+                    //       ),
+                    //       const PopupMenuItem<String>(
+                    //         value: 'Item 4',
+                    //         child: Row(
+                    //           children: <Widget>[
+                    //             Icon(
+                    //               Icons.poll,
+                    //               color: textColor,
+                    //               size: 18,
+                    //             ),
+                    //             SizedBox(width: 8),
+                    //             Text(
+                    //               'Create Polls & Surveys',
+                    //               style: TextStyle(
+                    //                 fontSize: 13,
+                    //               ),
+                    //             ),
+                    //           ],
+                    //         ),
+                    //       ),
+                    //     ];
+                    //   },
+                    //   offset: const Offset(0, 40),
+                    //   child: Container(
+                    //     padding: const EdgeInsets.symmetric(
+                    //         horizontal: 4, vertical: 4),
+                    //     decoration: BoxDecoration(
+                    //       color: backgroundcolorinterface,
+                    //       borderRadius: BorderRadius.circular(20),
+                    //     ),
+                    //     child: const Icon(Icons.add),
+                    //   ),
+                    // ),
+                    // const SizedBox(
+                    //   width: 8,
+                    // ),
                     GestureDetector(
                       onTap: () => Get.toNamed(Routes.promotionscreen),
                       child: Container(
@@ -277,7 +283,7 @@ class HomeAppBar extends StatelessWidget {
                               formatCount(int.parse(coinsCount)),
                               style: const TextStyle(
                                 color: textColor,
-                                fontSize: 15,
+                                fontSize: 14,
                                 fontWeight: FontWeight.w700,
                               ),
                             ),
@@ -290,36 +296,56 @@ class HomeAppBar extends StatelessWidget {
                       children: <Widget>[
                         GestureDetector(
                           onTap: () => Get.toNamed(Routes.liveEvents),
-                          child: CircleAvatar(
-                            backgroundColor: Colors.transparent,
-                            child: SvgPicture.asset(
-                              'assets/svgs/events.svg',
-                              height: 19,
-                              colorFilter: const ColorFilter.mode(
-                                primaryColorLT,
-                                BlendMode.srcIn,
+                          child: GestureDetector(
+                            onTap: () =>
+                                Get.toNamed(Routes.relevantusersscreen),
+                            child: Container(
+                              padding: const EdgeInsets.symmetric(
+                                  horizontal: 10, vertical: 5),
+                              decoration: BoxDecoration(
+                                color: backgroundcolorinterface,
+                                borderRadius: BorderRadius.circular(20),
+                              ),
+                              child: Row(
+                                children: <Widget>[
+                                  Padding(
+                                    padding: const EdgeInsets.all(3.0),
+                                    child: SvgPicture.asset(
+                                        'assets/svgs/eventu.svg',
+                                        height: 16),
+                                  ),
+                                  const SizedBox(width: 5),
+                                  const Text(
+                                    'Events',
+                                    style: TextStyle(
+                                      color: textColor,
+                                      fontSize: 14,
+                                      fontWeight: FontWeight.w700,
+                                    ),
+                                  ),
+                                ],
                               ),
                             ),
                           ),
                         ),
-                        if (hasevent == true)
-                          Positioned(
-                            top: 5,
-                            right: 3,
-                            child: Container(
-                              decoration: BoxDecoration(
-                                shape: BoxShape.circle,
-                                border: Border.all(
-                                  color: Colors.white, // Border color
-                                  width: 2.0, // Border width
-                                ),
-                              ),
-                              child: const CircleAvatar(
-                                backgroundColor: primaryColorLT,
-                                radius: 5,
-                              ),
-                            ),
-                          )
+                        // if (hasevent != true)
+                        //   Positioned(
+                        //     top: 0,
+                        //     right: 0,
+                        //     child: Container(
+                        //       decoration: BoxDecoration(
+                        //         shape: BoxShape.circle,
+                        //         border: Border.all(
+                        //           color: Colors.white, // Border color
+                        //           width: 2.0, // Border width
+                        //         ),
+                        //       ),
+                        //       child: const CircleAvatar(
+                        //         backgroundColor: primaryColorLT,
+                        //         radius: 5,
+                        //       ),
+                        //     ),
+                        //   )
                       ],
                     ),
                     Stack(
