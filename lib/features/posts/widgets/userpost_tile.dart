@@ -654,6 +654,118 @@ class _PostTileState extends State<PostTile> {
                             const SizedBox(height: 10),
                           ],
                         ),
+                      if (widget.post.market != null) ...<Widget>{
+                        Stack(
+                          children: <Widget>[
+                            SizedBox(
+                              width: double.infinity,
+                              height: 200,
+                              child: ClipRRect(
+                                borderRadius: BorderRadius.circular(15.0),
+                                child: FittedBox(
+                                  fit: BoxFit.cover,
+                                  child: CachedNetworkImage(
+                                    imageUrl: widget.post.market!.images !=
+                                                null &&
+                                            widget
+                                                .post.market!.images!.isNotEmpty
+                                        ? widget.post.market!.images![0]
+                                        : 'https://businessbosses.com.ng/learningImages/events.jpg',
+                                    memCacheHeight: 512,
+                                    memCacheWidth: 512,
+                                    placeholder:
+                                        (BuildContext context, String photo) =>
+                                            const CircularProgressIndicator(),
+                                    errorWidget: (BuildContext context,
+                                            String photo, Object error) =>
+                                        const Icon(Icons.error),
+                                  ),
+                                ),
+                              ),
+                            ),
+                            Container(
+                              width: double.infinity,
+                              height: 200,
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(15.0),
+                                color: Colors.black.withAlpha(150),
+                              ),
+                            ),
+                            Positioned(
+                              left: 10,
+                              top: 10,
+                              child: Container(
+                                padding: const EdgeInsets.symmetric(
+                                    horizontal: 10, vertical: 8),
+                                decoration: BoxDecoration(
+                                    color: Colors.black.withAlpha(70),
+                                    borderRadius: BorderRadius.circular(5)),
+                                child: const Center(
+                                    child: Text('Marketplace',
+                                        style: TextStyle(
+                                          color: Colors.white,
+                                        ))),
+                              ),
+                            ),
+                            Padding(
+                              padding:
+                                  const EdgeInsets.symmetric(horizontal: 15.0),
+                              child: Column(
+                                children: <Widget>[
+                                  const SizedBox(
+                                    height: 80,
+                                  ),
+                                  Center(
+                                    child: Text(
+                                      widget.post.market!.title!,
+                                      maxLines: 2,
+                                      overflow: TextOverflow.ellipsis,
+                                      style: const TextStyle(
+                                        fontSize: 14,
+                                        color: Colors.white,
+                                        fontWeight: FontWeight.w700,
+                                      ),
+                                    ),
+                                  ),
+                                  const SizedBox(
+                                    height: 10,
+                                  ),
+                                  Container(
+                                      padding: const EdgeInsets.symmetric(
+                                          horizontal: 10, vertical: 5),
+                                      decoration: BoxDecoration(
+                                        color: Colors.black.withAlpha(70),
+                                        borderRadius: BorderRadius.circular(50),
+                                      ),
+                                      child: Wrap(
+                                          crossAxisAlignment:
+                                              WrapCrossAlignment.center,
+                                          children: <Widget>[
+                                            GestureDetector(
+                                              onTap: () {
+                                                // Get.to(() => ExpandedForumView(
+                                                //     forum: widget.post.forum!));
+                                              },
+                                              child: const Text(
+                                                'View Post',
+                                                style: TextStyle(
+                                                    color: Colors.white),
+                                              ),
+                                            ),
+                                            const SizedBox(
+                                              width: 5,
+                                            ),
+                                            SvgPicture.asset(
+                                              'assets/svgs/nexticon.svg',
+                                              color: Colors.white,
+                                            ),
+                                          ]))
+                                ],
+                              ),
+                            )
+                          ],
+                        )
+                      },
                       if (widget.post.forum != null) ...<Widget>{
                         Stack(
                           children: <Widget>[

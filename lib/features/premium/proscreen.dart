@@ -263,7 +263,7 @@ class _ProSubscribeSectionState extends State<ProSubscribeSection> {
             begin: Alignment.topCenter,
             end: Alignment.bottomCenter,
             colors: <Color>[
-              widget.isGrow == null ? probackgroundColor : Colors.white,
+              widget.isGrow == null ? prosemibackColor : Colors.white,
               Colors.white,
             ],
             stops: const <double>[0.0, 0.5],
@@ -280,8 +280,10 @@ class _ProSubscribeSectionState extends State<ProSubscribeSection> {
                     height: 25,
                   ),
                   Text('Upgrade to a Pro Boss Experience',
-                      style:
-                          TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
+                      style: TextStyle(
+                        fontSize: 20,
+                        fontWeight: FontWeight.bold,
+                      )),
                   Text(
                     'Sell everywhere, mange easier, and grow 10x faster,',
                     style: TextStyle(fontSize: 15, fontWeight: FontWeight.w600),
