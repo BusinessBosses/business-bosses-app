@@ -213,7 +213,7 @@ class _SetupshopState extends State<Setupshop> with TickerProviderStateMixin {
       igslController.text = widget.shop!.instagram ?? '';
       lslController.text = widget.shop!.linkedin ?? '';
       xslController.text = widget.shop!.twitter ?? '';
-      cslController.text = '';
+      cslController.text = widget.shop!.url ?? '';
       _populatePaymentMethods(widget.shop!.payments);
     } else {
       shopController.initShop().then((bool value) {
@@ -677,6 +677,7 @@ class _SetupshopState extends State<Setupshop> with TickerProviderStateMixin {
       'twitter': xslController.text,
       'facebook': fbslController.text,
       'linkedin': lslController.text,
+      'url': cslController.text,
     };
 
     final Map<String, dynamic> dataUpdate = <String, dynamic>{
@@ -694,6 +695,7 @@ class _SetupshopState extends State<Setupshop> with TickerProviderStateMixin {
       'twitter': xslController.text,
       'facebook': fbslController.text,
       'linkedin': lslController.text,
+      'url': cslController.text,
     };
 
     bool response = false;

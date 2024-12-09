@@ -20,6 +20,7 @@ class Shop {
   final String? twitter;
   final String? linkedin;
   final String? instagram;
+  final String? url;
   final DateTime createdAt;
   final String currency;
   final UserModel? user;
@@ -47,6 +48,7 @@ class Shop {
     this.twitter,
     this.linkedin,
     this.instagram,
+    this.url,
   });
 
   factory Shop.fromMap(Map<String, dynamic> json) {
@@ -72,6 +74,7 @@ class Shop {
       twitter: json['twitter'],
       linkedin: json['linkedin'],
       instagram: json['instagram'],
+      url: json['url'],
       createdAt: DateTime.parse(json['createdAt']),
       user: json['user'] != null ? UserModel.fromMap(json['user']) : null,
     );
@@ -99,6 +102,7 @@ class Shop {
       'twitter': twitter,
       'instagram': instagram,
       'linkedin': linkedin,
+      'url': url,
       'createdAt': createdAt.toIso8601String(),
       'user': user?.toMap(),
     };
