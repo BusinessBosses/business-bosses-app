@@ -1,7 +1,10 @@
+import 'package:business_bosses_v2/bbpro/controllers/clients_controller.dart';
 import 'package:business_bosses_v2/bbpro/models/campaign_model.dart';
+import 'package:business_bosses_v2/bbpro/widgets/optionsbutton.dart';
 import 'package:business_bosses_v2/utils/theme/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:get/get.dart';
 
 class CampaignItem extends StatefulWidget {
   final Campaign campaign;
@@ -14,6 +17,7 @@ class CampaignItem extends StatefulWidget {
 }
 
 class _CampaignItemState extends State<CampaignItem> {
+  final ClientsController clientsController = Get.find();
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -61,12 +65,14 @@ class _CampaignItemState extends State<CampaignItem> {
                     ],
                   ),
                 ),
-                // OptionsButton(
-                //   onEdit: () {},
-                //   onDelete: () {},
-                //   padding: const EdgeInsets.all(0),
-                //   borderColor: Colors.white,
-                // ),
+                OptionsButton(
+                  onDelete: () {
+                    clientsController.deleteCampaign(widget.campaign.id);
+                  },
+                  isEdit: false,
+                  padding: const EdgeInsets.all(0),
+                  borderColor: Colors.white,
+                ),
               ],
             ),
             Padding(

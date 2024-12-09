@@ -650,145 +650,154 @@ class _ClientsScreenState extends State<ClientsScreen>
             ),
           ],
         ),
-        loading
-            ? const SafetyModel()
-            : clientsController.campaigns.isEmpty
-                ? SafetyModel(
-                    isLoading: false,
-                    icon: SvgPicture.asset(
-                      'assets/svgs/campaign.svg',
-                      height: 50,
-                      color: Colors.black12,
-                    ),
-                    title: 'No Campaigns Yet!',
-                  )
-                : Padding(
-                    padding: const EdgeInsets.symmetric(vertical: 10),
-                    child: Column(
-                      children: <Widget>[
-                        SizedBox(
-                          height: 55,
-                          child: Stack(
-                            children: <Widget>[
-                              Padding(
-                                padding: const EdgeInsets.only(
-                                    left: 10.0, right: 10, bottom: 10),
-                                child: SizedBox(
-                                  width: double.infinity,
-                                  child: DecoratedBox(
-                                    decoration: BoxDecoration(
-                                      color: Colors.white,
-                                      borderRadius: BorderRadius.circular(10),
-                                    ),
-                                    child: Padding(
-                                      padding: const EdgeInsets.symmetric(
-                                          horizontal: 10),
-                                      child: Row(
-                                        children: <Widget>[
-                                          SvgPicture.asset(
-                                            'assets/svgs/search.svg',
-                                            height: 20,
-                                            color: hintColor,
-                                          ),
-                                          Expanded(
-                                            child: ProSearchbar(
-                                              contentPadding: 10,
-                                              hasSearchIcon: false,
-                                              hintText: 'Search Campaigns',
-                                              autofocus: false,
-                                              onChange: (String query) {
-                                                setState(() {
-                                                  searchQuery = query;
-                                                  filteredCampaign = clientsController
-                                                      .campaigns
-                                                      .where((Campaign
-                                                              campaign) =>
-                                                          campaign.campaignName
-                                                              .toLowerCase()
-                                                              .contains(searchQuery
-                                                                  .toLowerCase()))
-                                                      .toList();
-                                                });
-                                              },
-                                              onSubmit: (String query) {},
-                                            ),
-                                          ),
-                                        ],
-                                      ),
-                                    ),
-                                  ),
-                                ),
-                              ),
-                              Positioned(
-                                right: 10,
-                                top: 0,
-                                bottom: 10,
-                                child: Padding(
-                                  padding: const EdgeInsets.all(5.0),
-                                  child: GestureDetector(
-                                    onTap: () {
-                                      showMenu(
-                                          shape: RoundedRectangleBorder(
-                                            borderRadius:
-                                                BorderRadius.circular(10),
-                                          ),
-                                          context: context,
-                                          shadowColor: Colors.black,
-                                          position: const RelativeRect.fromLTRB(
-                                              double.infinity, 130, 15, 0),
-                                          items: <String>[
-                                            'None',
-                                            'Latest',
-                                            'A-Z'
-                                          ].map((String option) {
-                                            return PopupMenuItem<String>(
-                                              value: option,
-                                              child: Text(option),
-                                            );
-                                          }).toList());
-                                    },
+        Obx(
+          () => clientsController.loading.value
+              ? const SafetyModel()
+              : clientsController.campaigns.isEmpty
+                  ? SafetyModel(
+                      isLoading: false,
+                      icon: SvgPicture.asset(
+                        'assets/svgs/campaign.svg',
+                        height: 50,
+                        color: Colors.black12,
+                      ),
+                      title: 'No Campaigns Yet!',
+                    )
+                  : Padding(
+                      padding: const EdgeInsets.symmetric(vertical: 10),
+                      child: Column(
+                        children: <Widget>[
+                          SizedBox(
+                            height: 55,
+                            child: Stack(
+                              children: <Widget>[
+                                Padding(
+                                  padding: const EdgeInsets.only(
+                                      left: 10.0, right: 10, bottom: 10),
+                                  child: SizedBox(
+                                    width: double.infinity,
                                     child: DecoratedBox(
                                       decoration: BoxDecoration(
-                                        color: backgroundColor,
-                                        borderRadius: BorderRadius.circular(7),
-                                        boxShadow: <BoxShadow>[
-                                          BoxShadow(
-                                            color: backgroundColor
-                                                .withOpacity(0.6),
-                                            offset: const Offset(-5, 0),
-                                            blurRadius: 10,
-                                            spreadRadius: 2,
-                                          ),
-                                        ],
+                                        color: Colors.white,
+                                        borderRadius: BorderRadius.circular(10),
                                       ),
                                       child: Padding(
                                         padding: const EdgeInsets.symmetric(
                                             horizontal: 10),
-                                        child: SvgPicture.asset(
-                                            'assets/svgs/filterprosections.svg'),
+                                        child: Row(
+                                          children: <Widget>[
+                                            SvgPicture.asset(
+                                              'assets/svgs/search.svg',
+                                              height: 20,
+                                              color: hintColor,
+                                            ),
+                                            Expanded(
+                                              child: ProSearchbar(
+                                                contentPadding: 10,
+                                                hasSearchIcon: false,
+                                                hintText: 'Search Campaigns',
+                                                autofocus: false,
+                                                onChange: (String query) {
+                                                  setState(() {
+                                                    searchQuery = query;
+                                                    filteredCampaign = clientsController
+                                                        .campaigns
+                                                        .where((Campaign
+                                                                campaign) =>
+                                                            campaign
+                                                                .campaignName
+                                                                .toLowerCase()
+                                                                .contains(
+                                                                    searchQuery
+                                                                        .toLowerCase()))
+                                                        .toList();
+                                                  });
+                                                },
+                                                onSubmit: (String query) {},
+                                              ),
+                                            ),
+                                          ],
+                                        ),
                                       ),
                                     ),
                                   ),
                                 ),
-                              ),
-                            ],
-                          ),
-                        ),
-                        filteredCampaign.isNotEmpty
-                            ? Expanded(
-                                child: ListView.builder(
-                                  itemCount: filteredCampaign.length,
-                                  itemBuilder:
-                                      ((BuildContext context, int index) {
-                                    return CampaignItem(
-                                        campaign: filteredCampaign[index]);
-                                  }),
+                                Positioned(
+                                  right: 10,
+                                  top: 0,
+                                  bottom: 10,
+                                  child: Padding(
+                                    padding: const EdgeInsets.all(5.0),
+                                    child: GestureDetector(
+                                      onTap: () {
+                                        showMenu(
+                                            shape: RoundedRectangleBorder(
+                                              borderRadius:
+                                                  BorderRadius.circular(10),
+                                            ),
+                                            context: context,
+                                            shadowColor: Colors.black,
+                                            position:
+                                                const RelativeRect.fromLTRB(
+                                                    double.infinity,
+                                                    130,
+                                                    15,
+                                                    0),
+                                            items: <String>[
+                                              'None',
+                                              'Latest',
+                                              'A-Z'
+                                            ].map((String option) {
+                                              return PopupMenuItem<String>(
+                                                value: option,
+                                                child: Text(option),
+                                              );
+                                            }).toList());
+                                      },
+                                      child: DecoratedBox(
+                                        decoration: BoxDecoration(
+                                          color: backgroundColor,
+                                          borderRadius:
+                                              BorderRadius.circular(7),
+                                          boxShadow: <BoxShadow>[
+                                            BoxShadow(
+                                              color: backgroundColor
+                                                  .withOpacity(0.6),
+                                              offset: const Offset(-5, 0),
+                                              blurRadius: 10,
+                                              spreadRadius: 2,
+                                            ),
+                                          ],
+                                        ),
+                                        child: Padding(
+                                          padding: const EdgeInsets.symmetric(
+                                              horizontal: 10),
+                                          child: SvgPicture.asset(
+                                              'assets/svgs/filterprosections.svg'),
+                                        ),
+                                      ),
+                                    ),
+                                  ),
                                 ),
-                              )
-                            : const Text('No Campaigns found'),
-                      ],
+                              ],
+                            ),
+                          ),
+                          filteredCampaign.isNotEmpty
+                              ? Expanded(
+                                  child: ListView.builder(
+                                    itemCount: filteredCampaign.length,
+                                    itemBuilder:
+                                        ((BuildContext context, int index) {
+                                      return CampaignItem(
+                                          campaign: filteredCampaign[index]);
+                                    }),
+                                  ),
+                                )
+                              : const Text('No Campaigns found'),
+                        ],
+                      ),
                     ),
-                  ),
+        ),
       ]),
     );
   }
