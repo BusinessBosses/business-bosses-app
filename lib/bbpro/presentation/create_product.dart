@@ -245,24 +245,24 @@ class _CreateProductListingState extends State<CreateProductListing> {
                         return null;
                       },
                     ),
-                    const SizedBox(height: 16),
-                    CustomDropdownWidget(
-                      caption: 'Select Category',
-                      hintText: 'Choose a category',
-                      items: const <String>[
-                        'Beauty',
-                        'Electronics',
-                        'Fashion',
-                        'Home'
-                      ],
-                      iconName: 'assets/svgs/dropdown.svg',
-                      initialValue: category,
-                      onChanged: (String? newValue) {
-                        setState(() {
-                          category = newValue;
-                        });
-                      },
-                    ),
+                    // const SizedBox(height: 16),
+                    // CustomDropdownWidget(
+                    //   caption: 'Select Category',
+                    //   hintText: 'Choose a category',
+                    //   items: const <String>[
+                    //     'Beauty',
+                    //     'Electronics',
+                    //     'Fashion',
+                    //     'Home'
+                    //   ],
+                    //   iconName: 'assets/svgs/dropdown.svg',
+                    //   initialValue: category,
+                    //   onChanged: (String? newValue) {
+                    //     setState(() {
+                    //       category = newValue;
+                    //     });
+                    //   },
+                    // ),
                     const SizedBox(height: 16),
                     Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 7.0),

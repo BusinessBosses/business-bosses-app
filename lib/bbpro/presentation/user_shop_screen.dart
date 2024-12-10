@@ -564,7 +564,7 @@ class _UserShopScreenState extends State<UserShopScreen> {
           _buildContactRow(
             'assets/svgs/website.svg',
             'Virtual Address',
-            'jdnjsnkjdnskjjdnsndnsj',
+            '#1234 Biz-Centre, Business Bosses, United Kingdom',
             12,
             null,
           ),

@@ -303,23 +303,23 @@ class _CreateServiceListingState extends State<CreateServiceListing>
               controller: _descriptionController,
               maxLength: 300,
             ),
-            const SizedBox(height: 16),
-            CustomDropdownWidget(
-              initialValue: category,
-              caption: 'Select Category *',
-              hintText: 'Choose a category',
-              items: const <String>[
-                'Design Services',
-                'Consulting',
-                'Technical Support'
-              ],
-              iconName: 'assets/svgs/dropdown.svg',
-              onChanged: (String? newValue) {
-                setState(() {
-                  category = newValue;
-                });
-              },
-            ),
+            // const SizedBox(height: 16),
+            // CustomDropdownWidget(
+            //   initialValue: category,
+            //   caption: 'Select Category *',
+            //   hintText: 'Choose a category',
+            //   items: const <String>[
+            //     'Design Services',
+            //     'Consulting',
+            //     'Technical Support'
+            //   ],
+            //   iconName: 'assets/svgs/dropdown.svg',
+            //   onChanged: (String? newValue) {
+            //     setState(() {
+            //       category = newValue;
+            //     });
+            //   },
+            // ),
 
             // Select Category Dropdown
             // DropdownButtonFormField<String>(
