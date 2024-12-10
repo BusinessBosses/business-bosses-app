@@ -7,13 +7,17 @@ class OrderSummaryWidget extends StatefulWidget {
   final double discount;
   final double total;
   final String currency;
+  final bool? isservice;
+  final double? packagesprice;
   const OrderSummaryWidget(
       {Key? key,
       required this.quantity,
       required this.price,
       required this.discount,
       required this.total,
-      required this.currency})
+      required this.currency,
+      this.isservice,
+      this.packagesprice})
       : super(key: key);
 
   @override
@@ -82,6 +86,21 @@ class _OrderSummaryWidgetState extends State<OrderSummaryWidget> {
                 ),
               ],
             ),
+            if (widget.isservice != null) const SizedBox(height: 8),
+            if (widget.isservice != null)
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: <Widget>[
+                  const Text(
+                    'Additional packages:',
+                    style: TextStyle(fontSize: 13),
+                  ),
+                  Text(
+                    '${widget.currency}${widget.packagesprice.toString() ?? 0}',
+                    style: const TextStyle(fontSize: 13),
+                  ),
+                ],
+              ),
             const SizedBox(height: 24),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,

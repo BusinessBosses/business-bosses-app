@@ -117,6 +117,7 @@ class _CreateServiceListingState extends State<CreateServiceListing>
       serviceType = widget.service!.serviceType;
       paymentMethod = widget.service!.paymentMethod;
       notesController.text = widget.service!.notes ?? '';
+      // addressorlinkController.text = widget.service!.addressorlink ?? '';
       packages
           .addAll(widget.service!.packages.map((package) => <String, dynamic>{
                 'name': package['name'],
@@ -259,6 +260,7 @@ class _CreateServiceListingState extends State<CreateServiceListing>
         child: ListView(
           children: <Widget>[
             const SizedBox(height: 16),
+
             CustomEditText(
               caption: 'Service Name *',
               hintText: 'Enter service name here',
@@ -365,7 +367,7 @@ class _CreateServiceListingState extends State<CreateServiceListing>
                   ),
                 ),
                 initialSelection: location!.isEmpty
-                    ? shopController.shop!.location
+                    ? shopController.shop?.location
                     : location,
                 pickerBuilder:
                     (BuildContext context, CountryCode? countryCode) {

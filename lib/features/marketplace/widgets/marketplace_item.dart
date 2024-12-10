@@ -898,18 +898,18 @@ class _MarketTileState extends State<MarketTile> {
                                               ),
                                         ),
                                       ),
-                                      Padding(
-                                        padding: const EdgeInsets.symmetric(
-                                            horizontal: 10.0),
-                                        child: GestureDetector(
-                                          onTap: () => showOptions(),
-                                          child: SvgPicture.asset(
-                                            'assets/svgs/share.svg',
-                                            height: 13.0,
-                                            color: textColor.withOpacity(1.0),
-                                          ),
-                                        ),
-                                      ),
+                                      // Padding(
+                                      //   padding: const EdgeInsets.symmetric(
+                                      //       horizontal: 10.0),
+                                      //   child: GestureDetector(
+                                      //     onTap: () => showOptions(),
+                                      //     child: SvgPicture.asset(
+                                      //       'assets/svgs/share.svg',
+                                      //       height: 13.0,
+                                      //       color: textColor.withOpacity(1.0),
+                                      //     ),
+                                      //   ),
+                                      // ),
                                       const SizedBox(width: 10.0),
                                       _post.userId ==
                                               profileController.myProfile.uid

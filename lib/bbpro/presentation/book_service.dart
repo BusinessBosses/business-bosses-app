@@ -44,6 +44,7 @@ class _BookServiceScreenState extends State<BookServiceScreen> {
   DateTime? deliveryDate = DateTime.now();
   String? clientId;
   String? selectedClient;
+  double selectedpackagesprice = 0;
 
   List<String> clientsName = <String>[];
   List<Map<String, dynamic>> clients = <Map<String, dynamic>>[];
@@ -328,8 +329,70 @@ class _BookServiceScreenState extends State<BookServiceScreen> {
               const SizedBox(
                 height: 15,
               ),
+            if (widget.service.packages.isNotEmpty)
+              const SizedBox(
+                height: 15,
+              ),
+
+            if (widget.service.packages.isNotEmpty)
+              Padding(
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 15.0,
+                ),
+                child: Container(
+                  decoration: BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.circular(10)),
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 15, vertical: 15),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: <Widget>[
+                      const Text(
+                        'Additional Packages',
+                        style: TextStyle(
+                          fontSize: 16,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                      const SizedBox(height: 5),
+                      Column(
+                        children: widget.service.packages
+                            .map((package) => CheckboxListTile(
+                                  title: Text(package['name']),
+                                  subtitle: Text(
+                                      '${widget.shop.currency}${package['price']}'),
+                                  value: selectedItems.any(
+                                      (Map<String, dynamic> item) =>
+                                          item['id'] == package['id']),
+                                  onChanged: (bool? value) {
+                                    setState(() {
+                                      if (value!) {
+                                        selectedItems.add(package);
+                                        selectedpackagesprice +=
+                                            (package['price'] as num)
+                                                .toDouble();
+                                      } else {
+                                        selectedItems.removeWhere(
+                                            (Map<String, dynamic> item) =>
+                                                item['id'] == package['id']);
+                                        selectedpackagesprice -=
+                                            (package['price'] as num)
+                                                .toDouble();
+                                      }
+                                    });
+                                  },
+                                ))
+                            .toList(),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            const SizedBox(height: 15),
 
             const ServicetypeSectionWidget(),
+
             const SizedBox(height: 15),
 
             // Order Summary Section
@@ -339,8 +402,11 @@ class _BookServiceScreenState extends State<BookServiceScreen> {
               discount: widget.service.discount,
               total:
                   (int.parse(quantityController.text) * widget.service.price) *
-                      (1 - (widget.service.discount / 100)),
+                          (1 - (widget.service.discount / 100)) +
+                      selectedpackagesprice,
               currency: widget.shop.currency,
+              isservice: true,
+              packagesprice: selectedpackagesprice,
             ),
 
             // Customer Details Section

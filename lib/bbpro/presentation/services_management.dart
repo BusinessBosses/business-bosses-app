@@ -1,5 +1,6 @@
 import 'package:business_bosses_v2/bbpro/controllers/shop_controller.dart';
 import 'package:business_bosses_v2/bbpro/models/service_model.dart';
+import 'package:business_bosses_v2/bbpro/presentation/book_service.dart';
 import 'package:business_bosses_v2/bbpro/presentation/create_service.dart';
 import 'package:business_bosses_v2/bbpro/widgets/button.dart';
 import 'package:business_bosses_v2/bbpro/widgets/myservicecard.dart';
@@ -68,7 +69,7 @@ class _ManageServicesState extends State<ManageServices> {
           icon: SvgPicture.asset('assets/svgs/backbutton.svg'),
         ),
         title: Text(
-          'My Sevices (${filteredServices.length})',
+          'My Services (${filteredServices.length})',
           style: const TextStyle(
             color: proprimaryColor,
             fontWeight: FontWeight.bold,
@@ -214,6 +215,10 @@ class _ManageServicesState extends State<ManageServices> {
                               service: service,
                             ),
                           );
+                          // Get.to(
+                          //   () => BookServiceScreen(
+                          //       service: service, shop: shopController.shop!),
+                          // );
                         },
                         child: Padding(
                           padding: const EdgeInsets.only(bottom: 10.0),
