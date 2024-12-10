@@ -296,35 +296,31 @@ class HomeAppBar extends StatelessWidget {
                       children: <Widget>[
                         GestureDetector(
                           onTap: () => Get.toNamed(Routes.liveEvents),
-                          child: GestureDetector(
-                            onTap: () =>
-                                Get.toNamed(Routes.relevantusersscreen),
-                            child: Container(
-                              padding: const EdgeInsets.symmetric(
-                                  horizontal: 10, vertical: 5),
-                              decoration: BoxDecoration(
-                                color: backgroundcolorinterface,
-                                borderRadius: BorderRadius.circular(20),
-                              ),
-                              child: Row(
-                                children: <Widget>[
-                                  Padding(
-                                    padding: const EdgeInsets.all(3.0),
-                                    child: SvgPicture.asset(
-                                        'assets/svgs/eventu.svg',
-                                        height: 16),
+                          child: Container(
+                            padding: const EdgeInsets.symmetric(
+                                horizontal: 10, vertical: 5),
+                            decoration: BoxDecoration(
+                              color: backgroundcolorinterface,
+                              borderRadius: BorderRadius.circular(20),
+                            ),
+                            child: Row(
+                              children: <Widget>[
+                                Padding(
+                                  padding: const EdgeInsets.all(3.0),
+                                  child: SvgPicture.asset(
+                                      'assets/svgs/eventu.svg',
+                                      height: 16),
+                                ),
+                                const SizedBox(width: 5),
+                                const Text(
+                                  'Events',
+                                  style: TextStyle(
+                                    color: textColor,
+                                    fontSize: 14,
+                                    fontWeight: FontWeight.w700,
                                   ),
-                                  const SizedBox(width: 5),
-                                  const Text(
-                                    'Events',
-                                    style: TextStyle(
-                                      color: textColor,
-                                      fontSize: 14,
-                                      fontWeight: FontWeight.w700,
-                                    ),
-                                  ),
-                                ],
-                              ),
+                                ),
+                              ],
                             ),
                           ),
                         ),

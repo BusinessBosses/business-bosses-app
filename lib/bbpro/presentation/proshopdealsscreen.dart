@@ -7,6 +7,7 @@ import 'package:business_bosses_v2/bbpro/presentation/order_product.dart';
 import 'package:business_bosses_v2/bbpro/widgets/inventorycard.dart';
 import 'package:business_bosses_v2/bbpro/widgets/servicecard.dart';
 import 'package:business_bosses_v2/features/marketplace/controllers/market_controller.dart';
+import 'package:business_bosses_v2/features/premium/proscreen.dart';
 import 'package:business_bosses_v2/features/profile/controller/profile_controller.dart';
 import 'package:business_bosses_v2/utils/theme/theme.dart';
 import 'package:flutter/material.dart';
@@ -62,6 +63,130 @@ class _ProshopdealsScreenState extends State<ProshopdealsScreen>
             Tab(text: 'Services'),
           ],
         ),
+        actions: <Widget>[
+          profileController.myProfile.isSubscribed
+              ? PopupMenuButton<String>(
+                  onSelected: (String item) {
+                    switch (item) {
+                      case 'Item 1':
+                        Get.to(() => const CreateProductListing());
+                        break;
+                      case 'Item 2':
+                        Get.to(() => const CreateServiceListing());
+                        break;
+                    }
+                  },
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(10.0),
+                  ),
+                  itemBuilder: (BuildContext context) {
+                    return <PopupMenuEntry<String>>[
+                      PopupMenuItem<String>(
+                        value: 'Item 1',
+                        child: Row(
+                          children: <Widget>[
+                            SvgPicture.asset(
+                              'assets/svgs/addproduct.svg',
+                              colorFilter: const ColorFilter.mode(
+                                textColor,
+                                BlendMode.srcIn,
+                              ),
+                              height: 15,
+                            ),
+                            const SizedBox(width: 8),
+                            const Text(
+                              'Create a Product',
+                              style: TextStyle(
+                                fontSize: 13,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                      PopupMenuItem<String>(
+                        value: 'Item 2',
+                        child: Row(
+                          children: <Widget>[
+                            SvgPicture.asset(
+                              'assets/svgs/addservice.svg',
+                              height: 15,
+                              colorFilter: const ColorFilter.mode(
+                                textColor,
+                                BlendMode.srcIn,
+                              ),
+                            ),
+                            const SizedBox(width: 8),
+                            const Text(
+                              'Create a Service',
+                              style: TextStyle(
+                                fontSize: 13,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ];
+                  },
+                  offset: const Offset(0, 60),
+                  child: Padding(
+                    padding:
+                        const EdgeInsets.only(right: 8.0, top: 10, bottom: 10),
+                    child: Container(
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 10, vertical: 5),
+                      decoration: BoxDecoration(
+                        color: backgroundcolorinterface,
+                        borderRadius: BorderRadius.circular(20),
+                      ),
+                      child: Row(
+                        children: <Widget>[
+                          SvgPicture.asset('assets/svgs/addtolist.svg',
+                              height: 16),
+                          const SizedBox(width: 3),
+                          const Text(
+                            'Get listing featured',
+                            style: TextStyle(
+                              color: textColor,
+                              fontSize: 14,
+                              fontWeight: FontWeight.w700,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ))
+              : GestureDetector(
+                  onTap: () {
+                    Get.to(() => const ProScreen());
+                  },
+                  child: Padding(
+                    padding:
+                        const EdgeInsets.only(right: 8.0, top: 10, bottom: 10),
+                    child: Container(
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 10, vertical: 5),
+                      decoration: BoxDecoration(
+                        color: backgroundcolorinterface,
+                        borderRadius: BorderRadius.circular(20),
+                      ),
+                      child: Row(
+                        children: <Widget>[
+                          SvgPicture.asset('assets/svgs/addtolist.svg',
+                              height: 16),
+                          const SizedBox(width: 3),
+                          const Text(
+                            'Get listing featured',
+                            style: TextStyle(
+                              color: textColor,
+                              fontSize: 14,
+                              fontWeight: FontWeight.w700,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  )),
+        ],
       ),
       body: TabBarView(
         controller: _tabController,
