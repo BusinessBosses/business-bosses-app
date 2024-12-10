@@ -83,13 +83,13 @@ class _ClientWidgetState extends State<ClientWidget> {
                             fontSize: 13,
                           ),
                         ),
-                        Text(
-                          ' - ${widget.client.type.displayTitle}',
-                          style: const TextStyle(
-                            fontWeight: FontWeight.bold,
-                            fontSize: 13,
-                          ),
-                        ),
+                        // Text(
+                        //   ' - ${widget.client.type.displayTitle}',
+                        //   style: const TextStyle(
+                        //     fontWeight: FontWeight.bold,
+                        //     fontSize: 13,
+                        //   ),
+                        // ),
                       ]),
                 ),
                 OptionsButton(
@@ -211,6 +211,24 @@ class _ClientWidgetState extends State<ClientWidget> {
                       //     fontSize: 13,
                       //   ),
                       // ),
+                    ],
+                  ),
+                  Row(
+                    children: <Widget>[
+                      const Text(
+                        'Client type: ',
+                        style: TextStyle(
+                          fontWeight: FontWeight.normal,
+                          fontSize: 13,
+                        ),
+                      ),
+                      Text(
+                        widget.client.type.displayTitle,
+                        style: const TextStyle(
+                          fontWeight: FontWeight.bold,
+                          fontSize: 13,
+                        ),
+                      ),
                     ],
                   ),
                 ],

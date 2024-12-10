@@ -18,6 +18,7 @@ import 'package:detectable_text_field/widgets/detectable_text.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
+import 'package:lottie/lottie.dart';
 
 class OrderProductScreen extends StatefulWidget {
   final Product product;
@@ -463,9 +464,45 @@ class _OrderProductScreenState extends State<OrderProductScreen> {
                       };
                       bool response = await orderController.addOrder(orderData);
                       if (response) {
-                        showSnackbar(message: 'Order Added Successfully!');
-                        // ignore: use_build_context_synchronously
-                        Navigator.pop(context);
+                        setState(() {
+                          isSubmit = false;
+                        });
+                        Get.defaultDialog(
+                          title: '',
+                          barrierDismissible: false,
+                          content: Column(
+                            children: <Widget>[
+                              const Text(
+                                'Order placed successfully',
+                                style: TextStyle(fontSize: 16),
+                              ),
+                              const SizedBox(
+                                height: 30,
+                              ),
+                              LottieBuilder.asset(
+                                'assets/anim/done.json',
+                                width: 100,
+                                height: 100,
+                              ),
+                              const SizedBox(
+                                height: 30,
+                              ),
+                              SizedBox(
+                                width: double.infinity,
+                                child: ProCustomButton(
+                                    text: 'Done',
+                                    onPressed: () {
+                                      Navigator.pop(context);
+                                      Get.back();
+                                    }),
+                              ),
+                            ],
+                          ),
+                        );
+
+                        // showSnackbar(message: 'Order Added Successfully!');
+                        // // ignore: use_build_context_synchronously
+                        // Navigator.pop(context);
                       } else {
                         showSnackbar(
                           message: 'Error creating order!',

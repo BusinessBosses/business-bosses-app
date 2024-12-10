@@ -16,6 +16,7 @@ import 'package:detectable_text_field/widgets/detectable_text.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
+import 'package:lottie/lottie.dart';
 import 'package:syncfusion_flutter_calendar/calendar.dart';
 
 class BookServiceScreen extends StatefulWidget {
@@ -386,8 +387,41 @@ class _BookServiceScreenState extends State<BookServiceScreen> {
 
                     bool response = await orderController.addOrder(orderData);
                     if (response) {
-                      showSnackbar(message: 'Order Added Successfully!');
-                      Navigator.pop(context);
+                      setState(() {
+                        isSubmit = false;
+                      });
+                      Get.defaultDialog(
+                        title: '',
+                        barrierDismissible: false,
+                        content: Column(
+                          children: <Widget>[
+                            const Text(
+                              'Service booked successfully',
+                              style: TextStyle(fontSize: 16),
+                            ),
+                            const SizedBox(
+                              height: 30,
+                            ),
+                            LottieBuilder.asset(
+                              'assets/anim/done.json',
+                              width: 100,
+                              height: 100,
+                            ),
+                            const SizedBox(
+                              height: 30,
+                            ),
+                            SizedBox(
+                              width: double.infinity,
+                              child: ProCustomButton(
+                                  text: 'Done',
+                                  onPressed: () {
+                                    Navigator.pop(context);
+                                    Get.back();
+                                  }),
+                            ),
+                          ],
+                        ),
+                      );
                     } else {
                       showSnackbar(
                         message: 'Error creating order!',
