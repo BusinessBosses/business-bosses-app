@@ -23,6 +23,7 @@ class Shop {
   final String? url;
   final DateTime createdAt;
   final String currency;
+  final String appId;
   final UserModel? user;
 
   Shop({
@@ -42,6 +43,7 @@ class Shop {
     this.approved = false,
     this.plan,
     required this.currency,
+    required this.appId,
     required this.createdAt,
     this.user,
     this.facebook,
@@ -75,6 +77,7 @@ class Shop {
       linkedin: json['linkedin'],
       instagram: json['instagram'],
       url: json['url'],
+      appId: json['appId'],
       createdAt: DateTime.parse(json['createdAt']),
       user: json['user'] != null ? UserModel.fromMap(json['user']) : null,
     );
@@ -103,6 +106,7 @@ class Shop {
       'instagram': instagram,
       'linkedin': linkedin,
       'url': url,
+      'appId': appId,
       'createdAt': createdAt.toIso8601String(),
       'user': user?.toMap(),
     };

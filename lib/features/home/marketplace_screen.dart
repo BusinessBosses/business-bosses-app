@@ -4,7 +4,7 @@ import 'package:business_bosses_v2/features/donations/presentation/filtersupplie
 import 'package:business_bosses_v2/features/forum/models/industry.dart';
 import 'package:business_bosses_v2/features/home/widgets/bottom_bar.dart';
 import 'package:business_bosses_v2/features/home/widgets/floatingbutton.dart';
-import 'package:business_bosses_v2/features/live_event/presentation/live_event.dart';
+
 import 'package:business_bosses_v2/features/marketplace/controllers/supplier_controller.dart';
 import 'package:business_bosses_v2/features/marketplace/models/market_model.dart';
 import 'package:business_bosses_v2/features/marketplace/presentation/filtermarketplaceposts.dart';
@@ -20,13 +20,10 @@ import 'package:business_bosses_v2/features/search/widgets/search_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import 'package:visibility_detector/visibility_detector.dart';
-import '../../common/models/user_model.dart';
-import '../../common/widgets/buttons/my_outlined_button.dart';
+
 import '../../common/widgets/safety_model.dart';
-import '../../services/api_service.dart';
-import '../../utils/constants/constants.dart';
+
 import '../../utils/theme/theme.dart';
 import '../marketplace/controllers/market_controller.dart';
 import '../profile/controller/profile_controller.dart';

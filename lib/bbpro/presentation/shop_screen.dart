@@ -173,13 +173,11 @@ class _ShopScreenState extends State<ShopScreen> {
                                 const SizedBox(width: 4),
                                 GestureDetector(
                                   onTap: () {},
-                                  child: Obx(
-                                    () => Text(
-                                      '${shopController.shop!.user?.averageRating} Reviews',
-                                      style: const TextStyle(
-                                        fontWeight: FontWeight.w700,
-                                        fontSize: 14,
-                                      ),
+                                  child: Text(
+                                    '${shopController.shop!.user?.averageRating} Reviews',
+                                    style: const TextStyle(
+                                      fontWeight: FontWeight.w700,
+                                      fontSize: 14,
                                     ),
                                   ),
                                 ),
@@ -396,7 +394,7 @@ class _ShopScreenState extends State<ShopScreen> {
           _buildContactRow(
             'assets/svgs/website.svg',
             'Virtual Address',
-            'jdnjsnkjdnskjjdnsndnsj',
+            '${shopController.shop!.appId} Biz-Centre, Business Bosses, United Kingdom',
             12,
             null,
           ),
