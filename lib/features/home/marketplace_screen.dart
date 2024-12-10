@@ -61,6 +61,7 @@ class _MarketplaceScreenState extends State<MarketplaceScreen>
   late final TabController _marketplaceTabController;
   bool isfiltervisible = true;
   bool databool = true;
+  bool loadingData = true;
   final SupplierController supplierController = Get.put(SupplierController());
 
   @override
@@ -68,20 +69,26 @@ class _MarketplaceScreenState extends State<MarketplaceScreen>
     super.initState();
     _marketplacesearchTabController = TabController(length: 3, vsync: this);
     _marketplaceTabController = TabController(length: 4, vsync: this);
-    _marketController.initProItems();
+    _marketController
+        .initProItems()
+        .then((void value) => setState((() => loadingData = false)));
     supplierController.initSuppliers();
     _scrollController.addListener(() {
       double percentageScrolled =
           _scrollController.offset / _scrollController.position.maxScrollExtent;
 
       if (percentageScrolled >= 0.3) {
-        setState(() {
-          showFloatingButton = true;
-        });
+        if (mounted) {
+          setState(() {
+            showFloatingButton = true;
+          });
+        }
       } else {
-        setState(() {
-          showFloatingButton = false;
-        });
+        if (mounted) {
+          setState(() {
+            showFloatingButton = false;
+          });
+        }
       }
     });
   }
@@ -353,7 +360,8 @@ class _MarketplaceScreenState extends State<MarketplaceScreen>
                             return <Widget>[];
                           },
                           body: Obx(() {
-                            if (_marketController.loading.value) {
+                            if (_marketController.loading.value ||
+                                loadingData) {
                               return const Center(
                                   child: CircularProgressIndicator());
                             } else if (_marketController.error.value) {

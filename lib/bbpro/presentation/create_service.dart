@@ -364,7 +364,9 @@ class _CreateServiceListingState extends State<CreateServiceListing>
                     style: TextStyle(),
                   ),
                 ),
-                initialSelection: shopController.shop!.location,
+                initialSelection: location!.isEmpty
+                    ? shopController.shop!.location
+                    : location,
                 pickerBuilder:
                     (BuildContext context, CountryCode? countryCode) {
                   return Container(
@@ -375,7 +377,9 @@ class _CreateServiceListingState extends State<CreateServiceListing>
                     child: CustomTextWidget(
                       caption: 'Location',
                       iconName: 'assets/svgs/nexticon.svg',
-                      text: shopController.shop!.location,
+                      text: location!.isEmpty
+                          ? shopController.shop!.location
+                          : location,
                     ),
                   );
                 },
@@ -885,7 +889,8 @@ class _CreateServiceListingState extends State<CreateServiceListing>
               ? '0'
               : _discountController.text.trim(),
           'category': category,
-          'location': shopController.shop!.location,
+          'location':
+              location!.isEmpty ? shopController.shop!.location : location,
           'images': images!.isEmpty ? null : images,
           'paymentMethod': paymentMethod ?? '',
           'deliveryMethod': deliveryMethod ?? '',

@@ -173,11 +173,14 @@ class _ShopScreenState extends State<ShopScreen> {
                                 const SizedBox(width: 4),
                                 GestureDetector(
                                   onTap: () {},
-                                  child: Text(
-                                    '${shopController.shop!.user?.averageRating} Reviews',
-                                    style: const TextStyle(
+                                  child: Obx(
+                                    () => Text(
+                                      '${shopController.shop!.user?.averageRating} Reviews',
+                                      style: const TextStyle(
                                         fontWeight: FontWeight.w700,
-                                        fontSize: 14),
+                                        fontSize: 14,
+                                      ),
+                                    ),
                                   ),
                                 ),
                               ],

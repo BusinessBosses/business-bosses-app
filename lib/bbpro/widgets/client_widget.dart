@@ -1,4 +1,5 @@
 import 'package:business_bosses_v2/bbpro/controllers/clients_controller.dart';
+import 'package:business_bosses_v2/bbpro/controllers/shop_controller.dart';
 import 'package:business_bosses_v2/bbpro/presentation/add_client.dart';
 import 'package:business_bosses_v2/bbpro/widgets/optionsbutton.dart';
 import 'package:business_bosses_v2/bbpro/models/client_model.dart';
@@ -29,6 +30,7 @@ class _ClientWidgetState extends State<ClientWidget> {
   @override
   Widget build(BuildContext context) {
     final ClientsController clientsController = Get.find();
+    final ShopController shopController = Get.find();
     return Container(
       decoration: BoxDecoration(
           border: Border.all(
@@ -197,20 +199,20 @@ class _ClientWidgetState extends State<ClientWidget> {
                           fontSize: 13,
                         ),
                       ),
-                      // Text(
-                      //   ' - GHS',
-                      //   style: TextStyle(
-                      //     fontWeight: FontWeight.bold,
-                      //     fontSize: 13,
-                      //   ),
-                      // ),
-                      // Text(
-                      //   '200',
-                      //   style: TextStyle(
-                      //     fontWeight: FontWeight.bold,
-                      //     fontSize: 13,
-                      //   ),
-                      // ),
+                      Text(
+                        ' - ${shopController.shop!.currency}',
+                        style: const TextStyle(
+                          fontWeight: FontWeight.bold,
+                          fontSize: 13,
+                        ),
+                      ),
+                      Text(
+                        widget.client.totalAmountSpent.toString(),
+                        style: const TextStyle(
+                          fontWeight: FontWeight.bold,
+                          fontSize: 13,
+                        ),
+                      ),
                     ],
                   ),
                 ],

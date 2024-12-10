@@ -1,5 +1,7 @@
 import 'package:business_bosses_v2/bbpro/controllers/shop_controller.dart';
 import 'package:business_bosses_v2/bbpro/models/order_model.dart';
+import 'package:business_bosses_v2/bbpro/models/product_model.dart';
+import 'package:business_bosses_v2/bbpro/models/service_model.dart';
 import 'package:business_bosses_v2/bbpro/widgets/orderwidget.dart';
 import 'package:business_bosses_v2/bbpro/widgets/proseardwidget.dart';
 import 'package:business_bosses_v2/bbpro/widgets/proshopdeals.dart';
@@ -225,14 +227,8 @@ class _MyOrdersScreenState extends State<MyOrdersScreen> {
                           children: <Widget>[
                             ProshopdealsWidget(
                               caption: 'Recommended',
-                              combinedList: <Object>[
-                                ..._marketController.proProducts
-                                    .take(5)
-                                    .toList(),
-                                ..._marketController.proServices
-                                    .take(5)
-                                    .toList(),
-                              ],
+                              combinedList:
+                                  _marketController.proItems.take(10).toList(),
                             ),
                           ],
                         )

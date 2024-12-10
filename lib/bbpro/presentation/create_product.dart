@@ -281,7 +281,9 @@ class _CreateProductListingState extends State<CreateProductListing> {
                             textAlign: TextAlign.center,
                           ),
                         ),
-                        initialSelection: shopController.shop!.location,
+                        initialSelection: country.isEmpty
+                            ? shopController.shop!.location
+                            : country,
                         pickerBuilder:
                             (BuildContext context, CountryCode? countryCode) {
                           return Container(
@@ -292,7 +294,9 @@ class _CreateProductListingState extends State<CreateProductListing> {
                             child: CustomTextWidget(
                               caption: 'Location',
                               iconName: 'assets/svgs/nexticon.svg',
-                              text: shopController.shop!.location,
+                              text: country.isEmpty
+                                  ? shopController.shop!.location
+                                  : country,
                             ),
                           );
                         },
@@ -599,10 +603,14 @@ class _CreateProductListingState extends State<CreateProductListing> {
                             'shopId': shopController.shop?.id,
                             'name': _productNameController.text,
                             'price': _priceController.text,
-                            'discount': _discountController.text,
+                            'discount': _discountController.text.isEmpty
+                                ? 0
+                                : _discountController.text,
                             'description': _descriptionController.text,
                             'category': category,
-                            'location': shopController.shop?.location,
+                            'location': country.isEmpty
+                                ? shopController.shop!.location
+                                : country,
                             'images': images,
                             'paymentMethod': paymentMethod,
                             'deliveryMethod': deliveryMethod,

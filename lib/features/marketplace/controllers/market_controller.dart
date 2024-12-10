@@ -460,8 +460,6 @@ class MarketController extends GetxController {
     proServices.clear();
     proItems.clear();
     orders.clear();
-    loading(true);
-    error(false);
 
     final ApiResponseModel response = await ApiService.get(path: 'goods/all');
     final ApiResponseModel responseServices =
@@ -471,13 +469,19 @@ class MarketController extends GetxController {
     if (response.success) {
       for (int i = 0; i < response.data['rows'].length; i++) {
         if (Product.fromJson(response.data['rows'][i]).isActive) {
+          // if (Product.fromJson(response.data['rows'][i]).user != null &&
+          //   Product.fromJson(response.data['rows'][i]).user!.isSubscribed) {
           proProducts.add(Product.fromJson(response.data['rows'][i]));
+          //}
         }
       }
       if (responseServices.success) {
         for (int i = 0; i < responseServices.data['rows'].length; i++) {
           if (Service.fromJson(responseServices.data['rows'][i]).isActive) {
+            // if (Service.fromJson(response.data['rows'][i]).user != null &&
+            //     Service.fromJson(response.data['rows'][i]).user!.isSubscribed) {
             proServices.add(Service.fromJson(responseServices.data['rows'][i]));
+            //}
           }
         }
         if (responseOrders.success) {
