@@ -389,7 +389,7 @@ class _ShopScreenState extends State<ShopScreen> {
               color: textColor,
             ),
           ),
-          const SizedBox(height: 30),
+          const SizedBox(height: 20),
           // if (shopController.shop?.user?.virtualAddress?.isNotEmpty ?? false)
           _buildContactRow(
             'assets/svgs/website.svg',

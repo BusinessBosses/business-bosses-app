@@ -583,7 +583,7 @@ class _UserShopScreenState extends State<UserShopScreen> {
           ),
           _buildDivider(),
           if (shopController.userShop?.user?.website?.isNotEmpty ?? false)
-            const SizedBox(height: 20),
+            const SizedBox(height: 10),
           if (shopController.userShop?.email.isNotEmpty ?? false)
             _buildContactRow(
               'assets/svgs/email.svg',
@@ -601,7 +601,7 @@ class _UserShopScreenState extends State<UserShopScreen> {
           if (shopController.userShop?.email.isNotEmpty ?? false)
             _buildDivider(),
           if (shopController.userShop?.email.isNotEmpty ?? false)
-            const SizedBox(height: 20),
+            const SizedBox(height: 10),
           if (shopController.userShop?.phone.isNotEmpty ?? false)
             _buildContactRow(
               'assets/svgs/phone.svg',
@@ -784,7 +784,7 @@ class _UserShopScreenState extends State<UserShopScreen> {
             ),
           ),
         ),
-        const SizedBox(height: 20),
+        const SizedBox(height: 10),
       ],
     );
   }
