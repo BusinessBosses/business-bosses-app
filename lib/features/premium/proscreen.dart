@@ -56,61 +56,56 @@ class _ProScreenState extends State<ProScreen> with TickerProviderStateMixin {
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
-        automaticallyImplyLeading: false,
-        title: const Text(
-          'Everything you need to grow',
+        backgroundColor: Colors.white,
+        elevation: 0,
+        bottom: PreferredSize(
+          preferredSize: const Size.fromHeight(0),
+          child: Padding(
+            padding: const EdgeInsets.only(bottom: 0),
+            child: TabBar(
+              isScrollable: false,
+              indicatorColor: primaryColorLT,
+              labelColor: primaryColorLT, // Set label color
+              unselectedLabelColor: Colors.grey, // Set unselected label color
+              controller: protabbarcontroller,
+              tabs: const <Widget>[
+                Tab(
+                  child: FittedBox(
+                    child: Text(
+                      'Upgrade',
+                      style:
+                          TextStyle(fontWeight: FontWeight.w700, fontSize: 14),
+                    ),
+                  ),
+                ),
+                Tab(
+                  child: FittedBox(
+                    child: Text(
+                      'Partner with us',
+                      style:
+                          TextStyle(fontWeight: FontWeight.w700, fontSize: 14),
+                    ),
+                  ),
+                ),
+                Tab(
+                  child: FittedBox(
+                    child: Text(
+                      'Post Ad',
+                      style:
+                          TextStyle(fontWeight: FontWeight.w700, fontSize: 14),
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
         ),
-        // actions: <Widget>[
-        //   IconButton(
-        //     onPressed: () {
-        //       Get.to(() => const LiveEvent());
-        //     },
-        //     icon: const Icon(Icons.calendar_month),
-        //   ),
-        // ],
       ),
       body: Stack(children: <Widget>[
         Column(
           mainAxisAlignment: MainAxisAlignment.start,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
-            Padding(
-              padding: const EdgeInsets.only(bottom: 0),
-              child: TabBar(
-                isScrollable: false,
-                indicatorColor: primaryColorLT,
-                controller: protabbarcontroller,
-                tabs: const <Widget>[
-                  Tab(
-                    child: FittedBox(
-                      child: Text(
-                        'Upgrade',
-                        style: TextStyle(
-                            fontWeight: FontWeight.w700, fontSize: 14),
-                      ),
-                    ),
-                  ),
-                  Tab(
-                    child: FittedBox(
-                      child: Text(
-                        'Partner with us',
-                        style: TextStyle(
-                            fontWeight: FontWeight.w700, fontSize: 14),
-                      ),
-                    ),
-                  ),
-                  Tab(
-                    child: FittedBox(
-                      child: Text(
-                        'Post Ad',
-                        style: TextStyle(
-                            fontWeight: FontWeight.w700, fontSize: 14),
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-            ),
             Expanded(
                 child: TabBarView(
                     controller: protabbarcontroller,
