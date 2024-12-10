@@ -399,8 +399,8 @@ class _ShopScreenState extends State<ShopScreen> {
             null,
           ),
           _buildDivider(),
-          if (shopController.shop?.user?.website?.isNotEmpty ?? false)
-            const SizedBox(height: 20),
+          if (shopController.shop!.appId.isNotEmpty ?? false)
+            const SizedBox(height: 10),
           if (shopController.shop?.email.isNotEmpty ?? false)
             _buildContactRow(
               'assets/svgs/email.svg',
@@ -417,7 +417,7 @@ class _ShopScreenState extends State<ShopScreen> {
             ),
           if (shopController.shop?.email.isNotEmpty ?? false) _buildDivider(),
           if (shopController.shop?.email.isNotEmpty ?? false)
-            const SizedBox(height: 20),
+            const SizedBox(height: 10),
           if (shopController.shop?.phone.isNotEmpty ?? false)
             _buildContactRow(
               'assets/svgs/phone.svg',
@@ -431,6 +431,9 @@ class _ShopScreenState extends State<ShopScreen> {
                 }
               },
             ),
+          _buildDivider(),
+
+          const SizedBox(height: 10),
           // if (shopController.shop?.user?.location?.isNotEmpty ?? false)
           _buildContactRow(
             'assets/svgs/website.svg',
@@ -613,7 +616,7 @@ class _ShopScreenState extends State<ShopScreen> {
             ),
           ),
         ),
-        const SizedBox(height: 20),
+        const SizedBox(height: 10),
       ],
     );
   }
