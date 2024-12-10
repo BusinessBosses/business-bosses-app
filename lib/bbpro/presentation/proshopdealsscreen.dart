@@ -14,6 +14,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
+import 'package:lottie/lottie.dart';
 
 class ProshopdealsScreen extends StatefulWidget {
   const ProshopdealsScreen({super.key});
@@ -157,7 +158,53 @@ class _ProshopdealsScreenState extends State<ProshopdealsScreen>
                   ))
               : GestureDetector(
                   onTap: () {
-                    Get.to(() => const ProScreen());
+                    Get.bottomSheet(
+                      isScrollControlled: true,
+                      shape: const RoundedRectangleBorder(
+                        borderRadius: BorderRadius.only(
+                          topLeft: Radius.circular(20.0),
+                          topRight: Radius.circular(20.0),
+                        ),
+                      ),
+                      SizedBox(
+                        height: Get.height * 0.9,
+                        child: Center(
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: <Widget>[
+                              const Text(
+                                'Upgrade now to get your listing featured',
+                                style: TextStyle(
+                                  fontSize: 18,
+                                  fontWeight: FontWeight.w700,
+                                ),
+                                textAlign: TextAlign.center,
+                              ),
+                              const SizedBox(
+                                height: 30,
+                              ),
+                              Lottie.asset(
+                                'assets/anim/listing.json',
+                                fit: BoxFit.cover,
+                                height: 90,
+                                width: 90,
+                              ),
+                              const SizedBox(
+                                height: 30,
+                              ),
+                              const Padding(
+                                  padding: EdgeInsets.only(
+                                      left: 0.0, top: 10, bottom: 10),
+                                  child: ProSubscribeSection(
+                                    isGrow: true,
+                                  )),
+                            ],
+                          ),
+                        ),
+                      ),
+                      backgroundColor: Colors.white,
+                    );
                   },
                   child: Padding(
                     padding:

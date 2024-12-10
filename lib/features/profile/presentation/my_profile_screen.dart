@@ -663,7 +663,7 @@ class _MyProfileScreenState extends State<MyProfileScreen> {
                     ],
                   ),
                 ),
-                !profileController.myProfile.isSubscribed
+                profileController.myProfile.isSubscribed
                     ? SizedBox(
                         height: MediaQuery.of(context).size.height,
                         width: MediaQuery.of(context).size.width,
