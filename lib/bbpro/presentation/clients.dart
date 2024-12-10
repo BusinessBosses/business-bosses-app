@@ -319,7 +319,7 @@ class _ClientsScreenState extends State<ClientsScreen>
                       );
                       break;
                     case 'Item 3':
-                      Get.to(() => const Campaignpage());
+                      Get.to(() => () => const Campaignpage());
                       break;
                   }
                 },

@@ -16,9 +16,11 @@ import '../models/reviews_model.dart';
 import '../widgets/review_item.dart';
 
 class SellerReviewScreen extends StatefulWidget {
+  final VoidCallback? refreshCallback;
   final UserModel user;
   final bool? isShop;
-  const SellerReviewScreen({Key? key, required this.user, this.isShop})
+  const SellerReviewScreen(
+      {Key? key, required this.user, this.isShop = false, this.refreshCallback})
       : super(key: key);
 
   @override
@@ -109,10 +111,13 @@ class _SellerReviewScreenState extends State<SellerReviewScreen> {
     if (cUser == null) {
       return Scaffold(
         resizeToAvoidBottomInset: false,
-        appBar: widget.isShop == null
+        appBar: !widget.isShop!
             ? AppBar(
                 leading: IconButton(
                   onPressed: () {
+                    if (widget.refreshCallback != null) {
+                      widget.refreshCallback!();
+                    }
                     Navigator.pop(context);
                   },
                   icon: SvgPicture.asset('assets/svgs/backbutton.svg'),
@@ -131,10 +136,13 @@ class _SellerReviewScreenState extends State<SellerReviewScreen> {
     } else {
       return Scaffold(
         backgroundColor: Colors.white,
-        appBar: widget.isShop == null
+        appBar: !widget.isShop!
             ? AppBar(
                 leading: IconButton(
                   onPressed: () {
+                    if (widget.refreshCallback != null) {
+                      widget.refreshCallback!();
+                    }
                     Navigator.pop(context);
                   },
                   icon: SvgPicture.asset('assets/svgs/backbutton.svg'),
@@ -149,7 +157,7 @@ class _SellerReviewScreenState extends State<SellerReviewScreen> {
         body: SingleChildScrollView(
           child: Column(
             children: <Widget>[
-              if (widget.isShop == null)
+              if (!widget.isShop!)
                 Container(
                   height: 20,
                   color: backgroundcolorinterface,
@@ -164,15 +172,16 @@ class _SellerReviewScreenState extends State<SellerReviewScreen> {
                 ),
                 child: Column(
                   children: <Widget>[
-                    if (widget.isShop == null)
+                    if (!widget.isShop!)
                       PublicProfileTile(
                         myProfile: cUser!,
                       ),
-                    if (widget.isShop == null)
+                    if (!widget.isShop!)
                       const SizedBox(
                         height: 10,
                       ),
-                    if ((reviews == null ||
+                    if ((!widget.isShop!) &&
+                        (reviews == null ||
                             reviews!
                                 .where((ReviewModel review) =>
                                     review.rater.uid ==

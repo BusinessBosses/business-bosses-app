@@ -40,6 +40,13 @@ class _UserShopScreenState extends State<UserShopScreen> {
   @override
   void initState() {
     super.initState();
+    loadData();
+  }
+
+  void loadData() {
+    setState(() {
+      loading = true;
+    });
     shopController.initUserShop(widget.user).then((bool value) {
       if (value) {
         setState(() {
@@ -79,9 +86,15 @@ class _UserShopScreenState extends State<UserShopScreen> {
             } else if (action['text'] == 'Share') {
               _shareBizCenter();
             } else if (action['text'] == 'Review') {
-              Get.to(() => SellerReviewScreen(
-                    user: shopController.userShop!.user!,
-                  ));
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (BuildContext context) => SellerReviewScreen(
+                    user: widget.user,
+                    refreshCallback: loadData,
+                  ),
+                ),
+              );
             }
           },
           child: Padding(
@@ -526,7 +539,7 @@ class _UserShopScreenState extends State<UserShopScreen> {
                                   ///Tab 2 Content
                                   SellerReviewScreen(
                                     isShop: true,
-                                    user: profileController.myProfile,
+                                    user: widget.user,
                                   ),
 
                                   ///Tab 3 Content
@@ -564,7 +577,7 @@ class _UserShopScreenState extends State<UserShopScreen> {
           _buildContactRow(
             'assets/svgs/website.svg',
             'Virtual Address',
-            '#1234 Biz-Centre, Business Bosses, United Kingdom',
+            '#${shopController.userShop!.appId}, Biz-Centre, Business Bosses, United Kingdom',
             12,
             null,
           ),
