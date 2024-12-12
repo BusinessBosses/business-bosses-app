@@ -261,7 +261,7 @@ class _ProSubscribeSectionState extends State<ProSubscribeSection> {
         ),
         Container(
             decoration: const BoxDecoration(
-              color: Colors.transparent,
+              color: Colors.white,
               // gradient: LinearGradient(
               //   begin: Alignment.topCenter,
               //   end: Alignment.bottomCenter,
@@ -337,28 +337,29 @@ class _ProSubscribeSectionState extends State<ProSubscribeSection> {
                       child: SvgPicture.asset(
                         'assets/svgs/premiumdescback.svg',
                         width: MediaQuery.of(context).size.width,
-                        fit: BoxFit.contain,
+                        fit: BoxFit.fill,
                       ),
                     ),
                     Container(
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(15),
-                        color: Colors.white,
-                        border: Border.all(
-                          color: Colors.grey.withOpacity(0.12),
-                          width: 2,
-                        ),
-                      ),
+                      decoration: const BoxDecoration(
+                          // borderRadius: BorderRadius.circular(15),
+                          // color: Colors.transparent,
+                          // border: Border.all(
+                          //   color: Colors.grey.withOpacity(0.12),
+                          //   width: 2,
+                          // ),
+                          ),
                       padding: const EdgeInsets.all(16),
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: <Widget>[
+                          const SizedBox(
+                            height: 5,
+                          ),
                           const Text(
                             'What\'s included',
                             style: TextStyle(
-                                fontWeight: FontWeight.w700,
-                                color: textColor,
-                                fontSize: 14),
+                                fontSize: 16, fontWeight: FontWeight.bold),
                           ),
                           const SizedBox(
                             height: 20,
@@ -369,6 +370,7 @@ class _ProSubscribeSectionState extends State<ProSubscribeSection> {
                                     padding:
                                         const EdgeInsets.only(bottom: 12.0),
                                     child: ProfeatureTile(
+                                      backgroundColor: Colors.transparent,
                                       feature: feature,
                                     )))
                                 .toList(),

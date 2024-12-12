@@ -4,14 +4,16 @@ import 'package:flutter_svg/flutter_svg.dart';
 
 class ProfeatureTile extends StatelessWidget {
   final ProFeatureItem feature;
+  final Color? backgroundColor;
 
-  const ProfeatureTile({Key? key, required this.feature}) : super(key: key);
+  const ProfeatureTile({Key? key, required this.feature, this.backgroundColor})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Container(
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: backgroundColor ?? Colors.white,
         borderRadius: BorderRadius.circular(8),
       ),
       child: Column(
