@@ -224,7 +224,7 @@ class _MyProfileScreenState extends State<MyProfileScreen> {
                                                 market.userId ==
                                                 profileController.myProfile.uid)
                                             .isNotEmpty)
-                                          const Tab(text: 'Listing'),
+                                          const Tab(text: 'Listings'),
                                       if (homeController
                                           .userresources.isNotEmpty)
                                         const Tab(text: 'Resources'),

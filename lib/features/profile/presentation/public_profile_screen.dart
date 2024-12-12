@@ -506,7 +506,7 @@ class _PublicProfileScreenState extends State<PublicProfileScreen> {
                                         ),
                                         if (!publicUser.isSubscribed)
                                           const Tab(
-                                            text: 'Listing',
+                                            text: 'Listings',
                                           ),
                                       ],
                               ),

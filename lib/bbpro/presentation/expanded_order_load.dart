@@ -73,7 +73,7 @@ class _ExpandedOrdersViewState extends State<ExpandedOrdersView> {
                         const Padding(
                           padding: EdgeInsets.symmetric(horizontal: 15.0),
                           child: Text(
-                            'Items',
+                            'Listings',
                             style: TextStyle(
                                 fontWeight: FontWeight.bold, fontSize: 16),
                           ),

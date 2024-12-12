@@ -327,7 +327,7 @@ class _UserShopScreenState extends State<UserShopScreen> {
                                 unselectedLabelColor: Colors.grey,
                                 indicatorColor: Colors.black,
                                 tabs: <Widget>[
-                                  Tab(text: 'Items'),
+                                  Tab(text: 'Listings'),
                                   Tab(text: 'Reviews'),
                                   Tab(text: 'About'),
                                 ]),
