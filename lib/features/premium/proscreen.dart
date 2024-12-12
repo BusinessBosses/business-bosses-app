@@ -222,31 +222,31 @@ class ProSubscribeSection extends StatefulWidget {
 class _ProSubscribeSectionState extends State<ProSubscribeSection> {
   static final List<ProFeatureItem> _profeatures = <ProFeatureItem>[
     ProFeatureItem(
-        iconPath: 'assets/svgs/bizcentericon.svg',
-        caption: 'Get Your Own Business Center',
-        subtext: 'Sell everywhere, convert visits into sales'),
+        iconPath: 'assets/svgs/checkfilled.svg',
+        caption: 'Online Biz-Centre',
+        subtext: 'Your business site to convert visits into sales'),
     ProFeatureItem(
-      iconPath: 'assets/svgs/income.svg',
+      iconPath: 'assets/svgs/checkfilled.svg',
       caption: 'Mutiple Income',
       subtext: 'Manage orders from multiple sales channel',
     ),
     ProFeatureItem(
-      iconPath: 'assets/svgs/assistant.svg',
+        iconPath: 'assets/svgs/checkfilled.svg',
+        caption: 'More Customers & Referrals',
+        subtext: 'Get featured in marketplace & posts search'),
+    ProFeatureItem(
+      iconPath: 'assets/svgs/checkfilled.svg',
       caption: 'Digital Assistant',
       subtext: 'Manage inventory, tasks, schedules & expenses',
     ),
     ProFeatureItem(
-        iconPath: 'assets/svgs/connections.svg',
-        caption: 'More Customers & Referrals',
-        subtext: 'Get discovered in global markets & searches'),
+        iconPath: 'assets/svgs/checkfilled.svg',
+        caption: 'Marketing Campaigns & Broadcast',
+        subtext: 'Send customers direct marketing messages'),
     ProFeatureItem(
-        iconPath: 'assets/svgs/campaign.svg',
-        caption: 'Campaign & Broadcast',
-        subtext: 'Send marketing campaigns & broadcasts'),
-    ProFeatureItem(
-        iconPath: 'assets/svgs/premiumbadgered.svg',
-        caption: 'Professional Virtual Office Address',
-        subtext: 'Virtual Business Address to boost your credibility'),
+        iconPath: 'assets/svgs/checkfilled.svg',
+        caption: 'Get Verified & Exclusive Offers',
+        subtext: 'FREE virtual address, monthly rewards & more!'),
   ];
   String paymentMethodId = 'Proyear';
   bool loading = false;
@@ -258,15 +258,17 @@ class _ProSubscribeSectionState extends State<ProSubscribeSection> {
             begin: Alignment.topCenter,
             end: Alignment.bottomCenter,
             colors: <Color>[
-              widget.isGrow == null ? prosemibackColor : Colors.white,
+              widget.isGrow == null
+                  ? prosemibackColor.withAlpha(50)
+                  : Colors.white,
               Colors.white,
             ],
-            stops: const <double>[0.0, 0.5],
+            stops: const <double>[0.0, 0.25],
           ),
         ),
         padding: const EdgeInsets.symmetric(horizontal: 15),
         child: Column(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          mainAxisAlignment: MainAxisAlignment.start,
           children: <Widget>[
             if (widget.isGrow == null)
               const Column(
@@ -279,19 +281,39 @@ class _ProSubscribeSectionState extends State<ProSubscribeSection> {
                         fontSize: 20,
                         fontWeight: FontWeight.bold,
                       )),
-                  Text(
-                    'Sell everywhere, mange easier, and grow 10x faster,',
-                    style: TextStyle(fontSize: 15, fontWeight: FontWeight.w600),
+                  Padding(
+                    padding: EdgeInsets.symmetric(horizontal: 15.0),
+                    child: Text.rich(
+                      textAlign: TextAlign.center,
+                      TextSpan(
+                        children: <InlineSpan>[
+                          TextSpan(
+                            text:
+                                'Everything you need to manage and grow your business 10X faster, ',
+                            style: TextStyle(
+                                fontSize: 15, fontWeight: FontWeight.w600),
+                          ),
+                          TextSpan(
+                            text: 'all in one place.',
+                            style: TextStyle(
+                                fontSize: 15,
+                                fontWeight: FontWeight.w600,
+                                color: primaryColorLT),
+                          ),
+                        ],
+                      ),
+                    ),
                   ),
-                  Text(
-                    'with one simple link',
-                    style: TextStyle(
-                        color: primaryColorLT,
-                        fontSize: 15,
-                        fontWeight: FontWeight.w600),
-                  ),
+                  // Text(
+                  //   'all in one place',
+                  //   style: TextStyle(
+                  //       color: primaryColorLT,
+                  //       fontSize: 15,
+                  //       fontWeight: FontWeight.w600),
+                  // ),
                 ],
               ),
+            const SizedBox(height: 30),
             Container(
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(15),
@@ -305,9 +327,6 @@ class _ProSubscribeSectionState extends State<ProSubscribeSection> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: <Widget>[
-                  const SizedBox(
-                    height: 10,
-                  ),
                   const Text(
                     'What\'s included',
                     style: TextStyle(
@@ -327,15 +346,13 @@ class _ProSubscribeSectionState extends State<ProSubscribeSection> {
                             )))
                         .toList(),
                   ),
-                  const SizedBox(
-                    height: 10,
-                  ),
                 ],
               ),
             ),
+            const SizedBox(height: 30),
             if (widget.isGrow != null)
               const SizedBox(
-                height: 30,
+                height: 10,
               ),
             Container(
               width: double.infinity,

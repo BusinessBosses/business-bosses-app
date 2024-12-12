@@ -1,3 +1,4 @@
+import 'package:business_bosses_v2/utils/theme/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
@@ -27,6 +28,7 @@ class ProfeatureTile extends StatelessWidget {
                 child: SvgPicture.asset(
                   feature.iconPath,
                   height: 15,
+                  color: proprimaryColor,
                 ),
               ),
               const SizedBox(width: 8),
@@ -38,12 +40,12 @@ class ProfeatureTile extends StatelessWidget {
                       feature.caption,
                       style: const TextStyle(
                         fontWeight: FontWeight.bold,
-                        fontSize: 14,
+                        fontSize: 15,
                       ),
                     ),
                     Text(
                       feature.subtext!,
-                      style: const TextStyle(fontSize: 12),
+                      style: const TextStyle(fontSize: 14),
                     ),
                   ],
                 ),
