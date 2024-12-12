@@ -117,7 +117,7 @@ class _CreateServiceListingState extends State<CreateServiceListing>
       serviceType = widget.service!.serviceType;
       paymentMethod = widget.service!.paymentMethod;
       notesController.text = widget.service!.notes ?? '';
-      // addressorlinkController.text = widget.service!.addressorlink ?? '';
+      addressorlinkController.text = widget.service!.url ?? '';
       packages
           .addAll(widget.service!.packages.map((package) => <String, dynamic>{
                 'name': package['name'],
@@ -893,6 +893,8 @@ class _CreateServiceListingState extends State<CreateServiceListing>
           'category': category,
           'location':
               location!.isEmpty ? shopController.shop!.location : location,
+          'participants': groupmembersController.text,
+          'repeat': frequency,
           'images': images!.isEmpty ? null : images,
           'paymentMethod': paymentMethod ?? '',
           'deliveryMethod': deliveryMethod ?? '',
