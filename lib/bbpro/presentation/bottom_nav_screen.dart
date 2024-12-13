@@ -145,7 +145,7 @@ class _BottomnavscreenState extends State<Bottomnavscreen> {
                         BlendMode.srcIn,
                       ),
                     ),
-                    label: 'Clients',
+                    label: 'Customers',
                   ),
                   BottomNavigationBarItem(
                     icon: SvgPicture.asset(

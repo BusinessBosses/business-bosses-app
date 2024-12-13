@@ -223,17 +223,13 @@ class _ProSubscribeSectionState extends State<ProSubscribeSection> {
   static final List<ProFeatureItem> _profeatures = <ProFeatureItem>[
     ProFeatureItem(
         iconPath: 'assets/svgs/checkfilled.svg',
-        caption: 'Online Biz-Centre',
-        subtext: 'Your business site to convert visits into sales'),
+        caption: 'Biz-Centre',
+        subtext: 'Your business website to convert visits into sales'),
     ProFeatureItem(
       iconPath: 'assets/svgs/checkfilled.svg',
-      caption: 'Mutiple Income',
-      subtext: 'Manage orders from multiple sales channel',
+      caption: 'Earn more',
+      subtext: 'Handle orders from different sales channel',
     ),
-    ProFeatureItem(
-        iconPath: 'assets/svgs/checkfilled.svg',
-        caption: 'More Customers & Referrals',
-        subtext: 'Get featured in marketplace & posts search'),
     ProFeatureItem(
       iconPath: 'assets/svgs/checkfilled.svg',
       caption: 'Digital Assistant',
@@ -241,11 +237,15 @@ class _ProSubscribeSectionState extends State<ProSubscribeSection> {
     ),
     ProFeatureItem(
         iconPath: 'assets/svgs/checkfilled.svg',
-        caption: 'Marketing Campaigns & Broadcast',
-        subtext: 'Send customers direct marketing messages'),
+        caption: 'More Connections & Referrals',
+        subtext: 'Get noticed in marketplace & posts search'),
     ProFeatureItem(
         iconPath: 'assets/svgs/checkfilled.svg',
-        caption: 'Get Verified & Exclusive Offers',
+        caption: 'Marketing Messages & Campaigns',
+        subtext: 'Send marketing messages & grow customer base'),
+    ProFeatureItem(
+        iconPath: 'assets/svgs/checkfilled.svg',
+        caption: 'Exclusive Premium Offers',
         subtext: 'FREE virtual address, monthly rewards & more!'),
   ];
   String paymentMethodId = 'Proyear';
@@ -261,7 +261,7 @@ class _ProSubscribeSectionState extends State<ProSubscribeSection> {
         ),
         Container(
             decoration: const BoxDecoration(
-              color: Colors.transparent,
+              color: Colors.white,
               // gradient: LinearGradient(
               //   begin: Alignment.topCenter,
               //   end: Alignment.bottomCenter,
@@ -337,28 +337,29 @@ class _ProSubscribeSectionState extends State<ProSubscribeSection> {
                       child: SvgPicture.asset(
                         'assets/svgs/premiumdescback.svg',
                         width: MediaQuery.of(context).size.width,
-                        fit: BoxFit.contain,
+                        fit: BoxFit.fill,
                       ),
                     ),
                     Container(
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(15),
-                        color: Colors.white,
-                        border: Border.all(
-                          color: Colors.grey.withOpacity(0.12),
-                          width: 2,
-                        ),
-                      ),
+                      decoration: const BoxDecoration(
+                          // borderRadius: BorderRadius.circular(15),
+                          // color: Colors.transparent,
+                          // border: Border.all(
+                          //   color: Colors.grey.withOpacity(0.12),
+                          //   width: 2,
+                          // ),
+                          ),
                       padding: const EdgeInsets.all(16),
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: <Widget>[
+                          const SizedBox(
+                            height: 5,
+                          ),
                           const Text(
                             'What\'s included',
                             style: TextStyle(
-                                fontWeight: FontWeight.w700,
-                                color: textColor,
-                                fontSize: 14),
+                                fontSize: 16, fontWeight: FontWeight.bold),
                           ),
                           const SizedBox(
                             height: 20,
@@ -369,6 +370,7 @@ class _ProSubscribeSectionState extends State<ProSubscribeSection> {
                                     padding:
                                         const EdgeInsets.only(bottom: 12.0),
                                     child: ProfeatureTile(
+                                      backgroundColor: Colors.transparent,
                                       feature: feature,
                                     )))
                                 .toList(),

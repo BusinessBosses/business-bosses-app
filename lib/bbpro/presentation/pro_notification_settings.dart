@@ -166,7 +166,7 @@ class _ProNotificationSettingsState extends State<ProNotificationSettings> {
                   ),
                   SizedBox(height: 4),
                   Text(
-                    'Send automatic notification messages and reminder to your clients. View and Edit templates',
+                    'Send automatic notification messages and reminder to your customers. View and Edit templates',
                     style: TextStyle(
                       fontSize: 12,
                       color: Colors.grey,
@@ -181,7 +181,7 @@ class _ProNotificationSettingsState extends State<ProNotificationSettings> {
                 children: <Widget>[
                   _buildNotificationSetting(
                     'Order Confirmation',
-                    'This message will be sent to your clients immediately after order is placed.',
+                    'This message will be sent to your customers immediately after order is placed.',
                     orderConfirmationEmail,
                     (bool value) {
                       setState(() {
