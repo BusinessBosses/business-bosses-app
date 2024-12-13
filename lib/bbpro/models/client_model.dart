@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 
 // Enum for client types
 enum ClientType {
-  allclients('All Clients', Colors.black),
+  allclients('All Customers', Colors.black),
   online('Individual', Colors.green),
   inPerson('Company', Colors.blue);
   // bbUser('Bb-User', primaryColorLT);
@@ -88,8 +88,9 @@ class Client {
         image: List<String>.from(json['image']),
         orderCount: num.parse(
             json['orderCount'] != null ? json['orderCount'].toString() : '0'),
-        totalAmountSpent: num.parse(
-            json['totalAmountSpent'] != null ? json['totalAmountSpent'].toString() : '0'),
+        totalAmountSpent: num.parse(json['totalAmountSpent'] != null
+            ? json['totalAmountSpent'].toString()
+            : '0'),
       );
 
   Map<String, dynamic> toMap() => <String, dynamic>{

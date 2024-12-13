@@ -187,7 +187,7 @@ class _ChooseClientBottomSheetState extends State<ChooseClientBottomSheet>
           hasSearchIcon: true,
           contentPadding: 10,
           backgroundColor: backgroundColor,
-          hintText: 'Search Clients',
+          hintText: 'Search Customers',
           onChange: onSearchChange,
           onSubmit: (String query) {},
         ),

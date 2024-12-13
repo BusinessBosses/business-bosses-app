@@ -106,7 +106,7 @@ class _ClientsScreenState extends State<ClientsScreen>
             children: const <int, Widget>{
               0: Padding(
                 padding: EdgeInsets.symmetric(horizontal: 0, vertical: 10),
-                child: Text('Clients', style: TextStyle(fontSize: 14)),
+                child: Text('Customers', style: TextStyle(fontSize: 14)),
               ),
               1: Padding(
                 padding: EdgeInsets.symmetric(horizontal: 5, vertical: 10),

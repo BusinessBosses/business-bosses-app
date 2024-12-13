@@ -106,7 +106,7 @@ class _CampaignItemState extends State<CampaignItem> {
                   Row(
                     children: <Widget>[
                       const Text(
-                        'Total Clients: ',
+                        'Total Customers: ',
                         style: TextStyle(
                           fontWeight: FontWeight.normal,
                           fontSize: 13,

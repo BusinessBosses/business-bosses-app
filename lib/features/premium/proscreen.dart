@@ -223,17 +223,13 @@ class _ProSubscribeSectionState extends State<ProSubscribeSection> {
   static final List<ProFeatureItem> _profeatures = <ProFeatureItem>[
     ProFeatureItem(
         iconPath: 'assets/svgs/checkfilled.svg',
-        caption: 'Online Biz-Centre',
-        subtext: 'Your business site to convert visits into sales'),
+        caption: 'Biz-Centre',
+        subtext: 'Your business website to convert visits into sales'),
     ProFeatureItem(
       iconPath: 'assets/svgs/checkfilled.svg',
-      caption: 'Mutiple Income',
-      subtext: 'Manage orders from multiple sales channel',
+      caption: 'Earn more',
+      subtext: 'Handle orders from different sales channel',
     ),
-    ProFeatureItem(
-        iconPath: 'assets/svgs/checkfilled.svg',
-        caption: 'More Customers & Referrals',
-        subtext: 'Get featured in marketplace & posts search'),
     ProFeatureItem(
       iconPath: 'assets/svgs/checkfilled.svg',
       caption: 'Digital Assistant',
@@ -241,11 +237,15 @@ class _ProSubscribeSectionState extends State<ProSubscribeSection> {
     ),
     ProFeatureItem(
         iconPath: 'assets/svgs/checkfilled.svg',
-        caption: 'Marketing Campaigns & Broadcast',
-        subtext: 'Send customers direct marketing messages'),
+        caption: 'More Connections & Referrals',
+        subtext: 'Get noticed in marketplace & posts search'),
     ProFeatureItem(
         iconPath: 'assets/svgs/checkfilled.svg',
-        caption: 'Get Verified & Exclusive Offers',
+        caption: 'Marketing Messages & Campaigns',
+        subtext: 'Send marketing messages & grow customer base'),
+    ProFeatureItem(
+        iconPath: 'assets/svgs/checkfilled.svg',
+        caption: 'Exclusive Premium Offers',
         subtext: 'FREE virtual address, monthly rewards & more!'),
   ];
   String paymentMethodId = 'Proyear';

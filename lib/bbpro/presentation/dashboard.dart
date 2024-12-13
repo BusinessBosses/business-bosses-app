@@ -33,7 +33,7 @@ class Dashboard extends StatefulWidget {
 
 class _DashboardState extends State<Dashboard> {
   final List<String> titles = <String>[
-    'Clients',
+    'Customers',
     'Visits',
     'To-do tasks',
     // 'Shop Visits'
@@ -43,7 +43,7 @@ class _DashboardState extends State<Dashboard> {
     'Add Products',
     'Add Services',
     'Create Orders',
-    'Add Clients',
+    'Add Customers',
   ];
   final ShopController shopController = Get.put(ShopController());
   final ClientsController clientsController = Get.put(ClientsController());
@@ -107,7 +107,7 @@ class _DashboardState extends State<Dashboard> {
                                       : index == 3
                                           ? 'Add Orders'
                                           : index == 4
-                                              ? 'Add Clients'
+                                              ? 'Add Customers'
                                               : 'Add Projects',
                           style: const TextStyle(
                             fontSize: 18,
