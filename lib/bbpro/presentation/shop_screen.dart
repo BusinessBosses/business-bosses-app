@@ -394,7 +394,7 @@ class _ShopScreenState extends State<ShopScreen> {
           _buildContactRow(
             'assets/svgs/website.svg',
             'Virtual Address',
-            '${shopController.shop!.appId} Biz-Centre, Business Bosses, United Kingdom',
+            '#${shopController.shop!.appId} Biz-Centre, Business Bosses, United Kingdom',
             12,
             null,
           ),

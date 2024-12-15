@@ -577,7 +577,7 @@ class _UserShopScreenState extends State<UserShopScreen> {
           _buildContactRow(
             'assets/svgs/website.svg',
             'Virtual Address',
-            '#${shopController.userShop!.appId}, Biz-Centre, Business Bosses, United Kingdom',
+            '#${shopController.userShop!.appId} Biz-Centre, Business Bosses, United Kingdom',
             12,
             null,
           ),
