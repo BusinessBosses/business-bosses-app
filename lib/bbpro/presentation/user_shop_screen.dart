@@ -58,8 +58,8 @@ class _UserShopScreenState extends State<UserShopScreen> {
 
   void _shareBizCenter() {
     String message =
-        'Have a look at ${shopController.userShop!.user?.username ?? 'Business Bosses'}\'s BizCenter on Business Bosses\n'
-        'https://vm.businessbosses.co.uk/share/post';
+        'Have a look at ${shopController.userShop!.user?.username}\'s BizCenter on Business Bosses\n'
+        ' ${shopController.userShop!.url}';
     socialShare(message);
   }
 

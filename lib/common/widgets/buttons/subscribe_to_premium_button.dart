@@ -1,4 +1,5 @@
 import 'package:business_bosses_v2/features/premium/premiumscreen.dart';
+import 'package:business_bosses_v2/features/premium/proscreen.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -13,7 +14,7 @@ Widget subscribetopremiumbutton() {
     child: IntrinsicWidth(
       child: GestureDetector(
         onTap: () {
-          Get.to(() => const PremiumScreen());
+          Get.to(() => const ProScreen());
         },
         child: const Padding(
           padding: EdgeInsets.symmetric(vertical: 8, horizontal: 15),

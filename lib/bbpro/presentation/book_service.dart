@@ -141,26 +141,37 @@ class _BookServiceScreenState extends State<BookServiceScreen> {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: <Widget>[
-                      Wrap(
-                        children: <Widget>[
-                          Text(
-                            widget.shop.currency,
-                            style: const TextStyle(
-                              color: proprimaryColor,
-                              fontWeight: FontWeight.bold,
-                              fontSize: 16,
+                      if (widget.service.discount > 0)
+                        Row(
+                          children: <Widget>[
+                            Text(
+                              '${widget.shop.currency}${((widget.service.price * (1 - widget.service.discount / 100)) * 100).round() / 100}',
+                              style: const TextStyle(
+                                color: proprimaryColor,
+                                fontWeight: FontWeight.bold,
+                                fontSize: 16,
+                              ),
                             ),
-                          ),
-                          Text(
-                            widget.service.price.toString(),
-                            style: const TextStyle(
-                              color: proprimaryColor,
-                              fontWeight: FontWeight.bold,
-                              fontSize: 16,
+                            const SizedBox(width: 5),
+                            Text(
+                              '${widget.shop.currency}${widget.service.price.toStringAsFixed(2)}',
+                              style: const TextStyle(
+                                color: Colors.grey,
+                                decoration: TextDecoration.lineThrough,
+                                fontSize: 14,
+                              ),
                             ),
+                          ],
+                        )
+                      else
+                        Text(
+                          '${widget.shop.currency}${widget.service.price.toStringAsFixed(2)}',
+                          style: const TextStyle(
+                            color: proprimaryColor,
+                            fontWeight: FontWeight.bold,
+                            fontSize: 16,
                           ),
-                        ],
-                      ),
+                        ),
                     ],
                   ),
                   const SizedBox(height: 15),
@@ -238,6 +249,26 @@ class _BookServiceScreenState extends State<BookServiceScreen> {
                       }
                     },
                   ),
+                  if (widget.service.availability != null)
+                    Column(
+                      children: <Widget>[
+                        const SizedBox(
+                          height: 10,
+                        ),
+                        GestureDetector(
+                          onTap: () {
+                            print(widget.service.availability);
+                          },
+                          child: Text(
+                            'Available Time: ${widget.service.availability?['startTime']} - ${widget.service.availability?['endTime']}',
+                            style: const TextStyle(
+                              fontSize: 14,
+                              fontWeight: FontWeight.normal,
+                            ),
+                          ),
+                        ),
+                      ],
+                    )
                 ],
               ),
             ),

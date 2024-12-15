@@ -93,14 +93,38 @@ class _ServiceCardState extends State<ServiceCard> {
                       maxLines: 1,
                       overflow: TextOverflow.ellipsis,
                     ),
-                    Text(
-                      '${widget.shop == null ? shopController.shop!.currency : widget.shop!.currency}${widget.service?.price.toString()}',
-                      style: const TextStyle(
-                        color: proprimaryColor,
-                        fontWeight: FontWeight.bold,
-                        fontSize: 13,
+                    if (widget.service?.discount != null &&
+                        widget.service!.discount > 0)
+                      Row(
+                        children: <Widget>[
+                          Text(
+                            '${widget.shop?.currency ?? shopController.shop!.currency}${((widget.service!.price * (1 - widget.service!.discount / 100)) * 100).round() / 100}',
+                            style: const TextStyle(
+                              color: proprimaryColor,
+                              fontWeight: FontWeight.bold,
+                              fontSize: 13,
+                            ),
+                          ),
+                          const SizedBox(width: 5),
+                          Text(
+                            '${widget.shop?.currency ?? shopController.shop!.currency}${widget.service!.price.toStringAsFixed(2)}',
+                            style: const TextStyle(
+                              color: Colors.grey,
+                              decoration: TextDecoration.lineThrough,
+                              fontSize: 11,
+                            ),
+                          ),
+                        ],
+                      )
+                    else
+                      Text(
+                        '${widget.shop?.currency ?? shopController.shop!.currency}${widget.service!.price.toStringAsFixed(2)}',
+                        style: const TextStyle(
+                          color: proprimaryColor,
+                          fontWeight: FontWeight.bold,
+                          fontSize: 13,
+                        ),
                       ),
-                    ),
                     Text(
                       widget.service?.description ?? 'Service description',
                       style: const TextStyle(fontSize: 11),

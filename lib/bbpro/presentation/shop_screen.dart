@@ -1,3 +1,4 @@
+import 'package:business_bosses_v2/action/action.dart';
 import 'package:business_bosses_v2/bbpro/controllers/shop_controller.dart';
 import 'package:business_bosses_v2/bbpro/models/service_model.dart';
 import 'package:business_bosses_v2/bbpro/models/product_model.dart';
@@ -62,7 +63,9 @@ class _ShopScreenState extends State<ShopScreen> {
                 CircleAvatar(
                   backgroundColor: Colors.transparent,
                   child: IconButton(
-                      onPressed: () {},
+                      onPressed: () {
+                        _sharePost();
+                      },
                       icon: SvgPicture.asset('assets/svgs/shopshare.svg')),
                 )
               ],
@@ -623,5 +626,12 @@ class _ShopScreenState extends State<ShopScreen> {
 
   Widget _buildDivider() {
     return Container(color: Colors.black12, height: 0.5);
+  }
+
+  void _sharePost() {
+    String message =
+        'Have a look at ${shopController.shop!.user?.username}\'s biz-center on Business Bosses\n'
+        ' ${shopController.shop?.url}';
+    socialShare(message);
   }
 }

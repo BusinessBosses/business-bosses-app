@@ -1,3 +1,4 @@
+import 'package:business_bosses_v2/action/action.dart';
 import 'package:business_bosses_v2/bbpro/controllers/shop_controller.dart';
 import 'package:business_bosses_v2/bbpro/presentation/availability.dart';
 import 'package:business_bosses_v2/bbpro/presentation/services_management.dart';
@@ -196,7 +197,9 @@ class _SetupState extends State<Setup> {
                                   textColor: proprimaryColor,
                                   backgroundColor: Colors.white,
                                   text: 'Share my link',
-                                  onPressed: () {},
+                                  onPressed: () {
+                                    _sharePost();
+                                  },
                                 ),
                               ],
                             )
@@ -355,5 +358,12 @@ class _SetupState extends State<Setup> {
           message: 'An error occurred, please try again!',
           error: true);
     }
+  }
+
+  void _sharePost() {
+    String message =
+        'Have a look at ${shopController.shop!.user?.username}\'s biz-center on Business Bosses\n'
+        ' ${shopController.shop?.url}';
+    socialShare(message);
   }
 }

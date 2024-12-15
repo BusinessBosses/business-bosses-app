@@ -148,26 +148,38 @@ class _OrderProductScreenState extends State<OrderProductScreen> {
                           Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: <Widget>[
-                              Wrap(
-                                children: <Widget>[
-                                  Text(
-                                    widget.shop.currency,
-                                    style: const TextStyle(
-                                      color: proprimaryColor,
-                                      fontWeight: FontWeight.bold,
-                                      fontSize: 16,
+                              if (widget.product.discount != null &&
+                                  widget.product.discount! > 0)
+                                Row(
+                                  children: <Widget>[
+                                    Text(
+                                      '${widget.shop.currency}${((widget.product.price * (1 - widget.product.discount! / 100)) * 100).round() / 100}',
+                                      style: const TextStyle(
+                                        color: proprimaryColor,
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: 16,
+                                      ),
                                     ),
-                                  ),
-                                  Text(
-                                    widget.product.price.toString(),
-                                    style: const TextStyle(
-                                      color: proprimaryColor,
-                                      fontWeight: FontWeight.bold,
-                                      fontSize: 16,
+                                    const SizedBox(width: 5),
+                                    Text(
+                                      '${widget.shop.currency}${widget.product.price.toStringAsFixed(2)}',
+                                      style: const TextStyle(
+                                        color: Colors.grey,
+                                        decoration: TextDecoration.lineThrough,
+                                        fontSize: 14,
+                                      ),
                                     ),
+                                  ],
+                                )
+                              else
+                                Text(
+                                  '${widget.shop.currency}${widget.product.price.toStringAsFixed(2)}',
+                                  style: const TextStyle(
+                                    color: proprimaryColor,
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 16,
                                   ),
-                                ],
-                              ),
+                                ),
                               // if (widget.product.deliveryMethod != null)
                               //   Text(
                               //     widget.product.deliveryMethod!,
