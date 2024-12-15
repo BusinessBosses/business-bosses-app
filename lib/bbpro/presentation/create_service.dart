@@ -69,7 +69,7 @@ class _CreateServiceListingState extends State<CreateServiceListing>
 
   late AnimationController _animationController;
   late Animation<double> _animation;
-  final List<DateTime> _selectedDates = <DateTime>[];
+  List<DateTime> _selectedDates = <DateTime>[];
   bool _isAlwaysAvailable = false;
   final List<bool> _selectedWeekdays = List<bool>.filled(7, false);
   TimeOfDay _startTime = const TimeOfDay(hour: 9, minute: 0);
@@ -118,6 +118,9 @@ class _CreateServiceListingState extends State<CreateServiceListing>
       paymentMethod = widget.service!.paymentMethod;
       notesController.text = widget.service!.notes ?? '';
       addressorlinkController.text = widget.service!.url ?? '';
+      _selectedDates = (widget.service!.selectedDates)
+          .map((date) => DateTime.parse(date.toString()))
+          .toList();
       packages
           .addAll(widget.service!.packages.map((package) => <String, dynamic>{
                 'name': package['name'],
@@ -366,7 +369,7 @@ class _CreateServiceListingState extends State<CreateServiceListing>
                     style: TextStyle(),
                   ),
                 ),
-                initialSelection: location!.isEmpty
+                initialSelection: location == null || location!.isEmpty
                     ? shopController.shop?.location
                     : location,
                 pickerBuilder:
@@ -379,7 +382,7 @@ class _CreateServiceListingState extends State<CreateServiceListing>
                     child: CustomTextWidget(
                       caption: 'Location',
                       iconName: 'assets/svgs/nexticon.svg',
-                      text: location!.isEmpty
+                      text: location == null || location!.isEmpty
                           ? shopController.shop!.location
                           : location,
                     ),
@@ -926,6 +929,8 @@ class _CreateServiceListingState extends State<CreateServiceListing>
           'notes': notesController.text.trim().isEmpty
               ? null
               : notesController.text.trim(),
+          'selectedDates':
+              _selectedDates.map((DateTime date) => date.toString()).toList(),
         };
 
         // Log the cleaned data
@@ -1110,13 +1115,18 @@ class _CreateServiceListingState extends State<CreateServiceListing>
                   : SizedBox(
                       height: 300,
                       child: SfCalendar(
+                        initialSelectedDate: _selectedDates.isNotEmpty
+                            ? _selectedDates[0]
+                            : DateTime.now(),
                         selectionDecoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(8),
                           color: Colors.transparent,
                         ),
                         todayHighlightColor: proprimaryColor,
                         view: CalendarView.month,
-                        initialDisplayDate: DateTime.now(),
+                        initialDisplayDate: _selectedDates.isNotEmpty
+                            ? _selectedDates[0]
+                            : DateTime.now(),
                         monthViewSettings: const MonthViewSettings(
                           appointmentDisplayMode:
                               MonthAppointmentDisplayMode.indicator,
@@ -1137,13 +1147,18 @@ class _CreateServiceListingState extends State<CreateServiceListing>
               SizedBox(
                 height: 400,
                 child: SfCalendar(
+                  initialSelectedDate: _selectedDates.isNotEmpty
+                      ? _selectedDates[0]
+                      : DateTime.now(),
                   selectionDecoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(8),
                     color: Colors.transparent,
                   ),
                   todayHighlightColor: proprimaryColor,
                   view: CalendarView.month,
-                  initialDisplayDate: DateTime.now(),
+                  initialDisplayDate: _selectedDates.isNotEmpty
+                      ? _selectedDates[0]
+                      : DateTime.now(),
                   monthViewSettings: const MonthViewSettings(
                     appointmentDisplayMode:
                         MonthAppointmentDisplayMode.indicator,

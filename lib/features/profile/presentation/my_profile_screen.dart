@@ -663,8 +663,9 @@ class _MyProfileScreenState extends State<MyProfileScreen> {
                     ],
                   ),
                 ),
-                profileController.myProfile.isSubscribed
-                    ? SizedBox(
+                // profileController.myProfile.isSubscribed
+                //     ? 
+                    SizedBox(
                         height: MediaQuery.of(context).size.height,
                         width: MediaQuery.of(context).size.width,
                         child: Bottomnavscreen(
@@ -676,40 +677,40 @@ class _MyProfileScreenState extends State<MyProfileScreen> {
                           },
                         ),
                       )
-                    : Center(
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          children: <Widget>[
-                            const Text(
-                              'Upgrade now to unlock \nBiz-Centre',
-                              style: TextStyle(
-                                fontSize: 18,
-                                fontWeight: FontWeight.w700,
-                              ),
-                              textAlign: TextAlign.center,
-                            ),
-                            const SizedBox(
-                              height: 30,
-                            ),
-                            Lottie.asset(
-                              'assets/anim/padlock.json',
-                              fit: BoxFit.cover,
-                              height: 90,
-                              width: 90,
-                            ),
-                            const SizedBox(
-                              height: 30,
-                            ),
-                            const Padding(
-                                padding: EdgeInsets.only(
-                                    left: 0.0, top: 10, bottom: 10),
-                                child: ProSubscribeSection(
-                                  isGrow: true,
-                                )),
-                          ],
-                        ),
-                      )
+                    // : Center(
+                    //     child: Column(
+                    //       mainAxisAlignment: MainAxisAlignment.center,
+                    //       crossAxisAlignment: CrossAxisAlignment.center,
+                    //       children: <Widget>[
+                    //         const Text(
+                    //           'Upgrade now to unlock \nBiz-Centre',
+                    //           style: TextStyle(
+                    //             fontSize: 18,
+                    //             fontWeight: FontWeight.w700,
+                    //           ),
+                    //           textAlign: TextAlign.center,
+                    //         ),
+                    //         const SizedBox(
+                    //           height: 30,
+                    //         ),
+                    //         Lottie.asset(
+                    //           'assets/anim/padlock.json',
+                    //           fit: BoxFit.cover,
+                    //           height: 90,
+                    //           width: 90,
+                    //         ),
+                    //         const SizedBox(
+                    //           height: 30,
+                    //         ),
+                    //         const Padding(
+                    //             padding: EdgeInsets.only(
+                    //                 left: 0.0, top: 10, bottom: 10),
+                    //             child: ProSubscribeSection(
+                    //               isGrow: true,
+                    //             )),
+                    //       ],
+                    //     ),
+                    //   )
               ]),
         );
       },
