@@ -253,14 +253,14 @@ class _BookServiceScreenState extends State<BookServiceScreen> {
                     Column(
                       children: <Widget>[
                         const SizedBox(
-                          height: 10,
+                          height: 15,
                         ),
                         GestureDetector(
                           onTap: () {
-                            print(widget.service.availability);
+                            print(widget.service);
                           },
                           child: Text(
-                            'Available Time: ${widget.service.availability?['startTime']} - ${widget.service.availability?['endTime']}',
+                            'Available Time: ${_formatTime(widget.service.availability?['startTime'])} - ${_formatTime(widget.service.availability?['endTime'])}',
                             style: const TextStyle(
                               fontSize: 14,
                               fontWeight: FontWeight.normal,
@@ -549,5 +549,33 @@ class _BookServiceScreenState extends State<BookServiceScreen> {
     } else {
       return 'pickup';
     }
+  }
+
+  String _formatTime(String? time) {
+    if (time == null) return '';
+
+    // Split the time into hours and minutes
+    List<String> timeParts = time.split(':');
+    if (timeParts.length < 2) return time;
+
+    int hour = int.parse(timeParts[0]);
+    String minute = timeParts[1];
+    String period = 'AM';
+
+    // Convert to 12-hour format
+    if (hour >= 12) {
+      period = 'PM';
+      if (hour > 12) {
+        hour -= 12;
+      }
+    }
+
+    // Handle midnight (0:00)
+    if (hour == 0) {
+      hour = 12;
+    }
+
+    // Format as 12-hour time with AM/PM
+    return '$hour:$minute $period';
   }
 }
