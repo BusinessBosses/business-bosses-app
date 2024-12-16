@@ -118,11 +118,15 @@ class _CreateServiceListingState extends State<CreateServiceListing>
       paymentMethod = widget.service!.paymentMethod;
       notesController.text = widget.service!.notes ?? '';
       addressorlinkController.text = widget.service!.url ?? '';
-      _selectedDates = (widget.service!.selectedDates)
-          .map((date) => DateTime.parse(date.toString()))
-          .toList();
-      packages
-          .addAll(widget.service!.packages.map((package) => <String, dynamic>{
+      _selectedDates = _selectedDates.isEmpty ||
+              (_selectedDates.length == 1 &&
+                  _selectedDates.first.toString() == '')
+          ? <DateTime>[]
+          : (widget.service!.selectedDates)
+              .map((dynamic date) => DateTime.parse(date.toString()))
+              .toList();
+      packages.addAll(
+          widget.service!.packages.map((dynamic package) => <String, dynamic>{
                 'name': package['name'],
                 'price': package['price'],
               }));
@@ -876,7 +880,8 @@ class _CreateServiceListingState extends State<CreateServiceListing>
         // First validate required fields
         if (_serviceNameController.text.isEmpty ||
             _priceController.text.isEmpty ||
-            _descriptionController.text.isEmpty) {
+            _descriptionController.text.isEmpty ||
+            category == null) {
           // Check if days are selected
           showSnackbar(
               message: 'Please fill in all required fields', error: true);
@@ -928,8 +933,11 @@ class _CreateServiceListingState extends State<CreateServiceListing>
           'notes': notesController.text.trim().isEmpty
               ? null
               : notesController.text.trim(),
-          'selectedDates':
-              _selectedDates.map((DateTime date) => date.toString()).toList(),
+          'selectedDates': _selectedDates.isEmpty ||
+                  (_selectedDates.length == 1 &&
+                      _selectedDates.first.toString() == '')
+              ? null
+              : _selectedDates.map((DateTime date) => date.toString()).toList(),
         };
 
         // Log the cleaned data
@@ -949,6 +957,7 @@ class _CreateServiceListingState extends State<CreateServiceListing>
           }
         }
       } catch (e) {
+        print(e);
         String errorMessage = 'Failed to add service';
         showSnackbar(message: errorMessage, error: true);
       } finally {

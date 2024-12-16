@@ -82,7 +82,7 @@ class Service {
       deliveryTime: json['deliveryTime'],
       serviceType: json['serviceType'],
       createdAt: DateTime.parse(json['createdAt']),
-      availability: json['availability'],
+      availability: json['availability'] ?? json['serviceAvailability'],
       packages: json['packages'] ?? <dynamic>[],
       selectedDates: json['selectedDates'] ?? <dynamic>[],
       notes: json['notes'],
