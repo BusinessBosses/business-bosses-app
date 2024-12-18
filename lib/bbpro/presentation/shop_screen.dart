@@ -205,7 +205,7 @@ class _ShopScreenState extends State<ShopScreen> {
                   tabs: <Widget>[
                     Tab(text: 'Listings'),
                     Tab(text: 'Reviews'),
-                    Tab(text: 'About'),
+                    Tab(text: 'Contact'),
                   ]),
               const Divider(
                 height: 1,
@@ -384,15 +384,15 @@ class _ShopScreenState extends State<ShopScreen> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
-          const Text(
-            'Contact Information',
-            style: TextStyle(
-              fontWeight: FontWeight.w700,
-              fontSize: 18,
-              color: textColor,
-            ),
-          ),
-          const SizedBox(height: 20),
+          // const Text(
+          //   'Contact Information',
+          //   style: TextStyle(
+          //     fontWeight: FontWeight.w700,
+          //     fontSize: 18,
+          //     color: textColor,
+          //   ),
+          // ),
+          // const SizedBox(height: 20),
           // if (shopController.shop?.user?.virtualAddress?.isNotEmpty ?? false)
           _buildContactRow(
             'assets/svgs/website.svg',

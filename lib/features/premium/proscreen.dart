@@ -72,7 +72,7 @@ class _ProScreenState extends State<ProScreen> with TickerProviderStateMixin {
                 Tab(
                   child: FittedBox(
                     child: Text(
-                      'Upgrade',
+                      'My-Biz',
                       style:
                           TextStyle(fontWeight: FontWeight.w700, fontSize: 14),
                     ),

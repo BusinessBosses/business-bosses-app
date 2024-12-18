@@ -56,7 +56,7 @@ class _AddclientState extends State<Addclient> {
       backgroundColor: probackgroundColor,
       appBar: AppBar(
         title: Text(
-          widget.client != null ? 'Edit CLient' : 'Add a Client',
+          widget.client != null ? 'Edit Customers' : 'Add a Customer',
           style: const TextStyle(
             color: proprimaryColor,
             fontWeight: FontWeight.bold,
@@ -84,8 +84,8 @@ class _AddclientState extends State<Addclient> {
                     const SizedBox(height: 15),
                     CustomCard(
                       buttonvisible: true,
-                      caption: 'Client Information',
-                      subText: 'Add a photo for your client',
+                      caption: 'Customer Information',
+                      subText: 'Add a photo for your customer',
                       buttonText: 'Choose Photo',
                       onPressed: _pickImage,
                       imagePath: _selectedImage?.path ??
@@ -96,7 +96,7 @@ class _AddclientState extends State<Addclient> {
                     ),
                     const SizedBox(height: 15),
                     CustomEditText(
-                      caption: 'Client\'s Name',
+                      caption: 'Customer\'s Name',
                       maxLength: 30,
                       hintText: 'Enter name here',
                       controller: nameController,
@@ -104,13 +104,13 @@ class _AddclientState extends State<Addclient> {
                     const SizedBox(height: 15),
                     CustomEditText(
                       maxLength: 30,
-                      caption: 'Client\'s Email',
+                      caption: 'Customer\'s Email',
                       hintText: 'example@business.com',
                       controller: emailController,
                     ),
                     const SizedBox(height: 15),
                     CustomEditText(
-                      caption: 'Client\'s Phone number',
+                      caption: 'Customer\'s Phone number',
                       hintText: '+448908654321',
                       controller: phoneController,
                       maxLength: 30,
@@ -128,7 +128,7 @@ class _AddclientState extends State<Addclient> {
                     widget.client != null
                         ? CustomDropdownWidget(
                             initialValue: toInitialString(selectedType!),
-                            caption: 'Client Type',
+                            caption: 'Customer Type',
                             items: ClientType.values
                                 .skip(1) // Skip the first item
                                 .map((ClientType type) => type.displayTitle)
@@ -140,7 +140,7 @@ class _AddclientState extends State<Addclient> {
                             iconName: 'assets/svgs/dropdown.svg',
                           )
                         : CustomDropdownWidget(
-                            caption: 'Client Type',
+                            caption: 'Customer Type',
                             items: ClientType.values
                                 .skip(1) // Skip the first item
                                 .map((ClientType type) => type.displayTitle)
@@ -187,7 +187,7 @@ class _AddclientState extends State<Addclient> {
 
                   if (name.isEmpty) {
                     showSnackbar(
-                        message: 'Please enter the client\'s name',
+                        message: 'Please enter the customer\'s name',
                         error: true);
                     setState(() {
                       isSubmit = false;
@@ -197,7 +197,7 @@ class _AddclientState extends State<Addclient> {
 
                   if (email.isEmpty) {
                     showSnackbar(
-                        message: 'Please enter the client\'s email',
+                        message: 'Please enter the customer\'s email',
                         error: true);
                     setState(() {
                       isSubmit = false;
@@ -228,7 +228,7 @@ class _AddclientState extends State<Addclient> {
 
                   if (selectedType == null) {
                     showSnackbar(
-                        message: 'Please select a client type', error: true);
+                        message: 'Please select a customer type', error: true);
                     setState(() {
                       isSubmit = false;
                     });
@@ -280,8 +280,8 @@ class _AddclientState extends State<Addclient> {
                     if (response) {
                       showSnackbar(
                         message: widget.client != null
-                            ? 'Client Updated Successfully!'
-                            : 'Client Added Successfully!',
+                            ? 'Customer Updated Successfully!'
+                            : 'Customer Added Successfully!',
                       );
                       // ignore: use_build_context_synchronously
 
@@ -295,8 +295,8 @@ class _AddclientState extends State<Addclient> {
                     } else {
                       showSnackbar(
                         message: widget.client != null
-                            ? ' Error updatig client!'
-                            : 'Error Adding Client!',
+                            ? ' Error updating customer!'
+                            : 'Error adding customer!',
                         error: true,
                       );
                       setState(() {
@@ -332,7 +332,7 @@ class _AddclientState extends State<Addclient> {
       case 'Bb-User':
         return 'bb-user';
       default:
-        return 'on-line'; // default value, if needed
+        return 'on-line';
     }
   }
 
@@ -345,7 +345,7 @@ class _AddclientState extends State<Addclient> {
       case 'bb-user':
         return 'Bb-User';
       default:
-        return 'Online'; // default value, if needed
+        return 'Online';
     }
   }
 }

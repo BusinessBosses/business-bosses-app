@@ -77,12 +77,12 @@ class _UserShopScreenState extends State<UserShopScreen> {
                 ),
                 arguments: shopController.userShop!.user,
               );
-            } else if (action['text'] == 'Call') {
-              final Uri launchUri = Uri(
-                scheme: 'tel',
-                path: shopController.shop!.phone,
-              );
-              launchUrl(launchUri);
+              // } else if (action['text'] == 'Call') {
+              //   final Uri launchUri = Uri(
+              //     scheme: 'tel',
+              //     path: shopController.shop!.phone,
+              //   );
+              //   launchUrl(launchUri);
             } else if (action['text'] == 'Share') {
               _shareBizCenter();
             } else if (action['text'] == 'Review') {
@@ -329,7 +329,7 @@ class _UserShopScreenState extends State<UserShopScreen> {
                                 tabs: <Widget>[
                                   Tab(text: 'Listings'),
                                   Tab(text: 'Reviews'),
-                                  Tab(text: 'About'),
+                                  Tab(text: 'Contact'),
                                 ]),
                             const Divider(
                               height: 1,
@@ -565,15 +565,15 @@ class _UserShopScreenState extends State<UserShopScreen> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
-          const Text(
-            'Contact Information',
-            style: TextStyle(
-              fontWeight: FontWeight.w700,
-              fontSize: 16,
-              color: textColor,
-            ),
-          ),
-          const SizedBox(height: 20),
+          // const Text(
+          //   'Contact Information',
+          //   style: TextStyle(
+          //     fontWeight: FontWeight.w700,
+          //     fontSize: 16,
+          //     color: textColor,
+          //   ),
+          // ),
+          // const SizedBox(height: 20),
           _buildContactRow(
             'assets/svgs/website.svg',
             'Virtual Address',
