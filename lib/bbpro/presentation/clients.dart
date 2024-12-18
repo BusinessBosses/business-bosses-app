@@ -342,7 +342,7 @@ class _ClientsScreenState extends State<ClientsScreen>
                           ),
                           const SizedBox(width: 8),
                           const Text(
-                            'Add a Client',
+                            'Add a Customer',
                             style: TextStyle(
                               fontSize: 13,
                             ),

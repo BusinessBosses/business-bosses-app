@@ -14,15 +14,17 @@ class ProfeatureTile extends StatelessWidget {
     return Container(
       decoration: BoxDecoration(
         color: backgroundColor ?? Colors.white,
-        borderRadius: BorderRadius.circular(8),
+        borderRadius: BorderRadius.circular(6),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
           Row(
+            mainAxisAlignment: MainAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[
               Container(
-                padding: const EdgeInsets.all(8),
+                padding: const EdgeInsets.only(right: 8),
                 decoration: BoxDecoration(
                   color: feature.color,
                   borderRadius: BorderRadius.circular(8),

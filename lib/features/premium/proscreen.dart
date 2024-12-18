@@ -260,19 +260,19 @@ class _ProSubscribeSectionState extends State<ProSubscribeSection> {
           fit: BoxFit.fitWidth,
         ),
         Container(
-            decoration: const BoxDecoration(
+            decoration: BoxDecoration(
               color: Colors.white,
-              // gradient: LinearGradient(
-              //   begin: Alignment.topCenter,
-              //   end: Alignment.bottomCenter,
-              //   colors: <Color>[
-              //     widget.isGrow == null
-              //         ? prosemibackColor.withAlpha(50)
-              //         : Colors.white,
-              //     Colors.white,
-              //   ],
-              //   stops: const <double>[0.0, 0.25],
-              // ),
+              gradient: LinearGradient(
+                begin: Alignment.topCenter,
+                end: Alignment.bottomCenter,
+                colors: <Color>[
+                  widget.isGrow == null
+                      ? prosemibackColor.withAlpha(50)
+                      : Colors.white,
+                  Colors.white,
+                ],
+                stops: const <double>[0.0, 0.25],
+              ),
             ),
             padding: const EdgeInsets.symmetric(horizontal: 15),
             child: Column(
@@ -312,73 +312,45 @@ class _ProSubscribeSectionState extends State<ProSubscribeSection> {
                           ),
                         ),
                       ),
-                      // Text(
-                      //   'all in one place',
-                      //   style: TextStyle(
-                      //       color: primaryColorLT,
-                      //       fontSize: 15,
-                      //       fontWeight: FontWeight.w600),
-                      // ),
                     ],
                   ),
                 const SizedBox(height: 30),
-                Stack(
-                  children: <Widget>[
-                    Container(
-                      decoration: BoxDecoration(
-                        boxShadow: <BoxShadow>[
-                          BoxShadow(
-                            color: Colors.black.withOpacity(0.09),
-                            blurRadius: 50.0,
-                            spreadRadius: 0.0,
-                          ),
-                        ],
-                      ),
-                      child: SvgPicture.asset(
-                        'assets/svgs/premiumdescback.svg',
-                        width: MediaQuery.of(context).size.width,
-                        fit: BoxFit.fill,
-                      ),
+                Container(
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(15),
+                    color: Colors.white,
+                    border: Border.all(
+                      color: Colors.grey.withOpacity(0.12),
+                      width: 2,
                     ),
-                    Container(
-                      decoration: const BoxDecoration(
-                          // borderRadius: BorderRadius.circular(15),
-                          // color: Colors.transparent,
-                          // border: Border.all(
-                          //   color: Colors.grey.withOpacity(0.12),
-                          //   width: 2,
-                          // ),
-                          ),
-                      padding: const EdgeInsets.all(16),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: <Widget>[
-                          const SizedBox(
-                            height: 5,
-                          ),
-                          const Text(
-                            'What\'s included',
-                            style: TextStyle(
-                                fontSize: 16, fontWeight: FontWeight.bold),
-                          ),
-                          const SizedBox(
-                            height: 20,
-                          ),
-                          Column(
-                            children: _profeatures
-                                .map((ProFeatureItem feature) => Padding(
-                                    padding:
-                                        const EdgeInsets.only(bottom: 12.0),
-                                    child: ProfeatureTile(
-                                      backgroundColor: Colors.transparent,
-                                      feature: feature,
-                                    )))
-                                .toList(),
-                          ),
-                        ],
+                  ),
+                  padding: const EdgeInsets.all(16),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: <Widget>[
+                      const SizedBox(
+                        height: 5,
                       ),
-                    ),
-                  ],
+                      const Text(
+                        'What\'s included',
+                        style: TextStyle(
+                            fontSize: 16, fontWeight: FontWeight.bold),
+                      ),
+                      const SizedBox(
+                        height: 20,
+                      ),
+                      Column(
+                        children: _profeatures
+                            .map((ProFeatureItem feature) => Padding(
+                                padding: const EdgeInsets.only(bottom: 12.0),
+                                child: ProfeatureTile(
+                                  backgroundColor: Colors.transparent,
+                                  feature: feature,
+                                )))
+                            .toList(),
+                      ),
+                    ],
+                  ),
                 ),
                 const SizedBox(height: 30),
                 if (widget.isGrow != null)

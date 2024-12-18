@@ -233,7 +233,9 @@ class _BookServiceScreenState extends State<BookServiceScreen> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: <Widget>[
-                  const Text('Select Delivery Date'),
+                  const Text('Select Date and Time',
+                      style:
+                          TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
                   SfCalendar(
                     view: CalendarView.month,
                     initialDisplayDate: DateTime.now(),
@@ -259,11 +261,37 @@ class _BookServiceScreenState extends State<BookServiceScreen> {
                           onTap: () {
                             print(widget.service);
                           },
-                          child: Text(
-                            'Available Time: ${_formatTime(widget.service.availability?['startTime'])} - ${_formatTime(widget.service.availability?['endTime'])}',
-                            style: const TextStyle(
-                              fontSize: 14,
-                              fontWeight: FontWeight.normal,
+                          child: RichText(
+                            text: TextSpan(
+                              style: const TextStyle(
+                                fontSize: 14,
+                                fontWeight: FontWeight.normal,
+                                color: Colors.black, // Default text color
+                              ),
+                              children: <TextSpan>[
+                                const TextSpan(
+                                    text: 'Available Time: ',
+                                    style: TextStyle(
+                                      fontSize: 12,
+                                    )),
+                                TextSpan(
+                                  text: _formatTime(widget
+                                      .service.availability?['startTime']),
+                                  style: const TextStyle(
+                                    fontSize: 14,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
+                                const TextSpan(text: ' - '),
+                                TextSpan(
+                                  text: _formatTime(
+                                      widget.service.availability?['endTime']),
+                                  style: const TextStyle(
+                                    fontSize: 14,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
+                              ],
                             ),
                           ),
                         ),

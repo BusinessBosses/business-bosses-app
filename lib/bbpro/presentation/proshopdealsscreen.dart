@@ -168,32 +168,32 @@ class _ProshopdealsScreenState extends State<ProshopdealsScreen>
                       ),
                       SizedBox(
                         height: Get.height * 0.9,
-                        child: Center(
+                        child: const Center(
                           child: Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
+                            mainAxisAlignment: MainAxisAlignment.start,
                             crossAxisAlignment: CrossAxisAlignment.center,
                             children: <Widget>[
-                              const Text(
-                                'Upgrade now to get your listing featured',
-                                style: TextStyle(
-                                  fontSize: 18,
-                                  fontWeight: FontWeight.w700,
+                              SizedBox(
+                                height: 20,
+                              ),
+                              Padding(
+                                padding: EdgeInsets.symmetric(horizontal: 15.0),
+                                child: Text(
+                                  'Upgrade now to get your listing featured',
+                                  style: TextStyle(
+                                    fontSize: 18,
+                                    fontWeight: FontWeight.w700,
+                                  ),
+                                  textAlign: TextAlign.center,
                                 ),
-                                textAlign: TextAlign.center,
                               ),
-                              const SizedBox(
-                                height: 30,
-                              ),
-                              Lottie.asset(
-                                'assets/anim/listing.json',
-                                fit: BoxFit.cover,
-                                height: 90,
-                                width: 90,
-                              ),
-                              const SizedBox(
-                                height: 30,
-                              ),
-                              const Padding(
+                              // Lottie.asset(
+                              //   'assets/anim/listing.json',
+                              //   fit: BoxFit.cover,
+                              //   height: 90,
+                              //   width: 90,
+                              // ),
+                              Padding(
                                   padding: EdgeInsets.only(
                                       left: 0.0, top: 10, bottom: 10),
                                   child: ProSubscribeSection(

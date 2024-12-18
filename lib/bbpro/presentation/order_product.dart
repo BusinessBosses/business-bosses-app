@@ -525,7 +525,7 @@ class _OrderProductScreenState extends State<OrderProductScreen> {
                         });
                       }
                     },
-                    text: 'Done ',
+                    text: 'Place Order',
                   ),
                 ),
                 const SizedBox(

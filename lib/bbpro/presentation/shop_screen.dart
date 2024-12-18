@@ -30,7 +30,7 @@ class ShopScreen extends StatefulWidget {
 class _ShopScreenState extends State<ShopScreen> {
   final ShopController shopController = Get.find();
   final ProfileController profileController = Get.find();
-  String _selectedItem = 'All Products';
+  final String _selectedItem = 'All Products';
 
   @override
   void initState() {
@@ -224,83 +224,88 @@ class _ShopScreenState extends State<ShopScreen> {
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: <Widget>[
-                              Text(
-                                'Showcase (${shopController.products.length + shopController.services.length})',
-                                style: const TextStyle(
-                                    fontSize: 14, fontWeight: FontWeight.w700),
-                              ),
-                              GestureDetector(
-                                onTap: () {
-                                  final RenderBox button =
-                                      context.findRenderObject() as RenderBox;
-                                  final RenderBox overlay = Overlay.of(context)
-                                      .context
-                                      .findRenderObject() as RenderBox;
-                                  final RelativeRect position =
-                                      RelativeRect.fromRect(
-                                    Rect.fromPoints(
-                                      button.localToGlobal(
-                                          button.size
-                                              .topRight(const Offset(0, 380)),
-                                          ancestor: overlay),
-                                      button.localToGlobal(
-                                          button.size
-                                              .bottomRight(const Offset(0, 20)),
-                                          ancestor: overlay),
-                                    ),
-                                    Offset.zero & overlay.size,
-                                  );
-
-                                  showMenu(
-                                    shape: RoundedRectangleBorder(
-                                        borderRadius:
-                                            BorderRadius.circular(10)),
-                                    context: context,
-                                    shadowColor: Colors.black,
-                                    position: position,
-                                    items: <String>[
-                                      'All Products',
-                                      'Low Stock',
-                                      'Out of Stock',
-                                      'Most Popular',
-                                      'Newest First',
-                                    ].map((String option) {
-                                      return PopupMenuItem<String>(
-                                        value: option,
-                                        child: Text(
-                                          option,
-                                          style: const TextStyle(fontSize: 14),
-                                        ),
-                                      );
-                                    }).toList(),
-                                  ).then((String? selected) {
-                                    if (selected != null) {
-                                      setState(() {
-                                        _selectedItem = selected;
-                                      });
-                                    }
-                                  });
-                                },
-                                child: Container(
-                                  width: 150,
-                                  decoration: BoxDecoration(
-                                      color: backgroundColor,
-                                      borderRadius: BorderRadius.circular(7)),
-                                  child: Row(
-                                    children: <Widget>[
-                                      CircleAvatar(
-                                        backgroundColor: backgroundColor,
-                                        child: SvgPicture.asset(
-                                            'assets/svgs/filterprosections.svg'),
-                                      ),
-                                      Text(
-                                        _selectedItem,
-                                        style: const TextStyle(fontSize: 14),
-                                      )
-                                    ],
-                                  ),
+                              Padding(
+                                padding:
+                                    const EdgeInsets.symmetric(vertical: 5.0),
+                                child: Text(
+                                  'Showcase (${shopController.products.length + shopController.services.length})',
+                                  style: const TextStyle(
+                                      fontSize: 14,
+                                      fontWeight: FontWeight.w700),
                                 ),
                               ),
+                              // GestureDetector(
+                              //   onTap: () {
+                              //     final RenderBox button =
+                              //         context.findRenderObject() as RenderBox;
+                              //     final RenderBox overlay = Overlay.of(context)
+                              //         .context
+                              //         .findRenderObject() as RenderBox;
+                              //     final RelativeRect position =
+                              //         RelativeRect.fromRect(
+                              //       Rect.fromPoints(
+                              //         button.localToGlobal(
+                              //             button.size
+                              //                 .topRight(const Offset(0, 380)),
+                              //             ancestor: overlay),
+                              //         button.localToGlobal(
+                              //             button.size
+                              //                 .bottomRight(const Offset(0, 20)),
+                              //             ancestor: overlay),
+                              //       ),
+                              //       Offset.zero & overlay.size,
+                              //     );
+
+                              //     showMenu(
+                              //       shape: RoundedRectangleBorder(
+                              //           borderRadius:
+                              //               BorderRadius.circular(10)),
+                              //       context: context,
+                              //       shadowColor: Colors.black,
+                              //       position: position,
+                              //       items: <String>[
+                              //         'All Products',
+                              //         'Low Stock',
+                              //         'Out of Stock',
+                              //         'Most Popular',
+                              //         'Newest First',
+                              //       ].map((String option) {
+                              //         return PopupMenuItem<String>(
+                              //           value: option,
+                              //           child: Text(
+                              //             option,
+                              //             style: const TextStyle(fontSize: 14),
+                              //           ),
+                              //         );
+                              //       }).toList(),
+                              //     ).then((String? selected) {
+                              //       if (selected != null) {
+                              //         setState(() {
+                              //           _selectedItem = selected;
+                              //         });
+                              //       }
+                              //     });
+                              //   },
+                              //   child: Container(
+                              //     width: 150,
+                              //     decoration: BoxDecoration(
+                              //         color: backgroundColor,
+                              //         borderRadius: BorderRadius.circular(7)),
+                              //     child: Row(
+                              //       children: <Widget>[
+                              //         CircleAvatar(
+                              //           backgroundColor: backgroundColor,
+                              //           child: SvgPicture.asset(
+                              //               'assets/svgs/filterprosections.svg'),
+                              //         ),
+                              //         Text(
+                              //           _selectedItem,
+                              //           style: const TextStyle(fontSize: 14),
+                              //         )
+                              //       ],
+                              //     ),
+                              //   ),
+                              // ),
                             ],
                           ),
                         ),
@@ -397,7 +402,7 @@ class _ShopScreenState extends State<ShopScreen> {
           _buildContactRow(
             'assets/svgs/website.svg',
             'Virtual Address',
-            '#${shopController.shop!.appId} Biz-Centre, Business Bosses, United Kingdom',
+            '#${shopController.shop!.appId} Biz-Centre,\nBusiness Bosses, United Kingdom',
             12,
             null,
           ),
