@@ -179,30 +179,29 @@ class _ProshopdealsWidgetState extends State<ProshopdealsWidget> {
               fontWeight: FontWeight.w500,
             ),
           ),
-          if (hasDiscount)
-            Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: <Widget>[
-                if (hasDiscount)
-                  Text(
-                    '$currency${(double.parse(originalPrice)).toStringAsFixed(2)}',
-                    style: const TextStyle(
-                      color: Colors.grey,
-                      decoration: TextDecoration.lineThrough,
-                      fontSize: 11,
-                    ),
-                  ),
-                const SizedBox(width: 5),
+          Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: <Widget>[
+              if (hasDiscount)
                 Text(
-                  '$currency${(double.parse(originalPrice) * (1 - (double.tryParse(discount.replaceAll(RegExp(r'[^0-9.]'), '')) ?? 0) / 100)).toStringAsFixed(2)}',
-                  style: TextStyle(
-                    color: hasDiscount ? Colors.black : Colors.grey,
-                    fontWeight: FontWeight.bold,
-                    fontSize: 13,
+                  '$currency${(double.parse(originalPrice)).toStringAsFixed(2)}',
+                  style: const TextStyle(
+                    color: Colors.grey,
+                    decoration: TextDecoration.lineThrough,
+                    fontSize: 11,
                   ),
                 ),
-              ],
-            ),
+              const SizedBox(width: 5),
+              Text(
+                '$currency${(double.parse(originalPrice) * (1 - (double.tryParse(discount.replaceAll(RegExp(r'[^0-9.]'), '')) ?? 0) / 100)).toStringAsFixed(2)}',
+                style: TextStyle(
+                  color: hasDiscount ? Colors.black : Colors.grey,
+                  fontWeight: FontWeight.bold,
+                  fontSize: 13,
+                ),
+              ),
+            ],
+          ),
         ],
       ),
     );
