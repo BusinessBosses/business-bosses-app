@@ -192,20 +192,7 @@ class _MarketsPageState extends State<MarketsPage> {
                             margin: const EdgeInsets.symmetric(vertical: 10),
                             child: ProshopdealsWidget(
                               title: 'NEW',
-                              combinedList: _marketController.proItems
-                                  .where((Object item) {
-                                    if (item is Product) {
-                                      return item.images != null &&
-                                          item.images!.isNotEmpty &&
-                                          item.images![0].isNotEmpty;
-                                    } else if (item is Service) {
-                                      // Add a condition for Service if applicable
-                                      return item.images != null &&
-                                          item.images!.isNotEmpty &&
-                                          item.images![0].isNotEmpty;
-                                    }
-                                    return false;
-                                  })
+                              combinedList: _marketController.proItemsWithImages
                                   .take(10)
                                   .toList(),
                             ),

@@ -154,8 +154,7 @@ class _PostsWidgetState extends State<PostsWidget> {
             isHome: true,
             caption: 'Featured Listing',
             combinedList: <Object>[
-              ...marketController.proProducts.take(5).toList(),
-              ...marketController.proServices.take(5).toList(),
+              ...marketController.proItemsWithImages.take(10).toList(),
             ],
           ),
         ],

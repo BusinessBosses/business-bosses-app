@@ -227,8 +227,9 @@ class _MyOrdersScreenState extends State<MyOrdersScreen> {
                           children: <Widget>[
                             ProshopdealsWidget(
                               caption: 'Recommended',
-                              combinedList:
-                                  _marketController.proItems.take(10).toList(),
+                              combinedList: _marketController.proItemsWithImages
+                                  .take(10)
+                                  .toList(),
                             ),
                           ],
                         )

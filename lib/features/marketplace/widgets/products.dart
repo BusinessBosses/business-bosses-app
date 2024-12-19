@@ -1,3 +1,5 @@
+import 'package:business_bosses_v2/bbpro/models/product_model.dart';
+import 'package:business_bosses_v2/bbpro/models/service_model.dart';
 import 'package:business_bosses_v2/bbpro/widgets/proshopdeals.dart';
 import 'package:business_bosses_v2/features/home/controller/home_controller.dart';
 import 'package:business_bosses_v2/features/home/widgets/sellingpopup.dart';
@@ -125,7 +127,22 @@ class _ProductsPageState extends State<ProductsPage> {
                 padding: const EdgeInsets.only(bottom: 10.0),
                 child: ProshopdealsWidget(
                   title: 'NEW',
-                  products: _marketController.proProducts,
+                  products: _marketController.proProducts
+                      .where((Object item) {
+                        if (item is Product) {
+                          return item.images != null &&
+                              item.images!.isNotEmpty &&
+                              item.images![0].isNotEmpty;
+                        } else if (item is Service) {
+                          // Add a condition for Service if applicable
+                          return item.images != null &&
+                              item.images!.isNotEmpty &&
+                              item.images![0].isNotEmpty;
+                        }
+                        return false;
+                      })
+                      .take(10)
+                      .toList(),
                 ),
               ); // Return the widget instead of just referencing it
             } else if (index <=

@@ -11,7 +11,6 @@ import 'package:business_bosses_v2/bbpro/widgets/client_widget.dart';
 import 'package:business_bosses_v2/bbpro/widgets/custom_tabbar.dart';
 import 'package:business_bosses_v2/bbpro/widgets/notificationbutton.dart';
 import 'package:business_bosses_v2/bbpro/widgets/proseardwidget.dart';
-import 'package:business_bosses_v2/bbpro/widgets/proshopdeals.dart';
 import 'package:business_bosses_v2/bbpro/widgets/supplierscard.dart';
 import 'package:business_bosses_v2/bbpro/controllers/clients_controller.dart';
 import 'package:business_bosses_v2/bbpro/models/client_model.dart';

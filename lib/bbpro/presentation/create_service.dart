@@ -167,6 +167,7 @@ class _CreateServiceListingState extends State<CreateServiceListing>
     currencyController.text = shopController.shop?.location != null
         ? '${currencyValues[shopController.shop!.location.toString()]}'
         : 'USD';
+        setState((){});
   }
 
   Future<void> _pickImage() async {

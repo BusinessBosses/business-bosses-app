@@ -22,6 +22,7 @@ class MarketController extends GetxController {
   RxList<Product> proProducts = RxList<Product>(<Product>[]);
   RxList<Service> proServices = RxList<Service>(<Service>[]);
   RxList<Object> proItems = RxList<Object>(<Object>[]);
+  RxList<Object> proItemsWithImages = RxList<Object>(<Object>[]);
   RxList<MarketModel> products = RxList<MarketModel>(<MarketModel>[]);
   RxList<Order> orders = RxList<Order>(<Order>[]);
   RxList<MarketModel> services = RxList<MarketModel>(<MarketModel>[]);
@@ -502,6 +503,21 @@ class MarketController extends GetxController {
         DateTime bDate = b is Product ? b.createdAt : (b as Service).createdAt;
         return bDate.compareTo(aDate);
       });
+      proItemsWithImages.addAll(<Object>[
+        ...proItems.where((Object item) {
+          if (item is Product) {
+            return item.images != null &&
+                item.images!.isNotEmpty &&
+                item.images![0].isNotEmpty;
+          } else if (item is Service) {
+            // Add a condition for Service if applicable
+            return item.images != null &&
+                item.images!.isNotEmpty &&
+                item.images![0].isNotEmpty;
+          }
+          return false;
+        }).toList()
+      ]);
     } else {
       error(true);
     }
