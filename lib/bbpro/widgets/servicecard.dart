@@ -47,7 +47,7 @@ class _ServiceCardState extends State<ServiceCard> {
         ),
       ),
       child: Column(
-        crossAxisAlignment: CrossAxisAlignment.center,
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
           if (widget.service?.images != null &&
               widget.service!.images!.isNotEmpty)
@@ -154,34 +154,35 @@ class _ServiceCardState extends State<ServiceCard> {
                   ],
                 ),
               ),
-              widget.myShop == false
-                  ? Container(
-                      padding: const EdgeInsets.symmetric(
-                          horizontal: 5, vertical: 3),
-                      decoration: BoxDecoration(
-                        // color: primaryColorLT,
-                        borderRadius: BorderRadius.circular(70),
-                        border: Border.all(
-                          color: primaryColorLT,
-                          width: 1,
-                        ),
-                      ),
-                      child: const Text(
-                        'Book',
-                        style: TextStyle(
-                          color: primaryColorLT,
-                          fontWeight: FontWeight.bold,
-                          fontSize: 11,
-                        ),
-                      ),
-                    )
-                  : OptionsButton(
-                      item: widget.service,
-                      onEdit: _onEdit,
-                      onDelete: onDelete,
-                    ),
             ],
           ),
+          const SizedBox(height: 5),
+          widget.myShop == false
+              ? Container(
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 5, vertical: 3),
+                  decoration: BoxDecoration(
+                    color: Colors.black,
+                    borderRadius: BorderRadius.circular(70),
+                    border: Border.all(
+                      color: Colors.grey,
+                      width: 1,
+                    ),
+                  ),
+                  child: const Text(
+                    'Book',
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontWeight: FontWeight.bold,
+                      fontSize: 11,
+                    ),
+                  ),
+                )
+              : OptionsButton(
+                  item: widget.service,
+                  onEdit: _onEdit,
+                  onDelete: onDelete,
+                ),
         ],
       ),
     );

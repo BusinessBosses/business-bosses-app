@@ -260,163 +260,194 @@ class _ProSubscribeSectionState extends State<ProSubscribeSection> {
           fit: BoxFit.fitWidth,
         ),
         Container(
-            decoration: BoxDecoration(
-              color: Colors.white,
-              gradient: LinearGradient(
-                begin: Alignment.topCenter,
-                end: Alignment.bottomCenter,
-                colors: <Color>[
-                  widget.isGrow == null
-                      ? prosemibackColor.withAlpha(50)
-                      : Colors.white,
-                  Colors.white,
-                ],
-                stops: const <double>[0.0, 0.25],
-              ),
-            ),
             padding: const EdgeInsets.symmetric(horizontal: 15),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.start,
-              children: <Widget>[
-                if (widget.isGrow == null)
-                  const Column(
-                    children: <Widget>[
-                      SizedBox(
-                        height: 25,
-                      ),
-                      Text('Upgrade to a Pro Boss Experience',
-                          style: TextStyle(
-                            fontSize: 20,
-                            fontWeight: FontWeight.bold,
-                          )),
-                      Padding(
-                        padding: EdgeInsets.symmetric(horizontal: 15.0),
-                        child: Text.rich(
-                          textAlign: TextAlign.center,
-                          TextSpan(
-                            children: <InlineSpan>[
-                              TextSpan(
-                                text:
-                                    'Everything you need to manage and grow your business 10X faster, ',
-                                style: TextStyle(
-                                    fontSize: 15, fontWeight: FontWeight.w600),
-                              ),
-                              TextSpan(
-                                text: 'all in one place.',
-                                style: TextStyle(
-                                    fontSize: 15,
-                                    fontWeight: FontWeight.w600,
-                                    color: primaryColorLT),
-                              ),
-                            ],
+            child: SingleChildScrollView(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: <Widget>[
+                  if (widget.isGrow == null)
+                    const Column(
+                      children: <Widget>[
+                        SizedBox(
+                          height: 25,
+                        ),
+                        Text('Upgrade to a Pro Boss Experience',
+                            style: TextStyle(
+                              fontSize: 20,
+                              fontWeight: FontWeight.bold,
+                            )),
+                        Padding(
+                          padding: EdgeInsets.symmetric(horizontal: 15.0),
+                          child: Text.rich(
+                            textAlign: TextAlign.center,
+                            TextSpan(
+                              children: <InlineSpan>[
+                                TextSpan(
+                                  text:
+                                      'Everything you need to manage and grow your business 10X faster, ',
+                                  style: TextStyle(
+                                      fontSize: 15,
+                                      fontWeight: FontWeight.w600),
+                                ),
+                                TextSpan(
+                                  text: 'all in one place.',
+                                  style: TextStyle(
+                                      fontSize: 15,
+                                      fontWeight: FontWeight.w600,
+                                      color: primaryColorLT),
+                                ),
+                              ],
+                            ),
                           ),
                         ),
+                      ],
+                    ),
+                  const SizedBox(height: 30),
+                  Container(
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(15),
+                      color: Colors.white,
+                      border: Border.all(
+                        color: Colors.grey.withOpacity(0.12),
+                        width: 2,
                       ),
-                    ],
-                  ),
-                const SizedBox(height: 30),
-                Container(
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(15),
-                    color: Colors.white,
-                    border: Border.all(
-                      color: Colors.grey.withOpacity(0.12),
-                      width: 2,
+                    ),
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 15, vertical: 10),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: <Widget>[
+                        const SizedBox(
+                          height: 5,
+                        ),
+                        const Text(
+                          'What\'s included',
+                          style: TextStyle(
+                              fontSize: 16, fontWeight: FontWeight.bold),
+                        ),
+                        const SizedBox(
+                          height: 20,
+                        ),
+                        Column(
+                          children: _profeatures
+                              .map((ProFeatureItem feature) => Padding(
+                                  padding: const EdgeInsets.only(bottom: 10.0),
+                                  child: ProfeatureTile(
+                                    backgroundColor: Colors.transparent,
+                                    feature: feature,
+                                  )))
+                              .toList(),
+                        ),
+                      ],
                     ),
                   ),
-                  padding: const EdgeInsets.all(16),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: <Widget>[
-                      const SizedBox(
-                        height: 5,
-                      ),
-                      const Text(
-                        'What\'s included',
-                        style: TextStyle(
-                            fontSize: 16, fontWeight: FontWeight.bold),
-                      ),
-                      const SizedBox(
-                        height: 20,
-                      ),
-                      Column(
-                        children: _profeatures
-                            .map((ProFeatureItem feature) => Padding(
-                                padding: const EdgeInsets.only(bottom: 12.0),
-                                child: ProfeatureTile(
-                                  backgroundColor: Colors.transparent,
-                                  feature: feature,
-                                )))
-                            .toList(),
-                      ),
-                    ],
-                  ),
-                ),
-                const SizedBox(height: 30),
-                if (widget.isGrow != null)
-                  const SizedBox(
-                    height: 10,
-                  ),
-                Container(
-                  width: double.infinity,
-                  padding: const EdgeInsets.symmetric(horizontal: 0),
-                  child: ProCustomButton(
-                    color: primaryColorLT,
-                    text: 'Start your \$1/Month Trial',
-                    onPressed: () {
-                      showModalBottomSheet<void>(
-                        context: context,
-                        shape: const RoundedRectangleBorder(
-                          borderRadius: BorderRadius.vertical(
-                            top: Radius.circular(25.0),
+                  const SizedBox(height: 30),
+                  if (widget.isGrow != null)
+                    const SizedBox(
+                      height: 10,
+                    ),
+                  Container(
+                    width: double.infinity,
+                    padding: const EdgeInsets.symmetric(horizontal: 0),
+                    child: ProCustomButton(
+                      color: primaryColorLT,
+                      text: 'Start your \$1/Month Trial',
+                      onPressed: () {
+                        showModalBottomSheet<void>(
+                          context: context,
+                          shape: const RoundedRectangleBorder(
+                            borderRadius: BorderRadius.vertical(
+                              top: Radius.circular(25.0),
+                            ),
                           ),
-                        ),
-                        builder: (BuildContext context) {
-                          return StatefulBuilder(
-                            // Wrap the entire bottom sheet content with StatefulBuilder
-                            builder:
-                                (BuildContext context, StateSetter setState) {
-                              return Container(
-                                padding: const EdgeInsets.symmetric(
-                                    horizontal: 20, vertical: 20),
-                                child: Column(
-                                  mainAxisSize: MainAxisSize.min,
-                                  children: <Widget>[
-                                    Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.spaceBetween,
-                                      children: <Widget>[
-                                        const Text(
-                                          'Choose your plan',
-                                          style: TextStyle(
-                                            fontSize: 16,
-                                            fontWeight: FontWeight.bold,
+                          builder: (BuildContext context) {
+                            return StatefulBuilder(
+                              // Wrap the entire bottom sheet content with StatefulBuilder
+                              builder:
+                                  (BuildContext context, StateSetter setState) {
+                                return Container(
+                                  padding: const EdgeInsets.symmetric(
+                                      horizontal: 20, vertical: 20),
+                                  child: Column(
+                                    mainAxisSize: MainAxisSize.min,
+                                    children: <Widget>[
+                                      Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.spaceBetween,
+                                        children: <Widget>[
+                                          const Text(
+                                            'Choose your plan',
+                                            style: TextStyle(
+                                              fontSize: 16,
+                                              fontWeight: FontWeight.bold,
+                                            ),
+                                          ),
+                                          IconButton(
+                                            icon: const Icon(
+                                              Icons.close,
+                                              color: Colors.black54,
+                                            ),
+                                            onPressed: () {
+                                              Navigator.pop(context);
+                                            },
+                                          ),
+                                        ],
+                                      ),
+                                      const SizedBox(
+                                        height: 20,
+                                      ),
+                                      InkWell(
+                                        onTap: () {
+                                          setState(() {
+                                            paymentMethodId = 'Promonth';
+                                          });
+                                        },
+                                        child: Container(
+                                          decoration: BoxDecoration(
+                                            border: Border.all(
+                                              color:
+                                                  paymentMethodId == 'Promonth'
+                                                      ? primaryColorLT
+                                                      : Colors.transparent,
+                                              width: 2,
+                                            ),
+                                            borderRadius:
+                                                BorderRadius.circular(15),
+                                          ),
+                                          child: RadioListTile<String>(
+                                            title: const Row(
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment
+                                                      .spaceBetween,
+                                              children: <Widget>[
+                                                Text(
+                                                  'Pro Monthly',
+                                                  style: TextStyle(
+                                                      fontWeight:
+                                                          FontWeight.w600,
+                                                      fontSize: 16),
+                                                ),
+                                                Text('\$14.99/month',
+                                                    style: TextStyle(
+                                                        fontWeight:
+                                                            FontWeight.w200,
+                                                        fontSize: 16)),
+                                              ],
+                                            ),
+                                            value: 'Promonth',
+                                            groupValue: paymentMethodId,
+                                            onChanged: (String? value) {
+                                              setState(() {
+                                                paymentMethodId = value!;
+                                              });
+                                            },
                                           ),
                                         ),
-                                        IconButton(
-                                          icon: const Icon(
-                                            Icons.close,
-                                            color: Colors.black54,
-                                          ),
-                                          onPressed: () {
-                                            Navigator.pop(context);
-                                          },
-                                        ),
-                                      ],
-                                    ),
-                                    const SizedBox(
-                                      height: 20,
-                                    ),
-                                    InkWell(
-                                      onTap: () {
-                                        setState(() {
-                                          paymentMethodId = 'Promonth';
-                                        });
-                                      },
-                                      child: Container(
+                                      ),
+                                      Container(
                                         decoration: BoxDecoration(
                                           border: Border.all(
-                                            color: paymentMethodId == 'Promonth'
+                                            color: paymentMethodId == 'Proyear'
                                                 ? primaryColorLT
                                                 : Colors.transparent,
                                             width: 2,
@@ -430,19 +461,19 @@ class _ProSubscribeSectionState extends State<ProSubscribeSection> {
                                                 MainAxisAlignment.spaceBetween,
                                             children: <Widget>[
                                               Text(
-                                                'Pro Monthly',
+                                                'Pro Yearly',
                                                 style: TextStyle(
                                                     fontWeight: FontWeight.w600,
                                                     fontSize: 16),
                                               ),
-                                              Text('\$14.99/month',
+                                              Text('\$9.99/month ( 33% off )',
                                                   style: TextStyle(
                                                       fontWeight:
                                                           FontWeight.w200,
                                                       fontSize: 16)),
                                             ],
                                           ),
-                                          value: 'Promonth',
+                                          value: 'Proyear',
                                           groupValue: paymentMethodId,
                                           onChanged: (String? value) {
                                             setState(() {
@@ -451,138 +482,103 @@ class _ProSubscribeSectionState extends State<ProSubscribeSection> {
                                           },
                                         ),
                                       ),
-                                    ),
-                                    Container(
-                                      decoration: BoxDecoration(
-                                        border: Border.all(
-                                          color: paymentMethodId == 'Proyear'
-                                              ? primaryColorLT
-                                              : Colors.transparent,
-                                          width: 2,
-                                        ),
-                                        borderRadius: BorderRadius.circular(15),
+                                      const SizedBox(
+                                        height: 20,
                                       ),
-                                      child: RadioListTile<String>(
-                                        title: const Row(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.spaceBetween,
-                                          children: <Widget>[
-                                            Text(
-                                              'Pro Yearly',
-                                              style: TextStyle(
-                                                  fontWeight: FontWeight.w600,
-                                                  fontSize: 16),
-                                            ),
-                                            Text('\$9.99/month ( 33% off )',
-                                                style: TextStyle(
-                                                    fontWeight: FontWeight.w200,
-                                                    fontSize: 16)),
-                                          ],
-                                        ),
-                                        value: 'Proyear',
-                                        groupValue: paymentMethodId,
-                                        onChanged: (String? value) {
-                                          setState(() {
-                                            paymentMethodId = value!;
-                                          });
-                                        },
+                                      SizedBox(
+                                          width: double.infinity,
+                                          child: ProCustomButton(
+                                            padding: 0,
+                                            color: primaryColorLT,
+                                            text: 'Start your \$1/month trial',
+                                            loading: loading,
+                                            onPressed: () async {
+                                              setState(() {
+                                                loading = true;
+                                              });
+                                              if (paymentMethodId ==
+                                                  'Proyear') {
+                                                try {
+                                                  final List<StoreProduct>
+                                                      product = await Purchases
+                                                          .getProducts(<String>[
+                                                    'xyz.codexia.businessbosses.proyear'
+                                                  ]);
+                                                  final CustomerInfo
+                                                      customerInfo =
+                                                      await Purchases
+                                                          .purchaseStoreProduct(
+                                                              product[0]);
+                                                  if (customerInfo
+                                                          .entitlements
+                                                          .all[
+                                                              'xyz.codexia.businessbosses.proyear']
+                                                          ?.isActive ??
+                                                      false) {
+                                                    // Grant access to premium features
+                                                    print('User subscribed!');
+                                                  }
+                                                } catch (e) {
+                                                  // Handle error
+                                                  print(
+                                                      'Error purchasing product: $e');
+                                                } finally {
+                                                  setState(() {
+                                                    loading = false;
+                                                  });
+                                                }
+                                              } else {
+                                                try {
+                                                  final List<StoreProduct>
+                                                      product = await Purchases
+                                                          .getProducts(<String>[
+                                                    'xyz.codexia.businessbosses.promonth'
+                                                  ]);
+                                                  final CustomerInfo
+                                                      customerInfo =
+                                                      await Purchases
+                                                          .purchaseStoreProduct(
+                                                              product[0]);
+                                                  if (customerInfo
+                                                          .entitlements
+                                                          .all[
+                                                              'xyz.codexia.businessbosses.promonth']
+                                                          ?.isActive ??
+                                                      false) {
+                                                    // Grant access to premium features
+                                                    print('User subscribed!');
+                                                  }
+                                                } catch (e) {
+                                                  // Handle error
+                                                  print(
+                                                      'Error purchasing product: $e');
+                                                } finally {
+                                                  setState(() {
+                                                    loading = false;
+                                                  });
+                                                }
+                                              }
+                                            },
+                                          )),
+                                      const SizedBox(
+                                        height: 50,
                                       ),
-                                    ),
-                                    const SizedBox(
-                                      height: 20,
-                                    ),
-                                    SizedBox(
-                                        width: double.infinity,
-                                        child: ProCustomButton(
-                                          padding: 0,
-                                          color: primaryColorLT,
-                                          text: 'Start your \$1/month trial',
-                                          loading: loading,
-                                          onPressed: () async {
-                                            setState(() {
-                                              loading = true;
-                                            });
-                                            if (paymentMethodId == 'Proyear') {
-                                              try {
-                                                final List<StoreProduct>
-                                                    product = await Purchases
-                                                        .getProducts(<String>[
-                                                  'xyz.codexia.businessbosses.proyear'
-                                                ]);
-                                                final CustomerInfo
-                                                    customerInfo =
-                                                    await Purchases
-                                                        .purchaseStoreProduct(
-                                                            product[0]);
-                                                if (customerInfo
-                                                        .entitlements
-                                                        .all[
-                                                            'xyz.codexia.businessbosses.proyear']
-                                                        ?.isActive ??
-                                                    false) {
-                                                  // Grant access to premium features
-                                                  print('User subscribed!');
-                                                }
-                                              } catch (e) {
-                                                // Handle error
-                                                print(
-                                                    'Error purchasing product: $e');
-                                              } finally {
-                                                setState(() {
-                                                  loading = false;
-                                                });
-                                              }
-                                            } else {
-                                              try {
-                                                final List<StoreProduct>
-                                                    product = await Purchases
-                                                        .getProducts(<String>[
-                                                  'xyz.codexia.businessbosses.promonth'
-                                                ]);
-                                                final CustomerInfo
-                                                    customerInfo =
-                                                    await Purchases
-                                                        .purchaseStoreProduct(
-                                                            product[0]);
-                                                if (customerInfo
-                                                        .entitlements
-                                                        .all[
-                                                            'xyz.codexia.businessbosses.promonth']
-                                                        ?.isActive ??
-                                                    false) {
-                                                  // Grant access to premium features
-                                                  print('User subscribed!');
-                                                }
-                                              } catch (e) {
-                                                // Handle error
-                                                print(
-                                                    'Error purchasing product: $e');
-                                              } finally {
-                                                setState(() {
-                                                  loading = false;
-                                                });
-                                              }
-                                            }
-                                          },
-                                        )),
-                                    const SizedBox(
-                                      height: 50,
-                                    ),
-                                  ],
-                                ),
-                              );
-                            },
-                          );
-                        },
-                      );
-                    },
+                                    ],
+                                  ),
+                                );
+                              },
+                            );
+                          },
+                        );
+                      },
+                    ),
                   ),
-                ),
-                if (widget.isGrow == null)
-                  const SizedBox(
-                    height: 100,
-                  )
-              ],
+                  if (widget.isGrow == null)
+                    const SizedBox(
+                      height: 100,
+                    )
+                ],
+              ),
             )),
       ],
     );

@@ -84,7 +84,7 @@ class _ChooseClientBottomSheetState extends State<ChooseClientBottomSheet>
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: <Widget>[
               const Text(
-                'Select Client',
+                'Select Customer',
                 style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
               ),
               Wrap(children: <Widget>[
@@ -95,7 +95,7 @@ class _ChooseClientBottomSheetState extends State<ChooseClientBottomSheet>
                       onClientAdded: widget.onClientAdded,
                     ));
                   },
-                  text: 'New Client',
+                  text: 'New Customer',
                   radius: 10.0,
                 ),
               ])
@@ -116,15 +116,11 @@ class _ChooseClientBottomSheetState extends State<ChooseClientBottomSheet>
                 1: Padding(
                     padding: EdgeInsets.symmetric(horizontal: 5, vertical: 10),
                     child: Text(
-                      'Online',
+                      'Individual',
                       style: TextStyle(fontSize: 14),
                     )),
                 2: Text(
-                  'In-person',
-                  style: TextStyle(fontSize: 14),
-                ),
-                3: Text(
-                  'BB-User',
+                  'Company',
                   style: TextStyle(fontSize: 14),
                 ),
               },

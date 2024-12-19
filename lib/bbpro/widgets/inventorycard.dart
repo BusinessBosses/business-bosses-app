@@ -154,39 +154,42 @@ class _InventoryCardState extends State<InventoryCard> {
                   ],
                 ),
               ),
-              widget.myShop == false
-                  ? Container(
-                      padding: const EdgeInsets.symmetric(
-                        horizontal: 5,
-                        vertical: 3,
-                      ),
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(70),
-                        color: Colors.transparent,
-                        border: Border.all(
-                          color: primaryColorLT,
-                        ),
-                      ),
-                      child: const Text(
-                        'Order',
-                        style: TextStyle(
-                          color: primaryColorLT,
-                          fontWeight: FontWeight.bold,
-                          fontSize: 11,
-                        ),
-                      ),
-                    )
-                  : OptionsButton(
-                      item: widget.product,
-                      onEdit: () => Get.to(
-                        () => CreateProductListing(
-                          product: widget.product,
-                        ),
-                      ),
-                      onDelete: onDelete,
-                    ),
             ],
           ),
+          const SizedBox(
+            height: 5,
+          ),
+          widget.myShop == false
+              ? Container(
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 5,
+                    vertical: 3,
+                  ),
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(70),
+                    color: Colors.black,
+                    border: Border.all(
+                      color: Colors.grey,
+                    ),
+                  ),
+                  child: const Text(
+                    'Order',
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontWeight: FontWeight.bold,
+                      fontSize: 11,
+                    ),
+                  ),
+                )
+              : OptionsButton(
+                  item: widget.product,
+                  onEdit: () => Get.to(
+                    () => CreateProductListing(
+                      product: widget.product,
+                    ),
+                  ),
+                  onDelete: onDelete,
+                ),
         ],
       ),
     );
