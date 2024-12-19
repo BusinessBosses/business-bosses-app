@@ -415,6 +415,7 @@ class _ProSubscribeSectionState extends State<ProSubscribeSection> {
                                                 BorderRadius.circular(15),
                                           ),
                                           child: RadioListTile<String>(
+                                            contentPadding: EdgeInsets.zero,
                                             title: const Row(
                                               mainAxisAlignment:
                                                   MainAxisAlignment
@@ -456,6 +457,7 @@ class _ProSubscribeSectionState extends State<ProSubscribeSection> {
                                               BorderRadius.circular(15),
                                         ),
                                         child: RadioListTile<String>(
+                                          contentPadding: EdgeInsets.zero,
                                           title: const Row(
                                             mainAxisAlignment:
                                                 MainAxisAlignment.spaceBetween,
