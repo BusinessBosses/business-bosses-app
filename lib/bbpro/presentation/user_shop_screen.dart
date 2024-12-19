@@ -353,7 +353,7 @@ class _UserShopScreenState extends State<UserShopScreen> {
                                                   const EdgeInsets.symmetric(
                                                       vertical: 5.0),
                                               child: Text(
-                                                'Showcase (${shopController.userProducts.length + shopController.userServices.length})',
+                                                'Showcase (${shopController.userItems.length})',
                                                 style: const TextStyle(
                                                     fontSize: 14,
                                                     fontWeight:
@@ -469,34 +469,17 @@ class _UserShopScreenState extends State<UserShopScreen> {
                                               mainAxisSpacing: 10.0,
                                               crossAxisSpacing: 10.0,
                                               itemCount: shopController
-                                                      .userProducts
-                                                      .where((Product p) =>
-                                                          p.isActive)
-                                                      .length +
-                                                  shopController.userServices
-                                                      .where((Service s) =>
-                                                          s.isActive)
-                                                      .length,
+                                                  .userItems.length,
                                               itemBuilder:
                                                   (BuildContext context,
                                                       int index) {
-                                                final List<Product>
-                                                    activeProducts =
-                                                    shopController.userProducts
-                                                        .where((Product p) =>
-                                                            p.isActive)
-                                                        .toList();
-                                                final List<Service>
-                                                    activeServices =
-                                                    shopController.userServices
-                                                        .where((Service s) =>
-                                                            s.isActive)
-                                                        .toList();
-
-                                                if (index <
-                                                    activeProducts.length) {
+                                                if (shopController
+                                                        .userItems[index]
+                                                    is Product) {
                                                   final Product product =
-                                                      activeProducts[index];
+                                                      shopController
+                                                              .userItems[index]
+                                                          as Product;
                                                   return GestureDetector(
                                                     onTap: () {
                                                       Get.to(() =>
@@ -507,17 +490,17 @@ class _UserShopScreenState extends State<UserShopScreen> {
                                                           ));
                                                     },
                                                     child: InventoryCard(
+                                                      product: product,
                                                       shop: shopController
                                                           .userShop!,
-                                                      product: product,
                                                       myShop: false,
                                                     ),
                                                   );
                                                 } else {
                                                   final Service service =
-                                                      activeServices[index -
-                                                          activeProducts
-                                                              .length];
+                                                      shopController
+                                                              .userItems[index]
+                                                          as Service;
                                                   return GestureDetector(
                                                     onTap: () {
                                                       Get.to(() =>

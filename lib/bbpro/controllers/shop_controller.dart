@@ -22,8 +22,10 @@ class ShopController extends GetxController {
   RxBool supploerAddLoading = RxBool(false);
   RxList<Product> products = RxList<Product>(<Product>[]);
   RxList<Service> services = RxList<Service>(<Service>[]);
+  RxList<Object> items = RxList<Object>(<Object>[]);
   RxList<Product> userProducts = RxList<Product>(<Product>[]);
   RxList<Service> userServices = RxList<Service>(<Service>[]);
+  RxList<Object> userItems = RxList<Object>(<Object>[]);
   RxList<Vendor> suppliers = RxList<Vendor>(<Vendor>[]);
   OrderStats? orderStats;
   ShopStats? shopStats;
@@ -64,6 +66,14 @@ class ShopController extends GetxController {
           services.add(Service.fromJson(servicesResponse.data['rows'][i]));
         }
       }
+
+      items.addAll(<Object>[...products, ...services]);
+      items.sort((Object a, Object b) {
+        // Assuming both Product and Service have a createdAt property.
+        DateTime aDate = a is Product ? a.createdAt : (a as Service).createdAt;
+        DateTime bDate = b is Product ? b.createdAt : (b as Service).createdAt;
+        return bDate.compareTo(aDate);
+      });
 
       ApiResponseModel vendorsReponse = await ApiService.get(
         path: 'vendors/user/${profileController.myProfile.uid}',
@@ -122,6 +132,17 @@ class ShopController extends GetxController {
           userServices.add(Service.fromJson(servicesResponse.data['rows'][i]));
         }
       }
+      userItems.clear();
+      userItems.addAll(<Object>[
+        ...userProducts.where((Product item) => item.isActive).toList(),
+        ...userServices.where((Service item) => item.isActive).toList()
+      ]);
+      userItems.sort((Object a, Object b) {
+        // Assuming both Product and Service have a createdAt property.
+        DateTime aDate = a is Product ? a.createdAt : (a as Service).createdAt;
+        DateTime bDate = b is Product ? b.createdAt : (b as Service).createdAt;
+        return bDate.compareTo(aDate);
+      });
 
       return true;
     } else {
