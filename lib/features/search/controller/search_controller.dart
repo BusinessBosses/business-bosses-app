@@ -39,6 +39,7 @@ class CompleteSearchController extends GetxController {
     final ApiResponseModel response =
         await SearchRepository.search(query.trim());
     if (response.success) {
+      searchedUsers.clear();
       for (int i = 0; i < response.data['users'].length; i++) {
         final dynamic mapData = response.data['users'][i];
         final UserModel modelizedData = UserModel.fromMap(mapData);

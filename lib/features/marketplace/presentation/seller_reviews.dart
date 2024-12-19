@@ -715,7 +715,7 @@ class _SellerReviewScreenState extends State<SellerReviewScreen> {
                                       DateTime.now().millisecondsSinceEpoch,
                                   'notificationType': 'Review',
                                   'username': widget.user.username,
-                                  'user': widget.user,
+                                  'user': widget.user.toMap(),
                                 },
                               );
                               await processData();
