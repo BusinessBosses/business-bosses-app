@@ -105,7 +105,7 @@ class _OrderProductScreenState extends State<OrderProductScreen> {
                     fontSize: 14,
                   ),
                 ),
-                const Text('Visit Shop', style: TextStyle(fontSize: 10)),
+                const Text('Visit Biz-Center', style: TextStyle(fontSize: 10)),
               ],
             ),
           ),
