@@ -254,54 +254,53 @@ class _ProSubscribeSectionState extends State<ProSubscribeSection> {
   Widget build(BuildContext context) {
     return Stack(
       children: <Widget>[
-        SvgPicture.asset(
-          'assets/svgs/premiumback.svg',
-          width: MediaQuery.of(context).size.width,
-          fit: BoxFit.fitWidth,
-        ),
+        if (widget.isGrow == null)
+          SvgPicture.asset(
+            'assets/svgs/premiumback.svg',
+            width: MediaQuery.of(context).size.width,
+            fit: BoxFit.fitWidth,
+          ),
         Container(
             padding: const EdgeInsets.symmetric(horizontal: 15),
             child: SingleChildScrollView(
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: <Widget>[
-                  if (widget.isGrow == null)
-                    const Column(
-                      children: <Widget>[
-                        SizedBox(
-                          height: 25,
-                        ),
-                        Text('Upgrade to a Pro Boss Experience',
-                            style: TextStyle(
-                              fontSize: 20,
-                              fontWeight: FontWeight.bold,
-                            )),
-                        Padding(
-                          padding: EdgeInsets.symmetric(horizontal: 15.0),
-                          child: Text.rich(
-                            textAlign: TextAlign.center,
-                            TextSpan(
-                              children: <InlineSpan>[
-                                TextSpan(
-                                  text:
-                                      'Everything you need to manage and grow your business 10X faster, ',
-                                  style: TextStyle(
-                                      fontSize: 15,
-                                      fontWeight: FontWeight.w600),
-                                ),
-                                TextSpan(
-                                  text: 'all in one place.',
-                                  style: TextStyle(
-                                      fontSize: 15,
-                                      fontWeight: FontWeight.w600,
-                                      color: primaryColorLT),
-                                ),
-                              ],
-                            ),
+                  const Column(
+                    children: <Widget>[
+                      SizedBox(
+                        height: 25,
+                      ),
+                      Text('Upgrade to a Pro Boss Experience',
+                          style: TextStyle(
+                            fontSize: 20,
+                            fontWeight: FontWeight.bold,
+                          )),
+                      Padding(
+                        padding: EdgeInsets.symmetric(horizontal: 15.0),
+                        child: Text.rich(
+                          textAlign: TextAlign.center,
+                          TextSpan(
+                            children: <InlineSpan>[
+                              TextSpan(
+                                text:
+                                    'Everything you need to manage and grow your business 10X faster, ',
+                                style: TextStyle(
+                                    fontSize: 15, fontWeight: FontWeight.w600),
+                              ),
+                              TextSpan(
+                                text: 'all in one place.',
+                                style: TextStyle(
+                                    fontSize: 15,
+                                    fontWeight: FontWeight.w600,
+                                    color: primaryColorLT),
+                              ),
+                            ],
                           ),
                         ),
-                      ],
-                    ),
+                      ),
+                    ],
+                  ),
                   const SizedBox(height: 30),
                   Container(
                     decoration: BoxDecoration(
