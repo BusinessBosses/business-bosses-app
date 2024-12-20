@@ -363,7 +363,7 @@ class _SetupState extends State<Setup> {
   void _sharePost() {
     String message =
         'Have a look at ${shopController.shop!.user?.username}\'s biz-center on Business Bosses\n'
-        ' ${shopController.shop?.url}';
+        'https://businessbosses.co.uk/${shopController.shop?.name.toLowerCase().replaceAll(' ', '-')}';
     socialShare(message);
   }
 }

@@ -228,7 +228,7 @@ class _ShopScreenState extends State<ShopScreen> {
                                 padding:
                                     const EdgeInsets.symmetric(vertical: 5.0),
                                 child: Text(
-                                  'Showcase (${shopController.products.length + shopController.services.length})',
+                                  'Showcase (${shopController.items.length})',
                                   style: const TextStyle(
                                       fontSize: 14,
                                       fontWeight: FontWeight.w700),
@@ -319,12 +319,11 @@ class _ShopScreenState extends State<ShopScreen> {
                                   const StaggeredTile.fit(1),
                               mainAxisSpacing: 10.0,
                               crossAxisSpacing: 10.0,
-                              itemCount: shopController.products.length +
-                                  shopController.services.length,
+                              itemCount: shopController.items.length,
                               itemBuilder: (BuildContext context, int index) {
-                                if (index < shopController.products.length) {
+                                if (shopController.items[index] is Product) {
                                   final Product product =
-                                      shopController.products[index];
+                                      shopController.items[index] as Product;
                                   return GestureDetector(
                                     onTap: () {
                                       Get.to(
@@ -339,9 +338,8 @@ class _ShopScreenState extends State<ShopScreen> {
                                     ),
                                   );
                                 } else {
-                                  final Service service = shopController
-                                          .services[
-                                      index - shopController.products.length];
+                                  final Service service =
+                                      shopController.items[index] as Service;
                                   return GestureDetector(
                                     onTap: () {
                                       Get.to(
@@ -636,7 +634,7 @@ class _ShopScreenState extends State<ShopScreen> {
   void _sharePost() {
     String message =
         'Have a look at ${shopController.shop!.user?.username}\'s biz-center on Business Bosses\n'
-        ' ${shopController.shop?.url}';
+        'https://businessbosses.co.uk/${shopController.shop?.name.toLowerCase().replaceAll(' ', '-')}';
     socialShare(message);
   }
 }

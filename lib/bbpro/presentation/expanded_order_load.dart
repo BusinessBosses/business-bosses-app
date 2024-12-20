@@ -9,6 +9,7 @@ import 'package:business_bosses_v2/utils/theme/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class ExpandedOrdersView extends StatefulWidget {
   final String order;
@@ -24,12 +25,18 @@ class ExpandedOrdersView extends StatefulWidget {
 
 class _ExpandedOrdersViewState extends State<ExpandedOrdersView> {
   final ShopController shopController = Get.find();
-  final OrderController orderController = Get.find();
+  final OrderController orderController = Get.put(OrderController());
 
   @override
   void initState() {
     super.initState();
+    saveOrderDetails();
     orderController.loadOrder(widget.order);
+  }
+
+  void saveOrderDetails() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    await prefs.setBool('visited', true);
   }
 
   @override
@@ -68,6 +75,7 @@ class _ExpandedOrdersViewState extends State<ExpandedOrdersView> {
                           bgcolor:
                               orderController.orderView!.status.backgroundColor,
                           isExpanded: true,
+                          shop: orderController.orderView!.shop,
                         ),
                         const SizedBox(height: 30),
                         const Padding(
@@ -89,7 +97,7 @@ class _ExpandedOrdersViewState extends State<ExpandedOrdersView> {
                             ),
                             leading: _buildProductImage(product),
                             subtitle: Text(
-                              '${shopController.shop?.currency ?? ''} ${product.price.toString()}',
+                              '${orderController.orderView!.shop.currency} ${product.price.toString()}',
                               style: const TextStyle(
                                 fontSize: 14,
                               ),
@@ -111,7 +119,7 @@ class _ExpandedOrdersViewState extends State<ExpandedOrdersView> {
                             ),
                             leading: _buildServiceImage(service),
                             subtitle: Text(
-                              '${shopController.shop?.currency ?? ''} ${service.price.toString()}',
+                              '${orderController.orderView!.shop.currency} ${service.price.toString()}',
                               style: const TextStyle(
                                 fontSize: 14,
                               ),
@@ -132,7 +140,7 @@ class _ExpandedOrdersViewState extends State<ExpandedOrdersView> {
                               ),
                             ),
                             subtitle: Text(
-                              '${shopController.shop?.currency ?? ''} ${custom['amount'].toString()}',
+                              '${orderController.orderView!.shop.currency} ${custom['amount'].toString()}',
                               style: const TextStyle(
                                 fontSize: 14,
                               ),

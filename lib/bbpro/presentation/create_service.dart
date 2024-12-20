@@ -57,6 +57,7 @@ class _CreateServiceListingState extends State<CreateServiceListing>
 
   // Form fields
   String? category;
+  String? categorys;
   String? location;
   List<String>? images = <String>[];
   List<String>? updateImages = <String>[];
@@ -167,7 +168,7 @@ class _CreateServiceListingState extends State<CreateServiceListing>
     currencyController.text = shopController.shop?.location != null
         ? '${currencyValues[shopController.shop!.location.toString()]}'
         : 'USD';
-        setState((){});
+    setState(() {});
   }
 
   Future<void> _pickImage() async {
@@ -313,23 +314,32 @@ class _CreateServiceListingState extends State<CreateServiceListing>
               controller: _descriptionController,
               maxLength: 300,
             ),
-            // const SizedBox(height: 16),
-            // CustomDropdownWidget(
-            //   initialValue: category,
-            //   caption: 'Select Category *',
-            //   hintText: 'Choose a category',
-            //   items: const <String>[
-            //     'Design Services',
-            //     'Consulting',
-            //     'Technical Support'
-            //   ],
-            //   iconName: 'assets/svgs/dropdown.svg',
-            //   onChanged: (String? newValue) {
-            //     setState(() {
-            //       category = newValue;
-            //     });
-            //   },
-            // ),
+            const SizedBox(height: 16),
+            CustomDropdownWidget(
+              initialValue: categorys,
+              caption: 'Select Category *',
+              hintText: 'Choose a category',
+              items: const <String>[
+                'Home, Garden & Outdoors',
+                'Fashion & Beauty',
+                'Sports & Entertainment',
+                'Books & Education',
+                'Jewellery & Timepieces',
+                'Security, Safety & Equipment',
+                'Video Games & Electronics',
+                'Agriculture, Food, Beverage',
+                'Construction & Real Estate',
+                'Vehicle & Transportation',
+                'Business Services & Events',
+                'Other',
+              ],
+              iconName: 'assets/svgs/dropdown.svg',
+              onChanged: (String? newValue) {
+                setState(() {
+                  categorys = newValue;
+                });
+              },
+            ),
 
             // Select Category Dropdown
             // DropdownButtonFormField<String>(

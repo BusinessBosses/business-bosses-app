@@ -1,4 +1,5 @@
 import 'package:business_bosses_v2/bbpro/controllers/shop_controller.dart';
+import 'package:business_bosses_v2/bbpro/presentation/expanded_order_load.dart';
 import 'package:business_bosses_v2/common/widgets/safety_model.dart';
 import 'package:business_bosses_v2/features/forum/controller/challenge_controller.dart';
 import 'package:business_bosses_v2/features/home/controller/commumities_controller.dart';
@@ -153,6 +154,14 @@ class _HomeScreenState extends State<HomeScreen>
     super.dispose();
   }
 
+  void checkOrderVisit() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    bool? visit = prefs.getBool('visited');
+    if (visit != null && !visit) {
+      Get.to(() => ExpandedOrdersView(order: prefs.getString('orderId')!));
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     _tabController.addListener(() {
@@ -190,6 +199,7 @@ class _HomeScreenState extends State<HomeScreen>
       },
       child: GetBuilder<HomeController>(
         builder: (HomeController controller) {
+          checkOrderVisit();
           return UpgradeAlert(
             child: Scaffold(
               backgroundColor: Colors.white,

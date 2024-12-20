@@ -362,14 +362,16 @@ class _MarketplaceScreenState extends State<MarketplaceScreen>
                               return const Center(
                                   child: CircularProgressIndicator());
                             } else if (_marketController.error.value) {
-                              return const SafetyModel(
+                              return SafetyModel(
                                 isLoading: false,
                                 title: 'Error While Loading Data',
                                 subTitle: 'Try Reloading Again',
-                                icon: Icon(
+                                icon: const Icon(
                                   Icons.warning,
                                   size: 60,
                                 ),
+                                clickableText: 'Reload',
+                                onTap: () => _marketController.initMarket,
                               );
                             } else {
                               return _marketController.products.isEmpty &&
