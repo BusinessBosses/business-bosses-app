@@ -59,7 +59,7 @@ class _UserShopScreenState extends State<UserShopScreen> {
   void _shareBizCenter() {
     String message =
         'Have a look at ${shopController.userShop!.user?.username}\'s BizCenter on Business Bosses\n'
-        ' ${shopController.userShop!.url}';
+        'https://businessbosses.co.uk/${shopController.userShop!.name.toLowerCase().replaceAll(' ', '-')}';
     socialShare(message);
   }
 
@@ -447,10 +447,8 @@ class _UserShopScreenState extends State<UserShopScreen> {
                                           ],
                                         ),
                                       ),
-                                      if ((shopController.userProducts.length +
-                                              shopController
-                                                  .userServices.length) ==
-                                          0) ...<Widget>{
+                                      if ((shopController
+                                          .userItems.isEmpty)) ...<Widget>{
                                         const SafetyModel(
                                           isLoading: false,
                                           title: 'No Items In Shop!',

@@ -185,6 +185,7 @@ class ShopController extends GetxController {
         await ApiService.post(path: 'goods', body: data);
     if (response.success) {
       products.add(Product.fromJson(response.data));
+      items.add(Product.fromJson(response.data));
       update();
       return true;
     } else {
@@ -200,6 +201,11 @@ class ShopController extends GetxController {
       final int productIndex =
           products.indexWhere((Product element) => element.id == id);
       products[productIndex] = Product.fromJson(response.data);
+      final int objectIndex = items.indexWhere((Object element) {
+        if (element is Product) return element.id == id;
+        return false;
+      });
+      items[objectIndex] = Product.fromJson(response.data);
       update();
       return true;
     } else {
@@ -213,6 +219,7 @@ class ShopController extends GetxController {
         await ApiService.post(path: 'services', body: data);
     if (response.success) {
       services.add(Service.fromJson(response.data));
+      items.add(Service.fromJson(response.data));
       update();
       return true;
     } else {
@@ -228,6 +235,11 @@ class ShopController extends GetxController {
       final int serviceIndex =
           services.indexWhere((Service element) => element.id == id);
       services[serviceIndex] = Service.fromJson(response.data);
+      final int objectIndex = items.indexWhere((Object element) {
+        if (element is Service) return element.id == id;
+        return false;
+      });
+      items[objectIndex] = Service.fromJson(response.data);
       update();
       return true;
     } else {
