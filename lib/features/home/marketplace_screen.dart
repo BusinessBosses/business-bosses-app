@@ -66,6 +66,7 @@ class _MarketplaceScreenState extends State<MarketplaceScreen>
     super.initState();
     _marketplacesearchTabController = TabController(length: 3, vsync: this);
     _marketplaceTabController = TabController(length: 4, vsync: this);
+    _marketController.error(false);
     _marketController
         .initProItems()
         .then((void value) => setState((() => loadingData = false)));
@@ -371,320 +372,289 @@ class _MarketplaceScreenState extends State<MarketplaceScreen>
                                   size: 60,
                                 ),
                                 clickableText: 'Reload',
-                                onTap: () => _marketController.initMarket,
+                                onTap: () {
+                                  setState(() {
+                                    _marketController.initMarket();
+                                  });
+                                },
                               );
                             } else {
-                              return _marketController.products.isEmpty &&
-                                      !_marketController.isfiltered.value
+                              return _marketController.searchResult.isEmpty &&
+                                      _marketController.isfiltered.value
                                   ? SafetyModel(
                                       isLoading: false,
                                       icon: const Icon(
-                                        Icons.edit,
+                                        Icons.shopping_cart,
                                         color: Colors.grey,
                                         size: 80.0,
                                       ),
                                       title:
-                                          'Be the first one to Sell your Item',
+                                          'No Items Available For This Search',
                                       // subTitle: '',
-                                      clickableText: 'Post an item',
+                                      clickableText: 'View All',
                                       onTap: () {
-                                        Get.to(
-                                          () => const CreateSellingitemScreen(
-                                            isUpd: false,
-                                          ),
+                                        setState(
+                                          () {
+                                            filterLocation = null;
+                                            filterCode = null;
+                                            filterCategory = null;
+                                            _selectedLocation = null;
+                                            _selectedCategory = null;
+                                            _marketController.updateFiltered();
+                                            _marketController.initMarket();
+                                          },
                                         );
                                       },
                                     )
-                                  : _marketController.searchResult.isEmpty &&
-                                          _marketController.isfiltered.value
-                                      ? SafetyModel(
-                                          isLoading: false,
-                                          icon: const Icon(
-                                            Icons.shopping_cart,
-                                            color: Colors.grey,
-                                            size: 80.0,
-                                          ),
-                                          title:
-                                              'No Items Available For This Search',
-                                          // subTitle: '',
-                                          clickableText: 'View All',
-                                          onTap: () {
-                                            setState(
-                                              () {
-                                                filterLocation = null;
-                                                filterCode = null;
-                                                filterCategory = null;
-                                                _selectedLocation = null;
-                                                _selectedCategory = null;
-                                                _marketController
-                                                    .updateFiltered();
-                                                _marketController.initMarket();
-                                              },
-                                            );
-                                          },
-                                        )
-                                      : RefreshIndicator(
-                                          onRefresh: refreshData,
-                                          child: _marketController
-                                                  .isfiltered.value
-                                              ? NotificationListener<
-                                                  ScrollNotification>(
-                                                  onNotification:
-                                                      (ScrollNotification
-                                                          notification) {
-                                                    if (notification
-                                                        is ScrollUpdateNotification) {
-                                                      if (notification
-                                                                  .dragDetails !=
-                                                              null &&
-                                                          notification
-                                                                  .dragDetails!
-                                                                  .primaryDelta !=
-                                                              null) {
-                                                        double primaryDelta =
-                                                            notification
-                                                                .dragDetails!
-                                                                .primaryDelta!;
+                                  : RefreshIndicator(
+                                      onRefresh: refreshData,
+                                      child: _marketController.isfiltered.value
+                                          ? NotificationListener<
+                                              ScrollNotification>(
+                                              onNotification:
+                                                  (ScrollNotification
+                                                      notification) {
+                                                if (notification
+                                                    is ScrollUpdateNotification) {
+                                                  if (notification
+                                                              .dragDetails !=
+                                                          null &&
+                                                      notification.dragDetails!
+                                                              .primaryDelta !=
+                                                          null) {
+                                                    double primaryDelta =
+                                                        notification
+                                                            .dragDetails!
+                                                            .primaryDelta!;
 
-                                                        if (primaryDelta > 0) {
-                                                          // Scrolling downward
+                                                    if (primaryDelta > 0) {
+                                                      // Scrolling downward
+                                                      setState(() {
+                                                        isScrolled = true;
+                                                      });
+                                                    } else if (primaryDelta <
+                                                        0) {
+                                                      // Scrolling upward
+                                                      setState(() {
+                                                        isScrolled = false;
+                                                      });
+                                                    }
+                                                  }
+                                                }
+
+                                                return true;
+                                              },
+                                              child: ListView.builder(
+                                                shrinkWrap: true,
+                                                itemCount: _marketController
+                                                        .isfiltered.value
+                                                    ? _marketController
+                                                        .searchResult.length
+                                                    : _marketController
+                                                            .markets.length +
+                                                        1,
+                                                itemBuilder:
+                                                    (BuildContext context,
+                                                        int index) {
+                                                  if (index <
+                                                      (_marketController
+                                                              .isfiltered.value
+                                                          ? _marketController
+                                                              .searchResult
+                                                              .length
+                                                          : _marketController
+                                                              .markets
+                                                              .length)) {
+                                                    final MarketModel market =
+                                                        _marketController
+                                                                .isfiltered
+                                                                .value
+                                                            ? _marketController
+                                                                    .searchResult[
+                                                                index]
+                                                            : _marketController
+                                                                .markets[index];
+                                                    return VisibilityDetector(
+                                                      key:
+                                                          Key(index.toString()),
+                                                      onVisibilityChanged:
+                                                          (VisibilityInfo
+                                                              info) {
+                                                        final bool
+                                                            hasIncrementedView =
+                                                            hmeController
+                                                                .itemsWithIncrementedViews
+                                                                .contains(_marketController
+                                                                    .markets[
+                                                                        index]
+                                                                    .marketId);
+                                                        if (info.visibleFraction ==
+                                                                1.0 &&
+                                                            !hasIncrementedView) {
+                                                          _marketController
+                                                              .updatemarketViews(
+                                                                  _marketController
+                                                                          .markets[
+                                                                      index]);
                                                           setState(() {
-                                                            isScrolled = true;
-                                                          });
-                                                        } else if (primaryDelta <
-                                                            0) {
-                                                          // Scrolling upward
-                                                          setState(() {
-                                                            isScrolled = false;
+                                                            hmeController
+                                                                .itemsWithIncrementedViews
+                                                                .add(_marketController
+                                                                    .markets[
+                                                                        index]
+                                                                    .marketId); // Set the flag to prevent further increments
                                                           });
                                                         }
-                                                      }
-                                                    }
-
-                                                    return true;
-                                                  },
-                                                  child: ListView.builder(
-                                                    shrinkWrap: true,
-                                                    itemCount: _marketController
-                                                            .isfiltered.value
-                                                        ? _marketController
-                                                            .searchResult.length
-                                                        : _marketController
-                                                                .markets
-                                                                .length +
-                                                            1,
-                                                    itemBuilder:
-                                                        (BuildContext context,
-                                                            int index) {
-                                                      if (index <
-                                                          (_marketController
-                                                                  .isfiltered
-                                                                  .value
-                                                              ? _marketController
-                                                                  .searchResult
-                                                                  .length
-                                                              : _marketController
-                                                                  .markets
-                                                                  .length)) {
-                                                        final MarketModel
-                                                            market =
-                                                            _marketController
-                                                                    .isfiltered
-                                                                    .value
-                                                                ? _marketController
-                                                                        .searchResult[
-                                                                    index]
-                                                                : _marketController
-                                                                        .markets[
-                                                                    index];
-                                                        return VisibilityDetector(
-                                                          key: Key(
-                                                              index.toString()),
-                                                          onVisibilityChanged:
-                                                              (VisibilityInfo
-                                                                  info) {
-                                                            final bool
-                                                                hasIncrementedView =
-                                                                hmeController
-                                                                    .itemsWithIncrementedViews
-                                                                    .contains(_marketController
-                                                                        .markets[
-                                                                            index]
-                                                                        .marketId);
-                                                            if (info.visibleFraction ==
-                                                                    1.0 &&
-                                                                !hasIncrementedView) {
-                                                              _marketController
-                                                                  .updatemarketViews(
-                                                                      _marketController
-                                                                              .markets[
-                                                                          index]);
-                                                              setState(() {
-                                                                hmeController
-                                                                    .itemsWithIncrementedViews
-                                                                    .add(_marketController
-                                                                        .markets[
-                                                                            index]
-                                                                        .marketId); // Set the flag to prevent further increments
-                                                              });
-                                                            }
-                                                          },
-                                                          child:
-                                                              _marketController
+                                                      },
+                                                      child: _marketController
+                                                              .markets[index]
+                                                              .isProduct
+                                                          ? MarketTile(
+                                                              post: market,
+                                                              controller:
+                                                                  _marketController,
+                                                              key: ValueKey<
+                                                                      String>(
+                                                                  _marketController
                                                                       .markets[
                                                                           index]
-                                                                      .isProduct
-                                                                  ? MarketTile(
-                                                                      post:
-                                                                          market,
-                                                                      controller:
-                                                                          _marketController,
-                                                                      key: ValueKey<String>(_marketController
-                                                                          .markets[
-                                                                              index]
-                                                                          .marketId),
-                                                                    )
-                                                                  : ServiceTile(
-                                                                      post:
-                                                                          market,
-                                                                      controller:
-                                                                          _marketController,
-                                                                      key: ValueKey<String>(_marketController
-                                                                          .markets[
-                                                                              index]
-                                                                          .marketId),
-                                                                    ),
-                                                        );
-                                                      } else {
-                                                        // Display a loading indicator at the end of the list
-                                                        if (_marketController
-                                                            .loadingMore
-                                                            .value) {
-                                                          return const Padding(
-                                                            padding:
-                                                                EdgeInsets.all(
-                                                                    8.0),
-                                                            child: Center(
-                                                              child:
-                                                                  CircularProgressIndicator(),
+                                                                      .marketId),
+                                                            )
+                                                          : ServiceTile(
+                                                              post: market,
+                                                              controller:
+                                                                  _marketController,
+                                                              key: ValueKey<
+                                                                      String>(
+                                                                  _marketController
+                                                                      .markets[
+                                                                          index]
+                                                                      .marketId),
                                                             ),
-                                                          );
-                                                        } else {
-                                                          return const SizedBox
-                                                              .shrink();
-                                                        }
-                                                      }
-                                                    },
-                                                  ),
-                                                )
-                                              : DefaultTabController(
-                                                  length: 4, // Number of tabs
-                                                  child: Column(
-                                                    children: <Widget>[
-                                                      Container(
-                                                        constraints:
-                                                            const BoxConstraints
-                                                                .expand(
-                                                                height: 40),
-                                                        child: TabBar(
-                                                          labelStyle:
-                                                              const TextStyle(
+                                                    );
+                                                  } else {
+                                                    // Display a loading indicator at the end of the list
+                                                    if (_marketController
+                                                        .loadingMore.value) {
+                                                      return const Padding(
+                                                        padding:
+                                                            EdgeInsets.all(8.0),
+                                                        child: Center(
+                                                          child:
+                                                              CircularProgressIndicator(),
+                                                        ),
+                                                      );
+                                                    } else {
+                                                      return const SizedBox
+                                                          .shrink();
+                                                    }
+                                                  }
+                                                },
+                                              ),
+                                            )
+                                          : DefaultTabController(
+                                              length: 4, // Number of tabs
+                                              child: Column(
+                                                children: <Widget>[
+                                                  Container(
+                                                    constraints:
+                                                        const BoxConstraints
+                                                            .expand(height: 40),
+                                                    child: TabBar(
+                                                      labelStyle:
+                                                          const TextStyle(
+                                                              fontWeight:
+                                                                  FontWeight
+                                                                      .w400),
+                                                      controller:
+                                                          _marketplaceTabController,
+                                                      isScrollable: false,
+                                                      // indicator:
+                                                      //     BoxDecoration(
+                                                      //   borderRadius:
+                                                      //       BorderRadius
+                                                      //           .circular(
+                                                      //               50), // Creates border
+                                                      //   color: Colors
+                                                      //       .black87
+                                                      //       .withAlpha(180),
+                                                      // ),
+                                                      // unselectedLabelColor:
+                                                      //     Colors.grey,
+                                                      // labelColor:
+                                                      //     Colors.white,
+                                                      labelPadding:
+                                                          const EdgeInsets
+                                                              .symmetric(
+                                                              horizontal: 20.0),
+                                                      tabs: const <Widget>[
+                                                        Tab(
+                                                          icon: Icon(
+                                                            Icons.dashboard,
+                                                            size: 15,
+                                                          ),
+                                                        ),
+                                                        Tab(
+                                                          child: FittedBox(
+                                                            child: Text(
+                                                              'Products',
+                                                              style: TextStyle(
                                                                   fontWeight:
                                                                       FontWeight
-                                                                          .w400),
-                                                          controller:
-                                                              _marketplaceTabController,
-                                                          isScrollable: false,
-                                                          // indicator:
-                                                          //     BoxDecoration(
-                                                          //   borderRadius:
-                                                          //       BorderRadius
-                                                          //           .circular(
-                                                          //               50), // Creates border
-                                                          //   color: Colors
-                                                          //       .black87
-                                                          //       .withAlpha(180),
-                                                          // ),
-                                                          // unselectedLabelColor:
-                                                          //     Colors.grey,
-                                                          // labelColor:
-                                                          //     Colors.white,
-                                                          labelPadding:
-                                                              const EdgeInsets
-                                                                  .symmetric(
-                                                                  horizontal:
-                                                                      20.0),
-                                                          tabs: const <Widget>[
-                                                            Tab(
-                                                              icon: Icon(
-                                                                Icons.dashboard,
-                                                                size: 15,
-                                                              ),
+                                                                          .w700,
+                                                                  fontSize: 14),
                                                             ),
-                                                            Tab(
-                                                              child: FittedBox(
-                                                                child: Text(
-                                                                  'Products',
-                                                                  style: TextStyle(
-                                                                      fontWeight:
-                                                                          FontWeight
-                                                                              .w700,
-                                                                      fontSize:
-                                                                          14),
-                                                                ),
-                                                              ),
-                                                            ),
-                                                            Tab(
-                                                              child: FittedBox(
-                                                                child: Text(
-                                                                  'Services',
-                                                                  style: TextStyle(
-                                                                      fontWeight:
-                                                                          FontWeight
-                                                                              .w700,
-                                                                      fontSize:
-                                                                          14),
-                                                                ),
-                                                              ),
-                                                            ),
-                                                            Tab(
-                                                              child: FittedBox(
-                                                                child: Text(
-                                                                  'Suppliers',
-                                                                  style: TextStyle(
-                                                                      fontWeight:
-                                                                          FontWeight
-                                                                              .w700,
-                                                                      fontSize:
-                                                                          14),
-                                                                ),
-                                                              ),
-                                                            ),
-                                                          ],
+                                                          ),
                                                         ),
-                                                      ),
-                                                      Expanded(
-                                                        child: Column(
-                                                          children: <Widget>[
-                                                            Expanded(
-                                                              child: TabBarView(
-                                                                controller:
-                                                                    _marketplaceTabController,
-                                                                children: const <Widget>[
-                                                                  MarketsPage(),
-                                                                  ProductsPage(),
-                                                                  ServicesPage(),
-                                                                  SuppliersPage(),
-                                                                ],
-                                                              ),
+                                                        Tab(
+                                                          child: FittedBox(
+                                                            child: Text(
+                                                              'Services',
+                                                              style: TextStyle(
+                                                                  fontWeight:
+                                                                      FontWeight
+                                                                          .w700,
+                                                                  fontSize: 14),
                                                             ),
-                                                          ],
+                                                          ),
                                                         ),
-                                                      ),
-                                                    ],
+                                                        Tab(
+                                                          child: FittedBox(
+                                                            child: Text(
+                                                              'Suppliers',
+                                                              style: TextStyle(
+                                                                  fontWeight:
+                                                                      FontWeight
+                                                                          .w700,
+                                                                  fontSize: 14),
+                                                            ),
+                                                          ),
+                                                        ),
+                                                      ],
+                                                    ),
                                                   ),
-                                                ),
-                                        );
+                                                  Expanded(
+                                                    child: Column(
+                                                      children: <Widget>[
+                                                        Expanded(
+                                                          child: TabBarView(
+                                                            controller:
+                                                                _marketplaceTabController,
+                                                            children: const <Widget>[
+                                                              MarketsPage(),
+                                                              ProductsPage(),
+                                                              ServicesPage(),
+                                                              SuppliersPage(),
+                                                            ],
+                                                          ),
+                                                        ),
+                                                      ],
+                                                    ),
+                                                  ),
+                                                ],
+                                              ),
+                                            ),
+                                    );
                             }
                           }),
                         ),
