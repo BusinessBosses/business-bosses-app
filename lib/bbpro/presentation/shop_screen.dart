@@ -177,7 +177,7 @@ class _ShopScreenState extends State<ShopScreen> {
                                 GestureDetector(
                                   onTap: () {},
                                   child: Text(
-                                    '${shopController.shop!.user?.averageRating} Reviews',
+                                    '${shopController.shop!.user?.averageRating!.toStringAsFixed(2)} Reviews',
                                     style: const TextStyle(
                                       fontWeight: FontWeight.w700,
                                       fontSize: 14,
