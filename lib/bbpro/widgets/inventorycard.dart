@@ -121,13 +121,14 @@ class _InventoryCardState extends State<InventoryCard> {
                           fontSize: 13,
                         ),
                       ),
-                    Text(
-                      widget.product?.description ?? 'Product description',
-                      style: const TextStyle(fontSize: 11),
-                      maxLines: 2,
-                      overflow: TextOverflow.ellipsis,
-                    ),
-                    if (widget.myShop != false)
+                    if (widget.myShop == false)
+                      Text(
+                        widget.product?.description ?? 'Product description',
+                        style: const TextStyle(fontSize: 11),
+                        maxLines: 2,
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                    if (widget.myShop == false)
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: <Widget>[
@@ -181,14 +182,55 @@ class _InventoryCardState extends State<InventoryCard> {
                     ),
                   ),
                 )
-              : OptionsButton(
-                  item: widget.product,
-                  onEdit: () => Get.to(
-                    () => CreateProductListing(
-                      product: widget.product,
+              : Row(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: <Widget>[
+                    Column(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: <Widget>[
+                        Text(
+                          widget.product?.description ?? 'Product description',
+                          style: const TextStyle(fontSize: 11),
+                          maxLines: 2,
+                          overflow: TextOverflow.ellipsis,
+                        ),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: <Widget>[
+                            Wrap(
+                              crossAxisAlignment: WrapCrossAlignment.center,
+                              children: <Widget>[
+                                CircleAvatar(
+                                  radius: 3,
+                                  backgroundColor: widget.product!.quantity! > 0
+                                      ? Colors.green
+                                      : Colors.red,
+                                ),
+                                const SizedBox(width: 3),
+                                Text(
+                                  widget.product!.quantity! > 0
+                                      ? '${widget.product?.quantity.toString()} in Stock'
+                                      : 'Out of stock',
+                                  style: const TextStyle(fontSize: 10),
+                                ),
+                              ],
+                            ),
+                          ],
+                        ),
+                      ],
                     ),
-                  ),
-                  onDelete: onDelete,
+                    OptionsButton(
+                      item: widget.product,
+                      onEdit: () => Get.to(
+                        () => CreateProductListing(
+                          product: widget.product,
+                        ),
+                      ),
+                      onDelete: onDelete,
+                    ),
+                  ],
                 ),
         ],
       ),

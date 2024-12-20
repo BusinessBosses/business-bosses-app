@@ -125,13 +125,14 @@ class _ServiceCardState extends State<ServiceCard> {
                           fontSize: 13,
                         ),
                       ),
-                    Text(
-                      widget.service?.description ?? 'Service description',
-                      style: const TextStyle(fontSize: 11),
-                      maxLines: 2,
-                      overflow: TextOverflow.ellipsis,
-                    ),
-                    if (widget.myShop != false)
+                    if (widget.myShop == false)
+                      Text(
+                        widget.service?.description ?? 'Service description',
+                        style: const TextStyle(fontSize: 11),
+                        maxLines: 2,
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                    if (widget.myShop == false)
                       const Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: <Widget>[
@@ -178,10 +179,46 @@ class _ServiceCardState extends State<ServiceCard> {
                     ),
                   ),
                 )
-              : OptionsButton(
-                  item: widget.service,
-                  onEdit: _onEdit,
-                  onDelete: onDelete,
+              : Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: <Widget>[
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: <Widget>[
+                        Text(
+                          widget.service?.description ?? 'Service description',
+                          style: const TextStyle(fontSize: 11),
+                          maxLines: 2,
+                          overflow: TextOverflow.ellipsis,
+                        ),
+                        const Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: <Widget>[
+                            Wrap(
+                              crossAxisAlignment: WrapCrossAlignment.center,
+                              children: <Widget>[
+                                CircleAvatar(
+                                  radius: 3,
+                                  backgroundColor: Colors.green,
+                                ),
+                                SizedBox(width: 3),
+                                Text(
+                                  'Upcoming',
+                                  style: TextStyle(fontSize: 10),
+                                ),
+                              ],
+                            ),
+                          ],
+                        ),
+                      ],
+                    ),
+                    OptionsButton(
+                      item: widget.service,
+                      onEdit: _onEdit,
+                      onDelete: onDelete,
+                    ),
+                  ],
                 ),
         ],
       ),
