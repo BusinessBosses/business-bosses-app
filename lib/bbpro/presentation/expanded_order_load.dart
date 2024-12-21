@@ -76,6 +76,7 @@ class _ExpandedOrdersViewState extends State<ExpandedOrdersView> {
                               orderController.orderView!.status.backgroundColor,
                           isExpanded: true,
                           shop: orderController.orderView!.shop,
+                          myShop: false,
                         ),
                         const SizedBox(height: 30),
                         const Padding(

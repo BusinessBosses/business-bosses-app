@@ -891,8 +891,7 @@ class _CreateServiceListingState extends State<CreateServiceListing>
         // First validate required fields
         if (_serviceNameController.text.isEmpty ||
             _priceController.text.isEmpty ||
-            _descriptionController.text.isEmpty ||
-            category == null) {
+            _descriptionController.text.isEmpty) {
           // Check if days are selected
           showSnackbar(
               message: 'Please fill in all required fields', error: true);

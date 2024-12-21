@@ -59,7 +59,7 @@ class _UserShopScreenState extends State<UserShopScreen> {
   void _shareBizCenter() {
     String message =
         'Have a look at ${shopController.userShop!.user?.username}\'s BizCenter on Business Bosses\n'
-        'https://businessbosses.co.uk/${shopController.userShop!.name.toLowerCase().replaceAll(' ', '-')}';
+        'https://my-biz.io/${shopController.userShop!.name.toLowerCase().replaceAll(' ', '-')}';
     socialShare(message);
   }
 

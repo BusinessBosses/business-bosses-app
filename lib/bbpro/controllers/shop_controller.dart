@@ -66,7 +66,7 @@ class ShopController extends GetxController {
           services.add(Service.fromJson(servicesResponse.data['rows'][i]));
         }
       }
-
+      items.clear();
       items.addAll(<Object>[...products, ...services]);
       items.sort((Object a, Object b) {
         // Assuming both Product and Service have a createdAt property.

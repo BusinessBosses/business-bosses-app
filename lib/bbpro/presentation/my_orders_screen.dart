@@ -209,6 +209,7 @@ class _MyOrdersScreenState extends State<MyOrdersScreen> {
                                   bgcolor: order.status.backgroundColor,
                                   shop: order.shop,
                                   showChange: false,
+                                  myShop: false,
                                 ),
                               );
                             },

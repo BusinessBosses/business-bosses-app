@@ -19,12 +19,14 @@ class OrderWidget extends StatefulWidget {
   final Order order;
   final Color bgcolor;
   final bool? isExpanded;
+  final bool? myShop;
   final Shop? shop;
   final bool showChange;
 
   const OrderWidget({
     required this.order,
     required this.bgcolor,
+    this.myShop = true,
     super.key,
     this.isExpanded,
     this.shop,
@@ -99,28 +101,29 @@ class _OrderWidgetState extends State<OrderWidget> {
                                 ),
                               ]),
                         ),
-                        OptionsButton(
-                          padding: const EdgeInsets.all(0),
-                          borderColor: Colors.white,
-                          onEdit: onEdit,
-                          onDelete: () async {
-                            final bool delete = await orderController
-                                .deleteOrder(widget.order.id);
-                            if (delete) {
-                              showSnackbar(
-                                  message: 'Order deleted successfully!');
-                            } else {
-                              showSnackbar(
-                                message: 'Error deleting order!',
-                                error: true,
-                              );
-                            }
+                        if (widget.myShop!)
+                          OptionsButton(
+                            padding: const EdgeInsets.all(0),
+                            borderColor: Colors.white,
+                            onEdit: onEdit,
+                            onDelete: () async {
+                              final bool delete = await orderController
+                                  .deleteOrder(widget.order.id);
+                              if (delete) {
+                                showSnackbar(
+                                    message: 'Order deleted successfully!');
+                              } else {
+                                showSnackbar(
+                                  message: 'Error deleting order!',
+                                  error: true,
+                                );
+                              }
 
-                            setState(() {});
-                            orderController
-                                .initOrders(profileController.myProfile.uid);
-                          },
-                        ),
+                              setState(() {});
+                              orderController
+                                  .initOrders(profileController.myProfile.uid);
+                            },
+                          ),
                       ],
                     ),
                     Padding(

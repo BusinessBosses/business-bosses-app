@@ -444,7 +444,7 @@ class _ShopScreenState extends State<ShopScreen> {
           _buildContactRow(
             'assets/svgs/website.svg',
             'Address',
-            'Ghana',
+            shopController.shop!.location,
             12,
             () async {
               final Uri uri =
@@ -634,7 +634,7 @@ class _ShopScreenState extends State<ShopScreen> {
   void _sharePost() {
     String message =
         'Have a look at ${shopController.shop!.user?.username}\'s biz-center on Business Bosses\n'
-        'https://businessbosses.co.uk/${shopController.shop?.name.toLowerCase().replaceAll(' ', '-')}';
+        'https://my-biz.io${shopController.shop?.name.toLowerCase().replaceAll(' ', '-')}';
     socialShare(message);
   }
 }
