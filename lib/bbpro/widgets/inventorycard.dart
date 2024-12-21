@@ -121,13 +121,14 @@ class _InventoryCardState extends State<InventoryCard> {
                           fontSize: 13,
                         ),
                       ),
-                    Text(
-                      widget.product?.description ?? 'Product description',
-                      style: const TextStyle(fontSize: 11),
-                      maxLines: 2,
-                      overflow: TextOverflow.ellipsis,
-                    ),
-                    if (widget.myShop != false)
+                    if (widget.myShop == false)
+                      Text(
+                        widget.product?.description ?? 'Product description',
+                        style: const TextStyle(fontSize: 11),
+                        maxLines: 2,
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                    if (widget.myShop == false)
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: <Widget>[
@@ -154,29 +155,73 @@ class _InventoryCardState extends State<InventoryCard> {
                   ],
                 ),
               ),
-              widget.myShop == false
-                  ? Container(
-                      padding: const EdgeInsets.symmetric(
-                        horizontal: 5,
-                        vertical: 3,
-                      ),
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(70),
-                        color: Colors.transparent,
-                        border: Border.all(
-                          color: primaryColorLT,
+            ],
+          ),
+          const SizedBox(
+            height: 5,
+          ),
+          widget.myShop == false
+              ? Container(
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 5,
+                    vertical: 3,
+                  ),
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(70),
+                    color: Colors.black,
+                    border: Border.all(
+                      color: Colors.grey,
+                    ),
+                  ),
+                  child: const Text(
+                    'Order',
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontWeight: FontWeight.bold,
+                      fontSize: 11,
+                    ),
+                  ),
+                )
+              : Row(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: <Widget>[
+                    Column(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: <Widget>[
+                        Text(
+                          widget.product?.description ?? 'Product description',
+                          style: const TextStyle(fontSize: 11),
+                          maxLines: 2,
+                          overflow: TextOverflow.ellipsis,
                         ),
-                      ),
-                      child: const Text(
-                        'Order',
-                        style: TextStyle(
-                          color: primaryColorLT,
-                          fontWeight: FontWeight.bold,
-                          fontSize: 11,
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: <Widget>[
+                            Wrap(
+                              crossAxisAlignment: WrapCrossAlignment.center,
+                              children: <Widget>[
+                                CircleAvatar(
+                                  radius: 3,
+                                  backgroundColor: widget.product!.quantity! > 0
+                                      ? Colors.green
+                                      : Colors.red,
+                                ),
+                                const SizedBox(width: 3),
+                                Text(
+                                  widget.product!.quantity! > 0
+                                      ? '${widget.product?.quantity.toString()} in Stock'
+                                      : 'Out of stock',
+                                  style: const TextStyle(fontSize: 10),
+                                ),
+                              ],
+                            ),
+                          ],
                         ),
-                      ),
-                    )
-                  : OptionsButton(
+                      ],
+                    ),
+                    OptionsButton(
                       item: widget.product,
                       onEdit: () => Get.to(
                         () => CreateProductListing(
@@ -185,8 +230,8 @@ class _InventoryCardState extends State<InventoryCard> {
                       ),
                       onDelete: onDelete,
                     ),
-            ],
-          ),
+                  ],
+                ),
         ],
       ),
     );

@@ -121,7 +121,7 @@ class _ClientWidgetState extends State<ClientWidget> {
                                   .deleteClient(widget.client.id);
                               if (delete) {
                                 showSnackbar(
-                                    message: 'Client deleted successfully!');
+                                    message: 'Customer deleted successfully!');
                               } else {
                                 showSnackbar(
                                     message: 'Error deleting client!',
@@ -218,7 +218,7 @@ class _ClientWidgetState extends State<ClientWidget> {
                   Row(
                     children: <Widget>[
                       const Text(
-                        'Client type: ',
+                        'Customer type: ',
                         style: TextStyle(
                           fontWeight: FontWeight.normal,
                           fontSize: 13,

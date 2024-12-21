@@ -376,7 +376,7 @@ class _CreateOrderState extends State<CreateOrder> {
                           child: CustomTextWidget(
                             padding: 15,
                             textpadding: 15,
-                            caption: 'Client\'s Name *',
+                            caption: 'Customers\'s Name *',
 
                             // items: clientsName,
                             iconName: 'assets/svgs/dropdown.svg',
@@ -384,7 +384,7 @@ class _CreateOrderState extends State<CreateOrder> {
                             // initialValue: selectedClient,
                             // onChanged: (String? value) {
                             //   setState(() {
-                            //     selectedClient = value!;
+                            //     selectesdClient = value!;
                             //     _onClientSelect(value);
                             //   });
                             // },

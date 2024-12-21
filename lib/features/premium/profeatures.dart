@@ -24,7 +24,7 @@ class ProfeatureTile extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[
               Container(
-                padding: const EdgeInsets.only(right: 8),
+                padding: const EdgeInsets.only(right: 8, top: 1),
                 decoration: BoxDecoration(
                   color: feature.color,
                   borderRadius: BorderRadius.circular(8),
@@ -35,7 +35,6 @@ class ProfeatureTile extends StatelessWidget {
                   color: proprimaryColor,
                 ),
               ),
-              const SizedBox(width: 8),
               Expanded(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,

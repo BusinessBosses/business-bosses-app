@@ -177,7 +177,7 @@ class _ShopScreenState extends State<ShopScreen> {
                                 GestureDetector(
                                   onTap: () {},
                                   child: Text(
-                                    '${shopController.shop!.user?.averageRating} Reviews',
+                                    '${shopController.shop!.user?.averageRating!.toStringAsFixed(2)} Reviews',
                                     style: const TextStyle(
                                       fontWeight: FontWeight.w700,
                                       fontSize: 14,
@@ -218,22 +218,22 @@ class _ShopScreenState extends State<ShopScreen> {
                     ///Tab 1 Content
                     Column(
                       children: <Widget>[
-                        Padding(
-                          padding: const EdgeInsets.symmetric(
+                        const Padding(
+                          padding: EdgeInsets.symmetric(
                               horizontal: 15.0, vertical: 10),
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: <Widget>[
-                              Padding(
-                                padding:
-                                    const EdgeInsets.symmetric(vertical: 5.0),
-                                child: Text(
-                                  'Showcase (${shopController.items.length})',
-                                  style: const TextStyle(
-                                      fontSize: 14,
-                                      fontWeight: FontWeight.w700),
-                                ),
-                              ),
+                              // Padding(
+                              //   padding:
+                              //       const EdgeInsets.symmetric(vertical: 5.0),
+                              //   child: Text(
+                              //     'Showcase (${shopController.products.length + shopController.services.length})',
+                              //     style: const TextStyle(
+                              //         fontSize: 14,
+                              //         fontWeight: FontWeight.w700),
+                              //   ),
+                              // ),
                               // GestureDetector(
                               //   onTap: () {
                               //     final RenderBox button =
@@ -319,11 +319,12 @@ class _ShopScreenState extends State<ShopScreen> {
                                   const StaggeredTile.fit(1),
                               mainAxisSpacing: 10.0,
                               crossAxisSpacing: 10.0,
-                              itemCount: shopController.items.length,
+                              itemCount: shopController.products.length +
+                                  shopController.services.length,
                               itemBuilder: (BuildContext context, int index) {
-                                if (shopController.items[index] is Product) {
+                                if (index < shopController.products.length) {
                                   final Product product =
-                                      shopController.items[index] as Product;
+                                      shopController.products[index];
                                   return GestureDetector(
                                     onTap: () {
                                       Get.to(
@@ -338,8 +339,9 @@ class _ShopScreenState extends State<ShopScreen> {
                                     ),
                                   );
                                 } else {
-                                  final Service service =
-                                      shopController.items[index] as Service;
+                                  final Service service = shopController
+                                          .services[
+                                      index - shopController.products.length];
                                   return GestureDetector(
                                     onTap: () {
                                       Get.to(

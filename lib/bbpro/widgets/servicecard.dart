@@ -47,7 +47,7 @@ class _ServiceCardState extends State<ServiceCard> {
         ),
       ),
       child: Column(
-        crossAxisAlignment: CrossAxisAlignment.center,
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
           if (widget.service?.images != null &&
               widget.service!.images!.isNotEmpty)
@@ -125,13 +125,14 @@ class _ServiceCardState extends State<ServiceCard> {
                           fontSize: 13,
                         ),
                       ),
-                    Text(
-                      widget.service?.description ?? 'Service description',
-                      style: const TextStyle(fontSize: 11),
-                      maxLines: 2,
-                      overflow: TextOverflow.ellipsis,
-                    ),
-                    if (widget.myShop != false)
+                    if (widget.myShop == false)
+                      Text(
+                        widget.service?.description ?? 'Service description',
+                        style: const TextStyle(fontSize: 11),
+                        maxLines: 2,
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                    if (widget.myShop == false)
                       const Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: <Widget>[
@@ -154,34 +155,71 @@ class _ServiceCardState extends State<ServiceCard> {
                   ],
                 ),
               ),
-              widget.myShop == false
-                  ? Container(
-                      padding: const EdgeInsets.symmetric(
-                          horizontal: 5, vertical: 3),
-                      decoration: BoxDecoration(
-                        // color: primaryColorLT,
-                        borderRadius: BorderRadius.circular(70),
-                        border: Border.all(
-                          color: primaryColorLT,
-                          width: 1,
+            ],
+          ),
+          const SizedBox(height: 5),
+          widget.myShop == false
+              ? Container(
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 5, vertical: 3),
+                  decoration: BoxDecoration(
+                    color: Colors.black,
+                    borderRadius: BorderRadius.circular(70),
+                    border: Border.all(
+                      color: Colors.grey,
+                      width: 1,
+                    ),
+                  ),
+                  child: const Text(
+                    'Book',
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontWeight: FontWeight.bold,
+                      fontSize: 11,
+                    ),
+                  ),
+                )
+              : Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: <Widget>[
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: <Widget>[
+                        Text(
+                          widget.service?.description ?? 'Service description',
+                          style: const TextStyle(fontSize: 11),
+                          maxLines: 2,
+                          overflow: TextOverflow.ellipsis,
                         ),
-                      ),
-                      child: const Text(
-                        'Book',
-                        style: TextStyle(
-                          color: primaryColorLT,
-                          fontWeight: FontWeight.bold,
-                          fontSize: 11,
+                        const Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: <Widget>[
+                            Wrap(
+                              crossAxisAlignment: WrapCrossAlignment.center,
+                              children: <Widget>[
+                                CircleAvatar(
+                                  radius: 3,
+                                  backgroundColor: Colors.green,
+                                ),
+                                SizedBox(width: 3),
+                                Text(
+                                  'Upcoming',
+                                  style: TextStyle(fontSize: 10),
+                                ),
+                              ],
+                            ),
+                          ],
                         ),
-                      ),
-                    )
-                  : OptionsButton(
+                      ],
+                    ),
+                    OptionsButton(
                       item: widget.service,
                       onEdit: _onEdit,
                       onDelete: onDelete,
                     ),
-            ],
-          ),
+                  ],
+                ),
         ],
       ),
     );

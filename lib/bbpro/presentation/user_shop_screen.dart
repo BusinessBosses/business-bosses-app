@@ -274,7 +274,7 @@ class _UserShopScreenState extends State<UserShopScreen> {
                                               GestureDetector(
                                                 onTap: () {},
                                                 child: Text(
-                                                  '${shopController.userShop!.user?.averageRating} Reviews',
+                                                  '${shopController.userShop!.user?.averageRating?.toStringAsFixed(2)} Reviews',
                                                   style: const TextStyle(
                                                       fontWeight:
                                                           FontWeight.w700,
@@ -341,25 +341,25 @@ class _UserShopScreenState extends State<UserShopScreen> {
                                   ///Tab 1 Content
                                   Column(
                                     children: <Widget>[
-                                      Padding(
-                                        padding: const EdgeInsets.symmetric(
+                                      const Padding(
+                                        padding: EdgeInsets.symmetric(
                                             horizontal: 15.0, vertical: 10),
                                         child: Row(
                                           mainAxisAlignment:
                                               MainAxisAlignment.spaceBetween,
                                           children: <Widget>[
-                                            Padding(
-                                              padding:
-                                                  const EdgeInsets.symmetric(
-                                                      vertical: 5.0),
-                                              child: Text(
-                                                'Showcase (${shopController.userItems.length})',
-                                                style: const TextStyle(
-                                                    fontSize: 14,
-                                                    fontWeight:
-                                                        FontWeight.w700),
-                                              ),
-                                            ),
+                                            // Padding(
+                                            //   padding:
+                                            //       const EdgeInsets.symmetric(
+                                            //           vertical: 5.0),
+                                            //   child: Text(
+                                            //     'Showcase (${shopController.userItems.length})',
+                                            //     style: const TextStyle(
+                                            //         fontSize: 14,
+                                            //         fontWeight:
+                                            //             FontWeight.w700),
+                                            //   ),
+                                            // ),
                                             // GestureDetector(
                                             //   onTap: () {
                                             //     final RenderBox button =
