@@ -203,30 +203,33 @@ class _InventoryState extends State<Inventory> {
 
             // Product List
             Expanded(
-              child: filteredProducts.isNotEmpty
-                  ? ListView.builder(
-                      physics: const AlwaysScrollableScrollPhysics(),
-                      itemCount: filteredProducts.length,
-                      itemBuilder: (BuildContext context, int index) {
-                        final Product product = filteredProducts[index];
-                        return GestureDetector(
-                          onTap: () {
-                            Get.to(
-                              () => CreateProductListing(
+              child: Obx(
+                () => shopController.products.isNotEmpty
+                    ? ListView.builder(
+                        physics: const AlwaysScrollableScrollPhysics(),
+                        itemCount: shopController.products.length,
+                        itemBuilder: (BuildContext context, int index) {
+                          final Product product =
+                              shopController.products.reversed.toList()[index];
+                          return GestureDetector(
+                            onTap: () {
+                              Get.to(
+                                () => CreateProductListing(
+                                  product: product,
+                                ),
+                              );
+                            },
+                            child: Padding(
+                              padding: const EdgeInsets.only(bottom: 10.0),
+                              child: MyInventoryCard(
                                 product: product,
                               ),
-                            );
-                          },
-                          child: Padding(
-                            padding: const EdgeInsets.only(bottom: 10.0),
-                            child: MyInventoryCard(
-                              product: product,
                             ),
-                          ),
-                        );
-                      },
-                    )
-                  : const Center(child: Text('No Products found')),
+                          );
+                        },
+                      )
+                    : const Center(child: Text('No Products found')),
+              ),
             ),
           ],
         ),

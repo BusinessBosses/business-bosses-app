@@ -58,13 +58,13 @@ class _CreateServiceListingState extends State<CreateServiceListing>
   // Form fields
   String? category;
   String? categorys;
-  String? location;
-  List<String>? images = <String>[];
+  String location = '';
+  List<String> images = <String>[];
   List<String>? updateImages = <String>[];
   String? paymentMethod;
   String? deliveryMethod;
   String? deliveryTime;
-  DateTime? availableTime;
+  DateTime availableTime = DateTime.now();
   String? serviceType;
   Map<String, dynamic>? availability;
 
@@ -110,11 +110,13 @@ class _CreateServiceListingState extends State<CreateServiceListing>
       _descriptionController.text = widget.service!.description;
       category = widget.service!.category;
       location = widget.service!.location;
-      images = widget.service!.images;
+      images = widget.service!.images!;
       updateImages = widget.service!.images;
       deliveryMethod = widget.service!.deliveryMethod;
       deliveryTime = widget.service!.deliveryTime;
-      availableTime = widget.service!.availableTime;
+      availableTime = widget.service!.availableTime != null
+          ? widget.service!.availableTime!
+          : DateTime.now();
       serviceType = widget.service!.serviceType;
       paymentMethod = widget.service!.paymentMethod;
       notesController.text = widget.service!.notes ?? '';
@@ -384,9 +386,8 @@ class _CreateServiceListingState extends State<CreateServiceListing>
                     style: TextStyle(),
                   ),
                 ),
-                initialSelection: location == null || location!.isEmpty
-                    ? shopController.shop?.location
-                    : location,
+                initialSelection:
+                    location.isEmpty ? shopController.shop?.location : location,
                 pickerBuilder:
                     (BuildContext context, CountryCode? countryCode) {
                   return Container(
@@ -397,7 +398,7 @@ class _CreateServiceListingState extends State<CreateServiceListing>
                     child: CustomTextWidget(
                       caption: 'Location',
                       iconName: 'assets/svgs/nexticon.svg',
-                      text: location == null || location!.isEmpty
+                      text: location.isEmpty
                           ? shopController.shop!.location
                           : location,
                     ),
@@ -405,9 +406,9 @@ class _CreateServiceListingState extends State<CreateServiceListing>
                 },
                 onChanged: (CountryCode? code) {
                   setState(() {
-                    location = code?.name;
+                    location = code!.name!;
                     currencyController.text =
-                        '${currencyValues[code?.name.toString()]}';
+                        '${currencyValues[code.name.toString()]}';
                   });
                 },
                 useSafeArea: false,
@@ -882,7 +883,7 @@ class _CreateServiceListingState extends State<CreateServiceListing>
         dynamic response = await ApiService.uploadFile(image);
         if (response['success']) {
           setState(() {
-            images!.add(response['fileUrl']);
+            images.add(response['fileUrl']);
           });
         }
       }
@@ -908,15 +909,16 @@ class _CreateServiceListingState extends State<CreateServiceListing>
               ? '0'
               : _discountController.text.trim(),
           'category': category,
+          'categorys': categorys,
           'location':
-              location!.isEmpty ? shopController.shop!.location : location,
+              location.isEmpty ? shopController.shop!.location : location,
           'participants': groupmembersController.text,
           'repeat': frequency,
-          'images': images!.isEmpty ? null : images,
+          'images': images.isEmpty ? null : images,
           'paymentMethod': paymentMethod ?? '',
           'deliveryMethod': deliveryMethod ?? '',
           'deliveryTime': deliveryTime ?? '',
-          'availableTime': availableTime?.toIso8601String(),
+          'availableTime': availableTime.toIso8601String(),
           'serviceType': serviceType ?? '1:1',
           'itemType': 'service',
           'isActive': _isSwitched,
@@ -957,6 +959,9 @@ class _CreateServiceListingState extends State<CreateServiceListing>
           if (result) {
             showSnackbar(message: 'Service Added Successfully!');
             Navigator.pop(context);
+          } else {
+            String errorMessage = 'Failed to add service';
+            showSnackbar(message: errorMessage, error: true);
           }
         } else {
           final bool result = await shopController.updateService(
@@ -964,6 +969,9 @@ class _CreateServiceListingState extends State<CreateServiceListing>
           if (result) {
             showSnackbar(message: 'Service Updated Successfully!');
             Navigator.pop(context);
+          } else {
+            String errorMessage = 'Failed to edit service';
+            showSnackbar(message: errorMessage, error: true);
           }
         }
       } catch (e) {

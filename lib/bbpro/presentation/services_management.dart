@@ -201,35 +201,38 @@ class _ManageServicesState extends State<ManageServices> {
 
           // Product List
           Expanded(
-            child: filteredServices.isNotEmpty
-                ? ListView.builder(
-                    physics: const AlwaysScrollableScrollPhysics(),
-                    itemCount: filteredServices.length,
-                    itemBuilder: (BuildContext context, int index) {
-                      final Service service = filteredServices[index];
+            child: Obx(
+              () => shopController.services.isNotEmpty
+                  ? ListView.builder(
+                      physics: const AlwaysScrollableScrollPhysics(),
+                      itemCount: shopController.services.length,
+                      itemBuilder: (BuildContext context, int index) {
+                        final Service service =
+                            shopController.services.reversed.toList()[index];
 
-                      return GestureDetector(
-                        onTap: () {
-                          Get.to(
-                            () => CreateServiceListing(
+                        return GestureDetector(
+                          onTap: () {
+                            Get.to(
+                              () => CreateServiceListing(
+                                service: service,
+                              ),
+                            );
+                            // Get.to(
+                            //   () => BookServiceScreen(
+                            //       service: service, shop: shopController.shop!),
+                            // );
+                          },
+                          child: Padding(
+                            padding: const EdgeInsets.only(bottom: 10.0),
+                            child: MyServiceCard(
                               service: service,
                             ),
-                          );
-                          // Get.to(
-                          //   () => BookServiceScreen(
-                          //       service: service, shop: shopController.shop!),
-                          // );
-                        },
-                        child: Padding(
-                          padding: const EdgeInsets.only(bottom: 10.0),
-                          child: MyServiceCard(
-                            service: service,
                           ),
-                        ),
-                      );
-                    },
-                  )
-                : const Center(child: Text('No Services found')),
+                        );
+                      },
+                    )
+                  : const Center(child: Text('No Services found')),
+            ),
           )
         ],
       ),
