@@ -1,7 +1,15 @@
 // ignore_for_file: always_specify_types
 
 import 'package:business_bosses_v2/common/widgets/network_image_with_placeholder.dart';
+import 'package:business_bosses_v2/features/chat/chat_screen.dart';
+import 'package:business_bosses_v2/features/donations/presentation/donations.dart';
+import 'package:business_bosses_v2/features/home/all_communities_screen.dart';
+import 'package:business_bosses_v2/features/home/marketplace_screen.dart';
+import 'package:business_bosses_v2/features/posts/presentation/create_post_screen.dart';
+import 'package:business_bosses_v2/features/premium/proscreen.dart';
 import 'package:business_bosses_v2/features/profile/controller/profile_controller.dart';
+import 'package:business_bosses_v2/features/profile/presentation/my_profile_screen.dart';
+import 'package:business_bosses_v2/navigation/routes.dart';
 import 'package:business_bosses_v2/utils/theme/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
@@ -33,7 +41,7 @@ class _HowToUseAppScreenState extends State<HowToUseAppScreen> {
         'title': 'Marketplace',
         'description':
             'Browse and purchase items from other users. You can find a wide variety of items here.',
-        'screenRoute': '/marketplace',
+        'onTileClicked': () => Get.to(const MarketplaceScreen()),
       },
       {
         'icon': SvgPicture.asset(
@@ -47,7 +55,7 @@ class _HowToUseAppScreenState extends State<HowToUseAppScreen> {
         'title': 'Grow',
         'description':
             'Upgrade to Premium for exclusive features and benefits. Enjoy ad-free browsing and more.',
-        'screenRoute': '/premium',
+        'onTileClicked': () => Get.to(() => const ProScreen()),
       },
       {
         'icon': SizedBox(
@@ -70,7 +78,7 @@ class _HowToUseAppScreenState extends State<HowToUseAppScreen> {
         'title': 'Profile',
         'description':
             'View and edit your profile information. Manage your account settings and preferences.',
-        'screenRoute': '/profile',
+        'onTileClicked': () => Get.to(const MyProfileScreen()),
       },
       {
         'icon': SvgPicture.asset(
@@ -84,7 +92,7 @@ class _HowToUseAppScreenState extends State<HowToUseAppScreen> {
         'title': 'Boss Up',
         'description':
             'Connect with other users and build your network. Find friends who share your interests.',
-        'screenRoute': '/friends',
+        'onTileClicked': () => Get.to(const AllCommunitiesScreen()),
       },
       {
         'icon': SvgPicture.asset(
@@ -98,7 +106,7 @@ class _HowToUseAppScreenState extends State<HowToUseAppScreen> {
         'title': 'Messages',
         'description':
             'Join or create groups to discuss topics with like-minded individuals. Share your thoughts and ideas.',
-        'screenRoute': '/groups',
+        'onTileClicked': () => Get.to(const ChatScreen()),
       },
       {
         'icon': SvgPicture.asset(
@@ -112,7 +120,7 @@ class _HowToUseAppScreenState extends State<HowToUseAppScreen> {
         'title': 'Events',
         'description':
             'Manage your inventory of items. Track your purchases and sales.',
-        'screenRoute': '/inventory',
+        'onTileClicked': () => Get.toNamed(Routes.liveEvents),
       },
       {
         'icon': SvgPicture.asset(
@@ -126,8 +134,7 @@ class _HowToUseAppScreenState extends State<HowToUseAppScreen> {
         'title': 'Crowdfund',
         'description':
             'Communicate with other users through private messages. Stay connected with your friends and colleagues.',
-        'screenRoute': '/messages',
-        // 'notificationCount': 1, // Example notification count
+        'onTileClicked': () => Get.to(const DonationsPage()),
       },
       {
         'icon': const Icon(
@@ -138,7 +145,7 @@ class _HowToUseAppScreenState extends State<HowToUseAppScreen> {
         'title': 'Create',
         'description':
             'Create your own content and share it with the community. Build your brand and reach a wider audience.',
-        'screenRoute': '/create',
+        'onTileClicked': () => Get.to(() => const CreatePostScreen()),
       },
     ];
     return Scaffold(
@@ -170,7 +177,7 @@ class _HowToUseAppScreenState extends State<HowToUseAppScreen> {
             icon: tileData['icon'],
             title: tileData['title'],
             description: tileData['description'],
-            screenRoute: tileData['screenRoute'],
+            onTileClicked: tileData['onTileClicked'],
             notificationCount: tileData['notificationCount'] ?? 0,
           );
         },
@@ -183,7 +190,7 @@ class TileWidget extends StatelessWidget {
   final Widget icon;
   final String title;
   final String description;
-  final String screenRoute;
+  final void Function() onTileClicked;
   final int notificationCount;
 
   const TileWidget({
@@ -191,7 +198,7 @@ class TileWidget extends StatelessWidget {
     required this.icon,
     required this.title,
     required this.description,
-    required this.screenRoute,
+    required this.onTileClicked,
     this.notificationCount = 0,
   }) : super(key: key);
 
@@ -214,7 +221,10 @@ class TileWidget extends StatelessWidget {
               child: BottomSheetContent(
                 title: title,
                 description: description,
-                screenRoute: screenRoute,
+                onTileClick: () {
+                  Navigator.pop(context);
+                  onTileClicked();
+                },
               ),
             );
           },
@@ -242,7 +252,7 @@ class TileWidget extends StatelessWidget {
                         notificationCount.toString(),
                         style: const TextStyle(
                           color: Colors.white,
-                          fontSize: 10.0,
+                          fontSize: 14.0,
                         ),
                       ),
                     ),
@@ -253,6 +263,7 @@ class TileWidget extends StatelessWidget {
                 title,
                 style: const TextStyle(
                   fontWeight: FontWeight.bold,
+                  fontSize: 15,
                 ),
               ),
             ],
@@ -266,13 +277,13 @@ class TileWidget extends StatelessWidget {
 class BottomSheetContent extends StatelessWidget {
   final String title;
   final String description;
-  final String screenRoute;
+  final void Function() onTileClick;
 
   const BottomSheetContent({
     Key? key,
     required this.title,
     required this.description,
-    required this.screenRoute,
+    required this.onTileClick,
   }) : super(key: key);
 
   @override
@@ -291,13 +302,10 @@ class BottomSheetContent extends StatelessWidget {
             ),
           ),
           const SizedBox(height: 8.0),
-          Text(description),
+          Text(description, style: const TextStyle(fontSize: 15)),
           const SizedBox(height: 16.0),
           ElevatedButton(
-            onPressed: () {
-              // Navigate to the specified screen
-              Navigator.pushNamed(context, screenRoute);
-            },
+            onPressed: onTileClick,
             child: const Text('Go to Screen'),
           ),
         ],
