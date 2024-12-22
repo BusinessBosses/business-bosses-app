@@ -54,7 +54,7 @@ class _HowToUseAppScreenState extends State<HowToUseAppScreen> {
         ),
         'title': 'Grow',
         'description':
-            'Upgrade to Premium for exclusive features and benefits. Enjoy ad-free browsing and more.',
+            'Everything you need to manage and grow your business 10X faster, all in one place.',
         'onTileClicked': () => Get.to(() => const ProScreen()),
       },
       {
@@ -91,7 +91,7 @@ class _HowToUseAppScreenState extends State<HowToUseAppScreen> {
         ),
         'title': 'Boss Up',
         'description':
-            'Connect with other users and build your network. Find friends who share your interests.',
+            'Connect with other users and build your network. Find connections who share your interests.',
         'onTileClicked': () => Get.to(const AllCommunitiesScreen()),
       },
       {
@@ -105,7 +105,7 @@ class _HowToUseAppScreenState extends State<HowToUseAppScreen> {
         ),
         'title': 'Messages',
         'description':
-            'Join or create groups to discuss topics with like-minded individuals. Share your thoughts and ideas.',
+            'Communicate with other users through private messages. Stay connected with your connections and customers',
         'onTileClicked': () => Get.to(const ChatScreen()),
       },
       {
@@ -119,7 +119,7 @@ class _HowToUseAppScreenState extends State<HowToUseAppScreen> {
         ),
         'title': 'Events',
         'description':
-            'Manage your inventory of items. Track your purchases and sales.',
+            'Discover and attend events hosted by other users. Find events that match your interests and goals.',
         'onTileClicked': () => Get.toNamed(Routes.liveEvents),
       },
       {
@@ -133,8 +133,10 @@ class _HowToUseAppScreenState extends State<HowToUseAppScreen> {
         ),
         'title': 'Crowdfund',
         'description':
-            'Communicate with other users through private messages. Stay connected with your friends and colleagues.',
-        'onTileClicked': () => Get.to(const DonationsPage()),
+            'Support and invest in projects you believe in. Discover opportunities to back innovative ideas and businesses.',
+        'onTileClicked': () => Get.to(() => const AllCommunitiesScreen(
+              initialBossupTabIndex: 3,
+            )),
       },
       {
         'icon': const Icon(
