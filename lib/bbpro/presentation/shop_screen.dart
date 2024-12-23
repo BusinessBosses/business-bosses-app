@@ -368,7 +368,7 @@ class _ShopScreenState extends State<ShopScreen> {
                               Get.to(const HomeScreen());
                             },
                             child: const Padding(
-                              padding: EdgeInsets.symmetric(vertical: 5.0),
+                              padding: EdgeInsets.symmetric(vertical: 3.0),
                               child: Text(
                                 'Powered by Business Bosses',
                                 style: TextStyle(
