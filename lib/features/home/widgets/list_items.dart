@@ -1,3 +1,4 @@
+import 'package:business_bosses_v2/bbpro/widgets/proshopdeals.dart';
 import 'package:business_bosses_v2/common/widgets/text_widget.dart';
 import 'package:business_bosses_v2/features/courses/controller/course_controller.dart';
 import 'package:business_bosses_v2/features/courses/models/course_model.dart';
@@ -7,6 +8,7 @@ import 'package:business_bosses_v2/features/home/controller/home_controller.dart
 import 'package:business_bosses_v2/features/home/widgets/challengessection.dart';
 import 'package:business_bosses_v2/features/home/widgets/course_item.dart';
 import 'package:business_bosses_v2/features/home/widgets/course_list.dart';
+import 'package:business_bosses_v2/features/home/widgets/relevantpeopletile.dart';
 import 'package:business_bosses_v2/features/live_event/controller/live_event_controller.dart';
 import 'package:business_bosses_v2/features/live_event/presentation/live_event.dart';
 import 'package:business_bosses_v2/features/marketplace/controllers/market_controller.dart';
@@ -145,15 +147,24 @@ class _PostsWidgetState extends State<PostsWidget> {
     // List to hold multiple widgets (ChallengeSection + Post)
     List<Widget> widgets = <Widget>[];
 
-    // Insert ChallengesSection every 6th item without replacing the original post
     if (postIndex == 3) {
       widgets.add(Column(
         children: <Widget>[
-          const ChallengesSection(backgroundColor: backgroundColor),
-          Container(
-            height: 10,
-            color: backgroundColor,
-          )
+          ProshopdealsWidget(
+            isHome: true,
+            caption: 'Featured Listing',
+            combinedList: <Object>[
+              ...marketController.proItemsWithImages.take(10).toList(),
+            ],
+          ),
+        ],
+      ));
+    }
+
+    if (postIndex == 5) {
+      widgets.add(const Column(
+        children: <Widget>[
+          RelevantPeopleTile(),
         ],
       ));
     }

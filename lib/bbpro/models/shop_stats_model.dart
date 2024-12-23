@@ -5,24 +5,28 @@ class ShopStats {
   final num clientCount;
   final num projectCount;
   final num totalAmount;
+  final num totalExpenses;
   ShopStats({
     required this.views,
     this.clientCount = 0,
     this.projectCount = 0,
     this.totalAmount = 0,
+    this.totalExpenses = 0,
   });
 
   ShopStats copyWith({
-    int? views,
-    int? clientCount,
-    int? projectCount,
-    int? totalAmount,
+    num? views,
+    num? clientCount,
+    num? projectCount,
+    num? totalAmount,
+    num? totalExpenses,
   }) {
     return ShopStats(
       views: views ?? this.views,
       clientCount: clientCount ?? this.clientCount,
       projectCount: projectCount ?? this.projectCount,
       totalAmount: totalAmount ?? this.totalAmount,
+      totalExpenses: totalExpenses ?? this.totalExpenses,
     );
   }
 
@@ -32,6 +36,7 @@ class ShopStats {
       'clientCount': clientCount,
       'projectCount': projectCount,
       'totalAmount': totalAmount,
+      'totalExpenses': totalExpenses,
     };
   }
 
@@ -47,6 +52,9 @@ class ShopStats {
       totalAmount: map['totalAmount'] == null
           ? 0
           : num.parse(map['totalAmount'].toString()),
+      totalExpenses: map['totalExpenses'] == null
+          ? 0
+          : num.parse(map['totalExpenses'].toString()),
     );
   }
 
@@ -57,6 +65,6 @@ class ShopStats {
 
   @override
   String toString() {
-    return 'ShopStats(views: $views, clientCount: $clientCount, projectCount: $projectCount, totalAmount: $totalAmount)';
+    return 'ShopStats(views: $views, clientCount: $clientCount, projectCount: $projectCount, totalAmount: $totalAmount, totalExpenses: $totalExpenses)';
   }
 }

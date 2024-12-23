@@ -21,9 +21,9 @@ class _CrowdfundSectionState extends State<CrowdfundSection> {
         builder: (DonationsController controller) {
       return GestureDetector(
         onTap: () {
-          Get.to(const DonationsPage(
-            ishome: false,
-          ));
+          Get.to(() => const DonationsPage(
+                ishome: false,
+              ));
         },
         child: Column(
           children: <Widget>[

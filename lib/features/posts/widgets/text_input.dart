@@ -56,7 +56,7 @@ class TextInput extends StatelessWidget {
                         : 'Ask your question here',
                     border: InputBorder.none,
                     hintStyle: Theme.of(context).textTheme.bodyMedium!.copyWith(
-                          color: textColor.withOpacity(0.2),
+                          color: hintColor,
                         ),
                   ),
                 ),

@@ -24,17 +24,17 @@ class BossUpTopSection extends StatelessWidget {
                 children: <Widget>[
                   _buildButton(context, 'Challenge',
                       Colors.grey.shade800.withOpacity(0.1), () {
-                    Get.to(const BossupChallenge(
-                      ishome: false,
-                    ));
+                    Get.to(() => const BossupChallenge(
+                          ishome: false,
+                        ));
                   }),
                   _buildButton(context, 'Learning',
                       Colors.green.shade700.withOpacity(0.1), () {
-                    Get.to(const LearningPage());
+                    Get.to(() => const LearningPage());
                   }),
                   _buildButton(context, 'Crowdfund',
                       Colors.purple.shade700.withOpacity(0.1), () {
-                    Get.to(const DonationsPage(ishome: false));
+                    Get.to(() => const DonationsPage(ishome: false));
                   }),
                   // _buildButton(context, 'Community',
                   //     Colors.red.shade700.withOpacity(0.1), () {
@@ -47,7 +47,7 @@ class BossUpTopSection extends StatelessWidget {
                   // }),
                   // _buildButton(context, 'Crowdfund',
                   //     Colors.purple.shade700.withOpacity(0.1), () {
-                  //   Get.to(const DonationsPage(ishome: false));
+                  //   Get.to(()=> DonationsPage(ishome: false));
                   // }),
                   // _buildButton(
                   //     context, 'Upgrade +', proprimaryColor.withOpacity(0.1),

@@ -1,4 +1,4 @@
-import 'package:business_bosses_v2/bbpro/presentation/pronotification.dart';
+import 'package:business_bosses_v2/bbpro/presentation/pro_notification.dart';
 import 'package:business_bosses_v2/utils/theme/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';

@@ -7,13 +7,17 @@ class OrderSummaryWidget extends StatefulWidget {
   final double discount;
   final double total;
   final String currency;
+  final bool? isservice;
+  final double? packagesprice;
   const OrderSummaryWidget(
       {Key? key,
       required this.quantity,
       required this.price,
       required this.discount,
       required this.total,
-      required this.currency})
+      required this.currency,
+      this.isservice,
+      this.packagesprice})
       : super(key: key);
 
   @override
@@ -33,11 +37,12 @@ class _OrderSummaryWidgetState extends State<OrderSummaryWidget> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
             const Text(
-              'Order Total',
+              'Order Summary',
               style: TextStyle(
-                  fontSize: 14,
-                  fontWeight: FontWeight.w700,
-                  color: proprimaryColor),
+                fontWeight: FontWeight.w700,
+                fontSize: 16,
+                color: proprimaryColor,
+              ),
             ),
             const SizedBox(height: 16),
             Row(
@@ -76,11 +81,26 @@ class _OrderSummaryWidgetState extends State<OrderSummaryWidget> {
                   style: TextStyle(fontSize: 13),
                 ),
                 Text(
-                  widget.discount.toString(),
+                  '${widget.discount.toString()}%',
                   style: const TextStyle(fontSize: 13),
                 ),
               ],
             ),
+            if (widget.isservice != null) const SizedBox(height: 8),
+            if (widget.isservice != null)
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: <Widget>[
+                  const Text(
+                    'Additional packages:',
+                    style: TextStyle(fontSize: 13),
+                  ),
+                  Text(
+                    '${widget.currency}${widget.packagesprice.toString() ?? 0}',
+                    style: const TextStyle(fontSize: 13),
+                  ),
+                ],
+              ),
             const SizedBox(height: 24),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -90,7 +110,7 @@ class _OrderSummaryWidgetState extends State<OrderSummaryWidget> {
                   style: TextStyle(fontWeight: FontWeight.bold),
                 ),
                 Text(
-                  widget.currency + widget.total.toString(),
+                  '${widget.currency} ${widget.total}',
                   style: const TextStyle(
                       fontWeight: FontWeight.bold,
                       color: proprimaryColor,

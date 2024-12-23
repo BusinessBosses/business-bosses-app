@@ -10,6 +10,7 @@ class ProIconButton extends StatelessWidget {
   final Color? textColor;
   final double? padding;
   final Color? shadow;
+  final double? textsize;
 
   const ProIconButton({
     Key? key,
@@ -21,6 +22,7 @@ class ProIconButton extends StatelessWidget {
     this.textColor,
     this.padding,
     this.shadow,
+    this.textsize,
   }) : super(key: key);
 
   @override
@@ -46,7 +48,7 @@ class ProIconButton extends StatelessWidget {
             text,
             style: TextStyle(
               color: textColor ?? Colors.white, // Text color
-              fontSize: 14.0,
+              fontSize: textsize ?? 14.0,
             ),
           ),
         ],

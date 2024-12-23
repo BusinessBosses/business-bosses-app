@@ -1,5 +1,6 @@
 import 'package:business_bosses_v2/bbpro/controllers/shop_controller.dart';
 import 'package:business_bosses_v2/bbpro/models/service_model.dart';
+import 'package:business_bosses_v2/bbpro/models/shop_model.dart';
 import 'package:business_bosses_v2/bbpro/widgets/optionsbutton.dart';
 import 'package:business_bosses_v2/common/dialogs/snackbar.dart';
 import 'package:business_bosses_v2/common/widgets/network_image_with_placeholder.dart';
@@ -11,11 +12,13 @@ import 'package:business_bosses_v2/bbpro/presentation/create_service.dart';
 class ServiceCard extends StatefulWidget {
   final Service? service;
   final bool? myShop;
+  final Shop? shop;
 
   const ServiceCard({
     Key? key,
     this.service,
     this.myShop,
+    this.shop,
   }) : super(key: key);
 
   @override
@@ -44,7 +47,7 @@ class _ServiceCardState extends State<ServiceCard> {
         ),
       ),
       child: Column(
-        crossAxisAlignment: CrossAxisAlignment.center,
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
           if (widget.service?.images != null &&
               widget.service!.images!.isNotEmpty)
@@ -54,7 +57,7 @@ class _ServiceCardState extends State<ServiceCard> {
               child: ClipRRect(
                 borderRadius: BorderRadius.circular(10),
                 child: NetworkImageWithPlaceHolder(
-                  imageUrl: (widget.service?.images == null ||
+                  imageUrl: (widget.service?.images == null &&
                           widget.service!.images!.isEmpty)
                       ? ''
                       : widget.service?.images![0],
@@ -87,72 +90,120 @@ class _ServiceCardState extends State<ServiceCard> {
                         fontSize: 13,
                         fontWeight: FontWeight.bold,
                       ),
-                    ),
-                    Text(
-                      '${shopController.shop!.currency}${widget.service?.price.toString()}',
-                      style: const TextStyle(
-                        color: proprimaryColor,
-                        fontWeight: FontWeight.bold,
-                        fontSize: 13,
-                      ),
-                    ),
-                    Text(
-                      widget.service?.description ?? 'Service description',
-                      style: const TextStyle(fontSize: 11),
-                      maxLines: 2,
+                      maxLines: 1,
                       overflow: TextOverflow.ellipsis,
                     ),
-                    const Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: <Widget>[
-                        Wrap(
-                          crossAxisAlignment: WrapCrossAlignment.center,
-                          children: <Widget>[
-                            CircleAvatar(
-                              radius: 3,
-                              backgroundColor: Colors.green,
+                    if (widget.service?.discount != null &&
+                        widget.service!.discount > 0)
+                      Row(
+                        children: <Widget>[
+                          Text(
+                            '${widget.shop?.currency ?? shopController.shop!.currency}${((widget.service!.price * (1 - widget.service!.discount / 100)) * 100).round() / 100}',
+                            style: const TextStyle(
+                              color: proprimaryColor,
+                              fontWeight: FontWeight.bold,
+                              fontSize: 13,
                             ),
-                            SizedBox(width: 3),
-                            Text(
-                              'Upcoming',
-                              style: TextStyle(fontSize: 10),
+                          ),
+                          const SizedBox(width: 5),
+                          Text(
+                            '${widget.shop?.currency ?? shopController.shop!.currency}${widget.service!.price.toStringAsFixed(2)}',
+                            style: const TextStyle(
+                              color: Colors.grey,
+                              decoration: TextDecoration.lineThrough,
+                              fontSize: 11,
                             ),
-                          ],
+                          ),
+                        ],
+                      )
+                    else
+                      Text(
+                        '${widget.shop?.currency ?? shopController.shop!.currency}${widget.service!.price.toStringAsFixed(2)}',
+                        style: const TextStyle(
+                          color: proprimaryColor,
+                          fontWeight: FontWeight.bold,
+                          fontSize: 13,
                         ),
-                      ],
-                    ),
+                      ),
+                    if (widget.myShop == false)
+                      Text(
+                        widget.service?.description ?? 'Service description',
+                        style: const TextStyle(fontSize: 11),
+                        maxLines: 2,
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                    // if (widget.myShop == false)
+                    //   const Row(
+                    //     mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    //     children: <Widget>[
+                    //       Wrap(
+                    //         crossAxisAlignment: WrapCrossAlignment.center,
+                    //         children: <Widget>[
+                    //           CircleAvatar(
+                    //             radius: 3,
+                    //             backgroundColor: Colors.green,
+                    //           ),
+                    //           SizedBox(width: 3),
+                    //           Text(
+                    //             'Upcoming',
+                    //             style: TextStyle(fontSize: 10),
+                    //           ),
+                    //         ],
+                    //       ),
+                    //     ],
+                    //   ),
                   ],
                 ),
               ),
-              widget.myShop == false
-                  ? GestureDetector(
-                      onTap: () {},
-                      child: Container(
-                        padding: const EdgeInsets.symmetric(
-                            horizontal: 10, vertical: 7),
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(7),
-                          border: Border.all(
-                            color: proprimaryColor,
+            ],
+          ),
+          const SizedBox(height: 5),
+          widget.myShop == false
+              ? Container(
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 5, vertical: 3),
+                  decoration: BoxDecoration(
+                    color: Colors.black,
+                    borderRadius: BorderRadius.circular(70),
+                    border: Border.all(
+                      color: Colors.grey,
+                      width: 1,
+                    ),
+                  ),
+                  child: const Text(
+                    'Book',
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontWeight: FontWeight.bold,
+                      fontSize: 11,
+                    ),
+                  ),
+                )
+              : Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: <Widget>[
+                    Expanded(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: <Widget>[
+                          Text(
+                            widget.service?.description ??
+                                'Service description',
+                            style: const TextStyle(fontSize: 11),
+                            maxLines: 2,
+                            overflow: TextOverflow.ellipsis,
                           ),
-                        ),
-                        child: const Text(
-                          'Book',
-                          style: TextStyle(
-                            color: proprimaryColor,
-                            fontWeight: FontWeight.bold,
-                            fontSize: 11,
-                          ),
-                        ),
+                        ],
                       ),
-                    )
-                  : OptionsButton(
+                    ),
+                    OptionsButton(
                       item: widget.service,
                       onEdit: _onEdit,
                       onDelete: onDelete,
                     ),
-            ],
-          ),
+                  ],
+                ),
         ],
       ),
     );
@@ -174,15 +225,17 @@ class _ServiceCardState extends State<ServiceCard> {
           ),
           TextButton(
             onPressed: () async {
-              final bool delete =
-                  await shopController.deleteService(widget.service!.id);
-              if (delete) {
-                showSnackbar(message: 'Service deleted successfully!');
-              } else {
-                showSnackbar(message: 'Error deleting service!', error: true);
+              if (widget.shop != null) {
+                final bool delete =
+                    await shopController.deleteService(widget.service!.id);
+                if (delete) {
+                  showSnackbar(message: 'Service deleted successfully!');
+                } else {
+                  showSnackbar(message: 'Error deleting service!', error: true);
+                }
+                setState(() {});
+                Navigator.pop(context);
               }
-              setState(() {});
-              Navigator.pop(context);
             },
             child: const Text('Yes'),
           ),

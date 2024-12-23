@@ -11,7 +11,7 @@ class Service {
   double discount;
   String description;
   String? notes;
-  String category;
+  String? category;
   String location;
   String? paymentMethod;
   String? deliveryMethod;
@@ -26,6 +26,7 @@ class Service {
   DateTime createdAt;
   Map<String, dynamic>? availability;
   List<dynamic> packages;
+  List<dynamic> selectedDates;
 
   Service({
     this.images,
@@ -36,7 +37,7 @@ class Service {
     required this.price,
     required this.discount,
     required this.description,
-    required this.category,
+    this.category,
     required this.location,
     this.paymentMethod,
     this.deliveryMethod,
@@ -52,6 +53,7 @@ class Service {
     required this.createdAt,
     this.availability,
     this.packages = const <Map<String, dynamic>>[],
+    this.selectedDates = const <dynamic>[],
   });
 
   factory Service.fromJson(Map<String, dynamic> json) {
@@ -80,8 +82,9 @@ class Service {
       deliveryTime: json['deliveryTime'],
       serviceType: json['serviceType'],
       createdAt: DateTime.parse(json['createdAt']),
-      availability: json['availability'],
+      availability: json['availability'] ?? json['serviceAvailability'],
       packages: json['packages'] ?? <dynamic>[],
+      selectedDates: json['selectedDates'] ?? <dynamic>[],
       notes: json['notes'],
     );
   }
@@ -111,6 +114,7 @@ class Service {
       'notes': notes,
       'participants': participants,
       'repeat': repeat,
+      'selectedDates': selectedDates,
     };
   }
 
@@ -141,6 +145,7 @@ Service {
   notes: $notes,
   participants: $participants,
   repeat: $repeat,
+  selectedDates: $selectedDates,
 }
 ''';
   }

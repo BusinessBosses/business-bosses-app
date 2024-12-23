@@ -98,7 +98,7 @@ class _RelevantUsersScreenState extends State<RelevantUsersScreen> {
           ),
           centerTitle: true,
           title: const Text(
-            'Follow',
+            'Find Collaborators',
             textAlign: TextAlign.center,
           ),
           actions: <Widget>[

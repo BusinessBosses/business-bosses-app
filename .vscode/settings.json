@@ -2,14 +2,16 @@
   "java.configuration.updateBuildConfiguration": "interactive",
   "cmake.configureOnOpen": true,
   "editor.inlineSuggest.showToolbar": "always",
-  "dart.flutterSdkPath": ".fvm/versions/3.13.5",
+  "dart.flutterSdkPath": ".fvm/flutter_sdk",
   "cSpell.words": [
     "backgroundcolorinterface",
+    "Campaigncardwidget",
     "Floatingbutton",
-    "probackground"
+    "probackground",
+    "Proshopdeals"
   ],
   "editor.formatOnSave": true,
   "editor.codeActionsOnSave": {
-    "source.fixAll": "explicit",
+    "source.fixAll": "explicit"
   }
 }

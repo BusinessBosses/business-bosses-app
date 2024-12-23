@@ -1,7 +1,6 @@
 import 'package:business_bosses_v2/bbpro/controllers/order_controller.dart';
 import 'package:business_bosses_v2/bbpro/controllers/shop_controller.dart';
-import 'package:business_bosses_v2/bbpro/presentation/bottomnavscreen.dart';
-import 'package:business_bosses_v2/features/home/bottom_nav.dart';
+import 'package:business_bosses_v2/bbpro/presentation/bottom_nav_screen.dart';
 import 'package:business_bosses_v2/utils/theme/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:fl_chart/fl_chart.dart';
@@ -38,7 +37,7 @@ class _OrdersWidgetState extends State<OrdersWidget> {
       child: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 15.0, vertical: 15),
         child: Container(
-          padding: const EdgeInsets.all(10.0),
+          padding: const EdgeInsets.all(15.0),
           decoration: BoxDecoration(
             color: Colors.white,
             borderRadius: BorderRadius.circular(16.0),
@@ -160,27 +159,27 @@ class _OrdersWidgetState extends State<OrdersWidget> {
                           child: PieChart(
                             PieChartData(
                               sections: <PieChartSectionData>[
-                                PieChartSectionData(
-                                  color: Colors.blue,
-                                  value: double.parse(
-                                      shopController.orderStats?.online != null
-                                          ? shopController.orderStats!.online
-                                              .toString()
-                                          : '0'),
-                                  title: '',
-                                  radius: 40, // Reduced radius
-                                ),
-                                PieChartSectionData(
-                                  color: Colors.purple,
-                                  value: double.parse(
-                                      shopController.orderStats?.inPerson !=
-                                              null
-                                          ? shopController.orderStats!.inPerson
-                                              .toString()
-                                          : '0'),
-                                  title: '',
-                                  radius: 40, // Reduced radius
-                                ),
+                                // PieChartSectionData(
+                                //   color: Colors.lightGreenAccent,
+                                //   value: double.parse(
+                                //       shopController.orderStats?.online != null
+                                //           ? shopController.orderStats!.online
+                                //               .toString()
+                                //           : '0'),
+                                //   title: '',
+                                //   radius: 40, // Reduced radius
+                                // ),
+                                // PieChartSectionData(
+                                //   color: Colors.purple,
+                                //   value: double.parse(
+                                //       shopController.orderStats?.inPerson !=
+                                //               null
+                                //           ? shopController.orderStats!.inPerson
+                                //               .toString()
+                                //           : '0'),
+                                //   title: '',
+                                //   radius: 40, // Reduced radius
+                                // ),
                                 PieChartSectionData(
                                   color: Colors.yellow,
                                   value: double.parse(
@@ -192,7 +191,7 @@ class _OrdersWidgetState extends State<OrdersWidget> {
                                   radius: 40, // Reduced radius
                                 ),
                                 PieChartSectionData(
-                                  color: Colors.green,
+                                  color: Colors.blue,
                                   value: double.parse(
                                       shopController.orderStats?.paid != null
                                           ? shopController.orderStats!.paid
@@ -202,7 +201,7 @@ class _OrdersWidgetState extends State<OrdersWidget> {
                                   radius: 40, // Reduced radius
                                 ),
                                 PieChartSectionData(
-                                  color: Colors.red,
+                                  color: Colors.green,
                                   value: double.parse(
                                       shopController.orderStats?.cancelled !=
                                               null
@@ -225,30 +224,30 @@ class _OrdersWidgetState extends State<OrdersWidget> {
                         Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: <Widget>[
-                            Indicator(
-                              color: Colors.blue,
-                              text: 'Online',
-                              value: int.parse(
-                                  shopController.orderStats?.online != null
-                                      ? shopController.orderStats!.online
-                                          .toString()
-                                      : '0'),
-                            ),
-                            const SizedBox(
-                              height: 3,
-                            ),
-                            Indicator(
-                              color: Colors.purple,
-                              text: 'In Person',
-                              value: int.parse(
-                                  shopController.orderStats?.online != null
-                                      ? shopController.orderStats!.inPerson
-                                          .toString()
-                                      : '0'),
-                            ),
-                            const SizedBox(
-                              height: 3,
-                            ),
+                            // Indicator(
+                            //   color: Colors.lightGreenAccent,
+                            //   text: 'Online',
+                            //   value: int.parse(
+                            //       shopController.orderStats?.online != null
+                            //           ? shopController.orderStats!.online
+                            //               .toString()
+                            //           : '0'),
+                            // ),
+                            // const SizedBox(
+                            //   height: 3,
+                            // ),
+                            // Indicator(
+                            //   color: Colors.purple,
+                            //   text: 'In Person',
+                            //   value: int.parse(
+                            //       shopController.orderStats?.online != null
+                            //           ? shopController.orderStats!.inPerson
+                            //               .toString()
+                            //           : '0'),
+                            // ),
+                            // const SizedBox(
+                            //   height: 3,
+                            // ),
                             Indicator(
                               color: Colors.yellow,
                               text: 'Pending',
@@ -262,7 +261,7 @@ class _OrdersWidgetState extends State<OrdersWidget> {
                               height: 3,
                             ),
                             Indicator(
-                              color: Colors.green,
+                              color: Colors.blue,
                               text: 'Paid',
                               value: int.parse(
                                   shopController.orderStats?.online != null
@@ -274,8 +273,8 @@ class _OrdersWidgetState extends State<OrdersWidget> {
                               height: 3,
                             ),
                             Indicator(
-                              color: Colors.red,
-                              text: 'Cancelled',
+                              color: Colors.green,
+                              text: 'Completed',
                               value: int.parse(
                                   shopController.orderStats?.online != null
                                       ? shopController.orderStats!.cancelled

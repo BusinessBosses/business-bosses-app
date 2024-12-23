@@ -2,7 +2,7 @@ import 'dart:io';
 
 import 'package:business_bosses_v2/bbpro/controllers/shop_controller.dart';
 import 'package:business_bosses_v2/bbpro/models/supplier_model.dart';
-import 'package:business_bosses_v2/bbpro/widgets/customcard.dart';
+import 'package:business_bosses_v2/bbpro/widgets/custom_card.dart';
 import 'package:business_bosses_v2/bbpro/widgets/textfield.dart';
 import 'package:business_bosses_v2/common/dialogs/snackbar.dart';
 import 'package:business_bosses_v2/features/profile/controller/profile_controller.dart';
@@ -11,7 +11,7 @@ import 'package:country_list_pick/country_list_pick.dart';
 import 'package:flutter/material.dart';
 import 'package:business_bosses_v2/bbpro/widgets/button.dart';
 import 'package:business_bosses_v2/bbpro/widgets/dropdown.dart';
-import 'package:business_bosses_v2/bbpro/widgets/edittext.dart';
+import 'package:business_bosses_v2/bbpro/widgets/edit_text.dart';
 import 'package:business_bosses_v2/utils/theme/theme.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
@@ -184,6 +184,7 @@ class _AddSupplierState extends State<AddSupplier> {
                     ),
                     const SizedBox(height: 15),
                     CustomEditText(
+                      maxLength: 30,
                       caption: 'Supplier\'s Name',
                       hintText: 'Enter name here',
                       controller: nameController,
@@ -266,8 +267,9 @@ class _AddSupplierState extends State<AddSupplier> {
                     const SizedBox(height: 15),
                     CustomEditText(
                       caption: 'Phone number',
-                      hintText: '+234 000 000 000',
+                      hintText: '+448908654321',
                       controller: phoneController,
+                      maxLength: 30,
                     ),
                     const SizedBox(height: 15),
                     const SizedBox(height: 150),

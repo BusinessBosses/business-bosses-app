@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'package:business_bosses_v2/bbpro/presentation/campaign_page.dart';
 import 'package:business_bosses_v2/common/models/user_model.dart';
 import 'package:business_bosses_v2/common/widgets/text_widget.dart';
 import 'package:business_bosses_v2/features/chat/chat_room_screen.dart';
@@ -13,7 +14,6 @@ import '../../action/action.dart';
 import '../../common/dialogs/snackbar.dart';
 import '../../common/widgets/popup/my_popup_menu_button.dart';
 import '../../common/widgets/safety_model.dart';
-import '../../common/widgets/un_read_dot.dart';
 import '../../common/widgets/user_avatar_with_badge.dart';
 import '../../utils/theme/theme.dart';
 import '../../utils/time_format.dart';
@@ -34,6 +34,7 @@ class ChatScreen extends StatefulWidget {
 
 class _ChatScreenState extends State<ChatScreen> {
   final ChatController _chatController = Get.find();
+  final ProfileController _profileController = Get.find();
 
   bool _isSearching = false;
   final List<LastMessage> _myChats = <LastMessage>[];
@@ -72,9 +73,41 @@ class _ChatScreenState extends State<ChatScreen> {
                     centerTitle: true,
                     title: const Text('Chats'),
                     actions: <Widget>[
-                      IconButton(
-                        onPressed: _onChangeSearching,
-                        icon: SvgPicture.asset('assets/svgs/search.svg'),
+                      Row(
+                        children: <Widget>[
+                          if (_profileController.myProfile.isSubscribed == true)
+                            Padding(
+                              padding: const EdgeInsets.only(right: 5.0),
+                              child: GestureDetector(
+                                onTap: () {
+                                  Get.to(() => const Campaignpage());
+                                },
+                                child: CircleAvatar(
+                                    radius: 20,
+                                    backgroundColor: backgroundColor,
+                                    child: SvgPicture.asset(
+                                      'assets/svgs/megaphone.svg',
+                                      height: 20,
+                                    )),
+                              ),
+                            ),
+                          Padding(
+                            padding: const EdgeInsets.only(right: 15.0),
+                            child: GestureDetector(
+                              onTap: () {
+                                _onChangeSearching();
+                              },
+                              child: CircleAvatar(
+                                  backgroundColor: backgroundColor,
+                                  radius: 20,
+                                  child: SvgPicture.asset(
+                                    'assets/svgs/homesearch.svg',
+                                    height: 18,
+                                    color: textColor,
+                                  )),
+                            ),
+                          ),
+                        ],
                       )
                     ],
                   ),
@@ -221,14 +254,14 @@ class _ChatItemState extends State<ChatItem> {
   final ProfileController _profileController = Get.find();
   final HomeController _homeController = Get.find();
 
-  bool getUnreadMessages() {
+  int getUnreadMessagesCount() {
     final List<MessageModel> unread = widget.chatController.chatMessages
         .where((MessageModel element) =>
             element.receiverUid == _profileController.myProfile.uid &&
             element.senderUid == widget.myChatUser.user!.uid &&
             !element.seen)
         .toList();
-    return unread.isNotEmpty;
+    return unread.length;
   }
 
   @override
@@ -248,22 +281,40 @@ class _ChatItemState extends State<ChatItem> {
             child: Container(
               key: widget.key,
               padding:
-                  const EdgeInsets.only(right: 15.0, top: 10.0, bottom: 10.0),
+                  const EdgeInsets.only(right: 15.0, top: 10.0, bottom: 10),
               child: Row(
                 children: <Widget>[
-                  if (getUnreadMessages()) const UnReadDot() else Container(),
-                  Container(
-                    width: 80.0,
-                    alignment: Alignment.center,
-                    child: UserAvatarWithBadge(
-                      user: widget.myChatUser.user,
-                      height: 52.0,
-                      width: 52.0,
-                      radius: 50.0,
-                      placeHolder: Icons.person,
-                      iconSize: 36.0,
+                  Stack(children: <Widget>[
+                    Container(
+                      width: 80.0,
+                      alignment: Alignment.center,
+                      child: UserAvatarWithBadge(
+                        user: widget.myChatUser.user,
+                        height: 52.0,
+                        width: 52.0,
+                        radius: 50.0,
+                        placeHolder: Icons.person,
+                        iconSize: 36.0,
+                      ),
                     ),
-                  ),
+                    if (getUnreadMessagesCount() > 0)
+                      Positioned(
+                        bottom: 0,
+                        right: 10,
+                        child: CircleAvatar(
+                          radius: 8,
+                          backgroundColor: primaryColorLT,
+                          child: Text(
+                            '${getUnreadMessagesCount()}',
+                            style: bodyText2.copyWith(
+                              color: Colors.white,
+                              fontWeight: FontWeight.bold,
+                              fontSize: 10,
+                            ),
+                          ),
+                        ),
+                      ),
+                  ]),
                   Expanded(
                     child: Column(
                       children: <Widget>[
@@ -316,25 +367,6 @@ class _ChatItemState extends State<ChatItem> {
                                           Theme.of(context).textTheme.bodyLarge,
                                     ),
                             ),
-                            Text(
-                              TimeFormat.formatString(
-                                  widget.myChatUser.timestamp),
-                              style: bodyText2.copyWith(
-                                color: hintColor,
-                              ),
-                            ),
-                            SizedBox(
-                              // color: Colors.redAccent,
-                              height: 22,
-                              width: 22,
-                              child: MyPopupMenuButton(
-                                popupItems: _popupItemForumMore,
-                                icon: const Icon(Icons.more_vert),
-                                onSelected: (String val) {
-                                  deleteChat();
-                                },
-                              ),
-                            )
                           ],
                         ),
                         Row(
@@ -366,6 +398,28 @@ class _ChatItemState extends State<ChatItem> {
                         ),
                       ],
                     ),
+                  ),
+                  Row(
+                    children: <Widget>[
+                      Text(
+                        TimeFormat.formatString(widget.myChatUser.timestamp),
+                        style: bodyText2.copyWith(
+                          color: hintColor,
+                        ),
+                      ),
+                      SizedBox(
+                        // color: Colors.redAccent,
+                        height: 22,
+                        width: 22,
+                        child: MyPopupMenuButton(
+                          popupItems: _popupItemForumMore,
+                          icon: const Icon(Icons.more_vert),
+                          onSelected: (String val) {
+                            deleteChat();
+                          },
+                        ),
+                      ),
+                    ],
                   )
                 ],
               ),

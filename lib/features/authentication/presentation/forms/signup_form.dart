@@ -228,8 +228,6 @@ class _SignUpFormState extends State<SignUpForm> {
           ),
         );
       }
-
-      print('${_authCred!} ${_authusername!}');
     } catch (error) {
       // Error oc'${_authCred!} ${_authusername!}'og('Here ->>>>>> $error');
 

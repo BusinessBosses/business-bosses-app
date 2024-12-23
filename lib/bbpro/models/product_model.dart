@@ -12,6 +12,7 @@ class Product {
   String description;
   String category;
   String? location;
+  String? notes;
   String? paymentMethod;
   String? deliveryMethod;
   String? url;
@@ -25,7 +26,7 @@ class Product {
   DateTime? endAt;
   List<String>? color;
   List<String>? size;
-  DateTime? createdAt;
+  DateTime createdAt;
 
   Product({
     this.images,
@@ -35,6 +36,7 @@ class Product {
     required this.name,
     required this.price,
     this.discount = 0,
+    this.notes,
     required this.description,
     required this.category,
     this.location,
@@ -66,6 +68,7 @@ class Product {
           ? json['discount'].toString()
           : 0.toString()),
       description: json['description'],
+      notes: json['notes'],
       category: json['category'],
       location: json['location'] ?? 'Nigeria',
       paymentMethod: json['paymentMethod'],
@@ -82,7 +85,7 @@ class Product {
       endAt: json['endAt'] == null ? null : DateTime.parse(json['endAt']),
       color: json['color'] != null ? List<String>.from(json['color']) : null,
       size: json['size'] != null ? List<String>.from(json['size']) : null,
-      createdAt: null,
+      createdAt: DateTime.parse(json['createdAt']),
     );
   }
 
@@ -94,6 +97,7 @@ class Product {
       'shop': shop?.toMap(),
       'name': name,
       'price': price,
+      'notes': notes,
       'discount': discount,
       'description': description,
       'category': category,
@@ -125,6 +129,7 @@ Product {
   discount: $discount,
   description: $description,
   category: $category,
+  notes: $notes,
   location: $location,
   paymentMethod: $paymentMethod,
   deliveryMethod: $deliveryMethod,

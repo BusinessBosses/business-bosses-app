@@ -11,8 +11,10 @@ class ChooseClientBottomSheet extends StatefulWidget {
   final List<Map<String, dynamic>> online;
   final List<Map<String, dynamic>> inperson;
   final List<Map<String, dynamic>> bbuser;
+  final List<Map<String, dynamic>> all;
   final String selectedItem;
   final VoidCallback? onClientAdded;
+  final bool? isCampaign;
 
   const ChooseClientBottomSheet({
     Key? key,
@@ -21,6 +23,8 @@ class ChooseClientBottomSheet extends StatefulWidget {
     required this.inperson,
     required this.bbuser,
     this.onClientAdded,
+    required this.all,
+    this.isCampaign,
   }) : super(key: key);
 
   @override
@@ -38,15 +42,21 @@ class _ChooseClientBottomSheetState extends State<ChooseClientBottomSheet>
   final TextEditingController currencyController = TextEditingController();
   final ShopController shopController = Get.find();
 
+  List<Map<String, dynamic>>? selectedItems = <Map<String, dynamic>>[];
+
   String _onlineSearchQuery = '';
+  String _allSearchQuery = '';
   String _inpersonSearchQuery = '';
   String _bbuserSearchQuery = '';
-  String? selectedItem; // Local variable to track selected item
+  String? selectedItem;
+
+  // final List<Map<String, dynamic>> _tempSelectedItems =
+  //     <Map<String, dynamic>>[];
 
   @override
   void initState() {
     super.initState();
-    _tabController = TabController(length: 3, vsync: this);
+    _tabController = TabController(length: 4, vsync: this);
     _tabController.addListener(() {
       setState(() {
         _selectedIndex = _tabController.index;
@@ -74,7 +84,7 @@ class _ChooseClientBottomSheetState extends State<ChooseClientBottomSheet>
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: <Widget>[
               const Text(
-                'Select Client',
+                'Select Customer',
                 style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
               ),
               Wrap(children: <Widget>[
@@ -85,62 +95,73 @@ class _ChooseClientBottomSheetState extends State<ChooseClientBottomSheet>
                       onClientAdded: widget.onClientAdded,
                     ));
                   },
-                  text: 'New Client',
+                  text: 'New Customer',
                   radius: 10.0,
                 ),
               ])
             ],
           ),
           const SizedBox(height: 10),
-          CupertinoSlidingSegmentedControl<int>(
-            backgroundColor: probackgroundColor,
-            groupValue: _selectedIndex,
-            children: const <int, Widget>{
-              0: Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 5, vertical: 10),
-                  child: Text(
-                    'Online',
-                    style: TextStyle(fontSize: 14),
-                  )),
-              1: Text(
-                'In-person',
-                style: TextStyle(fontSize: 14),
-              ),
-              2: Text(
-                'BB-User',
-                style: TextStyle(fontSize: 14),
-              ),
-            },
-            onValueChanged: (int? value) {
-              setState(() {
-                _selectedIndex = value!;
-                _tabController.animateTo(value);
-              });
-            },
-          ),
-          const SizedBox(height: 20),
+          if (widget.isCampaign == null)
+            CupertinoSlidingSegmentedControl<int>(
+              backgroundColor: probackgroundColor,
+              groupValue: _selectedIndex,
+              children: const <int, Widget>{
+                0: Padding(
+                    padding: EdgeInsets.symmetric(horizontal: 5, vertical: 10),
+                    child: Text(
+                      'All',
+                      style: TextStyle(fontSize: 14),
+                    )),
+                1: Padding(
+                    padding: EdgeInsets.symmetric(horizontal: 5, vertical: 10),
+                    child: Text(
+                      'Individual',
+                      style: TextStyle(fontSize: 14),
+                    )),
+                2: Text(
+                  'Company',
+                  style: TextStyle(fontSize: 14),
+                ),
+              },
+              onValueChanged: (int? value) {
+                setState(() {
+                  _selectedIndex = value!;
+                  _tabController.animateTo(value);
+                });
+              },
+            ),
+          if (widget.isCampaign == null) const SizedBox(height: 20),
           Expanded(
             child: TabBarView(
               controller: _tabController,
               children: <Widget>[
-                _buildClientList(widget.online, _onlineSearchQuery,
-                    (String query) {
+                _buildClientList(widget.all, _allSearchQuery, (String query) {
                   setState(() {
-                    _onlineSearchQuery = query;
+                    _allSearchQuery = query;
                   });
                 }),
-                _buildClientList(widget.inperson, _inpersonSearchQuery,
-                    (String query) {
-                  setState(() {
-                    _inpersonSearchQuery = query;
-                  });
-                }),
-                _buildClientList(widget.bbuser, _bbuserSearchQuery,
-                    (String query) {
-                  setState(() {
-                    _bbuserSearchQuery = query;
-                  });
-                }),
+                if (widget.isCampaign == null)
+                  _buildClientList(widget.online, _onlineSearchQuery,
+                      (String query) {
+                    setState(() {
+                      _onlineSearchQuery = query;
+                    });
+                  }),
+                if (widget.isCampaign == null)
+                  _buildClientList(widget.inperson, _inpersonSearchQuery,
+                      (String query) {
+                    setState(() {
+                      _inpersonSearchQuery = query;
+                    });
+                  }),
+                if (widget.isCampaign == null)
+                  _buildClientList(widget.bbuser, _bbuserSearchQuery,
+                      (String query) {
+                    setState(() {
+                      _bbuserSearchQuery = query;
+                    });
+                  }),
               ],
             ),
           ),
@@ -162,7 +183,7 @@ class _ChooseClientBottomSheetState extends State<ChooseClientBottomSheet>
           hasSearchIcon: true,
           contentPadding: 10,
           backgroundColor: backgroundColor,
-          hintText: 'Search Clients',
+          hintText: 'Search Customers',
           onChange: onSearchChange,
           onSubmit: (String query) {},
         ),

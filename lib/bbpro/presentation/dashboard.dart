@@ -3,10 +3,12 @@ import 'package:business_bosses_v2/bbpro/controllers/shop_controller.dart';
 import 'package:business_bosses_v2/bbpro/presentation/add_client.dart';
 import 'package:business_bosses_v2/bbpro/presentation/add_project.dart';
 import 'package:business_bosses_v2/bbpro/presentation/add_supplier.dart';
-import 'package:business_bosses_v2/bbpro/presentation/bottomnavscreen.dart';
+import 'package:business_bosses_v2/bbpro/presentation/bottom_nav_screen.dart';
 import 'package:business_bosses_v2/bbpro/presentation/create_product.dart';
 import 'package:business_bosses_v2/bbpro/presentation/create_service.dart';
 import 'package:business_bosses_v2/bbpro/presentation/create_order.dart';
+import 'package:business_bosses_v2/bbpro/presentation/todo_tasks_view.dart';
+import 'package:business_bosses_v2/bbpro/widgets/financial_analysis_card.dart';
 import 'package:business_bosses_v2/bbpro/widgets/gotoshopwidget.dart';
 import 'package:business_bosses_v2/bbpro/widgets/infocard.dart';
 import 'package:business_bosses_v2/bbpro/widgets/notificationbutton.dart';
@@ -20,8 +22,6 @@ import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 
-import '../widgets/salescard.dart';
-
 class Dashboard extends StatefulWidget {
   const Dashboard({
     super.key,
@@ -33,8 +33,8 @@ class Dashboard extends StatefulWidget {
 
 class _DashboardState extends State<Dashboard> {
   final List<String> titles = <String>[
-    'Clients',
-    'Expenses',
+    'Customers',
+    'Visits',
     'To-do tasks',
     // 'Shop Visits'
   ];
@@ -43,7 +43,7 @@ class _DashboardState extends State<Dashboard> {
     'Add Products',
     'Add Services',
     'Create Orders',
-    'Add Clients',
+    'Add Customers',
   ];
   final ShopController shopController = Get.put(ShopController());
   final ClientsController clientsController = Get.put(ClientsController());
@@ -107,7 +107,7 @@ class _DashboardState extends State<Dashboard> {
                                       : index == 3
                                           ? 'Add Orders'
                                           : index == 4
-                                              ? 'Add Clients'
+                                              ? 'Add Customers'
                                               : 'Add Projects',
                           style: const TextStyle(
                             fontSize: 18,
@@ -244,11 +244,11 @@ class _DashboardState extends State<Dashboard> {
                                   Rect.fromPoints(
                                     button.localToGlobal(
                                         button.size
-                                            .topRight(const Offset(0, 170)),
+                                            .topRight(const Offset(0, 110)),
                                         ancestor: overlay),
                                     button.localToGlobal(
                                         button.size
-                                            .bottomRight(const Offset(0, 50)),
+                                            .bottomLeft(const Offset(0, 0)),
                                         ancestor: overlay),
                                   ),
                                   Offset.zero & overlay.size,
@@ -339,7 +339,7 @@ class _DashboardState extends State<Dashboard> {
                         ],
                       ),
                       const OrdersWidget(),
-                      const SalesWidget(),
+                      const FinancialanalysisWidget(),
                       StaggeredGridView.countBuilder(
                         physics: const NeverScrollableScrollPhysics(),
                         staggeredTileBuilder: (int index) =>
@@ -359,7 +359,7 @@ class _DashboardState extends State<Dashboard> {
                                 if (index == 0) {
                                   Navigator.pushReplacement(
                                     context,
-                                    MaterialPageRoute(
+                                    MaterialPageRoute<dynamic>(
                                       builder: (BuildContext context) =>
                                           const Bottomnavscreen(
                                               initialindex: 3),
@@ -368,14 +368,7 @@ class _DashboardState extends State<Dashboard> {
                                 } else if (index == 1) {
                                   // Add navigation for Expenses
                                 } else if (index == 2) {
-                                  Navigator.pushReplacement(
-                                    context,
-                                    MaterialPageRoute(
-                                      builder: (BuildContext context) =>
-                                          const Bottomnavscreen(
-                                              initialindex: 1),
-                                    ),
-                                  );
+                                  Get.to(() => const TodoTaskView());
                                 } else if (index == 3) {
                                   Get.to(() => const CreateOrder());
                                 }
@@ -383,21 +376,11 @@ class _DashboardState extends State<Dashboard> {
                               child: InfoCard(
                                 cardName: titles[index],
                                 value: index == 0
-                                    ? clientsController.allclients.length
+                                    ? shopController.shopStats!.clientCount
                                         .toString()
                                     : index == 1
-                                        ? shopController.shop!.currency +
-                                            (shopController.shopStats!
-                                                        .totalAmount >=
-                                                    1000000
-                                                ? '${(shopController.shopStats!.totalAmount / 1000000).toStringAsFixed(1)}M'
-                                                : shopController.shopStats!
-                                                            .totalAmount >=
-                                                        1000
-                                                    ? '${(shopController.shopStats!.totalAmount / 1000).toStringAsFixed(1)}K'
-                                                    : shopController
-                                                        .shopStats!.totalAmount
-                                                        .toStringAsFixed(1))
+                                        ? shopController.shopStats!.views
+                                            .toString()
                                         : index == 2
                                             ? shopController
                                                 .shopStats!.projectCount
@@ -422,13 +405,13 @@ class _DashboardState extends State<Dashboard> {
                           return GestureDetector(
                             onTap: () {
                               if (index == 0) {
-                                Get.to(const CreateProductListing());
+                                Get.to(() => const CreateProductListing());
                               } else if (index == 1) {
-                                Get.to(const CreateServiceListing());
+                                Get.to(() => const CreateServiceListing());
                               } else if (index == 2) {
-                                Get.to(const CreateOrder());
+                                Get.to(() => const CreateOrder());
                               } else if (index == 3) {
-                                Get.to(const Addclient());
+                                Get.to(() => const Addclient());
                               }
                             },
                             child: QuickActionCard(
@@ -436,7 +419,7 @@ class _DashboardState extends State<Dashboard> {
                                 value: index == 0
                                     ? clientsController.allclients.length
                                         .toString()
-                                    : 'value',
+                                    : '0',
                                 color: index == 0
                                     ? Colors.blue
                                     : index == 1

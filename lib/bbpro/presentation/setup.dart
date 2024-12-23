@@ -1,8 +1,9 @@
+import 'package:business_bosses_v2/action/action.dart';
 import 'package:business_bosses_v2/bbpro/controllers/shop_controller.dart';
 import 'package:business_bosses_v2/bbpro/presentation/availability.dart';
-import 'package:business_bosses_v2/bbpro/presentation/servicesmanagement.dart';
-import 'package:business_bosses_v2/bbpro/presentation/setupshop.dart';
-import 'package:business_bosses_v2/bbpro/presentation/shopscreen.dart';
+import 'package:business_bosses_v2/bbpro/presentation/services_management.dart';
+import 'package:business_bosses_v2/bbpro/presentation/setup_shop.dart';
+import 'package:business_bosses_v2/bbpro/presentation/shop_screen.dart';
 import 'package:business_bosses_v2/bbpro/widgets/iconbutton.dart';
 import 'package:business_bosses_v2/bbpro/widgets/notificationbutton.dart';
 import 'package:business_bosses_v2/bbpro/presentation/inventory.dart';
@@ -105,8 +106,8 @@ class _SetupState extends State<Setup> {
                     Row(
                       children: <Widget>[
                         SizedBox(
-                          height: 100.0,
-                          width: 100.0,
+                          height: 70.0,
+                          width: 70.0,
                           child: Align(
                             alignment: Alignment.topLeft,
                             child: ClipRRect(
@@ -130,10 +131,14 @@ class _SetupState extends State<Setup> {
                           children: <Widget>[
                             GetBuilder<ShopController>(
                               builder: (ShopController controller) => Text(
-                                controller.shop?.name ?? '',
+                                (controller.shop?.name ?? '').length > 30
+                                    ? '${(controller.shop?.name ?? '').substring(0, 30)}...'
+                                    : controller.shop?.name ?? '',
+                                maxLines: 1,
+                                overflow: TextOverflow.ellipsis,
                                 style: const TextStyle(
                                   fontWeight: FontWeight.bold,
-                                  fontSize: 20,
+                                  fontSize: 16,
                                 ),
                               ),
                             ),
@@ -163,6 +168,7 @@ class _SetupState extends State<Setup> {
                                 //         horizontal: 8, vertical: 8),
                                 //     child: const Text('Share my link')),
                                 ProIconButton(
+                                  textsize: 12,
                                   padding: 10,
                                   shadow: Colors.transparent,
                                   icon: SvgPicture.asset(
@@ -171,7 +177,7 @@ class _SetupState extends State<Setup> {
                                   ),
                                   backgroundColor: Colors.white,
                                   textColor: proprimaryColor,
-                                  text: 'View Shop',
+                                  text: 'View Biz-Center',
                                   onPressed: () {
                                     Get.to(() => const ShopScreen());
                                   },
@@ -180,6 +186,7 @@ class _SetupState extends State<Setup> {
                                   width: 5,
                                 ),
                                 ProIconButton(
+                                  textsize: 12,
                                   padding: 10,
                                   shadow: Colors.transparent,
                                   icon: const Icon(
@@ -190,7 +197,9 @@ class _SetupState extends State<Setup> {
                                   textColor: proprimaryColor,
                                   backgroundColor: Colors.white,
                                   text: 'Share my link',
-                                  onPressed: () {},
+                                  onPressed: () {
+                                    _sharePost();
+                                  },
                                 ),
                               ],
                             )
@@ -349,5 +358,12 @@ class _SetupState extends State<Setup> {
           message: 'An error occurred, please try again!',
           error: true);
     }
+  }
+
+  void _sharePost() {
+    String message =
+        'Have a look at ${shopController.shop!.user?.username}\'s biz-center on Business Bosses\n'
+        'https://my-biz.io/${shopController.shop?.name.toLowerCase().replaceAll(' ', '-')}';
+    socialShare(message);
   }
 }

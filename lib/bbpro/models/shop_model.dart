@@ -2,6 +2,7 @@ import 'package:business_bosses_v2/common/models/user_model.dart';
 
 class Shop {
   final String id;
+  final String userId;
   final String name;
   final String description;
   final String? image;
@@ -15,12 +16,19 @@ class Shop {
   final int? promotionDuration;
   final bool? approved;
   final String? plan;
+  final String? facebook;
+  final String? twitter;
+  final String? linkedin;
+  final String? instagram;
+  final String? url;
   final DateTime createdAt;
   final String currency;
+  final String appId;
   final UserModel? user;
 
   Shop({
     required this.id,
+    required this.userId,
     required this.name,
     required this.description,
     this.image,
@@ -35,13 +43,20 @@ class Shop {
     this.approved = false,
     this.plan,
     required this.currency,
+    required this.appId,
     required this.createdAt,
     this.user,
+    this.facebook,
+    this.twitter,
+    this.linkedin,
+    this.instagram,
+    this.url,
   });
 
   factory Shop.fromMap(Map<String, dynamic> json) {
     return Shop(
       id: json['id'],
+      userId: json['userId'],
       name: json['name'],
       description: json['description'],
       image: json['image'],
@@ -57,6 +72,12 @@ class Shop {
       approved: json['approved'] ?? false,
       plan: json['plan'],
       currency: json['currency'],
+      facebook: json['facebook'],
+      twitter: json['twitter'],
+      linkedin: json['linkedin'],
+      instagram: json['instagram'],
+      url: json['url'],
+      appId: json['appId'],
       createdAt: DateTime.parse(json['createdAt']),
       user: json['user'] != null ? UserModel.fromMap(json['user']) : null,
     );
@@ -65,6 +86,7 @@ class Shop {
   Map<String, dynamic> toMap() {
     return <String, dynamic>{
       'id': id,
+      'userId': userId,
       'name': name,
       'description': description,
       'image': image,
@@ -79,6 +101,12 @@ class Shop {
       'approved': approved,
       'plan': plan,
       'currency': currency,
+      'facebook': facebook,
+      'twitter': twitter,
+      'instagram': instagram,
+      'linkedin': linkedin,
+      'url': url,
+      'appId': appId,
       'createdAt': createdAt.toIso8601String(),
       'user': user?.toMap(),
     };

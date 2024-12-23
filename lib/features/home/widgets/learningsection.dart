@@ -1,6 +1,6 @@
 import 'package:business_bosses_v2/common/widgets/tiles/custom_tile.dart';
 import 'package:business_bosses_v2/features/forum/models/industry.dart';
-import 'package:business_bosses_v2/features/forum/presentation/all_forum_screen.dart';
+import 'package:business_bosses_v2/features/home/all_communities_screen.dart';
 import 'package:business_bosses_v2/features/home/controller/commumities_controller.dart';
 import 'package:business_bosses_v2/features/home/widgets/all_learning_posts.dart';
 import 'package:business_bosses_v2/navigation/routes.dart';
@@ -20,7 +20,9 @@ class LearningSection extends StatelessWidget {
         builder: (CommunitiesController controller) {
       return GestureDetector(
         onTap: () {
-          Get.to(() => const AllLearningPostsScreen(isCoursesTile: false));
+          Get.to(() => const AllCommunitiesScreen(
+                initialBossupTabIndex: 2,
+              ));
         },
         child: Container(
           color: backgroundColor,

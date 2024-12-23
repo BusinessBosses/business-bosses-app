@@ -4,6 +4,7 @@ import 'package:business_bosses_v2/common/models/comment_model.dart';
 import 'package:business_bosses_v2/common/models/user_model.dart';
 import 'package:business_bosses_v2/features/donations/models/donations_model.dart';
 import 'package:business_bosses_v2/features/forum/models/forum_model.dart';
+import 'package:business_bosses_v2/features/marketplace/models/market_model.dart';
 
 class PostModel {
   final String postId;
@@ -28,9 +29,11 @@ class PostModel {
   final bool? isPolled;
   final List<dynamic>? options;
   final DonationModel? donation;
+  final MarketModel? market;
   final ForumModel? forum;
   final List<Map<String, dynamic>>? pollvotes;
   PostModel({
+    this.market,
     this.donation,
     this.forum,
     required this.postId,
@@ -81,6 +84,7 @@ class PostModel {
     List<dynamic>? options,
     List<Map<String, dynamic>>? pollvotes,
     DonationModel? donation,
+    MarketModel? market,
     ForumModel? forum,
   }) {
     return PostModel(
@@ -108,6 +112,7 @@ class PostModel {
       pollvotes: pollvotes ?? this.pollvotes,
       donation: donation ?? this.donation,
       forum: forum ?? this.forum,
+      market: market ?? this.market,
     );
   }
 
@@ -137,6 +142,7 @@ class PostModel {
       'pollvotes': pollvotes,
       'donation': donation,
       'forum': forum,
+      'market': market,
     };
   }
 
@@ -184,6 +190,7 @@ class PostModel {
       pollvotes: map['pollvotes'] != null
           ? List<Map<String, dynamic>>.from(map['pollvotes'])
           : null,
+      market: map['market'] != null ? MarketModel.fromMap(map['market']) : null,
     );
   }
 

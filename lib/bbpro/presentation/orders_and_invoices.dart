@@ -1,21 +1,20 @@
 import 'dart:async';
 
-import 'package:business_bosses_v2/action/action.dart';
 import 'package:business_bosses_v2/bbpro/controllers/shop_controller.dart';
 import 'package:business_bosses_v2/bbpro/widgets/iconbutton.dart';
 import 'package:business_bosses_v2/bbpro/widgets/notificationbutton.dart';
 import 'package:business_bosses_v2/bbpro/widgets/proseardwidget.dart';
 import 'package:business_bosses_v2/common/widgets/safety_model.dart';
+import 'package:business_bosses_v2/features/chat/chat_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 
 import 'package:business_bosses_v2/bbpro/controllers/clients_controller.dart';
 import 'package:business_bosses_v2/bbpro/controllers/order_controller.dart';
-import 'package:business_bosses_v2/bbpro/models/client_model.dart';
 import 'package:business_bosses_v2/bbpro/models/order_model.dart';
 import 'package:business_bosses_v2/bbpro/presentation/create_order.dart';
-import 'package:business_bosses_v2/bbpro/widgets/customtabbar.dart';
+import 'package:business_bosses_v2/bbpro/widgets/custom_tabbar.dart';
 import 'package:business_bosses_v2/bbpro/widgets/orderwidget.dart';
 import 'package:business_bosses_v2/utils/theme/theme.dart';
 
@@ -40,8 +39,7 @@ class _OrdersScreenState extends State<OrdersScreen>
   @override
   void initState() {
     super.initState();
-    _tabController =
-        TabController(length: ClientType.values.length, vsync: this);
+    _tabController = TabController(length: 4, vsync: this);
 
     // Initialize tasks
     orderController.initOrders(shopController.shop!.id).then((_) {
@@ -95,14 +93,7 @@ class _OrdersScreenState extends State<OrdersScreen>
                 ),
                 GestureDetector(
                   onTap: () {
-                    if (clientsController.clients.isEmpty) {
-                      showSnackBar(
-                        context,
-                        message: 'You have to add a client to create order!',
-                      );
-                      return;
-                    }
-                    Get.to(() => const CreateOrder());
+                    Get.to(() => const ChatScreen());
                   },
                   child: Padding(
                     padding: const EdgeInsets.only(
@@ -136,8 +127,8 @@ class _OrdersScreenState extends State<OrdersScreen>
               backgroundColor: <Color>[
                 backgroundColor,
                 Colors.amber.withOpacity(0.1),
-                Colors.green.withOpacity(0.1),
-                Colors.red.withOpacity(0.1)
+                Colors.blue.withOpacity(0.1),
+                Colors.green.withOpacity(0.1)
               ],
               listofitems: OrderStatus.values.toList(),
               itemToString: (OrderStatus status) =>
@@ -209,6 +200,7 @@ class _OrdersScreenState extends State<OrdersScreen>
                                                     services: order.services,
                                                     orderDetails:
                                                         order.orderDetails,
+                                                    shop: order.shop,
                                                   ),
                                                 );
                                                 orderController.updateOrder(
@@ -325,8 +317,8 @@ class _RowStatusCardState extends State<RowStatusCard> {
                                 widget.orderStatus.displayTitle == 'Pending'
                                     ? Colors.amber
                                     : widget.orderStatus.displayTitle == 'Paid'
-                                        ? Colors.green
-                                        : Colors.red,
+                                        ? Colors.blue
+                                        : Colors.green,
                             radius: 5,
                           ),
                     if (widget.orderStatus.index != 0)
@@ -366,9 +358,11 @@ class _RowStatusCardState extends State<RowStatusCard> {
                                       query; // Update the search query
                                   filteredOrders =
                                       widget.allorders.where((Order order) {
-                                    return order.client.name
-                                        .toLowerCase()
-                                        .contains(query.toLowerCase());
+                                    return order.client != null
+                                        ? order.client!.name
+                                            .toLowerCase()
+                                            .contains(query.toLowerCase())
+                                        : false;
                                   }).toList();
                                 });
                               },

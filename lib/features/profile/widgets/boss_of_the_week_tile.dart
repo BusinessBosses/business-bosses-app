@@ -1,6 +1,8 @@
 import 'package:business_bosses_v2/common/models/api_response_model.dart';
 import 'package:business_bosses_v2/common/models/user_model.dart';
 import 'package:business_bosses_v2/common/widgets/popup/bossup_challenge_popuphome.dart';
+import 'package:business_bosses_v2/features/forum/controller/challenge_controller.dart';
+import 'package:business_bosses_v2/features/forum/presentation/bossup_screen.dart';
 import 'package:business_bosses_v2/features/moreinfoscreens/bossuppartner.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -36,6 +38,7 @@ class _BossOfWeekProfileTileState extends State<BossOfWeekProfileTile> {
   final HomeController homeController = Get.find();
   late Color startColor;
   final List<Color> startColors = <Color>[backgroundColor];
+  final ChallengeController challengeController = Get.find();
 
   Future<void> onRefer(UserModel publicUser) async {
     showDialog(
@@ -76,6 +79,7 @@ class _BossOfWeekProfileTileState extends State<BossOfWeekProfileTile> {
     super.initState();
     startColor = startColors[0];
     user = homeController.bossOfTheWeek;
+    ChallengeController();
   }
 
   @override
@@ -116,30 +120,31 @@ class _BossOfWeekProfileTileState extends State<BossOfWeekProfileTile> {
                           const Text(
                             'Boss of the week',
                             style: TextStyle(
-                                fontWeight: FontWeight.w700, fontSize: 18),
+                                fontWeight: FontWeight.w900, fontSize: 20),
                           ),
                         if (widget.isForyou == true) const Spacer(),
                         if (widget.isForyou == true)
                           GestureDetector(
                             onTap: () {
-                              showDialog(
-                                context: context,
-                                builder: (BuildContext context) =>
-                                    const BossUpChallangePopUpHome(),
-                              );
+                              Get.to(() => BossUpSection(
+                                    industry: challengeController.categories[0],
+                                    bossUp: challengeController.categories[0],
+                                  ));
                             },
                             child: Container(
                               color: Colors.transparent,
                               width: 50,
                               height: 50,
-                              child: SvgPicture.asset(
-                                'assets/svgs/more.svg',
-                                height: 20,
-                                fit: BoxFit.none,
+                              child: const Align(
                                 alignment: Alignment.centerRight,
+                                child: Icon(
+                                  Icons.chevron_right_rounded,
+                                  color: textColor,
+                                  size: 20,
+                                ),
                               ),
                             ),
-                          )
+                          ),
                       ],
                     ),
                   ),
@@ -510,7 +515,7 @@ class _BossOfWeekProfileTileState extends State<BossOfWeekProfileTile> {
                               Text(
                                 widget.isForyou == false
                                     ? 'Our Happy Partners'
-                                    : 'Deals',
+                                    : 'Partner\'s Deals',
                                 style: TextStyle(
                                     fontWeight: FontWeight.w700,
                                     color: widget.isForyou == false
@@ -519,20 +524,15 @@ class _BossOfWeekProfileTileState extends State<BossOfWeekProfileTile> {
                                     fontSize:
                                         widget.isForyou == false ? 14 : 18),
                               ),
-                              Wrap(
+                              const Wrap(
                                   crossAxisAlignment: WrapCrossAlignment.center,
                                   children: <Widget>[
-                                    const Text(
+                                    Text(
                                       'View all',
                                       style: TextStyle(fontSize: 11),
                                     ),
-                                    const SizedBox(width: 5.0),
-                                    SvgPicture.asset(
-                                      'assets/svgs/nexticon.svg',
-                                      // ignore: deprecated_member_use
-                                      color: textColor,
-                                      height: 8,
-                                    ),
+                                    Icon(Icons.chevron_right,
+                                        color: textColor, size: 16),
                                   ]),
                             ],
                           ),

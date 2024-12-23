@@ -1,4 +1,5 @@
 import 'package:business_bosses_v2/bbpro/controllers/clients_controller.dart';
+import 'package:business_bosses_v2/bbpro/controllers/shop_controller.dart';
 import 'package:business_bosses_v2/bbpro/presentation/add_client.dart';
 import 'package:business_bosses_v2/bbpro/widgets/optionsbutton.dart';
 import 'package:business_bosses_v2/bbpro/models/client_model.dart';
@@ -29,6 +30,7 @@ class _ClientWidgetState extends State<ClientWidget> {
   @override
   Widget build(BuildContext context) {
     final ClientsController clientsController = Get.find();
+    final ShopController shopController = Get.find();
     return Container(
       decoration: BoxDecoration(
           border: Border.all(
@@ -83,13 +85,13 @@ class _ClientWidgetState extends State<ClientWidget> {
                             fontSize: 13,
                           ),
                         ),
-                        Text(
-                          ' - ${widget.client.type.displayTitle}',
-                          style: const TextStyle(
-                            fontWeight: FontWeight.bold,
-                            fontSize: 13,
-                          ),
-                        ),
+                        // Text(
+                        //   ' - ${widget.client.type.displayTitle}',
+                        //   style: const TextStyle(
+                        //     fontWeight: FontWeight.bold,
+                        //     fontSize: 13,
+                        //   ),
+                        // ),
                       ]),
                 ),
                 OptionsButton(
@@ -119,7 +121,7 @@ class _ClientWidgetState extends State<ClientWidget> {
                                   .deleteClient(widget.client.id);
                               if (delete) {
                                 showSnackbar(
-                                    message: 'Client deleted successfully!');
+                                    message: 'Customer deleted successfully!');
                               } else {
                                 showSnackbar(
                                     message: 'Error deleting client!',
@@ -171,7 +173,59 @@ class _ClientWidgetState extends State<ClientWidget> {
                         ),
                       ),
                       Text(
-                        widget.client.phone,
+                        widget.client.phone.isNotEmpty
+                            ? widget.client.phone
+                            : 'N/A',
+                        style: const TextStyle(
+                          fontWeight: FontWeight.bold,
+                          fontSize: 13,
+                        ),
+                      ),
+                    ],
+                  ),
+                  Row(
+                    children: <Widget>[
+                      const Text(
+                        'Total Orders: ',
+                        style: TextStyle(
+                          fontWeight: FontWeight.normal,
+                          fontSize: 13,
+                        ),
+                      ),
+                      Text(
+                        widget.client.orderCount.toString(),
+                        style: const TextStyle(
+                          fontWeight: FontWeight.bold,
+                          fontSize: 13,
+                        ),
+                      ),
+                      Text(
+                        ' - ${shopController.shop!.currency}',
+                        style: const TextStyle(
+                          fontWeight: FontWeight.bold,
+                          fontSize: 13,
+                        ),
+                      ),
+                      Text(
+                        widget.client.totalAmountSpent.toString(),
+                        style: const TextStyle(
+                          fontWeight: FontWeight.bold,
+                          fontSize: 13,
+                        ),
+                      ),
+                    ],
+                  ),
+                  Row(
+                    children: <Widget>[
+                      const Text(
+                        'Customer type: ',
+                        style: TextStyle(
+                          fontWeight: FontWeight.normal,
+                          fontSize: 13,
+                        ),
+                      ),
+                      Text(
+                        widget.client.type.displayTitle,
                         style: const TextStyle(
                           fontWeight: FontWeight.bold,
                           fontSize: 13,

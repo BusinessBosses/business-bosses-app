@@ -1,3 +1,6 @@
+import 'package:business_bosses_v2/bbpro/models/order_model.dart';
+import 'package:business_bosses_v2/bbpro/models/product_model.dart';
+import 'package:business_bosses_v2/bbpro/models/service_model.dart';
 import 'package:business_bosses_v2/common/models/api_response_model.dart';
 import 'package:business_bosses_v2/features/home/controller/home_controller.dart';
 import 'package:business_bosses_v2/features/profile/controller/profile_controller.dart';
@@ -16,7 +19,12 @@ class MarketController extends GetxController {
   late IO.Socket socket;
   List<MarketModel> allmarkets = <MarketModel>[];
   RxList<MarketModel> markets = RxList<MarketModel>(<MarketModel>[]);
+  RxList<Product> proProducts = RxList<Product>(<Product>[]);
+  RxList<Service> proServices = RxList<Service>(<Service>[]);
+  RxList<Object> proItems = RxList<Object>(<Object>[]);
+  RxList<Object> proItemsWithImages = RxList<Object>(<Object>[]);
   RxList<MarketModel> products = RxList<MarketModel>(<MarketModel>[]);
+  RxList<Order> orders = RxList<Order>(<Order>[]);
   RxList<MarketModel> services = RxList<MarketModel>(<MarketModel>[]);
   RxList<MarketModel> searchResult = RxList<MarketModel>(<MarketModel>[]);
   RxList<UserModel> users = RxList<UserModel>(<UserModel>[]);
@@ -35,9 +43,12 @@ class MarketController extends GetxController {
   String marketDescription = '';
   String donationDescription = '';
   RxBool loading = RxBool(false);
+  RxBool oloading = RxBool(false);
+  RxBool oerror = RxBool(false);
   RxBool loadingMore = RxBool(false);
   RxBool isJoined = RxBool(false);
   bool isLoading = true;
+
   RxBool isfiltered = RxBool(false);
   final HomeController _homeController = Get.find();
   final ProfileController _profileController = Get.find();
@@ -147,7 +158,6 @@ class MarketController extends GetxController {
       // update();
     } else {
       final List psts = post;
-      markets.clear();
       for (int i = 0; i < psts.length; i++) {
         markets.add(MarketModel.fromMap(<String, dynamic>{
           ...psts[i],
@@ -168,7 +178,6 @@ class MarketController extends GetxController {
       services.clear();
       products.addAll(productMarkets);
       services.addAll(serviceMarkets);
-      _homeController.addMarkets(markets);
     }
   }
 
@@ -405,44 +414,146 @@ class MarketController extends GetxController {
 
   ///  INITIALIZE MARKETPLACE LISTINGS
   Future<void> initMarket() async {
-    loading(true);
-    error(false);
-    update();
+    try {
+      // Clear existing data and reset state
+      markets.clear();
+      loading(true);
+      error(false);
+      update();
 
-    final ApiResponseModel response = await HomeRepository.fetchMarket();
-    final ApiResponseModel description =
-        await HomeRepository.fetchMarketDescription();
-    if (response.success) {
+      // Fetch data in parallel
+      final List<ApiResponseModel> responses =
+          await Future.wait(<Future<ApiResponseModel>>[
+        HomeRepository.fetchMarket(),
+        HomeRepository.fetchMarketDescription(),
+      ]);
+
+      final ApiResponseModel response = responses[0];
+      final ApiResponseModel description = responses[1];
+
+      if (!response.success) throw Exception('Failed to fetch market data.');
+
+      // Process market listings
       processPostsToState(response.data['rows']);
+      await initProItems();
+
       if (description.success) {
-        // Find the "market" entry and extract its description
         final List<dynamic> rows = description.data['rows'];
-        final Map<String, dynamic>? marketEntry = rows.firstWhere(
-          (dynamic entry) => entry['title'] == 'market',
+
+        // Extract specific entries
+        final marketEntry = rows.firstWhere(
+          (entry) => entry['title'] == 'market',
           orElse: () => null,
         );
-        final Map<String, dynamic>? donationEntry = rows.firstWhere(
-          (dynamic entry) => entry['title'] == 'donation',
+        final donationEntry = rows.firstWhere(
+          (entry) => entry['title'] == 'donation',
           orElse: () => null,
         );
-        final Map<String, dynamic>? popUpEntry = rows.firstWhere(
-          (dynamic entry) => entry['id'] == 6,
+        final popUpEntry = rows.firstWhere(
+          (entry) => entry['id'] == 6,
           orElse: () => null,
         );
 
-        marketDescription = marketEntry?['description'];
-        donationDescription = donationEntry?['description'];
-        _homeController.notificationStatus = popUpEntry?['title'];
-        _homeController.notificationDescription = popUpEntry?['description'];
+        // Assign extracted data
+        marketDescription = marketEntry?['description'] ?? '';
+        donationDescription = donationEntry?['description'] ?? '';
+        _homeController.notificationStatus = popUpEntry?['title'] ?? '';
+        _homeController.notificationDescription =
+            popUpEntry?['description'] ?? '';
       } else {
         marketDescription = '';
       }
-    } else {
+    } catch (e) {
       error(true);
+      print('Error initializing market: $e');
+    } finally {
+      loading(false);
+      update();
     }
-    loading(false);
+  }
 
-    update();
+  Future<void> initProItems() async {
+    // Clear previous data
+    proProducts.clear();
+    proServices.clear();
+    proItems.clear();
+
+    try {
+      // Fetch data
+      final List<ApiResponseModel> responses =
+          await Future.wait(<Future<ApiResponseModel>>[
+        ApiService.get(path: 'goods/all'),
+        ApiService.get(path: 'services/all'),
+      ]);
+
+      final ApiResponseModel responseProducts = responses[0];
+      final ApiResponseModel responseServices = responses[1];
+
+      // Process products
+      if (responseProducts.success) {
+        proProducts.addAll(responseProducts.data['rows']
+            .map<Product>((json) => Product.fromJson(json))
+            .where((Product product) => product.isActive)
+            .toList());
+      } else {
+        throw Exception('Failed to fetch products.');
+      }
+
+      // Process services
+      if (responseServices.success) {
+        proServices.addAll(responseServices.data['rows']
+            .map<Service>((json) => Service.fromJson(json))
+            .where((Service service) => service.isActive)
+            .toList());
+      } else {
+        throw Exception('Failed to fetch services.');
+      }
+
+      // Combine and sort items
+      proItems.addAll(<Object>[...proProducts, ...proServices]);
+      proItems.sort((Object a, Object b) {
+        final DateTime aDate =
+            a is Product ? a.createdAt : (a as Service).createdAt;
+        final DateTime bDate =
+            b is Product ? b.createdAt : (b as Service).createdAt;
+        return bDate.compareTo(aDate);
+      });
+
+      // Filter items with images
+      proItemsWithImages.addAll(
+        proItems.where((Object item) {
+          if (item is Product) {
+            return item.images != null &&
+                item.images!.isNotEmpty &&
+                item.images!.first.isNotEmpty;
+          } else if (item is Service) {
+            return item.images != null &&
+                item.images!.isNotEmpty &&
+                item.images!.first.isNotEmpty;
+          }
+          return false;
+        }).toList(),
+      );
+    } catch (e) {
+      error(true);
+      print('Error initializing marketplace items: $e');
+    } finally {
+      loading(false);
+    }
+  }
+
+  Future<void> initOrder() async {
+    orders.clear();
+    final ApiResponseModel responseOrders = await ApiService.get(
+        path: 'orders/user-orders/${_profileController.myProfile.uid}');
+    // Process orders
+    if (responseOrders.success) {
+      orders.addAll(responseOrders.data['rows']
+          .map<Order>((json) => Order.fromJson(json))
+          .toList());
+    } else {
+      throw Exception('Failed to fetch orders.');
+    }
   }
 
   void connectToUser(UserModel user) async {

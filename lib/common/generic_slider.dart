@@ -9,6 +9,7 @@ class GenericSlider extends StatefulWidget {
   final List<String> images;
   final double width, height;
   final BoxFit fit;
+  final double? radius;
 
   const GenericSlider({
     Key? key,
@@ -16,6 +17,7 @@ class GenericSlider extends StatefulWidget {
     this.width = double.infinity,
     this.height = double.infinity,
     this.fit = BoxFit.cover,
+    this.radius,
   }) : super(key: key);
 
   @override
@@ -69,7 +71,7 @@ class _GenericSliderState extends State<GenericSlider> {
                             imageUrl: widget.images[i],
                             fit: widget.fit,
                             placeHolder: Icons.photo,
-                            radius: 15.0,
+                            radius: radius,
                           ),
                         ),
                       ],

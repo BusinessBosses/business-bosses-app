@@ -8,10 +8,10 @@ import 'package:business_bosses_v2/bbpro/models/order_model.dart';
 import 'package:business_bosses_v2/bbpro/models/product_model.dart';
 import 'package:business_bosses_v2/bbpro/models/service_model.dart';
 import 'package:business_bosses_v2/bbpro/widgets/button.dart';
-import 'package:business_bosses_v2/bbpro/widgets/chooseclientbottomsheet.dart';
-import 'package:business_bosses_v2/bbpro/widgets/chooseorderbottomsheet.dart';
+import 'package:business_bosses_v2/bbpro/widgets/choose_client_bottomsheet.dart';
+import 'package:business_bosses_v2/bbpro/widgets/choose_order_bottomsheet.dart';
 import 'package:business_bosses_v2/bbpro/widgets/dropdown.dart';
-import 'package:business_bosses_v2/bbpro/widgets/edittext.dart';
+import 'package:business_bosses_v2/bbpro/widgets/edit_text.dart';
 import 'package:business_bosses_v2/bbpro/widgets/invoiceoptionswidget.dart';
 import 'package:business_bosses_v2/bbpro/widgets/taskitem.dart';
 import 'package:business_bosses_v2/bbpro/widgets/textfield.dart';
@@ -125,6 +125,7 @@ class _CreateOrderState extends State<CreateOrder> {
                 .where((Map<String, dynamic> client) =>
                     client['type'].toString() == 'ClientType.bbUser')
                 .toList(),
+            all: clients,
           ),
         );
       },
@@ -233,7 +234,7 @@ class _CreateOrderState extends State<CreateOrder> {
       });
     }
     if (widget.order != null) {
-      notesController.text = widget.order!.notes;
+      notesController.text = widget.order!.notes ?? '';
       clientId = widget.order!.clientId;
       selectedClient = clients.firstWhere(
         (Map<String, dynamic> element) => element['id'] == clientId,
@@ -375,7 +376,7 @@ class _CreateOrderState extends State<CreateOrder> {
                           child: CustomTextWidget(
                             padding: 15,
                             textpadding: 15,
-                            caption: 'Client\'s Name *',
+                            caption: 'Customers\'s Name *',
 
                             // items: clientsName,
                             iconName: 'assets/svgs/dropdown.svg',
@@ -383,7 +384,7 @@ class _CreateOrderState extends State<CreateOrder> {
                             // initialValue: selectedClient,
                             // onChanged: (String? value) {
                             //   setState(() {
-                            //     selectedClient = value!;
+                            //     selectesdClient = value!;
                             //     _onClientSelect(value);
                             //   });
                             // },

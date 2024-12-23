@@ -8,6 +8,7 @@ import 'package:business_bosses_v2/bbpro/models/shop_model.dart';
 import 'package:business_bosses_v2/bbpro/models/shop_stats_model.dart';
 import 'package:business_bosses_v2/bbpro/models/supplier_model.dart';
 import 'package:business_bosses_v2/common/models/api_response_model.dart';
+import 'package:business_bosses_v2/common/models/user_model.dart';
 import 'package:business_bosses_v2/features/profile/controller/profile_controller.dart';
 import 'package:business_bosses_v2/services/api_service.dart';
 import 'package:get/get.dart';
@@ -15,11 +16,16 @@ import 'package:get/get.dart';
 class ShopController extends GetxController {
   final ProfileController profileController = Get.find();
   Shop? shop;
+  Shop? userShop;
   RxBool loading = RxBool(true);
   RxBool loadingData = RxBool(true);
   RxBool supploerAddLoading = RxBool(false);
   RxList<Product> products = RxList<Product>(<Product>[]);
   RxList<Service> services = RxList<Service>(<Service>[]);
+  RxList<Object> items = RxList<Object>(<Object>[]);
+  RxList<Product> userProducts = RxList<Product>(<Product>[]);
+  RxList<Service> userServices = RxList<Service>(<Service>[]);
+  RxList<Object> userItems = RxList<Object>(<Object>[]);
   RxList<Vendor> suppliers = RxList<Vendor>(<Vendor>[]);
   OrderStats? orderStats;
   ShopStats? shopStats;
@@ -60,6 +66,14 @@ class ShopController extends GetxController {
           services.add(Service.fromJson(servicesResponse.data['rows'][i]));
         }
       }
+      items.clear();
+      items.addAll(<Object>[...products, ...services]);
+      items.sort((Object a, Object b) {
+        // Assuming both Product and Service have a createdAt property.
+        DateTime aDate = a is Product ? a.createdAt : (a as Service).createdAt;
+        DateTime bDate = b is Product ? b.createdAt : (b as Service).createdAt;
+        return bDate.compareTo(aDate);
+      });
 
       ApiResponseModel vendorsReponse = await ApiService.get(
         path: 'vendors/user/${profileController.myProfile.uid}',
@@ -70,6 +84,66 @@ class ShopController extends GetxController {
           suppliers.add(Vendor.fromMap(vendorsReponse.data['rows'][i]));
         }
       }
+      return true;
+    } else {
+      return false;
+    }
+  }
+
+  Future<bool> initUserShop(UserModel user) async {
+    userShop = null;
+    ApiResponseModel response = await ApiService.get(
+      path: 'shops/user-shops/${user.uid}',
+    );
+    if (response.success) {
+      if (response.data['rows'].isEmpty) {
+        return false;
+      } else {
+        userShop = Shop.fromMap(<String, dynamic>{
+          ...response.data['rows'][0],
+          'user': user.toMap()
+        });
+        ApiService.put(
+          path: 'shops/${userShop!.id}',
+          body: <String, dynamic>{
+            'views': userShop!.views + 1,
+          },
+        );
+      }
+    } else {
+      return false;
+    }
+    if (response.data['rows'].isNotEmpty) {
+      ApiResponseModel productResponse = await ApiService.get(
+        path: 'goods/user-products/${user.uid}',
+      );
+      userProducts.clear();
+      if (productResponse.success) {
+        for (int i = 0; i < productResponse.data['rows'].length; i++) {
+          userProducts.add(Product.fromJson(productResponse.data['rows'][i]));
+        }
+      }
+      ApiResponseModel servicesResponse = await ApiService.get(
+        path: 'services/user-services/${user.uid}',
+      );
+      userServices.clear();
+      if (servicesResponse.success) {
+        for (int i = 0; i < servicesResponse.data['rows'].length; i++) {
+          userServices.add(Service.fromJson(servicesResponse.data['rows'][i]));
+        }
+      }
+      userItems.clear();
+      userItems.addAll(<Object>[
+        ...userProducts.where((Product item) => item.isActive).toList(),
+        ...userServices.where((Service item) => item.isActive).toList()
+      ]);
+      userItems.sort((Object a, Object b) {
+        // Assuming both Product and Service have a createdAt property.
+        DateTime aDate = a is Product ? a.createdAt : (a as Service).createdAt;
+        DateTime bDate = b is Product ? b.createdAt : (b as Service).createdAt;
+        return bDate.compareTo(aDate);
+      });
+
       return true;
     } else {
       return false;
@@ -111,6 +185,7 @@ class ShopController extends GetxController {
         await ApiService.post(path: 'goods', body: data);
     if (response.success) {
       products.add(Product.fromJson(response.data));
+      items.add(Product.fromJson(response.data));
       update();
       return true;
     } else {
@@ -126,6 +201,11 @@ class ShopController extends GetxController {
       final int productIndex =
           products.indexWhere((Product element) => element.id == id);
       products[productIndex] = Product.fromJson(response.data);
+      final int objectIndex = items.indexWhere((Object element) {
+        if (element is Product) return element.id == id;
+        return false;
+      });
+      items[objectIndex] = Product.fromJson(response.data);
       update();
       return true;
     } else {
@@ -139,6 +219,7 @@ class ShopController extends GetxController {
         await ApiService.post(path: 'services', body: data);
     if (response.success) {
       services.add(Service.fromJson(response.data));
+      items.add(Service.fromJson(response.data));
       update();
       return true;
     } else {
@@ -154,6 +235,11 @@ class ShopController extends GetxController {
       final int serviceIndex =
           services.indexWhere((Service element) => element.id == id);
       services[serviceIndex] = Service.fromJson(response.data);
+      final int objectIndex = items.indexWhere((Object element) {
+        if (element is Service) return element.id == id;
+        return false;
+      });
+      items[objectIndex] = Service.fromJson(response.data);
       update();
       return true;
     } else {

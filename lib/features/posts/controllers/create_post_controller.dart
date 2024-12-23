@@ -181,11 +181,13 @@ class CreatePostController extends GetxController {
             ...response.data,
             'donation': body['donation'],
             'forum': body['forum'],
+            'market': body['market'],
           }, profileController);
           profileController.addNewPost(<String, dynamic>{
             ...response.data,
             'donation': body['donation'],
             'forum': body['forum'],
+            'market': body['market'],
           });
 
           if (shouldPromote.value == true) {

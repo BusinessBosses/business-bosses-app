@@ -18,6 +18,8 @@ class RelevantPeopleTile extends StatefulWidget {
 class _RelevantPeopleTileState extends State<RelevantPeopleTile> {
   late ProfileController profileController;
   String _filtertitle = '';
+  final CompleteSearchController controller =
+      Get.put(CompleteSearchController());
 
   @override
   void initState() {
@@ -27,14 +29,8 @@ class _RelevantPeopleTileState extends State<RelevantPeopleTile> {
 
   @override
   Widget build(BuildContext context) {
-    return GetBuilder<CompleteSearchController>(
-      init: CompleteSearchController(), // Ensure the controller is initialized
-      builder: (CompleteSearchController controller) {
-        // Ensure the controller is registered
-        if (!Get.isRegistered<CompleteSearchController>()) {
-          return const Center(child: Text('Controller not found'));
-        }
-
+    return Obx(
+      () {
         final List<UserModel> filteredConnections =
             controller.recommendedConnections.toList();
         final List<UserModel> filteredConnectionsbytitle = controller
@@ -49,7 +45,6 @@ class _RelevantPeopleTileState extends State<RelevantPeopleTile> {
           });
         }
 
-        // Sorting logic
         filteredConnections.sort((UserModel a, UserModel b) {
           return _compareUsersByPhotoUrl(a, b);
         });
@@ -69,27 +64,24 @@ class _RelevantPeopleTileState extends State<RelevantPeopleTile> {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: <Widget>[
                   const Text(
-                    'Follow Relevant People',
+                    'Find Collaborators',
                     style: TextStyle(fontWeight: FontWeight.w700, fontSize: 14),
                   ),
                   GestureDetector(
                     onTap: () {
                       Get.toNamed(Routes.relevantusersscreen);
                     },
-                    child: Wrap(
+                    child: const Wrap(
                         crossAxisAlignment: WrapCrossAlignment.center,
                         children: <Widget>[
-                          const Text(
+                          Text(
                             'View all',
                             style: TextStyle(fontSize: 11),
                           ),
-                          const SizedBox(width: 5.0),
-                          SvgPicture.asset(
-                            'assets/svgs/nexticon.svg',
-                            // ignore: deprecated_member_use
-                            color: textColor,
-                            height: 8,
-                          ),
+                          Icon(
+                            Icons.chevron_right,
+                            size: 15,
+                          )
                         ]),
                   ),
                 ],
@@ -98,36 +90,43 @@ class _RelevantPeopleTileState extends State<RelevantPeopleTile> {
             const SizedBox(height: 8),
             controller.loading.value
                 ? const Center(child: CircularProgressIndicator())
-                : SizedBox(
-                    height: 190,
-                    child: ListView.builder(
-                      scrollDirection: Axis.horizontal,
-                      itemCount: 11,
-                      shrinkWrap: true,
-                      itemBuilder: (BuildContext context, int index) {
-                        final UserModel currentUser =
-                            filteredConnections[index];
+                : Padding(
+                    padding: const EdgeInsets.only(bottom: 10.0),
+                    child: SizedBox(
+                      height: 190,
+                      child: ListView.builder(
+                        scrollDirection: Axis.horizontal,
+                        itemCount: filteredConnections.length > 10
+                            ? 11
+                            : filteredConnections.length + 1,
+                        shrinkWrap: true,
+                        itemBuilder: (BuildContext context, int index) {
+                          if (index == 0) {
+                            return const SizedBox(width: 15);
+                          }
 
-                        bool checkConnected =
-                            profileController.myProfile.connecteds != null &&
-                                profileController.myProfile.connecteds!
-                                    .contains(currentUser.uid);
+                          final UserModel currentUser =
+                              filteredConnections[index - 1];
 
-                        return index == 0
-                            ? const SizedBox(width: 15)
-                            : Column(
-                                children: <Widget>[
-                                  ConnectionGridTile(
-                                    color: backgroundColor,
-                                    user: currentUser,
-                                    status: checkConnected,
-                                    onChangeConnectionStatus: () {
-                                      controller.connectToUser(currentUser);
-                                    },
-                                  ),
-                                ],
-                              );
-                      },
+                          bool checkConnected =
+                              profileController.myProfile.connecteds != null &&
+                                  profileController.myProfile.connecteds!
+                                      .contains(currentUser.uid);
+
+                          return Column(
+                            children: <Widget>[
+                              ConnectionGridTile(
+                                color: Colors.white,
+                                user: currentUser,
+                                status: checkConnected,
+                                onChangeConnectionStatus: () {
+                                  controller.connectToUser(currentUser);
+                                },
+                              ),
+                            ],
+                          );
+                        },
+                      ),
                     ),
                   ),
           ],

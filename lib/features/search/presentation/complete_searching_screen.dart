@@ -2,6 +2,8 @@ import 'package:business_bosses_v2/common/widgets/safety_model.dart';
 import 'package:business_bosses_v2/common/widgets/text_widget.dart';
 import 'package:business_bosses_v2/features/forum/models/forum_model.dart';
 import 'package:business_bosses_v2/features/forum/widgets/forum_item.dart';
+import 'package:business_bosses_v2/features/home/widgets/discoversection.dart';
+import 'package:business_bosses_v2/features/home/widgets/howtousetile.dart';
 import 'package:business_bosses_v2/features/search/controller/search_controller.dart';
 import 'package:business_bosses_v2/features/search/widgets/search_bar.dart';
 import 'package:business_bosses_v2/features/search/widgets/filterusers.dart';
@@ -69,23 +71,28 @@ class _CompleteSearchingScreenState extends State<CompleteSearchingScreen>
                 },
               ),
               bottom: PreferredSize(
-                  preferredSize: const Size.fromHeight(kToolbarHeight),
-                  child: TabBar(
-                    controller: _tabController,
-                    tabs: const <Widget>[
-                      Tab(
-                        child: TextWidget(
-                          text: 'People',
-                          size: 14,
-                          fontWeight: FontWeight.w700,
-                        ),
-                      ),
-                      Tab(
-                        child: TextWidget(
-                          text: 'Posts',
-                          size: 14,
-                          fontWeight: FontWeight.w700,
-                        ),
+                  preferredSize: const Size.fromHeight(kToolbarHeight + 50),
+                  child: Column(
+                    children: <Widget>[
+                      const HowtouseTile(),
+                      TabBar(
+                        controller: _tabController,
+                        tabs: const <Widget>[
+                          Tab(
+                            child: TextWidget(
+                              text: 'People',
+                              size: 14,
+                              fontWeight: FontWeight.w700,
+                            ),
+                          ),
+                          Tab(
+                            child: TextWidget(
+                              text: 'Posts',
+                              size: 14,
+                              fontWeight: FontWeight.w700,
+                            ),
+                          ),
+                        ],
                       ),
                     ],
                   )),

@@ -1,6 +1,7 @@
 import 'package:business_bosses_v2/bbpro/models/client_model.dart';
 import 'package:business_bosses_v2/bbpro/models/product_model.dart';
 import 'package:business_bosses_v2/bbpro/models/service_model.dart';
+import 'package:business_bosses_v2/bbpro/models/shop_model.dart';
 import 'package:business_bosses_v2/common/models/user_model.dart';
 import 'package:flutter/material.dart';
 
@@ -8,41 +9,43 @@ class Order {
   final String id;
   final String userId;
   final String shopId;
-  final String clientId;
+  final String? clientId;
   final List<OrderItem>? items;
   final String deliveryMethod;
   final DateTime? deliveryDate;
   final String paymentMethod;
-  final String notes;
+  final String? notes;
   final String invoiceOption;
   final UserModel? user;
-  final Client client;
+  final Client? client;
   final OrderStatus status;
   final List<Product>? products;
   final List<dynamic>? customItems;
   final List<Service>? services;
   final DateTime createdAt;
   final String? orderDetails;
+  final Shop shop;
 
   Order({
     required this.id,
     required this.userId,
     required this.shopId,
-    required this.clientId,
+    this.clientId,
     this.items,
     required this.deliveryMethod,
     this.deliveryDate,
     required this.paymentMethod,
-    required this.notes,
+    this.notes,
     required this.invoiceOption,
     this.user,
     required this.status,
     this.products,
     this.services,
     this.customItems,
-    required this.client,
+    this.client,
     required this.createdAt,
     this.orderDetails,
+    required this.shop,
   });
 
   factory Order.fromJson(Map<String, dynamic> json) {
@@ -76,8 +79,9 @@ class Order {
               .map((dynamic item) => Service.fromJson(item))
               .toList()
           : <Service>[],
-      client: Client.fromMap(json['client']),
+      client: json['client'] == null ? null : Client.fromMap(json['client']),
       createdAt: DateTime.parse(json['createdAt']),
+      shop: Shop.fromMap(json['shop']),
     );
   }
 
@@ -167,7 +171,7 @@ enum OrderStatus {
       case OrderStatus.paid:
         return 'Paid';
       case OrderStatus.cancelled:
-        return 'Cancelled';
+        return 'Completed';
     }
   }
 
@@ -178,9 +182,9 @@ enum OrderStatus {
       case OrderStatus.pending:
         return Colors.amber.withOpacity(0.1);
       case OrderStatus.paid:
-        return Colors.green.withOpacity(0.1);
+        return Colors.blue.withOpacity(0.1);
       case OrderStatus.cancelled:
-        return Colors.red.withOpacity(0.1);
+        return Colors.green.withOpacity(0.1);
     }
   }
 

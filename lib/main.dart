@@ -133,6 +133,7 @@ Future<void> initUniLinks() async {
 
   uriLinkStream.listen((Uri? uri) {
     if (uri != null) {
+      print('order for link1 ${uri.queryParameters}');
       processDeepLink(uri);
       processPostDeeplink(uri);
     } else {}
@@ -178,8 +179,9 @@ void processDeepLink(Uri uri) {
   }
 }
 
-void processPostDeeplink(Uri uri) {
+void processPostDeeplink(Uri uri) async {
   log(uri.toString());
+
   Fluttertoast.showToast(
     msg: 'Welcome back to BusinessBosses',
     toastLength: Toast.LENGTH_SHORT,
@@ -188,6 +190,16 @@ void processPostDeeplink(Uri uri) {
     backgroundColor: Colors.green,
     textColor: Colors.white,
   );
+
+  if (uri.queryParameters.isNotEmpty) {
+    final String orderId = uri.queryParameters['orderId']!;
+    print('order for link $orderId');
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    await prefs.setString('orderId', orderId);
+    await prefs.setBool('visited', false);
+    return;
+  }
+
   if (uri.scheme == 'myapp' && uri.host == 'app.post') {
     navigatorKey.currentState?.pushNamed(Routes.home);
   } else {

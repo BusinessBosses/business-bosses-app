@@ -2,9 +2,9 @@ import 'dart:io';
 
 import 'package:business_bosses_v2/bbpro/controllers/shop_controller.dart';
 import 'package:business_bosses_v2/bbpro/models/service_model.dart';
-import 'package:business_bosses_v2/bbpro/widgets/addpackagebottomsheet.dart';
+import 'package:business_bosses_v2/bbpro/widgets/add_package_bottomsheet.dart';
 import 'package:business_bosses_v2/bbpro/widgets/dropdown.dart';
-import 'package:business_bosses_v2/bbpro/widgets/edittext.dart';
+import 'package:business_bosses_v2/bbpro/widgets/edit_text.dart';
 import 'package:business_bosses_v2/bbpro/widgets/iconbutton.dart';
 import 'package:business_bosses_v2/bbpro/widgets/switchwidget.dart';
 import 'package:business_bosses_v2/bbpro/widgets/taskitem.dart';
@@ -57,19 +57,20 @@ class _CreateServiceListingState extends State<CreateServiceListing>
 
   // Form fields
   String? category;
-  String? location;
-  List<String>? images = <String>[];
+  String? categorys;
+  String location = '';
+  List<String> images = <String>[];
   List<String>? updateImages = <String>[];
   String? paymentMethod;
   String? deliveryMethod;
   String? deliveryTime;
-  DateTime? availableTime;
+  DateTime availableTime = DateTime.now();
   String? serviceType;
   Map<String, dynamic>? availability;
 
   late AnimationController _animationController;
   late Animation<double> _animation;
-  final List<DateTime> _selectedDates = <DateTime>[];
+  List<DateTime> _selectedDates = <DateTime>[];
   bool _isAlwaysAvailable = false;
   final List<bool> _selectedWeekdays = List<bool>.filled(7, false);
   TimeOfDay _startTime = const TimeOfDay(hour: 9, minute: 0);
@@ -109,30 +110,48 @@ class _CreateServiceListingState extends State<CreateServiceListing>
       _descriptionController.text = widget.service!.description;
       category = widget.service!.category;
       location = widget.service!.location;
-      images = widget.service!.images;
+      images = widget.service!.images!;
       updateImages = widget.service!.images;
       deliveryMethod = widget.service!.deliveryMethod;
       deliveryTime = widget.service!.deliveryTime;
-      availableTime = widget.service!.availableTime;
+      availableTime = widget.service!.availableTime != null
+          ? widget.service!.availableTime!
+          : DateTime.now();
       serviceType = widget.service!.serviceType;
       paymentMethod = widget.service!.paymentMethod;
       notesController.text = widget.service!.notes ?? '';
-      packages
-          .addAll(widget.service!.packages.map((package) => <String, dynamic>{
+      addressorlinkController.text = widget.service!.url ?? '';
+      _selectedDates = _selectedDates.isEmpty ||
+              (_selectedDates.length == 1 &&
+                  _selectedDates.first.toString() == '')
+          ? <DateTime>[]
+          : (widget.service!.selectedDates)
+              .map((dynamic date) => DateTime.parse(date.toString()))
+              .toList();
+      packages.addAll(
+          widget.service!.packages.map((dynamic package) => <String, dynamic>{
                 'name': package['name'],
                 'price': package['price'],
               }));
       availability = widget.service!.availability;
       _startTime = TimeOfDay(
-          hour: int.parse(
-              widget.service!.availability!['startTime'].substring(0, 2)),
-          minute: int.parse(
-              widget.service!.availability!['startTime'].substring(3, 5)));
+          hour: widget.service!.availability == null
+              ? 0
+              : int.parse(
+                  widget.service!.availability!['startTime'].substring(0, 2)),
+          minute: widget.service!.availability == null
+              ? 0
+              : int.parse(
+                  widget.service!.availability!['startTime'].substring(3, 5)));
       _endTime = TimeOfDay(
-          hour: int.parse(widget.service!.availability!['endTime']
-              .substring(0, 2)), // Extract hour
-          minute: int.parse(widget.service!.availability!['endTime']
-              .substring(3, 5))); // Extract minute
+          hour: widget.service!.availability == null
+              ? 0
+              : int.parse(widget.service!.availability!['endTime']
+                  .substring(0, 2)), // Extract hour
+          minute: widget.service!.availability == null
+              ? 0
+              : int.parse(widget.service!.availability!['endTime']
+                  .substring(3, 5))); // Extract minute
 
       // selectedSubmitWeekdays =
       //     List<String>.from(widget.service!.availability!['dayOfWeek']);
@@ -151,6 +170,7 @@ class _CreateServiceListingState extends State<CreateServiceListing>
     currencyController.text = shopController.shop?.location != null
         ? '${currencyValues[shopController.shop!.location.toString()]}'
         : 'USD';
+    setState(() {});
   }
 
   Future<void> _pickImage() async {
@@ -251,9 +271,11 @@ class _CreateServiceListingState extends State<CreateServiceListing>
         child: ListView(
           children: <Widget>[
             const SizedBox(height: 16),
+
             CustomEditText(
               caption: 'Service Name *',
               hintText: 'Enter service name here',
+              maxLength: 15,
               controller: _serviceNameController,
             ),
             const SizedBox(height: 16),
@@ -262,6 +284,7 @@ class _CreateServiceListingState extends State<CreateServiceListing>
               children: <Widget>[
                 Expanded(
                   child: CustomEditText(
+                    maxLength: 15,
                     iscurrencyfield: true,
                     currencycontroller: currencyController,
                     caption: 'Price *',
@@ -274,6 +297,7 @@ class _CreateServiceListingState extends State<CreateServiceListing>
                   child: Padding(
                     padding: const EdgeInsets.only(right: 15.0),
                     child: CustomEditText(
+                      maxLength: 15,
                       padding: 0,
                       caption: 'Discount',
                       hintText: 'Enter discount',
@@ -294,18 +318,27 @@ class _CreateServiceListingState extends State<CreateServiceListing>
             ),
             const SizedBox(height: 16),
             CustomDropdownWidget(
-              initialValue: category,
+              initialValue: categorys,
               caption: 'Select Category *',
               hintText: 'Choose a category',
               items: const <String>[
-                'Design Services',
-                'Consulting',
-                'Technical Support'
+                'Home, Garden & Outdoors',
+                'Fashion & Beauty',
+                'Sports & Entertainment',
+                'Books & Education',
+                'Jewellery & Timepieces',
+                'Security, Safety & Equipment',
+                'Video Games & Electronics',
+                'Agriculture, Food, Beverage',
+                'Construction & Real Estate',
+                'Vehicle & Transportation',
+                'Business Services & Events',
+                'Other',
               ],
               iconName: 'assets/svgs/dropdown.svg',
               onChanged: (String? newValue) {
                 setState(() {
-                  category = newValue;
+                  categorys = newValue;
                 });
               },
             ),
@@ -353,7 +386,8 @@ class _CreateServiceListingState extends State<CreateServiceListing>
                     style: TextStyle(),
                   ),
                 ),
-                initialSelection: shopController.shop!.location,
+                initialSelection:
+                    location.isEmpty ? shopController.shop?.location : location,
                 pickerBuilder:
                     (BuildContext context, CountryCode? countryCode) {
                   return Container(
@@ -364,15 +398,17 @@ class _CreateServiceListingState extends State<CreateServiceListing>
                     child: CustomTextWidget(
                       caption: 'Location',
                       iconName: 'assets/svgs/nexticon.svg',
-                      text: shopController.shop!.location,
+                      text: location.isEmpty
+                          ? shopController.shop!.location
+                          : location,
                     ),
                   );
                 },
                 onChanged: (CountryCode? code) {
                   setState(() {
-                    location = code?.name;
+                    location = code!.name!;
                     currencyController.text =
-                        '${currencyValues[code?.name.toString()]}';
+                        '${currencyValues[code.name.toString()]}';
                   });
                 },
                 useSafeArea: false,
@@ -847,7 +883,7 @@ class _CreateServiceListingState extends State<CreateServiceListing>
         dynamic response = await ApiService.uploadFile(image);
         if (response['success']) {
           setState(() {
-            images!.add(response['fileUrl']);
+            images.add(response['fileUrl']);
           });
         }
       }
@@ -856,8 +892,7 @@ class _CreateServiceListingState extends State<CreateServiceListing>
         // First validate required fields
         if (_serviceNameController.text.isEmpty ||
             _priceController.text.isEmpty ||
-            _descriptionController.text.isEmpty ||
-            category == null) {
+            _descriptionController.text.isEmpty) {
           // Check if days are selected
           showSnackbar(
               message: 'Please fill in all required fields', error: true);
@@ -874,12 +909,16 @@ class _CreateServiceListingState extends State<CreateServiceListing>
               ? '0'
               : _discountController.text.trim(),
           'category': category,
-          'location': shopController.shop!.location,
-          'images': images!.isEmpty ? null : images,
+          'categorys': categorys,
+          'location':
+              location.isEmpty ? shopController.shop!.location : location,
+          'participants': groupmembersController.text,
+          'repeat': frequency,
+          'images': images.isEmpty ? null : images,
           'paymentMethod': paymentMethod ?? '',
           'deliveryMethod': deliveryMethod ?? '',
           'deliveryTime': deliveryTime ?? '',
-          'availableTime': availableTime?.toIso8601String(),
+          'availableTime': availableTime.toIso8601String(),
           'serviceType': serviceType ?? '1:1',
           'itemType': 'service',
           'isActive': _isSwitched,
@@ -906,6 +945,11 @@ class _CreateServiceListingState extends State<CreateServiceListing>
           'notes': notesController.text.trim().isEmpty
               ? null
               : notesController.text.trim(),
+          'selectedDates': _selectedDates.isEmpty ||
+                  (_selectedDates.length == 1 &&
+                      _selectedDates.first.toString() == '')
+              ? null
+              : _selectedDates.map((DateTime date) => date.toString()).toList(),
         };
 
         // Log the cleaned data
@@ -915,6 +959,9 @@ class _CreateServiceListingState extends State<CreateServiceListing>
           if (result) {
             showSnackbar(message: 'Service Added Successfully!');
             Navigator.pop(context);
+          } else {
+            String errorMessage = 'Failed to add service';
+            showSnackbar(message: errorMessage, error: true);
           }
         } else {
           final bool result = await shopController.updateService(
@@ -922,9 +969,13 @@ class _CreateServiceListingState extends State<CreateServiceListing>
           if (result) {
             showSnackbar(message: 'Service Updated Successfully!');
             Navigator.pop(context);
+          } else {
+            String errorMessage = 'Failed to edit service';
+            showSnackbar(message: errorMessage, error: true);
           }
         }
       } catch (e) {
+        print(e);
         String errorMessage = 'Failed to add service';
         showSnackbar(message: errorMessage, error: true);
       } finally {
@@ -1090,13 +1141,18 @@ class _CreateServiceListingState extends State<CreateServiceListing>
                   : SizedBox(
                       height: 300,
                       child: SfCalendar(
+                        initialSelectedDate: _selectedDates.isNotEmpty
+                            ? _selectedDates[0]
+                            : DateTime.now(),
                         selectionDecoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(8),
                           color: Colors.transparent,
                         ),
                         todayHighlightColor: proprimaryColor,
                         view: CalendarView.month,
-                        initialDisplayDate: DateTime.now(),
+                        initialDisplayDate: _selectedDates.isNotEmpty
+                            ? _selectedDates[0]
+                            : DateTime.now(),
                         monthViewSettings: const MonthViewSettings(
                           appointmentDisplayMode:
                               MonthAppointmentDisplayMode.indicator,
@@ -1117,13 +1173,18 @@ class _CreateServiceListingState extends State<CreateServiceListing>
               SizedBox(
                 height: 400,
                 child: SfCalendar(
+                  initialSelectedDate: _selectedDates.isNotEmpty
+                      ? _selectedDates[0]
+                      : DateTime.now(),
                   selectionDecoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(8),
                     color: Colors.transparent,
                   ),
                   todayHighlightColor: proprimaryColor,
                   view: CalendarView.month,
-                  initialDisplayDate: DateTime.now(),
+                  initialDisplayDate: _selectedDates.isNotEmpty
+                      ? _selectedDates[0]
+                      : DateTime.now(),
                   monthViewSettings: const MonthViewSettings(
                     appointmentDisplayMode:
                         MonthAppointmentDisplayMode.indicator,

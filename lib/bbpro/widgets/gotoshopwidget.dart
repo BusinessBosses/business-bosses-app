@@ -1,5 +1,5 @@
 import 'package:business_bosses_v2/bbpro/controllers/shop_controller.dart';
-import 'package:business_bosses_v2/bbpro/presentation/shopscreen.dart';
+import 'package:business_bosses_v2/bbpro/presentation/shop_screen.dart';
 import 'package:business_bosses_v2/common/widgets/network_image_with_placeholder.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -63,10 +63,11 @@ class _GotoshopWidgetState extends State<GotoshopWidget> {
                               style: const TextStyle(
                                   fontSize: 14, fontWeight: FontWeight.w700),
                             ),
-                            Text(
-                                'Visits: ${shopController.shopStats != null ? shopController.shopStats!.views : 0}',
-                                style: const TextStyle(
-                                    fontSize: 12, fontWeight: FontWeight.w500)),
+                            const Text('View Biz-Center',
+                                style: TextStyle(
+                                    fontSize: 12,
+                                    fontWeight: FontWeight.w500,
+                                    decoration: TextDecoration.underline)),
                           ],
                         ),
                       ),

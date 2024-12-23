@@ -1,7 +1,7 @@
 import 'package:business_bosses_v2/bbpro/controllers/shop_controller.dart';
 import 'package:business_bosses_v2/bbpro/models/project_model.dart';
 import 'package:business_bosses_v2/bbpro/widgets/button.dart';
-import 'package:business_bosses_v2/bbpro/widgets/edittext.dart';
+import 'package:business_bosses_v2/bbpro/widgets/edit_text.dart';
 import 'package:business_bosses_v2/bbpro/controllers/project_controller.dart';
 import 'package:business_bosses_v2/common/dialogs/snackbar.dart';
 import 'package:business_bosses_v2/features/marketplace/widgets/currency.dart';
@@ -225,6 +225,7 @@ class _AddprojectState extends State<Addproject> {
                   CustomEditText(
                     iscurrencyfield: true,
                     caption: 'Task Expenses',
+                    maxLength: 15,
                     hintText: '0.00',
                     controller: budgetController,
                     inputType: TextInputType.number,
@@ -234,6 +235,7 @@ class _AddprojectState extends State<Addproject> {
                     currencycontroller: currencyController,
                     iscurrencyfield: true,
                     caption: 'Task Expenses',
+                    maxLength: 15,
                     hintText: '0.00',
                     controller: budgetController,
                     inputType: TextInputType.number,

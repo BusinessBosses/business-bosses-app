@@ -5,6 +5,7 @@ import 'package:business_bosses_v2/common/widgets/gallery_screen.dart';
 import 'package:business_bosses_v2/common/widgets/text_widget.dart';
 import 'package:business_bosses_v2/features/donations/models/donations_model.dart';
 import 'package:business_bosses_v2/features/forum/models/forum_model.dart';
+import 'package:business_bosses_v2/features/marketplace/models/market_model.dart';
 import 'package:business_bosses_v2/features/posts/controllers/create_post_controller.dart';
 import 'package:business_bosses_v2/features/posts/widgets/preview.dart';
 import 'package:business_bosses_v2/features/posts/widgets/promote_section.dart';
@@ -59,6 +60,7 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
   String? livedata;
   DonationModel? donationModel;
   ForumModel? forumModel;
+  MarketModel? marketModel;
 
   void onDetectionFinished() {
     _overlayEntry?.remove();
@@ -88,6 +90,11 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
       final dynamic forumData = arguments?['forumdata'];
 
       forumModel = forumData;
+    }
+    if (arguments?['marketdata'] != null) {
+      final dynamic marketData = arguments?['marketdata'];
+
+      marketModel = marketData;
     }
 
     if (widget.isGrow == true) {
@@ -145,8 +152,12 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
                 child: Column(
                   children: <Widget>[
                     if (widget.isGrow == true)
+                      const SizedBox(
+                        height: 10,
+                      ),
+                    if (widget.isGrow == true)
                       Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 15.0),
+                        padding: const EdgeInsets.symmetric(horizontal: 0.0),
                         child: FeatureTile(
                           feature: FeatureItem(
                             iconPath: 'assets/svgs/rocketblack.svg',
@@ -164,6 +175,10 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
                         height: 20,
                         child: ColoredBox(color: backgroundcolorinterface),
                       ),
+                    if (widget.isGrow == true)
+                      const SizedBox(
+                        height: 10,
+                      ),
                     Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 20.0),
                       child: Column(
@@ -180,6 +195,7 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
                     const SizedBox(
                       height: 10,
                     ),
+
                     title != null
                         ? Container()
                         : Padding(
@@ -386,6 +402,12 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
                                         'forum': forumModel != null
                                             ? forumModel!.toMap()
                                             : null,
+                                        'marketId': marketModel != null
+                                            ? marketModel!.marketId
+                                            : null,
+                                        'market': marketModel != null
+                                            ? marketModel!.toMap()
+                                            : null,
                                         'title': _titleCtrl.text.trim(),
                                         'ytUrl': _ytUrl,
                                         'images': _ytUrl != null && _ytUrl != ''
@@ -433,6 +455,12 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
                                       : null,
                                   'forum': forumModel != null
                                       ? forumModel!.toMap()
+                                      : null,
+                                  'marketId': marketModel != null
+                                      ? marketModel!.marketId
+                                      : null,
+                                  'market': marketModel != null
+                                      ? marketModel!.toMap()
                                       : null,
                                   'title': _titleCtrl.text.trim(),
                                   'ytUrl': _ytUrl,

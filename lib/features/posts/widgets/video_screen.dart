@@ -18,7 +18,7 @@ import 'package:business_bosses_v2/features/posts/widgets/post_like_comment.dart
 import '../../../utils/theme/theme.dart';
 import '../../../utils/time_format.dart';
 import '../../profile/controller/profile_controller.dart';
-import '../../profile/presentation/publicprofilescreen.dart';
+import '../../profile/presentation/public_profile_screen.dart';
 
 class VideoScreen extends StatefulWidget {
   const VideoScreen({

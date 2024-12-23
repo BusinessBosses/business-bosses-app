@@ -1,13 +1,12 @@
 import 'dart:convert';
-import 'package:business_bosses_v2/utils/theme/theme.dart';
 import 'package:flutter/material.dart';
 
 // Enum for client types
 enum ClientType {
-  allclients('All Clients', Colors.black),
-  online('Online', Colors.green),
-  inPerson('In-Person', Colors.blue),
-  bbUser('Bb-User', primaryColorLT);
+  allclients('All Customers', Colors.black),
+  online('Individual', Colors.green),
+  inPerson('Company', Colors.blue);
+  // bbUser('Bb-User', primaryColorLT);
 
   const ClientType(this.displayTitle, this.backgroundColor);
 
@@ -21,8 +20,8 @@ enum ClientType {
         return ClientType.online;
       case 'in-person':
         return ClientType.inPerson;
-      case 'bb-user':
-        return ClientType.bbUser;
+      // case 'bb-user':
+      //   return ClientType.bbUser;
       default:
         return ClientType.online; // default value if the type doesn't match
     }
@@ -40,8 +39,8 @@ enum ClientType {
         return 'on-line';
       case ClientType.inPerson:
         return 'in-person';
-      case ClientType.bbUser:
-        return 'bb-user';
+      // case ClientType.bbUser:
+      //   return 'bb-user';
       default:
         return 'on-line'; // default value, if needed
     }
@@ -58,6 +57,8 @@ class Client {
   final ClientType type;
   final DateTime createdAt;
   final List<String> image;
+  final num orderCount;
+  final num totalAmountSpent;
 
   Client({
     required this.id,
@@ -68,6 +69,8 @@ class Client {
     required this.type,
     required this.createdAt,
     required this.image,
+    this.orderCount = 0,
+    this.totalAmountSpent = 0,
   });
 
   factory Client.fromJson(String str) => Client.fromMap(json.decode(str));
@@ -83,6 +86,11 @@ class Client {
         type: ClientType.fromString(json['type']),
         createdAt: DateTime.parse(json['createdAt']),
         image: List<String>.from(json['image']),
+        orderCount: num.parse(
+            json['orderCount'] != null ? json['orderCount'].toString() : '0'),
+        totalAmountSpent: num.parse(json['totalAmountSpent'] != null
+            ? json['totalAmountSpent'].toString()
+            : '0'),
       );
 
   Map<String, dynamic> toMap() => <String, dynamic>{
@@ -94,5 +102,6 @@ class Client {
         'type': type.toShortString(),
         'createdAt': createdAt.toIso8601String(),
         'image': image,
+        'orderCount': orderCount,
       };
 }

@@ -1,15 +1,17 @@
 import 'dart:async';
 import 'package:business_bosses_v2/bbpro/controllers/shop_controller.dart';
+import 'package:business_bosses_v2/bbpro/models/campaign_model.dart';
 import 'package:business_bosses_v2/bbpro/models/supplier_model.dart';
 import 'package:business_bosses_v2/bbpro/presentation/add_client.dart';
 import 'package:business_bosses_v2/bbpro/presentation/add_supplier.dart';
+import 'package:business_bosses_v2/bbpro/presentation/campaign_page.dart';
 import 'package:business_bosses_v2/bbpro/presentation/expandedprosupplierpage.dart';
-import 'package:business_bosses_v2/bbpro/widgets/clientwidget.dart';
-import 'package:business_bosses_v2/bbpro/widgets/customtabbar.dart';
+import 'package:business_bosses_v2/bbpro/widgets/campaign_item.dart';
+import 'package:business_bosses_v2/bbpro/widgets/client_widget.dart';
+import 'package:business_bosses_v2/bbpro/widgets/custom_tabbar.dart';
 import 'package:business_bosses_v2/bbpro/widgets/notificationbutton.dart';
 import 'package:business_bosses_v2/bbpro/widgets/proseardwidget.dart';
 import 'package:business_bosses_v2/bbpro/widgets/supplierscard.dart';
-import 'package:business_bosses_v2/bbpro/widgets/topsection.dart';
 import 'package:business_bosses_v2/bbpro/controllers/clients_controller.dart';
 import 'package:business_bosses_v2/bbpro/models/client_model.dart';
 import 'package:business_bosses_v2/common/dialogs/snackbar.dart';
@@ -47,6 +49,9 @@ class _ClientsScreenState extends State<ClientsScreen>
   final ClientsController clientsController = Get.put(ClientsController());
   final ShopController shopController = Get.find();
 
+  String searchQuery = '';
+  List<Campaign> filteredCampaign = <Campaign>[];
+
   void _scrollToSection(int index) {
     final double offset = index * MediaQuery.of(context).size.width * 0.9;
     _mainListScrollController.animateTo(
@@ -60,17 +65,21 @@ class _ClientsScreenState extends State<ClientsScreen>
   @override
   void initState() {
     super.initState();
+    filteredCampaign.clear();
     _tabController =
-        TabController(length: ClientType.values.length, vsync: this);
+        TabController(length: ClientType.values.length + 1, vsync: this);
     _viewController = TabController(length: 2, vsync: this);
     supplierController.initMySuppliers();
     supplierController.initSuppliers();
-    clientsController
-        .initClients(clientsController.profileController.myProfile.uid)
-        .then((_) {
-      setState(() {
-        loading = false;
-      });
+    clientsController.initClients(profileController.myProfile.uid).then((_) {
+      clientsController.initCampaigns(profileController.myProfile.uid).then(
+        (__) {
+          setState(() {
+            loading = false;
+            filteredCampaign.addAll(clientsController.campaigns);
+          });
+        },
+      );
     });
   }
 
@@ -96,11 +105,11 @@ class _ClientsScreenState extends State<ClientsScreen>
             children: const <int, Widget>{
               0: Padding(
                 padding: EdgeInsets.symmetric(horizontal: 0, vertical: 10),
-                child: Text('Clients', style: TextStyle(fontSize: 14)),
+                child: Text('Customers', style: TextStyle(fontSize: 14)),
               ),
               1: Padding(
                 padding: EdgeInsets.symmetric(horizontal: 5, vertical: 10),
-                child: Text('Suppliers', style: TextStyle(fontSize: 14)),
+                child: Text('Campaign', style: TextStyle(fontSize: 14)),
               ),
             },
             onValueChanged: (int? value) {
@@ -119,7 +128,7 @@ class _ClientsScreenState extends State<ClientsScreen>
                 onSelected: (String item) {
                   switch (item) {
                     case 'Item 1':
-                      Get.to(const Addclient());
+                      Get.to(() => const Addclient());
                       break;
                     case 'Item 2':
                       showModalBottomSheet<void>(
@@ -308,6 +317,9 @@ class _ClientsScreenState extends State<ClientsScreen>
                         },
                       );
                       break;
+                    case 'Item 3':
+                      Get.to(() => const Campaignpage());
+                      break;
                   }
                 },
                 shape: RoundedRectangleBorder(
@@ -329,7 +341,7 @@ class _ClientsScreenState extends State<ClientsScreen>
                           ),
                           const SizedBox(width: 8),
                           const Text(
-                            'Add a Client',
+                            'Add a Customer',
                             style: TextStyle(
                               fontSize: 13,
                             ),
@@ -352,6 +364,28 @@ class _ClientsScreenState extends State<ClientsScreen>
                           const SizedBox(width: 8),
                           const Text(
                             'Add a Supplier',
+                            style: TextStyle(
+                              fontSize: 13,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                    PopupMenuItem<String>(
+                      value: 'Item 3',
+                      child: Row(
+                        children: <Widget>[
+                          SvgPicture.asset(
+                            'assets/svgs/megaphone.svg',
+                            height: 18,
+                            colorFilter: const ColorFilter.mode(
+                              textColor,
+                              BlendMode.srcIn,
+                            ),
+                          ),
+                          const SizedBox(width: 8),
+                          const Text(
+                            'Create a Campaign',
                             style: TextStyle(
                               fontSize: 13,
                             ),
@@ -415,7 +449,7 @@ class _ClientsScreenState extends State<ClientsScreen>
             const SizedBox(
               height: 10,
             ),
-            CustomTabBarWidget<ClientType>(
+            CustomTabBarWidget<String>(
               tabController: _tabController,
               scrollToSection: (int index) {
                 _scrollToSection(index);
@@ -425,11 +459,20 @@ class _ClientsScreenState extends State<ClientsScreen>
                 backgroundColor,
                 Colors.green.withOpacity(0.1),
                 Colors.blue.withOpacity(0.1),
-                primaryColorLT.withOpacity(0.1)
+                primaryColorLT.withOpacity(0.1),
               ],
-              listofitems: ClientType.values.toList(),
-              itemToString: (ClientType status) =>
-                  '${status.displayTitle.toString().split('.').last} (${status == ClientType.allclients ? clientsController.clients.length : (clientsController.clientsType[status] == null ? '0' : clientsController.clientsType[status]!.length.toString())})',
+              listofitems: <String>[
+                ...ClientType.values.map((ClientType e) => e.name).toList(),
+                'Suppliers',
+              ],
+              itemToString: (String status) {
+                if (status == 'Suppliers') {
+                  return 'Suppliers (${shopController.suppliers.length})';
+                }
+                final ClientType clientType = ClientType.values
+                    .firstWhere((ClientType element) => element.name == status);
+                return '${clientType.displayTitle.toString().split('.').last} (${clientType == ClientType.allclients ? clientsController.clients.length : (clientsController.clientsType[clientType] == null ? '0' : clientsController.clientsType[clientType]!.length.toString())})';
+              },
             ),
             Expanded(
               child: Padding(
@@ -479,7 +522,126 @@ class _ClientsScreenState extends State<ClientsScreen>
                                         allclients: clientsController.clients,
                                       ),
                                     ),
-                                  )
+                                  ),
+                                  SliverToBoxAdapter(
+                                    child: Padding(
+                                      padding:
+                                          const EdgeInsets.only(left: 10.0),
+                                      child: Container(
+                                        width: screenSize.width * 0.9,
+                                        height: screenSize.height * 0.8,
+                                        decoration: BoxDecoration(
+                                          color: Colors.white,
+                                          borderRadius:
+                                              BorderRadius.circular(15),
+                                        ),
+                                        child: Column(children: <Widget>[
+                                          const SizedBox(
+                                            height: 10,
+                                          ),
+                                          const Padding(
+                                            padding: EdgeInsets.symmetric(
+                                                horizontal: 10.0, vertical: 5),
+                                            child: Row(
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment
+                                                      .spaceBetween,
+                                              children: <Widget>[
+                                                Wrap(
+                                                  crossAxisAlignment:
+                                                      WrapCrossAlignment.center,
+                                                  children: <Widget>[
+                                                    CircleAvatar(
+                                                      backgroundColor:
+                                                          primaryColorLT,
+                                                      radius: 5,
+                                                    ),
+                                                    SizedBox(
+                                                      width: 10,
+                                                    ),
+                                                    Text(
+                                                      'Suppliers',
+                                                      style: TextStyle(
+                                                        color: Colors.black,
+                                                        fontWeight:
+                                                            FontWeight.bold,
+                                                        fontSize: 14,
+                                                      ),
+                                                    ),
+                                                  ],
+                                                ),
+                                                SizedBox(
+                                                  width: 50,
+                                                ),
+                                              ],
+                                            ),
+                                          ),
+                                          const Padding(
+                                            padding: EdgeInsets.symmetric(
+                                                vertical: 10),
+                                            child: Divider(
+                                              height: 1,
+                                              color: Colors.black12,
+                                            ),
+                                          ),
+                                          Obx(() {
+                                            if (shopController
+                                                .suppliers.isNotEmpty) {
+                                              return loadingSupplier
+                                                  ? const SafetyModel()
+                                                  : Expanded(
+                                                      child: StaggeredGridView
+                                                          .countBuilder(
+                                                        staggeredTileBuilder: (int
+                                                                index) =>
+                                                            const StaggeredTile
+                                                                .fit(1),
+                                                        padding:
+                                                            const EdgeInsets
+                                                                .symmetric(
+                                                          horizontal: 15.0,
+                                                        ),
+                                                        crossAxisCount: 2,
+                                                        crossAxisSpacing: 8.0,
+                                                        mainAxisSpacing: 8.0,
+                                                        itemCount:
+                                                            shopController
+                                                                .suppliers
+                                                                .length,
+                                                        shrinkWrap: true,
+                                                        physics: null,
+                                                        itemBuilder:
+                                                            (BuildContext
+                                                                    context,
+                                                                int index) {
+                                                          return SuppliersCard(
+                                                            onTap: () {
+                                                              Get.to(() => ExpandedProSuppliersPage(
+                                                                  supplier: shopController
+                                                                          .suppliers[
+                                                                      index]));
+                                                            },
+                                                            supplier:
+                                                                shopController
+                                                                        .suppliers[
+                                                                    index],
+                                                          );
+                                                        },
+                                                      ),
+                                                    );
+                                            } else {
+                                              return const Center(
+                                                child: SafetyModel(
+                                                  isLoading: false,
+                                                  title: 'No Suppliers Found!',
+                                                ),
+                                              );
+                                            }
+                                          }),
+                                        ]),
+                                      ),
+                                    ),
+                                  ),
                                 ],
                               ),
                       ),
@@ -487,52 +649,157 @@ class _ClientsScreenState extends State<ClientsScreen>
             ),
           ],
         ),
-        Column(children: <Widget>[
-          const SizedBox(
-            height: 10,
-          ),
-          Obx(() {
-            if (shopController.suppliers.isNotEmpty) {
-              return loadingSupplier
-                  ? const SafetyModel()
-                  : Expanded(
-                      child: StaggeredGridView.countBuilder(
-                        staggeredTileBuilder: (int index) =>
-                            const StaggeredTile.fit(1),
-                        padding: const EdgeInsets.symmetric(
-                          horizontal: 15.0,
-                        ),
-                        crossAxisCount: 2,
-                        crossAxisSpacing: 8.0,
-                        mainAxisSpacing: 8.0,
-                        itemCount: shopController.suppliers.length,
-                        shrinkWrap: true,
-                        physics: null,
-                        itemBuilder: (BuildContext context, int index) {
-                          return SuppliersCard(
-                            onTap: () {
-                              Get.to(() => ExpandedProSuppliersPage(
-                                  supplier: shopController.suppliers[index]));
-                            },
-                            supplier: shopController.suppliers[index],
-                          );
-                        },
+        Obx(
+          () => clientsController.loading.value
+              ? const SafetyModel()
+              : clientsController.campaigns.isEmpty
+                  ? SafetyModel(
+                      isLoading: false,
+                      icon: SvgPicture.asset(
+                        'assets/svgs/campaign.svg',
+                        height: 50,
+                        color: Colors.black12,
                       ),
-                    );
-            } else {
-              return const Center(
-                child: SafetyModel(
-                  isLoading: false,
-                  title: 'No Suppliers Found!',
-                ),
-              );
-            }
-          }),
-        ]),
+                      title: 'No Campaigns Yet!',
+                    )
+                  : Padding(
+                      padding: const EdgeInsets.symmetric(vertical: 10),
+                      child: Column(
+                        children: <Widget>[
+                          SizedBox(
+                            height: 55,
+                            child: Stack(
+                              children: <Widget>[
+                                Padding(
+                                  padding: const EdgeInsets.only(
+                                      left: 10.0, right: 10, bottom: 10),
+                                  child: SizedBox(
+                                    width: double.infinity,
+                                    child: DecoratedBox(
+                                      decoration: BoxDecoration(
+                                        color: Colors.white,
+                                        borderRadius: BorderRadius.circular(10),
+                                      ),
+                                      child: Padding(
+                                        padding: const EdgeInsets.symmetric(
+                                            horizontal: 10),
+                                        child: Row(
+                                          children: <Widget>[
+                                            SvgPicture.asset(
+                                              'assets/svgs/search.svg',
+                                              height: 20,
+                                              color: hintColor,
+                                            ),
+                                            Expanded(
+                                              child: ProSearchbar(
+                                                contentPadding: 10,
+                                                hasSearchIcon: false,
+                                                hintText: 'Search Campaigns',
+                                                autofocus: false,
+                                                onChange: (String query) {
+                                                  setState(() {
+                                                    searchQuery = query;
+                                                    filteredCampaign = clientsController
+                                                        .campaigns
+                                                        .where((Campaign
+                                                                campaign) =>
+                                                            campaign
+                                                                .campaignName
+                                                                .toLowerCase()
+                                                                .contains(
+                                                                    searchQuery
+                                                                        .toLowerCase()))
+                                                        .toList();
+                                                  });
+                                                },
+                                                onSubmit: (String query) {},
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                                Positioned(
+                                  right: 10,
+                                  top: 0,
+                                  bottom: 10,
+                                  child: Padding(
+                                    padding: const EdgeInsets.all(5.0),
+                                    child: GestureDetector(
+                                      onTap: () {
+                                        showMenu(
+                                            shape: RoundedRectangleBorder(
+                                              borderRadius:
+                                                  BorderRadius.circular(10),
+                                            ),
+                                            context: context,
+                                            shadowColor: Colors.black,
+                                            position:
+                                                const RelativeRect.fromLTRB(
+                                                    double.infinity,
+                                                    130,
+                                                    15,
+                                                    0),
+                                            items: <String>[
+                                              'None',
+                                              'Latest',
+                                              'A-Z'
+                                            ].map((String option) {
+                                              return PopupMenuItem<String>(
+                                                value: option,
+                                                child: Text(option),
+                                              );
+                                            }).toList());
+                                      },
+                                      child: DecoratedBox(
+                                        decoration: BoxDecoration(
+                                          color: backgroundColor,
+                                          borderRadius:
+                                              BorderRadius.circular(7),
+                                          boxShadow: <BoxShadow>[
+                                            BoxShadow(
+                                              color: backgroundColor
+                                                  .withOpacity(0.6),
+                                              offset: const Offset(-5, 0),
+                                              blurRadius: 10,
+                                              spreadRadius: 2,
+                                            ),
+                                          ],
+                                        ),
+                                        child: Padding(
+                                          padding: const EdgeInsets.symmetric(
+                                              horizontal: 10),
+                                          child: SvgPicture.asset(
+                                              'assets/svgs/filterprosections.svg'),
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                          filteredCampaign.isNotEmpty
+                              ? Expanded(
+                                  child: ListView.builder(
+                                    itemCount: filteredCampaign.length,
+                                    itemBuilder:
+                                        ((BuildContext context, int index) {
+                                      return CampaignItem(
+                                          campaign: filteredCampaign[index]);
+                                    }),
+                                  ),
+                                )
+                              : const Text('No Campaigns found'),
+                        ],
+                      ),
+                    ),
+        ),
       ]),
     );
   }
-
   // SuppliersModel? _selectedSupplier;
 
   // void _onItemSelect(bool? selected, SuppliersModel supplier) {
@@ -610,9 +877,9 @@ class _RowStatusCardState extends State<RowStatusCard> {
       case ClientType.inPerson:
         statusColor = Colors.blue;
         break;
-      case ClientType.bbUser:
-        statusColor = primaryColorLT;
-        break;
+      // case ClientType.bbUser:
+      //   statusColor = primaryColorLT;
+      //   break;
       default:
         statusColor = Colors.grey;
     }

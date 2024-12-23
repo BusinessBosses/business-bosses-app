@@ -1,0 +1,209 @@
+import 'package:business_bosses_v2/bbpro/models/product_model.dart';
+import 'package:business_bosses_v2/bbpro/models/service_model.dart';
+import 'package:business_bosses_v2/bbpro/presentation/book_service.dart';
+import 'package:business_bosses_v2/bbpro/presentation/order_product.dart';
+import 'package:business_bosses_v2/bbpro/presentation/proshopdealsscreen.dart';
+import 'package:business_bosses_v2/common/widgets/network_image_with_placeholder.dart';
+import 'package:business_bosses_v2/utils/theme/theme.dart';
+import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+
+class ProshopdealsWidget extends StatefulWidget {
+  final String? title;
+  final String? caption;
+  final List<Service>? services;
+  final List<Product>? products;
+  final List<Object>? combinedList;
+  final bool? isHome;
+  const ProshopdealsWidget({
+    Key? key,
+    this.title,
+    this.caption,
+    this.services,
+    this.products,
+    this.combinedList,
+    this.isHome,
+  }) : super(key: key);
+
+  @override
+  State<ProshopdealsWidget> createState() => _ProshopdealsWidgetState();
+}
+
+class _ProshopdealsWidgetState extends State<ProshopdealsWidget> {
+  @override
+  Widget build(BuildContext context) {
+    final List<Object>? items;
+    if (widget.combinedList != null) {
+      items = widget.combinedList;
+    } else {
+      items = widget.products?.take(10).toList() ??
+          widget.services?.take(10).toList();
+    }
+
+    return GestureDetector(
+      onTap: () {
+        Get.to(const ProshopdealsScreen());
+      },
+      child: Container(
+        decoration: BoxDecoration(
+          color: widget.isHome != null && widget.isHome == true
+              ? backgroundColor
+              : Colors.white,
+          borderRadius: BorderRadius.circular(
+              widget.isHome != null && widget.isHome! ? 0 : 15),
+        ),
+        padding: const EdgeInsets.all(0.0),
+        margin: EdgeInsets.symmetric(
+            horizontal: widget.isHome != null && widget.isHome! ? 0 : 10),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: <Widget>[
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: <Widget>[
+                Padding(
+                  padding: const EdgeInsets.all(10.0),
+                  child: Row(
+                    children: <Widget>[
+                      Text(
+                        widget.caption ?? 'Featured Listing',
+                        style: const TextStyle(
+                            fontSize: 16, fontWeight: FontWeight.bold),
+                      ),
+                      const SizedBox(width: 10),
+                      if (widget.title != null && widget.title != '')
+                        Container(
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: 8.0, vertical: 4.0),
+                          decoration: BoxDecoration(
+                            color: Colors.black,
+                            borderRadius: BorderRadius.circular(4.0),
+                          ),
+                          child: Text(
+                            widget.title ?? '',
+                            maxLines: 1,
+                            overflow: TextOverflow.ellipsis,
+                            style: const TextStyle(
+                                fontSize: 10,
+                                color: Colors.white,
+                                fontWeight: FontWeight.w700),
+                          ),
+                        ),
+                    ],
+                  ),
+                ),
+                const Icon(Icons.chevron_right),
+              ],
+            ),
+            const SizedBox(height: 5.0),
+            SizedBox(
+              height: 150,
+              child: items!.isNotEmpty
+                  ? ListView.builder(
+                      scrollDirection: Axis.horizontal,
+                      itemCount: items.length,
+                      itemBuilder: (BuildContext context, int index) {
+                        final Object item = items![index];
+                        if (item is Product) {
+                          return GestureDetector(
+                            onTap: () {
+                              Get.to(OrderProductScreen(
+                                product: item,
+                                shop: item.shop!,
+                              ));
+                            },
+                            child: _buildDealItem(
+                              item.images!.isNotEmpty
+                                  ? item.images![0]
+                                  : 'assets/placeholder.png',
+                              item.name,
+                              '${item.discount ?? '0%'}',
+                              '${item.price}',
+                              item.discount != null && item.discount! > 0,
+                              item.shop!.currency,
+                            ),
+                          );
+                        } else if (item is Service) {
+                          return GestureDetector(
+                            onTap: () {
+                              Get.to(BookServiceScreen(
+                                  shop: item.shop!, service: item));
+                            },
+                            child: _buildDealItem(
+                              item.images!.isNotEmpty
+                                  ? item.images![0]
+                                  : 'assets/placeholder.png',
+                              item.name,
+                              '${item.discount}',
+                              '${item.price}',
+                              item.discount > 0,
+                              item.shop!.currency,
+                            ),
+                          );
+                        }
+                        return const SizedBox();
+                      },
+                    )
+                  : const Center(child: Text('No deals available')),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildDealItem(
+    String imagePath,
+    String title,
+    String discount,
+    String originalPrice,
+    bool hasDiscount,
+    String? currency,
+  ) {
+    return SizedBox(
+      width: 100,
+      child: Column(
+        children: <Widget>[
+          NetworkImageWithPlaceHolder(
+            imageUrl: imagePath,
+            height: 80,
+            width: 80,
+          ),
+          const SizedBox(height: 10.0),
+          Text(
+            title,
+            maxLines: 1,
+            overflow: TextOverflow.ellipsis,
+            style: const TextStyle(
+              fontSize: 12,
+              fontWeight: FontWeight.w500,
+            ),
+          ),
+          Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: <Widget>[
+              if (hasDiscount)
+                Text(
+                  '$currency${(double.parse(originalPrice)).toStringAsFixed(2)}',
+                  style: const TextStyle(
+                    color: Colors.grey,
+                    decoration: TextDecoration.lineThrough,
+                    fontSize: 11,
+                  ),
+                ),
+              const SizedBox(width: 5),
+              Text(
+                '$currency${(double.parse(originalPrice) * (1 - (double.tryParse(discount.replaceAll(RegExp(r'[^0-9.]'), '')) ?? 0) / 100)).toStringAsFixed(2)}',
+                style: TextStyle(
+                  color: hasDiscount ? Colors.black : Colors.grey,
+                  fontWeight: FontWeight.bold,
+                  fontSize: 13,
+                ),
+              ),
+            ],
+          ),
+        ],
+      ),
+    );
+  }
+}

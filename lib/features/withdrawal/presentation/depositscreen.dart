@@ -170,6 +170,7 @@ class _DepositsScreenState extends State<DepositsScreen> {
 
                                                                   /// update coin here
                                                                 } catch (e) {
+                                                                  print(e.toString());
                                                                   showSnackbar(
                                                                     title:
                                                                         'OOPS!',

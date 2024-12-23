@@ -100,6 +100,8 @@ class CustomDropdownWidget extends StatefulWidget {
   final String? hintText;
   final FormFieldValidator<String>? validator;
   final Widget? secondarysection;
+  final double? padding;
+  final bool? isorder;
 
   const CustomDropdownWidget({
     super.key,
@@ -110,7 +112,9 @@ class CustomDropdownWidget extends StatefulWidget {
     this.onChanged,
     this.hintText,
     this.validator,
-    this.secondarysection, // New: Optional validator field
+    this.secondarysection,
+    this.isorder,
+    this.padding,
   });
 
   @override
@@ -134,62 +138,128 @@ class _CustomDropdownWidgetState extends State<CustomDropdownWidget> {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 15.0),
+      padding: EdgeInsets.symmetric(horizontal: widget.padding ?? 15.0),
       child: Container(
         decoration: BoxDecoration(
             color: Colors.white, borderRadius: BorderRadius.circular(10)),
-        padding: const EdgeInsets.only(left: 15.0, right: 15, top: 15),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: <Widget>[
-            Text(
-              widget.caption,
-              style: const TextStyle(
-                fontSize: 14,
-                fontWeight: FontWeight.w600,
-              ),
-            ),
-            DropdownButtonFormField<String>(
-              decoration: const InputDecoration(
-                enabledBorder: UnderlineInputBorder(
-                  borderSide: BorderSide(color: Colors.transparent),
-                ),
-                focusedBorder: UnderlineInputBorder(
-                  borderSide: BorderSide(color: Colors.transparent),
-                ),
-              ),
-              value:
-                  widget.items.contains(_selectedItem) ? _selectedItem : null,
-              hint: widget.hintText != null
-                  ? Text(
-                      widget.hintText!,
-                      style: const TextStyle(fontSize: 13),
-                    )
-                  : null,
-              onChanged: (String? newValue) {
-                setState(() {
-                  _selectedItem = newValue;
-                });
-                if (widget.onChanged != null) {
-                  widget.onChanged!(newValue);
-                }
-              },
-              items: widget.items.map<DropdownMenuItem<String>>((String value) {
-                return DropdownMenuItem<String>(
-                  value: value,
-                  child: Text(value, style: const TextStyle(fontSize: 13)),
-                );
-              }).toList(),
-              isExpanded: true,
-              icon: SvgPicture.asset(
-                widget.iconName,
-                color: proprimaryColor,
-              ),
-              validator: widget.validator,
-            ),
-            if (widget.secondarysection != null) widget.secondarysection!,
-          ],
+        padding: EdgeInsets.only(
+          left: 15.0,
+          right: 15,
+          top: widget.isorder != null ? 0 : 15,
         ),
+        child: widget.isorder != null
+            ? Row(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: <Widget>[
+                  Expanded(
+                    child: Text(
+                      widget.caption,
+                      style: const TextStyle(
+                        fontSize: 14,
+                        fontWeight: FontWeight.w600,
+                      ),
+                    ),
+                  ),
+                  Expanded(
+                    child: DropdownButtonFormField<String>(
+                      decoration: const InputDecoration(
+                        enabledBorder: UnderlineInputBorder(
+                          borderSide: BorderSide(color: Colors.transparent),
+                        ),
+                        focusedBorder: UnderlineInputBorder(
+                          borderSide: BorderSide(color: Colors.transparent),
+                        ),
+                      ),
+                      value: widget.items.contains(_selectedItem)
+                          ? _selectedItem
+                          : null,
+                      hint: widget.hintText != null
+                          ? Text(
+                              widget.hintText!,
+                              style: const TextStyle(fontSize: 13),
+                            )
+                          : null,
+                      onChanged: (String? newValue) {
+                        setState(() {
+                          _selectedItem = newValue;
+                        });
+                        if (widget.onChanged != null) {
+                          widget.onChanged!(newValue);
+                        }
+                      },
+                      items: widget.items
+                          .map<DropdownMenuItem<String>>((String value) {
+                        return DropdownMenuItem<String>(
+                          value: value,
+                          child:
+                              Text(value, style: const TextStyle(fontSize: 13)),
+                        );
+                      }).toList(),
+                      isExpanded: true,
+                      icon: SvgPicture.asset(
+                        widget.iconName,
+                        color: proprimaryColor,
+                      ),
+                      validator: widget.validator,
+                    ),
+                  ),
+                ],
+              )
+            : Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: <Widget>[
+                  Text(
+                    widget.caption,
+                    style: const TextStyle(
+                      fontSize: 14,
+                      fontWeight: FontWeight.w600,
+                    ),
+                  ),
+                  DropdownButtonFormField<String>(
+                    decoration: const InputDecoration(
+                      enabledBorder: UnderlineInputBorder(
+                        borderSide: BorderSide(color: Colors.transparent),
+                      ),
+                      focusedBorder: UnderlineInputBorder(
+                        borderSide: BorderSide(color: Colors.transparent),
+                      ),
+                    ),
+                    value: widget.items.contains(_selectedItem)
+                        ? _selectedItem
+                        : null,
+                    hint: widget.hintText != null
+                        ? Text(
+                            widget.hintText!,
+                            style: const TextStyle(fontSize: 13),
+                          )
+                        : null,
+                    onChanged: (String? newValue) {
+                      setState(() {
+                        _selectedItem = newValue;
+                      });
+                      if (widget.onChanged != null) {
+                        widget.onChanged!(newValue);
+                      }
+                    },
+                    items: widget.items
+                        .map<DropdownMenuItem<String>>((String value) {
+                      return DropdownMenuItem<String>(
+                        value: value,
+                        child:
+                            Text(value, style: const TextStyle(fontSize: 13)),
+                      );
+                    }).toList(),
+                    isExpanded: true,
+                    icon: SvgPicture.asset(
+                      widget.iconName,
+                      color: proprimaryColor,
+                    ),
+                    validator: widget.validator,
+                  ),
+                  if (widget.secondarysection != null) widget.secondarysection!,
+                ],
+              ),
       ),
     );
   }

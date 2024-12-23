@@ -148,8 +148,6 @@ class _LoginFormState extends State<LoginForm> {
           ),
         );
       }
-
-      print('${_authCred!} ${_authusername!}');
     } catch (error) {
       // Error occurred during sign in
       // log('Here ->>>>>> $error');

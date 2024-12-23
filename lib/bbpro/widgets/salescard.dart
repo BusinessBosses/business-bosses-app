@@ -1,7 +1,7 @@
 import 'package:business_bosses_v2/bbpro/controllers/order_controller.dart';
 import 'package:business_bosses_v2/bbpro/controllers/shop_controller.dart';
 import 'package:business_bosses_v2/bbpro/models/shop_graph_model.dart';
-import 'package:business_bosses_v2/bbpro/presentation/bottomnavscreen.dart';
+import 'package:business_bosses_v2/bbpro/presentation/bottom_nav_screen.dart';
 import 'package:business_bosses_v2/utils/theme/theme.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
@@ -150,7 +150,8 @@ class _SalesWidgetState extends State<SalesWidget> {
                     ],
                   ),
                   const SizedBox(height: 10),
-                  if (shopController.shopGraph!.totalSales == 0)
+                  if (shopController.shopGraph!.graphData != null &&
+                      shopController.shopGraph!.graphData!.isEmpty)
                     const Padding(
                       padding: EdgeInsets.all(15),
                       child: Center(

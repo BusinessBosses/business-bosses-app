@@ -1,6 +1,6 @@
 import 'dart:async';
 import 'package:business_bosses_v2/bbpro/models/project_model.dart';
-import 'package:business_bosses_v2/bbpro/widgets/customtabbar.dart';
+import 'package:business_bosses_v2/bbpro/widgets/custom_tabbar.dart';
 import 'package:business_bosses_v2/bbpro/widgets/iconbutton.dart';
 import 'package:business_bosses_v2/bbpro/widgets/notificationbutton.dart';
 import 'package:business_bosses_v2/bbpro/widgets/proseardwidget.dart';
@@ -15,8 +15,10 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 
 class Projects extends StatefulWidget {
+  final int? initialposition;
   const Projects({
     super.key,
+    this.initialposition,
   });
 
   @override
@@ -102,7 +104,7 @@ class _ProjectsState extends State<Projects>
                   radius: 50,
                   icon: const Icon(Icons.add),
                   onPressed: () {
-                    Get.to(const Addproject());
+                    Get.to(() => const Addproject());
                   },
                   text: 'Add Tasks',
                 ),
@@ -135,6 +137,7 @@ class _ProjectsState extends State<Projects>
             height: 10,
           ),
           CustomTabBarWidget<ProjectStatus>(
+            initialposition: widget.initialposition ?? 0,
             tabController: _tabController,
             scrollToSection: (int index) {
               _scrollToSection(index);
@@ -353,13 +356,13 @@ class _RowStatusCardState extends State<RowStatusCard> {
                     widget.projectStatus.index == 0
                         ? Container()
                         : CircleAvatar(
-                            backgroundColor: widget
-                                        .projectStatus.displayTitle ==
-                                    'To Do'
-                                ? Colors.black
-                                : widget.projectStatus.displayTitle == 'Pending'
-                                    ? Colors.amber
-                                    : Colors.green,
+                            backgroundColor:
+                                widget.projectStatus.displayTitle == 'To Do'
+                                    ? Colors.black
+                                    : widget.projectStatus.displayTitle ==
+                                            'In-Progress'
+                                        ? Colors.amber
+                                        : Colors.green,
                             radius: 5,
                           ),
                     if (widget.projectStatus.index != 0)

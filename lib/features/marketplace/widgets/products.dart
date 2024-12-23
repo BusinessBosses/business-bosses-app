@@ -1,3 +1,6 @@
+import 'package:business_bosses_v2/bbpro/models/product_model.dart';
+import 'package:business_bosses_v2/bbpro/models/service_model.dart';
+import 'package:business_bosses_v2/bbpro/widgets/proshopdeals.dart';
 import 'package:business_bosses_v2/features/home/controller/home_controller.dart';
 import 'package:business_bosses_v2/features/home/widgets/sellingpopup.dart';
 import 'package:business_bosses_v2/features/marketplace/controllers/market_controller.dart';
@@ -36,16 +39,13 @@ class _ProductsPageState extends State<ProductsPage> {
 
   @override
   Widget build(BuildContext context) {
-    // int userCount = _marketController.users.length;
-    // String formattedUserCount = formatCount(userCount);
     return Scaffold(
+      backgroundColor: backgroundColor,
       body: Obx(() {
         return ListView.builder(
           itemCount: _marketController.isfiltered.value
-              ? _marketController.searchResult.length + 1
-              : _marketController.products.length +
-                  1 +
-                  1, // Add 1 for static text
+              ? _marketController.searchResult.length + 2
+              : _marketController.products.length + 3,
           itemBuilder: (BuildContext context, int index) {
             if (index == 0) {
               return Container(
@@ -122,37 +122,55 @@ class _ProductsPageState extends State<ProductsPage> {
                   ],
                 ),
               );
+            } else if (index == 1) {
+              return Padding(
+                padding: const EdgeInsets.only(bottom: 10.0),
+                child: ProshopdealsWidget(
+                  title: 'NEW',
+                  products: _marketController.proProducts
+                      .where((Object item) {
+                        if (item is Product) {
+                          return item.images != null &&
+                              item.images!.isNotEmpty &&
+                              item.images![0].isNotEmpty;
+                        } else if (item is Service) {
+                          // Add a condition for Service if applicable
+                          return item.images != null &&
+                              item.images!.isNotEmpty &&
+                              item.images![0].isNotEmpty;
+                        }
+                        return false;
+                      })
+                      .take(10)
+                      .toList(),
+                ),
+              ); // Return the widget instead of just referencing it
             } else if (index <=
                 (_marketController.isfiltered.value
-                    ? _marketController.searchResult.length
-                    : _marketController.products.length)) {
+                    ? _marketController.searchResult.length + 1
+                    : _marketController.products.length + 2)) {
               final MarketModel market = _marketController.isfiltered.value
-                  ? _marketController
-                      .searchResult[index - 1] // Adjust for static text
-                  : _marketController
-                      .products[index - 1]; // Adjust for static text
+                  ? _marketController.searchResult[index - 2]
+                  : _marketController.products[index - 2];
               return VisibilityDetector(
                 key: Key(index.toString()),
                 onVisibilityChanged: (VisibilityInfo info) {
                   final bool hasIncrementedView = hmeController
                       .itemsWithIncrementedViews
-                      .contains(_marketController.products[index - 1]
-                          .marketId); // Adjust for static text
+                      .contains(_marketController.products[index - 2].marketId);
                   if (info.visibleFraction == 1.0 && !hasIncrementedView) {
-                    _marketController.updatemarketViews(_marketController
-                        .products[index - 1]); // Adjust for static text
+                    _marketController.updatemarketViews(
+                        _marketController.products[index - 2]);
                     setState(() {
-                      hmeController.itemsWithIncrementedViews.add(
-                          _marketController.products[index - 1]
-                              .marketId); // Adjust for static text
+                      hmeController.itemsWithIncrementedViews
+                          .add(_marketController.products[index - 2].marketId);
                     });
                   }
                 },
                 child: MarketTile(
                   post: market,
                   controller: _marketController,
-                  key: ValueKey(_marketController
-                      .products[index - 1].marketId), // Adjust for static text
+                  key: ValueKey(_marketController.products[index - 2].marketId),
                 ),
               );
             } else {

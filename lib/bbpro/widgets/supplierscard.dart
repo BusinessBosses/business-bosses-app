@@ -41,10 +41,15 @@ class _SuppliersCardState extends State<SuppliersCard> {
     return InkWell(
       onTap: widget.onTap,
       borderRadius: BorderRadius.circular(radius),
-      child: Ink(
+      child: Container(
         padding: const EdgeInsets.all(15.0),
         decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(radius), color: Colors.white),
+            border: Border.all(
+              color: Colors.black12,
+              width: 0.5,
+            ),
+            borderRadius: BorderRadius.circular(radius),
+            color: Colors.white),
         child: Column(
           children: <Widget>[
             const SizedBox(

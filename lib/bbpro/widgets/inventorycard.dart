@@ -1,5 +1,6 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'package:business_bosses_v2/bbpro/controllers/shop_controller.dart';
+import 'package:business_bosses_v2/bbpro/models/shop_model.dart';
 import 'package:business_bosses_v2/bbpro/presentation/create_product.dart';
 import 'package:business_bosses_v2/common/dialogs/snackbar.dart';
 import 'package:flutter/material.dart';
@@ -13,6 +14,7 @@ import 'package:get/get.dart';
 class InventoryCard extends StatefulWidget {
   final Product? product;
   final bool? myShop;
+  final Shop? shop;
   final bool? isProduct;
 
   const InventoryCard({
@@ -20,6 +22,7 @@ class InventoryCard extends StatefulWidget {
     this.product,
     this.isProduct,
     this.myShop,
+    this.shop,
   }) : super(key: key);
 
   @override
@@ -83,71 +86,145 @@ class _InventoryCardState extends State<InventoryCard> {
                         fontSize: 13,
                         fontWeight: FontWeight.bold,
                       ),
-                    ),
-                    Text(
-                      '${shopController.shop!.currency}${widget.product?.price.toString()}',
-                      style: const TextStyle(
-                        color: proprimaryColor,
-                        fontWeight: FontWeight.bold,
-                        fontSize: 13,
-                      ),
-                    ),
-                    Text(
-                      widget.product?.description ?? 'Product description',
-                      style: const TextStyle(fontSize: 11),
-                      maxLines: 2,
+                      maxLines: 1,
                       overflow: TextOverflow.ellipsis,
                     ),
-                    // if (widget.isProduct == true)
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: <Widget>[
-                        Wrap(
-                          crossAxisAlignment: WrapCrossAlignment.center,
-                          children: <Widget>[
-                            CircleAvatar(
-                              radius: 3,
-                              backgroundColor: widget.product!.quantity! > 0
-                                  ? Colors.green
-                                  : Colors.red,
+                    if (widget.product?.discount != null &&
+                        widget.product!.discount! > 0)
+                      Row(
+                        children: <Widget>[
+                          Text(
+                            '${widget.shop?.currency ?? shopController.shop!.currency}${((widget.product!.price * (1 - widget.product!.discount! / 100)) * 100).round() / 100}',
+                            style: const TextStyle(
+                              color: proprimaryColor,
+                              fontWeight: FontWeight.bold,
+                              fontSize: 13,
                             ),
-                            const SizedBox(width: 3),
-                            Text(
-                              widget.product!.quantity! > 0
-                                  ? '${widget.product?.quantity.toString()} in Stock'
-                                  : 'Out of stock',
-                              style: const TextStyle(fontSize: 10),
+                          ),
+                          const SizedBox(width: 5),
+                          Text(
+                            '${widget.shop?.currency ?? shopController.shop!.currency}${widget.product!.price.toStringAsFixed(2)}',
+                            style: const TextStyle(
+                              color: Colors.grey,
+                              decoration: TextDecoration.lineThrough,
+                              fontSize: 11,
                             ),
-                          ],
+                          ),
+                        ],
+                      )
+                    else
+                      Text(
+                        '${widget.shop?.currency ?? shopController.shop!.currency}${widget.product!.price.toStringAsFixed(2)}',
+                        style: const TextStyle(
+                          color: proprimaryColor,
+                          fontWeight: FontWeight.bold,
+                          fontSize: 13,
                         ),
-                      ],
-                    ),
+                      ),
+                    if (widget.myShop == false)
+                      Text(
+                        widget.product?.description ?? 'Product description',
+                        style: const TextStyle(fontSize: 11),
+                        maxLines: 2,
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                    // if (widget.myShop == false)
+                    //   Row(
+                    //     mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    //     children: <Widget>[
+                    //       Wrap(
+                    //         crossAxisAlignment: WrapCrossAlignment.center,
+                    //         children: <Widget>[
+                    //           CircleAvatar(
+                    //             radius: 3,
+                    //             backgroundColor: widget.product!.quantity! > 0
+                    //                 ? Colors.green
+                    //                 : Colors.red,
+                    //           ),
+                    //           // const SizedBox(width: 3),
+                    //           // Text(
+                    //           //   widget.product!.quantity! > 0
+                    //           //       ? '${widget.product?.quantity.toString()} in Stock'
+                    //           //       : 'Out of stock',
+                    //           //   style: const TextStyle(fontSize: 10),
+                    //           // ),
+                    //         ],
+                    //       ),
+                    //     ],
+                    //   ),
                   ],
                 ),
               ),
-              widget.myShop == false
-                  ? GestureDetector(
-                      onTap: () {},
-                      child: Container(
-                        padding: const EdgeInsets.symmetric(
-                            horizontal: 10, vertical: 7),
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(7),
-                          border: Border.all(
-                            color: proprimaryColor,
+            ],
+          ),
+          const SizedBox(
+            height: 5,
+          ),
+          widget.myShop == false
+              ? Container(
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 5,
+                    vertical: 3,
+                  ),
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(70),
+                    color: Colors.black,
+                    border: Border.all(
+                      color: Colors.grey,
+                    ),
+                  ),
+                  child: const Text(
+                    'Order',
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontWeight: FontWeight.bold,
+                      fontSize: 11,
+                    ),
+                  ),
+                )
+              : Row(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: <Widget>[
+                    Expanded(
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: <Widget>[
+                          Text(
+                            widget.product?.description ??
+                                'Product description',
+                            style: const TextStyle(fontSize: 11),
+                            maxLines: 2,
+                            overflow: TextOverflow.ellipsis,
                           ),
-                        ),
-                        child: const Text(
-                          'Order',
-                          style: TextStyle(
-                            color: proprimaryColor,
-                            fontWeight: FontWeight.bold,
-                            fontSize: 11,
-                          ),
-                        ),
+                          // Row(
+                          //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          //   children: <Widget>[
+                          //     Wrap(
+                          //       crossAxisAlignment: WrapCrossAlignment.center,
+                          //       children: <Widget>[
+                          //         CircleAvatar(
+                          //           radius: 3,
+                          //           backgroundColor: widget.product!.quantity! > 0
+                          //               ? Colors.green
+                          //               : Colors.red,
+                          //         ),
+                          //         const SizedBox(width: 3),
+                          //         Text(
+                          //           widget.product!.quantity! > 0
+                          //               ? '${widget.product?.quantity.toString()} in Stock'
+                          //               : 'Out of stock',
+                          //           style: const TextStyle(fontSize: 10),
+                          //         ),
+                          //       ],
+                          //     ),
+                          //   ],
+                          // ),
+                        ],
                       ),
-                    )
-                  : OptionsButton(
+                    ),
+                    OptionsButton(
                       item: widget.product,
                       onEdit: () => Get.to(
                         () => CreateProductListing(
@@ -156,8 +233,8 @@ class _InventoryCardState extends State<InventoryCard> {
                       ),
                       onDelete: onDelete,
                     ),
-            ],
-          ),
+                  ],
+                ),
         ],
       ),
     );
