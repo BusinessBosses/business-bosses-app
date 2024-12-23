@@ -183,35 +183,19 @@ class _ServiceCardState extends State<ServiceCard> {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: <Widget>[
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: <Widget>[
-                        Text(
-                          widget.service?.description ?? 'Service description',
-                          style: const TextStyle(fontSize: 11),
-                          maxLines: 2,
-                          overflow: TextOverflow.ellipsis,
-                        ),
-                        // const Row(
-                        //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        //   children: <Widget>[
-                        //     Wrap(
-                        //       crossAxisAlignment: WrapCrossAlignment.center,
-                        //       children: <Widget>[
-                        //         CircleAvatar(
-                        //           radius: 3,
-                        //           backgroundColor: Colors.green,
-                        //         ),
-                        //         SizedBox(width: 3),
-                        //         Text(
-                        //           'Upcoming',
-                        //           style: TextStyle(fontSize: 10),
-                        //         ),
-                        //       ],
-                        //     ),
-                        //   ],
-                        // ),
-                      ],
+                    Expanded(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: <Widget>[
+                          Text(
+                            widget.service?.description ??
+                                'Service description',
+                            style: const TextStyle(fontSize: 11),
+                            maxLines: 2,
+                            overflow: TextOverflow.ellipsis,
+                          ),
+                        ],
+                      ),
                     ),
                     OptionsButton(
                       item: widget.service,

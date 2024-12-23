@@ -186,40 +186,43 @@ class _InventoryCardState extends State<InventoryCard> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: <Widget>[
-                    Column(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: <Widget>[
-                        Text(
-                          widget.product?.description ?? 'Product description',
-                          style: const TextStyle(fontSize: 11),
-                          maxLines: 2,
-                          overflow: TextOverflow.ellipsis,
-                        ),
-                        // Row(
-                        //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        //   children: <Widget>[
-                        //     Wrap(
-                        //       crossAxisAlignment: WrapCrossAlignment.center,
-                        //       children: <Widget>[
-                        //         CircleAvatar(
-                        //           radius: 3,
-                        //           backgroundColor: widget.product!.quantity! > 0
-                        //               ? Colors.green
-                        //               : Colors.red,
-                        //         ),
-                        //         const SizedBox(width: 3),
-                        //         Text(
-                        //           widget.product!.quantity! > 0
-                        //               ? '${widget.product?.quantity.toString()} in Stock'
-                        //               : 'Out of stock',
-                        //           style: const TextStyle(fontSize: 10),
-                        //         ),
-                        //       ],
-                        //     ),
-                        //   ],
-                        // ),
-                      ],
+                    Expanded(
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: <Widget>[
+                          Text(
+                            widget.product?.description ??
+                                'Product description',
+                            style: const TextStyle(fontSize: 11),
+                            maxLines: 2,
+                            overflow: TextOverflow.ellipsis,
+                          ),
+                          // Row(
+                          //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          //   children: <Widget>[
+                          //     Wrap(
+                          //       crossAxisAlignment: WrapCrossAlignment.center,
+                          //       children: <Widget>[
+                          //         CircleAvatar(
+                          //           radius: 3,
+                          //           backgroundColor: widget.product!.quantity! > 0
+                          //               ? Colors.green
+                          //               : Colors.red,
+                          //         ),
+                          //         const SizedBox(width: 3),
+                          //         Text(
+                          //           widget.product!.quantity! > 0
+                          //               ? '${widget.product?.quantity.toString()} in Stock'
+                          //               : 'Out of stock',
+                          //           style: const TextStyle(fontSize: 10),
+                          //         ),
+                          //       ],
+                          //     ),
+                          //   ],
+                          // ),
+                        ],
+                      ),
                     ),
                     OptionsButton(
                       item: widget.product,
