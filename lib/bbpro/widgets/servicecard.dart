@@ -192,25 +192,25 @@ class _ServiceCardState extends State<ServiceCard> {
                           maxLines: 2,
                           overflow: TextOverflow.ellipsis,
                         ),
-                        const Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: <Widget>[
-                            Wrap(
-                              crossAxisAlignment: WrapCrossAlignment.center,
-                              children: <Widget>[
-                                CircleAvatar(
-                                  radius: 3,
-                                  backgroundColor: Colors.green,
-                                ),
-                                SizedBox(width: 3),
-                                Text(
-                                  'Upcoming',
-                                  style: TextStyle(fontSize: 10),
-                                ),
-                              ],
-                            ),
-                          ],
-                        ),
+                        // const Row(
+                        //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        //   children: <Widget>[
+                        //     Wrap(
+                        //       crossAxisAlignment: WrapCrossAlignment.center,
+                        //       children: <Widget>[
+                        //         CircleAvatar(
+                        //           radius: 3,
+                        //           backgroundColor: Colors.green,
+                        //         ),
+                        //         SizedBox(width: 3),
+                        //         Text(
+                        //           'Upcoming',
+                        //           style: TextStyle(fontSize: 10),
+                        //         ),
+                        //       ],
+                        //     ),
+                        //   ],
+                        // ),
                       ],
                     ),
                     OptionsButton(
