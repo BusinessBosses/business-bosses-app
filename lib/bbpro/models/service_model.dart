@@ -11,7 +11,7 @@ class Service {
   double discount;
   String description;
   String? notes;
-  String category;
+  String? category;
   String location;
   String? paymentMethod;
   String? deliveryMethod;
@@ -37,7 +37,7 @@ class Service {
     required this.price,
     required this.discount,
     required this.description,
-    required this.category,
+    this.category,
     required this.location,
     this.paymentMethod,
     this.deliveryMethod,
