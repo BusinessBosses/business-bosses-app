@@ -362,24 +362,24 @@ class _ShopScreenState extends State<ShopScreen> {
                             ),
                           ),
                         ),
-                        Center(
-                          child: GestureDetector(
-                            onTap: () {
-                              Get.to(const HomeScreen());
-                            },
-                            child: const Padding(
-                              padding: EdgeInsets.symmetric(vertical: 3.0),
-                              child: Text(
-                                'Powered by Business Bosses',
-                                style: TextStyle(
-                                  fontSize: 12,
-                                  decoration: TextDecoration.underline,
-                                  color: textColor,
-                                ),
-                              ),
-                            ),
-                          ),
-                        )
+                        // Center(
+                        //   child: GestureDetector(
+                        //     onTap: () {
+                        //       Get.to(const HomeScreen());
+                        //     },
+                        //     child: const Padding(
+                        //       padding: EdgeInsets.symmetric(vertical: 3.0),
+                        //       child: Text(
+                        //         'Powered by Business Bosses',
+                        //         style: TextStyle(
+                        //           fontSize: 12,
+                        //           decoration: TextDecoration.underline,
+                        //           color: textColor,
+                        //         ),
+                        //       ),
+                        //     ),
+                        //   ),
+                        // )
                       ],
                     ),
 
