@@ -128,30 +128,30 @@ class _InventoryCardState extends State<InventoryCard> {
                         maxLines: 2,
                         overflow: TextOverflow.ellipsis,
                       ),
-                    if (widget.myShop == false)
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: <Widget>[
-                          Wrap(
-                            crossAxisAlignment: WrapCrossAlignment.center,
-                            children: <Widget>[
-                              CircleAvatar(
-                                radius: 3,
-                                backgroundColor: widget.product!.quantity! > 0
-                                    ? Colors.green
-                                    : Colors.red,
-                              ),
-                              const SizedBox(width: 3),
-                              Text(
-                                widget.product!.quantity! > 0
-                                    ? '${widget.product?.quantity.toString()} in Stock'
-                                    : 'Out of stock',
-                                style: const TextStyle(fontSize: 10),
-                              ),
-                            ],
-                          ),
-                        ],
-                      ),
+                    // if (widget.myShop == false)
+                    //   Row(
+                    //     mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    //     children: <Widget>[
+                    //       Wrap(
+                    //         crossAxisAlignment: WrapCrossAlignment.center,
+                    //         children: <Widget>[
+                    //           CircleAvatar(
+                    //             radius: 3,
+                    //             backgroundColor: widget.product!.quantity! > 0
+                    //                 ? Colors.green
+                    //                 : Colors.red,
+                    //           ),
+                    //           // const SizedBox(width: 3),
+                    //           // Text(
+                    //           //   widget.product!.quantity! > 0
+                    //           //       ? '${widget.product?.quantity.toString()} in Stock'
+                    //           //       : 'Out of stock',
+                    //           //   style: const TextStyle(fontSize: 10),
+                    //           // ),
+                    //         ],
+                    //       ),
+                    //     ],
+                    //   ),
                   ],
                 ),
               ),
