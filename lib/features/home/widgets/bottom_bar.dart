@@ -1,5 +1,7 @@
+import 'package:business_bosses_v2/bbpro/presentation/bottom_nav_screen.dart';
 import 'package:business_bosses_v2/features/home/bottom_nav.dart';
 import 'package:business_bosses_v2/features/premium/proscreen.dart';
+import 'package:business_bosses_v2/features/profile/controller/profile_controller.dart';
 import 'package:business_bosses_v2/navigation/routes.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -13,6 +15,7 @@ class BottomBar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    ProfileController profileController = Get.find();
     return Align(
       alignment: Alignment.bottomCenter,
       child: Container(
@@ -194,7 +197,9 @@ class BottomBar extends StatelessWidget {
                             if (activeIndex == 2) return;
 
                             if (activeIndex == 0) {
-                              Get.to(() => const ProScreen());
+                              profileController.myProfile.isSubscribed
+                                  ? Get.to(const Bottomnavscreen())
+                                  : Get.to(() => const ProScreen());
                             } else {
                               Get.off(() => const ProScreen());
                             }
