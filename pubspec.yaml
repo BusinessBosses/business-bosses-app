@@ -16,7 +16,7 @@ publish_to: "none" # Remove this line if you wish to publish to pub.dev
 # https://developer.apple.com/library/archive/documentation/General/Reference/InfoPlistKeyReference/Articles/CoreFoundationKeys.html
 # In Windows, build-name is used as the major, minor, and patch parts
 # of the product and file versions while build-number is used as the build suffix.
-version: 2.2.28+63
+version: 2.2.29+65
 
 environment:
   sdk: ">=2.19.2 <3.0.0"
@@ -32,8 +32,7 @@ dependencies:
   cached_network_image: ^3.2.3
   chewie: ^1.7.1
   countdown_progress_indicator: ^0.1.2
-  country_list_pick: ^1.0.1+6
-  country_picker: ^2.0.20
+h  country_picker: ^2.0.20
   crypto: ^3.0.3
   cupertino_icons: ^1.0.2
   detectable_text_field: ^2.1.0
