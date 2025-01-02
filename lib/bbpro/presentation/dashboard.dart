@@ -16,6 +16,8 @@ import 'package:business_bosses_v2/bbpro/widgets/orderscard.dart';
 import 'package:business_bosses_v2/bbpro/widgets/quickactioncard.dart';
 import 'package:business_bosses_v2/common/widgets/safety_model.dart';
 import 'package:business_bosses_v2/features/chat/chat_screen.dart';
+import 'package:business_bosses_v2/features/home/home_screen.dart';
+import 'package:business_bosses_v2/features/home/widgets/bottom_bar.dart';
 import 'package:business_bosses_v2/utils/theme/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
@@ -23,8 +25,10 @@ import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 
 class Dashboard extends StatefulWidget {
+  final bool noBack;
   const Dashboard({
     super.key,
+    this.noBack = true,
   });
 
   @override
@@ -198,37 +202,39 @@ class _DashboardState extends State<Dashboard> {
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         crossAxisAlignment: CrossAxisAlignment.center,
                         children: <Widget>[
-                          // GestureDetector(
-                          //   onTap: () {
-                          //     Get.back();
-                          //   },
-                          //   child: Container(
-                          //     margin: const EdgeInsets.only(top: 10, left: 15),
-                          //     padding: const EdgeInsets.symmetric(
-                          //         horizontal: 10, vertical: 5),
-                          //     decoration: BoxDecoration(
-                          //         color: primaryColorLT.withAlpha(20),
-                          //         borderRadius: BorderRadius.circular(100)),
-                          //     child: Wrap(
-                          //       crossAxisAlignment: WrapCrossAlignment.center,
-                          //       children: <Widget>[
-                          //         const Icon(
-                          //           Icons.chevron_left,
-                          //           color: primaryColorLT,
-                          //           size: 24,
-                          //         ),
-                          //         Image.asset(
-                          //           'assets/images/app_logo_2.png',
-                          //           height: 25,
-                          //         ),
-                          //         const Text(
-                          //           '  Go back to BB',
-                          //           style: TextStyle(fontSize: 13),
-                          //         )
-                          //       ],
-                          //     ),
-                          //   ),
-                          // ),
+                          if (!widget.noBack)
+                            GestureDetector(
+                              onTap: () {
+                                Get.off(() => const HomeScreen());
+                              },
+                              child: Container(
+                                margin:
+                                    const EdgeInsets.only(top: 10, left: 15),
+                                padding: const EdgeInsets.symmetric(
+                                    horizontal: 10, vertical: 5),
+                                decoration: BoxDecoration(
+                                    color: primaryColorLT.withAlpha(20),
+                                    borderRadius: BorderRadius.circular(100)),
+                                child: Wrap(
+                                  crossAxisAlignment: WrapCrossAlignment.center,
+                                  children: <Widget>[
+                                    const Icon(
+                                      Icons.chevron_left,
+                                      color: primaryColorLT,
+                                      size: 24,
+                                    ),
+                                    Image.asset(
+                                      'assets/images/app_logo_2.png',
+                                      height: 25,
+                                    ),
+                                    const Text(
+                                      '  Go back to BB',
+                                      style: TextStyle(fontSize: 13),
+                                    )
+                                  ],
+                                ),
+                              ),
+                            ),
                           Container(
                             margin: const EdgeInsets.only(top: 10),
                             padding: const EdgeInsets.only(left: 15.0),

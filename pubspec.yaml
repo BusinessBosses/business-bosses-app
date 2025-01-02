@@ -32,7 +32,8 @@ dependencies:
   cached_network_image: ^3.2.3
   chewie: ^1.7.1
   countdown_progress_indicator: ^0.1.2
-h  country_picker: ^2.0.20
+  country_list_pick: ^1.0.1+6
+  country_picker: ^2.0.20
   crypto: ^3.0.3
   cupertino_icons: ^1.0.2
   detectable_text_field: ^2.1.0
