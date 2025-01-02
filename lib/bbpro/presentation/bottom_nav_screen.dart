@@ -16,8 +16,14 @@ import 'package:get/get.dart';
 class Bottomnavscreen extends StatefulWidget {
   final int? initialindex;
   final void Function(int)? onTabChanged;
-  const Bottomnavscreen(
-      {super.key, bottomNavScreenKey, this.initialindex, this.onTabChanged});
+  final bool noBack;
+  const Bottomnavscreen({
+    super.key,
+    bottomNavScreenKey,
+    this.initialindex,
+    this.onTabChanged,
+    this.noBack = true,
+  });
 
   static _BottomnavscreenState? of(BuildContext context) =>
       context.findAncestorStateOfType<_BottomnavscreenState>();
@@ -50,23 +56,26 @@ class _BottomnavscreenState extends State<Bottomnavscreen> {
     });
   }
 
-  static const List<Widget> _widgetOptions = <Widget>[
-    Dashboard(),
-    Projects(),
-    OrdersScreen(),
-    ClientsScreen(),
-    Setup(),
-  ];
+  static List<Widget> _widgetOptions = <Widget>[];
 
   @override
   void initState() {
     super.initState();
     _selectedIndex = widget.initialindex ?? 0;
+    _widgetOptions = <Widget>[
+      Dashboard(noBack: widget.noBack),
+      const Projects(),
+      const OrdersScreen(),
+      const ClientsScreen(),
+      const Setup(),
+    ];
     shopController.initShop().then((bool value) {
       if (value) {
         shopController.loading(false);
       } else {
-        Get.to(() => const Setupshop());
+        Get.to(() => const Setupshop(
+              backToHome: true,
+            ));
       }
     });
   }

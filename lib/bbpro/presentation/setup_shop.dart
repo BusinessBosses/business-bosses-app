@@ -8,6 +8,7 @@ import 'package:business_bosses_v2/bbpro/widgets/selectionboxes.dart';
 import 'package:business_bosses_v2/bbpro/widgets/textfield.dart';
 import 'package:business_bosses_v2/bbpro/controllers/shop_controller.dart';
 import 'package:business_bosses_v2/common/dialogs/snackbar.dart';
+import 'package:business_bosses_v2/features/home/home_screen.dart';
 import 'package:business_bosses_v2/features/marketplace/widgets/currency.dart';
 import 'package:business_bosses_v2/features/profile/controller/profile_controller.dart';
 import 'package:business_bosses_v2/services/api_service.dart';
@@ -21,7 +22,12 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 class Setupshop extends StatefulWidget {
   final Shop? shop;
-  const Setupshop({super.key, this.shop});
+  final bool backToHome;
+  const Setupshop({
+    super.key,
+    this.shop,
+    this.backToHome = false,
+  });
 
   @override
   // ignore: library_private_types_in_public_api
@@ -350,10 +356,14 @@ class _SetupshopState extends State<Setupshop> with TickerProviderStateMixin {
       backgroundColor: probackgroundColor,
       appBar: AppBar(
         // backgroundColor: probackgroundColor,
-        leading: widget.shop != null
+        leading: widget.shop != null || widget.backToHome
             ? IconButton(
                 onPressed: () {
-                  Navigator.pop(context);
+                  if (!widget.backToHome) {
+                    Navigator.pop(context);
+                  } else {
+                    Get.off(() => const HomeScreen());
+                  }
                 },
                 icon: SvgPicture.asset('assets/svgs/backbutton.svg'),
               )
