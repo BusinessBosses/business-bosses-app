@@ -47,7 +47,8 @@ class _ProScreenState extends State<ProScreen> with TickerProviderStateMixin {
   @override
   void initState() {
     super.initState();
-    protabbarcontroller = TabController(length: 3, vsync: this);
+    protabbarcontroller = TabController(
+        length: profileController.myProfile.isSubscribed ? 2 : 3, vsync: this);
   }
 
   @override
@@ -68,17 +69,18 @@ class _ProScreenState extends State<ProScreen> with TickerProviderStateMixin {
               labelColor: primaryColorLT, // Set label color
               unselectedLabelColor: Colors.grey, // Set unselected label color
               controller: protabbarcontroller,
-              tabs: const <Widget>[
-                Tab(
-                  child: FittedBox(
-                    child: Text(
-                      'My-Biz',
-                      style:
-                          TextStyle(fontWeight: FontWeight.w700, fontSize: 14),
+              tabs: <Widget>[
+                if (!profileController.myProfile.isSubscribed)
+                  const Tab(
+                    child: FittedBox(
+                      child: Text(
+                        'My-Biz',
+                        style: TextStyle(
+                            fontWeight: FontWeight.w700, fontSize: 14),
+                      ),
                     ),
                   ),
-                ),
-                Tab(
+                const Tab(
                   child: FittedBox(
                     child: Text(
                       'Partner with us',
@@ -87,7 +89,7 @@ class _ProScreenState extends State<ProScreen> with TickerProviderStateMixin {
                     ),
                   ),
                 ),
-                Tab(
+                const Tab(
                   child: FittedBox(
                     child: Text(
                       'Post Ad',
@@ -110,7 +112,8 @@ class _ProScreenState extends State<ProScreen> with TickerProviderStateMixin {
                 child: TabBarView(
                     controller: protabbarcontroller,
                     children: <Widget>[
-                  const ProSubscribeSection(),
+                  if (!profileController.myProfile.isSubscribed)
+                    const ProSubscribeSection(),
                   Column(
                     children: <Widget>[
                       const SizedBox(

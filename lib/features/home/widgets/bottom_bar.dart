@@ -197,15 +197,14 @@ class BottomBar extends StatelessWidget {
                             if (activeIndex == 2) return;
 
                             if (activeIndex == 0) {
-                              profileController.myProfile.isSubscribed
-                                  ? Get.to(const Bottomnavscreen(noBack: false))
-                                  : Get.to(
-                                      () => const ProScreen());
+                              //   profileController.myProfile.isSubscribed
+                              //       ? Get.to(const Bottomnavscreen(noBack: false))
+                              Get.to(() => const ProScreen());
                             } else {
-                              profileController.myProfile.isSubscribed
-                                  ? Get.to(const Bottomnavscreen(noBack: false))
-                                  : Get.off(
-                                      () => const ProScreen());
+                              // profileController.myProfile.isSubscribed
+                              //     ? Get.to(const Bottomnavscreen(noBack: false))
+
+                              Get.off(() => const ProScreen());
                             }
                           },
                           isActive: activeIndex == 2,
