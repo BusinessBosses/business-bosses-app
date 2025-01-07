@@ -73,8 +73,8 @@ class _CreateServiceListingState extends State<CreateServiceListing>
   List<DateTime> _selectedDates = <DateTime>[];
   bool _isAlwaysAvailable = false;
   final List<bool> _selectedWeekdays = List<bool>.filled(7, false);
-  TimeOfDay _startTime = const TimeOfDay(hour: 9, minute: 0);
-  TimeOfDay _endTime = const TimeOfDay(hour: 17, minute: 0);
+  TimeOfDay? _startTime;
+  TimeOfDay? _endTime;
   bool _startTimeSelected = false;
   bool _endTimeSelected = false;
   List<String> paymentMethods = <String>[];
@@ -92,7 +92,7 @@ class _CreateServiceListingState extends State<CreateServiceListing>
 
   @override
   void initState() {
-    print(widget.service!);
+    // print(widget.service!);
     super.initState();
     _animationController = AnimationController(
       duration: const Duration(milliseconds: 200),
@@ -349,30 +349,6 @@ class _CreateServiceListingState extends State<CreateServiceListing>
                 });
               },
             ),
-
-            // Select Category Dropdown
-            // DropdownButtonFormField<String>(
-            //   decoration: const InputDecoration(
-            //     labelText: 'Select Category',
-            //     border: OutlineInputBorder(),
-            //   ),
-            //   value: category,
-            //   items: <String>[
-            //     'Design Services',
-            //     'Consulting',
-            //     'Technical Support'
-            //   ].map((String category) {
-            //     return DropdownMenuItem<String>(
-            //       value: category,
-            //       child: Text(category),
-            //     );
-            //   }).toList(),
-            //   onChanged: (String? newValue) {
-            //     setState(() {
-            //       category = newValue;
-            //     });
-            //   },
-            // ),
             const SizedBox(height: 16),
 
             // Location Dropdown
@@ -854,9 +830,9 @@ class _CreateServiceListingState extends State<CreateServiceListing>
       );
       return;
     }
-    if (!(_endTime.hour > _startTime.hour ||
-        (_endTime.hour == _startTime.hour &&
-            _endTime.minute >= _startTime.minute))) {
+    if (!(_endTime!.hour > _startTime!.hour ||
+        (_endTime?.hour == _startTime?.hour &&
+            _endTime!.minute >= _startTime!.minute))) {
       showSnackbar(
         message: 'End Time cannot be before Start Time!',
         error: true,
@@ -929,14 +905,13 @@ class _CreateServiceListingState extends State<CreateServiceListing>
                   ]
                 : selectedSubmitWeekdays,
             'startTime':
-                '${_startTime.hour.toString().padLeft(2, '0')}:${_startTime.minute.toString().padLeft(2, '0')}:00',
+                '${_startTime?.hour.toString().padLeft(2, '0')}:${_startTime?.minute.toString().padLeft(2, '0')}:00',
             'endTime':
-                '${_endTime.hour.toString().padLeft(2, '0')}:${_endTime.minute.toString().padLeft(2, '0')}:00',
+                '${_endTime?.hour.toString().padLeft(2, '0')}:${_endTime?.minute.toString().padLeft(2, '0')}:00',
             'startDate': '2023-10-01',
             'endDate': '2023-10-01',
           },
-          'servicePackages':
-              packages.isEmpty ? <Map<String, dynamic>>[] : packages,
+          'packages': packages,
           'url': addressorlinkController.text,
           'notes': notesController.text.trim().isEmpty
               ? null
@@ -1220,7 +1195,7 @@ class _CreateServiceListingState extends State<CreateServiceListing>
                 TextButton(
                   onPressed: () => _selectTime(context, true),
                   child: Text(
-                    'Start Time: ${_startTime.format(context)}',
+                    'Start Time: ${_startTime?.format(context) ?? '9:00 AM'}',
                     style: TextStyle(
                       color: _startTimeSelected ? Colors.black : Colors.grey,
                     ),
@@ -1229,7 +1204,7 @@ class _CreateServiceListingState extends State<CreateServiceListing>
                 TextButton(
                   onPressed: () => _selectTime(context, false),
                   child: Text(
-                    'End Time: ${_endTime.format(context)}',
+                    'End Time: ${_endTime?.format(context) ?? '5:00 PM'}',
                     style: TextStyle(
                       color: _endTimeSelected ? Colors.black : Colors.grey,
                     ),
@@ -1301,7 +1276,9 @@ class _CreateServiceListingState extends State<CreateServiceListing>
   Future<void> _selectTime(BuildContext context, bool isStartTime) async {
     final TimeOfDay? picked = await showTimePicker(
       context: context,
-      initialTime: isStartTime ? _startTime : _endTime,
+      initialTime: isStartTime
+          ? _startTime ?? const TimeOfDay(hour: 9, minute: 0)
+          : _endTime ?? const TimeOfDay(hour: 17, minute: 0),
     );
     if (picked != null) {
       setState(() {
