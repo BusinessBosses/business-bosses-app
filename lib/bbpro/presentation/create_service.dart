@@ -9,6 +9,7 @@ import 'package:business_bosses_v2/bbpro/widgets/iconbutton.dart';
 import 'package:business_bosses_v2/bbpro/widgets/switchwidget.dart';
 import 'package:business_bosses_v2/bbpro/widgets/taskitem.dart';
 import 'package:business_bosses_v2/features/marketplace/widgets/currency.dart';
+import 'package:business_bosses_v2/features/posts/widgets/image_item.dart';
 import 'package:business_bosses_v2/features/profile/controller/profile_controller.dart';
 import 'package:business_bosses_v2/services/api_service.dart';
 import 'package:flutter/material.dart';
@@ -174,10 +175,19 @@ class _CreateServiceListingState extends State<CreateServiceListing>
   }
 
   Future<void> _pickImage() async {
-    final XFile? image = await _picker.pickImage(source: ImageSource.gallery);
-    if (image != null) {
+    if (_selectedImages.length >= 5) {
+      showSnackbar(message: 'Maximum of 5 images allowed', error: true);
+      return;
+    }
+    final List<XFile> images = await _picker.pickMultiImage();
+    if (images.isNotEmpty) {
       setState(() {
-        _selectedImages.add(File(image.path));
+        _selectedImages.addAll(images
+            .map((XFile image) => File(image.path))
+            .take(5 - _selectedImages.length)); // Limit to 5 images
+        if (_selectedImages.length > 5) {
+          _selectedImages.removeRange(5, _selectedImages.length);
+        }
       });
     }
   }
@@ -445,46 +455,43 @@ class _CreateServiceListingState extends State<CreateServiceListing>
             ),
             const SizedBox(height: 16),
 
-            if (_selectedImages.isNotEmpty)
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 15.0),
-                child: GridView.builder(
-                  shrinkWrap: true,
-                  physics: const NeverScrollableScrollPhysics(),
-                  gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                    crossAxisCount: 3,
-                    crossAxisSpacing: 4,
-                    mainAxisSpacing: 4,
-                  ),
-                  itemCount: _selectedImages.length,
-                  itemBuilder: (BuildContext context, int index) {
-                    return Image.file(
-                      _selectedImages[index],
-                      fit: BoxFit.cover,
-                    );
-                  },
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 15.0),
+              child: GridView.builder(
+                shrinkWrap: true,
+                physics: const NeverScrollableScrollPhysics(),
+                gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                  crossAxisCount: 3,
+                  crossAxisSpacing: 4,
+                  mainAxisSpacing: 4,
                 ),
-              ),
-            if (updateImages!.isNotEmpty)
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 15.0),
-                child: GridView.builder(
-                  shrinkWrap: true,
-                  physics: const NeverScrollableScrollPhysics(),
-                  gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                    crossAxisCount: 3,
-                    crossAxisSpacing: 4,
-                    mainAxisSpacing: 4,
-                  ),
-                  itemCount: updateImages!.length,
-                  itemBuilder: (BuildContext context, int index) {
-                    return Image.network(
-                      updateImages![index],
-                      fit: BoxFit.cover,
+                itemCount: _selectedImages.length + updateImages!.length,
+                itemBuilder: (BuildContext context, int index) {
+                  if (index < _selectedImages.length) {
+                    return ImageItem(
+                      file: _selectedImages[index],
+                      onRemove: () {
+                        setState(() {
+                          _selectedImages.removeAt(index);
+                        });
+                      },
+                      imageUrl: null,
                     );
-                  },
-                ),
+                  } else {
+                    final int updateIndex = index - _selectedImages.length;
+                    return ImageItem(
+                      file: null,
+                      onRemove: () {
+                        setState(() {
+                          updateImages!.removeAt(updateIndex);
+                        });
+                      },
+                      imageUrl: updateImages![updateIndex],
+                    );
+                  }
+                },
               ),
+            ),
 
             // Delivery Method Dropdown
             ExpansionTile(

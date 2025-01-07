@@ -457,7 +457,8 @@ class _PublicProfileScreenState extends State<PublicProfileScreen> {
                   },
                   icon: SvgPicture.asset('assets/svgs/backbutton.svg'),
                 ),
-                title: Text(publicUser.name ?? publicUser.username),
+                title: Text(
+                    '@${publicUser.username.toLowerCase() ?? publicUser.name}'),
               ),
         // : AppBar(
         //     leading: IconButton(
