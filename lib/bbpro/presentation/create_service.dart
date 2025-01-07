@@ -40,7 +40,7 @@ class _CreateServiceListingState extends State<CreateServiceListing>
   final ProfileController profileController = Get.find();
   final ImagePicker _picker = ImagePicker();
   final List<File> _selectedImages = <File>[];
-  final List<Map<String, dynamic>> packages = <Map<String, dynamic>>[];
+  List<Map<String, dynamic>> packages = <Map<String, dynamic>>[];
   final TextEditingController _serviceNameController = TextEditingController();
   final TextEditingController _priceController = TextEditingController();
   final TextEditingController _descriptionController = TextEditingController();
@@ -58,7 +58,6 @@ class _CreateServiceListingState extends State<CreateServiceListing>
 
   // Form fields
   String? category;
-  String? categorys;
   String location = '';
   List<String> images = <String>[];
   List<String>? updateImages = <String>[];
@@ -93,6 +92,7 @@ class _CreateServiceListingState extends State<CreateServiceListing>
 
   @override
   void initState() {
+    print(widget.service!);
     super.initState();
     _animationController = AnimationController(
       duration: const Duration(milliseconds: 200),
@@ -105,6 +105,7 @@ class _CreateServiceListingState extends State<CreateServiceListing>
       paymentMethods.add(payments['paymentMethod']);
     }
     if (widget.service != null) {
+      groupmembersController.text = widget.service!.participants.toString();
       _serviceNameController.text = widget.service!.name;
       _priceController.text = widget.service!.price.toString();
       _discountController.text = widget.service!.discount.toString();
@@ -129,11 +130,7 @@ class _CreateServiceListingState extends State<CreateServiceListing>
           : (widget.service!.selectedDates)
               .map((dynamic date) => DateTime.parse(date.toString()))
               .toList();
-      packages.addAll(
-          widget.service!.packages.map((dynamic package) => <String, dynamic>{
-                'name': package['name'],
-                'price': package['price'],
-              }));
+      packages = List<Map<String, dynamic>>.from(widget.service!.packages);
       availability = widget.service!.availability;
       _startTime = TimeOfDay(
           hour: widget.service!.availability == null
@@ -328,7 +325,7 @@ class _CreateServiceListingState extends State<CreateServiceListing>
             ),
             const SizedBox(height: 16),
             CustomDropdownWidget(
-              initialValue: categorys,
+              initialValue: category,
               caption: 'Select Category *',
               hintText: 'Choose a category',
               items: const <String>[
@@ -348,7 +345,7 @@ class _CreateServiceListingState extends State<CreateServiceListing>
               iconName: 'assets/svgs/dropdown.svg',
               onChanged: (String? newValue) {
                 setState(() {
-                  categorys = newValue;
+                  category = newValue;
                 });
               },
             ),
@@ -782,13 +779,6 @@ class _CreateServiceListingState extends State<CreateServiceListing>
               ],
             ),
 
-            // Padding(
-            //   padding: const EdgeInsets.symmetric(horizontal: 15.0),
-            //   child: MultipleEditTextWidget(
-            //       caption: 'Add Additional Packages to this service',
-            //       hintText: 'Package Name',
-            //       controller: _serviceNameController),
-            // ),
             const SizedBox(height: 16),
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 15.0),
@@ -916,7 +906,6 @@ class _CreateServiceListingState extends State<CreateServiceListing>
               ? '0'
               : _discountController.text.trim(),
           'category': category,
-          'categorys': categorys,
           'location':
               location.isEmpty ? shopController.shop!.location : location,
           'participants': groupmembersController.text,
