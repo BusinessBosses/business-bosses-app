@@ -87,6 +87,7 @@ class _OrderProductScreenState extends State<OrderProductScreen> {
             },
             icon: SvgPicture.asset('assets/svgs/backbutton.svg'),
           ),
+          titleSpacing: 0,
           title: GestureDetector(
             onTap: () {
               Get.to(UserShopScreen(

@@ -450,6 +450,13 @@ class _PublicProfileScreenState extends State<PublicProfileScreen> {
                 ]),
               )
             : AppBar(
+                automaticallyImplyLeading: false,
+                leading: IconButton(
+                  onPressed: () {
+                    Navigator.pop(context);
+                  },
+                  icon: SvgPicture.asset('assets/svgs/backbutton.svg'),
+                ),
                 title: Text(publicUser.name ?? publicUser.username),
               ),
         // : AppBar(

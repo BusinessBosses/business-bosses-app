@@ -275,7 +275,7 @@ class _CreateServiceListingState extends State<CreateServiceListing>
             CustomEditText(
               caption: 'Service Name *',
               hintText: 'Enter service name here',
-              maxLength: 15,
+              maxLength: 30,
               controller: _serviceNameController,
             ),
             const SizedBox(height: 16),

@@ -11,7 +11,9 @@ import 'package:business_bosses_v2/common/widgets/network_image_with_placeholder
 import 'package:business_bosses_v2/common/widgets/safety_model.dart';
 import 'package:business_bosses_v2/features/chat/chat_room_screen.dart';
 import 'package:business_bosses_v2/features/marketplace/presentation/seller_reviews.dart';
+import 'package:business_bosses_v2/features/posts/widgets/images_viewer_screen.dart';
 import 'package:business_bosses_v2/features/profile/controller/profile_controller.dart';
+import 'package:business_bosses_v2/navigation/routes.dart';
 import 'package:business_bosses_v2/utils/theme/theme.dart';
 import 'package:detectable_text_field/detector/sample_regular_expressions.dart';
 import 'package:detectable_text_field/widgets/detectable_text.dart';
@@ -127,18 +129,36 @@ class _UserShopScreenState extends State<UserShopScreen> {
       appBar: widget.ismyshop != null
           ? null
           : AppBar(
+              titleSpacing: 0,
               automaticallyImplyLeading: false,
-              actions: <Widget>[
-                widget.ismyshop != null
-                    ? Container()
-                    : CircleAvatar(
-                        backgroundColor: Colors.transparent,
-                        child: IconButton(
-                            onPressed: () {},
-                            icon:
-                                SvgPicture.asset('assets/svgs/shopshare.svg')),
-                      )
-              ],
+              leading: CircleAvatar(
+                backgroundColor: Colors.transparent,
+                child: IconButton(
+                    onPressed: () {
+                      Get.back();
+                    },
+                    icon: SvgPicture.asset('assets/svgs/backbutton.svg')),
+              ),
+              title: GestureDetector(
+                onTap: () {
+                  Get.toNamed(Routes.publicProfile, arguments: widget.user);
+                },
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: <Widget>[
+                    Text(
+                      '@${widget.user.username.toLowerCase()}',
+                      style: const TextStyle(
+                        color: proprimaryColor,
+                        fontWeight: FontWeight.bold,
+                        fontSize: 14,
+                      ),
+                    ),
+                    const Text('View Profile', style: TextStyle(fontSize: 10)),
+                  ],
+                ),
+              ),
             ),
       body: loading
           ? const SafetyModel()
@@ -158,8 +178,23 @@ class _UserShopScreenState extends State<UserShopScreen> {
                                 // const SizedBox(
                                 //   height: 10.0,
                                 // ),
-                                Stack(children: <Widget>[
-                                  SizedBox(
+                                GestureDetector(
+                                  onTap: () {
+                                    Navigator.of(context).push(
+                                      // ignore: always_specify_types
+                                      MaterialPageRoute(
+                                        builder: (BuildContext context) =>
+                                            ImagesViewerScreen(
+                                          // ignore: always_specify_types
+                                          urls: [
+                                            shopController.userShop!.image ?? ''
+                                          ],
+                                          index: 0,
+                                        ),
+                                      ),
+                                    );
+                                  },
+                                  child: SizedBox(
                                     height: 100,
                                     width: 100,
                                     child: SizedBox(
@@ -183,7 +218,7 @@ class _UserShopScreenState extends State<UserShopScreen> {
                                       ),
                                     ),
                                   ),
-                                ]),
+                                ),
                                 const SizedBox(height: 10),
                                 Padding(
                                   padding: const EdgeInsets.symmetric(

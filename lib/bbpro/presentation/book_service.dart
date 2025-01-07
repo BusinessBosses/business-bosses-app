@@ -82,6 +82,7 @@ class _BookServiceScreenState extends State<BookServiceScreen> {
       child: Scaffold(
         backgroundColor: probackgroundColor,
         appBar: AppBar(
+          titleSpacing: 0,
           leading: IconButton(
             onPressed: () {
               Get.back();
