@@ -89,10 +89,14 @@ class _CreateServiceListingState extends State<CreateServiceListing>
     'Sun'
   ];
   String frequency = 'Weekly';
+  DateTime? _startDate;
+  DateTime? _endDate;
+  final bool _startDateSelected = false;
+  final bool _endDateSelected = false;
 
   @override
   void initState() {
-    // print(widget.service!);
+    print(widget.service!);
     super.initState();
     _animationController = AnimationController(
       duration: const Duration(milliseconds: 200),
@@ -132,6 +136,12 @@ class _CreateServiceListingState extends State<CreateServiceListing>
               .toList();
       packages = List<Map<String, dynamic>>.from(widget.service!.packages);
       availability = widget.service!.availability;
+      _startDate = widget.service!.availability == null
+          ? null
+          : DateTime.parse(widget.service!.availability!['startDate']);
+      _endDate = widget.service!.availability == null
+          ? null
+          : DateTime.parse(widget.service!.availability!['endDate']);
       _startTime = TimeOfDay(
           hour: widget.service!.availability == null
               ? 0
@@ -306,7 +316,7 @@ class _CreateServiceListingState extends State<CreateServiceListing>
                     child: CustomEditText(
                       maxLength: 15,
                       padding: 0,
-                      caption: 'Discount',
+                      caption: 'Discount (%)',
                       hintText: 'Enter discount',
                       controller: _discountController,
                       inputType: TextInputType.number,
@@ -326,7 +336,7 @@ class _CreateServiceListingState extends State<CreateServiceListing>
             const SizedBox(height: 16),
             CustomDropdownWidget(
               initialValue: category,
-              caption: 'Select Category *',
+              caption: 'Select Category',
               hintText: 'Choose a category',
               items: const <String>[
                 'Home, Garden & Outdoors',
@@ -830,6 +840,10 @@ class _CreateServiceListingState extends State<CreateServiceListing>
       );
       return;
     }
+    _startTime ??= const TimeOfDay(hour: 9, minute: 0);
+    _endTime ??= const TimeOfDay(hour: 17, minute: 0);
+    _startDate ??= DateTime.now();
+    _endDate ??= DateTime.now();
     if (!(_endTime!.hour > _startTime!.hour ||
         (_endTime?.hour == _startTime?.hour &&
             _endTime!.minute >= _startTime!.minute))) {
@@ -837,7 +851,7 @@ class _CreateServiceListingState extends State<CreateServiceListing>
         message: 'End Time cannot be before Start Time!',
         error: true,
       );
-      return; // Or handle the error as needed
+      return;
     }
     // else if (selectedSubmitWeekdays.isEmpty) {
     //   showSnackbar(
@@ -908,8 +922,8 @@ class _CreateServiceListingState extends State<CreateServiceListing>
                 '${_startTime?.hour.toString().padLeft(2, '0')}:${_startTime?.minute.toString().padLeft(2, '0')}:00',
             'endTime':
                 '${_endTime?.hour.toString().padLeft(2, '0')}:${_endTime?.minute.toString().padLeft(2, '0')}:00',
-            'startDate': '2023-10-01',
-            'endDate': '2023-10-01',
+            'startDate': _startDate?.toIso8601String(),
+            'endDate': _endDate?.toIso8601String(),
           },
           'packages': packages,
           'url': addressorlinkController.text,
@@ -1142,24 +1156,28 @@ class _CreateServiceListingState extends State<CreateServiceListing>
                     ),
             if (!isRecurring)
               SizedBox(
-                height: 400,
+                height: MediaQuery.of(context).size.height / 3,
                 child: SfCalendar(
-                  initialSelectedDate: _selectedDates.isNotEmpty
-                      ? _selectedDates[0]
-                      : DateTime.now(),
+                  initialSelectedDate: _startDate ??
+                      (_selectedDates.isNotEmpty
+                          ? _selectedDates[0]
+                          : DateTime.now()),
                   selectionDecoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(8),
-                    color: Colors.transparent,
+                    borderRadius: BorderRadius.circular(0),
+                    color: Colors.black45,
                   ),
-                  todayHighlightColor: proprimaryColor,
+                  todayTextStyle: const TextStyle(color: Colors.black),
+                  todayHighlightColor: Colors.transparent,
                   view: CalendarView.month,
-                  initialDisplayDate: _selectedDates.isNotEmpty
-                      ? _selectedDates[0]
-                      : DateTime.now(),
+                  initialDisplayDate: _startDate ??
+                      (_selectedDates.isNotEmpty
+                          ? _selectedDates[0]
+                          : DateTime.now()),
+                  minDate: DateTime.now(),
                   monthViewSettings: const MonthViewSettings(
                     appointmentDisplayMode:
                         MonthAppointmentDisplayMode.indicator,
-                    showAgenda: true, // Enable agenda view to select dates
+                    showAgenda: false, // Enable agenda view to select dates
                   ),
                   dataSource: _getCalendarDataSource(),
                   onTap: (CalendarTapDetails details) {
@@ -1180,12 +1198,15 @@ class _CreateServiceListingState extends State<CreateServiceListing>
                         _selectedWeekdays[weekdayIndex] = true;
                         selectedSubmitWeekdays
                             .add(_getWeekdayName(weekdayIndex));
+
+                        // Set _startDate to the selected date
+                        _startDate = selectedDate;
                       });
                     }
                   },
                 ),
               ),
-            if (isRecurring) const SizedBox(height: 20),
+            const SizedBox(height: 20),
             Text(!isRecurring
                 ? 'Available Time for selected day'
                 : 'Available Time for selected days'),
