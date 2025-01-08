@@ -94,7 +94,6 @@ class _CreateServiceListingState extends State<CreateServiceListing>
 
   @override
   void initState() {
-    print(widget.service!);
     super.initState();
     _animationController = AnimationController(
       duration: const Duration(milliseconds: 200),
@@ -524,14 +523,6 @@ class _CreateServiceListingState extends State<CreateServiceListing>
                             counterText: null,
                           ),
                           controller: addressorlinkController,
-                          // validator: (String? value) {
-                          //   if (value == null || value.isEmpty) {
-                          //     return deliveryMethod == 'Online'
-                          //         ? 'Please enter meeting link here'
-                          //         : 'Please enter an address';
-                          //   }
-                          //   return null;
-                          // },
                         )
                       : null,
                 ),
@@ -750,27 +741,6 @@ class _CreateServiceListingState extends State<CreateServiceListing>
     );
   }
 
-  // String _formatDate(DateTime? dateTime) {
-  //   if (dateTime == null) {
-  //     return 'Select date';
-  //   }
-  //   return DateFormat('yyyy-MM-dd').format(dateTime);
-  // }
-
-  // Future<void> _selectDate(BuildContext context) async {
-  //   final DateTime? picked = await showDatePicker(
-  //     context: context,
-  //     initialDate: availableTime ?? DateTime.now(),
-  //     firstDate: DateTime(2000),
-  //     lastDate: DateTime(2101),
-  //   );
-  //   if (picked != null && picked != availableTime) {
-  //     setState(() {
-  //       availableTime = picked;
-  //     });
-  //   }
-  // }
-
   void _submitForm() async {
     if (_serviceNameController.text.isEmpty) {
       showSnackbar(
@@ -824,7 +794,6 @@ class _CreateServiceListingState extends State<CreateServiceListing>
         if (_serviceNameController.text.isEmpty ||
             _priceController.text.isEmpty ||
             _descriptionController.text.isEmpty) {
-          // Check if days are selected
           showSnackbar(
               message: 'Please fill in all required fields', error: true);
           return;
@@ -1220,21 +1189,6 @@ class _CreateServiceListingState extends State<CreateServiceListing>
 
     return _AppointmentDataSource(appointments);
   }
-
-  // void _handleCalendarTap(CalendarTapDetails details) {
-  //   if (!_isAlwaysAvailable &&
-  //       details.targetElement == CalendarElement.calendarCell) {
-  //     setState(() {
-  //       DateTime selectedDate = DateTime(
-  //           details.date!.year, details.date!.month, details.date!.day);
-  //       if (_selectedDates.contains(selectedDate)) {
-  //         _selectedDates.remove(selectedDate);
-  //       } else {
-  //         _selectedDates.add(selectedDate);
-  //       }
-  //     });
-  //   }
-  // }
 
   Future<void> _selectTime(BuildContext context, bool isStartTime) async {
     final TimeOfDay? picked = await showTimePicker(
