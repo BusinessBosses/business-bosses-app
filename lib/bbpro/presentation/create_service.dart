@@ -63,7 +63,6 @@ class _CreateServiceListingState extends State<CreateServiceListing>
   List<String>? updateImages = <String>[];
   String? paymentMethod;
   String? deliveryMethod;
-  String? deliveryTime;
   DateTime availableTime = DateTime.now();
   String? serviceType;
   Map<String, dynamic>? availability;
@@ -88,16 +87,15 @@ class _CreateServiceListingState extends State<CreateServiceListing>
     'Sat',
     'Sun'
   ];
-  String frequency = 'Weekly';
+  String frequency = 'No (One-time Service)';
   DateTime? _startDate;
   DateTime? _endDate;
-  final bool _startDateSelected = false;
-  final bool _endDateSelected = false;
 
   @override
   void initState() {
     print(widget.service!);
     super.initState();
+    _isAlwaysAvailable = widget.service?.deliveryTime == 'true' ? true : false;
     _animationController = AnimationController(
       duration: const Duration(milliseconds: 200),
       vsync: this,
@@ -119,7 +117,6 @@ class _CreateServiceListingState extends State<CreateServiceListing>
       images = widget.service!.images!;
       updateImages = widget.service!.images;
       deliveryMethod = widget.service!.deliveryMethod;
-      deliveryTime = widget.service!.deliveryTime;
       availableTime = widget.service!.availableTime != null
           ? widget.service!.availableTime!
           : DateTime.now();
@@ -161,17 +158,13 @@ class _CreateServiceListingState extends State<CreateServiceListing>
               : int.parse(widget.service!.availability!['endTime']
                   .substring(3, 5))); // Extract minute
 
-      // selectedSubmitWeekdays =
-      //     List<String>.from(widget.service!.availability!['dayOfWeek']);
-      // _selectedWeekdays = List<bool>.filled(7, false);
-
       for (int i = 0; i < weekdays.length; i++) {
         if (selectedSubmitWeekdays.contains(weekdays[i])) {
           _selectedWeekdays[i] = true;
         }
       }
 
-      _updateSelectedDates();
+      // _updateSelectedDates();
       _startTimeSelected = true;
       _endTimeSelected = true;
     }
@@ -538,20 +531,6 @@ class _CreateServiceListingState extends State<CreateServiceListing>
                 ),
 
                 const SizedBox(height: 16),
-                // CustomDropdownWidget(
-                //   caption: 'Repeat',
-                //   hintText: 'Offer this service once or regularly?',
-                //   items: const <String>[
-                //     'Yes (One-time Service)',
-                //     'No (Regular Service)',
-                //   ],
-                //   iconName: 'assets/svgs/dropdown.svg',
-                //   onChanged: (String? newValue) {
-                //     setState(() {
-                //       category = newValue;
-                //     });
-                //   },
-                // ),
 
                 CustomDropdownWidget(
                   caption: 'Repeat',
@@ -564,51 +543,22 @@ class _CreateServiceListingState extends State<CreateServiceListing>
                   initialValue: <String>[
                     'Yes (Regular Service)',
                     'No (One-time Service)'
-                  ].contains(category)
-                      ? category
+                  ].contains(frequency)
+                      ? frequency
                       : null,
                   onChanged: (String? newValue) {
                     setState(() {
-                      category = newValue;
+                      frequency = newValue!;
                     });
                   },
                 ),
 
                 const SizedBox(height: 16),
 
-                if (category != null)
-                  availabilityWidget(
-                      isRecurring:
-                          category == 'Yes (Regular Service)' ? true : false),
-
-                // Delivery Time Field
-                // TextFormField(
-                //   decoration: const InputDecoration(
-                //     labelText: 'Delivery Time',
-                //     hintText: 'e.g., 3-5 business days',
-                //     border: OutlineInputBorder(),
-                //   ),
-                //   onChanged: (String value) {
-                //     setState(() {
-                //       deliveryTime = value;
-                //     });
-                //   },
-                // ),
-                if (category != null) const SizedBox(height: 16),
-
-                // Available Time Field
-                // TextFormField(
-                //   readOnly: true,
-                //   decoration: InputDecoration(
-                //     labelText: 'Available Time',
-                //     hintText: _formatDate(availableTime),
-                //     border: const OutlineInputBorder(),
-                //   ),
-                //   onTap: () => _selectDate(context),
-                // ),
-                // const SizedBox(height: 16),
-
-                // Payment Method Dropdown
+                availabilityWidget(
+                    isRecurring:
+                        frequency == 'Yes (Regular Service)' ? true : false),
+                const SizedBox(height: 16),
 
                 CustomDropdownWidget(
                   caption: 'Payment Method',
@@ -853,13 +803,6 @@ class _CreateServiceListingState extends State<CreateServiceListing>
       );
       return;
     }
-    // else if (selectedSubmitWeekdays.isEmpty) {
-    //   showSnackbar(
-    //     message: 'Selecting a day is Mandatory!',
-    //     error: true,
-    //   );
-    //   return;
-    // }
 
     if (_formKey.currentState?.validate() ?? false) {
       _formKey.currentState?.save();
@@ -903,19 +846,19 @@ class _CreateServiceListingState extends State<CreateServiceListing>
           'images': images.isEmpty ? null : images,
           'paymentMethod': paymentMethod ?? '',
           'deliveryMethod': deliveryMethod ?? '',
-          'deliveryTime': deliveryTime ?? '',
           'availableTime': availableTime.toIso8601String(),
           'serviceType': serviceType ?? '1:1',
           'itemType': 'service',
           'isActive': _isSwitched,
+          'deliveryTime': _isAlwaysAvailable == true ? 'true' : 'false',
           'serviceAvailability': <String, dynamic>{
             'dayOfWeek': selectedSubmitWeekdays.isEmpty
                 ? <String>[
-                    'Monday',
-                    'Tuesday',
-                    'Wednesday',
-                    'Thursday',
-                    'Friday'
+                    'Mon',
+                    'Tue',
+                    'Wed',
+                    'Thu',
+                    'Fri',
                   ]
                 : selectedSubmitWeekdays,
             'startTime':
@@ -1005,7 +948,7 @@ class _CreateServiceListingState extends State<CreateServiceListing>
                           _selectedWeekdays.fillRange(0, 7, false);
                           selectedSubmitWeekdays = <String>[];
                         }
-                        _updateSelectedDates();
+                        // _updateSelectedDates();
                       });
                     },
                     child: AnimatedBuilder(
@@ -1058,102 +1001,103 @@ class _CreateServiceListingState extends State<CreateServiceListing>
                 ],
               ),
             const SizedBox(height: 10),
+            // if (isRecurring && !_isAlwaysAvailable)
+            //   Container(
+            //     width: 200,
+            //     padding: const EdgeInsets.symmetric(horizontal: 10),
+            //     decoration: BoxDecoration(
+            //         color: probackgroundColor,
+            //         borderRadius: BorderRadius.circular(10)),
+            //     child: DropdownButtonHideUnderline(
+            //         child: DropdownButton<String>(
+            //       hint: const Text('Select repeat frequency'),
+            //       value: <String>['Repeat Weekly', 'Repeat Monthly']
+            //               .contains(frequency)
+            //           ? frequency
+            //           : null,
+            //       onChanged: (String? newValue) {
+            //         setState(() {
+            //           frequency = newValue!;
+            //         });
+            //       },
+            //       items: const <String>[
+            //         'Repeat Weekly',
+            //         'Repeat Monthly',
+            //       ].map((String value) {
+            //         return DropdownMenuItem<String>(
+            //           value: value,
+            //           child: Text(value),
+            //         );
+            //       }).toList(),
+            //       isExpanded: true,
+            //       icon: SvgPicture.asset(
+            //         'assets/svgs/dropdown.svg',
+            //         color: proprimaryColor,
+            //       ),
+            //     )),
+            //   ),
+            // const SizedBox(height: 10),
             if (isRecurring && !_isAlwaysAvailable)
-              Container(
-                width: 200,
-                padding: const EdgeInsets.symmetric(horizontal: 10),
-                decoration: BoxDecoration(
-                    color: probackgroundColor,
-                    borderRadius: BorderRadius.circular(10)),
-                child: DropdownButtonHideUnderline(
-                    child: DropdownButton<String>(
-                  hint: const Text('Select repeat frequency'),
-                  value: <String>['Repeat Weekly', 'Repeat Monthly']
-                          .contains(frequency)
-                      ? frequency
-                      : null,
-                  onChanged: (String? newValue) {
-                    setState(() {
-                      frequency = newValue!;
-                    });
-                  },
-                  items: const <String>[
-                    'Repeat Weekly',
-                    'Repeat Monthly',
-                  ].map((String value) {
-                    return DropdownMenuItem<String>(
-                      value: value,
-                      child: Text(value),
+              // frequency == 'Yes (Regular Service)'
+              // ?
+              Wrap(
+                  spacing: 8,
+                  children: List<Widget>.generate(7, (int index) {
+                    return ChoiceChip(
+                      label: Text(_getWeekdayName(index)),
+                      selected: _selectedWeekdays[index],
+                      selectedColor: proprimaryColor,
+                      onSelected: (bool selected) {
+                        setState(() {
+                          _selectedWeekdays[index] = selected;
+                          // _updateSelectedDates();
+                          if (selectedSubmitWeekdays
+                              .contains(_getWeekdayName(index))) {
+                            selectedSubmitWeekdays.remove(_getWeekdayName(
+                                index)); // Remove if already selected
+                          } else {
+                            selectedSubmitWeekdays.add(
+                                _getWeekdayName(index)); // Add if not selected
+                          }
+                          selectedSubmitWeekdays.sort((String a, String b) =>
+                              weekdays
+                                  .indexOf(a)
+                                  .compareTo(weekdays.indexOf(b)));
+                        });
+                      },
                     );
-                  }).toList(),
-                  isExpanded: true,
-                  icon: SvgPicture.asset(
-                    'assets/svgs/dropdown.svg',
-                    color: proprimaryColor,
-                  ),
-                )),
-              ),
-            const SizedBox(height: 10),
-            if (isRecurring && !_isAlwaysAvailable)
-              frequency == 'Weekly'
-                  ? Wrap(
-                      spacing: 8,
-                      children: List<Widget>.generate(7, (int index) {
-                        return ChoiceChip(
-                          label: Text(_getWeekdayName(index)),
-                          selected: _selectedWeekdays[index],
-                          selectedColor: proprimaryColor,
-                          onSelected: (bool selected) {
-                            setState(() {
-                              _selectedWeekdays[index] = selected;
-                              _updateSelectedDates();
-                              if (selectedSubmitWeekdays
-                                  .contains(_getWeekdayName(index))) {
-                                selectedSubmitWeekdays.remove(_getWeekdayName(
-                                    index)); // Remove if already selected
-                              } else {
-                                selectedSubmitWeekdays.add(_getWeekdayName(
-                                    index)); // Add if not selected
-                              }
-                              selectedSubmitWeekdays.sort(
-                                  (String a, String b) => weekdays
-                                      .indexOf(a)
-                                      .compareTo(weekdays.indexOf(b)));
-                            });
-                          },
-                        );
-                      }))
-                  : SizedBox(
-                      height: 300,
-                      child: SfCalendar(
-                        initialSelectedDate: _selectedDates.isNotEmpty
-                            ? _selectedDates[0]
-                            : DateTime.now(),
-                        selectionDecoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(8),
-                          color: Colors.transparent,
-                        ),
-                        todayHighlightColor: proprimaryColor,
-                        view: CalendarView.month,
-                        initialDisplayDate: _selectedDates.isNotEmpty
-                            ? _selectedDates[0]
-                            : DateTime.now(),
-                        monthViewSettings: const MonthViewSettings(
-                          appointmentDisplayMode:
-                              MonthAppointmentDisplayMode.indicator,
-                        ),
-                        dataSource: _getCalendarDataSource(),
-                        onTap: (CalendarTapDetails details) {
-                          setState(() {
-                            if (_selectedDates.contains(details.date)) {
-                              _selectedDates.remove(details.date);
-                            } else {
-                              _selectedDates.add(details.date!);
-                            }
-                          });
-                        },
-                      ),
-                    ),
+                  })),
+            // : SizedBox(
+            //     height: 300,
+            //     child: SfCalendar(
+            //       initialSelectedDate: _selectedDates.isNotEmpty
+            //           ? _selectedDates[0]
+            //           : DateTime.now(),
+            //       selectionDecoration: BoxDecoration(
+            //         borderRadius: BorderRadius.circular(8),
+            //         color: Colors.transparent,
+            //       ),
+            //       todayHighlightColor: proprimaryColor,
+            //       view: CalendarView.month,
+            //       initialDisplayDate: _selectedDates.isNotEmpty
+            //           ? _selectedDates[0]
+            //           : DateTime.now(),
+            //       monthViewSettings: const MonthViewSettings(
+            //         appointmentDisplayMode:
+            //             MonthAppointmentDisplayMode.indicator,
+            //       ),
+            //       dataSource: _getCalendarDataSource(),
+            //       onTap: (CalendarTapDetails details) {
+            //         setState(() {
+            //           if (_selectedDates.contains(details.date)) {
+            //             _selectedDates.remove(details.date);
+            //           } else {
+            //             _selectedDates.add(details.date!);
+            //           }
+            //         });
+            //       },
+            //     ),
+            //   ),
             if (!isRecurring)
               SizedBox(
                 height: MediaQuery.of(context).size.height / 3,
@@ -1164,7 +1108,7 @@ class _CreateServiceListingState extends State<CreateServiceListing>
                           : DateTime.now()),
                   selectionDecoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(0),
-                    color: Colors.black45,
+                    color: proprimaryColor.withOpacity(0.5),
                   ),
                   todayTextStyle: const TextStyle(color: Colors.black),
                   todayHighlightColor: Colors.transparent,
@@ -1252,18 +1196,18 @@ class _CreateServiceListingState extends State<CreateServiceListing>
     return weekdayss[index];
   }
 
-  void _updateSelectedDates() {
-    _selectedDates.clear();
-    if (!_isAlwaysAvailable) {
-      DateTime now = DateTime.now();
-      for (int i = 0; i < 365; i++) {
-        DateTime date = now.add(Duration(days: i));
-        if (_selectedWeekdays[date.weekday - 1]) {
-          _selectedDates.add(date);
-        }
-      }
-    }
-  }
+  // void _updateSelectedDates() {
+  //   _selectedDates.clear();
+  //   if (!_isAlwaysAvailable) {
+  //     DateTime now = DateTime.now();
+  //     for (int i = 0; i < 365; i++) {
+  //       DateTime date = now.add(Duration(days: i));
+  //       if (_selectedWeekdays[date.weekday - 1]) {
+  //         _selectedDates.add(date);
+  //       }
+  //     }
+  //   }
+  // }
 
   CalendarDataSource _getCalendarDataSource() {
     List<Appointment> appointments = _selectedDates
