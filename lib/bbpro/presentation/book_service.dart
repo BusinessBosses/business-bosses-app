@@ -234,9 +234,50 @@ class _BookServiceScreenState extends State<BookServiceScreen> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: <Widget>[
-                  const Text('Select Date and Time',
+                  const Text('Select a Date and Time',
                       style:
                           TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
+                  if (widget.service.deliveryTime == 'true')
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      children: <Widget>[
+                        SvgPicture.asset(
+                          'assets/svgs/checkfilled.svg',
+                          height: 15,
+                        ),
+                        const SizedBox(
+                          width: 5,
+                        ),
+                        const Text('This service is always available'),
+                      ],
+                    ),
+                  if (widget.service.deliveryTime == 'false' &&
+                      widget.service.repeat == 'Yes (Regular Service)')
+                    Wrap(
+                        spacing: 8,
+                        children: List<Widget>.generate(7, (int index) {
+                          return ChoiceChip(
+                            label: const Text('_getWeekdayName(index)'),
+                            selected: true,
+                            selectedColor: proprimaryColor,
+                            onSelected: (bool selected) {
+                              setState(() {
+                                // if (selectedSubmitWeekdays
+                                //     .contains(_getWeekdayName(index))) {
+                                //   selectedSubmitWeekdays.remove(_getWeekdayName(
+                                //       index)); // Remove if already selected
+                                // } else {
+                                //   selectedSubmitWeekdays.add(_getWeekdayName(
+                                //       index)); // Add if not selected
+                                // }
+                                // selectedSubmitWeekdays.sort(
+                                //     (String a, String b) => weekdays
+                                //         .indexOf(a)
+                                //         .compareTo(weekdays.indexOf(b)));
+                              });
+                            },
+                          );
+                        })),
                   SfCalendar(
                     view: CalendarView.month,
                     initialDisplayDate: DateTime.now(),
