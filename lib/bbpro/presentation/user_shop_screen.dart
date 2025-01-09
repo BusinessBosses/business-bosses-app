@@ -72,7 +72,6 @@ class _UserShopScreenState extends State<UserShopScreen> {
         return GestureDetector(
           onTap: () {
             if (action['text'] == 'Chat') {
-              print('object');
               Get.to(
                 () => const ChatRoomScreen(
                   frommarketplace: false,
@@ -536,7 +535,6 @@ class _UserShopScreenState extends State<UserShopScreen> {
                                                           as Service;
                                                   return GestureDetector(
                                                     onTap: () {
-                                                      print(service);
                                                       Get.to(() =>
                                                           BookServiceScreen(
                                                             service: service,
