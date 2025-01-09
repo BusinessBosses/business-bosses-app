@@ -278,21 +278,62 @@ class _BookServiceScreenState extends State<BookServiceScreen> {
                             },
                           );
                         })),
-                  SfCalendar(
-                    view: CalendarView.month,
-                    initialDisplayDate: DateTime.now(),
-                    monthViewSettings: const MonthViewSettings(
-                      appointmentDisplayMode:
-                          MonthAppointmentDisplayMode.indicator,
+                  if (widget.service.repeat != 'Yes (Regular Service)')
+                    SizedBox(
+                      height: MediaQuery.of(context).size.height / 3,
+                      child: SfCalendar(
+                        initialSelectedDate: _startDate ??
+                            (_selectedDates.isNotEmpty
+                                ? _selectedDates[0]
+                                : DateTime.now()),
+                        selectionDecoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(0),
+                          color: proprimaryColor.withOpacity(0.5),
+                        ),
+                        todayTextStyle: const TextStyle(color: Colors.black),
+                        todayHighlightColor: Colors.transparent,
+                        view: CalendarView.month,
+                        initialDisplayDate: _startDate ??
+                            (_selectedDates.isNotEmpty
+                                ? _selectedDates[0]
+                                : DateTime.now()),
+                        minDate: DateTime.now(),
+                        monthViewSettings: const MonthViewSettings(
+                          appointmentDisplayMode:
+                              MonthAppointmentDisplayMode.indicator,
+                          showAgenda:
+                              false, // Enable agenda view to select dates
+                        ),
+                        dataSource: _getCalendarDataSource(),
+                        onTap: (CalendarTapDetails details) {
+                          if (!_isAlwaysAvailable &&
+                              details.targetElement ==
+                                  CalendarElement.calendarCell) {
+                            setState(() {
+                              DateTime selectedDate = DateTime(
+                                  details.date!.year,
+                                  details.date!.month,
+                                  details.date!.day);
+
+                              // Clear previously selected dates and weekdays
+                              _selectedDates.clear();
+                              _selectedWeekdays.fillRange(0, 7, false);
+                              selectedSubmitWeekdays.clear();
+
+                              // Add the newly selected date and update weekdays
+                              _selectedDates.add(selectedDate);
+                              int weekdayIndex = selectedDate.weekday - 1;
+                              _selectedWeekdays[weekdayIndex] = true;
+                              selectedSubmitWeekdays
+                                  .add(_getWeekdayName(weekdayIndex));
+
+                              // Set _startDate to the selected date
+                              _startDate = selectedDate;
+                            });
+                          }
+                        },
+                      ),
                     ),
-                    onTap: (CalendarTapDetails details) {
-                      if (details.date != null) {
-                        setState(() {
-                          deliveryDate = details.date!;
-                        });
-                      }
-                    },
-                  ),
                   if (widget.service.availability != null)
                     Column(
                       children: <Widget>[
