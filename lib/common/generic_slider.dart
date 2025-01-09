@@ -71,7 +71,7 @@ class _GenericSliderState extends State<GenericSlider> {
                             imageUrl: widget.images[i],
                             fit: widget.fit,
                             placeHolder: Icons.photo,
-                            radius: radius,
+                            radius: widget.radius ?? radius,
                           ),
                         ),
                       ],

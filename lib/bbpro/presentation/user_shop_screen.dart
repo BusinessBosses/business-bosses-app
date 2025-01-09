@@ -536,6 +536,7 @@ class _UserShopScreenState extends State<UserShopScreen> {
                                                           as Service;
                                                   return GestureDetector(
                                                     onTap: () {
+                                                      print(service);
                                                       Get.to(() =>
                                                           BookServiceScreen(
                                                             service: service,

@@ -90,12 +90,11 @@ class _CreateServiceListingState extends State<CreateServiceListing>
   String frequency = 'No (One-time Service)';
   DateTime? _startDate;
   DateTime? _endDate;
+  String deliveryTime = 'false';
 
   @override
   void initState() {
-    print(widget.service!);
     super.initState();
-    _isAlwaysAvailable = widget.service?.deliveryTime == 'true' ? true : false;
     _animationController = AnimationController(
       duration: const Duration(milliseconds: 200),
       vsync: this,
@@ -107,6 +106,10 @@ class _CreateServiceListingState extends State<CreateServiceListing>
       paymentMethods.add(payments['paymentMethod']);
     }
     if (widget.service != null) {
+      frequency = widget.service!.repeat!;
+      _isAlwaysAvailable =
+          widget.service!.deliveryTime == 'true' ? true : false;
+      deliveryTime = widget.service!.deliveryTime.toString();
       groupmembersController.text = widget.service!.participants.toString();
       _serviceNameController.text = widget.service!.name;
       _priceController.text = widget.service!.price.toString();
@@ -158,6 +161,8 @@ class _CreateServiceListingState extends State<CreateServiceListing>
               : int.parse(widget.service!.availability!['endTime']
                   .substring(3, 5))); // Extract minute
 
+      selectedSubmitWeekdays =
+          List<String>.from(availability?['dayOfWeek'] ?? <String>[]);
       for (int i = 0; i < weekdays.length; i++) {
         if (selectedSubmitWeekdays.contains(weekdays[i])) {
           _selectedWeekdays[i] = true;
@@ -518,14 +523,6 @@ class _CreateServiceListingState extends State<CreateServiceListing>
                             counterText: null,
                           ),
                           controller: addressorlinkController,
-                          // validator: (String? value) {
-                          //   if (value == null || value.isEmpty) {
-                          //     return deliveryMethod == 'Online'
-                          //         ? 'Please enter meeting link here'
-                          //         : 'Please enter an address';
-                          //   }
-                          //   return null;
-                          // },
                         )
                       : null,
                 ),
@@ -540,12 +537,7 @@ class _CreateServiceListingState extends State<CreateServiceListing>
                     'No (One-time Service)',
                   ],
                   iconName: 'assets/svgs/dropdown.svg',
-                  initialValue: <String>[
-                    'Yes (Regular Service)',
-                    'No (One-time Service)'
-                  ].contains(frequency)
-                      ? frequency
-                      : null,
+                  initialValue: frequency,
                   onChanged: (String? newValue) {
                     setState(() {
                       frequency = newValue!;
@@ -749,27 +741,6 @@ class _CreateServiceListingState extends State<CreateServiceListing>
     );
   }
 
-  // String _formatDate(DateTime? dateTime) {
-  //   if (dateTime == null) {
-  //     return 'Select date';
-  //   }
-  //   return DateFormat('yyyy-MM-dd').format(dateTime);
-  // }
-
-  // Future<void> _selectDate(BuildContext context) async {
-  //   final DateTime? picked = await showDatePicker(
-  //     context: context,
-  //     initialDate: availableTime ?? DateTime.now(),
-  //     firstDate: DateTime(2000),
-  //     lastDate: DateTime(2101),
-  //   );
-  //   if (picked != null && picked != availableTime) {
-  //     setState(() {
-  //       availableTime = picked;
-  //     });
-  //   }
-  // }
-
   void _submitForm() async {
     if (_serviceNameController.text.isEmpty) {
       showSnackbar(
@@ -823,7 +794,6 @@ class _CreateServiceListingState extends State<CreateServiceListing>
         if (_serviceNameController.text.isEmpty ||
             _priceController.text.isEmpty ||
             _descriptionController.text.isEmpty) {
-          // Check if days are selected
           showSnackbar(
               message: 'Please fill in all required fields', error: true);
           return;
@@ -850,7 +820,7 @@ class _CreateServiceListingState extends State<CreateServiceListing>
           'serviceType': serviceType ?? '1:1',
           'itemType': 'service',
           'isActive': _isSwitched,
-          'deliveryTime': _isAlwaysAvailable == true ? 'true' : 'false',
+          'deliveryTime': _isAlwaysAvailable.toString(),
           'serviceAvailability': <String, dynamic>{
             'dayOfWeek': selectedSubmitWeekdays.isEmpty
                 ? <String>[
@@ -941,6 +911,7 @@ class _CreateServiceListingState extends State<CreateServiceListing>
                           : _animationController.forward();
                       setState(() {
                         _isAlwaysAvailable = !_isAlwaysAvailable;
+                        deliveryTime = _isAlwaysAvailable.toString();
                         if (_isAlwaysAvailable) {
                           _selectedWeekdays.fillRange(0, 7, true);
                           selectedSubmitWeekdays = weekdays;
@@ -948,7 +919,6 @@ class _CreateServiceListingState extends State<CreateServiceListing>
                           _selectedWeekdays.fillRange(0, 7, false);
                           selectedSubmitWeekdays = <String>[];
                         }
-                        // _updateSelectedDates();
                       });
                     },
                     child: AnimatedBuilder(
@@ -1037,20 +1007,17 @@ class _CreateServiceListingState extends State<CreateServiceListing>
             //     )),
             //   ),
             // const SizedBox(height: 10),
-            if (isRecurring && !_isAlwaysAvailable)
-              // frequency == 'Yes (Regular Service)'
-              // ?
+            if (!_isAlwaysAvailable && isRecurring)
               Wrap(
                   spacing: 8,
                   children: List<Widget>.generate(7, (int index) {
                     return ChoiceChip(
                       label: Text(_getWeekdayName(index)),
-                      selected: _selectedWeekdays[index],
+                      selected: selectedSubmitWeekdays
+                          .contains(_getWeekdayName(index)),
                       selectedColor: proprimaryColor,
                       onSelected: (bool selected) {
                         setState(() {
-                          _selectedWeekdays[index] = selected;
-                          // _updateSelectedDates();
                           if (selectedSubmitWeekdays
                               .contains(_getWeekdayName(index))) {
                             selectedSubmitWeekdays.remove(_getWeekdayName(
@@ -1222,21 +1189,6 @@ class _CreateServiceListingState extends State<CreateServiceListing>
 
     return _AppointmentDataSource(appointments);
   }
-
-  // void _handleCalendarTap(CalendarTapDetails details) {
-  //   if (!_isAlwaysAvailable &&
-  //       details.targetElement == CalendarElement.calendarCell) {
-  //     setState(() {
-  //       DateTime selectedDate = DateTime(
-  //           details.date!.year, details.date!.month, details.date!.day);
-  //       if (_selectedDates.contains(selectedDate)) {
-  //         _selectedDates.remove(selectedDate);
-  //       } else {
-  //         _selectedDates.add(selectedDate);
-  //       }
-  //     });
-  //   }
-  // }
 
   Future<void> _selectTime(BuildContext context, bool isStartTime) async {
     final TimeOfDay? picked = await showTimePicker(
