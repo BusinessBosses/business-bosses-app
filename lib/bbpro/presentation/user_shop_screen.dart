@@ -598,7 +598,7 @@ class _UserShopScreenState extends State<UserShopScreen> {
           _buildContactRow(
             'assets/svgs/website.svg',
             'Virtual Address',
-            '#${shopController.userShop!.appId} Biz-Centre,\nBusiness Bosses, United Kingdom',
+            '#${shopController.userShop!.appId} Biz-Centre,\nBusiness Bosses, ${shopController.userShop!.location}',
             12,
             null,
           ),
@@ -639,7 +639,7 @@ class _UserShopScreenState extends State<UserShopScreen> {
             ),
           if (shopController.userShop!.facebook != null ||
               shopController.userShop!.twitter != null ||
-              shopController.userShop!.linkedin != null ||
+              shopController.userShop!.linkedIn != null ||
               shopController.userShop!.facebook != null)
             Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -741,10 +741,10 @@ class _UserShopScreenState extends State<UserShopScreen> {
                         ),
                       ),
                     },
-                    if (shopController.userShop!.linkedin != null) ...<Widget>{
+                    if (shopController.userShop!.linkedIn != null) ...<Widget>{
                       GestureDetector(
                         onTap: () async {
-                          String? website = shopController.userShop!.linkedin;
+                          String? website = shopController.userShop!.linkedIn;
                           try {
                             if (!website!.startsWith('http://') &&
                                 !website.startsWith('https://')) {
@@ -762,7 +762,40 @@ class _UserShopScreenState extends State<UserShopScreen> {
                               padding: const EdgeInsets.only(right: 8.0),
                               child: CircleAvatar(
                                 backgroundColor: backgroundColor,
-                                child: SvgPicture.asset('assets/svgs/lsl.svg'),
+                                child: SvgPicture.asset(
+                                  'assets/svgs/lsl.svg',
+                                  color: Colors.black,
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    },
+                    if (shopController.userShop!.url != null) ...<Widget>{
+                      GestureDetector(
+                        onTap: () async {
+                          String? website = shopController.userShop!.url;
+                          try {
+                            if (!website!.startsWith('http://') &&
+                                !website.startsWith('https://')) {
+                              website = 'https://$website';
+                            }
+                            final Uri uri = Uri.parse(website);
+                            final bool launched = await launchUrl(uri,
+                                mode: LaunchMode.platformDefault,
+                                webOnlyWindowName: '_self');
+                          } catch (e) {}
+                        },
+                        child: Row(
+                          children: <Widget>[
+                            Padding(
+                              padding: const EdgeInsets.only(right: 8.0),
+                              child: CircleAvatar(
+                                backgroundColor: backgroundColor,
+                                child: SvgPicture.asset(
+                                  'assets/svgs/url.svg',
+                                ),
                               ),
                             ),
                           ],

@@ -176,7 +176,7 @@ class _CreateProductListingState extends State<CreateProductListing> {
                     const SizedBox(height: 16),
                     CustomEditText(
                       caption: 'Product Name',
-                      maxLength: 15,
+                      maxLength: 30,
                       hintText: 'Enter product name here',
                       controller: _productNameController,
                       validator: (String? value) {

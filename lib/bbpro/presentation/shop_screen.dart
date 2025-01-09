@@ -347,16 +347,16 @@ class _ShopScreenState extends State<ShopScreen> {
                                       .toList()[index] as Service;
                                   return GestureDetector(
                                     onTap: () {
-                                      print(service);
-                                      Get.to(() => BookServiceScreen(
-                                            service: service,
-                                            shop: shopController.userShop!,
-                                          ));
-                                      // Get.to(
-                                      //   () => CreateServiceListing(
-                                      //     service: service,
-                                      //   ),
-                                      // );
+                                      // print(service);
+                                      // Get.to(() => BookServiceScreen(
+                                      //       service: service,
+                                      //       shop: shopController.userShop!,
+                                      //     ));
+                                      Get.to(
+                                        () => CreateServiceListing(
+                                          service: service,
+                                        ),
+                                      );
                                     },
                                     child: ServiceCard(
                                       myShop: true,
@@ -428,7 +428,7 @@ class _ShopScreenState extends State<ShopScreen> {
           _buildContactRow(
             'assets/svgs/website.svg',
             'Virtual Address',
-            '#${shopController.shop!.appId} Biz-Centre,\nBusiness Bosses, United Kingdom',
+            '#${shopController.shop!.appId} Biz-Centre,\nBusiness Bosses, ${shopController.shop!.location}',
             12,
             null,
           ),
@@ -484,7 +484,7 @@ class _ShopScreenState extends State<ShopScreen> {
           ),
           if (shopController.shop!.facebook != null ||
               shopController.shop!.twitter != null ||
-              shopController.shop!.linkedin != null ||
+              shopController.shop!.linkedIn != null ||
               shopController.shop!.instagram != null)
             Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -586,10 +586,10 @@ class _ShopScreenState extends State<ShopScreen> {
                         ),
                       ),
                     },
-                    if (shopController.shop!.linkedin != null) ...<Widget>{
+                    if (shopController.shop!.linkedIn != null) ...<Widget>{
                       GestureDetector(
                         onTap: () async {
-                          String? website = shopController.shop!.linkedin;
+                          String? website = shopController.shop!.linkedIn;
                           try {
                             if (!website!.startsWith('http://') &&
                                 !website.startsWith('https://')) {
@@ -614,6 +614,34 @@ class _ShopScreenState extends State<ShopScreen> {
                         ),
                       ),
                     },
+                    if (shopController.shop!.url != null) ...<Widget>{
+                      GestureDetector(
+                        onTap: () async {
+                          String? website = shopController.shop!.url;
+                          try {
+                            if (!website!.startsWith('http://') &&
+                                !website.startsWith('https://')) {
+                              website = 'https://$website';
+                            }
+                            final Uri uri = Uri.parse(website);
+                            final bool launched = await launchUrl(uri,
+                                mode: LaunchMode.platformDefault,
+                                webOnlyWindowName: '_self');
+                          } catch (e) {}
+                        },
+                        child: Row(
+                          children: <Widget>[
+                            Padding(
+                              padding: const EdgeInsets.only(right: 8.0),
+                              child: CircleAvatar(
+                                backgroundColor: backgroundColor,
+                                child: SvgPicture.asset('assets/svgs/url.svg'),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    }
                   ],
                 )
               ],
