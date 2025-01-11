@@ -49,7 +49,7 @@ class _OrderWidgetState extends State<OrderWidget> {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
-        print(widget.order.deliveryDate);
+        print(widget.order.startTime);
         if (widget.isExpanded != true) {
           Get.to(() => ExpandedOrders(
                 order: widget.order,
@@ -229,7 +229,7 @@ class _OrderWidgetState extends State<OrderWidget> {
                                   ),
                                 ),
                                 Text(
-                                  'From ${_formatTime(widget.order.startTime!)} to ${_formatTime(widget.order.endTime!)}',
+                                  'From ${widget.order.startTime!} to ${widget.order.endTime}',
                                   style: const TextStyle(
                                     fontWeight: FontWeight.bold,
                                     fontSize: 13,
