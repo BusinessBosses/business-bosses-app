@@ -246,6 +246,28 @@ class _BookServiceScreenState extends State<BookServiceScreen> {
                   const Text('Select a Date and Time',
                       style:
                           TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
+                  if (widget.service.deliveryTime == 'false')
+                    Row(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: <Widget>[
+                        SvgPicture.asset(
+                          'assets/svgs/info.svg',
+                          height: 13,
+                        ),
+                        const SizedBox(
+                          width: 5,
+                        ),
+                        Expanded(
+                          child: Text(
+                            "This service is available from ${_formatTime(widget.service.availability!['startTime'])} to ${_formatTime(widget.service.availability!['endTime'])}",
+                            style: const TextStyle(
+                              fontSize: 13,
+                              color: Colors.grey,
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
                   if (widget.service.deliveryTime == 'true')
                     Column(children: <Widget>[
                       Row(
@@ -253,12 +275,18 @@ class _BookServiceScreenState extends State<BookServiceScreen> {
                         children: <Widget>[
                           SvgPicture.asset(
                             'assets/svgs/checkfilled.svg',
-                            height: 15,
+                            height: 13,
                           ),
                           const SizedBox(
                             width: 5,
                           ),
-                          const Text('This service is always available'),
+                          const Text(
+                            'This service is always available',
+                            style: TextStyle(
+                              fontSize: 13,
+                              color: Colors.grey,
+                            ),
+                          ),
                         ],
                       ),
                       const SizedBox(height: 10),
@@ -445,7 +473,7 @@ class _BookServiceScreenState extends State<BookServiceScreen> {
                       TextButton(
                         onPressed: () => _selectTime(context, true),
                         child: Text(
-                          'Start Time: ${_startTime?.format(context) ?? '9:00 AM'}',
+                          'Start Time: ${_startTime?.format(context) ?? _formatTime(widget.service.availability!['startTime'])}',
                           style: TextStyle(
                             color:
                                 _startTimeSelected ? Colors.black : Colors.grey,
@@ -455,7 +483,7 @@ class _BookServiceScreenState extends State<BookServiceScreen> {
                       TextButton(
                         onPressed: () => _selectTime(context, false),
                         child: Text(
-                          'End Time: ${_endTime?.format(context) ?? '5:00 PM'}',
+                          'End Time: ${_endTime?.format(context) ?? _formatTime(widget.service.availability!['endTime'])}',
                           style: TextStyle(
                             color:
                                 _endTimeSelected ? Colors.black : Colors.grey,
@@ -646,9 +674,30 @@ class _BookServiceScreenState extends State<BookServiceScreen> {
                 child: ProCustomButton(
                   loading: isSubmit,
                   onPressed: () async {
-                    if (deliveryDate == null) {
+                    // if (deliveryDate == null) {
+                    //   showSnackbar(
+                    //     message: 'Delivery Date is required!',
+                    //     error: true,
+                    //   );
+                    //   return;
+                    // }
+                    if (_startDate == null) {
                       showSnackbar(
-                        message: 'Delivery Date is required!',
+                        message: 'Please select a date!',
+                        error: true,
+                      );
+                      return;
+                    }
+                    if (_startTime == null) {
+                      showSnackbar(
+                        message: 'Please choose your start time!',
+                        error: true,
+                      );
+                      return;
+                    }
+                    if (_endTime == null) {
+                      showSnackbar(
+                        message: 'Please choose your end time!',
                         error: true,
                       );
                       return;
@@ -666,7 +715,8 @@ class _BookServiceScreenState extends State<BookServiceScreen> {
                               widget.service.deliveryMethod!.isNotEmpty
                           ? widget.service.deliveryMethod!.toLowerCase()
                           : 'online',
-                      'deliveryDate': deliveryDate.toString(),
+                      'deliveryDate':
+                          '${_startDate!.toIso8601String().split('T').first} startTime:${_startTime!.format(context)} endTime:${_endTime!.format(context)}',
                       'paymentMethod': widget.service.paymentMethod != null &&
                               widget.service.paymentMethod!.isNotEmpty
                           ? widget.service.paymentMethod!
@@ -828,7 +878,8 @@ class _BookServiceScreenState extends State<BookServiceScreen> {
         });
       } else {
         showSnackbar(
-          message: 'Please select a time within the available hours.',
+          message:
+              'Please select a time between ${_formatTime(widget.service.availability!['startTime'])} and ${_formatTime(widget.service.availability!['endTime'])}',
           error: true,
         );
       }
