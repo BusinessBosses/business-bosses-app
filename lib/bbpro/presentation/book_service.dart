@@ -716,6 +716,8 @@ class _BookServiceScreenState extends State<BookServiceScreen> {
                           ? widget.service.deliveryMethod!.toLowerCase()
                           : 'online',
                       'deliveryDate': '$_startDate',
+                      'startTime': _startTime,
+                      'endTime': _endTime,
                       'paymentMethod': widget.service.paymentMethod != null &&
                               widget.service.paymentMethod!.isNotEmpty
                           ? widget.service.paymentMethod!
