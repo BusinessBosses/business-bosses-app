@@ -196,7 +196,7 @@ class _OrderWidgetState extends State<OrderWidget> {
                           Row(
                             children: <Widget>[
                               const Text(
-                                'Order Delivery Date: ',
+                                'Delivery Date: ',
                                 style: TextStyle(
                                   fontWeight: FontWeight.normal,
                                   fontSize: 13,
