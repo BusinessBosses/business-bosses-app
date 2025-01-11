@@ -45,6 +45,7 @@ class _OrderWidgetState extends State<OrderWidget> {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
+        print(widget.order.deliveryDate);
         if (widget.isExpanded != true) {
           Get.to(() => ExpandedOrders(
                 order: widget.order,
@@ -195,7 +196,7 @@ class _OrderWidgetState extends State<OrderWidget> {
                           Row(
                             children: <Widget>[
                               const Text(
-                                'Order Date: ',
+                                'Order Delivery Date: ',
                                 style: TextStyle(
                                   fontWeight: FontWeight.normal,
                                   fontSize: 13,
@@ -213,6 +214,27 @@ class _OrderWidgetState extends State<OrderWidget> {
                               ),
                             ],
                           ),
+                          // Row(
+                          //   children: <Widget>[
+                          //     const Text(
+                          //       'Order Delivery Time: ',
+                          //       style: TextStyle(
+                          //         fontWeight: FontWeight.normal,
+                          //         fontSize: 13,
+                          //       ),
+                          //     ),
+                          //     Text(
+                          //       DateFormat('dd MMM yyyy')
+                          //           .format(widget.order.deliveryDate ??
+                          //               widget.order.createdAt)
+                          //           .toString(),
+                          //       style: const TextStyle(
+                          //         fontWeight: FontWeight.bold,
+                          //         fontSize: 13,
+                          //       ),
+                          //     ),
+                          //   ],
+                          // ),
                           if (widget.isExpanded == true)
                             Row(
                               children: <Widget>[
