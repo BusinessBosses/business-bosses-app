@@ -347,46 +347,102 @@ class _CreateProductListingState extends State<CreateProductListing> {
                       ),
                     ),
                     const SizedBox(height: 16),
-                    if (_selectedImages.isNotEmpty)
+                    if (_selectedImages.isNotEmpty || updateImages!.isNotEmpty)
                       Padding(
                         padding: const EdgeInsets.symmetric(horizontal: 15.0),
-                        child: GridView.builder(
-                          shrinkWrap: true,
-                          physics: const NeverScrollableScrollPhysics(),
-                          gridDelegate:
-                              const SliverGridDelegateWithFixedCrossAxisCount(
-                            crossAxisCount: 3,
-                            crossAxisSpacing: 4,
-                            mainAxisSpacing: 4,
-                          ),
-                          itemCount: _selectedImages.length,
-                          itemBuilder: (BuildContext context, int index) {
-                            return Image.file(
-                              _selectedImages[index],
-                              fit: BoxFit.cover,
-                            );
-                          },
-                        ),
-                      ),
-                    if (updateImages!.isNotEmpty)
-                      Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 15.0),
-                        child: GridView.builder(
-                          shrinkWrap: true,
-                          physics: const NeverScrollableScrollPhysics(),
-                          gridDelegate:
-                              const SliverGridDelegateWithFixedCrossAxisCount(
-                            crossAxisCount: 3,
-                            crossAxisSpacing: 4,
-                            mainAxisSpacing: 4,
-                          ),
-                          itemCount: updateImages!.length,
-                          itemBuilder: (BuildContext context, int index) {
-                            return Image.network(
-                              updateImages![index],
-                              fit: BoxFit.cover,
-                            );
-                          },
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: <Widget>[
+                            if (_selectedImages.isNotEmpty)
+                              GridView.builder(
+                                shrinkWrap: true,
+                                physics: const NeverScrollableScrollPhysics(),
+                                gridDelegate:
+                                    const SliverGridDelegateWithFixedCrossAxisCount(
+                                  crossAxisCount: 3,
+                                  crossAxisSpacing: 4,
+                                  mainAxisSpacing: 4,
+                                ),
+                                itemCount: _selectedImages.length,
+                                itemBuilder: (BuildContext context, int index) {
+                                  return Stack(
+                                    children: <Widget>[
+                                      Positioned.fill(
+                                        child: Image.file(
+                                          _selectedImages[index],
+                                          fit: BoxFit.cover,
+                                        ),
+                                      ),
+                                      Positioned(
+                                        top: 5,
+                                        right: 5,
+                                        child: GestureDetector(
+                                          onTap: () {
+                                            setState(() {
+                                              _selectedImages.removeAt(index);
+                                            });
+                                          },
+                                          child: const CircleAvatar(
+                                            backgroundColor: Colors.red,
+                                            radius: 12,
+                                            child: Icon(
+                                              Icons.close,
+                                              color: Colors.white,
+                                              size: 16,
+                                            ),
+                                          ),
+                                        ),
+                                      ),
+                                    ],
+                                  );
+                                },
+                              ),
+                            const SizedBox(height: 16),
+                            if (updateImages!.isNotEmpty)
+                              GridView.builder(
+                                shrinkWrap: true,
+                                physics: const NeverScrollableScrollPhysics(),
+                                gridDelegate:
+                                    const SliverGridDelegateWithFixedCrossAxisCount(
+                                  crossAxisCount: 3,
+                                  crossAxisSpacing: 4,
+                                  mainAxisSpacing: 4,
+                                ),
+                                itemCount: updateImages!.length,
+                                itemBuilder: (BuildContext context, int index) {
+                                  return Stack(
+                                    children: <Widget>[
+                                      Positioned.fill(
+                                        child: Image.network(
+                                          updateImages![index],
+                                          fit: BoxFit.cover,
+                                        ),
+                                      ),
+                                      Positioned(
+                                        top: 5,
+                                        right: 5,
+                                        child: GestureDetector(
+                                          onTap: () {
+                                            setState(() {
+                                              updateImages!.removeAt(index);
+                                            });
+                                          },
+                                          child: const CircleAvatar(
+                                            backgroundColor: Colors.red,
+                                            radius: 12,
+                                            child: Icon(
+                                              Icons.close,
+                                              color: Colors.white,
+                                              size: 16,
+                                            ),
+                                          ),
+                                        ),
+                                      ),
+                                    ],
+                                  );
+                                },
+                              ),
+                          ],
                         ),
                       ),
                     CustomEditText(
@@ -583,11 +639,6 @@ class _CreateProductListingState extends State<CreateProductListing> {
                           showSnackbar(message: 'Enter quantity', error: true);
                           return;
                         }
-
-                        // if (_selectedImages.isEmpty) {
-                        //   showSnackbar(message: 'Select a product image', error: true);
-                        //   return;
-                        // }
                         if (_formKey.currentState?.validate() ?? false) {
                           _formKey.currentState?.save();
 
@@ -679,29 +730,4 @@ class _CreateProductListingState extends State<CreateProductListing> {
       ),
     );
   }
-
-  // String _formatDate(DateTime? date) {
-  //   if (date == null) return 'Select Date';
-  //   return DateFormat('yyyy-MM-dd').format(date);
-  // }
-
-  // Future<void> _selectDate(BuildContext context, bool isStartDate) async {
-  //   final DateTime? pickedDate = await showDatePicker(
-  //     context: context,
-  //     initialDate: DateTime.now(),
-  //     firstDate: DateTime(2000),
-  //     lastDate: DateTime(2101),
-  //   );
-
-  //   if (pickedDate != null &&
-  //       pickedDate != (isStartDate ? startDate : endDate)) {
-  //     setState(() {
-  //       if (isStartDate) {
-  //         startDate = pickedDate;
-  //       } else {
-  //         endDate = pickedDate;
-  //       }
-  //     });
-  //   }
-  // }
 }

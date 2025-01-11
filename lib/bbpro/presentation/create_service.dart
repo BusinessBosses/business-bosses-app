@@ -422,11 +422,14 @@ class _CreateServiceListingState extends State<CreateServiceListing>
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: <Widget>[
-                        Text('Add Attachment',
-                            style: TextStyle(
-                                fontSize: 13,
-                                color: Colors.black,
-                                fontWeight: FontWeight.w600)),
+                        Text(
+                          'Add Attachment',
+                          style: TextStyle(
+                            fontSize: 13,
+                            color: Colors.black,
+                            fontWeight: FontWeight.w600,
+                          ),
+                        ),
                         Icon(Icons.image),
                       ],
                     ),
