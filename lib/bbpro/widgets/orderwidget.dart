@@ -229,7 +229,7 @@ class _OrderWidgetState extends State<OrderWidget> {
                                   ),
                                 ),
                                 Text(
-                                  'From ${widget.order.startTime!} to ${widget.order.endTime}',
+                                  'From ${_formatTime(widget.order.startTime!)} to ${_formatTime(widget.order.endTime!)}',
                                   style: const TextStyle(
                                     fontWeight: FontWeight.bold,
                                     fontSize: 13,
