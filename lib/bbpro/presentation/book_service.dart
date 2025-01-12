@@ -715,8 +715,9 @@ class _BookServiceScreenState extends State<BookServiceScreen> {
                               widget.service.deliveryMethod!.isNotEmpty
                           ? widget.service.deliveryMethod!.toLowerCase()
                           : 'online',
-                      'deliveryDate':
-                          '${_startDate!.toIso8601String().split('T').first} startTime:${_startTime!.format(context)} endTime:${_endTime!.format(context)}',
+                      'deliveryDate': '$_startDate',
+                      'startTime': _startTime!.format(context),
+                      'endTime': _endTime!.format(context),
                       'paymentMethod': widget.service.paymentMethod != null &&
                               widget.service.paymentMethod!.isNotEmpty
                           ? widget.service.paymentMethod!
@@ -726,6 +727,8 @@ class _BookServiceScreenState extends State<BookServiceScreen> {
                       'invoiceOption': 'send_with_payment_link',
                       'status': 'pending'
                     };
+
+                    // print(orderData);
 
                     bool response = await orderController.addOrder(orderData);
                     if (response) {

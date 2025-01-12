@@ -681,29 +681,27 @@ class _MyProfileScreenState extends State<MyProfileScreen> {
                                           },
                                         ),
                                       )
-                                  ],
+                                  ]),
                                 ),
-                              ),
-                            ],
+                              ],
+                            ),
                           ),
                         ),
                       ),
-                    ),
-                    const BottomBar(
-                      activeIndex: 4,
-                    ),
-                  ],
+                      const BottomBar(
+                        activeIndex: 4,
+                      )
+                    ],
+                  ),
                 ),
-              ),
-              profileController.myProfile.isSubscribed
-                  ? SizedBox(
-                      height: MediaQuery.of(context).size.height,
-                      width: MediaQuery.of(context).size.width,
-                      child: Bottomnavscreen(
-                        initialindex: 0,
-                        onTabChanged: (int index) {
-                          setState(
-                            () {
+                profileController.myProfile.isSubscribed
+                    ? SizedBox(
+                        height: MediaQuery.of(context).size.height,
+                        width: MediaQuery.of(context).size.width,
+                        child: Bottomnavscreen(
+                          initialindex: 0,
+                          onTabChanged: (int index) {
+                            setState(() {
                               _selectedIndex = index;
                             },
                           );

@@ -430,6 +430,8 @@ class _RowStatusCardState extends State<RowStatusCard> {
                       child: ListView.builder(
                         itemCount: filteredOrders.length,
                         shrinkWrap: true,
+                        reverse:
+                            true, // This will show the most recent items first
                         itemBuilder: (BuildContext context, int index) {
                           return Padding(
                             padding: const EdgeInsets.only(bottom: 12),
