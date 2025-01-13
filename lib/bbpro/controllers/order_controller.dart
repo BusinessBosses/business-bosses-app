@@ -88,6 +88,7 @@ class OrderController extends GetxController {
       // Convert the response data to a Client object and add it to the list
       return true;
     } else {
+      print('Error: ${response.message}');
       return false;
     }
   }

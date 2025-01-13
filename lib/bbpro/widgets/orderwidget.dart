@@ -49,7 +49,7 @@ class _OrderWidgetState extends State<OrderWidget> {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
-        print(widget.order.deliveryDate);
+        print(widget.order.startTime);
         if (widget.isExpanded != true) {
           Get.to(() => ExpandedOrders(
                 order: widget.order,
