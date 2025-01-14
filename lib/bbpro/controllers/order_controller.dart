@@ -24,25 +24,26 @@ class OrderController extends GetxController {
     ApiResponseModel response =
         await ApiService.get(path: 'orders/shop-orders/$shopId');
     if (response.success) {
-    // Map and sort orders by createdAt
-    orders.addAll(response.data['rows']
-        .map((order) => Order.fromJson(order))
-        .toList()
-        ..sort((a, b) => b.createdAt.compareTo(a.createdAt))); // Newest at the top
-  }
+      // Map and sort orders by createdAt
+      orders.addAll(response.data['rows']
+          .map((dynamic order) => Order.fromJson(order))
+          .toList()
+        ..sort((Order a, Order b) =>
+            b.createdAt.compareTo(a.createdAt))); // Newest at the top
+    }
 
-  // Initialize ordersStatus map
-  for (OrderStatus status in OrderStatus.values) {
-    ordersStatus[status] = <Order>[];
-  }
+    // Initialize ordersStatus map
+    for (OrderStatus status in OrderStatus.values) {
+      ordersStatus[status] = <Order>[];
+    }
 
-  // Group orders by status and populate allorders
-  for (OrderStatus status in OrderStatus.values) {
-    List<Order> statusOrders =
-        orders.where((Order order) => order.status == status).toList();
-    ordersStatus[status] = statusOrders;
-    allorders.addAll(statusOrders); // Add tasks to alltasks
-  }
+    // Group orders by status and populate allorders
+    for (OrderStatus status in OrderStatus.values) {
+      List<Order> statusOrders =
+          orders.where((Order order) => order.status == status).toList();
+      ordersStatus[status] = statusOrders;
+      allorders.addAll(statusOrders); // Add tasks to alltasks
+    }
     loading(false);
     update();
   }
