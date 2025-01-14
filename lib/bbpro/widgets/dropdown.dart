@@ -102,6 +102,7 @@ class CustomDropdownWidget extends StatefulWidget {
   final Widget? secondarysection;
   final double? padding;
   final bool? isorder;
+  final Color? iconcolor;
 
   const CustomDropdownWidget({
     super.key,
@@ -115,6 +116,7 @@ class CustomDropdownWidget extends StatefulWidget {
     this.secondarysection,
     this.isorder,
     this.padding,
+    this.iconcolor,
   });
 
   @override
@@ -199,7 +201,7 @@ class _CustomDropdownWidgetState extends State<CustomDropdownWidget> {
                       isExpanded: true,
                       icon: SvgPicture.asset(
                         widget.iconName,
-                        color: proprimaryColor,
+                        color: widget.iconcolor ?? proprimaryColor,
                       ),
                       validator: widget.validator,
                     ),
@@ -253,7 +255,7 @@ class _CustomDropdownWidgetState extends State<CustomDropdownWidget> {
                     isExpanded: true,
                     icon: SvgPicture.asset(
                       widget.iconName,
-                      color: proprimaryColor,
+                      color: widget.iconcolor ?? proprimaryColor,
                     ),
                     validator: widget.validator,
                   ),
