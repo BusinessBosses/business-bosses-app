@@ -371,28 +371,29 @@ class _ClientsScreenState extends State<ClientsScreen>
                         ],
                       ),
                     ),
-                    PopupMenuItem<String>(
-                      value: 'Item 3',
-                      child: Row(
-                        children: <Widget>[
-                          SvgPicture.asset(
-                            'assets/svgs/megaphone.svg',
-                            height: 18,
-                            colorFilter: const ColorFilter.mode(
-                              textColor,
-                              BlendMode.srcIn,
+                    if (profileController.myProfile.isSubscribed)
+                      PopupMenuItem<String>(
+                        value: 'Item 3',
+                        child: Row(
+                          children: <Widget>[
+                            SvgPicture.asset(
+                              'assets/svgs/megaphone.svg',
+                              height: 18,
+                              colorFilter: const ColorFilter.mode(
+                                textColor,
+                                BlendMode.srcIn,
+                              ),
                             ),
-                          ),
-                          const SizedBox(width: 8),
-                          const Text(
-                            'Create a Campaign',
-                            style: TextStyle(
-                              fontSize: 13,
+                            const SizedBox(width: 8),
+                            const Text(
+                              'Create a Campaign',
+                              style: TextStyle(
+                                fontSize: 13,
+                              ),
                             ),
-                          ),
-                        ],
+                          ],
+                        ),
                       ),
-                    ),
                   ];
                 },
                 offset: const Offset(50, 50),
