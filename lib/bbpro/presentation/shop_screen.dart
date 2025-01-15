@@ -206,7 +206,7 @@ class _ShopScreenState extends State<ShopScreen> {
                   unselectedLabelColor: Colors.grey,
                   indicatorColor: Colors.black,
                   tabs: <Widget>[
-                    Tab(text: 'Listings'),
+                    Tab(text: 'Showcase'),
                     Tab(text: 'Reviews'),
                     Tab(text: 'Contact'),
                   ]),

@@ -41,7 +41,7 @@ class _OrderSummaryWidgetState extends State<OrderSummaryWidget> {
               style: TextStyle(
                 fontWeight: FontWeight.w700,
                 fontSize: 16,
-                color: proprimaryColor,
+                color: textColor,
               ),
             ),
             const SizedBox(height: 16),
@@ -112,8 +112,8 @@ class _OrderSummaryWidgetState extends State<OrderSummaryWidget> {
                 Text(
                   '${widget.currency} ${widget.total}',
                   style: const TextStyle(
-                      fontWeight: FontWeight.bold,
-                      color: proprimaryColor,
+                      fontWeight: FontWeight.w900,
+                      color: Colors.black,
                       fontSize: 18),
                 ),
               ],

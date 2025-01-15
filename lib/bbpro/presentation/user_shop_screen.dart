@@ -101,11 +101,11 @@ class _UserShopScreenState extends State<UserShopScreen> {
             child: Column(
               children: <Widget>[
                 CircleAvatar(
-                  radius: 18,
+                  radius: 21,
                   backgroundColor: backgroundColor,
                   child: SvgPicture.asset(
                     action['icon']!,
-                    height: 17,
+                    height: 20,
                   ),
                 ),
                 const SizedBox(height: 3),
@@ -147,12 +147,35 @@ class _UserShopScreenState extends State<UserShopScreen> {
                     Text(
                       '@${widget.user.username.toLowerCase()}',
                       style: const TextStyle(
-                        color: proprimaryColor,
+                        color: textColor,
                         fontWeight: FontWeight.bold,
                         fontSize: 14,
                       ),
                     ),
-                    const Text('View Profile', style: TextStyle(fontSize: 10)),
+                    Container(
+                      decoration: BoxDecoration(
+                          color: backgroundColor,
+                          borderRadius: BorderRadius.circular(radius)),
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 10.0, vertical: 3),
+                      child: const Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: <Widget>[
+                          Text(
+                            'View Profile',
+                            style: TextStyle(
+                              fontSize: 10,
+                              color: textColor,
+                            ),
+                          ),
+                          Icon(
+                            Icons.chevron_right,
+                            color: textColor,
+                            size: 10,
+                          ),
+                        ],
+                      ),
+                    ),
                   ],
                 ),
               ),
@@ -376,7 +399,7 @@ class _UserShopScreenState extends State<UserShopScreen> {
                                     unselectedLabelColor: Colors.grey,
                                     indicatorColor: Colors.black,
                                     tabs: <Widget>[
-                                      Tab(text: 'Listings'),
+                                      Tab(text: 'Showcase'),
                                       Tab(text: 'Reviews'),
                                       Tab(text: 'Contact'),
                                     ]),

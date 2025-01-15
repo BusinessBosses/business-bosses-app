@@ -111,12 +111,35 @@ class _BookServiceScreenState extends State<BookServiceScreen> {
                 Text(
                   widget.service.shop!.name,
                   style: const TextStyle(
-                    color: proprimaryColor,
+                    color: textColor,
                     fontWeight: FontWeight.bold,
                     fontSize: 14,
                   ),
                 ),
-                const Text('Visit Biz-Center', style: TextStyle(fontSize: 10)),
+                Container(
+                  decoration: BoxDecoration(
+                      color: backgroundColor,
+                      borderRadius: BorderRadius.circular(radius)),
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 10.0, vertical: 3),
+                  child: const Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: <Widget>[
+                      Text(
+                        'Visit Biz-Center',
+                        style: TextStyle(
+                          fontSize: 10,
+                          color: textColor,
+                        ),
+                      ),
+                      Icon(
+                        Icons.chevron_right,
+                        color: textColor,
+                        size: 10,
+                      ),
+                    ],
+                  ),
+                ),
               ],
             ),
           ),
@@ -157,7 +180,7 @@ class _BookServiceScreenState extends State<BookServiceScreen> {
                             Text(
                               '${widget.shop.currency}${((widget.service.price * (1 - widget.service.discount / 100)) * 100).round() / 100}',
                               style: const TextStyle(
-                                color: proprimaryColor,
+                                color: Colors.black,
                                 fontWeight: FontWeight.bold,
                                 fontSize: 16,
                               ),
@@ -177,7 +200,7 @@ class _BookServiceScreenState extends State<BookServiceScreen> {
                         Text(
                           '${widget.shop.currency}${widget.service.price.toStringAsFixed(2)}',
                           style: const TextStyle(
-                            color: proprimaryColor,
+                            color: Colors.black,
                             fontWeight: FontWeight.bold,
                             fontSize: 16,
                           ),
@@ -185,20 +208,14 @@ class _BookServiceScreenState extends State<BookServiceScreen> {
                     ],
                   ),
                   const SizedBox(height: 15),
-                  const Text(
-                    'Description',
-                    style: TextStyle(
-                      fontSize: 16,
-                      fontWeight: FontWeight.w600,
-                      color: textColor,
-                    ),
-                  ),
                   DetectableText(
                     text: widget.service.description,
                     detectionRegExp: detectionRegExp(hashtag: false)!,
                     detectedStyle: bodyText2.copyWith(color: Colors.blue),
-                    moreStyle: bodyText2.copyWith(color: proprimaryColor),
-                    lessStyle: bodyText2.copyWith(color: proprimaryColor),
+                    moreStyle: bodyText2.copyWith(
+                        color: Colors.black, fontWeight: FontWeight.bold),
+                    lessStyle: bodyText2.copyWith(
+                        color: Colors.black, fontWeight: FontWeight.bold),
                     trimLength: 100,
                     trimExpandedText: '  show less',
                     basicStyle: bodyText2.copyWith(color: textColor),
@@ -219,8 +236,10 @@ class _BookServiceScreenState extends State<BookServiceScreen> {
                       text: widget.service.notes ?? 'No note added!',
                       detectionRegExp: detectionRegExp(hashtag: false)!,
                       detectedStyle: bodyText2.copyWith(color: Colors.blue),
-                      moreStyle: bodyText2.copyWith(color: proprimaryColor),
-                      lessStyle: bodyText2.copyWith(color: proprimaryColor),
+                      moreStyle: bodyText2.copyWith(
+                          color: Colors.black, fontWeight: FontWeight.bold),
+                      lessStyle: bodyText2.copyWith(
+                          color: Colors.black, fontWeight: FontWeight.bold),
                       trimLength: 100,
                       trimExpandedText: '  show less',
                       basicStyle: bodyText2.copyWith(color: textColor),
@@ -299,7 +318,7 @@ class _BookServiceScreenState extends State<BookServiceScreen> {
                                   : DateTime.now()),
                           selectionDecoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(0),
-                            color: proprimaryColor.withOpacity(0.5),
+                            color: Colors.black.withOpacity(0.5),
                           ),
                           todayTextStyle: const TextStyle(color: Colors.black),
                           todayHighlightColor: Colors.transparent,
@@ -370,7 +389,7 @@ class _BookServiceScreenState extends State<BookServiceScreen> {
                         ),
                         selectionDecoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(0),
-                          color: proprimaryColor.withOpacity(0.5),
+                          color: Colors.black.withOpacity(0.5),
                         ),
                         todayTextStyle: const TextStyle(color: Colors.black),
                         todayHighlightColor: Colors.transparent,
@@ -427,7 +446,7 @@ class _BookServiceScreenState extends State<BookServiceScreen> {
                           ),
                           selectionDecoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(0),
-                            color: proprimaryColor.withOpacity(0.5),
+                            color: Colors.black.withOpacity(0.5),
                           ),
                           todayTextStyle: const TextStyle(color: Colors.black),
                           todayHighlightColor: Colors.transparent,
@@ -672,6 +691,7 @@ class _BookServiceScreenState extends State<BookServiceScreen> {
               child: SizedBox(
                 width: double.infinity,
                 child: ProCustomButton(
+                  color: Colors.black,
                   loading: isSubmit,
                   onPressed: () async {
                     // if (deliveryDate == null) {
