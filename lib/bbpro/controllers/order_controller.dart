@@ -25,11 +25,11 @@ class OrderController extends GetxController {
         await ApiService.get(path: 'orders/shop-orders/$shopId');
     if (response.success) {
       // Map and sort orders by createdAt
-      orders.addAll(response.data['rows']
+      orders.addAll((response.data['rows'] as List<dynamic>)
           .map((dynamic order) => Order.fromJson(order))
           .toList()
         ..sort((Order a, Order b) =>
-            b.createdAt.compareTo(a.createdAt))); // Newest at the top
+            a.createdAt.compareTo(b.createdAt))); // Newest at the top
     }
 
     // Initialize ordersStatus map
