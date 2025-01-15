@@ -222,7 +222,7 @@ class _SetupshopState extends State<Setupshop> with TickerProviderStateMixin {
       cslController.text = widget.shop!.url ?? '';
       _populatePaymentMethods(widget.shop!.payments);
     } else {
-      shopController.initShop().then((bool value) {
+      shopController.initShopData().then((bool value) {
         if (mounted) {
           loading = false;
           setState(() {});

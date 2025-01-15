@@ -43,11 +43,16 @@ class ShopController extends GetxController {
           ...response.data['rows'][0],
           'user': profileController.myProfile.toMap()
         });
+        return true;
       }
     } else {
       return false;
     }
-    if (response.data['rows'].isNotEmpty) {
+  }
+
+  Future<bool> initShopData() async {
+    final bool response = await initShop();
+    if (response) {
       ApiResponseModel productResponse = await ApiService.get(
         path: 'goods/user-products/${profileController.myProfile.uid}',
       );
