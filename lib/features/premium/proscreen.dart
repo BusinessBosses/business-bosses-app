@@ -1,9 +1,11 @@
+import 'package:business_bosses_v2/bbpro/controllers/shop_controller.dart';
 import 'package:business_bosses_v2/bbpro/widgets/button.dart';
 import 'package:business_bosses_v2/features/home/widgets/bottom_bar.dart';
 import 'package:business_bosses_v2/features/live_event/presentation/live_event.dart';
 import 'package:business_bosses_v2/features/posts/presentation/create_post_screen.dart';
 import 'package:business_bosses_v2/features/premium/profeatures.dart';
 import 'package:business_bosses_v2/features/premium/unlockedfeatures.dart';
+import 'package:business_bosses_v2/features/profile/presentation/my_profile_screen.dart';
 import 'package:business_bosses_v2/features/profile/widgets/boss_of_the_week_tile.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
@@ -29,6 +31,7 @@ class _ProScreenState extends State<ProScreen> with TickerProviderStateMixin {
   bool isSubscribed = false;
   bool loading = false;
   final ProfileController profileController = Get.find();
+  final ShopController shopController = Get.find();
   final List<String> reviews = <String>[
     'Best app ever! So easy to use and manage everything.',
     'This app transformed my business! Highly recommend.',
@@ -47,8 +50,8 @@ class _ProScreenState extends State<ProScreen> with TickerProviderStateMixin {
   @override
   void initState() {
     super.initState();
-    protabbarcontroller = TabController(
-        length: profileController.myProfile.isSubscribed ? 2 : 3, vsync: this);
+    protabbarcontroller =
+        TabController(length: shopController.shop != null ? 2 : 3, vsync: this);
   }
 
   @override
@@ -70,7 +73,7 @@ class _ProScreenState extends State<ProScreen> with TickerProviderStateMixin {
               unselectedLabelColor: Colors.grey, // Set unselected label color
               controller: protabbarcontroller,
               tabs: <Widget>[
-                if (!profileController.myProfile.isSubscribed)
+                if (shopController.shop == null)
                   const Tab(
                     child: FittedBox(
                       child: Text(
@@ -112,8 +115,7 @@ class _ProScreenState extends State<ProScreen> with TickerProviderStateMixin {
                 child: TabBarView(
                     controller: protabbarcontroller,
                     children: <Widget>[
-                  if (!profileController.myProfile.isSubscribed)
-                    const ProSubscribeSection(),
+                  if (shopController.shop == null) const ProSubscribeSection(),
                   Column(
                     children: <Widget>[
                       const SizedBox(
@@ -226,30 +228,32 @@ class _ProSubscribeSectionState extends State<ProSubscribeSection> {
   static final List<ProFeatureItem> _profeatures = <ProFeatureItem>[
     ProFeatureItem(
         iconPath: 'assets/svgs/checkfilled.svg',
-        caption: 'Biz-Centre',
-        subtext: 'Your business website to convert visits into sales'),
+        caption: 'Your Own Biz-Centre',
+        subtext:
+            'Showcase your products/services and convert visits into sales'),
     ProFeatureItem(
       iconPath: 'assets/svgs/checkfilled.svg',
-      caption: 'Earn more',
-      subtext: 'Handle orders from different sales channel',
+      caption: 'Monetize Your Expertise',
+      subtext:
+          'Launch your brand as a coach, consultant, freelancer, solopreneur or a small business owner',
     ),
     ProFeatureItem(
       iconPath: 'assets/svgs/checkfilled.svg',
-      caption: 'Digital Assistant',
+      caption: 'Smart Business Tools',
       subtext: 'Manage inventory, tasks, schedules & expenses',
     ),
     ProFeatureItem(
         iconPath: 'assets/svgs/checkfilled.svg',
-        caption: 'More Connections & Referrals',
-        subtext: 'Get noticed in marketplace & posts search'),
+        caption: 'Centralised Dashboard',
+        subtext: 'Track all orders from different sales channel'),
     ProFeatureItem(
         iconPath: 'assets/svgs/checkfilled.svg',
-        caption: 'Marketing Messages & Campaigns',
-        subtext: 'Send marketing messages & grow customer base'),
+        caption: 'Customer Engagement',
+        subtext: 'Manage customer records and communications'),
     ProFeatureItem(
         iconPath: 'assets/svgs/checkfilled.svg',
-        caption: 'Exclusive Premium Offers',
-        subtext: 'FREE virtual address, monthly rewards & more!'),
+        caption: 'Virtual Office Address',
+        subtext: 'Boost your professional image'),
   ];
   String paymentMethodId = 'Proyear';
   bool loading = false;
@@ -274,7 +278,7 @@ class _ProSubscribeSectionState extends State<ProSubscribeSection> {
                       SizedBox(
                         height: 25,
                       ),
-                      Text('Upgrade to a Pro Boss Experience',
+                      Text('Your Business Simplified',
                           style: TextStyle(
                             fontSize: 20,
                             fontWeight: FontWeight.bold,
@@ -287,16 +291,16 @@ class _ProSubscribeSectionState extends State<ProSubscribeSection> {
                             children: <InlineSpan>[
                               TextSpan(
                                 text:
-                                    'Everything you need to manage and grow your business 10X faster, ',
+                                    'Everything You Need to Showcase and Manage Your Business, All in One Place. ',
                                 style: TextStyle(
-                                    fontSize: 15, fontWeight: FontWeight.w600),
+                                    fontSize: 14, fontWeight: FontWeight.w600),
                               ),
                               TextSpan(
-                                text: 'all in one place.',
+                                text: 'Free and Easy to Setup.',
                                 style: TextStyle(
                                     fontSize: 15,
-                                    fontWeight: FontWeight.w600,
-                                    color: primaryColorLT),
+                                    fontWeight: FontWeight.w800,
+                                    color: Colors.blueGrey),
                               ),
                             ],
                           ),
@@ -323,7 +327,7 @@ class _ProSubscribeSectionState extends State<ProSubscribeSection> {
                           height: 5,
                         ),
                         const Text(
-                          'What\'s included',
+                          'Benefits of My-Biz',
                           style: TextStyle(
                               fontSize: 16, fontWeight: FontWeight.bold),
                         ),
@@ -353,230 +357,240 @@ class _ProSubscribeSectionState extends State<ProSubscribeSection> {
                     padding: const EdgeInsets.symmetric(horizontal: 0),
                     child: ProCustomButton(
                       color: primaryColorLT,
-                      text: 'Start your \$1/Month Trial',
+                      text: 'Setup',
                       onPressed: () {
-                        showModalBottomSheet<void>(
-                          context: context,
-                          shape: const RoundedRectangleBorder(
-                            borderRadius: BorderRadius.vertical(
-                              top: Radius.circular(25.0),
-                            ),
-                          ),
-                          builder: (BuildContext context) {
-                            return StatefulBuilder(
-                              // Wrap the entire bottom sheet content with StatefulBuilder
-                              builder:
-                                  (BuildContext context, StateSetter setState) {
-                                return Container(
-                                  padding: const EdgeInsets.symmetric(
-                                      horizontal: 20, vertical: 20),
-                                  child: Column(
-                                    mainAxisSize: MainAxisSize.min,
-                                    children: <Widget>[
-                                      Row(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.spaceBetween,
-                                        children: <Widget>[
-                                          const Text(
-                                            'Choose your plan',
-                                            style: TextStyle(
-                                              fontSize: 16,
-                                              fontWeight: FontWeight.bold,
-                                            ),
-                                          ),
-                                          IconButton(
-                                            icon: const Icon(
-                                              Icons.close,
-                                              color: Colors.black54,
-                                            ),
-                                            onPressed: () {
-                                              Navigator.pop(context);
-                                            },
-                                          ),
-                                        ],
-                                      ),
-                                      const SizedBox(
-                                        height: 20,
-                                      ),
-                                      InkWell(
-                                        onTap: () {
-                                          setState(() {
-                                            paymentMethodId = 'Promonth';
-                                          });
-                                        },
-                                        child: Container(
-                                          decoration: BoxDecoration(
-                                            border: Border.all(
-                                              color:
-                                                  paymentMethodId == 'Promonth'
-                                                      ? primaryColorLT
-                                                      : Colors.transparent,
-                                              width: 2,
-                                            ),
-                                            borderRadius:
-                                                BorderRadius.circular(15),
-                                          ),
-                                          child: RadioListTile<String>(
-                                            contentPadding: EdgeInsets.zero,
-                                            title: const Row(
-                                              mainAxisAlignment:
-                                                  MainAxisAlignment
-                                                      .spaceBetween,
-                                              children: <Widget>[
-                                                Text(
-                                                  'Pro Monthly',
-                                                  style: TextStyle(
-                                                      fontWeight:
-                                                          FontWeight.w600,
-                                                      fontSize: 16),
-                                                ),
-                                                Text('\$14.99/month',
-                                                    style: TextStyle(
-                                                        fontWeight:
-                                                            FontWeight.w200,
-                                                        fontSize: 16)),
-                                              ],
-                                            ),
-                                            value: 'Promonth',
-                                            groupValue: paymentMethodId,
-                                            onChanged: (String? value) {
-                                              setState(() {
-                                                paymentMethodId = value!;
-                                              });
-                                            },
-                                          ),
-                                        ),
-                                      ),
-                                      Container(
-                                        decoration: BoxDecoration(
-                                          border: Border.all(
-                                            color: paymentMethodId == 'Proyear'
-                                                ? primaryColorLT
-                                                : Colors.transparent,
-                                            width: 2,
-                                          ),
-                                          borderRadius:
-                                              BorderRadius.circular(15),
-                                        ),
-                                        child: RadioListTile<String>(
-                                          contentPadding: EdgeInsets.zero,
-                                          title: const Row(
-                                            mainAxisAlignment:
-                                                MainAxisAlignment.spaceBetween,
-                                            children: <Widget>[
-                                              Text(
-                                                'Pro Yearly',
-                                                style: TextStyle(
-                                                    fontWeight: FontWeight.w600,
-                                                    fontSize: 16),
-                                              ),
-                                              Text('\$9.99/month ( 33% off )',
-                                                  style: TextStyle(
-                                                      fontWeight:
-                                                          FontWeight.w200,
-                                                      fontSize: 16)),
-                                            ],
-                                          ),
-                                          value: 'Proyear',
-                                          groupValue: paymentMethodId,
-                                          onChanged: (String? value) {
-                                            setState(() {
-                                              paymentMethodId = value!;
-                                            });
-                                          },
-                                        ),
-                                      ),
-                                      const SizedBox(
-                                        height: 20,
-                                      ),
-                                      SizedBox(
-                                          width: double.infinity,
-                                          child: ProCustomButton(
-                                            padding: 0,
-                                            color: primaryColorLT,
-                                            text: 'Start your \$1/month trial',
-                                            loading: loading,
-                                            onPressed: () async {
-                                              setState(() {
-                                                loading = true;
-                                              });
-                                              if (paymentMethodId ==
-                                                  'Proyear') {
-                                                try {
-                                                  final List<StoreProduct>
-                                                      product = await Purchases
-                                                          .getProducts(<String>[
-                                                    'xyz.codexia.businessbosses.proyear'
-                                                  ]);
-                                                  final CustomerInfo
-                                                      customerInfo =
-                                                      await Purchases
-                                                          .purchaseStoreProduct(
-                                                              product[0]);
-                                                  if (customerInfo
-                                                          .entitlements
-                                                          .all[
-                                                              'xyz.codexia.businessbosses.proyear']
-                                                          ?.isActive ??
-                                                      false) {
-                                                    // Grant access to premium features
-                                                    print('User subscribed!');
-                                                  }
-                                                } catch (e) {
-                                                  // Handle error
-                                                  print(
-                                                      'Error purchasing product: $e');
-                                                } finally {
-                                                  setState(() {
-                                                    loading = false;
-                                                  });
-                                                }
-                                              } else {
-                                                try {
-                                                  final List<StoreProduct>
-                                                      product = await Purchases
-                                                          .getProducts(<String>[
-                                                    'xyz.codexia.businessbosses.promonth'
-                                                  ]);
-                                                  final CustomerInfo
-                                                      customerInfo =
-                                                      await Purchases
-                                                          .purchaseStoreProduct(
-                                                              product[0]);
-                                                  if (customerInfo
-                                                          .entitlements
-                                                          .all[
-                                                              'xyz.codexia.businessbosses.promonth']
-                                                          ?.isActive ??
-                                                      false) {
-                                                    // Grant access to premium features
-                                                    print('User subscribed!');
-                                                  }
-                                                } catch (e) {
-                                                  // Handle error
-                                                  print(
-                                                      'Error purchasing product: $e');
-                                                } finally {
-                                                  setState(() {
-                                                    loading = false;
-                                                  });
-                                                }
-                                              }
-                                            },
-                                          )),
-                                      const SizedBox(
-                                        height: 50,
-                                      ),
-                                    ],
-                                  ),
-                                );
-                              },
-                            );
-                          },
-                        );
+                        Get.to(const MyProfileScreen(
+                          selectedIndex: 4,
+                          currentIndex: 1,
+                        ));
+                        // showModalBottomSheet<void>(
+                        //   context: context,
+                        //   shape: const RoundedRectangleBorder(
+                        //     borderRadius: BorderRadius.vertical(
+                        //       top: Radius.circular(25.0),
+                        //     ),
+                        //   ),
+                        //   builder: (BuildContext context) {
+                        //     return StatefulBuilder(
+                        //       // Wrap the entire bottom sheet content with StatefulBuilder
+                        //       builder:
+                        //           (BuildContext context, StateSetter setState) {
+                        //         return Container(
+                        //           padding: const EdgeInsets.symmetric(
+                        //               horizontal: 20, vertical: 20),
+                        //           child: Column(
+                        //             mainAxisSize: MainAxisSize.min,
+                        //             children: <Widget>[
+                        //               Row(
+                        //                 mainAxisAlignment:
+                        //                     MainAxisAlignment.spaceBetween,
+                        //                 children: <Widget>[
+                        //                   const Text(
+                        //                     'Choose your plan',
+                        //                     style: TextStyle(
+                        //                       fontSize: 16,
+                        //                       fontWeight: FontWeight.bold,
+                        //                     ),
+                        //                   ),
+                        //                   IconButton(
+                        //                     icon: const Icon(
+                        //                       Icons.close,
+                        //                       color: Colors.black54,
+                        //                     ),
+                        //                     onPressed: () {
+                        //                       Navigator.pop(context);
+                        //                     },
+                        //                   ),
+                        //                 ],
+                        //               ),
+                        //               const SizedBox(
+                        //                 height: 20,
+                        //               ),
+                        //               InkWell(
+                        //                 onTap: () {
+                        //                   setState(() {
+                        //                     paymentMethodId = 'Promonth';
+                        //                   });
+                        //                 },
+                        //                 child: Container(
+                        //                   decoration: BoxDecoration(
+                        //                     border: Border.all(
+                        //                       color:
+                        //                           paymentMethodId == 'Promonth'
+                        //                               ? primaryColorLT
+                        //                               : Colors.transparent,
+                        //                       width: 2,
+                        //                     ),
+                        //                     borderRadius:
+                        //                         BorderRadius.circular(15),
+                        //                   ),
+                        //                   child: RadioListTile<String>(
+                        //                     contentPadding: EdgeInsets.zero,
+                        //                     title: const Row(
+                        //                       mainAxisAlignment:
+                        //                           MainAxisAlignment
+                        //                               .spaceBetween,
+                        //                       children: <Widget>[
+                        //                         Text(
+                        //                           'Pro Monthly',
+                        //                           style: TextStyle(
+                        //                               fontWeight:
+                        //                                   FontWeight.w600,
+                        //                               fontSize: 16),
+                        //                         ),
+                        //                         Text('\$14.99/month',
+                        //                             style: TextStyle(
+                        //                                 fontWeight:
+                        //                                     FontWeight.w200,
+                        //                                 fontSize: 16)),
+                        //                       ],
+                        //                     ),
+                        //                     value: 'Promonth',
+                        //                     groupValue: paymentMethodId,
+                        //                     onChanged: (String? value) {
+                        //                       setState(() {
+                        //                         paymentMethodId = value!;
+                        //                       });
+                        //                     },
+                        //                   ),
+                        //                 ),
+                        //               ),
+                        //               Container(
+                        //                 decoration: BoxDecoration(
+                        //                   border: Border.all(
+                        //                     color: paymentMethodId == 'Proyear'
+                        //                         ? primaryColorLT
+                        //                         : Colors.transparent,
+                        //                     width: 2,
+                        //                   ),
+                        //                   borderRadius:
+                        //                       BorderRadius.circular(15),
+                        //                 ),
+                        //                 child: RadioListTile<String>(
+                        //                   contentPadding: EdgeInsets.zero,
+                        //                   title: const Row(
+                        //                     mainAxisAlignment:
+                        //                         MainAxisAlignment.spaceBetween,
+                        //                     children: <Widget>[
+                        //                       Text(
+                        //                         'Pro Yearly',
+                        //                         style: TextStyle(
+                        //                             fontWeight: FontWeight.w600,
+                        //                             fontSize: 16),
+                        //                       ),
+                        //                       Text('\$9.99/month ( 33% off )',
+                        //                           style: TextStyle(
+                        //                               fontWeight:
+                        //                                   FontWeight.w200,
+                        //                               fontSize: 16)),
+                        //                     ],
+                        //                   ),
+                        //                   value: 'Proyear',
+                        //                   groupValue: paymentMethodId,
+                        //                   onChanged: (String? value) {
+                        //                     setState(() {
+                        //                       paymentMethodId = value!;
+                        //                     });
+                        //                   },
+                        //                 ),
+                        //               ),
+                        //               const SizedBox(
+                        //                 height: 20,
+                        //               ),
+                        //               SizedBox(
+                        //                   width: double.infinity,
+                        //                   child: ProCustomButton(
+                        //                     padding: 0,
+                        //                     color: primaryColorLT,
+                        //                     text: 'Start your \$1/month trial',
+                        //                     loading: loading,
+                        //                     onPressed: () async {
+                        //                       setState(() {
+                        //                         loading = true;
+                        //                       });
+                        //                       if (paymentMethodId ==
+                        //                           'Proyear') {
+                        //                         try {
+                        //                           final List<StoreProduct>
+                        //                               product = await Purchases
+                        //                                   .getProducts(<String>[
+                        //                             'xyz.codexia.businessbosses.proyear'
+                        //                           ]);
+                        //                           final CustomerInfo
+                        //                               customerInfo =
+                        //                               await Purchases
+                        //                                   .purchaseStoreProduct(
+                        //                                       product[0]);
+                        //                           if (customerInfo
+                        //                                   .entitlements
+                        //                                   .all[
+                        //                                       'xyz.codexia.businessbosses.proyear']
+                        //                                   ?.isActive ??
+                        //                               false) {
+                        //                             // Grant access to premium features
+                        //                             print('User subscribed!');
+                        //                           }
+                        //                         } catch (e) {
+                        //                           // Handle error
+                        //                           print(
+                        //                               'Error purchasing product: $e');
+                        //                         } finally {
+                        //                           setState(() {
+                        //                             loading = false;
+                        //                           });
+                        //                         }
+                        //                       } else {
+                        //                         try {
+                        //                           final List<StoreProduct>
+                        //                               product = await Purchases
+                        //                                   .getProducts(<String>[
+                        //                             'xyz.codexia.businessbosses.promonth'
+                        //                           ]);
+                        //                           final CustomerInfo
+                        //                               customerInfo =
+                        //                               await Purchases
+                        //                                   .purchaseStoreProduct(
+                        //                                       product[0]);
+                        //                           if (customerInfo
+                        //                                   .entitlements
+                        //                                   .all[
+                        //                                       'xyz.codexia.businessbosses.promonth']
+                        //                                   ?.isActive ??
+                        //                               false) {
+                        //                             // Grant access to premium features
+                        //                             print('User subscribed!');
+                        //                           }
+                        //                         } catch (e) {
+                        //                           // Handle error
+                        //                           print(
+                        //                               'Error purchasing product: $e');
+                        //                         } finally {
+                        //                           setState(() {
+                        //                             loading = false;
+                        //                           });
+                        //                         }
+                        //                       }
+                        //                     },
+                        //                   )),
+                        //               const SizedBox(
+                        //                 height: 50,
+                        //               ),
+                        //             ],
+                        //           ),
+                        //         );
+                        //       },
+                        //     );
+                        //   },
+                        // );
                       },
                     ),
                   ),
+                  const SizedBox(
+                    height: 5,
+                  ),
+                  const Text('Free to use, no Credit Card required',
+                      style:
+                          TextStyle(fontSize: 12, fontWeight: FontWeight.w700)),
                   if (widget.isGrow == null)
                     const SizedBox(
                       height: 100,

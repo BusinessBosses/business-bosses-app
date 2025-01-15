@@ -28,11 +28,14 @@ bool isExpanded = false;
 
 // ignore: public_member_api_docs
 class MyProfileScreen extends StatefulWidget {
+  final int? selectedIndex;
+  final int? currentIndex;
   // ignore: public_member_api_docs
   static const String routeName = '/my-profile-screen';
 
   // ignore: public_member_api_docs
-  const MyProfileScreen({Key? key}) : super(key: key);
+  const MyProfileScreen({Key? key, this.selectedIndex, this.currentIndex})
+      : super(key: key);
 
   @override
   State<MyProfileScreen> createState() => _MyProfileScreenState();
@@ -55,7 +58,9 @@ class _MyProfileScreenState extends State<MyProfileScreen> {
   void initState() {
     super.initState();
     _pageController = PageController(initialPage: _currentIndex);
-    _selectedIndex = 0;
+    _selectedIndex = widget.selectedIndex ?? 0;
+    _currentIndex = widget.currentIndex ?? 0;
+    _pageController = PageController(initialPage: widget.currentIndex ?? 0);
   }
 
   @override
