@@ -100,7 +100,7 @@ class _ServiceCardState extends State<ServiceCard> {
                           Text(
                             '${widget.shop?.currency ?? shopController.shop!.currency}${((widget.service!.price * (1 - widget.service!.discount / 100)) * 100).round() / 100}',
                             style: const TextStyle(
-                              color: proprimaryColor,
+                              color: Colors.black,
                               fontWeight: FontWeight.bold,
                               fontSize: 13,
                             ),
@@ -120,7 +120,7 @@ class _ServiceCardState extends State<ServiceCard> {
                       Text(
                         '${widget.shop?.currency ?? shopController.shop!.currency}${widget.service!.price.toStringAsFixed(2)}',
                         style: const TextStyle(
-                          color: proprimaryColor,
+                          color: Colors.black,
                           fontWeight: FontWeight.bold,
                           fontSize: 13,
                         ),

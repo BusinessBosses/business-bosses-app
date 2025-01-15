@@ -16,6 +16,7 @@ import 'package:detectable_text_field/widgets/detectable_text.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
+import 'package:intl/intl.dart';
 import 'package:lottie/lottie.dart';
 import 'package:syncfusion_flutter_calendar/calendar.dart';
 
@@ -59,6 +60,9 @@ class _BookServiceScreenState extends State<BookServiceScreen> {
   DateTime? _endDate;
   final List<DateTime> _selectedDates = <DateTime>[];
 
+  bool timeslotselected = false;
+  String? selectedSlot;
+
   @override
   void initState() {
     super.initState();
@@ -89,7 +93,7 @@ class _BookServiceScreenState extends State<BookServiceScreen> {
         FocusScope.of(context).unfocus();
       },
       child: Scaffold(
-        backgroundColor: probackgroundColor,
+        backgroundColor: backgroundColor,
         appBar: AppBar(
           titleSpacing: 0,
           leading: IconButton(
@@ -468,10 +472,21 @@ class _BookServiceScreenState extends State<BookServiceScreen> {
                     spacing: 8.0, // Horizontal spacing between chips
                     children: _generateTimeSlots().map((String slot) {
                       return ChoiceChip(
-                        label: Text(slot),
-                        selected: false,
+                        label: Text(
+                          slot,
+                          style: TextStyle(
+                              fontSize: 12,
+                              color: selectedSlot == slot
+                                  ? Colors.white
+                                  : Colors.black),
+                        ),
+                        selected: selectedSlot == slot,
+                        selectedColor: Colors.black,
                         onSelected: (bool selected) {
-                          // Handle slot selection
+                          setState(() {
+                            selectedSlot = selected ? slot : null;
+                            print(selectedSlot);
+                          });
                         },
                       );
                     }).toList(),
@@ -667,23 +682,16 @@ class _BookServiceScreenState extends State<BookServiceScreen> {
                     //   );
                     //   return;
                     // }
-                    if (_startDate == null) {
+                    // if (_startDate == null) {
+                    //   showSnackbar(
+                    //     message: 'Please select a date!',
+                    //     error: true,
+                    //   );
+                    //   return;
+                    // }
+                    if (selectedSlot == null) {
                       showSnackbar(
-                        message: 'Please select a date!',
-                        error: true,
-                      );
-                      return;
-                    }
-                    if (_startTime == null) {
-                      showSnackbar(
-                        message: 'Please choose your start time!',
-                        error: true,
-                      );
-                      return;
-                    }
-                    if (_endTime == null) {
-                      showSnackbar(
-                        message: 'Please choose your end time!',
+                        message: 'Please select your  time!',
                         error: true,
                       );
                       return;
@@ -692,6 +700,18 @@ class _BookServiceScreenState extends State<BookServiceScreen> {
                     setState(() {
                       isSubmit = true;
                     });
+
+                    List<String> times = selectedSlot.toString().split(' - ');
+                    String startTimeString = times[0];
+                    String endTimeString = times[1];
+
+                    // Define the time format
+                    DateFormat timeFormat = DateFormat('hh:mm a');
+
+                    // Parse the times
+                    DateTime parsedStartTime =
+                        timeFormat.parse(startTimeString);
+                    DateTime parsedEndTime = timeFormat.parse(endTimeString);
 
                     final Map<String, dynamic> orderData = <String, dynamic>{
                       'userId': profileController.myProfile.uid,
@@ -706,11 +726,15 @@ class _BookServiceScreenState extends State<BookServiceScreen> {
                               _startDate!.year,
                               _startDate!.month,
                               _startDate!.day,
-                              _startTime!.hour,
-                              _startTime!.minute)
+                              parsedStartTime.hour,
+                              parsedStartTime.minute)
                           .toIso8601String(),
-                      'endTime': DateTime(_startDate!.year, _startDate!.month,
-                              _startDate!.day, _endTime!.hour, _endTime!.minute)
+                      'endTime': DateTime(
+                              _startDate!.year,
+                              _startDate!.month,
+                              _startDate!.day,
+                              parsedEndTime.hour,
+                              parsedEndTime.minute)
                           .toIso8601String(),
                       'paymentMethod': widget.service.paymentMethod != null &&
                               widget.service.paymentMethod!.isNotEmpty
@@ -722,54 +746,54 @@ class _BookServiceScreenState extends State<BookServiceScreen> {
                       'status': 'pending'
                     };
 
-                    // print(orderData);
+                    print(orderData);
 
-                    bool response = await orderController.addOrder(orderData);
-                    if (response) {
-                      setState(() {
-                        isSubmit = false;
-                      });
-                      Get.defaultDialog(
-                        title: '',
-                        barrierDismissible: false,
-                        content: Column(
-                          children: <Widget>[
-                            const Text(
-                              'Service booked successfully',
-                              style: TextStyle(fontSize: 16),
-                            ),
-                            const SizedBox(
-                              height: 30,
-                            ),
-                            LottieBuilder.asset(
-                              'assets/anim/done.json',
-                              width: 100,
-                              height: 100,
-                            ),
-                            const SizedBox(
-                              height: 30,
-                            ),
-                            SizedBox(
-                              width: double.infinity,
-                              child: ProCustomButton(
-                                  text: 'Done',
-                                  onPressed: () {
-                                    Navigator.pop(context);
-                                    Get.back();
-                                  }),
-                            ),
-                          ],
-                        ),
-                      );
-                    } else {
-                      showSnackbar(
-                        message: 'Error creating order!',
-                        error: true,
-                      );
-                      setState(() {
-                        isSubmit = false;
-                      });
-                    }
+                    // bool response = await orderController.addOrder(orderData);
+                    // if (response) {
+                    //   setState(() {
+                    //     isSubmit = false;
+                    //   });
+                    //   Get.defaultDialog(
+                    //     title: '',
+                    //     barrierDismissible: false,
+                    //     content: Column(
+                    //       children: <Widget>[
+                    //         const Text(
+                    //           'Service booked successfully',
+                    //           style: TextStyle(fontSize: 16),
+                    //         ),
+                    //         const SizedBox(
+                    //           height: 30,
+                    //         ),
+                    //         LottieBuilder.asset(
+                    //           'assets/anim/done.json',
+                    //           width: 100,
+                    //           height: 100,
+                    //         ),
+                    //         const SizedBox(
+                    //           height: 30,
+                    //         ),
+                    //         SizedBox(
+                    //           width: double.infinity,
+                    //           child: ProCustomButton(
+                    //               text: 'Done',
+                    //               onPressed: () {
+                    //                 Navigator.pop(context);
+                    //                 Get.back();
+                    //               }),
+                    //         ),
+                    //       ],
+                    //     ),
+                    //   );
+                    // } else {
+                    //   showSnackbar(
+                    //     message: 'Error creating order!',
+                    //     error: true,
+                    //   );
+                    //   setState(() {
+                    //     isSubmit = false;
+                    //   });
+                    // }
                   },
                   text: 'Book Service',
                 ),
