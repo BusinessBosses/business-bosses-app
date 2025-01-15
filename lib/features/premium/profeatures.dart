@@ -43,12 +43,12 @@ class ProfeatureTile extends StatelessWidget {
                       feature.caption,
                       style: const TextStyle(
                         fontWeight: FontWeight.bold,
-                        fontSize: 15,
+                        fontSize: 14,
                       ),
                     ),
                     Text(
                       feature.subtext!,
-                      style: const TextStyle(fontSize: 14),
+                      style: const TextStyle(fontSize: 13),
                     ),
                   ],
                 ),
