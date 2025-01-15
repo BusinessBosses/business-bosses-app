@@ -365,6 +365,7 @@ class _DashboardState extends State<Dashboard> {
                           return GestureDetector(
                               onTap: () {
                                 if (index == 0) {
+                                  Bottomnavscreen.of(context)?.onTabTapped(3);
                                 } else if (index == 1) {
                                   // Add navigation for Expenses
                                 } else if (index == 2) {
