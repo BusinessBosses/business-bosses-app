@@ -11,7 +11,9 @@ import 'package:business_bosses_v2/common/widgets/network_image_with_placeholder
 import 'package:business_bosses_v2/common/widgets/safety_model.dart';
 import 'package:business_bosses_v2/features/chat/chat_room_screen.dart';
 import 'package:business_bosses_v2/features/marketplace/presentation/seller_reviews.dart';
+import 'package:business_bosses_v2/features/posts/widgets/images_viewer_screen.dart';
 import 'package:business_bosses_v2/features/profile/controller/profile_controller.dart';
+import 'package:business_bosses_v2/navigation/routes.dart';
 import 'package:business_bosses_v2/utils/theme/theme.dart';
 import 'package:detectable_text_field/detector/sample_regular_expressions.dart';
 import 'package:detectable_text_field/widgets/detectable_text.dart';
@@ -48,11 +50,9 @@ class _UserShopScreenState extends State<UserShopScreen> {
       loading = true;
     });
     shopController.initUserShop(widget.user).then((bool value) {
-      if (value) {
-        setState(() {
-          loading = false;
-        });
-      }
+      setState(() {
+        loading = false;
+      });
     });
   }
 
@@ -70,7 +70,6 @@ class _UserShopScreenState extends State<UserShopScreen> {
         return GestureDetector(
           onTap: () {
             if (action['text'] == 'Chat') {
-              print('object');
               Get.to(
                 () => const ChatRoomScreen(
                   frommarketplace: false,
@@ -102,11 +101,11 @@ class _UserShopScreenState extends State<UserShopScreen> {
             child: Column(
               children: <Widget>[
                 CircleAvatar(
-                  radius: 18,
+                  radius: 21,
                   backgroundColor: backgroundColor,
                   child: SvgPicture.asset(
                     action['icon']!,
-                    height: 17,
+                    height: 20,
                   ),
                 ),
                 const SizedBox(height: 3),
@@ -127,418 +126,497 @@ class _UserShopScreenState extends State<UserShopScreen> {
       appBar: widget.ismyshop != null
           ? null
           : AppBar(
+              titleSpacing: 0,
               automaticallyImplyLeading: false,
-              actions: <Widget>[
-                widget.ismyshop != null
-                    ? Container()
-                    : CircleAvatar(
-                        backgroundColor: Colors.transparent,
-                        child: IconButton(
-                            onPressed: () {},
-                            icon:
-                                SvgPicture.asset('assets/svgs/shopshare.svg')),
-                      )
-              ],
+              leading: CircleAvatar(
+                backgroundColor: Colors.transparent,
+                child: IconButton(
+                    onPressed: () {
+                      Get.back();
+                    },
+                    icon: SvgPicture.asset('assets/svgs/backbutton.svg')),
+              ),
+              title: GestureDetector(
+                onTap: () {
+                  Get.toNamed(Routes.publicProfile, arguments: widget.user);
+                },
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: <Widget>[
+                    Text(
+                      '@${widget.user.username.toLowerCase()}',
+                      style: const TextStyle(
+                        color: textColor,
+                        fontWeight: FontWeight.bold,
+                        fontSize: 14,
+                      ),
+                    ),
+                    Container(
+                      decoration: BoxDecoration(
+                          color: backgroundColor,
+                          borderRadius: BorderRadius.circular(radius)),
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 10.0, vertical: 3),
+                      child: const Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: <Widget>[
+                          Text(
+                            'View Profile',
+                            style: TextStyle(
+                              fontSize: 10,
+                              color: textColor,
+                            ),
+                          ),
+                          Icon(
+                            Icons.chevron_right,
+                            color: textColor,
+                            size: 10,
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
+              ),
             ),
       body: loading
           ? const SafetyModel()
-          : Obx(
-              () => shopController.userShop == null
-                  ? const SafetyModel(
-                      isLoading: false,
-                      title: 'No Shop Found For This User!',
-                    )
-                  : NestedScrollView(
-                      headerSliverBuilder:
-                          (BuildContext context, bool innerBoxIsScrolled) {
-                        return <Widget>[
-                          SliverStickyHeader(
-                              sticky: false,
-                              header: Column(children: <Widget>[
-                                // const SizedBox(
-                                //   height: 10.0,
-                                // ),
-                                Stack(children: <Widget>[
-                                  SizedBox(
-                                    height: 100,
-                                    width: 100,
-                                    child: SizedBox(
-                                      height: 80.0,
-                                      width: 80.0,
-                                      child: Align(
-                                        alignment: Alignment.topLeft,
-                                        child: ClipRRect(
-                                          borderRadius:
-                                              BorderRadius.circular(1000),
-                                          child: NetworkImageWithPlaceHolder(
-                                            imageUrl: shopController
-                                                    .userShop!.image ??
-                                                '',
-                                            radius: radius,
-                                            placeHolder: Icons.person,
-                                            iconSize: 22.0,
-                                            fit: BoxFit.cover,
+          : shopController.userShop == null
+              ? const SafetyModel(
+                  isLoading: false,
+                  title: 'Coming Soon',
+                  icon: Icon(Icons.shopping_bag),
+                )
+              : Obx(
+                  () => shopController.userShop == null
+                      ? const SafetyModel(
+                          isLoading: false,
+                          title: 'No Shop Found For This User!',
+                        )
+                      : NestedScrollView(
+                          headerSliverBuilder:
+                              (BuildContext context, bool innerBoxIsScrolled) {
+                            return <Widget>[
+                              SliverStickyHeader(
+                                  sticky: false,
+                                  header: Column(children: <Widget>[
+                                    // const SizedBox(
+                                    //   height: 10.0,
+                                    // ),
+                                    GestureDetector(
+                                      onTap: () {
+                                        Navigator.of(context).push(
+                                          // ignore: always_specify_types
+                                          MaterialPageRoute(
+                                            builder: (BuildContext context) =>
+                                                ImagesViewerScreen(
+                                              // ignore: always_specify_types
+                                              urls: [
+                                                shopController
+                                                        .userShop!.image ??
+                                                    ''
+                                              ],
+                                              index: 0,
+                                            ),
+                                          ),
+                                        );
+                                      },
+                                      child: SizedBox(
+                                        height: 100,
+                                        width: 100,
+                                        child: SizedBox(
+                                          height: 80.0,
+                                          width: 80.0,
+                                          child: Align(
+                                            alignment: Alignment.topLeft,
+                                            child: ClipRRect(
+                                              borderRadius:
+                                                  BorderRadius.circular(1000),
+                                              child:
+                                                  NetworkImageWithPlaceHolder(
+                                                imageUrl: shopController
+                                                        .userShop!.image ??
+                                                    '',
+                                                radius: radius,
+                                                placeHolder: Icons.person,
+                                                iconSize: 22.0,
+                                                fit: BoxFit.cover,
+                                              ),
+                                            ),
                                           ),
                                         ),
                                       ),
                                     ),
-                                  ),
-                                ]),
-                                const SizedBox(height: 10),
-                                Padding(
-                                  padding: const EdgeInsets.symmetric(
-                                      horizontal: 15.0),
-                                  child: Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.center,
-                                    children: <Widget>[
-                                      Text(shopController.userShop!.name,
-                                          style: const TextStyle(
-                                              fontWeight: FontWeight.bold,
-                                              fontSize: 14)),
-                                      const SizedBox(height: 2),
-                                      DetectableText(
-                                        text: shopController
-                                            .userShop!.description,
-                                        detectionRegExp:
-                                            detectionRegExp(hashtag: false)!,
-                                        detectedStyle: bodyText2.copyWith(
-                                            color: Colors.blue),
-                                        textAlign: TextAlign.center,
-                                        moreStyle: bodyText2.copyWith(
-                                            color: Colors.black),
-                                        lessStyle: bodyText2.copyWith(
-                                            color: Colors.black),
-                                        trimLength: 40,
-                                        trimExpandedText: '  show less',
-                                        basicStyle: bodyText2.copyWith(
-                                            color: textColor),
-                                        onTap: (String text) async {
-                                          final Uri url = Uri.parse(text);
-                                          if ((url.scheme == 'http' ||
-                                              url.scheme == 'https')) {
-                                            if (!await launchUrl(url)) {
-                                              throw Exception(
-                                                  'Could not launch $url');
-                                            }
-                                          } else if (text.startsWith('wa.me')) {
-                                            final Uri whatsappUrl =
-                                                Uri.parse('https://$text');
-                                            if (await launchUrl(whatsappUrl)) {
-                                              await launchUrl(whatsappUrl);
-                                            } else {
-                                              throw Exception(
-                                                  'Could not launch $whatsappUrl');
-                                            }
-                                          }
-                                        },
-                                      ),
-                                      Row(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.center,
+                                    const SizedBox(height: 10),
+                                    Padding(
+                                      padding: const EdgeInsets.symmetric(
+                                          horizontal: 15.0),
+                                      child: Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.center,
                                         children: <Widget>[
+                                          Text(shopController.userShop!.name,
+                                              style: const TextStyle(
+                                                  fontWeight: FontWeight.bold,
+                                                  fontSize: 14)),
+                                          const SizedBox(height: 2),
+                                          DetectableText(
+                                            text: shopController
+                                                .userShop!.description,
+                                            detectionRegExp: detectionRegExp(
+                                                hashtag: false)!,
+                                            detectedStyle: bodyText2.copyWith(
+                                                color: Colors.blue),
+                                            textAlign: TextAlign.center,
+                                            moreStyle: bodyText2.copyWith(
+                                                color: Colors.black),
+                                            lessStyle: bodyText2.copyWith(
+                                                color: Colors.black),
+                                            trimLength: 40,
+                                            trimExpandedText: '  show less',
+                                            basicStyle: bodyText2.copyWith(
+                                                color: textColor),
+                                            onTap: (String text) async {
+                                              final Uri url = Uri.parse(text);
+                                              if ((url.scheme == 'http' ||
+                                                  url.scheme == 'https')) {
+                                                if (!await launchUrl(url)) {
+                                                  throw Exception(
+                                                      'Could not launch $url');
+                                                }
+                                              } else if (text
+                                                  .startsWith('wa.me')) {
+                                                final Uri whatsappUrl =
+                                                    Uri.parse('https://$text');
+                                                if (await launchUrl(
+                                                    whatsappUrl)) {
+                                                  await launchUrl(whatsappUrl);
+                                                } else {
+                                                  throw Exception(
+                                                      'Could not launch $whatsappUrl');
+                                                }
+                                              }
+                                            },
+                                          ),
                                           Row(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.center,
                                             children: <Widget>[
-                                              const Icon(Icons.location_on,
-                                                  color: Colors.red, size: 15),
-                                              // const SizedBox(width: 5),
-                                              Text(
-                                                shopController.userShop!
-                                                            .location.length >
-                                                        15
-                                                    ? '${shopController.userShop!.location.substring(0, 15)}...'
-                                                    : shopController
-                                                        .userShop!.location,
-                                                style: const TextStyle(
-                                                    fontWeight: FontWeight.w700,
-                                                    fontSize: 14),
+                                              Row(
+                                                children: <Widget>[
+                                                  const Icon(Icons.location_on,
+                                                      color: Colors.red,
+                                                      size: 15),
+                                                  // const SizedBox(width: 5),
+                                                  Text(
+                                                    shopController
+                                                                .userShop!
+                                                                .location
+                                                                .length >
+                                                            15
+                                                        ? '${shopController.userShop!.location.substring(0, 15)}...'
+                                                        : shopController
+                                                            .userShop!.location,
+                                                    style: const TextStyle(
+                                                        fontWeight:
+                                                            FontWeight.w700,
+                                                        fontSize: 14),
+                                                  ),
+                                                ],
+                                              ),
+                                              const SizedBox(
+                                                width: 5,
+                                              ),
+                                              const CircleAvatar(
+                                                radius: 2,
+                                                backgroundColor: Colors.black87,
+                                              ),
+                                              const SizedBox(
+                                                width: 5,
+                                              ),
+                                              Row(
+                                                children: <Widget>[
+                                                  const Icon(Icons.star,
+                                                      color: Colors.amber,
+                                                      size: 18),
+                                                  const SizedBox(width: 4),
+                                                  GestureDetector(
+                                                    onTap: () {},
+                                                    child: Text(
+                                                      '${shopController.userShop!.user?.averageRating?.toStringAsFixed(2)} Reviews',
+                                                      style: const TextStyle(
+                                                          fontWeight:
+                                                              FontWeight.w700,
+                                                          fontSize: 14),
+                                                    ),
+                                                  ),
+                                                ],
                                               ),
                                             ],
                                           ),
                                           const SizedBox(
-                                            width: 5,
-                                          ),
-                                          const CircleAvatar(
-                                            radius: 2,
-                                            backgroundColor: Colors.black87,
-                                          ),
-                                          const SizedBox(
-                                            width: 5,
+                                            height: 10,
                                           ),
                                           Row(
-                                            children: <Widget>[
-                                              const Icon(Icons.star,
-                                                  color: Colors.amber,
-                                                  size: 18),
-                                              const SizedBox(width: 4),
-                                              GestureDetector(
-                                                onTap: () {},
-                                                child: Text(
-                                                  '${shopController.userShop!.user?.averageRating?.toStringAsFixed(2)} Reviews',
-                                                  style: const TextStyle(
-                                                      fontWeight:
-                                                          FontWeight.w700,
-                                                      fontSize: 14),
-                                                ),
-                                              ),
-                                            ],
-                                          ),
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.center,
+                                            children: _buildActionButtons(<Map<
+                                                String, String>>[
+                                              <String, String>{
+                                                'icon':
+                                                    'assets/svgs/shopchat.svg',
+                                                'text': 'Chat'
+                                              },
+                                              // <String, String>{
+                                              //   'icon': 'assets/svgs/shopcall.svg',
+                                              //   'text': 'Call'
+                                              // },
+                                              <String, String>{
+                                                'icon':
+                                                    'assets/svgs/shopshare.svg',
+                                                'text': 'Share'
+                                              },
+                                              <String, String>{
+                                                'icon':
+                                                    'assets/svgs/shopreview.svg',
+                                                'text': 'Review'
+                                              },
+                                            ]),
+                                          )
                                         ],
                                       ),
-                                      const SizedBox(
-                                        height: 10,
+                                    ),
+                                  ]))
+                            ];
+                          },
+                          body: DefaultTabController(
+                            length: 3,
+                            child: Column(
+                              children: <Widget>[
+                                const TabBar(
+                                    labelColor: Colors.black,
+                                    unselectedLabelColor: Colors.grey,
+                                    indicatorColor: Colors.black,
+                                    tabs: <Widget>[
+                                      Tab(text: 'Showcase'),
+                                      Tab(text: 'Reviews'),
+                                      Tab(text: 'Contact'),
+                                    ]),
+                                const Divider(
+                                  height: 1,
+                                  // thickness: 1,
+                                ),
+                                Expanded(
+                                  child: TabBarView(
+                                    children: <Widget>[
+                                      ///Tab 1 Content
+                                      Column(
+                                        children: <Widget>[
+                                          const Padding(
+                                            padding: EdgeInsets.symmetric(
+                                                horizontal: 15.0, vertical: 10),
+                                            child: Row(
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment
+                                                      .spaceBetween,
+                                              children: <Widget>[
+                                                // Padding(
+                                                //   padding:
+                                                //       const EdgeInsets.symmetric(
+                                                //           vertical: 5.0),
+                                                //   child: Text(
+                                                //     'Showcase (${shopController.userItems.length})',
+                                                //     style: const TextStyle(
+                                                //         fontSize: 14,
+                                                //         fontWeight:
+                                                //             FontWeight.w700),
+                                                //   ),
+                                                // ),
+                                                // GestureDetector(
+                                                //   onTap: () {
+                                                //     final RenderBox button =
+                                                //         context.findRenderObject()
+                                                //             as RenderBox;
+                                                //     final RenderBox overlay =
+                                                //         Overlay.of(context)
+                                                //                 .context
+                                                //                 .findRenderObject()
+                                                //             as RenderBox;
+                                                //     final RelativeRect position =
+                                                //         RelativeRect.fromRect(
+                                                //       Rect.fromPoints(
+                                                //         button.localToGlobal(
+                                                //             button.size.topRight(
+                                                //                 const Offset(
+                                                //                     0, 380)),
+                                                //             ancestor: overlay),
+                                                //         button.localToGlobal(
+                                                //             button.size.bottomRight(
+                                                //                 const Offset(
+                                                //                     0, 20)),
+                                                //             ancestor: overlay),
+                                                //       ),
+                                                //       Offset.zero & overlay.size,
+                                                //     );
+
+                                                //     showMenu(
+                                                //       shape: RoundedRectangleBorder(
+                                                //           borderRadius:
+                                                //               BorderRadius.circular(
+                                                //                   10)),
+                                                //       context: context,
+                                                //       shadowColor: Colors.black,
+                                                //       position: position,
+                                                //       items: <String>[
+                                                //         'All Products',
+                                                //         'Low Stock',
+                                                //         'Out of Stock',
+                                                //         'Most Popular',
+                                                //         'Newest First',
+                                                //       ].map((String option) {
+                                                //         return PopupMenuItem<
+                                                //             String>(
+                                                //           value: option,
+                                                //           child: Text(
+                                                //             option,
+                                                //             style: const TextStyle(
+                                                //                 fontSize: 14),
+                                                //           ),
+                                                //         );
+                                                //       }).toList(),
+                                                //     ).then((String? selected) {
+                                                //       if (selected != null) {
+                                                //         setState(() {
+                                                //           _selectedItem = selected;
+                                                //         });
+                                                //       }
+                                                //     });
+                                                //   },
+                                                //   child: Container(
+                                                //     width: 150,
+                                                //     decoration: BoxDecoration(
+                                                //         color: backgroundColor,
+                                                //         borderRadius:
+                                                //             BorderRadius.circular(
+                                                //                 7)),
+                                                //     child: Row(
+                                                //       children: <Widget>[
+                                                //         CircleAvatar(
+                                                //           backgroundColor:
+                                                //               backgroundColor,
+                                                //           child: SvgPicture.asset(
+                                                //               'assets/svgs/filterprosections.svg'),
+                                                //         ),
+                                                //         Text(
+                                                //           _selectedItem,
+                                                //           style: const TextStyle(
+                                                //               fontSize: 14),
+                                                //         )
+                                                //       ],
+                                                //     ),
+                                                //   ),
+                                                // ),
+                                              ],
+                                            ),
+                                          ),
+                                          if ((shopController
+                                              .userItems.isEmpty)) ...<Widget>{
+                                            const SafetyModel(
+                                              isLoading: false,
+                                              title: 'No Items In Shop!',
+                                            )
+                                          } else
+                                            Expanded(
+                                              child: Padding(
+                                                padding:
+                                                    const EdgeInsets.symmetric(
+                                                        horizontal: 15.0),
+                                                child: StaggeredGridView
+                                                    .countBuilder(
+                                                  crossAxisCount: 2,
+                                                  staggeredTileBuilder:
+                                                      (int index) =>
+                                                          const StaggeredTile
+                                                              .fit(1),
+                                                  mainAxisSpacing: 10.0,
+                                                  crossAxisSpacing: 10.0,
+                                                  itemCount: shopController
+                                                      .userItems.length,
+                                                  itemBuilder:
+                                                      (BuildContext context,
+                                                          int index) {
+                                                    if (shopController
+                                                            .userItems[index]
+                                                        is Product) {
+                                                      final Product product =
+                                                          shopController
+                                                                  .userItems[
+                                                              index] as Product;
+                                                      return GestureDetector(
+                                                        onTap: () {
+                                                          Get.to(() =>
+                                                              OrderProductScreen(
+                                                                product:
+                                                                    product,
+                                                                shop: shopController
+                                                                    .userShop!,
+                                                              ));
+                                                        },
+                                                        child: InventoryCard(
+                                                          product: product,
+                                                          shop: shopController
+                                                              .userShop!,
+                                                          myShop: false,
+                                                        ),
+                                                      );
+                                                    } else {
+                                                      final Service service =
+                                                          shopController
+                                                                  .userItems[
+                                                              index] as Service;
+                                                      return GestureDetector(
+                                                        onTap: () {
+                                                          print(service);
+                                                          Get.to(() =>
+                                                              BookServiceScreen(
+                                                                service:
+                                                                    service,
+                                                                shop: shopController
+                                                                    .userShop!,
+                                                              ));
+                                                        },
+                                                        child: ServiceCard(
+                                                          shop: shopController
+                                                              .userShop!,
+                                                          myShop: false,
+                                                          service: service,
+                                                        ),
+                                                      );
+                                                    }
+                                                  },
+                                                ),
+                                              ),
+                                            ),
+                                        ],
                                       ),
-                                      Row(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.center,
-                                        children: _buildActionButtons(<Map<
-                                            String, String>>[
-                                          <String, String>{
-                                            'icon': 'assets/svgs/shopchat.svg',
-                                            'text': 'Chat'
-                                          },
-                                          // <String, String>{
-                                          //   'icon': 'assets/svgs/shopcall.svg',
-                                          //   'text': 'Call'
-                                          // },
-                                          <String, String>{
-                                            'icon': 'assets/svgs/shopshare.svg',
-                                            'text': 'Share'
-                                          },
-                                          <String, String>{
-                                            'icon':
-                                                'assets/svgs/shopreview.svg',
-                                            'text': 'Review'
-                                          },
-                                        ]),
-                                      )
+
+                                      ///Tab 2 Content
+                                      SellerReviewScreen(
+                                        isShop: true,
+                                        user: widget.user,
+                                      ),
+
+                                      ///Tab 3 Content
+                                      Center(child: _buildContactInfo()),
                                     ],
                                   ),
                                 ),
-                              ]))
-                        ];
-                      },
-                      body: DefaultTabController(
-                        length: 3,
-                        child: Column(
-                          children: <Widget>[
-                            const TabBar(
-                                labelColor: Colors.black,
-                                unselectedLabelColor: Colors.grey,
-                                indicatorColor: Colors.black,
-                                tabs: <Widget>[
-                                  Tab(text: 'Listings'),
-                                  Tab(text: 'Reviews'),
-                                  Tab(text: 'Contact'),
-                                ]),
-                            const Divider(
-                              height: 1,
-                              // thickness: 1,
+                              ],
                             ),
-                            Expanded(
-                              child: TabBarView(
-                                children: <Widget>[
-                                  ///Tab 1 Content
-                                  Column(
-                                    children: <Widget>[
-                                      const Padding(
-                                        padding: EdgeInsets.symmetric(
-                                            horizontal: 15.0, vertical: 10),
-                                        child: Row(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.spaceBetween,
-                                          children: <Widget>[
-                                            // Padding(
-                                            //   padding:
-                                            //       const EdgeInsets.symmetric(
-                                            //           vertical: 5.0),
-                                            //   child: Text(
-                                            //     'Showcase (${shopController.userItems.length})',
-                                            //     style: const TextStyle(
-                                            //         fontSize: 14,
-                                            //         fontWeight:
-                                            //             FontWeight.w700),
-                                            //   ),
-                                            // ),
-                                            // GestureDetector(
-                                            //   onTap: () {
-                                            //     final RenderBox button =
-                                            //         context.findRenderObject()
-                                            //             as RenderBox;
-                                            //     final RenderBox overlay =
-                                            //         Overlay.of(context)
-                                            //                 .context
-                                            //                 .findRenderObject()
-                                            //             as RenderBox;
-                                            //     final RelativeRect position =
-                                            //         RelativeRect.fromRect(
-                                            //       Rect.fromPoints(
-                                            //         button.localToGlobal(
-                                            //             button.size.topRight(
-                                            //                 const Offset(
-                                            //                     0, 380)),
-                                            //             ancestor: overlay),
-                                            //         button.localToGlobal(
-                                            //             button.size.bottomRight(
-                                            //                 const Offset(
-                                            //                     0, 20)),
-                                            //             ancestor: overlay),
-                                            //       ),
-                                            //       Offset.zero & overlay.size,
-                                            //     );
-
-                                            //     showMenu(
-                                            //       shape: RoundedRectangleBorder(
-                                            //           borderRadius:
-                                            //               BorderRadius.circular(
-                                            //                   10)),
-                                            //       context: context,
-                                            //       shadowColor: Colors.black,
-                                            //       position: position,
-                                            //       items: <String>[
-                                            //         'All Products',
-                                            //         'Low Stock',
-                                            //         'Out of Stock',
-                                            //         'Most Popular',
-                                            //         'Newest First',
-                                            //       ].map((String option) {
-                                            //         return PopupMenuItem<
-                                            //             String>(
-                                            //           value: option,
-                                            //           child: Text(
-                                            //             option,
-                                            //             style: const TextStyle(
-                                            //                 fontSize: 14),
-                                            //           ),
-                                            //         );
-                                            //       }).toList(),
-                                            //     ).then((String? selected) {
-                                            //       if (selected != null) {
-                                            //         setState(() {
-                                            //           _selectedItem = selected;
-                                            //         });
-                                            //       }
-                                            //     });
-                                            //   },
-                                            //   child: Container(
-                                            //     width: 150,
-                                            //     decoration: BoxDecoration(
-                                            //         color: backgroundColor,
-                                            //         borderRadius:
-                                            //             BorderRadius.circular(
-                                            //                 7)),
-                                            //     child: Row(
-                                            //       children: <Widget>[
-                                            //         CircleAvatar(
-                                            //           backgroundColor:
-                                            //               backgroundColor,
-                                            //           child: SvgPicture.asset(
-                                            //               'assets/svgs/filterprosections.svg'),
-                                            //         ),
-                                            //         Text(
-                                            //           _selectedItem,
-                                            //           style: const TextStyle(
-                                            //               fontSize: 14),
-                                            //         )
-                                            //       ],
-                                            //     ),
-                                            //   ),
-                                            // ),
-                                          ],
-                                        ),
-                                      ),
-                                      if ((shopController
-                                          .userItems.isEmpty)) ...<Widget>{
-                                        const SafetyModel(
-                                          isLoading: false,
-                                          title: 'No Items In Shop!',
-                                        )
-                                      } else
-                                        Expanded(
-                                          child: Padding(
-                                            padding: const EdgeInsets.symmetric(
-                                                horizontal: 15.0),
-                                            child:
-                                                StaggeredGridView.countBuilder(
-                                              crossAxisCount: 2,
-                                              staggeredTileBuilder: (int
-                                                      index) =>
-                                                  const StaggeredTile.fit(1),
-                                              mainAxisSpacing: 10.0,
-                                              crossAxisSpacing: 10.0,
-                                              itemCount: shopController
-                                                  .userItems.length,
-                                              itemBuilder:
-                                                  (BuildContext context,
-                                                      int index) {
-                                                if (shopController
-                                                        .userItems[index]
-                                                    is Product) {
-                                                  final Product product =
-                                                      shopController
-                                                              .userItems[index]
-                                                          as Product;
-                                                  return GestureDetector(
-                                                    onTap: () {
-                                                      Get.to(() =>
-                                                          OrderProductScreen(
-                                                            product: product,
-                                                            shop: shopController
-                                                                .userShop!,
-                                                          ));
-                                                    },
-                                                    child: InventoryCard(
-                                                      product: product,
-                                                      shop: shopController
-                                                          .userShop!,
-                                                      myShop: false,
-                                                    ),
-                                                  );
-                                                } else {
-                                                  final Service service =
-                                                      shopController
-                                                              .userItems[index]
-                                                          as Service;
-                                                  return GestureDetector(
-                                                    onTap: () {
-                                                      Get.to(() =>
-                                                          BookServiceScreen(
-                                                            service: service,
-                                                            shop: shopController
-                                                                .userShop!,
-                                                          ));
-                                                    },
-                                                    child: ServiceCard(
-                                                      shop: shopController
-                                                          .userShop!,
-                                                      myShop: false,
-                                                      service: service,
-                                                    ),
-                                                  );
-                                                }
-                                              },
-                                            ),
-                                          ),
-                                        ),
-                                    ],
-                                  ),
-
-                                  ///Tab 2 Content
-                                  SellerReviewScreen(
-                                    isShop: true,
-                                    user: widget.user,
-                                  ),
-
-                                  ///Tab 3 Content
-                                  Center(child: _buildContactInfo()),
-                                ],
-                              ),
-                            ),
-                          ],
+                          ),
                         ),
-                      ),
-                    ),
-            ),
+                ),
     );
   }
 
@@ -564,7 +642,7 @@ class _UserShopScreenState extends State<UserShopScreen> {
           _buildContactRow(
             'assets/svgs/website.svg',
             'Virtual Address',
-            '#${shopController.userShop!.appId} Biz-Centre,\nBusiness Bosses, United Kingdom',
+            '#${shopController.userShop!.appId} Biz-Centre,\nBusiness Bosses, ${shopController.userShop!.location}',
             12,
             null,
           ),
@@ -605,7 +683,7 @@ class _UserShopScreenState extends State<UserShopScreen> {
             ),
           if (shopController.userShop!.facebook != null ||
               shopController.userShop!.twitter != null ||
-              shopController.userShop!.linkedin != null ||
+              shopController.userShop!.linkedIn != null ||
               shopController.userShop!.facebook != null)
             Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -707,10 +785,10 @@ class _UserShopScreenState extends State<UserShopScreen> {
                         ),
                       ),
                     },
-                    if (shopController.userShop!.linkedin != null) ...<Widget>{
+                    if (shopController.userShop!.linkedIn != null) ...<Widget>{
                       GestureDetector(
                         onTap: () async {
-                          String? website = shopController.userShop!.linkedin;
+                          String? website = shopController.userShop!.linkedIn;
                           try {
                             if (!website!.startsWith('http://') &&
                                 !website.startsWith('https://')) {
@@ -728,7 +806,40 @@ class _UserShopScreenState extends State<UserShopScreen> {
                               padding: const EdgeInsets.only(right: 8.0),
                               child: CircleAvatar(
                                 backgroundColor: backgroundColor,
-                                child: SvgPicture.asset('assets/svgs/lsl.svg'),
+                                child: SvgPicture.asset(
+                                  'assets/svgs/lsl.svg',
+                                  color: Colors.black,
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    },
+                    if (shopController.userShop!.url != null) ...<Widget>{
+                      GestureDetector(
+                        onTap: () async {
+                          String? website = shopController.userShop!.url;
+                          try {
+                            if (!website!.startsWith('http://') &&
+                                !website.startsWith('https://')) {
+                              website = 'https://$website';
+                            }
+                            final Uri uri = Uri.parse(website);
+                            final bool launched = await launchUrl(uri,
+                                mode: LaunchMode.platformDefault,
+                                webOnlyWindowName: '_self');
+                          } catch (e) {}
+                        },
+                        child: Row(
+                          children: <Widget>[
+                            Padding(
+                              padding: const EdgeInsets.only(right: 8.0),
+                              child: CircleAvatar(
+                                backgroundColor: backgroundColor,
+                                child: SvgPicture.asset(
+                                  'assets/svgs/url.svg',
+                                ),
                               ),
                             ),
                           ],

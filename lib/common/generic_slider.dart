@@ -10,6 +10,7 @@ class GenericSlider extends StatefulWidget {
   final double width, height;
   final BoxFit fit;
   final double? radius;
+  final Color? iconcolor;
 
   const GenericSlider({
     Key? key,
@@ -18,6 +19,7 @@ class GenericSlider extends StatefulWidget {
     this.height = double.infinity,
     this.fit = BoxFit.cover,
     this.radius,
+    this.iconcolor,
   }) : super(key: key);
 
   @override
@@ -71,7 +73,7 @@ class _GenericSliderState extends State<GenericSlider> {
                             imageUrl: widget.images[i],
                             fit: widget.fit,
                             placeHolder: Icons.photo,
-                            radius: radius,
+                            radius: widget.radius ?? radius,
                           ),
                         ),
                       ],
@@ -99,8 +101,10 @@ class _GenericSliderState extends State<GenericSlider> {
                             horizontal: 4.0, vertical: 2),
                         decoration: BoxDecoration(
                             color: _activeIndex == i
-                                ? primaryColorLT
-                                : primaryColorLT.withOpacity(0.5),
+                                ? widget.iconcolor ?? primaryColorLT
+                                : widget.iconcolor == null
+                                    ? widget.iconcolor!.withOpacity(0.5)
+                                    : primaryColorLT.withOpacity(0.5),
                             borderRadius: BorderRadius.circular(10.0)),
                       );
                     }),

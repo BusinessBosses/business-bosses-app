@@ -217,7 +217,7 @@ class _SetupshopState extends State<Setupshop> with TickerProviderStateMixin {
       image = widget.shop!.image;
       fbslController.text = widget.shop!.facebook ?? '';
       igslController.text = widget.shop!.instagram ?? '';
-      lslController.text = widget.shop!.linkedin ?? '';
+      lslController.text = widget.shop!.linkedIn ?? '';
       xslController.text = widget.shop!.twitter ?? '';
       cslController.text = widget.shop!.url ?? '';
       _populatePaymentMethods(widget.shop!.payments);
@@ -232,22 +232,22 @@ class _SetupshopState extends State<Setupshop> with TickerProviderStateMixin {
   }
 
   bool _validateForm() {
-    if (_selectedImage == null && image == null) {
-      showSnackbar(message: 'Photo is required', error: true);
-      return false;
-    }
+    // if (_selectedImage == null && image == null) {
+    //   showSnackbar(message: 'Photo is required', error: true);
+    //   return false;
+    // }
     if (nameController.text.isEmpty) {
       showSnackbar(message: 'Shop name is required', error: true);
       return false;
     }
-    if (phoneController.text.isEmpty) {
-      showSnackbar(message: 'Phone number is required', error: true);
-      return false;
-    }
-    if (emailController.text.isEmpty || !emailController.text.contains('@')) {
-      showSnackbar(message: 'Valid email address is required', error: true);
-      return false;
-    }
+    // if (phoneController.text.isEmpty) {
+    //   showSnackbar(message: 'Phone number is required', error: true);
+    //   return false;
+    // }
+    // if (emailController.text.isEmpty || !emailController.text.contains('@')) {
+    //   showSnackbar(message: 'Valid email address is required', error: true);
+    //   return false;
+    // }
     if (_selectedLocation == null) {
       showSnackbar(message: 'Location is required', error: true);
       return false;
@@ -475,7 +475,7 @@ class _SetupshopState extends State<Setupshop> with TickerProviderStateMixin {
                     ),
                     const SizedBox(height: 15),
                     CustomEditText(
-                      maxLength: 30,
+                      maxLength: 50,
                       optionalText: RichText(
                         text: const TextSpan(
                           children: <InlineSpan>[
@@ -583,7 +583,7 @@ class _SetupshopState extends State<Setupshop> with TickerProviderStateMixin {
                       controller: bankController,
                       pmh1: 'Enter Instagram URL',
                       pmh2: 'Enter Facebook URL',
-                      pmh3: 'Enter Linkedin URL',
+                      pmh3: 'Enter linkedIn URL',
                       pmh4: 'Enter X URL',
                       pmh5: 'Enter Custom URL',
                       pm1controller: igslController,
@@ -660,7 +660,7 @@ class _SetupshopState extends State<Setupshop> with TickerProviderStateMixin {
         image = response['fileUrl'];
       } else {
         showSnackbar(
-          message: 'Error while adding shop!',
+          message: 'Error while adding shop image!',
           error: true,
         );
         setState(() {
@@ -686,7 +686,7 @@ class _SetupshopState extends State<Setupshop> with TickerProviderStateMixin {
       'instagram': igslController.text,
       'twitter': xslController.text,
       'facebook': fbslController.text,
-      'linkedin': lslController.text,
+      'linkedIn': lslController.text,
       'url': cslController.text,
     };
 
@@ -704,7 +704,7 @@ class _SetupshopState extends State<Setupshop> with TickerProviderStateMixin {
       'instagram': igslController.text,
       'twitter': xslController.text,
       'facebook': fbslController.text,
-      'linkedin': lslController.text,
+      'linkedIn': lslController.text,
       'url': cslController.text,
     };
 

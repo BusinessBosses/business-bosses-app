@@ -139,7 +139,7 @@ class _CreateSellingitemScreenState extends State<CreateSellingitemScreen> {
                     onChanged: (String val) => title = val,
                     textInputAction: TextInputAction.next,
                     keyboardType: TextInputType.text,
-                    maxLength: 15,
+                    maxLength: 30,
                     decoration: inputDecoration.copyWith(
                       hintText: 'Enter Product Title',
                     ),

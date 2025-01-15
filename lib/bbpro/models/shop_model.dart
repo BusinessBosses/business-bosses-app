@@ -18,7 +18,7 @@ class Shop {
   final String? plan;
   final String? facebook;
   final String? twitter;
-  final String? linkedin;
+  final String? linkedIn;
   final String? instagram;
   final String? url;
   final DateTime createdAt;
@@ -48,7 +48,7 @@ class Shop {
     this.user,
     this.facebook,
     this.twitter,
-    this.linkedin,
+    this.linkedIn,
     this.instagram,
     this.url,
   });
@@ -74,7 +74,7 @@ class Shop {
       currency: json['currency'],
       facebook: json['facebook'],
       twitter: json['twitter'],
-      linkedin: json['linkedin'],
+      linkedIn: json['linkedIn'],
       instagram: json['instagram'],
       url: json['url'],
       appId: json['appId'],
@@ -104,7 +104,7 @@ class Shop {
       'facebook': facebook,
       'twitter': twitter,
       'instagram': instagram,
-      'linkedin': linkedin,
+      'linkedIn': linkedIn,
       'url': url,
       'appId': appId,
       'createdAt': createdAt.toIso8601String(),

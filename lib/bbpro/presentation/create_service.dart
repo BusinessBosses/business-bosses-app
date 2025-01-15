@@ -9,6 +9,7 @@ import 'package:business_bosses_v2/bbpro/widgets/iconbutton.dart';
 import 'package:business_bosses_v2/bbpro/widgets/switchwidget.dart';
 import 'package:business_bosses_v2/bbpro/widgets/taskitem.dart';
 import 'package:business_bosses_v2/features/marketplace/widgets/currency.dart';
+import 'package:business_bosses_v2/features/posts/widgets/image_item.dart';
 import 'package:business_bosses_v2/features/profile/controller/profile_controller.dart';
 import 'package:business_bosses_v2/services/api_service.dart';
 import 'package:flutter/material.dart';
@@ -39,7 +40,7 @@ class _CreateServiceListingState extends State<CreateServiceListing>
   final ProfileController profileController = Get.find();
   final ImagePicker _picker = ImagePicker();
   final List<File> _selectedImages = <File>[];
-  final List<Map<String, dynamic>> packages = <Map<String, dynamic>>[];
+  List<Map<String, dynamic>> packages = <Map<String, dynamic>>[];
   final TextEditingController _serviceNameController = TextEditingController();
   final TextEditingController _priceController = TextEditingController();
   final TextEditingController _descriptionController = TextEditingController();
@@ -57,13 +58,11 @@ class _CreateServiceListingState extends State<CreateServiceListing>
 
   // Form fields
   String? category;
-  String? categorys;
   String location = '';
   List<String> images = <String>[];
   List<String>? updateImages = <String>[];
   String? paymentMethod;
   String? deliveryMethod;
-  String? deliveryTime;
   DateTime availableTime = DateTime.now();
   String? serviceType;
   Map<String, dynamic>? availability;
@@ -73,8 +72,8 @@ class _CreateServiceListingState extends State<CreateServiceListing>
   List<DateTime> _selectedDates = <DateTime>[];
   bool _isAlwaysAvailable = false;
   final List<bool> _selectedWeekdays = List<bool>.filled(7, false);
-  TimeOfDay _startTime = const TimeOfDay(hour: 9, minute: 0);
-  TimeOfDay _endTime = const TimeOfDay(hour: 17, minute: 0);
+  TimeOfDay? _startTime;
+  TimeOfDay? _endTime;
   bool _startTimeSelected = false;
   bool _endTimeSelected = false;
   List<String> paymentMethods = <String>[];
@@ -88,7 +87,10 @@ class _CreateServiceListingState extends State<CreateServiceListing>
     'Sat',
     'Sun'
   ];
-  String frequency = 'Weekly';
+  String frequency = 'No (One-time Service)';
+  DateTime? _startDate;
+  DateTime? _endDate;
+  String deliveryTime = 'false';
 
   @override
   void initState() {
@@ -104,6 +106,11 @@ class _CreateServiceListingState extends State<CreateServiceListing>
       paymentMethods.add(payments['paymentMethod']);
     }
     if (widget.service != null) {
+      frequency = widget.service!.repeat!;
+      _isAlwaysAvailable =
+          widget.service!.deliveryTime == 'true' ? true : false;
+      deliveryTime = widget.service!.deliveryTime.toString();
+      groupmembersController.text = widget.service!.participants.toString();
       _serviceNameController.text = widget.service!.name;
       _priceController.text = widget.service!.price.toString();
       _discountController.text = widget.service!.discount.toString();
@@ -113,7 +120,6 @@ class _CreateServiceListingState extends State<CreateServiceListing>
       images = widget.service!.images!;
       updateImages = widget.service!.images;
       deliveryMethod = widget.service!.deliveryMethod;
-      deliveryTime = widget.service!.deliveryTime;
       availableTime = widget.service!.availableTime != null
           ? widget.service!.availableTime!
           : DateTime.now();
@@ -128,12 +134,14 @@ class _CreateServiceListingState extends State<CreateServiceListing>
           : (widget.service!.selectedDates)
               .map((dynamic date) => DateTime.parse(date.toString()))
               .toList();
-      packages.addAll(
-          widget.service!.packages.map((dynamic package) => <String, dynamic>{
-                'name': package['name'],
-                'price': package['price'],
-              }));
+      packages = List<Map<String, dynamic>>.from(widget.service!.packages);
       availability = widget.service!.availability;
+      _startDate = widget.service!.availability == null
+          ? null
+          : DateTime.parse(widget.service!.availability!['startDate']);
+      _endDate = widget.service!.availability == null
+          ? null
+          : DateTime.parse(widget.service!.availability!['endDate']);
       _startTime = TimeOfDay(
           hour: widget.service!.availability == null
               ? 0
@@ -153,17 +161,15 @@ class _CreateServiceListingState extends State<CreateServiceListing>
               : int.parse(widget.service!.availability!['endTime']
                   .substring(3, 5))); // Extract minute
 
-      // selectedSubmitWeekdays =
-      //     List<String>.from(widget.service!.availability!['dayOfWeek']);
-      // _selectedWeekdays = List<bool>.filled(7, false);
-
+      selectedSubmitWeekdays =
+          List<String>.from(availability?['dayOfWeek'] ?? <String>[]);
       for (int i = 0; i < weekdays.length; i++) {
         if (selectedSubmitWeekdays.contains(weekdays[i])) {
           _selectedWeekdays[i] = true;
         }
       }
 
-      _updateSelectedDates();
+      // _updateSelectedDates();
       _startTimeSelected = true;
       _endTimeSelected = true;
     }
@@ -174,10 +180,19 @@ class _CreateServiceListingState extends State<CreateServiceListing>
   }
 
   Future<void> _pickImage() async {
-    final XFile? image = await _picker.pickImage(source: ImageSource.gallery);
-    if (image != null) {
+    if (_selectedImages.length >= 5) {
+      showSnackbar(message: 'Maximum of 5 images allowed', error: true);
+      return;
+    }
+    final List<XFile> images = await _picker.pickMultiImage();
+    if (images.isNotEmpty) {
       setState(() {
-        _selectedImages.add(File(image.path));
+        _selectedImages.addAll(images
+            .map((XFile image) => File(image.path))
+            .take(5 - _selectedImages.length)); // Limit to 5 images
+        if (_selectedImages.length > 5) {
+          _selectedImages.removeRange(5, _selectedImages.length);
+        }
       });
     }
   }
@@ -275,7 +290,7 @@ class _CreateServiceListingState extends State<CreateServiceListing>
             CustomEditText(
               caption: 'Service Name *',
               hintText: 'Enter service name here',
-              maxLength: 15,
+              maxLength: 30,
               controller: _serviceNameController,
             ),
             const SizedBox(height: 16),
@@ -299,7 +314,7 @@ class _CreateServiceListingState extends State<CreateServiceListing>
                     child: CustomEditText(
                       maxLength: 15,
                       padding: 0,
-                      caption: 'Discount',
+                      caption: 'Discount (%)',
                       hintText: 'Enter discount',
                       controller: _discountController,
                       inputType: TextInputType.number,
@@ -318,8 +333,8 @@ class _CreateServiceListingState extends State<CreateServiceListing>
             ),
             const SizedBox(height: 16),
             CustomDropdownWidget(
-              initialValue: categorys,
-              caption: 'Select Category *',
+              initialValue: category,
+              caption: 'Select Category',
               hintText: 'Choose a category',
               items: const <String>[
                 'Home, Garden & Outdoors',
@@ -338,34 +353,10 @@ class _CreateServiceListingState extends State<CreateServiceListing>
               iconName: 'assets/svgs/dropdown.svg',
               onChanged: (String? newValue) {
                 setState(() {
-                  categorys = newValue;
+                  category = newValue;
                 });
               },
             ),
-
-            // Select Category Dropdown
-            // DropdownButtonFormField<String>(
-            //   decoration: const InputDecoration(
-            //     labelText: 'Select Category',
-            //     border: OutlineInputBorder(),
-            //   ),
-            //   value: category,
-            //   items: <String>[
-            //     'Design Services',
-            //     'Consulting',
-            //     'Technical Support'
-            //   ].map((String category) {
-            //     return DropdownMenuItem<String>(
-            //       value: category,
-            //       child: Text(category),
-            //     );
-            //   }).toList(),
-            //   onChanged: (String? newValue) {
-            //     setState(() {
-            //       category = newValue;
-            //     });
-            //   },
-            // ),
             const SizedBox(height: 16),
 
             // Location Dropdown
@@ -445,46 +436,43 @@ class _CreateServiceListingState extends State<CreateServiceListing>
             ),
             const SizedBox(height: 16),
 
-            if (_selectedImages.isNotEmpty)
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 15.0),
-                child: GridView.builder(
-                  shrinkWrap: true,
-                  physics: const NeverScrollableScrollPhysics(),
-                  gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                    crossAxisCount: 3,
-                    crossAxisSpacing: 4,
-                    mainAxisSpacing: 4,
-                  ),
-                  itemCount: _selectedImages.length,
-                  itemBuilder: (BuildContext context, int index) {
-                    return Image.file(
-                      _selectedImages[index],
-                      fit: BoxFit.cover,
-                    );
-                  },
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 15.0),
+              child: GridView.builder(
+                shrinkWrap: true,
+                physics: const NeverScrollableScrollPhysics(),
+                gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                  crossAxisCount: 3,
+                  crossAxisSpacing: 4,
+                  mainAxisSpacing: 4,
                 ),
-              ),
-            if (updateImages!.isNotEmpty)
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 15.0),
-                child: GridView.builder(
-                  shrinkWrap: true,
-                  physics: const NeverScrollableScrollPhysics(),
-                  gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                    crossAxisCount: 3,
-                    crossAxisSpacing: 4,
-                    mainAxisSpacing: 4,
-                  ),
-                  itemCount: updateImages!.length,
-                  itemBuilder: (BuildContext context, int index) {
-                    return Image.network(
-                      updateImages![index],
-                      fit: BoxFit.cover,
+                itemCount: _selectedImages.length + updateImages!.length,
+                itemBuilder: (BuildContext context, int index) {
+                  if (index < _selectedImages.length) {
+                    return ImageItem(
+                      file: _selectedImages[index],
+                      onRemove: () {
+                        setState(() {
+                          _selectedImages.removeAt(index);
+                        });
+                      },
+                      imageUrl: null,
                     );
-                  },
-                ),
+                  } else {
+                    final int updateIndex = index - _selectedImages.length;
+                    return ImageItem(
+                      file: null,
+                      onRemove: () {
+                        setState(() {
+                          updateImages!.removeAt(updateIndex);
+                        });
+                      },
+                      imageUrl: updateImages![updateIndex],
+                    );
+                  }
+                },
               ),
+            ),
 
             // Delivery Method Dropdown
             ExpansionTile(
@@ -535,33 +523,11 @@ class _CreateServiceListingState extends State<CreateServiceListing>
                             counterText: null,
                           ),
                           controller: addressorlinkController,
-                          // validator: (String? value) {
-                          //   if (value == null || value.isEmpty) {
-                          //     return deliveryMethod == 'Online'
-                          //         ? 'Please enter meeting link here'
-                          //         : 'Please enter an address';
-                          //   }
-                          //   return null;
-                          // },
                         )
                       : null,
                 ),
 
                 const SizedBox(height: 16),
-                // CustomDropdownWidget(
-                //   caption: 'Repeat',
-                //   hintText: 'Offer this service once or regularly?',
-                //   items: const <String>[
-                //     'Yes (One-time Service)',
-                //     'No (Regular Service)',
-                //   ],
-                //   iconName: 'assets/svgs/dropdown.svg',
-                //   onChanged: (String? newValue) {
-                //     setState(() {
-                //       category = newValue;
-                //     });
-                //   },
-                // ),
 
                 CustomDropdownWidget(
                   caption: 'Repeat',
@@ -571,54 +537,20 @@ class _CreateServiceListingState extends State<CreateServiceListing>
                     'No (One-time Service)',
                   ],
                   iconName: 'assets/svgs/dropdown.svg',
-                  initialValue: <String>[
-                    'Yes (Regular Service)',
-                    'No (One-time Service)'
-                  ].contains(category)
-                      ? category
-                      : null,
+                  initialValue: frequency,
                   onChanged: (String? newValue) {
                     setState(() {
-                      category = newValue;
+                      frequency = newValue!;
                     });
                   },
                 ),
 
                 const SizedBox(height: 16),
 
-                if (category != null)
-                  availabilityWidget(
-                      isRecurring:
-                          category == 'Yes (Regular Service)' ? true : false),
-
-                // Delivery Time Field
-                // TextFormField(
-                //   decoration: const InputDecoration(
-                //     labelText: 'Delivery Time',
-                //     hintText: 'e.g., 3-5 business days',
-                //     border: OutlineInputBorder(),
-                //   ),
-                //   onChanged: (String value) {
-                //     setState(() {
-                //       deliveryTime = value;
-                //     });
-                //   },
-                // ),
-                if (category != null) const SizedBox(height: 16),
-
-                // Available Time Field
-                // TextFormField(
-                //   readOnly: true,
-                //   decoration: InputDecoration(
-                //     labelText: 'Available Time',
-                //     hintText: _formatDate(availableTime),
-                //     border: const OutlineInputBorder(),
-                //   ),
-                //   onTap: () => _selectDate(context),
-                // ),
-                // const SizedBox(height: 16),
-
-                // Payment Method Dropdown
+                availabilityWidget(
+                    isRecurring:
+                        frequency == 'Yes (Regular Service)' ? true : false),
+                const SizedBox(height: 16),
 
                 CustomDropdownWidget(
                   caption: 'Payment Method',
@@ -775,13 +707,6 @@ class _CreateServiceListingState extends State<CreateServiceListing>
               ],
             ),
 
-            // Padding(
-            //   padding: const EdgeInsets.symmetric(horizontal: 15.0),
-            //   child: MultipleEditTextWidget(
-            //       caption: 'Add Additional Packages to this service',
-            //       hintText: 'Package Name',
-            //       controller: _serviceNameController),
-            // ),
             const SizedBox(height: 16),
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 15.0),
@@ -816,27 +741,6 @@ class _CreateServiceListingState extends State<CreateServiceListing>
     );
   }
 
-  // String _formatDate(DateTime? dateTime) {
-  //   if (dateTime == null) {
-  //     return 'Select date';
-  //   }
-  //   return DateFormat('yyyy-MM-dd').format(dateTime);
-  // }
-
-  // Future<void> _selectDate(BuildContext context) async {
-  //   final DateTime? picked = await showDatePicker(
-  //     context: context,
-  //     initialDate: availableTime ?? DateTime.now(),
-  //     firstDate: DateTime(2000),
-  //     lastDate: DateTime(2101),
-  //   );
-  //   if (picked != null && picked != availableTime) {
-  //     setState(() {
-  //       availableTime = picked;
-  //     });
-  //   }
-  // }
-
   void _submitForm() async {
     if (_serviceNameController.text.isEmpty) {
       showSnackbar(
@@ -857,22 +761,19 @@ class _CreateServiceListingState extends State<CreateServiceListing>
       );
       return;
     }
-    if (!(_endTime.hour > _startTime.hour ||
-        (_endTime.hour == _startTime.hour &&
-            _endTime.minute >= _startTime.minute))) {
+    _startTime ??= const TimeOfDay(hour: 9, minute: 0);
+    _endTime ??= const TimeOfDay(hour: 17, minute: 0);
+    _startDate ??= DateTime.now();
+    _endDate ??= DateTime.now();
+    if (!(_endTime!.hour > _startTime!.hour ||
+        (_endTime?.hour == _startTime?.hour &&
+            _endTime!.minute >= _startTime!.minute))) {
       showSnackbar(
         message: 'End Time cannot be before Start Time!',
         error: true,
       );
-      return; // Or handle the error as needed
+      return;
     }
-    // else if (selectedSubmitWeekdays.isEmpty) {
-    //   showSnackbar(
-    //     message: 'Selecting a day is Mandatory!',
-    //     error: true,
-    //   );
-    //   return;
-    // }
 
     if (_formKey.currentState?.validate() ?? false) {
       _formKey.currentState?.save();
@@ -893,7 +794,6 @@ class _CreateServiceListingState extends State<CreateServiceListing>
         if (_serviceNameController.text.isEmpty ||
             _priceController.text.isEmpty ||
             _descriptionController.text.isEmpty) {
-          // Check if days are selected
           showSnackbar(
               message: 'Please fill in all required fields', error: true);
           return;
@@ -909,7 +809,6 @@ class _CreateServiceListingState extends State<CreateServiceListing>
               ? '0'
               : _discountController.text.trim(),
           'category': category,
-          'categorys': categorys,
           'location':
               location.isEmpty ? shopController.shop!.location : location,
           'participants': groupmembersController.text,
@@ -917,30 +816,29 @@ class _CreateServiceListingState extends State<CreateServiceListing>
           'images': images.isEmpty ? null : images,
           'paymentMethod': paymentMethod ?? '',
           'deliveryMethod': deliveryMethod ?? '',
-          'deliveryTime': deliveryTime ?? '',
           'availableTime': availableTime.toIso8601String(),
           'serviceType': serviceType ?? '1:1',
           'itemType': 'service',
           'isActive': _isSwitched,
+          'deliveryTime': _isAlwaysAvailable.toString(),
           'serviceAvailability': <String, dynamic>{
             'dayOfWeek': selectedSubmitWeekdays.isEmpty
                 ? <String>[
-                    'Monday',
-                    'Tuesday',
-                    'Wednesday',
-                    'Thursday',
-                    'Friday'
+                    'Mon',
+                    'Tue',
+                    'Wed',
+                    'Thu',
+                    'Fri',
                   ]
                 : selectedSubmitWeekdays,
             'startTime':
-                '${_startTime.hour.toString().padLeft(2, '0')}:${_startTime.minute.toString().padLeft(2, '0')}:00',
+                '${_startTime?.hour.toString().padLeft(2, '0')}:${_startTime?.minute.toString().padLeft(2, '0')}:00',
             'endTime':
-                '${_endTime.hour.toString().padLeft(2, '0')}:${_endTime.minute.toString().padLeft(2, '0')}:00',
-            'startDate': '2023-10-01',
-            'endDate': '2023-10-01',
+                '${_endTime?.hour.toString().padLeft(2, '0')}:${_endTime?.minute.toString().padLeft(2, '0')}:00',
+            'startDate': _startDate?.toIso8601String(),
+            'endDate': _endDate?.toIso8601String(),
           },
-          'servicePackages':
-              packages.isEmpty ? <Map<String, dynamic>>[] : packages,
+          'packages': packages,
           'url': addressorlinkController.text,
           'notes': notesController.text.trim().isEmpty
               ? null
@@ -1013,6 +911,7 @@ class _CreateServiceListingState extends State<CreateServiceListing>
                           : _animationController.forward();
                       setState(() {
                         _isAlwaysAvailable = !_isAlwaysAvailable;
+                        deliveryTime = _isAlwaysAvailable.toString();
                         if (_isAlwaysAvailable) {
                           _selectedWeekdays.fillRange(0, 7, true);
                           selectedSubmitWeekdays = weekdays;
@@ -1020,7 +919,6 @@ class _CreateServiceListingState extends State<CreateServiceListing>
                           _selectedWeekdays.fillRange(0, 7, false);
                           selectedSubmitWeekdays = <String>[];
                         }
-                        _updateSelectedDates();
                       });
                     },
                     child: AnimatedBuilder(
@@ -1073,122 +971,124 @@ class _CreateServiceListingState extends State<CreateServiceListing>
                 ],
               ),
             const SizedBox(height: 10),
-            if (isRecurring && !_isAlwaysAvailable)
-              Container(
-                width: 200,
-                padding: const EdgeInsets.symmetric(horizontal: 10),
-                decoration: BoxDecoration(
-                    color: probackgroundColor,
-                    borderRadius: BorderRadius.circular(10)),
-                child: DropdownButtonHideUnderline(
-                    child: DropdownButton<String>(
-                  hint: const Text('Select repeat frequency'),
-                  value: <String>['Repeat Weekly', 'Repeat Monthly']
-                          .contains(frequency)
-                      ? frequency
-                      : null,
-                  onChanged: (String? newValue) {
-                    setState(() {
-                      frequency = newValue!;
-                    });
-                  },
-                  items: const <String>[
-                    'Repeat Weekly',
-                    'Repeat Monthly',
-                  ].map((String value) {
-                    return DropdownMenuItem<String>(
-                      value: value,
-                      child: Text(value),
+            // if (isRecurring && !_isAlwaysAvailable)
+            //   Container(
+            //     width: 200,
+            //     padding: const EdgeInsets.symmetric(horizontal: 10),
+            //     decoration: BoxDecoration(
+            //         color: probackgroundColor,
+            //         borderRadius: BorderRadius.circular(10)),
+            //     child: DropdownButtonHideUnderline(
+            //         child: DropdownButton<String>(
+            //       hint: const Text('Select repeat frequency'),
+            //       value: <String>['Repeat Weekly', 'Repeat Monthly']
+            //               .contains(frequency)
+            //           ? frequency
+            //           : null,
+            //       onChanged: (String? newValue) {
+            //         setState(() {
+            //           frequency = newValue!;
+            //         });
+            //       },
+            //       items: const <String>[
+            //         'Repeat Weekly',
+            //         'Repeat Monthly',
+            //       ].map((String value) {
+            //         return DropdownMenuItem<String>(
+            //           value: value,
+            //           child: Text(value),
+            //         );
+            //       }).toList(),
+            //       isExpanded: true,
+            //       icon: SvgPicture.asset(
+            //         'assets/svgs/dropdown.svg',
+            //         color: proprimaryColor,
+            //       ),
+            //     )),
+            //   ),
+            // const SizedBox(height: 10),
+            if (!_isAlwaysAvailable && isRecurring)
+              Wrap(
+                  spacing: 8,
+                  children: List<Widget>.generate(7, (int index) {
+                    return ChoiceChip(
+                      label: Text(_getWeekdayName(index)),
+                      selected: selectedSubmitWeekdays
+                          .contains(_getWeekdayName(index)),
+                      selectedColor: proprimaryColor,
+                      onSelected: (bool selected) {
+                        setState(() {
+                          if (selectedSubmitWeekdays
+                              .contains(_getWeekdayName(index))) {
+                            selectedSubmitWeekdays.remove(_getWeekdayName(
+                                index)); // Remove if already selected
+                          } else {
+                            selectedSubmitWeekdays.add(
+                                _getWeekdayName(index)); // Add if not selected
+                          }
+                          selectedSubmitWeekdays.sort((String a, String b) =>
+                              weekdays
+                                  .indexOf(a)
+                                  .compareTo(weekdays.indexOf(b)));
+                        });
+                      },
                     );
-                  }).toList(),
-                  isExpanded: true,
-                  icon: SvgPicture.asset(
-                    'assets/svgs/dropdown.svg',
-                    color: proprimaryColor,
-                  ),
-                )),
-              ),
-            const SizedBox(height: 10),
-            if (isRecurring && !_isAlwaysAvailable)
-              frequency == 'Weekly'
-                  ? Wrap(
-                      spacing: 8,
-                      children: List<Widget>.generate(7, (int index) {
-                        return ChoiceChip(
-                          label: Text(_getWeekdayName(index)),
-                          selected: _selectedWeekdays[index],
-                          selectedColor: proprimaryColor,
-                          onSelected: (bool selected) {
-                            setState(() {
-                              _selectedWeekdays[index] = selected;
-                              _updateSelectedDates();
-                              if (selectedSubmitWeekdays
-                                  .contains(_getWeekdayName(index))) {
-                                selectedSubmitWeekdays.remove(_getWeekdayName(
-                                    index)); // Remove if already selected
-                              } else {
-                                selectedSubmitWeekdays.add(_getWeekdayName(
-                                    index)); // Add if not selected
-                              }
-                              selectedSubmitWeekdays.sort(
-                                  (String a, String b) => weekdays
-                                      .indexOf(a)
-                                      .compareTo(weekdays.indexOf(b)));
-                            });
-                          },
-                        );
-                      }))
-                  : SizedBox(
-                      height: 300,
-                      child: SfCalendar(
-                        initialSelectedDate: _selectedDates.isNotEmpty
-                            ? _selectedDates[0]
-                            : DateTime.now(),
-                        selectionDecoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(8),
-                          color: Colors.transparent,
-                        ),
-                        todayHighlightColor: proprimaryColor,
-                        view: CalendarView.month,
-                        initialDisplayDate: _selectedDates.isNotEmpty
-                            ? _selectedDates[0]
-                            : DateTime.now(),
-                        monthViewSettings: const MonthViewSettings(
-                          appointmentDisplayMode:
-                              MonthAppointmentDisplayMode.indicator,
-                        ),
-                        dataSource: _getCalendarDataSource(),
-                        onTap: (CalendarTapDetails details) {
-                          setState(() {
-                            if (_selectedDates.contains(details.date)) {
-                              _selectedDates.remove(details.date);
-                            } else {
-                              _selectedDates.add(details.date!);
-                            }
-                          });
-                        },
-                      ),
-                    ),
+                  })),
+            // : SizedBox(
+            //     height: 300,
+            //     child: SfCalendar(
+            //       initialSelectedDate: _selectedDates.isNotEmpty
+            //           ? _selectedDates[0]
+            //           : DateTime.now(),
+            //       selectionDecoration: BoxDecoration(
+            //         borderRadius: BorderRadius.circular(8),
+            //         color: Colors.transparent,
+            //       ),
+            //       todayHighlightColor: proprimaryColor,
+            //       view: CalendarView.month,
+            //       initialDisplayDate: _selectedDates.isNotEmpty
+            //           ? _selectedDates[0]
+            //           : DateTime.now(),
+            //       monthViewSettings: const MonthViewSettings(
+            //         appointmentDisplayMode:
+            //             MonthAppointmentDisplayMode.indicator,
+            //       ),
+            //       dataSource: _getCalendarDataSource(),
+            //       onTap: (CalendarTapDetails details) {
+            //         setState(() {
+            //           if (_selectedDates.contains(details.date)) {
+            //             _selectedDates.remove(details.date);
+            //           } else {
+            //             _selectedDates.add(details.date!);
+            //           }
+            //         });
+            //       },
+            //     ),
+            //   ),
             if (!isRecurring)
               SizedBox(
-                height: 400,
+                height: MediaQuery.of(context).size.height / 3,
                 child: SfCalendar(
-                  initialSelectedDate: _selectedDates.isNotEmpty
-                      ? _selectedDates[0]
-                      : DateTime.now(),
+                  initialSelectedDate: _startDate ??
+                      (_selectedDates.isNotEmpty
+                          ? _selectedDates[0]
+                          : DateTime.now()),
                   selectionDecoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(8),
-                    color: Colors.transparent,
+                    borderRadius: BorderRadius.circular(0),
+                    color: proprimaryColor.withOpacity(0.5),
                   ),
-                  todayHighlightColor: proprimaryColor,
+                  todayTextStyle: const TextStyle(color: Colors.black),
+                  todayHighlightColor: Colors.transparent,
                   view: CalendarView.month,
-                  initialDisplayDate: _selectedDates.isNotEmpty
-                      ? _selectedDates[0]
-                      : DateTime.now(),
+                  initialDisplayDate: _startDate ??
+                      (_selectedDates.isNotEmpty
+                          ? _selectedDates[0]
+                          : DateTime.now()),
+                  minDate: DateTime.now(),
                   monthViewSettings: const MonthViewSettings(
                     appointmentDisplayMode:
                         MonthAppointmentDisplayMode.indicator,
-                    showAgenda: true, // Enable agenda view to select dates
+                    showAgenda: false, // Enable agenda view to select dates
                   ),
                   dataSource: _getCalendarDataSource(),
                   onTap: (CalendarTapDetails details) {
@@ -1209,12 +1109,15 @@ class _CreateServiceListingState extends State<CreateServiceListing>
                         _selectedWeekdays[weekdayIndex] = true;
                         selectedSubmitWeekdays
                             .add(_getWeekdayName(weekdayIndex));
+
+                        // Set _startDate to the selected date
+                        _startDate = selectedDate;
                       });
                     }
                   },
                 ),
               ),
-            if (isRecurring) const SizedBox(height: 20),
+            const SizedBox(height: 20),
             Text(!isRecurring
                 ? 'Available Time for selected day'
                 : 'Available Time for selected days'),
@@ -1224,7 +1127,7 @@ class _CreateServiceListingState extends State<CreateServiceListing>
                 TextButton(
                   onPressed: () => _selectTime(context, true),
                   child: Text(
-                    'Start Time: ${_startTime.format(context)}',
+                    'Start Time: ${_startTime?.format(context) ?? '9:00 AM'}',
                     style: TextStyle(
                       color: _startTimeSelected ? Colors.black : Colors.grey,
                     ),
@@ -1233,7 +1136,7 @@ class _CreateServiceListingState extends State<CreateServiceListing>
                 TextButton(
                   onPressed: () => _selectTime(context, false),
                   child: Text(
-                    'End Time: ${_endTime.format(context)}',
+                    'End Time: ${_endTime?.format(context) ?? '5:00 PM'}',
                     style: TextStyle(
                       color: _endTimeSelected ? Colors.black : Colors.grey,
                     ),
@@ -1260,18 +1163,18 @@ class _CreateServiceListingState extends State<CreateServiceListing>
     return weekdayss[index];
   }
 
-  void _updateSelectedDates() {
-    _selectedDates.clear();
-    if (!_isAlwaysAvailable) {
-      DateTime now = DateTime.now();
-      for (int i = 0; i < 365; i++) {
-        DateTime date = now.add(Duration(days: i));
-        if (_selectedWeekdays[date.weekday - 1]) {
-          _selectedDates.add(date);
-        }
-      }
-    }
-  }
+  // void _updateSelectedDates() {
+  //   _selectedDates.clear();
+  //   if (!_isAlwaysAvailable) {
+  //     DateTime now = DateTime.now();
+  //     for (int i = 0; i < 365; i++) {
+  //       DateTime date = now.add(Duration(days: i));
+  //       if (_selectedWeekdays[date.weekday - 1]) {
+  //         _selectedDates.add(date);
+  //       }
+  //     }
+  //   }
+  // }
 
   CalendarDataSource _getCalendarDataSource() {
     List<Appointment> appointments = _selectedDates
@@ -1287,25 +1190,12 @@ class _CreateServiceListingState extends State<CreateServiceListing>
     return _AppointmentDataSource(appointments);
   }
 
-  // void _handleCalendarTap(CalendarTapDetails details) {
-  //   if (!_isAlwaysAvailable &&
-  //       details.targetElement == CalendarElement.calendarCell) {
-  //     setState(() {
-  //       DateTime selectedDate = DateTime(
-  //           details.date!.year, details.date!.month, details.date!.day);
-  //       if (_selectedDates.contains(selectedDate)) {
-  //         _selectedDates.remove(selectedDate);
-  //       } else {
-  //         _selectedDates.add(selectedDate);
-  //       }
-  //     });
-  //   }
-  // }
-
   Future<void> _selectTime(BuildContext context, bool isStartTime) async {
     final TimeOfDay? picked = await showTimePicker(
       context: context,
-      initialTime: isStartTime ? _startTime : _endTime,
+      initialTime: isStartTime
+          ? _startTime ?? const TimeOfDay(hour: 9, minute: 0)
+          : _endTime ?? const TimeOfDay(hour: 17, minute: 0),
     );
     if (picked != null) {
       setState(() {

@@ -94,33 +94,46 @@ class _ClientsScreenState extends State<ClientsScreen>
   @override
   Widget build(BuildContext context) {
     final Size screenSize = MediaQuery.of(context).size;
+    // Dynamically build the children map based on the condition
+    Map<int, Widget> segments = <int, Widget>{
+      0: const Padding(
+        padding: EdgeInsets.symmetric(horizontal: 0, vertical: 10),
+        child: Text('Customers', style: TextStyle(fontSize: 14)),
+      ),
+    };
+
+    if (profileController.myProfile.isSubscribed) {
+      segments[1] = const Padding(
+        padding: EdgeInsets.symmetric(horizontal: 5, vertical: 10),
+        child: Text('Campaign', style: TextStyle(fontSize: 14)),
+      );
+    }
     return Scaffold(
       backgroundColor: probackgroundColor,
       appBar: AppBar(
         automaticallyImplyLeading: false,
-        title: Container(
-          padding: const EdgeInsets.only(bottom: 5),
-          child: CupertinoSlidingSegmentedControl<int>(
-            groupValue: _viewController.index,
-            children: const <int, Widget>{
-              0: Padding(
-                padding: EdgeInsets.symmetric(horizontal: 0, vertical: 10),
-                child: Text('Customers', style: TextStyle(fontSize: 14)),
+        title: !profileController.myProfile.isSubscribed
+            ? Container(
+                padding: const EdgeInsets.only(bottom: 5),
+                child: CupertinoSlidingSegmentedControl<int>(
+                  groupValue: _viewController.index,
+                  children: segments,
+                  onValueChanged: (int? value) {
+                    if (value != null) {
+                      setState(() {
+                        _viewController.index = value;
+                      });
+                    }
+                  },
+                ),
+              )
+            : const Text(
+                'Customers',
+                style: TextStyle(
+                  color: proprimaryColor,
+                  fontWeight: FontWeight.bold,
+                ),
               ),
-              1: Padding(
-                padding: EdgeInsets.symmetric(horizontal: 5, vertical: 10),
-                child: Text('Campaign', style: TextStyle(fontSize: 14)),
-              ),
-            },
-            onValueChanged: (int? value) {
-              if (value != null) {
-                setState(() {
-                  _viewController.index = value;
-                });
-              }
-            },
-          ),
-        ),
         actions: <Widget>[
           Row(
             children: <Widget>[
@@ -255,7 +268,7 @@ class _ClientsScreenState extends State<ClientsScreen>
                                                                                             ),
                                                                                           ),
                                                                                         )
-                                                                                      : null,
+                                                                                      : const SizedBox(),
                                                                                   title: Text(supplier.name),
                                                                                   trailing: ElevatedButton(
                                                                                     onPressed: () async {
@@ -371,28 +384,29 @@ class _ClientsScreenState extends State<ClientsScreen>
                         ],
                       ),
                     ),
-                    PopupMenuItem<String>(
-                      value: 'Item 3',
-                      child: Row(
-                        children: <Widget>[
-                          SvgPicture.asset(
-                            'assets/svgs/megaphone.svg',
-                            height: 18,
-                            colorFilter: const ColorFilter.mode(
-                              textColor,
-                              BlendMode.srcIn,
+                    if (profileController.myProfile.isSubscribed)
+                      PopupMenuItem<String>(
+                        value: 'Item 3',
+                        child: Row(
+                          children: <Widget>[
+                            SvgPicture.asset(
+                              'assets/svgs/megaphone.svg',
+                              height: 18,
+                              colorFilter: const ColorFilter.mode(
+                                textColor,
+                                BlendMode.srcIn,
+                              ),
                             ),
-                          ),
-                          const SizedBox(width: 8),
-                          const Text(
-                            'Create a Campaign',
-                            style: TextStyle(
-                              fontSize: 13,
+                            const SizedBox(width: 8),
+                            const Text(
+                              'Create a Campaign',
+                              style: TextStyle(
+                                fontSize: 13,
+                              ),
                             ),
-                          ),
-                        ],
+                          ],
+                        ),
                       ),
-                    ),
                   ];
                 },
                 offset: const Offset(50, 50),

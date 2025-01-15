@@ -37,6 +37,10 @@ class OrderWidget extends StatefulWidget {
   State<OrderWidget> createState() => _OrderWidgetState();
 }
 
+String _formatTime(DateTime time) {
+  return DateFormat('hh:mm a').format(time);
+}
+
 class _OrderWidgetState extends State<OrderWidget> {
   final OrderController orderController = Get.put(OrderController());
   final ProfileController profileController = Get.find();
@@ -45,6 +49,7 @@ class _OrderWidgetState extends State<OrderWidget> {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
+        print(widget.order.startTime);
         if (widget.isExpanded != true) {
           Get.to(() => ExpandedOrders(
                 order: widget.order,
@@ -195,7 +200,7 @@ class _OrderWidgetState extends State<OrderWidget> {
                           Row(
                             children: <Widget>[
                               const Text(
-                                'Order Date: ',
+                                'Delivery Date: ',
                                 style: TextStyle(
                                   fontWeight: FontWeight.normal,
                                   fontSize: 13,
@@ -213,6 +218,25 @@ class _OrderWidgetState extends State<OrderWidget> {
                               ),
                             ],
                           ),
+                          if (widget.order.startTime != null)
+                            Row(
+                              children: <Widget>[
+                                const Text(
+                                  'Delivery Time: ',
+                                  style: TextStyle(
+                                    fontWeight: FontWeight.normal,
+                                    fontSize: 13,
+                                  ),
+                                ),
+                                Text(
+                                  'From ${_formatTime(widget.order.startTime!)} to ${_formatTime(widget.order.endTime!)}',
+                                  style: const TextStyle(
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 13,
+                                  ),
+                                ),
+                              ],
+                            ),
                           if (widget.isExpanded == true)
                             Row(
                               children: <Widget>[

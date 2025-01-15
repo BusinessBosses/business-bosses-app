@@ -79,7 +79,7 @@ class _OrderProductScreenState extends State<OrderProductScreen> {
         FocusScope.of(context).unfocus();
       },
       child: Scaffold(
-        backgroundColor: probackgroundColor,
+        backgroundColor: backgroundColor,
         appBar: AppBar(
           leading: IconButton(
             onPressed: () {
@@ -87,6 +87,7 @@ class _OrderProductScreenState extends State<OrderProductScreen> {
             },
             icon: SvgPicture.asset('assets/svgs/backbutton.svg'),
           ),
+          titleSpacing: 0,
           title: GestureDetector(
             onTap: () {
               Get.to(UserShopScreen(
@@ -100,12 +101,36 @@ class _OrderProductScreenState extends State<OrderProductScreen> {
                 Text(
                   widget.product.shop!.name,
                   style: const TextStyle(
-                    color: proprimaryColor,
+                    color: textColor,
                     fontWeight: FontWeight.bold,
                     fontSize: 14,
                   ),
                 ),
-                const Text('Visit Biz-Center', style: TextStyle(fontSize: 10)),
+                const SizedBox(height: 5),
+                Container(
+                  decoration: BoxDecoration(
+                      color: backgroundColor,
+                      borderRadius: BorderRadius.circular(radius)),
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 10.0, vertical: 3),
+                  child: const Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: <Widget>[
+                      Text(
+                        'Visit Biz-Center',
+                        style: TextStyle(
+                          fontSize: 10,
+                          color: textColor,
+                        ),
+                      ),
+                      Icon(
+                        Icons.chevron_right,
+                        color: textColor,
+                        size: 10,
+                      ),
+                    ],
+                  ),
+                ),
               ],
             ),
           ),
@@ -119,6 +144,8 @@ class _OrderProductScreenState extends State<OrderProductScreen> {
                   SizedBox(
                     height: 250,
                     child: GenericSlider(
+                      iconcolor: textColor,
+                      radius: 0,
                       images: widget.product.images!,
                     ),
                   ),
@@ -155,8 +182,8 @@ class _OrderProductScreenState extends State<OrderProductScreen> {
                                     Text(
                                       '${widget.shop.currency}${((widget.product.price * (1 - widget.product.discount! / 100)) * 100).round() / 100}',
                                       style: const TextStyle(
-                                        color: proprimaryColor,
-                                        fontWeight: FontWeight.bold,
+                                        color: Colors.black,
+                                        fontWeight: FontWeight.w900,
                                         fontSize: 16,
                                       ),
                                     ),
@@ -175,8 +202,8 @@ class _OrderProductScreenState extends State<OrderProductScreen> {
                                 Text(
                                   '${widget.shop.currency}${widget.product.price.toStringAsFixed(2)}',
                                   style: const TextStyle(
-                                    color: proprimaryColor,
-                                    fontWeight: FontWeight.bold,
+                                    color: Colors.black,
+                                    fontWeight: FontWeight.w900,
                                     fontSize: 16,
                                   ),
                                 ),
@@ -194,18 +221,6 @@ class _OrderProductScreenState extends State<OrderProductScreen> {
                           const SizedBox(
                             height: 15,
                           ),
-                          const Row(
-                            children: <Widget>[
-                              Text(
-                                'Product Description',
-                                style: TextStyle(
-                                  fontSize: 16,
-                                  fontWeight: FontWeight.w600,
-                                  color: textColor,
-                                ),
-                              ),
-                            ],
-                          ),
                           Align(
                             alignment: Alignment.centerLeft,
                             child: DetectableText(
@@ -215,10 +230,12 @@ class _OrderProductScreenState extends State<OrderProductScreen> {
                                 color: Colors.blue,
                               ),
                               moreStyle: bodyText2.copyWith(
-                                color: proprimaryColor,
+                                color: textColor,
+                                fontWeight: FontWeight.bold,
                               ),
                               lessStyle: bodyText2.copyWith(
-                                color: proprimaryColor,
+                                color: textColor,
+                                fontWeight: FontWeight.bold,
                               ),
                               trimLength: 100,
                               trimExpandedText: '  show less',
@@ -253,10 +270,12 @@ class _OrderProductScreenState extends State<OrderProductScreen> {
                                   color: Colors.blue,
                                 ),
                                 moreStyle: bodyText2.copyWith(
-                                  color: proprimaryColor,
+                                  color: textColor,
+                                  fontWeight: FontWeight.bold,
                                 ),
                                 lessStyle: bodyText2.copyWith(
-                                  color: proprimaryColor,
+                                  color: textColor,
+                                  fontWeight: FontWeight.bold,
                                 ),
                                 trimLength: 100,
                                 trimExpandedText: '  show less',
@@ -311,6 +330,7 @@ class _OrderProductScreenState extends State<OrderProductScreen> {
                         CustomDropdownWidget(
                           padding: 0,
                           isorder: true,
+                          iconcolor: textColor,
                           caption: 'Choose Color',
                           items: widget.product.color!
                               .map((String e) => e)
@@ -323,6 +343,7 @@ class _OrderProductScreenState extends State<OrderProductScreen> {
                       if (widget.product.size![0].isNotEmpty)
                         CustomDropdownWidget(
                           padding: 0,
+                          iconcolor: textColor,
                           isorder: true,
                           caption: 'Choose Size',
                           items: widget.product.size!
@@ -450,6 +471,7 @@ class _OrderProductScreenState extends State<OrderProductScreen> {
                 SizedBox(
                   width: double.infinity,
                   child: ProCustomButton(
+                    color: Colors.black,
                     loading: isSubmit,
                     onPressed: () async {
                       setState(() {

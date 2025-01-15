@@ -6,12 +6,12 @@ import 'package:flutter/material.dart';
 
 class ImageItem extends StatelessWidget {
   final String? imageUrl;
-  final VoidCallback onRemove;
+  final VoidCallback? onRemove;
   final File? file;
   const ImageItem({
     Key? key,
     this.imageUrl,
-    required this.onRemove,
+    this.onRemove,
     this.file,
   }) : super(key: key);
 

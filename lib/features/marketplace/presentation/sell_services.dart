@@ -137,7 +137,7 @@ class _CreateServiceScreenState extends State<CreateServiceScreen> {
                     onChanged: (String val) => title = val,
                     textInputAction: TextInputAction.next,
                     keyboardType: TextInputType.text,
-                    maxLength: 15,
+                    maxLength: 30,
                     decoration: inputDecoration.copyWith(
                       hintText: 'Enter service title',
                     ),

@@ -85,6 +85,7 @@ class _InventoryCardState extends State<InventoryCard> {
                       style: const TextStyle(
                         fontSize: 13,
                         fontWeight: FontWeight.bold,
+                        color: textColor,
                       ),
                       maxLines: 1,
                       overflow: TextOverflow.ellipsis,
@@ -96,8 +97,8 @@ class _InventoryCardState extends State<InventoryCard> {
                           Text(
                             '${widget.shop?.currency ?? shopController.shop!.currency}${((widget.product!.price * (1 - widget.product!.discount! / 100)) * 100).round() / 100}',
                             style: const TextStyle(
-                              color: proprimaryColor,
-                              fontWeight: FontWeight.bold,
+                              color: Colors.black,
+                              fontWeight: FontWeight.w700,
                               fontSize: 13,
                             ),
                           ),
@@ -116,8 +117,8 @@ class _InventoryCardState extends State<InventoryCard> {
                       Text(
                         '${widget.shop?.currency ?? shopController.shop!.currency}${widget.product!.price.toStringAsFixed(2)}',
                         style: const TextStyle(
-                          color: proprimaryColor,
-                          fontWeight: FontWeight.bold,
+                          color: Colors.black,
+                          fontWeight: FontWeight.w700,
                           fontSize: 13,
                         ),
                       ),

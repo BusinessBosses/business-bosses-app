@@ -55,7 +55,11 @@ class _FilterUsersState extends State<ExpandedProSuppliersPage> {
             child: const Padding(
               padding: EdgeInsets.only(right: 15.0),
               child: CircleAvatar(
-                  backgroundColor: prosemibackColor, child: Icon(Icons.edit)),
+                  backgroundColor: prosemibackColor,
+                  child: Icon(
+                    Icons.edit,
+                    color: Colors.black,
+                  )),
             ),
           ),
         ],
@@ -102,6 +106,7 @@ class _FilterUsersState extends State<ExpandedProSuppliersPage> {
                 cacheHeight: 300,
                 cacheWidth: 300,
                 placeHolder: Icons.person,
+                iconSize: 60,
               ),
         const SizedBox(height: 20),
       ],
@@ -290,7 +295,7 @@ class _FilterUsersState extends State<ExpandedProSuppliersPage> {
                 width: 200,
                 height: 200,
                 placeHolder: Icons.photo,
-                iconSize: 18.0,
+                iconSize: 60.0,
                 radius: 10.0,
               ),
             ),

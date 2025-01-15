@@ -25,6 +25,8 @@ class Order {
   final DateTime createdAt;
   final String? orderDetails;
   final Shop shop;
+  final DateTime? startTime;
+  final DateTime? endTime;
 
   Order({
     required this.id,
@@ -46,6 +48,8 @@ class Order {
     required this.createdAt,
     this.orderDetails,
     required this.shop,
+    this.startTime,
+    this.endTime,
   });
 
   factory Order.fromJson(Map<String, dynamic> json) {
@@ -82,6 +86,9 @@ class Order {
       client: json['client'] == null ? null : Client.fromMap(json['client']),
       createdAt: DateTime.parse(json['createdAt']),
       shop: Shop.fromMap(json['shop']),
+      startTime:
+          json['startTime'] == null ? null : DateTime.parse(json['startTime']),
+      endTime: json['endTime'] == null ? null : DateTime.parse(json['endTime']),
     );
   }
 
@@ -105,6 +112,8 @@ class Order {
       'services': services?.map((Service service) => service.toJson()).toList(),
       'createdAt': createdAt,
       'orderDetails': orderDetails,
+      'startTime': startTime,
+      'endTime': endTime,
     };
   }
 }

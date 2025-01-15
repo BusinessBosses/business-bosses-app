@@ -51,10 +51,19 @@ class _BookServiceScreenState extends State<BookServiceScreen> {
 
   late FocusNode _focusNode;
 
+  TimeOfDay? _startTime;
+  TimeOfDay? _endTime;
+  bool _startTimeSelected = false;
+  bool _endTimeSelected = false;
+
+  DateTime? _startDate;
+  DateTime? _endDate;
+  final List<DateTime> _selectedDates = <DateTime>[];
+
   @override
   void initState() {
     super.initState();
-    fullNameController.text = profileController.myProfile.name!;
+    fullNameController.text = profileController.myProfile.name ?? '';
     emailController.text = profileController.myProfile.email;
     _focusNode = FocusNode();
     quantityController.text = '1';
@@ -82,6 +91,7 @@ class _BookServiceScreenState extends State<BookServiceScreen> {
       child: Scaffold(
         backgroundColor: probackgroundColor,
         appBar: AppBar(
+          titleSpacing: 0,
           leading: IconButton(
             onPressed: () {
               Get.back();
@@ -101,12 +111,35 @@ class _BookServiceScreenState extends State<BookServiceScreen> {
                 Text(
                   widget.service.shop!.name,
                   style: const TextStyle(
-                    color: proprimaryColor,
+                    color: textColor,
                     fontWeight: FontWeight.bold,
                     fontSize: 14,
                   ),
                 ),
-                const Text('Visit Biz-Center', style: TextStyle(fontSize: 10)),
+                Container(
+                  decoration: BoxDecoration(
+                      color: backgroundColor,
+                      borderRadius: BorderRadius.circular(radius)),
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 10.0, vertical: 3),
+                  child: const Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: <Widget>[
+                      Text(
+                        'Visit Biz-Center',
+                        style: TextStyle(
+                          fontSize: 10,
+                          color: textColor,
+                        ),
+                      ),
+                      Icon(
+                        Icons.chevron_right,
+                        color: textColor,
+                        size: 10,
+                      ),
+                    ],
+                  ),
+                ),
               ],
             ),
           ),
@@ -147,7 +180,7 @@ class _BookServiceScreenState extends State<BookServiceScreen> {
                             Text(
                               '${widget.shop.currency}${((widget.service.price * (1 - widget.service.discount / 100)) * 100).round() / 100}',
                               style: const TextStyle(
-                                color: proprimaryColor,
+                                color: Colors.black,
                                 fontWeight: FontWeight.bold,
                                 fontSize: 16,
                               ),
@@ -167,7 +200,7 @@ class _BookServiceScreenState extends State<BookServiceScreen> {
                         Text(
                           '${widget.shop.currency}${widget.service.price.toStringAsFixed(2)}',
                           style: const TextStyle(
-                            color: proprimaryColor,
+                            color: Colors.black,
                             fontWeight: FontWeight.bold,
                             fontSize: 16,
                           ),
@@ -175,20 +208,14 @@ class _BookServiceScreenState extends State<BookServiceScreen> {
                     ],
                   ),
                   const SizedBox(height: 15),
-                  const Text(
-                    'Description',
-                    style: TextStyle(
-                      fontSize: 16,
-                      fontWeight: FontWeight.w600,
-                      color: textColor,
-                    ),
-                  ),
                   DetectableText(
                     text: widget.service.description,
                     detectionRegExp: detectionRegExp(hashtag: false)!,
                     detectedStyle: bodyText2.copyWith(color: Colors.blue),
-                    moreStyle: bodyText2.copyWith(color: proprimaryColor),
-                    lessStyle: bodyText2.copyWith(color: proprimaryColor),
+                    moreStyle: bodyText2.copyWith(
+                        color: Colors.black, fontWeight: FontWeight.bold),
+                    lessStyle: bodyText2.copyWith(
+                        color: Colors.black, fontWeight: FontWeight.bold),
                     trimLength: 100,
                     trimExpandedText: '  show less',
                     basicStyle: bodyText2.copyWith(color: textColor),
@@ -209,8 +236,10 @@ class _BookServiceScreenState extends State<BookServiceScreen> {
                       text: widget.service.notes ?? 'No note added!',
                       detectionRegExp: detectionRegExp(hashtag: false)!,
                       detectedStyle: bodyText2.copyWith(color: Colors.blue),
-                      moreStyle: bodyText2.copyWith(color: proprimaryColor),
-                      lessStyle: bodyText2.copyWith(color: proprimaryColor),
+                      moreStyle: bodyText2.copyWith(
+                          color: Colors.black, fontWeight: FontWeight.bold),
+                      lessStyle: bodyText2.copyWith(
+                          color: Colors.black, fontWeight: FontWeight.bold),
                       trimLength: 100,
                       trimExpandedText: '  show less',
                       basicStyle: bodyText2.copyWith(color: textColor),
@@ -233,70 +262,255 @@ class _BookServiceScreenState extends State<BookServiceScreen> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: <Widget>[
-                  const Text('Select Date and Time',
+                  const Text('Select a Date and Time',
                       style:
                           TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
-                  SfCalendar(
-                    view: CalendarView.month,
-                    initialDisplayDate: DateTime.now(),
-                    monthViewSettings: const MonthViewSettings(
-                      appointmentDisplayMode:
-                          MonthAppointmentDisplayMode.indicator,
-                    ),
-                    onTap: (CalendarTapDetails details) {
-                      if (details.date != null) {
-                        setState(() {
-                          deliveryDate = details.date!;
-                        });
-                      }
-                    },
-                  ),
-                  if (widget.service.availability != null)
-                    Column(
+                  if (widget.service.deliveryTime == 'false')
+                    Row(
+                      crossAxisAlignment: CrossAxisAlignment.start,
                       children: <Widget>[
-                        const SizedBox(
-                          height: 15,
+                        SvgPicture.asset(
+                          'assets/svgs/info.svg',
+                          height: 13,
                         ),
-                        GestureDetector(
-                          onTap: () {
-                            print(widget.service);
-                          },
-                          child: RichText(
-                            text: TextSpan(
-                              style: const TextStyle(
-                                fontSize: 14,
-                                fontWeight: FontWeight.normal,
-                                color: Colors.black, // Default text color
-                              ),
-                              children: <TextSpan>[
-                                const TextSpan(
-                                    text: 'Available Time: ',
-                                    style: TextStyle(
-                                      fontSize: 12,
-                                    )),
-                                TextSpan(
-                                  text: _formatTime(widget
-                                      .service.availability?['startTime']),
-                                  style: const TextStyle(
-                                    fontSize: 14,
-                                    fontWeight: FontWeight.bold,
-                                  ),
-                                ),
-                                const TextSpan(text: ' - '),
-                                TextSpan(
-                                  text: _formatTime(
-                                      widget.service.availability?['endTime']),
-                                  style: const TextStyle(
-                                    fontSize: 14,
-                                    fontWeight: FontWeight.bold,
-                                  ),
-                                ),
-                              ],
+                        const SizedBox(
+                          width: 5,
+                        ),
+                        Expanded(
+                          child: Text(
+                            "This service is available from ${_formatTime(widget.service.availability!['startTime'])} to ${_formatTime(widget.service.availability!['endTime'])}",
+                            style: const TextStyle(
+                              fontSize: 13,
+                              color: Colors.grey,
                             ),
                           ),
                         ),
                       ],
-                    )
+                    ),
+                  if (widget.service.deliveryTime == 'true')
+                    Column(children: <Widget>[
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        children: <Widget>[
+                          SvgPicture.asset(
+                            'assets/svgs/checkfilled.svg',
+                            height: 13,
+                          ),
+                          const SizedBox(
+                            width: 5,
+                          ),
+                          const Text(
+                            'This service is always available',
+                            style: TextStyle(
+                              fontSize: 13,
+                              color: Colors.grey,
+                            ),
+                          ),
+                        ],
+                      ),
+                      const SizedBox(height: 10),
+                      SizedBox(
+                        height: MediaQuery.of(context).size.height / 3,
+                        child: SfCalendar(
+                          initialSelectedDate: _startDate ??
+                              (_selectedDates.isNotEmpty
+                                  ? _selectedDates[0]
+                                  : DateTime.now()),
+                          selectionDecoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(0),
+                            color: Colors.black.withOpacity(0.5),
+                          ),
+                          todayTextStyle: const TextStyle(color: Colors.black),
+                          todayHighlightColor: Colors.transparent,
+                          view: CalendarView.month,
+                          initialDisplayDate: _startDate ??
+                              (_selectedDates.isNotEmpty
+                                  ? _selectedDates[0]
+                                  : DateTime.now()),
+                          minDate: DateTime.now(),
+                          monthViewSettings: const MonthViewSettings(
+                            appointmentDisplayMode:
+                                MonthAppointmentDisplayMode.indicator,
+                            showAgenda:
+                                false, // Enable agenda view to select dates
+                          ),
+                          onTap: (CalendarTapDetails details) {
+                            if (widget.service.deliveryTime == 'false' &&
+                                details.targetElement ==
+                                    CalendarElement.calendarCell) {
+                              setState(() {
+                                DateTime selectedDate = DateTime(
+                                    details.date!.year,
+                                    details.date!.month,
+                                    details.date!.day);
+
+                                // Check if the selected date is in the allowed days
+                                if (widget.service.availability!['dayOfWeek']
+                                    .contains(_getWeekdayName(
+                                        selectedDate.weekday))) {
+                                  // Clear previously selected dates and weekdays
+                                  _selectedDates.clear();
+
+                                  // Add the newly selected date and update weekdays
+                                  _selectedDates.add(selectedDate);
+
+                                  // Set _startDate to the selected date
+                                  _startDate = selectedDate;
+                                } else {
+                                  showSnackbar(
+                                    message: 'Please select a valid day.',
+                                    error: true,
+                                  );
+                                }
+                              });
+                            }
+                          },
+                        ),
+                      ),
+                    ]),
+                  if (widget.service.repeat == 'Yes (Regular Service)')
+                    SizedBox(
+                      height: MediaQuery.of(context).size.height / 3,
+                      child: SfCalendar(
+                        view: CalendarView.month,
+                        initialSelectedDate: _startDate ??
+                            (_selectedDates.isNotEmpty
+                                ? _selectedDates[0]
+                                : DateTime.now()),
+                        initialDisplayDate: _startDate ??
+                            (_selectedDates.isNotEmpty
+                                ? _selectedDates[0]
+                                : DateTime.now()),
+                        minDate: DateTime.now(),
+                        monthViewSettings: const MonthViewSettings(
+                          appointmentDisplayMode:
+                              MonthAppointmentDisplayMode.indicator,
+                          showAgenda: false,
+                        ),
+                        selectionDecoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(0),
+                          color: Colors.black.withOpacity(0.5),
+                        ),
+                        todayTextStyle: const TextStyle(color: Colors.black),
+                        todayHighlightColor: Colors.transparent,
+                        cellBorderColor: Colors.transparent,
+                        blackoutDates: _getNonAvailableDates(),
+                        blackoutDatesTextStyle: const TextStyle(
+                          color: Colors.black12,
+                          decoration: TextDecoration.lineThrough,
+                        ),
+                        onTap: (CalendarTapDetails details) {
+                          if (details.targetElement ==
+                              CalendarElement.calendarCell) {
+                            setState(() {
+                              DateTime selectedDate = DateTime(
+                                  details.date!.year,
+                                  details.date!.month,
+                                  details.date!.day);
+
+                              if (widget.service.availability!['dayOfWeek']
+                                  .contains(
+                                      _getWeekdayName(selectedDate.weekday))) {
+                                _selectedDates.clear();
+                                _selectedDates.add(selectedDate);
+                                _startDate = selectedDate;
+                              } else {
+                                showSnackbar(
+                                  message: 'Please select a valid day.',
+                                  error: true,
+                                );
+                              }
+                            });
+                          }
+                        },
+                      ),
+                    ),
+                  if (widget.service.repeat == 'No (One-time Service)')
+                    SizedBox(
+                        height: MediaQuery.of(context).size.height / 3,
+                        child: SfCalendar(
+                          view: CalendarView.month,
+                          initialSelectedDate: _startDate ??
+                              (_selectedDates.isNotEmpty
+                                  ? _selectedDates[0]
+                                  : DateTime.now()),
+                          initialDisplayDate: _startDate ??
+                              (_selectedDates.isNotEmpty
+                                  ? _selectedDates[0]
+                                  : DateTime.now()),
+                          minDate: DateTime.now(),
+                          monthViewSettings: const MonthViewSettings(
+                            appointmentDisplayMode:
+                                MonthAppointmentDisplayMode.indicator,
+                            showAgenda: false,
+                          ),
+                          selectionDecoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(0),
+                            color: Colors.black.withOpacity(0.5),
+                          ),
+                          todayTextStyle: const TextStyle(color: Colors.black),
+                          todayHighlightColor: Colors.transparent,
+                          cellBorderColor: Colors.transparent,
+                          blackoutDates: _getAllDatesExceptStart(),
+                          blackoutDatesTextStyle: const TextStyle(
+                            color: Colors.black12,
+                            decoration: TextDecoration.lineThrough,
+                          ),
+                          onTap: (CalendarTapDetails details) {
+                            if (details.targetElement ==
+                                CalendarElement.calendarCell) {
+                              setState(() {
+                                DateTime selectedDate = DateTime(
+                                    details.date!.year,
+                                    details.date!.month,
+                                    details.date!.day);
+
+                                DateTime startDate = DateTime.parse(
+                                    widget.service.availability!['startDate']);
+
+                                if (selectedDate.year == startDate.year &&
+                                    selectedDate.month == startDate.month &&
+                                    selectedDate.day == startDate.day) {
+                                  _selectedDates.clear();
+                                  _selectedDates.add(selectedDate);
+                                  _startDate = selectedDate;
+                                } else {
+                                  showSnackbar(
+                                    message:
+                                        'Please select the specific start date.',
+                                    error: true,
+                                  );
+                                }
+                              });
+                            }
+                          },
+                        )),
+                  const SizedBox(height: 10),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: <Widget>[
+                      TextButton(
+                        onPressed: () => _selectTime(context, true),
+                        child: Text(
+                          'Start Time: ${_startTime?.format(context) ?? _formatTime(widget.service.availability!['startTime'])}',
+                          style: TextStyle(
+                            color:
+                                _startTimeSelected ? Colors.black : Colors.grey,
+                          ),
+                        ),
+                      ),
+                      TextButton(
+                        onPressed: () => _selectTime(context, false),
+                        child: Text(
+                          'End Time: ${_endTime?.format(context) ?? _formatTime(widget.service.availability!['endTime'])}',
+                          style: TextStyle(
+                            color:
+                                _endTimeSelected ? Colors.black : Colors.grey,
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
                 ],
               ),
             ),
@@ -477,11 +691,33 @@ class _BookServiceScreenState extends State<BookServiceScreen> {
               child: SizedBox(
                 width: double.infinity,
                 child: ProCustomButton(
+                  color: Colors.black,
                   loading: isSubmit,
                   onPressed: () async {
-                    if (deliveryDate == null) {
+                    // if (deliveryDate == null) {
+                    //   showSnackbar(
+                    //     message: 'Delivery Date is required!',
+                    //     error: true,
+                    //   );
+                    //   return;
+                    // }
+                    if (_startDate == null) {
                       showSnackbar(
-                        message: 'Delivery Date is required!',
+                        message: 'Please select a date!',
+                        error: true,
+                      );
+                      return;
+                    }
+                    if (_startTime == null) {
+                      showSnackbar(
+                        message: 'Please choose your start time!',
+                        error: true,
+                      );
+                      return;
+                    }
+                    if (_endTime == null) {
+                      showSnackbar(
+                        message: 'Please choose your end time!',
                         error: true,
                       );
                       return;
@@ -499,7 +735,17 @@ class _BookServiceScreenState extends State<BookServiceScreen> {
                               widget.service.deliveryMethod!.isNotEmpty
                           ? widget.service.deliveryMethod!.toLowerCase()
                           : 'online',
-                      'deliveryDate': deliveryDate.toString(),
+                      'deliveryDate': '$_startDate',
+                      'startTime': DateTime(
+                              _startDate!.year,
+                              _startDate!.month,
+                              _startDate!.day,
+                              _startTime!.hour,
+                              _startTime!.minute)
+                          .toIso8601String(),
+                      'endTime': DateTime(_startDate!.year, _startDate!.month,
+                              _startDate!.day, _endTime!.hour, _endTime!.minute)
+                          .toIso8601String(),
                       'paymentMethod': widget.service.paymentMethod != null &&
                               widget.service.paymentMethod!.isNotEmpty
                           ? widget.service.paymentMethod!
@@ -509,6 +755,8 @@ class _BookServiceScreenState extends State<BookServiceScreen> {
                       'invoiceOption': 'send_with_payment_link',
                       'status': 'pending'
                     };
+
+                    // print(orderData);
 
                     bool response = await orderController.addOrder(orderData);
                     if (response) {
@@ -605,5 +853,125 @@ class _BookServiceScreenState extends State<BookServiceScreen> {
 
     // Format as 12-hour time with AM/PM
     return '$hour:$minute $period';
+  }
+
+  Future<void> _selectTime(BuildContext context, bool isStartTime) async {
+    final TimeOfDay? picked = await showTimePicker(
+      context: context,
+      initialTime: isStartTime
+          ? TimeOfDay(
+              hour: widget.service.availability == null
+                  ? 0
+                  : int.parse(widget.service.availability!['startTime']
+                      .substring(0, 2)),
+              minute: widget.service.availability == null
+                  ? 0
+                  : int.parse(widget.service.availability!['startTime']
+                      .substring(3, 5)),
+            )
+          : TimeOfDay(
+              hour: widget.service.availability == null
+                  ? 0
+                  : int.parse(
+                      widget.service.availability!['endTime'].substring(0, 2)),
+              minute: widget.service.availability == null
+                  ? 0
+                  : int.parse(
+                      widget.service.availability!['endTime'].substring(3, 5)),
+            ),
+      builder: (BuildContext context, Widget? child) {
+        return MediaQuery(
+          data: MediaQuery.of(context).copyWith(alwaysUse24HourFormat: false),
+          child: child!,
+        );
+      },
+    );
+    if (picked != null) {
+      final int pickedMinutes = picked.hour * 60 + picked.minute;
+      final int startMinutes = int.parse(
+                  widget.service.availability!['startTime'].substring(0, 2)) *
+              60 +
+          int.parse(widget.service.availability!['startTime'].substring(3, 5));
+      final int endMinutes = int.parse(
+                  widget.service.availability!['endTime'].substring(0, 2)) *
+              60 +
+          int.parse(widget.service.availability!['endTime'].substring(3, 5));
+
+      if (pickedMinutes >= startMinutes && pickedMinutes <= endMinutes) {
+        setState(() {
+          if (isStartTime) {
+            _startTime = picked;
+            _startTimeSelected = true;
+          } else {
+            _endTime = picked;
+            _endTimeSelected = true;
+          }
+        });
+      } else {
+        showSnackbar(
+          message:
+              'Please select a time between ${_formatTime(widget.service.availability!['startTime'])} and ${_formatTime(widget.service.availability!['endTime'])}',
+          error: true,
+        );
+      }
+    }
+  }
+
+  String _getWeekdayName(int weekday) {
+    switch (weekday) {
+      case DateTime.monday:
+        return 'Mon';
+      case DateTime.tuesday:
+        return 'Tue';
+      case DateTime.wednesday:
+        return 'Wed';
+      case DateTime.thursday:
+        return 'Thu';
+      case DateTime.friday:
+        return 'Fri';
+      case DateTime.saturday:
+        return 'Sat';
+      case DateTime.sunday:
+        return 'Sun';
+      default:
+        return '';
+    }
+  }
+
+  List<DateTime> _getNonAvailableDates() {
+    final List<DateTime> nonAvailableDates = <DateTime>[];
+    final DateTime now = DateTime.now();
+    final DateTime endDate = DateTime(now.year + 1);
+
+    for (DateTime date = now;
+        date.isBefore(endDate);
+        date = date.add(const Duration(days: 1))) {
+      if (!widget.service.availability!['dayOfWeek']
+          .contains(_getWeekdayName(date.weekday))) {
+        nonAvailableDates.add(date);
+      }
+    }
+
+    return nonAvailableDates;
+  }
+
+  List<DateTime> _getAllDatesExceptStart() {
+    final List<DateTime> blockedDates = <DateTime>[];
+    final DateTime now = DateTime.now();
+    final DateTime endDate = DateTime(now.year + 1);
+    final DateTime startDate =
+        DateTime.parse(widget.service.availability!['startDate']);
+
+    for (DateTime date = now;
+        date.isBefore(endDate);
+        date = date.add(const Duration(days: 1))) {
+      if (date.year != startDate.year ||
+          date.month != startDate.month ||
+          date.day != startDate.day) {
+        blockedDates.add(date);
+      }
+    }
+
+    return blockedDates;
   }
 }

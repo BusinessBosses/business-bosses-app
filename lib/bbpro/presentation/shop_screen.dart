@@ -2,6 +2,7 @@ import 'package:business_bosses_v2/action/action.dart';
 import 'package:business_bosses_v2/bbpro/controllers/shop_controller.dart';
 import 'package:business_bosses_v2/bbpro/models/service_model.dart';
 import 'package:business_bosses_v2/bbpro/models/product_model.dart';
+import 'package:business_bosses_v2/bbpro/presentation/book_service.dart';
 import 'package:business_bosses_v2/bbpro/presentation/create_product.dart';
 import 'package:business_bosses_v2/bbpro/presentation/create_service.dart';
 import 'package:business_bosses_v2/bbpro/widgets/inventorycard.dart';
@@ -14,6 +15,7 @@ import 'package:business_bosses_v2/utils/theme/theme.dart';
 import 'package:detectable_text_field/detector/sample_regular_expressions.dart';
 import 'package:detectable_text_field/widgets/detectable_text.dart';
 import 'package:flutter/material.dart';
+import 'package:business_bosses_v2/common/widgets/safety_model.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:flutter_sticky_header/flutter_sticky_header.dart';
 import 'package:flutter_svg/svg.dart';
@@ -204,7 +206,7 @@ class _ShopScreenState extends State<ShopScreen> {
                   unselectedLabelColor: Colors.grey,
                   indicatorColor: Colors.black,
                   tabs: <Widget>[
-                    Tab(text: 'Listings'),
+                    Tab(text: 'Showcase'),
                     Tab(text: 'Reviews'),
                     Tab(text: 'Contact'),
                   ]),
@@ -310,58 +312,71 @@ class _ShopScreenState extends State<ShopScreen> {
                             ],
                           ),
                         ),
-                        Expanded(
-                          child: Padding(
-                            padding:
-                                const EdgeInsets.symmetric(horizontal: 15.0),
-                            child: StaggeredGridView.countBuilder(
-                              crossAxisCount: 2,
-                              staggeredTileBuilder: (int index) =>
-                                  const StaggeredTile.fit(1),
-                              mainAxisSpacing: 10.0,
-                              crossAxisSpacing: 10.0,
-                              itemCount: shopController.items.length,
-                              itemBuilder: (BuildContext context, int index) {
-                                if (shopController.items.reversed
-                                    .toList()[index] is Product) {
-                                  final Product product = shopController
-                                      .items.reversed
-                                      .toList()[index] as Product;
-                                  return GestureDetector(
-                                    onTap: () {
-                                      Get.to(
-                                        () => CreateProductListing(
-                                          product: product,
-                                        ),
-                                      );
-                                    },
-                                    child: InventoryCard(
-                                      product: product,
-                                      myShop: true,
+                        Obx(
+                          () => shopController.items.isEmpty
+                              ? const SafetyModel(
+                                  title: 'Coming Soon',
+                                  isLoading: false,
+                                )
+                              : Expanded(
+                                  child: Padding(
+                                    padding: const EdgeInsets.symmetric(
+                                        horizontal: 15.0),
+                                    child: StaggeredGridView.countBuilder(
+                                      crossAxisCount: 2,
+                                      staggeredTileBuilder: (int index) =>
+                                          const StaggeredTile.fit(1),
+                                      mainAxisSpacing: 10.0,
+                                      crossAxisSpacing: 10.0,
+                                      itemCount: shopController.items.length,
+                                      itemBuilder:
+                                          (BuildContext context, int index) {
+                                        if (shopController.items.reversed
+                                            .toList()[index] is Product) {
+                                          final Product product = shopController
+                                              .items.reversed
+                                              .toList()[index] as Product;
+                                          return GestureDetector(
+                                            onTap: () {
+                                              Get.to(
+                                                () => CreateProductListing(
+                                                  product: product,
+                                                ),
+                                              );
+                                            },
+                                            child: InventoryCard(
+                                              product: product,
+                                              myShop: true,
+                                            ),
+                                          );
+                                        } else {
+                                          final Service service = shopController
+                                              .items.reversed
+                                              .toList()[index] as Service;
+                                          return GestureDetector(
+                                            onTap: () {
+                                              // print(service);
+                                              // Get.to(() => BookServiceScreen(
+                                              //       service: service,
+                                              //       shop: shopController.userShop!,
+                                              //     ));
+                                              Get.to(
+                                                () => CreateServiceListing(
+                                                  service: service,
+                                                ),
+                                              );
+                                            },
+                                            child: ServiceCard(
+                                              myShop: true,
+                                              service: service,
+                                            ),
+                                          );
+                                        }
+                                      },
                                     ),
-                                  );
-                                } else {
-                                  final Service service = shopController
-                                      .items.reversed
-                                      .toList()[index] as Service;
-                                  return GestureDetector(
-                                    onTap: () {
-                                      Get.to(
-                                        () => CreateServiceListing(
-                                          service: service,
-                                        ),
-                                      );
-                                    },
-                                    child: ServiceCard(
-                                      myShop: true,
-                                      service: service,
-                                    ),
-                                  );
-                                }
-                              },
-                            ),
-                          ),
-                        ),
+                                  ),
+                                ),
+                        )
                         // Center(
                         //   child: GestureDetector(
                         //     onTap: () {
@@ -422,7 +437,7 @@ class _ShopScreenState extends State<ShopScreen> {
           _buildContactRow(
             'assets/svgs/website.svg',
             'Virtual Address',
-            '#${shopController.shop!.appId} Biz-Centre,\nBusiness Bosses, United Kingdom',
+            '#${shopController.shop!.appId} Biz-Centre,\nBusiness Bosses, ${shopController.shop!.location}',
             12,
             null,
           ),
@@ -478,7 +493,7 @@ class _ShopScreenState extends State<ShopScreen> {
           ),
           if (shopController.shop!.facebook != null ||
               shopController.shop!.twitter != null ||
-              shopController.shop!.linkedin != null ||
+              shopController.shop!.linkedIn != null ||
               shopController.shop!.instagram != null)
             Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -580,10 +595,10 @@ class _ShopScreenState extends State<ShopScreen> {
                         ),
                       ),
                     },
-                    if (shopController.shop!.linkedin != null) ...<Widget>{
+                    if (shopController.shop!.linkedIn != null) ...<Widget>{
                       GestureDetector(
                         onTap: () async {
-                          String? website = shopController.shop!.linkedin;
+                          String? website = shopController.shop!.linkedIn;
                           try {
                             if (!website!.startsWith('http://') &&
                                 !website.startsWith('https://')) {
@@ -608,6 +623,34 @@ class _ShopScreenState extends State<ShopScreen> {
                         ),
                       ),
                     },
+                    if (shopController.shop!.url != null) ...<Widget>{
+                      GestureDetector(
+                        onTap: () async {
+                          String? website = shopController.shop!.url;
+                          try {
+                            if (!website!.startsWith('http://') &&
+                                !website.startsWith('https://')) {
+                              website = 'https://$website';
+                            }
+                            final Uri uri = Uri.parse(website);
+                            final bool launched = await launchUrl(uri,
+                                mode: LaunchMode.platformDefault,
+                                webOnlyWindowName: '_self');
+                          } catch (e) {}
+                        },
+                        child: Row(
+                          children: <Widget>[
+                            Padding(
+                              padding: const EdgeInsets.only(right: 8.0),
+                              child: CircleAvatar(
+                                backgroundColor: backgroundColor,
+                                child: SvgPicture.asset('assets/svgs/url.svg'),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    }
                   ],
                 )
               ],

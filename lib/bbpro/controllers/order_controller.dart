@@ -24,13 +24,20 @@ class OrderController extends GetxController {
     ApiResponseModel response =
         await ApiService.get(path: 'orders/shop-orders/$shopId');
     if (response.success) {
-      for (int i = 0; i < response.data['rows'].length; i++) {
-        orders.add(Order.fromJson(response.data['rows'][i]));
-      }
+      // Map and sort orders by createdAt
+      orders.addAll(response.data['rows']
+          .map((dynamic order) => Order.fromJson(order))
+          .toList()
+        ..sort((Order a, Order b) =>
+            b.createdAt.compareTo(a.createdAt))); // Newest at the top
     }
+
+    // Initialize ordersStatus map
     for (OrderStatus status in OrderStatus.values) {
       ordersStatus[status] = <Order>[];
     }
+
+    // Group orders by status and populate allorders
     for (OrderStatus status in OrderStatus.values) {
       List<Order> statusOrders =
           orders.where((Order order) => order.status == status).toList();
@@ -81,6 +88,7 @@ class OrderController extends GetxController {
       // Convert the response data to a Client object and add it to the list
       return true;
     } else {
+      print('Error: ${response.message}');
       return false;
     }
   }
