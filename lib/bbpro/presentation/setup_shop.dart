@@ -109,6 +109,7 @@ class _SetupshopState extends State<Setupshop> with TickerProviderStateMixin {
               height: MediaQuery.of(context).size.height * 0.9,
               child: ListView(
                 children: <Widget>[
+                  const SizedBox(height: 15),
                   SelectionSection(
                     onSelectionChanged: (Map<String, bool> newSelections) {
                       setModalState(() {
@@ -173,6 +174,11 @@ class _SetupshopState extends State<Setupshop> with TickerProviderStateMixin {
                     ),
                   ),
                   const SizedBox(height: 15),
+                  ProCustomButton(
+                      text: 'Done',
+                      onPressed: () {
+                        Get.back();
+                      }),
                   // Visibility(
                   //   visible: selections['Cash'] ?? false,
                   //   child: CustomEditText(
