@@ -84,7 +84,7 @@ class _CreateProductListingState extends State<CreateProductListing> {
     super.initState();
     if (shopController.shop == null) {
       loading = true;
-      shopController.initShop().then((bool value) {
+      shopController.initShopData().then((bool value) {
         loading = false;
         shopController.loading(false);
       });

@@ -69,7 +69,7 @@ class _BottomnavscreenState extends State<Bottomnavscreen> {
       const ClientsScreen(),
       const Setup(),
     ];
-    shopController.initShop().then((bool value) {
+    shopController.initShopData().then((bool value) {
       if (value) {
         shopController.loading(false);
       } else {
