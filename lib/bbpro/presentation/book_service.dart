@@ -53,8 +53,7 @@ class _BookServiceScreenState extends State<BookServiceScreen> {
 
   TimeOfDay? _startTime;
   TimeOfDay? _endTime;
-  bool _startTimeSelected = false;
-  bool _endTimeSelected = false;
+  int? duration;
 
   DateTime? _startDate;
   DateTime? _endDate;
@@ -67,6 +66,7 @@ class _BookServiceScreenState extends State<BookServiceScreen> {
     emailController.text = profileController.myProfile.email;
     _focusNode = FocusNode();
     quantityController.text = '1';
+    duration = widget.service.serviceDuration ?? 60;
     selectedItems.add(
       <String, dynamic>{
         'type': 'service',
@@ -265,28 +265,6 @@ class _BookServiceScreenState extends State<BookServiceScreen> {
                   const Text('Select a Date and Time',
                       style:
                           TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
-                  if (widget.service.deliveryTime == 'false')
-                    Row(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: <Widget>[
-                        SvgPicture.asset(
-                          'assets/svgs/info.svg',
-                          height: 13,
-                        ),
-                        const SizedBox(
-                          width: 5,
-                        ),
-                        Expanded(
-                          child: Text(
-                            "This service is available from ${_formatTime(widget.service.availability!['startTime'])} to ${_formatTime(widget.service.availability!['endTime'])}",
-                            style: const TextStyle(
-                              fontSize: 13,
-                              color: Colors.grey,
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
                   if (widget.service.deliveryTime == 'true')
                     Column(children: <Widget>[
                       Row(
@@ -486,31 +464,19 @@ class _BookServiceScreenState extends State<BookServiceScreen> {
                           },
                         )),
                   const SizedBox(height: 10),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: <Widget>[
-                      TextButton(
-                        onPressed: () => _selectTime(context, true),
-                        child: Text(
-                          'Start Time: ${_startTime?.format(context) ?? _formatTime(widget.service.availability!['startTime'])}',
-                          style: TextStyle(
-                            color:
-                                _startTimeSelected ? Colors.black : Colors.grey,
-                          ),
-                        ),
-                      ),
-                      TextButton(
-                        onPressed: () => _selectTime(context, false),
-                        child: Text(
-                          'End Time: ${_endTime?.format(context) ?? _formatTime(widget.service.availability!['endTime'])}',
-                          style: TextStyle(
-                            color:
-                                _endTimeSelected ? Colors.black : Colors.grey,
-                          ),
-                        ),
-                      ),
-                    ],
+                  Wrap(
+                    spacing: 8.0, // Horizontal spacing between chips
+                    children: _generateTimeSlots().map((String slot) {
+                      return ChoiceChip(
+                        label: Text(slot),
+                        selected: false,
+                        onSelected: (bool selected) {
+                          // Handle slot selection
+                        },
+                      );
+                    }).toList(),
                   ),
+                  const SizedBox(height: 10),
                 ],
               ),
             ),
@@ -817,6 +783,52 @@ class _BookServiceScreenState extends State<BookServiceScreen> {
     );
   }
 
+  List<String> _generateTimeSlots() {
+    List<String> slots = <String>[];
+    if (duration != null && widget.service.availability != null) {
+      // Parse the start time and end time
+      List<String> startTimeParts =
+          widget.service.availability!['startTime'].split(':');
+      List<String> endTimeParts =
+          widget.service.availability!['endTime'].split(':');
+
+      // Parse the start date (assumes startDate and endDate are the same day for this example)
+      DateTime startDate =
+          DateTime.parse(widget.service.availability!['startDate']);
+      DateTime endDate =
+          DateTime.parse(widget.service.availability!['endDate']);
+
+      // Construct DateTime objects for the start and end of the time slots
+      DateTime startDateTime = DateTime(
+        startDate.year,
+        startDate.month,
+        startDate.day,
+        int.parse(startTimeParts[0]), // Hour
+        int.parse(startTimeParts[1]), // Minute
+      );
+
+      DateTime endDateTime = DateTime(
+        endDate.year,
+        endDate.month,
+        endDate.day,
+        int.parse(endTimeParts[0]), // Hour
+        int.parse(endTimeParts[1]), // Minute
+      );
+
+      // Generate slots
+      while (startDateTime.isBefore(endDateTime)) {
+        DateTime slotEndTime = startDateTime.add(Duration(minutes: duration!));
+        if (slotEndTime.isAfter(endDateTime)) break;
+
+        slots.add(
+            '${TimeOfDay.fromDateTime(startDateTime).format(context)} - ${TimeOfDay.fromDateTime(slotEndTime).format(context)}');
+
+        startDateTime = slotEndTime;
+      }
+    }
+    return slots;
+  }
+
   String getDeliveryMethod(String method) {
     if (method == 'Online') {
       return 'online';
@@ -853,68 +865,6 @@ class _BookServiceScreenState extends State<BookServiceScreen> {
 
     // Format as 12-hour time with AM/PM
     return '$hour:$minute $period';
-  }
-
-  Future<void> _selectTime(BuildContext context, bool isStartTime) async {
-    final TimeOfDay? picked = await showTimePicker(
-      context: context,
-      initialTime: isStartTime
-          ? TimeOfDay(
-              hour: widget.service.availability == null
-                  ? 0
-                  : int.parse(widget.service.availability!['startTime']
-                      .substring(0, 2)),
-              minute: widget.service.availability == null
-                  ? 0
-                  : int.parse(widget.service.availability!['startTime']
-                      .substring(3, 5)),
-            )
-          : TimeOfDay(
-              hour: widget.service.availability == null
-                  ? 0
-                  : int.parse(
-                      widget.service.availability!['endTime'].substring(0, 2)),
-              minute: widget.service.availability == null
-                  ? 0
-                  : int.parse(
-                      widget.service.availability!['endTime'].substring(3, 5)),
-            ),
-      builder: (BuildContext context, Widget? child) {
-        return MediaQuery(
-          data: MediaQuery.of(context).copyWith(alwaysUse24HourFormat: false),
-          child: child!,
-        );
-      },
-    );
-    if (picked != null) {
-      final int pickedMinutes = picked.hour * 60 + picked.minute;
-      final int startMinutes = int.parse(
-                  widget.service.availability!['startTime'].substring(0, 2)) *
-              60 +
-          int.parse(widget.service.availability!['startTime'].substring(3, 5));
-      final int endMinutes = int.parse(
-                  widget.service.availability!['endTime'].substring(0, 2)) *
-              60 +
-          int.parse(widget.service.availability!['endTime'].substring(3, 5));
-
-      if (pickedMinutes >= startMinutes && pickedMinutes <= endMinutes) {
-        setState(() {
-          if (isStartTime) {
-            _startTime = picked;
-            _startTimeSelected = true;
-          } else {
-            _endTime = picked;
-            _endTimeSelected = true;
-          }
-        });
-      } else {
-        showSnackbar(
-          message:
-              'Please select a time between ${_formatTime(widget.service.availability!['startTime'])} and ${_formatTime(widget.service.availability!['endTime'])}',
-          error: true,
-        );
-      }
-    }
   }
 
   String _getWeekdayName(int weekday) {

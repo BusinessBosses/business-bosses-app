@@ -27,6 +27,7 @@ class Service {
   Map<String, dynamic>? availability;
   List<dynamic> packages;
   List<dynamic> selectedDates;
+  int? serviceDuration;
 
   Service({
     this.images,
@@ -54,6 +55,7 @@ class Service {
     this.availability,
     this.packages = const <Map<String, dynamic>>[],
     this.selectedDates = const <dynamic>[],
+    this.serviceDuration,
   });
 
   factory Service.fromJson(Map<String, dynamic> json) {
@@ -86,6 +88,7 @@ class Service {
       packages: json['packages'] ?? <dynamic>[],
       selectedDates: json['selectedDates'] ?? <dynamic>[],
       notes: json['notes'],
+      serviceDuration: json['serviceDuration'],
     );
   }
 
@@ -115,6 +118,7 @@ class Service {
       'participants': participants,
       'repeat': repeat,
       'selectedDates': selectedDates,
+      'serviceDuration': serviceDuration,
     };
   }
 
@@ -146,6 +150,7 @@ Service {
   participants: $participants,
   repeat: $repeat,
   selectedDates: $selectedDates,
+  serviceDuration: $serviceDuration, 
 }
 ''';
   }
