@@ -31,13 +31,6 @@ class ShopController extends GetxController {
   ShopStats? shopStats;
   ShopGraphData? shopGraph;
 
-  
-  @override
-  void onInit() {
-    initShop();
-    super.onInit();
-  }
-
   Future<bool> initShop() async {
     ApiResponseModel response = await ApiService.get(
       path: 'shops/user-shops/${profileController.myProfile.uid}',
@@ -388,5 +381,11 @@ class ShopController extends GetxController {
     }
     loadingData(false);
     update();
+  }
+
+  @override
+  void onInit() {
+    initShop();
+    super.onInit();
   }
 }
