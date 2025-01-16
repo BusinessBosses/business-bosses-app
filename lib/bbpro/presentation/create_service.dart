@@ -91,6 +91,7 @@ class _CreateServiceListingState extends State<CreateServiceListing>
   DateTime? _startDate;
   DateTime? _endDate;
   String deliveryTime = 'false';
+  int? duration;
 
   @override
   void initState() {
@@ -106,6 +107,7 @@ class _CreateServiceListingState extends State<CreateServiceListing>
       paymentMethods.add(payments['paymentMethod']);
     }
     if (widget.service != null) {
+      duration = widget.service!.serviceDuration;
       frequency = widget.service!.repeat!;
       _isAlwaysAvailable =
           widget.service!.deliveryTime == 'true' ? true : false;
@@ -809,6 +811,7 @@ class _CreateServiceListingState extends State<CreateServiceListing>
               ? '0'
               : _discountController.text.trim(),
           'category': category,
+          'serviceDuration': duration,
           'location':
               location.isEmpty ? shopController.shop!.location : location,
           'participants': groupmembersController.text,
@@ -971,42 +974,6 @@ class _CreateServiceListingState extends State<CreateServiceListing>
                 ],
               ),
             const SizedBox(height: 10),
-            // if (isRecurring && !_isAlwaysAvailable)
-            //   Container(
-            //     width: 200,
-            //     padding: const EdgeInsets.symmetric(horizontal: 10),
-            //     decoration: BoxDecoration(
-            //         color: probackgroundColor,
-            //         borderRadius: BorderRadius.circular(10)),
-            //     child: DropdownButtonHideUnderline(
-            //         child: DropdownButton<String>(
-            //       hint: const Text('Select repeat frequency'),
-            //       value: <String>['Repeat Weekly', 'Repeat Monthly']
-            //               .contains(frequency)
-            //           ? frequency
-            //           : null,
-            //       onChanged: (String? newValue) {
-            //         setState(() {
-            //           frequency = newValue!;
-            //         });
-            //       },
-            //       items: const <String>[
-            //         'Repeat Weekly',
-            //         'Repeat Monthly',
-            //       ].map((String value) {
-            //         return DropdownMenuItem<String>(
-            //           value: value,
-            //           child: Text(value),
-            //         );
-            //       }).toList(),
-            //       isExpanded: true,
-            //       icon: SvgPicture.asset(
-            //         'assets/svgs/dropdown.svg',
-            //         color: proprimaryColor,
-            //       ),
-            //     )),
-            //   ),
-            // const SizedBox(height: 10),
             if (!_isAlwaysAvailable && isRecurring)
               Wrap(
                   spacing: 8,
@@ -1034,37 +1001,6 @@ class _CreateServiceListingState extends State<CreateServiceListing>
                       },
                     );
                   })),
-            // : SizedBox(
-            //     height: 300,
-            //     child: SfCalendar(
-            //       initialSelectedDate: _selectedDates.isNotEmpty
-            //           ? _selectedDates[0]
-            //           : DateTime.now(),
-            //       selectionDecoration: BoxDecoration(
-            //         borderRadius: BorderRadius.circular(8),
-            //         color: Colors.transparent,
-            //       ),
-            //       todayHighlightColor: proprimaryColor,
-            //       view: CalendarView.month,
-            //       initialDisplayDate: _selectedDates.isNotEmpty
-            //           ? _selectedDates[0]
-            //           : DateTime.now(),
-            //       monthViewSettings: const MonthViewSettings(
-            //         appointmentDisplayMode:
-            //             MonthAppointmentDisplayMode.indicator,
-            //       ),
-            //       dataSource: _getCalendarDataSource(),
-            //       onTap: (CalendarTapDetails details) {
-            //         setState(() {
-            //           if (_selectedDates.contains(details.date)) {
-            //             _selectedDates.remove(details.date);
-            //           } else {
-            //             _selectedDates.add(details.date!);
-            //           }
-            //         });
-            //       },
-            //     ),
-            //   ),
             if (!isRecurring)
               SizedBox(
                 height: MediaQuery.of(context).size.height / 3,
@@ -1144,6 +1080,42 @@ class _CreateServiceListingState extends State<CreateServiceListing>
                 ),
               ],
             ),
+            CustomDropdownWidget(
+              padding: 0,
+              caption: 'Duration',
+              hintText: 'Choose duration for this service',
+              items: const <String>[
+                '5 mins',
+                '10 mins',
+                '15 mins',
+                '20 mins',
+                '30 mins',
+                '45 mins',
+                '60 mins (1 hour)',
+                '120 mins (2 hours)',
+                '180 mins (3 hours)',
+                '240 mins (4 hours)',
+                '300 mins (5 hours)',
+                '360 mins (6 hours)',
+                '420 mins (7 hours)',
+                '480 mins (8 hours)',
+                '540 mins (9 hours)',
+                '600 mins (10 hours)',
+                '660 mins (11 hours)',
+                '720 mins (12 hours)'
+              ],
+              iconName: 'assets/svgs/dropdown.svg',
+              initialValue: duration.toString(),
+              onChanged: (String? newValue) {
+                setState(() {
+                  final RegExp regex = RegExp(r'\d+');
+                  final Match? match = regex.firstMatch(newValue!);
+                  if (match != null) {
+                    duration = int.tryParse(match.group(0) ?? '') ?? 0;
+                  }
+                });
+              },
+            ),
           ],
         ),
       ),
@@ -1162,19 +1134,6 @@ class _CreateServiceListingState extends State<CreateServiceListing>
     ];
     return weekdayss[index];
   }
-
-  // void _updateSelectedDates() {
-  //   _selectedDates.clear();
-  //   if (!_isAlwaysAvailable) {
-  //     DateTime now = DateTime.now();
-  //     for (int i = 0; i < 365; i++) {
-  //       DateTime date = now.add(Duration(days: i));
-  //       if (_selectedWeekdays[date.weekday - 1]) {
-  //         _selectedDates.add(date);
-  //       }
-  //     }
-  //   }
-  // }
 
   CalendarDataSource _getCalendarDataSource() {
     List<Appointment> appointments = _selectedDates

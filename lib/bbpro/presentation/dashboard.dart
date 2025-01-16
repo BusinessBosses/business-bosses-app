@@ -4,6 +4,7 @@ import 'package:business_bosses_v2/bbpro/presentation/add_client.dart';
 import 'package:business_bosses_v2/bbpro/presentation/add_project.dart';
 import 'package:business_bosses_v2/bbpro/presentation/add_supplier.dart';
 import 'package:business_bosses_v2/bbpro/presentation/bottom_nav_screen.dart';
+import 'package:business_bosses_v2/bbpro/presentation/clients.dart';
 import 'package:business_bosses_v2/bbpro/presentation/create_product.dart';
 import 'package:business_bosses_v2/bbpro/presentation/create_service.dart';
 import 'package:business_bosses_v2/bbpro/presentation/create_order.dart';
@@ -16,6 +17,7 @@ import 'package:business_bosses_v2/bbpro/widgets/orderscard.dart';
 import 'package:business_bosses_v2/bbpro/widgets/quickactioncard.dart';
 import 'package:business_bosses_v2/common/widgets/safety_model.dart';
 import 'package:business_bosses_v2/features/chat/chat_screen.dart';
+import 'package:business_bosses_v2/features/home/bottom_nav.dart';
 import 'package:business_bosses_v2/features/home/home_screen.dart';
 import 'package:business_bosses_v2/features/home/widgets/bottom_bar.dart';
 import 'package:business_bosses_v2/utils/theme/theme.dart';
@@ -363,14 +365,7 @@ class _DashboardState extends State<Dashboard> {
                           return GestureDetector(
                               onTap: () {
                                 if (index == 0) {
-                                  Navigator.pushReplacement(
-                                    context,
-                                    MaterialPageRoute<dynamic>(
-                                      builder: (BuildContext context) =>
-                                          const Bottomnavscreen(
-                                              initialindex: 3),
-                                    ),
-                                  );
+                                  Bottomnavscreen.of(context)?.onTabTapped(3);
                                 } else if (index == 1) {
                                   // Add navigation for Expenses
                                 } else if (index == 2) {
