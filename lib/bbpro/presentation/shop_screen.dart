@@ -1,14 +1,14 @@
+// ignore_for_file: empty_catches
+
 import 'package:business_bosses_v2/action/action.dart';
 import 'package:business_bosses_v2/bbpro/controllers/shop_controller.dart';
 import 'package:business_bosses_v2/bbpro/models/service_model.dart';
 import 'package:business_bosses_v2/bbpro/models/product_model.dart';
-import 'package:business_bosses_v2/bbpro/presentation/book_service.dart';
 import 'package:business_bosses_v2/bbpro/presentation/create_product.dart';
 import 'package:business_bosses_v2/bbpro/presentation/create_service.dart';
 import 'package:business_bosses_v2/bbpro/widgets/inventorycard.dart';
 import 'package:business_bosses_v2/bbpro/widgets/servicecard.dart';
 import 'package:business_bosses_v2/common/widgets/network_image_with_placeholder.dart';
-import 'package:business_bosses_v2/features/home/home_screen.dart';
 import 'package:business_bosses_v2/features/marketplace/presentation/seller_reviews.dart';
 import 'package:business_bosses_v2/features/profile/controller/profile_controller.dart';
 import 'package:business_bosses_v2/utils/theme/theme.dart';
@@ -34,11 +34,6 @@ class _ShopScreenState extends State<ShopScreen> {
   final ShopController shopController = Get.find();
   final ProfileController profileController = Get.find();
   final String _selectedItem = 'All Products';
-
-  @override
-  void initState() {
-    super.initState();
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -355,11 +350,6 @@ class _ShopScreenState extends State<ShopScreen> {
                                               .toList()[index] as Service;
                                           return GestureDetector(
                                             onTap: () {
-                                              // print(service);
-                                              // Get.to(() => BookServiceScreen(
-                                              //       service: service,
-                                              //       shop: shopController.userShop!,
-                                              //     ));
                                               Get.to(
                                                 () => CreateServiceListing(
                                                   service: service,
@@ -442,8 +432,7 @@ class _ShopScreenState extends State<ShopScreen> {
             null,
           ),
           _buildDivider(),
-          if (shopController.shop!.appId.isNotEmpty ?? false)
-            const SizedBox(height: 10),
+          if (shopController.shop!.appId.isNotEmpty) const SizedBox(height: 10),
           if (shopController.shop?.email.isNotEmpty ?? false)
             _buildContactRow(
               'assets/svgs/email.svg',
