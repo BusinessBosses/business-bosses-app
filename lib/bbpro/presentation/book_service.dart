@@ -377,8 +377,8 @@ class _BookServiceScreenState extends State<BookServiceScreen> {
                         todayHighlightColor: Colors.transparent,
                         cellBorderColor: Colors.transparent,
                         blackoutDates: _getNonAvailableDates(),
-                        blackoutDatesTextStyle: const TextStyle(
-                          color: Colors.black12,
+                        blackoutDatesTextStyle: TextStyle(
+                          color: Colors.black12.withOpacity(0.08),
                           decoration: TextDecoration.lineThrough,
                         ),
                         onTap: (CalendarTapDetails details) {
@@ -427,15 +427,15 @@ class _BookServiceScreenState extends State<BookServiceScreen> {
                             showAgenda: false,
                           ),
                           selectionDecoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(0),
-                            color: Colors.black.withOpacity(0.5),
+                            borderRadius: BorderRadius.circular(10),
+                            color: Colors.green.withOpacity(0.2),
                           ),
                           todayTextStyle: const TextStyle(color: Colors.black),
                           todayHighlightColor: Colors.transparent,
                           cellBorderColor: Colors.transparent,
                           blackoutDates: _getAllDatesExceptStart(),
-                          blackoutDatesTextStyle: const TextStyle(
-                            color: Colors.black12,
+                          blackoutDatesTextStyle: TextStyle(
+                            color: Colors.black12.withOpacity(0.08),
                             decoration: TextDecoration.lineThrough,
                           ),
                           onTap: (CalendarTapDetails details) {
