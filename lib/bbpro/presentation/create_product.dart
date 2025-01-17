@@ -645,15 +645,15 @@ class _CreateProductListingState extends State<CreateProductListing> {
                           setState(() {
                             isSubmitted = true;
                           });
-                          if (_selectedImages.isNotEmpty) {
-                            for (File image in _selectedImages) {
-                              dynamic response =
-                                  await ApiService.uploadFile(image);
-                              if (response['success']) {
-                                setState(() {
-                                  images!.add(response['fileUrl']);
-                                });
-                              }
+                          List<String> finalImages =
+                              List<String>.from(updateImages ?? <String>[]);
+
+// Step 2: Upload newly picked images, adding them to finalImages
+                          for (File image in _selectedImages) {
+                            final dynamic response =
+                                await ApiService.uploadFile(image);
+                            if (response['success']) {
+                              finalImages.add(response['fileUrl']);
                             }
                           }
                           final Map<String, dynamic> productListing =
@@ -670,7 +670,7 @@ class _CreateProductListingState extends State<CreateProductListing> {
                             'location': country.isEmpty
                                 ? shopController.shop!.location
                                 : country,
-                            'images': images,
+                            'images': finalImages,
                             'paymentMethod': paymentMethod,
                             'deliveryMethod': deliveryMethod,
                             'url': 'http://example.com/product', // Example URL

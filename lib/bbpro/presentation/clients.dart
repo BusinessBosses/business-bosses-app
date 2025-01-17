@@ -112,7 +112,7 @@ class _ClientsScreenState extends State<ClientsScreen>
       backgroundColor: probackgroundColor,
       appBar: AppBar(
         automaticallyImplyLeading: false,
-        title: !profileController.myProfile.isSubscribed
+        title: profileController.myProfile.isSubscribed
             ? Container(
                 padding: const EdgeInsets.only(bottom: 5),
                 child: CupertinoSlidingSegmentedControl<int>(

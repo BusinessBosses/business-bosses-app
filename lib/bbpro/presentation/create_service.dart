@@ -921,12 +921,20 @@ class _CreateServiceListingState extends State<CreateServiceListing>
       setState(() {
         isSubmitted = true;
       });
+      // 1. Clear the final images list
+      List<String> finalImages = <String>[];
+
+// 2. Add back any *retained* old images
+//    (i.e., those still in updateImages)
+      for (String oldImageUrl in updateImages!) {
+        finalImages.add(oldImageUrl);
+      }
+
+// 3. Upload and add newly selected images
       for (File image in _selectedImages) {
-        dynamic response = await ApiService.uploadFile(image);
+        final response = await ApiService.uploadFile(image);
         if (response['success']) {
-          setState(() {
-            images.add(response['fileUrl']);
-          });
+          finalImages.add(response['fileUrl']);
         }
       }
       // Create a map to hold form data
@@ -955,7 +963,7 @@ class _CreateServiceListingState extends State<CreateServiceListing>
               location.isEmpty ? shopController.shop!.location : location,
           'participants': groupmembersController.text,
           'repeat': frequency,
-          'images': images.isEmpty ? null : images,
+          'images': finalImages.isEmpty ? null : finalImages,
           'paymentMethod': paymentMethod ?? '',
           'deliveryMethod': deliveryMethod ?? '',
           'availableTime': availableTime.toIso8601String(),

@@ -34,10 +34,25 @@ class _ProshopdealsWidgetState extends State<ProshopdealsWidget> {
   Widget build(BuildContext context) {
     final List<Object>? items;
     if (widget.combinedList != null) {
-      items = widget.combinedList;
+      items = widget.combinedList!.where((Object object) {
+        if (object is Product) {
+          if (object.user!.isSubscribed) return true;
+        } else if (object is Service) {
+          if (object.user!.isSubscribed) {
+            return true;
+          }
+        }
+        return false;
+      }).toList();
     } else {
-      items = widget.products?.take(10).toList() ??
-          widget.services?.take(10).toList();
+      items = widget.products
+              ?.where((Product product) => product.user!.isSubscribed)
+              .take(10)
+              .toList() ??
+          widget.services
+              ?.where((Service service) => service.user!.isSubscribed)
+              .take(10)
+              .toList();
     }
 
     return GestureDetector(

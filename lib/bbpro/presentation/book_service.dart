@@ -612,7 +612,7 @@ class _BookServiceScreenState extends State<BookServiceScreen> {
                       const SizedBox(height: 5),
                       Column(
                         children: widget.service.packages
-                            .map((package) => CheckboxListTile(
+                            .map((dynamic package) => CheckboxListTile(
                                   title: Text(package['name']),
                                   subtitle: Text(
                                       '${widget.shop.currency}${package['price']}'),
