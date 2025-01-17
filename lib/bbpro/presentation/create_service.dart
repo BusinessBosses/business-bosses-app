@@ -877,6 +877,31 @@ class _CreateServiceListingState extends State<CreateServiceListing>
       );
       return;
     }
+
+    if (servicePeriodnumber != null && servicePeriod != null) {
+      int number = int.parse(servicePeriodnumber!);
+      switch (servicePeriod) {
+        case 'minute(s)':
+          duration = number;
+          break;
+        case 'hour(s)':
+          duration = number * 60;
+          break;
+        case 'day(s)':
+          duration = number * 60 * 24;
+          break;
+        case 'week(s)':
+          duration = number * 60 * 24 * 7;
+          break;
+        case 'month(s)':
+          duration = number * 60 * 24 * 30;
+          break;
+        case 'year(s)':
+          duration = number * 60 * 24 * 365;
+          break;
+      }
+    }
+
     _startTime ??= const TimeOfDay(hour: 9, minute: 0);
     _endTime ??= const TimeOfDay(hour: 17, minute: 0);
     _startDate ??= DateTime.now();
