@@ -63,6 +63,7 @@ class _CreateServiceListingState extends State<CreateServiceListing>
   List<String>? updateImages = <String>[];
   String? paymentMethod;
   String? deliveryMethod;
+  String? selectedServiceDuration;
   DateTime availableTime = DateTime.now();
   String? serviceType;
   Map<String, dynamic>? availability;
@@ -92,6 +93,10 @@ class _CreateServiceListingState extends State<CreateServiceListing>
   DateTime? _endDate;
   String deliveryTime = 'false';
   int? duration;
+  bool? customduration = false;
+  String? servicePeriod = 'minute(s)';
+  String? servicePeriodnumber;
+  String? calendarType = 'Single day';
 
   @override
   void initState() {
@@ -408,6 +413,115 @@ class _CreateServiceListingState extends State<CreateServiceListing>
               ),
             ),
             const SizedBox(height: 16),
+
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 15.0),
+              child: CustomDropdownWidget(
+                padding: 0,
+                caption: 'Duration',
+                hintText: 'Choose duration for your service',
+                items: const <String>[
+                  '5 mins',
+                  '10 mins',
+                  '15 mins',
+                  '20 mins',
+                  '30 mins',
+                  '45 mins',
+                  '60 mins (1 hour)',
+                  'Custom'
+                ],
+                iconName: 'assets/svgs/dropdown.svg',
+                initialValue: duration.toString(),
+                onChanged: (String? newValue) {
+                  setState(() {
+                    if (newValue == 'Custom') {
+                      customduration = true;
+                    } else {
+                      final RegExp regex = RegExp(r'\d+');
+                      final Match? match = regex.firstMatch(newValue!);
+                      if (match != null) {
+                        duration = int.tryParse(match.group(0) ?? '') ?? 0;
+                      }
+                    }
+                  });
+                },
+                secondarysection: customduration == true
+                    ? Row(
+                        children: <Widget>[
+                          Expanded(
+                            child: TextFormField(
+                              style: const TextStyle(fontSize: 13),
+                              keyboardType: TextInputType.number,
+                              maxLength: 3,
+                              maxLines: 1,
+                              decoration: InputDecoration(
+                                border: InputBorder.none,
+                                hintText: 'Number of $servicePeriod',
+                                filled: false,
+                                fillColor: Colors.grey.shade100,
+                                counterText: '',
+                              ),
+                              onChanged: (String value) {
+                                setState(() {
+                                  servicePeriodnumber = value;
+                                });
+                              },
+                            ),
+                          ),
+                          SizedBox(
+                            width: 100,
+                            child: DropdownButtonFormField<String>(
+                              decoration: InputDecoration(
+                                border: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(
+                                    radiusValue,
+                                  ),
+                                  borderSide: BorderSide.none,
+                                ),
+                                filled: true,
+                                fillColor: Colors.white,
+                              ),
+                              value: 'minute(s)',
+                              padding: EdgeInsets.zero,
+                              onChanged: (String? newValue) {
+                                setState(() {
+                                  servicePeriod = newValue;
+                                });
+                              },
+                              icon: SvgPicture.asset(
+                                'assets/svgs/dropdown.svg',
+                                color: proprimaryColor,
+                              ),
+                              items: const <String>[
+                                'minute(s)',
+                                'hour(s)',
+                                'day(s)',
+                                'week(s)',
+                                'month(s)',
+                                'year(s)'
+                              ].map<DropdownMenuItem<String>>(
+                                (String value) {
+                                  return DropdownMenuItem<String>(
+                                    value: value,
+                                    child: Text(
+                                      value,
+                                      textAlign: TextAlign.right,
+                                      style: const TextStyle(fontSize: 14),
+                                    ),
+                                  );
+                                },
+                              ).toList(),
+                            ),
+                          )
+                        ],
+                      )
+                    : null,
+              ),
+            ),
+
+            const SizedBox(
+              height: 16,
+            ),
 
             // Add Attachment (Image Picker)
             Padding(
@@ -893,14 +1007,62 @@ class _CreateServiceListingState extends State<CreateServiceListing>
       child: Container(
         decoration: BoxDecoration(
             color: Colors.white, borderRadius: BorderRadius.circular(radius)),
-        padding: const EdgeInsets.all(15),
-        // height: 600,
+        padding: EdgeInsets.only(
+            left: 15, right: 15, bottom: 15, top: !isRecurring ? 0 : 15),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
-            const Text(
-              'Select a Date and Time',
-              style: TextStyle(fontWeight: FontWeight.w600, fontSize: 14),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: <Widget>[
+                const Text(
+                  'Select a Date and Time',
+                  style: TextStyle(fontWeight: FontWeight.w600, fontSize: 14),
+                ),
+                if (!isRecurring)
+                  SizedBox(
+                    width: 130,
+                    child: DropdownButtonFormField<String>(
+                      decoration: InputDecoration(
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(
+                            radiusValue,
+                          ),
+                          borderSide: BorderSide.none,
+                        ),
+                        filled: true,
+                        fillColor: Colors.white,
+                      ),
+                      value: 'Single day',
+                      padding: EdgeInsets.zero,
+                      onChanged: (String? newValue) {
+                        setState(() {
+                          calendarType = newValue!;
+                        });
+                      },
+                      icon: SvgPicture.asset(
+                        'assets/svgs/dropdown.svg',
+                        color: proprimaryColor,
+                      ),
+                      items: const <String>[
+                        'Single day',
+                        'Multiple days',
+                      ].map<DropdownMenuItem<String>>(
+                        (String value) {
+                          return DropdownMenuItem<String>(
+                            value: value,
+                            child: Text(
+                              value,
+                              textAlign: TextAlign.right,
+                              style: const TextStyle(
+                                  fontSize: 12, color: Colors.black54),
+                            ),
+                          );
+                        },
+                      ).toList(),
+                    ),
+                  )
+              ],
             ),
             if (isRecurring)
               Row(
@@ -1003,56 +1165,79 @@ class _CreateServiceListingState extends State<CreateServiceListing>
                   })),
             if (!isRecurring)
               SizedBox(
-                height: MediaQuery.of(context).size.height / 3,
-                child: SfCalendar(
-                  initialSelectedDate: _startDate ??
-                      (_selectedDates.isNotEmpty
-                          ? _selectedDates[0]
-                          : DateTime.now()),
-                  selectionDecoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(0),
-                    color: proprimaryColor.withOpacity(0.5),
-                  ),
-                  todayTextStyle: const TextStyle(color: Colors.black),
-                  todayHighlightColor: Colors.transparent,
-                  view: CalendarView.month,
-                  initialDisplayDate: _startDate ??
-                      (_selectedDates.isNotEmpty
-                          ? _selectedDates[0]
-                          : DateTime.now()),
-                  minDate: DateTime.now(),
-                  monthViewSettings: const MonthViewSettings(
-                    appointmentDisplayMode:
-                        MonthAppointmentDisplayMode.indicator,
-                    showAgenda: false, // Enable agenda view to select dates
-                  ),
-                  dataSource: _getCalendarDataSource(),
-                  onTap: (CalendarTapDetails details) {
-                    if (!_isAlwaysAvailable &&
-                        details.targetElement == CalendarElement.calendarCell) {
-                      setState(() {
-                        DateTime selectedDate = DateTime(details.date!.year,
-                            details.date!.month, details.date!.day);
+                  height: MediaQuery.of(context).size.height / 3,
+                  child: SfCalendar(
+                    initialSelectedDate: _selectedDates.isNotEmpty
+                        ? _selectedDates[0]
+                        : DateTime.now(),
+                    selectionDecoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(0),
+                      color: proprimaryColor.withOpacity(0.5),
+                    ),
+                    todayTextStyle: const TextStyle(color: Colors.black),
+                    todayHighlightColor: Colors.transparent,
+                    view: CalendarView.month,
+                    initialDisplayDate: _selectedDates.isNotEmpty
+                        ? _selectedDates[0]
+                        : DateTime.now(),
+                    minDate: DateTime.now(),
+                    monthViewSettings: const MonthViewSettings(
+                      appointmentDisplayMode:
+                          MonthAppointmentDisplayMode.indicator,
+                      showAgenda: false,
+                    ),
+                    dataSource: _getCalendarDataSource(),
+                    onTap: (CalendarTapDetails details) {
+                      if (!_isAlwaysAvailable &&
+                          details.targetElement ==
+                              CalendarElement.calendarCell &&
+                          details.date != null) {
+                        setState(() {
+                          DateTime selectedDate = DateTime(
+                            details.date!.year,
+                            details.date!.month,
+                            details.date!.day,
+                          );
 
-                        // Clear previously selected dates and weekdays
-                        _selectedDates.clear();
-                        _selectedWeekdays.fillRange(0, 7, false);
-                        selectedSubmitWeekdays.clear();
+                          switch (calendarType) {
+                            case 'Single day':
+                              // Select only one day
+                              _selectedDates.clear();
+                              _selectedDates.add(selectedDate);
+                              break;
 
-                        // Add the newly selected date and update weekdays
-                        _selectedDates.add(selectedDate);
-                        int weekdayIndex = selectedDate.weekday - 1;
-                        _selectedWeekdays[weekdayIndex] = true;
-                        selectedSubmitWeekdays
-                            .add(_getWeekdayName(weekdayIndex));
+                            case 'Multiple days':
+                              // Toggle selection for multiple days
+                              if (_selectedDates.contains(selectedDate)) {
+                                _selectedDates.remove(selectedDate);
+                              } else {
+                                _selectedDates.add(selectedDate);
+                              }
+                              break;
 
-                        // Set _startDate to the selected date
-                        _startDate = selectedDate;
-                      });
-                    }
-                  },
-                ),
-              ),
+                            default:
+                              // Handle unknown calendar type if necessary
+                              break;
+                          }
+
+                          // Update weekdays accordingly
+                          _selectedWeekdays.fillRange(0, 7, false);
+                          selectedSubmitWeekdays.clear();
+                          for (DateTime date in _selectedDates) {
+                            int weekdayIndex = date.weekday - 1;
+                            _selectedWeekdays[weekdayIndex] = true;
+                            selectedSubmitWeekdays
+                                .add(_getWeekdayName(weekdayIndex));
+                          }
+
+                          // Update _startDate (e.g., first selected date)
+                          _startDate = _selectedDates.isNotEmpty
+                              ? _selectedDates[0]
+                              : null;
+                        });
+                      }
+                    },
+                  )),
             const SizedBox(height: 20),
             Text(!isRecurring
                 ? 'Available Time for selected day'
@@ -1080,41 +1265,27 @@ class _CreateServiceListingState extends State<CreateServiceListing>
                 ),
               ],
             ),
-            CustomDropdownWidget(
-              padding: 0,
-              caption: 'Duration',
-              hintText: 'Choose duration for this service',
-              items: const <String>[
-                '5 mins',
-                '10 mins',
-                '15 mins',
-                '20 mins',
-                '30 mins',
-                '45 mins',
-                '60 mins (1 hour)',
-                '120 mins (2 hours)',
-                '180 mins (3 hours)',
-                '240 mins (4 hours)',
-                '300 mins (5 hours)',
-                '360 mins (6 hours)',
-                '420 mins (7 hours)',
-                '480 mins (8 hours)',
-                '540 mins (9 hours)',
-                '600 mins (10 hours)',
-                '660 mins (11 hours)',
-                '720 mins (12 hours)'
-              ],
-              iconName: 'assets/svgs/dropdown.svg',
-              initialValue: duration.toString(),
-              onChanged: (String? newValue) {
-                setState(() {
-                  final RegExp regex = RegExp(r'\d+');
-                  final Match? match = regex.firstMatch(newValue!);
-                  if (match != null) {
-                    duration = int.tryParse(match.group(0) ?? '') ?? 0;
-                  }
-                });
-              },
+            if (duration != null && _startTime != null && _endTime != null)
+              const SizedBox(
+                height: 10,
+              ),
+            if (duration != null && _startTime != null && _endTime != null)
+              const Text('Time Slots for your service'),
+            Wrap(
+              spacing: 8.0, // Horizontal spacing between chips
+              children: _generateTimeSlots().map((String slot) {
+                return ChoiceChip(
+                  shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(8)),
+                  backgroundColor: backgroundColor,
+                  label: Text(
+                    slot,
+                    style: const TextStyle(fontSize: 12, color: Colors.black38),
+                  ),
+                  selected: false,
+                  onSelected: (bool selected) {},
+                );
+              }).toList(),
             ),
           ],
         ),
@@ -1167,6 +1338,52 @@ class _CreateServiceListingState extends State<CreateServiceListing>
         }
       });
     }
+  }
+
+  List<String> _generateTimeSlots() {
+    List<String> slots = <String>[];
+    if (duration != null && _startTime != null && _endTime != null) {
+      DateTime startDate = _selectedDates.isNotEmpty
+          ? _selectedDates[0]
+          : DateTime.now(); // Fallback to today if no dates are selected
+      DateTime startDateTime = DateTime(
+        startDate.year,
+        startDate.month,
+        startDate.day,
+        _startTime!.hour,
+        _startTime!.minute,
+      );
+
+      DateTime endDateTime = DateTime(
+        startDate.year,
+        startDate.month,
+        startDate.day,
+        _endTime!.hour,
+        _endTime!.minute,
+      );
+
+      while (startDateTime.isBefore(endDateTime)) {
+        DateTime slotEndTime = startDateTime.add(Duration(minutes: duration!));
+        if (slotEndTime.isAfter(endDateTime)) {
+          slotEndTime =
+              endDateTime; // Adjust the last slot to end exactly at endDateTime
+        }
+
+        // Format the time in 12-hour format with AM/PM
+        String formatTime(DateTime dateTime) {
+          String hour = (dateTime.hour % 12 == 0 ? 12 : dateTime.hour % 12)
+              .toString()
+              .padLeft(2, '0');
+          String minute = dateTime.minute.toString().padLeft(2, '0');
+          String period = dateTime.hour < 12 ? 'AM' : 'PM';
+          return '$hour:$minute $period';
+        }
+
+        slots.add('${formatTime(startDateTime)} - ${formatTime(slotEndTime)}');
+        startDateTime = slotEndTime;
+      }
+    }
+    return slots;
   }
 }
 
