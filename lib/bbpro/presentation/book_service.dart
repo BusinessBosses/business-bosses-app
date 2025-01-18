@@ -582,32 +582,34 @@ class _BookServiceScreenState extends State<BookServiceScreen> {
                             },
                           )),
                     const SizedBox(height: 10),
-                    const Text(
-                      'Time slots',
-                      style: TextStyle(fontSize: 13),
-                    ),
-                    Wrap(
-                      spacing: 8.0,
-                      children: _generateTimeSlots().map((String slot) {
-                        return ChoiceChip(
-                          label: Text(
-                            slot,
-                            style: TextStyle(
-                                fontSize: 12,
-                                color: selectedSlot == slot
-                                    ? Colors.white
-                                    : Colors.black),
-                          ),
-                          selected: selectedSlot == slot,
-                          selectedColor: Colors.black,
-                          onSelected: (bool selected) {
-                            setState(() {
-                              selectedSlot = selected ? slot : null;
-                            });
-                          },
-                        );
-                      }).toList(),
-                    ),
+                    if (_startDate != null)
+                      const Text(
+                        'Time slots',
+                        style: TextStyle(fontSize: 13),
+                      ),
+                    if (_startDate != null)
+                      Wrap(
+                        spacing: 8.0,
+                        children: _generateTimeSlots().map((String slot) {
+                          return ChoiceChip(
+                            label: Text(
+                              slot,
+                              style: TextStyle(
+                                  fontSize: 12,
+                                  color: selectedSlot == slot
+                                      ? Colors.white
+                                      : Colors.black),
+                            ),
+                            selected: selectedSlot == slot,
+                            selectedColor: Colors.black,
+                            onSelected: (bool selected) {
+                              setState(() {
+                                selectedSlot = selected ? slot : null;
+                              });
+                            },
+                          );
+                        }).toList(),
+                      ),
                     const SizedBox(height: 10),
                   ],
                 ),
