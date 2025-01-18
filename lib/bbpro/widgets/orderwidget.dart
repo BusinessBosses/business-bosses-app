@@ -218,26 +218,27 @@ class _OrderWidgetState extends State<OrderWidget> {
                               ),
                             ],
                           ),
-
-                          // if (widget.order.startTime != null)
-                          //   Row(
-                          //     children: <Widget>[
-                          //       const Text(
-                          //         'Delivery Time: ',
-                          //         style: TextStyle(
-                          //           fontWeight: FontWeight.normal,
-                          //           fontSize: 13,
-                          //         ),
-                          //       ),
-                          //       Text(
-                          //         'From ${_formatTime(widget.order.startTime!)} to ${_formatTime(widget.order.endTime!)}',
-                          //         style: const TextStyle(
-                          //           fontWeight: FontWeight.bold,
-                          //           fontSize: 13,
-                          //         ),
-                          //       ),
-                          //     ],
-                          //   ),
+                          Row(
+                            children: <Widget>[
+                              const Text(
+                                'Delivery Time: ',
+                                style: TextStyle(
+                                  fontWeight: FontWeight.normal,
+                                  fontSize: 13,
+                                ),
+                              ),
+                              Text(
+                                (widget.order.startTime != null &&
+                                        widget.order.endTime != null)
+                                    ? 'From ${_formatTime(widget.order.startTime!)} to ${_formatTime(widget.order.endTime!)} '
+                                    : 'N/A',
+                                style: const TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 13,
+                                ),
+                              ),
+                            ],
+                          ),
                           if (widget.isExpanded == true)
                             Row(
                               children: <Widget>[
