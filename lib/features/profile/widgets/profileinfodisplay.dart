@@ -1,5 +1,6 @@
 import 'package:business_bosses_v2/common/models/user_model.dart';
 import 'package:business_bosses_v2/common/widgets/tiles/custom_tileinterests.dart';
+import 'package:business_bosses_v2/features/profile/controller/profile_controller.dart';
 import 'package:business_bosses_v2/features/profile/widgets/productandserviceschip.dart';
 import 'package:business_bosses_v2/functions/my_native_functions.dart';
 import 'package:business_bosses_v2/navigation/routes.dart';
@@ -14,7 +15,7 @@ import 'package:business_bosses_v2/features/home/all_communities_screen.dart';
 import '../../../utils/theme/theme.dart';
 
 Widget profileinfodisplay(BuildContext context, UserModel publicUser) {
-  // final ProfileController _profileController = Get.find();
+  final ProfileController profileController = Get.find();
   return Column(
       mainAxisAlignment: MainAxisAlignment.start,
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -227,6 +228,7 @@ Widget profileinfodisplay(BuildContext context, UserModel publicUser) {
         const SizedBox(
           height: 20,
         ),
+
         // _profileController.myProfile
         //                 .productsandservices ==
         //             null ||
@@ -236,37 +238,37 @@ Widget profileinfodisplay(BuildContext context, UserModel publicUser) {
         //             ''
         //     ? Container()
         //     :
-        if (publicUser.productsandservices != null &&
-            publicUser.productsandservices!.isNotEmpty &&
-            publicUser.productsandservices!
-                .where((String element) => element.isNotEmpty)
-                .toList()
-                .isNotEmpty)
-          Column(
-            mainAxisAlignment: MainAxisAlignment.start,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: <Widget>[
-              const Padding(
-                padding: EdgeInsets.only(left: 15),
-                child: Text(
-                  'Products & Services',
-                  style: TextStyle(
-                    fontSize: 18,
-                    fontWeight: FontWeight.bold,
-                    color: subtextColor,
-                  ),
-                ),
-              ),
-              const SizedBox(
-                height: 5,
-              ),
-              buildChoiceChips(publicUser.productsandservices != null
-                  ? publicUser.productsandservices!
-                      .where((String element) => element.isNotEmpty)
-                      .toList()
-                  : <String>[])
-            ],
-          ),
+        // if (publicUser.productsandservices != null &&
+        //     publicUser.productsandservices!.isNotEmpty &&
+        //     publicUser.productsandservices!
+        //         .where((String element) => element.isNotEmpty)
+        //         .toList()
+        //         .isNotEmpty)
+        //   Column(
+        //     mainAxisAlignment: MainAxisAlignment.start,
+        //     crossAxisAlignment: CrossAxisAlignment.start,
+        //     children: <Widget>[
+        //       const Padding(
+        //         padding: EdgeInsets.only(left: 15),
+        //         child: Text(
+        //           'Products & Services',
+        //           style: TextStyle(
+        //             fontSize: 18,
+        //             fontWeight: FontWeight.bold,
+        //             color: subtextColor,
+        //           ),
+        //         ),
+        //       ),
+        //       const SizedBox(
+        //         height: 5,
+        //       ),
+        //       buildChoiceChips(publicUser.productsandservices != null
+        //           ? publicUser.productsandservices!
+        //               .where((String element) => element.isNotEmpty)
+        //               .toList()
+        //           : <String>[])
+        //     ],
+        //   ),
         const SizedBox(
           height: 10,
         ),
@@ -338,6 +340,15 @@ Widget profileinfodisplay(BuildContext context, UserModel publicUser) {
             height: 150,
           )
         ]),
+
+        // if (profileController.myProfile.uid == publicUser.uid)
+        //   const Padding(
+        //     padding: EdgeInsets.symmetric(horizontal: 15.0),
+        //     child: Text(
+        //       'Products and services added on biz-center will appear here',
+        //       style: TextStyle(fontSize: 14),
+        //     ),
+        //   ),
 
         const SizedBox(
           height: 100,
