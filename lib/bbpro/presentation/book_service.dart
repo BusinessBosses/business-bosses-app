@@ -583,11 +583,11 @@ class _BookServiceScreenState extends State<BookServiceScreen> {
                           )),
                     const SizedBox(height: 10),
                     const Text(
-                      'Available Time Slots',
+                      'Time slots',
                       style: TextStyle(fontSize: 13),
                     ),
                     Wrap(
-                      spacing: 8.0, // Horizontal spacing between chips
+                      spacing: 8.0,
                       children: _generateTimeSlots().map((String slot) {
                         return ChoiceChip(
                           label: Text(
@@ -603,7 +603,6 @@ class _BookServiceScreenState extends State<BookServiceScreen> {
                           onSelected: (bool selected) {
                             setState(() {
                               selectedSlot = selected ? slot : null;
-                              print(selectedSlot);
                             });
                           },
                         );
@@ -927,49 +926,97 @@ class _BookServiceScreenState extends State<BookServiceScreen> {
   }
 
   List<String> _generateTimeSlots() {
-    List<String> slots = <String>[];
-    if (duration != null && widget.service.availability != null) {
-      // Parse the start time and end time
-      List<String> startTimeParts =
-          widget.service.availability!['startTime'].split(':');
-      List<String> endTimeParts =
-          widget.service.availability!['endTime'].split(':');
+    // Default time values if data is invalid or null
+    TimeOfDay defaultStartTime = const TimeOfDay(hour: 9, minute: 0); // 9:00 AM
+    TimeOfDay defaultEndTime = const TimeOfDay(hour: 17, minute: 0); // 5:00 PM
 
-      // Parse the start date (assumes startDate and endDate are the same day for this example)
-      DateTime startDate =
-          DateTime.parse(widget.service.availability!['startDate']);
-      DateTime endDate =
-          DateTime.parse(widget.service.availability!['endDate']);
-
-      // Construct DateTime objects for the start and end of the time slots
-      DateTime startDateTime = DateTime(
-        startDate.year,
-        startDate.month,
-        startDate.day,
-        int.parse(startTimeParts[0]), // Hour
-        int.parse(startTimeParts[1]), // Minute
-      );
-
-      DateTime endDateTime = DateTime(
-        endDate.year,
-        endDate.month,
-        endDate.day,
-        int.parse(endTimeParts[0]), // Hour
-        int.parse(endTimeParts[1]), // Minute
-      );
-
-      // Generate slots
-      while (startDateTime.isBefore(endDateTime)) {
-        DateTime slotEndTime = startDateTime.add(Duration(minutes: duration!));
-        if (slotEndTime.isAfter(endDateTime)) break;
-
-        slots.add(
-            '${TimeOfDay.fromDateTime(startDateTime).format(context)} - ${TimeOfDay.fromDateTime(slotEndTime).format(context)}');
-
-        startDateTime = slotEndTime;
-      }
+    // Return default formatted times if duration or availability data is null
+    if (duration == null || widget.service.availability == null) {
+      return <String>[
+        '${defaultStartTime.format(context)} - ${defaultEndTime.format(context)}'
+      ];
     }
-    return slots;
+
+    List<String> slots = <String>[];
+
+    // Parse the start time and end time
+    String? rawStartTime = widget.service.availability!['startTime'];
+    String? rawEndTime = widget.service.availability!['endTime'];
+
+    List<String> startTimeParts = rawStartTime?.split(':') ?? <String>[];
+    List<String> endTimeParts = rawEndTime?.split(':') ?? <String>[];
+
+    // Validate and fallback to default times
+    int startHour =
+        int.tryParse(startTimeParts.isNotEmpty ? startTimeParts[0] : '') ??
+            defaultStartTime.hour;
+    int startMinute =
+        int.tryParse(startTimeParts.length > 1 ? startTimeParts[1] : '') ??
+            defaultStartTime.minute;
+
+    int endHour =
+        int.tryParse(endTimeParts.isNotEmpty ? endTimeParts[0] : '') ??
+            defaultEndTime.hour;
+    int endMinute =
+        int.tryParse(endTimeParts.length > 1 ? endTimeParts[1] : '') ??
+            defaultEndTime.minute;
+
+    // Parse the start and end dates
+    String? rawStartDate = widget.service.availability!['startDate'];
+    String? rawEndDate = widget.service.availability!['endDate'];
+
+    if (rawStartDate == null || rawEndDate == null) {
+      return <String>[
+        '${TimeOfDay(hour: startHour, minute: startMinute).format(context)} - ${TimeOfDay(hour: endHour, minute: endMinute).format(context)}'
+      ]; // Missing date information
+    }
+
+    DateTime startDate;
+    DateTime endDate;
+
+    try {
+      startDate = DateTime.parse(rawStartDate);
+      endDate = DateTime.parse(rawEndDate);
+    } catch (e) {
+      return <String>[
+        '${TimeOfDay(hour: startHour, minute: startMinute).format(context)} - ${TimeOfDay(hour: endHour, minute: endMinute).format(context)}'
+      ]; // Invalid date format
+    }
+
+    // Construct DateTime objects for the start and end of the time slots
+    DateTime startDateTime = DateTime(
+      startDate.year,
+      startDate.month,
+      startDate.day,
+      startHour,
+      startMinute,
+    );
+
+    DateTime endDateTime = DateTime(
+      endDate.year,
+      endDate.month,
+      endDate.day,
+      endHour,
+      endMinute,
+    );
+
+    // Generate slots
+    while (startDateTime.isBefore(endDateTime)) {
+      DateTime slotEndTime = startDateTime.add(Duration(minutes: duration!));
+      if (slotEndTime.isAfter(endDateTime)) break;
+
+      slots.add(
+          '${TimeOfDay.fromDateTime(startDateTime).format(context)} - ${TimeOfDay.fromDateTime(slotEndTime).format(context)}');
+
+      startDateTime = slotEndTime;
+    }
+
+    // Return startTime to endTime if no slots could be generated
+    return slots.isEmpty
+        ? <String>[
+            '${TimeOfDay(hour: startHour, minute: startMinute).format(context)} - ${TimeOfDay(hour: endHour, minute: endMinute).format(context)}'
+          ]
+        : slots;
   }
 
   String getDeliveryMethod(String method) {
