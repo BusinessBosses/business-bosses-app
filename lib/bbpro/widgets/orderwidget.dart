@@ -49,7 +49,6 @@ class _OrderWidgetState extends State<OrderWidget> {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
-        print(widget.order.startTime);
         if (widget.isExpanded != true) {
           Get.to(() => ExpandedOrders(
                 order: widget.order,
@@ -208,9 +207,10 @@ class _OrderWidgetState extends State<OrderWidget> {
                               ),
                               Text(
                                 DateFormat('dd MMM yyyy')
-                                    .format(widget.order.deliveryDate ??
-                                        widget.order.createdAt)
-                                    .toString(),
+                                        .format(widget.order.deliveryDate ??
+                                            widget.order.createdAt)
+                                        .toString() ??
+                                    'N/A',
                                 style: const TextStyle(
                                   fontWeight: FontWeight.bold,
                                   fontSize: 13,
@@ -218,25 +218,26 @@ class _OrderWidgetState extends State<OrderWidget> {
                               ),
                             ],
                           ),
-                          if (widget.order.startTime != null)
-                            Row(
-                              children: <Widget>[
-                                const Text(
-                                  'Delivery Time: ',
-                                  style: TextStyle(
-                                    fontWeight: FontWeight.normal,
-                                    fontSize: 13,
-                                  ),
-                                ),
-                                Text(
-                                  'From ${_formatTime(widget.order.startTime!)} to ${_formatTime(widget.order.endTime!)}',
-                                  style: const TextStyle(
-                                    fontWeight: FontWeight.bold,
-                                    fontSize: 13,
-                                  ),
-                                ),
-                              ],
-                            ),
+
+                          // if (widget.order.startTime != null)
+                          //   Row(
+                          //     children: <Widget>[
+                          //       const Text(
+                          //         'Delivery Time: ',
+                          //         style: TextStyle(
+                          //           fontWeight: FontWeight.normal,
+                          //           fontSize: 13,
+                          //         ),
+                          //       ),
+                          //       Text(
+                          //         'From ${_formatTime(widget.order.startTime!)} to ${_formatTime(widget.order.endTime!)}',
+                          //         style: const TextStyle(
+                          //           fontWeight: FontWeight.bold,
+                          //           fontSize: 13,
+                          //         ),
+                          //       ),
+                          //     ],
+                          //   ),
                           if (widget.isExpanded == true)
                             Row(
                               children: <Widget>[
@@ -485,33 +486,6 @@ class _OrderWidgetState extends State<OrderWidget> {
                           )
                         ],
                       ),
-                    // if (widget.isExpanded != true)
-                    //   Row(
-                    //     mainAxisAlignment: MainAxisAlignment.end,
-                    //     children: <Widget>[
-                    //       GestureDetector(
-                    //         onTap: () {
-                    //           Get.to(() => ExpandedOrders(
-                    //                 order: widget.order,
-                    //               ));
-                    //           // showDialog(
-                    //           //   context: context,
-                    //           //   builder: (BuildContext context) => OrderPopUp(
-                    //           //     order: widget.order,
-                    //           //   ),
-                    //           // );
-                    //         },
-                    //         child: CircleAvatar(
-                    //           backgroundColor: probackgroundColor,
-                    //           radius: 15,
-                    //           child: SvgPicture.asset(
-                    //             'assets/svgs/expandform.svg',
-                    //             color: proprimaryColor,
-                    //           ),
-                    //         ),
-                    //       )
-                    //     ],
-                    //   )
                   ],
                 ),
               ),
