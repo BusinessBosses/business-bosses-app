@@ -4,6 +4,7 @@ import 'package:business_bosses_v2/action/action.dart';
 import 'package:business_bosses_v2/bbpro/controllers/shop_controller.dart';
 import 'package:business_bosses_v2/bbpro/models/service_model.dart';
 import 'package:business_bosses_v2/bbpro/models/product_model.dart';
+import 'package:business_bosses_v2/bbpro/presentation/book_service.dart';
 import 'package:business_bosses_v2/bbpro/presentation/create_product.dart';
 import 'package:business_bosses_v2/bbpro/presentation/create_service.dart';
 import 'package:business_bosses_v2/bbpro/widgets/inventorycard.dart';
@@ -53,7 +54,7 @@ class _ShopScreenState extends State<ShopScreen> {
                     ? 'Biz-Center'
                     : 'Biz-Center',
                 style: const TextStyle(
-                  color: proprimaryColor,
+                  color: Colors.black,
                   fontWeight: FontWeight.bold,
                 ),
               ),

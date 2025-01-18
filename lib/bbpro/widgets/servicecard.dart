@@ -9,6 +9,33 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:business_bosses_v2/bbpro/presentation/create_service.dart';
 
+String formatServiceDuration(int? duration) {
+  if (duration == null || duration == 2000000) return '';
+  if (duration < 60) return '$duration mins @';
+  if (duration < 1440) {
+    int hours = duration ~/ 60;
+    int minutes = duration % 60;
+    String formattedDuration = '${hours}hr(s)';
+    if (minutes > 0) {
+      formattedDuration += ' ${minutes}mins';
+    }
+    return '$formattedDuration @ ';
+  } else {
+    int days = duration ~/ 1440;
+    int remainingMinutes = duration % 1440;
+    int hours = remainingMinutes ~/ 60;
+    int minutes = remainingMinutes % 60;
+    String formattedDuration = '${days}d';
+    if (hours > 0) {
+      formattedDuration += ' ${hours}hr(s)';
+    }
+    if (minutes > 0) {
+      formattedDuration += ' ${minutes}mins';
+    }
+    return '$formattedDuration @ ';
+  }
+}
+
 class ServiceCard extends StatefulWidget {
   final Service? service;
   final bool? myShop;
@@ -81,78 +108,90 @@ class _ServiceCardState extends State<ServiceCard> {
             crossAxisAlignment: CrossAxisAlignment.end,
             children: <Widget>[
               Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: <Widget>[
-                    Text(
-                      widget.service?.name ?? 'Service Name',
-                      style: const TextStyle(
-                        fontSize: 13,
-                        fontWeight: FontWeight.bold,
-                      ),
-                      maxLines: 1,
-                      overflow: TextOverflow.ellipsis,
-                    ),
-                    if (widget.service?.discount != null &&
-                        widget.service!.discount > 0)
-                      Row(
-                        children: <Widget>[
-                          Text(
-                            '${widget.shop?.currency ?? shopController.shop!.currency}${((widget.service!.price * (1 - widget.service!.discount / 100)) * 100).round() / 100}',
-                            style: const TextStyle(
-                              color: Colors.black,
-                              fontWeight: FontWeight.bold,
-                              fontSize: 13,
-                            ),
-                          ),
-                          const SizedBox(width: 5),
-                          Text(
-                            '${widget.shop?.currency ?? shopController.shop!.currency}${widget.service!.price.toStringAsFixed(2)}',
-                            style: const TextStyle(
-                              color: Colors.grey,
-                              decoration: TextDecoration.lineThrough,
-                              fontSize: 11,
-                            ),
-                          ),
-                        ],
-                      )
-                    else
+                child: Container(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: <Widget>[
                       Text(
-                        '${widget.shop?.currency ?? shopController.shop!.currency}${widget.service!.price.toStringAsFixed(2)}',
+                        widget.service?.name ?? 'Service Name',
                         style: const TextStyle(
-                          color: Colors.black,
-                          fontWeight: FontWeight.bold,
                           fontSize: 13,
+                          fontWeight: FontWeight.bold,
                         ),
-                      ),
-                    if (widget.myShop == false)
-                      Text(
-                        widget.service?.description ?? 'Service description',
-                        style: const TextStyle(fontSize: 11),
-                        maxLines: 2,
+                        maxLines: 1,
                         overflow: TextOverflow.ellipsis,
                       ),
-                    // if (widget.myShop == false)
-                    //   const Row(
-                    //     mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    //     children: <Widget>[
-                    //       Wrap(
-                    //         crossAxisAlignment: WrapCrossAlignment.center,
-                    //         children: <Widget>[
-                    //           CircleAvatar(
-                    //             radius: 3,
-                    //             backgroundColor: Colors.green,
-                    //           ),
-                    //           SizedBox(width: 3),
-                    //           Text(
-                    //             'Upcoming',
-                    //             style: TextStyle(fontSize: 10),
-                    //           ),
-                    //         ],
-                    //       ),
-                    //     ],
-                    //   ),
-                  ],
+
+                      if (widget.service?.discount != null &&
+                          widget.service!.discount > 0)
+                        Column(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: <Widget>[
+                            if (widget.service?.serviceDuration != null)
+                              Text(formatServiceDuration(
+                                  widget.service?.serviceDuration)),
+                            Row(
+                              children: <Widget>[
+                                Text(
+                                  '${widget.shop?.currency ?? shopController.shop!.currency}${((widget.service!.price * (1 - widget.service!.discount / 100)) * 100).round() / 100}',
+                                  style: const TextStyle(
+                                    color: Colors.black,
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 13,
+                                  ),
+                                ),
+                                const SizedBox(width: 5),
+                                Text(
+                                  '${widget.shop?.currency ?? shopController.shop!.currency}${widget.service!.price.toStringAsFixed(2)}',
+                                  style: const TextStyle(
+                                    color: Colors.grey,
+                                    decoration: TextDecoration.lineThrough,
+                                    fontSize: 11,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ],
+                        )
+                      else
+                        Text(
+                          '${widget.shop?.currency ?? shopController.shop!.currency}${widget.service!.price.toStringAsFixed(2)}',
+                          style: const TextStyle(
+                            color: Colors.black,
+                            fontWeight: FontWeight.bold,
+                            fontSize: 13,
+                          ),
+                        ),
+                      if (widget.myShop == false)
+                        Text(
+                          widget.service?.description ?? 'Service description',
+                          style: const TextStyle(fontSize: 11),
+                          maxLines: 2,
+                          overflow: TextOverflow.ellipsis,
+                        ),
+                      // if (widget.myShop == false)
+                      //   const Row(
+                      //     mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      //     children: <Widget>[
+                      //       Wrap(
+                      //         crossAxisAlignment: WrapCrossAlignment.center,
+                      //         children: <Widget>[
+                      //           CircleAvatar(
+                      //             radius: 3,
+                      //             backgroundColor: Colors.green,
+                      //           ),
+                      //           SizedBox(width: 3),
+                      //           Text(
+                      //             'Upcoming',
+                      //             style: TextStyle(fontSize: 10),
+                      //           ),
+                      //         ],
+                      //       ),
+                      //     ],
+                      //   ),
+                    ],
+                  ),
                 ),
               ),
             ],

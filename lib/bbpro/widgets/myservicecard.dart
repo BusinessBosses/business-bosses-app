@@ -1,4 +1,5 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
+import 'dart:math';
 import 'package:business_bosses_v2/bbpro/controllers/shop_controller.dart';
 import 'package:business_bosses_v2/bbpro/models/service_model.dart';
 import 'package:business_bosses_v2/bbpro/models/shop_model.dart';
@@ -10,6 +11,33 @@ import 'package:business_bosses_v2/utils/theme/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
+
+String formatServiceDuration(int? duration) {
+  if (duration == null || duration == 2000000) return '';
+  if (duration < 60) return '$duration mins @';
+  if (duration < 1440) {
+    int hours = duration ~/ 60;
+    int minutes = duration % 60;
+    String formattedDuration = '${hours}hr(s)';
+    if (minutes > 0) {
+      formattedDuration += ' ${minutes}mins';
+    }
+    return '$formattedDuration @ ';
+  } else {
+    int days = duration ~/ 1440;
+    int remainingMinutes = duration % 1440;
+    int hours = remainingMinutes ~/ 60;
+    int minutes = remainingMinutes % 60;
+    String formattedDuration = '${days}d';
+    if (hours > 0) {
+      formattedDuration += ' ${hours}hr(s)';
+    }
+    if (minutes > 0) {
+      formattedDuration += ' ${minutes}mins';
+    }
+    return '$formattedDuration @ ';
+  }
+}
 
 class MyServiceCard extends StatefulWidget {
   final Service? service;
@@ -32,6 +60,7 @@ class MyServiceCard extends StatefulWidget {
 
 class _MyServiceCardState extends State<MyServiceCard> {
   final ShopController shopController = Get.find();
+  final String serviceduration = '';
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -109,25 +138,6 @@ class _MyServiceCardState extends State<MyServiceCard> {
                       ),
               ],
             ),
-            // if (widget.service?.images != null &&
-            //     widget.service!.images!.isNotEmpty)
-            //   Padding(
-            //     padding: const EdgeInsets.symmetric(vertical: 10.0),
-            //     child: SizedBox(
-            //       height: 120.0,
-            //       width: double.infinity,
-            //       child: ClipRRect(
-            //         borderRadius: BorderRadius.circular(10),
-            //         child: NetworkImageWithPlaceHolder(
-            //           imageUrl: widget.service?.images?[0],
-            //           radius: radius,
-            //           placeHolder: Icons.person,
-            //           iconSize: 0.0,
-            //           fit: BoxFit.cover,
-            //         ),
-            //       ),
-            //     ),
-            //   ),
             Padding(
               padding: const EdgeInsets.symmetric(vertical: 10.0),
               child: Column(
@@ -146,7 +156,7 @@ class _MyServiceCardState extends State<MyServiceCard> {
                         Row(
                           children: <Widget>[
                             Text(
-                              '${widget.shop == null ? shopController.shop!.currency : widget.shop!.currency}${((widget.service!.price ?? 0) * (1 - (widget.service!.discount ?? 0) / 100)).toStringAsFixed(2)}',
+                              '${formatServiceDuration(widget.service?.serviceDuration)}${widget.shop == null ? shopController.shop!.currency : widget.shop!.currency}${((widget.service!.price ?? 0) * (1 - (widget.service!.discount ?? 0) / 100)).toStringAsFixed(2)}',
                               style: const TextStyle(
                                 color: proprimaryColor,
                                 fontWeight: FontWeight.bold,
@@ -166,7 +176,7 @@ class _MyServiceCardState extends State<MyServiceCard> {
                         )
                       else
                         Text(
-                          '${widget.shop == null ? shopController.shop!.currency : widget.shop!.currency}${(widget.service?.price ?? 0).toStringAsFixed(2)}',
+                          '${formatServiceDuration(widget.service?.serviceDuration)}${widget.shop == null ? shopController.shop!.currency : widget.shop!.currency}${(widget.service?.price ?? 0).toStringAsFixed(2)}',
                           style: const TextStyle(
                             color: proprimaryColor,
                             fontWeight: FontWeight.bold,
@@ -241,17 +251,6 @@ class _MyServiceCardState extends State<MyServiceCard> {
                               maxLines: 2,
                               overflow: TextOverflow.ellipsis,
                             ),
-                            // Expanded(
-                            //   child: Text(
-                            //     widget.service?.participants ??
-                            //         'Service description',
-                            //     style: const TextStyle(
-                            //       fontSize: 13,
-                            //     ),
-                            //     maxLines: 2,
-                            //     overflow: TextOverflow.ellipsis,
-                            //   ),
-                            // ),
                           ],
                         ),
                       ),

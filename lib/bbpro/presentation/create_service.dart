@@ -437,6 +437,7 @@ class _CreateServiceListingState extends State<CreateServiceListing>
                     if (newValue == 'Custom') {
                       customduration = true;
                     } else {
+                      customduration = false;
                       final RegExp regex = RegExp(r'\d+');
                       final Match? match = regex.firstMatch(newValue!);
                       if (match != null) {
@@ -496,9 +497,6 @@ class _CreateServiceListingState extends State<CreateServiceListing>
                                 'minute(s)',
                                 'hour(s)',
                                 'day(s)',
-                                'week(s)',
-                                'month(s)',
-                                'year(s)'
                               ].map<DropdownMenuItem<String>>(
                                 (String value) {
                                   return DropdownMenuItem<String>(
@@ -858,6 +856,8 @@ class _CreateServiceListingState extends State<CreateServiceListing>
   }
 
   void _submitForm() async {
+    duration ??= 2000000;
+
     if (_serviceNameController.text.isEmpty) {
       showSnackbar(
         message: 'Service Name is Mandatory!',
@@ -890,22 +890,13 @@ class _CreateServiceListingState extends State<CreateServiceListing>
         case 'day(s)':
           duration = number * 60 * 24;
           break;
-        case 'week(s)':
-          duration = number * 60 * 24 * 7;
-          break;
-        case 'month(s)':
-          duration = number * 60 * 24 * 30;
-          break;
-        case 'year(s)':
-          duration = number * 60 * 24 * 365;
-          break;
       }
     }
 
     _startTime ??= const TimeOfDay(hour: 9, minute: 0);
     _endTime ??= const TimeOfDay(hour: 17, minute: 0);
-    _startDate ??= DateTime.now();
-    _endDate ??= DateTime.now();
+    // _startDate ??= DateTime.now();
+    // _endDate ??= DateTime.now();
     if (!(_endTime!.hour > _startTime!.hour ||
         (_endTime?.hour == _startTime?.hour &&
             _endTime!.minute >= _startTime!.minute))) {
@@ -1265,6 +1256,9 @@ class _CreateServiceListingState extends State<CreateServiceListing>
 
                           // Update _startDate (e.g., first selected date)
                           _startDate = _selectedDates.isNotEmpty
+                              ? _selectedDates[0]
+                              : null;
+                          _endDate = _selectedDates.isNotEmpty
                               ? _selectedDates[0]
                               : null;
                         });
