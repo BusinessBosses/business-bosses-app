@@ -705,6 +705,7 @@ class _SetupshopState extends State<Setupshop> with TickerProviderStateMixin {
     List<Map<String, dynamic>> paymentMethods = <Map<String, dynamic>>[];
 
     // Add payment methods to the array
+
     if (selections['Bank'] == true && bankDetails.isNotEmpty) {
       paymentMethods.add(<String, dynamic>{
         'paymentMethod': 'Bank',

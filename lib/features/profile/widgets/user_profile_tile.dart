@@ -1,3 +1,4 @@
+import 'package:business_bosses_v2/bbpro/controllers/shop_controller.dart';
 import 'package:business_bosses_v2/common/models/user_model.dart';
 import 'package:business_bosses_v2/common/widgets/buttons/subscribe_to_premium_button.dart';
 import 'package:business_bosses_v2/features/profile/widgets/profile_picture_display.dart';
@@ -21,6 +22,7 @@ class UserProfileTile extends StatefulWidget {
 class _UserProfileTileState extends State<UserProfileTile> {
   @override
   Widget build(BuildContext context) {
+    ShopController shopController = Get.find();
     // ignore: unused_local_variable
     final ProfileController profileController = Get.find();
     // fetchData();
@@ -181,7 +183,7 @@ class _UserProfileTileState extends State<UserProfileTile> {
                         : Container(),
                   ],
                 ),
-                if (!widget.myProfile.isSubscribed)
+                if (shopController.shop == null)
                   GestureDetector(
                     onTap: () {},
                     child: Container(
