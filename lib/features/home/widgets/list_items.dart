@@ -1,3 +1,5 @@
+import 'package:business_bosses_v2/bbpro/models/product_model.dart';
+import 'package:business_bosses_v2/bbpro/models/service_model.dart';
 import 'package:business_bosses_v2/bbpro/widgets/proshopdeals.dart';
 import 'package:business_bosses_v2/common/widgets/text_widget.dart';
 import 'package:business_bosses_v2/features/courses/controller/course_controller.dart';
@@ -5,7 +7,6 @@ import 'package:business_bosses_v2/features/courses/models/course_model.dart';
 import 'package:business_bosses_v2/features/forum/models/industry.dart';
 import 'package:business_bosses_v2/features/home/controller/commumities_controller.dart';
 import 'package:business_bosses_v2/features/home/controller/home_controller.dart';
-import 'package:business_bosses_v2/features/home/widgets/challengessection.dart';
 import 'package:business_bosses_v2/features/home/widgets/course_item.dart';
 import 'package:business_bosses_v2/features/home/widgets/course_list.dart';
 import 'package:business_bosses_v2/features/home/widgets/relevantpeopletile.dart';
@@ -19,7 +20,6 @@ import 'package:business_bosses_v2/features/posts/models/post_model.dart';
 import 'package:business_bosses_v2/features/posts/widgets/userpost_tile.dart';
 import 'package:business_bosses_v2/features/profile/widgets/boss_of_the_week_tile.dart';
 import 'package:business_bosses_v2/utils/constants/constants.dart';
-import 'package:business_bosses_v2/utils/theme/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:lottie/lottie.dart';
@@ -154,7 +154,19 @@ class _PostsWidgetState extends State<PostsWidget> {
             isHome: true,
             caption: 'Featured Listing',
             combinedList: <Object>[
-              ...marketController.proItemsWithImages.take(10).toList(),
+              ...marketController.proItemsWithImages
+                  .where((Object object) {
+                    if (object is Product) {
+                      if (object.user!.isSubscribed) return true;
+                    } else if (object is Service) {
+                      if (object.user!.isSubscribed) {
+                        return true;
+                      }
+                    }
+                    return false;
+                  })
+                  .take(10)
+                  .toList(),
             ],
           ),
         ],
