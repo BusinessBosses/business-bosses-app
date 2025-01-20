@@ -97,6 +97,7 @@ class _CreateServiceListingState extends State<CreateServiceListing>
   String? servicePeriod = 'minute(s)';
   String? servicePeriodnumber;
   String? calendarType = 'Single day';
+  bool? isAppointment = false;
 
   @override
   void initState() {
@@ -321,7 +322,7 @@ class _CreateServiceListingState extends State<CreateServiceListing>
                     child: CustomEditText(
                       maxLength: 15,
                       padding: 0,
-                      caption: 'Discount (%)',
+                      caption: 'Discount(%) - Optional',
                       hintText: 'Enter discount',
                       controller: _discountController,
                       inputType: TextInputType.number,
@@ -341,7 +342,7 @@ class _CreateServiceListingState extends State<CreateServiceListing>
             const SizedBox(height: 16),
             CustomDropdownWidget(
               initialValue: category,
-              caption: 'Select Category',
+              caption: 'Select Category (Optional)',
               hintText: 'Choose a category',
               items: const <String>[
                 'Home, Garden & Outdoors',
@@ -416,9 +417,30 @@ class _CreateServiceListingState extends State<CreateServiceListing>
 
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 15.0),
+              child: SwitchWidget(
+                value: isAppointment!,
+                onChanged: (bool value) {
+                  setState(() {
+                    isAppointment = value;
+                  });
+                },
+                caption: 'Is this an Appointment Service',
+                subtext:
+                    'If this is an appointment service, you must choose a duration, select a date and time for bookings.',
+                activeColor: proprimaryColor,
+                inactiveColor: Colors.grey,
+              ),
+            ),
+
+            const SizedBox(height: 16),
+
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 15.0),
               child: CustomDropdownWidget(
                 padding: 0,
-                caption: 'Duration',
+                caption: isAppointment != false
+                    ? 'Duration (Optional)'
+                    : 'Duration *',
                 hintText: 'Choose duration for your service',
                 items: const <String>[
                   '5 mins',
@@ -590,6 +612,7 @@ class _CreateServiceListingState extends State<CreateServiceListing>
 
             // Delivery Method Dropdown
             ExpansionTile(
+              initiallyExpanded: true,
               trailing: isExpanded
                   ? SvgPicture.asset(
                       'assets/svgs/dropdownexpansionup.svg',
@@ -661,23 +684,24 @@ class _CreateServiceListingState extends State<CreateServiceListing>
 
                 const SizedBox(height: 16),
 
-                availabilityWidget(
-                    isRecurring:
-                        frequency == 'Yes (Regular Service)' ? true : false),
-                const SizedBox(height: 16),
+                if (isAppointment != false)
+                  availabilityWidget(
+                      isRecurring:
+                          frequency == 'Yes (Regular Service)' ? true : false),
+                // const SizedBox(height: 16),
 
-                CustomDropdownWidget(
-                  caption: 'Payment Method',
-                  hintText: 'Choose a payment method',
-                  items: paymentMethods,
-                  initialValue: paymentMethod,
-                  iconName: 'assets/svgs/dropdown.svg',
-                  onChanged: (String? newValue) {
-                    setState(() {
-                      paymentMethod = newValue;
-                    });
-                  },
-                ),
+                // CustomDropdownWidget(
+                //   caption: 'Payment Method',
+                //   hintText: 'Choose a payment method',
+                //   items: paymentMethods,
+                //   initialValue: paymentMethod,
+                //   iconName: 'assets/svgs/dropdown.svg',
+                //   onChanged: (String? newValue) {
+                //     setState(() {
+                //       paymentMethod = newValue;
+                //     });
+                //   },
+                // ),
 
                 const SizedBox(height: 16),
 
@@ -876,6 +900,12 @@ class _CreateServiceListingState extends State<CreateServiceListing>
         error: true,
       );
       return;
+    } else if (isAppointment == true && duration == 200000) {
+      showSnackbar(
+        message: 'Duration is Mandatory!',
+        error: true,
+      );
+      return;
     }
 
     if (servicePeriodnumber != null && servicePeriod != null) {
@@ -950,12 +980,13 @@ class _CreateServiceListingState extends State<CreateServiceListing>
               : _discountController.text.trim(),
           'category': category,
           'serviceDuration': duration,
+          'isAppointment': isAppointment,
           'location':
               location.isEmpty ? shopController.shop!.location : location,
           'participants': groupmembersController.text,
           'repeat': frequency,
           'images': finalImages.isEmpty ? null : finalImages,
-          'paymentMethod': paymentMethod ?? '',
+          'paymentMethod': '',
           'deliveryMethod': deliveryMethod ?? '',
           'availableTime': availableTime.toIso8601String(),
           'serviceType': serviceType ?? '1:1',

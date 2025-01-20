@@ -25,7 +25,7 @@ String formatServiceDuration(int? duration) {
     int remainingMinutes = duration % 1440;
     int hours = remainingMinutes ~/ 60;
     int minutes = remainingMinutes % 60;
-    String formattedDuration = '${days}d';
+    String formattedDuration = '${days}days';
     if (hours > 0) {
       formattedDuration += ' ${hours}hr(s)';
     }

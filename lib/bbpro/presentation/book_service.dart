@@ -6,9 +6,11 @@ import 'package:business_bosses_v2/bbpro/presentation/user_shop_screen.dart';
 import 'package:business_bosses_v2/bbpro/widgets/button.dart';
 import 'package:business_bosses_v2/bbpro/widgets/orderpaymentcard.dart';
 import 'package:business_bosses_v2/bbpro/widgets/ordersummarycard.dart';
+import 'package:business_bosses_v2/bbpro/widgets/paymentoptioncard.dart';
 import 'package:business_bosses_v2/bbpro/widgets/servicetypesection.dart';
 import 'package:business_bosses_v2/common/dialogs/snackbar.dart';
 import 'package:business_bosses_v2/common/generic_slider.dart';
+import 'package:business_bosses_v2/features/premium/reviewpayment.dart';
 import 'package:business_bosses_v2/features/profile/controller/profile_controller.dart';
 import 'package:business_bosses_v2/utils/theme/theme.dart';
 import 'package:detectable_text_field/detector/sample_regular_expressions.dart';
@@ -36,7 +38,7 @@ String formatServiceDuration(int? duration) {
     int remainingMinutes = duration % 1440;
     int hours = remainingMinutes ~/ 60;
     int minutes = remainingMinutes % 60;
-    String formattedDuration = '${days}d';
+    String formattedDuration = '${days}days';
     if (hours > 0) {
       formattedDuration += ' ${hours}hr(s)';
     }
@@ -90,11 +92,19 @@ class _BookServiceScreenState extends State<BookServiceScreen> {
   bool timeslotselected = false;
   String? selectedSlot;
   String serviceduration = '';
+  List<dynamic>? paymentMethods;
+  String paymentMethod = '';
+  String activePaymentMethod = '';
+  bool isAppointment = false;
 
   @override
   void initState() {
-    print(widget.service);
     super.initState();
+
+    paymentMethods = widget.shop.payments;
+    if (paymentMethods!.isNotEmpty) {
+      activePaymentMethod = paymentMethods![0]['paymentMethod'] ?? '';
+    }
     fullNameController.text = profileController.myProfile.name ?? '';
     emailController.text = profileController.myProfile.email;
     _focusNode = FocusNode();
@@ -615,89 +625,89 @@ class _BookServiceScreenState extends State<BookServiceScreen> {
                 ),
               ),
 
-            const SizedBox(height: 15),
+            // const SizedBox(height: 15),
 
             // Order Preview Section
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 15.0),
-              child: Container(
-                decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(10),
-                    color: Colors.white),
-                padding: const EdgeInsets.only(
-                    left: 15.0, top: 15, right: 15, bottom: 0),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: <Widget>[
-                    const Text(
-                      'Edit your Details',
-                      style: TextStyle(
-                        fontSize: 16,
-                        fontWeight: FontWeight.w700,
-                      ),
-                    ),
-                    const SizedBox(
-                      width: 10,
-                    ),
-                    TextFormField(
-                      style: const TextStyle(fontSize: 13),
-                      maxLines: 1,
-                      controller: fullNameController,
-                      decoration: InputDecoration(
-                        border: InputBorder.none,
-                        hintText: 'Full Name',
-                        filled: false,
-                        fillColor: Colors.grey.shade100,
-                      ),
-                    ),
-                    TextFormField(
-                      controller: emailController,
-                      style: const TextStyle(fontSize: 13),
-                      maxLines: 1,
-                      decoration: InputDecoration(
-                        border: InputBorder.none,
-                        hintText: 'Email',
-                        filled: false,
-                        fillColor: Colors.grey.shade100,
-                      ),
-                    ),
-                    TextFormField(
-                      controller: phoneController,
-                      style: const TextStyle(fontSize: 13),
-                      maxLines: 1,
-                      decoration: InputDecoration(
-                        border: InputBorder.none,
-                        hintText: 'Phone Number',
-                        filled: false,
-                        fillColor: Colors.grey.shade100,
-                      ),
-                    ),
-                    TextFormField(
-                      controller: deliveryController,
-                      style: const TextStyle(fontSize: 13),
-                      maxLength: 300,
-                      maxLines: 3,
-                      decoration: InputDecoration(
-                        border: InputBorder.none,
-                        hintText: 'Delivery address',
-                        filled: false,
-                        fillColor: Colors.grey.shade100,
-                      ),
-                    ),
-                    const SizedBox(
-                      height: 15,
-                    ),
-                  ],
-                ),
-              ),
-            ),
-            const SizedBox(
-              height: 15,
-            ),
-            if (widget.shop.payments.isNotEmpty)
-              OrderPaymentMethodsWidget(
-                paymentMethods: widget.shop.payments,
-              ),
+            // Padding(
+            //   padding: const EdgeInsets.symmetric(horizontal: 15.0),
+            //   child: Container(
+            //     decoration: BoxDecoration(
+            //         borderRadius: BorderRadius.circular(10),
+            //         color: Colors.white),
+            //     padding: const EdgeInsets.only(
+            //         left: 15.0, top: 15, right: 15, bottom: 0),
+            //     child: Column(
+            //       crossAxisAlignment: CrossAxisAlignment.start,
+            //       children: <Widget>[
+            //         const Text(
+            //          ss 'Edit your Details',
+            //           style: TextStyle(
+            //             fontSize: 16,
+            //             fontWeight: FontWeight.w700,
+            //           ),
+            //         ),
+            //         const SizedBox(
+            //           width: 10,
+            //         ),
+            //         TextFormField(
+            //           style: const TextStyle(fontSize: 13),
+            //           maxLines: 1,
+            //           controller: fullNameController,
+            //           decoration: InputDecoration(
+            //             border: InputBorder.none,
+            //             hintText: 'Full Name',
+            //             filled: false,
+            //             fillColor: Colors.grey.shade100,
+            //           ),
+            //         ),
+            //         TextFormField(
+            //           controller: emailController,
+            //           style: const TextStyle(fontSize: 13),
+            //           maxLines: 1,
+            //           decoration: InputDecoration(
+            //             border: InputBorder.none,
+            //             hintText: 'Email',
+            //             filled: false,
+            //             fillColor: Colors.grey.shade100,
+            //           ),
+            //         ),
+            //         TextFormField(
+            //           controller: phoneController,
+            //           style: const TextStyle(fontSize: 13),
+            //           maxLines: 1,
+            //           decoration: InputDecoration(
+            //             border: InputBorder.none,
+            //             hintText: 'Phone Number',
+            //             filled: false,
+            //             fillColor: Colors.grey.shade100,
+            //           ),
+            //         ),
+            //         TextFormField(
+            //           controller: deliveryController,
+            //           style: const TextStyle(fontSize: 13),
+            //           maxLength: 300,
+            //           maxLines: 3,
+            //           decoration: InputDecoration(
+            //             border: InputBorder.none,
+            //             hintText: 'Delivery address',
+            //             filled: false,
+            //             fillColor: Colors.grey.shade100,
+            //           ),
+            //         ),
+            //         const SizedBox(
+            //           height: 15,
+            //         ),
+            //       ],
+            //     ),
+            //   ),
+            // ),
+            // const SizedBox(
+            //   height: 15,
+            // ),
+            // if (widget.shop.payments.isNotEmpty)
+            //   OrderPaymentMethodsWidget(
+            //     paymentMethods: widget.shop.payments,
+            //   ),
             if (widget.shop.payments.isNotEmpty)
               const SizedBox(
                 height: 15,
@@ -764,10 +774,64 @@ class _BookServiceScreenState extends State<BookServiceScreen> {
               ),
             const SizedBox(height: 15),
 
-            const ServicetypeSectionWidget(),
+            if (widget.service.deliveryMethod != null &&
+                widget.service.deliveryMethod != '')
+              ServicetypeSectionWidget(
+                isOnline:
+                    widget.service.deliveryMethod == 'online' ? true : false,
+                service: widget.service,
+              ),
 
-            const SizedBox(height: 15),
+            if (widget.service.deliveryMethod != null &&
+                widget.service.deliveryMethod != '')
+              const SizedBox(height: 15),
 
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 15.0),
+              child: Container(
+                decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.circular(15)),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: <Widget>[
+                    const SizedBox(
+                      height: 15,
+                    ),
+                    const Padding(
+                      padding: EdgeInsets.only(left: 20.0),
+                      child: Text(
+                        'Select a Payment Option',
+                        style: TextStyle(
+                            fontSize: 16, fontWeight: FontWeight.w700),
+                      ),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.all(15),
+                      child: Column(
+                        children: paymentMethods!
+                            .map((payment) => ProPaymentOptionCard(
+                                  option: payment['paymentMethod'] ?? '',
+                                  subtext:
+                                      'Details: ${payment['details'] ?? 'N/A'}',
+                                  activeoption:
+                                      activePaymentMethod, // Dynamically updated
+                                  onTap: (String newOption) {
+                                    setState(() {
+                                      activePaymentMethod = newOption;
+                                    });
+                                  },
+                                ))
+                            .toList(),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+            const SizedBox(
+              height: 16,
+            ),
             // Order Summary Section
             OrderSummaryWidget(
               quantity: int.parse(quantityController.text),
@@ -812,6 +876,13 @@ class _BookServiceScreenState extends State<BookServiceScreen> {
                       );
                       return;
                     }
+                    if (activePaymentMethod.isEmpty) {
+                      showSnackbar(
+                        message: 'Please select a payment method',
+                        error: true,
+                      );
+                      return;
+                    }
 
                     setState(() {
                       isSubmit = true;
@@ -846,6 +917,7 @@ class _BookServiceScreenState extends State<BookServiceScreen> {
                             parsedEndTime.second));
 
                     final Map<String, dynamic> orderData = <String, dynamic>{
+                      // 'isAppointment': isAppointment,
                       'userId': profileController.myProfile.uid,
                       'shopId': widget.shop.id,
                       'items': selectedItems,
@@ -856,18 +928,12 @@ class _BookServiceScreenState extends State<BookServiceScreen> {
                       'deliveryDate': '$_startDate',
                       'startTime': startFormattedTime,
                       'endTime': endFormattedTime,
-                      'paymentMethod': widget.service.paymentMethod != null &&
-                              widget.service.paymentMethod!.isNotEmpty
-                          ? widget.service.paymentMethod!
-                          : 'cash',
-                      'orderDetails':
-                          'Name: ${fullNameController.text} \n Email: ${emailController.text} \n Phone: ${phoneController.text} \n Delivery Details: ${deliveryController.text}',
+                      'paymentMethod': activePaymentMethod,
+                      'orderDetails': '',
                       'invoiceOption': 'send_with_payment_link',
                       'status': 'pending'
                     };
-
                     print(orderData);
-
                     bool response = await orderController.addOrder(orderData);
                     if (response) {
                       setState(() {

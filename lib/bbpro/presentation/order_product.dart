@@ -383,82 +383,82 @@ class _OrderProductScreenState extends State<OrderProductScreen> {
                   ),
                   currency: widget.shop.currency,
                 ),
-                const SizedBox(
-                  height: 15,
-                ),
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 15.0),
-                  child: Container(
-                    decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(10),
-                        color: Colors.white),
-                    padding: const EdgeInsets.only(
-                        left: 15.0, top: 15, right: 15, bottom: 0),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: <Widget>[
-                        const Text(
-                          'Edit your Details',
-                          style: TextStyle(
-                            fontSize: 16,
-                            fontWeight: FontWeight.w700,
-                          ),
-                        ),
-                        const SizedBox(
-                          width: 10,
-                        ),
-                        TextFormField(
-                          style: const TextStyle(fontSize: 13),
-                          maxLines: 1,
-                          controller: fullNameController,
-                          decoration: InputDecoration(
-                            border: InputBorder.none,
-                            hintText: 'Full Name',
-                            filled: false,
-                            fillColor: Colors.grey.shade100,
-                          ),
-                        ),
-                        TextFormField(
-                          controller: emailController,
-                          style: const TextStyle(fontSize: 13),
-                          maxLines: 1,
-                          decoration: InputDecoration(
-                            border: InputBorder.none,
-                            hintText: 'Email',
-                            filled: false,
-                            fillColor: Colors.grey.shade100,
-                          ),
-                        ),
-                        TextFormField(
-                          controller: phoneController,
-                          style: const TextStyle(fontSize: 13),
-                          maxLines: 1,
-                          decoration: InputDecoration(
-                            border: InputBorder.none,
-                            hintText: 'Phone Number',
-                            filled: false,
-                            fillColor: Colors.grey.shade100,
-                          ),
-                        ),
-                        TextFormField(
-                          controller: deliveryController,
-                          style: const TextStyle(fontSize: 13),
-                          maxLength: 300,
-                          maxLines: 3,
-                          decoration: InputDecoration(
-                            border: InputBorder.none,
-                            hintText: 'Delivery address',
-                            filled: false,
-                            fillColor: Colors.grey.shade100,
-                          ),
-                        ),
-                        const SizedBox(
-                          height: 15,
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
+                // const SizedBox(
+                //   height: 15,
+                // ),
+                // Padding(
+                //   padding: const EdgeInsets.symmetric(horizontal: 15.0),
+                //   child: Container(
+                //     decoration: BoxDecoration(
+                //         borderRadius: BorderRadius.circular(10),
+                //         color: Colors.white),
+                //     padding: const EdgeInsets.only(
+                //         left: 15.0, top: 15, right: 15, bottom: 0),
+                //     child: Column(
+                //       crossAxisAlignment: CrossAxisAlignment.start,
+                //       children: <Widget>[
+                //         const Text(
+                //           'Edit your Details',
+                //           style: TextStyle(
+                //             fontSize: 16,
+                //             fontWeight: FontWeight.w700,
+                //           ),
+                //         ),
+                //         const SizedBox(
+                //           width: 10,
+                //         ),
+                //         TextFormField(
+                //           style: const TextStyle(fontSize: 13),
+                //           maxLines: 1,
+                //           controller: fullNameController,
+                //           decoration: InputDecoration(
+                //             border: InputBorder.none,
+                //             hintText: 'Full Name',
+                //             filled: false,
+                //             fillColor: Colors.grey.shade100,
+                //           ),
+                //         ),
+                //         TextFormField(
+                //           controller: emailController,
+                //           style: const TextStyle(fontSize: 13),
+                //           maxLines: 1,
+                //           decoration: InputDecoration(
+                //             border: InputBorder.none,
+                //             hintText: 'Email',
+                //             filled: false,
+                //             fillColor: Colors.grey.shade100,
+                //           ),
+                //         ),
+                //         TextFormField(
+                //           controller: phoneController,
+                //           style: const TextStyle(fontSize: 13),
+                //           maxLines: 1,
+                //           decoration: InputDecoration(
+                //             border: InputBorder.none,
+                //             hintText: 'Phone Number',
+                //             filled: false,
+                //             fillColor: Colors.grey.shade100,
+                //           ),
+                //         ),
+                //         TextFormField(
+                //           controller: deliveryController,
+                //           style: const TextStyle(fontSize: 13),
+                //           maxLength: 300,
+                //           maxLines: 3,
+                //           decoration: InputDecoration(
+                //             border: InputBorder.none,
+                //             hintText: 'Delivery address',
+                //             filled: false,
+                //             fillColor: Colors.grey.shade100,
+                //           ),
+                //         ),
+                //         const SizedBox(
+                //           height: 15,
+                //         ),
+                //       ],
+                //     ),
+                //   ),
+                // ),
                 const SizedBox(
                   height: 15,
                 ),
@@ -491,8 +491,7 @@ class _OrderProductScreenState extends State<OrderProductScreen> {
                                 widget.product.paymentMethod!.isNotEmpty
                             ? widget.product.paymentMethod!
                             : 'Cash',
-                        'orderDetails':
-                            'Name: ${fullNameController.text} \n Email: ${emailController.text} \n Phone: ${phoneController.text} \n Delivery Details: ${deliveryController.text}',
+                        'orderDetails': '',
                         'invoiceOption': 'send_with_payment_link',
                         'status': 'pending'
                       };

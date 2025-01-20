@@ -1,9 +1,13 @@
+import 'package:business_bosses_v2/bbpro/models/service_model.dart';
 import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class ServicetypeSectionWidget extends StatefulWidget {
   final bool? isOnline;
-  const ServicetypeSectionWidget({Key? key, this.isOnline}) : super(key: key);
+  final Service service;
+  const ServicetypeSectionWidget(
+      {Key? key, this.isOnline, required this.service})
+      : super(key: key);
 
   @override
   State<ServicetypeSectionWidget> createState() =>
@@ -43,23 +47,23 @@ class _ServicetypeSectionWidgetState extends State<ServicetypeSectionWidget> {
             if (widget.isOnline == false)
               Column(
                 children: <Widget>[
-                  Center(
-                    child: Image.asset(
-                      'assets/google_meet_logo.png', // Replace with your Google Meet logo asset
-                      height: 50,
-                    ),
-                  ),
-                  const SizedBox(height: 10),
-                  const Center(
-                    child: Text(
-                      'Google Meet',
-                      style: TextStyle(
-                        fontSize: 18,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                  ),
-                  const SizedBox(height: 5),
+                  // Center(
+                  //   child: Image.asset(
+                  //     'assets/google_meet_logo.png', // Replace with your Google Meet logo asset
+                  //     height: 50,
+                  //   ),
+                  // ),
+                  // const SizedBox(height: 10),
+                  // const Center(
+                  //   child: Text(
+                  //     'Google Meet',
+                  //     style: TextStyle(
+                  //       fontSize: 18,
+                  //       fontWeight: FontWeight.bold,
+                  //     ),
+                  //   ),
+                  // ),
+                  // const SizedBox(height: 5),
                   const Center(
                     child: Text(
                       'Web conference',
@@ -74,9 +78,9 @@ class _ServicetypeSectionWidgetState extends State<ServicetypeSectionWidget> {
                     child: InkWell(
                       onTap: () => launchUrl(Uri.parse(
                           'https://bookperfectly.pro/profilelink/')), // Replace with your actual profile link
-                      child: const Text(
-                        'bookperfectly.pro/profilelink/',
-                        style: TextStyle(
+                      child: Text(
+                        widget.service.url ?? 'N/A',
+                        style: const TextStyle(
                           fontSize: 14,
                           color: Colors.blue,
                           decoration: TextDecoration.underline,
