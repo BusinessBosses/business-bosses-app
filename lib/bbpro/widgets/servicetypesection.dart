@@ -44,52 +44,59 @@ class _ServicetypeSectionWidgetState extends State<ServicetypeSectionWidget> {
                 ),
               ),
             ),
-            if (widget.isOnline == false)
-              Column(
-                children: <Widget>[
-                  // Center(
-                  //   child: Image.asset(
-                  //     'assets/google_meet_logo.png', // Replace with your Google Meet logo asset
-                  //     height: 50,
-                  //   ),
-                  // ),
-                  // const SizedBox(height: 10),
-                  // const Center(
-                  //   child: Text(
-                  //     'Google Meet',
-                  //     style: TextStyle(
-                  //       fontSize: 18,
-                  //       fontWeight: FontWeight.bold,
-                  //     ),
-                  //   ),
-                  // ),
-                  // const SizedBox(height: 5),
-                  const Center(
-                    child: Text(
-                      'Web conference',
-                      style: TextStyle(
-                        fontSize: 14,
-                        color: Colors.grey,
-                      ),
-                    ),
-                  ),
-                  const SizedBox(height: 20),
-                  Center(
-                    child: InkWell(
-                      onTap: () => launchUrl(Uri.parse(
-                          'https://bookperfectly.pro/profilelink/')), // Replace with your actual profile link
-                      child: Text(
-                        widget.service.url ?? 'N/A',
-                        style: const TextStyle(
-                          fontSize: 14,
-                          color: Colors.blue,
-                          decoration: TextDecoration.underline,
-                        ),
-                      ),
-                    ),
-                  ),
-                ],
-              ),
+            Column(
+              children: <Widget>[
+                // Center(
+                //   child: Image.asset(
+                //     'assets/google_meet_logo.png', // Replace with your Google Meet logo asset
+                //     height: 50,
+                //   ),
+                // ),
+                // const SizedBox(height: 10),
+                // const Center(
+                //   child: Text(
+                //     'Google Meet',
+                //     style: TextStyle(
+                //       fontSize: 18,
+                //       fontWeight: FontWeight.bold,
+                //     ),
+                //   ),
+                // ),
+                // const SizedBox(height: 5),
+                // const Center(
+                //   child: Text(
+                //     'Web conference',
+                //     style: TextStyle(
+                //       fontSize: 14,
+                //       color: Colors.grey,
+                //     ),
+                //   ),
+                // ),
+                const SizedBox(height: 20),
+                Center(
+                    child: widget.isOnline == true
+                        ? InkWell(
+                            onTap: () => launchUrl(Uri.parse(widget.service
+                                .url!)), // Replace with your actual profile link
+                            child: Text(
+                              widget.service.url ?? 'N/A',
+                              style: const TextStyle(
+                                fontSize: 14,
+                                color: Colors.blue,
+                                decoration: TextDecoration.underline,
+                              ),
+                            ),
+                          )
+                        : Text(
+                            widget.service.url ?? 'N/A',
+                            style: const TextStyle(
+                              fontSize: 14,
+                              color: Colors.blue,
+                              decoration: TextDecoration.underline,
+                            ),
+                          )),
+              ],
+            ),
           ],
         ),
       ),

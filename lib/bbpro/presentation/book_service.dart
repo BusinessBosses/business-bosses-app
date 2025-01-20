@@ -698,7 +698,7 @@ class _BookServiceScreenState extends State<BookServiceScreen> {
                 widget.service.deliveryMethod != '')
               ServicetypeSectionWidget(
                 isOnline:
-                    widget.service.deliveryMethod == 'online' ? true : false,
+                    widget.service.deliveryMethod == 'Online' ? true : false,
                 service: widget.service,
               ),
 

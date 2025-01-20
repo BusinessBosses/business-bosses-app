@@ -440,7 +440,7 @@ class _CreateServiceListingState extends State<CreateServiceListing>
               padding: const EdgeInsets.symmetric(horizontal: 15.0),
               child: CustomDropdownWidget(
                 padding: 0,
-                caption: isAppointment != false
+                caption: isAppointment == false
                     ? 'Duration (Optional)'
                     : 'Duration *',
                 hintText: 'Choose duration for your service',
@@ -705,7 +705,7 @@ class _CreateServiceListingState extends State<CreateServiceListing>
                 //   },
                 // ),
 
-                const SizedBox(height: 16),
+                if (isAppointment != false) const SizedBox(height: 16),
 
                 // Service Type Field
                 CustomDropdownWidget(
