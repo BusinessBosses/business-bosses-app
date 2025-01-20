@@ -295,202 +295,106 @@ class _BookServiceScreenState extends State<BookServiceScreen> {
             const SizedBox(height: 15),
 
             // Calendar Section
-            if (widget.service.availability!['startDate'] != null)
-              Container(
-                decoration: BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.circular(radius),
-                ),
-                padding: const EdgeInsets.all(15),
-                margin: const EdgeInsets.symmetric(horizontal: 15),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: <Widget>[
-                    const Text('Select a Date and Time',
-                        style: TextStyle(
-                            fontSize: 16, fontWeight: FontWeight.bold)),
-                    if (widget.service.deliveryTime == 'true')
-                      Column(children: <Widget>[
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          children: <Widget>[
-                            SvgPicture.asset(
-                              'assets/svgs/checkfilled.svg',
-                              height: 13,
-                            ),
-                            const SizedBox(
-                              width: 5,
-                            ),
-                            const Text(
-                              'This service is always available',
-                              style: TextStyle(
-                                fontSize: 13,
-                                color: Colors.grey,
+            if (widget.service.isAppointment == true)
+              if (widget.service.availability!['startDate'] != null)
+                Container(
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.circular(radius),
+                  ),
+                  padding: const EdgeInsets.all(15),
+                  margin: const EdgeInsets.symmetric(horizontal: 15),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: <Widget>[
+                      const Text('Select a Date and Time',
+                          style: TextStyle(
+                              fontSize: 16, fontWeight: FontWeight.bold)),
+                      if (widget.service.deliveryTime == 'true')
+                        Column(children: <Widget>[
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            children: <Widget>[
+                              SvgPicture.asset(
+                                'assets/svgs/checkfilled.svg',
+                                height: 13,
                               ),
-                            ),
-                          ],
-                        ),
-                        const SizedBox(height: 10),
-                        SizedBox(
-                          height: MediaQuery.of(context).size.height / 3,
-                          child: SfCalendar(
-                            initialSelectedDate: _startDate ??
-                                (_selectedDates.isNotEmpty
-                                    ? _selectedDates[0]
-                                    : DateTime.now()),
-                            selectionDecoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(0),
-                              color: Colors.black.withOpacity(0.5),
-                            ),
-                            todayTextStyle:
-                                const TextStyle(color: Colors.black),
-                            todayHighlightColor: Colors.transparent,
-                            view: CalendarView.month,
-                            initialDisplayDate: _startDate ??
-                                (_selectedDates.isNotEmpty
-                                    ? _selectedDates[0]
-                                    : DateTime.now()),
-                            minDate: DateTime.now(),
-                            monthViewSettings: const MonthViewSettings(
-                              appointmentDisplayMode:
-                                  MonthAppointmentDisplayMode.indicator,
-                              showAgenda:
-                                  false, // Enable agenda view to select dates
-                            ),
-                            onTap: (CalendarTapDetails details) {
-                              if (widget.service.deliveryTime == 'false' &&
-                                  details.targetElement ==
-                                      CalendarElement.calendarCell) {
-                                setState(() {
-                                  DateTime selectedDate = DateTime(
-                                      details.date!.year,
-                                      details.date!.month,
-                                      details.date!.day);
-
-                                  // Check if the selected date is in the allowed days
-                                  if (widget.service.availability!['dayOfWeek']
-                                      .contains(_getWeekdayName(
-                                          selectedDate.weekday))) {
-                                    // Clear previously selected dates and weekdays
-                                    _selectedDates.clear();
-
-                                    // Add the newly selected date and update weekdays
-                                    _selectedDates.add(selectedDate);
-
-                                    // Set _startDate to the selected date
-                                    _startDate = selectedDate;
-                                  } else {
-                                    showSnackbar(
-                                      message: 'Please select a valid day.',
-                                      error: true,
-                                    );
-                                  }
-                                });
-                              }
-                            },
-                          ),
-                        ),
-                      ]),
-                    if (widget.service.repeat == 'Yes (Regular Service)')
-                      SizedBox(
-                        height: MediaQuery.of(context).size.height / 3,
-                        child: SfCalendar(
-                          monthCellBuilder:
-                              (BuildContext context, MonthCellDetails details) {
-                            DateTime minDate =
-                                DateTime.now(); // Define your minimum date here
-                            List<DateTime> blackoutDates =
-                                _getNonAvailableDates();
-
-                            // Combine blackoutDates with days before the minDate
-                            bool isBlackoutDate = blackoutDates.any(
-                                    (DateTime date) =>
-                                        date.year == details.date.year &&
-                                        date.month == details.date.month &&
-                                        date.day == details.date.day) ||
-                                details.date.isBefore(minDate);
-
-                            // Define the text style based on the date condition
-                            TextStyle textStyle;
-                            if (isBlackoutDate) {
-                              textStyle = TextStyle(
-                                color: Colors.grey.withOpacity(0.2),
-                                decoration: TextDecoration.lineThrough,
-                                fontStyle: FontStyle.italic,
-                              );
-                            } else {
-                              textStyle = const TextStyle(
-                                  color: Colors.black,
-                                  fontWeight: FontWeight.bold);
-                            }
-
-                            // Return the styled container
-                            return Container(
-                              alignment: Alignment.center,
-                              decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(4),
+                              const SizedBox(
+                                width: 5,
                               ),
-                              child: Text(
-                                details.date.day.toString(),
-                                style: textStyle,
+                              const Text(
+                                'This service is always available',
+                                style: TextStyle(
+                                  fontSize: 13,
+                                  color: Colors.grey,
+                                ),
                               ),
-                            );
-                          },
-                          view: CalendarView.month,
-                          initialSelectedDate: _startDate ??
-                              (_selectedDates.isNotEmpty
-                                  ? _selectedDates[0]
-                                  : DateTime.now()),
-                          initialDisplayDate: _startDate ??
-                              (_selectedDates.isNotEmpty
-                                  ? _selectedDates[0]
-                                  : DateTime.now()),
-                          minDate: DateTime.now(),
-                          monthViewSettings: const MonthViewSettings(
-                            appointmentDisplayMode:
-                                MonthAppointmentDisplayMode.indicator,
-                            showAgenda: false,
+                            ],
                           ),
-                          selectionDecoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(0),
-                            color: Colors.black.withOpacity(0.5),
-                          ),
-                          todayTextStyle: const TextStyle(color: Colors.black),
-                          todayHighlightColor: Colors.transparent,
-                          cellBorderColor: Colors.transparent,
-                          blackoutDates: _getNonAvailableDates(),
-                          blackoutDatesTextStyle: TextStyle(
-                            color: Colors.black12.withOpacity(0.08),
-                            decoration: TextDecoration.lineThrough,
-                          ),
-                          onTap: (CalendarTapDetails details) {
-                            if (details.targetElement ==
-                                CalendarElement.calendarCell) {
-                              setState(() {
-                                DateTime selectedDate = DateTime(
-                                    details.date!.year,
-                                    details.date!.month,
-                                    details.date!.day);
+                          const SizedBox(height: 10),
+                          SizedBox(
+                            height: MediaQuery.of(context).size.height / 3,
+                            child: SfCalendar(
+                              initialSelectedDate: _startDate ??
+                                  (_selectedDates.isNotEmpty
+                                      ? _selectedDates[0]
+                                      : DateTime.now()),
+                              selectionDecoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(0),
+                                color: Colors.black.withOpacity(0.5),
+                              ),
+                              todayTextStyle:
+                                  const TextStyle(color: Colors.black),
+                              todayHighlightColor: Colors.transparent,
+                              view: CalendarView.month,
+                              initialDisplayDate: _startDate ??
+                                  (_selectedDates.isNotEmpty
+                                      ? _selectedDates[0]
+                                      : DateTime.now()),
+                              minDate: DateTime.now(),
+                              monthViewSettings: const MonthViewSettings(
+                                appointmentDisplayMode:
+                                    MonthAppointmentDisplayMode.indicator,
+                                showAgenda:
+                                    false, // Enable agenda view to select dates
+                              ),
+                              onTap: (CalendarTapDetails details) {
+                                if (widget.service.deliveryTime == 'false' &&
+                                    details.targetElement ==
+                                        CalendarElement.calendarCell) {
+                                  setState(() {
+                                    DateTime selectedDate = DateTime(
+                                        details.date!.year,
+                                        details.date!.month,
+                                        details.date!.day);
 
-                                if (widget.service.availability!['dayOfWeek']
-                                    .contains(_getWeekdayName(
-                                        selectedDate.weekday))) {
-                                  _selectedDates.clear();
-                                  _selectedDates.add(selectedDate);
-                                  _startDate = selectedDate;
-                                } else {
-                                  showSnackbar(
-                                    message: 'Please select a valid day.',
-                                    error: true,
-                                  );
+                                    // Check if the selected date is in the allowed days
+                                    if (widget
+                                        .service.availability!['dayOfWeek']
+                                        .contains(_getWeekdayName(
+                                            selectedDate.weekday))) {
+                                      // Clear previously selected dates and weekdays
+                                      _selectedDates.clear();
+
+                                      // Add the newly selected date and update weekdays
+                                      _selectedDates.add(selectedDate);
+
+                                      // Set _startDate to the selected date
+                                      _startDate = selectedDate;
+                                    } else {
+                                      showSnackbar(
+                                        message: 'Please select a valid day.',
+                                        error: true,
+                                      );
+                                    }
+                                  });
                                 }
-                              });
-                            }
-                          },
-                        ),
-                      ),
-                    if (widget.service.repeat == 'No (One-time Service)')
-                      SizedBox(
+                              },
+                            ),
+                          ),
+                        ]),
+                      if (widget.service.repeat == 'Yes (Regular Service)')
+                        SizedBox(
                           height: MediaQuery.of(context).size.height / 3,
                           child: SfCalendar(
                             monthCellBuilder: (BuildContext context,
@@ -498,7 +402,7 @@ class _BookServiceScreenState extends State<BookServiceScreen> {
                               DateTime minDate = DateTime
                                   .now(); // Define your minimum date here
                               List<DateTime> blackoutDates =
-                                  _getAllDatesExceptStart();
+                                  _getNonAvailableDates();
 
                               // Combine blackoutDates with days before the minDate
                               bool isBlackoutDate = blackoutDates.any(
@@ -550,14 +454,14 @@ class _BookServiceScreenState extends State<BookServiceScreen> {
                               showAgenda: false,
                             ),
                             selectionDecoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(10),
-                              color: Colors.green.withOpacity(0.2),
+                              borderRadius: BorderRadius.circular(0),
+                              color: Colors.black.withOpacity(0.5),
                             ),
                             todayTextStyle:
                                 const TextStyle(color: Colors.black),
                             todayHighlightColor: Colors.transparent,
                             cellBorderColor: Colors.transparent,
-                            blackoutDates: _getAllDatesExceptStart(),
+                            blackoutDates: _getNonAvailableDates(),
                             blackoutDatesTextStyle: TextStyle(
                               color: Colors.black12.withOpacity(0.08),
                               decoration: TextDecoration.lineThrough,
@@ -571,143 +475,159 @@ class _BookServiceScreenState extends State<BookServiceScreen> {
                                       details.date!.month,
                                       details.date!.day);
 
-                                  DateTime startDate = DateTime.parse(widget
-                                      .service.availability!['startDate']);
-
-                                  if (selectedDate.year == startDate.year &&
-                                      selectedDate.month == startDate.month &&
-                                      selectedDate.day == startDate.day) {
+                                  if (widget.service.availability!['dayOfWeek']
+                                      .contains(_getWeekdayName(
+                                          selectedDate.weekday))) {
                                     _selectedDates.clear();
                                     _selectedDates.add(selectedDate);
                                     _startDate = selectedDate;
                                   } else {
                                     showSnackbar(
-                                      message:
-                                          'Please select the specific start date.',
+                                      message: 'Please select a valid day.',
                                       error: true,
                                     );
                                   }
                                 });
                               }
                             },
-                          )),
-                    const SizedBox(height: 10),
-                    if (_startDate != null)
-                      const Text(
-                        'Time slots',
-                        style: TextStyle(fontSize: 13),
-                      ),
-                    if (_startDate != null)
-                      Wrap(
-                        spacing: 8.0,
-                        children: _generateTimeSlots().map((String slot) {
-                          return ChoiceChip(
-                            label: Text(
-                              slot,
-                              style: TextStyle(
-                                  fontSize: 12,
-                                  color: selectedSlot == slot
-                                      ? Colors.white
-                                      : Colors.black),
-                            ),
-                            selected: selectedSlot == slot,
-                            selectedColor: Colors.black,
-                            onSelected: (bool selected) {
-                              setState(() {
-                                selectedSlot = selected ? slot : null;
-                              });
-                            },
-                          );
-                        }).toList(),
-                      ),
-                    const SizedBox(height: 10),
-                  ],
+                          ),
+                        ),
+                      if (widget.service.repeat == 'No (One-time Service)')
+                        SizedBox(
+                            height: MediaQuery.of(context).size.height / 3,
+                            child: SfCalendar(
+                              monthCellBuilder: (BuildContext context,
+                                  MonthCellDetails details) {
+                                DateTime minDate = DateTime
+                                    .now(); // Define your minimum date here
+                                List<DateTime> blackoutDates =
+                                    _getAllDatesExceptStart();
+
+                                // Combine blackoutDates with days before the minDate
+                                bool isBlackoutDate = blackoutDates.any(
+                                        (DateTime date) =>
+                                            date.year == details.date.year &&
+                                            date.month == details.date.month &&
+                                            date.day == details.date.day) ||
+                                    details.date.isBefore(minDate);
+
+                                // Define the text style based on the date condition
+                                TextStyle textStyle;
+                                if (isBlackoutDate) {
+                                  textStyle = TextStyle(
+                                    color: Colors.grey.withOpacity(0.2),
+                                    decoration: TextDecoration.lineThrough,
+                                    fontStyle: FontStyle.italic,
+                                  );
+                                } else {
+                                  textStyle = const TextStyle(
+                                      color: Colors.black,
+                                      fontWeight: FontWeight.bold);
+                                }
+
+                                // Return the styled container
+                                return Container(
+                                  alignment: Alignment.center,
+                                  decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(4),
+                                  ),
+                                  child: Text(
+                                    details.date.day.toString(),
+                                    style: textStyle,
+                                  ),
+                                );
+                              },
+                              view: CalendarView.month,
+                              initialSelectedDate: _startDate ??
+                                  (_selectedDates.isNotEmpty
+                                      ? _selectedDates[0]
+                                      : DateTime.now()),
+                              initialDisplayDate: _startDate ??
+                                  (_selectedDates.isNotEmpty
+                                      ? _selectedDates[0]
+                                      : DateTime.now()),
+                              minDate: DateTime.now(),
+                              monthViewSettings: const MonthViewSettings(
+                                appointmentDisplayMode:
+                                    MonthAppointmentDisplayMode.indicator,
+                                showAgenda: false,
+                              ),
+                              selectionDecoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(10),
+                                color: Colors.green.withOpacity(0.2),
+                              ),
+                              todayTextStyle:
+                                  const TextStyle(color: Colors.black),
+                              todayHighlightColor: Colors.transparent,
+                              cellBorderColor: Colors.transparent,
+                              blackoutDates: _getAllDatesExceptStart(),
+                              blackoutDatesTextStyle: TextStyle(
+                                color: Colors.black12.withOpacity(0.08),
+                                decoration: TextDecoration.lineThrough,
+                              ),
+                              onTap: (CalendarTapDetails details) {
+                                if (details.targetElement ==
+                                    CalendarElement.calendarCell) {
+                                  setState(() {
+                                    DateTime selectedDate = DateTime(
+                                        details.date!.year,
+                                        details.date!.month,
+                                        details.date!.day);
+
+                                    DateTime startDate = DateTime.parse(widget
+                                        .service.availability!['startDate']);
+
+                                    if (selectedDate.year == startDate.year &&
+                                        selectedDate.month == startDate.month &&
+                                        selectedDate.day == startDate.day) {
+                                      _selectedDates.clear();
+                                      _selectedDates.add(selectedDate);
+                                      _startDate = selectedDate;
+                                    } else {
+                                      showSnackbar(
+                                        message:
+                                            'Please select the specific start date.',
+                                        error: true,
+                                      );
+                                    }
+                                  });
+                                }
+                              },
+                            )),
+                      const SizedBox(height: 10),
+                      if (_startDate != null)
+                        const Text(
+                          'Time slots',
+                          style: TextStyle(fontSize: 13),
+                        ),
+                      if (_startDate != null)
+                        Wrap(
+                          spacing: 8.0,
+                          children: _generateTimeSlots().map((String slot) {
+                            return ChoiceChip(
+                              label: Text(
+                                slot,
+                                style: TextStyle(
+                                    fontSize: 12,
+                                    color: selectedSlot == slot
+                                        ? Colors.white
+                                        : Colors.black),
+                              ),
+                              selected: selectedSlot == slot,
+                              selectedColor: Colors.black,
+                              onSelected: (bool selected) {
+                                setState(() {
+                                  selectedSlot = selected ? slot : null;
+                                });
+                              },
+                            );
+                          }).toList(),
+                        ),
+                      const SizedBox(height: 10),
+                    ],
+                  ),
                 ),
-              ),
 
-            // const SizedBox(height: 15),
-
-            // Order Preview Section
-            // Padding(
-            //   padding: const EdgeInsets.symmetric(horizontal: 15.0),
-            //   child: Container(
-            //     decoration: BoxDecoration(
-            //         borderRadius: BorderRadius.circular(10),
-            //         color: Colors.white),
-            //     padding: const EdgeInsets.only(
-            //         left: 15.0, top: 15, right: 15, bottom: 0),
-            //     child: Column(
-            //       crossAxisAlignment: CrossAxisAlignment.start,
-            //       children: <Widget>[
-            //         const Text(
-            //          ss 'Edit your Details',
-            //           style: TextStyle(
-            //             fontSize: 16,
-            //             fontWeight: FontWeight.w700,
-            //           ),
-            //         ),
-            //         const SizedBox(
-            //           width: 10,
-            //         ),
-            //         TextFormField(
-            //           style: const TextStyle(fontSize: 13),
-            //           maxLines: 1,
-            //           controller: fullNameController,
-            //           decoration: InputDecoration(
-            //             border: InputBorder.none,
-            //             hintText: 'Full Name',
-            //             filled: false,
-            //             fillColor: Colors.grey.shade100,
-            //           ),
-            //         ),
-            //         TextFormField(
-            //           controller: emailController,
-            //           style: const TextStyle(fontSize: 13),
-            //           maxLines: 1,
-            //           decoration: InputDecoration(
-            //             border: InputBorder.none,
-            //             hintText: 'Email',
-            //             filled: false,
-            //             fillColor: Colors.grey.shade100,
-            //           ),
-            //         ),
-            //         TextFormField(
-            //           controller: phoneController,
-            //           style: const TextStyle(fontSize: 13),
-            //           maxLines: 1,
-            //           decoration: InputDecoration(
-            //             border: InputBorder.none,
-            //             hintText: 'Phone Number',
-            //             filled: false,
-            //             fillColor: Colors.grey.shade100,
-            //           ),
-            //         ),
-            //         TextFormField(
-            //           controller: deliveryController,
-            //           style: const TextStyle(fontSize: 13),
-            //           maxLength: 300,
-            //           maxLines: 3,
-            //           decoration: InputDecoration(
-            //             border: InputBorder.none,
-            //             hintText: 'Delivery address',
-            //             filled: false,
-            //             fillColor: Colors.grey.shade100,
-            //           ),
-            //         ),
-            //         const SizedBox(
-            //           height: 15,
-            //         ),
-            //       ],
-            //     ),
-            //   ),
-            // ),
-            // const SizedBox(
-            //   height: 15,
-            // ),
-            // if (widget.shop.payments.isNotEmpty)
-            //   OrderPaymentMethodsWidget(
-            //     paymentMethods: widget.shop.payments,
-            //   ),
             if (widget.shop.payments.isNotEmpty)
               const SizedBox(
                 height: 15,
