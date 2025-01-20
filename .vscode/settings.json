@@ -14,5 +14,6 @@
   "editor.codeActionsOnSave": {
     "source.fixAll": "explicit"
   },
-  "java.home": "C:\\Users\\Eawuku\\OpenJDK\\jdk-17.0.12"
+  "java.home": "C:\\Users\\Eawuku\\OpenJDK\\jdk-17.0.12",
+  "android.sdk.path": "C:\\Users\\Eawuku\\AppData\\Local\\AndroidSdk"
 }
