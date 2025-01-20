@@ -144,10 +144,12 @@ class _CreateServiceListingState extends State<CreateServiceListing>
               .toList();
       packages = List<Map<String, dynamic>>.from(widget.service!.packages);
       availability = widget.service!.availability;
-      _startDate = widget.service!.availability == null
+      _startDate = widget.service!.availability == null ||
+              widget.service!.availability!['startDate'] == null
           ? null
           : DateTime.parse(widget.service!.availability!['startDate']);
-      _endDate = widget.service!.availability == null
+      _endDate = widget.service!.availability == null ||
+              widget.service!.availability!['endDate'] == null
           ? null
           : DateTime.parse(widget.service!.availability!['endDate']);
       _startTime = TimeOfDay(
