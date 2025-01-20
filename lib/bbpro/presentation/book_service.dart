@@ -726,25 +726,35 @@ class _BookServiceScreenState extends State<BookServiceScreen> {
                             fontSize: 16, fontWeight: FontWeight.w700),
                       ),
                     ),
-                    Padding(
-                      padding: const EdgeInsets.all(15),
-                      child: Column(
-                        children: paymentMethods!
-                            .map((payment) => ProPaymentOptionCard(
-                                  option: payment['paymentMethod'] ?? '',
-                                  subtext:
-                                      'Details: ${payment['details'] ?? 'N/A'}',
-                                  activeoption:
-                                      activePaymentMethod, // Dynamically updated
-                                  onTap: (String newOption) {
-                                    setState(() {
-                                      activePaymentMethod = newOption;
-                                    });
-                                  },
-                                ))
-                            .toList(),
-                      ),
-                    ),
+                    widget.shop.payments.isNotEmpty
+                        ? Padding(
+                            padding: const EdgeInsets.all(15),
+                            child: Column(
+                              children: paymentMethods!
+                                  .map((payment) => ProPaymentOptionCard(
+                                        option: payment['paymentMethod'] ?? '',
+                                        subtext:
+                                            'Details: ${payment['details'] ?? 'N/A'}',
+                                        activeoption: activePaymentMethod,
+                                        onTap: (String newOption) {
+                                          setState(() {
+                                            activePaymentMethod = newOption;
+                                          });
+                                        },
+                                      ))
+                                  .toList(),
+                            ),
+                          )
+                        : const Padding(
+                            padding: EdgeInsets.all(15.0),
+                            child: Center(
+                              child: Text(
+                                'User has not added a payment method yet',
+                                style:
+                                    TextStyle(color: Colors.grey, fontSize: 14),
+                              ),
+                            ),
+                          ),
                   ],
                 ),
               ),
