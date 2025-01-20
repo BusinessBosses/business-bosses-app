@@ -917,7 +917,6 @@ class _BookServiceScreenState extends State<BookServiceScreen> {
                             parsedEndTime.second));
 
                     final Map<String, dynamic> orderData = <String, dynamic>{
-                      // 'isAppointment': isAppointment,
                       'userId': profileController.myProfile.uid,
                       'shopId': widget.shop.id,
                       'items': selectedItems,
