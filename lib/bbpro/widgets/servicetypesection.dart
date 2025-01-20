@@ -72,7 +72,7 @@ class _ServicetypeSectionWidgetState extends State<ServicetypeSectionWidget> {
                 //     ),
                 //   ),
                 // ),
-                const SizedBox(height: 20),
+
                 Center(
                     child: widget.isOnline == true
                         ? InkWell(
