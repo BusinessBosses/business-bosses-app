@@ -112,7 +112,7 @@ class _AnalyserScreenState extends State<AnalyserScreen> {
                                   ),
                                   child: shopController.shop == null
                                       ? subscribetopremiumbutton()
-                                      : Container()),
+                                      : Container())
                             ],
                           ),
                         ),
