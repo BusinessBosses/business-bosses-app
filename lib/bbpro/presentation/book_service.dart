@@ -720,8 +720,9 @@ class _BookServiceScreenState extends State<BookServiceScreen> {
               currency: widget.shop.currency,
               isservice: true,
               packagesprice: selectedpackagesprice,
-              timeofservice:
-                  '${DateFormat('d MMMM yyyy').format(_startDate!)} ${selectedSlot!}',
+              timeofservice: _startDate != null && selectedSlot != null
+                  ? '${DateFormat('d MMMM yyyy').format(_startDate!)} ${selectedSlot!}'
+                  : null,
             ),
             const SizedBox(
               height: 16,

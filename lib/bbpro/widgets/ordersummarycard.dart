@@ -82,50 +82,52 @@ class _OrderSummaryWidgetState extends State<OrderSummaryWidget> {
                 mainAxisAlignment: MainAxisAlignment.start,
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: <Widget>[
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: <Widget>[
-                      if (widget.discount > 0)
-                        Row(
-                          children: <Widget>[
-                            Text(
-                              '${formatServiceDuration(widget.serviceDuration)}${widget.currency}${((widget.price * (1 - widget.discount / 100)) * 100).round() / 100}',
-                              style: const TextStyle(
-                                color: Colors.black,
-                                fontWeight: FontWeight.bold,
-                                fontSize: 14,
+                  if (widget.timeofservice != null)
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: <Widget>[
+                        if (widget.discount > 0)
+                          Row(
+                            children: <Widget>[
+                              Text(
+                                '${formatServiceDuration(widget.serviceDuration)}${widget.currency}${((widget.price * (1 - widget.discount / 100)) * 100).round() / 100}',
+                                style: const TextStyle(
+                                  color: Colors.black,
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 14,
+                                ),
                               ),
-                            ),
-                            const SizedBox(width: 5),
-                            Text(
-                              '${widget.currency}${widget.price.toStringAsFixed(2)}',
-                              style: const TextStyle(
-                                color: Colors.grey,
-                                decoration: TextDecoration.lineThrough,
-                                fontSize: 14,
+                              const SizedBox(width: 5),
+                              Text(
+                                '${widget.currency}${widget.price.toStringAsFixed(2)}',
+                                style: const TextStyle(
+                                  color: Colors.grey,
+                                  decoration: TextDecoration.lineThrough,
+                                  fontSize: 14,
+                                ),
                               ),
+                            ],
+                          )
+                        else
+                          Text(
+                            '${formatServiceDuration(widget.serviceDuration)}${widget.currency}${widget.price.toStringAsFixed(2)}',
+                            style: const TextStyle(
+                              color: Colors.black,
+                              fontWeight: FontWeight.bold,
+                              fontSize: 14,
                             ),
-                          ],
-                        )
-                      else
-                        Text(
-                          '${formatServiceDuration(widget.serviceDuration)}${widget.currency}${widget.price.toStringAsFixed(2)}',
-                          style: const TextStyle(
-                            color: Colors.black,
-                            fontWeight: FontWeight.bold,
-                            fontSize: 14,
                           ),
-                        ),
-                    ],
-                  ),
-                  Text(
-                    widget.timeofservice ?? '',
-                    style: const TextStyle(
-                      color: Colors.black,
-                      fontWeight: FontWeight.bold,
-                      fontSize: 14,
+                      ],
                     ),
-                  ),
+                  if (widget.timeofservice != null)
+                    Text(
+                      widget.timeofservice!,
+                      style: const TextStyle(
+                        color: Colors.black,
+                        fontWeight: FontWeight.bold,
+                        fontSize: 14,
+                      ),
+                    ),
                   const SizedBox(
                     height: 30,
                   ),
