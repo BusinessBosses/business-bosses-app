@@ -51,10 +51,15 @@ class _ProScreenState extends State<ProScreen> with TickerProviderStateMixin {
   @override
   void initState() {
     super.initState();
-    shopController.initShop().then((bool value) {
+    if (shopController.shop == null) {
+      shopController.initShop().then((bool value) {
+        loading = false;
+        setState(() {});
+      });
+    } else {
       loading = false;
       setState(() {});
-    });
+    }
     protabbarcontroller =
         TabController(length: shopController.shop != null ? 2 : 3, vsync: this);
   }
