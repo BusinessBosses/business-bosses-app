@@ -286,7 +286,7 @@ class _BookServiceScreenState extends State<BookServiceScreen> {
                       padding:
                           EdgeInsets.symmetric(horizontal: 15.0, vertical: 15),
                       child: Text(
-                        'Seller Note',
+                        'Seller\'s Note',
                         style: TextStyle(
                           fontWeight: FontWeight.w700,
                           fontSize: 16,
@@ -337,6 +337,10 @@ class _BookServiceScreenState extends State<BookServiceScreen> {
                     ),
                   ],
                 ),
+              ),
+            if (widget.service.notes != null)
+              const SizedBox(
+                height: 16,
               ),
             // Calendar Section
             if (widget.service.isAppointment == true)
@@ -736,7 +740,7 @@ class _BookServiceScreenState extends State<BookServiceScreen> {
                   ),
                 ),
               ),
-            const SizedBox(height: 15),
+            if (widget.service.packages.isNotEmpty) const SizedBox(height: 15),
 
             if (widget.service.deliveryMethod != null &&
                 widget.service.deliveryMethod != '')
@@ -824,23 +828,6 @@ class _BookServiceScreenState extends State<BookServiceScreen> {
             ),
             const SizedBox(
               height: 16,
-            ),
-            if (widget.service.notes != null)
-              const SizedBox(
-                height: 16,
-              ),
-            // Order Summary Section
-            OrderSummaryWidget(
-              quantity: int.parse(quantityController.text),
-              price: widget.service.price,
-              discount: widget.service.discount,
-              total:
-                  (int.parse(quantityController.text) * widget.service.price) *
-                          (1 - (widget.service.discount / 100)) +
-                      selectedpackagesprice,
-              currency: widget.shop.currency,
-              isservice: true,
-              packagesprice: selectedpackagesprice,
             ),
 
             // Customer Details Section
