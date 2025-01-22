@@ -805,7 +805,8 @@ class _SetupshopState extends State<Setupshop> with TickerProviderStateMixin {
       successDialog(context);
     } else {
       showSnackbar(
-        message: 'Error while adding shop!',
+        title: 'Error while adding shop!',
+        message: shopController.error!.message,
         error: true,
       );
     }

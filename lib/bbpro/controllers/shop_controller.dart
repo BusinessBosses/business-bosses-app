@@ -30,6 +30,7 @@ class ShopController extends GetxController {
   OrderStats? orderStats;
   ShopStats? shopStats;
   ShopGraphData? shopGraph;
+  ApiResponseModel? error;
 
   Future<bool> initShop() async {
     ApiResponseModel response = await ApiService.get(
@@ -166,6 +167,7 @@ class ShopController extends GetxController {
       update();
       return true;
     } else {
+      error = response;
       return false;
     }
   }
@@ -181,6 +183,7 @@ class ShopController extends GetxController {
       update();
       return true;
     } else {
+      error = response;
       return false;
     }
   }
