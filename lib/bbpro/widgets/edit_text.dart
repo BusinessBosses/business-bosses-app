@@ -85,11 +85,11 @@ class CustomEditText extends StatelessWidget {
         ),
         padding: EdgeInsets.only(
           left: 15.0,
-          top: isorder != null ? 0 : 15,
+          top: isorder != null ? 0 : padding ?? 15,
           right: 15,
           bottom: maxLength != null && maxLength! > 14 && maxLength! != 300
               ? 0
-              : 15,
+              : padding ?? 15,
         ),
         child: isorder != null
             ? Row(

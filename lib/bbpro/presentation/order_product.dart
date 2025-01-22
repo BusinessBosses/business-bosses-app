@@ -9,6 +9,7 @@ import 'package:business_bosses_v2/bbpro/widgets/dropdown.dart';
 import 'package:business_bosses_v2/bbpro/widgets/edit_text.dart';
 import 'package:business_bosses_v2/bbpro/widgets/orderpaymentcard.dart';
 import 'package:business_bosses_v2/bbpro/widgets/ordersummarycard.dart';
+import 'package:business_bosses_v2/bbpro/widgets/paymentoptioncard.dart';
 import 'package:business_bosses_v2/common/dialogs/snackbar.dart';
 import 'package:business_bosses_v2/common/generic_slider.dart';
 import 'package:business_bosses_v2/features/profile/controller/profile_controller.dart';
@@ -47,6 +48,10 @@ class _OrderProductScreenState extends State<OrderProductScreen> {
   String? clientId;
   String? selectedClient;
 
+  List<dynamic>? paymentMethods;
+  String paymentMethod = '';
+  String activePaymentMethod = '';
+
   bool isSubmit = false;
 
   late FocusNode _focusNode;
@@ -55,16 +60,20 @@ class _OrderProductScreenState extends State<OrderProductScreen> {
   void initState() {
     super.initState();
     _focusNode = FocusNode();
+    paymentMethods = widget.shop.payments;
+    if (paymentMethods!.isNotEmpty) {
+      activePaymentMethod = paymentMethods![0]['paymentMethod'] ?? '';
+    }
     quantityController.text = '1';
     fullNameController.text = profileController.myProfile.name!;
     emailController.text = profileController.myProfile.email;
-    selectedItems.add(
-      <String, dynamic>{
-        'type': 'product',
-        'id': widget.product.id,
-        'name': widget.product.name
-      },
-    );
+    // selectedItems.add(
+    //   <String, dynamic>{
+    //     'type': 'product',
+    //     'id': widget.product.id,
+    //     'name': widget.product.name
+    //   },
+    // );
   }
 
   @override
@@ -208,15 +217,6 @@ class _OrderProductScreenState extends State<OrderProductScreen> {
                                     fontSize: 16,
                                   ),
                                 ),
-                              // if (widget.product.deliveryMethod != null)
-                              //   Text(
-                              //     widget.product.deliveryMethod!,
-                              //     style: const TextStyle(
-                              //       color: proprimaryColor,
-                              //       fontWeight: FontWeight.bold,
-                              //       fontSize: 16,
-                              //     ),
-                              //   ),
                             ],
                           ),
                           const SizedBox(
@@ -247,44 +247,6 @@ class _OrderProductScreenState extends State<OrderProductScreen> {
                           const SizedBox(
                             height: 10,
                           ),
-                          if (widget.product.notes != null)
-                            const Row(
-                              children: <Widget>[
-                                Text(
-                                  'Seller\'s Notes',
-                                  style: TextStyle(
-                                    fontSize: 16,
-                                    fontWeight: FontWeight.w600,
-                                    color: textColor,
-                                  ),
-                                ),
-                              ],
-                            ),
-                          if (widget.product.notes != null)
-                            Align(
-                              alignment: Alignment.centerLeft,
-                              child: DetectableText(
-                                text: widget.product.notes ?? '',
-                                detectionRegExp:
-                                    detectionRegExp(hashtag: false)!,
-                                detectedStyle: bodyText2.copyWith(
-                                  color: Colors.blue,
-                                ),
-                                moreStyle: bodyText2.copyWith(
-                                  color: textColor,
-                                  fontWeight: FontWeight.bold,
-                                ),
-                                lessStyle: bodyText2.copyWith(
-                                  color: textColor,
-                                  fontWeight: FontWeight.bold,
-                                ),
-                                trimLength: 100,
-                                trimExpandedText: '  show less',
-                                basicStyle:
-                                    bodyText2.copyWith(color: textColor),
-                                onTap: (_) {},
-                              ),
-                            ),
                         ],
                       ),
                     ],
@@ -293,6 +255,78 @@ class _OrderProductScreenState extends State<OrderProductScreen> {
                 const SizedBox(
                   height: 15,
                 ),
+                if (widget.product.notes != null)
+                  Container(
+                    margin: const EdgeInsets.only(left: 15, right: 15),
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(10),
+                      color: Colors.white,
+                    ),
+                    width: double.infinity,
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: <Widget>[
+                        const Padding(
+                          padding: EdgeInsets.symmetric(
+                              horizontal: 15.0, vertical: 15),
+                          child: Text(
+                            'Seller\'s Note',
+                            style: TextStyle(
+                              fontWeight: FontWeight.w700,
+                              fontSize: 16,
+                              color: textColor,
+                            ),
+                          ),
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 15.0),
+                          child: Text(
+                            widget.product.notes!,
+                            style: const TextStyle(
+                              fontSize: 14,
+                            ),
+                          ),
+                        ),
+                        const SizedBox(
+                          height: 10,
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 15.0),
+                          child: Container(
+                            decoration: BoxDecoration(
+                              border: Border.all(color: backgroundColor),
+                              borderRadius: BorderRadius.circular(5),
+                            ),
+                            padding: const EdgeInsets.symmetric(
+                                horizontal: 10.0, vertical: 5.0),
+                            child: Row(
+                              mainAxisSize: MainAxisSize.min,
+                              children: <Widget>[
+                                SvgPicture.asset(
+                                  'assets/svgs/shopchat.svg',
+                                  height: 12,
+                                ),
+                                const SizedBox(
+                                  width: 5,
+                                ),
+                                const Text('Reply'),
+                              ],
+                            ),
+                          ),
+                        ),
+                        CustomEditText(
+                          padding: 0,
+                          hintText: 'Enter Note to Seller',
+                          controller: noteController,
+                          caption: '',
+                        ),
+                      ],
+                    ),
+                  ),
+                if (widget.product.notes != null)
+                  const SizedBox(
+                    height: 16,
+                  ),
                 Container(
                   margin: const EdgeInsets.only(left: 15, right: 15),
                   decoration: BoxDecoration(
@@ -366,49 +400,6 @@ class _OrderProductScreenState extends State<OrderProductScreen> {
                   height: 15,
                 ),
                 if (widget.shop.payments.isNotEmpty)
-                  OrderPaymentMethodsWidget(
-                    paymentMethods: widget.shop.payments,
-                  ),
-                if (widget.shop.payments.isNotEmpty)
-                  const SizedBox(
-                    height: 15,
-                  ),
-                if (widget.product.notes != null)
-                  Container(
-                    margin: const EdgeInsets.only(left: 15, right: 15),
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(10),
-                      color: Colors.white,
-                    ),
-                    width: double.infinity,
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: <Widget>[
-                        const Padding(
-                          padding: EdgeInsets.symmetric(
-                              horizontal: 15.0, vertical: 15),
-                          child: Text(
-                            'Seller Note',
-                            style: TextStyle(
-                              fontWeight: FontWeight.w700,
-                              fontSize: 16,
-                              color: textColor,
-                            ),
-                          ),
-                        ),
-                        Padding(
-                          padding: const EdgeInsets.all(15.0),
-                          child: Text(
-                            widget.product.notes!,
-                            style: const TextStyle(
-                              fontSize: 14,
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                if (widget.product.notes != null)
                   const SizedBox(
                     height: 15,
                   ),
@@ -423,89 +414,62 @@ class _OrderProductScreenState extends State<OrderProductScreen> {
                   ),
                   currency: widget.shop.currency,
                 ),
-                // const SizedBox(
-                //   height: 15,
-                // ),
-                // Padding(
-                //   padding: const EdgeInsets.symmetric(horizontal: 15.0),
-                //   child: Container(
-                //     decoration: BoxDecoration(
-                //         borderRadius: BorderRadius.circular(10),
-                //         color: Colors.white),
-                //     padding: const EdgeInsets.only(
-                //         left: 15.0, top: 15, right: 15, bottom: 0),
-                //     child: Column(
-                //       crossAxisAlignment: CrossAxisAlignment.start,
-                //       children: <Widget>[
-                //         const Text(
-                //           'Edit your Details',
-                //           style: TextStyle(
-                //             fontSize: 16,
-                //             fontWeight: FontWeight.w700,
-                //           ),
-                //         ),
-                //         const SizedBox(
-                //           width: 10,
-                //         ),
-                //         TextFormField(
-                //           style: const TextStyle(fontSize: 13),
-                //           maxLines: 1,
-                //           controller: fullNameController,
-                //           decoration: InputDecoration(
-                //             border: InputBorder.none,
-                //             hintText: 'Full Name',
-                //             filled: false,
-                //             fillColor: Colors.grey.shade100,
-                //           ),
-                //         ),
-                //         TextFormField(
-                //           controller: emailController,
-                //           style: const TextStyle(fontSize: 13),
-                //           maxLines: 1,
-                //           decoration: InputDecoration(
-                //             border: InputBorder.none,
-                //             hintText: 'Email',
-                //             filled: false,
-                //             fillColor: Colors.grey.shade100,
-                //           ),
-                //         ),
-                //         TextFormField(
-                //           controller: phoneController,
-                //           style: const TextStyle(fontSize: 13),
-                //           maxLines: 1,
-                //           decoration: InputDecoration(
-                //             border: InputBorder.none,
-                //             hintText: 'Phone Number',
-                //             filled: false,
-                //             fillColor: Colors.grey.shade100,
-                //           ),
-                //         ),
-                //         TextFormField(
-                //           controller: deliveryController,
-                //           style: const TextStyle(fontSize: 13),
-                //           maxLength: 300,
-                //           maxLines: 3,
-                //           decoration: InputDecoration(
-                //             border: InputBorder.none,
-                //             hintText: 'Delivery address',
-                //             filled: false,
-                //             fillColor: Colors.grey.shade100,
-                //           ),
-                //         ),
-                //         const SizedBox(
-                //           height: 15,
-                //         ),
-                //       ],
-                //     ),
-                //   ),
-                // ),
                 const SizedBox(
                   height: 15,
                 ),
-                CustomEditText(
-                  caption: 'Buyer Note',
-                  hintText: 'Enter Note to Seller',
-                  controller: noteController,
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 15.0),
+                  child: Container(
+                    decoration: BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.circular(15)),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: <Widget>[
+                        const SizedBox(
+                          height: 15,
+                        ),
+                        const Padding(
+                          padding: EdgeInsets.only(left: 20.0),
+                          child: Text(
+                            'Select a Payment Option',
+                            style: TextStyle(
+                                fontSize: 16, fontWeight: FontWeight.w700),
+                          ),
+                        ),
+                        widget.shop.payments.isNotEmpty
+                            ? Padding(
+                                padding: const EdgeInsets.all(15),
+                                child: Column(
+                                  children: paymentMethods!
+                                      .map((payment) => ProPaymentOptionCard(
+                                            option:
+                                                payment['paymentMethod'] ?? '',
+                                            subtext:
+                                                'Details: ${payment['details'] ?? 'N/A'}',
+                                            activeoption: activePaymentMethod,
+                                            onTap: (String newOption) {
+                                              setState(() {
+                                                activePaymentMethod = newOption;
+                                              });
+                                            },
+                                          ))
+                                      .toList(),
+                                ),
+                              )
+                            : const Padding(
+                                padding: EdgeInsets.all(15.0),
+                                child: Center(
+                                  child: Text(
+                                    'User has not added a payment method yet',
+                                    style: TextStyle(
+                                        color: Colors.grey, fontSize: 14),
+                                  ),
+                                ),
+                              ),
+                      ],
+                    ),
+                  ),
                 ),
                 const SizedBox(
                   height: 15,
@@ -532,10 +496,7 @@ class _OrderProductScreenState extends State<OrderProductScreen> {
                             ? getDeliveryMethod(widget.product.deliveryMethod!)
                             : 'online',
                         'deliveryDate': DateTime.now().toString(),
-                        'paymentMethod': widget.product.paymentMethod != null &&
-                                widget.product.paymentMethod!.isNotEmpty
-                            ? widget.product.paymentMethod!
-                            : 'Cash',
+                        'paymentMethod': activePaymentMethod,
                         'orderDetails': '',
                         'invoiceOption': 'send_with_payment_link',
                         'status': 'pending',
@@ -578,10 +539,6 @@ class _OrderProductScreenState extends State<OrderProductScreen> {
                             ],
                           ),
                         );
-
-                        // showSnackbar(message: 'Order Added Successfully!');
-                        // // ignore: use_build_context_synchronously
-                        // Navigator.pop(context);
                       } else {
                         showSnackbar(
                           message: 'Error creating order!',

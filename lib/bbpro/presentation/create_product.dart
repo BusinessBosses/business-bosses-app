@@ -175,7 +175,7 @@ class _CreateProductListingState extends State<CreateProductListing> {
                   children: <Widget>[
                     const SizedBox(height: 16),
                     CustomEditText(
-                      caption: 'Product Name',
+                      caption: 'Product Name *',
                       maxLength: 30,
                       hintText: 'Enter product name here',
                       controller: _productNameController,
@@ -192,7 +192,7 @@ class _CreateProductListingState extends State<CreateProductListing> {
                         Expanded(
                           child: CustomEditText(
                             currencycontroller: currencycontroller,
-                            caption: 'Price',
+                            caption: 'Price *',
                             iscurrencyfield: true,
                             maxLength: 15,
                             hintText: 'Enter price',
@@ -214,7 +214,7 @@ class _CreateProductListingState extends State<CreateProductListing> {
                             padding: const EdgeInsets.only(right: 15.0),
                             child: CustomEditText(
                               padding: 0,
-                              caption: 'Discount',
+                              caption: 'Discount (%) - Optional',
                               hintText: 'Enter discount',
                               maxLength: 15,
                               controller: _discountController,
@@ -234,7 +234,7 @@ class _CreateProductListingState extends State<CreateProductListing> {
                     ),
                     const SizedBox(height: 16),
                     CustomEditText(
-                      caption: 'Describe your Product',
+                      caption: 'Describe your Product *',
                       hintText: 'Add product description here',
                       controller: _descriptionController,
                       maxLength: 300,
@@ -247,7 +247,7 @@ class _CreateProductListingState extends State<CreateProductListing> {
                     ),
                     const SizedBox(height: 16),
                     CustomDropdownWidget(
-                      caption: 'Select Category',
+                      caption: 'Select Category *',
                       hintText: 'Choose a category',
                       items: const <String>[
                         'Home, Garden & Outdoors',
@@ -300,7 +300,7 @@ class _CreateProductListingState extends State<CreateProductListing> {
                               borderRadius: BorderRadius.circular(radiusValue),
                             ),
                             child: CustomTextWidget(
-                              caption: 'Location',
+                              caption: 'Location *',
                               iconName: 'assets/svgs/nexticon.svg',
                               text: country.isEmpty
                                   ? shopController.shop!.location
@@ -447,7 +447,7 @@ class _CreateProductListingState extends State<CreateProductListing> {
                       ),
                     CustomEditText(
                       maxLength: 30,
-                      caption: 'Quantity',
+                      caption: 'Quantity *',
                       hintText: 'Enter quantity',
                       inputType: TextInputType.number,
                       controller: quantityController,
@@ -617,7 +617,9 @@ class _CreateProductListingState extends State<CreateProductListing> {
                     const SizedBox(height: 16),
                     ProCustomButton(
                       loading: isSubmitted,
-                      text: widget.product != null ? 'Save Changes' : 'Create',
+                      text: widget.product != null
+                          ? 'Save Changes'
+                          : 'Create Product',
                       onPressed: () async {
                         if (_productNameController.text.isEmpty) {
                           showSnackbar(
@@ -674,7 +676,10 @@ class _CreateProductListingState extends State<CreateProductListing> {
                             'images': finalImages,
                             'paymentMethod': paymentMethod,
                             'deliveryMethod': deliveryMethod,
-                            'url': 'http://example.com/product', // Example URL
+                            'url': 'http://example.com/product',
+                            'notes': notesController.text.trim().isEmpty
+                                ? null
+                                : notesController.text.trim(),
                             'deliveryDuration': deliverydayscontroller.text,
                             'itemType': 'product',
                             'isActive': _isSwitched,

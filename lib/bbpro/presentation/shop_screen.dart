@@ -7,6 +7,7 @@ import 'package:business_bosses_v2/bbpro/models/product_model.dart';
 import 'package:business_bosses_v2/bbpro/presentation/book_service.dart';
 import 'package:business_bosses_v2/bbpro/presentation/create_product.dart';
 import 'package:business_bosses_v2/bbpro/presentation/create_service.dart';
+import 'package:business_bosses_v2/bbpro/presentation/order_product.dart';
 import 'package:business_bosses_v2/bbpro/widgets/inventorycard.dart';
 import 'package:business_bosses_v2/bbpro/widgets/servicecard.dart';
 import 'package:business_bosses_v2/common/widgets/network_image_with_placeholder.dart';
@@ -334,9 +335,16 @@ class _ShopScreenState extends State<ShopScreen> {
                                               .toList()[index] as Product;
                                           return GestureDetector(
                                             onTap: () {
+                                              // Get.to(
+                                              //   () => CreateProductListing(
+                                              //     product: product,
+                                              //   ),
+                                              // );
+                                              print(product);
                                               Get.to(
-                                                () => CreateProductListing(
+                                                () => OrderProductScreen(
                                                   product: product,
+                                                  shop: shopController.shop!,
                                                 ),
                                               );
                                             },
