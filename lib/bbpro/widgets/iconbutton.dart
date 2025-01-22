@@ -9,6 +9,7 @@ class ProIconButton extends StatelessWidget {
   final Color? backgroundColor;
   final Color? textColor;
   final double? padding;
+  final double? vpadding;
   final Color? shadow;
   final double? textsize;
 
@@ -23,6 +24,7 @@ class ProIconButton extends StatelessWidget {
     this.padding,
     this.shadow,
     this.textsize,
+    this.vpadding,
   }) : super(key: key);
 
   @override
@@ -32,8 +34,8 @@ class ProIconButton extends StatelessWidget {
       style: ElevatedButton.styleFrom(
         shadowColor: shadow ?? Colors.white,
         backgroundColor: backgroundColor ?? proprimaryColor, // Background color
-        padding:
-            EdgeInsets.symmetric(horizontal: padding ?? 20.0, vertical: 10.0),
+        padding: EdgeInsets.symmetric(
+            horizontal: padding ?? 20.0, vertical: vpadding ?? 10.0),
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(radius ?? 30.0),
         ),
