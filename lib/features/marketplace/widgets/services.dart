@@ -150,30 +150,7 @@ class _ServicesPageState extends State<ServicesPage> {
                 (_marketController.isfiltered.value
                     ? _marketController.searchResult.length + 1
                     : _marketController.services.length + 2)) {
-              final MarketModel market = _marketController.isfiltered.value
-                  ? _marketController.searchResult[index - 2]
-                  : _marketController.services[index - 2];
-              return VisibilityDetector(
-                key: Key(index.toString()),
-                onVisibilityChanged: (VisibilityInfo info) {
-                  final bool hasIncrementedView = hmeController
-                      .itemsWithIncrementedViews
-                      .contains(_marketController.services[index - 2].marketId);
-                  if (info.visibleFraction == 1.0 && !hasIncrementedView) {
-                    _marketController.updatemarketViews(
-                        _marketController.services[index - 2]);
-                    setState(() {
-                      hmeController.itemsWithIncrementedViews
-                          .add(_marketController.services[index - 2].marketId);
-                    });
-                  }
-                },
-                child: ServiceTile(
-                  post: market,
-                  controller: _marketController,
-                  key: ValueKey(_marketController.services[index - 2].marketId),
-                ),
-              );
+              return const SizedBox();
             } else {
               // Display a loading indicator at the end of the list
               if (_marketController.loadingMore.value) {

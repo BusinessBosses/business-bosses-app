@@ -6,12 +6,10 @@ import 'package:business_bosses_v2/features/home/controller/home_controller.dart
 import 'package:business_bosses_v2/features/profile/controller/profile_controller.dart';
 import 'package:business_bosses_v2/services/api_service.dart';
 import 'package:get/get.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import 'package:socket_io_client/socket_io_client.dart' as IO;
 
 import '../../../common/models/comment_model.dart';
 import '../../../common/models/user_model.dart';
-import '../../../utils/constants/constants.dart';
 import '../../home/repository/home_repository.dart';
 import '../models/market_model.dart';
 
@@ -477,6 +475,7 @@ class MarketController extends GetxController {
     proProducts.clear();
     proServices.clear();
     proItems.clear();
+    proItemsWithImages.clear();
 
     try {
       // Fetch data
@@ -673,27 +672,27 @@ class MarketController extends GetxController {
     update();
   }
 
-  Future<void> initUsers() async {
-    // loading(true);
-    // error(false);
-    update();
+  // Future<void> initUsers() async {
+  //   // loading(true);
+  //   // error(false);
+  //   update();
 
-    final ApiResponseModel response = await HomeRepository.fetchMarketMembers();
-    if (response.success) {
-      processMembersToState(response.data['rows']);
-    } else {
-      // error(true);
-    }
-    // loading(false);
-    final SharedPreferences prefs = await SharedPreferences.getInstance();
-    final String? userId = prefs.getString(Constants.USER_ID);
-    bool isJoin = users.any((UserModel user) => user.uid == userId);
-    if (isJoin) {
-      isJoined(true);
-    }
+  //   final ApiResponseModel response = await HomeRepository.fetchMarketMembers();
+  //   if (response.success) {
+  //     processMembersToState(response.data['rows']);
+  //   } else {
+  //     // error(true);
+  //   }
+  //   // loading(false);
+  //   final SharedPreferences prefs = await SharedPreferences.getInstance();
+  //   final String? userId = prefs.getString(Constants.USER_ID);
+  //   bool isJoin = users.any((UserModel user) => user.uid == userId);
+  //   if (isJoin) {
+  //     isJoined(true);
+  //   }
 
-    update();
-  }
+  //   update();
+  // }
 
   // initSocket() {
   //   socket = IO.io(Constants.socketUrl, <String, dynamic>{
@@ -716,9 +715,9 @@ class MarketController extends GetxController {
     isLoading = false;
     if (_homeController.markets.isEmpty) {
       initMarket();
-      initUsers();
+      // initUsers();
     } else {
-      users = _homeController.marketMembers;
+      // users = _homeController.marketMembers;
       markets = _homeController.markets;
     }
     update();

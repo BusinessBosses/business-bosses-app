@@ -4,6 +4,7 @@ import 'package:business_bosses_v2/bbpro/models/service_model.dart';
 import 'package:business_bosses_v2/bbpro/models/shop_model.dart';
 import 'package:business_bosses_v2/bbpro/presentation/user_shop_screen.dart';
 import 'package:business_bosses_v2/bbpro/widgets/button.dart';
+import 'package:business_bosses_v2/bbpro/widgets/edit_text.dart';
 import 'package:business_bosses_v2/bbpro/widgets/orderpaymentcard.dart';
 import 'package:business_bosses_v2/bbpro/widgets/ordersummarycard.dart';
 import 'package:business_bosses_v2/bbpro/widgets/paymentoptioncard.dart';
@@ -68,6 +69,7 @@ class _BookServiceScreenState extends State<BookServiceScreen> {
   final TextEditingController fullNameController = TextEditingController();
   final TextEditingController phoneController = TextEditingController();
   final TextEditingController emailController = TextEditingController();
+  final TextEditingController noteController = TextEditingController();
   bool isSubmit = false;
 
   List<Map<String, dynamic>> selectedItems = <Map<String, dynamic>>[];
@@ -777,9 +779,73 @@ class _BookServiceScreenState extends State<BookServiceScreen> {
                 ),
               ),
             ),
+            const SizedBox(
+              height: 16,
+            ),
+            if (widget.service.notes != null)
+              Container(
+                margin: const EdgeInsets.only(left: 15, right: 15),
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(10),
+                  color: Colors.white,
+                ),
+                width: double.infinity,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: <Widget>[
+                    const Padding(
+                      padding:
+                          EdgeInsets.symmetric(horizontal: 15.0, vertical: 15),
+                      child: Text(
+                        'Seller Note',
+                        style: TextStyle(
+                          fontWeight: FontWeight.w700,
+                          fontSize: 16,
+                          color: textColor,
+                        ),
+                      ),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.all(15.0),
+                      child: Text(
+                        widget.service.notes!,
+                        style: const TextStyle(
+                          fontSize: 14,
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            if (widget.service.notes != null)
+              const SizedBox(
+                height: 16,
+              ),
+            // Order Summary Section
+            OrderSummaryWidget(
+              quantity: int.parse(quantityController.text),
+              price: widget.service.price,
+              discount: widget.service.discount,
+              total:
+                  (int.parse(quantityController.text) * widget.service.price) *
+                          (1 - (widget.service.discount / 100)) +
+                      selectedpackagesprice,
+              currency: widget.shop.currency,
+              isservice: true,
+              packagesprice: selectedpackagesprice,
+            ),
+
+            // Customer Details Section
 
             const SizedBox(height: 25),
 
+            CustomEditText(
+              caption: 'Buyer Note',
+              hintText: 'Enter Note to Seller',
+              controller: noteController,
+            ),
+
+            const SizedBox(height: 25),
             // Submit Button
             Center(
               child: SizedBox(
@@ -860,7 +926,8 @@ class _BookServiceScreenState extends State<BookServiceScreen> {
                       'paymentMethod': activePaymentMethod,
                       'orderDetails': '',
                       'invoiceOption': 'send_with_payment_link',
-                      'status': 'pending'
+                      'status': 'pending',
+                      'notes': noteController.text,
                     };
                     print(orderData);
                     bool response = await orderController.addOrder(orderData);

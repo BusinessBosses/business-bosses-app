@@ -14,7 +14,7 @@ import 'package:business_bosses_v2/services/api_service.dart';
 import 'package:get/get.dart';
 
 class ShopController extends GetxController {
-  final ProfileController profileController = Get.find();
+  final ProfileController profileController = Get.put(ProfileController());
   Shop? shop;
   Shop? userShop;
   RxBool loading = RxBool(true);
@@ -381,11 +381,5 @@ class ShopController extends GetxController {
     }
     loadingData(false);
     update();
-  }
-
-  @override
-  void onInit() {
-    initShop();
-    super.onInit();
   }
 }

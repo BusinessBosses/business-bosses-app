@@ -640,10 +640,14 @@ class _CreateServiceListingState extends State<CreateServiceListing>
                   initialValue: deliveryMethod,
                   caption: 'Delivery Method',
                   hintText: 'Choose a delivery method',
-                  items: const <String>['Online', 'In-Person'],
+                  items: const <String>['None', 'Online', 'In-Person'],
                   iconName: 'assets/svgs/dropdown.svg',
                   onChanged: (String? newValue) {
                     setState(() {
+                      if (newValue == 'None') {
+                        deliveryMethod = null;
+                        return;
+                      }
                       deliveryMethod = newValue;
                       addressorlinkController.clear();
                     });
@@ -1012,7 +1016,7 @@ class _CreateServiceListingState extends State<CreateServiceListing>
             'startDate': _startDate?.toIso8601String(),
             'endDate': _endDate?.toIso8601String(),
           },
-          'packages': packages,
+          'servicePackages': packages,
           'url': addressorlinkController.text,
           'notes': notesController.text.trim().isEmpty
               ? null

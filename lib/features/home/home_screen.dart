@@ -283,7 +283,7 @@ class _HomeScreenState extends State<HomeScreen>
                             controller.loadData();
                             _profileController.fetchData();
                             marketController.initMarket();
-                            marketController.initUsers();
+                            // marketController.initUsers();
                             _communitiesController.fetchIndustries();
                             liveEventController.initEvents();
                           },
@@ -302,7 +302,7 @@ class _HomeScreenState extends State<HomeScreen>
                                 controller.loadData();
                                 _profileController.fetchData();
                                 marketController.initMarket();
-                                marketController.initUsers();
+                                // marketController.initUsers();
                                 _communitiesController.fetchIndustries();
                                 liveEventController.initEvents();
                               },

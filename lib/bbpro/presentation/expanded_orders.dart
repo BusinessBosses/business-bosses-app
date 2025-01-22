@@ -56,6 +56,27 @@ class _ExpandedOrdersState extends State<ExpandedOrders> {
             shop: widget.shop,
           ),
           const SizedBox(height: 30),
+          if (widget.order.notes != null)
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: <Widget>[
+                const Padding(
+                  padding: EdgeInsets.symmetric(horizontal: 15.0),
+                  child: Text(
+                    'Buyer Note',
+                    style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 15.0),
+                  child: Text(
+                    widget.order.notes!,
+                    style: const TextStyle(fontSize: 16),
+                  ),
+                ),
+              ],
+            ),
+          const SizedBox(height: 30),
           const Padding(
             padding: EdgeInsets.symmetric(horizontal: 15.0),
             child: Text(

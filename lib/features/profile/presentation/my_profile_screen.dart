@@ -1,3 +1,4 @@
+import 'package:business_bosses_v2/bbpro/controllers/shop_controller.dart';
 import 'package:business_bosses_v2/bbpro/presentation/bottom_nav_screen.dart';
 import 'package:business_bosses_v2/bbpro/presentation/shop_screen.dart';
 import 'package:business_bosses_v2/features/forum/widgets/forum_item.dart';
@@ -44,6 +45,7 @@ class MyProfileScreen extends StatefulWidget {
 class _MyProfileScreenState extends State<MyProfileScreen> {
   final ProfileController profileController = Get.find();
   final MarketController marketController = Get.find();
+  final ShopController shopController = Get.find();
   final HomeController homeController = Get.find();
   final LiveController liveEventController = Get.put(LiveController());
 
@@ -61,6 +63,7 @@ class _MyProfileScreenState extends State<MyProfileScreen> {
     _selectedIndex = widget.selectedIndex ?? 0;
     _currentIndex = widget.currentIndex ?? 0;
     _pageController = PageController(initialPage: widget.currentIndex ?? 0);
+    shopController.initShop();
   }
 
   @override
