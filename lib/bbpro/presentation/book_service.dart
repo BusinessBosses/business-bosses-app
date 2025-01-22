@@ -798,10 +798,11 @@ class _BookServiceScreenState extends State<BookServiceScreen> {
                             padding: const EdgeInsets.all(15),
                             child: Column(
                               children: paymentMethods!
-                                  .map((payment) => ProPaymentOptionCard(
+                                  .map((dynamic payment) =>
+                                      ProPaymentOptionCard(
                                         option: payment['paymentMethod'] ?? '',
                                         subtext:
-                                            'Details: ${payment['details'] ?? 'N/A'}',
+                                            'Details: ${payment['details'].toString() ?? 'N/A'}',
                                         activeoption: activePaymentMethod,
                                         onTap: (String newOption) {
                                           setState(() {
