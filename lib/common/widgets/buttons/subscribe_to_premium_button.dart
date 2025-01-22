@@ -22,16 +22,19 @@ Widget subscribetopremiumbutton() {
                 topRight: Radius.circular(20.0),
               ),
             ),
-            SizedBox(
+            Container(
+              decoration: const BoxDecoration(
+                borderRadius: BorderRadius.only(
+                  topLeft: Radius.circular(20.0),
+                  topRight: Radius.circular(20.0),
+                ),
+              ),
               height: Get.height * 0.9,
               child: const Center(
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.start,
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: <Widget>[
-                    SizedBox(
-                      height: 20,
-                    ),
                     // Padding(
                     //   padding: EdgeInsets.symmetric(horizontal: 15.0),
                     //   child: Text(
@@ -49,9 +52,7 @@ Widget subscribetopremiumbutton() {
                     //   height: 90,
                     //   width: 90,
                     // ),
-                    ProSubscribeSection(
-                      isGrow: true,
-                    ),
+                    PremiumScreen(),
                   ],
                 ),
               ),
