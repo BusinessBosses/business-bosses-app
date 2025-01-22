@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:business_bosses_v2/bbpro/models/product_model.dart';
 import 'package:business_bosses_v2/bbpro/models/service_model.dart';
 import 'package:business_bosses_v2/bbpro/presentation/book_service.dart';
@@ -54,10 +56,9 @@ class _ProshopdealsWidgetState extends State<ProshopdealsWidget> {
               .take(10)
               .toList();
     }
-
     return GestureDetector(
       onTap: () {
-        Get.to(const ProshopdealsScreen());
+        Get.to(() => const ProshopdealsScreen());
       },
       child: Container(
         decoration: BoxDecoration(

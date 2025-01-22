@@ -62,7 +62,7 @@ class HomeController extends GetxController {
   RxList<MarketModel> markets = RxList<MarketModel>(<MarketModel>[]);
   RxList<EventModel> events = RxList<EventModel>(<EventModel>[]);
   RxList<EventModel> myEvents = RxList<EventModel>(<EventModel>[]);
-  RxList<UserModel> marketMembers = RxList<UserModel>(<UserModel>[]);
+  // RxList<UserModel> marketMembers = RxList<UserModel>(<UserModel>[]);
   Set<dynamic> itemsWithIncrementedViews = {};
   String notificationDescription = '';
   String notificationStatus = '';
@@ -96,10 +96,10 @@ class HomeController extends GetxController {
     bossupMembers = data;
   }
 
-  void addMarketMembers(RxList<UserModel> data) {
-    marketMembers.clear();
-    marketMembers = data;
-  }
+  // void addMarketMembers(RxList<UserModel> data) {
+  //   marketMembers.clear();
+  //   marketMembers = data;
+  // }
 
   void pollVote(PostModel post, String selectedOption) {
     ApiService.post(path: 'pollvote', body: {

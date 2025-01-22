@@ -1,3 +1,4 @@
+import 'package:business_bosses_v2/bbpro/controllers/shop_controller.dart';
 import 'package:business_bosses_v2/bbpro/presentation/my_orders_screen.dart';
 import 'package:business_bosses_v2/features/chat/chat_screen.dart';
 import 'package:business_bosses_v2/features/donations/presentation/filtersuppliers.dart';
@@ -43,6 +44,7 @@ class _MarketplaceScreenState extends State<MarketplaceScreen>
   final ProfileController _profileController = Get.find();
   final MarketController _marketController = Get.find();
   final HomeController hmeController = Get.find();
+  final ShopController shopController = Get.find();
   String? _selectedCategory;
   String? _selectedLocation;
   String? filterCode;
@@ -67,9 +69,6 @@ class _MarketplaceScreenState extends State<MarketplaceScreen>
     _marketplacesearchTabController = TabController(length: 3, vsync: this);
     _marketplaceTabController = TabController(length: 4, vsync: this);
     _marketController.error(false);
-    _marketController
-        .initProItems()
-        .then((void value) => setState((() => loadingData = false)));
     supplierController.initSuppliers();
     _scrollController.addListener(() {
       double percentageScrolled =
@@ -89,6 +88,8 @@ class _MarketplaceScreenState extends State<MarketplaceScreen>
         }
       }
     });
+
+    shopController.initShop();
   }
 
   void _handleTabSelection() {
@@ -358,8 +359,7 @@ class _MarketplaceScreenState extends State<MarketplaceScreen>
                             return <Widget>[];
                           },
                           body: Obx(() {
-                            if (_marketController.loading.value ||
-                                loadingData) {
+                            if (_marketController.loading.value) {
                               return const Center(
                                   child: CircularProgressIndicator());
                             } else if (_marketController.error.value) {

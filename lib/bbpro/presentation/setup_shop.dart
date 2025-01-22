@@ -728,6 +728,17 @@ class _SetupshopState extends State<Setupshop> with TickerProviderStateMixin {
       paymentMethods.add(<String, dynamic>{'paymentMethod': 'Cash'});
     }
 
+    if (paymentMethods.isEmpty) {
+      showSnackbar(
+        message: 'Please select at least one payment method!',
+        error: true,
+      );
+      setState(() {
+        isSubmit = false;
+      });
+      return;
+    }
+
     if (_selectedImage != null) {
       dynamic response = await ApiService.uploadFile(_selectedImage!);
       if (response['success']) {

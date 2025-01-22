@@ -79,6 +79,29 @@ class _ExpandedOrdersViewState extends State<ExpandedOrdersView> {
                           myShop: false,
                         ),
                         const SizedBox(height: 30),
+                        if (orderController.orderView!.notes != null)
+                          Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: <Widget>[
+                              const Padding(
+                                padding: EdgeInsets.symmetric(horizontal: 15.0),
+                                child: Text(
+                                  'Buyer Note',
+                                  style: TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: 16),
+                                ),
+                              ),
+                              Padding(
+                                padding: const EdgeInsets.symmetric(
+                                    horizontal: 15.0),
+                                child: Text(
+                                  orderController.orderView!.notes!,
+                                  style: const TextStyle(fontSize: 16),
+                                ),
+                              ),
+                            ],
+                          ),
                         const Padding(
                           padding: EdgeInsets.symmetric(horizontal: 15.0),
                           child: Text(

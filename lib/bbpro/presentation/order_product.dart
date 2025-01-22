@@ -39,6 +39,7 @@ class _OrderProductScreenState extends State<OrderProductScreen> {
   final ShopController shopController = Get.find();
   final OrderController orderController = Get.put(OrderController());
   final TextEditingController deliveryController = TextEditingController();
+  final TextEditingController noteController = TextEditingController();
   List<Map<String, dynamic>> selectedItems = <Map<String, dynamic>>[];
 
   List<String> clientsName = <String>[];
@@ -372,6 +373,45 @@ class _OrderProductScreenState extends State<OrderProductScreen> {
                   const SizedBox(
                     height: 15,
                   ),
+                if (widget.product.notes != null)
+                  Container(
+                    margin: const EdgeInsets.only(left: 15, right: 15),
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(10),
+                      color: Colors.white,
+                    ),
+                    width: double.infinity,
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: <Widget>[
+                        const Padding(
+                          padding: EdgeInsets.symmetric(
+                              horizontal: 15.0, vertical: 15),
+                          child: Text(
+                            'Seller Note',
+                            style: TextStyle(
+                              fontWeight: FontWeight.w700,
+                              fontSize: 16,
+                              color: textColor,
+                            ),
+                          ),
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.all(15.0),
+                          child: Text(
+                            widget.product.notes!,
+                            style: const TextStyle(
+                              fontSize: 14,
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                if (widget.product.notes != null)
+                  const SizedBox(
+                    height: 15,
+                  ),
                 OrderSummaryWidget(
                   quantity: int.tryParse(quantityController.text) ?? 0,
                   price: widget.product.price,
@@ -462,6 +502,11 @@ class _OrderProductScreenState extends State<OrderProductScreen> {
                 const SizedBox(
                   height: 15,
                 ),
+                CustomEditText(
+                  caption: 'Buyer Note',
+                  hintText: 'Enter Note to Seller',
+                  controller: noteController,
+                ),
                 const SizedBox(
                   height: 15,
                 ),
@@ -493,7 +538,8 @@ class _OrderProductScreenState extends State<OrderProductScreen> {
                             : 'Cash',
                         'orderDetails': '',
                         'invoiceOption': 'send_with_payment_link',
-                        'status': 'pending'
+                        'status': 'pending',
+                        'notes': noteController.text,
                       };
                       bool response = await orderController.addOrder(orderData);
                       if (response) {

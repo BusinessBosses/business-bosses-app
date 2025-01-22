@@ -378,39 +378,7 @@ class _MarketsPageState extends State<MarketsPage> {
                   (_marketController.isfiltered.value
                       ? _marketController.searchResult.length
                       : _marketController.markets.length)) {
-                final MarketModel market = _marketController.isfiltered.value
-                    ? _marketController.searchResult[index - 1]
-                    : _marketController.markets[index - 1];
-                return VisibilityDetector(
-                  key: Key(index.toString()),
-                  onVisibilityChanged: (VisibilityInfo info) {
-                    final bool hasIncrementedView =
-                        hmeController.itemsWithIncrementedViews.contains(
-                            _marketController.markets[index - 1].marketId);
-                    if (info.visibleFraction == 1.0 && !hasIncrementedView) {
-                      _marketController.updatemarketViews(
-                          _marketController.markets[index - 1]);
-                      setState(() {
-                        hmeController.itemsWithIncrementedViews.add(
-                            _marketController.markets[index]
-                                .marketId); // Set the flag to prevent further increments
-                      });
-                    }
-                  },
-                  child: _marketController.markets[index - 1].isProduct
-                      ? MarketTile(
-                          post: market,
-                          controller: _marketController,
-                          key: ValueKey<String>(
-                              _marketController.markets[index].marketId),
-                        )
-                      : ServiceTile(
-                          post: market,
-                          controller: _marketController,
-                          key: ValueKey<String>(
-                              _marketController.markets[index - 1].marketId),
-                        ),
-                );
+                return const SizedBox();
               } else {
                 // Display a loading indicator at the end of the list
                 if (_marketController.loadingMore.value) {
