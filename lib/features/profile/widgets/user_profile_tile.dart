@@ -183,7 +183,7 @@ class _UserProfileTileState extends State<UserProfileTile> {
                         : Container(),
                   ],
                 ),
-                if (shopController.shop == null)
+                if (!profileController.myProfile.isSubscribed)
                   GestureDetector(
                     onTap: () {},
                     child: Container(
