@@ -267,35 +267,77 @@ class _BookServiceScreenState extends State<BookServiceScreen> {
                     onTap: (_) {},
                   ),
                   const SizedBox(height: 15),
-                  if (widget.service.notes != null)
-                    const Text(
-                      'Seller\'s Notes',
-                      style: TextStyle(
-                        fontSize: 16,
-                        fontWeight: FontWeight.w600,
-                        color: textColor,
-                      ),
-                    ),
-                  if (widget.service.notes != null)
-                    DetectableText(
-                      text: widget.service.notes ?? 'No note added!',
-                      detectionRegExp: detectionRegExp(hashtag: false)!,
-                      detectedStyle: bodyText2.copyWith(color: Colors.blue),
-                      moreStyle: bodyText2.copyWith(
-                          color: Colors.black, fontWeight: FontWeight.bold),
-                      lessStyle: bodyText2.copyWith(
-                          color: Colors.black, fontWeight: FontWeight.bold),
-                      trimLength: 100,
-                      trimExpandedText: '  show less',
-                      basicStyle: bodyText2.copyWith(color: textColor),
-                      onTap: (_) {},
-                    ),
                 ],
               ),
             ),
 
-            const SizedBox(height: 15),
-
+            if (widget.service.notes != null)
+              Container(
+                margin: const EdgeInsets.only(left: 15, right: 15),
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(10),
+                  color: Colors.white,
+                ),
+                width: double.infinity,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: <Widget>[
+                    const Padding(
+                      padding:
+                          EdgeInsets.symmetric(horizontal: 15.0, vertical: 15),
+                      child: Text(
+                        'Seller Note',
+                        style: TextStyle(
+                          fontWeight: FontWeight.w700,
+                          fontSize: 16,
+                          color: textColor,
+                        ),
+                      ),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 15.0),
+                      child: Text(
+                        widget.service.notes!,
+                        style: const TextStyle(
+                          fontSize: 14,
+                        ),
+                      ),
+                    ),
+                    const SizedBox(
+                      height: 10,
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 15.0),
+                      child: Container(
+                        decoration: BoxDecoration(
+                          border: Border.all(color: backgroundColor),
+                          borderRadius: BorderRadius.circular(5),
+                        ),
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 10.0, vertical: 5.0),
+                        child: Row(
+                          mainAxisSize: MainAxisSize.min,
+                          children: <Widget>[
+                            SvgPicture.asset(
+                              'assets/svgs/shopchat.svg',
+                              height: 12,
+                            ),
+                            const SizedBox(
+                              width: 5,
+                            ),
+                            const Text('Reply'),
+                          ],
+                        ),
+                      ),
+                    ),
+                    CustomEditText(
+                      hintText: 'Enter Note to Seller',
+                      controller: noteController,
+                      caption: '',
+                    ),
+                  ],
+                ),
+              ),
             // Calendar Section
             if (widget.service.isAppointment == true)
               if (widget.service.availability!['startDate'] != null)
@@ -784,41 +826,6 @@ class _BookServiceScreenState extends State<BookServiceScreen> {
               height: 16,
             ),
             if (widget.service.notes != null)
-              Container(
-                margin: const EdgeInsets.only(left: 15, right: 15),
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(10),
-                  color: Colors.white,
-                ),
-                width: double.infinity,
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: <Widget>[
-                    const Padding(
-                      padding:
-                          EdgeInsets.symmetric(horizontal: 15.0, vertical: 15),
-                      child: Text(
-                        'Seller Note',
-                        style: TextStyle(
-                          fontWeight: FontWeight.w700,
-                          fontSize: 16,
-                          color: textColor,
-                        ),
-                      ),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.all(15.0),
-                      child: Text(
-                        widget.service.notes!,
-                        style: const TextStyle(
-                          fontSize: 14,
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-            if (widget.service.notes != null)
               const SizedBox(
                 height: 16,
               ),
@@ -837,16 +844,9 @@ class _BookServiceScreenState extends State<BookServiceScreen> {
             ),
 
             // Customer Details Section
-
-            const SizedBox(height: 25),
-
-            CustomEditText(
-              caption: 'Buyer Note',
-              hintText: 'Enter Note to Seller',
-              controller: noteController,
+            const SizedBox(
+              height: 25,
             ),
-
-            const SizedBox(height: 25),
             // Submit Button
             Center(
               child: SizedBox(

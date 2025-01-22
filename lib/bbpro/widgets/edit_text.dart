@@ -189,14 +189,15 @@ class CustomEditText extends StatelessWidget {
                   Wrap(
                     crossAxisAlignment: WrapCrossAlignment.center,
                     children: <Widget>[
-                      Text(
-                        caption,
-                        style: const TextStyle(
-                          fontSize: 14,
-                          fontWeight: FontWeight.w600,
+                      if (caption != '')
+                        Text(
+                          caption,
+                          style: const TextStyle(
+                            fontSize: 14,
+                            fontWeight: FontWeight.w600,
+                          ),
                         ),
-                      ),
-                      const SizedBox(width: 10),
+                      if (caption != '') const SizedBox(width: 10),
                       optionalText ?? Container(),
                     ],
                   ),
