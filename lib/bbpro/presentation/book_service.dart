@@ -706,6 +706,24 @@ class _BookServiceScreenState extends State<BookServiceScreen> {
                 widget.service.deliveryMethod != '')
               const SizedBox(height: 15),
 
+            OrderSummaryWidget(
+              serviceDuration: widget.service.serviceDuration,
+              quantity: int.parse(quantityController.text),
+              price: widget.service.price,
+              discount: widget.service.discount,
+              total:
+                  (int.parse(quantityController.text) * widget.service.price) *
+                          (1 - (widget.service.discount / 100)) +
+                      selectedpackagesprice,
+              currency: widget.shop.currency,
+              isservice: true,
+              packagesprice: selectedpackagesprice,
+              timeofservice:
+                  '${DateFormat('d MMMM yyyy').format(_startDate!)} ${selectedSlot!}',
+            ),
+            const SizedBox(
+              height: 16,
+            ),
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 15.0),
               child: Container(
@@ -759,24 +777,6 @@ class _BookServiceScreenState extends State<BookServiceScreen> {
                 ),
               ),
             ),
-            const SizedBox(
-              height: 16,
-            ),
-            // Order Summary Section
-            OrderSummaryWidget(
-              quantity: int.parse(quantityController.text),
-              price: widget.service.price,
-              discount: widget.service.discount,
-              total:
-                  (int.parse(quantityController.text) * widget.service.price) *
-                          (1 - (widget.service.discount / 100)) +
-                      selectedpackagesprice,
-              currency: widget.shop.currency,
-              isservice: true,
-              packagesprice: selectedpackagesprice,
-            ),
-
-            // Customer Details Section
 
             const SizedBox(height: 25),
 
