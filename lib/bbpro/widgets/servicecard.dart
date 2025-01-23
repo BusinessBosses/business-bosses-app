@@ -240,6 +240,8 @@ class _ServiceCardState extends State<ServiceCard> {
                       item: widget.service,
                       onEdit: _onEdit,
                       onDelete: onDelete,
+                      onBoost: () {},
+                      isBoost: true,
                     ),
                   ],
                 ),

@@ -226,12 +226,14 @@ class _InventoryCardState extends State<InventoryCard> {
                       ),
                     ),
                     OptionsButton(
+                      isBoost: true,
                       item: widget.product,
                       onEdit: () => Get.to(
                         () => CreateProductListing(
                           product: widget.product,
                         ),
                       ),
+                      onBoost: () {},
                       onDelete: onDelete,
                     ),
                   ],

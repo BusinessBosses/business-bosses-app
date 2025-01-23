@@ -109,6 +109,8 @@ class _MyInventoryCardState extends State<MyInventoryCard> {
                         onDelete: onDelete,
                         padding: const EdgeInsets.all(0),
                         borderColor: Colors.white,
+                        onBoost: () {},
+                        isBoost: true,
                       ),
               ],
             ),
