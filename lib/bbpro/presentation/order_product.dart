@@ -65,7 +65,8 @@ class _OrderProductScreenState extends State<OrderProductScreen> {
       activePaymentMethod = paymentMethods![0]['paymentMethod'] ?? '';
     }
     quantityController.text = '1';
-    fullNameController.text = profileController.myProfile.name!;
+    fullNameController.text = profileController.myProfile.name ??
+        profileController.myProfile.username;
     emailController.text = profileController.myProfile.email;
     // selectedItems.add(
     //   <String, dynamic>{
@@ -255,78 +256,6 @@ class _OrderProductScreenState extends State<OrderProductScreen> {
                 const SizedBox(
                   height: 15,
                 ),
-                if (widget.product.notes != null)
-                  Container(
-                    margin: const EdgeInsets.only(left: 15, right: 15),
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(10),
-                      color: Colors.white,
-                    ),
-                    width: double.infinity,
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: <Widget>[
-                        const Padding(
-                          padding: EdgeInsets.symmetric(
-                              horizontal: 15.0, vertical: 15),
-                          child: Text(
-                            'Seller\'s Note',
-                            style: TextStyle(
-                              fontWeight: FontWeight.w700,
-                              fontSize: 16,
-                              color: textColor,
-                            ),
-                          ),
-                        ),
-                        Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 15.0),
-                          child: Text(
-                            widget.product.notes!,
-                            style: const TextStyle(
-                              fontSize: 14,
-                            ),
-                          ),
-                        ),
-                        const SizedBox(
-                          height: 10,
-                        ),
-                        Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 15.0),
-                          child: Container(
-                            decoration: BoxDecoration(
-                              border: Border.all(color: backgroundColor),
-                              borderRadius: BorderRadius.circular(5),
-                            ),
-                            padding: const EdgeInsets.symmetric(
-                                horizontal: 10.0, vertical: 5.0),
-                            child: Row(
-                              mainAxisSize: MainAxisSize.min,
-                              children: <Widget>[
-                                SvgPicture.asset(
-                                  'assets/svgs/shopchat.svg',
-                                  height: 12,
-                                ),
-                                const SizedBox(
-                                  width: 5,
-                                ),
-                                const Text('Reply'),
-                              ],
-                            ),
-                          ),
-                        ),
-                        CustomEditText(
-                          padding: 0,
-                          hintText: 'Enter Note to Seller',
-                          controller: noteController,
-                          caption: '',
-                        ),
-                      ],
-                    ),
-                  ),
-                if (widget.product.notes != null)
-                  const SizedBox(
-                    height: 16,
-                  ),
                 Container(
                   margin: const EdgeInsets.only(left: 15, right: 15),
                   decoration: BoxDecoration(
@@ -471,6 +400,51 @@ class _OrderProductScreenState extends State<OrderProductScreen> {
                     ),
                   ),
                 ),
+                if (widget.product.notes != null)
+                  const SizedBox(
+                    height: 16,
+                  ),
+                if (widget.product.notes != null)
+                  Container(
+                    margin: const EdgeInsets.only(left: 15, right: 15),
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(10),
+                      color: Colors.white,
+                    ),
+                    width: double.infinity,
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: <Widget>[
+                        const Padding(
+                          padding: EdgeInsets.symmetric(
+                              horizontal: 15.0, vertical: 15),
+                          child: Text(
+                            'Seller\'s Note',
+                            style: TextStyle(
+                              fontWeight: FontWeight.w700,
+                              fontSize: 16,
+                              color: textColor,
+                            ),
+                          ),
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 15.0),
+                          child: Text(
+                            widget.product.notes!,
+                            style: const TextStyle(
+                              fontSize: 14,
+                            ),
+                          ),
+                        ),
+                        CustomEditText(
+                          padding: 0,
+                          hintText: 'Enter Note to Seller here',
+                          controller: noteController,
+                          caption: '',
+                        ),
+                      ],
+                    ),
+                  ),
                 const SizedBox(
                   height: 15,
                 ),

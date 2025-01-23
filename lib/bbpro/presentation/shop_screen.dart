@@ -335,16 +335,9 @@ class _ShopScreenState extends State<ShopScreen> {
                                               .toList()[index] as Product;
                                           return GestureDetector(
                                             onTap: () {
-                                              // Get.to(
-                                              //   () => CreateProductListing(
-                                              //     product: product,
-                                              //   ),
-                                              // );
-                                              print(product);
                                               Get.to(
-                                                () => OrderProductScreen(
+                                                () => CreateProductListing(
                                                   product: product,
-                                                  shop: shopController.shop!,
                                                 ),
                                               );
                                             },
@@ -359,6 +352,7 @@ class _ShopScreenState extends State<ShopScreen> {
                                               .toList()[index] as Service;
                                           return GestureDetector(
                                             onTap: () {
+                                              print(service);
                                               Get.to(
                                                 () => CreateServiceListing(
                                                   service: service,

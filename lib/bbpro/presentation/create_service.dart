@@ -8,10 +8,12 @@ import 'package:business_bosses_v2/bbpro/widgets/edit_text.dart';
 import 'package:business_bosses_v2/bbpro/widgets/iconbutton.dart';
 import 'package:business_bosses_v2/bbpro/widgets/switchwidget.dart';
 import 'package:business_bosses_v2/bbpro/widgets/taskitem.dart';
+import 'package:business_bosses_v2/features/home/widgets/sellingpopup.dart';
 import 'package:business_bosses_v2/features/marketplace/widgets/currency.dart';
 import 'package:business_bosses_v2/features/posts/widgets/image_item.dart';
 import 'package:business_bosses_v2/features/profile/controller/profile_controller.dart';
 import 'package:business_bosses_v2/services/api_service.dart';
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:image_picker/image_picker.dart';
@@ -98,6 +100,7 @@ class _CreateServiceListingState extends State<CreateServiceListing>
   String? servicePeriodnumber;
   String? calendarType = 'Single day';
   bool? isAppointment = false;
+  final bool _shouldPromote = false;
 
   @override
   void initState() {
@@ -113,6 +116,7 @@ class _CreateServiceListingState extends State<CreateServiceListing>
       paymentMethods.add(payments['paymentMethod']);
     }
     if (widget.service != null) {
+      isAppointment = widget.service!.isAppointment;
       duration = widget.service!.serviceDuration;
       frequency = widget.service!.repeat!;
       _isAlwaysAvailable =
@@ -135,13 +139,10 @@ class _CreateServiceListingState extends State<CreateServiceListing>
       paymentMethod = widget.service!.paymentMethod;
       notesController.text = widget.service!.notes ?? '';
       addressorlinkController.text = widget.service!.url ?? '';
-      _selectedDates = _selectedDates.isEmpty ||
-              (_selectedDates.length == 1 &&
-                  _selectedDates.first.toString() == '')
-          ? <DateTime>[]
-          : (widget.service!.selectedDates)
-              .map((dynamic date) => DateTime.parse(date.toString()))
-              .toList();
+      _selectedDates = (widget.service!.selectedDates)
+          .map((dynamic date) => DateTime.parse(date.toString()))
+          .toList();
+
       packages = List<Map<String, dynamic>>.from(widget.service!.packages);
       availability = widget.service!.availability;
       _startDate = widget.service!.availability == null ||
@@ -319,16 +320,13 @@ class _CreateServiceListingState extends State<CreateServiceListing>
                   ),
                 ),
                 Expanded(
-                  child: Padding(
-                    padding: const EdgeInsets.only(right: 15.0),
-                    child: CustomEditText(
-                      maxLength: 15,
-                      padding: 0,
-                      caption: 'Discount(%) - Optional',
-                      hintText: 'Enter discount',
-                      controller: _discountController,
-                      inputType: TextInputType.number,
-                    ),
+                  child: CustomEditText(
+                    isps: true,
+                    maxLength: 15,
+                    caption: 'Discount(%)',
+                    hintText: 'Enter discount',
+                    controller: _discountController,
+                    inputType: TextInputType.number,
                   ),
                 ),
               ],
@@ -344,7 +342,7 @@ class _CreateServiceListingState extends State<CreateServiceListing>
             const SizedBox(height: 16),
             CustomDropdownWidget(
               initialValue: category,
-              caption: 'Select Category (Optional)',
+              caption: 'Select Category *',
               hintText: 'Choose a category',
               items: const <String>[
                 'Home, Garden & Outdoors',
@@ -852,6 +850,24 @@ class _CreateServiceListingState extends State<CreateServiceListing>
             ),
 
             const SizedBox(height: 16),
+
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 15.0),
+              child: SwitchWidget(
+                value: _shouldPromote,
+                onChanged: (bool value) {
+                  setState(() {
+                    _isSwitched = value;
+                  });
+                },
+                icon: 'assets/svgs/rocket.svg',
+                caption: 'Boost this listing',
+                subtext: 'Reach a wider audience and get more views',
+                activeColor: proprimaryColor,
+                inactiveColor: Colors.grey,
+              ),
+            ),
+            const SizedBox(height: 16),
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 15.0),
               child: SwitchWidget(
@@ -879,6 +895,55 @@ class _CreateServiceListingState extends State<CreateServiceListing>
             ),
 
             const SizedBox(height: 16),
+            Center(
+              child: Padding(
+                padding: const EdgeInsets.only(
+                  left: 20.0,
+                  right: 20,
+                  top: 20,
+                  bottom: 50,
+                ),
+                child: Center(
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 20.0),
+                    child: Text.rich(
+                      TextSpan(
+                        children: <InlineSpan>[
+                          const TextSpan(
+                            text:
+                                'By clicking on Create Service, you confirm that you will abide by the ',
+                            style: TextStyle(fontSize: 12, color: subtextColor),
+                          ),
+                          TextSpan(
+                            text: 'Biz-Center Guidelines',
+                            style: const TextStyle(
+                              fontWeight: FontWeight.bold,
+                              color: proprimaryColor,
+                              decoration: TextDecoration.underline,
+                              fontSize: 12,
+                            ),
+                            recognizer: TapGestureRecognizer()
+                              ..onTap = () {
+                                showDialog(
+                                  context: context,
+                                  builder: (BuildContext context) =>
+                                      sellingGuide(context),
+                                );
+                              },
+                          ),
+                          const TextSpan(
+                            text:
+                                ', and declare that the listing does not include any Prohibited Items',
+                            style: TextStyle(fontSize: 12, color: subtextColor),
+                          ),
+                        ],
+                      ),
+                      textAlign: TextAlign.center,
+                    ),
+                  ),
+                ),
+              ),
+            ),
           ],
         ),
       ),
@@ -906,7 +971,7 @@ class _CreateServiceListingState extends State<CreateServiceListing>
         error: true,
       );
       return;
-    }  else if (category == null) {
+    } else if (category == null) {
       showSnackbar(
         message: 'Select a category',
         error: true,
@@ -1100,7 +1165,9 @@ class _CreateServiceListingState extends State<CreateServiceListing>
                         filled: true,
                         fillColor: Colors.white,
                       ),
-                      value: 'Single day',
+                      value: _selectedDates.length > 1
+                          ? 'Multiple days'
+                          : 'Single day',
                       padding: EdgeInsets.zero,
                       onChanged: (String? newValue) {
                         setState(() {

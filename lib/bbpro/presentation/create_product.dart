@@ -11,11 +11,14 @@ import 'package:business_bosses_v2/bbpro/widgets/switchwidget.dart';
 import 'package:business_bosses_v2/bbpro/widgets/textfield.dart';
 import 'package:business_bosses_v2/common/dialogs/snackbar.dart';
 import 'package:business_bosses_v2/common/widgets/safety_model.dart';
+import 'package:business_bosses_v2/features/home/widgets/sellingpopup.dart';
 import 'package:business_bosses_v2/features/marketplace/widgets/currency.dart';
+import 'package:business_bosses_v2/features/posts/widgets/promote_section.dart';
 import 'package:business_bosses_v2/features/profile/controller/profile_controller.dart';
 import 'package:business_bosses_v2/services/api_service.dart';
 import 'package:business_bosses_v2/utils/theme/theme.dart';
 import 'package:country_list_pick/country_list_pick.dart';
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
@@ -78,6 +81,7 @@ class _CreateProductListingState extends State<CreateProductListing> {
   List<String> paymentMethods = <String>[];
   List<String> colors = <String>[];
   List<String> sizes = <String>[];
+  final bool _shouldPromote = false;
 
   @override
   void initState() {
@@ -210,24 +214,21 @@ class _CreateProductListingState extends State<CreateProductListing> {
                           ),
                         ),
                         Expanded(
-                          child: Padding(
-                            padding: const EdgeInsets.only(right: 15.0),
-                            child: CustomEditText(
-                              padding: 0,
-                              caption: 'Discount (%) - Optional',
-                              hintText: 'Enter discount',
-                              maxLength: 15,
-                              controller: _discountController,
-                              inputType: TextInputType.number,
-                              validator: (String? value) {
-                                if (value != null && value.isNotEmpty) {
-                                  if (double.tryParse(value) == null) {
-                                    return 'Please enter a valid number';
-                                  }
+                          child: CustomEditText(
+                            isps: true,
+                            caption: 'Discount (%)',
+                            hintText: 'Enter discount',
+                            maxLength: 15,
+                            controller: _discountController,
+                            inputType: TextInputType.number,
+                            validator: (String? value) {
+                              if (value != null && value.isNotEmpty) {
+                                if (double.tryParse(value) == null) {
+                                  return 'Please enter a valid number';
                                 }
-                                return null;
-                              },
-                            ),
+                              }
+                              return null;
+                            },
                           ),
                         ),
                       ],
@@ -504,19 +505,6 @@ class _CreateProductListingState extends State<CreateProductListing> {
                             controller: deliverydayscontroller,
                           ),
                           const SizedBox(height: 16),
-                          CustomDropdownWidget(
-                            caption: 'Payment Method',
-                            hintText: 'Choose a payment method',
-                            items: paymentMethods,
-                            initialValue: paymentMethod,
-                            iconName: 'assets/svgs/dropdown.svg',
-                            onChanged: (String? newValue) {
-                              setState(() {
-                                paymentMethod = newValue;
-                              });
-                            },
-                          ),
-                          const SizedBox(height: 16),
                           CustomEditText(
                             maxLength: 30,
                             caption: 'Storage Location',
@@ -597,6 +585,23 @@ class _CreateProductListingState extends State<CreateProductListing> {
                             maxLength: 300,
                           ),
                         ]),
+                    const SizedBox(height: 16),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 15.0),
+                      child: SwitchWidget(
+                        value: _shouldPromote,
+                        onChanged: (bool value) {
+                          setState(() {
+                            _isSwitched = value;
+                          });
+                        },
+                        icon: 'assets/svgs/rocket.svg',
+                        caption: 'Boost this listing',
+                        subtext: 'Reach a wider audience and get more views',
+                        activeColor: proprimaryColor,
+                        inactiveColor: Colors.grey,
+                      ),
+                    ),
                     const SizedBox(height: 16),
                     Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 15.0),
@@ -730,6 +735,58 @@ class _CreateProductListingState extends State<CreateProductListing> {
                       },
                     ),
                     const SizedBox(height: 16),
+                    Center(
+                      child: Padding(
+                        padding: const EdgeInsets.only(
+                          left: 20.0,
+                          right: 20,
+                          top: 20,
+                          bottom: 50,
+                        ),
+                        child: Center(
+                          child: Padding(
+                            padding:
+                                const EdgeInsets.symmetric(horizontal: 20.0),
+                            child: Text.rich(
+                              TextSpan(
+                                children: <InlineSpan>[
+                                  const TextSpan(
+                                    text:
+                                        'By clicking on Create Product, you confirm that you will abide by the ',
+                                    style: TextStyle(
+                                        fontSize: 12, color: subtextColor),
+                                  ),
+                                  TextSpan(
+                                    text: 'Biz-Center Guidelines',
+                                    style: const TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                      color: proprimaryColor,
+                                      decoration: TextDecoration.underline,
+                                      fontSize: 12,
+                                    ),
+                                    recognizer: TapGestureRecognizer()
+                                      ..onTap = () {
+                                        showDialog(
+                                          context: context,
+                                          builder: (BuildContext context) =>
+                                              sellingGuide(context),
+                                        );
+                                      },
+                                  ),
+                                  const TextSpan(
+                                    text:
+                                        ', and declare that the listing does not include any Prohibited Items',
+                                    style: TextStyle(
+                                        fontSize: 12, color: subtextColor),
+                                  ),
+                                ],
+                              ),
+                              textAlign: TextAlign.center,
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
                   ],
                 ),
               ),

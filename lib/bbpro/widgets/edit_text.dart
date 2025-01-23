@@ -32,6 +32,7 @@ class CustomEditText extends StatelessWidget {
   final bool? ispaymentfield;
   final bool? issl;
   final bool? isorder;
+  final bool? isps;
   final Function(String)? onTextChanged;
 
   const CustomEditText({
@@ -64,6 +65,7 @@ class CustomEditText extends StatelessWidget {
     this.issl,
     this.isorder,
     this.onTextChanged,
+    this.isps,
   });
 
   void _updateQuantity(BuildContext context, int newValue) {
@@ -77,7 +79,9 @@ class CustomEditText extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: EdgeInsets.symmetric(horizontal: padding ?? 15.0),
+      padding: isps == null
+          ? EdgeInsets.symmetric(horizontal: padding ?? 15.0)
+          : const EdgeInsets.only(right: 15),
       child: Container(
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(10),
