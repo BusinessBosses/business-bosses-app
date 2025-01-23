@@ -422,17 +422,11 @@ class MarketController extends GetxController {
       // Fetch data in parallel
       final List<ApiResponseModel> responses =
           await Future.wait(<Future<ApiResponseModel>>[
-        HomeRepository.fetchMarket(),
         HomeRepository.fetchMarketDescription(),
       ]);
 
-      final ApiResponseModel response = responses[0];
-      final ApiResponseModel description = responses[1];
+      final ApiResponseModel description = responses[0];
 
-      if (!response.success) throw Exception('Failed to fetch market data.');
-
-      // Process market listings
-      processPostsToState(response.data['rows']);
       await initProItems();
 
       if (description.success) {
