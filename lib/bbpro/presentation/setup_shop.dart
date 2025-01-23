@@ -725,7 +725,10 @@ class _SetupshopState extends State<Setupshop> with TickerProviderStateMixin {
       });
     }
     if (selections['Cash'] == true) {
-      paymentMethods.add(<String, dynamic>{'paymentMethod': 'Cash'});
+      paymentMethods.add(<String, dynamic>{
+        'paymentMethod': 'Cash',
+        'details': 'some details',
+      });
     }
 
     if (paymentMethods.isEmpty) {

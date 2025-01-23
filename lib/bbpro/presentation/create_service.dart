@@ -906,6 +906,12 @@ class _CreateServiceListingState extends State<CreateServiceListing>
         error: true,
       );
       return;
+    }  else if (category == null) {
+      showSnackbar(
+        message: 'Select a category',
+        error: true,
+      );
+      return;
     } else if (isAppointment == true && duration == 200000) {
       showSnackbar(
         message: 'Duration is Mandatory!',
