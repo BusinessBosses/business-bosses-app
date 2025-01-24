@@ -195,14 +195,14 @@ class _OrderProductScreenState extends State<OrderProductScreen> {
                                       style: const TextStyle(
                                         color: Colors.black,
                                         fontWeight: FontWeight.w900,
-                                        fontSize: 16,
+                                        fontSize: 18,
                                       ),
                                     ),
                                     const SizedBox(width: 5),
                                     Text(
                                       '${widget.shop.currency}${widget.product.price.toStringAsFixed(2)}',
                                       style: const TextStyle(
-                                        color: Colors.grey,
+                                        color: Colors.red,
                                         decoration: TextDecoration.lineThrough,
                                         fontSize: 14,
                                       ),

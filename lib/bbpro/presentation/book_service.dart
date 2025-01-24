@@ -225,14 +225,14 @@ class _BookServiceScreenState extends State<BookServiceScreen> {
                               style: const TextStyle(
                                 color: Colors.black,
                                 fontWeight: FontWeight.bold,
-                                fontSize: 16,
+                                fontSize: 18,
                               ),
                             ),
                             const SizedBox(width: 5),
                             Text(
                               '${widget.shop.currency}${widget.service.price.toStringAsFixed(2)}',
                               style: const TextStyle(
-                                color: Colors.grey,
+                                color: Colors.red,
                                 decoration: TextDecoration.lineThrough,
                                 fontSize: 14,
                               ),
