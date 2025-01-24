@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:business_bosses_v2/bbpro/models/product_model.dart';
 import 'package:business_bosses_v2/bbpro/models/service_model.dart';
 import 'package:business_bosses_v2/bbpro/presentation/book_service.dart';
@@ -17,6 +15,7 @@ class ProshopdealsWidget extends StatefulWidget {
   final List<Product>? products;
   final List<Object>? combinedList;
   final bool? isHome;
+  final int? initialIndex; // Added initialIndex
   const ProshopdealsWidget({
     Key? key,
     this.title,
@@ -25,6 +24,7 @@ class ProshopdealsWidget extends StatefulWidget {
     this.products,
     this.combinedList,
     this.isHome,
+    this.initialIndex = 0,
   }) : super(key: key);
 
   @override
@@ -58,7 +58,9 @@ class _ProshopdealsWidgetState extends State<ProshopdealsWidget> {
     }
     return GestureDetector(
       onTap: () {
-        Get.to(() => const ProshopdealsScreen());
+        Get.to(() => ProshopdealsScreen(
+              initialIndex: widget.initialIndex,
+            ));
       },
       child: Container(
         decoration: BoxDecoration(
@@ -123,10 +125,12 @@ class _ProshopdealsWidgetState extends State<ProshopdealsWidget> {
                         if (item is Product) {
                           return GestureDetector(
                             onTap: () {
-                              Get.to(OrderProductScreen(
-                                product: item,
-                                shop: item.shop!,
-                              ));
+                              Get.to(
+                                () => OrderProductScreen(
+                                  product: item,
+                                  shop: item.shop!,
+                                ),
+                              );
                             },
                             child: _buildDealItem(
                               item.images!.isNotEmpty

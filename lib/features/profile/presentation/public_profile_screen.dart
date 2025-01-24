@@ -44,6 +44,7 @@ class _PublicProfileScreenState extends State<PublicProfileScreen> {
   late UserModel publicUser;
   bool isLoading = true;
   bool blocked = false;
+  bool hasShop = false;
 
   bool hasUser = true;
   List<MarketModel> filteredMarkets = <MarketModel>[];
@@ -67,7 +68,15 @@ class _PublicProfileScreenState extends State<PublicProfileScreen> {
       filteredMarkets = _marketController.markets
           .where((MarketModel market) => market.userId == publicUser.uid)
           .toList();
-
+      await shopController.initUserShop(modelizedUser).then((bool value) {
+        if (value) {
+          if (mounted) {
+            setState(() {
+              hasShop = true;
+            });
+          }
+        }
+      });
       if (mounted) {
         setState(() {
           isLoading = false;
@@ -163,271 +172,300 @@ class _PublicProfileScreenState extends State<PublicProfileScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
         backgroundColor: Colors.white,
-        appBar: PreferredSize(
-          preferredSize: Size.fromHeight(
-              (_selectedIndex == 0 || _selectedIndex == 4)
-                  ? kToolbarHeight
-                  : 0),
-          child: Stack(children: <Widget>[
-            Column(
-              mainAxisAlignment: MainAxisAlignment.end,
-              children: <Widget>[
-                if (_selectedIndex == 0 || _selectedIndex == 4)
-                  Align(
-                    alignment: Alignment.bottomCenter,
-                    child: CupertinoSlidingSegmentedControl<int>(
-                      backgroundColor: Colors.grey[200]!,
-                      padding: const EdgeInsets.all(5),
-                      children: <int, Widget>{
-                        0: Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 15),
-                          child: Text('Profile',
-                              style: _currentIndex == 0
-                                  ? const TextStyle(
-                                      fontWeight: FontWeight.bold,
-                                      fontSize: 14,
-                                    )
-                                  : const TextStyle(
-                                      fontWeight: FontWeight.bold,
-                                      fontSize: 14,
-                                      color: Colors.grey)),
-                        ),
-                        1: Text(
-                          'Biz-Center',
-                          style: _currentIndex == 1
-                              ? const TextStyle(
-                                  fontWeight: FontWeight.bold, fontSize: 14)
-                              : const TextStyle(
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: 14,
-                                  color: Colors.grey,
+        appBar: !hasShop
+            ? AppBar(
+                title: Text(publicUser.name ?? publicUser.username),
+              )
+            : PreferredSize(
+                preferredSize: Size.fromHeight(
+                    (_selectedIndex == 0 || _selectedIndex == 4)
+                        ? kToolbarHeight
+                        : 0),
+                child: Stack(children: <Widget>[
+                  Column(
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    children: <Widget>[
+                      if (_selectedIndex == 0 || _selectedIndex == 4)
+                        if (hasShop) ...<Widget>{
+                          Align(
+                            alignment: Alignment.bottomCenter,
+                            child: CupertinoSlidingSegmentedControl<int>(
+                              backgroundColor: Colors.grey[200]!,
+                              padding: const EdgeInsets.all(5),
+                              children: <int, Widget>{
+                                0: Padding(
+                                  padding: const EdgeInsets.symmetric(
+                                      horizontal: 15),
+                                  child: Text('Profile',
+                                      style: _currentIndex == 0
+                                          ? const TextStyle(
+                                              fontWeight: FontWeight.bold,
+                                              fontSize: 14,
+                                            )
+                                          : const TextStyle(
+                                              fontWeight: FontWeight.bold,
+                                              fontSize: 14,
+                                              color: Colors.grey)),
                                 ),
-                        ),
+                                1: Text(
+                                  'Biz-Center',
+                                  style: _currentIndex == 1
+                                      ? const TextStyle(
+                                          fontWeight: FontWeight.bold,
+                                          fontSize: 14)
+                                      : const TextStyle(
+                                          fontWeight: FontWeight.bold,
+                                          fontSize: 14,
+                                          color: Colors.grey,
+                                        ),
+                                ),
+                              },
+                              onValueChanged: (int? value) {
+                                if (value != null) {
+                                  setState(() {
+                                    _selectedIndex == 0;
+                                    _currentIndex = value;
+                                    _pageController.animateToPage(
+                                      _currentIndex,
+                                      duration:
+                                          const Duration(milliseconds: 300),
+                                      curve: Curves.ease,
+                                    );
+                                  });
+                                }
+                              },
+                              groupValue: _currentIndex,
+                            ),
+                          )
+                        },
+                      if (_selectedIndex == 0 || _selectedIndex == 4)
+                        const SizedBox(height: 10.0),
+                    ],
+                  ),
+                  Positioned(
+                      bottom: 10,
+                      right: 0,
+                      child: publicUser.uid != _profileController.myProfile.uid
+                          ? Padding(
+                              padding: const EdgeInsets.only(right: 15.0),
+                              child: InkWell(
+                                  onTap: () {
+                                    showDialog(
+                                      context: context,
+                                      builder: (BuildContext context) =>
+                                          AlertDialog(
+                                        content: Column(
+                                          mainAxisSize: MainAxisSize.min,
+                                          children: <Widget>[
+                                            ListTile(
+                                              onTap: () {
+                                                navigateTo(context);
+                                                showDialog(
+                                                  context: context,
+                                                  builder:
+                                                      (BuildContext context) =>
+                                                          AlertDialog(
+                                                    title: const TextWidget(
+                                                      text:
+                                                          'Do you want to block user?',
+                                                      centralize: true,
+                                                      fontWeight:
+                                                          FontWeight.w700,
+                                                      size: 20,
+                                                    ),
+                                                    content: TextWidget(
+                                                      text: blocked == true
+                                                          ? 'You will see posts and comments related to user on your feed'
+                                                          : 'You will no longer see undefined posts and comments on your feed',
+                                                      centralize: true,
+                                                      color: Colors.black
+                                                          .withOpacity(.6),
+                                                    ),
+                                                    actions: <Widget>[
+                                                      TextButton(
+                                                        onPressed: () =>
+                                                            navigateTo(context),
+                                                        child: const TextWidget(
+                                                          text: 'Cancel',
+                                                          fontWeight:
+                                                              FontWeight.w700,
+                                                          size: 18,
+                                                          color: Colors.grey,
+                                                        ),
+                                                      ),
+                                                      GestureDetector(
+                                                        onTap: () {
+                                                          navigateTo(context);
+                                                          // print(_post.user.uid);
+
+                                                          // widget
+                                                          //     .onBlock(_post.user.uid);
+                                                          showSnackBar(context,
+                                                              message: blocked ==
+                                                                      true
+                                                                  ? 'User has been blocked'
+                                                                  : 'User has been unblocked');
+                                                        },
+                                                        child: Container(
+                                                          padding:
+                                                              const EdgeInsets
+                                                                  .symmetric(
+                                                            vertical: 7,
+                                                            horizontal: 14,
+                                                          ),
+                                                          decoration:
+                                                              BoxDecoration(
+                                                            color:
+                                                                primaryColorLT,
+                                                            borderRadius:
+                                                                BorderRadius
+                                                                    .circular(
+                                                                        5),
+                                                          ),
+                                                          child: TextWidget(
+                                                            text:
+                                                                blocked == true
+                                                                    ? 'Unblock'
+                                                                    : 'Block',
+                                                            color: Colors.white,
+                                                            fontWeight:
+                                                                FontWeight.bold,
+                                                          ),
+                                                        ),
+                                                      )
+                                                    ],
+                                                  ),
+                                                );
+                                              },
+                                              contentPadding: EdgeInsets.zero,
+                                              title: publicUser.isSubscribed ==
+                                                      true
+                                                  ? Row(
+                                                      children: <Widget>[
+                                                        TextWidget(
+                                                          text: blocked == true
+                                                              ? 'Unblock @${publicUser.name}'
+                                                              : 'Block @${publicUser.name}',
+                                                          color: Colors.blue,
+                                                        ),
+                                                        const SizedBox(
+                                                            width: 5),
+                                                        SvgPicture.asset(
+                                                          'assets/svgs/premiumbadge.svg',
+                                                          height: 9,
+                                                          color: primaryColorLT,
+                                                        )
+                                                      ],
+                                                    )
+                                                  : TextWidget(
+                                                      text: blocked == true
+                                                          ? 'Unblock @${publicUser.name}'
+                                                          : 'Block @${publicUser.name}',
+                                                      color: Colors.blue,
+                                                    ),
+                                            ),
+                                            ListTile(
+                                              onTap: () {
+                                                navigateTo(context);
+                                                showDialog(
+                                                  context: context,
+                                                  builder:
+                                                      (BuildContext context) =>
+                                                          AlertDialog(
+                                                    title: const TextWidget(
+                                                      text:
+                                                          'Do you want to report user?',
+                                                      centralize: true,
+                                                      fontWeight:
+                                                          FontWeight.w700,
+                                                      size: 20,
+                                                    ),
+                                                    content: TextWidget(
+                                                      text:
+                                                          'The user will be reported to admin to evaluate if it violates any community policy',
+                                                      centralize: true,
+                                                      color: Colors.black
+                                                          .withOpacity(.6),
+                                                    ),
+                                                    actions: <Widget>[
+                                                      TextButton(
+                                                        onPressed: () =>
+                                                            navigateTo(context),
+                                                        child: const TextWidget(
+                                                          text: 'Cancel',
+                                                          fontWeight:
+                                                              FontWeight.w700,
+                                                          size: 18,
+                                                          color: Colors.grey,
+                                                        ),
+                                                      ),
+                                                      GestureDetector(
+                                                        onTap: () async {
+                                                          navigateTo(context);
+                                                          await report(
+                                                            context,
+                                                            'accountReport',
+                                                            publicUser.uid,
+                                                          );
+                                                        },
+                                                        child: Container(
+                                                          padding:
+                                                              const EdgeInsets
+                                                                  .symmetric(
+                                                            vertical: 7,
+                                                            horizontal: 14,
+                                                          ),
+                                                          decoration:
+                                                              BoxDecoration(
+                                                            color:
+                                                                primaryColorLT,
+                                                            borderRadius:
+                                                                BorderRadius
+                                                                    .circular(
+                                                                        5),
+                                                          ),
+                                                          child:
+                                                              const TextWidget(
+                                                            text: 'Report',
+                                                            color: Colors.white,
+                                                            fontWeight:
+                                                                FontWeight.bold,
+                                                          ),
+                                                        ),
+                                                      )
+                                                    ],
+                                                  ),
+                                                );
+                                              },
+                                              contentPadding: EdgeInsets.zero,
+                                              title: const TextWidget(
+                                                text: 'Report this user',
+                                                color: Colors.red,
+                                              ),
+                                            )
+                                          ],
+                                        ),
+                                      ),
+                                    );
+                                  },
+                                  child: CircleAvatar(
+                                      backgroundColor: backgroundColor,
+                                      child: SvgPicture.asset(
+                                          'assets/svgs/more.svg'))),
+                            )
+                          : Container()),
+                  Positioned(
+                    bottom: 5,
+                    left: 0,
+                    child: IconButton(
+                      onPressed: () {
+                        Get.back();
                       },
-                      onValueChanged: (int? value) {
-                        if (value != null) {
-                          setState(() {
-                            _selectedIndex == 0;
-                            _currentIndex = value;
-                            _pageController.animateToPage(
-                              _currentIndex,
-                              duration: const Duration(milliseconds: 300),
-                              curve: Curves.ease,
-                            );
-                          });
-                        }
-                      },
-                      groupValue: _currentIndex,
+                      icon: SvgPicture.asset('assets/svgs/backbutton.svg'),
                     ),
                   ),
-                if (_selectedIndex == 0 || _selectedIndex == 4)
-                  const SizedBox(height: 10.0),
-              ],
-            ),
-            Positioned(
-                bottom: 10,
-                right: 0,
-                child: publicUser.uid != _profileController.myProfile.uid
-                    ? Padding(
-                        padding: const EdgeInsets.only(right: 15.0),
-                        child: InkWell(
-                            onTap: () {
-                              showDialog(
-                                context: context,
-                                builder: (BuildContext context) => AlertDialog(
-                                  content: Column(
-                                    mainAxisSize: MainAxisSize.min,
-                                    children: <Widget>[
-                                      ListTile(
-                                        onTap: () {
-                                          navigateTo(context);
-                                          showDialog(
-                                            context: context,
-                                            builder: (BuildContext context) =>
-                                                AlertDialog(
-                                              title: const TextWidget(
-                                                text:
-                                                    'Do you want to block user?',
-                                                centralize: true,
-                                                fontWeight: FontWeight.w700,
-                                                size: 20,
-                                              ),
-                                              content: TextWidget(
-                                                text: blocked == true
-                                                    ? 'You will see posts and comments related to user on your feed'
-                                                    : 'You will no longer see undefined posts and comments on your feed',
-                                                centralize: true,
-                                                color: Colors.black
-                                                    .withOpacity(.6),
-                                              ),
-                                              actions: <Widget>[
-                                                TextButton(
-                                                  onPressed: () =>
-                                                      navigateTo(context),
-                                                  child: const TextWidget(
-                                                    text: 'Cancel',
-                                                    fontWeight: FontWeight.w700,
-                                                    size: 18,
-                                                    color: Colors.grey,
-                                                  ),
-                                                ),
-                                                GestureDetector(
-                                                  onTap: () {
-                                                    navigateTo(context);
-                                                    // print(_post.user.uid);
-
-                                                    // widget
-                                                    //     .onBlock(_post.user.uid);
-                                                    showSnackBar(context,
-                                                        message: blocked == true
-                                                            ? 'User has been blocked'
-                                                            : 'User has been unblocked');
-                                                  },
-                                                  child: Container(
-                                                    padding: const EdgeInsets
-                                                        .symmetric(
-                                                      vertical: 7,
-                                                      horizontal: 14,
-                                                    ),
-                                                    decoration: BoxDecoration(
-                                                      color: primaryColorLT,
-                                                      borderRadius:
-                                                          BorderRadius.circular(
-                                                              5),
-                                                    ),
-                                                    child: TextWidget(
-                                                      text: blocked == true
-                                                          ? 'Unblock'
-                                                          : 'Block',
-                                                      color: Colors.white,
-                                                      fontWeight:
-                                                          FontWeight.bold,
-                                                    ),
-                                                  ),
-                                                )
-                                              ],
-                                            ),
-                                          );
-                                        },
-                                        contentPadding: EdgeInsets.zero,
-                                        title: publicUser.isSubscribed == true
-                                            ? Row(
-                                                children: <Widget>[
-                                                  TextWidget(
-                                                    text: blocked == true
-                                                        ? 'Unblock @${publicUser.name}'
-                                                        : 'Block @${publicUser.name}',
-                                                    color: Colors.blue,
-                                                  ),
-                                                  const SizedBox(width: 5),
-                                                  SvgPicture.asset(
-                                                    'assets/svgs/premiumbadge.svg',
-                                                    height: 9,
-                                                    color: primaryColorLT,
-                                                  )
-                                                ],
-                                              )
-                                            : TextWidget(
-                                                text: blocked == true
-                                                    ? 'Unblock @${publicUser.name}'
-                                                    : 'Block @${publicUser.name}',
-                                                color: Colors.blue,
-                                              ),
-                                      ),
-                                      ListTile(
-                                        onTap: () {
-                                          navigateTo(context);
-                                          showDialog(
-                                            context: context,
-                                            builder: (BuildContext context) =>
-                                                AlertDialog(
-                                              title: const TextWidget(
-                                                text:
-                                                    'Do you want to report user?',
-                                                centralize: true,
-                                                fontWeight: FontWeight.w700,
-                                                size: 20,
-                                              ),
-                                              content: TextWidget(
-                                                text:
-                                                    'The user will be reported to admin to evaluate if it violates any community policy',
-                                                centralize: true,
-                                                color: Colors.black
-                                                    .withOpacity(.6),
-                                              ),
-                                              actions: <Widget>[
-                                                TextButton(
-                                                  onPressed: () =>
-                                                      navigateTo(context),
-                                                  child: const TextWidget(
-                                                    text: 'Cancel',
-                                                    fontWeight: FontWeight.w700,
-                                                    size: 18,
-                                                    color: Colors.grey,
-                                                  ),
-                                                ),
-                                                GestureDetector(
-                                                  onTap: () async {
-                                                    navigateTo(context);
-                                                    await report(
-                                                      context,
-                                                      'accountReport',
-                                                      publicUser.uid,
-                                                    );
-                                                  },
-                                                  child: Container(
-                                                    padding: const EdgeInsets
-                                                        .symmetric(
-                                                      vertical: 7,
-                                                      horizontal: 14,
-                                                    ),
-                                                    decoration: BoxDecoration(
-                                                      color: primaryColorLT,
-                                                      borderRadius:
-                                                          BorderRadius.circular(
-                                                              5),
-                                                    ),
-                                                    child: const TextWidget(
-                                                      text: 'Report',
-                                                      color: Colors.white,
-                                                      fontWeight:
-                                                          FontWeight.bold,
-                                                    ),
-                                                  ),
-                                                )
-                                              ],
-                                            ),
-                                          );
-                                        },
-                                        contentPadding: EdgeInsets.zero,
-                                        title: const TextWidget(
-                                          text: 'Report this user',
-                                          color: Colors.red,
-                                        ),
-                                      )
-                                    ],
-                                  ),
-                                ),
-                              );
-                            },
-                            child: CircleAvatar(
-                                backgroundColor: backgroundColor,
-                                child:
-                                    SvgPicture.asset('assets/svgs/more.svg'))),
-                      )
-                    : Container()),
-            Positioned(
-              bottom: 5,
-              left: 0,
-              child: IconButton(
-                onPressed: () {
-                  Get.back();
-                },
-                icon: SvgPicture.asset('assets/svgs/backbutton.svg'),
+                ]),
               ),
-            ),
-          ]),
-        ),
         // : AppBar(
         //     automaticallyImplyLeading: false,
         //     leading: IconButton(

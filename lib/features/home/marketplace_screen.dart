@@ -2,14 +2,12 @@ import 'package:business_bosses_v2/bbpro/controllers/shop_controller.dart';
 import 'package:business_bosses_v2/bbpro/presentation/my_orders_screen.dart';
 import 'package:business_bosses_v2/features/chat/chat_screen.dart';
 import 'package:business_bosses_v2/features/donations/presentation/filtersuppliers.dart';
-import 'package:business_bosses_v2/features/forum/models/industry.dart';
 import 'package:business_bosses_v2/features/home/widgets/bottom_bar.dart';
 import 'package:business_bosses_v2/features/home/widgets/floatingbutton.dart';
 
 import 'package:business_bosses_v2/features/marketplace/controllers/supplier_controller.dart';
 import 'package:business_bosses_v2/features/marketplace/models/market_model.dart';
 import 'package:business_bosses_v2/features/marketplace/presentation/filtermarketplaceposts.dart';
-import 'package:business_bosses_v2/features/marketplace/presentation/sell_screen.dart';
 import 'package:business_bosses_v2/features/marketplace/presentation/supplierspage.dart';
 import 'package:business_bosses_v2/features/marketplace/widgets/marketplace_item.dart';
 import 'package:business_bosses_v2/features/marketplace/widgets/markets.dart';
@@ -27,7 +25,6 @@ import '../../common/widgets/safety_model.dart';
 
 import '../../utils/theme/theme.dart';
 import '../marketplace/controllers/market_controller.dart';
-import '../profile/controller/profile_controller.dart';
 import 'controller/home_controller.dart';
 
 /// Buying and Selling screen
@@ -41,7 +38,6 @@ class MarketplaceScreen extends StatefulWidget {
 
 class _MarketplaceScreenState extends State<MarketplaceScreen>
     with TickerProviderStateMixin {
-  final ProfileController _profileController = Get.find();
   final MarketController _marketController = Get.find();
   final HomeController hmeController = Get.find();
   final ShopController shopController = Get.find();

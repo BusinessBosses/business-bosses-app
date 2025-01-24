@@ -1,17 +1,19 @@
+import 'package:business_bosses_v2/bbpro/controllers/shop_controller.dart';
 import 'package:business_bosses_v2/bbpro/models/product_model.dart';
-import 'package:business_bosses_v2/bbpro/models/service_model.dart';
+import 'package:business_bosses_v2/bbpro/presentation/create_product.dart';
+import 'package:business_bosses_v2/bbpro/presentation/order_product.dart';
+import 'package:business_bosses_v2/bbpro/widgets/inventorycard.dart';
 import 'package:business_bosses_v2/bbpro/widgets/proshopdeals.dart';
+import 'package:business_bosses_v2/common/dialogs/snackbar.dart';
 import 'package:business_bosses_v2/features/home/controller/home_controller.dart';
 import 'package:business_bosses_v2/features/home/widgets/sellingpopup.dart';
 import 'package:business_bosses_v2/features/marketplace/controllers/market_controller.dart';
-import 'package:business_bosses_v2/features/marketplace/models/market_model.dart';
-import 'package:business_bosses_v2/features/marketplace/widgets/marketplace_item.dart';
-import 'package:business_bosses_v2/navigation/routes.dart';
+import 'package:business_bosses_v2/features/profile/controller/profile_controller.dart';
 import 'package:business_bosses_v2/utils/theme/theme.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
-import 'package:visibility_detector/visibility_detector.dart';
 
 class ProductsPage extends StatefulWidget {
   const ProductsPage({super.key});
@@ -36,19 +38,20 @@ String formatCount(int count) {
 class _ProductsPageState extends State<ProductsPage> {
   final MarketController _marketController = Get.find();
   final HomeController hmeController = Get.find();
-
+  final ProfileController profileController = Get.find();
+  final ShopController shopController = Get.find();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: backgroundColor,
-      body: Obx(() {
-        return ListView.builder(
-          itemCount: _marketController.isfiltered.value
-              ? _marketController.searchResult.length + 2
-              : _marketController.products.length + 3,
-          itemBuilder: (BuildContext context, int index) {
-            if (index == 0) {
-              return Container(
+      body: SingleChildScrollView(
+        child: ConstrainedBox(
+          constraints: BoxConstraints(
+            minHeight: MediaQuery.of(context).size.height,
+          ),
+          child: Column(
+            children: <Widget>[
+              Container(
                 width: double.infinity,
                 color: backgroundcolorinterface,
                 child: Stack(
@@ -78,94 +81,111 @@ class _ProductsPageState extends State<ProductsPage> {
                         ),
                       ),
                     ),
-                    Column(children: <Widget>[
-                      const SizedBox(
-                        height: 10,
-                      ),
-                      Align(
-                        alignment: Alignment.centerRight,
-                        child: Padding(
-                          padding: const EdgeInsets.only(
-                            right: 15,
-                          ),
-                          child: ElevatedButton(
-                            style: ElevatedButton.styleFrom(
-                                minimumSize: const Size(150,
-                                    45) // put the width and height you want
-                                ),
-                            onPressed: () {
-                              Get.toNamed(Routes.sellscreen);
-                            },
-                            child: Row(
-                              mainAxisSize: MainAxisSize.min,
-                              children: <Widget>[
-                                const Text(
-                                  'Sell',
-                                  style: TextStyle(
-                                      fontSize: 15,
-                                      color: Colors.white,
-                                      fontWeight: FontWeight.w500),
-                                ),
-                                const SizedBox(
-                                  width: 5,
-                                ),
-                                SvgPicture.asset('assets/svgs/startatopic.svg')
-                              ],
+                    Column(
+                      children: <Widget>[
+                        const SizedBox(height: 10),
+                        Align(
+                          alignment: Alignment.centerRight,
+                          child: Padding(
+                            padding: const EdgeInsets.only(right: 15),
+                            child: ElevatedButton(
+                              style: ElevatedButton.styleFrom(
+                                  minimumSize: const Size(150, 45)),
+                              onPressed: () {
+                                setState(() {});
+                                setState(() {});
+                                if (shopController.shop == null) {
+                                  showSnackbar(
+                                    message: 'Create a Biz-Center First',
+                                    error: true,
+                                  );
+                                  return;
+                                }
+                                Get.to(() => const CreateProductListing());
+                              },
+                              child: Row(
+                                mainAxisSize: MainAxisSize.min,
+                                children: <Widget>[
+                                  const Text(
+                                    'Sell',
+                                    style: TextStyle(
+                                        fontSize: 15,
+                                        color: Colors.white,
+                                        fontWeight: FontWeight.w500),
+                                  ),
+                                  const SizedBox(width: 5),
+                                  SvgPicture.asset(
+                                      'assets/svgs/startatopic.svg')
+                                ],
+                              ),
                             ),
                           ),
                         ),
-                      ),
-                      const SizedBox(
-                        height: 10,
-                      ),
-                    ]),
+                        const SizedBox(height: 10),
+                      ],
+                    ),
                   ],
                 ),
-              );
-            } else if (index == 1) {
-              return Padding(
+              ),
+              Padding(
                 padding: const EdgeInsets.only(bottom: 10.0),
                 child: ProshopdealsWidget(
                   title: 'NEW',
                   products: _marketController.proProducts
-                      .where((Object item) {
-                        if (item is Product) {
-                          return item.images != null &&
-                              item.images!.isNotEmpty &&
-                              item.images![0].isNotEmpty;
-                        } else if (item is Service) {
-                          // Add a condition for Service if applicable
-                          return item.images != null &&
-                              item.images!.isNotEmpty &&
-                              item.images![0].isNotEmpty;
-                        }
-                        return false;
-                      })
+                      .where((Product item) =>
+                          item.images != null &&
+                          item.images!.isNotEmpty &&
+                          item.images![0].isNotEmpty &&
+                          item.user!.isSubscribed)
                       .take(10)
                       .toList(),
+                  initialIndex: 1,
                 ),
-              ); // Return the widget instead of just referencing it
-            } else if (index <=
-                (_marketController.isfiltered.value
-                    ? _marketController.searchResult.length + 1
-                    : _marketController.products.length + 2)) {
-              return const SizedBox();
-            } else {
-              // Display a loading indicator at the end of the list
-              if (_marketController.loadingMore.value) {
-                return const Padding(
-                  padding: EdgeInsets.all(8.0),
-                  child: Center(
-                    child: CircularProgressIndicator(),
-                  ),
-                );
-              } else {
-                return const SizedBox.shrink();
-              }
-            }
-          },
-        );
-      }),
+              ),
+              Padding(
+                padding: const EdgeInsets.symmetric(
+                    horizontal: 10.0, vertical: 10.0),
+                child: StaggeredGridView.countBuilder(
+                  crossAxisCount: 2,
+                  staggeredTileBuilder: (int index) =>
+                      const StaggeredTile.fit(1),
+                  mainAxisSpacing: 10.0,
+                  crossAxisSpacing: 10.0,
+                  itemCount: _marketController.proProducts.length,
+                  shrinkWrap: true,
+                  physics: const NeverScrollableScrollPhysics(),
+                  itemBuilder: (BuildContext context, int index) {
+                    final Product product =
+                        _marketController.proProducts[index];
+                    return GestureDetector(
+                      onTap: () {
+                        if (product.user!.uid ==
+                            profileController.myProfile.uid) {
+                          // Navigate to edit listing
+                        } else {
+                          Get.to(() => OrderProductScreen(
+                                product: product,
+                                shop: product.shop!,
+                              ));
+                        }
+                      },
+                      child: InventoryCard(
+                        product: product,
+                        shop: product.shop!,
+                        myShop: product.user!.uid ==
+                            profileController.myProfile.uid,
+                      ),
+                    );
+                  },
+                ),
+              ),
+              const SizedBox(
+                height: 100,
+              ),
+            ],
+          ),
+        ),
+      ),
     );
   }
 }

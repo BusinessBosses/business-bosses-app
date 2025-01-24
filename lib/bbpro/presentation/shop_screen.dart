@@ -5,13 +5,10 @@ import 'package:business_bosses_v2/bbpro/controllers/shop_controller.dart';
 import 'package:business_bosses_v2/bbpro/models/customitem_model.dart';
 import 'package:business_bosses_v2/bbpro/models/service_model.dart';
 import 'package:business_bosses_v2/bbpro/models/product_model.dart';
-import 'package:business_bosses_v2/bbpro/presentation/book_service.dart';
 import 'package:business_bosses_v2/bbpro/presentation/create_product.dart';
 import 'package:business_bosses_v2/bbpro/presentation/create_service.dart';
-import 'package:business_bosses_v2/bbpro/presentation/createcustomlisting.dart';
-import 'package:business_bosses_v2/bbpro/presentation/order_product.dart';
-import 'package:business_bosses_v2/bbpro/widgets/customitemcard.dart';
-import 'package:business_bosses_v2/bbpro/widgets/iconbutton.dart';
+import 'package:business_bosses_v2/bbpro/presentation/create_custom_listing.dart';
+import 'package:business_bosses_v2/bbpro/widgets/custom_item_card.dart';
 import 'package:business_bosses_v2/bbpro/widgets/inventorycard.dart';
 import 'package:business_bosses_v2/bbpro/widgets/servicecard.dart';
 import 'package:business_bosses_v2/common/widgets/network_image_with_placeholder.dart';
@@ -39,7 +36,6 @@ class ShopScreen extends StatefulWidget {
 class _ShopScreenState extends State<ShopScreen> {
   final ShopController shopController = Get.find();
   final ProfileController profileController = Get.find();
-  final String _selectedItem = 'All Products';
 
   @override
   Widget build(BuildContext context) {
@@ -739,7 +735,7 @@ class _ShopScreenState extends State<ShopScreen> {
                               website = 'https://$website';
                             }
                             final Uri uri = Uri.parse(website);
-                            final bool launched = await launchUrl(uri,
+                            await launchUrl(uri,
                                 mode: LaunchMode.platformDefault,
                                 webOnlyWindowName: '_self');
                           } catch (e) {}
@@ -767,7 +763,7 @@ class _ShopScreenState extends State<ShopScreen> {
                               website = 'https://$website';
                             }
                             final Uri uri = Uri.parse(website);
-                            final bool launched = await launchUrl(uri,
+                            await launchUrl(uri,
                                 mode: LaunchMode.platformDefault,
                                 webOnlyWindowName: '_self');
                           } catch (e) {}
@@ -795,7 +791,7 @@ class _ShopScreenState extends State<ShopScreen> {
                               website = 'https://$website';
                             }
                             final Uri uri = Uri.parse(website);
-                            final bool launched = await launchUrl(uri,
+                            await launchUrl(uri,
                                 mode: LaunchMode.platformDefault,
                                 webOnlyWindowName: '_self');
                           } catch (e) {}
@@ -824,7 +820,7 @@ class _ShopScreenState extends State<ShopScreen> {
                               website = 'https://$website';
                             }
                             final Uri uri = Uri.parse(website);
-                            final bool launched = await launchUrl(uri,
+                            await launchUrl(uri,
                                 mode: LaunchMode.platformDefault,
                                 webOnlyWindowName: '_self');
                           } catch (e) {}
@@ -852,7 +848,7 @@ class _ShopScreenState extends State<ShopScreen> {
                               website = 'https://$website';
                             }
                             final Uri uri = Uri.parse(website);
-                            final bool launched = await launchUrl(uri,
+                            await launchUrl(uri,
                                 mode: LaunchMode.platformDefault,
                                 webOnlyWindowName: '_self');
                           } catch (e) {}

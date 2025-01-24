@@ -17,7 +17,11 @@ import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 
 class ProshopdealsScreen extends StatefulWidget {
-  const ProshopdealsScreen({super.key});
+  final int? initialIndex;
+  const ProshopdealsScreen({
+    super.key,
+    this.initialIndex = 0,
+  });
 
   @override
   State<ProshopdealsScreen> createState() => _ProshopdealsScreenState();
@@ -32,7 +36,11 @@ class _ProshopdealsScreenState extends State<ProshopdealsScreen>
   @override
   void initState() {
     super.initState();
-    _tabController = TabController(length: 3, vsync: this);
+    _tabController = TabController(
+      length: 3,
+      vsync: this,
+      initialIndex: widget.initialIndex ?? 0,
+    );
   }
 
   @override

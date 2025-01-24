@@ -44,6 +44,7 @@ class ShopController extends GetxController {
           ...response.data['rows'][0],
           'user': profileController.myProfile.toMap()
         });
+        update();
         return true;
       }
     } else {
