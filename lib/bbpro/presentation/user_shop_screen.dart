@@ -1,9 +1,12 @@
 import 'package:business_bosses_v2/action/action.dart';
 import 'package:business_bosses_v2/bbpro/controllers/shop_controller.dart';
+import 'package:business_bosses_v2/bbpro/models/customitem_model.dart';
 import 'package:business_bosses_v2/bbpro/models/service_model.dart';
 import 'package:business_bosses_v2/bbpro/models/product_model.dart';
 import 'package:business_bosses_v2/bbpro/presentation/book_service.dart';
+import 'package:business_bosses_v2/bbpro/presentation/createcustomlisting.dart';
 import 'package:business_bosses_v2/bbpro/presentation/order_product.dart';
+import 'package:business_bosses_v2/bbpro/widgets/customitemcard.dart';
 import 'package:business_bosses_v2/bbpro/widgets/inventorycard.dart';
 import 'package:business_bosses_v2/bbpro/widgets/servicecard.dart';
 import 'package:business_bosses_v2/common/models/user_model.dart';
@@ -721,39 +724,34 @@ class _UserShopScreenState extends State<UserShopScreen> {
                                                                   10.0,
                                                               itemCount:
                                                                   shopController
-                                                                      .userItems
+                                                                      .items
                                                                       .whereType<
-                                                                          Service>()
+                                                                          Customitem>()
                                                                       .length,
                                                               itemBuilder:
                                                                   (BuildContext
                                                                           context,
                                                                       int index) {
-                                                                final Service
-                                                                    service =
+                                                                final Customitem
+                                                                    customitem =
                                                                     shopController
-                                                                        .userItems
+                                                                        .items
                                                                         .whereType<
-                                                                            Service>()
+                                                                            Customitem>()
                                                                         .toList()[index];
                                                                 return GestureDetector(
                                                                   onTap: () {
-                                                                    Get.to(() =>
-                                                                        BookServiceScreen(
-                                                                          service:
-                                                                              service,
-                                                                          shop:
-                                                                              shopController.userShop!,
-                                                                        ));
+                                                                    Get.to(
+                                                                      () =>
+                                                                          const CreateCustomListing(),
+                                                                    );
                                                                   },
                                                                   child:
-                                                                      ServiceCard(
-                                                                    shop: shopController
-                                                                        .userShop!,
+                                                                      CustomItemCard(
                                                                     myShop:
-                                                                        false,
-                                                                    service:
-                                                                        service,
+                                                                        true,
+                                                                    customitem:
+                                                                        customitem,
                                                                   ),
                                                                 );
                                                               },

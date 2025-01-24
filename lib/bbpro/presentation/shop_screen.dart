@@ -2,6 +2,7 @@
 
 import 'package:business_bosses_v2/action/action.dart';
 import 'package:business_bosses_v2/bbpro/controllers/shop_controller.dart';
+import 'package:business_bosses_v2/bbpro/models/customitem_model.dart';
 import 'package:business_bosses_v2/bbpro/models/service_model.dart';
 import 'package:business_bosses_v2/bbpro/models/product_model.dart';
 import 'package:business_bosses_v2/bbpro/presentation/book_service.dart';
@@ -9,6 +10,7 @@ import 'package:business_bosses_v2/bbpro/presentation/create_product.dart';
 import 'package:business_bosses_v2/bbpro/presentation/create_service.dart';
 import 'package:business_bosses_v2/bbpro/presentation/createcustomlisting.dart';
 import 'package:business_bosses_v2/bbpro/presentation/order_product.dart';
+import 'package:business_bosses_v2/bbpro/widgets/customitemcard.dart';
 import 'package:business_bosses_v2/bbpro/widgets/iconbutton.dart';
 import 'package:business_bosses_v2/bbpro/widgets/inventorycard.dart';
 import 'package:business_bosses_v2/bbpro/widgets/servicecard.dart';
@@ -559,18 +561,19 @@ class _ShopScreenState extends State<ShopScreen> {
                                                               .fit(1),
                                                   mainAxisSpacing: 10.0,
                                                   crossAxisSpacing: 10.0,
-                                                  itemCount: shopController
-                                                      .items
-                                                      .whereType<Service>()
-                                                      .length,
+                                                  itemCount: 3,
                                                   itemBuilder:
                                                       (BuildContext context,
                                                           int index) {
-                                                    final Service service =
-                                                        shopController.items
-                                                            .whereType<
-                                                                Service>()
-                                                            .toList()[index];
+                                                    final Customitem
+                                                        customitem = Customitem(
+                                                            id: index,
+                                                            title:
+                                                                'Custom Item $index',
+                                                            description:
+                                                                'Description for custom item $index',
+                                                            createdAt:
+                                                                DateTime.now());
                                                     return GestureDetector(
                                                       onTap: () {
                                                         Get.to(
@@ -578,9 +581,9 @@ class _ShopScreenState extends State<ShopScreen> {
                                                               const CreateCustomListing(),
                                                         );
                                                       },
-                                                      child: ServiceCard(
-                                                        myShop: true,
-                                                        service: service,
+                                                      child: CustomItemCard(
+                                                        myShop: false,
+                                                        customitem: customitem,
                                                       ),
                                                     );
                                                   },
