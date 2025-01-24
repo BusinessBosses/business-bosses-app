@@ -322,7 +322,7 @@ class _ShopScreenState extends State<ShopScreen> {
                                     padding: const EdgeInsets.symmetric(
                                         horizontal: 15.0),
                                     child: DefaultTabController(
-                                      length: 2,
+                                      length: 3,
                                       child: Column(
                                         crossAxisAlignment:
                                             CrossAxisAlignment.start,
@@ -354,6 +354,10 @@ class _ShopScreenState extends State<ShopScreen> {
                                                     ),
                                                     Tab(
                                                       text: 'Services',
+                                                      height: 35,
+                                                    ),
+                                                    Tab(
+                                                      text: 'Other',
                                                       height: 35,
                                                     ),
                                                   ],
@@ -538,6 +542,40 @@ class _ShopScreenState extends State<ShopScreen> {
                                                               CreateServiceListing(
                                                             service: service,
                                                           ),
+                                                        );
+                                                      },
+                                                      child: ServiceCard(
+                                                        myShop: true,
+                                                        service: service,
+                                                      ),
+                                                    );
+                                                  },
+                                                ),
+                                                StaggeredGridView.countBuilder(
+                                                  crossAxisCount: 2,
+                                                  staggeredTileBuilder:
+                                                      (int index) =>
+                                                          const StaggeredTile
+                                                              .fit(1),
+                                                  mainAxisSpacing: 10.0,
+                                                  crossAxisSpacing: 10.0,
+                                                  itemCount: shopController
+                                                      .items
+                                                      .whereType<Service>()
+                                                      .length,
+                                                  itemBuilder:
+                                                      (BuildContext context,
+                                                          int index) {
+                                                    final Service service =
+                                                        shopController.items
+                                                            .whereType<
+                                                                Service>()
+                                                            .toList()[index];
+                                                    return GestureDetector(
+                                                      onTap: () {
+                                                        Get.to(
+                                                          () =>
+                                                              const CreateCustomListing(),
                                                         );
                                                       },
                                                       child: ServiceCard(

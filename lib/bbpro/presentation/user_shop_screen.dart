@@ -530,7 +530,7 @@ class _UserShopScreenState extends State<UserShopScreen> {
                                           } else
                                             Expanded(
                                               child: DefaultTabController(
-                                                length: 2,
+                                                length: 3,
                                                 child: Column(
                                                   crossAxisAlignment:
                                                       CrossAxisAlignment.start,
@@ -561,6 +561,10 @@ class _UserShopScreenState extends State<UserShopScreen> {
                                                           ),
                                                           Tab(
                                                             text: 'Services',
+                                                            height: 35,
+                                                          ),
+                                                          Tab(
+                                                            text: 'Other',
                                                             height: 35,
                                                           ),
                                                         ],
@@ -632,6 +636,68 @@ class _UserShopScreenState extends State<UserShopScreen> {
                                                             ),
                                                           ),
                                                           // Services Tab
+                                                          Padding(
+                                                            padding:
+                                                                const EdgeInsets
+                                                                    .symmetric(
+                                                                    horizontal:
+                                                                        15.0,
+                                                                    vertical:
+                                                                        15),
+                                                            child:
+                                                                StaggeredGridView
+                                                                    .countBuilder(
+                                                              crossAxisCount: 2,
+                                                              staggeredTileBuilder:
+                                                                  (int index) =>
+                                                                      const StaggeredTile
+                                                                          .fit(
+                                                                          1),
+                                                              mainAxisSpacing:
+                                                                  10.0,
+                                                              crossAxisSpacing:
+                                                                  10.0,
+                                                              itemCount:
+                                                                  shopController
+                                                                      .userItems
+                                                                      .whereType<
+                                                                          Service>()
+                                                                      .length,
+                                                              itemBuilder:
+                                                                  (BuildContext
+                                                                          context,
+                                                                      int index) {
+                                                                final Service
+                                                                    service =
+                                                                    shopController
+                                                                        .userItems
+                                                                        .whereType<
+                                                                            Service>()
+                                                                        .toList()[index];
+                                                                return GestureDetector(
+                                                                  onTap: () {
+                                                                    Get.to(() =>
+                                                                        BookServiceScreen(
+                                                                          service:
+                                                                              service,
+                                                                          shop:
+                                                                              shopController.userShop!,
+                                                                        ));
+                                                                  },
+                                                                  child:
+                                                                      ServiceCard(
+                                                                    shop: shopController
+                                                                        .userShop!,
+                                                                    myShop:
+                                                                        false,
+                                                                    service:
+                                                                        service,
+                                                                  ),
+                                                                );
+                                                              },
+                                                            ),
+                                                          ),
+                                                          // Other Tab
                                                           Padding(
                                                             padding:
                                                                 const EdgeInsets
