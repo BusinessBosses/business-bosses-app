@@ -415,7 +415,8 @@ class _UserShopScreenState extends State<UserShopScreen> {
                                         children: <Widget>[
                                           const Padding(
                                             padding: EdgeInsets.symmetric(
-                                                horizontal: 15.0, vertical: 10),
+                                              horizontal: 15.0,
+                                            ),
                                             child: Row(
                                               mainAxisAlignment:
                                                   MainAxisAlignment
@@ -528,73 +529,174 @@ class _UserShopScreenState extends State<UserShopScreen> {
                                             )
                                           } else
                                             Expanded(
-                                              child: Padding(
-                                                padding:
-                                                    const EdgeInsets.symmetric(
-                                                        horizontal: 15.0),
-                                                child: StaggeredGridView
-                                                    .countBuilder(
-                                                  crossAxisCount: 2,
-                                                  staggeredTileBuilder:
-                                                      (int index) =>
-                                                          const StaggeredTile
-                                                              .fit(1),
-                                                  mainAxisSpacing: 10.0,
-                                                  crossAxisSpacing: 10.0,
-                                                  itemCount: shopController
-                                                      .userItems.length,
-                                                  itemBuilder:
-                                                      (BuildContext context,
-                                                          int index) {
-                                                    if (shopController
-                                                            .userItems[index]
-                                                        is Product) {
-                                                      final Product product =
-                                                          shopController
-                                                                  .userItems[
-                                                              index] as Product;
-                                                      return GestureDetector(
-                                                        onTap: () {
-                                                          Get.to(() =>
-                                                              OrderProductScreen(
-                                                                product:
-                                                                    product,
-                                                                shop: shopController
-                                                                    .userShop!,
-                                                              ));
-                                                        },
-                                                        child: InventoryCard(
-                                                          product: product,
-                                                          shop: shopController
-                                                              .userShop!,
-                                                          myShop: false,
+                                              child: DefaultTabController(
+                                                length: 2,
+                                                child: Column(
+                                                  crossAxisAlignment:
+                                                      CrossAxisAlignment.start,
+                                                  children: <Widget>[
+                                                    Container(
+                                                      padding:
+                                                          const EdgeInsets.only(
+                                                              left: 15,
+                                                              right: 15,
+                                                              top: 15),
+                                                      child: TabBar(
+                                                        isScrollable: true,
+                                                        labelColor:
+                                                            Colors.white,
+                                                        unselectedLabelColor:
+                                                            Colors.black,
+                                                        indicator:
+                                                            BoxDecoration(
+                                                          borderRadius:
+                                                              BorderRadius
+                                                                  .circular(50),
+                                                          color: Colors.black87,
                                                         ),
-                                                      );
-                                                    } else {
-                                                      final Service service =
-                                                          shopController
-                                                                  .userItems[
-                                                              index] as Service;
-                                                      return GestureDetector(
-                                                        onTap: () {
-                                                          print(service);
-                                                          Get.to(() =>
-                                                              BookServiceScreen(
-                                                                service:
-                                                                    service,
-                                                                shop: shopController
-                                                                    .userShop!,
-                                                              ));
-                                                        },
-                                                        child: ServiceCard(
-                                                          shop: shopController
-                                                              .userShop!,
-                                                          myShop: false,
-                                                          service: service,
-                                                        ),
-                                                      );
-                                                    }
-                                                  },
+                                                        tabs: const <Widget>[
+                                                          Tab(
+                                                            text: 'Products',
+                                                            height: 35,
+                                                          ),
+                                                          Tab(
+                                                            text: 'Services',
+                                                            height: 35,
+                                                          ),
+                                                        ],
+                                                      ),
+                                                    ),
+                                                    Expanded(
+                                                      child: TabBarView(
+                                                        children: <Widget>[
+                                                          // Products Tab
+                                                          Padding(
+                                                            padding:
+                                                                const EdgeInsets
+                                                                    .symmetric(
+                                                                    horizontal:
+                                                                        15.0,
+                                                                    vertical:
+                                                                        15),
+                                                            child:
+                                                                StaggeredGridView
+                                                                    .countBuilder(
+                                                              crossAxisCount: 2,
+                                                              staggeredTileBuilder:
+                                                                  (int index) =>
+                                                                      const StaggeredTile
+                                                                          .fit(
+                                                                          1),
+                                                              mainAxisSpacing:
+                                                                  10.0,
+                                                              crossAxisSpacing:
+                                                                  10.0,
+                                                              itemCount:
+                                                                  shopController
+                                                                      .userItems
+                                                                      .whereType<
+                                                                          Product>()
+                                                                      .length,
+                                                              itemBuilder:
+                                                                  (BuildContext
+                                                                          context,
+                                                                      int index) {
+                                                                final Product
+                                                                    product =
+                                                                    shopController
+                                                                        .userItems
+                                                                        .whereType<
+                                                                            Product>()
+                                                                        .toList()[index];
+                                                                return GestureDetector(
+                                                                  onTap: () {
+                                                                    Get.to(() =>
+                                                                        OrderProductScreen(
+                                                                          product:
+                                                                              product,
+                                                                          shop:
+                                                                              shopController.userShop!,
+                                                                        ));
+                                                                  },
+                                                                  child:
+                                                                      InventoryCard(
+                                                                    product:
+                                                                        product,
+                                                                    shop: shopController
+                                                                        .userShop!,
+                                                                    myShop:
+                                                                        false,
+                                                                  ),
+                                                                );
+                                                              },
+                                                            ),
+                                                          ),
+                                                          // Services Tab
+                                                          Padding(
+                                                            padding:
+                                                                const EdgeInsets
+                                                                    .symmetric(
+                                                                    horizontal:
+                                                                        15.0,
+                                                                    vertical:
+                                                                        15),
+                                                            child:
+                                                                StaggeredGridView
+                                                                    .countBuilder(
+                                                              crossAxisCount: 2,
+                                                              staggeredTileBuilder:
+                                                                  (int index) =>
+                                                                      const StaggeredTile
+                                                                          .fit(
+                                                                          1),
+                                                              mainAxisSpacing:
+                                                                  10.0,
+                                                              crossAxisSpacing:
+                                                                  10.0,
+                                                              itemCount:
+                                                                  shopController
+                                                                      .userItems
+                                                                      .whereType<
+                                                                          Service>()
+                                                                      .length,
+                                                              itemBuilder:
+                                                                  (BuildContext
+                                                                          context,
+                                                                      int index) {
+                                                                final Service
+                                                                    service =
+                                                                    shopController
+                                                                        .userItems
+                                                                        .whereType<
+                                                                            Service>()
+                                                                        .toList()[index];
+                                                                return GestureDetector(
+                                                                  onTap: () {
+                                                                    Get.to(() =>
+                                                                        BookServiceScreen(
+                                                                          service:
+                                                                              service,
+                                                                          shop:
+                                                                              shopController.userShop!,
+                                                                        ));
+                                                                  },
+                                                                  child:
+                                                                      ServiceCard(
+                                                                    shop: shopController
+                                                                        .userShop!,
+                                                                    myShop:
+                                                                        false,
+                                                                    service:
+                                                                        service,
+                                                                  ),
+                                                                );
+                                                              },
+                                                            ),
+                                                          ),
+                                                        ],
+                                                      ),
+                                                    ),
+                                                  ],
                                                 ),
                                               ),
                                             ),
