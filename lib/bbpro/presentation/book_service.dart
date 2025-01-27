@@ -10,7 +10,10 @@ import 'package:business_bosses_v2/bbpro/widgets/paymentoptioncard.dart';
 import 'package:business_bosses_v2/bbpro/widgets/servicetypesection.dart';
 import 'package:business_bosses_v2/common/dialogs/snackbar.dart';
 import 'package:business_bosses_v2/common/generic_slider.dart';
+import 'package:business_bosses_v2/common/models/user_model.dart';
 import 'package:business_bosses_v2/features/profile/controller/profile_controller.dart';
+import 'package:business_bosses_v2/features/profile/presentation/public_profile_screen.dart';
+import 'package:business_bosses_v2/navigation/routes.dart';
 import 'package:business_bosses_v2/utils/theme/theme.dart';
 import 'package:detectable_text_field/detector/sample_regular_expressions.dart';
 import 'package:detectable_text_field/widgets/detectable_text.dart';
@@ -143,10 +146,21 @@ class _BookServiceScreenState extends State<BookServiceScreen> {
           ),
           title: GestureDetector(
             onTap: () {
-              Get.to(UserShopScreen(
-                user: widget.service.user!,
-              ));
+              if (Get.previousRoute == Routes.publicProfile) {
+                Get.back();
+              } else {
+                Get.to(
+                  () => PublicProfileScreen(
+                    currentIndex: 1,
+                  ),
+                  arguments: widget.service.user,
+                );
+              }
             },
+            // Get.to(UserShopScreen(
+            //   user: widget.service.user!,
+            // ));
+
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               crossAxisAlignment: CrossAxisAlignment.start,
