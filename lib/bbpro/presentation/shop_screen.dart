@@ -422,80 +422,82 @@ class _ShopScreenState extends State<ShopScreen> {
       floatingActionButton: FloatingActionButton(
         backgroundColor: Colors.black,
         onPressed: () {
-          showMenu(
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(10),
-            ),
+          showModalBottomSheet(
             context: context,
-            position: const RelativeRect.fromLTRB(0, 0, 10, 10),
-            items: <PopupMenuEntry<String>>[
-              PopupMenuItem<String>(
-                value: 'product',
-                onTap: () {
-                  Get.to(() => const CreateProductListing());
-                },
-                child: Row(
-                  children: <Widget>[
-                    SvgPicture.asset(
-                      'assets/svgs/addproduct.svg',
-                      colorFilter: const ColorFilter.mode(
-                        Colors.black,
-                        BlendMode.srcIn,
-                      ),
-                      height: 18,
-                    ),
-                    const SizedBox(width: 8),
-                    const Text(
-                      'Add Product',
-                      style: TextStyle(fontSize: 13),
-                    ),
-                  ],
+            shape: const RoundedRectangleBorder(
+              borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+            ),
+            builder: (BuildContext context) {
+              return SizedBox(
+                height: 250,
+                child: ListView.separated(
+                  padding: const EdgeInsets.all(10),
+                  itemBuilder: (BuildContext context, int index) {
+                    if (index == 0) {
+                      return ListTile(
+                        leading: SvgPicture.asset(
+                          'assets/svgs/addproduct.svg',
+                          colorFilter: const ColorFilter.mode(
+                            Colors.black,
+                            BlendMode.srcIn,
+                          ),
+                          height: 24,
+                        ),
+                        title: const Text(
+                          'Add Product',
+                          style: TextStyle(fontSize: 14),
+                        ),
+                        horizontalTitleGap: 0.0,
+                        onTap: () {
+                          Navigator.pop(context);
+                          Get.to(() => const CreateProductListing());
+                        },
+                      );
+                    } else if (index == 1) {
+                      return ListTile(
+                        leading: SvgPicture.asset(
+                          'assets/svgs/addservice.svg',
+                          colorFilter: const ColorFilter.mode(
+                            Colors.black,
+                            BlendMode.srcIn,
+                          ),
+                          height: 24,
+                        ),
+                        title: const Text(
+                          'Add Service',
+                          style: TextStyle(fontSize: 14),
+                        ),
+                        horizontalTitleGap: 0.0,
+                        onTap: () {
+                          Navigator.pop(context);
+                          Get.to(() => const CreateServiceListing());
+                        },
+                      );
+                    } else {
+                      return ListTile(
+                        leading: const Icon(
+                          Icons.add,
+                          color: Colors.black,
+                          size: 24,
+                        ),
+                        title: const Text(
+                          'Add Custom Item',
+                          style: TextStyle(fontSize: 14),
+                        ),
+                        horizontalTitleGap: 0.0,
+                        onTap: () {
+                          Navigator.pop(context);
+                          Get.to(() => const CreateCustomListing());
+                        },
+                      );
+                    }
+                  },
+                  separatorBuilder: (BuildContext context, int index) =>
+                      const Divider(),
+                  itemCount: 3,
                 ),
-              ),
-              PopupMenuItem<String>(
-                value: 'service',
-                onTap: () {
-                  Get.to(() => const CreateServiceListing());
-                },
-                child: Row(
-                  children: <Widget>[
-                    SvgPicture.asset(
-                      'assets/svgs/addservice.svg',
-                      colorFilter: const ColorFilter.mode(
-                        Colors.black,
-                        BlendMode.srcIn,
-                      ),
-                      height: 18,
-                    ),
-                    const SizedBox(width: 8),
-                    const Text(
-                      'Add Service',
-                      style: TextStyle(fontSize: 13),
-                    ),
-                  ],
-                ),
-              ),
-              PopupMenuItem<String>(
-                value: 'custom',
-                onTap: () {
-                  Get.to(() => const CreateCustomListing());
-                },
-                child: const Row(
-                  children: <Widget>[
-                    Icon(
-                      Icons.add,
-                      color: Colors.black,
-                      size: 18,
-                    ),
-                    SizedBox(width: 8),
-                    Text(
-                      'Add Custom Item',
-                      style: TextStyle(fontSize: 13),
-                    ),
-                  ],
-                ),
-              ),
-            ],
+              );
+            },
           );
         },
         child: const Icon(
