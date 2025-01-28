@@ -87,14 +87,14 @@ class _ServicetypeSectionWidgetState extends State<ServicetypeSectionWidget> {
             const SizedBox(
               height: 10,
             ),
-            Row(
+            Column(
               children: <Widget>[
                 const Text(
                   'Service Type',
                   style: TextStyle(fontSize: 16, fontWeight: FontWeight.w700),
                 ),
                 const SizedBox(
-                  width: 5,
+                  height: 5,
                 ),
                 Text(
                   widget.service.serviceType ?? 'N/A',
