@@ -18,7 +18,6 @@ class ManageServices extends StatefulWidget {
 
 class _ManageServicesState extends State<ManageServices> {
   final ShopController shopController = Get.find();
-  String? _selectedItem;
   String searchQuery = '';
   List<Service> filteredServices = <Service>[];
 
@@ -47,9 +46,7 @@ class _ManageServicesState extends State<ManageServices> {
       }).toList(),
     ).then((String? selected) {
       if (selected != null) {
-        setState(() {
-          _selectedItem = selected;
-        });
+        setState(() {});
         // Implement filter logic here
       }
     });

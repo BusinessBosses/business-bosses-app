@@ -557,19 +557,15 @@ class _ShopScreenState extends State<ShopScreen> {
                                                               .fit(1),
                                                   mainAxisSpacing: 10.0,
                                                   crossAxisSpacing: 10.0,
-                                                  itemCount: 3,
+                                                  itemCount: shopController
+                                                      .customItems.length,
                                                   itemBuilder:
                                                       (BuildContext context,
                                                           int index) {
                                                     final Customitem
-                                                        customitem = Customitem(
-                                                            id: index,
-                                                            title:
-                                                                'Custom Item $index',
-                                                            description:
-                                                                'Description for custom item $index',
-                                                            createdAt:
-                                                                DateTime.now());
+                                                        customitem =
+                                                        shopController
+                                                            .customItems[index];
                                                     return GestureDetector(
                                                       onTap: () {
                                                         Get.to(

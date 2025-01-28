@@ -37,7 +37,8 @@ class _CreateProductListingState extends State<CreateProductListing> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   final OrderController orderController = Get.put(OrderController());
   final ProfileController profileController = Get.find();
-  final ShopController shopController = Get.put(ShopController());
+  final ShopController shopController =
+      Get.put(ShopController(), permanent: true);
   final ImagePicker _picker = ImagePicker();
   final List<File> _selectedImages = <File>[];
   final TextEditingController _productNameController = TextEditingController();

@@ -51,7 +51,8 @@ class _DashboardState extends State<Dashboard> {
     'Create Orders',
     'Add Customers',
   ];
-  final ShopController shopController = Get.put(ShopController());
+  final ShopController shopController =
+      Get.put(ShopController(), permanent: true);
   final ClientsController clientsController = Get.put(ClientsController());
   String _selectedfilteritem = 'All Time';
   String _selectedDateFilter = 'all_time';

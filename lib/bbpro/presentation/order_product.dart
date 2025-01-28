@@ -1,13 +1,13 @@
+import 'dart:developer';
+
 import 'package:business_bosses_v2/bbpro/controllers/order_controller.dart';
 import 'package:business_bosses_v2/bbpro/controllers/shop_controller.dart';
 import 'package:business_bosses_v2/bbpro/models/product_model.dart';
 import 'package:business_bosses_v2/bbpro/models/shop_model.dart';
-import 'package:business_bosses_v2/bbpro/presentation/shop_screen.dart';
 import 'package:business_bosses_v2/bbpro/presentation/user_shop_screen.dart';
 import 'package:business_bosses_v2/bbpro/widgets/button.dart';
 import 'package:business_bosses_v2/bbpro/widgets/dropdown.dart';
 import 'package:business_bosses_v2/bbpro/widgets/edit_text.dart';
-import 'package:business_bosses_v2/bbpro/widgets/orderpaymentcard.dart';
 import 'package:business_bosses_v2/bbpro/widgets/ordersummarycard.dart';
 import 'package:business_bosses_v2/bbpro/widgets/paymentoptioncard.dart';
 import 'package:business_bosses_v2/common/dialogs/snackbar.dart';
@@ -61,6 +61,7 @@ class _OrderProductScreenState extends State<OrderProductScreen> {
     super.initState();
     _focusNode = FocusNode();
     paymentMethods = widget.shop.payments;
+    log(widget.shop.toMap().toString());
     if (paymentMethods!.isNotEmpty) {
       activePaymentMethod = paymentMethods![0]['paymentMethod'] ?? '';
     }
@@ -68,13 +69,13 @@ class _OrderProductScreenState extends State<OrderProductScreen> {
     fullNameController.text = profileController.myProfile.name ??
         profileController.myProfile.username;
     emailController.text = profileController.myProfile.email;
-    // selectedItems.add(
-    //   <String, dynamic>{
-    //     'type': 'product',
-    //     'id': widget.product.id,
-    //     'name': widget.product.name
-    //   },
-    // );
+    selectedItems.add(
+      <String, dynamic>{
+        'type': 'product',
+        'id': widget.product.id,
+        'name': widget.product.name
+      },
+    );
   }
 
   @override
@@ -460,6 +461,16 @@ class _OrderProductScreenState extends State<OrderProductScreen> {
                       setState(() {
                         isSubmit = true;
                       });
+                      if (activePaymentMethod.isEmpty) {
+                        showSnackbar(
+                          message: 'Please select a payment method',
+                          error: true,
+                        );
+                        setState(() {
+                          isSubmit = false;
+                        });
+                        return;
+                      }
                       final Map<String, dynamic> orderData = <String, dynamic>{
                         'userId': profileController.myProfile.uid,
                         'shopId': widget.shop.id,

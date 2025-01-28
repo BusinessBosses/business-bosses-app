@@ -19,6 +19,7 @@ import 'package:business_bosses_v2/common/widgets/safety_model.dart';
 import 'package:business_bosses_v2/features/chat/chat_screen.dart';
 import 'package:business_bosses_v2/features/marketplace/controllers/supplier_controller.dart';
 import 'package:business_bosses_v2/features/marketplace/models/suppliers_model.dart';
+import 'package:business_bosses_v2/features/premium/proscreen.dart';
 import 'package:business_bosses_v2/features/profile/controller/profile_controller.dart';
 import 'package:business_bosses_v2/utils/theme/theme.dart';
 import 'package:flutter/cupertino.dart';
@@ -100,40 +101,30 @@ class _ClientsScreenState extends State<ClientsScreen>
         padding: EdgeInsets.symmetric(horizontal: 0, vertical: 10),
         child: Text('Customers', style: TextStyle(fontSize: 14)),
       ),
-    };
-
-    if (profileController.myProfile.isSubscribed) {
-      segments[1] = const Padding(
+      1: const Padding(
         padding: EdgeInsets.symmetric(horizontal: 5, vertical: 10),
         child: Text('Campaign', style: TextStyle(fontSize: 14)),
-      );
-    }
+      ),
+    };
+
     return Scaffold(
       backgroundColor: probackgroundColor,
       appBar: AppBar(
         automaticallyImplyLeading: false,
-        title: profileController.myProfile.isSubscribed
-            ? Container(
-                padding: const EdgeInsets.only(bottom: 5),
-                child: CupertinoSlidingSegmentedControl<int>(
-                  groupValue: _viewController.index,
-                  children: segments,
-                  onValueChanged: (int? value) {
-                    if (value != null) {
-                      setState(() {
-                        _viewController.index = value;
-                      });
-                    }
-                  },
-                ),
-              )
-            : const Text(
-                'Customers',
-                style: TextStyle(
-                  color: proprimaryColor,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
+        title: Container(
+          padding: const EdgeInsets.only(bottom: 5),
+          child: CupertinoSlidingSegmentedControl<int>(
+            groupValue: _viewController.index,
+            children: segments,
+            onValueChanged: (int? value) {
+              if (value != null) {
+                setState(() {
+                  _viewController.index = value;
+                });
+              }
+            },
+          ),
+        ),
         actions: <Widget>[
           Row(
             children: <Widget>[
@@ -666,150 +657,156 @@ class _ClientsScreenState extends State<ClientsScreen>
         Obx(
           () => clientsController.loading.value
               ? const SafetyModel()
-              : clientsController.campaigns.isEmpty
-                  ? SafetyModel(
-                      isLoading: false,
-                      icon: SvgPicture.asset(
-                        'assets/svgs/campaign.svg',
-                        height: 50,
-                        color: Colors.black12,
-                      ),
-                      title: 'No Campaigns Yet!',
-                    )
-                  : Padding(
-                      padding: const EdgeInsets.symmetric(vertical: 10),
-                      child: Column(
-                        children: <Widget>[
-                          SizedBox(
-                            height: 55,
-                            child: Stack(
-                              children: <Widget>[
-                                Padding(
-                                  padding: const EdgeInsets.only(
-                                      left: 10.0, right: 10, bottom: 10),
-                                  child: SizedBox(
-                                    width: double.infinity,
-                                    child: DecoratedBox(
-                                      decoration: BoxDecoration(
-                                        color: Colors.white,
-                                        borderRadius: BorderRadius.circular(10),
-                                      ),
-                                      child: Padding(
-                                        padding: const EdgeInsets.symmetric(
-                                            horizontal: 10),
-                                        child: Row(
-                                          children: <Widget>[
-                                            SvgPicture.asset(
-                                              'assets/svgs/search.svg',
-                                              height: 20,
-                                              color: hintColor,
-                                            ),
-                                            Expanded(
-                                              child: ProSearchbar(
-                                                contentPadding: 10,
-                                                hasSearchIcon: false,
-                                                hintText: 'Search Campaigns',
-                                                autofocus: false,
-                                                onChange: (String query) {
-                                                  setState(() {
-                                                    searchQuery = query;
-                                                    filteredCampaign = clientsController
-                                                        .campaigns
-                                                        .where((Campaign
-                                                                campaign) =>
-                                                            campaign
-                                                                .campaignName
-                                                                .toLowerCase()
-                                                                .contains(
-                                                                    searchQuery
-                                                                        .toLowerCase()))
-                                                        .toList();
-                                                  });
-                                                },
-                                                onSubmit: (String query) {},
-                                              ),
-                                            ),
-                                          ],
-                                        ),
-                                      ),
-                                    ),
-                                  ),
-                                ),
-                                Positioned(
-                                  right: 10,
-                                  top: 0,
-                                  bottom: 10,
-                                  child: Padding(
-                                    padding: const EdgeInsets.all(5.0),
-                                    child: GestureDetector(
-                                      onTap: () {
-                                        showMenu(
-                                            shape: RoundedRectangleBorder(
-                                              borderRadius:
-                                                  BorderRadius.circular(10),
-                                            ),
-                                            context: context,
-                                            shadowColor: Colors.black,
-                                            position:
-                                                const RelativeRect.fromLTRB(
-                                                    double.infinity,
-                                                    130,
-                                                    15,
-                                                    0),
-                                            items: <String>[
-                                              'None',
-                                              'Latest',
-                                              'A-Z'
-                                            ].map((String option) {
-                                              return PopupMenuItem<String>(
-                                                value: option,
-                                                child: Text(option),
-                                              );
-                                            }).toList());
-                                      },
-                                      child: DecoratedBox(
-                                        decoration: BoxDecoration(
-                                          color: backgroundColor,
-                                          borderRadius:
-                                              BorderRadius.circular(7),
-                                          boxShadow: <BoxShadow>[
-                                            BoxShadow(
-                                              color: backgroundColor
-                                                  .withOpacity(0.6),
-                                              offset: const Offset(-5, 0),
-                                              blurRadius: 10,
-                                              spreadRadius: 2,
-                                            ),
-                                          ],
-                                        ),
-                                        child: Padding(
-                                          padding: const EdgeInsets.symmetric(
-                                              horizontal: 10),
-                                          child: SvgPicture.asset(
-                                              'assets/svgs/filterprosections.svg'),
-                                        ),
-                                      ),
-                                    ),
-                                  ),
-                                ),
-                              ],
-                            ),
+              : profileController.myProfile.isSubscribed
+                  ? clientsController.campaigns.isEmpty
+                      ? SafetyModel(
+                          isLoading: false,
+                          icon: SvgPicture.asset(
+                            'assets/svgs/campaign.svg',
+                            height: 50,
+                            color: Colors.black12,
                           ),
-                          filteredCampaign.isNotEmpty
-                              ? Expanded(
-                                  child: ListView.builder(
-                                    itemCount: filteredCampaign.length,
-                                    itemBuilder:
-                                        ((BuildContext context, int index) {
-                                      return CampaignItem(
-                                          campaign: filteredCampaign[index]);
-                                    }),
-                                  ),
-                                )
-                              : const Text('No Campaigns found'),
-                        ],
-                      ),
-                    ),
+                          title: 'No Campaigns Yet!',
+                        )
+                      : Padding(
+                          padding: const EdgeInsets.symmetric(vertical: 10),
+                          child: Column(
+                            children: <Widget>[
+                              SizedBox(
+                                height: 55,
+                                child: Stack(
+                                  children: <Widget>[
+                                    Padding(
+                                      padding: const EdgeInsets.only(
+                                          left: 10.0, right: 10, bottom: 10),
+                                      child: SizedBox(
+                                        width: double.infinity,
+                                        child: DecoratedBox(
+                                          decoration: BoxDecoration(
+                                            color: Colors.white,
+                                            borderRadius:
+                                                BorderRadius.circular(10),
+                                          ),
+                                          child: Padding(
+                                            padding: const EdgeInsets.symmetric(
+                                                horizontal: 10),
+                                            child: Row(
+                                              children: <Widget>[
+                                                SvgPicture.asset(
+                                                  'assets/svgs/search.svg',
+                                                  height: 20,
+                                                  color: hintColor,
+                                                ),
+                                                Expanded(
+                                                  child: ProSearchbar(
+                                                    contentPadding: 10,
+                                                    hasSearchIcon: false,
+                                                    hintText:
+                                                        'Search Campaigns',
+                                                    autofocus: false,
+                                                    onChange: (String query) {
+                                                      setState(() {
+                                                        searchQuery = query;
+                                                        filteredCampaign = clientsController
+                                                            .campaigns
+                                                            .where((Campaign
+                                                                    campaign) =>
+                                                                campaign
+                                                                    .campaignName
+                                                                    .toLowerCase()
+                                                                    .contains(
+                                                                        searchQuery
+                                                                            .toLowerCase()))
+                                                            .toList();
+                                                      });
+                                                    },
+                                                    onSubmit: (String query) {},
+                                                  ),
+                                                ),
+                                              ],
+                                            ),
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                    Positioned(
+                                      right: 10,
+                                      top: 0,
+                                      bottom: 10,
+                                      child: Padding(
+                                        padding: const EdgeInsets.all(5.0),
+                                        child: GestureDetector(
+                                          onTap: () {
+                                            showMenu(
+                                                shape: RoundedRectangleBorder(
+                                                  borderRadius:
+                                                      BorderRadius.circular(10),
+                                                ),
+                                                context: context,
+                                                shadowColor: Colors.black,
+                                                position:
+                                                    const RelativeRect.fromLTRB(
+                                                        double.infinity,
+                                                        130,
+                                                        15,
+                                                        0),
+                                                items: <String>[
+                                                  'None',
+                                                  'Latest',
+                                                  'A-Z'
+                                                ].map((String option) {
+                                                  return PopupMenuItem<String>(
+                                                    value: option,
+                                                    child: Text(option),
+                                                  );
+                                                }).toList());
+                                          },
+                                          child: DecoratedBox(
+                                            decoration: BoxDecoration(
+                                              color: backgroundColor,
+                                              borderRadius:
+                                                  BorderRadius.circular(7),
+                                              boxShadow: <BoxShadow>[
+                                                BoxShadow(
+                                                  color: backgroundColor
+                                                      .withOpacity(0.6),
+                                                  offset: const Offset(-5, 0),
+                                                  blurRadius: 10,
+                                                  spreadRadius: 2,
+                                                ),
+                                              ],
+                                            ),
+                                            child: Padding(
+                                              padding:
+                                                  const EdgeInsets.symmetric(
+                                                      horizontal: 10),
+                                              child: SvgPicture.asset(
+                                                  'assets/svgs/filterprosections.svg'),
+                                            ),
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                              filteredCampaign.isNotEmpty
+                                  ? Expanded(
+                                      child: ListView.builder(
+                                        itemCount: filteredCampaign.length,
+                                        itemBuilder:
+                                            ((BuildContext context, int index) {
+                                          return CampaignItem(
+                                              campaign:
+                                                  filteredCampaign[index]);
+                                        }),
+                                      ),
+                                    )
+                                  : const Text('No Campaigns found'),
+                            ],
+                          ),
+                        )
+                  : const ProSubscribeSection(),
         ),
       ]),
     );

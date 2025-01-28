@@ -65,7 +65,6 @@ class _MarketplaceScreenState extends State<MarketplaceScreen>
     _marketplacesearchTabController = TabController(length: 3, vsync: this);
     _marketplaceTabController = TabController(length: 4, vsync: this);
     _marketController.error(false);
-    supplierController.initSuppliers();
     _scrollController.addListener(() {
       double percentageScrolled =
           _scrollController.offset / _scrollController.position.maxScrollExtent;

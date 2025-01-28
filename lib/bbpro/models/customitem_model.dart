@@ -8,7 +8,7 @@ class Customitem {
   Shop? shop;
   String title;
   String description;
-  String? url;
+  String? link;
   DateTime createdAt;
 
   Customitem({
@@ -18,7 +18,7 @@ class Customitem {
     this.shop,
     required this.title,
     required this.description,
-    this.url,
+    this.link,
     required this.createdAt,
   });
 
@@ -31,6 +31,7 @@ class Customitem {
       user: json['user'] != null ? UserModel.fromMap(json['user']) : null,
       shop: json['shop'] != null ? Shop.fromMap(json['shop']) : null,
       title: json['title'],
+      link: json['link'],
       description: json['description'],
       createdAt: DateTime.parse(json['createdAt']),
     );
@@ -44,7 +45,7 @@ class Customitem {
       'shop': shop?.toMap(),
       'title': title,
       'description': description,
-      'url': url,
+      'link': link,
       'createdAt': createdAt.toIso8601String(),
     };
   }
@@ -56,7 +57,7 @@ Service {
   id: $id,
   name: $title,
   description: $description,
-  url: $url,
+  link: $link,
   createdAt: ${createdAt.toIso8601String()},
 }
 ''';

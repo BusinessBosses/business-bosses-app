@@ -28,8 +28,8 @@ class CustomItemCard extends StatefulWidget {
 class _CustomItemCardState extends State<CustomItemCard> {
   final ShopController shopController = Get.find();
   void _onEdit() {
-    Get.to(() => const CreateCustomListing(
-        // service: widget.service,
+    Get.to(() => CreateCustomListing(
+          customItem: widget.customitem,
         ));
   }
 
@@ -80,28 +80,26 @@ class _CustomItemCardState extends State<CustomItemCard> {
             crossAxisAlignment: CrossAxisAlignment.end,
             children: <Widget>[
               Expanded(
-                child: Container(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: <Widget>[
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: <Widget>[
+                    Text(
+                      widget.customitem?.title ?? 'Title',
+                      style: const TextStyle(
+                        fontSize: 13,
+                        fontWeight: FontWeight.bold,
+                      ),
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                    if (widget.myShop == false)
                       Text(
-                        widget.customitem?.title ?? 'Title',
-                        style: const TextStyle(
-                          fontSize: 13,
-                          fontWeight: FontWeight.bold,
-                        ),
-                        maxLines: 1,
+                        widget.customitem?.description ?? 'Item description',
+                        style: const TextStyle(fontSize: 11),
+                        maxLines: 2,
                         overflow: TextOverflow.ellipsis,
                       ),
-                      if (widget.myShop == false)
-                        Text(
-                          widget.customitem?.description ?? 'Item description',
-                          style: const TextStyle(fontSize: 11),
-                          maxLines: 2,
-                          overflow: TextOverflow.ellipsis,
-                        ),
-                    ],
-                  ),
+                  ],
                 ),
               ),
             ],

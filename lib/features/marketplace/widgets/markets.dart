@@ -236,10 +236,10 @@ class _MarketsPageState extends State<MarketsPage> {
                               profileController.myProfile.uid) {
                             // Get.to(() => CreateServiceListing(service: service));
                           } else {
-                            BookServiceScreen(
-                              service: service,
-                              shop: service.shop!,
-                            );
+                            Get.to(() => BookServiceScreen(
+                                  service: service,
+                                  shop: service.shop!,
+                                ));
                           }
                         },
                         child: ServiceCard(

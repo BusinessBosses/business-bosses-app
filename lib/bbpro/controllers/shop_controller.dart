@@ -1,5 +1,6 @@
 import 'dart:developer';
 
+import 'package:business_bosses_v2/bbpro/models/customitem_model.dart';
 import 'package:business_bosses_v2/bbpro/models/order_stats_model.dart';
 import 'package:business_bosses_v2/bbpro/models/product_model.dart';
 import 'package:business_bosses_v2/bbpro/models/service_model.dart';
@@ -22,6 +23,7 @@ class ShopController extends GetxController {
   RxBool supploerAddLoading = RxBool(false);
   RxList<Product> products = RxList<Product>(<Product>[]);
   RxList<Service> services = RxList<Service>(<Service>[]);
+  RxList<Customitem> customItems = RxList<Customitem>(<Customitem>[]);
   RxList<Object> items = RxList<Object>(<Object>[]);
   RxList<Product> userProducts = RxList<Product>(<Product>[]);
   RxList<Service> userServices = RxList<Service>(<Service>[]);
@@ -91,6 +93,19 @@ class ShopController extends GetxController {
           suppliers.add(Vendor.fromMap(vendorsReponse.data['rows'][i]));
         }
       }
+
+      ApiResponseModel customReponse = await ApiService.get(
+        path: 'custom-items/user/${profileController.myProfile.uid}',
+      );
+      suppliers.clear();
+      if (customReponse.success) {
+        if (customReponse.data.isNotEmpty) {
+          for (int i = 0; i < customReponse.data.length; i++) {
+            customItems.add(Customitem.fromJson(customReponse.data[i]));
+          }
+        }
+      }
+      loading(false);
       return true;
     } else {
       return false;
@@ -229,6 +244,40 @@ class ShopController extends GetxController {
     if (response.success) {
       services.add(Service.fromJson(response.data));
       items.add(Service.fromJson(response.data));
+      update();
+      return true;
+    } else {
+      log(response.toMap().toString());
+      return false;
+    }
+  }
+
+  Future<bool> addCustomItem(Map<String, dynamic> data) async {
+    ApiResponseModel response =
+        await ApiService.post(path: 'custom-items', body: data);
+    if (response.success) {
+      customItems.add(Customitem.fromJson(response.data));
+      // items.add(Service.fromJson(response.data));
+      update();
+      return true;
+    } else {
+      log(response.toMap().toString());
+      return false;
+    }
+  }
+
+  Future<bool> updateCustomItem(int id, Map<String, dynamic> data) async {
+    ApiResponseModel response =
+        await ApiService.put(path: 'custom-items/$id', body: data);
+    if (response.success) {
+      final int itemIndex =
+          customItems.indexWhere((Customitem element) => element.id == id);
+      customItems[itemIndex] = Customitem.fromJson(response.data);
+      // final int objectIndex = items.indexWhere((Object element) {
+      //   if (element is Product) return element.id == id;
+      //   return false;
+      // });
+      // items[objectIndex] = Customitem.fromJson(response.data);
       update();
       return true;
     } else {

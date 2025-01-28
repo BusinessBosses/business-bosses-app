@@ -109,19 +109,22 @@ class _MyServiceCardState extends State<MyServiceCard> {
                   ),
                 ),
                 widget.myShop == false
-                    ? Container(
-                        padding: const EdgeInsets.symmetric(
-                            horizontal: 5, vertical: 3),
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(70),
-                          color: primaryColorLT,
-                        ),
-                        child: const Text(
-                          'Book',
-                          style: TextStyle(
-                            color: Colors.white,
-                            fontWeight: FontWeight.bold,
-                            fontSize: 11,
+                    ? GestureDetector(
+                        onTap: () {},
+                        child: Container(
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: 5, vertical: 3),
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(70),
+                            color: primaryColorLT,
+                          ),
+                          child: const Text(
+                            'Book',
+                            style: TextStyle(
+                              color: Colors.white,
+                              fontWeight: FontWeight.bold,
+                              fontSize: 11,
+                            ),
                           ),
                         ),
                       )

@@ -34,7 +34,8 @@ class Bottomnavscreen extends StatefulWidget {
 }
 
 class _BottomnavscreenState extends State<Bottomnavscreen> {
-  final ShopController shopController = Get.put(ShopController());
+  final ShopController shopController =
+      Get.put(ShopController(), permanent: true);
   final ClientsController clientsController = Get.put(ClientsController());
   final ProfileController profileController = Get.put(ProfileController());
   late int _selectedIndex;
@@ -69,15 +70,17 @@ class _BottomnavscreenState extends State<Bottomnavscreen> {
       const ClientsScreen(),
       const Setup(),
     ];
-    shopController.initShopData().then((bool value) {
-      if (value) {
-        shopController.loading(false);
-      } else {
-        Get.to(() => const Setupshop(
-              backToHome: true,
-            ));
-      }
-    });
+    if (shopController.shop == null) {
+      shopController.initShopData().then((bool value) {
+        if (value) {
+          shopController.loading(false);
+        } else {
+          Get.to(() => const Setupshop(
+                backToHome: true,
+              ));
+        }
+      });
+    }
   }
 
   Future<bool> _onWillPop() async {

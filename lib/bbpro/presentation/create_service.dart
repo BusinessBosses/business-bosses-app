@@ -38,7 +38,8 @@ class CreateServiceListing extends StatefulWidget {
 class _CreateServiceListingState extends State<CreateServiceListing>
     with SingleTickerProviderStateMixin {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
-  final ShopController shopController = Get.put(ShopController());
+  final ShopController shopController =
+      Get.put(ShopController(), permanent: true);
   final ProfileController profileController = Get.find();
   final ImagePicker _picker = ImagePicker();
   final List<File> _selectedImages = <File>[];
@@ -1030,7 +1031,7 @@ class _CreateServiceListingState extends State<CreateServiceListing>
 
 // 3. Upload and add newly selected images
       for (File image in _selectedImages) {
-        final response = await ApiService.uploadFile(image);
+        final dynamic response = await ApiService.uploadFile(image);
         if (response['success']) {
           finalImages.add(response['fileUrl']);
         }
