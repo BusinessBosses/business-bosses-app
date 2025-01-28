@@ -211,15 +211,15 @@ class _ManageServicesState extends State<ManageServices> {
                         return GestureDetector(
                           onTap: () {
                             // print(service);
-                            // Get.to(
-                            //   () => CreateServiceListing(
-                            //     service: service,
-                            //   ),
-                            // );
                             Get.to(
-                              () => BookServiceScreen(
-                                  service: service, shop: shopController.shop!),
+                              () => CreateServiceListing(
+                                service: service,
+                              ),
                             );
+                            // Get.to(
+                            //   () => BookServiceScreen(
+                            //       service: service, shop: shopController.shop!),
+                            // );
                           },
                           child: Padding(
                             padding: const EdgeInsets.only(bottom: 10.0),
