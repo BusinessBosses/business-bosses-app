@@ -830,6 +830,7 @@ class _BookServiceScreenState extends State<BookServiceScreen> {
                       Column(
                         children: widget.service.packages
                             .map((dynamic package) => CheckboxListTile(
+                                  activeColor: Colors.black,
                                   title: Text(package['name']),
                                   subtitle: Text(
                                       '${widget.shop.currency}${package['price']}'),
