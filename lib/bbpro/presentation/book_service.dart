@@ -1,3 +1,4 @@
+import 'package:business_bosses_v2/action/action.dart';
 import 'package:business_bosses_v2/bbpro/controllers/order_controller.dart';
 import 'package:business_bosses_v2/bbpro/controllers/shop_controller.dart';
 import 'package:business_bosses_v2/bbpro/models/service_model.dart';
@@ -11,6 +12,7 @@ import 'package:business_bosses_v2/bbpro/widgets/servicetypesection.dart';
 import 'package:business_bosses_v2/common/dialogs/snackbar.dart';
 import 'package:business_bosses_v2/common/generic_slider.dart';
 import 'package:business_bosses_v2/common/models/user_model.dart';
+import 'package:business_bosses_v2/common/widgets/text_widget.dart';
 import 'package:business_bosses_v2/features/profile/controller/profile_controller.dart';
 import 'package:business_bosses_v2/features/profile/presentation/public_profile_screen.dart';
 import 'package:business_bosses_v2/navigation/routes.dart';
@@ -99,6 +101,7 @@ class _BookServiceScreenState extends State<BookServiceScreen> {
   String paymentMethod = '';
   String activePaymentMethod = '';
   bool isAppointment = false;
+  bool blocked = false;
 
   @override
   void initState() {
@@ -138,6 +141,182 @@ class _BookServiceScreenState extends State<BookServiceScreen> {
         backgroundColor: backgroundColor,
         appBar: AppBar(
           titleSpacing: 0,
+          actions: <Widget>[
+            Padding(
+              padding: const EdgeInsets.only(right: 15.0),
+              child: InkWell(
+                  onTap: () {
+                    showDialog(
+                      context: context,
+                      builder: (BuildContext context) => AlertDialog(
+                        content: Column(
+                          mainAxisSize: MainAxisSize.min,
+                          children: <Widget>[
+                            ListTile(
+                              onTap: () {
+                                navigateTo(context);
+                                showDialog(
+                                  context: context,
+                                  builder: (BuildContext context) =>
+                                      AlertDialog(
+                                    title: const TextWidget(
+                                      text: 'Do you want to block user?',
+                                      centralize: true,
+                                      fontWeight: FontWeight.w700,
+                                      size: 20,
+                                    ),
+                                    content: TextWidget(
+                                      text: blocked == true
+                                          ? 'You will see posts and comments related to user on your feed'
+                                          : 'You will no longer see undefined posts and comments on your feed',
+                                      centralize: true,
+                                      color: Colors.black.withOpacity(.6),
+                                    ),
+                                    actions: <Widget>[
+                                      TextButton(
+                                        onPressed: () => navigateTo(context),
+                                        child: const TextWidget(
+                                          text: 'Cancel',
+                                          fontWeight: FontWeight.w700,
+                                          size: 18,
+                                          color: Colors.grey,
+                                        ),
+                                      ),
+                                      GestureDetector(
+                                        onTap: () {
+                                          navigateTo(context);
+                                          // print(_post.user.uid);
+
+                                          // widget
+                                          //     .onBlock(_post.user.uid);
+                                          showSnackBar(context,
+                                              message: blocked == true
+                                                  ? 'User has been blocked'
+                                                  : 'User has been unblocked');
+                                        },
+                                        child: Container(
+                                          padding: const EdgeInsets.symmetric(
+                                            vertical: 7,
+                                            horizontal: 14,
+                                          ),
+                                          decoration: BoxDecoration(
+                                            color: primaryColorLT,
+                                            borderRadius:
+                                                BorderRadius.circular(5),
+                                          ),
+                                          child: TextWidget(
+                                            text: blocked == true
+                                                ? 'Unblock'
+                                                : 'Block',
+                                            color: Colors.white,
+                                            fontWeight: FontWeight.bold,
+                                          ),
+                                        ),
+                                      )
+                                    ],
+                                  ),
+                                );
+                              },
+                              contentPadding: EdgeInsets.zero,
+                              title: widget.service.user!.isSubscribed
+                                  ? Row(
+                                      children: <Widget>[
+                                        TextWidget(
+                                          text: blocked == true
+                                              ? 'Unblock @${widget.service.user!.name ?? widget.service.user!.username}'
+                                              : 'Block @${widget.service.user!.name ?? widget.service.user!.username}',
+                                          color: Colors.blue,
+                                        ),
+                                        const SizedBox(width: 5),
+                                        SvgPicture.asset(
+                                          'assets/svgs/premiumbadge.svg',
+                                          height: 9,
+                                          color: primaryColorLT,
+                                        )
+                                      ],
+                                    )
+                                  : TextWidget(
+                                      text: blocked == true
+                                          ? 'Unblock @${widget.service.user!.name ?? widget.service.user!.username}'
+                                          : 'Block @${widget.service.user!.name ?? widget.service.user!.username}',
+                                      color: Colors.blue,
+                                    ),
+                            ),
+                            ListTile(
+                              onTap: () {
+                                navigateTo(context);
+                                showDialog(
+                                  context: context,
+                                  builder: (BuildContext context) =>
+                                      AlertDialog(
+                                    title: const TextWidget(
+                                      text: 'Do you want to report user?',
+                                      centralize: true,
+                                      fontWeight: FontWeight.w700,
+                                      size: 20,
+                                    ),
+                                    content: TextWidget(
+                                      text:
+                                          'The user will be reported to admin to evaluate if it violates any community policy',
+                                      centralize: true,
+                                      color: Colors.black.withOpacity(.6),
+                                    ),
+                                    actions: <Widget>[
+                                      TextButton(
+                                        onPressed: () => navigateTo(context),
+                                        child: const TextWidget(
+                                          text: 'Cancel',
+                                          fontWeight: FontWeight.w700,
+                                          size: 18,
+                                          color: Colors.grey,
+                                        ),
+                                      ),
+                                      GestureDetector(
+                                        onTap: () async {
+                                          navigateTo(context);
+                                          await _reportUser(
+                                              context,
+                                              'accountReport',
+                                              widget.service.user!.uid,
+                                              widget.service.user!.username);
+                                        },
+                                        child: Container(
+                                          padding: const EdgeInsets.symmetric(
+                                            vertical: 7,
+                                            horizontal: 14,
+                                          ),
+                                          decoration: BoxDecoration(
+                                            color: primaryColorLT,
+                                            borderRadius:
+                                                BorderRadius.circular(5),
+                                          ),
+                                          child: const TextWidget(
+                                            text: 'Report',
+                                            color: Colors.white,
+                                            fontWeight: FontWeight.bold,
+                                          ),
+                                        ),
+                                      )
+                                    ],
+                                  ),
+                                );
+                              },
+                              contentPadding: EdgeInsets.zero,
+                              title: const TextWidget(
+                                text: 'Report this user',
+                                color: Colors.red,
+                              ),
+                            )
+                          ],
+                        ),
+                      ),
+                    );
+                  },
+                  child: CircleAvatar(
+                      backgroundColor: backgroundColor,
+                      child: SvgPicture.asset('assets/svgs/more.svg'))),
+            )
+          ],
           leading: IconButton(
             onPressed: () {
               Get.back();
@@ -963,6 +1142,9 @@ class _BookServiceScreenState extends State<BookServiceScreen> {
       ),
     );
   }
+
+  Future<void> _reportUser(BuildContext context, String reportType,
+      String userId, String username) async {}
 
   List<String> _generateTimeSlots() {
     // Default time values if data is invalid or null

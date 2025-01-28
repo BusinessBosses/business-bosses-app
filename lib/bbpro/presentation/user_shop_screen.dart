@@ -5,6 +5,7 @@ import 'package:business_bosses_v2/bbpro/models/service_model.dart';
 import 'package:business_bosses_v2/bbpro/models/product_model.dart';
 import 'package:business_bosses_v2/bbpro/presentation/book_service.dart';
 import 'package:business_bosses_v2/bbpro/presentation/createcustomlisting.dart';
+import 'package:business_bosses_v2/bbpro/presentation/my_orders_screen.dart';
 import 'package:business_bosses_v2/bbpro/presentation/order_product.dart';
 import 'package:business_bosses_v2/bbpro/widgets/customitemcard.dart';
 import 'package:business_bosses_v2/bbpro/widgets/inventorycard.dart';
@@ -12,6 +13,7 @@ import 'package:business_bosses_v2/bbpro/widgets/servicecard.dart';
 import 'package:business_bosses_v2/common/models/user_model.dart';
 import 'package:business_bosses_v2/common/widgets/network_image_with_placeholder.dart';
 import 'package:business_bosses_v2/common/widgets/safety_model.dart';
+import 'package:business_bosses_v2/common/widgets/text_widget.dart';
 import 'package:business_bosses_v2/features/chat/chat_room_screen.dart';
 import 'package:business_bosses_v2/features/marketplace/presentation/seller_reviews.dart';
 import 'package:business_bosses_v2/features/posts/widgets/images_viewer_screen.dart';
@@ -41,6 +43,7 @@ class _UserShopScreenState extends State<UserShopScreen> {
   final ProfileController profileController = Get.find();
   final String _selectedItem = 'All Products';
   bool loading = true;
+  bool blocked = false;
 
   @override
   void initState() {
@@ -58,6 +61,9 @@ class _UserShopScreenState extends State<UserShopScreen> {
       });
     });
   }
+
+  Future<void> report(
+      BuildContext context, String reportType, String userId) async {}
 
   void _shareBizCenter() {
     String message =
@@ -87,16 +93,171 @@ class _UserShopScreenState extends State<UserShopScreen> {
               //   launchUrl(launchUri);
             } else if (action['text'] == 'Share') {
               _shareBizCenter();
-            } else if (action['text'] == 'Review') {
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (BuildContext context) => SellerReviewScreen(
-                    user: widget.user,
-                    refreshCallback: loadData,
-                  ),
-                ),
-              );
+            } else if (action['text'] == 'More') {
+              showDialog(
+                  context: context,
+                  builder: (BuildContext context) => AlertDialog(
+                        content: Column(
+                          mainAxisSize: MainAxisSize.min,
+                          children: <Widget>[
+                            ListTile(
+                              onTap: () {
+                                navigateTo(context);
+                                showDialog(
+                                  context: context,
+                                  builder: (BuildContext context) =>
+                                      AlertDialog(
+                                    title: const TextWidget(
+                                      text: 'Do you want to block user?',
+                                      centralize: true,
+                                      fontWeight: FontWeight.w700,
+                                      size: 20,
+                                    ),
+                                    content: TextWidget(
+                                      text: blocked == true
+                                          ? 'You will see posts and comments related to user on your feed'
+                                          : 'You will no longer see undefined posts and comments on your feed',
+                                      centralize: true,
+                                      color: Colors.black.withOpacity(.6),
+                                    ),
+                                    actions: <Widget>[
+                                      TextButton(
+                                        onPressed: () => navigateTo(context),
+                                        child: const TextWidget(
+                                          text: 'Cancel',
+                                          fontWeight: FontWeight.w700,
+                                          size: 18,
+                                          color: Colors.grey,
+                                        ),
+                                      ),
+                                      GestureDetector(
+                                        onTap: () {
+                                          navigateTo(context);
+                                          // print(_post.user.uid);
+
+                                          // widget
+                                          //     .onBlock(_post.user.uid);
+                                          showSnackBar(context,
+                                              message: blocked == true
+                                                  ? 'User has been blocked'
+                                                  : 'User has been unblocked');
+                                        },
+                                        child: Container(
+                                          padding: const EdgeInsets.symmetric(
+                                            vertical: 7,
+                                            horizontal: 14,
+                                          ),
+                                          decoration: BoxDecoration(
+                                            color: primaryColorLT,
+                                            borderRadius:
+                                                BorderRadius.circular(5),
+                                          ),
+                                          child: TextWidget(
+                                            text: blocked == true
+                                                ? 'Unblock'
+                                                : 'Block',
+                                            color: Colors.white,
+                                            fontWeight: FontWeight.bold,
+                                          ),
+                                        ),
+                                      )
+                                    ],
+                                  ),
+                                );
+                              },
+                              contentPadding: EdgeInsets.zero,
+                              title: widget.user.isSubscribed == true
+                                  ? Row(
+                                      children: <Widget>[
+                                        TextWidget(
+                                          text: blocked == true
+                                              ? 'Unblock @${widget.user.name}'
+                                              : 'Block @${widget.user.name}',
+                                          color: Colors.blue,
+                                        ),
+                                        const SizedBox(width: 5),
+                                        SvgPicture.asset(
+                                          'assets/svgs/premiumbadge.svg',
+                                          height: 9,
+                                          color: primaryColorLT,
+                                        )
+                                      ],
+                                    )
+                                  : TextWidget(
+                                      text: blocked == true
+                                          ? 'Unblock @${widget.user.name}'
+                                          : 'Block @${widget.user.name}',
+                                      color: Colors.blue,
+                                    ),
+                            ),
+                            ListTile(
+                              onTap: () {
+                                navigateTo(context);
+                                showDialog(
+                                  context: context,
+                                  builder: (BuildContext context) =>
+                                      AlertDialog(
+                                    title: const TextWidget(
+                                      text: 'Do you want to report user?',
+                                      centralize: true,
+                                      fontWeight: FontWeight.w700,
+                                      size: 20,
+                                    ),
+                                    content: TextWidget(
+                                      text:
+                                          'The user will be reported to admin to evaluate if it violates any community policy',
+                                      centralize: true,
+                                      color: Colors.black.withOpacity(.6),
+                                    ),
+                                    actions: <Widget>[
+                                      TextButton(
+                                        onPressed: () => navigateTo(context),
+                                        child: const TextWidget(
+                                          text: 'Cancel',
+                                          fontWeight: FontWeight.w700,
+                                          size: 18,
+                                          color: Colors.grey,
+                                        ),
+                                      ),
+                                      GestureDetector(
+                                        onTap: () async {
+                                          navigateTo(context);
+                                          await report(
+                                            context,
+                                            'accountReport',
+                                            widget.user.uid,
+                                          );
+                                        },
+                                        child: Container(
+                                          padding: const EdgeInsets.symmetric(
+                                            vertical: 7,
+                                            horizontal: 14,
+                                          ),
+                                          decoration: BoxDecoration(
+                                            color: primaryColorLT,
+                                            borderRadius:
+                                                BorderRadius.circular(5),
+                                          ),
+                                          child: const TextWidget(
+                                            text: 'Report',
+                                            color: Colors.white,
+                                            fontWeight: FontWeight.bold,
+                                          ),
+                                        ),
+                                      )
+                                    ],
+                                  ),
+                                );
+                              },
+                              contentPadding: EdgeInsets.zero,
+                              title: const TextWidget(
+                                text: 'Report this user',
+                                color: Colors.red,
+                              ),
+                            )
+                          ],
+                        ),
+                      ));
             }
           },
           child: Padding(
@@ -389,8 +550,8 @@ class _UserShopScreenState extends State<UserShopScreen> {
                                               },
                                               <String, String>{
                                                 'icon':
-                                                    'assets/svgs/orderordersinvoices.svg',
-                                                'text': 'Orders'
+                                                    'assets/svgs/optionsicon.svg',
+                                                'text': 'More'
                                               },
                                             ]),
                                           )
@@ -425,8 +586,7 @@ class _UserShopScreenState extends State<UserShopScreen> {
                                         children: <Widget>[
                                           const Padding(
                                             padding: EdgeInsets.symmetric(
-                                              horizontal: 15.0,
-                                            ),
+                                                horizontal: 15.0),
                                             child: Row(
                                               mainAxisAlignment:
                                                   MainAxisAlignment
