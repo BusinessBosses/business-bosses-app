@@ -9,14 +9,11 @@ import 'package:business_bosses_v2/bbpro/widgets/notificationbutton.dart';
 import 'package:business_bosses_v2/bbpro/presentation/inventory.dart';
 import 'package:business_bosses_v2/common/dialogs/snackbar.dart';
 import 'package:business_bosses_v2/common/widgets/network_image_with_placeholder.dart';
-import 'package:business_bosses_v2/utils/constants/constants.dart';
 import 'package:business_bosses_v2/utils/theme/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
-import 'package:purchases_flutter/purchases_flutter.dart';
 import 'package:url_launcher/url_launcher.dart';
-import 'package:url_launcher/url_launcher_string.dart';
 
 class Setup extends StatefulWidget {
   const Setup({super.key});
@@ -312,24 +309,7 @@ class _SetupState extends State<Setup> {
                                     color: textColor.withOpacity(0.7),
                                   ),
                                 ),
-                                onTap: () {
-                                  if (index == 0) {
-                                    launchPolicy();
-                                  } else if (index == 1) {
-                                    _contactUs();
-                                  } else if (index == 2) {
-                                    try {
-                                      Purchases.presentCodeRedemptionSheet();
-                                    } catch (e) {
-                                      showSnackbar(
-                                        title: 'Error',
-                                        message:
-                                            'Unable to open subscription management. Please try again later.',
-                                        error: true,
-                                      );
-                                    }
-                                  }
-                                },
+                                onTap: () {},
                                 trailing: const Icon(
                                   Icons.chevron_right,
                                   color: proprimaryColor,
@@ -385,18 +365,5 @@ class _SetupState extends State<Setup> {
         'Have a look at ${shopController.shop!.user?.username}\'s biz-center on Business Bosses\n'
         'https://my-biz.io/${shopController.shop?.name.toLowerCase().replaceAll(' ', '-')}';
     socialShare(message);
-  }
-
-  Future<void> launchPolicy() async {
-    String url = Constants.PRIVACY_POLICY_LINK;
-    bool canLunchLink = await canLaunchUrlString(url);
-    if (canLunchLink) {
-      await launchUrlString(url);
-    } else {
-      showSnackbar(
-          title: 'OOPS!',
-          message: 'An error occurred, please try again!',
-          error: true);
-    }
   }
 }

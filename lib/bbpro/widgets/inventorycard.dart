@@ -106,7 +106,7 @@ class _InventoryCardState extends State<InventoryCard> {
                           Text(
                             '${widget.shop?.currency ?? shopController.shop!.currency}${widget.product!.price.toStringAsFixed(2)}',
                             style: const TextStyle(
-                              color: primaryColorLT,
+                              color: Colors.grey,
                               decoration: TextDecoration.lineThrough,
                               fontSize: 11,
                             ),

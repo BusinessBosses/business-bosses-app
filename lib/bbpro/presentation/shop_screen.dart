@@ -211,7 +211,8 @@ class _ShopScreenState extends State<ShopScreen> {
                 height: 1,
                 // thickness: 1,
               ),
-              Expanded(
+              SizedBox(
+                height: 500,
                 child: TabBarView(
                   children: <Widget>[
                     ///Tab 1 Content
@@ -318,65 +319,272 @@ class _ShopScreenState extends State<ShopScreen> {
                                   child: Padding(
                                     padding: const EdgeInsets.symmetric(
                                         horizontal: 15.0),
-                                    child: Column(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                      children: <Widget>[
-                                        Expanded(
-                                          child: StaggeredGridView.countBuilder(
-                                            crossAxisCount: 2,
-                                            staggeredTileBuilder: (int index) =>
-                                                const StaggeredTile.fit(1),
-                                            mainAxisSpacing: 10.0,
-                                            crossAxisSpacing: 10.0,
-                                            itemCount:
-                                                shopController.items.length,
-                                            itemBuilder: (BuildContext context,
-                                                int index) {
-                                              final Object item =
-                                                  shopController.items[index];
-                                              if (item is Product) {
-                                                return GestureDetector(
-                                                  onTap: () {
-                                                    Get.to(() =>
-                                                        CreateProductListing(
-                                                            product: item));
-                                                  },
-                                                  child: InventoryCard(
-                                                    product: item,
-                                                    myShop: true,
+                                    child: DefaultTabController(
+                                      length: 3,
+                                      child: Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        children: <Widget>[
+                                          Row(
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.start,
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.spaceBetween,
+                                            children: <Widget>[
+                                              Container(
+                                                padding: const EdgeInsets.only(
+                                                    bottom: 15),
+                                                child: TabBar(
+                                                  isScrollable: true,
+                                                  labelColor: Colors.white,
+                                                  unselectedLabelColor:
+                                                      Colors.black,
+                                                  indicator: BoxDecoration(
+                                                    borderRadius:
+                                                        BorderRadius.circular(
+                                                            50),
+                                                    color: Colors.black87,
                                                   ),
-                                                );
-                                              } else if (item is Service) {
-                                                return GestureDetector(
-                                                  onTap: () {
+                                                  tabs: const <Widget>[
+                                                    Tab(
+                                                      text: 'Products',
+                                                      height: 35,
+                                                    ),
+                                                    Tab(
+                                                      text: 'Services',
+                                                      height: 35,
+                                                    ),
+                                                    Tab(
+                                                      text: 'Other',
+                                                      height: 35,
+                                                    ),
+                                                  ],
+                                                ),
+                                              ),
+                                              PopupMenuButton<String>(
+                                                onSelected: (String value) {
+                                                  if (value == 'Add Product') {
                                                     Get.to(() =>
-                                                        CreateServiceListing(
-                                                            service: item));
-                                                  },
-                                                  child: ServiceCard(
-                                                    myShop: true,
-                                                    service: item,
-                                                  ),
-                                                );
-                                              } else if (item is Customitem) {
-                                                return GestureDetector(
-                                                  onTap: () {
+                                                        const CreateProductListing());
+                                                  } else if (value ==
+                                                      'Add Service') {
                                                     Get.to(() =>
-                                                        const CreateCustomListing());
-                                                  },
-                                                  child: CustomItemCard(
-                                                    myShop: true,
-                                                    customitem: item,
+                                                        const CreateServiceListing());
+                                                  }
+                                                },
+                                                shape: RoundedRectangleBorder(
+                                                  borderRadius:
+                                                      BorderRadius.circular(
+                                                          10.0),
+                                                ),
+                                                itemBuilder:
+                                                    (BuildContext context) {
+                                                  return <PopupMenuEntry<
+                                                      String>>[
+                                                    PopupMenuItem<String>(
+                                                      value: 'product',
+                                                      onTap: () {
+                                                        Get.to(() =>
+                                                            const CreateProductListing());
+                                                      },
+                                                      child: Row(
+                                                        children: <Widget>[
+                                                          SvgPicture.asset(
+                                                            'assets/svgs/addproduct.svg',
+                                                            colorFilter:
+                                                                const ColorFilter
+                                                                    .mode(
+                                                              textColor,
+                                                              BlendMode.srcIn,
+                                                            ),
+                                                            height: 18,
+                                                          ),
+                                                          const SizedBox(
+                                                              width: 8),
+                                                          const Text(
+                                                            'Add Product',
+                                                            style: TextStyle(
+                                                              fontSize: 13,
+                                                            ),
+                                                          ),
+                                                        ],
+                                                      ),
+                                                    ),
+                                                    PopupMenuItem<String>(
+                                                      value: 'service',
+                                                      onTap: () {
+                                                        Get.to(() =>
+                                                            const CreateServiceListing());
+                                                      },
+                                                      child: Row(
+                                                        children: <Widget>[
+                                                          SvgPicture.asset(
+                                                            'assets/svgs/addservice.svg',
+                                                            colorFilter:
+                                                                const ColorFilter
+                                                                    .mode(
+                                                              textColor,
+                                                              BlendMode.srcIn,
+                                                            ),
+                                                            height: 18,
+                                                          ),
+                                                          const SizedBox(
+                                                              width: 8),
+                                                          const Text(
+                                                            'Add Service',
+                                                            style: TextStyle(
+                                                              fontSize: 13,
+                                                            ),
+                                                          ),
+                                                        ],
+                                                      ),
+                                                    ),
+                                                    PopupMenuItem<String>(
+                                                      value: 'custom',
+                                                      onTap: () {
+                                                        Get.to(() =>
+                                                            const CreateCustomListing());
+                                                      },
+                                                      child: const Row(
+                                                        children: <Widget>[
+                                                          Icon(
+                                                            Icons.add,
+                                                            color: Colors.black,
+                                                            size: 18,
+                                                          ),
+                                                          SizedBox(width: 8),
+                                                          Text(
+                                                            'Add Custom Item',
+                                                            style: TextStyle(
+                                                              fontSize: 13,
+                                                            ),
+                                                          ),
+                                                        ],
+                                                      ),
+                                                    ),
+                                                  ];
+                                                },
+                                                child: const CircleAvatar(
+                                                  backgroundColor: Colors.black,
+                                                  child: Icon(
+                                                    Icons.add,
+                                                    color: Colors.white,
                                                   ),
-                                                );
-                                              } else {
-                                                return const SizedBox.shrink();
-                                              }
-                                            },
+                                                ),
+                                              )
+                                            ],
                                           ),
-                                        ),
-                                      ],
+                                          Expanded(
+                                            child: TabBarView(
+                                              children: <Widget>[
+                                                StaggeredGridView.countBuilder(
+                                                  crossAxisCount: 2,
+                                                  staggeredTileBuilder:
+                                                      (int index) =>
+                                                          const StaggeredTile
+                                                              .fit(1),
+                                                  mainAxisSpacing: 10.0,
+                                                  crossAxisSpacing: 10.0,
+                                                  itemCount: shopController
+                                                      .items
+                                                      .whereType<Product>()
+                                                      .length,
+                                                  itemBuilder:
+                                                      (BuildContext context,
+                                                          int index) {
+                                                    final Product product =
+                                                        shopController.items
+                                                            .whereType<
+                                                                Product>()
+                                                            .toList()[index];
+                                                    return GestureDetector(
+                                                      onTap: () {
+                                                        Get.to(
+                                                          () =>
+                                                              CreateProductListing(
+                                                            product: product,
+                                                          ),
+                                                        );
+                                                      },
+                                                      child: InventoryCard(
+                                                        product: product,
+                                                        myShop: true,
+                                                      ),
+                                                    );
+                                                  },
+                                                ),
+                                                StaggeredGridView.countBuilder(
+                                                  crossAxisCount: 2,
+                                                  staggeredTileBuilder:
+                                                      (int index) =>
+                                                          const StaggeredTile
+                                                              .fit(1),
+                                                  mainAxisSpacing: 10.0,
+                                                  crossAxisSpacing: 10.0,
+                                                  itemCount: shopController
+                                                      .items
+                                                      .whereType<Service>()
+                                                      .length,
+                                                  itemBuilder:
+                                                      (BuildContext context,
+                                                          int index) {
+                                                    final Service service =
+                                                        shopController.items
+                                                            .whereType<
+                                                                Service>()
+                                                            .toList()[index];
+                                                    return GestureDetector(
+                                                      onTap: () {
+                                                        Get.to(
+                                                          () =>
+                                                              CreateServiceListing(
+                                                            service: service,
+                                                          ),
+                                                        );
+                                                      },
+                                                      child: ServiceCard(
+                                                        myShop: true,
+                                                        service: service,
+                                                      ),
+                                                    );
+                                                  },
+                                                ),
+                                                StaggeredGridView.countBuilder(
+                                                  crossAxisCount: 2,
+                                                  staggeredTileBuilder:
+                                                      (int index) =>
+                                                          const StaggeredTile
+                                                              .fit(1),
+                                                  mainAxisSpacing: 10.0,
+                                                  crossAxisSpacing: 10.0,
+                                                  itemCount: shopController
+                                                      .customItems.length,
+                                                  itemBuilder:
+                                                      (BuildContext context,
+                                                          int index) {
+                                                    final Customitem
+                                                        customitem =
+                                                        shopController
+                                                            .customItems[index];
+                                                    return GestureDetector(
+                                                      onTap: () {
+                                                        Get.to(
+                                                          () =>
+                                                              const CreateCustomListing(),
+                                                        );
+                                                      },
+                                                      child: CustomItemCard(
+                                                        myShop: true,
+                                                        customitem: customitem,
+                                                      ),
+                                                    );
+                                                  },
+                                                ),
+                                              ],
+                                            ),
+                                          ),
+                                        ],
+                                      ),
                                     ),
                                   ),
                                 ),
@@ -413,92 +621,6 @@ class _ShopScreenState extends State<ShopScreen> {
               ),
             ],
           ),
-        ),
-      ),
-      floatingActionButton: FloatingActionButton(
-        backgroundColor: Colors.black,
-        onPressed: () {
-          showModalBottomSheet(
-            context: context,
-            shape: const RoundedRectangleBorder(
-              borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
-            ),
-            builder: (BuildContext context) {
-              return SizedBox(
-                height: 250,
-                child: ListView.separated(
-                  padding: const EdgeInsets.all(10),
-                  itemBuilder: (BuildContext context, int index) {
-                    if (index == 0) {
-                      return ListTile(
-                        leading: SvgPicture.asset(
-                          'assets/svgs/addproduct.svg',
-                          colorFilter: const ColorFilter.mode(
-                            Colors.black,
-                            BlendMode.srcIn,
-                          ),
-                          height: 24,
-                        ),
-                        title: const Text(
-                          'Add Product',
-                          style: TextStyle(fontSize: 14),
-                        ),
-                        horizontalTitleGap: 0.0,
-                        onTap: () {
-                          Navigator.pop(context);
-                          Get.to(() => const CreateProductListing());
-                        },
-                      );
-                    } else if (index == 1) {
-                      return ListTile(
-                        leading: SvgPicture.asset(
-                          'assets/svgs/addservice.svg',
-                          colorFilter: const ColorFilter.mode(
-                            Colors.black,
-                            BlendMode.srcIn,
-                          ),
-                          height: 24,
-                        ),
-                        title: const Text(
-                          'Add Service',
-                          style: TextStyle(fontSize: 14),
-                        ),
-                        horizontalTitleGap: 0.0,
-                        onTap: () {
-                          Navigator.pop(context);
-                          Get.to(() => const CreateServiceListing());
-                        },
-                      );
-                    } else {
-                      return ListTile(
-                        leading: const Icon(
-                          Icons.add,
-                          color: Colors.black,
-                          size: 24,
-                        ),
-                        title: const Text(
-                          'Add Custom Item',
-                          style: TextStyle(fontSize: 14),
-                        ),
-                        horizontalTitleGap: 0.0,
-                        onTap: () {
-                          Navigator.pop(context);
-                          Get.to(() => const CreateCustomListing());
-                        },
-                      );
-                    }
-                  },
-                  separatorBuilder: (BuildContext context, int index) =>
-                      const Divider(),
-                  itemCount: 3,
-                ),
-              );
-            },
-          );
-        },
-        child: const Icon(
-          Icons.add,
-          color: Colors.white,
         ),
       ),
     );

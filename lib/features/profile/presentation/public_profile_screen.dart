@@ -28,12 +28,9 @@ import '../widgets/friendprofileheader.dart';
 class PublicProfileScreen extends StatefulWidget {
   static const String routeName = '/public-profile-screen';
   bool? store;
-  final int? selectedIndex;
-  final int? currentIndex;
+
   // ignore: public_member_api_docs
-  PublicProfileScreen(
-      {Key? key, this.store, this.selectedIndex, this.currentIndex})
-      : super(key: key);
+  PublicProfileScreen({Key? key, this.store}) : super(key: key);
 
   @override
   State<PublicProfileScreen> createState() => _PublicProfileScreenState();
@@ -156,11 +153,8 @@ class _PublicProfileScreenState extends State<PublicProfileScreen> {
   @override
   void initState() {
     super.initState();
-    _pageController =
-        PageController(initialPage: widget.currentIndex ?? _currentIndex);
-    _selectedIndex = widget.selectedIndex ?? 0;
-    _currentIndex = widget.currentIndex ?? 0;
-
+    _selectedIndex = 0;
+    _pageController = PageController(initialPage: _currentIndex);
     if (Get.arguments == null) {
       // print("back");
       Get.back();
