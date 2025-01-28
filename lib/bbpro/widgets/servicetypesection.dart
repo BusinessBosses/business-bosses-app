@@ -26,53 +26,36 @@ class _ServicetypeSectionWidgetState extends State<ServicetypeSectionWidget> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
-            Align(
-              alignment: Alignment.topLeft,
-              child: Container(
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
-                decoration: BoxDecoration(
-                  color: Colors.grey[300],
-                  borderRadius: BorderRadius.circular(20),
-                ),
-                child: Text(
-                  widget.isOnline == true ? 'Online' : 'In-Person',
-                  style: const TextStyle(
-                    fontSize: 14,
-                    fontWeight: FontWeight.bold,
+            const Text(
+              'Delivery Method',
+              style: TextStyle(fontSize: 16, fontWeight: FontWeight.w700),
+            ),
+            const SizedBox(
+              height: 5,
+            ),
+            Row(
+              children: <Widget>[
+                Align(
+                  alignment: Alignment.topLeft,
+                  child: Container(
+                    padding:
+                        const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+                    decoration: BoxDecoration(
+                      color: Colors.grey[300],
+                      borderRadius: BorderRadius.circular(20),
+                    ),
+                    child: Text(
+                      widget.isOnline == true ? 'Online' : 'In-Person',
+                      style: const TextStyle(
+                        fontSize: 14,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
                   ),
                 ),
-              ),
-            ),
-            Column(
-              children: <Widget>[
-                // Center(
-                //   child: Image.asset(
-                //     'assets/google_meet_logo.png', // Replace with your Google Meet logo asset
-                //     height: 50,
-                //   ),
-                // ),
-                // const SizedBox(height: 10),
-                // const Center(
-                //   child: Text(
-                //     'Google Meet',
-                //     style: TextStyle(
-                //       fontSize: 18,
-                //       fontWeight: FontWeight.bold,
-                //     ),
-                //   ),
-                // ),
-                // const SizedBox(height: 5),
-                // const Center(
-                //   child: Text(
-                //     'Web conference',
-                //     style: TextStyle(
-                //       fontSize: 14,
-                //       color: Colors.grey,
-                //     ),
-                //   ),
-                // ),
-
+                const SizedBox(
+                  width: 5,
+                ),
                 Center(
                     child: widget.isOnline == true
                         ? InkWell(
@@ -95,6 +78,29 @@ class _ServicetypeSectionWidgetState extends State<ServicetypeSectionWidget> {
                               decoration: TextDecoration.underline,
                             ),
                           )),
+              ],
+            ),
+            const SizedBox(
+              height: 10,
+            ),
+            const Divider(),
+            const SizedBox(
+              height: 10,
+            ),
+            Row(
+              children: <Widget>[
+                const Text(
+                  'Service Type',
+                  style: TextStyle(fontSize: 16, fontWeight: FontWeight.w700),
+                ),
+                const SizedBox(
+                  width: 5,
+                ),
+                Text(
+                  widget.service.serviceType ?? 'N/A',
+                  style: const TextStyle(
+                      fontSize: 14, fontWeight: FontWeight.normal),
+                ),
               ],
             ),
           ],
