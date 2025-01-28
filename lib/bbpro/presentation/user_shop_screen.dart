@@ -576,7 +576,7 @@ class _UserShopScreenState extends State<UserShopScreen> {
                                     ]),
                                 const Divider(
                                   height: 1,
-                                  // thickness: 1,
+                                  thickness: 1,
                                 ),
                                 Expanded(
                                   child: TabBarView(
