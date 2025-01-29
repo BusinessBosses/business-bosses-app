@@ -6,6 +6,7 @@ import 'package:business_bosses_v2/common/dialogs/snackbar.dart';
 import 'package:business_bosses_v2/common/widgets/network_image_with_placeholder.dart';
 import 'package:business_bosses_v2/utils/theme/theme.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 import 'package:business_bosses_v2/bbpro/presentation/create_service.dart';
 
@@ -40,12 +41,14 @@ class ServiceCard extends StatefulWidget {
   final Service? service;
   final bool? myShop;
   final Shop? shop;
+  final bool? marketplace;
 
   const ServiceCard({
     Key? key,
     this.service,
     this.myShop,
     this.shop,
+    this.marketplace,
   }) : super(key: key);
 
   @override
@@ -198,25 +201,41 @@ class _ServiceCardState extends State<ServiceCard> {
           ),
           const SizedBox(height: 5),
           widget.myShop == false
-              ? Container(
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: 5, vertical: 3),
-                  decoration: BoxDecoration(
-                    color: Colors.black,
-                    borderRadius: BorderRadius.circular(70),
-                    border: Border.all(
-                      color: Colors.grey,
-                      width: 1,
+              ? Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: <Widget>[
+                    if (widget.marketplace == true)
+                      Row(
+                        children: <Widget>[
+                          const Icon(Icons.star, color: Colors.amber, size: 15),
+                          const SizedBox(width: 4),
+                          Text(
+                            '${shopController.userShop!.user?.averageRating?.toStringAsFixed(1)} Reviews',
+                            style: const TextStyle(
+                                fontWeight: FontWeight.w700, fontSize: 12),
+                          ),
+                        ],
+                      ),
+                    Container(
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 5, vertical: 3),
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(6),
+                        border: Border.all(
+                          color: primaryColorLT,
+                          width: 1,
+                        ),
+                      ),
+                      child: const Text(
+                        'Book',
+                        style: TextStyle(
+                          color: primaryColorLT,
+                          fontWeight: FontWeight.bold,
+                          fontSize: 11,
+                        ),
+                      ),
                     ),
-                  ),
-                  child: const Text(
-                    'Book',
-                    style: TextStyle(
-                      color: Colors.white,
-                      fontWeight: FontWeight.bold,
-                      fontSize: 11,
-                    ),
-                  ),
+                  ],
                 )
               : Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,

@@ -172,6 +172,7 @@ class _ServicesPageState extends State<ServicesPage> {
                         }
                       },
                       child: ServiceCard(
+                        marketplace: true,
                         shop: service.shop!,
                         service: service,
                         myShop: service.user!.uid ==

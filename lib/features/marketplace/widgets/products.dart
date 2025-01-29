@@ -170,6 +170,7 @@ class _ProductsPageState extends State<ProductsPage> {
                         }
                       },
                       child: InventoryCard(
+                        marketplace: true,
                         product: product,
                         shop: product.shop!,
                         myShop: product.user!.uid ==

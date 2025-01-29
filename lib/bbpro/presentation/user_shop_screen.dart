@@ -349,7 +349,7 @@ class _UserShopScreenState extends State<UserShopScreen> {
                                                         size: 18),
                                                     const SizedBox(width: 4),
                                                     Text(
-                                                      '${shopController.userShop!.user?.averageRating?.toStringAsFixed(2)} Reviews',
+                                                      '${shopController.userShop!.user?.averageRating?.toStringAsFixed(1)} Reviews',
                                                       style: const TextStyle(
                                                           fontWeight:
                                                               FontWeight.w700,

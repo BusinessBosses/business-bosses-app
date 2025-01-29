@@ -219,6 +219,7 @@ class _MarketsPageState extends State<MarketsPage> {
                           }
                         },
                         child: InventoryCard(
+                          marketplace: true,
                           product: product,
                           shop: product.shop!,
                           myShop: product.user!.uid ==
@@ -244,6 +245,7 @@ class _MarketsPageState extends State<MarketsPage> {
                         },
                         child: ServiceCard(
                           shop: service.shop!,
+                          marketplace: true,
                           service: service,
                           myShop: service.user!.uid ==
                                   profileController.myProfile.uid
