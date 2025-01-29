@@ -70,17 +70,15 @@ class _BottomnavscreenState extends State<Bottomnavscreen> {
       const ClientsScreen(),
       const Setup(),
     ];
-    if (shopController.shop == null) {
-      shopController.initShopData().then((bool value) {
-        if (value) {
-          shopController.loading(false);
-        } else {
-          Get.to(() => const Setupshop(
-                backToHome: true,
-              ));
-        }
-      });
-    }
+    shopController.initShopData().then((bool value) {
+      if (value) {
+        shopController.loading(false);
+      } else {
+        Get.to(() => const Setupshop(
+              backToHome: true,
+            ));
+      }
+    });
   }
 
   Future<bool> _onWillPop() async {

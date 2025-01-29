@@ -105,7 +105,6 @@ class ShopController extends GetxController {
           }
         }
       }
-      loading(false);
       return true;
     } else {
       return false;

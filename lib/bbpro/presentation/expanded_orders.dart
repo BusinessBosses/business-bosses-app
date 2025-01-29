@@ -93,7 +93,7 @@ class _ExpandedOrdersState extends State<ExpandedOrders> {
               ),
               leading: _buildProductImage(product),
               subtitle: Text(
-                '${widget.shop != null ? widget.shop!.currency : shopController.shop?.currency ?? ''} ${product.price.toString()}',
+                '${widget.shop != null ? widget.shop!.currency : widget.order.shop.currency} ${product.price.toString()}',
                 style: const TextStyle(
                   fontSize: 13,
                 ),
@@ -114,7 +114,7 @@ class _ExpandedOrdersState extends State<ExpandedOrders> {
               ),
               leading: _buildServiceImage(service),
               subtitle: Text(
-                '${widget.shop != null ? widget.shop!.currency : shopController.shop?.currency ?? ''} ${service.price.toString()}',
+                '${widget.shop != null ? widget.shop!.currency : widget.order.shop.currency} ${service.price.toString()}',
                 style: const TextStyle(
                   fontSize: 14,
                 ),
@@ -134,7 +134,7 @@ class _ExpandedOrdersState extends State<ExpandedOrders> {
                 ),
               ),
               subtitle: Text(
-                '${widget.shop != null ? widget.shop!.currency : shopController.shop?.currency ?? ''} ${custom['amount'].toString()}',
+                '${widget.shop != null ? widget.shop!.currency : widget.order.shop.currency} ${custom['amount'].toString()}',
                 style: const TextStyle(
                   fontSize: 14,
                 ),
