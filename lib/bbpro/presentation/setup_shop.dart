@@ -262,9 +262,14 @@ class _SetupshopState extends State<Setupshop> with TickerProviderStateMixin {
       _populatePaymentMethods(widget.shop!.payments);
     } else {
       shopController.initShopData().then((bool value) {
-        if (mounted) {
-          loading = false;
-          setState(() {});
+        if (value) {
+          Navigator.pop(context);
+        } else {
+          if (mounted) {
+            loading = false;
+            shopController.loading(false);
+            setState(() {});
+          }
         }
       });
     }
