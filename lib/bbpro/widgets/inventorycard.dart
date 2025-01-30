@@ -2,6 +2,7 @@
 import 'package:business_bosses_v2/bbpro/controllers/shop_controller.dart';
 import 'package:business_bosses_v2/bbpro/models/shop_model.dart';
 import 'package:business_bosses_v2/bbpro/presentation/create_product.dart';
+import 'package:business_bosses_v2/bbpro/widgets/countrycodes.dart';
 import 'package:business_bosses_v2/common/dialogs/snackbar.dart';
 import 'package:flutter/material.dart';
 
@@ -34,6 +35,12 @@ class InventoryCard extends StatefulWidget {
 
 class _InventoryCardState extends State<InventoryCard> {
   final ShopController shopController = Get.find();
+
+  @override
+  void initState() {
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -170,15 +177,33 @@ class _InventoryCardState extends State<InventoryCard> {
                     if (widget.marketplace == true)
                       Row(
                         children: <Widget>[
-                          const Icon(Icons.star, color: Colors.amber, size: 15),
+                          const Icon(Icons.place, color: Colors.grey, size: 15),
                           const SizedBox(width: 4),
                           Text(
-                            '${shopController.userShop!.user?.averageRating?.toStringAsFixed(1)} Reviews',
+                            CountryCodes.nameToCode[
+                                    widget.product?.location?.trim()] ??
+                                'N/A',
                             style: const TextStyle(
                                 fontWeight: FontWeight.w700, fontSize: 12),
                           ),
                         ],
                       ),
+                    if (widget.marketplace == true)
+                      Row(
+                        children: <Widget>[
+                          const Icon(Icons.star, color: Colors.amber, size: 15),
+                          const SizedBox(width: 4),
+                          Text(
+                            (widget.product?.user?.averageRating != null)
+                                ? widget.product!.user!.averageRating!
+                                    .toStringAsFixed(1)
+                                : 'N/A',
+                            style: const TextStyle(
+                                fontWeight: FontWeight.w700, fontSize: 12),
+                          ),
+                        ],
+                      ),
+                    if (widget.marketplace == null) Container(width: 5),
                     Container(
                       padding: const EdgeInsets.symmetric(
                         horizontal: 5,
