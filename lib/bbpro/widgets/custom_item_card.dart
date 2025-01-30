@@ -89,56 +89,65 @@ class _CustomItemCardState extends State<CustomItemCard> {
                       overflow: TextOverflow.ellipsis,
                     ),
                     if (widget.myShop == false)
-                      Text(
-                        widget.customitem?.description ?? 'Item description',
-                        style: const TextStyle(fontSize: 11),
-                        maxLines: 2,
-                        overflow: TextOverflow.ellipsis,
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: <Widget>[
+                          Expanded(
+                            child: Text(
+                              widget.customitem?.description ??
+                                  'Item description',
+                              style: const TextStyle(fontSize: 11),
+                              maxLines: 2,
+                              overflow: TextOverflow.ellipsis,
+                            ),
+                          ),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: <Widget>[
+                              Container(
+                                width: 5,
+                              ),
+                              Container(
+                                padding: const EdgeInsets.symmetric(
+                                    horizontal: 5, vertical: 3),
+                                decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(6),
+                                  border: Border.all(
+                                    color: primaryColorLT,
+                                    width: 1,
+                                  ),
+                                ),
+                                child: const Row(
+                                  children: <Widget>[
+                                    Text(
+                                      'Open',
+                                      style: TextStyle(
+                                        color: primaryColorLT,
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: 11,
+                                      ),
+                                    ),
+                                    SizedBox(width: 5),
+                                    Icon(
+                                      Icons.link,
+                                      size: 15,
+                                      color: primaryColorLT,
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ],
+                          )
+                        ],
                       ),
                   ],
                 ),
               ),
             ],
           ),
-          const SizedBox(height: 5),
+          if (widget.myShop == false) const SizedBox(height: 5),
           widget.myShop == false
-              ? Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: <Widget>[
-                    Container(
-                      width: 5,
-                    ),
-                    Container(
-                      padding: const EdgeInsets.symmetric(
-                          horizontal: 5, vertical: 3),
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(6),
-                        border: Border.all(
-                          color: primaryColorLT,
-                          width: 1,
-                        ),
-                      ),
-                      child: const Row(
-                        children: <Widget>[
-                          Text(
-                            'Open link',
-                            style: TextStyle(
-                              color: primaryColorLT,
-                              fontWeight: FontWeight.bold,
-                              fontSize: 11,
-                            ),
-                          ),
-                          SizedBox(width: 5),
-                          Icon(
-                            Icons.link,
-                            size: 15,
-                            color: primaryColorLT,
-                          ),
-                        ],
-                      ),
-                    ),
-                  ],
-                )
+              ? Container()
               : Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   crossAxisAlignment: CrossAxisAlignment.end,

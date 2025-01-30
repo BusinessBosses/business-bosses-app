@@ -607,9 +607,24 @@ class _UserShopScreenState extends State<UserShopScreen> {
                                                           } else if (item
                                                               is Customitem) {
                                                             return GestureDetector(
-                                                              onTap: () {
-                                                                Get.to(() =>
-                                                                    const CreateCustomListing());
+                                                              onTap: () async {
+                                                                if (item.link !=
+                                                                    null) {
+                                                                  final Uri
+                                                                      url =
+                                                                      Uri.parse(
+                                                                          item.link!);
+                                                                  if (await canLaunchUrl(
+                                                                      url)) {
+                                                                    await launchUrl(
+                                                                        url,
+                                                                        mode: LaunchMode
+                                                                            .externalApplication);
+                                                                  } else {
+                                                                    throw Exception(
+                                                                        'Could not launch $url');
+                                                                  }
+                                                                }
                                                               },
                                                               child:
                                                                   CustomItemCard(
