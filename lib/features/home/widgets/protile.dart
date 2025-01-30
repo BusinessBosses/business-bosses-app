@@ -1,3 +1,4 @@
+import 'package:business_bosses_v2/bbpro/controllers/shop_controller.dart';
 import 'package:business_bosses_v2/features/premium/proscreen.dart';
 import 'package:business_bosses_v2/utils/theme/theme.dart';
 import 'package:flutter/material.dart';
@@ -8,19 +9,21 @@ class ProTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    ShopController shopController = Get.find();
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 0.0),
       child: Column(
         children: <Widget>[
-          const Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: <Widget>[
-              Text(
-                'Upgrade to Pro',
-                style: TextStyle(fontWeight: FontWeight.w700, fontSize: 14),
-              ),
-            ],
-          ),
+          // if (shopController.shop != null)
+            const Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: <Widget>[
+                Text(
+                  'Upgrade to Pro',
+                  style: TextStyle(fontWeight: FontWeight.w700, fontSize: 14),
+                ),
+              ],
+            ),
           const SizedBox(height: 5),
           Container(
             padding: const EdgeInsets.symmetric(vertical: 15),

@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'dart:io';
 
 import 'package:business_bosses_v2/bbpro/models/shop_model.dart';
@@ -53,6 +54,20 @@ class _SetupshopState extends State<Setupshop> with TickerProviderStateMixin {
   final TextEditingController lslController = TextEditingController();
   final TextEditingController xslController = TextEditingController();
   final TextEditingController cslController = TextEditingController();
+
+  final TextEditingController bankNameController = TextEditingController();
+  final TextEditingController bankCountryController = TextEditingController();
+  final TextEditingController bankAccountController = TextEditingController();
+  final TextEditingController bankFullNameController = TextEditingController();
+
+  final TextEditingController paypalNameController = TextEditingController();
+  final TextEditingController paypalEmailController = TextEditingController();
+
+  final TextEditingController walletNameController = TextEditingController();
+  final TextEditingController walletDetailsController = TextEditingController();
+
+  final TextEditingController cashDetailsController = TextEditingController();
+
   String? _selectedLocation;
   File? _selectedImage;
   bool loading = true;
@@ -72,6 +87,11 @@ class _SetupshopState extends State<Setupshop> with TickerProviderStateMixin {
     'Wallet': false,
     'Cash': false
   };
+
+  Map<String, dynamic> bankDetails = <String, dynamic>{};
+  Map<String, dynamic> paypalDetails = <String, dynamic>{};
+
+  Map<String, dynamic> walletDetails = <String, dynamic>{};
 
   // void _onSelectionChanged(Map<String, bool> newSelections) {
   //   setState(() {
@@ -116,13 +136,18 @@ class _SetupshopState extends State<Setupshop> with TickerProviderStateMixin {
                         selections = newSelections;
                         selectedOptions = Map<String, bool>.from(newSelections);
                         if (newSelections['Bank'] == false) {
-                          bankController.clear();
+                          bankNameController.clear();
+                          bankCountryController.clear();
+                          bankAccountController.clear();
+                          bankFullNameController.clear();
                         }
                         if (newSelections['Paypal'] == false) {
-                          paypalController.clear();
+                          paypalNameController.clear();
+                          paypalEmailController.clear();
                         }
                         if (newSelections['Wallet'] == false) {
-                          walletController.clear();
+                          walletNameController.clear();
+                          walletDetailsController.clear();
                         }
                         if (newSelections['Cash'] == false) {
                           cashController.clear();
@@ -145,6 +170,10 @@ class _SetupshopState extends State<Setupshop> with TickerProviderStateMixin {
                       pmh2: 'Country',
                       pmh3: 'Bank Name',
                       pmh4: 'Account Number',
+                      pm1controller: bankFullNameController,
+                      pm2controller: bankCountryController,
+                      pm3controller: bankNameController,
+                      pm4controller: bankAccountController,
                     ),
                   ),
                   const SizedBox(height: 15),
@@ -158,6 +187,8 @@ class _SetupshopState extends State<Setupshop> with TickerProviderStateMixin {
                       controller: paypalController,
                       pmh1: 'Full Name',
                       pmh2: 'Paypal Email Address',
+                      pm1controller: paypalNameController,
+                      pm2controller: paypalEmailController,
                     ),
                   ),
                   const SizedBox(height: 15),
@@ -171,6 +202,8 @@ class _SetupshopState extends State<Setupshop> with TickerProviderStateMixin {
                       controller: walletController,
                       pmh1: 'Full Name',
                       pmh2: 'Wallet Email Address or Wallet Number',
+                      pm1controller: walletNameController,
+                      pm2controller: walletDetailsController,
                     ),
                   ),
                   const SizedBox(height: 15),
@@ -229,9 +262,14 @@ class _SetupshopState extends State<Setupshop> with TickerProviderStateMixin {
       _populatePaymentMethods(widget.shop!.payments);
     } else {
       shopController.initShopData().then((bool value) {
-        if (mounted) {
-          loading = false;
-          setState(() {});
+        if (value) {
+          Navigator.pop(context);
+        } else {
+          if (mounted) {
+            loading = false;
+            shopController.loading(false);
+            setState(() {});
+          }
         }
       });
     }
@@ -258,15 +296,15 @@ class _SetupshopState extends State<Setupshop> with TickerProviderStateMixin {
       showSnackbar(message: 'Location is required', error: true);
       return false;
     }
-    if (selections['Bank'] == true && bankController.text.isEmpty) {
+    if (selections['Bank'] == true && bankDetails.isEmpty) {
       showSnackbar(message: 'Bank payment details are required', error: true);
       return false;
     }
-    if (selections['Paypal'] == true && paypalController.text.isEmpty) {
+    if (selections['Paypal'] == true && paypalDetails.isEmpty) {
       showSnackbar(message: 'Paypal payment details are required', error: true);
       return false;
     }
-    if (selections['Wallet'] == true && walletController.text.isEmpty) {
+    if (selections['Wallet'] == true && walletDetails.isEmpty) {
       showSnackbar(message: 'Wallet payment details are required', error: true);
       return false;
     }
@@ -280,20 +318,41 @@ class _SetupshopState extends State<Setupshop> with TickerProviderStateMixin {
   // Helper to populate payment method details based on shop data
   void _populatePaymentMethods(List<dynamic> paymentMethods) {
     for (Map<String, dynamic> method in paymentMethods) {
+      final dynamic methodDetails = jsonDecode(method['details']);
       if (method['paymentMethod'] == 'Bank') {
         selections['Bank'] = true;
-        bankController.text = method['details'];
         selectedOptions['Bank'] = true;
+        bankFullNameController.text = methodDetails['Full Name'];
+        bankAccountController.text = methodDetails['Account Number'];
+        bankCountryController.text = methodDetails['Country'];
+        bankNameController.text = methodDetails['Bank Name'];
+        bankDetails.addAll(<String, dynamic>{
+          'Full Name': bankFullNameController.text,
+          'Country': bankCountryController.text,
+          'Bank Name': bankNameController.text,
+          'Account Number': bankAccountController.text
+        });
       }
       if (method['paymentMethod'] == 'Paypal') {
         selections['Paypal'] = true;
-        paypalController.text = method['details'];
         selectedOptions['Paypal'] = true;
+        paypalEmailController.text = methodDetails['Paypal Email Address'];
+        paypalNameController.text = methodDetails['Full Name'];
+        paypalDetails.addAll(<String, dynamic>{
+          'Full Name': paypalNameController.text,
+          'Paypal Email Address': paypalEmailController.text
+        });
       }
       if (method['paymentMethod'] == 'Wallet') {
         selections['Wallet'] = true;
-        walletController.text = method['details'];
         selectedOptions['Wallet'] = true;
+        walletDetailsController.text =
+            methodDetails['Wallet Email Address or Wallet Number'];
+        walletNameController.text = methodDetails['Full Name'];
+        walletDetails.addAll(<String, dynamic>{
+          'Full Name': walletNameController.text,
+          'Wallet Email Address or Wallet Number': walletDetailsController.text
+        });
       }
       if (method['paymentMethod'] == 'Cash') {
         selections['Cash'] = true;
@@ -561,6 +620,22 @@ class _SetupshopState extends State<Setupshop> with TickerProviderStateMixin {
                     GestureDetector(
                       onTap: () {
                         _showBottomSheet(context, () {
+                          bankDetails.addAll(<String, dynamic>{
+                            'Full Name': bankFullNameController.text,
+                            'Country': bankCountryController.text,
+                            'Bank Name': bankNameController.text,
+                            'Account Number': bankAccountController.text
+                          });
+                          paypalDetails.addAll(<String, dynamic>{
+                            'Full Name': paypalNameController.text,
+                            'Paypal Email Address': paypalEmailController.text
+                          });
+                          walletDetails.addAll(<String, dynamic>{
+                            'Full Name': walletNameController.text,
+                            'Wallet Email Address or Wallet Number':
+                                walletDetailsController.text
+                          });
+                          setState(() {});
                           setState(() {});
                         });
                       },
@@ -635,29 +710,41 @@ class _SetupshopState extends State<Setupshop> with TickerProviderStateMixin {
     List<Map<String, dynamic>> paymentMethods = <Map<String, dynamic>>[];
 
     // Add payment methods to the array
-    if (selections['Bank'] == true && bankController.text.isNotEmpty) {
+
+    if (selections['Bank'] == true && bankDetails.isNotEmpty) {
       paymentMethods.add(<String, dynamic>{
         'paymentMethod': 'Bank',
-        'details': bankController.text,
+        'details': jsonEncode(bankDetails),
       });
     }
-    if (selections['Paypal'] == true && paypalController.text.isNotEmpty) {
+    if (selections['Paypal'] == true && paypalDetails.isNotEmpty) {
       paymentMethods.add(<String, dynamic>{
         'paymentMethod': 'Paypal',
-        'details': paypalController.text,
+        'details': jsonEncode(paypalDetails),
       });
     }
-    if (selections['Wallet'] == true && walletController.text.isNotEmpty) {
+    if (selections['Wallet'] == true && walletDetails.isNotEmpty) {
       paymentMethods.add(<String, dynamic>{
         'paymentMethod': 'Wallet',
-        'details': walletController.text,
+        'details': jsonEncode(walletDetails),
       });
     }
-    if (selections['Cash'] == true && cashController.text.isNotEmpty) {
+    if (selections['Cash'] == true) {
       paymentMethods.add(<String, dynamic>{
         'paymentMethod': 'Cash',
-        'details': cashController.text,
+        'details': 'some details',
       });
+    }
+
+    if (paymentMethods.isEmpty) {
+      showSnackbar(
+        message: 'Please select at least one payment method!',
+        error: true,
+      );
+      setState(() {
+        isSubmit = false;
+      });
+      return;
     }
 
     if (_selectedImage != null) {
@@ -726,7 +813,8 @@ class _SetupshopState extends State<Setupshop> with TickerProviderStateMixin {
       successDialog(context);
     } else {
       showSnackbar(
-        message: 'Error while adding shop!',
+        title: 'Error while adding shop!',
+        message: shopController.error!.message,
         error: true,
       );
     }

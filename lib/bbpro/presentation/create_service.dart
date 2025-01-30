@@ -8,10 +8,12 @@ import 'package:business_bosses_v2/bbpro/widgets/edit_text.dart';
 import 'package:business_bosses_v2/bbpro/widgets/iconbutton.dart';
 import 'package:business_bosses_v2/bbpro/widgets/switchwidget.dart';
 import 'package:business_bosses_v2/bbpro/widgets/taskitem.dart';
+import 'package:business_bosses_v2/features/home/widgets/sellingpopup.dart';
 import 'package:business_bosses_v2/features/marketplace/widgets/currency.dart';
 import 'package:business_bosses_v2/features/posts/widgets/image_item.dart';
 import 'package:business_bosses_v2/features/profile/controller/profile_controller.dart';
 import 'package:business_bosses_v2/services/api_service.dart';
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:image_picker/image_picker.dart';
@@ -36,7 +38,8 @@ class CreateServiceListing extends StatefulWidget {
 class _CreateServiceListingState extends State<CreateServiceListing>
     with SingleTickerProviderStateMixin {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
-  final ShopController shopController = Get.put(ShopController());
+  final ShopController shopController =
+      Get.put(ShopController(), permanent: true);
   final ProfileController profileController = Get.find();
   final ImagePicker _picker = ImagePicker();
   final List<File> _selectedImages = <File>[];
@@ -63,6 +66,7 @@ class _CreateServiceListingState extends State<CreateServiceListing>
   List<String>? updateImages = <String>[];
   String? paymentMethod;
   String? deliveryMethod;
+  String? selectedServiceDuration;
   DateTime availableTime = DateTime.now();
   String? serviceType;
   Map<String, dynamic>? availability;
@@ -92,6 +96,12 @@ class _CreateServiceListingState extends State<CreateServiceListing>
   DateTime? _endDate;
   String deliveryTime = 'false';
   int? duration;
+  bool? customduration = false;
+  String? servicePeriod = 'minute(s)';
+  String? servicePeriodnumber;
+  String? calendarType = 'Single day';
+  bool? isAppointment = false;
+  final bool _shouldPromote = false;
 
   @override
   void initState() {
@@ -107,6 +117,7 @@ class _CreateServiceListingState extends State<CreateServiceListing>
       paymentMethods.add(payments['paymentMethod']);
     }
     if (widget.service != null) {
+      isAppointment = widget.service!.isAppointment;
       duration = widget.service!.serviceDuration;
       frequency = widget.service!.repeat!;
       _isAlwaysAvailable =
@@ -129,19 +140,18 @@ class _CreateServiceListingState extends State<CreateServiceListing>
       paymentMethod = widget.service!.paymentMethod;
       notesController.text = widget.service!.notes ?? '';
       addressorlinkController.text = widget.service!.url ?? '';
-      _selectedDates = _selectedDates.isEmpty ||
-              (_selectedDates.length == 1 &&
-                  _selectedDates.first.toString() == '')
-          ? <DateTime>[]
-          : (widget.service!.selectedDates)
-              .map((dynamic date) => DateTime.parse(date.toString()))
-              .toList();
+      _selectedDates = (widget.service!.selectedDates)
+          .map((dynamic date) => DateTime.parse(date.toString()))
+          .toList();
+
       packages = List<Map<String, dynamic>>.from(widget.service!.packages);
       availability = widget.service!.availability;
-      _startDate = widget.service!.availability == null
+      _startDate = widget.service!.availability == null ||
+              widget.service!.availability!['startDate'] == null
           ? null
           : DateTime.parse(widget.service!.availability!['startDate']);
-      _endDate = widget.service!.availability == null
+      _endDate = widget.service!.availability == null ||
+              widget.service!.availability!['endDate'] == null
           ? null
           : DateTime.parse(widget.service!.availability!['endDate']);
       _startTime = TimeOfDay(
@@ -311,16 +321,13 @@ class _CreateServiceListingState extends State<CreateServiceListing>
                   ),
                 ),
                 Expanded(
-                  child: Padding(
-                    padding: const EdgeInsets.only(right: 15.0),
-                    child: CustomEditText(
-                      maxLength: 15,
-                      padding: 0,
-                      caption: 'Discount (%)',
-                      hintText: 'Enter discount',
-                      controller: _discountController,
-                      inputType: TextInputType.number,
-                    ),
+                  child: CustomEditText(
+                    isps: true,
+                    maxLength: 15,
+                    caption: 'Discount(%)',
+                    hintText: 'Enter discount',
+                    controller: _discountController,
+                    inputType: TextInputType.number,
                   ),
                 ),
               ],
@@ -336,7 +343,7 @@ class _CreateServiceListingState extends State<CreateServiceListing>
             const SizedBox(height: 16),
             CustomDropdownWidget(
               initialValue: category,
-              caption: 'Select Category',
+              caption: 'Select Category *',
               hintText: 'Choose a category',
               items: const <String>[
                 'Home, Garden & Outdoors',
@@ -409,6 +416,134 @@ class _CreateServiceListingState extends State<CreateServiceListing>
             ),
             const SizedBox(height: 16),
 
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 15.0),
+              child: SwitchWidget(
+                value: isAppointment!,
+                onChanged: (bool value) {
+                  setState(() {
+                    isAppointment = value;
+                  });
+                },
+                caption: 'Is this an Appointment Service',
+                subtext:
+                    'If this is an appointment service, you must choose a duration, select a date and time for bookings.',
+                activeColor: proprimaryColor,
+                inactiveColor: Colors.grey,
+              ),
+            ),
+
+            const SizedBox(height: 16),
+
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 15.0),
+              child: CustomDropdownWidget(
+                padding: 0,
+                caption: isAppointment == false
+                    ? 'Duration (Optional)'
+                    : 'Duration *',
+                hintText: 'Choose duration for your service',
+                items: const <String>[
+                  '5 mins',
+                  '10 mins',
+                  '15 mins',
+                  '20 mins',
+                  '30 mins',
+                  '45 mins',
+                  '60 mins (1 hour)',
+                  'Custom'
+                ],
+                iconName: 'assets/svgs/dropdown.svg',
+                initialValue: duration.toString(),
+                onChanged: (String? newValue) {
+                  setState(() {
+                    if (newValue == 'Custom') {
+                      customduration = true;
+                    } else {
+                      customduration = false;
+                      final RegExp regex = RegExp(r'\d+');
+                      final Match? match = regex.firstMatch(newValue!);
+                      if (match != null) {
+                        duration = int.tryParse(match.group(0) ?? '') ?? 0;
+                      }
+                    }
+                  });
+                },
+                secondarysection: customduration == true
+                    ? Row(
+                        children: <Widget>[
+                          Expanded(
+                            child: TextFormField(
+                              style: const TextStyle(fontSize: 13),
+                              keyboardType: TextInputType.number,
+                              maxLength: 3,
+                              maxLines: 1,
+                              decoration: InputDecoration(
+                                border: InputBorder.none,
+                                hintText: 'Number of $servicePeriod',
+                                filled: false,
+                                fillColor: Colors.grey.shade100,
+                                counterText: '',
+                              ),
+                              onChanged: (String value) {
+                                setState(() {
+                                  servicePeriodnumber = value;
+                                });
+                              },
+                            ),
+                          ),
+                          SizedBox(
+                            width: 100,
+                            child: DropdownButtonFormField<String>(
+                              decoration: InputDecoration(
+                                border: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(
+                                    radiusValue,
+                                  ),
+                                  borderSide: BorderSide.none,
+                                ),
+                                filled: true,
+                                fillColor: Colors.white,
+                              ),
+                              value: 'minute(s)',
+                              padding: EdgeInsets.zero,
+                              onChanged: (String? newValue) {
+                                setState(() {
+                                  servicePeriod = newValue;
+                                });
+                              },
+                              icon: SvgPicture.asset(
+                                'assets/svgs/dropdown.svg',
+                                color: proprimaryColor,
+                              ),
+                              items: const <String>[
+                                'minute(s)',
+                                'hour(s)',
+                                'day(s)',
+                              ].map<DropdownMenuItem<String>>(
+                                (String value) {
+                                  return DropdownMenuItem<String>(
+                                    value: value,
+                                    child: Text(
+                                      value,
+                                      textAlign: TextAlign.right,
+                                      style: const TextStyle(fontSize: 14),
+                                    ),
+                                  );
+                                },
+                              ).toList(),
+                            ),
+                          )
+                        ],
+                      )
+                    : null,
+              ),
+            ),
+
+            const SizedBox(
+              height: 16,
+            ),
+
             // Add Attachment (Image Picker)
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 15.0),
@@ -478,6 +613,7 @@ class _CreateServiceListingState extends State<CreateServiceListing>
 
             // Delivery Method Dropdown
             ExpansionTile(
+              initiallyExpanded: true,
               trailing: isExpanded
                   ? SvgPicture.asset(
                       'assets/svgs/dropdownexpansionup.svg',
@@ -503,10 +639,14 @@ class _CreateServiceListingState extends State<CreateServiceListing>
                   initialValue: deliveryMethod,
                   caption: 'Delivery Method',
                   hintText: 'Choose a delivery method',
-                  items: const <String>['Online', 'In-Person'],
+                  items: const <String>['None', 'Online', 'In-Person'],
                   iconName: 'assets/svgs/dropdown.svg',
                   onChanged: (String? newValue) {
                     setState(() {
+                      if (newValue == 'None') {
+                        deliveryMethod = null;
+                        return;
+                      }
                       deliveryMethod = newValue;
                       addressorlinkController.clear();
                     });
@@ -549,25 +689,26 @@ class _CreateServiceListingState extends State<CreateServiceListing>
 
                 const SizedBox(height: 16),
 
-                availabilityWidget(
-                    isRecurring:
-                        frequency == 'Yes (Regular Service)' ? true : false),
-                const SizedBox(height: 16),
+                if (isAppointment != false)
+                  availabilityWidget(
+                      isRecurring:
+                          frequency == 'Yes (Regular Service)' ? true : false),
+                // const SizedBox(height: 16),
 
-                CustomDropdownWidget(
-                  caption: 'Payment Method',
-                  hintText: 'Choose a payment method',
-                  items: paymentMethods,
-                  initialValue: paymentMethod,
-                  iconName: 'assets/svgs/dropdown.svg',
-                  onChanged: (String? newValue) {
-                    setState(() {
-                      paymentMethod = newValue;
-                    });
-                  },
-                ),
+                // CustomDropdownWidget(
+                //   caption: 'Payment Method',
+                //   hintText: 'Choose a payment method',
+                //   items: paymentMethods,
+                //   initialValue: paymentMethod,
+                //   iconName: 'assets/svgs/dropdown.svg',
+                //   onChanged: (String? newValue) {
+                //     setState(() {
+                //       paymentMethod = newValue;
+                //     });
+                //   },
+                // ),
 
-                const SizedBox(height: 16),
+                if (isAppointment != false) const SizedBox(height: 16),
 
                 // Service Type Field
                 CustomDropdownWidget(
@@ -710,6 +851,24 @@ class _CreateServiceListingState extends State<CreateServiceListing>
             ),
 
             const SizedBox(height: 16),
+
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 15.0),
+              child: SwitchWidget(
+                value: _shouldPromote,
+                onChanged: (bool value) {
+                  setState(() {
+                    _isSwitched = value;
+                  });
+                },
+                icon: 'assets/svgs/rocket.svg',
+                caption: 'Boost this listing',
+                subtext: 'Reach a wider audience and get more views',
+                activeColor: proprimaryColor,
+                inactiveColor: Colors.grey,
+              ),
+            ),
+            const SizedBox(height: 16),
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 15.0),
               child: SwitchWidget(
@@ -737,6 +896,55 @@ class _CreateServiceListingState extends State<CreateServiceListing>
             ),
 
             const SizedBox(height: 16),
+            Center(
+              child: Padding(
+                padding: const EdgeInsets.only(
+                  left: 20.0,
+                  right: 20,
+                  top: 20,
+                  bottom: 50,
+                ),
+                child: Center(
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 20.0),
+                    child: Text.rich(
+                      TextSpan(
+                        children: <InlineSpan>[
+                          const TextSpan(
+                            text:
+                                'By clicking on Create Service, you confirm that you will abide by the ',
+                            style: TextStyle(fontSize: 12, color: subtextColor),
+                          ),
+                          TextSpan(
+                            text: 'Biz-Center Guidelines',
+                            style: const TextStyle(
+                              fontWeight: FontWeight.bold,
+                              color: proprimaryColor,
+                              decoration: TextDecoration.underline,
+                              fontSize: 12,
+                            ),
+                            recognizer: TapGestureRecognizer()
+                              ..onTap = () {
+                                showDialog(
+                                  context: context,
+                                  builder: (BuildContext context) =>
+                                      sellingGuide(context),
+                                );
+                              },
+                          ),
+                          const TextSpan(
+                            text:
+                                ', and declare that the listing does not include any Prohibited Items',
+                            style: TextStyle(fontSize: 12, color: subtextColor),
+                          ),
+                        ],
+                      ),
+                      textAlign: TextAlign.center,
+                    ),
+                  ),
+                ),
+              ),
+            ),
           ],
         ),
       ),
@@ -744,6 +952,8 @@ class _CreateServiceListingState extends State<CreateServiceListing>
   }
 
   void _submitForm() async {
+    duration ??= 2000000;
+
     if (_serviceNameController.text.isEmpty) {
       showSnackbar(
         message: 'Service Name is Mandatory!',
@@ -762,11 +972,39 @@ class _CreateServiceListingState extends State<CreateServiceListing>
         error: true,
       );
       return;
+    } else if (category == null) {
+      showSnackbar(
+        message: 'Select a category',
+        error: true,
+      );
+      return;
+    } else if (isAppointment == true && duration == 200000) {
+      showSnackbar(
+        message: 'Duration is Mandatory!',
+        error: true,
+      );
+      return;
     }
+
+    if (servicePeriodnumber != null && servicePeriod != null) {
+      int number = int.parse(servicePeriodnumber!);
+      switch (servicePeriod) {
+        case 'minute(s)':
+          duration = number;
+          break;
+        case 'hour(s)':
+          duration = number * 60;
+          break;
+        case 'day(s)':
+          duration = number * 60 * 24;
+          break;
+      }
+    }
+
     _startTime ??= const TimeOfDay(hour: 9, minute: 0);
     _endTime ??= const TimeOfDay(hour: 17, minute: 0);
-    _startDate ??= DateTime.now();
-    _endDate ??= DateTime.now();
+    // _startDate ??= DateTime.now();
+    // _endDate ??= DateTime.now();
     if (!(_endTime!.hour > _startTime!.hour ||
         (_endTime?.hour == _startTime?.hour &&
             _endTime!.minute >= _startTime!.minute))) {
@@ -782,12 +1020,20 @@ class _CreateServiceListingState extends State<CreateServiceListing>
       setState(() {
         isSubmitted = true;
       });
+      // 1. Clear the final images list
+      List<String> finalImages = <String>[];
+
+// 2. Add back any *retained* old images
+//    (i.e., those still in updateImages)
+      for (String oldImageUrl in updateImages!) {
+        finalImages.add(oldImageUrl);
+      }
+
+// 3. Upload and add newly selected images
       for (File image in _selectedImages) {
-        dynamic response = await ApiService.uploadFile(image);
+        final dynamic response = await ApiService.uploadFile(image);
         if (response['success']) {
-          setState(() {
-            images.add(response['fileUrl']);
-          });
+          finalImages.add(response['fileUrl']);
         }
       }
       // Create a map to hold form data
@@ -812,12 +1058,13 @@ class _CreateServiceListingState extends State<CreateServiceListing>
               : _discountController.text.trim(),
           'category': category,
           'serviceDuration': duration,
+          'isAppointment': isAppointment,
           'location':
               location.isEmpty ? shopController.shop!.location : location,
           'participants': groupmembersController.text,
           'repeat': frequency,
-          'images': images.isEmpty ? null : images,
-          'paymentMethod': paymentMethod ?? '',
+          'images': finalImages.isEmpty ? null : finalImages,
+          'paymentMethod': '',
           'deliveryMethod': deliveryMethod ?? '',
           'availableTime': availableTime.toIso8601String(),
           'serviceType': serviceType ?? '1:1',
@@ -841,7 +1088,7 @@ class _CreateServiceListingState extends State<CreateServiceListing>
             'startDate': _startDate?.toIso8601String(),
             'endDate': _endDate?.toIso8601String(),
           },
-          'packages': packages,
+          'servicePackages': packages,
           'url': addressorlinkController.text,
           'notes': notesController.text.trim().isEmpty
               ? null
@@ -893,14 +1140,64 @@ class _CreateServiceListingState extends State<CreateServiceListing>
       child: Container(
         decoration: BoxDecoration(
             color: Colors.white, borderRadius: BorderRadius.circular(radius)),
-        padding: const EdgeInsets.all(15),
-        // height: 600,
+        padding: EdgeInsets.only(
+            left: 15, right: 15, bottom: 15, top: !isRecurring ? 0 : 15),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
-            const Text(
-              'Select a Date and Time',
-              style: TextStyle(fontWeight: FontWeight.w600, fontSize: 14),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: <Widget>[
+                const Text(
+                  'Select a Date and Time',
+                  style: TextStyle(fontWeight: FontWeight.w600, fontSize: 14),
+                ),
+                if (!isRecurring)
+                  SizedBox(
+                    width: 130,
+                    child: DropdownButtonFormField<String>(
+                      decoration: InputDecoration(
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(
+                            radiusValue,
+                          ),
+                          borderSide: BorderSide.none,
+                        ),
+                        filled: true,
+                        fillColor: Colors.white,
+                      ),
+                      value: _selectedDates.length > 1
+                          ? 'Multiple days'
+                          : 'Single day',
+                      padding: EdgeInsets.zero,
+                      onChanged: (String? newValue) {
+                        setState(() {
+                          calendarType = newValue!;
+                        });
+                      },
+                      icon: SvgPicture.asset(
+                        'assets/svgs/dropdown.svg',
+                        color: proprimaryColor,
+                      ),
+                      items: const <String>[
+                        'Single day',
+                        'Multiple days',
+                      ].map<DropdownMenuItem<String>>(
+                        (String value) {
+                          return DropdownMenuItem<String>(
+                            value: value,
+                            child: Text(
+                              value,
+                              textAlign: TextAlign.right,
+                              style: const TextStyle(
+                                  fontSize: 12, color: Colors.black54),
+                            ),
+                          );
+                        },
+                      ).toList(),
+                    ),
+                  )
+              ],
             ),
             if (isRecurring)
               Row(
@@ -1003,56 +1300,82 @@ class _CreateServiceListingState extends State<CreateServiceListing>
                   })),
             if (!isRecurring)
               SizedBox(
-                height: MediaQuery.of(context).size.height / 3,
-                child: SfCalendar(
-                  initialSelectedDate: _startDate ??
-                      (_selectedDates.isNotEmpty
-                          ? _selectedDates[0]
-                          : DateTime.now()),
-                  selectionDecoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(0),
-                    color: proprimaryColor.withOpacity(0.5),
-                  ),
-                  todayTextStyle: const TextStyle(color: Colors.black),
-                  todayHighlightColor: Colors.transparent,
-                  view: CalendarView.month,
-                  initialDisplayDate: _startDate ??
-                      (_selectedDates.isNotEmpty
-                          ? _selectedDates[0]
-                          : DateTime.now()),
-                  minDate: DateTime.now(),
-                  monthViewSettings: const MonthViewSettings(
-                    appointmentDisplayMode:
-                        MonthAppointmentDisplayMode.indicator,
-                    showAgenda: false, // Enable agenda view to select dates
-                  ),
-                  dataSource: _getCalendarDataSource(),
-                  onTap: (CalendarTapDetails details) {
-                    if (!_isAlwaysAvailable &&
-                        details.targetElement == CalendarElement.calendarCell) {
-                      setState(() {
-                        DateTime selectedDate = DateTime(details.date!.year,
-                            details.date!.month, details.date!.day);
+                  height: MediaQuery.of(context).size.height / 3,
+                  child: SfCalendar(
+                    initialSelectedDate: _selectedDates.isNotEmpty
+                        ? _selectedDates[0]
+                        : DateTime.now(),
+                    selectionDecoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(0),
+                      color: proprimaryColor.withOpacity(0.5),
+                    ),
+                    todayTextStyle: const TextStyle(color: Colors.black),
+                    todayHighlightColor: Colors.transparent,
+                    view: CalendarView.month,
+                    initialDisplayDate: _selectedDates.isNotEmpty
+                        ? _selectedDates[0]
+                        : DateTime.now(),
+                    minDate: DateTime.now(),
+                    monthViewSettings: const MonthViewSettings(
+                      appointmentDisplayMode:
+                          MonthAppointmentDisplayMode.indicator,
+                      showAgenda: false,
+                    ),
+                    dataSource: _getCalendarDataSource(),
+                    onTap: (CalendarTapDetails details) {
+                      if (!_isAlwaysAvailable &&
+                          details.targetElement ==
+                              CalendarElement.calendarCell &&
+                          details.date != null) {
+                        setState(() {
+                          DateTime selectedDate = DateTime(
+                            details.date!.year,
+                            details.date!.month,
+                            details.date!.day,
+                          );
 
-                        // Clear previously selected dates and weekdays
-                        _selectedDates.clear();
-                        _selectedWeekdays.fillRange(0, 7, false);
-                        selectedSubmitWeekdays.clear();
+                          switch (calendarType) {
+                            case 'Single day':
+                              // Select only one day
+                              _selectedDates.clear();
+                              _selectedDates.add(selectedDate);
+                              break;
 
-                        // Add the newly selected date and update weekdays
-                        _selectedDates.add(selectedDate);
-                        int weekdayIndex = selectedDate.weekday - 1;
-                        _selectedWeekdays[weekdayIndex] = true;
-                        selectedSubmitWeekdays
-                            .add(_getWeekdayName(weekdayIndex));
+                            case 'Multiple days':
+                              // Toggle selection for multiple days
+                              if (_selectedDates.contains(selectedDate)) {
+                                _selectedDates.remove(selectedDate);
+                              } else {
+                                _selectedDates.add(selectedDate);
+                              }
+                              break;
 
-                        // Set _startDate to the selected date
-                        _startDate = selectedDate;
-                      });
-                    }
-                  },
-                ),
-              ),
+                            default:
+                              // Handle unknown calendar type if necessary
+                              break;
+                          }
+
+                          // Update weekdays accordingly
+                          _selectedWeekdays.fillRange(0, 7, false);
+                          selectedSubmitWeekdays.clear();
+                          for (DateTime date in _selectedDates) {
+                            int weekdayIndex = date.weekday - 1;
+                            _selectedWeekdays[weekdayIndex] = true;
+                            selectedSubmitWeekdays
+                                .add(_getWeekdayName(weekdayIndex));
+                          }
+
+                          // Update _startDate (e.g., first selected date)
+                          _startDate = _selectedDates.isNotEmpty
+                              ? _selectedDates[0]
+                              : null;
+                          _endDate = _selectedDates.isNotEmpty
+                              ? _selectedDates[0]
+                              : null;
+                        });
+                      }
+                    },
+                  )),
             const SizedBox(height: 20),
             Text(!isRecurring
                 ? 'Available Time for selected day'
@@ -1080,41 +1403,27 @@ class _CreateServiceListingState extends State<CreateServiceListing>
                 ),
               ],
             ),
-            CustomDropdownWidget(
-              padding: 0,
-              caption: 'Duration',
-              hintText: 'Choose duration for this service',
-              items: const <String>[
-                '5 mins',
-                '10 mins',
-                '15 mins',
-                '20 mins',
-                '30 mins',
-                '45 mins',
-                '60 mins (1 hour)',
-                '120 mins (2 hours)',
-                '180 mins (3 hours)',
-                '240 mins (4 hours)',
-                '300 mins (5 hours)',
-                '360 mins (6 hours)',
-                '420 mins (7 hours)',
-                '480 mins (8 hours)',
-                '540 mins (9 hours)',
-                '600 mins (10 hours)',
-                '660 mins (11 hours)',
-                '720 mins (12 hours)'
-              ],
-              iconName: 'assets/svgs/dropdown.svg',
-              initialValue: duration.toString(),
-              onChanged: (String? newValue) {
-                setState(() {
-                  final RegExp regex = RegExp(r'\d+');
-                  final Match? match = regex.firstMatch(newValue!);
-                  if (match != null) {
-                    duration = int.tryParse(match.group(0) ?? '') ?? 0;
-                  }
-                });
-              },
+            if (duration != null && _startTime != null && _endTime != null)
+              const SizedBox(
+                height: 10,
+              ),
+            if (duration != null && _startTime != null && _endTime != null)
+              const Text('Time Slots for your service'),
+            Wrap(
+              spacing: 8.0, // Horizontal spacing between chips
+              children: _generateTimeSlots().map((String slot) {
+                return ChoiceChip(
+                  shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(8)),
+                  backgroundColor: backgroundColor,
+                  label: Text(
+                    slot,
+                    style: const TextStyle(fontSize: 12, color: Colors.black38),
+                  ),
+                  selected: false,
+                  onSelected: (bool selected) {},
+                );
+              }).toList(),
             ),
           ],
         ),
@@ -1167,6 +1476,52 @@ class _CreateServiceListingState extends State<CreateServiceListing>
         }
       });
     }
+  }
+
+  List<String> _generateTimeSlots() {
+    List<String> slots = <String>[];
+    if (duration != null && _startTime != null && _endTime != null) {
+      DateTime startDate = _selectedDates.isNotEmpty
+          ? _selectedDates[0]
+          : DateTime.now(); // Fallback to today if no dates are selected
+      DateTime startDateTime = DateTime(
+        startDate.year,
+        startDate.month,
+        startDate.day,
+        _startTime!.hour,
+        _startTime!.minute,
+      );
+
+      DateTime endDateTime = DateTime(
+        startDate.year,
+        startDate.month,
+        startDate.day,
+        _endTime!.hour,
+        _endTime!.minute,
+      );
+
+      while (startDateTime.isBefore(endDateTime)) {
+        DateTime slotEndTime = startDateTime.add(Duration(minutes: duration!));
+        if (slotEndTime.isAfter(endDateTime)) {
+          slotEndTime =
+              endDateTime; // Adjust the last slot to end exactly at endDateTime
+        }
+
+        // Format the time in 12-hour format with AM/PM
+        String formatTime(DateTime dateTime) {
+          String hour = (dateTime.hour % 12 == 0 ? 12 : dateTime.hour % 12)
+              .toString()
+              .padLeft(2, '0');
+          String minute = dateTime.minute.toString().padLeft(2, '0');
+          String period = dateTime.hour < 12 ? 'AM' : 'PM';
+          return '$hour:$minute $period';
+        }
+
+        slots.add('${formatTime(startDateTime)} - ${formatTime(slotEndTime)}');
+        startDateTime = slotEndTime;
+      }
+    }
+    return slots;
   }
 }
 

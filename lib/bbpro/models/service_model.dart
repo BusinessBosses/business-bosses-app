@@ -28,6 +28,7 @@ class Service {
   List<dynamic> packages;
   List<dynamic> selectedDates;
   int? serviceDuration;
+  bool? isAppointment;
 
   Service({
     this.images,
@@ -56,40 +57,41 @@ class Service {
     this.packages = const <Map<String, dynamic>>[],
     this.selectedDates = const <dynamic>[],
     this.serviceDuration,
+    this.isAppointment = false,
   });
 
   factory Service.fromJson(Map<String, dynamic> json) {
     return Service(
-      images: json['images'] != null && json['images'] is List
-          ? List<String>.from(json['images'])
-          : <String>[],
-      id: json['id'],
-      user: json['user'] != null ? UserModel.fromMap(json['user']) : null,
-      shop: json['shop'] != null ? Shop.fromMap(json['shop']) : null,
-      name: json['name'],
-      price: double.parse(json['price'].toString()),
-      discount: json['discount'] == null
-          ? 0
-          : double.parse(json['discount'].toString()),
-      description: json['description'],
-      category: json['category'],
-      location: json['location'],
-      paymentMethod: json['paymentMethod'],
-      deliveryMethod: json['deliveryMethod'],
-      url: json['url'],
-      participants: json['participants'],
-      repeat: json['repeat'],
-      itemType: json['itemType'],
-      isActive: json['isActive'],
-      deliveryTime: json['deliveryTime'],
-      serviceType: json['serviceType'],
-      createdAt: DateTime.parse(json['createdAt']),
-      availability: json['availability'] ?? json['serviceAvailability'],
-      packages: json['packages'] ?? <dynamic>[],
-      selectedDates: json['selectedDates'] ?? <dynamic>[],
-      notes: json['notes'],
-      serviceDuration: json['serviceDuration'],
-    );
+        images: json['images'] != null && json['images'] is List
+            ? List<String>.from(json['images'])
+            : <String>[],
+        id: json['id'],
+        user: json['user'] != null ? UserModel.fromMap(json['user']) : null,
+        shop: json['shop'] != null ? Shop.fromMap(json['shop']) : null,
+        name: json['name'],
+        price: double.parse(json['price'].toString()),
+        discount: json['discount'] == null
+            ? 0
+            : double.parse(json['discount'].toString()),
+        description: json['description'],
+        category: json['category'],
+        location: json['location'],
+        paymentMethod: json['paymentMethod'],
+        deliveryMethod: json['deliveryMethod'],
+        url: json['url'],
+        participants: json['participants'],
+        repeat: json['repeat'],
+        itemType: json['itemType'],
+        isActive: json['isActive'],
+        deliveryTime: json['deliveryTime'],
+        serviceType: json['serviceType'],
+        createdAt: DateTime.parse(json['createdAt']),
+        availability: json['availability'] ?? json['serviceAvailability'],
+        packages: json['packages'] ?? <dynamic>[],
+        selectedDates: json['selectedDates'] ?? <dynamic>[],
+        notes: json['notes'],
+        serviceDuration: json['serviceDuration'],
+        isAppointment: json['isAppointment']);
   }
 
   Map<String, dynamic> toJson() {
@@ -119,6 +121,7 @@ class Service {
       'repeat': repeat,
       'selectedDates': selectedDates,
       'serviceDuration': serviceDuration,
+      'isAppointment': isAppointment,
     };
   }
 
@@ -151,6 +154,7 @@ Service {
   repeat: $repeat,
   selectedDates: $selectedDates,
   serviceDuration: $serviceDuration, 
+  isAppointment: $isAppointment
 }
 ''';
   }

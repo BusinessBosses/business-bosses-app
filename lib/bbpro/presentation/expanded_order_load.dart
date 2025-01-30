@@ -42,53 +42,75 @@ class _ExpandedOrdersViewState extends State<ExpandedOrdersView> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        backgroundColor: Colors.white,
-        appBar: AppBar(
-          automaticallyImplyLeading: false,
-          leading: IconButton(
-            onPressed: () {
-              Navigator.pop(context);
-            },
-            icon: SvgPicture.asset('assets/svgs/backbutton.svg'),
-          ),
-          title: const Text(
-            'Order Details',
-            style: TextStyle(
-              color: proprimaryColor,
-              fontWeight: FontWeight.bold,
-            ),
+      backgroundColor: Colors.white,
+      appBar: AppBar(
+        automaticallyImplyLeading: false,
+        leading: IconButton(
+          onPressed: () {
+            Navigator.pop(context);
+          },
+          icon: SvgPicture.asset('assets/svgs/backbutton.svg'),
+        ),
+        title: const Text(
+          'Order Details',
+          style: TextStyle(
+            color: proprimaryColor,
+            fontWeight: FontWeight.bold,
           ),
         ),
-        body: Obx(
-          () => orderController.orderLoading.value
-              ? const SafetyModel()
-              : orderController.orderView == null
-                  ? const SafetyModel(
-                      isLoading: false,
-                      title: 'No Order With ID found!',
-                    )
-                  : ListView(
-                      padding: const EdgeInsets.symmetric(vertical: 10),
-                      children: <Widget>[
-                        OrderWidget(
-                          order: orderController.orderView!,
-                          bgcolor:
-                              orderController.orderView!.status.backgroundColor,
-                          isExpanded: true,
-                          shop: orderController.orderView!.shop,
-                          myShop: false,
+      ),
+      body: Obx(
+        () => orderController.orderLoading.value
+            ? const SafetyModel()
+            : orderController.orderView == null
+                ? const SafetyModel(
+                    isLoading: false,
+                    title: 'No Order With ID found!',
+                  )
+                : ListView(
+                    padding: const EdgeInsets.symmetric(vertical: 10),
+                    children: <Widget>[
+                      OrderWidget(
+                        order: orderController.orderView!,
+                        bgcolor:
+                            orderController.orderView!.status.backgroundColor,
+                        isExpanded: true,
+                        shop: orderController.orderView!.shop,
+                        myShop: false,
+                      ),
+                      const SizedBox(height: 30),
+                      if (orderController.orderView!.notes != null)
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: <Widget>[
+                            const Padding(
+                              padding: EdgeInsets.symmetric(horizontal: 15.0),
+                              child: Text(
+                                'Buyer Note',
+                                style: TextStyle(
+                                    fontWeight: FontWeight.bold, fontSize: 16),
+                              ),
+                            ),
+                            Padding(
+                              padding:
+                                  const EdgeInsets.symmetric(horizontal: 15.0),
+                              child: Text(
+                                orderController.orderView!.notes!,
+                                style: const TextStyle(fontSize: 16),
+                              ),
+                            ),
+                          ],
                         ),
-                        const SizedBox(height: 30),
-                        const Padding(
-                          padding: EdgeInsets.symmetric(horizontal: 15.0),
-                          child: Text(
-                            'Listings',
-                            style: TextStyle(
-                                fontWeight: FontWeight.bold, fontSize: 16),
-                          ),
+                      const Padding(
+                        padding: EdgeInsets.symmetric(horizontal: 15.0),
+                        child: Text(
+                          'Listings',
+                          style: TextStyle(
+                              fontWeight: FontWeight.bold, fontSize: 16),
                         ),
-                        ...orderController.orderView!.products!
-                            .map<Widget>((Product product) {
+                      ),
+                      ...orderController.orderView!.products!.map<Widget>(
+                        (Product product) {
                           return ListTile(
                             title: Text(
                               product.name,
@@ -108,9 +130,10 @@ class _ExpandedOrdersViewState extends State<ExpandedOrdersView> {
                               vertical: 8,
                             ),
                           );
-                        }).toList(),
-                        ...orderController.orderView!.services!
-                            .map<Widget>((Service service) {
+                        },
+                      ).toList(),
+                      ...orderController.orderView!.services!.map<Widget>(
+                        (Service service) {
                           return ListTile(
                             title: Text(
                               service.name,
@@ -130,9 +153,10 @@ class _ExpandedOrdersViewState extends State<ExpandedOrdersView> {
                               vertical: 8,
                             ),
                           );
-                        }).toList(),
-                        ...orderController.orderView!.customItems!
-                            .map<Widget>((dynamic custom) {
+                        },
+                      ).toList(),
+                      ...orderController.orderView!.customItems!.map<Widget>(
+                        (dynamic custom) {
                           return ListTile(
                             title: Text(
                               custom['name'],
@@ -151,10 +175,12 @@ class _ExpandedOrdersViewState extends State<ExpandedOrdersView> {
                               vertical: 8,
                             ),
                           );
-                        }).toList(),
-                      ],
-                    ),
-        ));
+                        },
+                      ).toList(),
+                    ],
+                  ),
+      ),
+    );
   }
 
   Widget? _buildProductImage(Product product) {

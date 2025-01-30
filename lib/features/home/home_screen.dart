@@ -56,7 +56,8 @@ class _HomeScreenState extends State<HomeScreen>
   // final GetStorage sandBox = GetStorage();
   final ScrollController _scrollController = ScrollController();
   final MarketController marketController = Get.put(MarketController());
-  final ShopController shopController = Get.put(ShopController());
+  final ShopController shopController =
+      Get.put(ShopController(), permanent: true);
 
   int marketIndex = 0;
   // final GlobalKey<NavigatorState> postButtonKey = GlobalKey<NavigatorState>();
@@ -283,7 +284,7 @@ class _HomeScreenState extends State<HomeScreen>
                             controller.loadData();
                             _profileController.fetchData();
                             marketController.initMarket();
-                            marketController.initUsers();
+                            // marketController.initUsers();
                             _communitiesController.fetchIndustries();
                             liveEventController.initEvents();
                           },
@@ -302,7 +303,7 @@ class _HomeScreenState extends State<HomeScreen>
                                 controller.loadData();
                                 _profileController.fetchData();
                                 marketController.initMarket();
-                                marketController.initUsers();
+                                // marketController.initUsers();
                                 _communitiesController.fetchIndustries();
                                 liveEventController.initEvents();
                               },

@@ -6,9 +6,13 @@ import 'package:business_bosses_v2/bbpro/models/service_model.dart';
 import 'package:business_bosses_v2/bbpro/models/shop_model.dart';
 import 'package:business_bosses_v2/bbpro/presentation/create_order.dart';
 import 'package:business_bosses_v2/bbpro/presentation/expanded_orders.dart';
+import 'package:business_bosses_v2/bbpro/widgets/iconbutton.dart';
 import 'package:business_bosses_v2/bbpro/widgets/optionsbutton.dart';
 import 'package:business_bosses_v2/common/dialogs/snackbar.dart';
+import 'package:business_bosses_v2/common/widgets/network_image_with_placeholder.dart';
+import 'package:business_bosses_v2/features/chat/chat_room_screen.dart';
 import 'package:business_bosses_v2/features/profile/controller/profile_controller.dart';
+import 'package:business_bosses_v2/navigation/routes.dart';
 import 'package:business_bosses_v2/utils/theme/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -49,7 +53,6 @@ class _OrderWidgetState extends State<OrderWidget> {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
-        print(widget.order.startTime);
         if (widget.isExpanded != true) {
           Get.to(() => ExpandedOrders(
                 order: widget.order,
@@ -137,46 +140,182 @@ class _OrderWidgetState extends State<OrderWidget> {
                         mainAxisAlignment: MainAxisAlignment.start,
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: <Widget>[
-                          if (widget.order.client != null)
-                            Row(
-                              children: <Widget>[
-                                const Text(
-                                  'Customer: ',
-                                  style: TextStyle(
-                                    fontWeight: FontWeight.normal,
-                                    fontSize: 13,
+                          Column(
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: <Widget>[
+                              if (widget.isExpanded != true)
+                                Row(
+                                  children: <Widget>[
+                                    const Text(
+                                      'Customer',
+                                      style: TextStyle(
+                                        fontWeight: FontWeight.normal,
+                                        fontSize: 13,
+                                      ),
+                                    ),
+                                    const SizedBox(
+                                      width: 5,
+                                    ),
+                                    Text(
+                                      widget.order.user!.name ??
+                                          widget.order.user!.username,
+                                      style: const TextStyle(
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: 13,
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              if (widget.isExpanded == true)
+                                Container(
+                                  padding: const EdgeInsets.symmetric(
+                                      horizontal: 10, vertical: 5),
+                                  decoration: BoxDecoration(
+                                      color: Colors.white,
+                                      border: Border.all(
+                                          color: backgroundColor, width: 1),
+                                      borderRadius: BorderRadius.circular(10)),
+                                  child: Column(
+                                    mainAxisAlignment: MainAxisAlignment.start,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: <Widget>[
+                                      const Text(
+                                        'Customer',
+                                        style: TextStyle(
+                                          fontWeight: FontWeight.normal,
+                                          fontSize: 13,
+                                        ),
+                                      ),
+                                      const SizedBox(
+                                        height: 5,
+                                      ),
+                                      Row(
+                                        children: <Widget>[
+                                          Container(
+                                            width: 40,
+                                            height: 40,
+                                            decoration: BoxDecoration(
+                                              borderRadius:
+                                                  BorderRadius.circular(100),
+                                            ),
+                                            child: ClipRRect(
+                                                borderRadius:
+                                                    BorderRadius.circular(100),
+                                                child:
+                                                    NetworkImageWithPlaceHolder(
+                                                        imageUrl: widget.order
+                                                            .user!.photoUrl)),
+                                          ),
+                                          const SizedBox(
+                                            width: 10,
+                                          ),
+                                          Column(
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.start,
+                                            children: <Widget>[
+                                              Text(
+                                                widget.order.user!.name ??
+                                                    widget.order.user!.username,
+                                                style: const TextStyle(
+                                                  fontWeight: FontWeight.bold,
+                                                  fontSize: 13,
+                                                ),
+                                              ),
+                                              const SizedBox(
+                                                height: 2,
+                                              ),
+                                              Row(
+                                                children: <Widget>[
+                                                  GestureDetector(
+                                                    onTap: () {
+                                                      Get.to(
+                                                        () =>
+                                                            const ChatRoomScreen(
+                                                          frommarketplace:
+                                                              false,
+                                                        ),
+                                                        arguments:
+                                                            widget.order.user,
+                                                      );
+                                                    },
+                                                    child: Container(
+                                                      padding: const EdgeInsets
+                                                          .symmetric(
+                                                          vertical: 3,
+                                                          horizontal: 8),
+                                                      decoration: BoxDecoration(
+                                                          color:
+                                                              backgroundColor,
+                                                          borderRadius:
+                                                              BorderRadius
+                                                                  .circular(8)),
+                                                      child: Row(
+                                                        children: <Widget>[
+                                                          SvgPicture.asset(
+                                                            'assets/svgs/shopchat.svg',
+                                                            height: 10,
+                                                          ),
+                                                          const SizedBox(
+                                                            width: 5,
+                                                          ),
+                                                          const Text('Message')
+                                                        ],
+                                                      ),
+                                                    ),
+                                                  ),
+                                                  const SizedBox(
+                                                    width: 5,
+                                                  ),
+                                                  GestureDetector(
+                                                    onTap: () {
+                                                      Get.toNamed(
+                                                          Routes.publicProfile,
+                                                          arguments: widget
+                                                              .order.user);
+                                                    },
+                                                    child: Container(
+                                                      padding: const EdgeInsets
+                                                          .symmetric(
+                                                          vertical: 3,
+                                                          horizontal: 8),
+                                                      decoration: BoxDecoration(
+                                                          color:
+                                                              backgroundColor,
+                                                          borderRadius:
+                                                              BorderRadius
+                                                                  .circular(8)),
+                                                      child: Row(
+                                                        children: <Widget>[
+                                                          SvgPicture.asset(
+                                                            'assets/svgs/expandform.svg',
+                                                            height: 10,
+                                                          ),
+                                                          const SizedBox(
+                                                            width: 5,
+                                                          ),
+                                                          const Text(
+                                                              'View Profile')
+                                                        ],
+                                                      ),
+                                                    ),
+                                                  ),
+                                                ],
+                                              )
+                                            ],
+                                          ),
+                                        ],
+                                      ),
+                                    ],
                                   ),
                                 ),
-                                Text(
-                                  widget.order.client!.name,
-                                  style: const TextStyle(
-                                    fontWeight: FontWeight.bold,
-                                    fontSize: 13,
-                                  ),
+                              if (widget.isExpanded == true)
+                                const SizedBox(
+                                  height: 5,
                                 ),
-                              ],
-                            ),
-                          if (widget.order.user != null &&
-                              widget.order.client == null)
-                            Row(
-                              children: <Widget>[
-                                const Text(
-                                  'User: ',
-                                  style: TextStyle(
-                                    fontWeight: FontWeight.normal,
-                                    fontSize: 13,
-                                  ),
-                                ),
-                                Text(
-                                  widget.order.user!.name ??
-                                      widget.order.user!.username,
-                                  style: const TextStyle(
-                                    fontWeight: FontWeight.bold,
-                                    fontSize: 13,
-                                  ),
-                                ),
-                              ],
-                            ),
+                            ],
+                          ),
                           Row(
                             children: <Widget>[
                               const Text(
@@ -218,25 +357,27 @@ class _OrderWidgetState extends State<OrderWidget> {
                               ),
                             ],
                           ),
-                          if (widget.order.startTime != null)
-                            Row(
-                              children: <Widget>[
-                                const Text(
-                                  'Delivery Time: ',
-                                  style: TextStyle(
-                                    fontWeight: FontWeight.normal,
-                                    fontSize: 13,
-                                  ),
+                          Row(
+                            children: <Widget>[
+                              const Text(
+                                'Delivery Time: ',
+                                style: TextStyle(
+                                  fontWeight: FontWeight.normal,
+                                  fontSize: 13,
                                 ),
-                                Text(
-                                  'From ${_formatTime(widget.order.startTime!)} to ${_formatTime(widget.order.endTime!)}',
-                                  style: const TextStyle(
-                                    fontWeight: FontWeight.bold,
-                                    fontSize: 13,
-                                  ),
+                              ),
+                              Text(
+                                (widget.order.startTime != null &&
+                                        widget.order.endTime != null)
+                                    ? 'From ${_formatTime(widget.order.startTime!)} to ${_formatTime(widget.order.endTime!)} '
+                                    : 'N/A',
+                                style: const TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 13,
                                 ),
-                              ],
-                            ),
+                              ),
+                            ],
+                          ),
                           if (widget.isExpanded == true)
                             Row(
                               children: <Widget>[
@@ -485,33 +626,6 @@ class _OrderWidgetState extends State<OrderWidget> {
                           )
                         ],
                       ),
-                    // if (widget.isExpanded != true)
-                    //   Row(
-                    //     mainAxisAlignment: MainAxisAlignment.end,
-                    //     children: <Widget>[
-                    //       GestureDetector(
-                    //         onTap: () {
-                    //           Get.to(() => ExpandedOrders(
-                    //                 order: widget.order,
-                    //               ));
-                    //           // showDialog(
-                    //           //   context: context,
-                    //           //   builder: (BuildContext context) => OrderPopUp(
-                    //           //     order: widget.order,
-                    //           //   ),
-                    //           // );
-                    //         },
-                    //         child: CircleAvatar(
-                    //           backgroundColor: probackgroundColor,
-                    //           radius: 15,
-                    //           child: SvgPicture.asset(
-                    //             'assets/svgs/expandform.svg',
-                    //             color: proprimaryColor,
-                    //           ),
-                    //         ),
-                    //       )
-                    //     ],
-                    //   )
                   ],
                 ),
               ),

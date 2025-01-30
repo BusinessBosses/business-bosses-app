@@ -11,11 +11,13 @@ import 'package:business_bosses_v2/bbpro/widgets/switchwidget.dart';
 import 'package:business_bosses_v2/bbpro/widgets/textfield.dart';
 import 'package:business_bosses_v2/common/dialogs/snackbar.dart';
 import 'package:business_bosses_v2/common/widgets/safety_model.dart';
+import 'package:business_bosses_v2/features/home/widgets/sellingpopup.dart';
 import 'package:business_bosses_v2/features/marketplace/widgets/currency.dart';
 import 'package:business_bosses_v2/features/profile/controller/profile_controller.dart';
 import 'package:business_bosses_v2/services/api_service.dart';
 import 'package:business_bosses_v2/utils/theme/theme.dart';
 import 'package:country_list_pick/country_list_pick.dart';
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
@@ -34,7 +36,8 @@ class _CreateProductListingState extends State<CreateProductListing> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   final OrderController orderController = Get.put(OrderController());
   final ProfileController profileController = Get.find();
-  final ShopController shopController = Get.put(ShopController());
+  final ShopController shopController =
+      Get.put(ShopController(), permanent: true);
   final ImagePicker _picker = ImagePicker();
   final List<File> _selectedImages = <File>[];
   final TextEditingController _productNameController = TextEditingController();
@@ -78,6 +81,7 @@ class _CreateProductListingState extends State<CreateProductListing> {
   List<String> paymentMethods = <String>[];
   List<String> colors = <String>[];
   List<String> sizes = <String>[];
+  final bool _shouldPromote = false;
 
   @override
   void initState() {
@@ -175,7 +179,7 @@ class _CreateProductListingState extends State<CreateProductListing> {
                   children: <Widget>[
                     const SizedBox(height: 16),
                     CustomEditText(
-                      caption: 'Product Name',
+                      caption: 'Product Name *',
                       maxLength: 30,
                       hintText: 'Enter product name here',
                       controller: _productNameController,
@@ -192,7 +196,7 @@ class _CreateProductListingState extends State<CreateProductListing> {
                         Expanded(
                           child: CustomEditText(
                             currencycontroller: currencycontroller,
-                            caption: 'Price',
+                            caption: 'Price *',
                             iscurrencyfield: true,
                             maxLength: 15,
                             hintText: 'Enter price',
@@ -210,31 +214,28 @@ class _CreateProductListingState extends State<CreateProductListing> {
                           ),
                         ),
                         Expanded(
-                          child: Padding(
-                            padding: const EdgeInsets.only(right: 15.0),
-                            child: CustomEditText(
-                              padding: 0,
-                              caption: 'Discount',
-                              hintText: 'Enter discount',
-                              maxLength: 15,
-                              controller: _discountController,
-                              inputType: TextInputType.number,
-                              validator: (String? value) {
-                                if (value != null && value.isNotEmpty) {
-                                  if (double.tryParse(value) == null) {
-                                    return 'Please enter a valid number';
-                                  }
+                          child: CustomEditText(
+                            isps: true,
+                            caption: 'Discount (%)',
+                            hintText: 'Enter discount',
+                            maxLength: 15,
+                            controller: _discountController,
+                            inputType: TextInputType.number,
+                            validator: (String? value) {
+                              if (value != null && value.isNotEmpty) {
+                                if (double.tryParse(value) == null) {
+                                  return 'Please enter a valid number';
                                 }
-                                return null;
-                              },
-                            ),
+                              }
+                              return null;
+                            },
                           ),
                         ),
                       ],
                     ),
                     const SizedBox(height: 16),
                     CustomEditText(
-                      caption: 'Describe your Product',
+                      caption: 'Describe your Product *',
                       hintText: 'Add product description here',
                       controller: _descriptionController,
                       maxLength: 300,
@@ -247,7 +248,7 @@ class _CreateProductListingState extends State<CreateProductListing> {
                     ),
                     const SizedBox(height: 16),
                     CustomDropdownWidget(
-                      caption: 'Select Category',
+                      caption: 'Select Category *',
                       hintText: 'Choose a category',
                       items: const <String>[
                         'Home, Garden & Outdoors',
@@ -300,7 +301,7 @@ class _CreateProductListingState extends State<CreateProductListing> {
                               borderRadius: BorderRadius.circular(radiusValue),
                             ),
                             child: CustomTextWidget(
-                              caption: 'Location',
+                              caption: 'Location *',
                               iconName: 'assets/svgs/nexticon.svg',
                               text: country.isEmpty
                                   ? shopController.shop!.location
@@ -447,13 +448,14 @@ class _CreateProductListingState extends State<CreateProductListing> {
                       ),
                     CustomEditText(
                       maxLength: 30,
-                      caption: 'Quantity',
+                      caption: 'Quantity *',
                       hintText: 'Enter quantity',
                       inputType: TextInputType.number,
                       controller: quantityController,
                     ),
                     const SizedBox(height: 16),
                     ExpansionTile(
+                        initiallyExpanded: true,
                         trailing: isExpanded
                             ? SvgPicture.asset(
                                 'assets/svgs/dropdownexpansionup.svg',
@@ -501,19 +503,6 @@ class _CreateProductListingState extends State<CreateProductListing> {
                             hintText:
                                 'Enter number of days you can deliver after purchase',
                             controller: deliverydayscontroller,
-                          ),
-                          const SizedBox(height: 16),
-                          CustomDropdownWidget(
-                            caption: 'Payment Method',
-                            hintText: 'Choose a payment method',
-                            items: paymentMethods,
-                            initialValue: paymentMethod,
-                            iconName: 'assets/svgs/dropdown.svg',
-                            onChanged: (String? newValue) {
-                              setState(() {
-                                paymentMethod = newValue;
-                              });
-                            },
                           ),
                           const SizedBox(height: 16),
                           CustomEditText(
@@ -600,6 +589,23 @@ class _CreateProductListingState extends State<CreateProductListing> {
                     Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 15.0),
                       child: SwitchWidget(
+                        value: _shouldPromote,
+                        onChanged: (bool value) {
+                          setState(() {
+                            _isSwitched = value;
+                          });
+                        },
+                        icon: 'assets/svgs/rocket.svg',
+                        caption: 'Boost this listing',
+                        subtext: 'Reach a wider audience and get more views',
+                        activeColor: proprimaryColor,
+                        inactiveColor: Colors.grey,
+                      ),
+                    ),
+                    const SizedBox(height: 16),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 15.0),
+                      child: SwitchWidget(
                         value: _isSwitched,
                         onChanged: (bool value) {
                           setState(() {
@@ -616,7 +622,9 @@ class _CreateProductListingState extends State<CreateProductListing> {
                     const SizedBox(height: 16),
                     ProCustomButton(
                       loading: isSubmitted,
-                      text: widget.product != null ? 'Save Changes' : 'Create',
+                      text: widget.product != null
+                          ? 'Save Changes'
+                          : 'Create Product',
                       onPressed: () async {
                         if (_productNameController.text.isEmpty) {
                           showSnackbar(
@@ -645,15 +653,15 @@ class _CreateProductListingState extends State<CreateProductListing> {
                           setState(() {
                             isSubmitted = true;
                           });
-                          if (_selectedImages.isNotEmpty) {
-                            for (File image in _selectedImages) {
-                              dynamic response =
-                                  await ApiService.uploadFile(image);
-                              if (response['success']) {
-                                setState(() {
-                                  images!.add(response['fileUrl']);
-                                });
-                              }
+                          List<String> finalImages =
+                              List<String>.from(updateImages ?? <String>[]);
+
+// Step 2: Upload newly picked images, adding them to finalImages
+                          for (File image in _selectedImages) {
+                            final dynamic response =
+                                await ApiService.uploadFile(image);
+                            if (response['success']) {
+                              finalImages.add(response['fileUrl']);
                             }
                           }
                           final Map<String, dynamic> productListing =
@@ -670,10 +678,13 @@ class _CreateProductListingState extends State<CreateProductListing> {
                             'location': country.isEmpty
                                 ? shopController.shop!.location
                                 : country,
-                            'images': images,
+                            'images': finalImages,
                             'paymentMethod': paymentMethod,
                             'deliveryMethod': deliveryMethod,
-                            'url': 'http://example.com/product', // Example URL
+                            'url': 'http://example.com/product',
+                            'notes': notesController.text.trim().isEmpty
+                                ? null
+                                : notesController.text.trim(),
                             'deliveryDuration': deliverydayscontroller.text,
                             'itemType': 'product',
                             'isActive': _isSwitched,
@@ -724,6 +735,58 @@ class _CreateProductListingState extends State<CreateProductListing> {
                       },
                     ),
                     const SizedBox(height: 16),
+                    Center(
+                      child: Padding(
+                        padding: const EdgeInsets.only(
+                          left: 20.0,
+                          right: 20,
+                          top: 20,
+                          bottom: 50,
+                        ),
+                        child: Center(
+                          child: Padding(
+                            padding:
+                                const EdgeInsets.symmetric(horizontal: 20.0),
+                            child: Text.rich(
+                              TextSpan(
+                                children: <InlineSpan>[
+                                  const TextSpan(
+                                    text:
+                                        'By clicking on Create Product, you confirm that you will abide by the ',
+                                    style: TextStyle(
+                                        fontSize: 12, color: subtextColor),
+                                  ),
+                                  TextSpan(
+                                    text: 'Biz-Center Guidelines',
+                                    style: const TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                      color: proprimaryColor,
+                                      decoration: TextDecoration.underline,
+                                      fontSize: 12,
+                                    ),
+                                    recognizer: TapGestureRecognizer()
+                                      ..onTap = () {
+                                        showDialog(
+                                          context: context,
+                                          builder: (BuildContext context) =>
+                                              sellingGuide(context),
+                                        );
+                                      },
+                                  ),
+                                  const TextSpan(
+                                    text:
+                                        ', and declare that the listing does not include any Prohibited Items',
+                                    style: TextStyle(
+                                        fontSize: 12, color: subtextColor),
+                                  ),
+                                ],
+                              ),
+                              textAlign: TextAlign.center,
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
                   ],
                 ),
               ),

@@ -1,6 +1,7 @@
 import 'dart:core';
 
 import 'package:business_bosses_v2/analytics/presentation/howtouseapp.dart';
+import 'package:business_bosses_v2/bbpro/controllers/shop_controller.dart';
 import 'package:business_bosses_v2/common/dialogs/snackbar.dart';
 import 'package:business_bosses_v2/common/models/user_model.dart';
 import 'package:business_bosses_v2/common/widgets/buttons/subscribe_to_premium_button.dart';
@@ -27,6 +28,7 @@ class AnalyserScreen extends StatefulWidget {
 class _AnalyserScreenState extends State<AnalyserScreen> {
   bool _isInit = false;
   final ProfileController profileController = Get.find();
+  ShopController shopController = Get.find();
 
   @override
   void didChangeDependencies() {
@@ -111,7 +113,7 @@ class _AnalyserScreenState extends State<AnalyserScreen> {
                                   child:
                                       !profileController.myProfile.isSubscribed
                                           ? subscribetopremiumbutton()
-                                          : Container()),
+                                          : Container())
                             ],
                           ),
                         ),

@@ -1,5 +1,6 @@
 import 'package:business_bosses_v2/utils/theme/theme.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/svg.dart';
 
 class SwitchWidget extends StatefulWidget {
   final bool value;
@@ -8,6 +9,7 @@ class SwitchWidget extends StatefulWidget {
   final Color inactiveColor;
   final String caption;
   final String subtext;
+  final String? icon;
 
   const SwitchWidget({
     Key? key,
@@ -17,6 +19,7 @@ class SwitchWidget extends StatefulWidget {
     this.inactiveColor = Colors.grey,
     this.caption = '',
     this.subtext = '',
+    this.icon,
   }) : super(key: key);
 
   @override
@@ -71,6 +74,14 @@ class _SwitchWidgetState extends State<SwitchWidget>
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: <Widget>[
+              if (widget.icon != null)
+                SvgPicture.asset(
+                  widget.icon!,
+                  color: proprimaryColor,
+                  width: 25,
+                  height: 25,
+                ),
+              if (widget.icon != null) const SizedBox(width: 10),
               if (widget.subtext.isNotEmpty)
                 Expanded(
                   child: Text(

@@ -1,17 +1,21 @@
+import 'package:business_bosses_v2/action/action.dart';
+import 'dart:developer';
+
 import 'package:business_bosses_v2/bbpro/controllers/order_controller.dart';
 import 'package:business_bosses_v2/bbpro/controllers/shop_controller.dart';
 import 'package:business_bosses_v2/bbpro/models/product_model.dart';
 import 'package:business_bosses_v2/bbpro/models/shop_model.dart';
-import 'package:business_bosses_v2/bbpro/presentation/shop_screen.dart';
-import 'package:business_bosses_v2/bbpro/presentation/user_shop_screen.dart';
 import 'package:business_bosses_v2/bbpro/widgets/button.dart';
 import 'package:business_bosses_v2/bbpro/widgets/dropdown.dart';
 import 'package:business_bosses_v2/bbpro/widgets/edit_text.dart';
-import 'package:business_bosses_v2/bbpro/widgets/orderpaymentcard.dart';
 import 'package:business_bosses_v2/bbpro/widgets/ordersummarycard.dart';
+import 'package:business_bosses_v2/bbpro/widgets/paymentoptioncard.dart';
 import 'package:business_bosses_v2/common/dialogs/snackbar.dart';
 import 'package:business_bosses_v2/common/generic_slider.dart';
+import 'package:business_bosses_v2/common/widgets/text_widget.dart';
 import 'package:business_bosses_v2/features/profile/controller/profile_controller.dart';
+import 'package:business_bosses_v2/features/profile/presentation/public_profile_screen.dart';
+import 'package:business_bosses_v2/navigation/routes.dart';
 import 'package:business_bosses_v2/utils/theme/theme.dart';
 import 'package:detectable_text_field/detector/sample_regular_expressions.dart';
 import 'package:detectable_text_field/widgets/detectable_text.dart';
@@ -39,6 +43,7 @@ class _OrderProductScreenState extends State<OrderProductScreen> {
   final ShopController shopController = Get.find();
   final OrderController orderController = Get.put(OrderController());
   final TextEditingController deliveryController = TextEditingController();
+  final TextEditingController noteController = TextEditingController();
   List<Map<String, dynamic>> selectedItems = <Map<String, dynamic>>[];
 
   List<String> clientsName = <String>[];
@@ -46,16 +51,27 @@ class _OrderProductScreenState extends State<OrderProductScreen> {
   String? clientId;
   String? selectedClient;
 
+  List<dynamic>? paymentMethods;
+  String paymentMethod = '';
+  String activePaymentMethod = '';
+
   bool isSubmit = false;
 
   late FocusNode _focusNode;
+  bool blocked = false;
 
   @override
   void initState() {
     super.initState();
     _focusNode = FocusNode();
+    paymentMethods = widget.shop.payments;
+    log(widget.shop.toMap().toString());
+    if (paymentMethods!.isNotEmpty) {
+      activePaymentMethod = paymentMethods![0]['paymentMethod'] ?? '';
+    }
     quantityController.text = '1';
-    fullNameController.text = profileController.myProfile.name!;
+    fullNameController.text = profileController.myProfile.name ??
+        profileController.myProfile.username;
     emailController.text = profileController.myProfile.email;
     selectedItems.add(
       <String, dynamic>{
@@ -81,6 +97,182 @@ class _OrderProductScreenState extends State<OrderProductScreen> {
       child: Scaffold(
         backgroundColor: backgroundColor,
         appBar: AppBar(
+          actions: <Widget>[
+            Padding(
+              padding: const EdgeInsets.only(right: 15.0),
+              child: InkWell(
+                  onTap: () {
+                    showDialog(
+                      context: context,
+                      builder: (BuildContext context) => AlertDialog(
+                        content: Column(
+                          mainAxisSize: MainAxisSize.min,
+                          children: <Widget>[
+                            ListTile(
+                              onTap: () {
+                                navigateTo(context);
+                                showDialog(
+                                  context: context,
+                                  builder: (BuildContext context) =>
+                                      AlertDialog(
+                                    title: const TextWidget(
+                                      text: 'Do you want to block user?',
+                                      centralize: true,
+                                      fontWeight: FontWeight.w700,
+                                      size: 20,
+                                    ),
+                                    content: TextWidget(
+                                      text: blocked == true
+                                          ? 'You will see posts and comments related to user on your feed'
+                                          : 'You will no longer see undefined posts and comments on your feed',
+                                      centralize: true,
+                                      color: Colors.black.withOpacity(.6),
+                                    ),
+                                    actions: <Widget>[
+                                      TextButton(
+                                        onPressed: () => navigateTo(context),
+                                        child: const TextWidget(
+                                          text: 'Cancel',
+                                          fontWeight: FontWeight.w700,
+                                          size: 18,
+                                          color: Colors.grey,
+                                        ),
+                                      ),
+                                      GestureDetector(
+                                        onTap: () {
+                                          navigateTo(context);
+                                          // print(_post.user.uid);
+
+                                          // widget
+                                          //     .onBlock(_post.user.uid);
+                                          showSnackBar(context,
+                                              message: blocked == true
+                                                  ? 'User has been blocked'
+                                                  : 'User has been unblocked');
+                                        },
+                                        child: Container(
+                                          padding: const EdgeInsets.symmetric(
+                                            vertical: 7,
+                                            horizontal: 14,
+                                          ),
+                                          decoration: BoxDecoration(
+                                            color: primaryColorLT,
+                                            borderRadius:
+                                                BorderRadius.circular(5),
+                                          ),
+                                          child: TextWidget(
+                                            text: blocked == true
+                                                ? 'Unblock'
+                                                : 'Block',
+                                            color: Colors.white,
+                                            fontWeight: FontWeight.bold,
+                                          ),
+                                        ),
+                                      )
+                                    ],
+                                  ),
+                                );
+                              },
+                              contentPadding: EdgeInsets.zero,
+                              title: widget.product.user!.isSubscribed
+                                  ? Row(
+                                      children: <Widget>[
+                                        TextWidget(
+                                          text: blocked == true
+                                              ? 'Unblock @${widget.product.user!.name ?? widget.product.user!.username}'
+                                              : 'Block @${widget.product.user!.name ?? widget.product.user!.username}',
+                                          color: Colors.blue,
+                                        ),
+                                        const SizedBox(width: 5),
+                                        SvgPicture.asset(
+                                          'assets/svgs/premiumbadge.svg',
+                                          height: 9,
+                                          color: primaryColorLT,
+                                        )
+                                      ],
+                                    )
+                                  : TextWidget(
+                                      text: blocked == true
+                                          ? 'Unblock @${widget.product.user!.name ?? widget.product.user!.username}'
+                                          : 'Block @${widget.product.user!.name ?? widget.product.user!.username}',
+                                      color: Colors.blue,
+                                    ),
+                            ),
+                            ListTile(
+                              onTap: () {
+                                navigateTo(context);
+                                showDialog(
+                                  context: context,
+                                  builder: (BuildContext context) =>
+                                      AlertDialog(
+                                    title: const TextWidget(
+                                      text: 'Do you want to report user?',
+                                      centralize: true,
+                                      fontWeight: FontWeight.w700,
+                                      size: 20,
+                                    ),
+                                    content: TextWidget(
+                                      text:
+                                          'The user will be reported to admin to evaluate if it violates any community policy',
+                                      centralize: true,
+                                      color: Colors.black.withOpacity(.6),
+                                    ),
+                                    actions: <Widget>[
+                                      TextButton(
+                                        onPressed: () => navigateTo(context),
+                                        child: const TextWidget(
+                                          text: 'Cancel',
+                                          fontWeight: FontWeight.w700,
+                                          size: 18,
+                                          color: Colors.grey,
+                                        ),
+                                      ),
+                                      GestureDetector(
+                                        onTap: () async {
+                                          navigateTo(context);
+                                          await _reportUser(
+                                              context,
+                                              'accountReport',
+                                              widget.product.user!.uid,
+                                              widget.product.user!.username);
+                                        },
+                                        child: Container(
+                                          padding: const EdgeInsets.symmetric(
+                                            vertical: 7,
+                                            horizontal: 14,
+                                          ),
+                                          decoration: BoxDecoration(
+                                            color: primaryColorLT,
+                                            borderRadius:
+                                                BorderRadius.circular(5),
+                                          ),
+                                          child: const TextWidget(
+                                            text: 'Report',
+                                            color: Colors.white,
+                                            fontWeight: FontWeight.bold,
+                                          ),
+                                        ),
+                                      )
+                                    ],
+                                  ),
+                                );
+                              },
+                              contentPadding: EdgeInsets.zero,
+                              title: const TextWidget(
+                                text: 'Report this user',
+                                color: Colors.red,
+                              ),
+                            )
+                          ],
+                        ),
+                      ),
+                    );
+                  },
+                  child: CircleAvatar(
+                      backgroundColor: backgroundColor,
+                      child: SvgPicture.asset('assets/svgs/more.svg'))),
+            )
+          ],
           leading: IconButton(
             onPressed: () {
               Get.back();
@@ -90,9 +282,16 @@ class _OrderProductScreenState extends State<OrderProductScreen> {
           titleSpacing: 0,
           title: GestureDetector(
             onTap: () {
-              Get.to(UserShopScreen(
-                user: widget.product.user!,
-              ));
+              if (Get.previousRoute == Routes.publicProfile) {
+                Get.back();
+              } else {
+                Get.to(
+                  () => PublicProfileScreen(
+                    currentIndex: 1,
+                  ),
+                  arguments: widget.product.user,
+                );
+              }
             },
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
@@ -184,14 +383,14 @@ class _OrderProductScreenState extends State<OrderProductScreen> {
                                       style: const TextStyle(
                                         color: Colors.black,
                                         fontWeight: FontWeight.w900,
-                                        fontSize: 16,
+                                        fontSize: 18,
                                       ),
                                     ),
                                     const SizedBox(width: 5),
                                     Text(
                                       '${widget.shop.currency}${widget.product.price.toStringAsFixed(2)}',
                                       style: const TextStyle(
-                                        color: Colors.grey,
+                                        color: Colors.red,
                                         decoration: TextDecoration.lineThrough,
                                         fontSize: 14,
                                       ),
@@ -207,15 +406,6 @@ class _OrderProductScreenState extends State<OrderProductScreen> {
                                     fontSize: 16,
                                   ),
                                 ),
-                              // if (widget.product.deliveryMethod != null)
-                              //   Text(
-                              //     widget.product.deliveryMethod!,
-                              //     style: const TextStyle(
-                              //       color: proprimaryColor,
-                              //       fontWeight: FontWeight.bold,
-                              //       fontSize: 16,
-                              //     ),
-                              //   ),
                             ],
                           ),
                           const SizedBox(
@@ -246,44 +436,6 @@ class _OrderProductScreenState extends State<OrderProductScreen> {
                           const SizedBox(
                             height: 10,
                           ),
-                          if (widget.product.notes != null)
-                            const Row(
-                              children: <Widget>[
-                                Text(
-                                  'Seller\'s Notes',
-                                  style: TextStyle(
-                                    fontSize: 16,
-                                    fontWeight: FontWeight.w600,
-                                    color: textColor,
-                                  ),
-                                ),
-                              ],
-                            ),
-                          if (widget.product.notes != null)
-                            Align(
-                              alignment: Alignment.centerLeft,
-                              child: DetectableText(
-                                text: widget.product.notes ?? '',
-                                detectionRegExp:
-                                    detectionRegExp(hashtag: false)!,
-                                detectedStyle: bodyText2.copyWith(
-                                  color: Colors.blue,
-                                ),
-                                moreStyle: bodyText2.copyWith(
-                                  color: textColor,
-                                  fontWeight: FontWeight.bold,
-                                ),
-                                lessStyle: bodyText2.copyWith(
-                                  color: textColor,
-                                  fontWeight: FontWeight.bold,
-                                ),
-                                trimLength: 100,
-                                trimExpandedText: '  show less',
-                                basicStyle:
-                                    bodyText2.copyWith(color: textColor),
-                                onTap: (_) {},
-                              ),
-                            ),
                         ],
                       ),
                     ],
@@ -365,10 +517,6 @@ class _OrderProductScreenState extends State<OrderProductScreen> {
                   height: 15,
                 ),
                 if (widget.shop.payments.isNotEmpty)
-                  OrderPaymentMethodsWidget(
-                    paymentMethods: widget.shop.payments,
-                  ),
-                if (widget.shop.payments.isNotEmpty)
                   const SizedBox(
                     height: 15,
                   ),
@@ -390,78 +538,101 @@ class _OrderProductScreenState extends State<OrderProductScreen> {
                   padding: const EdgeInsets.symmetric(horizontal: 15.0),
                   child: Container(
                     decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(10),
-                        color: Colors.white),
-                    padding: const EdgeInsets.only(
-                        left: 15.0, top: 15, right: 15, bottom: 0),
+                        color: Colors.white,
+                        borderRadius: BorderRadius.circular(15)),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: <Widget>[
-                        const Text(
-                          'Edit your Details',
-                          style: TextStyle(
-                            fontSize: 16,
-                            fontWeight: FontWeight.w700,
-                          ),
-                        ),
-                        const SizedBox(
-                          width: 10,
-                        ),
-                        TextFormField(
-                          style: const TextStyle(fontSize: 13),
-                          maxLines: 1,
-                          controller: fullNameController,
-                          decoration: InputDecoration(
-                            border: InputBorder.none,
-                            hintText: 'Full Name',
-                            filled: false,
-                            fillColor: Colors.grey.shade100,
-                          ),
-                        ),
-                        TextFormField(
-                          controller: emailController,
-                          style: const TextStyle(fontSize: 13),
-                          maxLines: 1,
-                          decoration: InputDecoration(
-                            border: InputBorder.none,
-                            hintText: 'Email',
-                            filled: false,
-                            fillColor: Colors.grey.shade100,
-                          ),
-                        ),
-                        TextFormField(
-                          controller: phoneController,
-                          style: const TextStyle(fontSize: 13),
-                          maxLines: 1,
-                          decoration: InputDecoration(
-                            border: InputBorder.none,
-                            hintText: 'Phone Number',
-                            filled: false,
-                            fillColor: Colors.grey.shade100,
-                          ),
-                        ),
-                        TextFormField(
-                          controller: deliveryController,
-                          style: const TextStyle(fontSize: 13),
-                          maxLength: 300,
-                          maxLines: 3,
-                          decoration: InputDecoration(
-                            border: InputBorder.none,
-                            hintText: 'Delivery address',
-                            filled: false,
-                            fillColor: Colors.grey.shade100,
-                          ),
-                        ),
                         const SizedBox(
                           height: 15,
                         ),
+                        const Padding(
+                          padding: EdgeInsets.only(left: 20.0),
+                          child: Text(
+                            'Select a Payment Option',
+                            style: TextStyle(
+                                fontSize: 16, fontWeight: FontWeight.w700),
+                          ),
+                        ),
+                        widget.shop.payments.isNotEmpty
+                            ? Padding(
+                                padding: const EdgeInsets.all(15),
+                                child: Column(
+                                  children: paymentMethods!
+                                      .map((payment) => ProPaymentOptionCard(
+                                            option:
+                                                payment['paymentMethod'] ?? '',
+                                            subtext:
+                                                'Details: ${payment['details'] ?? 'N/A'}',
+                                            activeoption: activePaymentMethod,
+                                            onTap: (String newOption) {
+                                              setState(() {
+                                                activePaymentMethod = newOption;
+                                              });
+                                            },
+                                          ))
+                                      .toList(),
+                                ),
+                              )
+                            : const Padding(
+                                padding: EdgeInsets.all(15.0),
+                                child: Center(
+                                  child: Text(
+                                    'User has not added a payment method yet',
+                                    style: TextStyle(
+                                        color: Colors.grey, fontSize: 14),
+                                  ),
+                                ),
+                              ),
                       ],
                     ),
                   ),
                 ),
-                const SizedBox(
-                  height: 15,
-                ),
+                if (widget.product.notes != null)
+                  const SizedBox(
+                    height: 16,
+                  ),
+                if (widget.product.notes != null)
+                  Container(
+                    margin: const EdgeInsets.only(left: 15, right: 15),
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(10),
+                      color: Colors.white,
+                    ),
+                    width: double.infinity,
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: <Widget>[
+                        const Padding(
+                          padding: EdgeInsets.symmetric(
+                              horizontal: 15.0, vertical: 15),
+                          child: Text(
+                            'Seller\'s Note',
+                            style: TextStyle(
+                              fontWeight: FontWeight.w700,
+                              fontSize: 16,
+                              color: textColor,
+                            ),
+                          ),
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 15.0),
+                          child: Text(
+                            widget.product.notes!,
+                            style: const TextStyle(
+                              fontSize: 14,
+                            ),
+                          ),
+                        ),
+                        CustomEditText(
+                          padding: 0,
+                          hintText: 'Enter Note to Seller here',
+                          controller: noteController,
+                          caption: '',
+                        ),
+                      ],
+                    ),
+                  ),
                 const SizedBox(
                   height: 15,
                 ),
@@ -477,6 +648,16 @@ class _OrderProductScreenState extends State<OrderProductScreen> {
                       setState(() {
                         isSubmit = true;
                       });
+                      if (activePaymentMethod.isEmpty) {
+                        showSnackbar(
+                          message: 'Please select a payment method',
+                          error: true,
+                        );
+                        setState(() {
+                          isSubmit = false;
+                        });
+                        return;
+                      }
                       final Map<String, dynamic> orderData = <String, dynamic>{
                         'userId': profileController.myProfile.uid,
                         'shopId': widget.shop.id,
@@ -487,14 +668,11 @@ class _OrderProductScreenState extends State<OrderProductScreen> {
                             ? getDeliveryMethod(widget.product.deliveryMethod!)
                             : 'online',
                         'deliveryDate': DateTime.now().toString(),
-                        'paymentMethod': widget.product.paymentMethod != null &&
-                                widget.product.paymentMethod!.isNotEmpty
-                            ? widget.product.paymentMethod!
-                            : 'Cash',
-                        'orderDetails':
-                            'Name: ${fullNameController.text} \n Email: ${emailController.text} \n Phone: ${phoneController.text} \n Delivery Details: ${deliveryController.text}',
+                        'paymentMethod': activePaymentMethod,
+                        'orderDetails': '',
                         'invoiceOption': 'send_with_payment_link',
-                        'status': 'pending'
+                        'status': 'pending',
+                        'notes': noteController.text,
                       };
                       bool response = await orderController.addOrder(orderData);
                       if (response) {
@@ -533,10 +711,6 @@ class _OrderProductScreenState extends State<OrderProductScreen> {
                             ],
                           ),
                         );
-
-                        // showSnackbar(message: 'Order Added Successfully!');
-                        // // ignore: use_build_context_synchronously
-                        // Navigator.pop(context);
                       } else {
                         showSnackbar(
                           message: 'Error creating order!',
@@ -589,4 +763,7 @@ class _OrderProductScreenState extends State<OrderProductScreen> {
     // Final total after discount
     return baseTotal - discountAmount;
   }
+
+  Future<void> _reportUser(BuildContext context, String reportType,
+      String userId, String username) async {}
 }

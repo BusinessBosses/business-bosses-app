@@ -32,6 +32,7 @@ class CustomEditText extends StatelessWidget {
   final bool? ispaymentfield;
   final bool? issl;
   final bool? isorder;
+  final bool? isps;
   final Function(String)? onTextChanged;
 
   const CustomEditText({
@@ -64,6 +65,7 @@ class CustomEditText extends StatelessWidget {
     this.issl,
     this.isorder,
     this.onTextChanged,
+    this.isps,
   });
 
   void _updateQuantity(BuildContext context, int newValue) {
@@ -77,7 +79,9 @@ class CustomEditText extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: EdgeInsets.symmetric(horizontal: padding ?? 15.0),
+      padding: isps == null
+          ? EdgeInsets.symmetric(horizontal: padding ?? 15.0)
+          : const EdgeInsets.only(right: 15),
       child: Container(
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(10),
@@ -85,11 +89,11 @@ class CustomEditText extends StatelessWidget {
         ),
         padding: EdgeInsets.only(
           left: 15.0,
-          top: isorder != null ? 0 : 15,
+          top: isorder != null ? 0 : padding ?? 15,
           right: 15,
           bottom: maxLength != null && maxLength! > 14 && maxLength! != 300
               ? 0
-              : 15,
+              : padding ?? 15,
         ),
         child: isorder != null
             ? Row(
@@ -189,14 +193,15 @@ class CustomEditText extends StatelessWidget {
                   Wrap(
                     crossAxisAlignment: WrapCrossAlignment.center,
                     children: <Widget>[
-                      Text(
-                        caption,
-                        style: const TextStyle(
-                          fontSize: 14,
-                          fontWeight: FontWeight.w600,
+                      if (caption != '')
+                        Text(
+                          caption,
+                          style: const TextStyle(
+                            fontSize: 14,
+                            fontWeight: FontWeight.w600,
+                          ),
                         ),
-                      ),
-                      const SizedBox(width: 10),
+                      if (caption != '') const SizedBox(width: 10),
                       optionalText ?? Container(),
                     ],
                   ),

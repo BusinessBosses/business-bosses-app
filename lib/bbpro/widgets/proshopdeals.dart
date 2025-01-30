@@ -15,6 +15,7 @@ class ProshopdealsWidget extends StatefulWidget {
   final List<Product>? products;
   final List<Object>? combinedList;
   final bool? isHome;
+  final int? initialIndex; // Added initialIndex
   const ProshopdealsWidget({
     Key? key,
     this.title,
@@ -23,6 +24,7 @@ class ProshopdealsWidget extends StatefulWidget {
     this.products,
     this.combinedList,
     this.isHome,
+    this.initialIndex = 0,
   }) : super(key: key);
 
   @override
@@ -34,15 +36,31 @@ class _ProshopdealsWidgetState extends State<ProshopdealsWidget> {
   Widget build(BuildContext context) {
     final List<Object>? items;
     if (widget.combinedList != null) {
-      items = widget.combinedList;
+      items = widget.combinedList!.where((Object object) {
+        if (object is Product) {
+          if (object.user!.isSubscribed) return true;
+        } else if (object is Service) {
+          if (object.user!.isSubscribed) {
+            return true;
+          }
+        }
+        return false;
+      }).toList();
     } else {
-      items = widget.products?.take(10).toList() ??
-          widget.services?.take(10).toList();
+      items = widget.products
+              ?.where((Product product) => product.user!.isSubscribed)
+              .take(10)
+              .toList() ??
+          widget.services
+              ?.where((Service service) => service.user!.isSubscribed)
+              .take(10)
+              .toList();
     }
-
     return GestureDetector(
       onTap: () {
-        Get.to(const ProshopdealsScreen());
+        Get.to(() => ProshopdealsScreen(
+              initialIndex: widget.initialIndex,
+            ));
       },
       child: Container(
         decoration: BoxDecoration(
@@ -107,10 +125,12 @@ class _ProshopdealsWidgetState extends State<ProshopdealsWidget> {
                         if (item is Product) {
                           return GestureDetector(
                             onTap: () {
-                              Get.to(OrderProductScreen(
-                                product: item,
-                                shop: item.shop!,
-                              ));
+                              Get.to(
+                                () => OrderProductScreen(
+                                  product: item,
+                                  shop: item.shop!,
+                                ),
+                              );
                             },
                             child: _buildDealItem(
                               item.images!.isNotEmpty

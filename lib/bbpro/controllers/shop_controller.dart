@@ -1,5 +1,6 @@
 import 'dart:developer';
 
+import 'package:business_bosses_v2/bbpro/models/customitem_model.dart';
 import 'package:business_bosses_v2/bbpro/models/order_stats_model.dart';
 import 'package:business_bosses_v2/bbpro/models/product_model.dart';
 import 'package:business_bosses_v2/bbpro/models/service_model.dart';
@@ -14,7 +15,7 @@ import 'package:business_bosses_v2/services/api_service.dart';
 import 'package:get/get.dart';
 
 class ShopController extends GetxController {
-  final ProfileController profileController = Get.find();
+  final ProfileController profileController = Get.put(ProfileController());
   Shop? shop;
   Shop? userShop;
   RxBool loading = RxBool(true);
@@ -22,21 +23,17 @@ class ShopController extends GetxController {
   RxBool supploerAddLoading = RxBool(false);
   RxList<Product> products = RxList<Product>(<Product>[]);
   RxList<Service> services = RxList<Service>(<Service>[]);
+  RxList<Customitem> customItems = RxList<Customitem>(<Customitem>[]);
   RxList<Object> items = RxList<Object>(<Object>[]);
   RxList<Product> userProducts = RxList<Product>(<Product>[]);
   RxList<Service> userServices = RxList<Service>(<Service>[]);
+  RxList<Customitem> userCustomItems = RxList<Customitem>(<Customitem>[]);
   RxList<Object> userItems = RxList<Object>(<Object>[]);
   RxList<Vendor> suppliers = RxList<Vendor>(<Vendor>[]);
   OrderStats? orderStats;
   ShopStats? shopStats;
   ShopGraphData? shopGraph;
-
-  
-  @override
-  void onInit() {
-    initShop();
-    super.onInit();
-  }
+  ApiResponseModel? error;
 
   Future<bool> initShop() async {
     ApiResponseModel response = await ApiService.get(
@@ -50,6 +47,7 @@ class ShopController extends GetxController {
           ...response.data['rows'][0],
           'user': profileController.myProfile.toMap()
         });
+        update();
         return true;
       }
     } else {
@@ -78,12 +76,32 @@ class ShopController extends GetxController {
           services.add(Service.fromJson(servicesResponse.data['rows'][i]));
         }
       }
+      ApiResponseModel customReponse = await ApiService.get(
+        path: 'custom-items/user/${profileController.myProfile.uid}',
+      );
+      customItems.clear();
+      if (customReponse.success) {
+        if (customReponse.data.isNotEmpty) {
+          for (int i = 0; i < customReponse.data.length; i++) {
+            customItems.add(Customitem.fromJson(customReponse.data[i]));
+          }
+        }
+      }
       items.clear();
-      items.addAll(<Object>[...products, ...services]);
+      items.addAll(<Object>[...products, ...services, ...customItems]);
       items.sort((Object a, Object b) {
         // Assuming both Product and Service have a createdAt property.
-        DateTime aDate = a is Product ? a.createdAt : (a as Service).createdAt;
-        DateTime bDate = b is Product ? b.createdAt : (b as Service).createdAt;
+        DateTime aDate = (a is Product)
+            ? a.createdAt
+            : (a is Service)
+                ? a.createdAt
+                : (a as Customitem).createdAt;
+
+        DateTime bDate = (b is Product)
+            ? b.createdAt
+            : (b is Service)
+                ? b.createdAt
+                : (b as Customitem).createdAt;
         return bDate.compareTo(aDate);
       });
 
@@ -96,6 +114,7 @@ class ShopController extends GetxController {
           suppliers.add(Vendor.fromMap(vendorsReponse.data['rows'][i]));
         }
       }
+
       return true;
     } else {
       return false;
@@ -147,12 +166,22 @@ class ShopController extends GetxController {
       userItems.clear();
       userItems.addAll(<Object>[
         ...userProducts.where((Product item) => item.isActive).toList(),
-        ...userServices.where((Service item) => item.isActive).toList()
+        ...userServices.where((Service item) => item.isActive).toList(),
+        ...userCustomItems,
       ]);
       userItems.sort((Object a, Object b) {
         // Assuming both Product and Service have a createdAt property.
-        DateTime aDate = a is Product ? a.createdAt : (a as Service).createdAt;
-        DateTime bDate = b is Product ? b.createdAt : (b as Service).createdAt;
+        DateTime aDate = (a is Product)
+            ? a.createdAt
+            : (a is Service)
+                ? a.createdAt
+                : (a as Customitem).createdAt;
+
+        DateTime bDate = (b is Product)
+            ? b.createdAt
+            : (b is Service)
+                ? b.createdAt
+                : (b as Customitem).createdAt;
         return bDate.compareTo(aDate);
       });
 
@@ -173,6 +202,7 @@ class ShopController extends GetxController {
       update();
       return true;
     } else {
+      error = response;
       return false;
     }
   }
@@ -188,6 +218,7 @@ class ShopController extends GetxController {
       update();
       return true;
     } else {
+      error = response;
       return false;
     }
   }
@@ -232,6 +263,40 @@ class ShopController extends GetxController {
     if (response.success) {
       services.add(Service.fromJson(response.data));
       items.add(Service.fromJson(response.data));
+      update();
+      return true;
+    } else {
+      log(response.toMap().toString());
+      return false;
+    }
+  }
+
+  Future<bool> addCustomItem(Map<String, dynamic> data) async {
+    ApiResponseModel response =
+        await ApiService.post(path: 'custom-items', body: data);
+    if (response.success) {
+      customItems.add(Customitem.fromJson(response.data));
+      // items.add(Service.fromJson(response.data));
+      update();
+      return true;
+    } else {
+      log(response.toMap().toString());
+      return false;
+    }
+  }
+
+  Future<bool> updateCustomItem(int id, Map<String, dynamic> data) async {
+    ApiResponseModel response =
+        await ApiService.put(path: 'custom-items/$id', body: data);
+    if (response.success) {
+      final int itemIndex =
+          customItems.indexWhere((Customitem element) => element.id == id);
+      customItems[itemIndex] = Customitem.fromJson(response.data);
+      // final int objectIndex = items.indexWhere((Object element) {
+      //   if (element is Product) return element.id == id;
+      //   return false;
+      // });
+      // items[objectIndex] = Customitem.fromJson(response.data);
       update();
       return true;
     } else {

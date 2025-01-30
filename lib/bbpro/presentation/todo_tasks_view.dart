@@ -18,7 +18,8 @@ class TodoTaskView extends StatefulWidget {
 
 class _TodoTaskViewState extends State<TodoTaskView> {
   final ProjectController projectController = Get.put(ProjectController());
-  final ShopController shopController = Get.put(ShopController());
+  final ShopController shopController =
+      Get.put(ShopController(), permanent: true);
   final ProfileController profileController = Get.find();
   bool loading = true;
 

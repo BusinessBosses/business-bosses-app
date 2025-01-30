@@ -2,6 +2,7 @@
 import 'package:business_bosses_v2/bbpro/controllers/shop_controller.dart';
 import 'package:business_bosses_v2/bbpro/models/shop_model.dart';
 import 'package:business_bosses_v2/bbpro/presentation/create_product.dart';
+import 'package:business_bosses_v2/bbpro/widgets/countrycodes.dart';
 import 'package:business_bosses_v2/common/dialogs/snackbar.dart';
 import 'package:flutter/material.dart';
 
@@ -16,6 +17,7 @@ class InventoryCard extends StatefulWidget {
   final bool? myShop;
   final Shop? shop;
   final bool? isProduct;
+  final bool? marketplace;
 
   const InventoryCard({
     Key? key,
@@ -23,6 +25,7 @@ class InventoryCard extends StatefulWidget {
     this.isProduct,
     this.myShop,
     this.shop,
+    this.marketplace,
   }) : super(key: key);
 
   @override
@@ -32,6 +35,12 @@ class InventoryCard extends StatefulWidget {
 
 class _InventoryCardState extends State<InventoryCard> {
   final ShopController shopController = Get.find();
+
+  @override
+  void initState() {
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -106,7 +115,7 @@ class _InventoryCardState extends State<InventoryCard> {
                           Text(
                             '${widget.shop?.currency ?? shopController.shop!.currency}${widget.product!.price.toStringAsFixed(2)}',
                             style: const TextStyle(
-                              color: Colors.grey,
+                              color: primaryColorLT,
                               decoration: TextDecoration.lineThrough,
                               fontSize: 11,
                             ),
@@ -162,26 +171,60 @@ class _InventoryCardState extends State<InventoryCard> {
             height: 5,
           ),
           widget.myShop == false
-              ? Container(
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: 5,
-                    vertical: 3,
-                  ),
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(70),
-                    color: Colors.black,
-                    border: Border.all(
-                      color: Colors.grey,
+              ? Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: <Widget>[
+                    if (widget.marketplace == true)
+                      Row(
+                        children: <Widget>[
+                          const Icon(Icons.place, color: Colors.grey, size: 15),
+                          const SizedBox(width: 4),
+                          Text(
+                            CountryCodes.nameToCode[
+                                    widget.product?.location?.trim()] ??
+                                'N/A',
+                            style: const TextStyle(
+                                fontWeight: FontWeight.w700, fontSize: 12),
+                          ),
+                        ],
+                      ),
+                    if (widget.marketplace == true)
+                      Row(
+                        children: <Widget>[
+                          const Icon(Icons.star, color: Colors.amber, size: 15),
+                          const SizedBox(width: 4),
+                          Text(
+                            (widget.product?.user?.averageRating != null)
+                                ? widget.product!.user!.averageRating!
+                                    .toStringAsFixed(1)
+                                : 'N/A',
+                            style: const TextStyle(
+                                fontWeight: FontWeight.w700, fontSize: 12),
+                          ),
+                        ],
+                      ),
+                    if (widget.marketplace == null) Container(width: 5),
+                    Container(
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 5,
+                        vertical: 3,
+                      ),
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(6),
+                        border: Border.all(
+                          color: primaryColorLT,
+                        ),
+                      ),
+                      child: const Text(
+                        'Order',
+                        style: TextStyle(
+                          color: primaryColorLT,
+                          fontWeight: FontWeight.bold,
+                          fontSize: 11,
+                        ),
+                      ),
                     ),
-                  ),
-                  child: const Text(
-                    'Order',
-                    style: TextStyle(
-                      color: Colors.white,
-                      fontWeight: FontWeight.bold,
-                      fontSize: 11,
-                    ),
-                  ),
+                  ],
                 )
               : Row(
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -226,12 +269,14 @@ class _InventoryCardState extends State<InventoryCard> {
                       ),
                     ),
                     OptionsButton(
+                      isBoost: true,
                       item: widget.product,
                       onEdit: () => Get.to(
                         () => CreateProductListing(
                           product: widget.product,
                         ),
                       ),
+                      onBoost: () {},
                       onDelete: onDelete,
                     ),
                   ],

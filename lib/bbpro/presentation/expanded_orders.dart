@@ -56,6 +56,27 @@ class _ExpandedOrdersState extends State<ExpandedOrders> {
             shop: widget.shop,
           ),
           const SizedBox(height: 30),
+          if (widget.order.notes != null)
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: <Widget>[
+                const Padding(
+                  padding: EdgeInsets.symmetric(horizontal: 15.0),
+                  child: Text(
+                    'Buyer Note',
+                    style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 15.0),
+                  child: Text(
+                    widget.order.notes!,
+                    style: const TextStyle(fontSize: 16),
+                  ),
+                ),
+              ],
+            ),
+          const SizedBox(height: 30),
           const Padding(
             padding: EdgeInsets.symmetric(horizontal: 15.0),
             child: Text(
@@ -72,7 +93,7 @@ class _ExpandedOrdersState extends State<ExpandedOrders> {
               ),
               leading: _buildProductImage(product),
               subtitle: Text(
-                '${widget.shop != null ? widget.shop!.currency : shopController.shop?.currency ?? ''} ${product.price.toString()}',
+                '${widget.shop != null ? widget.shop!.currency : widget.order.shop.currency} ${product.price.toString()}',
                 style: const TextStyle(
                   fontSize: 13,
                 ),
@@ -93,7 +114,7 @@ class _ExpandedOrdersState extends State<ExpandedOrders> {
               ),
               leading: _buildServiceImage(service),
               subtitle: Text(
-                '${widget.shop != null ? widget.shop!.currency : shopController.shop?.currency ?? ''} ${service.price.toString()}',
+                '${widget.shop != null ? widget.shop!.currency : widget.order.shop.currency} ${service.price.toString()}',
                 style: const TextStyle(
                   fontSize: 14,
                 ),
@@ -113,7 +134,7 @@ class _ExpandedOrdersState extends State<ExpandedOrders> {
                 ),
               ),
               subtitle: Text(
-                '${widget.shop != null ? widget.shop!.currency : shopController.shop?.currency ?? ''} ${custom['amount'].toString()}',
+                '${widget.shop != null ? widget.shop!.currency : widget.order.shop.currency} ${custom['amount'].toString()}',
                 style: const TextStyle(
                   fontSize: 14,
                 ),

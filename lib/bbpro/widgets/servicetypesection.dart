@@ -1,9 +1,13 @@
+import 'package:business_bosses_v2/bbpro/models/service_model.dart';
 import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class ServicetypeSectionWidget extends StatefulWidget {
   final bool? isOnline;
-  const ServicetypeSectionWidget({Key? key, this.isOnline}) : super(key: key);
+  final Service service;
+  const ServicetypeSectionWidget(
+      {Key? key, this.isOnline, required this.service})
+      : super(key: key);
 
   @override
   State<ServicetypeSectionWidget> createState() =>
@@ -22,70 +26,83 @@ class _ServicetypeSectionWidgetState extends State<ServicetypeSectionWidget> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
-            Align(
-              alignment: Alignment.topLeft,
-              child: Container(
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
-                decoration: BoxDecoration(
-                  color: Colors.grey[300],
-                  borderRadius: BorderRadius.circular(20),
-                ),
-                child: Text(
-                  widget.isOnline == true ? 'Online' : 'In-Person',
-                  style: const TextStyle(
-                    fontSize: 14,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-              ),
+            const Text(
+              'Delivery Method',
+              style: TextStyle(fontSize: 16, fontWeight: FontWeight.w700),
             ),
-            if (widget.isOnline == false)
-              Column(
-                children: <Widget>[
-                  Center(
-                    child: Image.asset(
-                      'assets/google_meet_logo.png', // Replace with your Google Meet logo asset
-                      height: 50,
+            const SizedBox(
+              height: 5,
+            ),
+            Row(
+              children: <Widget>[
+                Align(
+                  alignment: Alignment.topLeft,
+                  child: Container(
+                    padding:
+                        const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+                    decoration: BoxDecoration(
+                      color: Colors.grey[300],
+                      borderRadius: BorderRadius.circular(20),
                     ),
-                  ),
-                  const SizedBox(height: 10),
-                  const Center(
                     child: Text(
-                      'Google Meet',
-                      style: TextStyle(
-                        fontSize: 18,
+                      widget.isOnline == true ? 'Online' : 'In-Person',
+                      style: const TextStyle(
+                        fontSize: 14,
                         fontWeight: FontWeight.bold,
                       ),
                     ),
                   ),
-                  const SizedBox(height: 5),
-                  const Center(
-                    child: Text(
-                      'Web conference',
-                      style: TextStyle(
-                        fontSize: 14,
-                        color: Colors.grey,
-                      ),
-                    ),
-                  ),
-                  const SizedBox(height: 20),
-                  Center(
-                    child: InkWell(
-                      onTap: () => launchUrl(Uri.parse(
-                          'https://bookperfectly.pro/profilelink/')), // Replace with your actual profile link
-                      child: const Text(
-                        'bookperfectly.pro/profilelink/',
-                        style: TextStyle(
-                          fontSize: 14,
-                          color: Colors.blue,
-                          decoration: TextDecoration.underline,
-                        ),
-                      ),
-                    ),
-                  ),
-                ],
-              ),
+                ),
+                const SizedBox(
+                  width: 5,
+                ),
+                Center(
+                    child: widget.isOnline == true
+                        ? InkWell(
+                            onTap: () => launchUrl(Uri.parse(widget.service
+                                .url!)), // Replace with your actual profile link
+                            child: Text(
+                              widget.service.url ?? 'N/A',
+                              style: const TextStyle(
+                                fontSize: 14,
+                                color: Colors.blue,
+                                decoration: TextDecoration.underline,
+                              ),
+                            ),
+                          )
+                        : Text(
+                            widget.service.url ?? 'N/A',
+                            style: const TextStyle(
+                              fontSize: 14,
+                              color: Colors.blue,
+                              decoration: TextDecoration.underline,
+                            ),
+                          )),
+              ],
+            ),
+            const SizedBox(
+              height: 10,
+            ),
+            const Divider(),
+            const SizedBox(
+              height: 10,
+            ),
+            Column(
+              children: <Widget>[
+                const Text(
+                  'Service Type',
+                  style: TextStyle(fontSize: 16, fontWeight: FontWeight.w700),
+                ),
+                const SizedBox(
+                  height: 5,
+                ),
+                Text(
+                  widget.service.serviceType ?? 'N/A',
+                  style: const TextStyle(
+                      fontSize: 14, fontWeight: FontWeight.normal),
+                ),
+              ],
+            ),
           ],
         ),
       ),

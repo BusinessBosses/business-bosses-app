@@ -1,9 +1,15 @@
+// ignore_for_file: empty_catches
+
 import 'package:business_bosses_v2/action/action.dart';
 import 'package:business_bosses_v2/bbpro/controllers/shop_controller.dart';
+import 'package:business_bosses_v2/bbpro/models/customitem_model.dart';
 import 'package:business_bosses_v2/bbpro/models/service_model.dart';
 import 'package:business_bosses_v2/bbpro/models/product_model.dart';
 import 'package:business_bosses_v2/bbpro/presentation/book_service.dart';
+import 'package:business_bosses_v2/bbpro/presentation/create_custom_listing.dart';
+import 'package:business_bosses_v2/bbpro/presentation/my_orders_screen.dart';
 import 'package:business_bosses_v2/bbpro/presentation/order_product.dart';
+import 'package:business_bosses_v2/bbpro/widgets/custom_item_card.dart';
 import 'package:business_bosses_v2/bbpro/widgets/inventorycard.dart';
 import 'package:business_bosses_v2/bbpro/widgets/servicecard.dart';
 import 'package:business_bosses_v2/common/models/user_model.dart';
@@ -36,7 +42,7 @@ class UserShopScreen extends StatefulWidget {
 class _UserShopScreenState extends State<UserShopScreen> {
   final ShopController shopController = Get.find();
   final ProfileController profileController = Get.find();
-  final String _selectedItem = 'All Products';
+
   bool loading = true;
 
   @override
@@ -84,16 +90,8 @@ class _UserShopScreenState extends State<UserShopScreen> {
               //   launchUrl(launchUri);
             } else if (action['text'] == 'Share') {
               _shareBizCenter();
-            } else if (action['text'] == 'Review') {
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (BuildContext context) => SellerReviewScreen(
-                    user: widget.user,
-                    refreshCallback: loadData,
-                  ),
-                ),
-              );
+            } else if (action['text'] == 'Orders') {
+              Get.to(const MyOrdersScreen());
             }
           },
           child: Padding(
@@ -335,23 +333,30 @@ class _UserShopScreenState extends State<UserShopScreen> {
                                               const SizedBox(
                                                 width: 5,
                                               ),
-                                              Row(
-                                                children: <Widget>[
-                                                  const Icon(Icons.star,
-                                                      color: Colors.amber,
-                                                      size: 18),
-                                                  const SizedBox(width: 4),
-                                                  GestureDetector(
-                                                    onTap: () {},
-                                                    child: Text(
-                                                      '${shopController.userShop!.user?.averageRating?.toStringAsFixed(2)} Reviews',
+                                              GestureDetector(
+                                                onTap: () {
+                                                  Get.to(
+                                                    SellerReviewScreen(
+                                                      user: widget.user,
+                                                      refreshCallback: loadData,
+                                                    ),
+                                                  );
+                                                },
+                                                child: Row(
+                                                  children: <Widget>[
+                                                    const Icon(Icons.star,
+                                                        color: Colors.amber,
+                                                        size: 18),
+                                                    const SizedBox(width: 4),
+                                                    Text(
+                                                      '${shopController.userShop!.user?.averageRating?.toStringAsFixed(1)} Reviews',
                                                       style: const TextStyle(
                                                           fontWeight:
                                                               FontWeight.w700,
                                                           fontSize: 14),
                                                     ),
-                                                  ),
-                                                ],
+                                                  ],
+                                                ),
                                               ),
                                             ],
                                           ),
@@ -379,8 +384,8 @@ class _UserShopScreenState extends State<UserShopScreen> {
                                               },
                                               <String, String>{
                                                 'icon':
-                                                    'assets/svgs/shopreview.svg',
-                                                'text': 'Review'
+                                                    'assets/svgs/ordersinvoices.svg',
+                                                'text': 'Orders'
                                               },
                                             ]),
                                           )
@@ -405,7 +410,7 @@ class _UserShopScreenState extends State<UserShopScreen> {
                                     ]),
                                 const Divider(
                                   height: 1,
-                                  // thickness: 1,
+                                  thickness: 1,
                                 ),
                                 Expanded(
                                   child: TabBarView(
@@ -415,7 +420,8 @@ class _UserShopScreenState extends State<UserShopScreen> {
                                         children: <Widget>[
                                           const Padding(
                                             padding: EdgeInsets.symmetric(
-                                                horizontal: 15.0, vertical: 10),
+                                              horizontal: 15.0,
+                                            ),
                                             child: Row(
                                               mainAxisAlignment:
                                                   MainAxisAlignment
@@ -528,74 +534,99 @@ class _UserShopScreenState extends State<UserShopScreen> {
                                             )
                                           } else
                                             Expanded(
-                                              child: Padding(
-                                                padding:
-                                                    const EdgeInsets.symmetric(
-                                                        horizontal: 15.0),
-                                                child: StaggeredGridView
-                                                    .countBuilder(
-                                                  crossAxisCount: 2,
-                                                  staggeredTileBuilder:
-                                                      (int index) =>
-                                                          const StaggeredTile
-                                                              .fit(1),
-                                                  mainAxisSpacing: 10.0,
-                                                  crossAxisSpacing: 10.0,
-                                                  itemCount: shopController
-                                                      .userItems.length,
-                                                  itemBuilder:
-                                                      (BuildContext context,
-                                                          int index) {
-                                                    if (shopController
-                                                            .userItems[index]
-                                                        is Product) {
-                                                      final Product product =
-                                                          shopController
-                                                                  .userItems[
-                                                              index] as Product;
-                                                      return GestureDetector(
-                                                        onTap: () {
-                                                          Get.to(() =>
-                                                              OrderProductScreen(
-                                                                product:
-                                                                    product,
+                                              child: Column(
+                                                crossAxisAlignment:
+                                                    CrossAxisAlignment.start,
+                                                children: <Widget>[
+                                                  Expanded(
+                                                    child: Padding(
+                                                      padding: const EdgeInsets
+                                                          .symmetric(
+                                                          horizontal: 15.0,
+                                                          vertical: 15),
+                                                      child: StaggeredGridView
+                                                          .countBuilder(
+                                                        crossAxisCount: 2,
+                                                        staggeredTileBuilder: (int
+                                                                index) =>
+                                                            const StaggeredTile
+                                                                .fit(1),
+                                                        mainAxisSpacing: 10.0,
+                                                        crossAxisSpacing: 10.0,
+                                                        itemCount:
+                                                            shopController
+                                                                .userItems
+                                                                .length,
+                                                        itemBuilder:
+                                                            (BuildContext
+                                                                    context,
+                                                                int index) {
+                                                          final Object item =
+                                                              shopController
+                                                                      .userItems[
+                                                                  index];
+                                                          if (item is Product) {
+                                                            return GestureDetector(
+                                                              onTap: () {
+                                                                Get.to(() =>
+                                                                    OrderProductScreen(
+                                                                      product:
+                                                                          item,
+                                                                      shop: shopController
+                                                                          .userShop!,
+                                                                    ));
+                                                              },
+                                                              child:
+                                                                  InventoryCard(
+                                                                product: item,
                                                                 shop: shopController
                                                                     .userShop!,
-                                                              ));
-                                                        },
-                                                        child: InventoryCard(
-                                                          product: product,
-                                                          shop: shopController
-                                                              .userShop!,
-                                                          myShop: false,
-                                                        ),
-                                                      );
-                                                    } else {
-                                                      final Service service =
-                                                          shopController
-                                                                  .userItems[
-                                                              index] as Service;
-                                                      return GestureDetector(
-                                                        onTap: () {
-                                                          print(service);
-                                                          Get.to(() =>
-                                                              BookServiceScreen(
-                                                                service:
-                                                                    service,
+                                                                myShop: false,
+                                                              ),
+                                                            );
+                                                          } else if (item
+                                                              is Service) {
+                                                            return GestureDetector(
+                                                              onTap: () {
+                                                                Get.to(() =>
+                                                                    BookServiceScreen(
+                                                                      service:
+                                                                          item,
+                                                                      shop: shopController
+                                                                          .userShop!,
+                                                                    ));
+                                                              },
+                                                              child:
+                                                                  ServiceCard(
                                                                 shop: shopController
                                                                     .userShop!,
-                                                              ));
+                                                                myShop: false,
+                                                                service: item,
+                                                              ),
+                                                            );
+                                                          } else if (item
+                                                              is Customitem) {
+                                                            return GestureDetector(
+                                                              onTap: () {
+                                                                Get.to(() =>
+                                                                    const CreateCustomListing());
+                                                              },
+                                                              child:
+                                                                  CustomItemCard(
+                                                                myShop: true,
+                                                                customitem:
+                                                                    item,
+                                                              ),
+                                                            );
+                                                          } else {
+                                                            return const SizedBox
+                                                                .shrink();
+                                                          }
                                                         },
-                                                        child: ServiceCard(
-                                                          shop: shopController
-                                                              .userShop!,
-                                                          myShop: false,
-                                                          service: service,
-                                                        ),
-                                                      );
-                                                    }
-                                                  },
-                                                ),
+                                                      ),
+                                                    ),
+                                                  )
+                                                ],
                                               ),
                                             ),
                                         ],
@@ -710,7 +741,7 @@ class _UserShopScreenState extends State<UserShopScreen> {
                               website = 'https://$website';
                             }
                             final Uri uri = Uri.parse(website);
-                            final bool launched = await launchUrl(uri,
+                            await launchUrl(uri,
                                 mode: LaunchMode.platformDefault,
                                 webOnlyWindowName: '_self');
                           } catch (e) {}
@@ -738,7 +769,7 @@ class _UserShopScreenState extends State<UserShopScreen> {
                               website = 'https://$website';
                             }
                             final Uri uri = Uri.parse(website);
-                            final bool launched = await launchUrl(uri,
+                            await launchUrl(uri,
                                 mode: LaunchMode.platformDefault,
                                 webOnlyWindowName: '_self');
                           } catch (e) {}
@@ -766,7 +797,7 @@ class _UserShopScreenState extends State<UserShopScreen> {
                               website = 'https://$website';
                             }
                             final Uri uri = Uri.parse(website);
-                            final bool launched = await launchUrl(uri,
+                            await launchUrl(uri,
                                 mode: LaunchMode.platformDefault,
                                 webOnlyWindowName: '_self');
                           } catch (e) {}
@@ -795,7 +826,7 @@ class _UserShopScreenState extends State<UserShopScreen> {
                               website = 'https://$website';
                             }
                             final Uri uri = Uri.parse(website);
-                            final bool launched = await launchUrl(uri,
+                            await launchUrl(uri,
                                 mode: LaunchMode.platformDefault,
                                 webOnlyWindowName: '_self');
                           } catch (e) {}
@@ -826,7 +857,7 @@ class _UserShopScreenState extends State<UserShopScreen> {
                               website = 'https://$website';
                             }
                             final Uri uri = Uri.parse(website);
-                            final bool launched = await launchUrl(uri,
+                            await launchUrl(uri,
                                 mode: LaunchMode.platformDefault,
                                 webOnlyWindowName: '_self');
                           } catch (e) {}

@@ -1,17 +1,19 @@
-import 'package:business_bosses_v2/bbpro/models/product_model.dart';
+import 'package:business_bosses_v2/bbpro/controllers/shop_controller.dart';
 import 'package:business_bosses_v2/bbpro/models/service_model.dart';
+import 'package:business_bosses_v2/bbpro/presentation/book_service.dart';
+import 'package:business_bosses_v2/bbpro/presentation/create_service.dart';
 import 'package:business_bosses_v2/bbpro/widgets/proshopdeals.dart';
+import 'package:business_bosses_v2/bbpro/widgets/servicecard.dart';
+import 'package:business_bosses_v2/common/dialogs/snackbar.dart';
 import 'package:business_bosses_v2/features/home/controller/home_controller.dart';
 import 'package:business_bosses_v2/features/home/widgets/sellingpopup.dart';
 import 'package:business_bosses_v2/features/marketplace/controllers/market_controller.dart';
-import 'package:business_bosses_v2/features/marketplace/models/market_model.dart';
-import 'package:business_bosses_v2/features/marketplace/presentation/sell_services.dart';
-import 'package:business_bosses_v2/features/marketplace/widgets/service_item.dart';
+import 'package:business_bosses_v2/features/profile/controller/profile_controller.dart';
 import 'package:business_bosses_v2/utils/theme/theme.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
-import 'package:visibility_detector/visibility_detector.dart';
 
 class ServicesPage extends StatefulWidget {
   const ServicesPage({super.key});
@@ -23,6 +25,8 @@ class ServicesPage extends StatefulWidget {
 class _ServicesPageState extends State<ServicesPage> {
   final MarketController _marketController = Get.find();
   final HomeController hmeController = Get.find();
+  final ProfileController profileController = Get.find();
+  final ShopController shopController = Get.find();
 
   String formatCount(int count) {
     if (count >= 1000) {
@@ -41,14 +45,14 @@ class _ServicesPageState extends State<ServicesPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: backgroundColor,
-      body: Obx(() {
-        return ListView.builder(
-          itemCount: _marketController.isfiltered.value
-              ? _marketController.searchResult.length + 2
-              : _marketController.services.length + 3,
-          itemBuilder: (BuildContext context, int index) {
-            if (index == 0) {
-              return Container(
+      body: SingleChildScrollView(
+        child: ConstrainedBox(
+          constraints: BoxConstraints(
+            minHeight: MediaQuery.of(context).size.height,
+          ),
+          child: Column(
+            children: <Widget>[
+              Container(
                 width: double.infinity,
                 color: backgroundcolorinterface,
                 child: Stack(
@@ -78,118 +82,113 @@ class _ServicesPageState extends State<ServicesPage> {
                         ),
                       ),
                     ),
-                    Column(children: <Widget>[
-                      const SizedBox(
-                        height: 10,
-                      ),
-                      Align(
-                        alignment: Alignment.centerRight,
-                        child: Padding(
-                          padding: const EdgeInsets.only(
-                            right: 15,
-                          ),
-                          child: ElevatedButton(
-                            style: ElevatedButton.styleFrom(
-                                minimumSize: const Size(150,
-                                    45) // put the width and height you want
-                                ),
-                            onPressed: () {
-                              Get.to(() =>
-                                  const CreateServiceScreen(isUpd: false));
-                            },
-                            child: Row(
-                              mainAxisSize: MainAxisSize.min,
-                              children: <Widget>[
-                                const Text(
-                                  'Sell',
-                                  style: TextStyle(
-                                      fontSize: 15,
-                                      color: Colors.white,
-                                      fontWeight: FontWeight.w500),
-                                ),
-                                const SizedBox(
-                                  width: 5,
-                                ),
-                                SvgPicture.asset('assets/svgs/startatopic.svg')
-                              ],
+                    Column(
+                      children: <Widget>[
+                        const SizedBox(
+                          height: 10,
+                        ),
+                        Align(
+                          alignment: Alignment.centerRight,
+                          child: Padding(
+                            padding: const EdgeInsets.only(right: 15),
+                            child: ElevatedButton(
+                              style: ElevatedButton.styleFrom(
+                                  minimumSize: const Size(150, 45)),
+                              onPressed: () {
+                                setState(() {});
+                                if (shopController.shop == null) {
+                                  showSnackbar(
+                                    message: 'Create a Biz-Center First',
+                                    error: true,
+                                  );
+                                  return;
+                                }
+                                Get.to(() => const CreateServiceListing());
+                              },
+                              child: Row(
+                                mainAxisSize: MainAxisSize.min,
+                                children: <Widget>[
+                                  const Text(
+                                    'Sell',
+                                    style: TextStyle(
+                                        fontSize: 15,
+                                        color: Colors.white,
+                                        fontWeight: FontWeight.w500),
+                                  ),
+                                  const SizedBox(width: 5),
+                                  SvgPicture.asset(
+                                      'assets/svgs/startatopic.svg')
+                                ],
+                              ),
                             ),
                           ),
                         ),
-                      ),
-                      const SizedBox(
-                        height: 10,
-                      )
-                    ]),
+                        const SizedBox(height: 10),
+                      ],
+                    ),
                   ],
                 ),
-              );
-            } else if (index == 1) {
-              return Padding(
+              ),
+              Padding(
                 padding: const EdgeInsets.only(bottom: 10.0),
                 child: ProshopdealsWidget(
                   title: 'NEW',
                   services: _marketController.proServices
-                      .where((Object item) {
-                        if (item is Product) {
-                          return item.images != null &&
-                              item.images!.isNotEmpty &&
-                              item.images![0].isNotEmpty;
-                        } else if (item is Service) {
-                          // Add a condition for Service if applicable
-                          return item.images != null &&
-                              item.images!.isNotEmpty &&
-                              item.images![0].isNotEmpty;
-                        }
-                        return false;
-                      })
+                      .where((Service item) =>
+                          item.images != null &&
+                          item.images!.isNotEmpty &&
+                          item.images![0].isNotEmpty &&
+                          item.user!.isSubscribed)
                       .take(10)
                       .toList(),
+                  initialIndex: 2,
                 ),
-              );
-            } else if (index <=
-                (_marketController.isfiltered.value
-                    ? _marketController.searchResult.length + 1
-                    : _marketController.services.length + 2)) {
-              final MarketModel market = _marketController.isfiltered.value
-                  ? _marketController.searchResult[index - 2]
-                  : _marketController.services[index - 2];
-              return VisibilityDetector(
-                key: Key(index.toString()),
-                onVisibilityChanged: (VisibilityInfo info) {
-                  final bool hasIncrementedView = hmeController
-                      .itemsWithIncrementedViews
-                      .contains(_marketController.services[index - 2].marketId);
-                  if (info.visibleFraction == 1.0 && !hasIncrementedView) {
-                    _marketController.updatemarketViews(
-                        _marketController.services[index - 2]);
-                    setState(() {
-                      hmeController.itemsWithIncrementedViews
-                          .add(_marketController.services[index - 2].marketId);
-                    });
-                  }
-                },
-                child: ServiceTile(
-                  post: market,
-                  controller: _marketController,
-                  key: ValueKey(_marketController.services[index - 2].marketId),
+              ),
+              Padding(
+                padding: const EdgeInsets.symmetric(
+                    horizontal: 10.0, vertical: 10.0),
+                child: StaggeredGridView.countBuilder(
+                  crossAxisCount: 2,
+                  staggeredTileBuilder: (int index) =>
+                      const StaggeredTile.fit(1),
+                  mainAxisSpacing: 10.0,
+                  crossAxisSpacing: 10.0,
+                  itemCount: _marketController.proServices.length,
+                  shrinkWrap: true,
+                  physics: const NeverScrollableScrollPhysics(),
+                  itemBuilder: (BuildContext context, int index) {
+                    final Service service =
+                        _marketController.proServices[index];
+                    return GestureDetector(
+                      onTap: () {
+                        if (service.user!.uid ==
+                            profileController.myProfile.uid) {
+                          // Navigate to edit listing
+                        } else {
+                          Get.to(() => BookServiceScreen(
+                                service: service,
+                                shop: service.shop!,
+                              ));
+                        }
+                      },
+                      child: ServiceCard(
+                        marketplace: true,
+                        shop: service.shop!,
+                        service: service,
+                        myShop: service.user!.uid ==
+                            profileController.myProfile.uid,
+                      ),
+                    );
+                  },
                 ),
-              );
-            } else {
-              // Display a loading indicator at the end of the list
-              if (_marketController.loadingMore.value) {
-                return const Padding(
-                  padding: EdgeInsets.all(8.0),
-                  child: Center(
-                    child: CircularProgressIndicator(),
-                  ),
-                );
-              } else {
-                return const SizedBox.shrink();
-              }
-            }
-          },
-        );
-      }),
+              ),
+              const SizedBox(
+                height: 100,
+              ),
+            ],
+          ),
+        ),
+      ),
     );
   }
 }

@@ -34,7 +34,8 @@ class Bottomnavscreen extends StatefulWidget {
 }
 
 class _BottomnavscreenState extends State<Bottomnavscreen> {
-  final ShopController shopController = Get.put(ShopController());
+  final ShopController shopController =
+      Get.put(ShopController(), permanent: true);
   final ClientsController clientsController = Get.put(ClientsController());
   final ProfileController profileController = Get.put(ProfileController());
   late int _selectedIndex;

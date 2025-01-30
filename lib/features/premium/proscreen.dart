@@ -1,5 +1,6 @@
 import 'package:business_bosses_v2/bbpro/controllers/shop_controller.dart';
 import 'package:business_bosses_v2/bbpro/widgets/button.dart';
+import 'package:business_bosses_v2/common/widgets/safety_model.dart';
 import 'package:business_bosses_v2/features/home/widgets/bottom_bar.dart';
 import 'package:business_bosses_v2/features/live_event/presentation/live_event.dart';
 import 'package:business_bosses_v2/features/posts/presentation/create_post_screen.dart';
@@ -29,7 +30,7 @@ class _ProScreenState extends State<ProScreen> with TickerProviderStateMixin {
   late final TabController protabbarcontroller;
   bool isCoin = false;
   bool isSubscribed = false;
-  bool loading = false;
+  bool loading = true;
   final ProfileController profileController = Get.find();
   final ShopController shopController = Get.find();
   final List<String> reviews = <String>[
@@ -50,6 +51,15 @@ class _ProScreenState extends State<ProScreen> with TickerProviderStateMixin {
   @override
   void initState() {
     super.initState();
+    if (shopController.shop == null) {
+      shopController.initShop().then((bool value) {
+        loading = false;
+        setState(() {});
+      });
+    } else {
+      loading = false;
+      setState(() {});
+    }
     protabbarcontroller =
         TabController(length: shopController.shop != null ? 2 : 3, vsync: this);
   }
@@ -57,162 +67,173 @@ class _ProScreenState extends State<ProScreen> with TickerProviderStateMixin {
   @override
   Widget build(BuildContext context) {
     Purchases.logIn(profileController.myProfile.uid.toString());
-    return Scaffold(
-      backgroundColor: Colors.white,
-      appBar: AppBar(
-        backgroundColor: Colors.white,
-        elevation: 0,
-        bottom: PreferredSize(
-          preferredSize: const Size.fromHeight(0),
-          child: Padding(
-            padding: const EdgeInsets.only(bottom: 0),
-            child: TabBar(
-              isScrollable: false,
-              indicatorColor: primaryColorLT,
-              labelColor: primaryColorLT, // Set label color
-              unselectedLabelColor: Colors.grey, // Set unselected label color
-              controller: protabbarcontroller,
-              tabs: <Widget>[
-                if (shopController.shop == null)
-                  const Tab(
-                    child: FittedBox(
-                      child: Text(
-                        'My-Biz',
-                        style: TextStyle(
-                            fontWeight: FontWeight.w700, fontSize: 14),
-                      ),
-                    ),
-                  ),
-                const Tab(
-                  child: FittedBox(
-                    child: Text(
-                      'Partner with us',
-                      style:
-                          TextStyle(fontWeight: FontWeight.w700, fontSize: 14),
-                    ),
-                  ),
-                ),
-                const Tab(
-                  child: FittedBox(
-                    child: Text(
-                      'Post Ad',
-                      style:
-                          TextStyle(fontWeight: FontWeight.w700, fontSize: 14),
-                    ),
-                  ),
-                ),
-              ],
-            ),
-          ),
-        ),
-      ),
-      body: Stack(children: <Widget>[
-        Column(
-          mainAxisAlignment: MainAxisAlignment.start,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: <Widget>[
-            Expanded(
-                child: TabBarView(
+    return loading
+        ? Scaffold(
+            appBar: AppBar(),
+            body: const SafetyModel(),
+          )
+        : Scaffold(
+            backgroundColor: Colors.white,
+            appBar: AppBar(
+              backgroundColor: Colors.white,
+              elevation: 0,
+              bottom: PreferredSize(
+                preferredSize: const Size.fromHeight(0),
+                child: Padding(
+                  padding: const EdgeInsets.only(bottom: 0),
+                  child: TabBar(
+                    isScrollable: false,
+                    indicatorColor: primaryColorLT,
+                    labelColor: primaryColorLT, // Set label color
+                    unselectedLabelColor:
+                        Colors.grey, // Set unselected label color
                     controller: protabbarcontroller,
-                    children: <Widget>[
-                  if (shopController.shop == null) const ProSubscribeSection(),
-                  Column(
-                    children: <Widget>[
-                      const SizedBox(
-                        height: 10,
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 0.0),
-                        child: FeatureTile(
-                          feature: FeatureItem(
-                            iconPath: 'assets/svgs/partner.svg',
-                            caption: 'Exclusive Partner Offers Await You',
-                            subtext:
-                                'Partner with us, list your deals and gets customers',
-                            color:
-                                Colors.grey.withOpacity(0.2), // Changed color
+                    tabs: <Widget>[
+                      if (shopController.shop == null)
+                        const Tab(
+                          child: FittedBox(
+                            child: Text(
+                              'My-Biz',
+                              style: TextStyle(
+                                  fontWeight: FontWeight.w700, fontSize: 14),
+                            ),
                           ),
                         ),
-                      ),
-                      const Padding(
-                        padding:
-                            EdgeInsets.only(left: 15.0, top: 5, bottom: 10),
-                        child: Align(
-                          alignment: Alignment
-                              .centerLeft, // Aligns the text to the left
+                      const Tab(
+                        child: FittedBox(
                           child: Text(
-                            'What you\'ll get',
+                            'Partner with us',
                             style: TextStyle(
-                                fontWeight: FontWeight.w700,
-                                color: textColor,
-                                fontSize: 14),
+                                fontWeight: FontWeight.w700, fontSize: 14),
                           ),
                         ),
                       ),
-                      Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 15.0),
-                        child: Column(
-                          children: _partnerfeatures
-                              .map((String feature) => Padding(
-                                    padding: const EdgeInsets.only(bottom: 8.0),
-                                    child: Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.start,
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                      children: <Widget>[
-                                        SvgPicture.asset(
-                                          'assets/svgs/checkfilled.svg',
-                                          height: 15,
-                                          color: proprimaryColor,
-                                        ),
-                                        const SizedBox(
-                                          width: 5,
-                                        ),
-                                        Flexible(
-                                          child: Text(
-                                            feature,
-                                            style:
-                                                const TextStyle(fontSize: 14),
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                  ))
-                              .toList(),
+                      const Tab(
+                        child: FittedBox(
+                          child: Text(
+                            'Post Ad',
+                            style: TextStyle(
+                                fontWeight: FontWeight.w700, fontSize: 14),
+                          ),
                         ),
-                      ),
-                      Padding(
-                          padding: const EdgeInsets.only(
-                              left: 0.0, top: 10, bottom: 10),
-                          child: Container(
-                            width: double.infinity,
-                            padding: const EdgeInsets.symmetric(horizontal: 30),
-                            child: ProCustomButton(
-                                color: primaryColorLT,
-                                text: 'Partner with us',
-                                onPressed: () async {
-                                  if (await canLaunchUrl(Uri.parse(
-                                      'https://businessbosses.co.uk/landingpageforpartners'))) {
-                                    await launchUrl(Uri.parse(
-                                        'https://businessbosses.co.uk/landingpageforpartners'));
-                                  }
-                                }),
-                          )),
-                      const BossOfWeekProfileTile(
-                        isForyou: false,
                       ),
                     ],
                   ),
-                  const CreatePostScreen(
-                    isGrow: true,
-                  )
-                ])),
-          ],
-        ),
-        const BottomBar(activeIndex: 2),
-      ]),
-    );
+                ),
+              ),
+            ),
+            body: Stack(children: <Widget>[
+              Column(
+                mainAxisAlignment: MainAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: <Widget>[
+                  Expanded(
+                      child: TabBarView(
+                          controller: protabbarcontroller,
+                          children: <Widget>[
+                        if (shopController.shop == null)
+                          const ProSubscribeSection(),
+                        Column(
+                          children: <Widget>[
+                            const SizedBox(
+                              height: 10,
+                            ),
+                            Padding(
+                              padding:
+                                  const EdgeInsets.symmetric(horizontal: 0.0),
+                              child: FeatureTile(
+                                feature: FeatureItem(
+                                  iconPath: 'assets/svgs/partner.svg',
+                                  caption: 'Exclusive Partner Offers Await You',
+                                  subtext:
+                                      'Partner with us, list your deals and gets customers',
+                                  color: Colors.grey
+                                      .withOpacity(0.2), // Changed color
+                                ),
+                              ),
+                            ),
+                            const Padding(
+                              padding: EdgeInsets.only(
+                                  left: 15.0, top: 5, bottom: 10),
+                              child: Align(
+                                alignment: Alignment
+                                    .centerLeft, // Aligns the text to the left
+                                child: Text(
+                                  'What you\'ll get',
+                                  style: TextStyle(
+                                      fontWeight: FontWeight.w700,
+                                      color: textColor,
+                                      fontSize: 14),
+                                ),
+                              ),
+                            ),
+                            Padding(
+                              padding:
+                                  const EdgeInsets.symmetric(horizontal: 15.0),
+                              child: Column(
+                                children: _partnerfeatures
+                                    .map((String feature) => Padding(
+                                          padding: const EdgeInsets.only(
+                                              bottom: 8.0),
+                                          child: Row(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.start,
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.start,
+                                            children: <Widget>[
+                                              SvgPicture.asset(
+                                                'assets/svgs/checkfilled.svg',
+                                                height: 15,
+                                                color: proprimaryColor,
+                                              ),
+                                              const SizedBox(
+                                                width: 5,
+                                              ),
+                                              Flexible(
+                                                child: Text(
+                                                  feature,
+                                                  style: const TextStyle(
+                                                      fontSize: 14),
+                                                ),
+                                              ),
+                                            ],
+                                          ),
+                                        ))
+                                    .toList(),
+                              ),
+                            ),
+                            Padding(
+                                padding: const EdgeInsets.only(
+                                    left: 0.0, top: 10, bottom: 10),
+                                child: Container(
+                                  width: double.infinity,
+                                  padding: const EdgeInsets.symmetric(
+                                      horizontal: 30),
+                                  child: ProCustomButton(
+                                      color: primaryColorLT,
+                                      text: 'Partner with us',
+                                      onPressed: () async {
+                                        if (await canLaunchUrl(Uri.parse(
+                                            'https://businessbosses.co.uk/landingpageforpartners'))) {
+                                          await launchUrl(Uri.parse(
+                                              'https://businessbosses.co.uk/landingpageforpartners'));
+                                        }
+                                      }),
+                                )),
+                            const BossOfWeekProfileTile(
+                              isForyou: false,
+                            ),
+                          ],
+                        ),
+                        const CreatePostScreen(
+                          isGrow: true,
+                        )
+                      ])),
+                ],
+              ),
+              const BottomBar(activeIndex: 2),
+            ]),
+          );
   }
 }
 

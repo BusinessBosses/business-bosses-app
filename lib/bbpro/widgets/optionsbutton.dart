@@ -7,9 +7,11 @@ class OptionsButton extends StatelessWidget {
   final bool? isExpanded;
   final bool? isEdit;
   final dynamic item;
+  final bool? isBoost;
   final VoidCallback? onEdit;
   final VoidCallback? onDelete;
   final VoidCallback? onView;
+  final VoidCallback? onBoost;
 
   const OptionsButton({
     Key? key,
@@ -21,6 +23,8 @@ class OptionsButton extends StatelessWidget {
     this.onEdit,
     this.onDelete,
     this.onView,
+    this.onBoost,
+    this.isBoost,
   }) : super(key: key);
 
   @override
@@ -49,6 +53,19 @@ class OptionsButton extends StatelessWidget {
           ),
         ),
       if (isEdit == true)
+        const PopupMenuDivider(
+          height: 0.0,
+        ),
+      if (isBoost == true)
+        PopupMenuItem<String>(
+          onTap: onBoost,
+          value: 'Boost',
+          child: const Text(
+            'Boost',
+            style: bodyText2,
+          ),
+        ),
+      if (isBoost == true)
         const PopupMenuDivider(
           height: 0.0,
         ),

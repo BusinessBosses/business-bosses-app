@@ -6,17 +6,13 @@ import 'package:business_bosses_v2/features/home/controller/home_controller.dart
 import 'package:business_bosses_v2/features/profile/controller/profile_controller.dart';
 import 'package:business_bosses_v2/services/api_service.dart';
 import 'package:get/get.dart';
-import 'package:shared_preferences/shared_preferences.dart';
-import 'package:socket_io_client/socket_io_client.dart' as IO;
 
 import '../../../common/models/comment_model.dart';
 import '../../../common/models/user_model.dart';
-import '../../../utils/constants/constants.dart';
 import '../../home/repository/home_repository.dart';
 import '../models/market_model.dart';
 
 class MarketController extends GetxController {
-  late IO.Socket socket;
   List<MarketModel> allmarkets = <MarketModel>[];
   RxList<MarketModel> markets = RxList<MarketModel>(<MarketModel>[]);
   RxList<Product> proProducts = RxList<Product>(<Product>[]);
@@ -342,20 +338,20 @@ class MarketController extends GetxController {
       }
     }
     update();
-    if (_profileController.myProfile.uid != receiverUid) {
-      socket.emit('like', <String, String>{
-        'postId': postId,
-        'userId': userId,
-        'type': type,
-        'receiverUid': receiverUid,
-      });
-    } else {
-      socket.emit('like', <String, String>{
-        'postId': postId,
-        'userId': userId,
-        'type': type,
-      });
-    }
+    // if (_profileController.myProfile.uid != receiverUid) {
+    //   socket.emit('like', <String, String>{
+    //     'postId': postId,
+    //     'userId': userId,
+    //     'type': type,
+    //     'receiverUid': receiverUid,
+    //   });
+    // } else {
+    //   socket.emit('like', <String, String>{
+    //     'postId': postId,
+    //     'userId': userId,
+    //     'type': type,
+    //   });
+    // }
   }
 
   /// COIN AND UNCOIN FUNCTION
@@ -388,12 +384,12 @@ class MarketController extends GetxController {
         _homeController.promotedMarkets[promotedIndex].coins!.add(userId);
       }
     }
-    socket.emit('coin', <String, String>{
-      'postId': postId,
-      'userId': userId,
-      'type': type,
-      'receiverUid': receiverUid,
-    });
+    // socket.emit('coin', <String, String>{
+    //   'postId': postId,
+    //   'userId': userId,
+    //   'type': type,
+    //   'receiverUid': receiverUid,
+    // });
     update();
   }
 
@@ -424,33 +420,27 @@ class MarketController extends GetxController {
       // Fetch data in parallel
       final List<ApiResponseModel> responses =
           await Future.wait(<Future<ApiResponseModel>>[
-        HomeRepository.fetchMarket(),
         HomeRepository.fetchMarketDescription(),
       ]);
 
-      final ApiResponseModel response = responses[0];
-      final ApiResponseModel description = responses[1];
+      final ApiResponseModel description = responses[0];
 
-      if (!response.success) throw Exception('Failed to fetch market data.');
-
-      // Process market listings
-      processPostsToState(response.data['rows']);
       await initProItems();
 
       if (description.success) {
         final List<dynamic> rows = description.data['rows'];
 
         // Extract specific entries
-        final marketEntry = rows.firstWhere(
-          (entry) => entry['title'] == 'market',
+        final dynamic marketEntry = rows.firstWhere(
+          (dynamic entry) => entry['title'] == 'market',
           orElse: () => null,
         );
-        final donationEntry = rows.firstWhere(
-          (entry) => entry['title'] == 'donation',
+        final dynamic donationEntry = rows.firstWhere(
+          (dynamic entry) => entry['title'] == 'donation',
           orElse: () => null,
         );
-        final popUpEntry = rows.firstWhere(
-          (entry) => entry['id'] == 6,
+        final dynamic popUpEntry = rows.firstWhere(
+          (dynamic entry) => entry['id'] == 6,
           orElse: () => null,
         );
 
@@ -465,7 +455,6 @@ class MarketController extends GetxController {
       }
     } catch (e) {
       error(true);
-      print('Error initializing market: $e');
     } finally {
       loading(false);
       update();
@@ -477,6 +466,7 @@ class MarketController extends GetxController {
     proProducts.clear();
     proServices.clear();
     proItems.clear();
+    proItemsWithImages.clear();
 
     try {
       // Fetch data
@@ -492,7 +482,7 @@ class MarketController extends GetxController {
       // Process products
       if (responseProducts.success) {
         proProducts.addAll(responseProducts.data['rows']
-            .map<Product>((json) => Product.fromJson(json))
+            .map<Product>((dynamic json) => Product.fromJson(json))
             .where((Product product) => product.isActive)
             .toList());
       } else {
@@ -502,20 +492,35 @@ class MarketController extends GetxController {
       // Process services
       if (responseServices.success) {
         proServices.addAll(responseServices.data['rows']
-            .map<Service>((json) => Service.fromJson(json))
+            .map<Service>((dynamic json) => Service.fromJson(json))
             .where((Service service) => service.isActive)
             .toList());
       } else {
         throw Exception('Failed to fetch services.');
       }
 
-      // Combine and sort items
+      // Combine items
       proItems.addAll(<Object>[...proProducts, ...proServices]);
+
+      // Sort items with Nigeria location first, then by creation date
       proItems.sort((Object a, Object b) {
         final DateTime aDate =
             a is Product ? a.createdAt : (a as Service).createdAt;
         final DateTime bDate =
             b is Product ? b.createdAt : (b as Service).createdAt;
+
+        final String? aLocation =
+            a is Product ? a.location : (a as Service).location;
+        final String? bLocation =
+            b is Product ? b.location : (b as Service).location;
+
+        // Sort by location: Nigeria first
+        if (aLocation == _profileController.myProfile.location &&
+            bLocation != _profileController.myProfile.location) return -1;
+        if (aLocation != _profileController.myProfile.location &&
+            bLocation == _profileController.myProfile.location) return 1;
+
+        // If both are in Nigeria or neither, sort by date (most recent first)
         return bDate.compareTo(aDate);
       });
 
@@ -536,7 +541,6 @@ class MarketController extends GetxController {
       );
     } catch (e) {
       error(true);
-      print('Error initializing marketplace items: $e');
     } finally {
       loading(false);
     }
@@ -549,7 +553,7 @@ class MarketController extends GetxController {
     // Process orders
     if (responseOrders.success) {
       orders.addAll(responseOrders.data['rows']
-          .map<Order>((json) => Order.fromJson(json))
+          .map<Order>((dynamic json) => Order.fromJson(json))
           .toList());
     } else {
       throw Exception('Failed to fetch orders.');
@@ -673,27 +677,27 @@ class MarketController extends GetxController {
     update();
   }
 
-  Future<void> initUsers() async {
-    // loading(true);
-    // error(false);
-    update();
+  // Future<void> initUsers() async {
+  //   // loading(true);
+  //   // error(false);
+  //   update();
 
-    final ApiResponseModel response = await HomeRepository.fetchMarketMembers();
-    if (response.success) {
-      processMembersToState(response.data['rows']);
-    } else {
-      // error(true);
-    }
-    // loading(false);
-    final SharedPreferences prefs = await SharedPreferences.getInstance();
-    final String? userId = prefs.getString(Constants.USER_ID);
-    bool isJoin = users.any((UserModel user) => user.uid == userId);
-    if (isJoin) {
-      isJoined(true);
-    }
+  //   final ApiResponseModel response = await HomeRepository.fetchMarketMembers();
+  //   if (response.success) {
+  //     processMembersToState(response.data['rows']);
+  //   } else {
+  //     // error(true);
+  //   }
+  //   // loading(false);
+  //   final SharedPreferences prefs = await SharedPreferences.getInstance();
+  //   final String? userId = prefs.getString(Constants.USER_ID);
+  //   bool isJoin = users.any((UserModel user) => user.uid == userId);
+  //   if (isJoin) {
+  //     isJoined(true);
+  //   }
 
-    update();
-  }
+  //   update();
+  // }
 
   // initSocket() {
   //   socket = IO.io(Constants.socketUrl, <String, dynamic>{
@@ -712,13 +716,13 @@ class MarketController extends GetxController {
 
   @override
   void onInit() {
-    socket = _homeController.socket;
+    // socket = _homeController.socket;
     isLoading = false;
     if (_homeController.markets.isEmpty) {
       initMarket();
-      initUsers();
+      // initUsers();
     } else {
-      users = _homeController.marketMembers;
+      // users = _homeController.marketMembers;
       markets = _homeController.markets;
     }
     update();
@@ -727,8 +731,8 @@ class MarketController extends GetxController {
 
   @override
   void dispose() {
-    socket.disconnect();
-    socket.dispose();
+    // socket.disconnect();
+    // socket.dispose();
     super.dispose();
   }
 }

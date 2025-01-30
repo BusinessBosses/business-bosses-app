@@ -1,14 +1,17 @@
+// ignore_for_file: empty_catches
+
 import 'package:business_bosses_v2/action/action.dart';
 import 'package:business_bosses_v2/bbpro/controllers/shop_controller.dart';
+import 'package:business_bosses_v2/bbpro/models/customitem_model.dart';
 import 'package:business_bosses_v2/bbpro/models/service_model.dart';
 import 'package:business_bosses_v2/bbpro/models/product_model.dart';
-import 'package:business_bosses_v2/bbpro/presentation/book_service.dart';
 import 'package:business_bosses_v2/bbpro/presentation/create_product.dart';
 import 'package:business_bosses_v2/bbpro/presentation/create_service.dart';
+import 'package:business_bosses_v2/bbpro/presentation/create_custom_listing.dart';
+import 'package:business_bosses_v2/bbpro/widgets/custom_item_card.dart';
 import 'package:business_bosses_v2/bbpro/widgets/inventorycard.dart';
 import 'package:business_bosses_v2/bbpro/widgets/servicecard.dart';
 import 'package:business_bosses_v2/common/widgets/network_image_with_placeholder.dart';
-import 'package:business_bosses_v2/features/home/home_screen.dart';
 import 'package:business_bosses_v2/features/marketplace/presentation/seller_reviews.dart';
 import 'package:business_bosses_v2/features/profile/controller/profile_controller.dart';
 import 'package:business_bosses_v2/utils/theme/theme.dart';
@@ -33,12 +36,6 @@ class ShopScreen extends StatefulWidget {
 class _ShopScreenState extends State<ShopScreen> {
   final ShopController shopController = Get.find();
   final ProfileController profileController = Get.find();
-  final String _selectedItem = 'All Products';
-
-  @override
-  void initState() {
-    super.initState();
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -58,7 +55,7 @@ class _ShopScreenState extends State<ShopScreen> {
                     ? 'Biz-Center'
                     : 'Biz-Center',
                 style: const TextStyle(
-                  color: proprimaryColor,
+                  color: Colors.black,
                   fontWeight: FontWeight.bold,
                 ),
               ),
@@ -214,8 +211,7 @@ class _ShopScreenState extends State<ShopScreen> {
                 height: 1,
                 // thickness: 1,
               ),
-              SizedBox(
-                height: 500,
+              Expanded(
                 child: TabBarView(
                   children: <Widget>[
                     ///Tab 1 Content
@@ -322,57 +318,65 @@ class _ShopScreenState extends State<ShopScreen> {
                                   child: Padding(
                                     padding: const EdgeInsets.symmetric(
                                         horizontal: 15.0),
-                                    child: StaggeredGridView.countBuilder(
-                                      crossAxisCount: 2,
-                                      staggeredTileBuilder: (int index) =>
-                                          const StaggeredTile.fit(1),
-                                      mainAxisSpacing: 10.0,
-                                      crossAxisSpacing: 10.0,
-                                      itemCount: shopController.items.length,
-                                      itemBuilder:
-                                          (BuildContext context, int index) {
-                                        if (shopController.items.reversed
-                                            .toList()[index] is Product) {
-                                          final Product product = shopController
-                                              .items.reversed
-                                              .toList()[index] as Product;
-                                          return GestureDetector(
-                                            onTap: () {
-                                              Get.to(
-                                                () => CreateProductListing(
-                                                  product: product,
-                                                ),
-                                              );
+                                    child: Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: <Widget>[
+                                        Expanded(
+                                          child: StaggeredGridView.countBuilder(
+                                            crossAxisCount: 2,
+                                            staggeredTileBuilder: (int index) =>
+                                                const StaggeredTile.fit(1),
+                                            mainAxisSpacing: 10.0,
+                                            crossAxisSpacing: 10.0,
+                                            itemCount:
+                                                shopController.items.length,
+                                            itemBuilder: (BuildContext context,
+                                                int index) {
+                                              final Object item =
+                                                  shopController.items[index];
+                                              if (item is Product) {
+                                                return GestureDetector(
+                                                  onTap: () {
+                                                    Get.to(() =>
+                                                        CreateProductListing(
+                                                            product: item));
+                                                  },
+                                                  child: InventoryCard(
+                                                    product: item,
+                                                    myShop: true,
+                                                  ),
+                                                );
+                                              } else if (item is Service) {
+                                                return GestureDetector(
+                                                  onTap: () {
+                                                    Get.to(() =>
+                                                        CreateServiceListing(
+                                                            service: item));
+                                                  },
+                                                  child: ServiceCard(
+                                                    myShop: true,
+                                                    service: item,
+                                                  ),
+                                                );
+                                              } else if (item is Customitem) {
+                                                return GestureDetector(
+                                                  onTap: () {
+                                                    Get.to(() =>
+                                                        const CreateCustomListing());
+                                                  },
+                                                  child: CustomItemCard(
+                                                    myShop: true,
+                                                    customitem: item,
+                                                  ),
+                                                );
+                                              } else {
+                                                return const SizedBox.shrink();
+                                              }
                                             },
-                                            child: InventoryCard(
-                                              product: product,
-                                              myShop: true,
-                                            ),
-                                          );
-                                        } else {
-                                          final Service service = shopController
-                                              .items.reversed
-                                              .toList()[index] as Service;
-                                          return GestureDetector(
-                                            onTap: () {
-                                              // print(service);
-                                              // Get.to(() => BookServiceScreen(
-                                              //       service: service,
-                                              //       shop: shopController.userShop!,
-                                              //     ));
-                                              Get.to(
-                                                () => CreateServiceListing(
-                                                  service: service,
-                                                ),
-                                              );
-                                            },
-                                            child: ServiceCard(
-                                              myShop: true,
-                                              service: service,
-                                            ),
-                                          );
-                                        }
-                                      },
+                                          ),
+                                        ),
+                                      ],
                                     ),
                                   ),
                                 ),
@@ -411,6 +415,92 @@ class _ShopScreenState extends State<ShopScreen> {
           ),
         ),
       ),
+      floatingActionButton: FloatingActionButton(
+        backgroundColor: Colors.black,
+        onPressed: () {
+          showModalBottomSheet(
+            context: context,
+            shape: const RoundedRectangleBorder(
+              borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+            ),
+            builder: (BuildContext context) {
+              return SizedBox(
+                height: 250,
+                child: ListView.separated(
+                  padding: const EdgeInsets.all(10),
+                  itemBuilder: (BuildContext context, int index) {
+                    if (index == 0) {
+                      return ListTile(
+                        leading: SvgPicture.asset(
+                          'assets/svgs/addproduct.svg',
+                          colorFilter: const ColorFilter.mode(
+                            Colors.black,
+                            BlendMode.srcIn,
+                          ),
+                          height: 24,
+                        ),
+                        title: const Text(
+                          'Add Product',
+                          style: TextStyle(fontSize: 14),
+                        ),
+                        horizontalTitleGap: 0.0,
+                        onTap: () {
+                          Navigator.pop(context);
+                          Get.to(() => const CreateProductListing());
+                        },
+                      );
+                    } else if (index == 1) {
+                      return ListTile(
+                        leading: SvgPicture.asset(
+                          'assets/svgs/addservice.svg',
+                          colorFilter: const ColorFilter.mode(
+                            Colors.black,
+                            BlendMode.srcIn,
+                          ),
+                          height: 24,
+                        ),
+                        title: const Text(
+                          'Add Service',
+                          style: TextStyle(fontSize: 14),
+                        ),
+                        horizontalTitleGap: 0.0,
+                        onTap: () {
+                          Navigator.pop(context);
+                          Get.to(() => const CreateServiceListing());
+                        },
+                      );
+                    } else {
+                      return ListTile(
+                        leading: const Icon(
+                          Icons.add,
+                          color: Colors.black,
+                          size: 24,
+                        ),
+                        title: const Text(
+                          'Add Custom Item',
+                          style: TextStyle(fontSize: 14),
+                        ),
+                        horizontalTitleGap: 0.0,
+                        onTap: () {
+                          Navigator.pop(context);
+                          Get.to(() => const CreateCustomListing());
+                        },
+                      );
+                    }
+                  },
+                  separatorBuilder: (BuildContext context, int index) =>
+                      const Divider(),
+                  itemCount: 3,
+                ),
+              );
+            },
+          );
+        },
+        child: const Icon(
+          Icons.add,
+          color: Colors.white,
+        ),
+      ),
     );
   }
 
@@ -442,8 +532,7 @@ class _ShopScreenState extends State<ShopScreen> {
             null,
           ),
           _buildDivider(),
-          if (shopController.shop!.appId.isNotEmpty ?? false)
-            const SizedBox(height: 10),
+          if (shopController.shop!.appId.isNotEmpty) const SizedBox(height: 10),
           if (shopController.shop?.email.isNotEmpty ?? false)
             _buildContactRow(
               'assets/svgs/email.svg',
@@ -520,7 +609,7 @@ class _ShopScreenState extends State<ShopScreen> {
                               website = 'https://$website';
                             }
                             final Uri uri = Uri.parse(website);
-                            final bool launched = await launchUrl(uri,
+                            await launchUrl(uri,
                                 mode: LaunchMode.platformDefault,
                                 webOnlyWindowName: '_self');
                           } catch (e) {}
@@ -548,7 +637,7 @@ class _ShopScreenState extends State<ShopScreen> {
                               website = 'https://$website';
                             }
                             final Uri uri = Uri.parse(website);
-                            final bool launched = await launchUrl(uri,
+                            await launchUrl(uri,
                                 mode: LaunchMode.platformDefault,
                                 webOnlyWindowName: '_self');
                           } catch (e) {}
@@ -576,7 +665,7 @@ class _ShopScreenState extends State<ShopScreen> {
                               website = 'https://$website';
                             }
                             final Uri uri = Uri.parse(website);
-                            final bool launched = await launchUrl(uri,
+                            await launchUrl(uri,
                                 mode: LaunchMode.platformDefault,
                                 webOnlyWindowName: '_self');
                           } catch (e) {}
@@ -605,7 +694,7 @@ class _ShopScreenState extends State<ShopScreen> {
                               website = 'https://$website';
                             }
                             final Uri uri = Uri.parse(website);
-                            final bool launched = await launchUrl(uri,
+                            await launchUrl(uri,
                                 mode: LaunchMode.platformDefault,
                                 webOnlyWindowName: '_self');
                           } catch (e) {}
@@ -633,7 +722,7 @@ class _ShopScreenState extends State<ShopScreen> {
                               website = 'https://$website';
                             }
                             final Uri uri = Uri.parse(website);
-                            final bool launched = await launchUrl(uri,
+                            await launchUrl(uri,
                                 mode: LaunchMode.platformDefault,
                                 webOnlyWindowName: '_self');
                           } catch (e) {}
