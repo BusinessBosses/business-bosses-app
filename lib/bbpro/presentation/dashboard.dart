@@ -434,7 +434,7 @@ class _DashboardState extends State<Dashboard> {
                                         ? Colors.orange
                                         : Colors.purple,
                                 assetlocation: index == 0
-                                    ? 'assets/svgs/startatopic.svg'
+                                    ? 'assets/svgs/plus.svg'
                                     : index == 1
                                         ? 'assets/svgs/addorder.svg'
                                         : index == 2
