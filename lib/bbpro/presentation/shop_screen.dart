@@ -368,7 +368,7 @@ class _ShopScreenState extends State<ShopScreen> {
                                                         ));
                                                   },
                                                   child: CustomItemCard(
-                                                    myShop: true,
+                                                    myShop: false,
                                                     customitem: item,
                                                   ),
                                                 );

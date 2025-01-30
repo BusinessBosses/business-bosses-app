@@ -103,15 +103,18 @@ class _CustomItemCardState extends State<CustomItemCard> {
           const SizedBox(height: 5),
           widget.myShop == false
               ? Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: <Widget>[
+                    Container(
+                      width: 5,
+                    ),
                     Container(
                       padding: const EdgeInsets.symmetric(
                           horizontal: 5, vertical: 3),
                       decoration: BoxDecoration(
-                        color: Colors.black,
-                        borderRadius: BorderRadius.circular(70),
+                        borderRadius: BorderRadius.circular(6),
                         border: Border.all(
-                          color: Colors.grey,
+                          color: primaryColorLT,
                           width: 1,
                         ),
                       ),
@@ -120,7 +123,7 @@ class _CustomItemCardState extends State<CustomItemCard> {
                           Text(
                             'Open link',
                             style: TextStyle(
-                              color: Colors.white,
+                              color: primaryColorLT,
                               fontWeight: FontWeight.bold,
                               fontSize: 11,
                             ),
@@ -129,7 +132,7 @@ class _CustomItemCardState extends State<CustomItemCard> {
                           Icon(
                             Icons.link,
                             size: 15,
-                            color: Colors.white,
+                            color: primaryColorLT,
                           ),
                         ],
                       ),
