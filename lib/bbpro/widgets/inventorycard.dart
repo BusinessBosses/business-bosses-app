@@ -173,7 +173,7 @@ class _InventoryCardState extends State<InventoryCard> {
                           const Icon(Icons.star, color: Colors.amber, size: 15),
                           const SizedBox(width: 4),
                           Text(
-                            '${shopController.userShop!.user?.averageRating?.toStringAsFixed(1)} Reviews',
+                            '${widget.product!.user?.averageRating?.toStringAsFixed(1)} Reviews',
                             style: const TextStyle(
                                 fontWeight: FontWeight.w700, fontSize: 12),
                           ),

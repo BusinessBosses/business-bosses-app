@@ -36,7 +36,7 @@ class _SetupState extends State<Setup> {
   final List<String> remtitles = <String>[
     'Privacy Policy & Terms of Use',
     'Contact Us',
-    'Manage Subscription'
+    // 'Manage Subscription'
   ];
 
   @override

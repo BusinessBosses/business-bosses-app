@@ -27,6 +27,7 @@ class ShopController extends GetxController {
   RxList<Object> items = RxList<Object>(<Object>[]);
   RxList<Product> userProducts = RxList<Product>(<Product>[]);
   RxList<Service> userServices = RxList<Service>(<Service>[]);
+  RxList<Customitem> userCustomItems = RxList<Customitem>(<Customitem>[]);
   RxList<Object> userItems = RxList<Object>(<Object>[]);
   RxList<Vendor> suppliers = RxList<Vendor>(<Vendor>[]);
   OrderStats? orderStats;
@@ -75,12 +76,32 @@ class ShopController extends GetxController {
           services.add(Service.fromJson(servicesResponse.data['rows'][i]));
         }
       }
+      ApiResponseModel customReponse = await ApiService.get(
+        path: 'custom-items/user/${profileController.myProfile.uid}',
+      );
+      customItems.clear();
+      if (customReponse.success) {
+        if (customReponse.data.isNotEmpty) {
+          for (int i = 0; i < customReponse.data.length; i++) {
+            customItems.add(Customitem.fromJson(customReponse.data[i]));
+          }
+        }
+      }
       items.clear();
-      items.addAll(<Object>[...products, ...services]);
+      items.addAll(<Object>[...products, ...services, ...customItems]);
       items.sort((Object a, Object b) {
         // Assuming both Product and Service have a createdAt property.
-        DateTime aDate = a is Product ? a.createdAt : (a as Service).createdAt;
-        DateTime bDate = b is Product ? b.createdAt : (b as Service).createdAt;
+        DateTime aDate = (a is Product)
+            ? a.createdAt
+            : (a is Service)
+                ? a.createdAt
+                : (a as Customitem).createdAt;
+
+        DateTime bDate = (b is Product)
+            ? b.createdAt
+            : (b is Service)
+                ? b.createdAt
+                : (b as Customitem).createdAt;
         return bDate.compareTo(aDate);
       });
 
@@ -94,17 +115,6 @@ class ShopController extends GetxController {
         }
       }
 
-      ApiResponseModel customReponse = await ApiService.get(
-        path: 'custom-items/user/${profileController.myProfile.uid}',
-      );
-      suppliers.clear();
-      if (customReponse.success) {
-        if (customReponse.data.isNotEmpty) {
-          for (int i = 0; i < customReponse.data.length; i++) {
-            customItems.add(Customitem.fromJson(customReponse.data[i]));
-          }
-        }
-      }
       return true;
     } else {
       return false;
@@ -156,12 +166,22 @@ class ShopController extends GetxController {
       userItems.clear();
       userItems.addAll(<Object>[
         ...userProducts.where((Product item) => item.isActive).toList(),
-        ...userServices.where((Service item) => item.isActive).toList()
+        ...userServices.where((Service item) => item.isActive).toList(),
+        ...userCustomItems,
       ]);
       userItems.sort((Object a, Object b) {
         // Assuming both Product and Service have a createdAt property.
-        DateTime aDate = a is Product ? a.createdAt : (a as Service).createdAt;
-        DateTime bDate = b is Product ? b.createdAt : (b as Service).createdAt;
+        DateTime aDate = (a is Product)
+            ? a.createdAt
+            : (a is Service)
+                ? a.createdAt
+                : (a as Customitem).createdAt;
+
+        DateTime bDate = (b is Product)
+            ? b.createdAt
+            : (b is Service)
+                ? b.createdAt
+                : (b as Customitem).createdAt;
         return bDate.compareTo(aDate);
       });
 

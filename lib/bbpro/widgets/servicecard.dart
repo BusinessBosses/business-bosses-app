@@ -210,7 +210,7 @@ class _ServiceCardState extends State<ServiceCard> {
                           const Icon(Icons.star, color: Colors.amber, size: 15),
                           const SizedBox(width: 4),
                           Text(
-                            '${shopController.userShop!.user?.averageRating?.toStringAsFixed(1)} Reviews',
+                            '${widget.service!.user!.averageRating?.toStringAsFixed(1)} Reviews',
                             style: const TextStyle(
                                 fontWeight: FontWeight.w700, fontSize: 12),
                           ),
