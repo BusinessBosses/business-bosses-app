@@ -48,34 +48,30 @@ class _CustomItemCardState extends State<CustomItemCard> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
-          if (widget.customitem?.images != null &&
-              widget.customitem!.images!.isNotEmpty)
-            SizedBox(
-              height: 120.0,
-              width: double.infinity,
-              child: ClipRRect(
-                borderRadius: BorderRadius.circular(10),
-                child: NetworkImageWithPlaceHolder(
-                  imageUrl: (widget.customitem?.images == null &&
-                          widget.customitem!.images!.isEmpty)
-                      ? ''
-                      : widget.customitem?.images![0],
-                  radius: radius,
-                  placeHolder: Icons.person,
-                  iconSize: 0.0,
-                  fit: BoxFit.cover,
+          (
+                  // ignore: always_specify_types
+                  widget.customitem!.images![0] == '')
+              ? Container()
+              : SizedBox(
+                  height: 120.0,
+                  width: double.infinity,
+                  child: ClipRRect(
+                    borderRadius: BorderRadius.circular(10),
+                    child: NetworkImageWithPlaceHolder(
+                      imageUrl: (widget.customitem?.images == null &&
+                              widget.customitem!.images!.isEmpty)
+                          ? ''
+                          : widget.customitem?.images![0],
+                      radius: radius,
+                      placeHolder: Icons.link,
+                      iconSize: 25.0,
+                      fit: BoxFit.cover,
+                    ),
+                  ),
                 ),
-              ),
-            ),
-          if (widget.customitem?.images != null &&
-              widget.customitem!.images!.isNotEmpty)
-            const SizedBox(height: 5),
-          if (widget.customitem?.images != null &&
-              widget.customitem!.images!.isNotEmpty)
-            const Divider(),
-          if (widget.customitem?.images != null &&
-              widget.customitem!.images!.isNotEmpty)
-            const SizedBox(height: 5),
+          if (widget.customitem!.images![0] != '') const SizedBox(height: 5),
+          if (widget.customitem!.images![0] != '') const Divider(),
+          if (widget.customitem!.images![0] != '') const SizedBox(height: 5),
           Row(
             crossAxisAlignment: CrossAxisAlignment.end,
             children: <Widget>[
@@ -142,7 +138,7 @@ class _CustomItemCardState extends State<CustomItemCard> {
                 )
               : Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  crossAxisAlignment: CrossAxisAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.end,
                   children: <Widget>[
                     Expanded(
                       child: Column(
@@ -155,6 +151,20 @@ class _CustomItemCardState extends State<CustomItemCard> {
                             maxLines: 2,
                             overflow: TextOverflow.ellipsis,
                           ),
+                          const SizedBox(height: 2),
+                          Container(
+                            padding: const EdgeInsets.symmetric(
+                                horizontal: 10, vertical: 5),
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(6),
+                              color: backgroundColor,
+                            ),
+                            child: const Icon(
+                              Icons.link,
+                              size: 15,
+                              color: Colors.black,
+                            ),
+                          )
                         ],
                       ),
                     ),
