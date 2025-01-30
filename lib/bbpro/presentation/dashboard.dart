@@ -5,6 +5,7 @@ import 'package:business_bosses_v2/bbpro/presentation/add_project.dart';
 import 'package:business_bosses_v2/bbpro/presentation/add_supplier.dart';
 import 'package:business_bosses_v2/bbpro/presentation/bottom_nav_screen.dart';
 import 'package:business_bosses_v2/bbpro/presentation/clients.dart';
+import 'package:business_bosses_v2/bbpro/presentation/create_custom_listing.dart';
 import 'package:business_bosses_v2/bbpro/presentation/create_product.dart';
 import 'package:business_bosses_v2/bbpro/presentation/create_service.dart';
 import 'package:business_bosses_v2/bbpro/presentation/create_order.dart';
@@ -46,8 +47,7 @@ class _DashboardState extends State<Dashboard> {
   ];
 
   final List<String> quickactions = <String>[
-    'Add Products',
-    'Add Services',
+    'Add Listing',
     'Create Orders',
     'Add Customers',
   ];
@@ -56,82 +56,6 @@ class _DashboardState extends State<Dashboard> {
   final ClientsController clientsController = Get.put(ClientsController());
   String _selectedfilteritem = 'All Time';
   String _selectedDateFilter = 'all_time';
-
-  void _showBottomSheet() {
-    showModalBottomSheet(
-      context: context,
-      shape: const RoundedRectangleBorder(
-        borderRadius: BorderRadius.vertical(
-          top: Radius.circular(25.0),
-        ),
-      ),
-      builder: (BuildContext context) {
-        return SizedBox(
-          height: 500,
-          child: Padding(
-            padding: const EdgeInsets.all(15.0),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              mainAxisSize: MainAxisSize.min,
-              children: <Widget>[
-                Expanded(
-                  child: ListView.separated(
-                    itemCount: 6,
-                    separatorBuilder: (BuildContext context, int index) =>
-                        const Divider(),
-                    itemBuilder: (BuildContext context, int index) {
-                      return ListTile(
-                        onTap: () {
-                          Navigator.pop(context);
-                          if (index == 0) {
-                            Get.to(() => const CreateProductListing());
-                          } else if (index == 1) {
-                            Get.to(() => const CreateServiceListing());
-                          } else if (index == 2) {
-                            Get.to(() => const AddSupplier());
-                          } else if (index == 3) {
-                            Get.to(() => const CreateOrder());
-                          } else if (index == 4) {
-                            Get.to(() => const Addclient());
-                          } else if (index == 5) {
-                            Get.to(() => const Addproject());
-                          }
-                        },
-                        minVerticalPadding: 0,
-                        contentPadding: const EdgeInsets.only(left: 10),
-                        leading: Icon(
-                          Icons.add,
-                          size: 22,
-                          color: textColor.withOpacity(1),
-                        ),
-                        title: Text(
-                          index == 0
-                              ? 'Add Products'
-                              : index == 1
-                                  ? 'Add Services'
-                                  : index == 2
-                                      ? 'Add Suppliers'
-                                      : index == 3
-                                          ? 'Add Orders'
-                                          : index == 4
-                                              ? 'Add Customers'
-                                              : 'Add Projects',
-                          style: const TextStyle(
-                            fontSize: 18,
-                            fontWeight: FontWeight.w700,
-                          ),
-                        ),
-                      );
-                    },
-                  ),
-                )
-              ],
-            ),
-          ),
-        );
-      },
-    );
-  }
 
   @override
   void initState() {
@@ -398,21 +322,103 @@ class _DashboardState extends State<Dashboard> {
                         padding: const EdgeInsets.symmetric(
                           horizontal: 15.0,
                         ),
-                        crossAxisCount: 4,
+                        crossAxisCount: 3,
                         crossAxisSpacing: 15.0,
                         mainAxisSpacing: 15.0,
                         shrinkWrap: true,
-                        itemCount: 4,
+                        itemCount: 3,
                         itemBuilder: (BuildContext context, int index) {
                           return GestureDetector(
                             onTap: () {
                               if (index == 0) {
-                                Get.to(() => const CreateProductListing());
+                                showModalBottomSheet(
+                                  context: context,
+                                  shape: const RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.vertical(
+                                        top: Radius.circular(20)),
+                                  ),
+                                  builder: (BuildContext context) {
+                                    return SizedBox(
+                                      height: 250,
+                                      child: ListView.separated(
+                                        padding: const EdgeInsets.all(10),
+                                        itemBuilder:
+                                            (BuildContext context, int index) {
+                                          if (index == 0) {
+                                            return ListTile(
+                                              leading: SvgPicture.asset(
+                                                'assets/svgs/addproduct.svg',
+                                                colorFilter:
+                                                    const ColorFilter.mode(
+                                                  Colors.black,
+                                                  BlendMode.srcIn,
+                                                ),
+                                                height: 24,
+                                              ),
+                                              title: const Text(
+                                                'Add Product',
+                                                style: TextStyle(fontSize: 14),
+                                              ),
+                                              horizontalTitleGap: 0.0,
+                                              onTap: () {
+                                                Navigator.pop(context);
+                                                Get.to(() =>
+                                                    const CreateProductListing());
+                                              },
+                                            );
+                                          } else if (index == 1) {
+                                            return ListTile(
+                                              leading: SvgPicture.asset(
+                                                'assets/svgs/addservice.svg',
+                                                colorFilter:
+                                                    const ColorFilter.mode(
+                                                  Colors.black,
+                                                  BlendMode.srcIn,
+                                                ),
+                                                height: 24,
+                                              ),
+                                              title: const Text(
+                                                'Add Service',
+                                                style: TextStyle(fontSize: 14),
+                                              ),
+                                              horizontalTitleGap: 0.0,
+                                              onTap: () {
+                                                Navigator.pop(context);
+                                                Get.to(() =>
+                                                    const CreateServiceListing());
+                                              },
+                                            );
+                                          } else {
+                                            return ListTile(
+                                              leading: const Icon(
+                                                Icons.add,
+                                                color: Colors.black,
+                                                size: 24,
+                                              ),
+                                              title: const Text(
+                                                'Add Custom Item',
+                                                style: TextStyle(fontSize: 14),
+                                              ),
+                                              horizontalTitleGap: 0.0,
+                                              onTap: () {
+                                                Navigator.pop(context);
+                                                Get.to(() =>
+                                                    const CreateCustomListing());
+                                              },
+                                            );
+                                          }
+                                        },
+                                        separatorBuilder:
+                                            (BuildContext context, int index) =>
+                                                const Divider(),
+                                        itemCount: 3,
+                                      ),
+                                    );
+                                  },
+                                );
                               } else if (index == 1) {
-                                Get.to(() => const CreateServiceListing());
-                              } else if (index == 2) {
                                 Get.to(() => const CreateOrder());
-                              } else if (index == 3) {
+                              } else if (index == 2) {
                                 Get.to(() => const Addclient());
                               }
                             },
@@ -423,21 +429,17 @@ class _DashboardState extends State<Dashboard> {
                                         .toString()
                                     : '0',
                                 color: index == 0
-                                    ? Colors.blue
+                                    ? Colors.black
                                     : index == 1
-                                        ? Colors.green
-                                        : index == 2
-                                            ? Colors.orange
-                                            : Colors.purple,
+                                        ? Colors.orange
+                                        : Colors.purple,
                                 assetlocation: index == 0
-                                    ? 'assets/svgs/addproduct.svg'
+                                    ? 'assets/svgs/startatopic.svg'
                                     : index == 1
-                                        ? 'assets/svgs/addservice.svg'
+                                        ? 'assets/svgs/addorder.svg'
                                         : index == 2
-                                            ? 'assets/svgs/addorder.svg'
-                                            : index == 3
-                                                ? 'assets/svgs/addclient.svg'
-                                                : ''),
+                                            ? 'assets/svgs/addclient.svg'
+                                            : ''),
                           );
                         },
                       ),
