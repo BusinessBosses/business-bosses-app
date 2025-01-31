@@ -163,6 +163,15 @@ class ShopController extends GetxController {
           userServices.add(Service.fromJson(servicesResponse.data['rows'][i]));
         }
       }
+      ApiResponseModel customResponse = await ApiService.get(
+        path: 'custom-items/user/${user.uid}',
+      );
+      userCustomItems.clear();
+      if (customResponse.success) {
+        for (int i = 0; i < customResponse.data.length; i++) {
+          customItems.add(Customitem.fromJson(customResponse.data[i]));
+        }
+      }
       userItems.clear();
       userItems.addAll(<Object>[
         ...userProducts.where((Product item) => item.isActive).toList(),
