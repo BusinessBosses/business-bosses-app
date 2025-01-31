@@ -168,11 +168,40 @@ class _ServiceCardState extends State<ServiceCard> {
                           ),
                         ),
                       if (widget.myShop == false)
-                        Text(
-                          widget.service?.description ?? 'Service description',
-                          style: const TextStyle(fontSize: 11),
-                          maxLines: 2,
-                          overflow: TextOverflow.ellipsis,
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: <Widget>[
+                            Expanded(
+                              child: Text(
+                                widget.service?.description ??
+                                    'Service description',
+                                style: const TextStyle(fontSize: 11),
+                                maxLines: 2,
+                                overflow: TextOverflow.ellipsis,
+                              ),
+                            ),
+                            if (widget.marketplace == null)
+                              Container(
+                                padding: const EdgeInsets.symmetric(
+                                  horizontal: 5,
+                                  vertical: 3,
+                                ),
+                                decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(6),
+                                  border: Border.all(
+                                    color: primaryColorLT,
+                                  ),
+                                ),
+                                child: const Text(
+                                  'Book',
+                                  style: TextStyle(
+                                    color: primaryColorLT,
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 11,
+                                  ),
+                                ),
+                              ),
+                          ],
                         ),
                       // if (widget.myShop == false)
                       //   const Row(
@@ -200,7 +229,7 @@ class _ServiceCardState extends State<ServiceCard> {
               ),
             ],
           ),
-          const SizedBox(height: 5),
+          if (widget.marketplace != null) const SizedBox(height: 5),
           widget.myShop == false
               ? Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -234,25 +263,27 @@ class _ServiceCardState extends State<ServiceCard> {
                           ),
                         ],
                       ),
-                    Container(
-                      padding: const EdgeInsets.symmetric(
-                          horizontal: 5, vertical: 3),
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(6),
-                        border: Border.all(
-                          color: primaryColorLT,
-                          width: 1,
+                    if (widget.marketplace == null) Container(width: 5),
+                    if (widget.marketplace != null)
+                      Container(
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 5, vertical: 3),
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(6),
+                          border: Border.all(
+                            color: primaryColorLT,
+                            width: 1,
+                          ),
+                        ),
+                        child: const Text(
+                          'Book',
+                          style: TextStyle(
+                            color: primaryColorLT,
+                            fontWeight: FontWeight.bold,
+                            fontSize: 11,
+                          ),
                         ),
                       ),
-                      child: const Text(
-                        'Book',
-                        style: TextStyle(
-                          color: primaryColorLT,
-                          fontWeight: FontWeight.bold,
-                          fontSize: 11,
-                        ),
-                      ),
-                    ),
                   ],
                 )
               : Row(

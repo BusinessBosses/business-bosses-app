@@ -48,34 +48,30 @@ class _CustomItemCardState extends State<CustomItemCard> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
-          if (widget.customitem?.images != null &&
-              widget.customitem!.images!.isNotEmpty)
-            SizedBox(
-              height: 120.0,
-              width: double.infinity,
-              child: ClipRRect(
-                borderRadius: BorderRadius.circular(10),
-                child: NetworkImageWithPlaceHolder(
-                  imageUrl: (widget.customitem?.images == null &&
-                          widget.customitem!.images!.isEmpty)
-                      ? ''
-                      : widget.customitem?.images![0],
-                  radius: radius,
-                  placeHolder: Icons.person,
-                  iconSize: 0.0,
-                  fit: BoxFit.cover,
+          (
+                  // ignore: always_specify_types
+                  widget.customitem!.images![0] == '')
+              ? Container()
+              : SizedBox(
+                  height: 120.0,
+                  width: double.infinity,
+                  child: ClipRRect(
+                    borderRadius: BorderRadius.circular(10),
+                    child: NetworkImageWithPlaceHolder(
+                      imageUrl: (widget.customitem?.images == null &&
+                              widget.customitem!.images!.isEmpty)
+                          ? ''
+                          : widget.customitem?.images![0],
+                      radius: radius,
+                      placeHolder: Icons.link,
+                      iconSize: 25.0,
+                      fit: BoxFit.cover,
+                    ),
+                  ),
                 ),
-              ),
-            ),
-          if (widget.customitem?.images != null &&
-              widget.customitem!.images!.isNotEmpty)
-            const SizedBox(height: 5),
-          if (widget.customitem?.images != null &&
-              widget.customitem!.images!.isNotEmpty)
-            const Divider(),
-          if (widget.customitem?.images != null &&
-              widget.customitem!.images!.isNotEmpty)
-            const SizedBox(height: 5),
+          if (widget.customitem!.images![0] != '') const SizedBox(height: 5),
+          if (widget.customitem!.images![0] != '') const Divider(),
+          if (widget.customitem!.images![0] != '') const SizedBox(height: 5),
           Row(
             crossAxisAlignment: CrossAxisAlignment.end,
             children: <Widget>[
@@ -93,56 +89,68 @@ class _CustomItemCardState extends State<CustomItemCard> {
                       overflow: TextOverflow.ellipsis,
                     ),
                     if (widget.myShop == false)
-                      Text(
-                        widget.customitem?.description ?? 'Item description',
-                        style: const TextStyle(fontSize: 11),
-                        maxLines: 2,
-                        overflow: TextOverflow.ellipsis,
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: <Widget>[
+                          Expanded(
+                            child: Text(
+                              widget.customitem?.description ??
+                                  'Item description',
+                              style: const TextStyle(fontSize: 11),
+                              maxLines: 2,
+                              overflow: TextOverflow.ellipsis,
+                            ),
+                          ),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: <Widget>[
+                              Container(
+                                width: 5,
+                              ),
+                              Container(
+                                padding: const EdgeInsets.symmetric(
+                                    horizontal: 5, vertical: 3),
+                                decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(6),
+                                  border: Border.all(
+                                    color: primaryColorLT,
+                                    width: 1,
+                                  ),
+                                ),
+                                child: const Row(
+                                  children: <Widget>[
+                                    Text(
+                                      'Open',
+                                      style: TextStyle(
+                                        color: primaryColorLT,
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: 11,
+                                      ),
+                                    ),
+                                    SizedBox(width: 5),
+                                    Icon(
+                                      Icons.link,
+                                      size: 15,
+                                      color: primaryColorLT,
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ],
+                          )
+                        ],
                       ),
                   ],
                 ),
               ),
             ],
           ),
-          const SizedBox(height: 5),
+          if (widget.myShop == false) const SizedBox(height: 5),
           widget.myShop == false
-              ? Row(
-                  children: <Widget>[
-                    Container(
-                      padding: const EdgeInsets.symmetric(
-                          horizontal: 5, vertical: 3),
-                      decoration: BoxDecoration(
-                        color: Colors.black,
-                        borderRadius: BorderRadius.circular(70),
-                        border: Border.all(
-                          color: Colors.grey,
-                          width: 1,
-                        ),
-                      ),
-                      child: const Row(
-                        children: <Widget>[
-                          Text(
-                            'Open link',
-                            style: TextStyle(
-                              color: Colors.white,
-                              fontWeight: FontWeight.bold,
-                              fontSize: 11,
-                            ),
-                          ),
-                          SizedBox(width: 5),
-                          Icon(
-                            Icons.link,
-                            size: 15,
-                            color: Colors.white,
-                          ),
-                        ],
-                      ),
-                    ),
-                  ],
-                )
+              ? Container()
               : Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  crossAxisAlignment: CrossAxisAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.end,
                   children: <Widget>[
                     Expanded(
                       child: Column(
@@ -155,6 +163,20 @@ class _CustomItemCardState extends State<CustomItemCard> {
                             maxLines: 2,
                             overflow: TextOverflow.ellipsis,
                           ),
+                          const SizedBox(height: 2),
+                          Container(
+                            padding: const EdgeInsets.symmetric(
+                                horizontal: 10, vertical: 5),
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(6),
+                              color: backgroundColor,
+                            ),
+                            child: const Icon(
+                              Icons.link,
+                              size: 15,
+                              color: Colors.black,
+                            ),
+                          )
                         ],
                       ),
                     ),

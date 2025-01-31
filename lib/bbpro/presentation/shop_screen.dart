@@ -363,7 +363,9 @@ class _ShopScreenState extends State<ShopScreen> {
                                                 return GestureDetector(
                                                   onTap: () {
                                                     Get.to(() =>
-                                                        const CreateCustomListing());
+                                                        CreateCustomListing(
+                                                          customItem: item,
+                                                        ));
                                                   },
                                                   child: CustomItemCard(
                                                     myShop: true,

@@ -132,11 +132,40 @@ class _InventoryCardState extends State<InventoryCard> {
                         ),
                       ),
                     if (widget.myShop == false)
-                      Text(
-                        widget.product?.description ?? 'Product description',
-                        style: const TextStyle(fontSize: 11),
-                        maxLines: 2,
-                        overflow: TextOverflow.ellipsis,
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: <Widget>[
+                          Expanded(
+                            child: Text(
+                              widget.product?.description ??
+                                  'Product description',
+                              style: const TextStyle(fontSize: 11),
+                              maxLines: 2,
+                              overflow: TextOverflow.ellipsis,
+                            ),
+                          ),
+                          if (widget.marketplace == null)
+                            Container(
+                              padding: const EdgeInsets.symmetric(
+                                horizontal: 5,
+                                vertical: 3,
+                              ),
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(6),
+                                border: Border.all(
+                                  color: primaryColorLT,
+                                ),
+                              ),
+                              child: const Text(
+                                'Order',
+                                style: TextStyle(
+                                  color: primaryColorLT,
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 11,
+                                ),
+                              ),
+                            ),
+                        ],
                       ),
                     // if (widget.myShop == false)
                     //   Row(
@@ -167,9 +196,10 @@ class _InventoryCardState extends State<InventoryCard> {
               ),
             ],
           ),
-          const SizedBox(
-            height: 5,
-          ),
+          if (widget.marketplace != null)
+            const SizedBox(
+              height: 5,
+            ),
           widget.myShop == false
               ? Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -204,26 +234,27 @@ class _InventoryCardState extends State<InventoryCard> {
                         ],
                       ),
                     if (widget.marketplace == null) Container(width: 5),
-                    Container(
-                      padding: const EdgeInsets.symmetric(
-                        horizontal: 5,
-                        vertical: 3,
-                      ),
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(6),
-                        border: Border.all(
-                          color: primaryColorLT,
+                    if (widget.marketplace != null)
+                      Container(
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 5,
+                          vertical: 3,
+                        ),
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(6),
+                          border: Border.all(
+                            color: primaryColorLT,
+                          ),
+                        ),
+                        child: const Text(
+                          'Order',
+                          style: TextStyle(
+                            color: primaryColorLT,
+                            fontWeight: FontWeight.bold,
+                            fontSize: 11,
+                          ),
                         ),
                       ),
-                      child: const Text(
-                        'Order',
-                        style: TextStyle(
-                          color: primaryColorLT,
-                          fontWeight: FontWeight.bold,
-                          fontSize: 11,
-                        ),
-                      ),
-                    ),
                   ],
                 )
               : Row(
@@ -231,7 +262,7 @@ class _InventoryCardState extends State<InventoryCard> {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: <Widget>[
                     Expanded(
-                      child: Column(
+                      child: Row(
                         mainAxisAlignment: MainAxisAlignment.start,
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: <Widget>[
