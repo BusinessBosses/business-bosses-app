@@ -1,3 +1,4 @@
+import 'package:business_bosses_v2/bbpro/models/customitem_model.dart';
 import 'package:business_bosses_v2/bbpro/models/order_model.dart';
 import 'package:business_bosses_v2/bbpro/models/product_model.dart';
 import 'package:business_bosses_v2/bbpro/models/service_model.dart';
@@ -17,6 +18,7 @@ class MarketController extends GetxController {
   RxList<MarketModel> markets = RxList<MarketModel>(<MarketModel>[]);
   RxList<Product> proProducts = RxList<Product>(<Product>[]);
   RxList<Service> proServices = RxList<Service>(<Service>[]);
+  RxList<Customitem> proCustomItems = RxList<Customitem>(<Customitem>[]);
   RxList<Object> proItems = RxList<Object>(<Object>[]);
   RxList<Object> proItemsWithImages = RxList<Object>(<Object>[]);
   RxList<MarketModel> products = RxList<MarketModel>(<MarketModel>[]);
@@ -465,6 +467,7 @@ class MarketController extends GetxController {
     // Clear previous data
     proProducts.clear();
     proServices.clear();
+    proCustomItems.clear();
     proItems.clear();
     proItemsWithImages.clear();
 
@@ -474,10 +477,12 @@ class MarketController extends GetxController {
           await Future.wait(<Future<ApiResponseModel>>[
         ApiService.get(path: 'goods/all'),
         ApiService.get(path: 'services/all'),
+        ApiService.get(path: 'custom-items'),
       ]);
 
       final ApiResponseModel responseProducts = responses[0];
       final ApiResponseModel responseServices = responses[1];
+      final ApiResponseModel responseCustomItems = responses[2];
 
       // Process products
       if (responseProducts.success) {
@@ -499,8 +504,17 @@ class MarketController extends GetxController {
         throw Exception('Failed to fetch services.');
       }
 
+      if (responseCustomItems.success) {
+        proCustomItems.addAll(responseCustomItems.data
+            .map<Customitem>((dynamic json) => Customitem.fromJson(json))
+            .toList());
+      } else {
+        throw Exception('Failed to fetch items.');
+      }
+
       // Combine items
-      proItems.addAll(<Object>[...proProducts, ...proServices]);
+      proItems
+          .addAll(<Object>[...proProducts, ...proServices, ...proCustomItems]);
 
       // Filter items with images
       proItemsWithImages.addAll(

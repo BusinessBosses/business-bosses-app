@@ -1,10 +1,12 @@
 import 'package:business_bosses_v2/bbpro/controllers/shop_controller.dart';
+import 'package:business_bosses_v2/bbpro/models/customitem_model.dart';
 import 'package:business_bosses_v2/bbpro/models/product_model.dart';
 import 'package:business_bosses_v2/bbpro/models/service_model.dart';
 import 'package:business_bosses_v2/bbpro/presentation/book_service.dart';
 import 'package:business_bosses_v2/bbpro/presentation/create_product.dart';
 import 'package:business_bosses_v2/bbpro/presentation/create_service.dart';
 import 'package:business_bosses_v2/bbpro/presentation/order_product.dart';
+import 'package:business_bosses_v2/bbpro/widgets/custom_item_card.dart';
 import 'package:business_bosses_v2/bbpro/widgets/inventorycard.dart';
 import 'package:business_bosses_v2/bbpro/widgets/proshopdeals.dart';
 import 'package:business_bosses_v2/bbpro/widgets/servicecard.dart';
@@ -35,15 +37,27 @@ class _MarketsPageState extends State<MarketsPage> {
   @override
   Widget build(BuildContext context) {
     _marketController.proItems.sort((Object a, Object b) {
-      final DateTime aDate =
-          (a is Product) ? a.createdAt : (a as Service).createdAt;
-      final DateTime bDate =
-          (b is Product) ? b.createdAt : (b as Service).createdAt;
+      final DateTime aDate = (a is Product)
+          ? a.createdAt
+          : (a is Service)
+              ? a.createdAt
+              : (a as Customitem).createdAt;
+      final DateTime bDate = (b is Product)
+          ? b.createdAt
+          : (b is Service)
+              ? b.createdAt
+              : (b as Customitem).createdAt;
 
-      final String? aLocation =
-          (a is Product) ? a.location : (a as Service).location;
-      final String? bLocation =
-          (b is Product) ? b.location : (b as Service).location;
+      final String? aLocation = (a is Product)
+          ? a.location
+          : (a is Service)
+              ? a.location
+              : (a as Customitem).shop!.location;
+      final String? bLocation = (b is Product)
+          ? b.location
+          : (b is Service)
+              ? b.location
+              : (b as Customitem).shop!.location;
 
       final String? myLocation =
           profileController.myProfile.location?.toLowerCase();
@@ -67,15 +81,27 @@ class _MarketsPageState extends State<MarketsPage> {
     });
 
     _marketController.proItemsWithImages.sort((Object a, Object b) {
-      final DateTime aDate =
-          (a is Product) ? a.createdAt : (a as Service).createdAt;
-      final DateTime bDate =
-          (b is Product) ? b.createdAt : (b as Service).createdAt;
+      final DateTime aDate = (a is Product)
+          ? a.createdAt
+          : (a is Service)
+              ? a.createdAt
+              : (a as Customitem).createdAt;
+      final DateTime bDate = (b is Product)
+          ? b.createdAt
+          : (b is Service)
+              ? b.createdAt
+              : (b as Customitem).createdAt;
 
-      final String? aLocation =
-          (a is Product) ? a.location : (a as Service).location;
-      final String? bLocation =
-          (b is Product) ? b.location : (b as Service).location;
+      final String? aLocation = (a is Product)
+          ? a.location
+          : (a is Service)
+              ? a.location
+              : (a as Customitem).shop!.location;
+      final String? bLocation = (b is Product)
+          ? b.location
+          : (b is Service)
+              ? b.location
+              : (b as Customitem).shop!.location;
 
       final String? myLocation =
           profileController.myProfile.location?.toLowerCase();
@@ -97,13 +123,6 @@ class _MarketsPageState extends State<MarketsPage> {
 
       return safeBDate.compareTo(safeADate);
     });
-    // Print sorted locations
-    print('Sorted Locations:');
-    for (Object item in _marketController.proItems) {
-      final String? location =
-          (item is Product) ? item.location : (item as Service).location;
-      print(location);
-    }
     return Scaffold(
       backgroundColor: backgroundColor,
       body: SingleChildScrollView(
@@ -298,7 +317,7 @@ class _MarketsPageState extends State<MarketsPage> {
                               : false,
                         ),
                       );
-                    } else {
+                    } else if (_marketController.proItems[index] is Service) {
                       final Service service =
                           _marketController.proItems[index] as Service;
                       return GestureDetector(
@@ -321,6 +340,26 @@ class _MarketsPageState extends State<MarketsPage> {
                                   profileController.myProfile.uid
                               ? true
                               : false,
+                        ),
+                      );
+                    } else {
+                      final Customitem customitem =
+                          _marketController.proItems[index] as Customitem;
+                      print(customitem.toJson());
+                      return GestureDetector(
+                        onTap: () {
+                          if (customitem.user!.uid ==
+                              profileController.myProfile.uid) {
+                            // Get.to(() => CreateServiceListing(service: service));
+                          } else {}
+                        },
+                        child: CustomItemCard(
+                          customitem: customitem,
+                          myShop: customitem.user!.uid ==
+                                  profileController.myProfile.uid
+                              ? true
+                              : false,
+                          shop: customitem.shop,
                         ),
                       );
                     }

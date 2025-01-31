@@ -328,20 +328,26 @@ class _InventoryCardState extends State<InventoryCard> {
         content: const Text('Are you sure you want to delete this product?'),
         actions: <Widget>[
           TextButton(
-            onPressed: () => Navigator.pop(context),
+            onPressed: () {
+              Navigator.pop(context);
+              Navigator.pop(context);
+            },
             child: const Text('No'),
           ),
           TextButton(
             onPressed: () async {
               final bool delete =
                   await shopController.deleteProduct(widget.product!.id);
+
               if (delete) {
                 showSnackbar(message: 'Product deleted successfully!');
+                Navigator.pop(context);
+                Navigator.pop(context);
               } else {
                 showSnackbar(message: 'Error deleting product!', error: true);
+                Navigator.pop(context);
               }
               setState(() {});
-              Navigator.pop(context);
             },
             child: const Text('Yes'),
           ),

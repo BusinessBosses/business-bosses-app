@@ -5,7 +5,6 @@ import 'package:business_bosses_v2/bbpro/models/shop_model.dart';
 import 'package:business_bosses_v2/bbpro/presentation/create_product.dart';
 import 'package:business_bosses_v2/bbpro/widgets/optionsbutton.dart';
 import 'package:business_bosses_v2/common/dialogs/snackbar.dart';
-import 'package:business_bosses_v2/common/widgets/network_image_with_placeholder.dart';
 import 'package:business_bosses_v2/utils/theme/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -314,20 +313,26 @@ class _MyInventoryCardState extends State<MyInventoryCard> {
         content: const Text('Are you sure you want to delete this product?'),
         actions: <Widget>[
           TextButton(
-            onPressed: () => Navigator.pop(context),
+            onPressed: () {
+              Navigator.pop(context);
+              Navigator.pop(context);
+            },
             child: const Text('No'),
           ),
           TextButton(
             onPressed: () async {
               final bool delete =
                   await shopController.deleteProduct(widget.product!.id);
+
               if (delete) {
                 showSnackbar(message: 'Product deleted successfully!');
+                Navigator.pop(context);
+                Navigator.pop(context);
               } else {
                 showSnackbar(message: 'Error deleting product!', error: true);
+                Navigator.pop(context);
               }
               setState(() {});
-              Navigator.pop(context);
             },
             child: const Text('Yes'),
           ),
