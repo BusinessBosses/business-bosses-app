@@ -358,6 +358,8 @@ class ShopController extends GetxController {
     ApiResponseModel response = await ApiService.delete(path: 'goods/$id');
     if (response.success) {
       products.removeWhere((Product element) => element.id == id);
+      items.removeWhere(
+          (Object element) => element is Product && element.id == id);
       update(); // Update the UI
       return true;
     } else {
@@ -371,6 +373,24 @@ class ShopController extends GetxController {
     ApiResponseModel response = await ApiService.delete(path: 'services/$id');
     if (response.success) {
       services.removeWhere((Service element) => element.id == id);
+      items.removeWhere(
+          (Object element) => element is Service && element.id == id);
+      update(); // Update the UI
+      return true;
+    } else {
+      log(response.toMap().toString());
+      return false;
+    }
+  }
+
+  // Delete Custom Item
+  Future<bool> deleteCustomItem(int id) async {
+    ApiResponseModel response =
+        await ApiService.delete(path: 'custom-items/$id');
+    if (response.success) {
+      customItems.removeWhere((Customitem element) => element.id == id);
+      items.removeWhere(
+          (Object element) => element is Customitem && element.id == id);
       update(); // Update the UI
       return true;
     } else {

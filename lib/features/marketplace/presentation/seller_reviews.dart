@@ -180,7 +180,7 @@ class _SellerReviewScreenState extends State<SellerReviewScreen> {
                       const SizedBox(
                         height: 10,
                       ),
-                    if ((!widget.isShop!) &&
+                    if ((widget.isShop!) &&
                         (reviews == null ||
                             reviews!
                                 .where((ReviewModel review) =>

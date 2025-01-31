@@ -3,6 +3,7 @@ import 'package:business_bosses_v2/bbpro/models/customitem_model.dart';
 import 'package:business_bosses_v2/bbpro/models/shop_model.dart';
 import 'package:business_bosses_v2/bbpro/presentation/create_custom_listing.dart';
 import 'package:business_bosses_v2/bbpro/widgets/optionsbutton.dart';
+import 'package:business_bosses_v2/common/dialogs/snackbar.dart';
 import 'package:business_bosses_v2/common/widgets/network_image_with_placeholder.dart';
 import 'package:business_bosses_v2/utils/theme/theme.dart';
 import 'package:flutter/material.dart';
@@ -183,12 +184,50 @@ class _CustomItemCardState extends State<CustomItemCard> {
                     OptionsButton(
                       item: widget.customitem,
                       onEdit: _onEdit,
-                      onDelete: () {},
+                      onDelete: onDelete,
                       onBoost: () {},
                       isBoost: true,
                     ),
                   ],
                 ),
+        ],
+      ),
+    );
+  }
+
+  void onDelete() {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) => AlertDialog(
+        title: const Text(
+          'Delete Item',
+          style: bodyText1,
+        ),
+        content: const Text('Are you sure you want to delete this?'),
+        actions: <Widget>[
+          TextButton(
+            onPressed: () {
+              Navigator.pop(context);
+              Navigator.pop(context);
+            },
+            child: const Text('No'),
+          ),
+          TextButton(
+            onPressed: () async {
+              final bool delete =
+                  await shopController.deleteCustomItem(widget.customitem!.id);
+
+              if (delete) {
+                showSnackbar(message: 'Product deleted successfully!');
+                Navigator.pop(context);
+              } else {
+                showSnackbar(message: 'Error deleting product!', error: true);
+                Navigator.pop(context);
+              }
+              setState(() {});
+            },
+            child: const Text('Yes'),
+          ),
         ],
       ),
     );

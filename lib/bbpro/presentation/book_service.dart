@@ -3,7 +3,6 @@ import 'package:business_bosses_v2/bbpro/controllers/order_controller.dart';
 import 'package:business_bosses_v2/bbpro/controllers/shop_controller.dart';
 import 'package:business_bosses_v2/bbpro/models/service_model.dart';
 import 'package:business_bosses_v2/bbpro/models/shop_model.dart';
-import 'package:business_bosses_v2/bbpro/presentation/user_shop_screen.dart';
 import 'package:business_bosses_v2/bbpro/widgets/button.dart';
 import 'package:business_bosses_v2/bbpro/widgets/edit_text.dart';
 import 'package:business_bosses_v2/bbpro/widgets/ordersummarycard.dart';
@@ -11,7 +10,6 @@ import 'package:business_bosses_v2/bbpro/widgets/paymentoptioncard.dart';
 import 'package:business_bosses_v2/bbpro/widgets/servicetypesection.dart';
 import 'package:business_bosses_v2/common/dialogs/snackbar.dart';
 import 'package:business_bosses_v2/common/generic_slider.dart';
-import 'package:business_bosses_v2/common/models/user_model.dart';
 import 'package:business_bosses_v2/common/widgets/text_widget.dart';
 import 'package:business_bosses_v2/features/profile/controller/profile_controller.dart';
 import 'package:business_bosses_v2/features/profile/presentation/public_profile_screen.dart';
@@ -923,7 +921,7 @@ class _BookServiceScreenState extends State<BookServiceScreen> {
                                       ProPaymentOptionCard(
                                         option: payment['paymentMethod'] ?? '',
                                         subtext:
-                                            'Details: ${payment['details'].toString() ?? 'N/A'}',
+                                            'Details: ${payment['details'].toString()}',
                                         activeoption: activePaymentMethod,
                                         onTap: (String newOption) {
                                           setState(() {
