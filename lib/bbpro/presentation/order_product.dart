@@ -567,7 +567,13 @@ class _OrderProductScreenState extends State<OrderProductScreen> {
                                             activeoption: activePaymentMethod,
                                             onTap: (String newOption) {
                                               setState(() {
-                                                activePaymentMethod = newOption;
+                                                if (activePaymentMethod !=
+                                                    newOption) {
+                                                  activePaymentMethod =
+                                                      newOption;
+                                                } else {
+                                                  activePaymentMethod = '';
+                                                }
                                               });
                                             },
                                           ))

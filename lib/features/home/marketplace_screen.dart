@@ -85,6 +85,7 @@ class _MarketplaceScreenState extends State<MarketplaceScreen>
     });
 
     shopController.initShop();
+    supplierController.initSuppliers();
   }
 
   void _handleTabSelection() {

@@ -34,6 +34,76 @@ class _MarketsPageState extends State<MarketsPage> {
 
   @override
   Widget build(BuildContext context) {
+    _marketController.proItems.sort((Object a, Object b) {
+      final DateTime aDate =
+          (a is Product) ? a.createdAt : (a as Service).createdAt;
+      final DateTime bDate =
+          (b is Product) ? b.createdAt : (b as Service).createdAt;
+
+      final String? aLocation =
+          (a is Product) ? a.location : (a as Service).location;
+      final String? bLocation =
+          (b is Product) ? b.location : (b as Service).location;
+
+      final String? myLocation =
+          profileController.myProfile.location?.toLowerCase();
+
+      // Ensure case-insensitive comparison
+      final String aLoc = aLocation?.toLowerCase() ?? '';
+      final String bLoc = bLocation?.toLowerCase() ?? '';
+
+      // Step 1: Prioritize myLocation (Nigeria) at the top
+      final bool aIsMyLocation = aLoc == myLocation;
+      final bool bIsMyLocation = bLoc == myLocation;
+
+      if (aIsMyLocation && !bIsMyLocation) return -1; // a (Nigeria) goes up
+      if (!aIsMyLocation && bIsMyLocation) return 1; // b (Nigeria) goes up
+
+      // Step 2: If both are Nigeria (or both are not Nigeria), sort by date (newest first)
+      final DateTime safeADate = aDate;
+      final DateTime safeBDate = bDate;
+
+      return safeBDate.compareTo(safeADate);
+    });
+
+    _marketController.proItemsWithImages.sort((Object a, Object b) {
+      final DateTime aDate =
+          (a is Product) ? a.createdAt : (a as Service).createdAt;
+      final DateTime bDate =
+          (b is Product) ? b.createdAt : (b as Service).createdAt;
+
+      final String? aLocation =
+          (a is Product) ? a.location : (a as Service).location;
+      final String? bLocation =
+          (b is Product) ? b.location : (b as Service).location;
+
+      final String? myLocation =
+          profileController.myProfile.location?.toLowerCase();
+
+      // Ensure case-insensitive comparison
+      final String aLoc = aLocation?.toLowerCase() ?? '';
+      final String bLoc = bLocation?.toLowerCase() ?? '';
+
+      // Step 1: Prioritize myLocation (Nigeria) at the top
+      final bool aIsMyLocation = aLoc == myLocation;
+      final bool bIsMyLocation = bLoc == myLocation;
+
+      if (aIsMyLocation && !bIsMyLocation) return -1; // a (Nigeria) goes up
+      if (!aIsMyLocation && bIsMyLocation) return 1; // b (Nigeria) goes up
+
+      // Step 2: If both are Nigeria (or both are not Nigeria), sort by date (newest first)
+      final DateTime safeADate = aDate;
+      final DateTime safeBDate = bDate;
+
+      return safeBDate.compareTo(safeADate);
+    });
+    // Print sorted locations
+    print('Sorted Locations:');
+    for (Object item in _marketController.proItems) {
+      final String? location =
+          (item is Product) ? item.location : (item as Service).location;
+      print(location);
+    }
     return Scaffold(
       backgroundColor: backgroundColor,
       body: SingleChildScrollView(

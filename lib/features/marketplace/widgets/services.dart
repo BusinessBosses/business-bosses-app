@@ -43,6 +43,33 @@ class _ServicesPageState extends State<ServicesPage> {
 
   @override
   Widget build(BuildContext context) {
+    _marketController.proServices.sort((Service a, Service b) {
+      final DateTime aDate = a.createdAt;
+      final DateTime bDate = b.createdAt;
+
+      final String aLocation = a.location;
+      final String bLocation = b.location;
+
+      final String? myLocation =
+          profileController.myProfile.location?.toLowerCase();
+
+      // Ensure case-insensitive comparison
+      final String aLoc = aLocation.toLowerCase();
+      final String bLoc = bLocation.toLowerCase();
+
+      // Step 1: Prioritize myLocation (Nigeria) at the top
+      final bool aIsMyLocation = aLoc == myLocation;
+      final bool bIsMyLocation = bLoc == myLocation;
+
+      if (aIsMyLocation && !bIsMyLocation) return -1; // a (Nigeria) goes up
+      if (!aIsMyLocation && bIsMyLocation) return 1; // b (Nigeria) goes up
+
+      // Step 2: If both are Nigeria (or both are not Nigeria), sort by date (newest first)
+      final DateTime safeADate = aDate;
+      final DateTime safeBDate = bDate;
+
+      return safeBDate.compareTo(safeADate);
+    });
     return Scaffold(
       backgroundColor: backgroundColor,
       body: SingleChildScrollView(

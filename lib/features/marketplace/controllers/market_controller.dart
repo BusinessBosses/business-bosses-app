@@ -502,28 +502,6 @@ class MarketController extends GetxController {
       // Combine items
       proItems.addAll(<Object>[...proProducts, ...proServices]);
 
-      // Sort items with Nigeria location first, then by creation date
-      proItems.sort((Object a, Object b) {
-        final DateTime aDate =
-            a is Product ? a.createdAt : (a as Service).createdAt;
-        final DateTime bDate =
-            b is Product ? b.createdAt : (b as Service).createdAt;
-
-        final String? aLocation =
-            a is Product ? a.location : (a as Service).location;
-        final String? bLocation =
-            b is Product ? b.location : (b as Service).location;
-
-        // Sort by location: Nigeria first
-        if (aLocation == _profileController.myProfile.location &&
-            bLocation != _profileController.myProfile.location) return -1;
-        if (aLocation != _profileController.myProfile.location &&
-            bLocation == _profileController.myProfile.location) return 1;
-
-        // If both are in Nigeria or neither, sort by date (most recent first)
-        return bDate.compareTo(aDate);
-      });
-
       // Filter items with images
       proItemsWithImages.addAll(
         proItems.where((Object item) {
