@@ -1,4 +1,5 @@
 import 'package:business_bosses_v2/bbpro/controllers/shop_controller.dart';
+import 'package:business_bosses_v2/bbpro/presentation/bizcentersearch.dart';
 import 'package:business_bosses_v2/bbpro/presentation/user_shop_screen.dart';
 import 'package:business_bosses_v2/common/models/api_response_model.dart';
 import 'package:business_bosses_v2/common/models/user_model.dart';
@@ -254,15 +255,18 @@ class _PublicProfileScreenState extends State<PublicProfileScreen> {
                       child: publicUser.uid != _profileController.myProfile.uid
                           ? Row(
                               children: <Widget>[
-                                GestureDetector(
-                                  onTap: () {},
-                                  child: CircleAvatar(
-                                      backgroundColor: backgroundColor,
-                                      child: SvgPicture.asset(
-                                        'assets/svgs/homesearch.svg',
-                                        height: 18,
-                                      )),
-                                ),
+                                if (_currentIndex == 1)
+                                  GestureDetector(
+                                    onTap: () {
+                                      Get.to(const BizCenterSearch());
+                                    },
+                                    child: CircleAvatar(
+                                        backgroundColor: backgroundColor,
+                                        child: SvgPicture.asset(
+                                          'assets/svgs/homesearch.svg',
+                                          height: 18,
+                                        )),
+                                  ),
                                 const SizedBox(
                                   width: 2,
                                 ),
