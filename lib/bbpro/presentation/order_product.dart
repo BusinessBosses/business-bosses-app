@@ -478,7 +478,7 @@ class _OrderProductScreenState extends State<OrderProductScreen> {
                           setState(() {});
                         },
                       ),
-                      if (widget.product.size![0].isNotEmpty)
+                      if (widget.product.color![0].isNotEmpty)
                         CustomDropdownWidget(
                           padding: 0,
                           isorder: true,
