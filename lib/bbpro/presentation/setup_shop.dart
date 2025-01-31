@@ -381,8 +381,8 @@ class _SetupshopState extends State<Setupshop> with TickerProviderStateMixin {
                   const SizedBox(height: 20),
                   Text(
                     widget.shop != null
-                        ? 'Shop updated successfully!'
-                        : 'Shop created successfully!',
+                        ? 'Biz-Center updated successfully!'
+                        : 'Biz-Center created successfully!',
                     style: const TextStyle(
                       fontSize: 18,
                     ),
@@ -480,8 +480,8 @@ class _SetupshopState extends State<Setupshop> with TickerProviderStateMixin {
                   children: <Widget>[
                     CustomCard(
                       buttonvisible: true,
-                      caption: 'Customise your Shop',
-                      subText: 'Add a photo for your shop',
+                      caption: 'Customise your Biz-Center',
+                      subText: 'Add a photo for your biz-center',
                       buttonText: 'Choose Photo',
                       onPressed: _pickImage,
                       imagePath: _selectedImage != null
@@ -494,8 +494,8 @@ class _SetupshopState extends State<Setupshop> with TickerProviderStateMixin {
                     const SizedBox(height: 15),
                     CustomEditText(
                       maxLength: 30,
-                      caption: 'Shop name *',
-                      hintText: 'Enter shop name here',
+                      caption: 'Biz-Center name *',
+                      hintText: 'Enter biz-center name here',
                       controller: nameController,
                     ),
                     const SizedBox(height: 15),
@@ -514,8 +514,8 @@ class _SetupshopState extends State<Setupshop> with TickerProviderStateMixin {
                         ),
                       ),
                       maxLength: 300,
-                      caption: 'Shop Message *',
-                      hintText: 'Enter shop description here',
+                      caption: 'Biz-Center Message *',
+                      hintText: 'Enter biz-center description here',
                       controller: descriptionController,
                     ),
                     const SizedBox(height: 15),
@@ -591,7 +591,8 @@ class _SetupshopState extends State<Setupshop> with TickerProviderStateMixin {
                               hashint: true,
                               caption: 'Location',
                               iconName: 'assets/svgs/nexticon.svg',
-                              text: _selectedLocation ?? 'Choose Shop Location',
+                              text: _selectedLocation ??
+                                  'Choose Biz-Center Location',
                             ),
                           );
                         },
