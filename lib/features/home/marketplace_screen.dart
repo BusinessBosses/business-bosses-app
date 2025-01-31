@@ -8,6 +8,8 @@ import 'package:business_bosses_v2/features/home/widgets/floatingbutton.dart';
 import 'package:business_bosses_v2/features/marketplace/controllers/supplier_controller.dart';
 import 'package:business_bosses_v2/features/marketplace/models/market_model.dart';
 import 'package:business_bosses_v2/features/marketplace/presentation/filtermarketplaceposts.dart';
+import 'package:business_bosses_v2/features/marketplace/presentation/filtermarketproducts.dart';
+import 'package:business_bosses_v2/features/marketplace/presentation/filtermarketservices.dart';
 import 'package:business_bosses_v2/features/marketplace/presentation/supplierspage.dart';
 import 'package:business_bosses_v2/features/marketplace/widgets/marketplace_item.dart';
 import 'package:business_bosses_v2/features/marketplace/widgets/markets.dart';
@@ -62,7 +64,7 @@ class _MarketplaceScreenState extends State<MarketplaceScreen>
   @override
   void initState() {
     super.initState();
-    _marketplacesearchTabController = TabController(length: 3, vsync: this);
+    _marketplacesearchTabController = TabController(length: 4, vsync: this);
     _marketplaceTabController = TabController(length: 4, vsync: this);
     _marketController.error(false);
     _scrollController.addListener(() {
@@ -160,18 +162,16 @@ class _MarketplaceScreenState extends State<MarketplaceScreen>
                     if (query.isEmpty) {
                       _marketplacesearchTabController.index == 2
                           ? supplierController.clearSupplierSearch()
-                          : _marketplacesearchTabController.index == 1
-                              ? _marketController.clearPostSearch()
-                              : _marketController.clearServiceSearch();
+                          : _marketController.clearFilter();
+                    } else {
+                      _marketController.filterItems(query);
+                      supplierController.searchSuppliers(query);
                     }
                     setState(() {});
                   },
                   onSubmit: (String query) {
                     supplierController.searchSuppliers(query);
-                    _marketController.searchServices(query);
-                    _marketController.searchPosts(
-                      query,
-                    );
+                    _marketController.filterItems(query);
                     setState(() {});
                   },
                 ),
@@ -184,6 +184,7 @@ class _MarketplaceScreenState extends State<MarketplaceScreen>
                 labelColor: Colors.black,
                 indicatorColor: primaryColorLT,
                 tabs: const <Widget>[
+                  Tab(text: 'All'),
                   Tab(text: 'Products'),
                   Tab(text: 'Services'),
                   Tab(text: 'Suppliers'),
@@ -200,8 +201,8 @@ class _MarketplaceScreenState extends State<MarketplaceScreen>
                   onPressed: () {
                     setState(() {
                       _ismarketplaceSearching = !_ismarketplaceSearching;
-                      _marketController.searchedPosts.clear();
-                      _marketController.searchedServices.clear();
+
+                      _marketController.clearFilter();
                       supplierController.searchedSuppliers.clear();
                     });
                   },
@@ -248,8 +249,7 @@ class _MarketplaceScreenState extends State<MarketplaceScreen>
                   onTap: () {
                     _ismarketplaceSearching = !_ismarketplaceSearching;
                     setState(() {});
-                    _marketController.searchedPosts.clear();
-                    _marketController.searchedServices.clear();
+                    _marketController.clearFilter();
                     supplierController.searchedSuppliers.clear();
                   },
                   child: Padding(
@@ -288,55 +288,17 @@ class _MarketplaceScreenState extends State<MarketplaceScreen>
               ? TabBarView(
                   controller: _marketplacesearchTabController,
                   children: <Widget>[
+                    const FilterMarketplacePosts(),
+                    const FilterMarketplaceProducts(),
+                    const FilterMarketServices(),
                     Obx(
-                      () {
-                        final List<MarketModel> filteredMarkets =
-                            _marketController.searchedPosts
-                                .where((MarketModel market) {
-                          bool matchesLocation = true;
-                          bool matchesCategory = true;
-
-                          if (_selectedLocation != null &&
-                              _selectedLocation!.isNotEmpty) {
-                            matchesLocation =
-                                market.location == _selectedLocation;
-                          }
-
-                          if (_selectedCategory != null &&
-                              _selectedCategory!.isNotEmpty) {
-                            matchesCategory =
-                                market.category == _selectedCategory;
-                          }
-
-                          return matchesLocation && matchesCategory;
-                        }).toList();
-
-                        return FilterMarketplacePosts(
-                          isPostssearch: true,
-                          selectedLocation: _selectedLocation,
-                          selectedCategory: _selectedCategory,
-                          selectedCategoryChanged: selectedCategoryChanged,
-                          selectedLocationChanged: selectedLocationChanged,
-                          filterItems: filteredMarkets,
-                          isLoading: _marketController.loading.value ||
-                              _marketController.loadingPostSearch.value,
-                        );
-                      },
-                    ),
-                    Obx(
-                      () => FilterMarketplacePosts(
-                        isPostssearch: false,
-                        filterItems: _marketController.searchedServices,
-                        isLoading: _marketController.loading.value ||
-                            _marketController.loadingServicesSearch.value,
+                      () => FilterSuppliers(
+                        members: supplierController.suppliers,
+                        filterItems: supplierController.searchedSuppliers,
+                        isLoading: supplierController.loading.value ||
+                            supplierController.loadingSearch.value,
                       ),
                     ),
-                    Obx(() => FilterSuppliers(
-                          members: supplierController.suppliers,
-                          filterItems: supplierController.searchedSuppliers,
-                          isLoading: supplierController.loading.value ||
-                              supplierController.loadingSearch.value,
-                        )),
                   ],
                 )
               : SizedBox(

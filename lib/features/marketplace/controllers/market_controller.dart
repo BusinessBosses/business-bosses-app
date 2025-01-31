@@ -48,6 +48,12 @@ class MarketController extends GetxController {
   bool isLoading = true;
 
   RxBool isfiltered = RxBool(false);
+  List<Product> filteredProducts = <Product>[];
+  List<Service> filteredServices = <Service>[];
+  List<Customitem> filteredCustomItems = <Customitem>[];
+
+  // Combined list of all matching items
+  List<Object> allFilteredItems = <Object>[];
   final HomeController _homeController = Get.find();
   final ProfileController _profileController = Get.find();
   late List<String> connecteds =
@@ -179,6 +185,42 @@ class MarketController extends GetxController {
     }
   }
 
+  void clearFilter() {
+    // Clear all filtered lists
+    filteredProducts.clear();
+    filteredServices.clear();
+    filteredCustomItems.clear();
+    allFilteredItems.clear();
+  }
+
+  void filterItems(String searchQuery) {
+    filteredProducts.clear();
+    filteredServices.clear();
+    filteredCustomItems.clear();
+    allFilteredItems.clear();
+    // Convert search query to lowercase for case-insensitive search
+    final String query = searchQuery.toLowerCase();
+    if (query.isEmpty) {
+      clearFilter();
+      return;
+    }
+
+    for (Object item in proItems) {
+      if (item is Product && item.name.toLowerCase().contains(query)) {
+        filteredProducts.add(item);
+        allFilteredItems.add(item);
+      } else if (item is Service && item.name.toLowerCase().contains(query)) {
+        filteredServices.add(item);
+        allFilteredItems.add(item);
+      } else if (item is Customitem &&
+          item.title.toLowerCase().contains(query)) {
+        filteredCustomItems.add(item);
+        allFilteredItems.add(item);
+      }
+    }
+    update();
+  }
+
   void updateFiltered() {
     isfiltered = RxBool(false);
   }
@@ -295,22 +337,22 @@ class MarketController extends GetxController {
     update();
   }
 
-  void filterMarket(String? location, String? category) async {
-    loading(true);
-    error(false);
-    update();
+  // void filterMarket(String? location, String? category) async {
+  //   loading(true);
+  //   error(false);
+  //   update();
 
-    final ApiResponseModel response =
-        await HomeRepository.filterMarket(location, category);
-    if (response.success) {
-      processPostsToState(response.data, isSearch: true);
-    } else {
-      error(true);
-    }
-    loading(false);
+  //   final ApiResponseModel response =
+  //       await HomeRepository.filterMarket(location, category);
+  //   if (response.success) {
+  //     processPostsToState(response.data, isSearch: true);
+  //   } else {
+  //     error(true);
+  //   }
+  //   loading(false);
 
-    update();
-  }
+  //   update();
+  // }
 
   /// LIKE AND UNLIKE FUNCTION
   void like(String userId, String postId, String type, String receiverUid) {

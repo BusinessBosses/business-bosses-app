@@ -47,7 +47,6 @@ class _SetupshopState extends State<Setupshop> with TickerProviderStateMixin {
   final TextEditingController walletController = TextEditingController();
   final TextEditingController phoneController = TextEditingController();
   final TextEditingController emailController = TextEditingController();
-  final TextEditingController cashController = TextEditingController();
 
   final TextEditingController igslController = TextEditingController();
   final TextEditingController fbslController = TextEditingController();
@@ -65,8 +64,6 @@ class _SetupshopState extends State<Setupshop> with TickerProviderStateMixin {
 
   final TextEditingController walletNameController = TextEditingController();
   final TextEditingController walletDetailsController = TextEditingController();
-
-  final TextEditingController cashDetailsController = TextEditingController();
 
   String? _selectedLocation;
   File? _selectedImage;
@@ -148,9 +145,6 @@ class _SetupshopState extends State<Setupshop> with TickerProviderStateMixin {
                         if (newSelections['Wallet'] == false) {
                           walletNameController.clear();
                           walletDetailsController.clear();
-                        }
-                        if (newSelections['Cash'] == false) {
-                          cashController.clear();
                         }
                       });
                     },
@@ -248,6 +242,7 @@ class _SetupshopState extends State<Setupshop> with TickerProviderStateMixin {
     _viewController =
         TabController(length: widget.shop != null ? 2 : 1, vsync: this);
     if (widget.shop != null) {
+      print(widget.shop!.toMap());
       nameController.text = widget.shop!.name;
       descriptionController.text = widget.shop!.description;
       phoneController.text = widget.shop!.phone;
@@ -318,7 +313,10 @@ class _SetupshopState extends State<Setupshop> with TickerProviderStateMixin {
   // Helper to populate payment method details based on shop data
   void _populatePaymentMethods(List<dynamic> paymentMethods) {
     for (Map<String, dynamic> method in paymentMethods) {
-      final dynamic methodDetails = jsonDecode(method['details']);
+      dynamic methodDetails;
+      if (method['paymentMethod'] != 'Cash') {
+        methodDetails = jsonDecode(method['details']);
+      }
       if (method['paymentMethod'] == 'Bank') {
         selections['Bank'] = true;
         selectedOptions['Bank'] = true;

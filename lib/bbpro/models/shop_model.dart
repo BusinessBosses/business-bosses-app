@@ -60,8 +60,8 @@ class Shop {
       name: json['name'],
       description: json['description'],
       image: json['image'],
-      email: json['email'],
-      phone: json['phone'],
+      email: json['email'] ?? '',
+      phone: json['phone'] ?? '',
       location: json['location'],
       views: int.parse(json['views'].toString()),
       timestamp:
