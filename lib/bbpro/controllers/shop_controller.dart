@@ -169,7 +169,7 @@ class ShopController extends GetxController {
       userCustomItems.clear();
       if (customResponse.success) {
         for (int i = 0; i < customResponse.data.length; i++) {
-          customItems.add(Customitem.fromJson(customResponse.data[i]));
+          userCustomItems.add(Customitem.fromJson(customResponse.data[i]));
         }
       }
       userItems.clear();
