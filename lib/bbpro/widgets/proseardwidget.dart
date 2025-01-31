@@ -20,6 +20,8 @@ class ProSearchbar extends StatelessWidget {
 
   final double? contentPadding;
 
+  final double? radius;
+
   // ignore: public_member_api_docs
   const ProSearchbar({
     Key? key,
@@ -30,6 +32,7 @@ class ProSearchbar extends StatelessWidget {
     this.autofocus = true,
     this.backgroundColor,
     this.contentPadding,
+    this.radius,
   }) : super(key: key);
 
   @override
@@ -56,7 +59,7 @@ class ProSearchbar extends StatelessWidget {
                 ),
               ),
         border: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(100.0),
+          borderRadius: BorderRadius.circular(radius ?? 100.0),
           borderSide: BorderSide.none,
         ),
         // enabledBorder: OutlineInputBorder(
