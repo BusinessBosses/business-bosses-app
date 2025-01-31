@@ -114,55 +114,53 @@ class _ProshopdealsWidgetState extends State<ProshopdealsWidget> {
               ],
             ),
             const SizedBox(height: 5.0),
-            SizedBox(
-              height: 150,
+            Container(
               child: items!.isNotEmpty
-                  ? ListView.builder(
-                      scrollDirection: Axis.horizontal,
-                      itemCount: items.length,
-                      itemBuilder: (BuildContext context, int index) {
-                        final Object item = items![index];
-                        if (item is Product) {
-                          return GestureDetector(
-                            onTap: () {
-                              Get.to(
-                                () => OrderProductScreen(
-                                  product: item,
-                                  shop: item.shop!,
+                  ? SizedBox(
+                      child: SingleChildScrollView(
+                        scrollDirection: Axis.horizontal,
+                        child: Row(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: items.map((Object item) {
+                            if (item is Product) {
+                              return GestureDetector(
+                                onTap: () {
+                                  Get.to(
+                                    () => OrderProductScreen(
+                                      product: item,
+                                      shop: item.shop!,
+                                    ),
+                                  );
+                                },
+                                child: _buildDealItem(
+                                  item.images!.isNotEmpty
+                                      ? item.images![0]
+                                      : 'assets/placeholder.png',
+                                  item.name,
+                                  '${item.price}',
+                                  item.shop!.currency,
                                 ),
                               );
-                            },
-                            child: _buildDealItem(
-                              item.images!.isNotEmpty
-                                  ? item.images![0]
-                                  : 'assets/placeholder.png',
-                              item.name,
-                              '${item.discount ?? '0%'}',
-                              '${item.price}',
-                              item.discount != null && item.discount! > 0,
-                              item.shop!.currency,
-                            ),
-                          );
-                        } else if (item is Service) {
-                          return GestureDetector(
-                            onTap: () {
-                              Get.to(BookServiceScreen(
-                                  shop: item.shop!, service: item));
-                            },
-                            child: _buildDealItem(
-                              item.images!.isNotEmpty
-                                  ? item.images![0]
-                                  : 'assets/placeholder.png',
-                              item.name,
-                              '${item.discount}',
-                              '${item.price}',
-                              item.discount > 0,
-                              item.shop!.currency,
-                            ),
-                          );
-                        }
-                        return const SizedBox();
-                      },
+                            } else if (item is Service) {
+                              return GestureDetector(
+                                onTap: () {
+                                  Get.to(BookServiceScreen(
+                                      shop: item.shop!, service: item));
+                                },
+                                child: _buildDealItem(
+                                  item.images!.isNotEmpty
+                                      ? item.images![0]
+                                      : 'assets/placeholder.png',
+                                  item.name,
+                                  '${item.price}',
+                                  item.shop!.currency,
+                                ),
+                              );
+                            }
+                            return const SizedBox();
+                          }).toList(),
+                        ),
+                      ),
                     )
                   : const Center(child: Text('No deals available')),
             ),
@@ -175,53 +173,52 @@ class _ProshopdealsWidgetState extends State<ProshopdealsWidget> {
   Widget _buildDealItem(
     String imagePath,
     String title,
-    String discount,
     String originalPrice,
-    bool hasDiscount,
     String? currency,
   ) {
-    return SizedBox(
-      width: 100,
+    return Container(
+      width: 100, // Fixed width for each item
+      margin:
+          const EdgeInsets.symmetric(horizontal: 8.0), // Add margin for spacing
       child: Column(
+        crossAxisAlignment:
+            CrossAxisAlignment.center, // Center content horizontally
+        mainAxisSize:
+            MainAxisSize.min, // Ensure the column takes minimum height
         children: <Widget>[
-          NetworkImageWithPlaceHolder(
-            imageUrl: imagePath,
+          // Image
+          SizedBox(
             height: 80,
             width: 80,
+            child: NetworkImageWithPlaceHolder(
+              imageUrl: imagePath,
+              fit: BoxFit.cover, // Ensure the image fits within the container
+            ),
           ),
-          const SizedBox(height: 10.0),
+          const SizedBox(height: 8.0),
+          // Title
           Text(
             title,
             maxLines: 1,
-            overflow: TextOverflow.ellipsis,
+            overflow: TextOverflow.ellipsis, // Handle overflow with ellipsis
             style: const TextStyle(
               fontSize: 12,
               fontWeight: FontWeight.w500,
             ),
           ),
-          Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: <Widget>[
-              if (hasDiscount)
-                Text(
-                  '$currency${(double.parse(originalPrice)).toStringAsFixed(2)}',
-                  style: const TextStyle(
-                    color: Colors.grey,
-                    decoration: TextDecoration.lineThrough,
-                    fontSize: 11,
-                  ),
-                ),
-              const SizedBox(width: 5),
-              Text(
-                '$currency${(double.parse(originalPrice) * (1 - (double.tryParse(discount.replaceAll(RegExp(r'[^0-9.]'), '')) ?? 0) / 100)).toStringAsFixed(2)}',
-                style: TextStyle(
-                  color: hasDiscount ? Colors.black : Colors.grey,
-                  fontWeight: FontWeight.bold,
-                  fontSize: 13,
-                ),
-              ),
-            ],
+          const SizedBox(height: 3.0),
+          // Price
+          Text(
+            '$currency${(double.parse(originalPrice))}',
+            style: const TextStyle(
+              color: Colors.black,
+              fontWeight: FontWeight.bold,
+              fontSize: 13,
+            ),
           ),
+          const SizedBox(
+            height: 10,
+          )
         ],
       ),
     );

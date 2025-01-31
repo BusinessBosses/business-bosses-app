@@ -7,6 +7,7 @@ import 'package:business_bosses_v2/bbpro/models/service_model.dart';
 import 'package:business_bosses_v2/bbpro/models/product_model.dart';
 import 'package:business_bosses_v2/bbpro/presentation/book_service.dart';
 import 'package:business_bosses_v2/bbpro/presentation/create_custom_listing.dart';
+import 'package:business_bosses_v2/bbpro/presentation/expandedcustomitemscreen.dart';
 import 'package:business_bosses_v2/bbpro/presentation/my_orders_screen.dart';
 import 'package:business_bosses_v2/bbpro/presentation/order_product.dart';
 import 'package:business_bosses_v2/bbpro/widgets/custom_item_card.dart';
@@ -99,11 +100,11 @@ class _UserShopScreenState extends State<UserShopScreen> {
             child: Column(
               children: <Widget>[
                 CircleAvatar(
-                  radius: 21,
+                  radius: 24,
                   backgroundColor: backgroundColor,
                   child: SvgPicture.asset(
                     action['icon']!,
-                    height: 20,
+                    height: 23,
                   ),
                 ),
                 const SizedBox(height: 3),
@@ -426,104 +427,7 @@ class _UserShopScreenState extends State<UserShopScreen> {
                                               mainAxisAlignment:
                                                   MainAxisAlignment
                                                       .spaceBetween,
-                                              children: <Widget>[
-                                                // Padding(
-                                                //   padding:
-                                                //       const EdgeInsets.symmetric(
-                                                //           vertical: 5.0),
-                                                //   child: Text(
-                                                //     'Showcase (${shopController.userItems.length})',
-                                                //     style: const TextStyle(
-                                                //         fontSize: 14,
-                                                //         fontWeight:
-                                                //             FontWeight.w700),
-                                                //   ),
-                                                // ),
-                                                // GestureDetector(
-                                                //   onTap: () {
-                                                //     final RenderBox button =
-                                                //         context.findRenderObject()
-                                                //             as RenderBox;
-                                                //     final RenderBox overlay =
-                                                //         Overlay.of(context)
-                                                //                 .context
-                                                //                 .findRenderObject()
-                                                //             as RenderBox;
-                                                //     final RelativeRect position =
-                                                //         RelativeRect.fromRect(
-                                                //       Rect.fromPoints(
-                                                //         button.localToGlobal(
-                                                //             button.size.topRight(
-                                                //                 const Offset(
-                                                //                     0, 380)),
-                                                //             ancestor: overlay),
-                                                //         button.localToGlobal(
-                                                //             button.size.bottomRight(
-                                                //                 const Offset(
-                                                //                     0, 20)),
-                                                //             ancestor: overlay),
-                                                //       ),
-                                                //       Offset.zero & overlay.size,
-                                                //     );
-
-                                                //     showMenu(
-                                                //       shape: RoundedRectangleBorder(
-                                                //           borderRadius:
-                                                //               BorderRadius.circular(
-                                                //                   10)),
-                                                //       context: context,
-                                                //       shadowColor: Colors.black,
-                                                //       position: position,
-                                                //       items: <String>[
-                                                //         'All Products',
-                                                //         'Low Stock',
-                                                //         'Out of Stock',
-                                                //         'Most Popular',
-                                                //         'Newest First',
-                                                //       ].map((String option) {
-                                                //         return PopupMenuItem<
-                                                //             String>(
-                                                //           value: option,
-                                                //           child: Text(
-                                                //             option,
-                                                //             style: const TextStyle(
-                                                //                 fontSize: 14),
-                                                //           ),
-                                                //         );
-                                                //       }).toList(),
-                                                //     ).then((String? selected) {
-                                                //       if (selected != null) {
-                                                //         setState(() {
-                                                //           _selectedItem = selected;
-                                                //         });
-                                                //       }
-                                                //     });
-                                                //   },
-                                                //   child: Container(
-                                                //     width: 150,
-                                                //     decoration: BoxDecoration(
-                                                //         color: backgroundColor,
-                                                //         borderRadius:
-                                                //             BorderRadius.circular(
-                                                //                 7)),
-                                                //     child: Row(
-                                                //       children: <Widget>[
-                                                //         CircleAvatar(
-                                                //           backgroundColor:
-                                                //               backgroundColor,
-                                                //           child: SvgPicture.asset(
-                                                //               'assets/svgs/filterprosections.svg'),
-                                                //         ),
-                                                //         Text(
-                                                //           _selectedItem,
-                                                //           style: const TextStyle(
-                                                //               fontSize: 14),
-                                                //         )
-                                                //       ],
-                                                //     ),
-                                                //   ),
-                                                // ),
-                                              ],
+                                              children: <Widget>[],
                                             ),
                                           ),
                                           if ((shopController
@@ -608,8 +512,16 @@ class _UserShopScreenState extends State<UserShopScreen> {
                                                               is Customitem) {
                                                             return GestureDetector(
                                                               onTap: () async {
-                                                                if (item.link !=
-                                                                    null) {
+                                                                if (item.link ==
+                                                                        null ||
+                                                                    item.link!
+                                                                        .isEmpty) {
+                                                                  Get.to(() =>
+                                                                      ExpandedCustomItemScreen(
+                                                                        customitem:
+                                                                            item,
+                                                                      ));
+                                                                } else {
                                                                   final Uri
                                                                       url =
                                                                       Uri.parse(
@@ -676,15 +588,6 @@ class _UserShopScreenState extends State<UserShopScreen> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
-          // const Text(
-          //   'Contact Information',
-          //   style: TextStyle(
-          //     fontWeight: FontWeight.w700,
-          //     fontSize: 16,
-          //     color: textColor,
-          //   ),
-          // ),
-          // const SizedBox(height: 20),
           _buildContactRow(
             'assets/svgs/website.svg',
             'Virtual Address',

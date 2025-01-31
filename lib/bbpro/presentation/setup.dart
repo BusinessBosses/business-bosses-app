@@ -9,6 +9,7 @@ import 'package:business_bosses_v2/bbpro/widgets/notificationbutton.dart';
 import 'package:business_bosses_v2/bbpro/presentation/inventory.dart';
 import 'package:business_bosses_v2/common/dialogs/snackbar.dart';
 import 'package:business_bosses_v2/common/widgets/network_image_with_placeholder.dart';
+import 'package:business_bosses_v2/features/chat/chat_screen.dart';
 import 'package:business_bosses_v2/utils/constants/constants.dart';
 import 'package:business_bosses_v2/utils/theme/theme.dart';
 import 'package:flutter/material.dart';
@@ -28,9 +29,10 @@ class Setup extends StatefulWidget {
 class _SetupState extends State<Setup> {
   final ShopController shopController = Get.find();
   final List<String> titles = <String>[
+    'Edit Biz-Center',
     'Manage Product Inventory',
     'My Services',
-    'Appointments'
+    // 'Appointments'
   ];
 
   final List<String> remtitles = <String>[
@@ -58,38 +60,20 @@ class _SetupState extends State<Setup> {
             children: <Widget>[
               GestureDetector(
                 onTap: () {
-                  Get.to(() => Setupshop(
-                        shop: shopController.shop,
-                      ));
+                  Get.to(() => const ChatScreen());
                 },
-                child: Container(
-                    margin: const EdgeInsets.only(bottom: 0),
-                    decoration: BoxDecoration(
-                        color: backgroundColor,
-                        borderRadius: BorderRadius.circular(40)),
-                    padding: const EdgeInsets.symmetric(
-                        horizontal: 15, vertical: 10),
-                    child: Row(
-                      children: <Widget>[
-                        SvgPicture.asset(
-                          'assets/svgs/editshop.svg',
-                          height: 15,
-                        ),
-                        const SizedBox(
-                          width: 5,
-                        ),
-                        const Text(
-                          'Edit',
-                          style: TextStyle(
-                              fontSize: 14,
-                              color: textColor,
-                              fontWeight: FontWeight.w700),
-                        ),
-                      ],
-                    )),
-              ),
-              const SizedBox(
-                width: 5,
+                child: Padding(
+                  padding: const EdgeInsets.only(
+                    right: 10.0,
+                  ),
+                  child: CircleAvatar(
+                      radius: 20,
+                      backgroundColor: prosemibackColor,
+                      child: SvgPicture.asset(
+                        'assets/svgs/prochat.svg',
+                        height: 15,
+                      )),
+                ),
               ),
               const NotificationButton(),
             ],
@@ -249,8 +233,8 @@ class _SetupState extends State<Setup> {
                                               height: 20,
                                             )
                                           : SvgPicture.asset(
-                                              'assets/svgs/calendar.svg',
-                                              height: 25,
+                                              'assets/svgs/editshop.svg',
+                                              height: 20,
                                             ),
                                   title: Text(
                                     titles[index],
@@ -268,8 +252,10 @@ class _SetupState extends State<Setup> {
                                     if (titles[index] == 'My Services') {
                                       Get.to(() => const ManageServices());
                                     }
-                                    if (titles[index] == 'Appointments') {
-                                      Get.to(() => const AppointmentsScreen());
+                                    if (titles[index] == 'Edit Biz-Center') {
+                                      Get.to(() => Setupshop(
+                                            shop: shopController.shop,
+                                          ));
                                     }
                                     if (titles[index] == 'Contact Us') {
                                       _contactUs();

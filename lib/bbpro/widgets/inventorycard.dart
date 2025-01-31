@@ -227,7 +227,7 @@ class _InventoryCardState extends State<InventoryCard> {
                             (widget.product?.user?.averageRating != null)
                                 ? widget.product!.user!.averageRating!
                                     .toStringAsFixed(1)
-                                : 'N/A',
+                                : '0.0',
                             style: const TextStyle(
                                 fontWeight: FontWeight.w700, fontSize: 12),
                           ),
