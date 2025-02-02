@@ -1,9 +1,12 @@
 import 'package:business_bosses_v2/bbpro/presentation/bottom_nav_screen.dart';
 import 'package:business_bosses_v2/features/chat/chat_screen.dart';
+import 'package:business_bosses_v2/features/chat/controllers/chat_controller.dart';
+import 'package:business_bosses_v2/features/chat/models/my_message.dart';
 import 'package:business_bosses_v2/features/home/bottom_nav.dart';
 import 'package:business_bosses_v2/features/premium/proscreen.dart';
 import 'package:business_bosses_v2/features/profile/controller/profile_controller.dart';
 import 'package:business_bosses_v2/navigation/routes.dart';
+import 'package:business_bosses_v2/utils/theme/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -17,6 +20,7 @@ class BottomBar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     ProfileController profileController = Get.find();
+    ChatController chatController = Get.find();
     return Align(
       alignment: Alignment.bottomCenter,
       child: Container(
@@ -62,27 +66,53 @@ class BottomBar extends StatelessWidget {
 
                       Expanded(
                         flex: 10,
-                        child: BottomTabButton(
-                          icon: activeIndex == 1
-                              ? 'assets/svgs/messagefilled.svg'
-                              : 'assets/svgs/prochat.svg',
-                          label: 'Messages',
-                          onTap: () {
-                            if (activeIndex == 1) return;
+                        child: Stack(children: <Widget>[
+                          BottomTabButton(
+                            icon: activeIndex == 1
+                                ? 'assets/svgs/messagefilled.svg'
+                                : 'assets/svgs/prochat.svg',
+                            label: 'Inbox',
+                            onTap: () {
+                              if (activeIndex == 1) return;
 
-                            if (activeIndex == 0) {
-                              //   profileController.myProfile.isSubscribed
-                              //       ? Get.to(const Bottomnavscreen(noBack: false))
-                              Get.to(const ChatScreen());
-                            } else {
-                              // profileController.myProfile.isSubscribed
-                              //     ? Get.to(const Bottomnavscreen(noBack: false))
+                              if (activeIndex == 0) {
+                                //   profileController.myProfile.isSubscribed
+                                //       ? Get.to(const Bottomnavscreen(noBack: false))
+                                Get.to(const ChatScreen());
+                              } else {
+                                // profileController.myProfile.isSubscribed
+                                //     ? Get.to(const Bottomnavscreen(noBack: false))
 
-                              Get.off(() => const ChatScreen());
-                            }
-                          },
-                          isActive: activeIndex == 1,
-                        ),
+                                Get.off(() => const ChatScreen());
+                              }
+                            },
+                            isActive: activeIndex == 1,
+                          ),
+                          if (chatController.chats
+                              .where((MessageModel element) =>
+                                  element.receiverUid ==
+                                      profileController.myProfile.uid &&
+                                  !element.seen)
+                              .toList()
+                              .isNotEmpty)
+                            Positioned(
+                              top: 5,
+                              right: 21,
+                              child: Container(
+                                decoration: BoxDecoration(
+                                  shape: BoxShape.circle,
+                                  border: Border.all(
+                                    color: Colors.white, // Border color
+                                    width: 2.0, // Border width
+                                  ),
+                                ),
+                                child: const CircleAvatar(
+                                  backgroundColor: primaryColorLT,
+                                  radius: 5,
+                                ),
+                              ),
+                            )
+                        ]),
                       ),
 
                       Expanded(

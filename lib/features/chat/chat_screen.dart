@@ -72,7 +72,7 @@ class _ChatScreenState extends State<ChatScreen> {
                       icon: SvgPicture.asset('assets/svgs/backbutton.svg'),
                     ),
                     centerTitle: true,
-                    title: const Text('Messages'),
+                    title: const Text('Inbox'),
                     actions: <Widget>[
                       Row(
                         children: <Widget>[
