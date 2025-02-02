@@ -1,4 +1,5 @@
 import 'package:business_bosses_v2/bbpro/presentation/bottom_nav_screen.dart';
+import 'package:business_bosses_v2/features/chat/chat_screen.dart';
 import 'package:business_bosses_v2/features/home/bottom_nav.dart';
 import 'package:business_bosses_v2/features/premium/proscreen.dart';
 import 'package:business_bosses_v2/features/profile/controller/profile_controller.dart';
@@ -58,14 +59,40 @@ class BottomBar extends StatelessWidget {
                           isActive: activeIndex == 0,
                         ),
                       ),
+
                       Expanded(
                         flex: 10,
                         child: BottomTabButton(
                           icon: activeIndex == 1
+                              ? 'assets/svgs/messagefilled.svg'
+                              : 'assets/svgs/prochat.svg',
+                          label: 'Messages',
+                          onTap: () {
+                            if (activeIndex == 1) return;
+
+                            if (activeIndex == 0) {
+                              //   profileController.myProfile.isSubscribed
+                              //       ? Get.to(const Bottomnavscreen(noBack: false))
+                              Get.to(const ChatScreen());
+                            } else {
+                              // profileController.myProfile.isSubscribed
+                              //     ? Get.to(const Bottomnavscreen(noBack: false))
+
+                              Get.off(() => const ChatScreen());
+                            }
+                          },
+                          isActive: activeIndex == 1,
+                        ),
+                      ),
+
+                      Expanded(
+                        flex: 10,
+                        child: BottomTabButton(
+                          icon: activeIndex == 2
                               ? 'assets/svgs/bossupufilled.svg'
                               : 'assets/svgs/bossupu.svg',
                           onTap: () {
-                            if (activeIndex == 1) return;
+                            if (activeIndex == 2) return;
                             if (activeIndex == 0) {
                               Get.toNamed(Routes.allCommunitiesScreen);
                             } else {
@@ -73,7 +100,7 @@ class BottomBar extends StatelessWidget {
                             }
                           },
                           label: 'Boss Up',
-                          isActive: activeIndex == 1,
+                          isActive: activeIndex == 2,
                         ),
                       ),
                       // Expanded(
@@ -186,37 +213,14 @@ class BottomBar extends StatelessWidget {
                       //         ),
                       //       ),
                       //     )),
-                      Expanded(
-                        flex: 10,
-                        child: BottomTabButton(
-                          icon: activeIndex == 2
-                              ? 'assets/svgs/growfilled.svg'
-                              : 'assets/svgs/grow.svg',
-                          label: 'Grow',
-                          onTap: () {
-                            if (activeIndex == 2) return;
 
-                            if (activeIndex == 0) {
-                              //   profileController.myProfile.isSubscribed
-                              //       ? Get.to(const Bottomnavscreen(noBack: false))
-                              Get.to(() => const ProScreen());
-                            } else {
-                              // profileController.myProfile.isSubscribed
-                              //     ? Get.to(const Bottomnavscreen(noBack: false))
-
-                              Get.off(() => const ProScreen());
-                            }
-                          },
-                          isActive: activeIndex == 2,
-                        ),
-                      ),
                       Expanded(
                         flex: 10,
                         child: BottomTabButton(
                           label: 'Marketplace',
                           icon: activeIndex == 3
-                              ? 'assets/svgs/cartufilled.svg'
-                              : 'assets/svgs/cartu.svg',
+                              ? 'assets/svgs/marketplacefilled.svg'
+                              : 'assets/svgs/marketplaceoutlined.svg',
                           onTap: () {
                             if (activeIndex == 3) return;
                             if (activeIndex == 0) {
@@ -228,6 +232,7 @@ class BottomBar extends StatelessWidget {
                           isActive: activeIndex == 3,
                         ),
                       ),
+
                       Expanded(
                         flex: 10,
                         child: BottomTabButton(

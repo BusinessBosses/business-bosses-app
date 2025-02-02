@@ -416,7 +416,7 @@ class _AllCommunitiesScreenState extends State<AllCommunitiesScreen>
                     ),
                   ),
                 ),
-                const BottomBar(activeIndex: 1),
+                const BottomBar(activeIndex: 2),
               ],
             ),
           ),

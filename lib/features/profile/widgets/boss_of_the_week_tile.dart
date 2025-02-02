@@ -96,52 +96,34 @@ class _BossOfWeekProfileTileState extends State<BossOfWeekProfileTile> {
       color: widget.isForyou == true ? backgroundColor : Colors.white,
       child: user != null
           ? Column(
-              mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
-                Align(
-                  alignment: Alignment.topLeft,
-                  child: Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 15.0),
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 15.0),
+                  child: GestureDetector(
+                    onTap: () {
+                      Get.to(() => BossUpSection(
+                            industry: challengeController.categories[0],
+                            bossUp: challengeController.categories[0],
+                          ));
+                    },
                     child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: <Widget>[
-                        if (widget.isForyou == true)
-                          CircleAvatar(
-                            radius: 48 / 3,
-                            backgroundColor: primaryColorLT.withOpacity(0.1),
-                            child: SvgPicture.asset(
-                              'assets/app/app_icon_only.svg',
-                            ),
-                          ),
-                        if (widget.isForyou == true)
-                          const SizedBox(
-                            width: 10,
-                          ),
                         if (widget.isForyou == true)
                           const Text(
                             'Boss of the week',
                             style: TextStyle(
                                 fontWeight: FontWeight.w900, fontSize: 20),
                           ),
-                        if (widget.isForyou == true) const Spacer(),
                         if (widget.isForyou == true)
-                          GestureDetector(
-                            onTap: () {
-                              Get.to(() => BossUpSection(
-                                    industry: challengeController.categories[0],
-                                    bossUp: challengeController.categories[0],
-                                  ));
-                            },
-                            child: Container(
-                              color: Colors.transparent,
-                              width: 50,
-                              height: 50,
-                              child: const Align(
-                                alignment: Alignment.centerRight,
-                                child: Icon(
-                                  Icons.chevron_right_rounded,
-                                  color: textColor,
-                                  size: 20,
-                                ),
+                          const CircleAvatar(
+                            backgroundColor: Colors.transparent,
+                            child: Align(
+                              alignment: Alignment.centerRight,
+                              child: Icon(
+                                Icons.chevron_right_rounded,
+                                color: textColor,
+                                size: 20,
                               ),
                             ),
                           ),
@@ -150,155 +132,123 @@ class _BossOfWeekProfileTileState extends State<BossOfWeekProfileTile> {
                   ),
                 ),
                 widget.isForyou == true
-                    ? Align(
-                        child: GestureDetector(
-                          onTap: () {
-                            Get.toNamed(Routes.publicProfile, arguments: user);
-                          },
-                          child: Container(
-                            padding: const EdgeInsets.symmetric(horizontal: 15),
-                            width: double.infinity,
-                            child: Row(
-                              children: <Widget>[
-                                Stack(
-                                  clipBehavior: Clip.none,
-                                  children: <Widget>[
-                                    GestureDetector(
-                                      onTap: (() {
-                                        Get.toNamed(Routes.publicProfile,
-                                            arguments: user);
-                                      }),
-                                      child: SizedBox(
-                                        height: 90.0,
-                                        width: 90.0,
-                                        child: Align(
-                                          alignment: Alignment.topLeft,
-                                          child: ClipRRect(
-                                            borderRadius:
-                                                BorderRadius.circular(1000),
-                                            child: user?.photoUrl != null
-                                                ? NetworkImageWithPlaceHolder(
-                                                    imageUrl: user?.photoUrl,
-                                                    height: 90.0,
-                                                    width: 90.0,
-                                                    radius: radius,
-                                                    placeHolder: Icons.person,
-                                                    iconSize: 64.0,
-                                                  )
-                                                : const CircleAvatar(
-                                                    radius: 50,
-                                                    backgroundImage: AssetImage(
-                                                        'assets/images/bb_avatar.jpg'),
-                                                  ),
-                                          ),
-                                        ),
-                                      ),
-                                    ),
-                                    if (user?.isRanked ?? false)
-                                      Positioned(
-                                        right: 7.0,
-                                        bottom: -3.0,
-                                        child: Container(
-                                          height: 32,
-                                          width: 32,
-                                          decoration: BoxDecoration(
-                                            color: Colors.transparent,
-                                            borderRadius:
-                                                BorderRadius.circular(30.0),
-                                            // ignore: prefer_const_literals_to_create_immutables
-                                          ),
-                                        ),
-                                      ),
-                                  ],
-                                ),
-                                const SizedBox(width: 20.0),
-                                Expanded(
-                                  child: Column(
-                                    mainAxisAlignment: MainAxisAlignment.start,
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: <Widget>[
-                                      if (user?.category == null &&
-                                          user?.companyName == null &&
-                                          user?.location == null)
-                                        const SizedBox(height: 12.0),
-                                      user?.isSubscribed == true
-                                          ? Row(
-                                              children: <Widget>[
-                                                Text(
-                                                    user?.name != null &&
-                                                            user!.name!
-                                                                    .length <=
-                                                                20
-                                                        ? user!.name!
-                                                        : user?.name != null
-                                                            ? '${user!.name!.substring(0, 20)}...'
-                                                            : '',
-                                                    maxLines: 1,
-                                                    overflow:
-                                                        TextOverflow.ellipsis,
-                                                    style: const TextStyle(
-                                                      fontSize: 15,
-                                                      fontWeight:
-                                                          FontWeight.bold,
-                                                    )),
-                                                const SizedBox(width: 5),
-                                                SvgPicture.asset(
-                                                  'assets/svgs/premiumbadge.svg',
-                                                  height: 9,
-                                                  color: primaryColorLT,
-                                                )
-                                              ],
+                    ? GestureDetector(
+                        onTap: () {
+                          Get.toNamed(Routes.publicProfile, arguments: user);
+                        },
+                        child: Container(
+                          padding: const EdgeInsets.symmetric(horizontal: 15),
+                          width: double.infinity,
+                          child: Row(
+                            children: <Widget>[
+                              GestureDetector(
+                                onTap: (() {
+                                  Get.toNamed(Routes.publicProfile,
+                                      arguments: user);
+                                }),
+                                child: SizedBox(
+                                  height: 90.0,
+                                  width: 90.0,
+                                  child: Align(
+                                    alignment: Alignment.topLeft,
+                                    child: ClipRRect(
+                                      borderRadius: BorderRadius.circular(1000),
+                                      child: user?.photoUrl != null
+                                          ? NetworkImageWithPlaceHolder(
+                                              imageUrl: user?.photoUrl,
+                                              height: 90.0,
+                                              width: 90.0,
+                                              radius: radius,
+                                              placeHolder: Icons.person,
+                                              iconSize: 64.0,
                                             )
-                                          : Text(
-                                              user?.name != null &&
-                                                      user!.name!.length <= 20
-                                                  ? user!.name!
-                                                  : user?.name != null
-                                                      ? '${user!.name!.substring(0, 20)}...'
-                                                      : '',
-                                              maxLines: 1,
-                                              overflow: TextOverflow.ellipsis,
-                                              style: const TextStyle(
-                                                fontSize: 15,
-                                                fontWeight: FontWeight.bold,
-                                              )),
-                                      user?.bio == null
-                                          ? Container()
-                                          : Column(
-                                              mainAxisAlignment:
-                                                  MainAxisAlignment.start,
-                                              crossAxisAlignment:
-                                                  CrossAxisAlignment.start,
-                                              children: <Widget>[
-                                                Text(
-                                                  user!.bio.toString(),
-                                                  maxLines: 2,
+                                          : const CircleAvatar(
+                                              radius: 50,
+                                              backgroundImage: AssetImage(
+                                                  'assets/images/bb_avatar.jpg'),
+                                            ),
+                                    ),
+                                  ),
+                                ),
+                              ),
+                              const SizedBox(width: 20.0),
+                              Expanded(
+                                child: Column(
+                                  mainAxisAlignment: MainAxisAlignment.start,
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: <Widget>[
+                                    user?.isSubscribed == true
+                                        ? Row(
+                                            children: <Widget>[
+                                              Text(
+                                                  user?.name != null &&
+                                                          user!.name!.length <=
+                                                              20
+                                                      ? user!.name!
+                                                      : user?.name != null
+                                                          ? '${user!.name!.substring(0, 20)}...'
+                                                          : '',
+                                                  maxLines: 1,
                                                   overflow:
                                                       TextOverflow.ellipsis,
                                                   style: const TextStyle(
-                                                    color: subtextColor,
-                                                    fontSize: 13,
+                                                    fontSize: 15,
+                                                    fontWeight: FontWeight.bold,
+                                                  )),
+                                              const SizedBox(width: 5),
+                                              SvgPicture.asset(
+                                                'assets/svgs/premiumbadge.svg',
+                                                height: 9,
+                                                color: primaryColorLT,
+                                              )
+                                            ],
+                                          )
+                                        : Text(
+                                            user?.name != null &&
+                                                    user!.name!.length <= 20
+                                                ? user!.name!
+                                                : user?.name != null
+                                                    ? '${user!.name!.substring(0, 20)}...'
+                                                    : '',
+                                            maxLines: 1,
+                                            overflow: TextOverflow.ellipsis,
+                                            style: const TextStyle(
+                                              fontSize: 15,
+                                              fontWeight: FontWeight.bold,
+                                            )),
+                                    user?.bio == null
+                                        ? Container()
+                                        : Column(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.start,
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.start,
+                                            children: <Widget>[
+                                              Text(
+                                                user!.bio.toString(),
+                                                maxLines: 2,
+                                                overflow: TextOverflow.ellipsis,
+                                                style: const TextStyle(
+                                                  color: subtextColor,
+                                                  fontSize: 13,
+                                                ),
+                                              ),
+                                              Row(
+                                                children: <Widget>[
+                                                  Expanded(
+                                                    child:
+                                                        outlineButtonHeader(() {
+                                                      onRefer(user!);
+                                                    }),
                                                   ),
-                                                ),
-                                                Row(
-                                                  children: <Widget>[
-                                                    Expanded(
-                                                      child:
-                                                          outlineButtonHeader(
-                                                              () {
-                                                        onRefer(user!);
-                                                      }),
-                                                    ),
-                                                  ],
-                                                ),
-                                              ],
-                                            ),
-                                    ],
-                                  ),
-                                )
-                              ],
-                            ),
+                                                ],
+                                              ),
+                                            ],
+                                          ),
+                                  ],
+                                ),
+                              )
+                            ],
                           ),
                         ),
                       )
