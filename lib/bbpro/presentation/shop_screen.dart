@@ -49,12 +49,9 @@ class _ShopScreenState extends State<ShopScreen> {
                 },
                 icon: SvgPicture.asset('assets/svgs/backbutton.svg'),
               ),
-              title: Text(
-                profileController.myProfile.uid ==
-                        shopController.shop!.user!.uid
-                    ? 'Biz-Center'
-                    : 'Biz-Center',
-                style: const TextStyle(
+              title: const Text(
+                'My-Biz Center',
+                style: TextStyle(
                   color: Colors.black,
                   fontWeight: FontWeight.bold,
                 ),

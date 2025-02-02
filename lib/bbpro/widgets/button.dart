@@ -52,11 +52,12 @@ class _ProCustomButtonState extends State<ProCustomButton> {
                   mainAxisSize: MainAxisSize.min,
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: <Widget>[
-                    if (widget.back)
+                    if (!widget.back)
                       if (widget.icon != null) widget.icon!,
                     if (!widget.back)
-                      if (widget.icon != null)
-                        widget.icon!, // Display icon if it's not null
+                      const SizedBox(
+                        width: 5,
+                      ), // Display icon if it's not null
                     Text(
                       widget.text,
                       style: const TextStyle(
