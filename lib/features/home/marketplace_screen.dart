@@ -600,7 +600,7 @@ class _MarketplaceScreenState extends State<MarketplaceScreen>
                     },
                     child: Padding(
                       padding: const EdgeInsets.only(
-                        left: 15,
+                        left: 10,
                         right: 10.0,
                       ),
                       child: CircleAvatar(
@@ -609,23 +609,6 @@ class _MarketplaceScreenState extends State<MarketplaceScreen>
                           child: SvgPicture.asset(
                             'assets/svgs/shoppingcart.svg',
                             height: 19,
-                          )),
-                    ),
-                  ),
-                  GestureDetector(
-                    onTap: () {
-                      Get.to(() => const ChatScreen());
-                    },
-                    child: Padding(
-                      padding: const EdgeInsets.only(
-                        right: 10.0,
-                      ),
-                      child: CircleAvatar(
-                          radius: 20,
-                          backgroundColor: backgroundColor,
-                          child: SvgPicture.asset(
-                            'assets/svgs/prochat.svg',
-                            height: 15,
                           )),
                     ),
                   ),
