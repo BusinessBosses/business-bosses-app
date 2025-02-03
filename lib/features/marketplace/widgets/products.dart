@@ -78,84 +78,8 @@ class _ProductsPageState extends State<ProductsPage> {
           ),
           child: Column(
             children: <Widget>[
-              Container(
-                width: double.infinity,
-                color: backgroundcolorinterface,
-                child: Stack(
-                  children: <Widget>[
-                    Padding(
-                      padding: const EdgeInsets.only(left: 15, top: 25),
-                      child: GestureDetector(
-                        onTap: (() {
-                          showDialog(
-                            context: context,
-                            builder: (BuildContext context) =>
-                                sellingGuide(context),
-                          );
-                        }),
-                        child: Row(
-                          children: <Widget>[
-                            const Text(
-                              'Guidelines ',
-                              style: TextStyle(
-                                  fontSize: 12, fontWeight: FontWeight.w700),
-                            ),
-                            SvgPicture.asset(
-                              'assets/svgs/info.svg',
-                              height: 20,
-                            ),
-                          ],
-                        ),
-                      ),
-                    ),
-                    Column(
-                      children: <Widget>[
-                        const SizedBox(height: 10),
-                        Align(
-                          alignment: Alignment.centerRight,
-                          child: Padding(
-                            padding: const EdgeInsets.only(right: 15),
-                            child: ElevatedButton(
-                              style: ElevatedButton.styleFrom(
-                                  minimumSize: const Size(150, 45)),
-                              onPressed: () {
-                                setState(() {});
-                                setState(() {});
-                                if (shopController.shop == null) {
-                                  showSnackbar(
-                                    message: 'Create a Biz-Center First',
-                                    error: true,
-                                  );
-                                  return;
-                                }
-                                Get.to(() => const CreateProductListing());
-                              },
-                              child: Row(
-                                mainAxisSize: MainAxisSize.min,
-                                children: <Widget>[
-                                  const Text(
-                                    'Sell',
-                                    style: TextStyle(
-                                        fontSize: 15,
-                                        color: Colors.white,
-                                        fontWeight: FontWeight.w500),
-                                  ),
-                                  const SizedBox(width: 5),
-                                  SvgPicture.asset(
-                                      'assets/svgs/startatopic.svg')
-                                ],
-                              ),
-                            ),
-                          ),
-                        ),
-                        const SizedBox(height: 10),
-                      ],
-                    ),
-                  ],
-                ),
-              ),
               Padding(
-                padding: const EdgeInsets.only(bottom: 10.0),
+                padding: const EdgeInsets.only(top: 10),
                 child: ProshopdealsWidget(
                   title: 'NEW',
                   products: _marketController.proProducts

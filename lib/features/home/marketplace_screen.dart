@@ -1,5 +1,11 @@
 import 'package:business_bosses_v2/bbpro/controllers/shop_controller.dart';
+import 'package:business_bosses_v2/bbpro/presentation/create_product.dart';
+import 'package:business_bosses_v2/bbpro/presentation/create_service.dart';
 import 'package:business_bosses_v2/bbpro/presentation/my_orders_screen.dart';
+import 'package:business_bosses_v2/bbpro/widgets/button.dart';
+import 'package:business_bosses_v2/bbpro/widgets/edit_text.dart';
+import 'package:business_bosses_v2/bbpro/widgets/proseardwidget.dart';
+import 'package:business_bosses_v2/common/dialogs/snackbar.dart';
 import 'package:business_bosses_v2/features/chat/chat_screen.dart';
 import 'package:business_bosses_v2/features/donations/presentation/filtersuppliers.dart';
 import 'package:business_bosses_v2/features/home/widgets/bottom_bar.dart';
@@ -18,9 +24,11 @@ import 'package:business_bosses_v2/features/marketplace/widgets/products.dart';
 import 'package:business_bosses_v2/features/marketplace/widgets/service_item.dart';
 import 'package:business_bosses_v2/features/marketplace/widgets/services.dart';
 import 'package:business_bosses_v2/features/search/widgets/search_bar.dart';
+import 'package:country_list_pick/country_list_pick.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:visibility_detector/visibility_detector.dart';
 
 import '../../common/widgets/safety_model.dart';
@@ -53,13 +61,15 @@ class _MarketplaceScreenState extends State<MarketplaceScreen>
   bool isScrolled = true;
   final ScrollController _scrollController = ScrollController();
   bool showFloatingButton = false;
-  bool _ismarketplaceSearching = false;
+  final bool _ismarketplaceSearching = false;
   late final TabController _marketplacesearchTabController;
   late final TabController _marketplaceTabController;
   bool isfiltervisible = true;
   bool databool = true;
   bool loadingData = true;
   final SupplierController supplierController = Get.put(SupplierController());
+  final TextEditingController minpricecontroller = TextEditingController();
+  final TextEditingController maxpricecontroller = TextEditingController();
 
   @override
   void initState() {
@@ -145,142 +155,608 @@ class _MarketplaceScreenState extends State<MarketplaceScreen>
     _marketplacesearchTabController.addListener(_handleTabSelection);
 
     return Scaffold(
-      backgroundColor: backgroundcolorinterface,
-      appBar: AppBar(
-        backgroundColor: Colors.white,
-        automaticallyImplyLeading: false,
-        title: _ismarketplaceSearching
-            ? SizedBox(
-                height: 42,
-                child: Searchbar(
-                  hintText: _marketplacesearchTabController.index == 0
-                      ? 'Search Products'
-                      : _marketplacesearchTabController.index == 1
-                          ? 'Search Services'
-                          : 'Find Suppliers for your Business',
-                  onChange: (String query) {
-                    if (query.isEmpty) {
-                      _marketplacesearchTabController.index == 2
-                          ? supplierController.clearSupplierSearch()
-                          : _marketController.clearFilter();
-                    } else {
-                      _marketController.filterItems(query);
-                      supplierController.searchSuppliers(query);
-                    }
-                    setState(() {});
-                  },
-                  onSubmit: (String query) {
-                    supplierController.searchSuppliers(query);
-                    _marketController.filterItems(query);
-                    setState(() {});
-                  },
-                ),
-              )
-            : const Text('Marketplace'),
-        bottom: _ismarketplaceSearching
-            ? TabBar(
-                controller: _marketplacesearchTabController,
-                labelStyle: const TextStyle(fontWeight: FontWeight.w500),
-                labelColor: Colors.black,
-                indicatorColor: primaryColorLT,
-                tabs: const <Widget>[
-                  Tab(text: 'All'),
-                  Tab(text: 'Products'),
-                  Tab(text: 'Services'),
-                  Tab(text: 'Suppliers'),
-                ],
-              )
-            : const PreferredSize(
-                preferredSize: Size.fromHeight(0.0),
-                child: SizedBox(height: 0),
-              ),
-        actions: _ismarketplaceSearching
-            ? <Widget>[
-                IconButton(
-                  icon: const Icon(Icons.close),
-                  onPressed: () {
+      backgroundColor: Colors.white,
+      appBar: PreferredSize(
+        preferredSize: const Size.fromHeight(kToolbarHeight + 50),
+        child: Column(
+          children: <Widget>[
+            AppBar(
+              automaticallyImplyLeading: false,
+              title: CountryListPick(
+                  appBar: AppBar(
+                    leading: IconButton(
+                      onPressed: () {
+                        Navigator.pop(context);
+                      },
+                      icon: SvgPicture.asset('assets/svgs/backbutton.svg'),
+                    ),
+                    centerTitle: true,
+                    title: const Text(
+                      'Select Location',
+                      textAlign: TextAlign.center,
+                    ),
+                  ),
+                  initialSelection: _selectedLocation,
+                  onChanged: (CountryCode? code) async {
                     setState(() {
-                      _ismarketplaceSearching = !_ismarketplaceSearching;
-
-                      _marketController.clearFilter();
-                      supplierController.searchedSuppliers.clear();
+                      _selectedLocation = code!.name;
                     });
                   },
-                ),
-              ]
-            : <Widget>[
-                if (!_ismarketplaceSearching)
+                  useSafeArea: false,
+                  pickerBuilder:
+                      (BuildContext context, CountryCode? countryCode) {
+                    return Row(
+                      children: <Widget>[
+                        const Icon(
+                          Icons.place,
+                          size: 18,
+                        ),
+                        const SizedBox(
+                          width: 5,
+                        ),
+                        Text(
+                          shopController.shop!.location.length > 20
+                              ? '${shopController.shop!.location.substring(0, 20)}...'
+                              : shopController.shop!.location,
+                          style: const TextStyle(
+                              color: Colors.black,
+                              fontWeight: FontWeight.w700,
+                              fontSize: 16),
+                        ),
+                        const SizedBox(
+                          width: 5,
+                        ),
+                        SvgPicture.asset('assets/svgs/dropdown.svg')
+                      ],
+                    );
+                  }),
+              actions: <Widget>[
+                Padding(
+                  padding:
+                      const EdgeInsets.only(top: 8.0, bottom: 8, right: 10),
+                  child: ProCustomButton(
+                    padding: 0.0,
+                    icon: SvgPicture.asset('assets/svgs/startatopic.svg'),
+                    color: primaryColorLT,
+                    onPressed: () {
+                      setState(() {});
+                      if (shopController.shop == null) {
+                        showSnackbar(
+                          message: 'Create a Biz-Center First',
+                          error: true,
+                        );
+                        return;
+                      }
+                      showModalBottomSheet(
+                          context: context,
+                          shape: const RoundedRectangleBorder(
+                            borderRadius: BorderRadius.vertical(
+                              top: Radius.circular(25.0),
+                            ),
+                          ),
+                          builder: (BuildContext context) {
+                            return SizedBox(
+                              height: 200,
+                              child: Padding(
+                                padding: const EdgeInsets.all(15.0),
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  mainAxisSize: MainAxisSize.min,
+                                  children: <Widget>[
+                                    Expanded(
+                                      child: ListView.separated(
+                                        itemCount: 2,
+                                        separatorBuilder:
+                                            (BuildContext context, int index) =>
+                                                const Divider(),
+                                        itemBuilder:
+                                            (BuildContext context, int index) {
+                                          return ListTile(
+                                            onTap: () {
+                                              Navigator.pop(context);
+                                              index == 0
+                                                  ? Get.to(() =>
+                                                      const CreateProductListing())
+                                                  : Get.to(() =>
+                                                      const CreateServiceListing());
+                                            },
+                                            minVerticalPadding: 0,
+                                            contentPadding:
+                                                const EdgeInsets.only(
+                                              left: 10,
+                                            ),
+                                            leading: SvgPicture.asset(
+                                              index == 0
+                                                  ? 'assets/svgs/sellicon.svg'
+                                                  : 'assets/svgs/sellicon.svg',
+                                              height: 25,
+                                              color: textColor.withOpacity(1),
+                                            ),
+                                            title: Text(
+                                              index == 0
+                                                  ? 'Sell your product'
+                                                  : 'Sell your service',
+                                              style: const TextStyle(
+                                                  fontSize: 18,
+                                                  fontWeight: FontWeight.w700),
+                                            ),
+                                          );
+                                        },
+                                      ),
+                                    )
+                                  ],
+                                ),
+                              ),
+                            );
+                          });
+                    },
+                    text: 'Sell',
+                  ),
+                )
+              ],
+            ),
+            Container(
+              padding: const EdgeInsets.only(left: 15),
+              color: Colors.white,
+              child: Row(
+                children: <Widget>[
+                  Expanded(
+                    child: ProSearchbar(
+                      onfiltertap: () {
+                        showModalBottomSheet(
+                          context: context,
+                          shape: const RoundedRectangleBorder(
+                            borderRadius: BorderRadius.vertical(
+                              top: Radius.circular(25.0),
+                            ),
+                          ),
+                          builder: (BuildContext context) {
+                            // State to manage which filter is currently selected
+                            String selectedFilter =
+                                'none'; // 'none', 'price', 'category', 'date'
+                            String? selectedPriceRange;
+                            String? selectedCategory;
+                            String? selectedDateRange;
+
+                            return StatefulBuilder(
+                              builder:
+                                  (BuildContext context, StateSetter setState) {
+                                return SizedBox(
+                                  height:
+                                      MediaQuery.of(context).size.height * 0.8,
+                                  child: Padding(
+                                    padding: const EdgeInsets.all(15.0),
+                                    child: Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: <Widget>[
+                                        if (selectedFilter ==
+                                            'none') ...<Widget>[
+                                          const Text(
+                                            'Filters',
+                                            style: TextStyle(
+                                                fontSize: 18,
+                                                fontWeight: FontWeight.bold),
+                                          ),
+                                          const SizedBox(height: 10),
+                                          ListTile(
+                                            trailing:
+                                                const Icon(Icons.chevron_right),
+                                            horizontalTitleGap: 0,
+                                            contentPadding: EdgeInsets.zero,
+                                            leading:
+                                                const Icon(Icons.attach_money),
+                                            title:
+                                                const Text('Filter by Price'),
+                                            subtitle: Text(selectedPriceRange ??
+                                                'No price range selected'),
+                                            onTap: () {
+                                              setState(() {
+                                                selectedFilter =
+                                                    'price'; // Show price filter options
+                                              });
+                                            },
+                                          ),
+                                          ListTile(
+                                            trailing:
+                                                const Icon(Icons.chevron_right),
+                                            horizontalTitleGap: 0,
+                                            contentPadding: EdgeInsets.zero,
+                                            leading: const Icon(Icons.category),
+                                            title: const Text(
+                                                'Filter by Category'),
+                                            subtitle: Text(selectedCategory ??
+                                                'No category selected'),
+                                            onTap: () {
+                                              setState(() {
+                                                selectedFilter =
+                                                    'category'; // Show category filter options
+                                              });
+                                            },
+                                          ),
+                                          ListTile(
+                                            trailing:
+                                                const Icon(Icons.chevron_right),
+                                            horizontalTitleGap: 0,
+                                            contentPadding: EdgeInsets.zero,
+                                            leading:
+                                                const Icon(Icons.date_range),
+                                            title: const Text('Filter by Date'),
+                                            subtitle: Text(selectedDateRange ??
+                                                'No date range selected'),
+                                            onTap: () {
+                                              setState(() {
+                                                selectedFilter =
+                                                    'date'; // Show date filter options
+                                              });
+                                            },
+                                          ),
+                                        ],
+
+                                        // Price Filter Options
+                                        if (selectedFilter ==
+                                            'price') ...<Widget>[
+                                          const Text(
+                                            'Set Price Range',
+                                            style: TextStyle(
+                                                fontSize: 18,
+                                                fontWeight: FontWeight.bold),
+                                          ),
+                                          CustomEditText(
+                                            padding: 0,
+                                            iscurrencyfield: true,
+                                            caption: 'Minimum Price',
+                                            hintText: '0.00',
+                                            controller: minpricecontroller,
+                                          ),
+                                          const SizedBox(height: 10),
+                                          CustomEditText(
+                                            padding: 0,
+                                            iscurrencyfield: true,
+                                            caption: 'Maximum Price',
+                                            hintText: '0.00',
+                                            controller: maxpricecontroller,
+                                          ),
+                                          const SizedBox(height: 20),
+                                          Row(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.spaceBetween,
+                                            children: <Widget>[
+                                              TextButton(
+                                                onPressed: () {
+                                                  setState(() {
+                                                    selectedFilter =
+                                                        'none'; // Go back to main filters
+                                                  });
+                                                },
+                                                child: const Text('Back'),
+                                              ),
+                                              ElevatedButton(
+                                                onPressed: () {
+                                                  // Handle price filter logic here
+                                                  setState(() {
+                                                    selectedPriceRange =
+                                                        'Selected Price Range';
+                                                    selectedFilter = 'none';
+                                                  });
+                                                },
+                                                child: const Text('Apply'),
+                                              ),
+                                            ],
+                                          ),
+                                        ],
+
+                                        // Category Filter Options
+                                        if (selectedFilter ==
+                                            'category') ...<Widget>[
+                                          const Text(
+                                            'Select Category',
+                                            style: TextStyle(
+                                                fontSize: 18,
+                                                fontWeight: FontWeight.bold),
+                                          ),
+                                          const SizedBox(height: 10),
+                                          Expanded(
+                                            child: ListView(
+                                              children: <String>[
+                                                'Electronics',
+                                                'Clothing',
+                                                'Home & Kitchen',
+                                                'Books',
+                                                'Sports',
+                                                'Others',
+                                              ].map((String category) {
+                                                return ListTile(
+                                                  title: Text(category),
+                                                  onTap: () {
+                                                    setState(() {
+                                                      selectedCategory =
+                                                          category;
+                                                      selectedFilter = 'none';
+                                                    });
+                                                  },
+                                                );
+                                              }).toList(),
+                                            ),
+                                          ),
+                                          TextButton(
+                                            onPressed: () {
+                                              setState(() {
+                                                selectedFilter =
+                                                    'none'; // Go back to main filters
+                                              });
+                                            },
+                                            child: const Text('Back'),
+                                          ),
+                                        ],
+
+                                        // Date Filter Options
+                                        if (selectedFilter ==
+                                            'date') ...<Widget>[
+                                          const Text(
+                                            'Select Date Range',
+                                            style: TextStyle(
+                                                fontSize: 18,
+                                                fontWeight: FontWeight.bold),
+                                          ),
+                                          const SizedBox(height: 10),
+                                          Expanded(
+                                            child: ListView(
+                                              children: <String>[
+                                                'Any',
+                                                'Last 24 Hours',
+                                                'Last 7 Days',
+                                                'Last 30 Days',
+                                              ].map((String dateOption) {
+                                                return ListTile(
+                                                  title: Text(dateOption),
+                                                  onTap: () {
+                                                    setState(() {
+                                                      selectedDateRange =
+                                                          dateOption;
+                                                      selectedFilter = 'none';
+                                                    });
+                                                  },
+                                                );
+                                              }).toList(),
+                                            ),
+                                          ),
+                                          TextButton(
+                                            onPressed: () {
+                                              setState(() {
+                                                selectedFilter =
+                                                    'none'; // Go back to main filters
+                                              });
+                                            },
+                                            child: const Text('Back'),
+                                          ),
+                                        ],
+                                        const SizedBox(height: 20),
+                                        Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.end,
+                                          children: <Widget>[
+                                            ElevatedButton(
+                                              style: ButtonStyle(
+                                                  textStyle:
+                                                      MaterialStateProperty.all<
+                                                              TextStyle>(
+                                                          const TextStyle(
+                                                              color: Colors
+                                                                  .black)),
+                                                  backgroundColor:
+                                                      MaterialStateProperty.all(
+                                                          backgroundColor)),
+                                              onPressed: () {
+                                                setState(() {
+                                                  selectedPriceRange = null;
+                                                  selectedCategory = null;
+                                                  selectedDateRange = null;
+                                                });
+                                              },
+                                              child: const Text(
+                                                'Reset',
+                                                style: TextStyle(
+                                                    color: Colors.black),
+                                              ),
+                                            ),
+                                            const SizedBox(
+                                              width: 10,
+                                            ),
+                                            ElevatedButton(
+                                              onPressed: () {
+                                                Navigator.pop(context);
+                                                // Apply the filters
+                                              },
+                                              child: const Text('Apply Filter'),
+                                            ),
+                                          ],
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                );
+                              },
+                            );
+                          },
+                        );
+                      },
+                      ismarketplace: true,
+                      radius: 8,
+                      contentPadding: 10,
+                      hasSearchIcon: true,
+                      backgroundColor: backgroundColor,
+                      hintText: 'Search Marketplace',
+                      autofocus: false,
+                      onChange: (String query) {
+                        // _performSearch(query);
+                      },
+                      onSubmit: (String query) {},
+                    ),
+                  ),
                   GestureDetector(
                     onTap: () {
                       Get.to(() => const MyOrdersScreen());
                     },
                     child: Padding(
                       padding: const EdgeInsets.only(
+                        left: 10,
                         right: 10.0,
                       ),
                       child: CircleAvatar(
                           radius: 20,
                           backgroundColor: backgroundColor,
                           child: SvgPicture.asset(
-                            'assets/svgs/ordersinvoices.svg',
+                            'assets/svgs/shoppingcart.svg',
                             height: 19,
                           )),
                     ),
                   ),
-                if (!_ismarketplaceSearching)
-                  GestureDetector(
-                    onTap: () {
-                      Get.to(() => const ChatScreen());
-                    },
-                    child: Padding(
-                      padding: const EdgeInsets.only(
-                        right: 10.0,
-                      ),
-                      child: CircleAvatar(
-                          radius: 20,
-                          backgroundColor: backgroundColor,
-                          child: SvgPicture.asset(
-                            'assets/svgs/prochat.svg',
-                            height: 15,
-                          )),
-                    ),
-                  ),
-                GestureDetector(
-                  onTap: () {
-                    _ismarketplaceSearching = !_ismarketplaceSearching;
-                    setState(() {});
-                    _marketController.clearFilter();
-                    supplierController.searchedSuppliers.clear();
-                  },
-                  child: Padding(
-                    padding: const EdgeInsets.only(
-                      right: 10.0,
-                    ),
-                    child: _ismarketplaceSearching
-                        ? const Icon(Icons.close)
-                        : CircleAvatar(
-                            radius: 20,
-                            backgroundColor: backgroundColor,
-                            child: SvgPicture.asset(
-                              'assets/svgs/homesearch.svg',
-                              height: 20,
-                              color: textColor,
-                            )),
-                  ),
-                ),
-                // IconButton(
-                //   icon: _ismarketplaceSearching
-                //       ? const Icon(Icons.close)
-                //       : SvgPicture.asset('assets/svgs/search.svg'),
-                //   onPressed: () {
-                //     _ismarketplaceSearching = !_ismarketplaceSearching;
-                //     setState(() {});
-                //     _marketController.searchedPosts.clear();
-                //     _marketController.searchedServices.clear();
-                //     supplierController.searchedSuppliers.clear();
-                //   },
-                // )
-              ],
+                ],
+              ),
+            ),
+
+            // Expanded(
+            //   child: AppBar(
+            //     backgroundColor: Colors.white,
+            //     automaticallyImplyLeading: false,
+            //     title: _ismarketplaceSearching
+            //         ? SizedBox(
+            //             height: 42,
+            //             child: Searchbar(
+            //               hintText: _marketplacesearchTabController.index == 0
+            //                   ? 'Search Products'
+            //                   : _marketplacesearchTabController.index == 1
+            //                       ? 'Search Services'
+            //                       : 'Find Suppliers for your Business',
+            //               onChange: (String query) {
+            //                 if (query.isEmpty) {
+            //                   _marketplacesearchTabController.index == 2
+            //                       ? supplierController.clearSupplierSearch()
+            //                       : _marketController.clearFilter();
+            //                 } else {
+            //                   _marketController.filterItems(query);
+            //                   supplierController.searchSuppliers(query);
+            //                 }
+            //                 setState(() {});
+            //               },
+            //               onSubmit: (String query) {
+            //                 supplierController.searchSuppliers(query);
+            //                 _marketController.filterItems(query);
+            //                 setState(() {});
+            //               },
+            //             ),
+            //           )
+            //         : ProSearchbar(
+            //             radius: 8,
+            //             contentPadding: 10,
+            //             hasSearchIcon: true,
+            //             backgroundColor: backgroundColor,
+            //             hintText: 'Search Marketplace',
+            //             autofocus: false,
+            //             onChange: (String query) {
+            //               // _performSearch(query);
+            //             },
+            //             onSubmit: (String query) {},
+            //           ),
+            //     bottom: _ismarketplaceSearching
+            //         ? TabBar(
+            //             controller: _marketplacesearchTabController,
+            //             labelStyle:
+            //                 const TextStyle(fontWeight: FontWeight.w500),
+            //             labelColor: Colors.black,
+            //             indicatorColor: primaryColorLT,
+            //             tabs: const <Widget>[
+            //               Tab(text: 'All'),
+            //               Tab(text: 'Products'),
+            //               Tab(text: 'Services'),
+            //               Tab(text: 'Suppliers'),
+            //             ],
+            //           )
+            //         : const PreferredSize(
+            //             preferredSize: Size.fromHeight(0.0),
+            //             child: SizedBox(height: 0),
+            //           ),
+            //     actions: _ismarketplaceSearching
+            //         ? <Widget>[
+            //             IconButton(
+            //               icon: const Icon(Icons.close),
+            //               onPressed: () {
+            //                 setState(() {
+            //                   _ismarketplaceSearching =
+            //                       !_ismarketplaceSearching;
+
+            //                   _marketController.clearFilter();
+            //                   supplierController.searchedSuppliers.clear();
+            //                 });
+            //               },
+            //             ),
+            //           ]
+            //         : <Widget>[
+            //             if (!_ismarketplaceSearching)
+            //               GestureDetector(
+            //                 onTap: () {
+            //                   Get.to(() => const MyOrdersScreen());
+            //                 },
+            //                 child: Padding(
+            //                   padding: const EdgeInsets.only(
+            //                     right: 10.0,
+            //                   ),
+            //                   child: CircleAvatar(
+            //                       radius: 20,
+            //                       backgroundColor: backgroundColor,
+            //                       child: SvgPicture.asset(
+            //                         'assets/svgs/shoppingcart.svg',
+            //                         height: 19,
+            //                       )),
+            //                 ),
+            //               ),
+            //             if (!_ismarketplaceSearching)
+            //               GestureDetector(
+            //                 onTap: () {
+            //                   Get.to(() => const ChatScreen());
+            //                 },
+            //                 child: Padding(
+            //                   padding: const EdgeInsets.only(
+            //                     right: 10.0,
+            //                   ),
+            //                   child: CircleAvatar(
+            //                       radius: 20,
+            //                       backgroundColor: backgroundColor,
+            //                       child: SvgPicture.asset(
+            //                         'assets/svgs/prochat.svg',
+            //                         height: 15,
+            //                       )),
+            //                 ),
+            //               ),
+            //             GestureDetector(
+            //               onTap: () {
+            //                 _ismarketplaceSearching = !_ismarketplaceSearching;
+            //                 setState(() {});
+            //                 _marketController.clearFilter();
+            //                 supplierController.searchedSuppliers.clear();
+            //               },
+            //               child: Padding(
+            //                 padding: const EdgeInsets.only(
+            //                   right: 10.0,
+            //                 ),
+            //                 child: _ismarketplaceSearching
+            //                     ? const Icon(Icons.close)
+            //                     : CircleAvatar(
+            //                         radius: 20,
+            //                         backgroundColor: backgroundColor,
+            //                         child: SvgPicture.asset(
+            //                           'assets/svgs/homesearch.svg',
+            //                           height: 20,
+            //                           color: textColor,
+            //                         )),
+            //               ),
+            //             ),
+            //           ],
+            //   ),
+            // ),
+          ],
+        ),
       ),
       body: _marketController.isLoading
           ? const CircularProgressIndicator()
@@ -517,7 +993,7 @@ class _MarketplaceScreenState extends State<MarketplaceScreen>
                                                   Container(
                                                     constraints:
                                                         const BoxConstraints
-                                                            .expand(height: 40),
+                                                            .expand(height: 45),
                                                     child: TabBar(
                                                       labelStyle:
                                                           const TextStyle(
@@ -527,20 +1003,6 @@ class _MarketplaceScreenState extends State<MarketplaceScreen>
                                                       controller:
                                                           _marketplaceTabController,
                                                       isScrollable: false,
-                                                      // indicator:
-                                                      //     BoxDecoration(
-                                                      //   borderRadius:
-                                                      //       BorderRadius
-                                                      //           .circular(
-                                                      //               50), // Creates border
-                                                      //   color: Colors
-                                                      //       .black87
-                                                      //       .withAlpha(180),
-                                                      // ),
-                                                      // unselectedLabelColor:
-                                                      //     Colors.grey,
-                                                      // labelColor:
-                                                      //     Colors.white,
                                                       labelPadding:
                                                           const EdgeInsets
                                                               .symmetric(

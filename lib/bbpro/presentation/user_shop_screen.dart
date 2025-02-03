@@ -385,7 +385,7 @@ class _UserShopScreenState extends State<UserShopScreen> {
                                               },
                                               <String, String>{
                                                 'icon':
-                                                    'assets/svgs/ordersinvoices.svg',
+                                                    'assets/svgs/shoppingcart.svg',
                                                 'text': 'Orders'
                                               },
                                             ]),
