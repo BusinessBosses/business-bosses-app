@@ -43,13 +43,13 @@ class _MarketplaceScreenState extends State<MarketplaceScreen>
   final MarketController _marketController = Get.find();
   final HomeController hmeController = Get.find();
   final ShopController shopController = Get.find();
-  String? _selectedCategory;
-  String? _selectedLocation;
   String? filterCode;
   String? filterLocation;
   String? filterCategory;
   int pageSize = 20;
   String? filteredCategory;
+  String? _selectedCategory;
+  String? _selectedLocation;
   bool isScrolled = true;
   final ScrollController _scrollController = ScrollController();
   bool showFloatingButton = false;
