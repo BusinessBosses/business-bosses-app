@@ -32,14 +32,14 @@ class _SetupState extends State<Setup> {
     'Edit Biz-Center',
     'Manage Product Inventory',
     'My Services',
-    // 'Appointments'
+    'Contact Us'
   ];
 
-  final List<String> remtitles = <String>[
-    'Privacy Policy & Terms of Use',
-    'Contact Us',
-    // 'Manage Subscription'
-  ];
+  // final List<String> remtitles = <String>[
+  //   'Privacy Policy & Terms of Use',
+  //   'Contact Us',
+  //   // 'Manage Subscription'
+  // ];
 
   @override
   Widget build(BuildContext context) {
@@ -132,28 +132,6 @@ class _SetupState extends State<Setup> {
                             const SizedBox(height: 10),
                             Row(
                               children: <Widget>[
-                                // GestureDetector(
-                                //   onTap: () {
-                                //     Get.to(() => const ShopScreen());
-                                //   },
-                                //   child: Container(
-                                //       decoration: BoxDecoration(
-                                //           color: Colors.white,
-                                //           borderRadius:
-                                //               BorderRadius.circular(40)),
-                                //       padding: const EdgeInsets.symmetric(
-                                //           horizontal: 8, vertical: 8),
-                                //       child: const Text('View Shop')),
-                                // ),
-                                // const SizedBox(width: 5),
-                                // Container(
-                                //     decoration: BoxDecoration(
-                                //         color: Colors.white,
-                                //         borderRadius:
-                                //             BorderRadius.circular(40)),
-                                //     padding: const EdgeInsets.symmetric(
-                                //         horizontal: 8, vertical: 8),
-                                //     child: const Text('Share my link')),
                                 ProIconButton(
                                   textsize: 12,
                                   padding: 10,
@@ -217,7 +195,7 @@ class _SetupState extends State<Setup> {
                                 const EdgeInsets.symmetric(horizontal: 15.0),
                             child: Container(
                               decoration: BoxDecoration(
-                                color: Colors.grey.shade200,
+                                color: backgroundColor,
                                 borderRadius: BorderRadius.circular(15),
                               ),
                               child: ListTile(
@@ -232,10 +210,15 @@ class _SetupState extends State<Setup> {
                                               'assets/svgs/myservices.svg',
                                               height: 20,
                                             )
-                                          : SvgPicture.asset(
-                                              'assets/svgs/editshop.svg',
-                                              height: 20,
-                                            ),
+                                          : titles[index] == 'Edit Biz-Center'
+                                              ? SvgPicture.asset(
+                                                  'assets/svgs/editshop.svg',
+                                                  height: 20,
+                                                )
+                                              : SvgPicture.asset(
+                                                  'assets/svgs/support.svg',
+                                                  height: 20,
+                                                ),
                                   title: Text(
                                     titles[index],
                                     style: const TextStyle(
@@ -278,55 +261,55 @@ class _SetupState extends State<Setup> {
                     },
                   ),
                   const SizedBox(height: 15),
-                  ListView.builder(
-                    shrinkWrap: true,
-                    physics: const NeverScrollableScrollPhysics(),
-                    itemCount: remtitles.length,
-                    itemBuilder: (BuildContext context, int index) {
-                      return Column(
-                        children: <Widget>[
-                          Padding(
-                            padding:
-                                const EdgeInsets.symmetric(horizontal: 15.0),
-                            child: ListTile(
-                                contentPadding: EdgeInsets.zero,
-                                title: Text(
-                                  remtitles[index],
-                                  style: TextStyle(
-                                    fontSize: 15,
-                                    fontWeight: FontWeight.w700,
-                                    color: textColor.withOpacity(0.7),
-                                  ),
-                                ),
-                                onTap: () {
-                                  if (index == 0) {
-                                    launchPolicy();
-                                  } else if (index == 1) {
-                                    _contactUs();
-                                  } else if (index == 2) {
-                                    try {
-                                      Purchases.presentCodeRedemptionSheet();
-                                    } catch (e) {
-                                      showSnackbar(
-                                        title: 'Error',
-                                        message:
-                                            'Unable to open subscription management. Please try again later.',
-                                        error: true,
-                                      );
-                                    }
-                                  }
-                                },
-                                trailing: const Icon(
-                                  Icons.chevron_right,
-                                  color: proprimaryColor,
-                                  size: 20,
-                                )),
-                          ),
-                          // const SizedBox(height: 15),
-                        ],
-                      );
-                    },
-                  ),
+                  // ListView.builder(
+                  //   shrinkWrap: true,
+                  //   physics: const NeverScrollableScrollPhysics(),
+                  //   itemCount: remtitles.length,
+                  //   itemBuilder: (BuildContext context, int index) {
+                  //     return Column(
+                  //       children: <Widget>[
+                  //         Padding(
+                  //           padding:
+                  //               const EdgeInsets.symmetric(horizontal: 15.0),
+                  //           child: ListTile(
+                  //               contentPadding: EdgeInsets.zero,
+                  //               title: Text(
+                  //                 remtitles[index],
+                  //                 style: TextStyle(
+                  //                   fontSize: 15,
+                  //                   fontWeight: FontWeight.w700,
+                  //                   color: textColor.withOpacity(0.7),
+                  //                 ),
+                  //               ),
+                  //               onTap: () {
+                  //                 if (index == 0) {
+                  //                   launchPolicy();
+                  //                 } else if (index == 1) {
+                  //                   _contactUs();
+                  //                 } else if (index == 2) {
+                  //                   try {
+                  //                     Purchases.presentCodeRedemptionSheet();
+                  //                   } catch (e) {
+                  //                     showSnackbar(
+                  //                       title: 'Error',
+                  //                       message:
+                  //                           'Unable to open subscription management. Please try again later.',
+                  //                       error: true,
+                  //                     );
+                  //                   }
+                  //                 }
+                  //               },
+                  //               trailing: const Icon(
+                  //                 Icons.chevron_right,
+                  //                 color: proprimaryColor,
+                  //                 size: 20,
+                  //               )),
+                  //         ),
+                  //         // const SizedBox(height: 15),
+                  //       ],
+                  //     );
+                  //   },
+                  // ),
                 ],
               ),
             ),
