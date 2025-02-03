@@ -91,7 +91,7 @@ class _UserShopScreenState extends State<UserShopScreen> {
               //   launchUrl(launchUri);
             } else if (action['text'] == 'Share') {
               _shareBizCenter();
-            } else if (action['text'] == 'Orders') {
+            } else if (action['text'] == 'Cart') {
               Get.to(const MyOrdersScreen());
             }
           },
@@ -386,7 +386,7 @@ class _UserShopScreenState extends State<UserShopScreen> {
                                               <String, String>{
                                                 'icon':
                                                     'assets/svgs/shoppingcart.svg',
-                                                'text': 'Orders'
+                                                'text': 'Cart'
                                               },
                                             ]),
                                           )
