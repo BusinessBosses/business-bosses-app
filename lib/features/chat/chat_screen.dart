@@ -7,7 +7,9 @@ import 'package:business_bosses_v2/features/chat/controllers/chat_controller.dar
 import 'package:business_bosses_v2/features/chat/models/my_message.dart';
 import 'package:business_bosses_v2/features/home/controller/home_controller.dart';
 import 'package:business_bosses_v2/features/home/widgets/bottom_bar.dart';
+import 'package:business_bosses_v2/features/home/widgets/home_appbar.dart';
 import 'package:business_bosses_v2/features/profile/controller/profile_controller.dart';
+import 'package:business_bosses_v2/navigation/routes.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
@@ -92,19 +94,18 @@ class _ChatScreenState extends State<ChatScreen> {
                                     )),
                               ),
                             ),
-                          Padding(
-                            padding: const EdgeInsets.only(right: 15.0),
-                            child: GestureDetector(
-                              onTap: () {
-                                _onChangeSearching();
-                              },
+                          GestureDetector(
+                            onTap: () => Get.toNamed(Routes.notifications),
+                            child: Padding(
+                              padding: const EdgeInsets.only(
+                                right: 10.0,
+                              ),
                               child: CircleAvatar(
-                                  backgroundColor: backgroundColor,
                                   radius: 20,
+                                  backgroundColor: backgroundColor,
                                   child: SvgPicture.asset(
-                                    'assets/svgs/homesearch.svg',
-                                    height: 18,
-                                    color: textColor,
+                                    'assets/svgs/notificationicon.svg',
+                                    height: 20,
                                   )),
                             ),
                           ),
@@ -131,36 +132,80 @@ class _ChatScreenState extends State<ChatScreen> {
                         //   routeName: UsersSearchScreen.routeName,
                         // ),
                       )
-                    : ListView.builder(
-                        itemCount: controller.chats.length,
-                        itemBuilder: (BuildContext context, int i) {
-                          return Column(
-                            children: <Widget>[
-                              if (i == 0)
-                                Padding(
-                                  padding: const EdgeInsets.symmetric(
-                                      horizontal: 15.0),
-                                  child: Divider(
-                                    height: 0.5,
-                                    color: Colors.grey.withOpacity(0.3),
-                                  ),
+                    : Column(
+                        children: <Widget>[
+                          GestureDetector(
+                            onTap: () {
+                              _onChangeSearching();
+                            },
+                            child: Padding(
+                              padding: const EdgeInsets.symmetric(
+                                  horizontal: 15.0, vertical: 5),
+                              child: Container(
+                                padding:
+                                    const EdgeInsets.symmetric(vertical: 3),
+                                decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(8),
+                                  color: backgroundColor,
                                 ),
-                              ChatItem(
-                                myChatUser: controller.chats[i],
-                                chatController: controller,
-                                // key: ValueKey(_myChats[i].user?.uid),
-                              ),
-                              Padding(
-                                padding: const EdgeInsets.symmetric(
-                                    horizontal: 15.0),
-                                child: Divider(
-                                  height: 0.5,
-                                  color: Colors.grey.withOpacity(0.3),
+                                child: Row(
+                                  children: <Widget>[
+                                    CircleAvatar(
+                                      backgroundColor: backgroundColor,
+                                      child: SvgPicture.asset(
+                                        'assets/svgs/homesearch.svg',
+                                        colorFilter: const ColorFilter.mode(
+                                          textColor,
+                                          BlendMode.srcIn,
+                                        ),
+                                        height: 20,
+                                      ),
+                                    ),
+                                    const Text(
+                                      'Search Chats',
+                                      style: TextStyle(
+                                        color: textColor,
+                                        fontSize: 14.0,
+                                        fontWeight: FontWeight.w700,
+                                      ),
+                                    ),
+                                  ],
                                 ),
                               ),
-                            ],
-                          );
-                        },
+                            ),
+                          ),
+                          const SizedBox(
+                            height: 5,
+                          ),
+                          Divider(
+                            height: 0.5,
+                            color: Colors.grey.withOpacity(0.3),
+                          ),
+                          Expanded(
+                            child: ListView.builder(
+                              itemCount: controller.chats.length,
+                              itemBuilder: (BuildContext context, int i) {
+                                return Column(
+                                  children: <Widget>[
+                                    ChatItem(
+                                      myChatUser: controller.chats[i],
+                                      chatController: controller,
+                                      // key: ValueKey(_myChats[i].user?.uid),
+                                    ),
+                                    Padding(
+                                      padding: const EdgeInsets.symmetric(
+                                          horizontal: 15.0),
+                                      child: Divider(
+                                        height: 0.5,
+                                        color: Colors.grey.withOpacity(0.3),
+                                      ),
+                                    ),
+                                  ],
+                                );
+                              },
+                            ),
+                          ),
+                        ],
                       ),
                 if (_isSearching)
                   Container(
