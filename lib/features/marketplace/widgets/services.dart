@@ -80,7 +80,7 @@ class _ServicesPageState extends State<ServicesPage> {
           child: Column(
             children: <Widget>[
               Padding(
-                padding: const EdgeInsets.only(bottom: 10.0, top: 10),
+                padding: const EdgeInsets.only(top: 10),
                 child: ProshopdealsWidget(
                   title: 'NEW',
                   services: _marketController.proServices

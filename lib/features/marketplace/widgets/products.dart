@@ -79,7 +79,7 @@ class _ProductsPageState extends State<ProductsPage> {
           child: Column(
             children: <Widget>[
               Padding(
-                padding: const EdgeInsets.only(bottom: 10.0, top: 10),
+                padding: const EdgeInsets.only(top: 10),
                 child: ProshopdealsWidget(
                   title: 'NEW',
                   products: _marketController.proProducts
