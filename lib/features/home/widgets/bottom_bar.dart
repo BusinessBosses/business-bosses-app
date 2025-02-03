@@ -249,8 +249,8 @@ class BottomBar extends StatelessWidget {
                         child: BottomTabButton(
                           label: 'Marketplace',
                           icon: activeIndex == 3
-                              ? 'assets/svgs/marketplacefilled.svg'
-                              : 'assets/svgs/marketplaceoutlined.svg',
+                              ? 'assets/svgs/cartufilled.svg'
+                              : 'assets/svgs/cartu.svg',
                           onTap: () {
                             if (activeIndex == 3) return;
                             if (activeIndex == 0) {
