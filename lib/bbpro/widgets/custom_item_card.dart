@@ -5,6 +5,7 @@ import 'package:business_bosses_v2/bbpro/presentation/create_custom_listing.dart
 import 'package:business_bosses_v2/bbpro/widgets/optionsbutton.dart';
 import 'package:business_bosses_v2/common/dialogs/snackbar.dart';
 import 'package:business_bosses_v2/common/widgets/network_image_with_placeholder.dart';
+import 'package:business_bosses_v2/features/profile/controller/profile_controller.dart';
 import 'package:business_bosses_v2/utils/theme/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -28,6 +29,7 @@ class CustomItemCard extends StatefulWidget {
 
 class _CustomItemCardState extends State<CustomItemCard> {
   final ShopController shopController = Get.find();
+  final ProfileController profileController = Get.find();
   void _onEdit() {
     Get.to(() => CreateCustomListing(
           customItem: widget.customitem,
@@ -181,13 +183,15 @@ class _CustomItemCardState extends State<CustomItemCard> {
                         ],
                       ),
                     ),
-                    OptionsButton(
-                      item: widget.customitem,
-                      onEdit: _onEdit,
-                      onDelete: onDelete,
-                      onBoost: () {},
-                      isBoost: true,
-                    ),
+                    if (widget.customitem!.user!.uid ==
+                        profileController.myProfile.uid)
+                      OptionsButton(
+                        item: widget.customitem,
+                        onEdit: _onEdit,
+                        onDelete: onDelete,
+                        onBoost: () {},
+                        isBoost: true,
+                      ),
                   ],
                 ),
         ],

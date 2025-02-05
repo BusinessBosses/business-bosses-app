@@ -1,4 +1,7 @@
 import 'package:business_bosses_v2/bbpro/controllers/shop_controller.dart';
+import 'package:business_bosses_v2/bbpro/models/customitem_model.dart';
+import 'package:business_bosses_v2/bbpro/models/product_model.dart';
+import 'package:business_bosses_v2/bbpro/models/service_model.dart';
 import 'package:business_bosses_v2/bbpro/presentation/create_product.dart';
 import 'package:business_bosses_v2/bbpro/presentation/create_service.dart';
 import 'package:business_bosses_v2/bbpro/presentation/my_orders_screen.dart';
@@ -6,7 +9,6 @@ import 'package:business_bosses_v2/bbpro/widgets/button.dart';
 import 'package:business_bosses_v2/bbpro/widgets/edit_text.dart';
 import 'package:business_bosses_v2/bbpro/widgets/proseardwidget.dart';
 import 'package:business_bosses_v2/common/dialogs/snackbar.dart';
-import 'package:business_bosses_v2/features/chat/chat_screen.dart';
 import 'package:business_bosses_v2/features/donations/presentation/filtersuppliers.dart';
 import 'package:business_bosses_v2/features/home/widgets/bottom_bar.dart';
 import 'package:business_bosses_v2/features/home/widgets/floatingbutton.dart';
@@ -23,12 +25,11 @@ import 'package:business_bosses_v2/features/marketplace/widgets/markets.dart';
 import 'package:business_bosses_v2/features/marketplace/widgets/products.dart';
 import 'package:business_bosses_v2/features/marketplace/widgets/service_item.dart';
 import 'package:business_bosses_v2/features/marketplace/widgets/services.dart';
-import 'package:business_bosses_v2/features/search/widgets/search_bar.dart';
+import 'package:business_bosses_v2/features/profile/controller/profile_controller.dart';
 import 'package:country_list_pick/country_list_pick.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import 'package:visibility_detector/visibility_detector.dart';
 
 import '../../common/widgets/safety_model.dart';
@@ -70,6 +71,12 @@ class _MarketplaceScreenState extends State<MarketplaceScreen>
   final SupplierController supplierController = Get.put(SupplierController());
   final TextEditingController minpricecontroller = TextEditingController();
   final TextEditingController maxpricecontroller = TextEditingController();
+  final ProfileController _profileController = Get.find();
+  // State to manage which filter is currently selected
+  String selectedFilter = 'none'; // 'none', 'price', 'category', 'date'
+  String? selectedPriceRange;
+  String? selectedCategory;
+  String? selectedDateRange;
 
   @override
   void initState() {
@@ -111,12 +118,10 @@ class _MarketplaceScreenState extends State<MarketplaceScreen>
   }
 
   void selectedLocationChanged(String? name, String? code) {
-    setState(
-      () {
-        _selectedLocation = name;
-        filterCode = code;
-      },
-    );
+    _marketController.changeLocation(name!);
+    filterCode = code;
+    sortItems();
+    setState(() {});
   }
 
   String formatCount(int count) {
@@ -154,6 +159,10 @@ class _MarketplaceScreenState extends State<MarketplaceScreen>
     //String formattedUserCount = formatCount(userCount);
     _marketplacesearchTabController.addListener(_handleTabSelection);
 
+    _marketController.selectedLocation = _marketController.selectedLocation ??
+        _profileController.myProfile.location ??
+        'Nigeria';
+    sortItems();
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: PreferredSize(
@@ -176,10 +185,10 @@ class _MarketplaceScreenState extends State<MarketplaceScreen>
                       textAlign: TextAlign.center,
                     ),
                   ),
-                  initialSelection: _selectedLocation,
+                  initialSelection: _marketController.selectedLocation,
                   onChanged: (CountryCode? code) async {
                     setState(() {
-                      _selectedLocation = code!.name;
+                      selectedLocationChanged(code!.name, code.code);
                     });
                   },
                   useSafeArea: false,
@@ -195,13 +204,14 @@ class _MarketplaceScreenState extends State<MarketplaceScreen>
                           width: 5,
                         ),
                         Text(
-                          shopController.shop!.location.length > 20
-                              ? '${shopController.shop!.location.substring(0, 20)}...'
-                              : shopController.shop!.location,
+                          _marketController.selectedLocation!.length > 20
+                              ? '${_marketController.selectedLocation!.substring(0, 20)}...'
+                              : _marketController.selectedLocation!,
                           style: const TextStyle(
-                              color: Colors.black,
-                              fontWeight: FontWeight.w700,
-                              fontSize: 16),
+                            color: Colors.black,
+                            fontWeight: FontWeight.w700,
+                            fontSize: 16,
+                          ),
                         ),
                         const SizedBox(
                           width: 5,
@@ -311,273 +321,7 @@ class _MarketplaceScreenState extends State<MarketplaceScreen>
                             ),
                           ),
                           builder: (BuildContext context) {
-                            // State to manage which filter is currently selected
-                            String selectedFilter =
-                                'none'; // 'none', 'price', 'category', 'date'
-                            String? selectedPriceRange;
-                            String? selectedCategory;
-                            String? selectedDateRange;
-
-                            return StatefulBuilder(
-                              builder:
-                                  (BuildContext context, StateSetter setState) {
-                                return SizedBox(
-                                  height:
-                                      MediaQuery.of(context).size.height * 0.8,
-                                  child: Padding(
-                                    padding: const EdgeInsets.all(15.0),
-                                    child: Column(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                      children: <Widget>[
-                                        if (selectedFilter ==
-                                            'none') ...<Widget>[
-                                          const Text(
-                                            'Filters',
-                                            style: TextStyle(
-                                                fontSize: 18,
-                                                fontWeight: FontWeight.bold),
-                                          ),
-                                          const SizedBox(height: 10),
-                                          ListTile(
-                                            trailing:
-                                                const Icon(Icons.chevron_right),
-                                            horizontalTitleGap: 0,
-                                            contentPadding: EdgeInsets.zero,
-                                            leading:
-                                                const Icon(Icons.attach_money),
-                                            title:
-                                                const Text('Filter by Price'),
-                                            subtitle: Text(selectedPriceRange ??
-                                                'No price range selected'),
-                                            onTap: () {
-                                              setState(() {
-                                                selectedFilter =
-                                                    'price'; // Show price filter options
-                                              });
-                                            },
-                                          ),
-                                          ListTile(
-                                            trailing:
-                                                const Icon(Icons.chevron_right),
-                                            horizontalTitleGap: 0,
-                                            contentPadding: EdgeInsets.zero,
-                                            leading: const Icon(Icons.category),
-                                            title: const Text(
-                                                'Filter by Category'),
-                                            subtitle: Text(selectedCategory ??
-                                                'No category selected'),
-                                            onTap: () {
-                                              setState(() {
-                                                selectedFilter =
-                                                    'category'; // Show category filter options
-                                              });
-                                            },
-                                          ),
-                                          ListTile(
-                                            trailing:
-                                                const Icon(Icons.chevron_right),
-                                            horizontalTitleGap: 0,
-                                            contentPadding: EdgeInsets.zero,
-                                            leading:
-                                                const Icon(Icons.date_range),
-                                            title: const Text('Filter by Date'),
-                                            subtitle: Text(selectedDateRange ??
-                                                'No date range selected'),
-                                            onTap: () {
-                                              setState(() {
-                                                selectedFilter =
-                                                    'date'; // Show date filter options
-                                              });
-                                            },
-                                          ),
-                                        ],
-
-                                        // Price Filter Options
-                                        if (selectedFilter ==
-                                            'price') ...<Widget>[
-                                          const Text(
-                                            'Set Price Range',
-                                            style: TextStyle(
-                                                fontSize: 18,
-                                                fontWeight: FontWeight.bold),
-                                          ),
-                                          CustomEditText(
-                                            padding: 0,
-                                            iscurrencyfield: true,
-                                            caption: 'Minimum Price',
-                                            hintText: '0.00',
-                                            controller: minpricecontroller,
-                                          ),
-                                          const SizedBox(height: 10),
-                                          CustomEditText(
-                                            padding: 0,
-                                            iscurrencyfield: true,
-                                            caption: 'Maximum Price',
-                                            hintText: '0.00',
-                                            controller: maxpricecontroller,
-                                          ),
-                                          const SizedBox(height: 20),
-                                          Row(
-                                            mainAxisAlignment:
-                                                MainAxisAlignment.spaceBetween,
-                                            children: <Widget>[
-                                              TextButton(
-                                                onPressed: () {
-                                                  setState(() {
-                                                    selectedFilter =
-                                                        'none'; // Go back to main filters
-                                                  });
-                                                },
-                                                child: const Text('Back'),
-                                              ),
-                                              ElevatedButton(
-                                                onPressed: () {
-                                                  // Handle price filter logic here
-                                                  setState(() {
-                                                    selectedPriceRange =
-                                                        'Selected Price Range';
-                                                    selectedFilter = 'none';
-                                                  });
-                                                },
-                                                child: const Text('Apply'),
-                                              ),
-                                            ],
-                                          ),
-                                        ],
-
-                                        // Category Filter Options
-                                        if (selectedFilter ==
-                                            'category') ...<Widget>[
-                                          const Text(
-                                            'Select Category',
-                                            style: TextStyle(
-                                                fontSize: 18,
-                                                fontWeight: FontWeight.bold),
-                                          ),
-                                          const SizedBox(height: 10),
-                                          Expanded(
-                                            child: ListView(
-                                              children: <String>[
-                                                'Electronics',
-                                                'Clothing',
-                                                'Home & Kitchen',
-                                                'Books',
-                                                'Sports',
-                                                'Others',
-                                              ].map((String category) {
-                                                return ListTile(
-                                                  title: Text(category),
-                                                  onTap: () {
-                                                    setState(() {
-                                                      selectedCategory =
-                                                          category;
-                                                      selectedFilter = 'none';
-                                                    });
-                                                  },
-                                                );
-                                              }).toList(),
-                                            ),
-                                          ),
-                                          TextButton(
-                                            onPressed: () {
-                                              setState(() {
-                                                selectedFilter =
-                                                    'none'; // Go back to main filters
-                                              });
-                                            },
-                                            child: const Text('Back'),
-                                          ),
-                                        ],
-
-                                        // Date Filter Options
-                                        if (selectedFilter ==
-                                            'date') ...<Widget>[
-                                          const Text(
-                                            'Select Date Range',
-                                            style: TextStyle(
-                                                fontSize: 18,
-                                                fontWeight: FontWeight.bold),
-                                          ),
-                                          const SizedBox(height: 10),
-                                          Expanded(
-                                            child: ListView(
-                                              children: <String>[
-                                                'Any',
-                                                'Last 24 Hours',
-                                                'Last 7 Days',
-                                                'Last 30 Days',
-                                              ].map((String dateOption) {
-                                                return ListTile(
-                                                  title: Text(dateOption),
-                                                  onTap: () {
-                                                    setState(() {
-                                                      selectedDateRange =
-                                                          dateOption;
-                                                      selectedFilter = 'none';
-                                                    });
-                                                  },
-                                                );
-                                              }).toList(),
-                                            ),
-                                          ),
-                                          TextButton(
-                                            onPressed: () {
-                                              setState(() {
-                                                selectedFilter =
-                                                    'none'; // Go back to main filters
-                                              });
-                                            },
-                                            child: const Text('Back'),
-                                          ),
-                                        ],
-                                        const SizedBox(height: 20),
-                                        Row(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.end,
-                                          children: <Widget>[
-                                            ElevatedButton(
-                                              style: ButtonStyle(
-                                                  textStyle:
-                                                      MaterialStateProperty.all<
-                                                              TextStyle>(
-                                                          const TextStyle(
-                                                              color: Colors
-                                                                  .black)),
-                                                  backgroundColor:
-                                                      MaterialStateProperty.all(
-                                                          backgroundColor)),
-                                              onPressed: () {
-                                                setState(() {
-                                                  selectedPriceRange = null;
-                                                  selectedCategory = null;
-                                                  selectedDateRange = null;
-                                                });
-                                              },
-                                              child: const Text(
-                                                'Reset',
-                                                style: TextStyle(
-                                                    color: Colors.black),
-                                              ),
-                                            ),
-                                            const SizedBox(
-                                              width: 10,
-                                            ),
-                                            ElevatedButton(
-                                              onPressed: () {
-                                                Navigator.pop(context);
-                                                // Apply the filters
-                                              },
-                                              child: const Text('Apply Filter'),
-                                            ),
-                                          ],
-                                        ),
-                                      ],
-                                    ),
-                                  ),
-                                );
-                              },
-                            );
+                            return filterWidget();
                           },
                         );
                       },
@@ -589,9 +333,47 @@ class _MarketplaceScreenState extends State<MarketplaceScreen>
                       hintText: 'Search Marketplace',
                       autofocus: false,
                       onChange: (String query) {
-                        // _performSearch(query);
+                        if (query.isNotEmpty) {
+                          _marketController.filterItems(
+                              query,
+                              selectedPriceRange,
+                              minpricecontroller,
+                              maxpricecontroller,
+                              selectedCategory,
+                              selectedDateRange);
+                        } else {
+                          _marketController.clearFilter();
+                          selectedPriceRange = null;
+                          selectedCategory = null;
+                          selectedDateRange = null;
+                          minpricecontroller.clear();
+                          maxpricecontroller.clear();
+                          sortItems();
+                        }
+                        setState(() {});
                       },
-                      onSubmit: (String query) {},
+                      onSubmit: (String query) {
+                        if (query.isNotEmpty) {
+                          _marketController.filterItems(
+                              query,
+                              selectedPriceRange,
+                              minpricecontroller,
+                              maxpricecontroller,
+                              selectedCategory,
+                              selectedDateRange);
+                          supplierController.searchSuppliers(query);
+                        } else {
+                          _marketController.clearFilter();
+                          selectedPriceRange = null;
+                          selectedCategory = null;
+                          selectedDateRange = null;
+                          minpricecontroller.clear();
+                          maxpricecontroller.clear();
+                          supplierController.clearSupplierSearch();
+                          sortItems();
+                        }
+                        setState(() {});
+                      },
                     ),
                   ),
                   GestureDetector(
@@ -604,12 +386,13 @@ class _MarketplaceScreenState extends State<MarketplaceScreen>
                         right: 10.0,
                       ),
                       child: CircleAvatar(
-                          radius: 20,
-                          backgroundColor: backgroundColor,
-                          child: SvgPicture.asset(
-                            'assets/svgs/shoppingcart.svg',
-                            height: 19,
-                          )),
+                        radius: 20,
+                        backgroundColor: backgroundColor,
+                        child: SvgPicture.asset(
+                          'assets/svgs/shoppingcart.svg',
+                          height: 19,
+                        ),
+                      ),
                     ),
                   ),
                 ],
@@ -1099,5 +882,384 @@ class _MarketplaceScreenState extends State<MarketplaceScreen>
 
   Future<void> refreshData() async {
     await loadData(); // Trigger data reload
+  }
+
+  Widget filterWidget() {
+    return StatefulBuilder(
+      builder: (BuildContext context, StateSetter setState) {
+        return SizedBox(
+          height: MediaQuery.of(context).size.height * 0.8,
+          child: Padding(
+            padding: const EdgeInsets.all(15.0),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: <Widget>[
+                if (selectedFilter == 'none') ...<Widget>[
+                  const Text(
+                    'Filters',
+                    style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                  ),
+                  const SizedBox(height: 10),
+                  ListTile(
+                    trailing: const Icon(Icons.chevron_right),
+                    horizontalTitleGap: 0,
+                    contentPadding: EdgeInsets.zero,
+                    leading: const Icon(Icons.attach_money),
+                    title: const Text('Filter by Price'),
+                    subtitle:
+                        Text(selectedPriceRange ?? 'No price range selected'),
+                    onTap: () {
+                      setState(() {
+                        selectedFilter = 'price'; // Show price filter options
+                      });
+                    },
+                  ),
+                  ListTile(
+                    trailing: const Icon(Icons.chevron_right),
+                    horizontalTitleGap: 0,
+                    contentPadding: EdgeInsets.zero,
+                    leading: const Icon(Icons.category),
+                    title: const Text('Filter by Category'),
+                    subtitle: Text(selectedCategory ?? 'No category selected'),
+                    onTap: () {
+                      setState(() {
+                        selectedFilter =
+                            'category'; // Show category filter options
+                      });
+                    },
+                  ),
+                  ListTile(
+                    trailing: const Icon(Icons.chevron_right),
+                    horizontalTitleGap: 0,
+                    contentPadding: EdgeInsets.zero,
+                    leading: const Icon(Icons.date_range),
+                    title: const Text('Filter by Date'),
+                    subtitle:
+                        Text(selectedDateRange ?? 'No date range selected'),
+                    onTap: () {
+                      setState(() {
+                        selectedFilter = 'date'; // Show date filter options
+                      });
+                    },
+                  ),
+                ],
+
+                // Price Filter Options
+                if (selectedFilter == 'price') ...<Widget>[
+                  const Text(
+                    'Set Price Range',
+                    style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                  ),
+                  CustomEditText(
+                    padding: 0,
+                    iscurrencyfield: true,
+                    caption: 'Minimum Price',
+                    hintText: '0.00',
+                    controller: minpricecontroller,
+                  ),
+                  const SizedBox(height: 10),
+                  CustomEditText(
+                    padding: 0,
+                    iscurrencyfield: true,
+                    caption: 'Maximum Price',
+                    hintText: '0.00',
+                    controller: maxpricecontroller,
+                  ),
+                  const SizedBox(height: 20),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: <Widget>[
+                      TextButton(
+                        onPressed: () {
+                          setState(() {
+                            selectedFilter = 'none'; // Go back to main filters
+                          });
+                        },
+                        child: const Text('Back'),
+                      ),
+                      ElevatedButton(
+                        onPressed: () {
+                          // Handle price filter logic here
+                          setState(() {
+                            selectedPriceRange = 'Selected Price Range';
+                            selectedFilter = 'none';
+                          });
+                        },
+                        child: const Text('Apply'),
+                      ),
+                    ],
+                  ),
+                ],
+
+                // Category Filter Options
+                if (selectedFilter == 'category') ...<Widget>[
+                  const Text(
+                    'Select Category',
+                    style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                  ),
+                  const SizedBox(height: 10),
+                  Expanded(
+                    child: ListView(
+                      children: <String>[
+                        'Electronics',
+                        'Clothing',
+                        'Home & Kitchen',
+                        'Books',
+                        'Sports',
+                        'Others',
+                      ].map((String category) {
+                        return ListTile(
+                          title: Text(category),
+                          onTap: () {
+                            setState(() {
+                              selectedCategory = category;
+                              selectedFilter = 'none';
+                            });
+                          },
+                        );
+                      }).toList(),
+                    ),
+                  ),
+                  TextButton(
+                    onPressed: () {
+                      setState(() {
+                        selectedFilter = 'none'; // Go back to main filters
+                      });
+                    },
+                    child: const Text('Back'),
+                  ),
+                ],
+
+                // Date Filter Options
+                if (selectedFilter == 'date') ...<Widget>[
+                  const Text(
+                    'Select Date Range',
+                    style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                  ),
+                  const SizedBox(height: 10),
+                  Expanded(
+                    child: ListView(
+                      children: <String>[
+                        'Any',
+                        'Last 24 Hours',
+                        'Last 7 Days',
+                        'Last 30 Days',
+                      ].map((String dateOption) {
+                        return ListTile(
+                          title: Text(dateOption),
+                          onTap: () {
+                            setState(() {
+                              selectedDateRange = dateOption;
+                              selectedFilter = 'none';
+                            });
+                          },
+                        );
+                      }).toList(),
+                    ),
+                  ),
+                  TextButton(
+                    onPressed: () {
+                      setState(() {
+                        selectedFilter = 'none'; // Go back to main filters
+                      });
+                    },
+                    child: const Text('Back'),
+                  ),
+                ],
+                const SizedBox(height: 20),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  children: <Widget>[
+                    ElevatedButton(
+                      style: ButtonStyle(
+                          textStyle: MaterialStateProperty.all<TextStyle>(
+                              const TextStyle(color: Colors.black)),
+                          backgroundColor:
+                              MaterialStateProperty.all(backgroundColor)),
+                      onPressed: () {
+                        setState(() {
+                          selectedPriceRange = null;
+                          selectedCategory = null;
+                          selectedDateRange = null;
+                          minpricecontroller.clear();
+                          maxpricecontroller.clear();
+                          _marketController.filterItems(
+                              '',
+                              selectedPriceRange,
+                              minpricecontroller,
+                              maxpricecontroller,
+                              selectedCategory,
+                              selectedDateRange);
+                          sortItems();
+                        });
+                      },
+                      child: const Text(
+                        'Reset',
+                        style: TextStyle(color: Colors.black),
+                      ),
+                    ),
+                    const SizedBox(
+                      width: 10,
+                    ),
+                    ElevatedButton(
+                      onPressed: () {
+                        Navigator.pop(context);
+                        // Apply the filters
+                      },
+                      child: const Text('Apply Filter'),
+                    ),
+                  ],
+                ),
+              ],
+            ),
+          ),
+        );
+      },
+    );
+  }
+
+  void sortItems() {
+    _marketController.proItems.sort((Object a, Object b) {
+      final DateTime aDate = (a is Product)
+          ? a.createdAt
+          : (a is Service)
+              ? a.createdAt
+              : (a as Customitem).createdAt;
+      final DateTime bDate = (b is Product)
+          ? b.createdAt
+          : (b is Service)
+              ? b.createdAt
+              : (b as Customitem).createdAt;
+
+      final String? aLocation = (a is Product)
+          ? a.location
+          : (a is Service)
+              ? a.location
+              : (a as Customitem).shop!.location;
+      final String? bLocation = (b is Product)
+          ? b.location
+          : (b is Service)
+              ? b.location
+              : (b as Customitem).shop!.location;
+
+      final String? myLocation =
+          _marketController.selectedLocation?.toLowerCase();
+
+      // Ensure case-insensitive comparison
+      final String aLoc = aLocation?.toLowerCase() ?? '';
+      final String bLoc = bLocation?.toLowerCase() ?? '';
+
+      // Step 1: Prioritize myLocation (Nigeria) at the top
+      final bool aIsMyLocation = aLoc == myLocation;
+      final bool bIsMyLocation = bLoc == myLocation;
+
+      if (aIsMyLocation && !bIsMyLocation) return -1; // a (Nigeria) goes up
+      if (!aIsMyLocation && bIsMyLocation) return 1; // b (Nigeria) goes up
+
+      // Step 2: If both are Nigeria (or both are not Nigeria), sort by date (newest first)
+      final DateTime safeADate = aDate;
+      final DateTime safeBDate = bDate;
+
+      return safeBDate.compareTo(safeADate);
+    });
+
+    _marketController.proItemsWithImages.sort((Object a, Object b) {
+      final DateTime aDate = (a is Product)
+          ? a.createdAt
+          : (a is Service)
+              ? a.createdAt
+              : (a as Customitem).createdAt;
+      final DateTime bDate = (b is Product)
+          ? b.createdAt
+          : (b is Service)
+              ? b.createdAt
+              : (b as Customitem).createdAt;
+
+      final String? aLocation = (a is Product)
+          ? a.location
+          : (a is Service)
+              ? a.location
+              : (a as Customitem).shop!.location;
+      final String? bLocation = (b is Product)
+          ? b.location
+          : (b is Service)
+              ? b.location
+              : (b as Customitem).shop!.location;
+
+      final String? myLocation =
+          _marketController.selectedLocation?.toLowerCase();
+
+      // Ensure case-insensitive comparison
+      final String aLoc = aLocation?.toLowerCase() ?? '';
+      final String bLoc = bLocation?.toLowerCase() ?? '';
+
+      // Step 1: Prioritize myLocation (Nigeria) at the top
+      final bool aIsMyLocation = aLoc == myLocation;
+      final bool bIsMyLocation = bLoc == myLocation;
+
+      if (aIsMyLocation && !bIsMyLocation) return -1; // a (Nigeria) goes up
+      if (!aIsMyLocation && bIsMyLocation) return 1; // b (Nigeria) goes up
+
+      // Step 2: If both are Nigeria (or both are not Nigeria), sort by date (newest first)
+      final DateTime safeADate = aDate;
+      final DateTime safeBDate = bDate;
+
+      return safeBDate.compareTo(safeADate);
+    });
+    _marketController.proProducts.sort((Product a, Product b) {
+      final DateTime aDate = a.createdAt;
+      final DateTime bDate = b.createdAt;
+
+      final String? aLocation = a.location;
+      final String? bLocation = b.location;
+
+      final String? myLocation =
+          _marketController.selectedLocation?.toLowerCase();
+
+      // Ensure case-insensitive comparison
+      final String aLoc = aLocation?.toLowerCase() ?? '';
+      final String bLoc = bLocation?.toLowerCase() ?? '';
+
+      // Step 1: Prioritize myLocation (Nigeria) at the top
+      final bool aIsMyLocation = aLoc == myLocation;
+      final bool bIsMyLocation = bLoc == myLocation;
+
+      if (aIsMyLocation && !bIsMyLocation) return -1; // a (Nigeria) goes up
+      if (!aIsMyLocation && bIsMyLocation) return 1; // b (Nigeria) goes up
+
+      // Step 2: If both are Nigeria (or both are not Nigeria), sort by date (newest first)
+      final DateTime safeADate = aDate;
+      final DateTime safeBDate = bDate;
+
+      return safeBDate.compareTo(safeADate);
+    });
+    _marketController.proServices.sort((Service a, Service b) {
+      final DateTime aDate = a.createdAt;
+      final DateTime bDate = b.createdAt;
+
+      final String aLocation = a.location;
+      final String bLocation = b.location;
+
+      final String? myLocation =
+          _marketController.selectedLocation?.toLowerCase();
+
+      // Ensure case-insensitive comparison
+      final String aLoc = aLocation.toLowerCase();
+      final String bLoc = bLocation.toLowerCase();
+
+      // Step 1: Prioritize myLocation (Nigeria) at the top
+      final bool aIsMyLocation = aLoc == myLocation;
+      final bool bIsMyLocation = bLoc == myLocation;
+
+      if (aIsMyLocation && !bIsMyLocation) return -1; // a (Nigeria) goes up
+      if (!aIsMyLocation && bIsMyLocation) return 1; // b (Nigeria) goes up
+
+      // Step 2: If both are Nigeria (or both are not Nigeria), sort by date (newest first)
+      final DateTime safeADate = aDate;
+      final DateTime safeBDate = bDate;
+
+      return safeBDate.compareTo(safeADate);
+    });
+    setState(() {});
   }
 }

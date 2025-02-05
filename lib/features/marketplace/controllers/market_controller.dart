@@ -6,6 +6,7 @@ import 'package:business_bosses_v2/common/models/api_response_model.dart';
 import 'package:business_bosses_v2/features/home/controller/home_controller.dart';
 import 'package:business_bosses_v2/features/profile/controller/profile_controller.dart';
 import 'package:business_bosses_v2/services/api_service.dart';
+import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 import '../../../common/models/comment_model.dart';
@@ -18,7 +19,6 @@ class MarketController extends GetxController {
   RxList<MarketModel> markets = RxList<MarketModel>(<MarketModel>[]);
   RxList<Product> proProducts = RxList<Product>(<Product>[]);
   RxList<Service> proServices = RxList<Service>(<Service>[]);
-  RxList<Customitem> proCustomItems = RxList<Customitem>(<Customitem>[]);
   RxList<Object> proItems = RxList<Object>(<Object>[]);
   RxList<Object> proItemsWithImages = RxList<Object>(<Object>[]);
   RxList<MarketModel> products = RxList<MarketModel>(<MarketModel>[]);
@@ -46,11 +46,11 @@ class MarketController extends GetxController {
   RxBool loadingMore = RxBool(false);
   RxBool isJoined = RxBool(false);
   bool isLoading = true;
+  String? selectedLocation;
 
   RxBool isfiltered = RxBool(false);
   List<Product> filteredProducts = <Product>[];
   List<Service> filteredServices = <Service>[];
-  List<Customitem> filteredCustomItems = <Customitem>[];
 
   // Combined list of all matching items
   List<Object> allFilteredItems = <Object>[];
@@ -89,6 +89,11 @@ class MarketController extends GetxController {
 
   void clearPostSearch() {
     isPostSearch(false);
+    update();
+  }
+
+  void changeLocation(String name) {
+    selectedLocation = name;
     update();
   }
 
@@ -189,36 +194,91 @@ class MarketController extends GetxController {
     // Clear all filtered lists
     filteredProducts.clear();
     filteredServices.clear();
-    filteredCustomItems.clear();
     allFilteredItems.clear();
   }
 
-  void filterItems(String searchQuery) {
+  void filterItems(
+      String searchQuery,
+      String? selectedPriceRange,
+      TextEditingController? minpricecontroller,
+      TextEditingController? maxpricecontroller,
+      String? selectedCategory,
+      String? selectedDateRange) {
     filteredProducts.clear();
     filteredServices.clear();
-    filteredCustomItems.clear();
     allFilteredItems.clear();
+
     // Convert search query to lowercase for case-insensitive search
     final String query = searchQuery.toLowerCase();
-    if (query.isEmpty) {
-      clearFilter();
-      return;
-    }
 
     for (Object item in proItems) {
-      if (item is Product && item.name.toLowerCase().contains(query)) {
-        filteredProducts.add(item);
-        allFilteredItems.add(item);
-      } else if (item is Service && item.name.toLowerCase().contains(query)) {
-        filteredServices.add(item);
-        allFilteredItems.add(item);
-      } else if (item is Customitem &&
-          item.title.toLowerCase().contains(query)) {
-        filteredCustomItems.add(item);
+      bool matchesQuery = query.isEmpty ||
+          (item is Product && item.name.toLowerCase().contains(query)) ||
+          (item is Service && item.name.toLowerCase().contains(query));
+
+      bool matchesPrice = true;
+      bool matchesCategory = true;
+      bool matchesDate = true;
+
+      // Price Range Filtering
+      if (selectedPriceRange != null &&
+          minpricecontroller!.text.isNotEmpty &&
+          maxpricecontroller!.text.isNotEmpty) {
+        double minPrice = double.tryParse(minpricecontroller.text) ?? 0.0;
+        double maxPrice =
+            double.tryParse(maxpricecontroller.text) ?? double.infinity;
+        double itemPrice =
+            (item is Product) ? item.price : (item as Service).price;
+
+        matchesPrice = itemPrice >= minPrice && itemPrice <= maxPrice;
+      }
+
+      // Category Filtering
+      if (selectedCategory != null) {
+        String itemCategory =
+            (item is Product) ? item.category : (item as Service).category!;
+        matchesCategory = itemCategory == selectedCategory;
+      }
+
+      // Date Range Filtering
+      if (selectedDateRange != null) {
+        DateTime itemDate = (item is Product)
+            ? item.createdAt
+            : (item is Service)
+                ? item.createdAt
+                : (item as Customitem).createdAt;
+
+        DateTime now = DateTime.now();
+        switch (selectedDateRange) {
+          case 'Last 24 Hours':
+            matchesDate =
+                itemDate.isAfter(now.subtract(const Duration(days: 1)));
+            break;
+          case 'Last 7 Days':
+            matchesDate =
+                itemDate.isAfter(now.subtract(const Duration(days: 7)));
+            break;
+          case 'Last 30 Days':
+            matchesDate =
+                itemDate.isAfter(now.subtract(const Duration(days: 30)));
+            break;
+          default:
+            matchesDate = true;
+            break;
+        }
+      }
+
+      // If item matches all selected filters, add it to the filtered list
+      if (matchesQuery && matchesPrice && matchesCategory && matchesDate) {
+        if (item is Product) {
+          filteredProducts.add(item);
+        } else if (item is Service) {
+          filteredServices.add(item);
+        }
         allFilteredItems.add(item);
       }
     }
-    update();
+    update(); // Refresh UI
   }
 
   void updateFiltered() {
@@ -509,7 +569,6 @@ class MarketController extends GetxController {
     // Clear previous data
     proProducts.clear();
     proServices.clear();
-    proCustomItems.clear();
     proItems.clear();
     proItemsWithImages.clear();
 
@@ -519,12 +578,10 @@ class MarketController extends GetxController {
           await Future.wait(<Future<ApiResponseModel>>[
         ApiService.get(path: 'goods/all'),
         ApiService.get(path: 'services/all'),
-        ApiService.get(path: 'custom-items'),
       ]);
 
       final ApiResponseModel responseProducts = responses[0];
       final ApiResponseModel responseServices = responses[1];
-      final ApiResponseModel responseCustomItems = responses[2];
 
       // Process products
       if (responseProducts.success) {
@@ -546,17 +603,8 @@ class MarketController extends GetxController {
         throw Exception('Failed to fetch services.');
       }
 
-      if (responseCustomItems.success) {
-        proCustomItems.addAll(responseCustomItems.data
-            .map<Customitem>((dynamic json) => Customitem.fromJson(json))
-            .toList());
-      } else {
-        throw Exception('Failed to fetch items.');
-      }
-
       // Combine items
-      proItems
-          .addAll(<Object>[...proProducts, ...proServices, ...proCustomItems]);
+      proItems.addAll(<Object>[...proProducts, ...proServices]);
 
       // Filter items with images
       proItemsWithImages.addAll(

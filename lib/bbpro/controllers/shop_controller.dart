@@ -306,8 +306,6 @@ class ShopController extends GetxController {
     if (response.success) {
       customItems.add(Customitem.fromJson(response.data));
       items.add(Customitem.fromJson(response.data));
-      marketController.proItems.add(Customitem.fromJson(response.data));
-      marketController.proCustomItems.add(Customitem.fromJson(response.data));
       update();
       return true;
     } else {
@@ -336,12 +334,6 @@ class ShopController extends GetxController {
             Customitem.fromJson(response.data);
       }
 
-      final int proCustomIndex = marketController.proCustomItems
-          .indexWhere((Customitem item) => item.id == id);
-      if (proCustomIndex != -1) {
-        marketController.proCustomItems[proCustomIndex] =
-            Customitem.fromJson(response.data);
-      }
       update();
       return true;
     } else {
@@ -461,10 +453,6 @@ class ShopController extends GetxController {
       items.removeWhere((Object element) =>
           element is Customitem &&
           element.id == id); // Remove from marketController lists
-      marketController.proItems
-          .removeWhere((Object item) => item is Customitem && item.id == id);
-      marketController.proCustomItems
-          .removeWhere((Customitem item) => item.id == id);
       update(); // Update the UI
       return true;
     } else {
