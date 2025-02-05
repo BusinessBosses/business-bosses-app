@@ -5,6 +5,7 @@ import 'package:business_bosses_v2/bbpro/controllers/shop_controller.dart';
 import 'package:business_bosses_v2/bbpro/models/customitem_model.dart';
 import 'package:business_bosses_v2/bbpro/models/service_model.dart';
 import 'package:business_bosses_v2/bbpro/models/product_model.dart';
+import 'package:business_bosses_v2/bbpro/presentation/bizcentersearch.dart';
 import 'package:business_bosses_v2/bbpro/presentation/book_service.dart';
 import 'package:business_bosses_v2/bbpro/presentation/create_custom_listing.dart';
 import 'package:business_bosses_v2/bbpro/presentation/expandedcustomitemscreen.dart';
@@ -83,15 +84,11 @@ class _UserShopScreenState extends State<UserShopScreen> {
                 ),
                 arguments: shopController.userShop!.user,
               );
-              // } else if (action['text'] == 'Call') {
-              //   final Uri launchUri = Uri(
-              //     scheme: 'tel',
-              //     path: shopController.shop!.phone,
-              //   );
-              //   launchUrl(launchUri);
+            } else if (action['text'] == 'Search') {
+              Get.to(const BizCenterSearch());
             } else if (action['text'] == 'Share') {
               _shareBizCenter();
-            } else if (action['text'] == 'Orders') {
+            } else if (action['text'] == 'Cart') {
               Get.to(const MyOrdersScreen());
             }
           },
@@ -374,10 +371,11 @@ class _UserShopScreenState extends State<UserShopScreen> {
                                                     'assets/svgs/shopchat.svg',
                                                 'text': 'Chat'
                                               },
-                                              // <String, String>{
-                                              //   'icon': 'assets/svgs/shopcall.svg',
-                                              //   'text': 'Call'
-                                              // },
+                                              <String, String>{
+                                                'icon':
+                                                    'assets/svgs/homesearch.svg',
+                                                'text': 'Search'
+                                              },
                                               <String, String>{
                                                 'icon':
                                                     'assets/svgs/shopshare.svg',
@@ -386,7 +384,7 @@ class _UserShopScreenState extends State<UserShopScreen> {
                                               <String, String>{
                                                 'icon':
                                                     'assets/svgs/shoppingcart.svg',
-                                                'text': 'Orders'
+                                                'text': 'Cart'
                                               },
                                             ]),
                                           )

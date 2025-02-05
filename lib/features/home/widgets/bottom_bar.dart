@@ -70,7 +70,7 @@ class BottomBar extends StatelessWidget {
                           BottomTabButton(
                             icon: activeIndex == 1
                                 ? 'assets/svgs/messagefilled.svg'
-                                : 'assets/svgs/prochat.svg',
+                                : 'assets/svgs/bottombarchat.svg',
                             label: 'Inbox',
                             onTap: () {
                               if (activeIndex == 1) return;
@@ -96,8 +96,8 @@ class BottomBar extends StatelessWidget {
                               .toList()
                               .isNotEmpty)
                             Positioned(
-                              top: 5,
-                              right: 21,
+                              top: 6,
+                              right: 22,
                               child: Container(
                                 decoration: BoxDecoration(
                                   shape: BoxShape.circle,
@@ -249,8 +249,8 @@ class BottomBar extends StatelessWidget {
                         child: BottomTabButton(
                           label: 'Marketplace',
                           icon: activeIndex == 3
-                              ? 'assets/svgs/marketplacefilled.svg'
-                              : 'assets/svgs/marketplaceoutlined.svg',
+                              ? 'assets/svgs/cartufilled.svg'
+                              : 'assets/svgs/cartu.svg',
                           onTap: () {
                             if (activeIndex == 3) return;
                             if (activeIndex == 0) {

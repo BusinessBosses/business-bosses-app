@@ -255,21 +255,6 @@ class _PublicProfileScreenState extends State<PublicProfileScreen> {
                       child: publicUser.uid != _profileController.myProfile.uid
                           ? Row(
                               children: <Widget>[
-                                if (_currentIndex == 1)
-                                  GestureDetector(
-                                    onTap: () {
-                                      Get.to(const BizCenterSearch());
-                                    },
-                                    child: CircleAvatar(
-                                        backgroundColor: backgroundColor,
-                                        child: SvgPicture.asset(
-                                          'assets/svgs/homesearch.svg',
-                                          height: 18,
-                                        )),
-                                  ),
-                                const SizedBox(
-                                  width: 2,
-                                ),
                                 Padding(
                                   padding: const EdgeInsets.only(right: 15.0),
                                   child: InkWell(

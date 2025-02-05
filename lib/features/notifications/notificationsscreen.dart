@@ -1,5 +1,6 @@
 import 'package:business_bosses_v2/common/widgets/safety_model.dart';
 import 'package:business_bosses_v2/features/chat/chat_room_screen.dart';
+import 'package:business_bosses_v2/features/chat/chat_screen.dart';
 import 'package:business_bosses_v2/features/notifications/controller/notification_controller.dart';
 import 'package:business_bosses_v2/features/notifications/widgets/nonotificationfoundwidget.dart';
 import 'package:business_bosses_v2/features/notifications/widgets/notification_item.dart';
@@ -53,6 +54,23 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
                 'Notifications',
                 textAlign: TextAlign.center,
               ),
+              actions: <Widget>[
+                GestureDetector(
+                  onTap: () => Get.to(const ChatScreen()),
+                  child: Padding(
+                    padding: const EdgeInsets.only(
+                      right: 10.0,
+                    ),
+                    child: CircleAvatar(
+                        radius: 20,
+                        backgroundColor: backgroundColor,
+                        child: SvgPicture.asset(
+                          'assets/svgs/prochat.svg',
+                          height: 15,
+                        )),
+                  ),
+                ),
+              ],
             ),
             body: controller.loading.value
                 ? SafetyModel(
