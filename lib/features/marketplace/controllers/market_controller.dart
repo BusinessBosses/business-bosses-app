@@ -1,4 +1,3 @@
-import 'package:business_bosses_v2/bbpro/models/customitem_model.dart';
 import 'package:business_bosses_v2/bbpro/models/order_model.dart';
 import 'package:business_bosses_v2/bbpro/models/product_model.dart';
 import 'package:business_bosses_v2/bbpro/models/service_model.dart';
@@ -6,7 +5,7 @@ import 'package:business_bosses_v2/common/models/api_response_model.dart';
 import 'package:business_bosses_v2/features/home/controller/home_controller.dart';
 import 'package:business_bosses_v2/features/profile/controller/profile_controller.dart';
 import 'package:business_bosses_v2/services/api_service.dart';
-import 'package:flutter/material.dart';
+
 import 'package:get/get.dart';
 
 import '../../../common/models/comment_model.dart';
@@ -47,6 +46,8 @@ class MarketController extends GetxController {
   RxBool isJoined = RxBool(false);
   bool isLoading = true;
   String? selectedLocation;
+  String? selectedCategory;
+  String searchQuery = '';
 
   RxBool isfiltered = RxBool(false);
   List<Product> filteredProducts = <Product>[];
@@ -195,81 +196,30 @@ class MarketController extends GetxController {
     filteredProducts.clear();
     filteredServices.clear();
     allFilteredItems.clear();
+    isfiltered(false);
+    update();
   }
 
-  void filterItems(
-      String searchQuery,
-      String? selectedPriceRange,
-      TextEditingController? minpricecontroller,
-      TextEditingController? maxpricecontroller,
-      String? selectedCategory,
-      String? selectedDateRange) {
+  void filterItems(String searchQuery) {
     filteredProducts.clear();
     filteredServices.clear();
     allFilteredItems.clear();
 
-    // Convert search query to lowercase for case-insensitive search
-    final String query = searchQuery.toLowerCase();
+    final String query = searchQuery.toLowerCase().trim();
+    final String? normalizedCategory = selectedCategory?.toLowerCase().trim();
 
-    for (Object item in proItems) {
-      bool matchesQuery = query.isEmpty ||
-          (item is Product && item.name.toLowerCase().contains(query)) ||
-          (item is Service && item.name.toLowerCase().contains(query));
+    for (dynamic item in proItems) {
+      final String? itemCategory = (item is Product || item is Service)
+          ? item.category?.toLowerCase().trim()
+          : null;
 
-      bool matchesPrice = true;
-      bool matchesCategory = true;
-      bool matchesDate = true;
+      bool matchesQuery =
+          query.isEmpty || item.name.toLowerCase().contains(query);
 
-      // Price Range Filtering
-      if (selectedPriceRange != null &&
-          minpricecontroller!.text.isNotEmpty &&
-          maxpricecontroller!.text.isNotEmpty) {
-        double minPrice = double.tryParse(minpricecontroller.text) ?? 0.0;
-        double maxPrice =
-            double.tryParse(maxpricecontroller.text) ?? double.infinity;
-        double itemPrice =
-            (item is Product) ? item.price : (item as Service).price;
+      bool matchesCategory = (normalizedCategory == null) ||
+          (itemCategory != null && itemCategory == normalizedCategory);
 
-        matchesPrice = itemPrice >= minPrice && itemPrice <= maxPrice;
-      }
-
-      // Category Filtering
-      if (selectedCategory != null) {
-        String itemCategory =
-            (item is Product) ? item.category : (item as Service).category!;
-        matchesCategory = itemCategory == selectedCategory;
-      }
-
-      // Date Range Filtering
-      if (selectedDateRange != null) {
-        DateTime itemDate = (item is Product)
-            ? item.createdAt
-            : (item is Service)
-                ? item.createdAt
-                : (item as Customitem).createdAt;
-
-        DateTime now = DateTime.now();
-        switch (selectedDateRange) {
-          case 'Last 24 Hours':
-            matchesDate =
-                itemDate.isAfter(now.subtract(const Duration(days: 1)));
-            break;
-          case 'Last 7 Days':
-            matchesDate =
-                itemDate.isAfter(now.subtract(const Duration(days: 7)));
-            break;
-          case 'Last 30 Days':
-            matchesDate =
-                itemDate.isAfter(now.subtract(const Duration(days: 30)));
-            break;
-          default:
-            matchesDate = true;
-            break;
-        }
-      }
-
-      // If item matches all selected filters, add it to the filtered list
-      if (matchesQuery && matchesPrice && matchesCategory && matchesDate) {
+      if (matchesQuery && matchesCategory) {
         if (item is Product) {
           filteredProducts.add(item);
         } else if (item is Service) {
@@ -278,7 +228,9 @@ class MarketController extends GetxController {
         allFilteredItems.add(item);
       }
     }
-    update(); // Refresh UI
+    print('Category: $selectedCategory');
+    isfiltered(true);
+    update();
   }
 
   void updateFiltered() {
