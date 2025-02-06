@@ -6,7 +6,6 @@ import 'package:business_bosses_v2/bbpro/presentation/create_product.dart';
 import 'package:business_bosses_v2/bbpro/presentation/create_service.dart';
 import 'package:business_bosses_v2/bbpro/presentation/my_orders_screen.dart';
 import 'package:business_bosses_v2/bbpro/widgets/button.dart';
-import 'package:business_bosses_v2/bbpro/widgets/edit_text.dart';
 import 'package:business_bosses_v2/bbpro/widgets/proseardwidget.dart';
 import 'package:business_bosses_v2/common/dialogs/snackbar.dart';
 import 'package:business_bosses_v2/features/donations/presentation/filtersuppliers.dart';
@@ -57,8 +56,6 @@ class _MarketplaceScreenState extends State<MarketplaceScreen>
   String? filterCategory;
   int pageSize = 20;
   String? filteredCategory;
-  String? _selectedCategory;
-  String? _selectedLocation;
   bool isScrolled = true;
   final ScrollController _scrollController = ScrollController();
   bool showFloatingButton = false;
@@ -74,9 +71,6 @@ class _MarketplaceScreenState extends State<MarketplaceScreen>
   final ProfileController _profileController = Get.find();
   // State to manage which filter is currently selected
   String selectedFilter = 'none'; // 'none', 'price', 'category', 'date'
-  String? selectedPriceRange;
-  String? selectedCategory;
-  String? selectedDateRange;
 
   @override
   void initState() {
@@ -113,7 +107,7 @@ class _MarketplaceScreenState extends State<MarketplaceScreen>
 
   void selectedCategoryChanged(String? newValue) {
     setState(() {
-      _selectedCategory = newValue;
+      _marketController.selectedCategory = newValue;
     });
   }
 
@@ -163,6 +157,7 @@ class _MarketplaceScreenState extends State<MarketplaceScreen>
         _profileController.myProfile.location ??
         'Nigeria';
     sortItems();
+    print(_marketController.allFilteredItems.toString());
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: PreferredSize(
@@ -333,42 +328,24 @@ class _MarketplaceScreenState extends State<MarketplaceScreen>
                       hintText: 'Search Marketplace',
                       autofocus: false,
                       onChange: (String query) {
+                        _marketController.searchQuery = query;
                         if (query.isNotEmpty) {
-                          _marketController.filterItems(
-                              query,
-                              selectedPriceRange,
-                              minpricecontroller,
-                              maxpricecontroller,
-                              selectedCategory,
-                              selectedDateRange);
+                          _marketController.filterItems(query);
                         } else {
                           _marketController.clearFilter();
-                          selectedPriceRange = null;
-                          selectedCategory = null;
-                          selectedDateRange = null;
-                          minpricecontroller.clear();
-                          maxpricecontroller.clear();
+                          _marketController.selectedCategory = null;
                           sortItems();
                         }
-                        setState(() {});
+                        setState(() {}); // Ensure UI updates
                       },
                       onSubmit: (String query) {
+                        _marketController.searchQuery = query;
                         if (query.isNotEmpty) {
-                          _marketController.filterItems(
-                              query,
-                              selectedPriceRange,
-                              minpricecontroller,
-                              maxpricecontroller,
-                              selectedCategory,
-                              selectedDateRange);
+                          _marketController.filterItems(query);
                           supplierController.searchSuppliers(query);
                         } else {
                           _marketController.clearFilter();
-                          selectedPriceRange = null;
-                          selectedCategory = null;
-                          selectedDateRange = null;
-                          minpricecontroller.clear();
-                          maxpricecontroller.clear();
+                          _marketController.selectedCategory = null;
                           supplierController.clearSupplierSearch();
                           sortItems();
                         }
@@ -596,268 +573,89 @@ class _MarketplaceScreenState extends State<MarketplaceScreen>
                                 },
                               );
                             } else {
-                              return _marketController.searchResult.isEmpty &&
-                                      _marketController.isfiltered.value
-                                  ? SafetyModel(
-                                      isLoading: false,
-                                      icon: const Icon(
-                                        Icons.shopping_cart,
-                                        color: Colors.grey,
-                                        size: 80.0,
-                                      ),
-                                      title:
-                                          'No Items Available For This Search',
-                                      // subTitle: '',
-                                      clickableText: 'View All',
-                                      onTap: () {
-                                        setState(
-                                          () {
-                                            filterLocation = null;
-                                            filterCode = null;
-                                            filterCategory = null;
-                                            _selectedLocation = null;
-                                            _selectedCategory = null;
-                                            _marketController.updateFiltered();
-                                            _marketController.initMarket();
-                                          },
-                                        );
-                                      },
-                                    )
-                                  : RefreshIndicator(
-                                      onRefresh: refreshData,
-                                      child: _marketController.isfiltered.value
-                                          ? NotificationListener<
-                                              ScrollNotification>(
-                                              onNotification:
-                                                  (ScrollNotification
-                                                      notification) {
-                                                if (notification
-                                                    is ScrollUpdateNotification) {
-                                                  if (notification
-                                                              .dragDetails !=
-                                                          null &&
-                                                      notification.dragDetails!
-                                                              .primaryDelta !=
-                                                          null) {
-                                                    double primaryDelta =
-                                                        notification
-                                                            .dragDetails!
-                                                            .primaryDelta!;
-
-                                                    if (primaryDelta > 0) {
-                                                      // Scrolling downward
-                                                      setState(() {
-                                                        isScrolled = true;
-                                                      });
-                                                    } else if (primaryDelta <
-                                                        0) {
-                                                      // Scrolling upward
-                                                      setState(() {
-                                                        isScrolled = false;
-                                                      });
-                                                    }
-                                                  }
-                                                }
-
-                                                return true;
-                                              },
-                                              child: ListView.builder(
-                                                shrinkWrap: true,
-                                                itemCount: _marketController
-                                                        .isfiltered.value
-                                                    ? _marketController
-                                                        .searchResult.length
-                                                    : _marketController
-                                                            .markets.length +
-                                                        1,
-                                                itemBuilder:
-                                                    (BuildContext context,
-                                                        int index) {
-                                                  if (index <
-                                                      (_marketController
-                                                              .isfiltered.value
-                                                          ? _marketController
-                                                              .searchResult
-                                                              .length
-                                                          : _marketController
-                                                              .markets
-                                                              .length)) {
-                                                    final MarketModel market =
-                                                        _marketController
-                                                                .isfiltered
-                                                                .value
-                                                            ? _marketController
-                                                                    .searchResult[
-                                                                index]
-                                                            : _marketController
-                                                                .markets[index];
-                                                    return VisibilityDetector(
-                                                      key:
-                                                          Key(index.toString()),
-                                                      onVisibilityChanged:
-                                                          (VisibilityInfo
-                                                              info) {
-                                                        final bool
-                                                            hasIncrementedView =
-                                                            hmeController
-                                                                .itemsWithIncrementedViews
-                                                                .contains(_marketController
-                                                                    .markets[
-                                                                        index]
-                                                                    .marketId);
-                                                        if (info.visibleFraction ==
-                                                                1.0 &&
-                                                            !hasIncrementedView) {
-                                                          _marketController
-                                                              .updatemarketViews(
-                                                                  _marketController
-                                                                          .markets[
-                                                                      index]);
-                                                          setState(() {
-                                                            hmeController
-                                                                .itemsWithIncrementedViews
-                                                                .add(_marketController
-                                                                    .markets[
-                                                                        index]
-                                                                    .marketId); // Set the flag to prevent further increments
-                                                          });
-                                                        }
-                                                      },
-                                                      child: _marketController
-                                                              .markets[index]
-                                                              .isProduct
-                                                          ? MarketTile(
-                                                              post: market,
-                                                              controller:
-                                                                  _marketController,
-                                                              key: ValueKey<
-                                                                      String>(
-                                                                  _marketController
-                                                                      .markets[
-                                                                          index]
-                                                                      .marketId),
-                                                            )
-                                                          : ServiceTile(
-                                                              post: market,
-                                                              controller:
-                                                                  _marketController,
-                                                              key: ValueKey<
-                                                                      String>(
-                                                                  _marketController
-                                                                      .markets[
-                                                                          index]
-                                                                      .marketId),
-                                                            ),
-                                                    );
-                                                  } else {
-                                                    // Display a loading indicator at the end of the list
-                                                    if (_marketController
-                                                        .loadingMore.value) {
-                                                      return const Padding(
-                                                        padding:
-                                                            EdgeInsets.all(8.0),
-                                                        child: Center(
-                                                          child:
-                                                              CircularProgressIndicator(),
-                                                        ),
-                                                      );
-                                                    } else {
-                                                      return const SizedBox
-                                                          .shrink();
-                                                    }
-                                                  }
-                                                },
+                              return RefreshIndicator(
+                                onRefresh: refreshData,
+                                child: DefaultTabController(
+                                  length: 4, // Number of tabs
+                                  child: Column(
+                                    children: <Widget>[
+                                      Container(
+                                        constraints:
+                                            const BoxConstraints.expand(
+                                                height: 45),
+                                        child: TabBar(
+                                          labelStyle: const TextStyle(
+                                              fontWeight: FontWeight.w400),
+                                          controller: _marketplaceTabController,
+                                          isScrollable: false,
+                                          labelPadding:
+                                              const EdgeInsets.symmetric(
+                                                  horizontal: 20.0),
+                                          tabs: const <Widget>[
+                                            Tab(
+                                              icon: Icon(
+                                                Icons.dashboard,
+                                                size: 15,
                                               ),
-                                            )
-                                          : DefaultTabController(
-                                              length: 4, // Number of tabs
-                                              child: Column(
-                                                children: <Widget>[
-                                                  Container(
-                                                    constraints:
-                                                        const BoxConstraints
-                                                            .expand(height: 45),
-                                                    child: TabBar(
-                                                      labelStyle:
-                                                          const TextStyle(
-                                                              fontWeight:
-                                                                  FontWeight
-                                                                      .w400),
-                                                      controller:
-                                                          _marketplaceTabController,
-                                                      isScrollable: false,
-                                                      labelPadding:
-                                                          const EdgeInsets
-                                                              .symmetric(
-                                                              horizontal: 20.0),
-                                                      tabs: const <Widget>[
-                                                        Tab(
-                                                          icon: Icon(
-                                                            Icons.dashboard,
-                                                            size: 15,
-                                                          ),
-                                                        ),
-                                                        Tab(
-                                                          child: FittedBox(
-                                                            child: Text(
-                                                              'Products',
-                                                              style: TextStyle(
-                                                                  fontWeight:
-                                                                      FontWeight
-                                                                          .w700,
-                                                                  fontSize: 14),
-                                                            ),
-                                                          ),
-                                                        ),
-                                                        Tab(
-                                                          child: FittedBox(
-                                                            child: Text(
-                                                              'Services',
-                                                              style: TextStyle(
-                                                                  fontWeight:
-                                                                      FontWeight
-                                                                          .w700,
-                                                                  fontSize: 14),
-                                                            ),
-                                                          ),
-                                                        ),
-                                                        Tab(
-                                                          child: FittedBox(
-                                                            child: Text(
-                                                              'Suppliers',
-                                                              style: TextStyle(
-                                                                  fontWeight:
-                                                                      FontWeight
-                                                                          .w700,
-                                                                  fontSize: 14),
-                                                            ),
-                                                          ),
-                                                        ),
-                                                      ],
-                                                    ),
-                                                  ),
-                                                  Expanded(
-                                                    child: Column(
-                                                      children: <Widget>[
-                                                        Expanded(
-                                                          child: TabBarView(
-                                                            controller:
-                                                                _marketplaceTabController,
-                                                            children: const <Widget>[
-                                                              MarketsPage(),
-                                                              ProductsPage(),
-                                                              ServicesPage(),
-                                                              SuppliersPage(),
-                                                            ],
-                                                          ),
-                                                        ),
-                                                      ],
-                                                    ),
-                                                  ),
+                                            ),
+                                            Tab(
+                                              child: FittedBox(
+                                                child: Text(
+                                                  'Products',
+                                                  style: TextStyle(
+                                                      fontWeight:
+                                                          FontWeight.w700,
+                                                      fontSize: 14),
+                                                ),
+                                              ),
+                                            ),
+                                            Tab(
+                                              child: FittedBox(
+                                                child: Text(
+                                                  'Services',
+                                                  style: TextStyle(
+                                                      fontWeight:
+                                                          FontWeight.w700,
+                                                      fontSize: 14),
+                                                ),
+                                              ),
+                                            ),
+                                            Tab(
+                                              child: FittedBox(
+                                                child: Text(
+                                                  'Suppliers',
+                                                  style: TextStyle(
+                                                      fontWeight:
+                                                          FontWeight.w700,
+                                                      fontSize: 14),
+                                                ),
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                      Expanded(
+                                        child: Column(
+                                          children: <Widget>[
+                                            Expanded(
+                                              child: TabBarView(
+                                                controller:
+                                                    _marketplaceTabController,
+                                                children: const <Widget>[
+                                                  MarketsPage(),
+                                                  ProductsPage(),
+                                                  ServicesPage(),
+                                                  SuppliersPage(),
                                                 ],
                                               ),
                                             ),
-                                    );
+                                          ],
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              );
                             }
                           }),
                         ),
@@ -894,220 +692,59 @@ class _MarketplaceScreenState extends State<MarketplaceScreen>
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[
-                if (selectedFilter == 'none') ...<Widget>[
-                  const Text(
-                    'Filters',
-                    style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-                  ),
-                  const SizedBox(height: 10),
-                  ListTile(
-                    trailing: const Icon(Icons.chevron_right),
-                    horizontalTitleGap: 0,
-                    contentPadding: EdgeInsets.zero,
-                    leading: const Icon(Icons.attach_money),
-                    title: const Text('Filter by Price'),
-                    subtitle:
-                        Text(selectedPriceRange ?? 'No price range selected'),
-                    onTap: () {
-                      setState(() {
-                        selectedFilter = 'price'; // Show price filter options
-                      });
-                    },
-                  ),
-                  ListTile(
-                    trailing: const Icon(Icons.chevron_right),
-                    horizontalTitleGap: 0,
-                    contentPadding: EdgeInsets.zero,
-                    leading: const Icon(Icons.category),
-                    title: const Text('Filter by Category'),
-                    subtitle: Text(selectedCategory ?? 'No category selected'),
-                    onTap: () {
-                      setState(() {
-                        selectedFilter =
-                            'category'; // Show category filter options
-                      });
-                    },
-                  ),
-                  ListTile(
-                    trailing: const Icon(Icons.chevron_right),
-                    horizontalTitleGap: 0,
-                    contentPadding: EdgeInsets.zero,
-                    leading: const Icon(Icons.date_range),
-                    title: const Text('Filter by Date'),
-                    subtitle:
-                        Text(selectedDateRange ?? 'No date range selected'),
-                    onTap: () {
-                      setState(() {
-                        selectedFilter = 'date'; // Show date filter options
-                      });
-                    },
-                  ),
-                ],
-
-                // Price Filter Options
-                if (selectedFilter == 'price') ...<Widget>[
-                  const Text(
-                    'Set Price Range',
-                    style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-                  ),
-                  const SizedBox(
-                    height: 10,
-                  ),
-                  CustomEditText(
-                    padding: 0,
-                    iscurrencyfield: true,
-                    caption: 'Minimum Price',
-                    hintText: '0.00',
-                    controller: minpricecontroller,
-                  ),
-                  const SizedBox(height: 10),
-                  CustomEditText(
-                    padding: 0,
-                    iscurrencyfield: true,
-                    caption: 'Maximum Price',
-                    hintText: '0.00',
-                    controller: maxpricecontroller,
-                  ),
-                  const SizedBox(height: 20),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: <Widget>[
-                      TextButton(
-                        onPressed: () {
+                const Text(
+                  'Filter by Category',
+                  style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                ),
+                const SizedBox(height: 10),
+                Expanded(
+                  child: ListView(
+                    children: <String>[
+                      'Home, Garden & Outdoors',
+                      'Fashion & Beauty',
+                      'Sports & Entertainment',
+                      'Books & Education',
+                      'Jewellery & Timepieces',
+                      'Security, Safety & Equipment',
+                      'Video Games & Electronics',
+                      'Agriculture, Food, Beverage',
+                      'Construction & Real Estate',
+                      'Vehicle & Transportation',
+                      'Business Services & Events',
+                      'Other',
+                    ].map((String category) {
+                      return ListTile(
+                        title: Text(category),
+                        onTap: () {
                           setState(() {
-                            selectedFilter = 'none'; // Go back to main filters
+                            _marketController.selectedCategory = category;
                           });
                         },
-                        child: const Text('Back'),
-                      ),
-                      ElevatedButton(
-                        onPressed: () {
-                          // Handle price filter logic here
-                          setState(() {
-                            selectedPriceRange = 'Selected Price Range';
-                            selectedFilter = 'none';
-                          });
-                        },
-                        child: const Text('Apply'),
-                      ),
-                    ],
+                        trailing: _marketController.selectedCategory == category
+                            ? const Icon(Icons.check, color: Colors.blue)
+                            : null,
+                      );
+                    }).toList(),
                   ),
-                ],
-
-                // Category Filter Options
-                if (selectedFilter == 'category') ...<Widget>[
-                  const Text(
-                    'Select Category',
-                    style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-                  ),
-                  const SizedBox(height: 10),
-                  Expanded(
-                    child: ListView(
-                      children: <String>[
-                        'Electronics',
-                        'Clothing',
-                        'Home & Kitchen',
-                        'Books',
-                        'Sports',
-                        'Others',
-                      ].map((String category) {
-                        return ListTile(
-                          title: Text(category),
-                          onTap: () {
-                            setState(() {
-                              selectedCategory = category;
-                              selectedFilter = 'none';
-                            });
-                          },
-                        );
-                      }).toList(),
-                    ),
-                  ),
-                  TextButton(
-                    onPressed: () {
-                      setState(() {
-                        selectedFilter = 'none'; // Go back to main filters
-                      });
-                    },
-                    child: const Text('Back'),
-                  ),
-                ],
-
-                // Date Filter Options
-                if (selectedFilter == 'date') ...<Widget>[
-                  const Text(
-                    'Select Date Range',
-                    style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-                  ),
-                  const SizedBox(height: 10),
-                  Expanded(
-                    child: ListView(
-                      children: <String>[
-                        'Any',
-                        'Last 24 Hours',
-                        'Last 7 Days',
-                        'Last 30 Days',
-                      ].map((String dateOption) {
-                        return ListTile(
-                          title: Text(dateOption),
-                          onTap: () {
-                            setState(() {
-                              selectedDateRange = dateOption;
-                              selectedFilter = 'none';
-                            });
-                          },
-                        );
-                      }).toList(),
-                    ),
-                  ),
-                  TextButton(
-                    onPressed: () {
-                      setState(() {
-                        selectedFilter = 'none'; // Go back to main filters
-                      });
-                    },
-                    child: const Text('Back'),
-                  ),
-                ],
-                const SizedBox(height: 20),
+                ),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.end,
                   children: <Widget>[
                     ElevatedButton(
-                      style: ButtonStyle(
-                          textStyle: MaterialStateProperty.all<TextStyle>(
-                              const TextStyle(color: Colors.black)),
-                          backgroundColor:
-                              MaterialStateProperty.all(backgroundColor)),
                       onPressed: () {
                         setState(() {
-                          selectedPriceRange = null;
-                          selectedCategory = null;
-                          selectedDateRange = null;
-                          minpricecontroller.clear();
-                          maxpricecontroller.clear();
-                          _marketController.filterItems(
-                              '',
-                              selectedPriceRange,
-                              minpricecontroller,
-                              maxpricecontroller,
-                              selectedCategory,
-                              selectedDateRange);
-                          sortItems();
+                          _marketController.selectedCategory = null;
                         });
+                        Navigator.pop(context);
                       },
-                      child: const Text(
-                        'Reset',
-                        style: TextStyle(color: Colors.black),
-                      ),
+                      child: const Text('Reset'),
                     ),
-                    const SizedBox(
-                      width: 10,
-                    ),
+                    const SizedBox(width: 10),
                     ElevatedButton(
                       onPressed: () {
                         Navigator.pop(context);
-                        // Apply the filters
+                        _marketController
+                            .filterItems(_marketController.searchQuery);
                       },
                       child: const Text('Apply Filter'),
                     ),
@@ -1122,147 +759,60 @@ class _MarketplaceScreenState extends State<MarketplaceScreen>
   }
 
   void sortItems() {
-    _marketController.proItems.sort((Object a, Object b) {
-      final DateTime aDate = (a is Product)
+    String? myLocation = _marketController.selectedLocation?.toLowerCase();
+
+    // Define a reusable sorting function
+    int compareItems(Object a, Object b) {
+      DateTime aDate = (a is Product)
           ? a.createdAt
           : (a is Service)
               ? a.createdAt
               : (a as Customitem).createdAt;
-      final DateTime bDate = (b is Product)
+      DateTime bDate = (b is Product)
           ? b.createdAt
           : (b is Service)
               ? b.createdAt
               : (b as Customitem).createdAt;
 
-      final String? aLocation = (a is Product)
+      String? aLocation = (a is Product)
           ? a.location
           : (a is Service)
               ? a.location
-              : (a as Customitem).shop!.location;
-      final String? bLocation = (b is Product)
+              : (a as Customitem).shop?.location;
+      String? bLocation = (b is Product)
           ? b.location
           : (b is Service)
               ? b.location
-              : (b as Customitem).shop!.location;
+              : (b as Customitem).shop?.location;
 
-      final String? myLocation =
-          _marketController.selectedLocation?.toLowerCase();
+      String aLoc = aLocation?.toLowerCase() ?? '';
+      String bLoc = bLocation?.toLowerCase() ?? '';
 
-      // Ensure case-insensitive comparison
-      final String aLoc = aLocation?.toLowerCase() ?? '';
-      final String bLoc = bLocation?.toLowerCase() ?? '';
+      // Step 1: Prioritize items matching the selected location
+      bool aIsMyLocation = aLoc == myLocation;
+      bool bIsMyLocation = bLoc == myLocation;
 
-      // Step 1: Prioritize myLocation (Nigeria) at the top
-      final bool aIsMyLocation = aLoc == myLocation;
-      final bool bIsMyLocation = bLoc == myLocation;
+      if (aIsMyLocation && !bIsMyLocation) return -1; // a goes up
+      if (!aIsMyLocation && bIsMyLocation) return 1; // b goes up
 
-      if (aIsMyLocation && !bIsMyLocation) return -1; // a (Nigeria) goes up
-      if (!aIsMyLocation && bIsMyLocation) return 1; // b (Nigeria) goes up
+      // Step 2: Sort by date (newest first)
+      return bDate.compareTo(aDate);
+    }
 
-      // Step 2: If both are Nigeria (or both are not Nigeria), sort by date (newest first)
-      final DateTime safeADate = aDate;
-      final DateTime safeBDate = bDate;
+    if (_marketController.isfiltered.value) {
+      // Sort filtered lists
+      _marketController.filteredProducts.sort(compareItems);
+      _marketController.filteredServices.sort(compareItems);
+      _marketController.allFilteredItems.sort(compareItems);
+    } else {
+      // Sort all items when no filter is applied
+      _marketController.proItems.sort(compareItems);
+      _marketController.proItemsWithImages.sort(compareItems);
+      _marketController.proProducts.sort(compareItems);
+      _marketController.proServices.sort(compareItems);
+    }
 
-      return safeBDate.compareTo(safeADate);
-    });
-
-    _marketController.proItemsWithImages.sort((Object a, Object b) {
-      final DateTime aDate = (a is Product)
-          ? a.createdAt
-          : (a is Service)
-              ? a.createdAt
-              : (a as Customitem).createdAt;
-      final DateTime bDate = (b is Product)
-          ? b.createdAt
-          : (b is Service)
-              ? b.createdAt
-              : (b as Customitem).createdAt;
-
-      final String? aLocation = (a is Product)
-          ? a.location
-          : (a is Service)
-              ? a.location
-              : (a as Customitem).shop!.location;
-      final String? bLocation = (b is Product)
-          ? b.location
-          : (b is Service)
-              ? b.location
-              : (b as Customitem).shop!.location;
-
-      final String? myLocation =
-          _marketController.selectedLocation?.toLowerCase();
-
-      // Ensure case-insensitive comparison
-      final String aLoc = aLocation?.toLowerCase() ?? '';
-      final String bLoc = bLocation?.toLowerCase() ?? '';
-
-      // Step 1: Prioritize myLocation (Nigeria) at the top
-      final bool aIsMyLocation = aLoc == myLocation;
-      final bool bIsMyLocation = bLoc == myLocation;
-
-      if (aIsMyLocation && !bIsMyLocation) return -1; // a (Nigeria) goes up
-      if (!aIsMyLocation && bIsMyLocation) return 1; // b (Nigeria) goes up
-
-      // Step 2: If both are Nigeria (or both are not Nigeria), sort by date (newest first)
-      final DateTime safeADate = aDate;
-      final DateTime safeBDate = bDate;
-
-      return safeBDate.compareTo(safeADate);
-    });
-    _marketController.proProducts.sort((Product a, Product b) {
-      final DateTime aDate = a.createdAt;
-      final DateTime bDate = b.createdAt;
-
-      final String? aLocation = a.location;
-      final String? bLocation = b.location;
-
-      final String? myLocation =
-          _marketController.selectedLocation?.toLowerCase();
-
-      // Ensure case-insensitive comparison
-      final String aLoc = aLocation?.toLowerCase() ?? '';
-      final String bLoc = bLocation?.toLowerCase() ?? '';
-
-      // Step 1: Prioritize myLocation (Nigeria) at the top
-      final bool aIsMyLocation = aLoc == myLocation;
-      final bool bIsMyLocation = bLoc == myLocation;
-
-      if (aIsMyLocation && !bIsMyLocation) return -1; // a (Nigeria) goes up
-      if (!aIsMyLocation && bIsMyLocation) return 1; // b (Nigeria) goes up
-
-      // Step 2: If both are Nigeria (or both are not Nigeria), sort by date (newest first)
-      final DateTime safeADate = aDate;
-      final DateTime safeBDate = bDate;
-
-      return safeBDate.compareTo(safeADate);
-    });
-    _marketController.proServices.sort((Service a, Service b) {
-      final DateTime aDate = a.createdAt;
-      final DateTime bDate = b.createdAt;
-
-      final String aLocation = a.location;
-      final String bLocation = b.location;
-
-      final String? myLocation =
-          _marketController.selectedLocation?.toLowerCase();
-
-      // Ensure case-insensitive comparison
-      final String aLoc = aLocation.toLowerCase();
-      final String bLoc = bLocation.toLowerCase();
-
-      // Step 1: Prioritize myLocation (Nigeria) at the top
-      final bool aIsMyLocation = aLoc == myLocation;
-      final bool bIsMyLocation = bLoc == myLocation;
-
-      if (aIsMyLocation && !bIsMyLocation) return -1; // a (Nigeria) goes up
-      if (!aIsMyLocation && bIsMyLocation) return 1; // b (Nigeria) goes up
-
-      // Step 2: If both are Nigeria (or both are not Nigeria), sort by date (newest first)
-      final DateTime safeADate = aDate;
-      final DateTime safeBDate = bDate;
-
-      return safeBDate.compareTo(safeADate);
-    });
-    setState(() {});
+    _marketController.update(); // Refresh UI
+    setState(() {}); // Ensure UI updates
   }
 }

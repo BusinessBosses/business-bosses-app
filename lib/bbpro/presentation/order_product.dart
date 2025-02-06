@@ -356,6 +356,8 @@ class _OrderProductScreenState extends State<OrderProductScreen> {
                         height: 15,
                       ),
                       Column(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        crossAxisAlignment: CrossAxisAlignment.start,
                         children: <Widget>[
                           Row(
                             children: <Widget>[
@@ -407,6 +409,10 @@ class _OrderProductScreenState extends State<OrderProductScreen> {
                                   ),
                                 ),
                             ],
+                          ),
+                          Text(
+                            'Category: ${widget.product.category}',
+                            textAlign: TextAlign.start,
                           ),
                           const SizedBox(
                             height: 15,

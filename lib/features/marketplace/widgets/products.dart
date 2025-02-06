@@ -45,7 +45,11 @@ class _ProductsPageState extends State<ProductsPage> {
           constraints: BoxConstraints(
             minHeight: MediaQuery.of(context).size.height,
           ),
-          child: Column(
+          child: GetBuilder<MarketController>(builder:(MarketController controller) {
+             List<Product> products = _marketController.filteredProducts.isEmpty
+                ? _marketController.proProducts
+                : _marketController.filteredProducts;
+            return Column(
             children: <Widget>[
               Padding(
                 padding: const EdgeInsets.only(top: 10),
@@ -71,12 +75,12 @@ class _ProductsPageState extends State<ProductsPage> {
                       const StaggeredTile.fit(1),
                   mainAxisSpacing: 10.0,
                   crossAxisSpacing: 10.0,
-                  itemCount: _marketController.proProducts.length,
+                  itemCount: products.length,
                   shrinkWrap: true,
                   physics: const NeverScrollableScrollPhysics(),
                   itemBuilder: (BuildContext context, int index) {
                     final Product product =
-                        _marketController.proProducts[index];
+                        products[index];
                     return GestureDetector(
                       onTap: () {
                         if (product.user!.uid ==
@@ -104,7 +108,8 @@ class _ProductsPageState extends State<ProductsPage> {
                 height: 100,
               ),
             ],
-          ),
+          );
+          }), 
         ),
       ),
     );
