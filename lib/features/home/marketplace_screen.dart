@@ -950,6 +950,9 @@ class _MarketplaceScreenState extends State<MarketplaceScreen>
                     'Set Price Range',
                     style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
                   ),
+                  const SizedBox(
+                    height: 10,
+                  ),
                   CustomEditText(
                     padding: 0,
                     iscurrencyfield: true,
