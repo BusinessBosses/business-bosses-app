@@ -274,13 +274,13 @@ class _CreateServiceListingState extends State<CreateServiceListing>
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: probackgroundColor,
+      backgroundColor: backgroundColor,
       appBar: AppBar(
         automaticallyImplyLeading: false,
         title: Text(
           widget.service != null ? 'Edit Service' : 'Create Service Listing',
           style: const TextStyle(
-            color: proprimaryColor,
+            color: textColor,
             fontWeight: FontWeight.bold,
           ),
         ),
@@ -428,7 +428,7 @@ class _CreateServiceListingState extends State<CreateServiceListing>
                 caption: 'Is this an Appointment Service',
                 subtext:
                     'If this is an appointment service, you must choose a duration, select a date and time for bookings.',
-                activeColor: proprimaryColor,
+                activeColor: primaryColorLT,
                 inactiveColor: Colors.grey,
               ),
             ),
@@ -861,10 +861,10 @@ class _CreateServiceListingState extends State<CreateServiceListing>
                     _isSwitched = value;
                   });
                 },
-                icon: 'assets/svgs/rocket.svg',
+                icon: 'assets/svgs/rocketblack.svg',
                 caption: 'Boost this listing',
                 subtext: 'Reach a wider audience and get more views',
-                activeColor: proprimaryColor,
+                activeColor: primaryColorLT,
                 inactiveColor: Colors.grey,
               ),
             ),
@@ -881,7 +881,7 @@ class _CreateServiceListingState extends State<CreateServiceListing>
                 caption: 'Status',
                 subtext:
                     'If status is active, this product will show in your shop',
-                activeColor: proprimaryColor,
+                activeColor: primaryColorLT,
                 inactiveColor: Colors.grey,
               ),
             ),
@@ -890,6 +890,7 @@ class _CreateServiceListingState extends State<CreateServiceListing>
 
             // Submit Button
             ProCustomButton(
+              color: primaryColorLT,
               loading: isSubmitted,
               text: widget.service != null ? 'Save Changes' : 'Create Service',
               onPressed: _submitForm,
@@ -919,7 +920,7 @@ class _CreateServiceListingState extends State<CreateServiceListing>
                             text: 'Biz-Center Guidelines',
                             style: const TextStyle(
                               fontWeight: FontWeight.bold,
-                              color: proprimaryColor,
+                              color: primaryColorLT,
                               decoration: TextDecoration.underline,
                               fontSize: 12,
                             ),

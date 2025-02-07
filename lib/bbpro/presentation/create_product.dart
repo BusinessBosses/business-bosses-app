@@ -147,7 +147,7 @@ class _CreateProductListingState extends State<CreateProductListing> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: probackgroundColor,
+      backgroundColor: backgroundColor,
       appBar: AppBar(
         automaticallyImplyLeading: false,
         title: Text(
@@ -155,7 +155,7 @@ class _CreateProductListingState extends State<CreateProductListing> {
               ? 'Create Product Listing'
               : 'Edit Product Listing',
           style: const TextStyle(
-            color: proprimaryColor,
+            color: textColor,
             fontWeight: FontWeight.bold,
           ),
         ),
@@ -608,12 +608,13 @@ class _CreateProductListingState extends State<CreateProductListing> {
                       caption: 'Status',
                       subtext:
                           'If status is active, this product will show in your shop',
-                      activeColor: proprimaryColor,
+                      activeColor: primaryColorLT,
                       inactiveColor: Colors.grey,
                     ),
                   ),
                   const SizedBox(height: 16),
                   ProCustomButton(
+                    color: primaryColorLT,
                     loading: isSubmitted,
                     text: widget.product != null
                         ? 'Save Changes'
@@ -751,7 +752,7 @@ class _CreateProductListingState extends State<CreateProductListing> {
                                   text: 'Biz-Center Guidelines',
                                   style: const TextStyle(
                                     fontWeight: FontWeight.bold,
-                                    color: proprimaryColor,
+                                    color: primaryColorLT,
                                     decoration: TextDecoration.underline,
                                     fontSize: 12,
                                   ),

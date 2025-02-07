@@ -15,7 +15,7 @@ class SwitchWidget extends StatefulWidget {
     Key? key,
     required this.value,
     required this.onChanged,
-    this.activeColor = proprimaryColor,
+    this.activeColor = primaryColorLT,
     this.inactiveColor = Colors.grey,
     this.caption = '',
     this.subtext = '',
@@ -77,7 +77,7 @@ class _SwitchWidgetState extends State<SwitchWidget>
               if (widget.icon != null)
                 SvgPicture.asset(
                   widget.icon!,
-                  color: proprimaryColor,
+                  color: primaryColorLT,
                   width: 25,
                   height: 25,
                 ),

@@ -736,8 +736,22 @@ class _OrderProductScreenState extends State<OrderProductScreen> {
                     text: 'Place Order',
                   ),
                 ),
-                const SizedBox(
-                  height: 15,
+                const SizedBox(height: 15),
+                Padding(
+                  padding: const EdgeInsets.only(
+                      left: 20.0, bottom: 200, right: 20, top: 20),
+                  child: ClipRRect(
+                    borderRadius: BorderRadius.circular(10),
+                    child: Container(
+                      color: Colors.grey.shade200,
+                      child: const Padding(
+                        padding: EdgeInsets.all(15.0),
+                        child: Text(
+                          'Safety tips \n\n• Check seller offers buyer protection before making payment \n• On delivery, check that the item delivered is what you ordered \n• Report any seller you have any concerns about',
+                        ),
+                      ),
+                    ),
+                  ),
                 ),
               ],
             ),
