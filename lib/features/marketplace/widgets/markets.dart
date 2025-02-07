@@ -81,6 +81,7 @@ class _MarketsPageState extends State<MarketsPage> {
                                 // Get.to(() => CreateProductListing(product: product));
                               } else {
                                 Get.to(() => OrderProductScreen(
+                                      ismarketplace: true,
                                       product: product,
                                       shop: product.shop!,
                                     ));
@@ -105,6 +106,7 @@ class _MarketsPageState extends State<MarketsPage> {
                                 // Get.to(() => CreateServiceListing(service: service));
                               } else {
                                 Get.to(() => BookServiceScreen(
+                                      isMarketplace: true,
                                       service: service,
                                       shop: service.shop!,
                                     ));

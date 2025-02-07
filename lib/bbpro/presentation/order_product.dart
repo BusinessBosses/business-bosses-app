@@ -25,10 +25,14 @@ import 'package:get/get.dart';
 import 'package:lottie/lottie.dart';
 
 class OrderProductScreen extends StatefulWidget {
+  final bool? ismarketplace;
   final Product product;
   final Shop shop;
   const OrderProductScreen(
-      {super.key, required this.product, required this.shop});
+      {super.key,
+      required this.product,
+      required this.shop,
+      this.ismarketplace});
 
   @override
   State<OrderProductScreen> createState() => _OrderProductScreenState();

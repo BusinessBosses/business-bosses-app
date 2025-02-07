@@ -52,10 +52,14 @@ String formatServiceDuration(int? duration) {
 }
 
 class BookServiceScreen extends StatefulWidget {
+  final bool? isMarketplace;
   final Service service;
   final Shop shop;
   const BookServiceScreen(
-      {super.key, required this.service, required this.shop});
+      {super.key,
+      required this.service,
+      required this.shop,
+      this.isMarketplace});
 
   @override
   State<BookServiceScreen> createState() => _BookServiceScreenState();

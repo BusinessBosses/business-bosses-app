@@ -23,8 +23,9 @@ import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
 
 class CreateProductListing extends StatefulWidget {
+  final bool? isMarketplace;
   final Product? product;
-  const CreateProductListing({super.key, this.product});
+  const CreateProductListing({super.key, this.product, this.isMarketplace});
 
   @override
   // ignore: library_private_types_in_public_api
@@ -591,7 +592,9 @@ class _CreateProductListingState extends State<CreateProductListing> {
                       icon: 'assets/svgs/rocket.svg',
                       caption: 'Boost this listing',
                       subtext: 'Reach a wider audience and get more views',
-                      activeColor: proprimaryColor,
+                      activeColor: widget.isMarketplace != null
+                          ? primaryColorLT
+                          : proprimaryColor,
                       inactiveColor: Colors.grey,
                     ),
                   ),
@@ -608,13 +611,17 @@ class _CreateProductListingState extends State<CreateProductListing> {
                       caption: 'Status',
                       subtext:
                           'If status is active, this product will show in your shop',
-                      activeColor: primaryColorLT,
+                      activeColor: widget.isMarketplace != null
+                          ? primaryColorLT
+                          : proprimaryColor,
                       inactiveColor: Colors.grey,
                     ),
                   ),
                   const SizedBox(height: 16),
                   ProCustomButton(
-                    color: primaryColorLT,
+                    color: widget.isMarketplace != null
+                        ? primaryColorLT
+                        : proprimaryColor,
                     loading: isSubmitted,
                     text: widget.product != null
                         ? 'Save Changes'
@@ -750,9 +757,11 @@ class _CreateProductListingState extends State<CreateProductListing> {
                                 ),
                                 TextSpan(
                                   text: 'Biz-Center Guidelines',
-                                  style: const TextStyle(
+                                  style: TextStyle(
                                     fontWeight: FontWeight.bold,
-                                    color: primaryColorLT,
+                                    color: widget.isMarketplace != null
+                                        ? primaryColorLT
+                                        : proprimaryColor,
                                     decoration: TextDecoration.underline,
                                     fontSize: 12,
                                   ),

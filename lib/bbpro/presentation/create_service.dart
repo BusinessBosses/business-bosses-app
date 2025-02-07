@@ -27,8 +27,9 @@ import 'package:business_bosses_v2/utils/theme/theme.dart';
 import 'package:syncfusion_flutter_calendar/calendar.dart';
 
 class CreateServiceListing extends StatefulWidget {
+  final bool? isMarketplace;
   final Service? service;
-  const CreateServiceListing({super.key, this.service});
+  const CreateServiceListing({super.key, this.service, this.isMarketplace});
 
   @override
   // ignore: library_private_types_in_public_api
@@ -514,7 +515,9 @@ class _CreateServiceListingState extends State<CreateServiceListing>
                               },
                               icon: SvgPicture.asset(
                                 'assets/svgs/dropdown.svg',
-                                color: proprimaryColor,
+                                color: widget.isMarketplace != null
+                                    ? primaryColorLT
+                                    : proprimaryColor,
                               ),
                               items: const <String>[
                                 'minute(s)',
@@ -800,16 +803,20 @@ class _CreateServiceListingState extends State<CreateServiceListing>
                               children: <Widget>[
                                 ProIconButton(
                                   backgroundColor: Colors.white,
-                                  textColor: proprimaryColor,
+                                  textColor: widget.isMarketplace != null
+                                      ? primaryColorLT
+                                      : proprimaryColor,
                                   text:
                                       'Add Additional Packages to this service',
                                   onPressed: () {
                                     _showAddPackageSheet(context);
                                   },
-                                  icon: const Icon(
+                                  icon: Icon(
                                     Icons.add,
                                     size: 20,
-                                    color: proprimaryColor,
+                                    color: widget.isMarketplace != null
+                                        ? primaryColorLT
+                                        : proprimaryColor,
                                   ),
                                 ),
                               ],
@@ -825,15 +832,19 @@ class _CreateServiceListingState extends State<CreateServiceListing>
                     children: <Widget>[
                       ProIconButton(
                         backgroundColor: Colors.white,
-                        textColor: proprimaryColor,
+                        textColor: widget.isMarketplace != null
+                            ? primaryColorLT
+                            : proprimaryColor,
                         text: 'Add Additional Packages to this service',
                         onPressed: () {
                           _showAddPackageSheet(context);
                         },
-                        icon: const Icon(
+                        icon: Icon(
                           Icons.add,
                           size: 20,
-                          color: proprimaryColor,
+                          color: widget.isMarketplace != null
+                              ? primaryColorLT
+                              : proprimaryColor,
                         ),
                       ),
                     ],
@@ -1178,7 +1189,9 @@ class _CreateServiceListingState extends State<CreateServiceListing>
                       },
                       icon: SvgPicture.asset(
                         'assets/svgs/dropdown.svg',
-                        color: proprimaryColor,
+                        color: widget.isMarketplace != null
+                            ? primaryColorLT
+                            : proprimaryColor,
                       ),
                       items: const <String>[
                         'Single day',
@@ -1231,7 +1244,9 @@ class _CreateServiceListingState extends State<CreateServiceListing>
                           decoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(15),
                             color: _isAlwaysAvailable
-                                ? proprimaryColor
+                                ? widget.isMarketplace != null
+                                    ? primaryColorLT
+                                    : proprimaryColor
                                 : Colors.grey,
                           ),
                           child: Stack(
@@ -1250,10 +1265,12 @@ class _CreateServiceListingState extends State<CreateServiceListing>
                                   ),
                                   child: Center(
                                     child: _isAlwaysAvailable
-                                        ? const Icon(
+                                        ? Icon(
                                             Icons.check,
                                             size: 12,
-                                            color: proprimaryColor,
+                                            color: widget.isMarketplace != null
+                                                ? primaryColorLT
+                                                : proprimaryColor,
                                           )
                                         : const Icon(
                                             Icons.close,
