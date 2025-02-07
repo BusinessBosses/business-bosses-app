@@ -44,17 +44,19 @@ class _HowToUseAppScreenState extends State<HowToUseAppScreen> {
       },
       {
         'icon': SvgPicture.asset(
-          'assets/svgs/grow.svg',
+          'assets/svgs/marketplaceoutlined.svg',
           height: 35,
           colorFilter: const ColorFilter.mode(
             Colors.grey,
             BlendMode.srcIn,
           ),
         ),
-        'title': 'Grow',
+        'title': 'Biz-Center',
         'description':
             'Everything you need to manage and grow your business 10X faster, all in one place.',
-        'onTileClicked': () => Get.to(() => const ProScreen()),
+        'onTileClicked': () => Get.to(() => const MyProfileScreen(
+              currentIndex: 1,
+            )),
       },
       {
         'icon': SizedBox(
