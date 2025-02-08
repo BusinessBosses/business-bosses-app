@@ -371,11 +371,11 @@ class _UserShopScreenState extends State<UserShopScreen> {
                                                     'assets/svgs/shopchat.svg',
                                                 'text': 'Chat'
                                               },
-                                              <String, String>{
-                                                'icon':
-                                                    'assets/svgs/homesearch.svg',
-                                                'text': 'Search'
-                                              },
+                                              // <String, String>{
+                                              //   'icon':
+                                              //       'assets/svgs/homesearch.svg',
+                                              //   'text': 'Search'
+                                              // },
                                               <String, String>{
                                                 'icon':
                                                     'assets/svgs/shopshare.svg',

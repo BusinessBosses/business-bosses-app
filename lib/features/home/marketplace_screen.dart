@@ -257,9 +257,13 @@ class _MarketplaceScreenState extends State<MarketplaceScreen>
                                               Navigator.pop(context);
                                               index == 0
                                                   ? Get.to(() =>
-                                                      const CreateProductListing())
+                                                      const CreateProductListing(
+                                                        isMarketplace: true,
+                                                      ))
                                                   : Get.to(() =>
-                                                      const CreateServiceListing());
+                                                      const CreateServiceListing(
+                                                        isMarketplace: true,
+                                                      ));
                                             },
                                             minVerticalPadding: 0,
                                             contentPadding:
@@ -268,8 +272,8 @@ class _MarketplaceScreenState extends State<MarketplaceScreen>
                                             ),
                                             leading: SvgPicture.asset(
                                               index == 0
-                                                  ? 'assets/svgs/sellicon.svg'
-                                                  : 'assets/svgs/sellicon.svg',
+                                                  ? 'assets/svgs/addproduct.svg'
+                                                  : 'assets/svgs/addservice.svg',
                                               height: 25,
                                               color: textColor.withOpacity(1),
                                             ),

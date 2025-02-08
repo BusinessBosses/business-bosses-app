@@ -28,8 +28,9 @@ import 'package:business_bosses_v2/utils/theme/theme.dart';
 import 'package:syncfusion_flutter_calendar/calendar.dart';
 
 class CreateServiceListing extends StatefulWidget {
+  final bool? isMarketplace;
   final Service? service;
-  const CreateServiceListing({super.key, this.service});
+  const CreateServiceListing({super.key, this.service, this.isMarketplace});
 
   @override
   // ignore: library_private_types_in_public_api
@@ -275,13 +276,13 @@ class _CreateServiceListingState extends State<CreateServiceListing>
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: probackgroundColor,
+      backgroundColor: backgroundColor,
       appBar: AppBar(
         automaticallyImplyLeading: false,
         title: Text(
           widget.service != null ? 'Edit Service' : 'Create Service Listing',
           style: const TextStyle(
-            color: proprimaryColor,
+            color: textColor,
             fontWeight: FontWeight.bold,
           ),
         ),
@@ -429,7 +430,7 @@ class _CreateServiceListingState extends State<CreateServiceListing>
                 caption: 'Is this an Appointment Service',
                 subtext:
                     'If this is an appointment service, you must choose a duration, select a date and time for bookings.',
-                activeColor: proprimaryColor,
+                activeColor: primaryColorLT,
                 inactiveColor: Colors.grey,
               ),
             ),
@@ -515,7 +516,9 @@ class _CreateServiceListingState extends State<CreateServiceListing>
                               },
                               icon: SvgPicture.asset(
                                 'assets/svgs/dropdown.svg',
-                                color: proprimaryColor,
+                                color: widget.isMarketplace != null
+                                    ? primaryColorLT
+                                    : proprimaryColor,
                               ),
                               items: const <String>[
                                 'minute(s)',
@@ -801,16 +804,20 @@ class _CreateServiceListingState extends State<CreateServiceListing>
                               children: <Widget>[
                                 ProIconButton(
                                   backgroundColor: Colors.white,
-                                  textColor: proprimaryColor,
+                                  textColor: widget.isMarketplace != null
+                                      ? primaryColorLT
+                                      : proprimaryColor,
                                   text:
                                       'Add Additional Packages to this service',
                                   onPressed: () {
                                     _showAddPackageSheet(context);
                                   },
-                                  icon: const Icon(
+                                  icon: Icon(
                                     Icons.add,
                                     size: 20,
-                                    color: proprimaryColor,
+                                    color: widget.isMarketplace != null
+                                        ? primaryColorLT
+                                        : proprimaryColor,
                                   ),
                                 ),
                               ],
@@ -826,15 +833,19 @@ class _CreateServiceListingState extends State<CreateServiceListing>
                     children: <Widget>[
                       ProIconButton(
                         backgroundColor: Colors.white,
-                        textColor: proprimaryColor,
+                        textColor: widget.isMarketplace != null
+                            ? primaryColorLT
+                            : proprimaryColor,
                         text: 'Add Additional Packages to this service',
                         onPressed: () {
                           _showAddPackageSheet(context);
                         },
-                        icon: const Icon(
+                        icon: Icon(
                           Icons.add,
                           size: 20,
-                          color: proprimaryColor,
+                          color: widget.isMarketplace != null
+                              ? primaryColorLT
+                              : proprimaryColor,
                         ),
                       ),
                     ],
@@ -862,10 +873,10 @@ class _CreateServiceListingState extends State<CreateServiceListing>
                     _shouldPromote = value;
                   });
                 },
-                icon: 'assets/svgs/rocket.svg',
+                icon: 'assets/svgs/rocketblack.svg',
                 caption: 'Boost this listing',
                 subtext: 'Reach a wider audience and get more views',
-                activeColor: proprimaryColor,
+                activeColor: primaryColorLT,
                 inactiveColor: Colors.grey,
               ),
             ),
@@ -882,7 +893,7 @@ class _CreateServiceListingState extends State<CreateServiceListing>
                 caption: 'Status',
                 subtext:
                     'If status is active, this product will show in your shop',
-                activeColor: proprimaryColor,
+                activeColor: primaryColorLT,
                 inactiveColor: Colors.grey,
               ),
             ),
@@ -891,6 +902,7 @@ class _CreateServiceListingState extends State<CreateServiceListing>
 
             // Submit Button
             ProCustomButton(
+              color: primaryColorLT,
               loading: isSubmitted,
               text: widget.service != null ? 'Save Changes' : 'Create Service',
               onPressed: _submitForm,
@@ -920,7 +932,7 @@ class _CreateServiceListingState extends State<CreateServiceListing>
                             text: 'Biz-Center Guidelines',
                             style: const TextStyle(
                               fontWeight: FontWeight.bold,
-                              color: proprimaryColor,
+                              color: primaryColorLT,
                               decoration: TextDecoration.underline,
                               fontSize: 12,
                             ),
@@ -1196,7 +1208,9 @@ class _CreateServiceListingState extends State<CreateServiceListing>
                       },
                       icon: SvgPicture.asset(
                         'assets/svgs/dropdown.svg',
-                        color: proprimaryColor,
+                        color: widget.isMarketplace != null
+                            ? primaryColorLT
+                            : proprimaryColor,
                       ),
                       items: const <String>[
                         'Single day',
@@ -1249,7 +1263,9 @@ class _CreateServiceListingState extends State<CreateServiceListing>
                           decoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(15),
                             color: _isAlwaysAvailable
-                                ? proprimaryColor
+                                ? widget.isMarketplace != null
+                                    ? primaryColorLT
+                                    : proprimaryColor
                                 : Colors.grey,
                           ),
                           child: Stack(
@@ -1268,10 +1284,12 @@ class _CreateServiceListingState extends State<CreateServiceListing>
                                   ),
                                   child: Center(
                                     child: _isAlwaysAvailable
-                                        ? const Icon(
+                                        ? Icon(
                                             Icons.check,
                                             size: 12,
-                                            color: proprimaryColor,
+                                            color: widget.isMarketplace != null
+                                                ? primaryColorLT
+                                                : proprimaryColor,
                                           )
                                         : const Icon(
                                             Icons.close,
