@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:business_bosses_v2/bbpro/controllers/shop_controller.dart';
 import 'package:business_bosses_v2/bbpro/models/product_model.dart';
+import 'package:business_bosses_v2/bbpro/presentation/boost_items.dart';
 import 'package:business_bosses_v2/bbpro/widgets/button.dart';
 import 'package:business_bosses_v2/bbpro/widgets/dropdown.dart';
 import 'package:business_bosses_v2/bbpro/widgets/edit_text.dart';
@@ -79,7 +80,7 @@ class _CreateProductListingState extends State<CreateProductListing> {
   List<String> paymentMethods = <String>[];
   List<String> colors = <String>[];
   List<String> sizes = <String>[];
-  final bool _shouldPromote = false;
+  bool _shouldPromote = false;
 
   @override
   void initState() {
@@ -585,7 +586,7 @@ class _CreateProductListingState extends State<CreateProductListing> {
                       value: _shouldPromote,
                       onChanged: (bool value) {
                         setState(() {
-                          _isSwitched = value;
+                          _shouldPromote = value;
                         });
                       },
                       icon: 'assets/svgs/rocket.svg',
@@ -632,6 +633,13 @@ class _CreateProductListingState extends State<CreateProductListing> {
 
                       if (_priceController.text.isEmpty) {
                         showSnackbar(message: 'Enter price', error: true);
+                        return;
+                      }
+
+                      if (_shouldPromote && !_isSwitched) {
+                        showSnackbar(
+                            message: 'You cannot boost a non-active product',
+                            error: true);
                         return;
                       }
 
@@ -692,12 +700,18 @@ class _CreateProductListingState extends State<CreateProductListing> {
                           'size': sizes,
                         };
                         if (widget.product == null) {
-                          bool response =
+                          ProductAddResult response =
                               await shopController.addProducts(productListing);
-                          if (response) {
+                          if (response.success) {
                             showSnackbar(
                               message: 'Product Added Successfully!',
                             );
+                            if (_shouldPromote) {
+                              Get.off(() => BoostItem(
+                                    product: response.product,
+                                  ));
+                              return;
+                            }
                             Navigator.pop(context);
                           } else {
                             showSnackbar(
@@ -712,6 +726,12 @@ class _CreateProductListingState extends State<CreateProductListing> {
                             showSnackbar(
                               message: 'Product Updated Successfully!',
                             );
+                            if (_shouldPromote) {
+                              Get.off(() => BoostItem(
+                                    product: widget.product,
+                                  ));
+                              return;
+                            }
                             Navigator.pop(context);
                           } else {
                             showSnackbar(

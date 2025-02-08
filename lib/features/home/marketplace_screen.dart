@@ -13,23 +13,19 @@ import 'package:business_bosses_v2/features/home/widgets/bottom_bar.dart';
 import 'package:business_bosses_v2/features/home/widgets/floatingbutton.dart';
 
 import 'package:business_bosses_v2/features/marketplace/controllers/supplier_controller.dart';
-import 'package:business_bosses_v2/features/marketplace/models/market_model.dart';
 import 'package:business_bosses_v2/features/marketplace/presentation/filtermarketplaceposts.dart';
 import 'package:business_bosses_v2/features/marketplace/presentation/filtermarketproducts.dart';
 import 'package:business_bosses_v2/features/marketplace/presentation/filtermarketservices.dart';
 import 'package:business_bosses_v2/features/marketplace/presentation/supplierspage.dart';
-import 'package:business_bosses_v2/features/marketplace/widgets/marketplace_item.dart';
 import 'package:business_bosses_v2/features/marketplace/widgets/markets.dart';
 
 import 'package:business_bosses_v2/features/marketplace/widgets/products.dart';
-import 'package:business_bosses_v2/features/marketplace/widgets/service_item.dart';
 import 'package:business_bosses_v2/features/marketplace/widgets/services.dart';
 import 'package:business_bosses_v2/features/profile/controller/profile_controller.dart';
 import 'package:country_list_pick/country_list_pick.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
-import 'package:visibility_detector/visibility_detector.dart';
 
 import '../../common/widgets/safety_model.dart';
 
@@ -96,8 +92,9 @@ class _MarketplaceScreenState extends State<MarketplaceScreen>
         }
       }
     });
-
-    shopController.initShop();
+    if (shopController.shop == null) {
+      shopController.initShop();
+    }
     supplierController.initSuppliers();
   }
 
@@ -157,7 +154,6 @@ class _MarketplaceScreenState extends State<MarketplaceScreen>
         _profileController.myProfile.location ??
         'Nigeria';
     sortItems();
-    print(_marketController.allFilteredItems.toString());
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: PreferredSize(
@@ -812,7 +808,6 @@ class _MarketplaceScreenState extends State<MarketplaceScreen>
       _marketController.proServices.sort(compareItems);
     }
 
-    _marketController.update(); // Refresh UI
     setState(() {}); // Ensure UI updates
   }
 }

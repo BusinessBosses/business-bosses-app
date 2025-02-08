@@ -189,8 +189,6 @@ class _CustomItemCardState extends State<CustomItemCard> {
                         item: widget.customitem,
                         onEdit: _onEdit,
                         onDelete: onDelete,
-                        onBoost: () {},
-                        isBoost: true,
                       ),
                   ],
                 ),

@@ -234,7 +234,7 @@ class ShopController extends GetxController {
     }
   }
 
-  Future<bool> addProducts(Map<String, dynamic> data) async {
+  Future<ProductAddResult> addProducts(Map<String, dynamic> data) async {
     ApiResponseModel response =
         await ApiService.post(path: 'goods', body: data);
     if (response.success) {
@@ -243,10 +243,11 @@ class ShopController extends GetxController {
       marketController.proItems.add(Product.fromJson(response.data));
       marketController.proProducts.add(Product.fromJson(response.data));
       update();
-      return true;
+      return ProductAddResult(
+          success: true, product: Product.fromJson(response.data));
     } else {
       log(response.toMap().toString());
-      return false;
+      return ProductAddResult(success: false);
     }
   }
 
@@ -284,7 +285,7 @@ class ShopController extends GetxController {
     }
   }
 
-  Future<bool> addService(Map<String, dynamic> data) async {
+  Future<ServiceAddResult> addService(Map<String, dynamic> data) async {
     ApiResponseModel response =
         await ApiService.post(path: 'services', body: data);
     if (response.success) {
@@ -293,10 +294,11 @@ class ShopController extends GetxController {
       marketController.proItems.add(Service.fromJson(response.data));
       marketController.proServices.add(Service.fromJson(response.data));
       update();
-      return true;
+      return ServiceAddResult(
+          success: true, service: Service.fromJson(response.data));
     } else {
       log(response.toMap().toString());
-      return false;
+      return ServiceAddResult(success: false);
     }
   }
 
@@ -536,4 +538,18 @@ class ShopController extends GetxController {
     loadingData(false);
     update();
   }
+}
+
+class ProductAddResult {
+  final bool success;
+  final Product? product; // Change to String? if using Firebase document ID
+
+  ProductAddResult({required this.success, this.product});
+}
+
+class ServiceAddResult {
+  final bool success;
+  final Service? service; // Change to String? if using Firebase document ID
+
+  ServiceAddResult({required this.success, this.service});
 }

@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:business_bosses_v2/bbpro/controllers/shop_controller.dart';
 import 'package:business_bosses_v2/bbpro/models/service_model.dart';
+import 'package:business_bosses_v2/bbpro/presentation/boost_items.dart';
 import 'package:business_bosses_v2/bbpro/widgets/add_package_bottomsheet.dart';
 import 'package:business_bosses_v2/bbpro/widgets/dropdown.dart';
 import 'package:business_bosses_v2/bbpro/widgets/edit_text.dart';
@@ -101,7 +102,7 @@ class _CreateServiceListingState extends State<CreateServiceListing>
   String? servicePeriodnumber;
   String? calendarType = 'Single day';
   bool? isAppointment = false;
-  final bool _shouldPromote = false;
+  bool _shouldPromote = false;
 
   @override
   void initState() {
@@ -858,7 +859,7 @@ class _CreateServiceListingState extends State<CreateServiceListing>
                 value: _shouldPromote,
                 onChanged: (bool value) {
                   setState(() {
-                    _isSwitched = value;
+                    _shouldPromote = value;
                   });
                 },
                 icon: 'assets/svgs/rocket.svg',
@@ -1014,6 +1015,11 @@ class _CreateServiceListingState extends State<CreateServiceListing>
       );
       return;
     }
+    if (_shouldPromote && !_isSwitched) {
+      showSnackbar(
+          message: 'You cannot boost a non-active service', error: true);
+      return;
+    }
 
     if (_formKey.currentState?.validate() ?? false) {
       _formKey.currentState?.save();
@@ -1103,9 +1109,16 @@ class _CreateServiceListingState extends State<CreateServiceListing>
         // Log the cleaned data
 
         if (widget.service == null) {
-          final bool result = await shopController.addService(serviceData);
-          if (result) {
+          final ServiceAddResult result =
+              await shopController.addService(serviceData);
+          if (result.success) {
             showSnackbar(message: 'Service Added Successfully!');
+            if (_shouldPromote) {
+              Get.off(() => BoostItem(
+                    service: result.service,
+                  ));
+              return;
+            }
             Navigator.pop(context);
           } else {
             String errorMessage = 'Failed to add service';
@@ -1116,6 +1129,12 @@ class _CreateServiceListingState extends State<CreateServiceListing>
               widget.service!.id, serviceData);
           if (result) {
             showSnackbar(message: 'Service Updated Successfully!');
+            if (_shouldPromote) {
+              Get.off(() => BoostItem(
+                    service: widget.service,
+                  ));
+              return;
+            }
             Navigator.pop(context);
           } else {
             String errorMessage = 'Failed to edit service';

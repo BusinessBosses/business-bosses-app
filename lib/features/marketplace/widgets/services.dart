@@ -3,6 +3,7 @@ import 'package:business_bosses_v2/bbpro/models/service_model.dart';
 import 'package:business_bosses_v2/bbpro/presentation/book_service.dart';
 import 'package:business_bosses_v2/bbpro/widgets/proshopdeals.dart';
 import 'package:business_bosses_v2/bbpro/widgets/servicecard.dart';
+import 'package:business_bosses_v2/common/widgets/safety_model.dart';
 import 'package:business_bosses_v2/features/home/controller/home_controller.dart';
 import 'package:business_bosses_v2/features/marketplace/controllers/market_controller.dart';
 import 'package:business_bosses_v2/features/profile/controller/profile_controller.dart';
@@ -48,7 +49,9 @@ class _ServicesPageState extends State<ServicesPage> {
           ),
           child: GetBuilder<MarketController>(
               builder: (MarketController controller) {
-            List<Service> services = _marketController.filteredServices.isEmpty
+            bool isFiltering = _marketController.isfiltered.value;
+
+            List<Service> services = !isFiltering
                 ? _marketController.proServices
                 : _marketController.filteredServices;
             return Column(
@@ -68,43 +71,51 @@ class _ServicesPageState extends State<ServicesPage> {
                     initialIndex: 2,
                   ),
                 ),
-                Padding(
-                  padding: const EdgeInsets.symmetric(
-                      horizontal: 10.0, vertical: 10.0),
-                  child: StaggeredGridView.countBuilder(
-                    crossAxisCount: 2,
-                    staggeredTileBuilder: (int index) =>
-                        const StaggeredTile.fit(1),
-                    mainAxisSpacing: 10.0,
-                    crossAxisSpacing: 10.0,
-                    itemCount: services.length,
-                    shrinkWrap: true,
-                    physics: const NeverScrollableScrollPhysics(),
-                    itemBuilder: (BuildContext context, int index) {
-                      final Service service = services[index];
-                      return GestureDetector(
-                        onTap: () {
-                          if (service.user!.uid ==
-                              profileController.myProfile.uid) {
-                            // Navigate to edit listing
-                          } else {
-                            Get.to(() => BookServiceScreen(
-                                  service: service,
-                                  shop: service.shop!,
-                                ));
-                          }
-                        },
-                        child: ServiceCard(
-                          marketplace: true,
-                          shop: service.shop!,
-                          service: service,
-                          myShop: service.user!.uid ==
-                              profileController.myProfile.uid,
-                        ),
-                      );
-                    },
+                if (isFiltering && services.isEmpty)
+                  const Center(
+                    child: SafetyModel(
+                      isLoading: false,
+                      title: 'No Services Found For This Search',
+                    ),
+                  )
+                else
+                  Padding(
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 10.0, vertical: 10.0),
+                    child: StaggeredGridView.countBuilder(
+                      crossAxisCount: 2,
+                      staggeredTileBuilder: (int index) =>
+                          const StaggeredTile.fit(1),
+                      mainAxisSpacing: 10.0,
+                      crossAxisSpacing: 10.0,
+                      itemCount: services.length,
+                      shrinkWrap: true,
+                      physics: const NeverScrollableScrollPhysics(),
+                      itemBuilder: (BuildContext context, int index) {
+                        final Service service = services[index];
+                        return GestureDetector(
+                          onTap: () {
+                            if (service.user!.uid ==
+                                profileController.myProfile.uid) {
+                              // Navigate to edit listing
+                            } else {
+                              Get.to(() => BookServiceScreen(
+                                    service: service,
+                                    shop: service.shop!,
+                                  ));
+                            }
+                          },
+                          child: ServiceCard(
+                            marketplace: true,
+                            shop: service.shop!,
+                            service: service,
+                            myShop: service.user!.uid ==
+                                profileController.myProfile.uid,
+                          ),
+                        );
+                      },
+                    ),
                   ),
-                ),
                 const SizedBox(
                   height: 100,
                 ),

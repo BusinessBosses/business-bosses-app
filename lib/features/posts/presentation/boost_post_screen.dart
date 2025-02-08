@@ -130,7 +130,13 @@ class _BoostPostState extends State<BoostPost> {
       Map<String, dynamic> body = <String, dynamic>{
         'amount': calculateAmount(amount),
         'currency': currency,
-        'payment_method_types[]': 'card'
+        'payment_method_types[]': 'card',
+        'receipt_email': profileController.myProfile.email, // Add user email
+        'metadata': <String, dynamic>{
+          'user_id': profileController.myProfile.uid, // Store user ID
+          'user_name': profileController.myProfile.name, // Store user name
+          'post_id': widget.postId,
+        }
       };
 
       http.Response res = await http.post(
