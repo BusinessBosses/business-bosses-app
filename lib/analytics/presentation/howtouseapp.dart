@@ -51,7 +51,7 @@ class _HowToUseAppScreenState extends State<HowToUseAppScreen> {
             BlendMode.srcIn,
           ),
         ),
-        'title': 'Biz-Center',
+        'title': 'My-Biz',
         'description':
             'Everything you need to manage and grow your business 10X faster, all in one place.',
         'onTileClicked': () => Get.to(() => const MyProfileScreen(
@@ -59,32 +59,25 @@ class _HowToUseAppScreenState extends State<HowToUseAppScreen> {
             )),
       },
       {
-        'icon': SizedBox(
-          height: 35.0,
-          width: 35.0,
-          child: Align(
-            alignment: Alignment.topLeft,
-            child: ClipRRect(
-              borderRadius: BorderRadius.circular(1000),
-              child: NetworkImageWithPlaceHolder(
-                imageUrl: profileController.myProfile.photoUrl ?? '',
-                radius: radius,
-                placeHolder: Icons.person,
-                iconSize: 22.0,
-                fit: BoxFit.cover,
-              ),
-            ),
-          ),
+        'icon': SvgPicture.asset(
+          'assets/svgs/coin.svg',
+          height: 35,
+          // colorFilter: const ColorFilter.mode(
+          //   Colors.grey,
+          //   BlendMode.srcIn,
+          // ),
         ),
-        'title': 'Profile',
+        'title': 'Monetization',
         'description':
-            'View and edit your profile information. Manage your account settings and preferences.',
-        'onTileClicked': () => Get.to(const MyProfileScreen()),
+            'Monetize your business. Explore various revenue streams and opportunities on business bosses.',
+        'onTileClicked': () {
+          Get.toNamed(Routes.promotionscreen);
+        },
       },
       {
         'icon': SvgPicture.asset(
           'assets/svgs/bossupu.svg',
-          height: 35,
+          height: 40,
           colorFilter: const ColorFilter.mode(
             Colors.grey,
             BlendMode.srcIn,

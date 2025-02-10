@@ -77,7 +77,7 @@ class _SwitchWidgetState extends State<SwitchWidget>
               if (widget.icon != null)
                 SvgPicture.asset(
                   widget.icon!,
-                  color: primaryColorLT,
+                  color: Colors.black,
                   width: 25,
                   height: 25,
                 ),

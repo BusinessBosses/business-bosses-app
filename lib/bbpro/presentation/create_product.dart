@@ -611,7 +611,7 @@ class _CreateProductListingState extends State<CreateProductListing> {
                       },
                       caption: 'Status',
                       subtext:
-                          'If status is active, this product will show in your shop',
+                          'This listing will show in your biz-centre and business bosses marketplace',
                       activeColor: widget.isMarketplace != null
                           ? primaryColorLT
                           : proprimaryColor,

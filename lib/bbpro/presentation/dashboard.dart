@@ -334,7 +334,7 @@ class _DashboardState extends State<Dashboard> {
                                   ),
                                   builder: (BuildContext context) {
                                     return SizedBox(
-                                      height: 250,
+                                      height: 270,
                                       child: ListView.separated(
                                         padding: const EdgeInsets.all(10),
                                         itemBuilder:
@@ -354,6 +354,8 @@ class _DashboardState extends State<Dashboard> {
                                                 'Add Product',
                                                 style: TextStyle(fontSize: 14),
                                               ),
+                                              subtitle: const Text(
+                                                  'To showcase your products in biz-centre & marketplace'),
                                               horizontalTitleGap: 0.0,
                                               onTap: () {
                                                 Navigator.pop(context);
@@ -372,6 +374,8 @@ class _DashboardState extends State<Dashboard> {
                                                 ),
                                                 height: 24,
                                               ),
+                                              subtitle: const Text(
+                                                  'To showcase your services in biz-centre & marketplace'),
                                               title: const Text(
                                                 'Add Service',
                                                 style: TextStyle(fontSize: 14),
@@ -385,6 +389,8 @@ class _DashboardState extends State<Dashboard> {
                                             );
                                           } else {
                                             return ListTile(
+                                              subtitle: const Text(
+                                                  'To showcase your portfolio, demo or affiliate links '),
                                               leading: const Icon(
                                                 Icons.add,
                                                 color: Colors.black,
