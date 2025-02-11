@@ -26,6 +26,8 @@ class ProSearchbar extends StatelessWidget {
 
   final VoidCallback? onfiltertap;
 
+  final VoidCallback? onTap;
+
   // ignore: public_member_api_docs
   const ProSearchbar({
     Key? key,
@@ -39,12 +41,14 @@ class ProSearchbar extends StatelessWidget {
     this.onfiltertap,
     this.radius,
     this.contentPadding,
+    this.onTap,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Stack(children: <Widget>[
       TextFormField(
+        onTap: onTap,
         autofocus: autofocus,
         onChanged: onChange,
         onFieldSubmitted: onSubmit,
