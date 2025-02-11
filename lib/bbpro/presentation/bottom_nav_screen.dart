@@ -101,82 +101,105 @@ class _BottomnavscreenState extends State<Bottomnavscreen> {
               body: Center(
                 child: _widgetOptions.elementAt(_selectedIndex),
               ),
-              bottomNavigationBar: SizedBox(
-                height: 83,
-                child: BottomNavigationBar(
-                  backgroundColor: Colors.white,
-                  type: BottomNavigationBarType.fixed,
-                  items: <BottomNavigationBarItem>[
-                    BottomNavigationBarItem(
-                      icon: SvgPicture.asset(
-                        'assets/svgs/dashboard.svg',
-                        height: 20,
-                        colorFilter: ColorFilter.mode(
-                          _selectedIndex == 0
-                              ? proprimaryColor
-                              : const Color(0xffBDBEC0),
-                          BlendMode.srcIn,
-                        ),
-                      ),
-                      label: 'Dashboard',
-                    ),
-                    BottomNavigationBarItem(
-                      icon: SvgPicture.asset(
-                        'assets/svgs/projects.svg',
-                        height: 20,
-                        colorFilter: ColorFilter.mode(
-                          _selectedIndex == 1
-                              ? proprimaryColor
-                              : const Color(0xffBDBEC0),
-                          BlendMode.srcIn,
-                        ),
-                      ),
-                      label: 'Tasks',
-                    ),
-                    BottomNavigationBarItem(
-                      icon: SvgPicture.asset(
-                        'assets/svgs/ordersinvoices.svg',
-                        height: 20,
-                        colorFilter: ColorFilter.mode(
-                          _selectedIndex == 2
-                              ? proprimaryColor
-                              : const Color(0xffBDBEC0),
-                          BlendMode.srcIn,
-                        ),
-                      ),
-                      label: 'Orders',
-                    ),
-                    BottomNavigationBarItem(
-                      icon: SvgPicture.asset(
-                        'assets/svgs/clients.svg',
-                        height: 20,
-                        colorFilter: ColorFilter.mode(
-                          _selectedIndex == 3
-                              ? proprimaryColor
-                              : const Color(0xffBDBEC0),
-                          BlendMode.srcIn,
-                        ),
-                      ),
-                      label: 'Customers',
-                    ),
-                    BottomNavigationBarItem(
-                      icon: SvgPicture.asset(
-                        'assets/svgs/setupshop.svg',
-                        height: 20,
-                        colorFilter: ColorFilter.mode(
-                          _selectedIndex == 4
-                              ? proprimaryColor
-                              : const Color(0xffBDBEC0),
-                          BlendMode.srcIn,
-                        ),
-                      ),
-                      label: 'Set Up',
+              bottomNavigationBar: Container(
+                decoration: BoxDecoration(
+                  boxShadow: <BoxShadow>[
+                    BoxShadow(
+                      color: Colors.black.withOpacity(0.08),
+                      spreadRadius: 10,
+                      blurRadius: 50,
+                      offset: const Offset(0, 7), // changes position of shadow
                     ),
                   ],
-                  currentIndex: _selectedIndex,
-                  selectedItemColor: proprimaryColor,
-                  unselectedItemColor: Colors.grey,
-                  onTap: _onItemTapped,
+                ),
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: <Widget>[
+                    Container(
+                      height: 10,
+                      color: Colors.white,
+                    ),
+                    BottomNavigationBar(
+                      elevation: 0,
+                      backgroundColor: Colors.white,
+                      type: BottomNavigationBarType.fixed,
+                      items: <BottomNavigationBarItem>[
+                        BottomNavigationBarItem(
+                          icon: SvgPicture.asset(
+                            'assets/svgs/dashboard.svg',
+                            height: 20,
+                            colorFilter: ColorFilter.mode(
+                              _selectedIndex == 0
+                                  ? proprimaryColor
+                                  : const Color(0xffBDBEC0),
+                              BlendMode.srcIn,
+                            ),
+                          ),
+                          label: 'Dashboard',
+                        ),
+                        BottomNavigationBarItem(
+                          icon: SvgPicture.asset(
+                            'assets/svgs/projects.svg',
+                            height: 20,
+                            colorFilter: ColorFilter.mode(
+                              _selectedIndex == 1
+                                  ? proprimaryColor
+                                  : const Color(0xffBDBEC0),
+                              BlendMode.srcIn,
+                            ),
+                          ),
+                          label: 'Tasks',
+                        ),
+                        BottomNavigationBarItem(
+                          icon: SvgPicture.asset(
+                            'assets/svgs/ordersinvoices.svg',
+                            height: 20,
+                            colorFilter: ColorFilter.mode(
+                              _selectedIndex == 2
+                                  ? proprimaryColor
+                                  : const Color(0xffBDBEC0),
+                              BlendMode.srcIn,
+                            ),
+                          ),
+                          label: 'Orders',
+                        ),
+                        BottomNavigationBarItem(
+                          icon: SvgPicture.asset(
+                            'assets/svgs/clients.svg',
+                            height: 20,
+                            colorFilter: ColorFilter.mode(
+                              _selectedIndex == 3
+                                  ? proprimaryColor
+                                  : const Color(0xffBDBEC0),
+                              BlendMode.srcIn,
+                            ),
+                          ),
+                          label: 'Customers',
+                        ),
+                        BottomNavigationBarItem(
+                          icon: SvgPicture.asset(
+                            'assets/svgs/setupshop.svg',
+                            height: 20,
+                            colorFilter: ColorFilter.mode(
+                              _selectedIndex == 4
+                                  ? proprimaryColor
+                                  : const Color(0xffBDBEC0),
+                              BlendMode.srcIn,
+                            ),
+                          ),
+                          label: 'Set Up',
+                        ),
+                      ],
+                      currentIndex: _selectedIndex,
+                      selectedItemColor: proprimaryColor,
+                      unselectedItemColor: Colors.grey,
+                      onTap: _onItemTapped,
+                    ),
+                    Container(
+                      height: 20,
+                      color: Colors.white,
+                    )
+                  ],
                 ),
               ),
             ),

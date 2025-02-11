@@ -40,7 +40,10 @@ class DrawerContent extends StatelessWidget {
         'title': 'Marketplace',
         'description':
             'Browse and purchase items from other users. You can find a wide variety of items here.',
-        'onTileClicked': () => Get.to(const MarketplaceScreen()),
+        'onTileClicked': () {
+          oncloseclick?.call();
+          Get.to(const MarketplaceScreen());
+        },
       },
       {
         'icon': SvgPicture.asset(
@@ -54,23 +57,23 @@ class DrawerContent extends StatelessWidget {
         'title': 'My-Biz',
         'description':
             'Everything you need to manage and grow your business 10X faster, all in one place.',
-        'onTileClicked': () => Get.to(() => const MyProfileScreen(
-              currentIndex: 1,
-            )),
+        'onTileClicked': () {
+          oncloseclick?.call();
+          Get.to(() => const MyProfileScreen(
+                currentIndex: 1,
+              ));
+        },
       },
       {
         'icon': SvgPicture.asset(
           'assets/svgs/coin.svg',
           height: 30,
-          // colorFilter: const ColorFilter.mode(
-          //   textColor,
-          //   BlendMode.srcIn,
-          // ),
         ),
         'title': 'Monetization',
         'description':
             'Monetize your business. Explore various revenue streams and opportunities on business bosses.',
         'onTileClicked': () {
+          oncloseclick?.call();
           Get.toNamed(Routes.promotionscreen);
         },
       },
@@ -86,7 +89,10 @@ class DrawerContent extends StatelessWidget {
         'title': 'Boss Up',
         'description':
             'Connect with other users and build your network. Find connections who share your interests.',
-        'onTileClicked': () => Get.to(const AllCommunitiesScreen()),
+        'onTileClicked': () {
+          oncloseclick?.call();
+          Get.to(const AllCommunitiesScreen());
+        },
       },
       {
         'icon': SvgPicture.asset(
@@ -100,7 +106,10 @@ class DrawerContent extends StatelessWidget {
         'title': 'Messages',
         'description':
             'Communicate with other users through private messages. Stay connected with your connections and customers',
-        'onTileClicked': () => Get.to(const ChatScreen()),
+        'onTileClicked': () {
+          oncloseclick?.call();
+          Get.to(const ChatScreen());
+        },
       },
       {
         'icon': SvgPicture.asset(
@@ -114,7 +123,10 @@ class DrawerContent extends StatelessWidget {
         'title': 'Events',
         'description':
             'Discover and attend events hosted by other users. Find events that match your interests and goals.',
-        'onTileClicked': () => Get.toNamed(Routes.liveEvents),
+        'onTileClicked': () {
+          oncloseclick?.call();
+          Get.toNamed(Routes.liveEvents);
+        },
       },
       {
         'icon': SvgPicture.asset(
@@ -128,9 +140,12 @@ class DrawerContent extends StatelessWidget {
         'title': 'Crowdfund',
         'description':
             'Support and invest in projects you believe in. Discover opportunities to back innovative ideas and businesses.',
-        'onTileClicked': () => Get.to(() => const AllCommunitiesScreen(
-              initialBossupTabIndex: 3,
-            )),
+        'onTileClicked': () {
+          oncloseclick?.call();
+          Get.to(() => const AllCommunitiesScreen(
+                initialBossupTabIndex: 3,
+              ));
+        },
       },
       {
         'icon': SvgPicture.asset(
@@ -144,7 +159,10 @@ class DrawerContent extends StatelessWidget {
         'title': 'Partnership',
         'description':
             'Support and invest in projects you believe in. Discover opportunities to back innovative ideas and businesses.',
-        'onTileClicked': () => Get.to(const Bossuppartner())
+        'onTileClicked': () {
+          oncloseclick?.call();
+          Get.to(const Bossuppartner());
+        }
       },
       {
         'icon': SvgPicture.asset(
@@ -158,7 +176,10 @@ class DrawerContent extends StatelessWidget {
         'title': 'Settings',
         'description':
             'Customize your app preferences and manage your account settings. ',
-        'onTileClicked': () => Get.to(const SettingsScreen()),
+        'onTileClicked': () {
+          oncloseclick?.call();
+          Get.to(const SettingsScreen());
+        },
       },
     ];
 
