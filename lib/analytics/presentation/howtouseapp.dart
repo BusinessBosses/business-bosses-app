@@ -5,6 +5,7 @@ import 'package:business_bosses_v2/features/chat/chat_screen.dart';
 import 'package:business_bosses_v2/features/home/all_communities_screen.dart';
 import 'package:business_bosses_v2/features/home/marketplace_screen.dart';
 import 'package:business_bosses_v2/features/home/sellProduct.dart';
+import 'package:business_bosses_v2/features/moreinfoscreens/bossuppartner.dart';
 import 'package:business_bosses_v2/features/posts/presentation/create_poll_screen.dart';
 import 'package:business_bosses_v2/features/posts/presentation/create_post_screen.dart';
 import 'package:business_bosses_v2/features/premium/proscreen.dart';
@@ -147,9 +148,7 @@ class _HowToUseAppScreenState extends State<HowToUseAppScreen> {
         'title': 'Partnership',
         'description':
             'Support and invest in projects you believe in. Discover opportunities to back innovative ideas and businesses.',
-        'onTileClicked': () => Get.to(() => const AllCommunitiesScreen(
-              initialBossupTabIndex: 3,
-            )),
+        'onTileClicked': () => Get.to(const Bossuppartner())
       },
       {
         'icon': SvgPicture.asset(

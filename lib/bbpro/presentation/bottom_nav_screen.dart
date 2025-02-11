@@ -101,80 +101,83 @@ class _BottomnavscreenState extends State<Bottomnavscreen> {
               body: Center(
                 child: _widgetOptions.elementAt(_selectedIndex),
               ),
-              bottomNavigationBar: BottomNavigationBar(
-                backgroundColor: Colors.white,
-                type: BottomNavigationBarType.fixed,
-                items: <BottomNavigationBarItem>[
-                  BottomNavigationBarItem(
-                    icon: SvgPicture.asset(
-                      'assets/svgs/dashboard.svg',
-                      height: 20,
-                      colorFilter: ColorFilter.mode(
-                        _selectedIndex == 0
-                            ? proprimaryColor
-                            : const Color(0xffBDBEC0),
-                        BlendMode.srcIn,
+              bottomNavigationBar: SizedBox(
+                height: 83,
+                child: BottomNavigationBar(
+                  backgroundColor: Colors.white,
+                  type: BottomNavigationBarType.fixed,
+                  items: <BottomNavigationBarItem>[
+                    BottomNavigationBarItem(
+                      icon: SvgPicture.asset(
+                        'assets/svgs/dashboard.svg',
+                        height: 20,
+                        colorFilter: ColorFilter.mode(
+                          _selectedIndex == 0
+                              ? proprimaryColor
+                              : const Color(0xffBDBEC0),
+                          BlendMode.srcIn,
+                        ),
                       ),
+                      label: 'Dashboard',
                     ),
-                    label: 'Dashboard',
-                  ),
-                  BottomNavigationBarItem(
-                    icon: SvgPicture.asset(
-                      'assets/svgs/projects.svg',
-                      height: 20,
-                      colorFilter: ColorFilter.mode(
-                        _selectedIndex == 1
-                            ? proprimaryColor
-                            : const Color(0xffBDBEC0),
-                        BlendMode.srcIn,
+                    BottomNavigationBarItem(
+                      icon: SvgPicture.asset(
+                        'assets/svgs/projects.svg',
+                        height: 20,
+                        colorFilter: ColorFilter.mode(
+                          _selectedIndex == 1
+                              ? proprimaryColor
+                              : const Color(0xffBDBEC0),
+                          BlendMode.srcIn,
+                        ),
                       ),
+                      label: 'Tasks',
                     ),
-                    label: 'Tasks',
-                  ),
-                  BottomNavigationBarItem(
-                    icon: SvgPicture.asset(
-                      'assets/svgs/ordersinvoices.svg',
-                      height: 20,
-                      colorFilter: ColorFilter.mode(
-                        _selectedIndex == 2
-                            ? proprimaryColor
-                            : const Color(0xffBDBEC0),
-                        BlendMode.srcIn,
+                    BottomNavigationBarItem(
+                      icon: SvgPicture.asset(
+                        'assets/svgs/ordersinvoices.svg',
+                        height: 20,
+                        colorFilter: ColorFilter.mode(
+                          _selectedIndex == 2
+                              ? proprimaryColor
+                              : const Color(0xffBDBEC0),
+                          BlendMode.srcIn,
+                        ),
                       ),
+                      label: 'Orders',
                     ),
-                    label: 'Orders',
-                  ),
-                  BottomNavigationBarItem(
-                    icon: SvgPicture.asset(
-                      'assets/svgs/clients.svg',
-                      height: 20,
-                      colorFilter: ColorFilter.mode(
-                        _selectedIndex == 3
-                            ? proprimaryColor
-                            : const Color(0xffBDBEC0),
-                        BlendMode.srcIn,
+                    BottomNavigationBarItem(
+                      icon: SvgPicture.asset(
+                        'assets/svgs/clients.svg',
+                        height: 20,
+                        colorFilter: ColorFilter.mode(
+                          _selectedIndex == 3
+                              ? proprimaryColor
+                              : const Color(0xffBDBEC0),
+                          BlendMode.srcIn,
+                        ),
                       ),
+                      label: 'Customers',
                     ),
-                    label: 'Customers',
-                  ),
-                  BottomNavigationBarItem(
-                    icon: SvgPicture.asset(
-                      'assets/svgs/setupshop.svg',
-                      height: 20,
-                      colorFilter: ColorFilter.mode(
-                        _selectedIndex == 4
-                            ? proprimaryColor
-                            : const Color(0xffBDBEC0),
-                        BlendMode.srcIn,
+                    BottomNavigationBarItem(
+                      icon: SvgPicture.asset(
+                        'assets/svgs/setupshop.svg',
+                        height: 20,
+                        colorFilter: ColorFilter.mode(
+                          _selectedIndex == 4
+                              ? proprimaryColor
+                              : const Color(0xffBDBEC0),
+                          BlendMode.srcIn,
+                        ),
                       ),
+                      label: 'Set Up',
                     ),
-                    label: 'Set Up',
-                  ),
-                ],
-                currentIndex: _selectedIndex,
-                selectedItemColor: proprimaryColor,
-                unselectedItemColor: Colors.grey,
-                onTap: _onItemTapped,
+                  ],
+                  currentIndex: _selectedIndex,
+                  selectedItemColor: proprimaryColor,
+                  unselectedItemColor: Colors.grey,
+                  onTap: _onItemTapped,
+                ),
               ),
             ),
           ));
