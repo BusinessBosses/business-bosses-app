@@ -30,25 +30,29 @@ class Searchbar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return TextFormField(
-      autofocus: autofocus,
-      onChanged: onChange,
-      onFieldSubmitted: onSubmit,
-      textInputAction: TextInputAction.search,
-      decoration: inputDecoration.copyWith(
-        contentPadding: const EdgeInsets.all(0.0),
-        hintText: hintText,
-        prefixIcon: hasSearchIcon == false
-            ? null
-            : Container(
-                padding:
-                    const EdgeInsets.symmetric(vertical: 12.0, horizontal: 0.0),
-                child: SvgPicture.asset(
-                  'assets/svgs/search.svg',
-                  color: hintColor,
-                ),
-              ),
-      ),
+    return Stack(
+      children: <Widget>[
+        TextFormField(
+          autofocus: autofocus,
+          onChanged: onChange,
+          onFieldSubmitted: onSubmit,
+          textInputAction: TextInputAction.search,
+          decoration: inputDecoration.copyWith(
+            contentPadding: const EdgeInsets.all(0.0),
+            hintText: hintText,
+            prefixIcon: hasSearchIcon == false
+                ? null
+                : Container(
+                    padding: const EdgeInsets.symmetric(
+                        vertical: 12.0, horizontal: 0.0),
+                    child: SvgPicture.asset(
+                      'assets/svgs/search.svg',
+                      color: hintColor,
+                    ),
+                  ),
+          ),
+        ),
+      ],
     );
   }
 }
