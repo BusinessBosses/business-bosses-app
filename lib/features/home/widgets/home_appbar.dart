@@ -353,7 +353,7 @@ class HomeAppBar extends StatelessWidget {
                           child: CircleAvatar(
                             backgroundColor: Colors.transparent,
                             child: SvgPicture.asset(
-                              'assets/svgs/notificationfilled.svg',
+                              'assets/svgs/notificationicon.svg',
                               height: 20,
                               colorFilter: const ColorFilter.mode(
                                 Colors.black,

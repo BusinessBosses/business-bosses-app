@@ -1,9 +1,11 @@
 // ignore_for_file: always_specify_types
 
 import 'package:business_bosses_v2/bbpro/widgets/button.dart';
+import 'package:business_bosses_v2/common/models/user_model.dart';
 import 'package:business_bosses_v2/common/widgets/network_image_with_placeholder.dart';
 import 'package:business_bosses_v2/features/chat/chat_screen.dart';
 import 'package:business_bosses_v2/features/home/all_communities_screen.dart';
+import 'package:business_bosses_v2/features/home/home_screen.dart';
 import 'package:business_bosses_v2/features/home/marketplace_screen.dart';
 import 'package:business_bosses_v2/features/home/sellProduct.dart';
 import 'package:business_bosses_v2/features/posts/presentation/create_poll_screen.dart';
@@ -17,11 +19,13 @@ import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 
 class DrawerContent extends StatelessWidget {
-  const DrawerContent({Key? key}) : super(key: key);
+  final UserModel? currentuser;
+  final VoidCallback? oncloseclick;
+  const DrawerContent({Key? key, this.currentuser, this.oncloseclick})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    ProfileController profileController = Get.find();
     List<Map<String, dynamic>> tilesData = <Map<String, dynamic>>[
       {
         'icon': SvgPicture.asset(
@@ -172,34 +176,40 @@ class DrawerContent extends StatelessWidget {
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    Row(
-                      children: [
-                        Container(
-                          width: 40.0,
-                          height: 40.0,
-                          clipBehavior: Clip.antiAlias,
-                          decoration: const BoxDecoration(
-                            color: Colors.transparent,
-                            shape: BoxShape.circle,
+                    GestureDetector(
+                      onTap: () {
+                        Get.to(const HomeScreen());
+                      },
+                      child: Row(
+                        children: [
+                          Container(
+                            width: 40.0,
+                            height: 40.0,
+                            clipBehavior: Clip.antiAlias,
+                            decoration: const BoxDecoration(
+                              color: Colors.transparent,
+                              shape: BoxShape.circle,
+                            ),
+                            child: Image.asset(
+                              'assets/images/app_logo_2.png',
+                              height: 40,
+                            ),
                           ),
-                          child: Image.asset(
-                            'assets/images/app_logo_2.png',
-                            height: 40,
+                          const SizedBox(
+                            width: 10,
                           ),
-                        ),
-                        const SizedBox(
-                          width: 10,
-                        ),
-                        const Text(
-                          'Business Bosses',
-                          style: TextStyle(
-                              fontSize: 18,
-                              color: primaryColorLT,
-                              fontWeight: FontWeight.w700),
-                        )
-                      ],
+                          const Text(
+                            'Business Bosses',
+                            style: TextStyle(
+                                fontSize: 18,
+                                color: primaryColorLT,
+                                fontWeight: FontWeight.w700),
+                          )
+                        ],
+                      ),
                     ),
                     GestureDetector(
+                      onTap: oncloseclick,
                       child: const CircleAvatar(
                         backgroundColor: Colors.transparent,
                         child: Icon(
@@ -217,8 +227,11 @@ class DrawerContent extends StatelessWidget {
                   ...List.generate(
                       tilesData.length,
                       (index) => Padding(
-                            padding: const EdgeInsets.only(left: 8.0),
+                            padding:
+                                const EdgeInsets.only(left: 15.0, right: 15),
                             child: ListTile(
+                              shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(8)),
                               onTap: tilesData[index]['onTileClicked'] as void
                                   Function(),
                               leading: tilesData[index]['icon'] as Widget,
@@ -343,15 +356,14 @@ class DrawerContent extends StatelessWidget {
                   child: Row(
                     children: [
                       SizedBox(
-                        height: 30.0,
-                        width: 30.0,
+                        height: 40.0,
+                        width: 40.0,
                         child: Align(
                           alignment: Alignment.topLeft,
                           child: ClipRRect(
                             borderRadius: BorderRadius.circular(1000),
                             child: NetworkImageWithPlaceHolder(
-                              imageUrl:
-                                  profileController.myProfile.photoUrl ?? '',
+                              imageUrl: currentuser?.photoUrl ?? '',
                               radius: radius,
                               placeHolder: Icons.person,
                               iconSize: 22.0,
@@ -367,11 +379,39 @@ class DrawerContent extends StatelessWidget {
                         mainAxisAlignment: MainAxisAlignment.start,
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Text(
-                              '@${profileController.myProfile.username.toLowerCase()}',
+                          Text('@${currentuser?.username.toLowerCase() ?? ''}',
                               style: const TextStyle(
                                   fontSize: 14, fontWeight: FontWeight.w700)),
-                          const Text('data'),
+                          Row(
+                            children: [
+                              Text(
+                                currentuser!.connectionCount.toString(),
+                                style: const TextStyle(
+                                  color: primaryColorLT,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                              const Text(
+                                ' followers • ',
+                                style: TextStyle(
+                                  color: textColor,
+                                ),
+                              ),
+                              Text(
+                                currentuser!.connections!.length.toString(),
+                                style: const TextStyle(
+                                  color: primaryColorLT,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                              const Text(
+                                ' following',
+                                style: TextStyle(
+                                  color: textColor,
+                                ),
+                              ),
+                            ],
+                          ),
                         ],
                       )
                     ],

@@ -12,7 +12,11 @@ class CustomMenuButton extends StatelessWidget {
   Widget build(BuildContext context) {
     return CircleAvatar(
       backgroundColor: Colors.transparent,
-      child: SvgPicture.asset('assets/svgs/menu.svg'),
+      child: SvgPicture.asset(
+        'assets/svgs/menu.svg',
+        height: 25,
+        color: Colors.black,
+      ),
     );
   }
 }

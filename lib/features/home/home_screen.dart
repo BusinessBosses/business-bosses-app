@@ -240,7 +240,12 @@ class _HomeScreenState extends State<HomeScreen>
                 borderRadius: BorderRadius.all(Radius.circular(16)),
               ),
 
-              drawer: const DrawerContent(),
+              drawer: DrawerContent(
+                oncloseclick: () {
+                  _advancedDrawerController.hideDrawer();
+                },
+                currentuser: homeController.profileController.myProfile,
+              ),
 
               child: Scaffold(
                 backgroundColor: Colors.white,
