@@ -4,10 +4,13 @@ import 'package:business_bosses_v2/common/widgets/network_image_with_placeholder
 import 'package:business_bosses_v2/features/chat/chat_screen.dart';
 import 'package:business_bosses_v2/features/home/all_communities_screen.dart';
 import 'package:business_bosses_v2/features/home/marketplace_screen.dart';
+import 'package:business_bosses_v2/features/home/sellProduct.dart';
+import 'package:business_bosses_v2/features/posts/presentation/create_poll_screen.dart';
 import 'package:business_bosses_v2/features/posts/presentation/create_post_screen.dart';
 import 'package:business_bosses_v2/features/premium/proscreen.dart';
 import 'package:business_bosses_v2/features/profile/controller/profile_controller.dart';
 import 'package:business_bosses_v2/features/profile/presentation/my_profile_screen.dart';
+import 'package:business_bosses_v2/features/settings/settingsscreen.dart';
 import 'package:business_bosses_v2/navigation/routes.dart';
 import 'package:business_bosses_v2/utils/theme/theme.dart';
 import 'package:flutter/material.dart';
@@ -133,6 +136,36 @@ class _HowToUseAppScreenState extends State<HowToUseAppScreen> {
             )),
       },
       {
+        'icon': SvgPicture.asset(
+          'assets/svgs/partner.svg',
+          height: 35,
+          colorFilter: const ColorFilter.mode(
+            Colors.grey,
+            BlendMode.srcIn,
+          ),
+        ),
+        'title': 'Partnership',
+        'description':
+            'Support and invest in projects you believe in. Discover opportunities to back innovative ideas and businesses.',
+        'onTileClicked': () => Get.to(() => const AllCommunitiesScreen(
+              initialBossupTabIndex: 3,
+            )),
+      },
+      {
+        'icon': SvgPicture.asset(
+          'assets/svgs/settings.svg',
+          height: 35,
+          colorFilter: const ColorFilter.mode(
+            Colors.grey,
+            BlendMode.srcIn,
+          ),
+        ),
+        'title': 'Settings',
+        'description':
+            'Customize your app preferences and manage your account settings. ',
+        'onTileClicked': () => Get.to(const SettingsScreen()),
+      },
+      {
         'icon': const Icon(
           Icons.add,
           size: 35,
@@ -141,7 +174,94 @@ class _HowToUseAppScreenState extends State<HowToUseAppScreen> {
         'title': 'Create',
         'description':
             'Create your own content and share it with the community. Build your brand and reach a wider audience.',
-        'onTileClicked': () => Get.to(() => const CreatePostScreen()),
+        'onTileClicked': () => showModalBottomSheet(
+              context: context,
+              shape: const RoundedRectangleBorder(
+                borderRadius: BorderRadius.vertical(
+                  top: Radius.circular(25.0),
+                ),
+              ),
+              builder: (BuildContext context) {
+                return SizedBox(
+                  height: 310,
+                  child: Padding(
+                    padding: const EdgeInsets.all(15.0),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      mainAxisSize: MainAxisSize.min,
+                      children: <Widget>[
+                        Expanded(
+                          // Set a specific height
+                          child: ListView.separated(
+                            itemCount: 4,
+                            separatorBuilder:
+                                (BuildContext context, int index) =>
+                                    const Divider(),
+                            itemBuilder: (BuildContext context, int index) {
+                              return ListTile(
+                                onTap: () {
+                                  Navigator.pop(
+                                      context); // Close the drawer or navigate back
+                                  if (index == 0) {
+                                    Get.toNamed(Routes
+                                        .createPost); // Navigate to "createPost" route
+                                  } else if (index == 1) {
+                                    sellProduct(
+                                        context); // Call sellProduct function
+                                  } else if (index == 2) {
+                                    Get.toNamed(Routes
+                                        .createevent); // Navigate to "createevent" route
+                                  } else if (index == 3) {
+                                    Get.to(() =>
+                                        const CreatePollScreen()); // Navigate to "createPollSurvey" route
+                                  }
+                                },
+                                minVerticalPadding: 0,
+                                contentPadding: const EdgeInsets.only(left: 10),
+                                leading: index == 3
+                                    ? const Icon(
+                                        Icons.poll,
+                                        color: Colors.black,
+                                      )
+                                    : SvgPicture.asset(
+                                        index == 0
+                                            ? 'assets/svgs/text.svg'
+                                            : index == 1
+                                                ? 'assets/svgs/sellicon.svg'
+                                                : 'assets/svgs/eventu.svg', // Assuming you have a "polls.svg" asset
+                                        height: index == 0
+                                            ? 25
+                                            : index == 1
+                                                ? 30
+                                                : index == 2
+                                                    ? 22
+                                                    : 22, // Adjust the height as needed
+                                        // ignore: deprecated_member_use
+                                        color: textColor.withOpacity(1),
+                                      ),
+                                title: Text(
+                                  index == 0
+                                      ? 'Create a Post'
+                                      : index == 1
+                                          ? 'Sell your product & service'
+                                          : index == 2
+                                              ? 'Create an Event'
+                                              : 'Create Polls & Surveys',
+                                  style: const TextStyle(
+                                    fontSize: 18,
+                                    fontWeight: FontWeight.w700,
+                                  ),
+                                ),
+                              );
+                            },
+                          ),
+                        )
+                      ],
+                    ),
+                  ),
+                );
+              },
+            )
       },
     ];
     return Scaffold(

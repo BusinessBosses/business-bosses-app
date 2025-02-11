@@ -114,21 +114,6 @@ class _ExplorebusinessbossesScreenState
                   const SizedBox(
                     height: 20,
                   ),
-                  // Linkify(
-                  //   onOpen: (LinkableElement link) async {
-                  //     if (await canLaunchUrl(Uri.parse(link.url))) {
-                  //       await launchUrl(Uri.parse(link.url));
-                  //     } else {
-                  //       showSnackbar(
-                  //           message:
-                  //               'Could not launch URL: ${link.url}');
-                  //     }
-                  //   },
-                  //   text: description!,
-                  //   style: bodyText2,
-                  //   linkStyle: const TextStyle(color: Colors.blue),
-                  // ),
-
                   Column(
                     mainAxisAlignment: MainAxisAlignment.start,
                     crossAxisAlignment: CrossAxisAlignment.start,
