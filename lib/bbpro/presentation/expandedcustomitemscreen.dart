@@ -1,7 +1,6 @@
 import 'package:business_bosses_v2/action/action.dart';
 import 'package:business_bosses_v2/bbpro/models/customitem_model.dart';
 import 'package:business_bosses_v2/bbpro/widgets/button.dart';
-import 'package:business_bosses_v2/bbpro/widgets/custom_item_card.dart';
 import 'package:business_bosses_v2/common/generic_slider.dart';
 import 'package:business_bosses_v2/common/widgets/text_widget.dart';
 import 'package:business_bosses_v2/features/profile/presentation/public_profile_screen.dart';
@@ -12,6 +11,7 @@ import 'package:detectable_text_field/widgets/detectable_text.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class ExpandedCustomItemScreen extends StatefulWidget {
   final Customitem? customitem;
@@ -304,13 +304,24 @@ class _ExpandedCustomItemScreenState extends State<ExpandedCustomItemScreen> {
                 basicStyle: bodyText2.copyWith(color: textColor),
                 onTap: (_) {},
               ),
-              if (widget.customitem!.link!.isNotEmpty)
+              if (widget.customitem!.link != null &&
+                  widget.customitem!.link!.isNotEmpty)
                 SizedBox(
                     width: double.infinity,
                     child: Padding(
                       padding: const EdgeInsets.symmetric(vertical: 20.0),
-                      child:
-                          ProCustomButton(text: 'Visit Page', onPressed: () {}),
+                      child: ProCustomButton(
+                          text: 'Visit Page',
+                          onPressed: () async {
+                            try {
+                              await _launchURL(widget.customitem!.link!);
+                            } catch (e) {
+                              // Show a snackbar or other error feedback if desired.
+                              print(e.toString());
+                              showSnackBar(context,
+                                  message: 'Could not open the link.');
+                            }
+                          }),
                     ))
             ],
           ),
@@ -321,4 +332,14 @@ class _ExpandedCustomItemScreenState extends State<ExpandedCustomItemScreen> {
 
   Future<void> _reportUser(BuildContext context, String reportType,
       String userId, String username) async {}
+
+  Future<void> _launchURL(String urlString) async {
+    if (!urlString.startsWith('http://') && !urlString.startsWith('https://')) {
+      urlString = 'https://$urlString';
+    }
+    final Uri url = Uri.parse(urlString);
+    if (!await launchUrl(url, mode: LaunchMode.externalApplication)) {
+      throw Exception('Could not launch $urlString');
+    }
+  }
 }
