@@ -5,6 +5,7 @@ import 'package:business_bosses_v2/common/models/api_response_model.dart';
 import 'package:business_bosses_v2/features/home/controller/home_controller.dart';
 import 'package:business_bosses_v2/features/profile/controller/profile_controller.dart';
 import 'package:business_bosses_v2/services/api_service.dart';
+
 import 'package:get/get.dart';
 
 import '../../../common/models/comment_model.dart';
@@ -44,8 +45,16 @@ class MarketController extends GetxController {
   RxBool loadingMore = RxBool(false);
   RxBool isJoined = RxBool(false);
   bool isLoading = true;
+  String? selectedLocation;
+  String? selectedCategory;
+  String searchQuery = '';
 
   RxBool isfiltered = RxBool(false);
+  List<Product> filteredProducts = <Product>[];
+  List<Service> filteredServices = <Service>[];
+
+  // Combined list of all matching items
+  List<Object> allFilteredItems = <Object>[];
   final HomeController _homeController = Get.find();
   final ProfileController _profileController = Get.find();
   late List<String> connecteds =
@@ -81,6 +90,11 @@ class MarketController extends GetxController {
 
   void clearPostSearch() {
     isPostSearch(false);
+    update();
+  }
+
+  void changeLocation(String name) {
+    selectedLocation = name;
     update();
   }
 
@@ -175,6 +189,48 @@ class MarketController extends GetxController {
       products.addAll(productMarkets);
       services.addAll(serviceMarkets);
     }
+  }
+
+  void clearFilter() {
+    // Clear all filtered lists
+    filteredProducts.clear();
+    filteredServices.clear();
+    allFilteredItems.clear();
+    isfiltered(false);
+    update();
+  }
+
+  void filterItems(String searchQuery) {
+    filteredProducts.clear();
+    filteredServices.clear();
+    allFilteredItems.clear();
+
+    final String query = searchQuery.toLowerCase().trim();
+    final String? normalizedCategory = selectedCategory?.toLowerCase().trim();
+
+    for (dynamic item in proItems) {
+      final String? itemCategory = (item is Product || item is Service)
+          ? item.category?.toLowerCase().trim()
+          : null;
+
+      bool matchesQuery =
+          query.isEmpty || item.name.toLowerCase().contains(query);
+
+      bool matchesCategory = (normalizedCategory == null) ||
+          (itemCategory != null && itemCategory == normalizedCategory);
+
+      if (matchesQuery && matchesCategory) {
+        if (item is Product) {
+          filteredProducts.add(item);
+        } else if (item is Service) {
+          filteredServices.add(item);
+        }
+        allFilteredItems.add(item);
+      }
+    }
+    print('Category: $selectedCategory');
+    isfiltered(true);
+    update();
   }
 
   void updateFiltered() {
@@ -293,22 +349,22 @@ class MarketController extends GetxController {
     update();
   }
 
-  void filterMarket(String? location, String? category) async {
-    loading(true);
-    error(false);
-    update();
+  // void filterMarket(String? location, String? category) async {
+  //   loading(true);
+  //   error(false);
+  //   update();
 
-    final ApiResponseModel response =
-        await HomeRepository.filterMarket(location, category);
-    if (response.success) {
-      processPostsToState(response.data, isSearch: true);
-    } else {
-      error(true);
-    }
-    loading(false);
+  //   final ApiResponseModel response =
+  //       await HomeRepository.filterMarket(location, category);
+  //   if (response.success) {
+  //     processPostsToState(response.data, isSearch: true);
+  //   } else {
+  //     error(true);
+  //   }
+  //   loading(false);
 
-    update();
-  }
+  //   update();
+  // }
 
   /// LIKE AND UNLIKE FUNCTION
   void like(String userId, String postId, String type, String receiverUid) {
@@ -501,28 +557,6 @@ class MarketController extends GetxController {
 
       // Combine items
       proItems.addAll(<Object>[...proProducts, ...proServices]);
-
-      // Sort items with Nigeria location first, then by creation date
-      proItems.sort((Object a, Object b) {
-        final DateTime aDate =
-            a is Product ? a.createdAt : (a as Service).createdAt;
-        final DateTime bDate =
-            b is Product ? b.createdAt : (b as Service).createdAt;
-
-        final String? aLocation =
-            a is Product ? a.location : (a as Service).location;
-        final String? bLocation =
-            b is Product ? b.location : (b as Service).location;
-
-        // Sort by location: Nigeria first
-        if (aLocation == _profileController.myProfile.location &&
-            bLocation != _profileController.myProfile.location) return -1;
-        if (aLocation != _profileController.myProfile.location &&
-            bLocation == _profileController.myProfile.location) return 1;
-
-        // If both are in Nigeria or neither, sort by date (most recent first)
-        return bDate.compareTo(aDate);
-      });
 
       // Filter items with images
       proItemsWithImages.addAll(

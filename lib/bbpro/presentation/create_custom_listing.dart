@@ -243,6 +243,13 @@ class _CreateCustomListingState extends State<CreateCustomListing> {
               onPressed: () async {
                 // Validate the form before proceeding
                 if (_formKey.currentState?.validate() ?? false) {
+                  if (updateImages!.isEmpty && _selectedImages.isEmpty) {
+                    showSnackbar(
+                      message: 'Please select at least one image to upload!',
+                      error: true,
+                    );
+                    return;
+                  }
                   setState(() => isSubmit = true);
                   // 1. Clear the final images list
                   List<String> finalImages = <String>[];

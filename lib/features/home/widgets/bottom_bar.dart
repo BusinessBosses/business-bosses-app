@@ -1,8 +1,13 @@
 import 'package:business_bosses_v2/bbpro/presentation/bottom_nav_screen.dart';
+import 'package:business_bosses_v2/features/chat/chat_screen.dart';
+import 'package:business_bosses_v2/features/chat/controllers/chat_controller.dart';
+import 'package:business_bosses_v2/features/chat/models/my_message.dart';
 import 'package:business_bosses_v2/features/home/bottom_nav.dart';
+import 'package:business_bosses_v2/features/home/marketplace_screen.dart';
 import 'package:business_bosses_v2/features/premium/proscreen.dart';
 import 'package:business_bosses_v2/features/profile/controller/profile_controller.dart';
 import 'package:business_bosses_v2/navigation/routes.dart';
+import 'package:business_bosses_v2/utils/theme/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -16,6 +21,7 @@ class BottomBar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     ProfileController profileController = Get.find();
+    ChatController chatController = Get.find();
     return Align(
       alignment: Alignment.bottomCenter,
       child: Container(
@@ -58,14 +64,66 @@ class BottomBar extends StatelessWidget {
                           isActive: activeIndex == 0,
                         ),
                       ),
+
+                      Expanded(
+                        flex: 10,
+                        child: Stack(children: <Widget>[
+                          BottomTabButton(
+                            icon: activeIndex == 1
+                                ? 'assets/svgs/messagefilled.svg'
+                                : 'assets/svgs/bottombarchat.svg',
+                            label: 'Inbox',
+                            onTap: () {
+                              if (activeIndex == 1) return;
+
+                              if (activeIndex == 0) {
+                                //   profileController.myProfile.isSubscribed
+                                //       ? Get.to(const Bottomnavscreen(noBack: false))
+                                Get.to(const ChatScreen());
+                              } else {
+                                // profileController.myProfile.isSubscribed
+                                //     ? Get.to(const Bottomnavscreen(noBack: false))
+
+                                Get.off(() => const ChatScreen());
+                              }
+                            },
+                            isActive: activeIndex == 1,
+                          ),
+                          if (chatController.chats
+                              .where((MessageModel element) =>
+                                  element.receiverUid ==
+                                      profileController.myProfile.uid &&
+                                  !element.seen)
+                              .toList()
+                              .isNotEmpty)
+                            Positioned(
+                              top: 6,
+                              right: 22,
+                              child: Container(
+                                decoration: BoxDecoration(
+                                  shape: BoxShape.circle,
+                                  border: Border.all(
+                                    color: Colors.white, // Border color
+                                    width: 2.0, // Border width
+                                  ),
+                                ),
+                                child: const CircleAvatar(
+                                  backgroundColor: primaryColorLT,
+                                  radius: 5,
+                                ),
+                              ),
+                            )
+                        ]),
+                      ),
+
                       Expanded(
                         flex: 10,
                         child: BottomTabButton(
-                          icon: activeIndex == 1
+                          icon: activeIndex == 2
                               ? 'assets/svgs/bossupufilled.svg'
                               : 'assets/svgs/bossupu.svg',
                           onTap: () {
-                            if (activeIndex == 1) return;
+                            if (activeIndex == 2) return;
                             if (activeIndex == 0) {
                               Get.toNamed(Routes.allCommunitiesScreen);
                             } else {
@@ -73,7 +131,7 @@ class BottomBar extends StatelessWidget {
                             }
                           },
                           label: 'Boss Up',
-                          isActive: activeIndex == 1,
+                          isActive: activeIndex == 2,
                         ),
                       ),
                       // Expanded(
@@ -186,30 +244,7 @@ class BottomBar extends StatelessWidget {
                       //         ),
                       //       ),
                       //     )),
-                      Expanded(
-                        flex: 10,
-                        child: BottomTabButton(
-                          icon: activeIndex == 2
-                              ? 'assets/svgs/growfilled.svg'
-                              : 'assets/svgs/grow.svg',
-                          label: 'Grow',
-                          onTap: () {
-                            if (activeIndex == 2) return;
 
-                            if (activeIndex == 0) {
-                              //   profileController.myProfile.isSubscribed
-                              //       ? Get.to(const Bottomnavscreen(noBack: false))
-                              Get.to(() => const ProScreen());
-                            } else {
-                              // profileController.myProfile.isSubscribed
-                              //     ? Get.to(const Bottomnavscreen(noBack: false))
-
-                              Get.off(() => const ProScreen());
-                            }
-                          },
-                          isActive: activeIndex == 2,
-                        ),
-                      ),
                       Expanded(
                         flex: 10,
                         child: BottomTabButton(
@@ -220,14 +255,15 @@ class BottomBar extends StatelessWidget {
                           onTap: () {
                             if (activeIndex == 3) return;
                             if (activeIndex == 0) {
-                              Get.toNamed(Routes.marketPlace);
+                              Get.to(() => const MarketplaceScreen());
                             } else {
-                              Get.offAndToNamed(Routes.marketPlace);
+                              Get.off(() => const MarketplaceScreen());
                             }
                           },
                           isActive: activeIndex == 3,
                         ),
                       ),
+
                       Expanded(
                         flex: 10,
                         child: BottomTabButton(

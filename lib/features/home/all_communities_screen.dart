@@ -12,7 +12,7 @@ import 'package:business_bosses_v2/features/home/widgets/eventssection.dart';
 import 'package:business_bosses_v2/features/home/widgets/industriessearch.dart';
 import 'package:business_bosses_v2/features/home/widgets/learningpage.dart';
 import 'package:business_bosses_v2/features/home/widgets/learningsection.dart';
-import 'package:business_bosses_v2/features/live_event/presentation/live_event.dart';
+import 'package:business_bosses_v2/features/profile/presentation/my_profile_screen.dart';
 import 'package:business_bosses_v2/navigation/routes.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
@@ -40,8 +40,8 @@ class AllCommunitiesScreen extends StatefulWidget {
 
 class _AllCommunitiesScreenState extends State<AllCommunitiesScreen>
     with TickerProviderStateMixin {
-  bool _isSearching = false;
-  bool _isSearchingDonations = false;
+  final bool _isSearching = false;
+  final bool _isSearchingDonations = false;
   Industry industry = Industry();
   bool isScrolled = true;
 
@@ -84,48 +84,78 @@ class _AllCommunitiesScreenState extends State<AllCommunitiesScreen>
             ),
           ),
         ),
-      _pageTabController.index != 2
-          ? GestureDetector(
-              onTap: () {
-                _isSearching = !_isSearching;
-                setState(() {});
-                _communitiesController.clearSearch();
-              },
-              child: Padding(
-                padding: const EdgeInsets.only(right: 10.0),
-                child: _isSearching
-                    ? const Icon(Icons.close)
-                    : CircleAvatar(
-                        radius: 20,
-                        backgroundColor: backgroundColor,
-                        child: SvgPicture.asset(
-                          'assets/svgs/homesearch.svg',
-                          height: 20,
-                          color: textColor,
-                        )),
-              ),
-            )
-          : GestureDetector(
-              child: Padding(
-                padding: const EdgeInsets.only(right: 10.0),
-                child: _isSearchingDonations
-                    ? const Icon(Icons.close)
-                    : CircleAvatar(
-                        radius: 20,
-                        backgroundColor: backgroundColor,
-                        child: SvgPicture.asset(
-                          'assets/svgs/homesearch.svg',
-                          height: 20,
-                          color: textColor,
-                        )),
-              ),
-              onTap: () {
-                _isSearchingDonations = !_isSearchingDonations;
-                setState(() {});
-                donationsController.searchedPosts.clear();
-                donationsController.searchedUsers.clear();
-              },
+      Padding(
+        padding: const EdgeInsets.only(right: 8.0, bottom: 8, top: 8),
+        child: GestureDetector(
+          onTap: () => Get.to(const MyProfileScreen(
+            currentIndex: 1,
+          )),
+          child: Container(
+            padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+            decoration: BoxDecoration(
+              color: probackgroundColor,
+              borderRadius: BorderRadius.circular(20),
             ),
+            child: Row(
+              children: <Widget>[
+                SvgPicture.asset('assets/svgs/marketplaceoutlined.svg',
+                    color: proprimaryColor, height: 15),
+                const SizedBox(width: 5),
+                const Text(
+                  'My-Biz',
+                  style: TextStyle(
+                    color: proprimaryColor,
+                    fontSize: 15,
+                    fontWeight: FontWeight.w700,
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ),
+      ),
+      // _pageTabController.index != 2
+      //     ? GestureDetector(
+      //         onTap: () {
+      //           _isSearching = !_isSearching;
+      //           setState(() {});
+      //           _communitiesController.clearSearch();
+      //         },
+      //         child: Padding(
+      //           padding: const EdgeInsets.only(right: 10.0),
+      //           child: _isSearching
+      //               ? const Icon(Icons.close)
+      //               : CircleAvatar(
+      //                   radius: 20,
+      //                   backgroundColor: backgroundColor,
+      //                   child: SvgPicture.asset(
+      //                     'assets/svgs/homesearch.svg',
+      //                     height: 20,
+      //                     color: textColor,
+      //                   )),
+      //         ),
+      //       )
+      //     : GestureDetector(
+      //         child: Padding(
+      //           padding: const EdgeInsets.only(right: 10.0),
+      //           child: _isSearchingDonations
+      //               ? const Icon(Icons.close)
+      //               : CircleAvatar(
+      //                   radius: 20,
+      //                   backgroundColor: backgroundColor,
+      //                   child: SvgPicture.asset(
+      //                     'assets/svgs/homesearch.svg',
+      //                     height: 20,
+      //                     color: textColor,
+      //                   )),
+      //         ),
+      //         onTap: () {
+      //           _isSearchingDonations = !_isSearchingDonations;
+      //           setState(() {});
+      //           donationsController.searchedPosts.clear();
+      //           donationsController.searchedUsers.clear();
+      //         },
+      //       ),
     ];
   }
 
@@ -417,7 +447,7 @@ class _AllCommunitiesScreenState extends State<AllCommunitiesScreen>
                     ),
                   ),
                 ),
-                const BottomBar(activeIndex: 1),
+                const BottomBar(activeIndex: 2),
               ],
             ),
           ),

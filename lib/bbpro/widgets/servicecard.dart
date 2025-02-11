@@ -1,13 +1,13 @@
 import 'package:business_bosses_v2/bbpro/controllers/shop_controller.dart';
 import 'package:business_bosses_v2/bbpro/models/service_model.dart';
 import 'package:business_bosses_v2/bbpro/models/shop_model.dart';
+import 'package:business_bosses_v2/bbpro/presentation/boost_items.dart';
 import 'package:business_bosses_v2/bbpro/widgets/countrycodes.dart';
 import 'package:business_bosses_v2/bbpro/widgets/optionsbutton.dart';
 import 'package:business_bosses_v2/common/dialogs/snackbar.dart';
 import 'package:business_bosses_v2/common/widgets/network_image_with_placeholder.dart';
 import 'package:business_bosses_v2/utils/theme/theme.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 import 'package:business_bosses_v2/bbpro/presentation/create_service.dart';
 
@@ -112,95 +112,122 @@ class _ServiceCardState extends State<ServiceCard> {
             crossAxisAlignment: CrossAxisAlignment.end,
             children: <Widget>[
               Expanded(
-                child: Container(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: <Widget>[
-                      Text(
-                        widget.service?.name ?? 'Service Name',
-                        style: const TextStyle(
-                          fontSize: 13,
-                          fontWeight: FontWeight.bold,
-                        ),
-                        maxLines: 1,
-                        overflow: TextOverflow.ellipsis,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: <Widget>[
+                    Text(
+                      widget.service?.name ?? 'Service Name',
+                      style: const TextStyle(
+                        fontSize: 13,
+                        fontWeight: FontWeight.bold,
                       ),
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                    ),
 
-                      if (widget.service?.discount != null &&
-                          widget.service!.discount > 0)
-                        Column(
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: <Widget>[
-                            if (widget.service?.serviceDuration != null)
-                              Text(formatServiceDuration(
-                                  widget.service?.serviceDuration)),
-                            Row(
-                              children: <Widget>[
-                                Text(
-                                  '${widget.shop?.currency ?? shopController.shop!.currency}${((widget.service!.price * (1 - widget.service!.discount / 100)) * 100).round() / 100}',
-                                  style: const TextStyle(
-                                    color: Colors.black,
-                                    fontWeight: FontWeight.bold,
-                                    fontSize: 13,
-                                  ),
+                    if (widget.service?.discount != null &&
+                        widget.service!.discount > 0)
+                      Column(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: <Widget>[
+                          if (widget.service?.serviceDuration != null)
+                            Text(formatServiceDuration(
+                                widget.service?.serviceDuration)),
+                          Row(
+                            children: <Widget>[
+                              Text(
+                                '${widget.shop?.currency ?? shopController.shop!.currency}${((widget.service!.price * (1 - widget.service!.discount / 100)) * 100).round() / 100}',
+                                style: const TextStyle(
+                                  color: Colors.black,
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 13,
                                 ),
-                                const SizedBox(width: 5),
-                                Text(
-                                  '${widget.shop?.currency ?? shopController.shop!.currency}${widget.service!.price.toStringAsFixed(2)}',
-                                  style: const TextStyle(
-                                    color: primaryColorLT,
-                                    decoration: TextDecoration.lineThrough,
-                                    fontSize: 11,
-                                  ),
+                              ),
+                              const SizedBox(width: 5),
+                              Text(
+                                '${widget.shop?.currency ?? shopController.shop!.currency}${widget.service!.price.toStringAsFixed(2)}',
+                                style: const TextStyle(
+                                  color: primaryColorLT,
+                                  decoration: TextDecoration.lineThrough,
+                                  fontSize: 11,
                                 ),
-                              ],
-                            ),
-                          ],
-                        )
-                      else
-                        Text(
-                          '${widget.shop?.currency ?? shopController.shop!.currency}${widget.service!.price.toStringAsFixed(2)}',
-                          style: const TextStyle(
-                            color: Colors.black,
-                            fontWeight: FontWeight.bold,
-                            fontSize: 13,
+                              ),
+                            ],
                           ),
+                        ],
+                      )
+                    else
+                      Text(
+                        '${widget.shop?.currency ?? shopController.shop!.currency}${widget.service!.price.toStringAsFixed(2)}',
+                        style: const TextStyle(
+                          color: Colors.black,
+                          fontWeight: FontWeight.bold,
+                          fontSize: 13,
                         ),
-                      if (widget.myShop == false)
-                        Text(
-                          widget.service?.description ?? 'Service description',
-                          style: const TextStyle(fontSize: 11),
-                          maxLines: 2,
-                          overflow: TextOverflow.ellipsis,
-                        ),
-                      // if (widget.myShop == false)
-                      //   const Row(
-                      //     mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      //     children: <Widget>[
-                      //       Wrap(
-                      //         crossAxisAlignment: WrapCrossAlignment.center,
-                      //         children: <Widget>[
-                      //           CircleAvatar(
-                      //             radius: 3,
-                      //             backgroundColor: Colors.green,
-                      //           ),
-                      //           SizedBox(width: 3),
-                      //           Text(
-                      //             'Upcoming',
-                      //             style: TextStyle(fontSize: 10),
-                      //           ),
-                      //         ],
-                      //       ),
-                      //     ],
-                      //   ),
-                    ],
-                  ),
+                      ),
+                    if (widget.myShop == false)
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: <Widget>[
+                          Expanded(
+                            child: Text(
+                              widget.service?.description ??
+                                  'Service description',
+                              style: const TextStyle(fontSize: 11),
+                              maxLines: 2,
+                              overflow: TextOverflow.ellipsis,
+                            ),
+                          ),
+                          if (widget.marketplace == null)
+                            Container(
+                              padding: const EdgeInsets.symmetric(
+                                horizontal: 5,
+                                vertical: 3,
+                              ),
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(6),
+                                border: Border.all(
+                                  color: primaryColorLT,
+                                ),
+                              ),
+                              child: const Text(
+                                'Book',
+                                style: TextStyle(
+                                  color: primaryColorLT,
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 11,
+                                ),
+                              ),
+                            ),
+                        ],
+                      ),
+                    // if (widget.myShop == false)
+                    //   const Row(
+                    //     mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    //     children: <Widget>[
+                    //       Wrap(
+                    //         crossAxisAlignment: WrapCrossAlignment.center,
+                    //         children: <Widget>[
+                    //           CircleAvatar(
+                    //             radius: 3,
+                    //             backgroundColor: Colors.green,
+                    //           ),
+                    //           SizedBox(width: 3),
+                    //           Text(
+                    //             'Upcoming',
+                    //             style: TextStyle(fontSize: 10),
+                    //           ),
+                    //         ],
+                    //       ),
+                    //     ],
+                    //   ),
+                  ],
                 ),
               ),
             ],
           ),
-          const SizedBox(height: 5),
+          if (widget.marketplace != null) const SizedBox(height: 5),
           widget.myShop == false
               ? Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -234,25 +261,27 @@ class _ServiceCardState extends State<ServiceCard> {
                           ),
                         ],
                       ),
-                    Container(
-                      padding: const EdgeInsets.symmetric(
-                          horizontal: 5, vertical: 3),
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(6),
-                        border: Border.all(
-                          color: primaryColorLT,
-                          width: 1,
+                    if (widget.marketplace == null) Container(width: 5),
+                    if (widget.marketplace != null)
+                      Container(
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 5, vertical: 3),
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(6),
+                          border: Border.all(
+                            color: primaryColorLT,
+                            width: 1,
+                          ),
+                        ),
+                        child: const Text(
+                          'Book',
+                          style: TextStyle(
+                            color: primaryColorLT,
+                            fontWeight: FontWeight.bold,
+                            fontSize: 11,
+                          ),
                         ),
                       ),
-                      child: const Text(
-                        'Book',
-                        style: TextStyle(
-                          color: primaryColorLT,
-                          fontWeight: FontWeight.bold,
-                          fontSize: 11,
-                        ),
-                      ),
-                    ),
                   ],
                 )
               : Row(
@@ -277,7 +306,11 @@ class _ServiceCardState extends State<ServiceCard> {
                       item: widget.service,
                       onEdit: _onEdit,
                       onDelete: onDelete,
-                      onBoost: () {},
+                      onBoost: () {
+                        Get.to(() => BoostItem(
+                              service: widget.service,
+                            ));
+                      },
                       isBoost: true,
                     ),
                   ],
@@ -298,7 +331,10 @@ class _ServiceCardState extends State<ServiceCard> {
         content: const Text('Are you sure you want to delete this service?'),
         actions: <Widget>[
           TextButton(
-            onPressed: () => Navigator.pop(context),
+            onPressed: () {
+              Navigator.pop(context);
+              Navigator.pop(context);
+            },
             child: const Text('No'),
           ),
           TextButton(
@@ -308,11 +344,13 @@ class _ServiceCardState extends State<ServiceCard> {
                     await shopController.deleteService(widget.service!.id);
                 if (delete) {
                   showSnackbar(message: 'Service deleted successfully!');
+                  Navigator.pop(context);
+                  Navigator.pop(context);
                 } else {
                   showSnackbar(message: 'Error deleting service!', error: true);
+                  Navigator.pop(context);
                 }
                 setState(() {});
-                Navigator.pop(context);
               }
             },
             child: const Text('Yes'),

@@ -3,7 +3,6 @@ import 'package:business_bosses_v2/bbpro/controllers/order_controller.dart';
 import 'package:business_bosses_v2/bbpro/controllers/shop_controller.dart';
 import 'package:business_bosses_v2/bbpro/models/service_model.dart';
 import 'package:business_bosses_v2/bbpro/models/shop_model.dart';
-import 'package:business_bosses_v2/bbpro/presentation/user_shop_screen.dart';
 import 'package:business_bosses_v2/bbpro/widgets/button.dart';
 import 'package:business_bosses_v2/bbpro/widgets/edit_text.dart';
 import 'package:business_bosses_v2/bbpro/widgets/ordersummarycard.dart';
@@ -11,7 +10,6 @@ import 'package:business_bosses_v2/bbpro/widgets/paymentoptioncard.dart';
 import 'package:business_bosses_v2/bbpro/widgets/servicetypesection.dart';
 import 'package:business_bosses_v2/common/dialogs/snackbar.dart';
 import 'package:business_bosses_v2/common/generic_slider.dart';
-import 'package:business_bosses_v2/common/models/user_model.dart';
 import 'package:business_bosses_v2/common/widgets/text_widget.dart';
 import 'package:business_bosses_v2/features/profile/controller/profile_controller.dart';
 import 'package:business_bosses_v2/features/profile/presentation/public_profile_screen.dart';
@@ -54,10 +52,14 @@ String formatServiceDuration(int? duration) {
 }
 
 class BookServiceScreen extends StatefulWidget {
+  final bool? isMarketplace;
   final Service service;
   final Shop shop;
   const BookServiceScreen(
-      {super.key, required this.service, required this.shop});
+      {super.key,
+      required this.service,
+      required this.shop,
+      this.isMarketplace});
 
   @override
   State<BookServiceScreen> createState() => _BookServiceScreenState();
@@ -443,6 +445,7 @@ class _BookServiceScreenState extends State<BookServiceScreen> {
                         ),
                     ],
                   ),
+                  Text('Category: ${widget.service.category}'),
                   const SizedBox(height: 15),
                   DetectableText(
                     text: widget.service.description,
@@ -923,11 +926,16 @@ class _BookServiceScreenState extends State<BookServiceScreen> {
                                       ProPaymentOptionCard(
                                         option: payment['paymentMethod'] ?? '',
                                         subtext:
-                                            'Details: ${payment['details'].toString() ?? 'N/A'}',
+                                            'Details: ${payment['details'].toString()}',
                                         activeoption: activePaymentMethod,
                                         onTap: (String newOption) {
                                           setState(() {
-                                            activePaymentMethod = newOption;
+                                            if (activePaymentMethod !=
+                                                newOption) {
+                                              activePaymentMethod = newOption;
+                                            } else {
+                                              activePaymentMethod = '';
+                                            }
                                           });
                                         },
                                       ))
@@ -1137,7 +1145,23 @@ class _BookServiceScreenState extends State<BookServiceScreen> {
               ),
             ),
 
-            const SizedBox(height: 30),
+            const SizedBox(height: 15),
+            Padding(
+              padding: const EdgeInsets.only(
+                  left: 20.0, bottom: 200, right: 20, top: 20),
+              child: ClipRRect(
+                borderRadius: BorderRadius.circular(10),
+                child: Container(
+                  color: Colors.grey.shade200,
+                  child: const Padding(
+                    padding: EdgeInsets.all(15.0),
+                    child: Text(
+                      'Safety tips \n\n• Check seller offers buyer protection before making payment \n• On delivery, check that the item delivered is what you ordered \n• Report any seller you have any concerns about',
+                    ),
+                  ),
+                ),
+              ),
+            ),
           ],
         ),
       ),

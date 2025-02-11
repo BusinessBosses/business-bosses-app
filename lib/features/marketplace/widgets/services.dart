@@ -1,18 +1,15 @@
 import 'package:business_bosses_v2/bbpro/controllers/shop_controller.dart';
 import 'package:business_bosses_v2/bbpro/models/service_model.dart';
 import 'package:business_bosses_v2/bbpro/presentation/book_service.dart';
-import 'package:business_bosses_v2/bbpro/presentation/create_service.dart';
 import 'package:business_bosses_v2/bbpro/widgets/proshopdeals.dart';
 import 'package:business_bosses_v2/bbpro/widgets/servicecard.dart';
-import 'package:business_bosses_v2/common/dialogs/snackbar.dart';
+import 'package:business_bosses_v2/common/widgets/safety_model.dart';
 import 'package:business_bosses_v2/features/home/controller/home_controller.dart';
-import 'package:business_bosses_v2/features/home/widgets/sellingpopup.dart';
 import 'package:business_bosses_v2/features/marketplace/controllers/market_controller.dart';
 import 'package:business_bosses_v2/features/profile/controller/profile_controller.dart';
 import 'package:business_bosses_v2/utils/theme/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
-import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 
 class ServicesPage extends StatefulWidget {
@@ -50,143 +47,81 @@ class _ServicesPageState extends State<ServicesPage> {
           constraints: BoxConstraints(
             minHeight: MediaQuery.of(context).size.height,
           ),
-          child: Column(
-            children: <Widget>[
-              Container(
-                width: double.infinity,
-                color: backgroundcolorinterface,
-                child: Stack(
-                  children: <Widget>[
-                    Padding(
-                      padding: const EdgeInsets.only(left: 15, top: 25),
-                      child: GestureDetector(
-                        onTap: (() {
-                          showDialog(
-                            context: context,
-                            builder: (BuildContext context) =>
-                                sellingGuide(context),
-                          );
-                        }),
-                        child: Row(
-                          children: <Widget>[
-                            const Text(
-                              'Guidelines ',
-                              style: TextStyle(
-                                  fontSize: 12, fontWeight: FontWeight.w700),
-                            ),
-                            SvgPicture.asset(
-                              'assets/svgs/info.svg',
-                              height: 20,
-                            ),
-                          ],
-                        ),
-                      ),
+          child: GetBuilder<MarketController>(
+              builder: (MarketController controller) {
+            bool isFiltering = _marketController.isfiltered.value;
+
+            List<Service> services = !isFiltering
+                ? _marketController.proServices
+                : _marketController.filteredServices;
+            return Column(
+              children: <Widget>[
+                Padding(
+                  padding: const EdgeInsets.only(top: 10),
+                  child: ProshopdealsWidget(
+                    title: 'NEW',
+                    services: _marketController.proServices
+                        .where((Service item) =>
+                            item.images != null &&
+                            item.images!.isNotEmpty &&
+                            item.images![0].isNotEmpty &&
+                            item.user!.isSubscribed)
+                        .take(10)
+                        .toList(),
+                    initialIndex: 2,
+                  ),
+                ),
+                if (isFiltering && services.isEmpty)
+                  const Center(
+                    child: SafetyModel(
+                      isLoading: false,
+                      title: 'No Services Found For This Search',
                     ),
-                    Column(
-                      children: <Widget>[
-                        const SizedBox(
-                          height: 10,
-                        ),
-                        Align(
-                          alignment: Alignment.centerRight,
-                          child: Padding(
-                            padding: const EdgeInsets.only(right: 15),
-                            child: ElevatedButton(
-                              style: ElevatedButton.styleFrom(
-                                  minimumSize: const Size(150, 45)),
-                              onPressed: () {
-                                setState(() {});
-                                if (shopController.shop == null) {
-                                  showSnackbar(
-                                    message: 'Create a Biz-Center First',
-                                    error: true,
-                                  );
-                                  return;
-                                }
-                                Get.to(() => const CreateServiceListing());
-                              },
-                              child: Row(
-                                mainAxisSize: MainAxisSize.min,
-                                children: <Widget>[
-                                  const Text(
-                                    'Sell',
-                                    style: TextStyle(
-                                        fontSize: 15,
-                                        color: Colors.white,
-                                        fontWeight: FontWeight.w500),
-                                  ),
-                                  const SizedBox(width: 5),
-                                  SvgPicture.asset(
-                                      'assets/svgs/startatopic.svg')
-                                ],
-                              ),
-                            ),
+                  )
+                else
+                  Padding(
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 10.0, vertical: 10.0),
+                    child: StaggeredGridView.countBuilder(
+                      crossAxisCount: 2,
+                      staggeredTileBuilder: (int index) =>
+                          const StaggeredTile.fit(1),
+                      mainAxisSpacing: 10.0,
+                      crossAxisSpacing: 10.0,
+                      itemCount: services.length,
+                      shrinkWrap: true,
+                      physics: const NeverScrollableScrollPhysics(),
+                      itemBuilder: (BuildContext context, int index) {
+                        final Service service = services[index];
+                        return GestureDetector(
+                          onTap: () {
+                            if (service.user!.uid ==
+                                profileController.myProfile.uid) {
+                              // Navigate to edit listing
+                            } else {
+                              Get.to(() => BookServiceScreen(
+                                    service: service,
+                                    shop: service.shop!,
+                                  ));
+                            }
+                          },
+                          child: ServiceCard(
+                            marketplace: true,
+                            shop: service.shop!,
+                            service: service,
+                            myShop: service.user!.uid ==
+                                profileController.myProfile.uid,
                           ),
-                        ),
-                        const SizedBox(height: 10),
-                      ],
-                    ),
-                  ],
-                ),
-              ),
-              Padding(
-                padding: const EdgeInsets.only(bottom: 10.0),
-                child: ProshopdealsWidget(
-                  title: 'NEW',
-                  services: _marketController.proServices
-                      .where((Service item) =>
-                          item.images != null &&
-                          item.images!.isNotEmpty &&
-                          item.images![0].isNotEmpty &&
-                          item.user!.isSubscribed)
-                      .take(10)
-                      .toList(),
-                  initialIndex: 2,
-                ),
-              ),
-              Padding(
-                padding: const EdgeInsets.symmetric(
-                    horizontal: 10.0, vertical: 10.0),
-                child: StaggeredGridView.countBuilder(
-                  crossAxisCount: 2,
-                  staggeredTileBuilder: (int index) =>
-                      const StaggeredTile.fit(1),
-                  mainAxisSpacing: 10.0,
-                  crossAxisSpacing: 10.0,
-                  itemCount: _marketController.proServices.length,
-                  shrinkWrap: true,
-                  physics: const NeverScrollableScrollPhysics(),
-                  itemBuilder: (BuildContext context, int index) {
-                    final Service service =
-                        _marketController.proServices[index];
-                    return GestureDetector(
-                      onTap: () {
-                        if (service.user!.uid ==
-                            profileController.myProfile.uid) {
-                          // Navigate to edit listing
-                        } else {
-                          Get.to(() => BookServiceScreen(
-                                service: service,
-                                shop: service.shop!,
-                              ));
-                        }
+                        );
                       },
-                      child: ServiceCard(
-                        marketplace: true,
-                        shop: service.shop!,
-                        service: service,
-                        myShop: service.user!.uid ==
-                            profileController.myProfile.uid,
-                      ),
-                    );
-                  },
+                    ),
+                  ),
+                const SizedBox(
+                  height: 100,
                 ),
-              ),
-              const SizedBox(
-                height: 100,
-              ),
-            ],
-          ),
+              ],
+            );
+          }),
         ),
       ),
     );

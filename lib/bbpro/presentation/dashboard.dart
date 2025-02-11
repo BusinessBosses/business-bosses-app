@@ -1,10 +1,7 @@
 import 'package:business_bosses_v2/bbpro/controllers/clients_controller.dart';
 import 'package:business_bosses_v2/bbpro/controllers/shop_controller.dart';
 import 'package:business_bosses_v2/bbpro/presentation/add_client.dart';
-import 'package:business_bosses_v2/bbpro/presentation/add_project.dart';
-import 'package:business_bosses_v2/bbpro/presentation/add_supplier.dart';
 import 'package:business_bosses_v2/bbpro/presentation/bottom_nav_screen.dart';
-import 'package:business_bosses_v2/bbpro/presentation/clients.dart';
 import 'package:business_bosses_v2/bbpro/presentation/create_custom_listing.dart';
 import 'package:business_bosses_v2/bbpro/presentation/create_product.dart';
 import 'package:business_bosses_v2/bbpro/presentation/create_service.dart';
@@ -18,9 +15,7 @@ import 'package:business_bosses_v2/bbpro/widgets/orderscard.dart';
 import 'package:business_bosses_v2/bbpro/widgets/quickactioncard.dart';
 import 'package:business_bosses_v2/common/widgets/safety_model.dart';
 import 'package:business_bosses_v2/features/chat/chat_screen.dart';
-import 'package:business_bosses_v2/features/home/bottom_nav.dart';
 import 'package:business_bosses_v2/features/home/home_screen.dart';
-import 'package:business_bosses_v2/features/home/widgets/bottom_bar.dart';
 import 'package:business_bosses_v2/utils/theme/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
@@ -434,7 +429,7 @@ class _DashboardState extends State<Dashboard> {
                                         ? Colors.orange
                                         : Colors.purple,
                                 assetlocation: index == 0
-                                    ? 'assets/svgs/startatopic.svg'
+                                    ? 'assets/svgs/plus.svg'
                                     : index == 1
                                         ? 'assets/svgs/addorder.svg'
                                         : index == 2

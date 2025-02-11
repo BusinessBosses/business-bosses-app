@@ -1,6 +1,6 @@
+import 'package:business_bosses_v2/bbpro/presentation/create_product.dart';
+import 'package:business_bosses_v2/bbpro/presentation/create_service.dart';
 import 'package:business_bosses_v2/features/marketplace/presentation/add_supplier.dart';
-import 'package:business_bosses_v2/features/marketplace/presentation/sell_services.dart';
-import 'package:business_bosses_v2/navigation/routes.dart';
 import 'package:business_bosses_v2/utils/theme/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
@@ -34,10 +34,9 @@ void sellProduct(BuildContext context) {
                       onTap: () {
                         Navigator.pop(context);
                         index == 0
-                            ? Get.toNamed(Routes.sellscreen)
+                            ? Get.to(() => const CreateProductListing())
                             : index == 1
-                                ? Get.to(() =>
-                                    const CreateServiceScreen(isUpd: false))
+                                ? Get.to(() => const CreateServiceListing())
                                 : Get.to(() => const AddSupplierScreen());
                       },
                       minVerticalPadding: 0,

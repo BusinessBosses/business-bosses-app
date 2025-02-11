@@ -1,6 +1,7 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'package:business_bosses_v2/bbpro/controllers/shop_controller.dart';
 import 'package:business_bosses_v2/bbpro/models/shop_model.dart';
+import 'package:business_bosses_v2/bbpro/presentation/boost_items.dart';
 import 'package:business_bosses_v2/bbpro/presentation/create_product.dart';
 import 'package:business_bosses_v2/bbpro/widgets/countrycodes.dart';
 import 'package:business_bosses_v2/common/dialogs/snackbar.dart';
@@ -132,11 +133,40 @@ class _InventoryCardState extends State<InventoryCard> {
                         ),
                       ),
                     if (widget.myShop == false)
-                      Text(
-                        widget.product?.description ?? 'Product description',
-                        style: const TextStyle(fontSize: 11),
-                        maxLines: 2,
-                        overflow: TextOverflow.ellipsis,
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: <Widget>[
+                          Expanded(
+                            child: Text(
+                              widget.product?.description ??
+                                  'Product description',
+                              style: const TextStyle(fontSize: 11),
+                              maxLines: 2,
+                              overflow: TextOverflow.ellipsis,
+                            ),
+                          ),
+                          if (widget.marketplace == null)
+                            Container(
+                              padding: const EdgeInsets.symmetric(
+                                horizontal: 5,
+                                vertical: 3,
+                              ),
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(6),
+                                border: Border.all(
+                                  color: primaryColorLT,
+                                ),
+                              ),
+                              child: const Text(
+                                'Order',
+                                style: TextStyle(
+                                  color: primaryColorLT,
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 11,
+                                ),
+                              ),
+                            ),
+                        ],
                       ),
                     // if (widget.myShop == false)
                     //   Row(
@@ -167,9 +197,10 @@ class _InventoryCardState extends State<InventoryCard> {
               ),
             ],
           ),
-          const SizedBox(
-            height: 5,
-          ),
+          if (widget.marketplace != null)
+            const SizedBox(
+              height: 5,
+            ),
           widget.myShop == false
               ? Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -197,33 +228,34 @@ class _InventoryCardState extends State<InventoryCard> {
                             (widget.product?.user?.averageRating != null)
                                 ? widget.product!.user!.averageRating!
                                     .toStringAsFixed(1)
-                                : 'N/A',
+                                : '0.0',
                             style: const TextStyle(
                                 fontWeight: FontWeight.w700, fontSize: 12),
                           ),
                         ],
                       ),
                     if (widget.marketplace == null) Container(width: 5),
-                    Container(
-                      padding: const EdgeInsets.symmetric(
-                        horizontal: 5,
-                        vertical: 3,
-                      ),
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(6),
-                        border: Border.all(
-                          color: primaryColorLT,
+                    if (widget.marketplace != null)
+                      Container(
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 5,
+                          vertical: 3,
+                        ),
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(6),
+                          border: Border.all(
+                            color: primaryColorLT,
+                          ),
+                        ),
+                        child: const Text(
+                          'Order',
+                          style: TextStyle(
+                            color: primaryColorLT,
+                            fontWeight: FontWeight.bold,
+                            fontSize: 11,
+                          ),
                         ),
                       ),
-                      child: const Text(
-                        'Order',
-                        style: TextStyle(
-                          color: primaryColorLT,
-                          fontWeight: FontWeight.bold,
-                          fontSize: 11,
-                        ),
-                      ),
-                    ),
                   ],
                 )
               : Row(
@@ -231,7 +263,7 @@ class _InventoryCardState extends State<InventoryCard> {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: <Widget>[
                     Expanded(
-                      child: Column(
+                      child: Row(
                         mainAxisAlignment: MainAxisAlignment.start,
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: <Widget>[
@@ -276,7 +308,11 @@ class _InventoryCardState extends State<InventoryCard> {
                           product: widget.product,
                         ),
                       ),
-                      onBoost: () {},
+                      onBoost: () {
+                        Get.to(() => BoostItem(
+                              product: widget.product,
+                            ));
+                      },
                       onDelete: onDelete,
                     ),
                   ],
@@ -297,20 +333,26 @@ class _InventoryCardState extends State<InventoryCard> {
         content: const Text('Are you sure you want to delete this product?'),
         actions: <Widget>[
           TextButton(
-            onPressed: () => Navigator.pop(context),
+            onPressed: () {
+              Navigator.pop(context);
+              Navigator.pop(context);
+            },
             child: const Text('No'),
           ),
           TextButton(
             onPressed: () async {
               final bool delete =
                   await shopController.deleteProduct(widget.product!.id);
+
               if (delete) {
                 showSnackbar(message: 'Product deleted successfully!');
+                Navigator.pop(context);
+                Navigator.pop(context);
               } else {
                 showSnackbar(message: 'Error deleting product!', error: true);
+                Navigator.pop(context);
               }
               setState(() {});
-              Navigator.pop(context);
             },
             child: const Text('Yes'),
           ),

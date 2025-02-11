@@ -25,10 +25,14 @@ import 'package:get/get.dart';
 import 'package:lottie/lottie.dart';
 
 class OrderProductScreen extends StatefulWidget {
+  final bool? ismarketplace;
   final Product product;
   final Shop shop;
   const OrderProductScreen(
-      {super.key, required this.product, required this.shop});
+      {super.key,
+      required this.product,
+      required this.shop,
+      this.ismarketplace});
 
   @override
   State<OrderProductScreen> createState() => _OrderProductScreenState();
@@ -356,6 +360,8 @@ class _OrderProductScreenState extends State<OrderProductScreen> {
                         height: 15,
                       ),
                       Column(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        crossAxisAlignment: CrossAxisAlignment.start,
                         children: <Widget>[
                           Row(
                             children: <Widget>[
@@ -407,6 +413,10 @@ class _OrderProductScreenState extends State<OrderProductScreen> {
                                   ),
                                 ),
                             ],
+                          ),
+                          Text(
+                            'Category: ${widget.product.category}',
+                            textAlign: TextAlign.start,
                           ),
                           const SizedBox(
                             height: 15,
@@ -478,7 +488,7 @@ class _OrderProductScreenState extends State<OrderProductScreen> {
                           setState(() {});
                         },
                       ),
-                      if (widget.product.size![0].isNotEmpty)
+                      if (widget.product.color![0].isNotEmpty)
                         CustomDropdownWidget(
                           padding: 0,
                           isorder: true,
@@ -567,7 +577,13 @@ class _OrderProductScreenState extends State<OrderProductScreen> {
                                             activeoption: activePaymentMethod,
                                             onTap: (String newOption) {
                                               setState(() {
-                                                activePaymentMethod = newOption;
+                                                if (activePaymentMethod !=
+                                                    newOption) {
+                                                  activePaymentMethod =
+                                                      newOption;
+                                                } else {
+                                                  activePaymentMethod = '';
+                                                }
                                               });
                                             },
                                           ))
@@ -724,8 +740,22 @@ class _OrderProductScreenState extends State<OrderProductScreen> {
                     text: 'Place Order',
                   ),
                 ),
-                const SizedBox(
-                  height: 15,
+                const SizedBox(height: 15),
+                Padding(
+                  padding: const EdgeInsets.only(
+                      left: 20.0, bottom: 200, right: 20, top: 20),
+                  child: ClipRRect(
+                    borderRadius: BorderRadius.circular(10),
+                    child: Container(
+                      color: Colors.grey.shade200,
+                      child: const Padding(
+                        padding: EdgeInsets.all(15.0),
+                        child: Text(
+                          'Safety tips \n\n• Check seller offers buyer protection before making payment \n• On delivery, check that the item delivered is what you ordered \n• Report any seller you have any concerns about',
+                        ),
+                      ),
+                    ),
+                  ),
                 ),
               ],
             ),

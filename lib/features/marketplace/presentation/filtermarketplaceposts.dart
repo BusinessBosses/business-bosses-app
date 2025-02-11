@@ -1,42 +1,35 @@
+import 'package:business_bosses_v2/bbpro/models/customitem_model.dart';
+import 'package:business_bosses_v2/bbpro/models/product_model.dart';
+import 'package:business_bosses_v2/bbpro/models/service_model.dart';
+import 'package:business_bosses_v2/bbpro/presentation/book_service.dart';
+import 'package:business_bosses_v2/bbpro/presentation/order_product.dart';
+import 'package:business_bosses_v2/bbpro/widgets/custom_item_card.dart';
+import 'package:business_bosses_v2/bbpro/widgets/inventorycard.dart';
+import 'package:business_bosses_v2/bbpro/widgets/servicecard.dart';
+import 'package:business_bosses_v2/common/widgets/safety_model.dart';
 import 'package:business_bosses_v2/features/marketplace/controllers/market_controller.dart';
-import 'package:business_bosses_v2/features/marketplace/models/market_model.dart';
-import 'package:business_bosses_v2/features/marketplace/widgets/marketplace_item.dart';
-import 'package:country_list_pick/country_list_pick.dart';
+
+import 'package:business_bosses_v2/features/profile/controller/profile_controller.dart';
+
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/svg.dart';
+import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:get/get.dart';
 
-import '../../../common/widgets/safety_model.dart';
-import '../../../utils/theme/theme.dart';
-
-class FilterMarketplacePosts extends StatelessWidget {
-  final List<MarketModel> filterItems;
-  final bool isLoading;
-  final bool isSearch;
-  final bool isPostssearch;
-  final String? selectedLocation;
-  final String? selectedCategory;
-  final Function(String?)? selectedCategoryChanged;
-  final Function(String?, String?)? selectedLocationChanged;
-  final String? filterCode;
-
+class FilterMarketplacePosts extends StatefulWidget {
   /// CONSTRUCTOR
   const FilterMarketplacePosts({
     Key? key,
-    this.filterItems = const <MarketModel>[],
-    this.isLoading = false,
-    this.isSearch = false,
-    this.isPostssearch = false,
-    this.selectedLocation,
-    this.selectedCategory,
-    this.selectedCategoryChanged,
-    this.selectedLocationChanged,
-    this.filterCode,
   }) : super(key: key);
 
   @override
+  State<FilterMarketplacePosts> createState() => _FilterMarketplacePostsState();
+}
+
+class _FilterMarketplacePostsState extends State<FilterMarketplacePosts> {
+  @override
   Widget build(BuildContext context) {
-    final MarketController controller = Get.find();
+    final MarketController marketController = Get.find();
+    final ProfileController profileController = Get.find();
 
     return GestureDetector(
       onTap: () {
@@ -47,227 +40,106 @@ class FilterMarketplacePosts extends StatelessWidget {
           FocusScope.of(context).unfocus();
           return false;
         },
-        child: ListView.separated(
-            key: key,
-            separatorBuilder: (_, __) => const SizedBox(height: 0.0),
-            padding: const EdgeInsets.all(0.0),
-            itemCount: isPostssearch == true
-                ? filterItems.length + 2
-                : filterItems.length + 1,
-            itemBuilder: (BuildContext context, int i) {
-              if (isPostssearch == true && i == 0) {
-                return Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: <Widget>[
-                    Container(
-                        padding: const EdgeInsets.only(left: 15),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: <Widget>[
-                            const Text(
-                              'Filter results',
-                              style: TextStyle(
-                                  fontSize: 18, fontWeight: FontWeight.w700),
-                            ),
-                            Wrap(
-                                crossAxisAlignment: WrapCrossAlignment.center,
-                                children: <Widget>[
-                                  GestureDetector(
-                                    onTap: () {
-                                      selectedLocationChanged!(null, null);
-                                      selectedCategoryChanged!(null);
-                                    },
-                                    child: const Text(
-                                      'Clear Filter',
-                                      style: TextStyle(
-                                          color: Colors.red,
-                                          fontSize: 12,
-                                          fontWeight: FontWeight.w700),
-                                    ),
-                                  ),
-                                  IconButton(
-                                      onPressed: () {
-                                        selectedLocationChanged!(null, null);
-                                        selectedCategoryChanged!(null);
-                                      },
-                                      icon: const Icon(Icons.cancel))
-                                ]),
-                          ],
-                        )),
-                    SingleChildScrollView(
-                      scrollDirection: Axis.horizontal,
+        child: GetBuilder<MarketController>(
+          builder: (MarketController controller) =>
+              marketController.allFilteredItems.isEmpty
+                  ? const SafetyModel(
+                      isLoading: false,
+                      icon: Icon(Icons.warning),
+                      title: 'No Item Found!',
+                    )
+                  : SingleChildScrollView(
                       child: Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 15.0),
-                        child: Row(
-                          children: <Widget>[
-                            Container(
-                              width: 250,
-                              padding: const EdgeInsets.symmetric(
-                                horizontal: 15,
-                              ),
-                              decoration: BoxDecoration(
-                                color: Colors.white,
-                                borderRadius: BorderRadius.circular(10),
-                              ),
-                              child: DropdownButtonHideUnderline(
-                                child: DropdownButton<String>(
-                                  value: selectedCategory,
-                                  isExpanded: true,
-                                  icon: const Icon(
-                                    Icons.keyboard_arrow_down,
-                                  ),
-                                  iconSize: 24,
-                                  elevation: 16,
-                                  onChanged: (String? newValue) {
-                                    selectedCategoryChanged!(newValue);
-                                  },
-                                  items: <String?>[
-                                    null,
-                                    'Home, Garden & Outdoors',
-                                    'Fashion & Beauty',
-                                    'Sports & Entertainment',
-                                    'Books & Education',
-                                    'Jewellery & Timepieces',
-                                    'Security, Safety & Equipment',
-                                    'Video Games & Electronics',
-                                    'Agriculture, Food, Beverage',
-                                    'Construction & Real Estate',
-                                    'Vehicle & Transportation',
-                                    'Business Services & Events',
-                                    'Other',
-                                  ].map<DropdownMenuItem<String>>(
-                                      (String? value) {
-                                    return DropdownMenuItem<String>(
-                                      value: value,
-                                      child: value != null
-                                          ? Text(
-                                              value,
-                                              overflow: TextOverflow
-                                                  .ellipsis, // Prevent text overflow
-                                              maxLines: 1, // Ensure single line
-                                            )
-                                          : Text(
-                                              'Select Category',
-                                              overflow: TextOverflow
-                                                  .ellipsis, // Prevent text overflow
-                                              maxLines: 1, // Ensure single line
-                                              style: bodyText2.copyWith(
-                                                color: hintColor,
-                                              ),
-                                            ),
-                                    );
-                                  }).toList(),
-                                ),
-                              ),
-                            ),
-                            SizedBox(
-                              width: 250,
-                              child: Padding(
-                                padding:
-                                    const EdgeInsets.symmetric(horizontal: 8.0),
-                                child: CountryListPick(
-                                  appBar: AppBar(
-                                    leading: IconButton(
-                                      onPressed: () {
-                                        Navigator.pop(context);
-                                      },
-                                      icon: SvgPicture.asset(
-                                          'assets/svgs/backbutton.svg'),
-                                    ),
-                                    centerTitle: true,
-                                    // ignore: prefer_const_constructors
-                                    title: Text(
-                                      'Select Location',
-                                      textAlign: TextAlign.center,
-                                    ),
-                                  ),
-                                  initialSelection: filterCode ?? 'GB',
-                                  pickerBuilder: (BuildContext context,
-                                      CountryCode? countryCode) {
-                                    return Container(
-                                        decoration: BoxDecoration(
-                                          color: Colors.white,
-                                          borderRadius: BorderRadius.circular(
-                                              radiusValue),
-                                        ),
-                                        child: DropdownMenuItem<String>(
-                                          value: selectedLocation,
-                                          child: selectedLocation != null
-                                              ? Padding(
-                                                  padding: const EdgeInsets
-                                                      .symmetric(
-                                                      horizontal: 15.0),
-                                                  child: Text(
-                                                    selectedLocation!,
-                                                    style: bodyText2.copyWith(
-                                                        color: textColor,
-                                                        fontSize: 16),
-                                                    overflow: TextOverflow
-                                                        .ellipsis, // Prevent text overflow
-                                                    maxLines:
-                                                        1, // Ensure single line
-                                                  ),
-                                                )
-                                              : Padding(
-                                                  padding: const EdgeInsets
-                                                      .symmetric(
-                                                      horizontal: 15),
-                                                  child: Text(
-                                                    'Select Location',
-                                                    overflow: TextOverflow
-                                                        .ellipsis, // Prevent text overflow
-                                                    maxLines:
-                                                        1, // Ensure single line
-                                                    style: bodyText2.copyWith(
-                                                      color: hintColor,
-                                                    ),
-                                                  ),
-                                                ),
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 10.0, vertical: 10.0),
+                        child: StaggeredGridView.countBuilder(
+                          crossAxisCount: 2,
+                          staggeredTileBuilder: (int index) =>
+                              const StaggeredTile.fit(1),
+                          mainAxisSpacing: 10.0,
+                          crossAxisSpacing: 10.0,
+                          itemCount: marketController.allFilteredItems.length,
+                          shrinkWrap: true,
+                          physics: const NeverScrollableScrollPhysics(),
+                          itemBuilder: (BuildContext context, int index) {
+                            if (marketController.allFilteredItems[index]
+                                is Product) {
+                              final Product product = marketController
+                                  .allFilteredItems[index] as Product;
+                              return GestureDetector(
+                                onTap: () {
+                                  if (product.user!.uid ==
+                                      profileController.myProfile.uid) {
+                                    // Get.to(() => CreateProductListing(product: product));
+                                  } else {
+                                    Get.to(() => OrderProductScreen(
+                                          product: product,
+                                          shop: product.shop!,
                                         ));
-                                  },
-                                  onChanged: (CountryCode? code) {
-                                    selectedLocationChanged!(
-                                        code?.name, code?.code);
-                                  },
-                                  useSafeArea: false,
+                                  }
+                                },
+                                child: InventoryCard(
+                                  marketplace: true,
+                                  product: product,
+                                  shop: product.shop!,
+                                  myShop: product.user!.uid ==
+                                          profileController.myProfile.uid
+                                      ? true
+                                      : false,
                                 ),
-                              ),
-                            ),
-                          ],
+                              );
+                            } else if (marketController.allFilteredItems[index]
+                                is Service) {
+                              final Service service = marketController
+                                  .allFilteredItems[index] as Service;
+                              return GestureDetector(
+                                onTap: () {
+                                  if (service.user!.uid ==
+                                      profileController.myProfile.uid) {
+                                    // Get.to(() => CreateServiceListing(service: service));
+                                  } else {
+                                    Get.to(() => BookServiceScreen(
+                                          service: service,
+                                          shop: service.shop!,
+                                        ));
+                                  }
+                                },
+                                child: ServiceCard(
+                                  shop: service.shop!,
+                                  marketplace: true,
+                                  service: service,
+                                  myShop: service.user!.uid ==
+                                          profileController.myProfile.uid
+                                      ? true
+                                      : false,
+                                ),
+                              );
+                            } else {
+                              final Customitem customitem = marketController
+                                  .allFilteredItems[index] as Customitem;
+
+                              return GestureDetector(
+                                onTap: () {
+                                  if (customitem.user!.uid ==
+                                      profileController.myProfile.uid) {
+                                    // Get.to(() => CreateServiceListing(service: service));
+                                  } else {}
+                                },
+                                child: CustomItemCard(
+                                  customitem: customitem,
+                                  myShop: customitem.user!.uid ==
+                                          profileController.myProfile.uid
+                                      ? true
+                                      : false,
+                                  shop: customitem.shop,
+                                ),
+                              );
+                            }
+                          },
                         ),
                       ),
                     ),
-                    const SizedBox(
-                      height: 10,
-                    ),
-                  ],
-                );
-              }
-
-              if ((isPostssearch == true && i == 1) ||
-                  (isPostssearch == false && i == 0)) {
-                return Visibility(
-                  visible: filterItems.isEmpty,
-                  child: SafetyModel(
-                    icon: const Icon(
-                      Icons.search,
-                      size: 80.0,
-                      color: hintColor,
-                    ),
-                    title: 'No results found',
-                    subTitle: 'Your results will be displayed here!',
-                    isLoading: isLoading,
-                  ),
-                );
-              } else if (i > 0 && i - 1 < filterItems.length) {
-                return MarketTile(
-                  post: filterItems[i - 1],
-                  controller: controller,
-                );
-              } else {
-                return const SizedBox.shrink();
-              }
-            }),
+        ),
       ),
     );
   }

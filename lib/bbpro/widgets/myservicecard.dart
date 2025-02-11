@@ -2,6 +2,7 @@
 import 'package:business_bosses_v2/bbpro/controllers/shop_controller.dart';
 import 'package:business_bosses_v2/bbpro/models/service_model.dart';
 import 'package:business_bosses_v2/bbpro/models/shop_model.dart';
+import 'package:business_bosses_v2/bbpro/presentation/boost_items.dart';
 import 'package:business_bosses_v2/bbpro/presentation/create_service.dart';
 import 'package:business_bosses_v2/bbpro/widgets/optionsbutton.dart';
 import 'package:business_bosses_v2/common/dialogs/snackbar.dart';
@@ -136,7 +137,11 @@ class _MyServiceCardState extends State<MyServiceCard> {
                         onDelete: onDelete,
                         padding: const EdgeInsets.all(0),
                         borderColor: Colors.white,
-                        onBoost: () {},
+                        onBoost: () {
+                          Get.to(() => BoostItem(
+                                service: widget.service,
+                              ));
+                        },
                         isBoost: true,
                       ),
               ],
@@ -302,7 +307,10 @@ class _MyServiceCardState extends State<MyServiceCard> {
         content: const Text('Are you sure you want to delete this service?'),
         actions: <Widget>[
           TextButton(
-            onPressed: () => Navigator.pop(context),
+            onPressed: () {
+              Navigator.pop(context);
+              Navigator.pop(context);
+            },
             child: const Text('No'),
           ),
           TextButton(
@@ -311,11 +319,13 @@ class _MyServiceCardState extends State<MyServiceCard> {
                   await shopController.deleteService(widget.service.id);
               if (delete) {
                 showSnackbar(message: 'Service deleted successfully!');
+                Navigator.pop(context);
+                Navigator.pop(context);
               } else {
                 showSnackbar(message: 'Error deleting service!', error: true);
+                Navigator.pop(context);
               }
               setState(() {});
-              Navigator.pop(context);
             },
             child: const Text('Yes'),
           ),
