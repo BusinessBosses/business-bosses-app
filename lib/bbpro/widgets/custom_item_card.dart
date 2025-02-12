@@ -86,41 +86,22 @@ class _CustomItemCardState extends State<CustomItemCard> {
                     // ignore: always_specify_types
                     widget.customitem!.images![0] == '')
                 ? Container()
-                : Stack(
-                    children: <Widget>[
-                      SizedBox(
-                        height: 120.0,
-                        width: double.infinity,
-                        child: ClipRRect(
-                          borderRadius: BorderRadius.circular(10),
-                          child: NetworkImageWithPlaceHolder(
-                            imageUrl: (widget.customitem?.images == null &&
-                                    widget.customitem!.images!.isEmpty)
-                                ? ''
-                                : widget.customitem?.images![0],
-                            radius: radius,
-                            placeHolder: Icons.link,
-                            iconSize: 25.0,
-                            fit: BoxFit.cover,
-                          ),
-                        ),
+                : SizedBox(
+                    height: 120.0,
+                    width: double.infinity,
+                    child: ClipRRect(
+                      borderRadius: BorderRadius.circular(10),
+                      child: NetworkImageWithPlaceHolder(
+                        imageUrl: (widget.customitem?.images == null &&
+                                widget.customitem!.images!.isEmpty)
+                            ? ''
+                            : widget.customitem?.images![0],
+                        radius: radius,
+                        placeHolder: Icons.link,
+                        iconSize: 25.0,
+                        fit: BoxFit.cover,
                       ),
-                      if (widget.customitem?.link != '')
-                        Positioned(
-                          bottom: 4,
-                          right: 4,
-                          child: Container(
-                            decoration: const BoxDecoration(
-                                color: Colors.white, shape: BoxShape.circle),
-                            padding: const EdgeInsets.all(4),
-                            child: SvgPicture.asset(
-                              'assets/svgs/upicon.svg',
-                              color: const Color(0xFF0F132D),
-                              height: 8,
-                            ),
-                          ),
-                        ),
-                    ],
+                    ),
                   ),
             if (widget.customitem!.images![0] != '') const SizedBox(height: 5),
             // if (widget.customitem!.images![0] != '') const Divider(),
@@ -216,6 +197,21 @@ class _CustomItemCardState extends State<CustomItemCard> {
                               maxLines: 2,
                               overflow: TextOverflow.ellipsis,
                             ),
+                            if (widget.customitem?.link != '')
+                              Padding(
+                                padding: const EdgeInsets.only(top: 5.0),
+                                child: Container(
+                                  decoration: const BoxDecoration(
+                                      color: backgroundColor,
+                                      shape: BoxShape.circle),
+                                  padding: const EdgeInsets.all(4),
+                                  child: SvgPicture.asset(
+                                    'assets/svgs/upicon.svg',
+                                    color: const Color(0xFF0F132D),
+                                    height: 8,
+                                  ),
+                                ),
+                              ),
                             // const SizedBox(height: 2),
 
                             // Container(
