@@ -235,7 +235,7 @@ class _MarketplaceScreenState extends State<MarketplaceScreen>
                           );
                           return;
                         }
-                        _marketplaceTabController != 3
+                        _marketplaceTabController == 3
                             ? Get.to(() => const AddSupplierScreen())
                             : showModalBottomSheet(
                                 context: context,
