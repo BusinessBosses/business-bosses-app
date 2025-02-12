@@ -16,6 +16,7 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
+import 'package:get_storage/get_storage.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:sign_in_with_apple/sign_in_with_apple.dart';
 import 'package:google_sign_in/google_sign_in.dart';
@@ -92,6 +93,12 @@ class _SignUpFormState extends State<SignUpForm> {
     final Random random = Random.secure();
     return List<String>.generate(
         length, (_) => charset[random.nextInt(charset.length)]).join();
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    GetStorage().write('isFirstTime', false);
   }
 
   /// Returns the sha156 hash of [input] in hex notation.

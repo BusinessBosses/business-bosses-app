@@ -235,10 +235,10 @@ class _MyAppState extends State<MyApp> {
         final SharedPreferences? data = snapshot.data;
         if (snapshot.hasData) {
           final String? userId = data!.getString(Constants.USER_ID);
+          final GetStorage box = GetStorage();
+          final bool isFirstTime = box.read('isFirstTime') ?? true;
 
-          final bool isFirstTime = data.getBool('isFirstTime') ?? true;
-
-          String initialRoute = isFirstTime
+          String initialRoute = isFirstTime == true
               ? Routes.registration
               : (userId == '' || userId == null ? Routes.login : Routes.home);
 
