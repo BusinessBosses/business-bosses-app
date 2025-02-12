@@ -22,7 +22,9 @@ import 'package:get/get.dart';
 class DrawerContent extends StatelessWidget {
   final UserModel? currentuser;
   final VoidCallback? oncloseclick;
-  const DrawerContent({Key? key, this.currentuser, this.oncloseclick})
+  final VoidCallback? oncrowfundclick;
+  const DrawerContent(
+      {Key? key, this.currentuser, this.oncloseclick, this.oncrowfundclick})
       : super(key: key);
 
   @override
@@ -145,6 +147,7 @@ class DrawerContent extends StatelessWidget {
           Get.to(() => const AllCommunitiesScreen(
                 initialBossupTabIndex: 3,
               ));
+          oncrowfundclick?.call();
         },
       },
       {
