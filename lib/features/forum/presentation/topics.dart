@@ -425,6 +425,7 @@ class _TopicsPageState extends State<TopicsPage> {
                               }
                             },
                             child: ForumItem(
+                              isLearningpost: true,
                               forum: controller.forums[i],
                               key: ValueKey(controller.forums[i].forumId),
                               controller: controller,

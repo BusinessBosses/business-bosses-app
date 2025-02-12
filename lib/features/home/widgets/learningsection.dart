@@ -12,7 +12,8 @@ import 'package:get/get.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class LearningSection extends StatelessWidget {
-  const LearningSection({super.key});
+  final Function? onTap;
+  const LearningSection({super.key, this.onTap});
 
   @override
   Widget build(BuildContext context) {
@@ -54,21 +55,28 @@ class LearningSection extends StatelessWidget {
                       style:
                           TextStyle(fontWeight: FontWeight.w700, fontSize: 14),
                     ),
-                    Wrap(
-                        crossAxisAlignment: WrapCrossAlignment.center,
-                        children: <Widget>[
-                          const Text(
-                            'View all',
-                            style: TextStyle(fontSize: 11),
-                          ),
-                          const SizedBox(width: 5.0),
-                          SvgPicture.asset(
-                            'assets/svgs/nexticon.svg',
-                            // ignore: deprecated_member_use
-                            color: textColor,
-                            height: 8,
-                          ),
-                        ]),
+                    GestureDetector(
+                      onTap: () {
+                        if (onTap != null) {
+                          onTap!();
+                        }
+                      },
+                      child: Wrap(
+                          crossAxisAlignment: WrapCrossAlignment.center,
+                          children: <Widget>[
+                            const Text(
+                              'View all',
+                              style: TextStyle(fontSize: 11),
+                            ),
+                            const SizedBox(width: 5.0),
+                            SvgPicture.asset(
+                              'assets/svgs/nexticon.svg',
+                              // ignore: deprecated_member_use
+                              color: textColor,
+                              height: 8,
+                            ),
+                          ]),
+                    ),
                   ],
                 ),
               ),

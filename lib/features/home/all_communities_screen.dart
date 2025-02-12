@@ -430,7 +430,14 @@ class _AllCommunitiesScreenState extends State<AllCommunitiesScreen>
                                                             const SizedBox(
                                                               height: 20,
                                                             ),
-                                                            const LearningSection(),
+                                                            LearningSection(
+                                                              onTap: () {
+                                                                setState(() {
+                                                                  _bossupTabController
+                                                                      .index = 2;
+                                                                });
+                                                              },
+                                                            ),
                                                             const EventsSection(),
                                                             const SizedBox(
                                                               height: 25,
