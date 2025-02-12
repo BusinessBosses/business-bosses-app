@@ -142,7 +142,7 @@ class DrawerContent extends StatelessWidget {
             'Support and invest in projects you believe in. Discover opportunities to back innovative ideas and businesses.',
         'onTileClicked': () {
           oncloseclick?.call();
-          Get.off(() => const AllCommunitiesScreen(
+          Get.to(() => const AllCommunitiesScreen(
                 initialBossupTabIndex: 3,
               ));
         },

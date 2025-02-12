@@ -78,11 +78,17 @@ class _MarketplaceScreenState extends State<MarketplaceScreen>
     _marketplacesearchTabController = TabController(length: 4, vsync: this);
     _marketplaceTabController = TabController(length: 4, vsync: this);
 
+    // _marketplaceTabController.addListener(() {
+    //   if (_marketplaceTabController.index == 2) {
+    //     setState(() {
+    //       databool = false;
+    //     });
+    //   }
+    // });
+
     _marketplaceTabController.addListener(() {
-      if (_marketplaceTabController.index == 2) {
-        setState(() {
-          databool = false;
-        });
+      if (!_marketplaceTabController.indexIsChanging) {
+        setState(() {});
       }
     });
 
@@ -583,10 +589,7 @@ class _MarketplaceScreenState extends State<MarketplaceScreen>
                                           controller: _marketplaceTabController,
                                           isScrollable: false,
                                           onTap: (int index) {
-                                            setState(() {
-                                              _marketplaceTabController.index =
-                                                  index;
-                                            });
+                                            setState(() {});
                                           },
                                           labelPadding:
                                               const EdgeInsets.symmetric(
