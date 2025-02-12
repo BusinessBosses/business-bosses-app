@@ -11,14 +11,9 @@ import 'forms/login_form.dart';
 class LoginScreen extends StatelessWidget {
   /// LOGIN SCREEN CONSTRUCTOR
   const LoginScreen({Key? key}) : super(key: key);
-  Future<void> setFirstTimeFlag() async {
-    final SharedPreferences prefs = await SharedPreferences.getInstance();
-    await prefs.setBool('isFirstTime', false);
-  }
 
   @override
   Widget build(BuildContext context) {
-    setFirstTimeFlag();
     return GestureDetector(
       onTap: () => unFocusKeyboard(context),
       child: Scaffold(
