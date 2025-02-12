@@ -55,87 +55,88 @@ class _FilterUsersState extends State<SuppliersPage> {
                   ? const Center(child: SafetyModel())
                   : Column(
                       children: <Widget>[
-                        Container(
-                          color: backgroundColor,
-                          child: Padding(
-                            padding: const EdgeInsets.only(
-                              left: 15,
-                              top: 10,
-                              bottom: 10,
-                            ),
-                            child: GestureDetector(
-                              onTap: () {
-                                showDialog(
-                                  context: context,
-                                  builder: (BuildContext context) =>
-                                      suppliersGuide(context),
-                                );
-                              },
-                              child: Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
-                                children: <Widget>[
-                                  Wrap(
-                                    crossAxisAlignment:
-                                        WrapCrossAlignment.center,
-                                    children: <Widget>[
-                                      const Text(
-                                        'Guidelines ',
-                                        style: TextStyle(
-                                          fontSize: 12,
-                                          fontWeight: FontWeight.w700,
-                                        ),
-                                      ),
-                                      SvgPicture.asset(
-                                        'assets/svgs/info.svg',
-                                        height: 20,
-                                      ),
-                                    ],
-                                  ),
-                                  Align(
-                                    alignment: Alignment.centerRight,
-                                    child: Padding(
-                                      padding: const EdgeInsets.only(
-                                        right: 15,
-                                      ),
-                                      child: ElevatedButton(
-                                        style: ElevatedButton.styleFrom(
-                                          minimumSize: const Size(
-                                            150,
-                                            45,
-                                          ),
-                                        ),
-                                        onPressed: () {
-                                          Get.to(
-                                              () => const AddSupplierScreen());
-                                        },
-                                        child: Row(
-                                          mainAxisSize: MainAxisSize.min,
-                                          children: <Widget>[
-                                            const Text(
-                                              'Add a Supplier',
-                                              style: TextStyle(
-                                                fontSize: 15,
-                                                color: Colors.white,
-                                                fontWeight: FontWeight.w500,
-                                              ),
-                                            ),
-                                            const SizedBox(
-                                              width: 5,
-                                            ),
-                                            SvgPicture.asset(
-                                              'assets/svgs/startatopic.svg',
-                                            ),
-                                          ],
-                                        ),
-                                      ),
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ),
-                          ),
-                        ),
+                        // Container(
+                        //   color: backgroundColor,
+                        //   child: Padding(
+                        //     padding: const EdgeInsets.only(
+                        //       left: 15,
+                        //       top: 10,
+                        //       bottom: 10,
+                        //     ),
+                        //     child: GestureDetector(
+                        //       onTap: () {
+                        //         showDialog(
+                        //           context: context,
+                        //           builder: (BuildContext context) =>
+                        //               suppliersGuide(context),
+                        //         );
+                        //       },
+                        //       child: Row(
+                        //         mainAxisAlignment:
+                        //             MainAxisAlignment.spaceBetween,
+                        //         children: <Widget>[
+                        //           Wrap(
+                        //             crossAxisAlignment:
+                        //                 WrapCrossAlignment.center,
+                        //             children: <Widget>[
+                        //               const Text(
+                        //                 'Guidelines ',
+                        //                 style: TextStyle(
+                        //                   fontSize: 12,
+                        //                   fontWeight: FontWeight.w700,
+                        //                 ),
+                        //               ),
+                        //               SvgPicture.asset(
+                        //                 'assets/svgs/info.svg',
+                        //                 height: 20,
+                        //               ),
+                        //             ],
+                        //           ),
+                        //           Align(
+                        //             alignment: Alignment.centerRight,
+                        //             child: Padding(
+                        //               padding: const EdgeInsets.only(
+                        //                 right: 15,
+                        //               ),
+                        //               child: ElevatedButton(
+                        //                 style: ElevatedButton.styleFrom(
+                        //                   minimumSize: const Size(
+                        //                     150,
+                        //                     45,
+                        //                   ),
+                        //                 ),
+                        //                 onPressed: () {
+                        //                   Get.to(
+                        //                       () => const AddSupplierScreen());
+                        //                 },
+                        //                 child: Row(
+                        //                   mainAxisSize: MainAxisSize.min,
+                        //                   children: <Widget>[
+                        //                     const Text(
+                        //                       'Add a Supplier',
+                        //                       style: TextStyle(
+                        //                         fontSize: 15,
+                        //                         color: Colors.white,
+                        //                         fontWeight: FontWeight.w500,
+                        //                       ),
+                        //                     ),
+                        //                     const SizedBox(
+                        //                       width: 5,
+                        //                     ),
+                        //                     SvgPicture.asset(
+                        //                       'assets/svgs/startatopic.svg',
+                        //                     ),
+                        //                   ],
+                        //                 ),
+                        //               ),
+                        //             ),
+                        //           ),
+                        //         ],
+                        //       ),
+                        //     ),
+                        //   ),
+                        // ),
+
                         NotificationListener<ScrollNotification>(
                           onNotification:
                               (ScrollNotification scrollNotification) {
@@ -146,8 +147,7 @@ class _FilterUsersState extends State<SuppliersPage> {
                             staggeredTileBuilder: (int index) =>
                                 const StaggeredTile.fit(1),
                             padding: const EdgeInsets.symmetric(
-                              horizontal: 15.0,
-                            ),
+                                horizontal: 15.0, vertical: 10),
                             crossAxisCount: 2,
                             crossAxisSpacing: 8.0,
                             mainAxisSpacing: 8.0,

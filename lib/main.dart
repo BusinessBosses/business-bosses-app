@@ -235,9 +235,12 @@ class _MyAppState extends State<MyApp> {
         final SharedPreferences? data = snapshot.data;
         if (snapshot.hasData) {
           final String? userId = data!.getString(Constants.USER_ID);
+          final GetStorage box = GetStorage();
+          final bool isFirstTime = box.read('isFirstTime') ?? true;
 
-          String initialRoute =
-              userId == '' || userId == null ? Routes.login : Routes.home;
+          String initialRoute = isFirstTime == true
+              ? Routes.registration
+              : (userId == '' || userId == null ? Routes.login : Routes.home);
 
           return GetMaterialApp(
             key: navigatorKey, // Set the GlobalKey

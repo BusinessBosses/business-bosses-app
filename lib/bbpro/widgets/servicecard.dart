@@ -99,12 +99,12 @@ class _ServiceCardState extends State<ServiceCard> {
                 ),
               ),
             ),
-          if (widget.service?.images != null &&
-              widget.service!.images!.isNotEmpty)
-            const SizedBox(height: 5),
-          if (widget.service?.images != null &&
-              widget.service!.images!.isNotEmpty)
-            const Divider(),
+          // if (widget.service?.images != null &&
+          //     widget.service!.images!.isNotEmpty)
+          //   const SizedBox(height: 5),
+          // if (widget.service?.images != null &&
+          //     widget.service!.images!.isNotEmpty)
+          //   const Divider(),
           if (widget.service?.images != null &&
               widget.service!.images!.isNotEmpty)
             const SizedBox(height: 5),

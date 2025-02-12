@@ -60,31 +60,32 @@ class _RelevantPeopleTileState extends State<RelevantPeopleTile> {
           children: <Widget>[
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 15.0),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: <Widget>[
-                  const Text(
-                    'Find Collaborators',
-                    style: TextStyle(fontWeight: FontWeight.w700, fontSize: 14),
-                  ),
-                  GestureDetector(
-                    onTap: () {
-                      Get.toNamed(Routes.relevantusersscreen);
-                    },
-                    child: const Wrap(
+              child: GestureDetector(
+                onTap: () {
+                  Get.toNamed(Routes.relevantusersscreen);
+                },
+                child: const Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: <Widget>[
+                    Text(
+                      'Find Collaborators',
+                      style:
+                          TextStyle(fontWeight: FontWeight.w700, fontSize: 14),
+                    ),
+                    Wrap(
                         crossAxisAlignment: WrapCrossAlignment.center,
                         children: <Widget>[
-                          Text(
-                            'View all',
-                            style: TextStyle(fontSize: 11),
-                          ),
+                          // Text(
+                          //   'View all',
+                          //   style: TextStyle(fontSize: 11),
+                          // ),
                           Icon(
                             Icons.chevron_right,
                             size: 15,
                           )
                         ]),
-                  ),
-                ],
+                  ],
+                ),
               ),
             ),
             const SizedBox(height: 8),

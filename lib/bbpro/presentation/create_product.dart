@@ -81,7 +81,7 @@ class _CreateProductListingState extends State<CreateProductListing> {
   List<String> paymentMethods = <String>[];
   List<String> colors = <String>[];
   List<String> sizes = <String>[];
-  bool _shouldPromote = false;
+  bool _shouldPromote = true;
 
   @override
   void initState() {

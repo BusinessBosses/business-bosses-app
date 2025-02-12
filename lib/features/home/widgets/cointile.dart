@@ -16,7 +16,7 @@ class CoinTile extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: <Widget>[
               Text(
-                'Earn Coins',
+                'Earn More',
                 style: TextStyle(fontWeight: FontWeight.w700, fontSize: 14),
               ),
             ],

@@ -477,10 +477,6 @@ class _BossOfWeekProfileTileState extends State<BossOfWeekProfileTile> {
                               const Wrap(
                                   crossAxisAlignment: WrapCrossAlignment.center,
                                   children: <Widget>[
-                                    Text(
-                                      'View all',
-                                      style: TextStyle(fontSize: 11),
-                                    ),
                                     Icon(Icons.chevron_right,
                                         color: textColor, size: 16),
                                   ]),

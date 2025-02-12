@@ -74,12 +74,12 @@ class _InventoryCardState extends State<InventoryCard> {
                 ),
               ),
             ),
-          if (widget.product?.images?[0] != null &&
-              widget.product!.images![0].isNotEmpty)
-            const SizedBox(height: 5),
-          if (widget.product?.images?[0] != null &&
-              widget.product!.images![0].isNotEmpty)
-            const Divider(),
+          // if (widget.product?.images?[0] != null &&
+          //     widget.product!.images![0].isNotEmpty)
+          //   const SizedBox(height: 5),
+          // if (widget.product?.images?[0] != null &&
+          //     widget.product!.images![0].isNotEmpty)
+          //   const Divider(),
           if (widget.product?.images?[0] != null &&
               widget.product!.images![0].isNotEmpty)
             const SizedBox(height: 5),

@@ -30,6 +30,7 @@ import 'forum_like_comment.dart';
 class ForumItem extends StatefulWidget {
   final ForumModel forum;
   final bool isBossUp;
+  final bool? isLearningpost;
 
   // final VoidCallback? commented;
   // final Function? likeUnlikeForum;
@@ -44,6 +45,7 @@ class ForumItem extends StatefulWidget {
     required this.forum,
     this.controller,
     this.isBossUp = false,
+    this.isLearningpost,
   }) : super(key: key);
 
   @override
@@ -849,16 +851,17 @@ class _ForumItemState extends State<ForumItem> {
                           ),
                         ),
                         const Spacer(),
-                        Padding(
-                          padding: const EdgeInsets.only(right: 15),
-                          child: Text(
-                            TimeFormat.formatString(widget.forum.timestamp!),
-                            style: Theme.of(context)
-                                .textTheme
-                                .bodyMedium
-                                ?.copyWith(color: textColor.withOpacity(0.4)),
-                          ),
-                        )
+                        if (widget.isLearningpost == null)
+                          Padding(
+                            padding: const EdgeInsets.only(right: 15),
+                            child: Text(
+                              TimeFormat.formatString(widget.forum.timestamp!),
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .bodyMedium
+                                  ?.copyWith(color: textColor.withOpacity(0.4)),
+                            ),
+                          )
                       ],
                     )
                   ],

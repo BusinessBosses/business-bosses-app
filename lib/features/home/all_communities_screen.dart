@@ -100,48 +100,6 @@ class _AllCommunitiesScreenState extends State<AllCommunitiesScreen>
             },
             child: const CustomMenuButton()),
       ),
-      // _pageTabController.index != 2
-      //     ? GestureDetector(
-      //         onTap: () {
-      //           _isSearching = !_isSearching;
-      //           setState(() {});
-      //           _communitiesController.clearSearch();
-      //         },
-      //         child: Padding(
-      //           padding: const EdgeInsets.only(right: 10.0),
-      //           child: _isSearching
-      //               ? const Icon(Icons.close)
-      //               : CircleAvatar(
-      //                   radius: 20,
-      //                   backgroundColor: backgroundColor,
-      //                   child: SvgPicture.asset(
-      //                     'assets/svgs/homesearch.svg',
-      //                     height: 20,
-      //                     color: textColor,
-      //                   )),
-      //         ),
-      //       )
-      //     : GestureDetector(
-      //         child: Padding(
-      //           padding: const EdgeInsets.only(right: 10.0),
-      //           child: _isSearchingDonations
-      //               ? const Icon(Icons.close)
-      //               : CircleAvatar(
-      //                   radius: 20,
-      //                   backgroundColor: backgroundColor,
-      //                   child: SvgPicture.asset(
-      //                     'assets/svgs/homesearch.svg',
-      //                     height: 20,
-      //                     color: textColor,
-      //                   )),
-      //         ),
-      //         onTap: () {
-      //           _isSearchingDonations = !_isSearchingDonations;
-      //           setState(() {});
-      //           donationsController.searchedPosts.clear();
-      //           donationsController.searchedUsers.clear();
-      //         },
-      //       ),
     ];
   }
 
@@ -154,6 +112,10 @@ class _AllCommunitiesScreenState extends State<AllCommunitiesScreen>
         length: 4,
         vsync: this,
         initialIndex: widget.initialBossupTabIndex ?? 0);
+
+    _bossupTabController.addListener(() {
+      setState(() {});
+    });
     _pageTabController = TabController(
         length: 3, vsync: this, initialIndex: widget.initialTabIndex ?? 0);
 
@@ -198,6 +160,11 @@ class _AllCommunitiesScreenState extends State<AllCommunitiesScreen>
           ),
 
           drawer: DrawerContent(
+            oncrowfundclick: () {
+              setState(() {
+                _bossupTabController.index = 3;
+              });
+            },
             oncloseclick: () {
               _advancedDrawerController.hideDrawer();
             },
@@ -430,7 +397,14 @@ class _AllCommunitiesScreenState extends State<AllCommunitiesScreen>
                                                             const SizedBox(
                                                               height: 20,
                                                             ),
-                                                            const LearningSection(),
+                                                            LearningSection(
+                                                              onTap: () {
+                                                                setState(() {
+                                                                  _bossupTabController
+                                                                      .index = 2;
+                                                                });
+                                                              },
+                                                            ),
                                                             const EventsSection(),
                                                             const SizedBox(
                                                               height: 25,
