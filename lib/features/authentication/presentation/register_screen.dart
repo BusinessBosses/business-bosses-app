@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../../common/widgets/text_widget.dart';
 import '../../../functions/unfocus_keyboard.dart';
@@ -13,9 +14,14 @@ class RegisterScreen extends StatelessWidget {
 
   const RegisterScreen({Key? key}) : super(key: key);
   // GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
+  Future<void> setFirstTimeFlag() async {
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+    await prefs.setBool('isFirstTime', false);
+  }
 
   @override
   Widget build(BuildContext context) {
+    setFirstTimeFlag();
     return GestureDetector(
       onTap: () => unFocusKeyboard(context),
       child: Scaffold(

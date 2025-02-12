@@ -236,8 +236,11 @@ class _MyAppState extends State<MyApp> {
         if (snapshot.hasData) {
           final String? userId = data!.getString(Constants.USER_ID);
 
-          String initialRoute =
-              userId == '' || userId == null ? Routes.login : Routes.home;
+          final bool isFirstTime = data.getBool('isFirstTime') ?? true;
+
+          String initialRoute = isFirstTime
+              ? Routes.registration
+              : (userId == '' || userId == null ? Routes.login : Routes.home);
 
           return GetMaterialApp(
             key: navigatorKey, // Set the GlobalKey

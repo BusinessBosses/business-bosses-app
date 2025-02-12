@@ -269,7 +269,7 @@ class _LoginFormState extends State<LoginForm> {
               ],
             ),
             //field user name or email
-            const SizedBox(height: 25.0),
+            const SizedBox(height: 15.0),
             Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[
