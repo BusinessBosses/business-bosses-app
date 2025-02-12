@@ -14,6 +14,7 @@ import 'package:business_bosses_v2/features/home/widgets/bottom_bar.dart';
 import 'package:business_bosses_v2/features/home/widgets/floatingbutton.dart';
 
 import 'package:business_bosses_v2/features/marketplace/controllers/supplier_controller.dart';
+import 'package:business_bosses_v2/features/marketplace/presentation/add_supplier.dart';
 import 'package:business_bosses_v2/features/marketplace/presentation/filtermarketplaceposts.dart';
 import 'package:business_bosses_v2/features/marketplace/presentation/filtermarketproducts.dart';
 import 'package:business_bosses_v2/features/marketplace/presentation/filtermarketservices.dart';
@@ -228,77 +229,85 @@ class _MarketplaceScreenState extends State<MarketplaceScreen>
                           );
                           return;
                         }
-                        showModalBottomSheet(
-                            context: context,
-                            shape: const RoundedRectangleBorder(
-                              borderRadius: BorderRadius.vertical(
-                                top: Radius.circular(25.0),
-                              ),
-                            ),
-                            builder: (BuildContext context) {
-                              return SizedBox(
-                                height: 200,
-                                child: Padding(
-                                  padding: const EdgeInsets.all(15.0),
-                                  child: Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    mainAxisSize: MainAxisSize.min,
-                                    children: <Widget>[
-                                      Expanded(
-                                        child: ListView.separated(
-                                          itemCount: 2,
-                                          separatorBuilder:
-                                              (BuildContext context,
-                                                      int index) =>
-                                                  const Divider(),
-                                          itemBuilder: (BuildContext context,
-                                              int index) {
-                                            return ListTile(
-                                              onTap: () {
-                                                Navigator.pop(context);
-                                                index == 0
-                                                    ? Get.to(() =>
-                                                        const CreateProductListing(
-                                                          isMarketplace: true,
-                                                        ))
-                                                    : Get.to(() =>
-                                                        const CreateServiceListing(
-                                                          isMarketplace: true,
-                                                        ));
-                                              },
-                                              minVerticalPadding: 0,
-                                              contentPadding:
-                                                  const EdgeInsets.only(
-                                                left: 10,
-                                              ),
-                                              leading: SvgPicture.asset(
-                                                index == 0
-                                                    ? 'assets/svgs/addproduct.svg'
-                                                    : 'assets/svgs/addservice.svg',
-                                                height: 25,
-                                                color: textColor.withOpacity(1),
-                                              ),
-                                              title: Text(
-                                                index == 0
-                                                    ? 'Sell your product'
-                                                    : 'Sell your service',
-                                                style: const TextStyle(
-                                                    fontSize: 18,
-                                                    fontWeight:
-                                                        FontWeight.w700),
-                                              ),
-                                            );
-                                          },
-                                        ),
-                                      )
-                                    ],
+                        _marketplaceTabController != 3
+                            ? Get.to(() => const AddSupplierScreen())
+                            : showModalBottomSheet(
+                                context: context,
+                                shape: const RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.vertical(
+                                    top: Radius.circular(25.0),
                                   ),
                                 ),
-                              );
-                            });
+                                builder: (BuildContext context) {
+                                  return SizedBox(
+                                    height: 200,
+                                    child: Padding(
+                                      padding: const EdgeInsets.all(15.0),
+                                      child: Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        mainAxisSize: MainAxisSize.min,
+                                        children: <Widget>[
+                                          Expanded(
+                                            child: ListView.separated(
+                                              itemCount: 2,
+                                              separatorBuilder:
+                                                  (BuildContext context,
+                                                          int index) =>
+                                                      const Divider(),
+                                              itemBuilder:
+                                                  (BuildContext context,
+                                                      int index) {
+                                                return ListTile(
+                                                  onTap: () {
+                                                    Navigator.pop(context);
+                                                    index == 0
+                                                        ? Get.to(() =>
+                                                            const CreateProductListing(
+                                                              isMarketplace:
+                                                                  true,
+                                                            ))
+                                                        : Get.to(() =>
+                                                            const CreateServiceListing(
+                                                              isMarketplace:
+                                                                  true,
+                                                            ));
+                                                  },
+                                                  minVerticalPadding: 0,
+                                                  contentPadding:
+                                                      const EdgeInsets.only(
+                                                    left: 10,
+                                                  ),
+                                                  leading: SvgPicture.asset(
+                                                    index == 0
+                                                        ? 'assets/svgs/addproduct.svg'
+                                                        : 'assets/svgs/addservice.svg',
+                                                    height: 25,
+                                                    color: textColor
+                                                        .withOpacity(1),
+                                                  ),
+                                                  title: Text(
+                                                    index == 0
+                                                        ? 'Sell your product'
+                                                        : 'Sell your service',
+                                                    style: const TextStyle(
+                                                        fontSize: 18,
+                                                        fontWeight:
+                                                            FontWeight.w700),
+                                                  ),
+                                                );
+                                              },
+                                            ),
+                                          )
+                                        ],
+                                      ),
+                                    ),
+                                  );
+                                });
                       },
-                      text: 'Sell',
+                      text: _marketplaceTabController.index != 3
+                          ? 'Sell'
+                          : 'Add a Supplier',
                     ),
                   )
                 ],
@@ -573,6 +582,12 @@ class _MarketplaceScreenState extends State<MarketplaceScreen>
                                               fontWeight: FontWeight.w400),
                                           controller: _marketplaceTabController,
                                           isScrollable: false,
+                                          onTap: (int index) {
+                                            setState(() {
+                                              _marketplaceTabController.index =
+                                                  index;
+                                            });
+                                          },
                                           labelPadding:
                                               const EdgeInsets.symmetric(
                                                   horizontal: 20.0),

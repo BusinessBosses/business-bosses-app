@@ -1,3 +1,4 @@
+import 'package:business_bosses_v2/action/action.dart';
 import 'package:business_bosses_v2/bbpro/controllers/shop_controller.dart';
 import 'package:business_bosses_v2/bbpro/models/customitem_model.dart';
 import 'package:business_bosses_v2/bbpro/models/shop_model.dart';
@@ -9,7 +10,9 @@ import 'package:business_bosses_v2/common/widgets/network_image_with_placeholder
 import 'package:business_bosses_v2/features/profile/controller/profile_controller.dart';
 import 'package:business_bosses_v2/utils/theme/theme.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class CustomItemCard extends StatefulWidget {
   final Customitem? customitem;
@@ -37,13 +40,34 @@ class _CustomItemCardState extends State<CustomItemCard> {
         ));
   }
 
+  Future<void> _launchURL(String urlString) async {
+    if (!urlString.startsWith('http://') && !urlString.startsWith('https://')) {
+      urlString = 'https://$urlString';
+    }
+    final Uri url = Uri.parse(urlString);
+    if (!await launchUrl(url, mode: LaunchMode.externalApplication)) {
+      throw Exception('Could not launch $urlString');
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
-        Get.to(() => ExpandedCustomItemScreen(
-              customitem: widget.customitem,
-            ));
+        if (widget.customitem!.user!.uid == profileController.myProfile.uid) {
+          _onEdit();
+        } else if (widget.customitem?.link != '') {
+          try {
+            _launchURL(widget.customitem!.link!);
+          } catch (e) {
+            print(e.toString());
+            showSnackbar(message: 'Could not open the link.', error: true);
+          }
+        } else {
+          Get.to(() => ExpandedCustomItemScreen(
+                customitem: widget.customitem,
+              ));
+        }
       },
       child: Container(
         padding: const EdgeInsets.all(10.0),
@@ -62,26 +86,45 @@ class _CustomItemCardState extends State<CustomItemCard> {
                     // ignore: always_specify_types
                     widget.customitem!.images![0] == '')
                 ? Container()
-                : SizedBox(
-                    height: 120.0,
-                    width: double.infinity,
-                    child: ClipRRect(
-                      borderRadius: BorderRadius.circular(10),
-                      child: NetworkImageWithPlaceHolder(
-                        imageUrl: (widget.customitem?.images == null &&
-                                widget.customitem!.images!.isEmpty)
-                            ? ''
-                            : widget.customitem?.images![0],
-                        radius: radius,
-                        placeHolder: Icons.link,
-                        iconSize: 25.0,
-                        fit: BoxFit.cover,
+                : Stack(
+                    children: <Widget>[
+                      SizedBox(
+                        height: 120.0,
+                        width: double.infinity,
+                        child: ClipRRect(
+                          borderRadius: BorderRadius.circular(10),
+                          child: NetworkImageWithPlaceHolder(
+                            imageUrl: (widget.customitem?.images == null &&
+                                    widget.customitem!.images!.isEmpty)
+                                ? ''
+                                : widget.customitem?.images![0],
+                            radius: radius,
+                            placeHolder: Icons.link,
+                            iconSize: 25.0,
+                            fit: BoxFit.cover,
+                          ),
+                        ),
                       ),
-                    ),
+                      if (widget.customitem?.link != '')
+                        Positioned(
+                          bottom: 4,
+                          right: 4,
+                          child: Container(
+                            decoration: const BoxDecoration(
+                                color: Colors.white, shape: BoxShape.circle),
+                            padding: const EdgeInsets.all(4),
+                            child: SvgPicture.asset(
+                              'assets/svgs/upicon.svg',
+                              color: const Color(0xFF0F132D),
+                              height: 8,
+                            ),
+                          ),
+                        ),
+                    ],
                   ),
             if (widget.customitem!.images![0] != '') const SizedBox(height: 5),
-            if (widget.customitem!.images![0] != '') const Divider(),
-            if (widget.customitem!.images![0] != '') const SizedBox(height: 5),
+            // if (widget.customitem!.images![0] != '') const Divider(),
+            // if (widget.customitem!.images![0] != '') const SizedBox(height: 5),
             Row(
               crossAxisAlignment: CrossAxisAlignment.end,
               children: <Widget>[
@@ -173,20 +216,21 @@ class _CustomItemCardState extends State<CustomItemCard> {
                               maxLines: 2,
                               overflow: TextOverflow.ellipsis,
                             ),
-                            const SizedBox(height: 2),
-                            Container(
-                              padding: const EdgeInsets.symmetric(
-                                  horizontal: 10, vertical: 5),
-                              decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(6),
-                                color: backgroundColor,
-                              ),
-                              child: const Icon(
-                                Icons.link,
-                                size: 15,
-                                color: Colors.black,
-                              ),
-                            )
+                            // const SizedBox(height: 2),
+
+                            // Container(
+                            //   padding: const EdgeInsets.symmetric(
+                            //       horizontal: 10, vertical: 5),
+                            //   decoration: BoxDecoration(
+                            //     borderRadius: BorderRadius.circular(6),
+                            //     color: backgroundColor,
+                            //   ),
+                            //   child: const Icon(
+                            //     Icons.link,
+                            //     size: 15,
+                            //     color: Colors.black,
+                            //   ),
+                            // )
                           ],
                         ),
                       ),

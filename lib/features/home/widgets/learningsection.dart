@@ -47,28 +47,28 @@ class LearningSection extends StatelessWidget {
               // ),
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 15.0),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: <Widget>[
-                    const Text(
-                      'Learning',
-                      style:
-                          TextStyle(fontWeight: FontWeight.w700, fontSize: 14),
-                    ),
-                    GestureDetector(
-                      onTap: () {
-                        if (onTap != null) {
-                          onTap!();
-                        }
-                      },
-                      child: Wrap(
+                child: GestureDetector(
+                  onTap: () {
+                    if (onTap != null) {
+                      onTap!();
+                    }
+                  },
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: <Widget>[
+                      const Text(
+                        'Learning',
+                        style: TextStyle(
+                            fontWeight: FontWeight.w700, fontSize: 14),
+                      ),
+                      Wrap(
                           crossAxisAlignment: WrapCrossAlignment.center,
                           children: <Widget>[
-                            const Text(
-                              'View all',
-                              style: TextStyle(fontSize: 11),
-                            ),
-                            const SizedBox(width: 5.0),
+                            // const Text(
+                            //   'View all',
+                            //   style: TextStyle(fontSize: 11),
+                            // ),
+                            // const SizedBox(width: 5.0),
                             SvgPicture.asset(
                               'assets/svgs/nexticon.svg',
                               // ignore: deprecated_member_use
@@ -76,8 +76,8 @@ class LearningSection extends StatelessWidget {
                               height: 8,
                             ),
                           ]),
-                    ),
-                  ],
+                    ],
+                  ),
                 ),
               ),
               const SizedBox(

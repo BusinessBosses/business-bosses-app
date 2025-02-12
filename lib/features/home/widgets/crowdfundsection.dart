@@ -29,27 +29,28 @@ class _CrowdfundSectionState extends State<CrowdfundSection> {
           children: <Widget>[
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 15.0),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: <Widget>[
-                  const Text(
-                    'Crowdfund',
-                    style: TextStyle(fontWeight: FontWeight.w700, fontSize: 14),
-                  ),
-                  GestureDetector(
-                    onTap: () {
-                      if (widget.onTap != null) {
-                        widget.onTap!();
-                      }
-                    },
-                    child: Wrap(
+              child: GestureDetector(
+                onTap: () {
+                  if (widget.onTap != null) {
+                    widget.onTap!();
+                  }
+                },
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: <Widget>[
+                    const Text(
+                      'Crowdfund',
+                      style:
+                          TextStyle(fontWeight: FontWeight.w700, fontSize: 14),
+                    ),
+                    Wrap(
                         crossAxisAlignment: WrapCrossAlignment.center,
                         children: <Widget>[
-                          const Text(
-                            'View all',
-                            style: TextStyle(fontSize: 11),
-                          ),
-                          const SizedBox(width: 5.0),
+                          // const Text(
+                          //   'View all',
+                          //   style: TextStyle(fontSize: 11),
+                          // ),
+                          // const SizedBox(width: 5.0),
                           SvgPicture.asset(
                             'assets/svgs/nexticon.svg',
                             // ignore: deprecated_member_use
@@ -57,8 +58,8 @@ class _CrowdfundSectionState extends State<CrowdfundSection> {
                             height: 8,
                           ),
                         ]),
-                  ),
-                ],
+                  ],
+                ),
               ),
             ),
             const SizedBox(
