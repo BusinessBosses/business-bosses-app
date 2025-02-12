@@ -950,16 +950,16 @@ class _CourseItemState extends State<CourseItem> {
                   ),
                 ),
                 const Spacer(),
-                Padding(
-                  padding: const EdgeInsets.only(right: 15),
-                  child: Text(
-                    TimeFormat.formatString(widget.course.timestamp),
-                    style: Theme.of(context)
-                        .textTheme
-                        .bodyMedium
-                        ?.copyWith(color: textColor.withOpacity(0.4)),
-                  ),
-                )
+                // Padding(
+                //   padding: const EdgeInsets.only(right: 15),
+                //   child: Text(
+                //     TimeFormat.formatString(widget.course.timestamp),
+                //     style: Theme.of(context)
+                //         .textTheme
+                //         .bodyMedium
+                //         ?.copyWith(color: textColor.withOpacity(0.4)),
+                //   ),
+                // )
               ],
             ),
             Container(
