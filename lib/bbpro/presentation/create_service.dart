@@ -103,7 +103,7 @@ class _CreateServiceListingState extends State<CreateServiceListing>
   String? servicePeriodnumber;
   String? calendarType = 'Single day';
   bool? isAppointment = false;
-  bool _shouldPromote = false;
+  bool _shouldPromote = true;
 
   @override
   void initState() {
