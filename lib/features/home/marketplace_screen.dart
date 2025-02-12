@@ -315,18 +315,22 @@ class _MarketplaceScreenState extends State<MarketplaceScreen>
                           setState(() {});
                         },
                         onfiltertap: () {
-                          showModalBottomSheet(
-                            context: context,
-                            shape: const RoundedRectangleBorder(
-                              borderRadius: BorderRadius.vertical(
-                                top: Radius.circular(25.0),
-                              ),
-                            ),
-                            builder: (BuildContext context) {
-                              return filterWidget();
-                            },
-                          );
-                        },
+  setState(() {
+    _ismarketplaceSearching = true;
+  });
+  showModalBottomSheet(
+    context: context,
+    shape: const RoundedRectangleBorder(
+      borderRadius: BorderRadius.vertical(
+        top: Radius.circular(25.0),
+      ),
+    ),
+    builder: (BuildContext context) {
+      return filterWidget();
+    },
+  );
+},
+
                         ismarketplace: true,
                         radius: 8,
                         contentPadding: 10,
