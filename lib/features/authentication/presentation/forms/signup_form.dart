@@ -126,7 +126,7 @@ class _SignUpFormState extends State<SignUpForm> {
                         _password = val;
                         setState(() {});
                       },
-                      validator: Validator.passwordValidator,
+                      validator: Validator.signuppasswordValidator,
                       textInputAction: TextInputAction.done,
                       obscureText: _invisiblePassword,
                       keyboardType: TextInputType.visiblePassword,
@@ -388,7 +388,7 @@ class _SignUpFormState extends State<SignUpForm> {
                   _password = val;
                   setState(() {});
                 },
-                validator: Validator.passwordValidator,
+                validator: Validator.signuppasswordValidator,
                 textInputAction: TextInputAction.done,
                 obscureText: _invisiblePassword,
                 keyboardType: TextInputType.visiblePassword,
