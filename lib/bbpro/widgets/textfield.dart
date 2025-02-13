@@ -13,6 +13,7 @@ class CustomTextWidget extends StatefulWidget {
   final bool? isSupplier;
   final String? buttontext;
   final Widget? selectedarea;
+  final Color? iconcolor;
 
   const CustomTextWidget(
       {super.key,
@@ -25,7 +26,8 @@ class CustomTextWidget extends StatefulWidget {
       this.isSupplier,
       this.buttontext,
       this.selectedarea,
-      this.hashint});
+      this.hashint,
+      this.iconcolor});
 
   @override
   // ignore: library_private_types_in_public_api
@@ -102,7 +104,7 @@ class _CustomTextWidgetState extends State<CustomTextWidget> {
                       )
                     : SvgPicture.asset(
                         widget.iconName,
-                        color: proprimaryColor,
+                        color: widget.iconcolor ?? proprimaryColor,
                       ),
               ],
             ),

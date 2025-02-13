@@ -1,5 +1,8 @@
 import 'dart:io';
 
+import 'package:business_bosses_v2/bbpro/widgets/button.dart';
+import 'package:business_bosses_v2/bbpro/widgets/edit_text.dart';
+import 'package:business_bosses_v2/bbpro/widgets/textfield.dart';
 import 'package:business_bosses_v2/common/dialogs/snackbar.dart';
 import 'package:business_bosses_v2/common/models/api_response_model.dart';
 import 'package:business_bosses_v2/features/home/widgets/sellingpopup.dart';
@@ -95,41 +98,33 @@ class _AddSupplierScreenState extends State<AddSupplierScreen> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[
-                const Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 16.0),
-                  child: Text(
-                    'Enter Supplier\'s Business Details',
-                    style: TextStyle(fontSize: 16),
-                  ),
+                // const Padding(
+                //   padding: EdgeInsets.symmetric(horizontal: 16.0),
+                //   child: Text(
+                //     'Enter Supplier\'s Business Details',
+                //     style: TextStyle(fontSize: 16),
+                //   ),
+                // ),
+
+                CustomEditText(
+                  maxLength: 30,
+                  controller: _nameController,
+                  onChanged: (String val) => name = val,
+                  caption: 'Business Name *',
+                  hintText: 'Enter Supplier\'s Business Name',
                 ),
                 const SizedBox(
-                  height: 10,
+                  height: 15,
                 ),
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 16.0),
-                  child: TextFormField(
-                    controller: _nameController,
-                    onChanged: (String val) => name = val,
-                    textInputAction: TextInputAction.next,
-                    decoration: inputDecoration.copyWith(
-                      hintText: '* Enter Business Name',
-                    ),
-                  ),
+                CustomEditText(
+                  maxLength: 30,
+                  controller: _emailController,
+                  onChanged: (String val) => email = val,
+                  caption: 'Business Email *',
+                  inputType: TextInputType.emailAddress,
+                  hintText: 'Enter Supplier\'s Business Email',
                 ),
-                const SizedBox(height: 12.0),
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 16.0),
-                  child: TextFormField(
-                    controller: _emailController,
-                    onChanged: (String val) => email = val,
-                    textInputAction: TextInputAction.next,
-                    keyboardType: TextInputType.emailAddress,
-                    decoration: inputDecoration.copyWith(
-                      hintText: '* Enter Business Email',
-                    ),
-                  ),
-                ),
-                const SizedBox(height: 12.0),
+                const SizedBox(height: 15.0),
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 16.0),
                   child: TextFormField(
@@ -138,43 +133,30 @@ class _AddSupplierScreenState extends State<AddSupplierScreen> {
                     textInputAction: TextInputAction.next,
                     keyboardType: TextInputType.phone,
                     decoration: inputDecoration.copyWith(
-                      hintText: '* Enter Business Telephone',
+                      hintText: '*Enter Business Telephone',
                     ),
                   ),
                 ),
-                const SizedBox(height: 12.0),
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 16.0),
-                  child: TextFormField(
-                    controller: _urlController,
-                    onChanged: (String val) => url = val,
-                    textInputAction: TextInputAction.next,
-                    decoration: inputDecoration.copyWith(
-                      hintText: '* Business Website Link',
-                    ),
-                  ),
+                const SizedBox(height: 15.0),
+                CustomEditText(
+                  controller: _urlController,
+                  onChanged: (String val) => url = val,
+                  maxLength: 30,
+                  hintText: "Enter Supplier's Business Website link",
+                  caption: 'Business Website Link *',
                 ),
-                const SizedBox(height: 30.0),
-                Padding(
-                  padding: const EdgeInsets.only(left: 16.0, right: 16),
-                  child: DetectableTextField(
-                    controller: descriptionController,
-                    detectionRegExp: detectionRegExp(hashtag: false)!,
-                    onDetectionTyped: (String text) {},
-                    onDetectionFinished: () {},
-                    keyboardType: TextInputType.multiline,
-                    maxLength: 300,
-                    maxLines: 5,
-                    basicStyle: Theme.of(context).textTheme.bodyMedium,
-                    onChanged: (String val) => description = val,
-                    decoration: inputDecoration.copyWith(
-                      hintText: '* What do you supply or manufacture?',
-                    ),
-                  ),
+                const SizedBox(height: 15.0),
+                CustomEditText(
+                  controller: descriptionController,
+                  inputType: TextInputType.multiline,
+                  maxLength: 300,
+                  onChanged: (String val) => description = val,
+                  hintText: 'What do you supply or manufacture?',
+                  caption: 'Business Description',
                 ),
-                const SizedBox(height: 12.0),
+                const SizedBox(height: 15.0),
                 Padding(
-                  padding: const EdgeInsets.only(left: 16.0, right: 16),
+                  padding: const EdgeInsets.only(left: 15.0, right: 15),
                   child: Container(
                     decoration: BoxDecoration(
                       color: Colors.white,
@@ -193,6 +175,7 @@ class _AddSupplierScreenState extends State<AddSupplierScreen> {
                       icon: const Icon(Icons.keyboard_arrow_right),
                       iconSize: 24,
                       elevation: 16,
+                      style: const TextStyle(fontSize: 14, color: textColor),
                       onChanged: (String? newValue) {
                         setState(() {
                           _selectedCategory = newValue!;
@@ -220,6 +203,7 @@ class _AddSupplierScreenState extends State<AddSupplierScreen> {
                               : Text(
                                   value ?? 'Select Category',
                                   style: bodyText2.copyWith(
+                                    fontSize: 14,
                                     color: hintColor,
                                   ),
                                 ),
@@ -229,8 +213,9 @@ class _AddSupplierScreenState extends State<AddSupplierScreen> {
                   ),
                 ),
                 const SizedBox(height: 12.0),
+
                 Padding(
-                  padding: const EdgeInsets.only(left: 8.0, right: 8),
+                  padding: const EdgeInsets.symmetric(horizontal: 8.0),
                   child: CountryListPick(
                     appBar: AppBar(
                       leading: IconButton(
@@ -243,6 +228,9 @@ class _AddSupplierScreenState extends State<AddSupplierScreen> {
                       title: const Text(
                         'Select Location',
                         textAlign: TextAlign.center,
+                        style: TextStyle(
+                          fontSize: 16,
+                        ),
                       ),
                     ),
                     initialSelection: _selectedLocation,
@@ -253,14 +241,13 @@ class _AddSupplierScreenState extends State<AddSupplierScreen> {
                           color: Colors.white,
                           borderRadius: BorderRadius.circular(radiusValue),
                         ),
-                        child: ListTile(
-                          leading: _selectedLocation != null
-                              ? Text(_selectedLocation!)
-                              : Text(
-                                  'Location',
-                                  style: bodyText2.copyWith(color: hintColor),
-                                ),
-                          trailing: const Icon(Icons.keyboard_arrow_right),
+                        child: CustomTextWidget(
+                          hashint: true,
+                          caption: 'Location',
+                          iconcolor: textColor,
+                          iconName: 'assets/svgs/nexticon.svg',
+                          text: _selectedLocation ??
+                              'Choose Supplier\'s Location',
                         ),
                       );
                     },
@@ -276,7 +263,9 @@ class _AddSupplierScreenState extends State<AddSupplierScreen> {
                             'country', code!.name!);
                         await marketplaceCountry.setString(
                             'currency', code.code!);
-                      } catch (e) {}
+                      } catch (e) {
+                        //
+                      }
                     },
                     useSafeArea: false,
                   ),
@@ -361,9 +350,10 @@ class _AddSupplierScreenState extends State<AddSupplierScreen> {
                         )
                       : const SizedBox.shrink(),
                 ),
-                Padding(
-                  padding: const EdgeInsets.only(left: 16.0, right: 16),
-                  child: MCustomButton(
+                SizedBox(
+                  width: double.infinity,
+                  child: ProCustomButton(
+                    color: primaryColorLT,
                     onPressed: () async {
                       setState(() {
                         _isProcessing = true;
@@ -406,11 +396,10 @@ class _AddSupplierScreenState extends State<AddSupplierScreen> {
                         _isProcessing = false;
                       });
                     },
-                    label: widget.supplier != null
+                    loading: _isProcessing,
+                    text: widget.supplier != null
                         ? 'Update Supplier'
                         : 'Add Supplier',
-                    isProcessing: _isProcessing,
-                    buttonType: ButtonType.elevated,
                   ),
                 ),
                 Center(
