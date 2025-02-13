@@ -330,22 +330,21 @@ class _MarketplaceScreenState extends State<MarketplaceScreen>
                           setState(() {});
                         },
                         onfiltertap: () {
-  setState(() {
-    _ismarketplaceSearching = true;
-  });
-  showModalBottomSheet(
-    context: context,
-    shape: const RoundedRectangleBorder(
-      borderRadius: BorderRadius.vertical(
-        top: Radius.circular(25.0),
-      ),
-    ),
-    builder: (BuildContext context) {
-      return filterWidget();
-    },
-  );
-},
-
+                          setState(() {
+                            _ismarketplaceSearching = true;
+                          });
+                          showModalBottomSheet(
+                            context: context,
+                            shape: const RoundedRectangleBorder(
+                              borderRadius: BorderRadius.vertical(
+                                top: Radius.circular(25.0),
+                              ),
+                            ),
+                            builder: (BuildContext context) {
+                              return filterWidget();
+                            },
+                          );
+                        },
                         ismarketplace: true,
                         radius: 8,
                         contentPadding: 10,
@@ -393,6 +392,20 @@ class _MarketplaceScreenState extends State<MarketplaceScreen>
                                   : _marketplacesearchTabController.index == 2
                                       ? 'Search Services'
                                       : 'Find Suppliers for your Business',
+                          onfiltertap: () {
+                            showModalBottomSheet(
+                              context: context,
+                              shape: const RoundedRectangleBorder(
+                                borderRadius: BorderRadius.vertical(
+                                  top: Radius.circular(25.0),
+                                ),
+                              ),
+                              builder: (BuildContext context) {
+                                return filterWidget();
+                              },
+                            );
+                          },
+                          ismarketplace: true,
                           onChange: (String query) {
                             if (query.isEmpty) {
                               _marketplacesearchTabController.index == 2
