@@ -197,7 +197,8 @@ class _CustomItemCardState extends State<CustomItemCard> {
                               maxLines: 2,
                               overflow: TextOverflow.ellipsis,
                             ),
-                            if (widget.customitem?.link != '')
+                            if (widget.customitem!.user!.uid ==
+                                profileController.myProfile.uid)
                               Padding(
                                 padding: const EdgeInsets.only(top: 5.0),
                                 child: Container(
@@ -230,6 +231,21 @@ class _CustomItemCardState extends State<CustomItemCard> {
                           ],
                         ),
                       ),
+                      if (widget.customitem!.user!.uid !=
+                          profileController.myProfile.uid)
+                        Padding(
+                          padding: const EdgeInsets.only(top: 5.0),
+                          child: Container(
+                            decoration: const BoxDecoration(
+                                color: backgroundColor, shape: BoxShape.circle),
+                            padding: const EdgeInsets.all(4),
+                            child: SvgPicture.asset(
+                              'assets/svgs/upicon.svg',
+                              color: const Color(0xFF0F132D),
+                              height: 8,
+                            ),
+                          ),
+                        ),
                       if (widget.customitem!.user!.uid ==
                           profileController.myProfile.uid)
                         OptionsButton(

@@ -358,7 +358,7 @@ class BottomTabButton extends StatelessWidget {
                         label,
                         maxLines: 1,
                         style: TextStyle(
-                          fontSize: 12.0,
+                          fontSize: 13.0,
                           fontWeight: FontWeight.w700,
                           color: isActive ? primaryColorLT : iconColor,
                         ),
