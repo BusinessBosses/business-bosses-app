@@ -104,6 +104,20 @@ class _CreateServiceListingState extends State<CreateServiceListing>
   String? calendarType = 'Single day';
   bool? isAppointment = false;
   bool _shouldPromote = true;
+  final List<String> categories = <String>[
+    'Agriculture, Food & Beverage',
+    'Books & Education',
+    'Construction & Real Estate',
+    'Fashion & Beauty',
+    'Finance & Legal',
+    'Healthcare & Wellness',
+    'Home, Gardens & Outdoors',
+    'Jewellery & Timepieces',
+    'Media & Entertainment',
+    'Security, Safety & Equipment',
+    'Technology, Games & Electronic',
+    'Vehicle & Transportation'
+  ];
 
   @override
   void initState() {
@@ -130,7 +144,13 @@ class _CreateServiceListingState extends State<CreateServiceListing>
       _priceController.text = widget.service!.price.toString();
       _discountController.text = widget.service!.discount.toString();
       _descriptionController.text = widget.service!.description;
-      category = widget.service!.category;
+      String? existingCategory = widget.service!.category;
+      if (categories.contains(existingCategory)) {
+        category = existingCategory;
+      } else {
+        category =
+            'Vehicle & Transportation'; // Default to "Other" if the category is invalid
+      }
       location = widget.service!.location;
       images = widget.service!.images!;
       updateImages = widget.service!.images;

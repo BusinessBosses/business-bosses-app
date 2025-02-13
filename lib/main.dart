@@ -239,10 +239,10 @@ class _MyAppState extends State<MyApp> {
           final bool isFirstTime = box.read('isFirstTime') ?? true;
 
           String initialRoute = userId == '' || userId == null
-              ? Routes.login
-              : isFirstTime == true
+              ?isFirstTime == true
                   ? Routes.registration
-                  : Routes.home;
+                  : Routes.login
+              :  Routes.home;
 
           // String initialRoute = isFirstTime == true
           //     ? Routes.registration

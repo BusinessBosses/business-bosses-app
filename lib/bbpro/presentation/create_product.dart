@@ -58,6 +58,20 @@ class _CreateProductListingState extends State<CreateProductListing> {
   bool _isSwitched = true;
   bool isExpanded = false;
   bool loading = false;
+  final List<String> categories = <String>[
+    'Agriculture, Food & Beverage',
+    'Books & Education',
+    'Construction & Real Estate',
+    'Fashion & Beauty',
+    'Finance & Legal',
+    'Healthcare & Wellness',
+    'Home, Gardens & Outdoors',
+    'Jewellery & Timepieces',
+    'Media & Entertainment',
+    'Security, Safety & Equipment',
+    'Technology, Games & Electronic',
+    'Vehicle & Transportation'
+  ];
 
   // Form fields
   String? productName;
@@ -116,7 +130,14 @@ class _CreateProductListingState extends State<CreateProductListing> {
       images = widget.product!.images;
       deliveryDuration = widget.product!.deliveryDuration;
       sizeController.text = widget.product!.size?.join(', ') ?? '';
-      category = widget.product!.category;
+      String? existingCategory = widget.product!.category;
+      if (categories.contains(existingCategory)) {
+        category = existingCategory;
+      } else {
+        category =
+            'Vehicle & Transportation'; // Default to "Other" if the category is invalid
+      }
+
       country = widget.product!.location != null
           ? widget.product!.location!
           : shopController.shop!.location;
@@ -249,20 +270,7 @@ class _CreateProductListingState extends State<CreateProductListing> {
                   CustomDropdownWidget(
                     caption: 'Select Category *',
                     hintText: 'Choose a category',
-                    items: const <String>[
-                      'Home, Garden & Outdoors',
-                      'Fashion & Beauty',
-                      'Sports & Entertainment',
-                      'Books & Education',
-                      'Jewellery & Timepieces',
-                      'Security, Safety & Equipment',
-                      'Video Games & Electronics',
-                      'Agriculture, Food, Beverage',
-                      'Construction & Real Estate',
-                      'Vehicle & Transportation',
-                      'Business Services & Events',
-                      'Other',
-                    ],
+                    items: categories,
                     iconName: 'assets/svgs/dropdown.svg',
                     initialValue: category,
                     onChanged: (String? newValue) {
