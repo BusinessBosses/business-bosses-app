@@ -238,9 +238,15 @@ class _MyAppState extends State<MyApp> {
           final GetStorage box = GetStorage();
           final bool isFirstTime = box.read('isFirstTime') ?? true;
 
-          String initialRoute = isFirstTime == true
-              ? Routes.registration
-              : (userId == '' || userId == null ? Routes.login : Routes.home);
+          String initialRoute = userId == '' || userId == null
+              ? Routes.login
+              : isFirstTime == true
+                  ? Routes.registration
+                  : Routes.home;
+
+          // String initialRoute = isFirstTime == true
+          //     ? Routes.registration
+          //     : (userId == '' || userId == null ? Routes.login : Routes.home);
 
           return GetMaterialApp(
             key: navigatorKey, // Set the GlobalKey
