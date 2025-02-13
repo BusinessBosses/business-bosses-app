@@ -3,6 +3,7 @@
 import 'dart:io';
 
 import 'package:business_bosses_v2/bbpro/presentation/bottom_nav_screen.dart';
+import 'package:business_bosses_v2/bbpro/widgets/dropdown.dart';
 import 'package:business_bosses_v2/common/dialogs/snackbar.dart';
 import 'package:business_bosses_v2/common/models/user_model.dart';
 import 'package:business_bosses_v2/features/profile/controller/profile_controller.dart';
@@ -81,6 +82,20 @@ class _UpdateProfileScreenState extends State<UpdateProfileScreen> {
   final List<String> _usersToCompareUsername = [''];
 
   List<String> achievements = <String>[];
+  final List<String> categories = <String>[
+    'Agriculture, Food & Beverage',
+    'Books & Education',
+    'Construction & Real Estate',
+    'Fashion & Beauty',
+    'Finance & Legal',
+    'Healthcare & Wellness',
+    'Home, Gardens & Outdoors',
+    'Jewellery & Timepieces',
+    'Media & Entertainment',
+    'Security, Safety & Equipment',
+    'Technology, Games & Electronic',
+    'Vehicle & Transportation'
+  ];
 
   TextEditingController achievementController = TextEditingController();
   TextEditingController productsController = TextEditingController();
@@ -145,7 +160,13 @@ class _UpdateProfileScreenState extends State<UpdateProfileScreen> {
   void setVariableValues(UserModel user) {
     _email = user.email;
     _location = user.location;
-    _category = user.category;
+    String? existingCategory = user.category;
+    if (categories.contains(existingCategory)) {
+      _category = existingCategory;
+    } else {
+      _category =
+          'Vehicle & Transportation'; // Default to "Other" if the category is invalid
+    }
     _industry = user.industry;
     _photoUrl = user.photoUrl;
     _companyName = user.companyName;
@@ -438,31 +459,17 @@ class _UpdateProfileScreenState extends State<UpdateProfileScreen> {
                                       ),
                                     ),
                                     const SizedBox(height: 12.0),
-                                    GestureDetector(
-                                      onTap: () => onDataPicker(
-                                        analyser: Analyser.category,
-                                        title: 'Profession',
-                                        list: AnalyserData.industries,
-                                      ),
-                                      child: Container(
-                                        width: double.infinity,
-                                        decoration: BoxDecoration(
-                                          color: backgroundcolorinterface,
-                                          borderRadius: BorderRadius.circular(
-                                              radiusValue),
-                                        ),
-                                        child: ListTile(
-                                          leading: _category != null
-                                              ? Text(_category!)
-                                              : Text(
-                                                  'select a category or profession',
-                                                  style: bodyText2.copyWith(
-                                                      color: hintColor),
-                                                ),
-                                          trailing: const Icon(
-                                              Icons.keyboard_arrow_right),
-                                        ),
-                                      ),
+                                    CustomDropdownWidget(
+                                      initialValue: _category,
+                                      caption: 'Select Category *',
+                                      hintText: 'Choose a category',
+                                      items: categories,
+                                      iconName: 'assets/svgs/dropdown.svg',
+                                      onChanged: (String? newValue) {
+                                        setState(() {
+                                          _category = newValue;
+                                        });
+                                      },
                                     ),
                                     const SizedBox(
                                       height: 20,

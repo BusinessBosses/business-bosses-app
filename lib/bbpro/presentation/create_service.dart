@@ -367,20 +367,7 @@ class _CreateServiceListingState extends State<CreateServiceListing>
               initialValue: category,
               caption: 'Select Category *',
               hintText: 'Choose a category',
-              items: const <String>[
-                'Home, Garden & Outdoors',
-                'Fashion & Beauty',
-                'Sports & Entertainment',
-                'Books & Education',
-                'Jewellery & Timepieces',
-                'Security, Safety & Equipment',
-                'Video Games & Electronics',
-                'Agriculture, Food, Beverage',
-                'Construction & Real Estate',
-                'Vehicle & Transportation',
-                'Business Services & Events',
-                'Other',
-              ],
+              items: categories,
               iconName: 'assets/svgs/dropdown.svg',
               onChanged: (String? newValue) {
                 setState(() {
