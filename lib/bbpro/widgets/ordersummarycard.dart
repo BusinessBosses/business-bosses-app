@@ -184,7 +184,7 @@ class _OrderSummaryWidgetState extends State<OrderSummaryWidget> {
                     style: TextStyle(fontSize: 13),
                   ),
                   Text(
-                    '${widget.currency}${widget.packagesprice.toString() ?? 0}',
+                    '${widget.currency}${widget.packagesprice.toString()}',
                     style: const TextStyle(fontSize: 13),
                   ),
                 ],

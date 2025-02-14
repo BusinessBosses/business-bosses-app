@@ -274,8 +274,8 @@ class _FilterUsersState extends State<ExpandedSuppliersPage> {
         const SizedBox(height: 5),
         GestureDetector(
           onTap: () async {
-            if (url.isNotEmpty && await canLaunch(url)) {
-              await launch(url);
+            if (url.isNotEmpty && await canLaunchUrl(Uri.parse(url))) {
+              await _launchURL(url);
             }
           },
           child: Text(
@@ -348,6 +348,16 @@ class _FilterUsersState extends State<ExpandedSuppliersPage> {
         ],
       ),
     );
+  }
+
+  Future<void> _launchURL(String urlString) async {
+    if (!urlString.startsWith('http://') && !urlString.startsWith('https://')) {
+      urlString = 'https://$urlString';
+    }
+    final Uri url = Uri.parse(urlString);
+    if (!await launchUrl(url, mode: LaunchMode.inAppBrowserView)) {
+      throw Exception('Could not launch $urlString');
+    }
   }
 
   Widget _buildImageGallery() {

@@ -88,12 +88,9 @@ class _BookServiceScreenState extends State<BookServiceScreen> {
 
   late FocusNode _focusNode;
 
-  TimeOfDay? _startTime;
-  TimeOfDay? _endTime;
   int? duration;
 
   DateTime? _startDate;
-  DateTime? _endDate;
   final List<DateTime> _selectedDates = <DateTime>[];
 
   bool timeslotselected = false;

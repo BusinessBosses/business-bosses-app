@@ -9,7 +9,6 @@ import 'package:business_bosses_v2/common/widgets/buttons/subscribe_to_premium_b
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
-import 'package:lottie/lottie.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import '../../common/params.dart';

@@ -1,7 +1,5 @@
 import 'package:business_bosses_v2/bbpro/controllers/shop_controller.dart';
 import 'package:business_bosses_v2/bbpro/models/order_model.dart';
-import 'package:business_bosses_v2/bbpro/models/product_model.dart';
-import 'package:business_bosses_v2/bbpro/models/service_model.dart';
 import 'package:business_bosses_v2/bbpro/widgets/orderwidget.dart';
 import 'package:business_bosses_v2/bbpro/widgets/proseardwidget.dart';
 import 'package:business_bosses_v2/bbpro/widgets/proshopdeals.dart';
@@ -21,7 +19,7 @@ class MyOrdersScreen extends StatefulWidget {
 
 class _MyOrdersScreenState extends State<MyOrdersScreen> {
   final ShopController shopController = Get.find();
-  String? _selectedItem;
+
   String searchQuery = '';
   List<Order> filteredOrders = <Order>[];
   bool loadingData = true;
@@ -57,9 +55,6 @@ class _MyOrdersScreenState extends State<MyOrdersScreen> {
       }).toList(),
     ).then((String? selected) {
       if (selected != null) {
-        setState(() {
-          _selectedItem = selected;
-        });
         // Implement filter logic here
       }
     });
