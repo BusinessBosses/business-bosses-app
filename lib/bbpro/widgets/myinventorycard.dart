@@ -6,6 +6,7 @@ import 'package:business_bosses_v2/bbpro/presentation/boost_items.dart';
 import 'package:business_bosses_v2/bbpro/presentation/create_product.dart';
 import 'package:business_bosses_v2/bbpro/widgets/optionsbutton.dart';
 import 'package:business_bosses_v2/common/dialogs/snackbar.dart';
+import 'package:business_bosses_v2/features/marketplace/widgets/currency.dart';
 import 'package:business_bosses_v2/utils/theme/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -155,7 +156,7 @@ class _MyInventoryCardState extends State<MyInventoryCard> {
                         Row(
                           children: <Widget>[
                             Text(
-                              '${widget.shop == null ? shopController.shop!.currency : widget.shop!.currency}${widget.product!.price * (1 - widget.product!.discount! / 100)}',
+                              '${currencyValues[widget.product!.location.toString()]}${widget.product!.price * (1 - widget.product!.discount! / 100)}',
                               style: const TextStyle(
                                 color: proprimaryColor,
                                 fontWeight: FontWeight.bold,
@@ -164,7 +165,7 @@ class _MyInventoryCardState extends State<MyInventoryCard> {
                             ),
                             const SizedBox(width: 5),
                             Text(
-                              '${widget.shop == null ? shopController.shop!.currency : widget.shop!.currency}${widget.product?.price.toString()}',
+                              '${currencyValues[widget.product!.location.toString()]}${widget.product?.price.toString()}',
                               style: const TextStyle(
                                 color: Colors.grey,
                                 decoration: TextDecoration.lineThrough,
@@ -175,7 +176,7 @@ class _MyInventoryCardState extends State<MyInventoryCard> {
                         )
                       else
                         Text(
-                          '${widget.shop == null ? shopController.shop!.currency : widget.shop!.currency}${widget.product?.price.toString()}',
+                          '${currencyValues[widget.product!.location.toString()]}${widget.product?.price.toString()}',
                           style: const TextStyle(
                             color: proprimaryColor,
                             fontWeight: FontWeight.bold,

@@ -78,27 +78,50 @@ class _ShopScreenState extends State<ShopScreen> {
                     const SizedBox(
                       height: 10.0,
                     ),
-                  SizedBox(
-                    height: 100,
-                    width: 100,
-                    child: SizedBox(
-                      height: 80.0,
-                      width: 80.0,
-                      child: Align(
-                        alignment: Alignment.topLeft,
-                        child: ClipRRect(
-                          borderRadius: BorderRadius.circular(1000),
-                          child: NetworkImageWithPlaceHolder(
-                            imageUrl: shopController.shop!.image ?? '',
-                            radius: radius,
-                            placeHolder: Icons.person,
-                            iconSize: 22.0,
-                            fit: BoxFit.cover,
+                  if (shopController.shop!.imageType == 'circle')
+                    SizedBox(
+                      height: 100,
+                      width: 100,
+                      child: SizedBox(
+                        height: 80.0,
+                        width: 80.0,
+                        child: Align(
+                          alignment: Alignment.topLeft,
+                          child: ClipRRect(
+                            borderRadius: BorderRadius.circular(1000),
+                            child: NetworkImageWithPlaceHolder(
+                              imageUrl: shopController.shop!.image ?? '',
+                              radius: radius,
+                              placeHolder: Icons.person,
+                              iconSize: 22.0,
+                              fit: BoxFit.cover,
+                            ),
                           ),
                         ),
                       ),
                     ),
-                  ),
+                  if (shopController.shop!.imageType == 'banner')
+                    ClipRect(
+                      child: Align(
+                        alignment:
+                            Alignment.topCenter, // Keeps the top part visible
+                        heightFactor: 1, // Shows only 30% of the image height
+                        child: SizedBox(
+                          width: double.infinity, // Stretches to full width
+                          child: ClipRRect(
+                            borderRadius: BorderRadius.circular(
+                                20), // Optional: Adjust corner radius
+                            child: NetworkImageWithPlaceHolder(
+                              imageUrl: shopController.shop?.image ?? '',
+                              radius: radius,
+                              placeHolder: Icons.person,
+                              iconSize: 22.0,
+                              fit: BoxFit.cover, // Ensures it stretches
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
                   const SizedBox(height: 10),
                   Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 15.0),

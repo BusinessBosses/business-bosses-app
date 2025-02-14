@@ -160,14 +160,14 @@ class _UpdateProfileScreenState extends State<UpdateProfileScreen> {
   void setVariableValues(UserModel user) {
     _email = user.email;
     _location = user.location;
-    String? existingCategory = user.category;
+    _category = user.category;
+    String? existingCategory = user.industry;
     if (categories.contains(existingCategory)) {
-      _category = existingCategory;
+      _industry = existingCategory;
     } else {
-      _category =
+      _industry =
           'Vehicle & Transportation'; // Default to "Other" if the category is invalid
     }
-    _industry = user.industry;
     _photoUrl = user.photoUrl;
     _companyName = user.companyName;
     _username = user.username;
@@ -459,17 +459,31 @@ class _UpdateProfileScreenState extends State<UpdateProfileScreen> {
                                       ),
                                     ),
                                     const SizedBox(height: 12.0),
-                                    CustomDropdownWidget(
-                                      initialValue: _category,
-                                      caption: 'Select Category *',
-                                      hintText: 'Choose a category',
-                                      items: categories,
-                                      iconName: 'assets/svgs/dropdown.svg',
-                                      onChanged: (String? newValue) {
-                                        setState(() {
-                                          _category = newValue;
-                                        });
-                                      },
+                                    GestureDetector(
+                                      onTap: () => onDataPicker(
+                                        analyser: Analyser.category,
+                                        title: 'Profession',
+                                        list: AnalyserData.industries,
+                                      ),
+                                      child: Container(
+                                        width: double.infinity,
+                                        decoration: BoxDecoration(
+                                          color: backgroundcolorinterface,
+                                          borderRadius: BorderRadius.circular(
+                                              radiusValue),
+                                        ),
+                                        child: ListTile(
+                                          leading: _category != null
+                                              ? Text(_category!)
+                                              : Text(
+                                                  'select a category or profession',
+                                                  style: bodyText2.copyWith(
+                                                      color: hintColor),
+                                                ),
+                                          trailing: const Icon(
+                                              Icons.keyboard_arrow_right),
+                                        ),
+                                      ),
                                     ),
                                     const SizedBox(
                                       height: 20,
@@ -633,36 +647,36 @@ class _UpdateProfileScreenState extends State<UpdateProfileScreen> {
                                                         fontWeight:
                                                             FontWeight.w700)),
                                                 const SizedBox(height: 10.0),
-                                                GestureDetector(
-                                                  onTap: () => onDataPicker(
-                                                    analyser: Analyser.industry,
-                                                    title: 'Industries',
-                                                    list:
-                                                        AnalyserData.industries,
+                                                DropdownButton<String>(
+                                                  value: _industry,
+                                                  borderRadius:
+                                                      BorderRadius.circular(
+                                                          radius),
+                                                  isExpanded: true,
+                                                  icon: const Icon(Icons
+                                                      .keyboard_arrow_down_sharp),
+                                                  iconSize: 24,
+                                                  elevation: 16,
+                                                  underline: Container(
+                                                    height: 1,
+                                                    color: hintColor,
                                                   ),
-                                                  child: Container(
-                                                    width: double.infinity,
-                                                    decoration: BoxDecoration(
-                                                      color:
-                                                          backgroundcolorinterface,
-                                                      borderRadius:
-                                                          BorderRadius.circular(
-                                                              radiusValue),
-                                                    ),
-                                                    child: ListTile(
-                                                      leading: _industry != null
-                                                          ? Text(_industry!)
-                                                          : Text(
-                                                              'select a industry',
-                                                              style: bodyText2
-                                                                  .copyWith(
-                                                                      color:
-                                                                          hintColor),
-                                                            ),
-                                                      trailing: const Icon(Icons
-                                                          .keyboard_arrow_right),
-                                                    ),
-                                                  ),
+                                                  onChanged:
+                                                      (String? newValue) {
+                                                    setState(() {
+                                                      _industry = newValue;
+                                                    });
+                                                  },
+                                                  items: categories.map<
+                                                          DropdownMenuItem<
+                                                              String>>(
+                                                      (String value) {
+                                                    return DropdownMenuItem<
+                                                        String>(
+                                                      value: value,
+                                                      child: Text(value),
+                                                    );
+                                                  }).toList(),
                                                 ),
                                                 const SizedBox(
                                                   height: 20,

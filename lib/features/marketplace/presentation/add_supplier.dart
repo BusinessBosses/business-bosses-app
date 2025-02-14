@@ -60,6 +60,20 @@ class _AddSupplierScreenState extends State<AddSupplierScreen> {
   final TextEditingController _nameController = TextEditingController();
   final TextEditingController _urlController = TextEditingController();
   final TextEditingController _phoneController = TextEditingController();
+  final List<String> categories = <String>[
+    'Agriculture, Food & Beverage',
+    'Books & Education',
+    'Construction & Real Estate',
+    'Fashion & Beauty',
+    'Finance & Legal',
+    'Healthcare & Wellness',
+    'Home, Gardens & Outdoors',
+    'Jewellery & Timepieces',
+    'Media & Entertainment',
+    'Security, Safety & Equipment',
+    'Technology, Games & Electronic',
+    'Vehicle & Transportation'
+  ];
 
   @override
   void initState() {
@@ -67,7 +81,13 @@ class _AddSupplierScreenState extends State<AddSupplierScreen> {
     descriptionController.text = _supplier?.description ?? '';
     email = _supplier?.email ?? '';
     _emailController.text = _supplier?.email ?? '';
-    _selectedCategory = _supplier?.category;
+    String? existingCategory = _supplier!.category;
+    if (categories.contains(existingCategory)) {
+      _selectedCategory = existingCategory;
+    } else {
+      _selectedCategory =
+          'Vehicle & Transportation'; // Default to "Other" if the category is invalid
+    }
     _selectedLocation = _supplier?.location;
   }
 
@@ -181,21 +201,8 @@ class _AddSupplierScreenState extends State<AddSupplierScreen> {
                           _selectedCategory = newValue!;
                         });
                       },
-                      items: <String?>[
-                        null,
-                        'Home, Garden & Outdoors',
-                        'Fashion & Beauty',
-                        'Sports & Entertainment',
-                        'Books & Education',
-                        'Jewellery & Timepieces',
-                        'Security, Safety & Equipment',
-                        'Video Games & Electronics',
-                        'Agriculture, Food, Beverage',
-                        'Construction & Real Estate',
-                        'Vehicle & Transportation',
-                        'Business Services & Events',
-                        'Other',
-                      ].map<DropdownMenuItem<String>>((String? value) {
+                      items: categories
+                          .map<DropdownMenuItem<String>>((String? value) {
                         return DropdownMenuItem<String>(
                           value: value,
                           child: value != null

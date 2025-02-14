@@ -57,6 +57,20 @@ class _MarketplaceScreenState extends State<MarketplaceScreen>
   int pageSize = 20;
   String? filteredCategory;
   bool isScrolled = true;
+  final List<String> categories = <String>[
+    'Agriculture, Food & Beverage',
+    'Books & Education',
+    'Construction & Real Estate',
+    'Fashion & Beauty',
+    'Finance & Legal',
+    'Healthcare & Wellness',
+    'Home, Gardens & Outdoors',
+    'Jewellery & Timepieces',
+    'Media & Entertainment',
+    'Security, Safety & Equipment',
+    'Technology, Games & Electronic',
+    'Vehicle & Transportation'
+  ];
   final ScrollController _scrollController = ScrollController();
   bool showFloatingButton = false;
   bool _ismarketplaceSearching = false;
@@ -125,6 +139,7 @@ class _MarketplaceScreenState extends State<MarketplaceScreen>
   void selectedCategoryChanged(String? newValue) {
     setState(() {
       _marketController.selectedCategory = newValue;
+      supplierController.filterCategory.value = newValue!;
     });
   }
 
@@ -719,25 +734,13 @@ class _MarketplaceScreenState extends State<MarketplaceScreen>
                 const SizedBox(height: 10),
                 Expanded(
                   child: ListView(
-                    children: <String>[
-                      'Home, Garden & Outdoors',
-                      'Fashion & Beauty',
-                      'Sports & Entertainment',
-                      'Books & Education',
-                      'Jewellery & Timepieces',
-                      'Security, Safety & Equipment',
-                      'Video Games & Electronics',
-                      'Agriculture, Food, Beverage',
-                      'Construction & Real Estate',
-                      'Vehicle & Transportation',
-                      'Business Services & Events',
-                      'Other',
-                    ].map((String category) {
+                    children: categories.map((String category) {
                       return ListTile(
                         title: Text(category),
                         onTap: () {
                           setState(() {
                             _marketController.selectedCategory = category;
+                            supplierController.filterCategory.value = category;
                           });
                         },
                         trailing: _marketController.selectedCategory == category
@@ -754,6 +757,8 @@ class _MarketplaceScreenState extends State<MarketplaceScreen>
                       onPressed: () {
                         setState(() {
                           _marketController.selectedCategory = null;
+
+                          supplierController.filterCategory.value = '';
                         });
                         Navigator.pop(context);
                       },
@@ -765,6 +770,8 @@ class _MarketplaceScreenState extends State<MarketplaceScreen>
                         Navigator.pop(context);
                         _marketController
                             .filterItems(_marketController.searchQuery);
+                        supplierController
+                            .searchSuppliers(_marketController.searchQuery);
                       },
                       child: const Text('Apply Filter'),
                     ),

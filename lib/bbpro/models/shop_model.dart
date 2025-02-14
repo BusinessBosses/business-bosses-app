@@ -25,6 +25,7 @@ class Shop {
   final String currency;
   final String appId;
   final UserModel? user;
+  final String? imageType;
 
   Shop({
     required this.id,
@@ -51,6 +52,7 @@ class Shop {
     this.linkedIn,
     this.instagram,
     this.url,
+    this.imageType = 'circle',
   });
 
   factory Shop.fromMap(Map<String, dynamic> json) {
@@ -80,6 +82,7 @@ class Shop {
       appId: json['appId'],
       createdAt: DateTime.parse(json['createdAt']),
       user: json['user'] != null ? UserModel.fromMap(json['user']) : null,
+      imageType: json['imageType'] ?? 'circle',
     );
   }
 
@@ -109,6 +112,7 @@ class Shop {
       'appId': appId,
       'createdAt': createdAt.toIso8601String(),
       'user': user?.toMap(),
+      'imageType': imageType,
     };
   }
 }

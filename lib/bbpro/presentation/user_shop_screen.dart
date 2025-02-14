@@ -200,50 +200,97 @@ class _UserShopScreenState extends State<UserShopScreen> {
                                     // const SizedBox(
                                     //   height: 10.0,
                                     // ),
-                                    GestureDetector(
-                                      onTap: () {
-                                        Navigator.of(context).push(
-                                          // ignore: always_specify_types
-                                          MaterialPageRoute(
-                                            builder: (BuildContext context) =>
-                                                ImagesViewerScreen(
-                                              // ignore: always_specify_types
-                                              urls: [
-                                                shopController
-                                                        .userShop!.image ??
-                                                    ''
-                                              ],
-                                              index: 0,
+                                    if (shopController.userShop!.imageType ==
+                                        'circle')
+                                      GestureDetector(
+                                        onTap: () {
+                                          Navigator.of(context).push(
+                                            // ignore: always_specify_types
+                                            MaterialPageRoute(
+                                              builder: (BuildContext context) =>
+                                                  ImagesViewerScreen(
+                                                // ignore: always_specify_types
+                                                urls: [
+                                                  shopController
+                                                          .userShop!.image ??
+                                                      ''
+                                                ],
+                                                index: 0,
+                                              ),
                                             ),
-                                          ),
-                                        );
-                                      },
-                                      child: SizedBox(
-                                        height: 100,
-                                        width: 100,
+                                          );
+                                        },
                                         child: SizedBox(
-                                          height: 80.0,
-                                          width: 80.0,
-                                          child: Align(
-                                            alignment: Alignment.topLeft,
-                                            child: ClipRRect(
-                                              borderRadius:
-                                                  BorderRadius.circular(1000),
-                                              child:
-                                                  NetworkImageWithPlaceHolder(
-                                                imageUrl: shopController
-                                                        .userShop!.image ??
-                                                    '',
-                                                radius: radius,
-                                                placeHolder: Icons.person,
-                                                iconSize: 22.0,
-                                                fit: BoxFit.cover,
+                                          height: 100,
+                                          width: 100,
+                                          child: SizedBox(
+                                            height: 80.0,
+                                            width: 80.0,
+                                            child: Align(
+                                              alignment: Alignment.topLeft,
+                                              child: ClipRRect(
+                                                borderRadius:
+                                                    BorderRadius.circular(1000),
+                                                child:
+                                                    NetworkImageWithPlaceHolder(
+                                                  imageUrl: shopController
+                                                          .userShop!.image ??
+                                                      '',
+                                                  radius: radius,
+                                                  placeHolder: Icons.person,
+                                                  iconSize: 22.0,
+                                                  fit: BoxFit.cover,
+                                                ),
                                               ),
                                             ),
                                           ),
                                         ),
                                       ),
-                                    ),
+                                    if (shopController.userShop!.imageType ==
+                                        'banner')
+                                      GestureDetector(
+                                        onTap: () {
+                                          Navigator.of(context).push(
+                                            MaterialPageRoute(
+                                              builder: (BuildContext context) =>
+                                                  ImagesViewerScreen(
+                                                urls: <String>[
+                                                  shopController
+                                                          .userShop?.image ??
+                                                      ''
+                                                ],
+                                                index: 0,
+                                              ),
+                                            ),
+                                          );
+                                        },
+                                        child: ClipRect(
+                                          child: Align(
+                                            alignment: Alignment
+                                                .topCenter, // Ensures the top part is visible
+                                            heightFactor:
+                                                1, // Clips the height to 30%
+                                            child: SizedBox(
+                                              width: double
+                                                  .infinity, // Stretches the image to full width
+                                              child: ClipRRect(
+                                                child:
+                                                    NetworkImageWithPlaceHolder(
+                                                  imageUrl: shopController
+                                                          .userShop?.image ??
+                                                      '',
+                                                  radius: radius,
+                                                  placeHolder: Icons.person,
+                                                  iconSize: 22.0,
+                                                  fit: BoxFit
+                                                      .cover, // Ensures the image fills the width properly
+                                                ),
+                                              ),
+                                            ),
+                                          ),
+                                        ),
+                                      ),
+
                                     const SizedBox(height: 10),
                                     Padding(
                                       padding: const EdgeInsets.symmetric(

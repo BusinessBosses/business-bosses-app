@@ -145,11 +145,18 @@ class CompleteSearchController extends GetxController {
       } else {
         page(1);
       }
-
-      final List<UserModel> newUsers = response.data['recommendedUsers']
-          .map<UserModel>((data) => UserModel.fromMap(data))
-          .toList();
-      recommendedConnections.addAll(newUsers);
+      final List<UserModel> newUsers;
+      if (selectedFilter.value.isEmpty) {
+        newUsers = response.data['recommendedUsers']
+            .map<UserModel>((data) => UserModel.fromMap(data))
+            .toList();
+        recommendedConnections.addAll(newUsers);
+      } else {
+        newUsers = response.data['categoryPosts']
+            .map<UserModel>((data) => UserModel.fromMap(data))
+            .toList();
+        recommendedConnections.addAll(newUsers);
+      }
     } else {
       error(true);
     }

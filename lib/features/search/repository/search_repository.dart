@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:business_bosses_v2/common/models/api_response_model.dart';
 import 'package:business_bosses_v2/services/api_service.dart';
 
@@ -8,7 +10,7 @@ class SearchRepository {
     if (title != null && title.isNotEmpty) {
       path += '&title=$title';
     }
-
+    log('searchurl: $path');
     final ApiResponseModel response = await ApiService.get(path: path);
     return response;
   }

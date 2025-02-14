@@ -6,6 +6,7 @@ import 'package:business_bosses_v2/bbpro/widgets/countrycodes.dart';
 import 'package:business_bosses_v2/bbpro/widgets/optionsbutton.dart';
 import 'package:business_bosses_v2/common/dialogs/snackbar.dart';
 import 'package:business_bosses_v2/common/widgets/network_image_with_placeholder.dart';
+import 'package:business_bosses_v2/features/marketplace/widgets/currency.dart';
 import 'package:business_bosses_v2/utils/theme/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -137,7 +138,7 @@ class _ServiceCardState extends State<ServiceCard> {
                           Row(
                             children: <Widget>[
                               Text(
-                                '${widget.shop?.currency ?? shopController.shop!.currency}${((widget.service!.price * (1 - widget.service!.discount / 100)) * 100).round() / 100}',
+                                '${currencyValues[widget.service!.location.toString()]}${((widget.service!.price * (1 - widget.service!.discount / 100)) * 100).round() / 100}',
                                 style: const TextStyle(
                                   color: Colors.black,
                                   fontWeight: FontWeight.bold,
@@ -146,7 +147,7 @@ class _ServiceCardState extends State<ServiceCard> {
                               ),
                               const SizedBox(width: 5),
                               Text(
-                                '${widget.shop?.currency ?? shopController.shop!.currency}${widget.service!.price.toStringAsFixed(2)}',
+                                '${currencyValues[widget.service!.location.toString()]}${widget.service!.price.toStringAsFixed(2)}',
                                 style: const TextStyle(
                                   color: primaryColorLT,
                                   decoration: TextDecoration.lineThrough,
@@ -159,7 +160,7 @@ class _ServiceCardState extends State<ServiceCard> {
                       )
                     else
                       Text(
-                        '${widget.shop?.currency ?? shopController.shop!.currency}${widget.service!.price.toStringAsFixed(2)}',
+                        '${currencyValues[widget.service!.location.toString()]}${widget.service!.price.toStringAsFixed(2)}',
                         style: const TextStyle(
                           color: Colors.black,
                           fontWeight: FontWeight.bold,

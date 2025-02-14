@@ -5,6 +5,7 @@ import 'package:business_bosses_v2/bbpro/presentation/boost_items.dart';
 import 'package:business_bosses_v2/bbpro/presentation/create_product.dart';
 import 'package:business_bosses_v2/bbpro/widgets/countrycodes.dart';
 import 'package:business_bosses_v2/common/dialogs/snackbar.dart';
+import 'package:business_bosses_v2/features/marketplace/widgets/currency.dart';
 import 'package:flutter/material.dart';
 
 import 'package:business_bosses_v2/bbpro/models/product_model.dart';
@@ -105,7 +106,7 @@ class _InventoryCardState extends State<InventoryCard> {
                       Row(
                         children: <Widget>[
                           Text(
-                            '${widget.shop?.currency ?? shopController.shop!.currency}${((widget.product!.price * (1 - widget.product!.discount! / 100)) * 100).round() / 100}',
+                            '${currencyValues[widget.product!.location.toString()]}${((widget.product!.price * (1 - widget.product!.discount! / 100)) * 100).round() / 100}',
                             style: const TextStyle(
                               color: Colors.black,
                               fontWeight: FontWeight.w700,
@@ -114,7 +115,7 @@ class _InventoryCardState extends State<InventoryCard> {
                           ),
                           const SizedBox(width: 5),
                           Text(
-                            '${widget.shop?.currency ?? shopController.shop!.currency}${widget.product!.price.toStringAsFixed(2)}',
+                            '${currencyValues[widget.product!.location.toString()]}${widget.product!.price.toStringAsFixed(2)}',
                             style: const TextStyle(
                               color: primaryColorLT,
                               decoration: TextDecoration.lineThrough,
@@ -125,7 +126,7 @@ class _InventoryCardState extends State<InventoryCard> {
                       )
                     else
                       Text(
-                        '${widget.shop?.currency ?? shopController.shop!.currency}${widget.product!.price.toStringAsFixed(2)}',
+                        '${currencyValues[widget.product!.location.toString()]}${widget.product!.price.toStringAsFixed(2)}',
                         style: const TextStyle(
                           color: Colors.black,
                           fontWeight: FontWeight.w700,

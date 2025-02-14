@@ -1,18 +1,13 @@
 import 'package:business_bosses_v2/common/models/user_model.dart';
-import 'package:business_bosses_v2/common/widgets/buttons/my_outlined_button.dart';
 import 'package:business_bosses_v2/features/profile/controller/profile_controller.dart';
-import 'package:business_bosses_v2/navigation/routes.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 
-import '../../common/models/analyser_data.dart';
-import '../../common/models/for_data_picker.dart';
 import '../../common/models/my_response.dart';
 import '../../common/models/my_title.dart';
 import '../../common/widgets/data_selection_screen.dart';
-import '../../common/widgets/safety_model.dart';
 import '../../features/connects/widgets/connection_grid_tile.dart';
 import '../../features/search/controller/search_controller.dart';
 import '../../utils/theme/theme.dart';
@@ -205,9 +200,11 @@ class _RelevantUsersScreenState extends State<RelevantUsersScreen> {
 
     if (res != null && res.success) {
       MyTitle category = res.data;
+      controller.selectedFilter.value = category.title ?? '';
       setState(() {
         _filtertitle = category.title ?? '';
       });
+      controller.update();
     }
   }
 
