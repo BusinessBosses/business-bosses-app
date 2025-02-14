@@ -216,7 +216,8 @@ class _ShopScreenState extends State<ShopScreen> {
                       children: <Widget>[
                         const Padding(
                           padding: EdgeInsets.symmetric(
-                              horizontal: 15.0, vertical: 10),
+                            horizontal: 15.0,
+                          ),
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: <Widget>[],
@@ -238,6 +239,8 @@ class _ShopScreenState extends State<ShopScreen> {
                                       children: <Widget>[
                                         Expanded(
                                           child: StaggeredGridView.countBuilder(
+                                            padding: const EdgeInsets.only(
+                                                top: 15, bottom: 100),
                                             crossAxisCount: 2,
                                             staggeredTileBuilder: (int index) =>
                                                 const StaggeredTile.fit(1),
