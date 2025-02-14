@@ -360,7 +360,6 @@ class _MarketplaceScreenState extends State<MarketplaceScreen>
                             },
                           );
                         },
-                        ismarketplace: true,
                         radius: 8,
                         contentPadding: 10,
                         hasSearchIcon: true,
@@ -757,8 +756,9 @@ class _MarketplaceScreenState extends State<MarketplaceScreen>
                       onPressed: () {
                         setState(() {
                           _marketController.selectedCategory = null;
-
                           supplierController.filterCategory.value = '';
+                          _marketController
+                              .filterItems(_marketController.searchQuery);
                         });
                         Navigator.pop(context);
                       },

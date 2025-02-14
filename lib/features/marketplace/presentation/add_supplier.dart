@@ -9,8 +9,6 @@ import 'package:business_bosses_v2/features/home/widgets/sellingpopup.dart';
 import 'package:business_bosses_v2/features/marketplace/controllers/supplier_controller.dart';
 import 'package:business_bosses_v2/features/marketplace/models/suppliers_model.dart';
 import 'package:country_list_pick/country_list_pick.dart';
-import 'package:detectable_text_field/detector/sample_regular_expressions.dart';
-import 'package:detectable_text_field/widgets/detectable_text_field.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -20,7 +18,6 @@ import 'dart:convert';
 import 'package:image_picker/image_picker.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../../../action/action.dart';
-import '../../../common/widgets/buttons/my_outlined_button.dart';
 import '../../../utils/theme/theme.dart';
 import '../../forum/widgets/field_container.dart';
 import '../../profile/controller/profile_controller.dart';
@@ -81,7 +78,7 @@ class _AddSupplierScreenState extends State<AddSupplierScreen> {
     descriptionController.text = _supplier?.description ?? '';
     email = _supplier?.email ?? '';
     _emailController.text = _supplier?.email ?? '';
-    String? existingCategory = _supplier!.category;
+    String? existingCategory = _supplier?.category;
     if (categories.contains(existingCategory)) {
       _selectedCategory = existingCategory;
     } else {
@@ -346,8 +343,11 @@ class _AddSupplierScreenState extends State<AddSupplierScreen> {
                                     child: const CircleAvatar(
                                       radius: 12,
                                       backgroundColor: Colors.red,
-                                      child: Icon(Icons.close,
-                                          size: 16, color: Colors.white),
+                                      child: Icon(
+                                        Icons.close,
+                                        size: 16,
+                                        color: Colors.white,
+                                      ),
                                     ),
                                   ),
                                 ),

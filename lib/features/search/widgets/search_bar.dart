@@ -17,7 +17,7 @@ class Searchbar extends StatelessWidget {
   // ignore: public_member_api_docs
   final bool autofocus;
 
-   final bool? ismarketplace;
+  final bool? ismarketplace;
 
   final VoidCallback? onfiltertap;
 
@@ -29,7 +29,9 @@ class Searchbar extends StatelessWidget {
     this.onSubmit,
     this.hasSearchIcon = true,
     this.autofocus = true,
-    this.focusNode, this.ismarketplace = false, this.onfiltertap,
+    this.focusNode,
+    this.ismarketplace = false,
+    this.onfiltertap,
   }) : super(key: key);
 
   @override
@@ -56,7 +58,7 @@ class Searchbar extends StatelessWidget {
                   ),
           ),
         ),
-        if (ismarketplace != null)
+        if (ismarketplace!)
           Positioned(
             right: 0,
             top: 0,

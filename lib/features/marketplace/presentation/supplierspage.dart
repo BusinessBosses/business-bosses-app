@@ -1,11 +1,8 @@
-import 'package:business_bosses_v2/features/home/widgets/supplierspopup.dart';
 import 'package:business_bosses_v2/features/marketplace/controllers/supplier_controller.dart';
-import 'package:business_bosses_v2/features/marketplace/presentation/add_supplier.dart';
 import 'package:business_bosses_v2/features/marketplace/widgets/suppliers_grid_tile.dart';
 import 'package:business_bosses_v2/features/profile/controller/profile_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
-import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 
 import '../../../common/models/user_model.dart';
