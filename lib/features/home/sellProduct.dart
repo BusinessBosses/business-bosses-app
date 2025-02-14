@@ -34,15 +34,23 @@ void sellProduct(BuildContext context) {
                       onTap: () {
                         Navigator.pop(context);
                         index == 0
-                            ? Get.to(() => const CreateProductListing())
+                            ? Get.to(() => const CreateProductListing(
+                                  isMarketplace: true,
+                                ))
                             : index == 1
-                                ? Get.to(() => const CreateServiceListing())
+                                ? Get.to(() => const CreateServiceListing(
+                                      isMarketplace: true,
+                                    ))
                                 : Get.to(() => const AddSupplierScreen());
                       },
                       minVerticalPadding: 0,
                       contentPadding: const EdgeInsets.only(left: 10),
                       leading: SvgPicture.asset(
-                        'assets/svgs/sellicon.svg',
+                        index == 0
+                            ? 'assets/svgs/addproduct.svg'
+                            : index == 1
+                                ? 'assets/svgs/addservice.svg'
+                                : 'assets/svgs/addclient.svg',
                         height: 25,
                         color: textColor.withOpacity(1),
                       ),

@@ -153,7 +153,7 @@ class _PromotionScreenState extends State<PromotionScreen> {
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 15.0),
               child: Text(
-                _currentIndex == 0 ? 'Earn Coins' : 'Withdraw Coins',
+                _currentIndex == 0 ? 'Earn More' : 'Withdraw Coins',
                 style:
                     const TextStyle(fontWeight: FontWeight.w700, fontSize: 25),
               ),
@@ -175,5 +175,4 @@ class _PromotionScreenState extends State<PromotionScreen> {
           ],
         ));
   }
-
 }

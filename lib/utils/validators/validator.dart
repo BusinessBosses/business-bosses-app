@@ -61,6 +61,21 @@ class Validator {
     if (val.length < 8) {
       return 'Password must be 8 characters long';
     }
+
+    if (!isValidPassword(val)) {
+      return 'Invalid password';
+    } else {
+      return null;
+    }
+  }
+
+  static String? signuppasswordValidator(String? val) {
+    if (val == null) {
+      return 'Enter a valid password';
+    }
+    if (val.length < 8) {
+      return 'Password must be 8 characters long';
+    }
     if (!RegExp(r'\d').hasMatch(val)) {
       return 'Password must contain at least one number';
     }
