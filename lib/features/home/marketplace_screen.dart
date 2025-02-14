@@ -750,7 +750,7 @@ class _MarketplaceScreenState extends State<MarketplaceScreen>
                 Row(
                   mainAxisAlignment: MainAxisAlignment.end,
                   children: <Widget>[
-                    ElevatedButton(
+                    OutlinedButton(
                       onPressed: () {
                         setState(() {
                           _marketController.selectedCategory = null;

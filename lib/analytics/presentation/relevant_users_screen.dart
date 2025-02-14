@@ -163,28 +163,25 @@ class _RelevantUsersScreenState extends State<RelevantUsersScreen> {
                     ),
                     const SizedBox(height: 20),
                     Row(
+                      mainAxisAlignment: MainAxisAlignment.end,
                       children: <Widget>[
-                        Expanded(
-                          child: ElevatedButton(
-                            onPressed: () {
-                              Get.back();
-                              controller.resetData(_filtertitle);
-                            },
-                            child: const Text('Apply'),
-                          ),
+                        OutlinedButton(
+                          onPressed: () {
+                            setState(() {
+                              _filtertitle = '';
+                            });
+                            controller.resetData('');
+                            Get.back();
+                          },
+                          child: const Text('Clear'),
                         ),
                         const SizedBox(width: 10),
-                        Expanded(
-                          child: OutlinedButton(
-                            onPressed: () {
-                              setState(() {
-                                _filtertitle = '';
-                              });
-                              controller.resetData('');
-                              Get.back();
-                            },
-                            child: const Text('Clear'),
-                          ),
+                        ElevatedButton(
+                          onPressed: () {
+                            Get.back();
+                            controller.resetData(_filtertitle);
+                          },
+                          child: const Text('Apply'),
                         ),
                       ],
                     ),
