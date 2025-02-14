@@ -491,10 +491,15 @@ class _UserShopScreenState extends State<UserShopScreen> {
                                                     child: Padding(
                                                       padding: const EdgeInsets
                                                           .symmetric(
-                                                          horizontal: 15.0,
-                                                          vertical: 15),
+                                                        horizontal: 15.0,
+                                                      ),
                                                       child: StaggeredGridView
                                                           .countBuilder(
+                                                        padding:
+                                                            const EdgeInsets
+                                                                .only(
+                                                                top: 15,
+                                                                bottom: 100),
                                                         crossAxisCount: 2,
                                                         staggeredTileBuilder: (int
                                                                 index) =>

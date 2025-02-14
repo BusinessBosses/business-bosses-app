@@ -532,6 +532,9 @@ class _DonationsPageState extends State<DonationsPage> {
                                           child: Container(
                                             color: backgroundColor,
                                             child: ListView.builder(
+                                              padding: const EdgeInsets.only(
+                                                bottom: 100,
+                                              ),
                                               shrinkWrap: true,
                                               scrollDirection:
                                                   widget.ishome == false
