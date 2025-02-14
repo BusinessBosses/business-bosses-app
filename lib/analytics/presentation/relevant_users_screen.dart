@@ -129,6 +129,9 @@ class _RelevantUsersScreenState extends State<RelevantUsersScreen> {
 
   void _showFilterModal(CompleteSearchController controller) {
     showModalBottomSheet(
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(20),
+        ),
         context: context,
         builder: (BuildContext context) {
           return StatefulBuilder(
