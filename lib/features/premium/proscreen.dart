@@ -299,7 +299,7 @@ class _ProSubscribeSectionState extends State<ProSubscribeSection> {
                       SizedBox(
                         height: 25,
                       ),
-                      Text('Your Business Simplified',
+                      Text('Set Up Your Biz-Centre & Start Selling',
                           style: TextStyle(
                             fontSize: 20,
                             fontWeight: FontWeight.bold,
