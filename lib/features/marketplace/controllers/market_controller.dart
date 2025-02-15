@@ -213,8 +213,9 @@ class MarketController extends GetxController {
           ? item.category?.toLowerCase().trim()
           : null;
 
-      bool matchesQuery =
-          query.isEmpty || item.name.toLowerCase().contains(query);
+      bool matchesQuery = query.isEmpty ||
+          item.name.toLowerCase().contains(query) ||
+          item.description.toLowerCase().contains(query);
 
       bool matchesCategory = (normalizedCategory == null) ||
           (itemCategory != null && itemCategory == normalizedCategory);

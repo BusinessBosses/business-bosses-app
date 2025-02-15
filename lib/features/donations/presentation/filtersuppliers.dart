@@ -70,66 +70,6 @@ class _FilterUsersState extends State<FilterSuppliers> {
                       padding: const EdgeInsets.symmetric(horizontal: 15.0),
                       child: Row(
                         children: <Widget>[
-                          Container(
-                            width: 250,
-                            padding: const EdgeInsets.symmetric(
-                              horizontal: 15,
-                            ),
-                            decoration: BoxDecoration(
-                              color: Colors.white,
-                              borderRadius: BorderRadius.circular(10),
-                            ),
-                            child: DropdownButtonHideUnderline(
-                              child: DropdownButton<String>(
-                                value: _selectedCategory,
-                                isExpanded: true,
-                                icon: const Icon(
-                                  Icons.keyboard_arrow_down,
-                                ),
-                                iconSize: 24,
-                                elevation: 16,
-                                onChanged: (String? newValue) {
-                                  setState(() {
-                                    _selectedCategory = newValue!;
-                                  });
-                                },
-                                items: <String?>[
-                                  null,
-                                  'Home, Garden & Outdoors',
-                                  'Fashion & Beauty',
-                                  'Sports & Entertainment',
-                                  'Books & Education',
-                                  'Jewellery & Timepieces',
-                                  'Security, Safety & Equipment',
-                                  'Video Games & Electronics',
-                                  'Agriculture, Food, Beverage',
-                                  'Construction & Real Estate',
-                                  'Vehicle & Transportation',
-                                  'Business Services & Events',
-                                  'Other',
-                                ].map<DropdownMenuItem<String>>(
-                                    (String? value) {
-                                  return DropdownMenuItem<String>(
-                                    value: value,
-                                    child: value != null
-                                        ? Text(
-                                            value,
-                                            overflow: TextOverflow.ellipsis,
-                                            maxLines: 1,
-                                          )
-                                        : Text(
-                                            'Select Category',
-                                            overflow: TextOverflow.ellipsis,
-                                            maxLines: 1,
-                                            style: bodyText2.copyWith(
-                                              color: hintColor,
-                                            ),
-                                          ),
-                                  );
-                                }).toList(),
-                              ),
-                            ),
-                          ),
                           SizedBox(
                             width: 250,
                             child: CountryListPick(
