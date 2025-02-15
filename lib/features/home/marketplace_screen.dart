@@ -24,6 +24,7 @@ import 'package:business_bosses_v2/features/marketplace/models/suppliers_model.d
 
 import 'package:business_bosses_v2/features/marketplace/widgets/products.dart';
 import 'package:business_bosses_v2/features/marketplace/widgets/services.dart';
+import 'package:business_bosses_v2/features/premium/proscreen.dart';
 import 'package:business_bosses_v2/features/profile/controller/profile_controller.dart';
 import 'package:business_bosses_v2/features/search/widgets/search_bar.dart';
 import 'package:country_list_pick/country_list_pick.dart';
@@ -243,10 +244,34 @@ class _MarketplaceScreenState extends State<MarketplaceScreen>
                       color: primaryColorLT,
                       onPressed: () {
                         setState(() {});
-                        if (shopController.shop == null) {
-                          showSnackbar(
-                            message: 'Create a Biz-Center First',
-                            error: true,
+                        if (_profileController.myProfile.hasShop.toString() ==
+                            'false') {
+                          Get.bottomSheet(
+                            isScrollControlled: true,
+                            shape: const RoundedRectangleBorder(
+                              borderRadius: BorderRadius.only(
+                                topLeft: Radius.circular(20.0),
+                                topRight: Radius.circular(20.0),
+                              ),
+                            ),
+                            SizedBox(
+                              height: Get.height * 0.9,
+                              child: const Center(
+                                child: Column(
+                                  mainAxisAlignment: MainAxisAlignment.start,
+                                  crossAxisAlignment: CrossAxisAlignment.center,
+                                  children: <Widget>[
+                                    Padding(
+                                        padding: EdgeInsets.only(
+                                            left: 0.0, top: 0, bottom: 10),
+                                        child: ProSubscribeSection(
+                                          isGrow: true,
+                                        )),
+                                  ],
+                                ),
+                              ),
+                            ),
+                            backgroundColor: Colors.white,
                           );
                           return;
                         }

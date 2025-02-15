@@ -709,6 +709,7 @@ class _ForumItemState extends State<ForumItem> {
                             ),
                           ),
                     Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: <Widget>[
                         TextButton.icon(
                           onPressed: () async {
@@ -843,14 +844,19 @@ class _ForumItemState extends State<ForumItem> {
                         const SizedBox(width: 8.0),
                         GestureDetector(
                           onTap: () => showOptions(),
-                          child: SvgPicture.asset(
-                            'assets/svgs/share.svg',
-                            height: 15.0,
-                            width: 15.0,
-                            color: textColor.withOpacity(1.0),
+                          child: Padding(
+                            padding: EdgeInsets.only(
+                                right:
+                                    widget.isLearningpost == null ? 0 : 15.0),
+                            child: SvgPicture.asset(
+                              'assets/svgs/share.svg',
+                              height: 15.0,
+                              width: 15.0,
+                              color: textColor.withOpacity(1.0),
+                            ),
                           ),
                         ),
-                        const Spacer(),
+                        if (widget.isLearningpost == null) const Spacer(),
                         if (widget.isLearningpost == null)
                           Padding(
                             padding: const EdgeInsets.only(right: 15),

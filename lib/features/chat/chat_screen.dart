@@ -116,12 +116,15 @@ class _ChatScreenState extends State<ChatScreen> {
             body: Stack(
               children: <Widget>[
                 controller.chatMessages.isEmpty
-                    ? const SafetyModel(
+                    ? SafetyModel(
                         isLoading: false,
-                        icon: Icon(
-                          Icons.person,
-                          size: 80.0,
-                          color: Colors.grey,
+                        icon: SvgPicture.asset(
+                          'assets/svgs/message.svg',
+                          colorFilter: const ColorFilter.mode(
+                            Colors.grey,
+                            BlendMode.srcIn,
+                          ),
+                          height: 80,
                         ),
                         title: 'No chat found',
                         subTitle:
