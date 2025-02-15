@@ -105,15 +105,15 @@ class _ShopScreenState extends State<ShopScreen> {
                       child: Align(
                         alignment:
                             Alignment.topCenter, // Keeps the top part visible
-                        heightFactor: 1, // Shows only 30% of the image height
+                        heightFactor: 0.8, // Shows only 30% of the image height
                         child: SizedBox(
                           width: double.infinity, // Stretches to full width
                           child: ClipRRect(
                             borderRadius: BorderRadius.circular(
-                                20), // Optional: Adjust corner radius
+                                0), // Optional: Adjust corner radius
                             child: NetworkImageWithPlaceHolder(
                               imageUrl: shopController.shop?.image ?? '',
-                              radius: radius,
+                              radius: 0,
                               placeHolder: Icons.person,
                               iconSize: 22.0,
                               fit: BoxFit.cover, // Ensures it stretches

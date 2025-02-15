@@ -826,6 +826,11 @@ class _SetupshopState extends State<Setupshop> with TickerProviderStateMixin {
       response = await shopController.updateShop(widget.shop!.id, dataUpdate);
     } else {
       response = await shopController.addShop(data);
+      if (response) {
+        profileController.updateProfile(<String, dynamic>{
+          'hasShop': true,
+        });
+      }
     }
     if (response) {
       // ignore: use_build_context_synchronously
