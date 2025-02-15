@@ -3,7 +3,6 @@
 import 'dart:io';
 
 import 'package:business_bosses_v2/bbpro/presentation/bottom_nav_screen.dart';
-import 'package:business_bosses_v2/bbpro/widgets/dropdown.dart';
 import 'package:business_bosses_v2/common/dialogs/snackbar.dart';
 import 'package:business_bosses_v2/common/models/user_model.dart';
 import 'package:business_bosses_v2/features/profile/controller/profile_controller.dart';

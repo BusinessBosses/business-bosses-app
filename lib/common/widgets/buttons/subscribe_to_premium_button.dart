@@ -1,5 +1,4 @@
 import 'package:business_bosses_v2/features/premium/premiumscreen.dart';
-import 'package:business_bosses_v2/features/premium/proscreen.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 

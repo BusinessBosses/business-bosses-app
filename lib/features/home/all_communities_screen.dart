@@ -15,7 +15,6 @@ import 'package:business_bosses_v2/features/home/widgets/industriessearch.dart';
 import 'package:business_bosses_v2/features/home/widgets/learningpage.dart';
 import 'package:business_bosses_v2/features/home/widgets/learningsection.dart';
 import 'package:business_bosses_v2/features/profile/controller/profile_controller.dart';
-import 'package:business_bosses_v2/features/profile/presentation/my_profile_screen.dart';
 import 'package:business_bosses_v2/navigation/routes.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_advanced_drawer/flutter_advanced_drawer.dart';
@@ -51,6 +50,7 @@ class _AllCommunitiesScreenState extends State<AllCommunitiesScreen>
 
   final ProfileController profileController = Get.put(ProfileController());
 
+  // ignore: unused_field
   final CommunitiesController _communitiesController =
       Get.put(CommunitiesController());
   final DonationsController donationsController =

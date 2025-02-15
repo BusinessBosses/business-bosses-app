@@ -9,21 +9,22 @@ class ProTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    // ignore: unused_local_variable
     ShopController shopController = Get.find();
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 0.0),
       child: Column(
         children: <Widget>[
           // if (shopController.shop != null)
-            const Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: <Widget>[
-                Text(
-                  'Upgrade to Pro',
-                  style: TextStyle(fontWeight: FontWeight.w700, fontSize: 14),
-                ),
-              ],
-            ),
+          const Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: <Widget>[
+              Text(
+                'Upgrade to Pro',
+                style: TextStyle(fontWeight: FontWeight.w700, fontSize: 14),
+              ),
+            ],
+          ),
           const SizedBox(height: 5),
           Container(
             padding: const EdgeInsets.symmetric(vertical: 15),
