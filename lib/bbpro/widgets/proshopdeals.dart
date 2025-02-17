@@ -70,48 +70,43 @@ class _ProshopdealsWidgetState extends State<ProshopdealsWidget> {
           borderRadius: BorderRadius.circular(
               widget.isHome != null && widget.isHome! ? 0 : 15),
         ),
-        padding: const EdgeInsets.all(0.0),
         margin: EdgeInsets.symmetric(
             horizontal: widget.isHome != null && widget.isHome! ? 0 : 10),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: <Widget>[
-                Padding(
-                  padding: const EdgeInsets.all(10.0),
-                  child: Row(
-                    children: <Widget>[
-                      Text(
-                        widget.caption ?? 'Featured Listing',
-                        style: const TextStyle(
-                            fontSize: 16, fontWeight: FontWeight.bold),
-                      ),
-                      const SizedBox(width: 10),
-                      if (widget.title != null && widget.title != '')
-                        Container(
-                          padding: const EdgeInsets.symmetric(
-                              horizontal: 8.0, vertical: 4.0),
-                          decoration: BoxDecoration(
-                            color: Colors.black,
-                            borderRadius: BorderRadius.circular(4.0),
-                          ),
-                          child: Text(
-                            widget.title ?? '',
-                            maxLines: 1,
-                            overflow: TextOverflow.ellipsis,
-                            style: const TextStyle(
-                                fontSize: 10,
-                                color: Colors.white,
-                                fontWeight: FontWeight.w700),
-                          ),
-                        ),
-                    ],
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 15.0),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: <Widget>[
+                  Text(
+                    widget.caption ?? 'Featured Listing',
+                    style: const TextStyle(
+                        fontSize: 16, fontWeight: FontWeight.bold),
                   ),
-                ),
-                const Icon(Icons.chevron_right),
-              ],
+                  const SizedBox(width: 10),
+                  if (widget.title != null && widget.title != '')
+                    Container(
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 8.0, vertical: 4.0),
+                      decoration: BoxDecoration(
+                        color: Colors.black,
+                        borderRadius: BorderRadius.circular(4.0),
+                      ),
+                      child: Text(
+                        widget.title ?? '',
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                        style: const TextStyle(
+                            fontSize: 10,
+                            color: Colors.white,
+                            fontWeight: FontWeight.w700),
+                      ),
+                    ),
+                  const Icon(Icons.chevron_right, color: textColor, size: 16),
+                ],
+              ),
             ),
             const SizedBox(height: 5.0),
             Container(

@@ -120,11 +120,8 @@ class _BossOfWeekProfileTileState extends State<BossOfWeekProfileTile> {
                             backgroundColor: Colors.transparent,
                             child: Align(
                               alignment: Alignment.centerRight,
-                              child: Icon(
-                                Icons.chevron_right_rounded,
-                                color: textColor,
-                                size: 20,
-                              ),
+                              child: Icon(Icons.chevron_right,
+                                  color: textColor, size: 16),
                             ),
                           ),
                       ],
@@ -457,24 +454,19 @@ class _BossOfWeekProfileTileState extends State<BossOfWeekProfileTile> {
                       mainAxisAlignment: MainAxisAlignment.start,
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: <Widget>[
-                        Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 15.0),
+                        const Padding(
+                          padding: EdgeInsets.symmetric(horizontal: 15.0),
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: <Widget>[
                               Text(
-                                widget.isForyou == false
-                                    ? 'Our Happy Partners'
-                                    : 'Partner\'s Deals',
+                                'Deals',
                                 style: TextStyle(
                                     fontWeight: FontWeight.w700,
-                                    color: widget.isForyou == false
-                                        ? proprimaryColor
-                                        : textColor,
-                                    fontSize:
-                                        widget.isForyou == false ? 14 : 18),
+                                    color: textColor,
+                                    fontSize: 16),
                               ),
-                              const Wrap(
+                              Wrap(
                                   crossAxisAlignment: WrapCrossAlignment.center,
                                   children: <Widget>[
                                     Icon(Icons.chevron_right,

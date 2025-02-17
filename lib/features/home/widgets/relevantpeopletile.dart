@@ -58,6 +58,9 @@ class _RelevantPeopleTileState extends State<RelevantPeopleTile> {
           crossAxisAlignment: CrossAxisAlignment.center,
           mainAxisSize: MainAxisSize.max,
           children: <Widget>[
+            const SizedBox(
+              height: 2,
+            ),
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 15.0),
               child: GestureDetector(
@@ -79,16 +82,13 @@ class _RelevantPeopleTileState extends State<RelevantPeopleTile> {
                           //   'View all',
                           //   style: TextStyle(fontSize: 11),
                           // ),
-                          Icon(
-                            Icons.chevron_right,
-                            size: 15,
-                          )
+                          Icon(Icons.chevron_right, color: textColor, size: 16),
                         ]),
                   ],
                 ),
               ),
             ),
-            const SizedBox(height: 8),
+            const SizedBox(height: 10),
             controller.loading.value
                 ? const Center(child: CircularProgressIndicator())
                 : Padding(

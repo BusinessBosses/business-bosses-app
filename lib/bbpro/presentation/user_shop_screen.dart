@@ -268,7 +268,7 @@ class _UserShopScreenState extends State<UserShopScreen> {
                                             alignment: Alignment
                                                 .topCenter, // Ensures the top part is visible
                                             heightFactor:
-                                                1, // Clips the height to 30%
+                                                0.7, // Clips the height to 30%
                                             child: SizedBox(
                                               width: double
                                                   .infinity, // Stretches the image to full width
@@ -278,7 +278,7 @@ class _UserShopScreenState extends State<UserShopScreen> {
                                                   imageUrl: shopController
                                                           .userShop?.image ??
                                                       '',
-                                                  radius: radius,
+                                                  radius: 0,
                                                   placeHolder: Icons.person,
                                                   iconSize: 22.0,
                                                   fit: BoxFit
@@ -312,13 +312,17 @@ class _UserShopScreenState extends State<UserShopScreen> {
                                                 color: Colors.blue),
                                             textAlign: TextAlign.center,
                                             moreStyle: bodyText2.copyWith(
-                                                color: Colors.black),
+                                                fontSize: 12,
+                                                fontWeight: FontWeight.w700,
+                                                color: proprimaryColor),
                                             lessStyle: bodyText2.copyWith(
-                                                color: Colors.black),
-                                            trimLength: 40,
+                                                fontSize: 12,
+                                                fontWeight: FontWeight.w700,
+                                                color: proprimaryColor),
+                                            trimLength: 100,
                                             trimExpandedText: '  show less',
                                             basicStyle: bodyText2.copyWith(
-                                                color: textColor),
+                                                fontSize: 12, color: textColor),
                                             onTap: (String text) async {
                                               final Uri url = Uri.parse(text);
                                               if ((url.scheme == 'http' ||

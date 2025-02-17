@@ -35,10 +35,10 @@ class _CrowdfundSectionState extends State<CrowdfundSection> {
                     widget.onTap!();
                   }
                 },
-                child: Row(
+                child: const Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: <Widget>[
-                    const Text(
+                    Text(
                       'Crowdfund',
                       style:
                           TextStyle(fontWeight: FontWeight.w700, fontSize: 14),
@@ -51,12 +51,7 @@ class _CrowdfundSectionState extends State<CrowdfundSection> {
                           //   style: TextStyle(fontSize: 11),
                           // ),
                           // const SizedBox(width: 5.0),
-                          SvgPicture.asset(
-                            'assets/svgs/nexticon.svg',
-                            // ignore: deprecated_member_use
-                            color: textColor,
-                            height: 8,
-                          ),
+                          Icon(Icons.chevron_right, color: textColor, size: 16),
                         ]),
                   ],
                 ),
