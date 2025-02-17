@@ -205,7 +205,8 @@ class _CustomItemCardState extends State<CustomItemCard> {
                           ],
                         ),
                       ),
-                      if (widget.myShop == false)
+                      if (widget.customitem!.user!.uid !=
+                          profileController.myProfile.uid)
                         Container(
                           decoration: const BoxDecoration(
                               color: backgroundColor, shape: BoxShape.circle),
