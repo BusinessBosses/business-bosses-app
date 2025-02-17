@@ -278,13 +278,8 @@ class _MarketplaceScreenState extends State<MarketplaceScreen>
                           return;
                         }
                         _marketplaceTabController.index == 4
-                            ? () async {
-                                if (await canLaunchUrl(Uri.parse(
-                                    'https://businessbosses.co.uk/landingpageforpartners'))) {
-                                  await launchUrl(Uri.parse(
-                                      'https://businessbosses.co.uk/landingpageforpartners'));
-                                }
-                              }
+                            ? launchUrl(Uri.parse(
+                                'https://businessbosses.co.uk/landingpageforpartners'))
                             : _marketplaceTabController.index == 3
                                 ? Get.to(() => const AddSupplierScreen())
                                 : showModalBottomSheet(
