@@ -32,6 +32,7 @@ import 'package:country_list_pick/country_list_pick.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 import '../../common/widgets/safety_model.dart';
 
@@ -276,85 +277,96 @@ class _MarketplaceScreenState extends State<MarketplaceScreen>
                           );
                           return;
                         }
-                        _marketplaceTabController.index == 3
-                            ? Get.to(() => const AddSupplierScreen())
-                            : showModalBottomSheet(
-                                context: context,
-                                shape: const RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.vertical(
-                                    top: Radius.circular(25.0),
-                                  ),
-                                ),
-                                builder: (BuildContext context) {
-                                  return SizedBox(
-                                    height: 200,
-                                    child: Padding(
-                                      padding: const EdgeInsets.all(15.0),
-                                      child: Column(
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.start,
-                                        mainAxisSize: MainAxisSize.min,
-                                        children: <Widget>[
-                                          Expanded(
-                                            child: ListView.separated(
-                                              itemCount: 2,
-                                              separatorBuilder:
-                                                  (BuildContext context,
-                                                          int index) =>
-                                                      const Divider(),
-                                              itemBuilder:
-                                                  (BuildContext context,
-                                                      int index) {
-                                                return ListTile(
-                                                  onTap: () {
-                                                    Navigator.pop(context);
-                                                    index == 0
-                                                        ? Get.to(() =>
-                                                            const CreateProductListing(
-                                                              isMarketplace:
-                                                                  true,
-                                                            ))
-                                                        : Get.to(() =>
-                                                            const CreateServiceListing(
-                                                              isMarketplace:
-                                                                  true,
-                                                            ));
-                                                  },
-                                                  minVerticalPadding: 0,
-                                                  contentPadding:
-                                                      const EdgeInsets.only(
-                                                    left: 10,
-                                                  ),
-                                                  leading: SvgPicture.asset(
-                                                    index == 0
-                                                        ? 'assets/svgs/addproduct.svg'
-                                                        : 'assets/svgs/addservice.svg',
-                                                    height: 25,
-                                                    color: textColor
-                                                        .withOpacity(1),
-                                                  ),
-                                                  title: Text(
-                                                    index == 0
-                                                        ? 'Sell your product'
-                                                        : 'Sell your service',
-                                                    style: const TextStyle(
-                                                        fontSize: 18,
-                                                        fontWeight:
-                                                            FontWeight.w700),
-                                                  ),
-                                                );
-                                              },
-                                            ),
-                                          )
-                                        ],
+                        _marketplaceTabController.index == 4
+                            ? () async {
+                                if (await canLaunchUrl(Uri.parse(
+                                    'https://businessbosses.co.uk/landingpageforpartners'))) {
+                                  await launchUrl(Uri.parse(
+                                      'https://businessbosses.co.uk/landingpageforpartners'));
+                                }
+                              }
+                            : _marketplaceTabController.index == 3
+                                ? Get.to(() => const AddSupplierScreen())
+                                : showModalBottomSheet(
+                                    context: context,
+                                    shape: const RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.vertical(
+                                        top: Radius.circular(25.0),
                                       ),
                                     ),
-                                  );
-                                });
+                                    builder: (BuildContext context) {
+                                      return SizedBox(
+                                        height: 200,
+                                        child: Padding(
+                                          padding: const EdgeInsets.all(15.0),
+                                          child: Column(
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.start,
+                                            mainAxisSize: MainAxisSize.min,
+                                            children: <Widget>[
+                                              Expanded(
+                                                child: ListView.separated(
+                                                  itemCount: 2,
+                                                  separatorBuilder:
+                                                      (BuildContext context,
+                                                              int index) =>
+                                                          const Divider(),
+                                                  itemBuilder:
+                                                      (BuildContext context,
+                                                          int index) {
+                                                    return ListTile(
+                                                      onTap: () {
+                                                        Navigator.pop(context);
+                                                        index == 0
+                                                            ? Get.to(() =>
+                                                                const CreateProductListing(
+                                                                  isMarketplace:
+                                                                      true,
+                                                                ))
+                                                            : Get.to(() =>
+                                                                const CreateServiceListing(
+                                                                  isMarketplace:
+                                                                      true,
+                                                                ));
+                                                      },
+                                                      minVerticalPadding: 0,
+                                                      contentPadding:
+                                                          const EdgeInsets.only(
+                                                        left: 10,
+                                                      ),
+                                                      leading: SvgPicture.asset(
+                                                        index == 0
+                                                            ? 'assets/svgs/addproduct.svg'
+                                                            : 'assets/svgs/addservice.svg',
+                                                        height: 25,
+                                                        color: textColor
+                                                            .withOpacity(1),
+                                                      ),
+                                                      title: Text(
+                                                        index == 0
+                                                            ? 'Sell your product'
+                                                            : 'Sell your service',
+                                                        style: const TextStyle(
+                                                            fontSize: 18,
+                                                            fontWeight:
+                                                                FontWeight
+                                                                    .w700),
+                                                      ),
+                                                    );
+                                                  },
+                                                ),
+                                              )
+                                            ],
+                                          ),
+                                        ),
+                                      );
+                                    });
                       },
-                      text: _marketplaceTabController.index != 3
-                          ? 'Sell'
-                          : 'Add a Supplier',
+                      text: _marketplaceTabController.index == 4
+                          ? 'Become a Partner'
+                          : _marketplaceTabController.index != 3
+                              ? 'Sell'
+                              : 'Add a Supplier',
                     ),
                   )
                 ],

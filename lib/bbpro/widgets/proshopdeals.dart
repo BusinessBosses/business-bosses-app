@@ -76,7 +76,10 @@ class _ProshopdealsWidgetState extends State<ProshopdealsWidget> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
             Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 15.0),
+              padding: EdgeInsets.symmetric(
+                  horizontal: 10.0,
+                  vertical:
+                      widget.isHome != null && widget.isHome == true ? 0 : 10),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: <Widget>[
@@ -86,29 +89,12 @@ class _ProshopdealsWidgetState extends State<ProshopdealsWidget> {
                         fontSize: 16, fontWeight: FontWeight.bold),
                   ),
                   const SizedBox(width: 10),
-                  if (widget.title != null && widget.title != '')
-                    Container(
-                      padding: const EdgeInsets.symmetric(
-                          horizontal: 8.0, vertical: 4.0),
-                      decoration: BoxDecoration(
-                        color: Colors.black,
-                        borderRadius: BorderRadius.circular(4.0),
-                      ),
-                      child: Text(
-                        widget.title ?? '',
-                        maxLines: 1,
-                        overflow: TextOverflow.ellipsis,
-                        style: const TextStyle(
-                            fontSize: 10,
-                            color: Colors.white,
-                            fontWeight: FontWeight.w700),
-                      ),
-                    ),
                   const Icon(Icons.chevron_right, color: textColor, size: 16),
                 ],
               ),
             ),
-            const SizedBox(height: 5.0),
+            if (widget.isHome != null && widget.isHome == true)
+              const SizedBox(height: 5.0),
             Container(
               child: items!.isNotEmpty
                   ? SizedBox(
@@ -157,7 +143,11 @@ class _ProshopdealsWidgetState extends State<ProshopdealsWidget> {
                         ),
                       ),
                     )
-                  : const Center(child: Text('No deals available')),
+                  : const Center(
+                      child: Padding(
+                      padding: EdgeInsets.only(bottom: 15.0),
+                      child: Text('No deals available'),
+                    )),
             ),
           ],
         ),
