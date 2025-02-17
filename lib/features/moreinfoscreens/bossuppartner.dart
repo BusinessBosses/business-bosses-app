@@ -14,8 +14,9 @@ import '../posts/widgets/images_viewer_screen.dart';
 
 // ignore: public_member_api_docs
 class Bossuppartner extends StatefulWidget {
+  final bool? isMarketplace;
   // ignore: public_member_api_docs
-  const Bossuppartner({Key? key}) : super(key: key);
+  const Bossuppartner({Key? key, this.isMarketplace}) : super(key: key);
 
   @override
   // ignore: library_private_types_in_public_api
@@ -47,78 +48,76 @@ class _BossuppartnerState extends State<Bossuppartner> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: backgroundColor,
-      appBar: AppBar(
-        // actions: <Widget>[
-        //   IconButton(
-        //     onPressed: () {},
-        //     icon: SvgPicture.asset(
-        //       'assets/svgs/info.svg',
-        //       height: 24,
-        //     ),
-        //   )
-        // ],
-        leading: IconButton(
-          onPressed: () {
-            Navigator.pop(context);
-          },
-          icon: SvgPicture.asset(
-            'assets/svgs/backbutton.svg',
-          ),
-        ),
-        centerTitle: true,
-        title: const Text(
-          'Partners Deals',
-          textAlign: TextAlign.center,
-        ),
-      ),
+      appBar: widget.isMarketplace != null
+          ? PreferredSize(
+              preferredSize: const Size.fromHeight(0),
+              child: Container(),
+            )
+          : AppBar(
+              leading: IconButton(
+                onPressed: () {
+                  Navigator.pop(context);
+                },
+                icon: SvgPicture.asset(
+                  'assets/svgs/backbutton.svg',
+                ),
+              ),
+              centerTitle: true,
+              title: const Text(
+                'Deals',
+                textAlign: TextAlign.center,
+              ),
+            ),
       body: Column(
         children: <Widget>[
-          Padding(
-            padding:
-                const EdgeInsets.only(left: 15, right: 15, top: 20, bottom: 20),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.end,
-              children: <Widget>[
-                const Expanded(
-                  child: Text(
-                    'Partner with us, list deals and get customers.',
-                    maxLines: 3,
-                    style: TextStyle(
-                      fontSize: 15,
-                      fontWeight: FontWeight.w700,
-                    ),
-                  ),
-                ),
-                const SizedBox(
-                  width: 20,
-                ),
-                Align(
-                  alignment: Alignment.centerRight,
-                  child: SizedBox(
-                    height: 45,
-                    child: ElevatedButton(
-                      child: const Text(
-                        'Become a Partner',
-                        style: TextStyle(
-                          // fontWeight: FontWeight.w700,
-                          fontSize: 15,
-                        ),
+          if (widget.isMarketplace == null)
+            Padding(
+              padding: const EdgeInsets.only(
+                  left: 15, right: 15, top: 20, bottom: 20),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.end,
+                children: <Widget>[
+                  const Expanded(
+                    child: Text(
+                      'Partner with us, list deals and get customers.',
+                      maxLines: 3,
+                      style: TextStyle(
+                        fontSize: 15,
+                        fontWeight: FontWeight.w700,
                       ),
-                      onPressed: () async {
-                        if (await canLaunchUrl(Uri.parse(
-                            'https://businessbosses.co.uk/landingpageforpartners'))) {
-                          await launchUrl(Uri.parse(
-                              'https://businessbosses.co.uk/landingpageforpartners'));
-                        }
-                      },
                     ),
                   ),
-                ),
-              ],
+                  const SizedBox(
+                    width: 20,
+                  ),
+                  Align(
+                    alignment: Alignment.centerRight,
+                    child: SizedBox(
+                      height: 45,
+                      child: ElevatedButton(
+                        child: const Text(
+                          'Become a Partner',
+                          style: TextStyle(
+                            // fontWeight: FontWeight.w700,
+                            fontSize: 15,
+                          ),
+                        ),
+                        onPressed: () async {
+                          if (await canLaunchUrl(Uri.parse(
+                              'https://businessbosses.co.uk/landingpageforpartners'))) {
+                            await launchUrl(Uri.parse(
+                                'https://businessbosses.co.uk/landingpageforpartners'));
+                          }
+                        },
+                      ),
+                    ),
+                  ),
+                ],
+              ),
             ),
-          ),
           Expanded(
             child: ListView.builder(
+              padding: const EdgeInsets.only(top: 10, bottom: 100),
               itemCount: homeController.bossUp?.length ?? 0,
               itemBuilder: (BuildContext context, int index) {
                 Map<String, dynamic> partner =

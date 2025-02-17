@@ -24,6 +24,7 @@ import 'package:business_bosses_v2/features/marketplace/models/suppliers_model.d
 
 import 'package:business_bosses_v2/features/marketplace/widgets/products.dart';
 import 'package:business_bosses_v2/features/marketplace/widgets/services.dart';
+import 'package:business_bosses_v2/features/moreinfoscreens/bossuppartner.dart';
 import 'package:business_bosses_v2/features/premium/proscreen.dart';
 import 'package:business_bosses_v2/features/profile/controller/profile_controller.dart';
 import 'package:business_bosses_v2/features/search/widgets/search_bar.dart';
@@ -91,7 +92,7 @@ class _MarketplaceScreenState extends State<MarketplaceScreen>
   void initState() {
     super.initState();
     _marketplacesearchTabController = TabController(length: 4, vsync: this);
-    _marketplaceTabController = TabController(length: 4, vsync: this);
+    _marketplaceTabController = TabController(length: 5, vsync: this);
 
     // _marketplaceTabController.addListener(() {
     //   if (_marketplaceTabController.index == 2) {
@@ -643,7 +644,7 @@ class _MarketplaceScreenState extends State<MarketplaceScreen>
                                           labelStyle: const TextStyle(
                                               fontWeight: FontWeight.w400),
                                           controller: _marketplaceTabController,
-                                          isScrollable: false,
+                                          isScrollable: true,
                                           onTap: (int index) {
                                             setState(() {});
                                           },
@@ -690,6 +691,17 @@ class _MarketplaceScreenState extends State<MarketplaceScreen>
                                                 ),
                                               ),
                                             ),
+                                            Tab(
+                                              child: FittedBox(
+                                                child: Text(
+                                                  'Deals',
+                                                  style: TextStyle(
+                                                      fontWeight:
+                                                          FontWeight.w700,
+                                                      fontSize: 14),
+                                                ),
+                                              ),
+                                            ),
                                           ],
                                         ),
                                       ),
@@ -705,6 +717,9 @@ class _MarketplaceScreenState extends State<MarketplaceScreen>
                                                   ProductsPage(),
                                                   ServicesPage(),
                                                   SuppliersPage(),
+                                                  Bossuppartner(
+                                                    isMarketplace: true,
+                                                  ),
                                                 ],
                                               ),
                                             ),
