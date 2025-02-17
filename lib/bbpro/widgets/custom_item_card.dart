@@ -102,8 +102,6 @@ class _CustomItemCardState extends State<CustomItemCard> {
                     ),
                   ),
             if (widget.customitem!.images![0] != '') const SizedBox(height: 5),
-            // if (widget.customitem!.images![0] != '') const Divider(),
-            // if (widget.customitem!.images![0] != '') const SizedBox(height: 5),
             Row(
               crossAxisAlignment: CrossAxisAlignment.end,
               children: <Widget>[
@@ -111,15 +109,16 @@ class _CustomItemCardState extends State<CustomItemCard> {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: <Widget>[
-                      Text(
-                        widget.customitem?.title ?? 'Title',
-                        style: const TextStyle(
-                          fontSize: 13,
-                          fontWeight: FontWeight.bold,
+                      if (widget.myShop == false)
+                        Text(
+                          widget.customitem?.title ?? 'Title',
+                          style: const TextStyle(
+                            fontSize: 13,
+                            fontWeight: FontWeight.bold,
+                          ),
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
                         ),
-                        maxLines: 1,
-                        overflow: TextOverflow.ellipsis,
-                      ),
                       if (widget.myShop == false)
                         Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -177,7 +176,6 @@ class _CustomItemCardState extends State<CustomItemCard> {
                 ),
               ],
             ),
-            if (widget.myShop == false) const SizedBox(height: 5),
             widget.myShop == false
                 ? Container()
                 : Row(
@@ -189,48 +187,26 @@ class _CustomItemCardState extends State<CustomItemCard> {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: <Widget>[
                             Text(
+                              widget.customitem?.title ?? 'Title',
+                              style: const TextStyle(
+                                fontSize: 13,
+                                fontWeight: FontWeight.bold,
+                              ),
+                              maxLines: 1,
+                              overflow: TextOverflow.ellipsis,
+                            ),
+                            Text(
                               widget.customitem?.description ??
                                   'Service description',
                               style: const TextStyle(fontSize: 11),
                               maxLines: 2,
                               overflow: TextOverflow.ellipsis,
                             ),
-
-                            // Padding(
-                            //   padding: const EdgeInsets.only(top: 5.0),
-                            //   child: Container(
-                            //     decoration: const BoxDecoration(
-                            //         color: backgroundColor,
-                            //         shape: BoxShape.circle,),
-                            //     padding: const EdgeInsets.all(4),
-                            //     child: SvgPicture.asset(
-                            //       'assets/svgs/upicon.svg',
-                            //       color: const Color(0xFF0F132D),
-                            //       height: 8,
-                            //     ),
-                            //   ),
-                            // ),
-                            // const SizedBox(height: 2),
-
-                            // Container(
-                            //   padding: const EdgeInsets.symmetric(
-                            //       horizontal: 10, vertical: 5),
-                            //   decoration: BoxDecoration(
-                            //     borderRadius: BorderRadius.circular(6),
-                            //     color: backgroundColor,
-                            //   ),
-                            //   child: const Icon(
-                            //     Icons.link,
-                            //     size: 15,
-                            //     color: Colors.black,
-                            //   ),
-                            // )
                           ],
                         ),
                       ),
-                      Padding(
-                        padding: const EdgeInsets.only(top: 5.0),
-                        child: Container(
+                      if (widget.myShop == false)
+                        Container(
                           decoration: const BoxDecoration(
                               color: backgroundColor, shape: BoxShape.circle),
                           padding: const EdgeInsets.all(4),
@@ -240,7 +216,6 @@ class _CustomItemCardState extends State<CustomItemCard> {
                             height: 8,
                           ),
                         ),
-                      ),
                       if (widget.customitem!.user!.uid ==
                           profileController.myProfile.uid)
                         OptionsButton(
