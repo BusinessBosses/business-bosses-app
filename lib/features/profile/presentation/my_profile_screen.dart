@@ -190,27 +190,29 @@ class _MyProfileScreenState extends State<MyProfileScreen> {
                       const SizedBox(height: 10.0),
                   ],
                 ),
-                Positioned(
-                    bottom: 5,
-                    right: 0,
-                    child: GestureDetector(
-                        onTap: () {
-                          _advancedDrawerController.showDrawer();
+                if (_selectedIndex == 0 || _selectedIndex == 4)
+                  Positioned(
+                      bottom: 5,
+                      right: 0,
+                      child: GestureDetector(
+                          onTap: () {
+                            _advancedDrawerController.showDrawer();
+                          },
+                          child: const CustomMenuButton())),
+                if (_selectedIndex == 0 || _selectedIndex == 4)
+                  Positioned(
+                      bottom: 5,
+                      left: 0,
+                      child: IconButton(
+                        onPressed: () {
+                          Get.to(
+                            () => const MyEvents(
+                              toHome: true,
+                            ),
+                          );
                         },
-                        child: const CustomMenuButton())),
-                Positioned(
-                    bottom: 5,
-                    left: 0,
-                    child: IconButton(
-                      onPressed: () {
-                        Get.to(
-                          () => const MyEvents(
-                            toHome: true,
-                          ),
-                        );
-                      },
-                      icon: const Icon(Icons.calendar_month),
-                    )),
+                        icon: const Icon(Icons.calendar_month),
+                      )),
               ]),
             ),
             body: loading
