@@ -4,6 +4,7 @@ import 'dart:io';
 import 'package:business_bosses_v2/bbpro/models/shop_model.dart';
 import 'package:business_bosses_v2/bbpro/widgets/button.dart';
 import 'package:business_bosses_v2/bbpro/widgets/custom_card.dart';
+import 'package:business_bosses_v2/bbpro/widgets/dropdown.dart';
 import 'package:business_bosses_v2/bbpro/widgets/edit_text.dart';
 import 'package:business_bosses_v2/bbpro/widgets/selectionboxes.dart';
 import 'package:business_bosses_v2/bbpro/widgets/textfield.dart';
@@ -70,6 +71,7 @@ class _SetupshopState extends State<Setupshop> with TickerProviderStateMixin {
   bool loading = true;
   bool isSubmit = false;
   String? image;
+  String? imageType;
 
   Map<String, bool> selections = <String, bool>{
     'Bank': false,
@@ -242,13 +244,14 @@ class _SetupshopState extends State<Setupshop> with TickerProviderStateMixin {
     _viewController =
         TabController(length: widget.shop != null ? 2 : 1, vsync: this);
     if (widget.shop != null) {
-      print(widget.shop!.toMap());
       nameController.text = widget.shop!.name;
       descriptionController.text = widget.shop!.description;
-      phoneController.text = widget.shop!.phone;
-      emailController.text = widget.shop!.email;
+      phoneController.text = widget.shop!.phone ?? '';
+      emailController.text = widget.shop!.email ?? '';
       _selectedLocation = widget.shop!.location;
       image = widget.shop!.image;
+      imageType = capitalizeFirstLetter(widget.shop!.imageType!);
+
       fbslController.text = widget.shop!.facebook ?? '';
       igslController.text = widget.shop!.instagram ?? '';
       lslController.text = widget.shop!.linkedIn ?? '';
@@ -268,6 +271,11 @@ class _SetupshopState extends State<Setupshop> with TickerProviderStateMixin {
         }
       });
     }
+  }
+
+  String capitalizeFirstLetter(String text) {
+    if (text.isEmpty) return text;
+    return text[0].toUpperCase() + text.substring(1);
   }
 
   bool _validateForm() {
@@ -488,6 +496,16 @@ class _SetupshopState extends State<Setupshop> with TickerProviderStateMixin {
                               ? widget.shop!.image!
                               : 'assets/images/shopplaceholder.png',
                       iconpath: 'assets/svgs/uploadicon.svg',
+                    ),
+                    const SizedBox(height: 15),
+                    CustomDropdownWidget(
+                      caption: 'Image Type',
+                      initialValue: imageType,
+                      items: const <String>['Circle', 'Banner'],
+                      iconName: 'assets/svgs/dropdown.svg',
+                      onChanged: (String? value) => setState(() {
+                        imageType = value!.toLowerCase();
+                      }),
                     ),
                     const SizedBox(height: 15),
                     CustomEditText(
@@ -780,6 +798,7 @@ class _SetupshopState extends State<Setupshop> with TickerProviderStateMixin {
       'facebook': fbslController.text,
       'linkedIn': lslController.text,
       'url': cslController.text,
+      'imageType': imageType,
     };
 
     final Map<String, dynamic> dataUpdate = <String, dynamic>{
@@ -798,6 +817,7 @@ class _SetupshopState extends State<Setupshop> with TickerProviderStateMixin {
       'facebook': fbslController.text,
       'linkedIn': lslController.text,
       'url': cslController.text,
+      'imageType': imageType,
     };
 
     bool response = false;
@@ -806,6 +826,11 @@ class _SetupshopState extends State<Setupshop> with TickerProviderStateMixin {
       response = await shopController.updateShop(widget.shop!.id, dataUpdate);
     } else {
       response = await shopController.addShop(data);
+      if (response) {
+        profileController.updateProfile(<String, dynamic>{
+          'hasShop': true,
+        });
+      }
     }
     if (response) {
       // ignore: use_build_context_synchronously

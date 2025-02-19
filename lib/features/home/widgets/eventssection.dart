@@ -19,20 +19,20 @@ class EventsSection extends StatelessWidget {
                 },
                 child: Container(
                   color: backgroundColor,
-                  child: Column(
+                  child: const Column(
                     children: <Widget>[
-                      const SizedBox(
+                      SizedBox(
                         height: 20,
                       ),
-                      const SizedBox(
+                      SizedBox(
                         height: 10,
                       ),
                       Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 15.0),
+                        padding: EdgeInsets.symmetric(horizontal: 15.0),
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: <Widget>[
-                            const Text(
+                            Text(
                               'Events',
                               style: TextStyle(
                                   fontWeight: FontWeight.w700, fontSize: 14),
@@ -40,25 +40,21 @@ class EventsSection extends StatelessWidget {
                             Wrap(
                                 crossAxisAlignment: WrapCrossAlignment.center,
                                 children: <Widget>[
-                                  const Text(
-                                    'View all',
-                                    style: TextStyle(fontSize: 11),
-                                  ),
-                                  const SizedBox(width: 5.0),
-                                  SvgPicture.asset(
-                                    'assets/svgs/nexticon.svg',
-                                    // ignore: deprecated_member_use
-                                    color: textColor,
-                                    height: 8,
-                                  ),
+                                  // const Text(
+                                  //   'View all',
+                                  //   style: TextStyle(fontSize: 11),
+                                  // ),
+                                  // const SizedBox(width: 5.0),
+                                  Icon(Icons.chevron_right,
+                                      color: textColor, size: 16),
                                 ]),
                           ],
                         ),
                       ),
-                      const SizedBox(
+                      SizedBox(
                         height: 10,
                       ),
-                      const EventCall(
+                      EventCall(
                         ishome: true,
                         full: true,
                       ),

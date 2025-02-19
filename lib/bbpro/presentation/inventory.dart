@@ -17,7 +17,6 @@ class Inventory extends StatefulWidget {
 
 class _InventoryState extends State<Inventory> {
   final ShopController shopController = Get.find();
-  String? _selectedItem;
   String searchQuery = '';
   List<Product> filteredProducts = <Product>[];
 
@@ -49,7 +48,7 @@ class _InventoryState extends State<Inventory> {
     ).then((String? selected) {
       if (selected != null) {
         setState(() {
-          _selectedItem = selected;
+          // _selectedItem = selected;
         });
         // Implement filter logic here
       }

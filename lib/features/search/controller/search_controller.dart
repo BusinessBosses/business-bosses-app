@@ -19,7 +19,9 @@ class CompleteSearchController extends GetxController {
   RxBool isUserSearch = RxBool(false);
   RxBool isPostSearch = RxBool(false);
   RxBool loading = RxBool(true);
+  RxBool loadingMore = RxBool(false);
   RxBool error = RxBool(false);
+  RxString selectedFilter = RxString('');
   final ProfileController _profileController = Get.find();
   late List<String> connecteds =
       _profileController.myProfile.connecteds ?? <String>[];
@@ -124,39 +126,57 @@ class CompleteSearchController extends GetxController {
     update();
   }
 
-  Future<void> getData() async {
-    loading(true);
-    error(false);
+  Future<void> getData({bool isPagination = false}) async {
+    if (isPagination) {
+      loadingMore(true);
+    } else {
+      loading(true);
+      recommendedConnections.clear();
+      page(0);
+    }
     update();
-    final ApiResponseModel response =
-        await SearchRepository.getData(page.value);
+
+    final ApiResponseModel response = await SearchRepository.getData(
+        title: selectedFilter.value, page: page.value);
 
     if (response.success) {
-      page(page.value + 1);
-
-      for (int i = 0; i < response.data['recommendedUsers'].length; i++) {
-        recommendedConnections
-            .add(UserModel.fromMap(response.data['recommendedUsers'][i]));
+      if (isPagination) {
+        page(page.value + 1);
+      } else {
+        page(1);
       }
-
-      for (int i = 0; i < response.data['recommendedPosts'].length; i++) {
-        final Map<String, dynamic> post = response.data['recommendedPosts'][i];
-        recommendedPosts.add(PostModel.fromMap(<String, dynamic>{
-          ...post,
-          'likes': post['likes']
-              .map((dynamic like) => like['userId'].toString())
-              .toList(),
-          'coins': post['coins']
-              .map((dynamic coin) => coin['userId'].toString())
-              .toList()
-        }));
+      final List<UserModel> newUsers;
+      if (selectedFilter.value.isEmpty) {
+        newUsers = response.data['recommendedUsers']
+            .map<UserModel>((data) => UserModel.fromMap(data))
+            .toList();
+        recommendedConnections.addAll(newUsers);
+      } else {
+        newUsers = response.data['categoryPosts']
+            .map<UserModel>((data) => UserModel.fromMap(data))
+            .toList();
+        recommendedConnections.addAll(newUsers);
       }
     } else {
       error(true);
     }
 
     loading(false);
+    loadingMore(false);
     update();
+  }
+
+  // Load More Data for Pagination
+  void loadMoreData() {
+    if (!loadingMore.value && !error.value) {
+      getData(isPagination: true);
+    }
+  }
+
+  // Reset Data When Filter Changes
+  void resetData(String newFilter) {
+    selectedFilter(newFilter);
+    getData(); // Fetch data with the new filter
   }
 
   Future<void> connect(String userId) async {

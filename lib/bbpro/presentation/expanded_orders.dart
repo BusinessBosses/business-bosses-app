@@ -3,6 +3,7 @@ import 'package:business_bosses_v2/bbpro/models/order_model.dart';
 import 'package:business_bosses_v2/bbpro/models/product_model.dart';
 import 'package:business_bosses_v2/bbpro/models/service_model.dart';
 import 'package:business_bosses_v2/bbpro/models/shop_model.dart';
+import 'package:business_bosses_v2/bbpro/widgets/myorderwidget.dart';
 import 'package:business_bosses_v2/bbpro/widgets/orderwidget.dart';
 import 'package:business_bosses_v2/common/widgets/network_image_with_placeholder.dart';
 import 'package:business_bosses_v2/utils/theme/theme.dart';
@@ -11,6 +12,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 
 class ExpandedOrders extends StatefulWidget {
+  final bool? ismyorder;
   final Order order;
   final Shop? shop;
 
@@ -18,6 +20,7 @@ class ExpandedOrders extends StatefulWidget {
     super.key,
     required this.order,
     this.shop,
+    this.ismyorder,
   });
 
   @override
@@ -49,12 +52,20 @@ class _ExpandedOrdersState extends State<ExpandedOrders> {
       body: ListView(
         padding: const EdgeInsets.symmetric(vertical: 10),
         children: <Widget>[
-          OrderWidget(
-            order: widget.order,
-            bgcolor: widget.order.status.backgroundColor,
-            isExpanded: true,
-            shop: widget.shop,
-          ),
+          if (widget.ismyorder != null)
+            MyOrderWidget(
+              order: widget.order,
+              bgcolor: widget.order.status.backgroundColor,
+              isExpanded: true,
+              shop: widget.shop,
+            ),
+          if (widget.ismyorder == null)
+            OrderWidget(
+              order: widget.order,
+              bgcolor: widget.order.status.backgroundColor,
+              isExpanded: true,
+              shop: widget.shop,
+            ),
           const SizedBox(height: 30),
           if (widget.order.notes != null)
             Column(

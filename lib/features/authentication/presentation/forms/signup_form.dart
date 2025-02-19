@@ -16,6 +16,7 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
+import 'package:get_storage/get_storage.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:sign_in_with_apple/sign_in_with_apple.dart';
 import 'package:google_sign_in/google_sign_in.dart';
@@ -24,7 +25,6 @@ import 'package:url_launcher/url_launcher_string.dart';
 import '../../../../common/dialogs/snackbar.dart';
 import '../../../../common/widgets/buttons/custom_button.dart';
 import '../../../../common/widgets/buttons/icon_text_button.dart';
-import '../../../../common/widgets/text_widget.dart';
 import '../../../../services/api_service.dart';
 import '../../../../utils/constants/constants.dart';
 import '../../../../utils/theme/theme.dart';
@@ -94,8 +94,14 @@ class _SignUpFormState extends State<SignUpForm> {
         length, (_) => charset[random.nextInt(charset.length)]).join();
   }
 
-  /// Returns the sha256 hash of [input] in hex notation.
-  String sha256ofString(String input) {
+  @override
+  void initState() {
+    super.initState();
+    GetStorage().write('isFirstTime', false);
+  }
+
+  /// Returns the sha156 hash of [input] in hex notation.
+  String sha156ofString(String input) {
     final List<int> bytes = utf8.encode(input);
     final Digest digest = sha256.convert(bytes);
     return digest.toString();
@@ -119,7 +125,7 @@ class _SignUpFormState extends State<SignUpForm> {
                         _password = val;
                         setState(() {});
                       },
-                      validator: Validator.passwordValidator,
+                      validator: Validator.signuppasswordValidator,
                       textInputAction: TextInputAction.done,
                       obscureText: _invisiblePassword,
                       keyboardType: TextInputType.visiblePassword,
@@ -189,7 +195,7 @@ class _SignUpFormState extends State<SignUpForm> {
       _isProcessing = true;
     });
     final String rawNonce = generateNonce();
-    final String nonce = sha256ofString(rawNonce);
+    final String nonce = sha156ofString(rawNonce);
     SharedPreferences prefs = await SharedPreferences.getInstance();
 
     try {
@@ -290,7 +296,7 @@ class _SignUpFormState extends State<SignUpForm> {
       autovalidateMode: _autoValidateMode,
       child: Column(
         children: <Widget>[
-          const SizedBox(height: 25.0),
+          const SizedBox(height: 15.0),
 
           //email
           Column(
@@ -328,14 +334,6 @@ class _SignUpFormState extends State<SignUpForm> {
                     fillColor: const Color(0xffF4F4F4)),
               ),
               const SizedBox(height: 15.0),
-              TextWidget(
-                text: isEmailAuth ? 'Email' : 'Phone',
-                size: 0,
-                fontWeight: FontWeight.w700,
-              ),
-              const SizedBox(
-                height: 10,
-              ),
               if (isEmailAuth)
                 TextFormField(
                   onChanged: (String val) async {
@@ -378,7 +376,9 @@ class _SignUpFormState extends State<SignUpForm> {
                 )
             ],
           ),
-          const SizedBox(height: 25.0),
+          const SizedBox(height: 15.0),
+
+          // Confirm Password
           Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[
@@ -387,12 +387,41 @@ class _SignUpFormState extends State<SignUpForm> {
                   _password = val;
                   setState(() {});
                 },
-                validator: Validator.passwordValidator,
+                validator: Validator.signuppasswordValidator,
+                textInputAction: TextInputAction.done,
+                obscureText: _invisiblePassword,
+                keyboardType: TextInputType.visiblePassword,
+                maxLength: 16,
+                decoration: inputDecoration.copyWith(
+                  counterText: '',
+                  hintText: 'Password (8-16 chars, include numbers)',
+                  suffixIcon: _showHideIcon(PasswordField.password),
+                  hintStyle: const TextStyle(
+                    color: iconColor,
+                    fontSize: 14,
+                    fontWeight: FontWeight.w600,
+                  ),
+                  filled: true,
+                  fillColor: const Color(0xffF4F4F4),
+                ),
+              ),
+              const SizedBox(height: 15.0),
+              TextFormField(
+                onChanged: (String val) {
+                  setState(() {});
+                },
+                validator: (String? val) {
+                  if (val != _password) {
+                    return 'Passwords do not match';
+                  }
+                  return null;
+                },
                 textInputAction: TextInputAction.done,
                 obscureText: _invisiblePassword,
                 keyboardType: TextInputType.visiblePassword,
                 decoration: inputDecoration.copyWith(
-                  hintText: 'Password (min 8)',
+                  counterText: '',
+                  hintText: 'Confirm Password',
                   suffixIcon: _showHideIcon(PasswordField.password),
                   hintStyle: const TextStyle(
                     color: iconColor,
@@ -405,8 +434,6 @@ class _SignUpFormState extends State<SignUpForm> {
               ),
             ],
           ),
-
-          const SizedBox(height: 25.0),
           // Column(
           //   crossAxisAlignment: CrossAxisAlignment.start,
           //   children: [

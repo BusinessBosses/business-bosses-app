@@ -36,7 +36,7 @@ class _AddclientState extends State<Addclient> {
   File? _selectedImage;
   bool isSubmit = false;
   String? image;
-  List<String>? updateImage;
+  List<String> updateImage = <String>[];
 
   @override
   void initState() {
@@ -89,8 +89,8 @@ class _AddclientState extends State<Addclient> {
                       buttonText: 'Choose Photo',
                       onPressed: _pickImage,
                       imagePath: _selectedImage?.path ??
-                          (updateImage != null
-                              ? updateImage![0]
+                          (updateImage.isNotEmpty
+                              ? updateImage[0]
                               : 'assets/images/shopplaceholder.png'),
                       iconpath: 'assets/svgs/uploadicon.svg',
                     ),
@@ -254,8 +254,8 @@ class _AddclientState extends State<Addclient> {
                     }
                     if (widget.client != null &&
                         _selectedImage == null &&
-                        updateImage != null) {
-                      image = updateImage![0];
+                        updateImage.isNotEmpty) {
+                      image = updateImage[0];
                     }
                     // Handle the save action
                     final Map<String, dynamic> data = <String, dynamic>{
@@ -325,9 +325,9 @@ class _AddclientState extends State<Addclient> {
 
   String toApiString(String type) {
     switch (type) {
-      case 'Online':
+      case 'Individual':
         return 'on-line';
-      case 'In-Person':
+      case 'Company':
         return 'in-person';
       case 'Bb-User':
         return 'bb-user';
@@ -339,9 +339,9 @@ class _AddclientState extends State<Addclient> {
   String toInitialString(String type) {
     switch (type) {
       case 'on-line':
-        return 'Online';
+        return 'Individual';
       case 'in-person':
-        return 'In-Person';
+        return 'Company';
       case 'bb-user':
         return 'Bb-User';
       default:

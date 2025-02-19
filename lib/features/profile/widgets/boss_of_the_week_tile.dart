@@ -1,6 +1,5 @@
 import 'package:business_bosses_v2/common/models/api_response_model.dart';
 import 'package:business_bosses_v2/common/models/user_model.dart';
-import 'package:business_bosses_v2/common/widgets/popup/bossup_challenge_popuphome.dart';
 import 'package:business_bosses_v2/features/forum/controller/challenge_controller.dart';
 import 'package:business_bosses_v2/features/forum/presentation/bossup_screen.dart';
 import 'package:business_bosses_v2/features/moreinfoscreens/bossuppartner.dart';
@@ -120,11 +119,8 @@ class _BossOfWeekProfileTileState extends State<BossOfWeekProfileTile> {
                             backgroundColor: Colors.transparent,
                             child: Align(
                               alignment: Alignment.centerRight,
-                              child: Icon(
-                                Icons.chevron_right_rounded,
-                                color: textColor,
-                                size: 20,
-                              ),
+                              child: Icon(Icons.chevron_right,
+                                  color: textColor, size: 16),
                             ),
                           ),
                       ],
@@ -457,30 +453,21 @@ class _BossOfWeekProfileTileState extends State<BossOfWeekProfileTile> {
                       mainAxisAlignment: MainAxisAlignment.start,
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: <Widget>[
-                        Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 15.0),
+                        const Padding(
+                          padding: EdgeInsets.symmetric(horizontal: 15.0),
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: <Widget>[
                               Text(
-                                widget.isForyou == false
-                                    ? 'Our Happy Partners'
-                                    : 'Partner\'s Deals',
+                                'Deals',
                                 style: TextStyle(
                                     fontWeight: FontWeight.w700,
-                                    color: widget.isForyou == false
-                                        ? proprimaryColor
-                                        : textColor,
-                                    fontSize:
-                                        widget.isForyou == false ? 14 : 18),
+                                    color: textColor,
+                                    fontSize: 16),
                               ),
-                              const Wrap(
+                              Wrap(
                                   crossAxisAlignment: WrapCrossAlignment.center,
                                   children: <Widget>[
-                                    Text(
-                                      'View all',
-                                      style: TextStyle(fontSize: 11),
-                                    ),
                                     Icon(Icons.chevron_right,
                                         color: textColor, size: 16),
                                   ]),
@@ -490,7 +477,7 @@ class _BossOfWeekProfileTileState extends State<BossOfWeekProfileTile> {
                         const SizedBox(
                           height: 10,
                         ),
-                        DealsSection(),
+                        dealsSection(),
                       ],
                     ),
                   ),
@@ -504,7 +491,7 @@ class _BossOfWeekProfileTileState extends State<BossOfWeekProfileTile> {
     );
   }
 
-  Widget DealsSection() {
+  Widget dealsSection() {
     return SingleChildScrollView(
       scrollDirection: Axis.horizontal,
       child: Row(
@@ -976,13 +963,5 @@ class _BossOfWeekProfileTileState extends State<BossOfWeekProfileTile> {
 
       user?.connecteds?.add(_profileController.myProfile.uid);
     });
-  }
-
-  void _share() {
-    String message =
-        'Have a look at ${user?.username}\'s profile on Business Bosses\n'
-        'https://businessbosses.onelink.me/xLWk/36a2ff16';
-    logEvent(user?.uid, 'user');
-    socialShare(message);
   }
 }

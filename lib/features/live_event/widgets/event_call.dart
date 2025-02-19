@@ -42,6 +42,7 @@ class _EventCallState extends State<EventCall> {
       return liveEventController.events.isNotEmpty
           ? Obx(
               () => ListView.builder(
+                padding: const EdgeInsets.only(bottom: 100),
                 itemCount: liveEventController.events.length,
                 itemBuilder: (BuildContext context, int index) {
                   EventModel event = liveEventController.events[index];

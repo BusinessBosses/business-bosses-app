@@ -33,6 +33,7 @@ class UserModel {
   final bool toPost;
   final String? weeklyRank;
   final String? monthlyRank;
+  final bool hasShop;
 
   // final List<String>? deviceTokens;
 
@@ -101,6 +102,7 @@ class UserModel {
     this.toPost = true,
     this.weeklyRank,
     this.monthlyRank,
+    this.hasShop = false,
   });
 
   UserModel copyWith({
@@ -130,6 +132,7 @@ class UserModel {
     bool? toPost,
     String? weeklyRank,
     String? monthlyRank,
+    bool? hasShop,
 
     // List<String>? deviceTokens,
 
@@ -200,6 +203,7 @@ class UserModel {
       weeklyRank: weeklyRank ?? this.weeklyRank,
       monthlyRank: monthlyRank ?? this.monthlyRank,
       isUpdated: isUpdated ?? this.isUpdated,
+      hasShop: hasShop ?? this.hasShop,
     );
   }
 
@@ -252,6 +256,7 @@ class UserModel {
       'toPost': toPost,
       'weeklyRank': weeklyRank,
       'monthlyRank': monthlyRank,
+      'hasShop': hasShop,
     };
   }
 
@@ -358,6 +363,7 @@ class UserModel {
               ? (map['averageRating'] as int).toDouble()
               : map['averageRating'] as double)
           : null,
+      hasShop: map['hasShop'] != null ? map['hasShop'] as bool : false,
     );
   }
 

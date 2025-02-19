@@ -6,6 +6,7 @@ import 'package:business_bosses_v2/bbpro/presentation/boost_items.dart';
 import 'package:business_bosses_v2/bbpro/presentation/create_service.dart';
 import 'package:business_bosses_v2/bbpro/widgets/optionsbutton.dart';
 import 'package:business_bosses_v2/common/dialogs/snackbar.dart';
+import 'package:business_bosses_v2/features/marketplace/widgets/currency.dart';
 import 'package:business_bosses_v2/utils/theme/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -163,7 +164,7 @@ class _MyServiceCardState extends State<MyServiceCard> {
                         Row(
                           children: <Widget>[
                             Text(
-                              '${formatServiceDuration(widget.service.serviceDuration)}${widget.shop == null ? shopController.shop!.currency : widget.shop!.currency}${((widget.service.price) * (1 - (widget.service.discount) / 100)).toStringAsFixed(2)}',
+                              '${formatServiceDuration(widget.service.serviceDuration)}${currencyValues[widget.service.location.toString()]}${((widget.service.price) * (1 - (widget.service.discount) / 100)).toStringAsFixed(2)}',
                               style: const TextStyle(
                                 color: proprimaryColor,
                                 fontWeight: FontWeight.bold,
@@ -172,7 +173,7 @@ class _MyServiceCardState extends State<MyServiceCard> {
                             ),
                             const SizedBox(width: 5),
                             Text(
-                              '${widget.shop == null ? shopController.shop!.currency : widget.shop!.currency}${(widget.service.price).toStringAsFixed(2)}',
+                              '${currencyValues[widget.service.location.toString()]}${(widget.service.price).toStringAsFixed(2)}',
                               style: const TextStyle(
                                 color: Colors.grey,
                                 decoration: TextDecoration.lineThrough,
@@ -183,7 +184,7 @@ class _MyServiceCardState extends State<MyServiceCard> {
                         )
                       else
                         Text(
-                          '${formatServiceDuration(widget.service.serviceDuration)}${widget.shop == null ? shopController.shop!.currency : widget.shop!.currency}${(widget.service.price).toStringAsFixed(2)}',
+                          '${formatServiceDuration(widget.service.serviceDuration)}${currencyValues[widget.service.location.toString()]}(widget.service.price).toStringAsFixed(2)}',
                           style: const TextStyle(
                             color: proprimaryColor,
                             fontWeight: FontWeight.bold,

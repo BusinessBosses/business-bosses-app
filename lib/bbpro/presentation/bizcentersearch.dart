@@ -5,7 +5,6 @@ import 'package:business_bosses_v2/bbpro/widgets/custom_item_card.dart';
 import 'package:business_bosses_v2/bbpro/widgets/inventorycard.dart';
 import 'package:business_bosses_v2/bbpro/widgets/proseardwidget.dart';
 import 'package:business_bosses_v2/bbpro/widgets/servicecard.dart';
-import 'package:business_bosses_v2/features/profile/presentation/public_profile_screen.dart';
 import 'package:business_bosses_v2/navigation/routes.dart';
 import 'package:business_bosses_v2/utils/theme/theme.dart';
 import 'package:flutter/material.dart';
@@ -145,7 +144,7 @@ class _BizCenterSearchState extends State<BizCenterSearch>
                 ),
                 Container(
                   decoration: BoxDecoration(
-                      color: backgroundColor,
+                      color: probackgroundColor,
                       borderRadius: BorderRadius.circular(radius)),
                   padding:
                       const EdgeInsets.symmetric(horizontal: 10.0, vertical: 3),
@@ -156,7 +155,7 @@ class _BizCenterSearchState extends State<BizCenterSearch>
                         'Visit Biz-Center',
                         style: TextStyle(
                           fontSize: 10,
-                          color: textColor,
+                          color: proprimaryColor,
                         ),
                       ),
                       Icon(

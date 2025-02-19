@@ -1,7 +1,7 @@
 // ignore_for_file: deprecated_member_use, always_specify_types
 
 import 'package:business_bosses_v2/common/dialogs/snackbar.dart';
-import 'package:business_bosses_v2/features/home/all_communities_screen.dart';
+import 'package:business_bosses_v2/features/home/widgets/all_learning_posts.dart';
 import 'package:business_bosses_v2/features/profile/controller/profile_controller.dart';
 import 'package:business_bosses_v2/features/promotions/widgets/buycoinslist_item.dart';
 import 'package:business_bosses_v2/features/withdrawal/controller/coinhistorycontroller.dart';
@@ -170,7 +170,8 @@ class _DepositsScreenState extends State<DepositsScreen> {
 
                                                                   /// update coin here
                                                                 } catch (e) {
-                                                                  print(e.toString());
+                                                                  print(e
+                                                                      .toString());
                                                                   showSnackbar(
                                                                     title:
                                                                         'OOPS!',
@@ -242,7 +243,7 @@ class _DepositsScreenState extends State<DepositsScreen> {
                                 onTap: () {
                                   !profileController.myProfile.isSubscribed
                                       ? Get.toNamed(Routes.premiumscreen)
-                                      :  null;
+                                      : null;
                                 },
                                 child: Container(
                                   padding: const EdgeInsets.symmetric(
@@ -376,8 +377,8 @@ class _DepositsScreenState extends State<DepositsScreen> {
                               ),
                               GestureDetector(
                                 onTap: () {
-                                  Get.to(() => const AllCommunitiesScreen(
-                                        initialTabIndex: 1,
+                                  Get.to(() => const AllLearningPostsScreen(
+                                        isCoursesTile: false,
                                       ));
                                 },
                                 child: Container(

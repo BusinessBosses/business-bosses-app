@@ -6,6 +6,7 @@ import 'package:business_bosses_v2/bbpro/widgets/countrycodes.dart';
 import 'package:business_bosses_v2/bbpro/widgets/optionsbutton.dart';
 import 'package:business_bosses_v2/common/dialogs/snackbar.dart';
 import 'package:business_bosses_v2/common/widgets/network_image_with_placeholder.dart';
+import 'package:business_bosses_v2/features/marketplace/widgets/currency.dart';
 import 'package:business_bosses_v2/utils/theme/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -58,6 +59,16 @@ class ServiceCard extends StatefulWidget {
 }
 
 class _ServiceCardState extends State<ServiceCard> {
+  String formatPrice(double price) {
+    if (price >= 1000000) {
+      return '${(price / 1000000).toStringAsFixed(1)}m';
+    } else if (price >= 1000) {
+      return '${(price / 1000).toStringAsFixed(1)}k';
+    } else {
+      return price.toStringAsFixed(2);
+    }
+  }
+
   final ShopController shopController = Get.find();
   void _onEdit() {
     Get.to(() => CreateServiceListing(
@@ -102,12 +113,6 @@ class _ServiceCardState extends State<ServiceCard> {
           if (widget.service?.images != null &&
               widget.service!.images!.isNotEmpty)
             const SizedBox(height: 5),
-          if (widget.service?.images != null &&
-              widget.service!.images!.isNotEmpty)
-            const Divider(),
-          if (widget.service?.images != null &&
-              widget.service!.images!.isNotEmpty)
-            const SizedBox(height: 5),
           Row(
             crossAxisAlignment: CrossAxisAlignment.end,
             children: <Widget>[
@@ -124,45 +129,35 @@ class _ServiceCardState extends State<ServiceCard> {
                       maxLines: 1,
                       overflow: TextOverflow.ellipsis,
                     ),
-
                     if (widget.service?.discount != null &&
                         widget.service!.discount > 0)
-                      Column(
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        crossAxisAlignment: CrossAxisAlignment.start,
+                      Row(
                         children: <Widget>[
-                          if (widget.service?.serviceDuration != null)
-                            Text(formatServiceDuration(
-                                widget.service?.serviceDuration)),
-                          Row(
-                            children: <Widget>[
-                              Text(
-                                '${widget.shop?.currency ?? shopController.shop!.currency}${((widget.service!.price * (1 - widget.service!.discount / 100)) * 100).round() / 100}',
-                                style: const TextStyle(
-                                  color: Colors.black,
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: 13,
-                                ),
-                              ),
-                              const SizedBox(width: 5),
-                              Text(
-                                '${widget.shop?.currency ?? shopController.shop!.currency}${widget.service!.price.toStringAsFixed(2)}',
-                                style: const TextStyle(
-                                  color: primaryColorLT,
-                                  decoration: TextDecoration.lineThrough,
-                                  fontSize: 11,
-                                ),
-                              ),
-                            ],
+                          Text(
+                            '${currencyValues[widget.service!.location.toString()]}${formatPrice(widget.service!.price * (1 - widget.service!.discount / 100))}',
+                            style: const TextStyle(
+                              color: Colors.black,
+                              fontWeight: FontWeight.w700,
+                              fontSize: 13,
+                            ),
+                          ),
+                          const SizedBox(width: 5),
+                          Text(
+                            '${currencyValues[widget.service!.location.toString()]}${formatPrice(widget.service!.price)}',
+                            style: const TextStyle(
+                              color: primaryColorLT,
+                              decoration: TextDecoration.lineThrough,
+                              fontSize: 11,
+                            ),
                           ),
                         ],
                       )
                     else
                       Text(
-                        '${widget.shop?.currency ?? shopController.shop!.currency}${widget.service!.price.toStringAsFixed(2)}',
+                        '${currencyValues[widget.service!.location.toString()]}${formatPrice(widget.service!.price)}',
                         style: const TextStyle(
                           color: Colors.black,
-                          fontWeight: FontWeight.bold,
+                          fontWeight: FontWeight.w700,
                           fontSize: 13,
                         ),
                       ),
@@ -202,26 +197,6 @@ class _ServiceCardState extends State<ServiceCard> {
                             ),
                         ],
                       ),
-                    // if (widget.myShop == false)
-                    //   const Row(
-                    //     mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    //     children: <Widget>[
-                    //       Wrap(
-                    //         crossAxisAlignment: WrapCrossAlignment.center,
-                    //         children: <Widget>[
-                    //           CircleAvatar(
-                    //             radius: 3,
-                    //             backgroundColor: Colors.green,
-                    //           ),
-                    //           SizedBox(width: 3),
-                    //           Text(
-                    //             'Upcoming',
-                    //             style: TextStyle(fontSize: 10),
-                    //           ),
-                    //         ],
-                    //       ),
-                    //     ],
-                    //   ),
                   ],
                 ),
               ),

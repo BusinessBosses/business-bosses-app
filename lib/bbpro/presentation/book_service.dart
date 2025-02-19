@@ -88,12 +88,9 @@ class _BookServiceScreenState extends State<BookServiceScreen> {
 
   late FocusNode _focusNode;
 
-  TimeOfDay? _startTime;
-  TimeOfDay? _endTime;
   int? duration;
 
   DateTime? _startDate;
-  DateTime? _endDate;
   final List<DateTime> _selectedDates = <DateTime>[];
 
   bool timeslotselected = false;
@@ -356,7 +353,7 @@ class _BookServiceScreenState extends State<BookServiceScreen> {
                 ),
                 Container(
                   decoration: BoxDecoration(
-                      color: backgroundColor,
+                      color: probackgroundColor,
                       borderRadius: BorderRadius.circular(radius)),
                   padding:
                       const EdgeInsets.symmetric(horizontal: 10.0, vertical: 3),
@@ -367,7 +364,7 @@ class _BookServiceScreenState extends State<BookServiceScreen> {
                         'Visit Biz-Center',
                         style: TextStyle(
                           fontSize: 10,
-                          color: textColor,
+                          color: proprimaryColor,
                         ),
                       ),
                       Icon(

@@ -1,5 +1,6 @@
 import 'package:business_bosses_v2/bbpro/controllers/shop_controller.dart';
 import 'package:business_bosses_v2/bbpro/presentation/expanded_order_load.dart';
+import 'package:business_bosses_v2/bbpro/widgets/drawercontent.dart';
 import 'package:business_bosses_v2/common/widgets/safety_model.dart';
 import 'package:business_bosses_v2/features/forum/controller/challenge_controller.dart';
 import 'package:business_bosses_v2/features/home/controller/commumities_controller.dart';
@@ -24,6 +25,7 @@ import '../marketplace/controllers/market_controller.dart';
 import '../posts/models/post_model.dart';
 import '../profile/controller/profile_controller.dart';
 import 'package:socket_io_client/socket_io_client.dart' as io;
+import 'package:flutter_advanced_drawer/flutter_advanced_drawer.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key, this.onPageChange});
@@ -36,6 +38,8 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen>
     with WidgetsBindingObserver, TickerProviderStateMixin {
+  final AdvancedDrawerController _advancedDrawerController =
+      AdvancedDrawerController();
   final HomeController homeController = Get.put(HomeController());
   final ProfileController _profileController = Get.find();
   final CommunitiesController _communitiesController =
@@ -202,190 +206,238 @@ class _HomeScreenState extends State<HomeScreen>
         builder: (HomeController controller) {
           checkOrderVisit();
           return UpgradeAlert(
-            child: Scaffold(
-              backgroundColor: Colors.white,
-              appBar: PreferredSize(
-                preferredSize: controller.loading.value
-                    ? const Size.fromHeight(0)
-                    : const Size.fromHeight(kToolbarHeight),
-                child: controller.loading.value
-                    ? Container()
-                    : GetBuilder<ChatController>(
-                        builder: (ChatController chatController) {
-                        final List<MessageModel> unseenChats = chatController
-                            .chats
-                            .where((MessageModel element) =>
-                                element.receiverUid ==
-                                    controller
-                                        .profileController.myProfile.uid &&
-                                !element.seen)
-                            .toList();
-                        final bool hasBadge = unseenChats.isNotEmpty;
-
-                        return GetBuilder<ProfileController>(
-                          builder: (ProfileController profileController) =>
-                              HomeAppBar(
-                            isTabVisible: isTabVisible,
-                            hasBadge: hasBadge,
-                            coinsCount: profileController.myProfile.coinscount
-                                    ?.toString() ??
-                                '',
-                            hasUnreadNotification: profileController
-                                        .myProfile.unReadCount !=
-                                    null &&
-                                profileController.myProfile.unReadCount! > 0,
-                            controller: _tabController,
-                          ),
-                        );
-                      }),
+            child: AdvancedDrawer(
+              backdrop: Container(
+                width: double.infinity,
+                height: double.infinity,
+                decoration: BoxDecoration(
+                  gradient: LinearGradient(
+                    begin: Alignment.topLeft,
+                    end: Alignment.bottomRight,
+                    colors: <Color>[
+                      Colors.white,
+                      Colors.white.withOpacity(0.2)
+                    ],
+                  ),
+                ),
               ),
-              body: controller.loading.value
-                  ? Center(
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: <Widget>[
-                          Stack(
-                            children: <Widget>[
-                              Positioned.fill(
-                                child: Align(
-                                  alignment: Alignment.center,
-                                  child: Image.asset(
-                                    'assets/app/app_logo_2.png',
-                                    height: 40,
-                                    width: 40,
-                                  ),
-                                ),
-                              ),
-                              const SizedBox(
-                                width: 45,
-                                height: 45,
-                                child: CircularProgressIndicator(),
-                              ),
-                            ],
-                          ),
-                          const Padding(
-                            padding: EdgeInsets.only(top: 20.0),
-                            child: Text(
-                              'Start, Grow and Promote Your Business Globally',
-                              style: TextStyle(fontSize: 16),
-                            ),
-                          )
-                        ],
-                      ),
-                    )
-                  : controller.noConnection.value
-                      ? SafetyModel(
-                          isLoading: false,
-                          title:
-                              'Error While Loading Data\nCheck your Internet Connection',
-                          subTitle: 'Try Reloading Again',
-                          clickableText: 'Refresh',
-                          onTap: () {
-                            controller.loadData();
-                            _profileController.fetchData();
-                            marketController.initMarket();
-                            // marketController.initUsers();
-                            _communitiesController.fetchIndustries();
-                            liveEventController.initEvents();
-                          },
-                          icon: const Icon(
-                            Icons.warning,
-                            size: 60,
-                          ),
-                        )
-                      : controller.error.value
-                          ? SafetyModel(
-                              isLoading: false,
-                              title: 'Error While Loading Data',
-                              subTitle: 'Try Reloading Again',
-                              clickableText: 'Refresh',
-                              onTap: () {
-                                controller.loadData();
-                                _profileController.fetchData();
-                                marketController.initMarket();
-                                // marketController.initUsers();
-                                _communitiesController.fetchIndustries();
-                                liveEventController.initEvents();
+              controller: _advancedDrawerController,
+              animationCurve: Curves.easeInOut,
+              animationDuration: const Duration(milliseconds: 300),
+              animateChildDecoration: true,
+              rtlOpening: false,
+              // openScale: 1.0,
+              disabledGestures: false,
+              childDecoration: const BoxDecoration(
+                // NOTICE: Uncomment if you want to add shadow behind the page.
+                // Keep in mind that it may cause animation jerks.
+                boxShadow: <BoxShadow>[
+                  BoxShadow(
+                    color: Colors.black12,
+                    blurRadius: 3,
+                  ),
+                ],
+                borderRadius: BorderRadius.all(Radius.circular(16)),
+              ),
+
+              drawer: DrawerContent(
+                oncloseclick: () {
+                  _advancedDrawerController.hideDrawer();
+                },
+                currentuser: homeController.profileController.myProfile,
+              ),
+
+              child: Scaffold(
+                backgroundColor: Colors.white,
+                appBar: PreferredSize(
+                  preferredSize: controller.loading.value
+                      ? const Size.fromHeight(0)
+                      : const Size.fromHeight(kToolbarHeight),
+                  child: controller.loading.value
+                      ? Container()
+                      : GetBuilder<ChatController>(
+                          builder: (ChatController chatController) {
+                          final List<MessageModel> unseenChats = chatController
+                              .chats
+                              .where((MessageModel element) =>
+                                  element.receiverUid ==
+                                      controller
+                                          .profileController.myProfile.uid &&
+                                  !element.seen)
+                              .toList();
+                          final bool hasBadge = unseenChats.isNotEmpty;
+
+                          return GetBuilder<ProfileController>(
+                            builder: (ProfileController profileController) =>
+                                HomeAppBar(
+                              onMenuClick: () {
+                                _advancedDrawerController.showDrawer();
                               },
-                              icon: const Icon(
-                                Icons.warning,
-                                size: 60,
-                              ),
-                            )
-                          : SizedBox(
-                              height: MediaQuery.of(context).size.height,
-                              width: MediaQuery.of(context).size.width,
-                              child: Stack(
-                                children: <Widget>[
-                                  Container(
-                                    height: MediaQuery.of(context).size.height,
-                                    width: MediaQuery.of(context).size.width,
-                                    color: backgroundColor,
-                                    child: RefreshIndicator(
-                                      onRefresh: controller.loadData,
-                                      child: NotificationListener<
-                                          ScrollNotification>(
-                                        onNotification:
-                                            (ScrollNotification notification) {
-                                          if (notification
-                                              is ScrollUpdateNotification) {
-                                            if (notification.dragDetails !=
-                                                    null &&
-                                                notification.dragDetails!
-                                                        .primaryDelta !=
-                                                    null) {
-                                              double primaryDelta = notification
-                                                  .dragDetails!.primaryDelta!;
-
-                                              if (primaryDelta > 0) {
-                                                // Scrolling downward
-                                                setState(() {
-                                                  isScrolled = true;
-                                                });
-                                              } else if (primaryDelta < 0) {
-                                                // Scrolling upward
-                                                setState(() {
-                                                  isScrolled = false;
-                                                });
-                                              }
-                                            }
-                                          }
-
-                                          return true;
-                                        },
-                                        child: TabBarView(
-                                            controller: _tabController,
-                                            children: <Widget>[
-                                              // const DiscoverSection(),
-                                              PostsWidget(
-                                                onPageChange:
-                                                    widget.onPageChange,
-                                              ),
-                                              ListView.builder(
-                                                shrinkWrap: true,
-                                                itemCount:
-                                                    controller.forums.length,
-                                                itemBuilder:
-                                                    (BuildContext context,
-                                                        int index) {
-                                                  return ForumItem(
-                                                    forum: controller
-                                                        .forums[index],
-                                                    controller: homeController,
-                                                  );
-                                                },
-                                              ),
-                                            ]),
-                                      ),
+                              isTabVisible: isTabVisible,
+                              hasBadge: hasBadge,
+                              coinsCount: profileController.myProfile.coinscount
+                                      ?.toString() ??
+                                  '',
+                              hasUnreadNotification: profileController
+                                          .myProfile.unReadCount !=
+                                      null &&
+                                  profileController.myProfile.unReadCount! > 0,
+                              controller: _tabController,
+                            ),
+                          );
+                        }),
+                ),
+                body: controller.loading.value
+                    ? Center(
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: <Widget>[
+                            Stack(
+                              children: <Widget>[
+                                Positioned.fill(
+                                  child: Align(
+                                    alignment: Alignment.center,
+                                    child: Image.asset(
+                                      'assets/app/app_logo_2.png',
+                                      height: 40,
+                                      width: 40,
                                     ),
                                   ),
-                                  const BottomBar(
-                                    activeIndex: 0,
-                                  ),
-                                  const Floatingbutton(),
-                                ],
-                              ),
+                                ),
+                                const SizedBox(
+                                  width: 45,
+                                  height: 45,
+                                  child: CircularProgressIndicator(),
+                                ),
+                              ],
                             ),
+                            const Padding(
+                              padding: EdgeInsets.only(top: 20.0),
+                              child: Text(
+                                'Start, Grow and Promote Your Business Globally',
+                                style: TextStyle(fontSize: 16),
+                              ),
+                            )
+                          ],
+                        ),
+                      )
+                    : controller.noConnection.value
+                        ? SafetyModel(
+                            isLoading: false,
+                            title:
+                                'Error While Loading Data\nCheck your Internet Connection',
+                            subTitle: 'Try Reloading Again',
+                            clickableText: 'Refresh',
+                            onTap: () {
+                              controller.loadData();
+                              _profileController.fetchData();
+                              marketController.initMarket();
+                              // marketController.initUsers();
+                              _communitiesController.fetchIndustries();
+                              liveEventController.initEvents();
+                            },
+                            icon: const Icon(
+                              Icons.warning,
+                              size: 60,
+                            ),
+                          )
+                        : controller.error.value
+                            ? SafetyModel(
+                                isLoading: false,
+                                title: 'Error While Loading Data',
+                                subTitle: 'Try Reloading Again',
+                                clickableText: 'Refresh',
+                                onTap: () {
+                                  controller.loadData();
+                                  _profileController.fetchData();
+                                  marketController.initMarket();
+                                  // marketController.initUsers();
+                                  _communitiesController.fetchIndustries();
+                                  liveEventController.initEvents();
+                                },
+                                icon: const Icon(
+                                  Icons.warning,
+                                  size: 60,
+                                ),
+                              )
+                            : SizedBox(
+                                height: MediaQuery.of(context).size.height,
+                                width: MediaQuery.of(context).size.width,
+                                child: Stack(
+                                  children: <Widget>[
+                                    Container(
+                                      height:
+                                          MediaQuery.of(context).size.height,
+                                      width: MediaQuery.of(context).size.width,
+                                      color: backgroundColor,
+                                      child: RefreshIndicator(
+                                        onRefresh: controller.loadData,
+                                        child: NotificationListener<
+                                            ScrollNotification>(
+                                          onNotification: (ScrollNotification
+                                              notification) {
+                                            if (notification
+                                                is ScrollUpdateNotification) {
+                                              if (notification.dragDetails !=
+                                                      null &&
+                                                  notification.dragDetails!
+                                                          .primaryDelta !=
+                                                      null) {
+                                                double primaryDelta =
+                                                    notification.dragDetails!
+                                                        .primaryDelta!;
+
+                                                if (primaryDelta > 0) {
+                                                  // Scrolling downward
+                                                  setState(() {
+                                                    isScrolled = true;
+                                                  });
+                                                } else if (primaryDelta < 0) {
+                                                  // Scrolling upward
+                                                  setState(() {
+                                                    isScrolled = false;
+                                                  });
+                                                }
+                                              }
+                                            }
+
+                                            return true;
+                                          },
+                                          child: TabBarView(
+                                              controller: _tabController,
+                                              children: <Widget>[
+                                                // const DiscoverSection(),
+                                                PostsWidget(
+                                                  onPageChange:
+                                                      widget.onPageChange,
+                                                ),
+                                                ListView.builder(
+                                                  shrinkWrap: true,
+                                                  itemCount:
+                                                      controller.forums.length,
+                                                  itemBuilder:
+                                                      (BuildContext context,
+                                                          int index) {
+                                                    return ForumItem(
+                                                      forum: controller
+                                                          .forums[index],
+                                                      controller:
+                                                          homeController,
+                                                    );
+                                                  },
+                                                ),
+                                              ]),
+                                        ),
+                                      ),
+                                    ),
+                                    const BottomBar(
+                                      activeIndex: 0,
+                                    ),
+                                    const Floatingbutton(),
+                                  ],
+                                ),
+                              ),
+              ),
             ),
           );
         },

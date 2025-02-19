@@ -1,3 +1,5 @@
+import 'package:business_bosses_v2/bbpro/widgets/drawercontent.dart';
+import 'package:business_bosses_v2/bbpro/widgets/menubutton.dart';
 import 'package:business_bosses_v2/features/donations/controller/donations_controller.dart';
 import 'package:business_bosses_v2/features/donations/presentation/donations.dart';
 import 'package:business_bosses_v2/features/donations/presentation/filterdonationposts.dart';
@@ -12,9 +14,10 @@ import 'package:business_bosses_v2/features/home/widgets/eventssection.dart';
 import 'package:business_bosses_v2/features/home/widgets/industriessearch.dart';
 import 'package:business_bosses_v2/features/home/widgets/learningpage.dart';
 import 'package:business_bosses_v2/features/home/widgets/learningsection.dart';
-import 'package:business_bosses_v2/features/profile/presentation/my_profile_screen.dart';
+import 'package:business_bosses_v2/features/profile/controller/profile_controller.dart';
 import 'package:business_bosses_v2/navigation/routes.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_advanced_drawer/flutter_advanced_drawer.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 
@@ -45,6 +48,9 @@ class _AllCommunitiesScreenState extends State<AllCommunitiesScreen>
   Industry industry = Industry();
   bool isScrolled = true;
 
+  final ProfileController profileController = Get.put(ProfileController());
+
+  // ignore: unused_field
   final CommunitiesController _communitiesController =
       Get.put(CommunitiesController());
   final DonationsController donationsController =
@@ -53,6 +59,8 @@ class _AllCommunitiesScreenState extends State<AllCommunitiesScreen>
   late final TabController _donationsearchTabController;
   late final TabController _pageTabController;
   late final TabController _bossupTabController;
+  final AdvancedDrawerController _advancedDrawerController =
+      AdvancedDrawerController();
 
   List<Widget> get mActions {
     return <Widget>[
@@ -87,75 +95,11 @@ class _AllCommunitiesScreenState extends State<AllCommunitiesScreen>
       Padding(
         padding: const EdgeInsets.only(right: 8.0, bottom: 8, top: 8),
         child: GestureDetector(
-          onTap: () => Get.to(const MyProfileScreen(
-            currentIndex: 1,
-          )),
-          child: Container(
-            padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
-            decoration: BoxDecoration(
-              color: probackgroundColor,
-              borderRadius: BorderRadius.circular(20),
-            ),
-            child: Row(
-              children: <Widget>[
-                SvgPicture.asset('assets/svgs/marketplaceoutlined.svg',
-                    color: proprimaryColor, height: 15),
-                const SizedBox(width: 5),
-                const Text(
-                  'My-Biz',
-                  style: TextStyle(
-                    color: proprimaryColor,
-                    fontSize: 15,
-                    fontWeight: FontWeight.w700,
-                  ),
-                ),
-              ],
-            ),
-          ),
-        ),
+            onTap: () {
+              _advancedDrawerController.showDrawer();
+            },
+            child: const CustomMenuButton()),
       ),
-      // _pageTabController.index != 2
-      //     ? GestureDetector(
-      //         onTap: () {
-      //           _isSearching = !_isSearching;
-      //           setState(() {});
-      //           _communitiesController.clearSearch();
-      //         },
-      //         child: Padding(
-      //           padding: const EdgeInsets.only(right: 10.0),
-      //           child: _isSearching
-      //               ? const Icon(Icons.close)
-      //               : CircleAvatar(
-      //                   radius: 20,
-      //                   backgroundColor: backgroundColor,
-      //                   child: SvgPicture.asset(
-      //                     'assets/svgs/homesearch.svg',
-      //                     height: 20,
-      //                     color: textColor,
-      //                   )),
-      //         ),
-      //       )
-      //     : GestureDetector(
-      //         child: Padding(
-      //           padding: const EdgeInsets.only(right: 10.0),
-      //           child: _isSearchingDonations
-      //               ? const Icon(Icons.close)
-      //               : CircleAvatar(
-      //                   radius: 20,
-      //                   backgroundColor: backgroundColor,
-      //                   child: SvgPicture.asset(
-      //                     'assets/svgs/homesearch.svg',
-      //                     height: 20,
-      //                     color: textColor,
-      //                   )),
-      //         ),
-      //         onTap: () {
-      //           _isSearchingDonations = !_isSearchingDonations;
-      //           setState(() {});
-      //           donationsController.searchedPosts.clear();
-      //           donationsController.searchedUsers.clear();
-      //         },
-      //       ),
     ];
   }
 
@@ -168,6 +112,10 @@ class _AllCommunitiesScreenState extends State<AllCommunitiesScreen>
         length: 4,
         vsync: this,
         initialIndex: widget.initialBossupTabIndex ?? 0);
+
+    _bossupTabController.addListener(() {
+      setState(() {});
+    });
     _pageTabController = TabController(
         length: 3, vsync: this, initialIndex: widget.initialTabIndex ?? 0);
 
@@ -180,275 +128,328 @@ class _AllCommunitiesScreenState extends State<AllCommunitiesScreen>
   Widget build(BuildContext context) {
     return GetBuilder<CommunitiesController>(
       builder: (CommunitiesController controller) {
-        return Scaffold(
-          appBar: AppBar(
-            automaticallyImplyLeading: false,
-            title: _isSearching
-                ? Searchbar(
-                    hintText: 'Search',
-                    onChange: (String query) {
-                      if (query.isEmpty) {
-                        controller.clearIIndustriesSearch();
-                        controller.clearIndustriesPostSearch();
-                      }
-                      setState(() {});
-                    },
-                    onSubmit: (String query) {
-                      controller.onsearchIndustries(query);
-                      controller.onsearchPosts(query);
-                    },
-                  )
-                : _isSearchingDonations && _pageTabController.index == 2
-                    ? Searchbar(
-                        hintText: 'Search Donations Members or Posts',
-                        onChange: (String query) {
-                          if (query.isEmpty) {
-                            donationsController.clearUserSearch();
-                            donationsController.clearPostSearch();
-                          }
-                          setState(() {});
-                        },
-                        onSubmit: (String query) {
-                          donationsController.searchUsers(query);
-                          donationsController.searchPosts(query);
-                          setState(() {});
-                        },
-                      )
-                    : const Text('Boss Up'),
-            actions: mActions,
+        return AdvancedDrawer(
+          backdrop: Container(
+            width: double.infinity,
+            height: double.infinity,
+            decoration: BoxDecoration(
+              gradient: LinearGradient(
+                begin: Alignment.topLeft,
+                end: Alignment.bottomRight,
+                colors: <Color>[Colors.white, Colors.white.withOpacity(0.2)],
+              ),
+            ),
           ),
-          body: SizedBox(
-            height: MediaQuery.of(context).size.height,
-            width: MediaQuery.of(context).size.width,
-            child: Stack(
-              children: <Widget>[
-                Container(
-                  height: MediaQuery.of(context).size.height,
-                  width: MediaQuery.of(context).size.width,
-                  color: Colors.white,
-                  child: DefaultTabController(
-                    length: _isSearching ? 2 : 3,
-                    child: Column(
-                      children: <Widget>[
-                        if (_isSearchingDonations)
-                          TabBar(
-                            controller: _donationsearchTabController,
-                            labelStyle:
-                                const TextStyle(fontWeight: FontWeight.w500),
-                            labelColor: Colors.black,
-                            indicatorColor: primaryColorLT,
-                            tabs: const <Widget>[
-                              Tab(text: 'Projects'),
-                              Tab(text: 'Members'),
-                            ],
-                          )
-                        else if (_isSearching)
-                          TabBar(
-                            controller: _searchTabController,
-                            labelStyle:
-                                const TextStyle(fontWeight: FontWeight.w500),
-                            labelColor: Colors.black,
-                            tabs: const <Widget>[
-                              Tab(text: 'Posts'),
-                              Tab(text: 'Groups'),
-                            ],
-                          ),
-                        Expanded(
-                          child: _isSearching || _isSearchingDonations
-                              ? TabBarView(
-                                  controller: _isSearching
-                                      ? _searchTabController
-                                      : _donationsearchTabController,
-                                  children: <Widget>[
-                                    if (_isSearching)
-                                      Container(
-                                        color: Theme.of(context)
-                                            .scaffoldBackgroundColor,
-                                        height: double.infinity,
-                                        width: double.infinity,
-                                        child: controller.searchedForums.isEmpty
-                                            ? SafetyModel(
-                                                mainAxisAlignment:
-                                                    MainAxisAlignment.start,
-                                                isLoading: controller
-                                                    .loadingSearch.value,
-                                                icon: SvgPicture.asset(
-                                                    'assets/svgs/search.svg',
-                                                    // ignore: deprecated_member_use
-                                                    color: hintColor,
-                                                    height: 80.0,
-                                                    width: 80.0),
-                                                title: 'Search for Posts',
-                                                subTitle:
-                                                    'Search for specific topics ',
-                                              )
-                                            : ListView.builder(
-                                                key: const ValueKey<String>(
-                                                    'cat.categoryId'),
-                                                padding: const EdgeInsets.only(
-                                                    top: 8.0,
-                                                    right: 8.0,
-                                                    left: 8.0,
-                                                    bottom: 120.0),
-                                                itemCount: controller
-                                                    .searchedForums.length,
-                                                itemBuilder:
-                                                    (BuildContext context,
-                                                        int i) {
-                                                  return ForumItem(
-                                                      forum: controller
-                                                          .searchedForums[i],
-                                                      controller: controller);
-                                                },
-                                              ),
-                                      )
-                                    else
-                                      Obx(
-                                        () => FilterDonationPosts(
-                                          filterItems:
-                                              donationsController.searchedPosts,
-                                          isLoading: donationsController
-                                                  .loading.value ||
-                                              donationsController
-                                                  .loadingPostsSearch.value,
-                                        ),
-                                      ),
-                                    if (_isSearching)
-                                      Container(
-                                        color: Theme.of(context)
-                                            .scaffoldBackgroundColor,
-                                        height: double.infinity,
-                                        width: double.infinity,
-                                        child: MySearchIndustries(
-                                            searchIndustries:
-                                                controller.searchedIndustries),
-                                      )
-                                    else
-                                      Obx(() => FilterDonationsUsers(
-                                            members: donationsController
-                                                .usersMembers,
+          controller: _advancedDrawerController,
+          animationCurve: Curves.easeInOut,
+          animationDuration: const Duration(milliseconds: 300),
+          animateChildDecoration: true,
+          rtlOpening: false,
+          // openScale: 1.0,
+          disabledGestures: false,
+          childDecoration: const BoxDecoration(
+            // NOTICE: Uncomment if you want to add shadow behind the page.
+            // Keep in mind that it may cause animation jerks.
+            boxShadow: <BoxShadow>[
+              BoxShadow(
+                color: Colors.black12,
+                blurRadius: 3,
+              ),
+            ],
+            borderRadius: BorderRadius.all(Radius.circular(16)),
+          ),
+
+          drawer: DrawerContent(
+            oncrowfundclick: () {
+              setState(() {
+                _bossupTabController.index = 3;
+              });
+            },
+            oncloseclick: () {
+              _advancedDrawerController.hideDrawer();
+            },
+            currentuser: profileController.myProfile,
+          ),
+
+          child: Scaffold(
+            appBar: AppBar(
+              automaticallyImplyLeading: false,
+              title: _isSearching
+                  ? Searchbar(
+                      hintText: 'Search',
+                      onChange: (String query) {
+                        if (query.isEmpty) {
+                          controller.clearIIndustriesSearch();
+                          controller.clearIndustriesPostSearch();
+                        }
+                        setState(() {});
+                      },
+                      onSubmit: (String query) {
+                        controller.onsearchIndustries(query);
+                        controller.onsearchPosts(query);
+                      },
+                    )
+                  : _isSearchingDonations && _pageTabController.index == 2
+                      ? Searchbar(
+                          hintText: 'Search Donations Members or Posts',
+                          onChange: (String query) {
+                            if (query.isEmpty) {
+                              donationsController.clearUserSearch();
+                              donationsController.clearPostSearch();
+                            }
+                            setState(() {});
+                          },
+                          onSubmit: (String query) {
+                            donationsController.searchUsers(query);
+                            donationsController.searchPosts(query);
+                            setState(() {});
+                          },
+                        )
+                      : const Text('Boss Up'),
+              actions: mActions,
+            ),
+            body: SizedBox(
+              height: MediaQuery.of(context).size.height,
+              width: MediaQuery.of(context).size.width,
+              child: Stack(
+                children: <Widget>[
+                  Container(
+                    height: MediaQuery.of(context).size.height,
+                    width: MediaQuery.of(context).size.width,
+                    color: Colors.white,
+                    child: DefaultTabController(
+                      length: _isSearching ? 2 : 3,
+                      child: Column(
+                        children: <Widget>[
+                          if (_isSearchingDonations)
+                            TabBar(
+                              controller: _donationsearchTabController,
+                              labelStyle:
+                                  const TextStyle(fontWeight: FontWeight.w500),
+                              labelColor: Colors.black,
+                              indicatorColor: primaryColorLT,
+                              tabs: const <Widget>[
+                                Tab(text: 'Projects'),
+                                Tab(text: 'Members'),
+                              ],
+                            )
+                          else if (_isSearching)
+                            TabBar(
+                              controller: _searchTabController,
+                              labelStyle:
+                                  const TextStyle(fontWeight: FontWeight.w500),
+                              labelColor: Colors.black,
+                              tabs: const <Widget>[
+                                Tab(text: 'Posts'),
+                                Tab(text: 'Groups'),
+                              ],
+                            ),
+                          Expanded(
+                            child: _isSearching || _isSearchingDonations
+                                ? TabBarView(
+                                    controller: _isSearching
+                                        ? _searchTabController
+                                        : _donationsearchTabController,
+                                    children: <Widget>[
+                                      if (_isSearching)
+                                        Container(
+                                          color: Theme.of(context)
+                                              .scaffoldBackgroundColor,
+                                          height: double.infinity,
+                                          width: double.infinity,
+                                          child: controller
+                                                  .searchedForums.isEmpty
+                                              ? SafetyModel(
+                                                  mainAxisAlignment:
+                                                      MainAxisAlignment.start,
+                                                  isLoading: controller
+                                                      .loadingSearch.value,
+                                                  icon: SvgPicture.asset(
+                                                      'assets/svgs/search.svg',
+                                                      // ignore: deprecated_member_use
+                                                      color: hintColor,
+                                                      height: 80.0,
+                                                      width: 80.0),
+                                                  title: 'Search for Posts',
+                                                  subTitle:
+                                                      'Search for specific topics ',
+                                                )
+                                              : ListView.builder(
+                                                  key: const ValueKey<String>(
+                                                      'cat.categoryId'),
+                                                  padding:
+                                                      const EdgeInsets.only(
+                                                          top: 8.0,
+                                                          right: 8.0,
+                                                          left: 8.0,
+                                                          bottom: 120.0),
+                                                  itemCount: controller
+                                                      .searchedForums.length,
+                                                  itemBuilder:
+                                                      (BuildContext context,
+                                                          int i) {
+                                                    return ForumItem(
+                                                        forum: controller
+                                                            .searchedForums[i],
+                                                        controller: controller);
+                                                  },
+                                                ),
+                                        )
+                                      else
+                                        Obx(
+                                          () => FilterDonationPosts(
                                             filterItems: donationsController
-                                                .searchedUsers,
+                                                .searchedPosts,
                                             isLoading: donationsController
                                                     .loading.value ||
                                                 donationsController
-                                                    .loadingSearch.value,
-                                            onConnectionChange:
-                                                donationsController
-                                                    .connectToUser,
-                                            isSearch: donationsController
-                                                .isUserSearch.value,
-                                          )),
-                                  ],
-                                )
-                              : DefaultTabController(
-                                  length: 4,
-                                  child: Column(
-                                    children: <Widget>[
-                                      Container(
-                                        padding: const EdgeInsets.only(
-                                            top: 0, bottom: 0, left: 0),
-                                        constraints:
-                                            const BoxConstraints.expand(
-                                                height: 40),
-                                        child: TabBar(
-                                          labelStyle: const TextStyle(
-                                              fontWeight: FontWeight.w400,
-                                              fontSize: 13),
-                                          controller: _bossupTabController,
-                                          isScrollable: false,
-                                          labelPadding:
-                                              const EdgeInsets.symmetric(
-                                                  horizontal: 0.0),
-                                          tabs: const <Widget>[
-                                            Tab(
-                                              text: 'All',
-                                            ),
-                                            Tab(text: 'Challenges'),
-                                            Tab(text: 'Learning'),
-                                            Tab(text: 'Crowdfund'),
-                                          ],
+                                                    .loadingPostsSearch.value,
+                                          ),
                                         ),
-                                      ),
-                                      Expanded(
-                                        child: Column(
-                                          children: <Widget>[
-                                            Expanded(
-                                              child: TabBarView(
-                                                controller:
-                                                    _bossupTabController,
-                                                children: <Widget>[
-                                                  Container(
-                                                    color: backgroundColor,
-                                                    child:
-                                                        SingleChildScrollView(
-                                                      child: Column(
-                                                        mainAxisAlignment:
-                                                            MainAxisAlignment
-                                                                .start,
-                                                        crossAxisAlignment:
-                                                            CrossAxisAlignment
-                                                                .start,
-                                                        children: <Widget>[
-                                                          const SizedBox(
-                                                            height: 20,
-                                                          ),
-                                                          ChallengesSection(
-                                                            onTap: () {
-                                                              setState(() {
-                                                                _bossupTabController
-                                                                    .index = 1;
-                                                              });
-                                                            },
-                                                          ),
-                                                          const SizedBox(
-                                                            height: 20,
-                                                          ),
-                                                          const LearningSection(),
-                                                          const EventsSection(),
-                                                          const SizedBox(
-                                                            height: 25,
-                                                          ),
-                                                          CrowdfundSection(
-                                                            onTap: () {
-                                                              setState(() {
-                                                                _bossupTabController
-                                                                    .index = 3;
-                                                              });
-                                                            },
-                                                          ),
-                                                          const SizedBox(
-                                                            height: 100,
-                                                          ),
-                                                        ],
+                                      if (_isSearching)
+                                        Container(
+                                          color: Theme.of(context)
+                                              .scaffoldBackgroundColor,
+                                          height: double.infinity,
+                                          width: double.infinity,
+                                          child: MySearchIndustries(
+                                              searchIndustries: controller
+                                                  .searchedIndustries),
+                                        )
+                                      else
+                                        Obx(() => FilterDonationsUsers(
+                                              members: donationsController
+                                                  .usersMembers,
+                                              filterItems: donationsController
+                                                  .searchedUsers,
+                                              isLoading: donationsController
+                                                      .loading.value ||
+                                                  donationsController
+                                                      .loadingSearch.value,
+                                              onConnectionChange:
+                                                  donationsController
+                                                      .connectToUser,
+                                              isSearch: donationsController
+                                                  .isUserSearch.value,
+                                            )),
+                                    ],
+                                  )
+                                : DefaultTabController(
+                                    length: 4,
+                                    child: Column(
+                                      children: <Widget>[
+                                        Container(
+                                          padding: const EdgeInsets.only(
+                                              top: 0, bottom: 0, left: 0),
+                                          constraints:
+                                              const BoxConstraints.expand(
+                                                  height: 40),
+                                          child: TabBar(
+                                            labelStyle: const TextStyle(
+                                                fontWeight: FontWeight.w400,
+                                                fontSize: 13),
+                                            controller: _bossupTabController,
+                                            isScrollable: false,
+                                            labelPadding:
+                                                const EdgeInsets.symmetric(
+                                                    horizontal: 0.0),
+                                            tabs: const <Widget>[
+                                              Tab(
+                                                text: 'All',
+                                              ),
+                                              Tab(text: 'Challenges'),
+                                              Tab(text: 'Learning'),
+                                              Tab(text: 'Crowdfund'),
+                                            ],
+                                          ),
+                                        ),
+                                        Expanded(
+                                          child: Column(
+                                            children: <Widget>[
+                                              Expanded(
+                                                child: TabBarView(
+                                                  controller:
+                                                      _bossupTabController,
+                                                  children: <Widget>[
+                                                    Container(
+                                                      color: backgroundColor,
+                                                      child:
+                                                          SingleChildScrollView(
+                                                        child: Column(
+                                                          mainAxisAlignment:
+                                                              MainAxisAlignment
+                                                                  .start,
+                                                          crossAxisAlignment:
+                                                              CrossAxisAlignment
+                                                                  .start,
+                                                          children: <Widget>[
+                                                            const SizedBox(
+                                                              height: 20,
+                                                            ),
+                                                            ChallengesSection(
+                                                              onTap: () {
+                                                                setState(() {
+                                                                  _bossupTabController
+                                                                      .index = 1;
+                                                                });
+                                                              },
+                                                            ),
+                                                            const SizedBox(
+                                                              height: 20,
+                                                            ),
+                                                            LearningSection(
+                                                              onTap: () {
+                                                                setState(() {
+                                                                  _bossupTabController
+                                                                      .index = 2;
+                                                                });
+                                                              },
+                                                            ),
+                                                            const EventsSection(),
+                                                            const SizedBox(
+                                                              height: 25,
+                                                            ),
+                                                            CrowdfundSection(
+                                                              onTap: () {
+                                                                setState(() {
+                                                                  _bossupTabController
+                                                                      .index = 3;
+                                                                });
+                                                              },
+                                                            ),
+                                                            const SizedBox(
+                                                              height: 100,
+                                                            ),
+                                                          ],
+                                                        ),
                                                       ),
                                                     ),
-                                                  ),
-                                                  const BossupChallenge(
-                                                    ishome: false,
-                                                    backgroundColor:
-                                                        backgroundColor,
-                                                  ),
-                                                  const LearningPage(),
-                                                  const DonationsPage(
-                                                    ishome: false,
-                                                  ),
-                                                ],
+                                                    const BossupChallenge(
+                                                      ishome: false,
+                                                      backgroundColor:
+                                                          backgroundColor,
+                                                    ),
+                                                    const LearningPage(),
+                                                    const DonationsPage(
+                                                      ishome: false,
+                                                    ),
+                                                  ],
+                                                ),
                                               ),
-                                            ),
-                                          ],
+                                            ],
+                                          ),
                                         ),
-                                      ),
-                                    ],
+                                      ],
+                                    ),
                                   ),
-                                ),
-                        ),
-                      ],
+                          ),
+                        ],
+                      ),
                     ),
                   ),
-                ),
-                const BottomBar(activeIndex: 2),
-              ],
+                  const BottomBar(activeIndex: 2),
+                ],
+              ),
             ),
           ),
         );

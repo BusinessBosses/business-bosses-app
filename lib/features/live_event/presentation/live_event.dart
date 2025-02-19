@@ -380,16 +380,10 @@ class _LiveEventState extends State<LiveEvent> {
                                 ],
                               ),
                             ),
-                            const SizedBox(
-                              height: 80,
-                            )
                           ],
                         ),
                       ),
                     ),
-              // const BottomBar(
-              //   activeIndex: 2,
-              // ),
               const Floatingbutton(
                 isEvent: true,
               ),

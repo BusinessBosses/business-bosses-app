@@ -1,14 +1,19 @@
+import 'dart:developer';
+
 import 'package:business_bosses_v2/common/models/api_response_model.dart';
 import 'package:business_bosses_v2/services/api_service.dart';
 
 class SearchRepository {
-  static Future<ApiResponseModel> getData(int page) async {
-    final ApiResponseModel response =
-        await ApiService.get(path: '/search/get-recommended-data');
+  static Future<ApiResponseModel> getData({String? title, int page = 0}) async {
+    String path = '/search/get-recommended-data-with-category?page=$page';
 
+    if (title != null && title.isNotEmpty) {
+      path += '&title=$title';
+    }
+    log('searchurl: $path');
+    final ApiResponseModel response = await ApiService.get(path: path);
     return response;
   }
-
   // static Future<ApiResponseModel> searchUsers(String query) async {
   //   final ApiResponseModel response =
   //       await ApiService.get(path: '/users/name/$query');

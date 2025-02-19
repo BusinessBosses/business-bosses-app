@@ -12,7 +12,8 @@ import 'package:get/get.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class LearningSection extends StatelessWidget {
-  const LearningSection({super.key});
+  final Function? onTap;
+  const LearningSection({super.key, this.onTap});
 
   @override
   Widget build(BuildContext context) {
@@ -46,30 +47,33 @@ class LearningSection extends StatelessWidget {
               // ),
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 15.0),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: <Widget>[
-                    const Text(
-                      'Learning',
-                      style:
-                          TextStyle(fontWeight: FontWeight.w700, fontSize: 14),
-                    ),
-                    Wrap(
-                        crossAxisAlignment: WrapCrossAlignment.center,
-                        children: <Widget>[
-                          const Text(
-                            'View all',
-                            style: TextStyle(fontSize: 11),
-                          ),
-                          const SizedBox(width: 5.0),
-                          SvgPicture.asset(
-                            'assets/svgs/nexticon.svg',
-                            // ignore: deprecated_member_use
-                            color: textColor,
-                            height: 8,
-                          ),
-                        ]),
-                  ],
+                child: GestureDetector(
+                  onTap: () {
+                    if (onTap != null) {
+                      onTap!();
+                    }
+                  },
+                  child: const Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: <Widget>[
+                      Text(
+                        'Learning',
+                        style: TextStyle(
+                            fontWeight: FontWeight.w700, fontSize: 14),
+                      ),
+                      Wrap(
+                          crossAxisAlignment: WrapCrossAlignment.center,
+                          children: <Widget>[
+                            // const Text(
+                            //   'View all',
+                            //   style: TextStyle(fontSize: 11),
+                            // ),
+                            // const SizedBox(width: 5.0),
+                            Icon(Icons.chevron_right,
+                                color: textColor, size: 16),
+                          ]),
+                    ],
+                  ),
                 ),
               ),
               const SizedBox(

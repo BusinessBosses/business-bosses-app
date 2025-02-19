@@ -6,6 +6,7 @@ import 'package:business_bosses_v2/bbpro/models/service_model.dart';
 import 'package:business_bosses_v2/bbpro/models/shop_model.dart';
 import 'package:business_bosses_v2/bbpro/presentation/create_order.dart';
 import 'package:business_bosses_v2/bbpro/presentation/expanded_orders.dart';
+import 'package:business_bosses_v2/bbpro/widgets/iconbutton.dart';
 import 'package:business_bosses_v2/bbpro/widgets/optionsbutton.dart';
 import 'package:business_bosses_v2/common/dialogs/snackbar.dart';
 import 'package:business_bosses_v2/common/widgets/network_image_with_placeholder.dart';
@@ -18,7 +19,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 
-class OrderWidget extends StatefulWidget {
+class MyOrderWidget extends StatefulWidget {
   final Order order;
   final Color bgcolor;
   final bool? isExpanded;
@@ -26,7 +27,7 @@ class OrderWidget extends StatefulWidget {
   final Shop? shop;
   final bool showChange;
 
-  const OrderWidget({
+  const MyOrderWidget({
     required this.order,
     required this.bgcolor,
     this.myShop = true,
@@ -37,14 +38,14 @@ class OrderWidget extends StatefulWidget {
   });
 
   @override
-  State<OrderWidget> createState() => _OrderWidgetState();
+  State<MyOrderWidget> createState() => _MyOrderWidgetState();
 }
 
 String _formatTime(DateTime time) {
   return DateFormat('hh:mm a').format(time);
 }
 
-class _OrderWidgetState extends State<OrderWidget> {
+class _MyOrderWidgetState extends State<MyOrderWidget> {
   final OrderController orderController = Get.put(OrderController());
   final ProfileController profileController = Get.find();
   final ShopController shopController = Get.find();
@@ -54,6 +55,7 @@ class _OrderWidgetState extends State<OrderWidget> {
       onTap: () {
         if (widget.isExpanded != true) {
           Get.to(() => ExpandedOrders(
+                ismyorder: true,
                 order: widget.order,
                 shop: widget.shop,
               ));
@@ -143,11 +145,33 @@ class _OrderWidgetState extends State<OrderWidget> {
                             mainAxisAlignment: MainAxisAlignment.start,
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: <Widget>[
+                              // if (widget.isExpanded != true)
+                              //   Row(
+                              //     children: <Widget>[
+                              //       const Text(
+                              //         'Ordered from',
+                              //         style: TextStyle(
+                              //           fontWeight: FontWeight.normal,
+                              //           fontSize: 13,
+                              //         ),
+                              //       ),
+                              //       const SizedBox(
+                              //         width: 5,
+                              //       ),
+                              //       Text(
+                              //         widget.shop!.name,
+                              //         style: const TextStyle(
+                              //           fontWeight: FontWeight.bold,
+                              //           fontSize: 13,
+                              //         ),
+                              //       ),
+                              //     ],
+                              //   ),
                               if (widget.isExpanded != true)
                                 Row(
                                   children: <Widget>[
                                     const Text(
-                                      'Customer',
+                                      'Seller:',
                                       style: TextStyle(
                                         fontWeight: FontWeight.normal,
                                         fontSize: 13,
@@ -157,8 +181,8 @@ class _OrderWidgetState extends State<OrderWidget> {
                                       width: 5,
                                     ),
                                     Text(
-                                      widget.order.user!.name ??
-                                          widget.order.user!.username,
+                                      widget.shop!.user!.name ??
+                                          widget.shop!.user!.username,
                                       style: const TextStyle(
                                         fontWeight: FontWeight.bold,
                                         fontSize: 13,
@@ -181,7 +205,7 @@ class _OrderWidgetState extends State<OrderWidget> {
                                         CrossAxisAlignment.start,
                                     children: <Widget>[
                                       const Text(
-                                        'Customer',
+                                        'Seller',
                                         style: TextStyle(
                                           fontWeight: FontWeight.normal,
                                           fontSize: 13,
@@ -204,7 +228,7 @@ class _OrderWidgetState extends State<OrderWidget> {
                                                     BorderRadius.circular(100),
                                                 child:
                                                     NetworkImageWithPlaceHolder(
-                                                        imageUrl: widget.order
+                                                        imageUrl: widget.shop!
                                                             .user!.photoUrl)),
                                           ),
                                           const SizedBox(
@@ -215,8 +239,8 @@ class _OrderWidgetState extends State<OrderWidget> {
                                                 CrossAxisAlignment.start,
                                             children: <Widget>[
                                               Text(
-                                                widget.order.user!.name ??
-                                                    widget.order.user!.username,
+                                                widget.shop!.user!.name ??
+                                                    widget.shop!.user!.username,
                                                 style: const TextStyle(
                                                   fontWeight: FontWeight.bold,
                                                   fontSize: 13,
@@ -236,7 +260,7 @@ class _OrderWidgetState extends State<OrderWidget> {
                                                               false,
                                                         ),
                                                         arguments:
-                                                            widget.order.user,
+                                                            widget.shop!.user,
                                                       );
                                                     },
                                                     child: Container(
@@ -272,7 +296,7 @@ class _OrderWidgetState extends State<OrderWidget> {
                                                       Get.toNamed(
                                                           Routes.publicProfile,
                                                           arguments: widget
-                                                              .order.user);
+                                                              .shop!.user);
                                                     },
                                                     child: Container(
                                                       padding: const EdgeInsets

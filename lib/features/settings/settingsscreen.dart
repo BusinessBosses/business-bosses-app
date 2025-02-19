@@ -3,6 +3,7 @@
 import 'dart:convert';
 import 'dart:io';
 
+import 'package:business_bosses_v2/action/action.dart';
 import 'package:business_bosses_v2/common/widgets/buttons/my_outlined_button.dart';
 import 'package:business_bosses_v2/features/profile/controller/profile_controller.dart';
 import 'package:business_bosses_v2/features/settings/settingsItemModal.dart';
@@ -84,6 +85,17 @@ class _SettingsScreenState extends State<SettingsScreen> {
     super.initState();
   }
 
+  void _shareWithFriends() {
+    // ignore: unnecessary_null_comparison
+    if (profileController.myProfile.inviteId == null) return;
+    String message = 'Check out Business Bosses.\n'
+        'An app to meet entrepreneurs and grow your business. Join now for FREE promotion\n'
+        'https://businessbosses.onelink.me/xLWk/36a2ff16\n'
+        'Invite id: $profileController.myProfile.inviteId';
+    logEvent(profileController.myProfile.inviteId, 'invite');
+    socialShare(message);
+  }
+
   @override
   Widget build(BuildContext context) {
     context = context;
@@ -107,6 +119,72 @@ class _SettingsScreenState extends State<SettingsScreen> {
       body: SingleChildScrollView(
         child: Column(
           children: [
+            const SizedBox(
+              height: 10,
+            ),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 15.0),
+              child: Container(
+                width: double.infinity,
+                padding: const EdgeInsets.only(bottom: 30),
+                decoration: BoxDecoration(
+                    color: backgroundColor,
+                    borderRadius: BorderRadius.circular(12)),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: <Widget>[
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: <Widget>[
+                        const Text(
+                          'Invite friends to get 10 coins',
+                          style: TextStyle(
+                              fontWeight: FontWeight.w700, fontSize: 16),
+                        ),
+                        Text(
+                          'Invite ID : ${profileController.myProfile.inviteId!}',
+                          style: const TextStyle(
+                              color: Colors.grey, fontWeight: FontWeight.w700),
+                        )
+                      ],
+                    ),
+                    GestureDetector(
+                      onTap: () {
+                        _shareWithFriends();
+                      },
+                      child: Container(
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 10, vertical: 10),
+                        width: 120,
+                        decoration: BoxDecoration(
+                          color: Colors.white,
+                          border:
+                              Border.all(width: 2, color: Colors.transparent),
+                          borderRadius: BorderRadius.circular(12),
+                        ),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: <Widget>[
+                            const Text(
+                              'Invite',
+                              style: TextStyle(
+                                  color: primaryColorLT,
+                                  fontWeight: FontWeight.w700,
+                                  fontSize: 16),
+                            ),
+                            SvgPicture.asset(
+                              'assets/svgs/invite.svg',
+                              color: primaryColorLT,
+                              height: 13,
+                            )
+                          ],
+                        ),
+                      ),
+                    )
+                  ],
+                ),
+              ),
+            ),
             ListView.builder(
               shrinkWrap: true,
               primary: false,

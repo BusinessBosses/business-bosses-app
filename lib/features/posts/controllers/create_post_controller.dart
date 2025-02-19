@@ -43,7 +43,7 @@ class CreatePostController extends GetxController {
   File? vidThumbnail;
 
   /// PROMOTE STATE
-  RxBool shouldPromote = false.obs;
+  RxBool shouldPromote = true.obs;
 
   /// LOADING STATE
   RxBool loading = false.obs;

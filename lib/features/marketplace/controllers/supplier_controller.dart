@@ -15,6 +15,7 @@ class SupplierController extends GetxController {
   RxBool loading = RxBool(true);
   RxBool loadingSearch = RxBool(false);
   RxBool isSupplierSearch = RxBool(false);
+  RxString filterCategory = RxString('');
 
   void clearSupplierSearch() {
     isSupplierSearch(false);
@@ -65,15 +66,37 @@ class SupplierController extends GetxController {
     update();
 
     searchedSuppliers.clear();
-    String lowerCaseQuery = query.toLowerCase();
-    for (SuppliersModel user in suppliers) {
-      String lowerCaseName = user.name.toLowerCase();
-      if (lowerCaseName.contains(lowerCaseQuery) ||
-          user.user!.name!.toLowerCase().contains(lowerCaseQuery) ||
-          user.user!.username.toLowerCase().contains(lowerCaseQuery)) {
-        searchedSuppliers.add(user);
-      }
+    String lowerCaseQuery = query.toLowerCase().trim();
+    String normalizedCategory = filterCategory.value.toLowerCase().trim();
+
+    // If search query is empty, clear the search results and exit early
+    if (lowerCaseQuery.isEmpty) {
+      loadingSearch(false);
+      isSupplierSearch(false); // Indicate that search is not active
+      update();
+      return;
     }
+
+    searchedSuppliers.addAll(
+      suppliers.where((SuppliersModel supplier) {
+        String lowerCaseName = supplier.name.toLowerCase();
+        String lowerCaseDescription = supplier.description.toLowerCase();
+        String? itemCategory = supplier.category?.toLowerCase().trim();
+        String? userName = supplier.user?.name?.toLowerCase();
+        String? userUsername = supplier.user?.username.toLowerCase();
+
+        bool matchesCategory =
+            normalizedCategory.isEmpty || itemCategory == normalizedCategory;
+        bool matchesQuery = lowerCaseName.isEmpty ||
+            lowerCaseName.contains(lowerCaseQuery) ||
+            lowerCaseDescription.contains(lowerCaseQuery) ||
+            (userName?.contains(lowerCaseQuery) ?? false) ||
+            (userUsername?.contains(lowerCaseQuery) ?? false);
+
+        return matchesCategory && matchesQuery;
+      }),
+    );
+
     loadingSearch(false);
     isSupplierSearch(true);
     update();

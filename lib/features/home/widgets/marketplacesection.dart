@@ -32,11 +32,11 @@ class MarketplaceSection extends StatelessWidget {
                   Wrap(
                       crossAxisAlignment: WrapCrossAlignment.center,
                       children: <Widget>[
-                        const Text(
-                          'View all',
-                          style: TextStyle(fontSize: 11),
-                        ),
-                        const SizedBox(width: 5.0),
+                        // const Text(
+                        //   'View all',
+                        //   style: TextStyle(fontSize: 11),
+                        // ),
+                        // const SizedBox(width: 5.0),
                         SvgPicture.asset(
                           'assets/svgs/nexticon.svg',
                           // ignore: deprecated_member_use

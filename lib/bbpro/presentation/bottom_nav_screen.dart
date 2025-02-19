@@ -101,80 +101,131 @@ class _BottomnavscreenState extends State<Bottomnavscreen> {
               body: Center(
                 child: _widgetOptions.elementAt(_selectedIndex),
               ),
-              bottomNavigationBar: BottomNavigationBar(
-                backgroundColor: Colors.white,
-                type: BottomNavigationBarType.fixed,
-                items: <BottomNavigationBarItem>[
-                  BottomNavigationBarItem(
-                    icon: SvgPicture.asset(
-                      'assets/svgs/dashboard.svg',
-                      height: 20,
-                      colorFilter: ColorFilter.mode(
-                        _selectedIndex == 0
-                            ? proprimaryColor
-                            : const Color(0xffBDBEC0),
-                        BlendMode.srcIn,
-                      ),
+              bottomNavigationBar: Container(
+                decoration: BoxDecoration(
+                  boxShadow: <BoxShadow>[
+                    BoxShadow(
+                      color: Colors.black.withOpacity(0.08),
+                      spreadRadius: 10,
+                      blurRadius: 50,
+                      offset: const Offset(0, 7), // changes position of shadow
                     ),
-                    label: 'Dashboard',
-                  ),
-                  BottomNavigationBarItem(
-                    icon: SvgPicture.asset(
-                      'assets/svgs/projects.svg',
-                      height: 20,
-                      colorFilter: ColorFilter.mode(
-                        _selectedIndex == 1
-                            ? proprimaryColor
-                            : const Color(0xffBDBEC0),
-                        BlendMode.srcIn,
-                      ),
+                  ],
+                ),
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: <Widget>[
+                    Container(
+                      height: 5,
+                      color: Colors.white,
                     ),
-                    label: 'Tasks',
-                  ),
-                  BottomNavigationBarItem(
-                    icon: SvgPicture.asset(
-                      'assets/svgs/ordersinvoices.svg',
-                      height: 20,
-                      colorFilter: ColorFilter.mode(
-                        _selectedIndex == 2
-                            ? proprimaryColor
-                            : const Color(0xffBDBEC0),
-                        BlendMode.srcIn,
+                    BottomNavigationBar(
+                      unselectedLabelStyle: const TextStyle(
+                        fontSize: 13.0,
+                        fontWeight: FontWeight.w700,
+                        color: iconColor,
                       ),
-                    ),
-                    label: 'Orders',
-                  ),
-                  BottomNavigationBarItem(
-                    icon: SvgPicture.asset(
-                      'assets/svgs/clients.svg',
-                      height: 20,
-                      colorFilter: ColorFilter.mode(
-                        _selectedIndex == 3
-                            ? proprimaryColor
-                            : const Color(0xffBDBEC0),
-                        BlendMode.srcIn,
+                      selectedLabelStyle: const TextStyle(
+                        fontSize: 13.0,
+                        fontWeight: FontWeight.w700,
+                        color: proprimaryColor,
                       ),
+                      elevation: 0,
+                      backgroundColor: Colors.white,
+                      type: BottomNavigationBarType.fixed,
+                      items: <BottomNavigationBarItem>[
+                        BottomNavigationBarItem(
+                          icon: Padding(
+                            padding: const EdgeInsets.only(bottom: 3.0),
+                            child: SvgPicture.asset(
+                              'assets/svgs/dashboard.svg',
+                              height: 20,
+                              colorFilter: ColorFilter.mode(
+                                _selectedIndex == 0
+                                    ? proprimaryColor
+                                    : const Color(0xffBDBEC0),
+                                BlendMode.srcIn,
+                              ),
+                            ),
+                          ),
+                          label: 'Dashboard',
+                        ),
+                        BottomNavigationBarItem(
+                          icon: Padding(
+                            padding: const EdgeInsets.only(bottom: 3.0),
+                            child: SvgPicture.asset(
+                              'assets/svgs/projects.svg',
+                              height: 20,
+                              colorFilter: ColorFilter.mode(
+                                _selectedIndex == 1
+                                    ? proprimaryColor
+                                    : const Color(0xffBDBEC0),
+                                BlendMode.srcIn,
+                              ),
+                            ),
+                          ),
+                          label: 'Tasks',
+                        ),
+                        BottomNavigationBarItem(
+                          icon: Padding(
+                            padding: const EdgeInsets.only(bottom: 3.0),
+                            child: SvgPicture.asset(
+                              'assets/svgs/ordersinvoices.svg',
+                              height: 20,
+                              colorFilter: ColorFilter.mode(
+                                _selectedIndex == 2
+                                    ? proprimaryColor
+                                    : const Color(0xffBDBEC0),
+                                BlendMode.srcIn,
+                              ),
+                            ),
+                          ),
+                          label: 'Orders',
+                        ),
+                        BottomNavigationBarItem(
+                          icon: Padding(
+                            padding: const EdgeInsets.only(bottom: 3.0),
+                            child: SvgPicture.asset(
+                              'assets/svgs/clients.svg',
+                              height: 20,
+                              colorFilter: ColorFilter.mode(
+                                _selectedIndex == 3
+                                    ? proprimaryColor
+                                    : const Color(0xffBDBEC0),
+                                BlendMode.srcIn,
+                              ),
+                            ),
+                          ),
+                          label: 'Customers',
+                        ),
+                        BottomNavigationBarItem(
+                          icon: Padding(
+                            padding: const EdgeInsets.only(bottom: 3.0),
+                            child: SvgPicture.asset(
+                              'assets/svgs/setupshop.svg',
+                              height: 20,
+                              colorFilter: ColorFilter.mode(
+                                _selectedIndex == 4
+                                    ? proprimaryColor
+                                    : const Color(0xffBDBEC0),
+                                BlendMode.srcIn,
+                              ),
+                            ),
+                          ),
+                          label: 'Set Up',
+                        ),
+                      ],
+                      currentIndex: _selectedIndex,
+                      selectedItemColor: proprimaryColor,
+                      unselectedItemColor: Colors.grey,
+                      onTap: _onItemTapped,
                     ),
-                    label: 'Customers',
-                  ),
-                  BottomNavigationBarItem(
-                    icon: SvgPicture.asset(
-                      'assets/svgs/setupshop.svg',
+                    Container(
                       height: 20,
-                      colorFilter: ColorFilter.mode(
-                        _selectedIndex == 4
-                            ? proprimaryColor
-                            : const Color(0xffBDBEC0),
-                        BlendMode.srcIn,
-                      ),
-                    ),
-                    label: 'Set Up',
-                  ),
-                ],
-                currentIndex: _selectedIndex,
-                selectedItemColor: proprimaryColor,
-                unselectedItemColor: Colors.grey,
-                onTap: _onItemTapped,
+                      color: Colors.white,
+                    )
+                  ],
+                ),
               ),
             ),
           ));

@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:business_bosses_v2/bbpro/models/shop_model.dart';
 import 'package:business_bosses_v2/bbpro/widgets/button.dart';
 import 'package:business_bosses_v2/bbpro/widgets/edit_text.dart';
 import 'package:business_bosses_v2/bbpro/widgets/textfield.dart';
@@ -23,30 +24,29 @@ import '../../forum/widgets/field_container.dart';
 import '../../profile/controller/profile_controller.dart';
 
 /// SELLING SCREEN MARKETPLACE
-class AddSupplierScreen extends StatefulWidget {
+class AddSupplierShopScreen extends StatefulWidget {
   /// SELLING SCREEN MARKETPLACE
-  const AddSupplierScreen({Key? key, this.supplier}) : super(key: key);
+  const AddSupplierShopScreen({Key? key, required this.shop}) : super(key: key);
 
-  final SuppliersModel? supplier;
+  final Shop shop;
   @override
   // ignore: library_private_types_in_public_api
-  _AddSupplierScreenState createState() => _AddSupplierScreenState();
+  _AddSupplierShopScreenState createState() => _AddSupplierShopScreenState();
 }
 
-class _AddSupplierScreenState extends State<AddSupplierScreen> {
+class _AddSupplierShopScreenState extends State<AddSupplierShopScreen> {
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
   final ProfileController _profileController = Get.find();
   final SupplierController supplierController = Get.put(SupplierController());
   final List<XFile> _selectedImages = <XFile>[];
-
-  SuppliersModel? _supplier;
 
   String? description;
   String? email;
   String? name;
   String? url;
   String? discount;
-  String? _selectedCategory;
+  String? image;
+  String? _selectedCategory = 'Agriculture, Food & Beverage';
   String? _selectedLocation;
   String? filterCode;
   String? filterLocation;
@@ -75,17 +75,14 @@ class _AddSupplierScreenState extends State<AddSupplierScreen> {
   @override
   void initState() {
     super.initState();
-    descriptionController.text = _supplier?.description ?? '';
-    email = _supplier?.email ?? '';
-    _emailController.text = _supplier?.email ?? '';
-    String? existingCategory = _supplier?.category;
-    if (categories.contains(existingCategory)) {
-      _selectedCategory = existingCategory;
-    } else {
-      _selectedCategory =
-          'Vehicle & Transportation'; // Default to "Other" if the category is invalid
-    }
-    _selectedLocation = _supplier?.location;
+    _nameController.text = widget.shop.name;
+    descriptionController.text = widget.shop.description;
+    email = widget.shop.email;
+    _emailController.text = widget.shop.email ?? '';
+    _urlController.text = widget.shop.url ?? '';
+    _phoneController.text = widget.shop.phone ?? '';
+    _selectedLocation = widget.shop.location;
+    image = widget.shop.image;
   }
 
   @override
@@ -98,8 +95,7 @@ class _AddSupplierScreenState extends State<AddSupplierScreen> {
           backgroundColor: backgroundcolorinterface,
           key: _scaffoldKey,
           appBar: AppBar(
-            title: Text(
-                widget.supplier != null ? 'Edit Supplier' : 'Add a Supplier'),
+            title: const Text('Add a Supplier'),
             automaticallyImplyLeading: false, // Used for removing back buttoon.
             actions: <Widget>[
               IconButton(
@@ -277,40 +273,39 @@ class _AddSupplierScreenState extends State<AddSupplierScreen> {
                 const SizedBox(
                   height: 12,
                 ),
-                widget.supplier != null
-                    ? const SizedBox()
-                    : Padding(
-                        padding: const EdgeInsets.only(left: 16.0, right: 16),
-                        child: GestureDetector(
-                          onTap: _pickImages,
-                          child: FieldContainer(
-                            child: Row(
-                              children: <Widget>[
-                                SvgPicture.asset('assets/svgs/file.svg'),
-                                const SizedBox(width: 16.0),
-                                Expanded(
-                                  child: Text(
-                                    'Add Attachment',
-                                    style: Theme.of(context)
-                                        .textTheme
-                                        .bodyMedium
-                                        ?.copyWith(color: hintColor),
-                                  ),
-                                ),
-                                const SizedBox(width: 16.0),
-                                CircleAvatar(
-                                  radius: 26 / 1.38,
-                                  backgroundColor: backgroundColor,
-                                  child: SvgPicture.asset(
-                                    'assets/svgs/addimagepost.svg',
-                                    height: 18,
-                                  ),
-                                ),
-                              ],
+                if (image != null)
+                  Padding(
+                    padding: const EdgeInsets.only(left: 16.0, right: 16),
+                    child: GestureDetector(
+                      onTap: _pickImages,
+                      child: FieldContainer(
+                        child: Row(
+                          children: <Widget>[
+                            SvgPicture.asset('assets/svgs/file.svg'),
+                            const SizedBox(width: 16.0),
+                            Expanded(
+                              child: Text(
+                                'Add Attachment',
+                                style: Theme.of(context)
+                                    .textTheme
+                                    .bodyMedium
+                                    ?.copyWith(color: hintColor),
+                              ),
                             ),
-                          ),
+                            const SizedBox(width: 16.0),
+                            CircleAvatar(
+                              radius: 26 / 1.38,
+                              backgroundColor: backgroundColor,
+                              child: SvgPicture.asset(
+                                'assets/svgs/addimagepost.svg',
+                                height: 18,
+                              ),
+                            ),
+                          ],
                         ),
                       ),
+                    ),
+                  ),
                 Padding(
                   padding: const EdgeInsets.only(
                     left: 16.0,
@@ -374,7 +369,7 @@ class _AddSupplierScreenState extends State<AddSupplierScreen> {
                           _phoneController.text.isEmpty ||
                           _selectedCategory == null ||
                           _selectedLocation == null ||
-                          _selectedImages.isEmpty) {
+                          (_selectedImages.isEmpty && image == null)) {
                         anError = true;
                       }
                       if (anError) {
@@ -404,9 +399,7 @@ class _AddSupplierScreenState extends State<AddSupplierScreen> {
                       });
                     },
                     loading: _isProcessing,
-                    text: widget.supplier != null
-                        ? 'Update Supplier'
-                        : 'Add Supplier',
+                    text: 'Add Supplier',
                   ),
                 ),
                 Center(
@@ -493,27 +486,30 @@ class _AddSupplierScreenState extends State<AddSupplierScreen> {
   }
 
   Future<void> _onChangeForum() async {
-    if (widget.supplier != null) {
+    List<String> imageUrls = <String>[];
+    if (image != null) {
+      imageUrls.add(image!);
     } else {
-      final List<String> imageUrls = await _uploadImages(_selectedImages);
-      final ApiResponseModel response =
-          await supplierController.addSupplier(<String, dynamic>{
-        'category': removeAfterHyphen(_selectedCategory),
-        'location': _selectedLocation,
-        'description': descriptionController.text,
-        'userId': _profileController.myProfile.uid,
-        'name': _nameController.text,
-        'email': _emailController.text,
-        'phone': _phoneController.text,
-        'url': _urlController.text,
-        'images': imageUrls,
-      });
-      if (response.success) {
-        Get.back();
-      } else {
-        showSnackbar(
-            message: 'Supplier not added!', title: 'Error!', error: true);
-      }
+      imageUrls = await _uploadImages(_selectedImages);
+    }
+    final ApiResponseModel response =
+        await supplierController.addSupplier(<String, dynamic>{
+      'category': removeAfterHyphen(_selectedCategory),
+      'location': _selectedLocation,
+      'description': descriptionController.text,
+      'userId': _profileController.myProfile.uid,
+      'name': _nameController.text,
+      'email': _emailController.text,
+      'phone': _phoneController.text,
+      'url': _urlController.text,
+      'images': imageUrls,
+      'isBiz': true,
+    });
+    if (response.success) {
+      Get.back();
+    } else {
+      showSnackbar(
+          message: 'Supplier not added!', title: 'Error!', error: true);
     }
   }
 

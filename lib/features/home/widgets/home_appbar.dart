@@ -1,8 +1,5 @@
-import 'package:business_bosses_v2/analytics/presentation/howtouseapp.dart';
-import 'package:business_bosses_v2/features/home/discoverscreen.dart';
-import 'package:business_bosses_v2/features/home/sellProduct.dart';
+import 'package:business_bosses_v2/bbpro/widgets/menubutton.dart';
 import 'package:business_bosses_v2/features/marketplace/widgets/products.dart';
-import 'package:business_bosses_v2/features/posts/presentation/create_poll_screen.dart';
 import 'package:business_bosses_v2/navigation/routes.dart';
 import 'package:business_bosses_v2/utils/theme/theme.dart';
 import 'package:flutter/material.dart';
@@ -18,8 +15,10 @@ class HomeAppBar extends StatelessWidget {
     this.isTabVisible = false,
     required this.controller,
     this.hasevent,
+    this.onMenuClick,
   }) : super(key: key);
 
+  final VoidCallback? onMenuClick;
   final bool hasBadge;
   final bool isTabVisible;
   final String coinsCount;
@@ -102,21 +101,21 @@ class HomeAppBar extends StatelessWidget {
                 //         ],
                 //       )
                 //     :
-                GestureDetector(
-                  onTap: () {
-                    Get.to(const HowToUseAppScreen());
-                  },
-                  child: Padding(
-                    padding: const EdgeInsets.only(right: 10.0),
-                    child: CircleAvatar(
-                      radius: 48 / 3,
-                      backgroundColor: primaryColorLT.withOpacity(0.1),
-                      child: SvgPicture.asset(
-                        'assets/app/app_icon_only.svg',
-                      ),
-                    ),
-                  ),
-                ),
+                // GestureDetector(
+                //   onTap: () {
+                //     Get.to(const HowToUseAppScreen());
+                //   },
+                //   child: Padding(
+                //     padding: const EdgeInsets.only(right: 10.0),
+                //     child: CircleAvatar(
+                //       radius: 48 / 3,
+                //       backgroundColor: primaryColorLT.withOpacity(0.1),
+                //       child: SvgPicture.asset(
+                //         'assets/app/app_icon_only.svg',
+                //       ),
+                //     ),
+                //   ),
+                // ),
                 Expanded(
                     child: GestureDetector(
                   onTap: () {
@@ -340,62 +339,9 @@ class HomeAppBar extends StatelessWidget {
                             ),
                           ),
                         ),
-                        // if (hasevent != true)
-                        //   Positioned(
-                        //     top: 0,
-                        //     right: 0,
-                        //     child: Container(
-                        //       decoration: BoxDecoration(
-                        //         shape: BoxShape.circle,
-                        //         border: Border.all(
-                        //           color: Colors.white, // Border color
-                        //           width: 2.0, // Border width
-                        //         ),
-                        //       ),
-                        //       child: const CircleAvatar(
-                        //         backgroundColor: primaryColorLT,
-                        //         radius: 5,
-                        //       ),
-                        //     ),
-                        //   )
                       ],
                     ),
-                    // Stack(
-                    //   children: <Widget>[
-                    //     GestureDetector(
-                    //       onTap: () => Get.toNamed(Routes.chat),
-                    //       child: CircleAvatar(
-                    //         backgroundColor: Colors.transparent,
-                    //         child: SvgPicture.asset(
-                    //           'assets/svgs/messagefilled.svg',
-                    //           height: 18,
-                    //           colorFilter: const ColorFilter.mode(
-                    //             primaryColorLT,
-                    //             BlendMode.srcIn,
-                    //           ),
-                    //         ),
-                    //       ),
-                    //     ),
-                    //     if (hasBadge)
-                    //       Positioned(
-                    //         top: 5,
-                    //         right: 3,
-                    //         child: Container(
-                    //           decoration: BoxDecoration(
-                    //             shape: BoxShape.circle,
-                    //             border: Border.all(
-                    //               color: Colors.white, // Border color
-                    //               width: 2.0, // Border width
-                    //             ),
-                    //           ),
-                    //           child: const CircleAvatar(
-                    //             backgroundColor: primaryColorLT,
-                    //             radius: 5,
-                    //           ),
-                    //         ),
-                    //       )
-                    //   ],
-                    // ),
+
                     Stack(
                       children: <Widget>[
                         GestureDetector(
@@ -403,7 +349,7 @@ class HomeAppBar extends StatelessWidget {
                           child: CircleAvatar(
                             backgroundColor: Colors.transparent,
                             child: SvgPicture.asset(
-                              'assets/svgs/notificationfilled.svg',
+                              'assets/svgs/notificationicon.svg',
                               height: 20,
                               colorFilter: const ColorFilter.mode(
                                 Colors.black,
@@ -432,6 +378,9 @@ class HomeAppBar extends StatelessWidget {
                           )
                       ],
                     ),
+
+                    GestureDetector(
+                        onTap: onMenuClick, child: const CustomMenuButton())
                   ],
                 ),
               ],

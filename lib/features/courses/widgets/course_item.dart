@@ -17,7 +17,6 @@ import 'package:business_bosses_v2/features/posts/widgets/youtube_display_item.d
 import 'package:business_bosses_v2/features/profile/controller/profile_controller.dart';
 import 'package:business_bosses_v2/navigation/routes.dart';
 import 'package:business_bosses_v2/utils/theme/theme.dart';
-import 'package:business_bosses_v2/utils/time_format.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
@@ -950,16 +949,16 @@ class _CourseItemState extends State<CourseItem> {
                   ),
                 ),
                 const Spacer(),
-                Padding(
-                  padding: const EdgeInsets.only(right: 15),
-                  child: Text(
-                    TimeFormat.formatString(widget.course.timestamp),
-                    style: Theme.of(context)
-                        .textTheme
-                        .bodyMedium
-                        ?.copyWith(color: textColor.withOpacity(0.4)),
-                  ),
-                )
+                // Padding(
+                //   padding: const EdgeInsets.only(right: 15),
+                //   child: Text(
+                //     TimeFormat.formatString(widget.course.timestamp),
+                //     style: Theme.of(context)
+                //         .textTheme
+                //         .bodyMedium
+                //         ?.copyWith(color: textColor.withOpacity(0.4)),
+                //   ),
+                // )
               ],
             ),
             Container(

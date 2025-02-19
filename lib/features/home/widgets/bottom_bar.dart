@@ -1,10 +1,9 @@
-import 'package:business_bosses_v2/bbpro/presentation/bottom_nav_screen.dart';
+
 import 'package:business_bosses_v2/features/chat/chat_screen.dart';
 import 'package:business_bosses_v2/features/chat/controllers/chat_controller.dart';
 import 'package:business_bosses_v2/features/chat/models/my_message.dart';
 import 'package:business_bosses_v2/features/home/bottom_nav.dart';
 import 'package:business_bosses_v2/features/home/marketplace_screen.dart';
-import 'package:business_bosses_v2/features/premium/proscreen.dart';
 import 'package:business_bosses_v2/features/profile/controller/profile_controller.dart';
 import 'package:business_bosses_v2/navigation/routes.dart';
 import 'package:business_bosses_v2/utils/theme/theme.dart';
@@ -64,7 +63,6 @@ class BottomBar extends StatelessWidget {
                           isActive: activeIndex == 0,
                         ),
                       ),
-
                       Expanded(
                         flex: 10,
                         child: Stack(children: <Widget>[
@@ -115,7 +113,6 @@ class BottomBar extends StatelessWidget {
                             )
                         ]),
                       ),
-
                       Expanded(
                         flex: 10,
                         child: BottomTabButton(
@@ -134,117 +131,6 @@ class BottomBar extends StatelessWidget {
                           isActive: activeIndex == 2,
                         ),
                       ),
-                      // Expanded(
-                      //     flex: 10,
-                      //     child: GestureDetector(
-                      //       onTap: () {
-                      //         showModalBottomSheet(
-                      //           context: context,
-                      //           shape: const RoundedRectangleBorder(
-                      //             borderRadius: BorderRadius.vertical(
-                      //               top: Radius.circular(25.0),
-                      //             ),
-                      //           ),
-                      //           builder: (BuildContext context) {
-                      //             return SizedBox(
-                      //               height: 310,
-                      //               child: Padding(
-                      //                 padding: const EdgeInsets.all(15.0),
-                      //                 child: Column(
-                      //                   crossAxisAlignment:
-                      //                       CrossAxisAlignment.start,
-                      //                   mainAxisSize: MainAxisSize.min,
-                      //                   children: <Widget>[
-                      //                     Expanded(
-                      //                       // Set a specific height
-                      //                       child: ListView.separated(
-                      //                         itemCount: 4,
-                      //                         separatorBuilder:
-                      //                             (BuildContext context,
-                      //                                     int index) =>
-                      //                                 const Divider(),
-                      //                         itemBuilder:
-                      //                             (BuildContext context,
-                      //                                 int index) {
-                      //                           return ListTile(
-                      //                             onTap: () {
-                      //                               Navigator.pop(
-                      //                                   context); // Close the drawer or navigate back
-                      //                               if (index == 0) {
-                      //                                 Get.toNamed(Routes
-                      //                                     .createPost); // Navigate to "createPost" route
-                      //                               } else if (index == 1) {
-                      //                                 sellProduct(
-                      //                                     context); // Call sellProduct function
-                      //                               } else if (index == 2) {
-                      //                                 Get.toNamed(Routes
-                      //                                     .createevent); // Navigate to "createevent" route
-                      //                               } else if (index == 3) {
-                      //                                 Get.to(() =>
-                      //                                     const CreatePollScreen()); // Navigate to "createPollSurvey" route
-                      //                               }
-                      //                             },
-                      //                             minVerticalPadding: 0,
-                      //                             contentPadding:
-                      //                                 const EdgeInsets.only(
-                      //                                     left: 10),
-                      //                             leading: index == 3
-                      //                                 ? const Icon(
-                      //                                     Icons.poll,
-                      //                                     color: Colors.black,
-                      //                                   )
-                      //                                 : SvgPicture.asset(
-                      //                                     index == 0
-                      //                                         ? 'assets/svgs/text.svg'
-                      //                                         : index == 1
-                      //                                             ? 'assets/svgs/sellicon.svg'
-                      //                                             : 'assets/svgs/liveevent.svg', // Assuming you have a "polls.svg" asset
-                      //                                     height: index == 0
-                      //                                         ? 25
-                      //                                         : index == 1
-                      //                                             ? 30
-                      //                                             : index == 2
-                      //                                                 ? 22
-                      //                                                 : 22, // Adjust the height as needed
-                      //                                     // ignore: deprecated_member_use
-                      //                                     color: textColor
-                      //                                         .withOpacity(1),
-                      //                                   ),
-                      //                             title: Text(
-                      //                               index == 0
-                      //                                   ? 'Create a Post'
-                      //                                   : index == 1
-                      //                                       ? 'Sell your product & service'
-                      //                                       : index == 2
-                      //                                           ? 'Create a Live Event'
-                      //                                           : 'Create Polls & Surveys',
-                      //                               style: const TextStyle(
-                      //                                 fontSize: 18,
-                      //                                 fontWeight:
-                      //                                     FontWeight.w700,
-                      //                               ),
-                      //                             ),
-                      //                           );
-                      //                         },
-                      //                       ),
-                      //                     )
-                      //                   ],
-                      //                 ),
-                      //               ),
-                      //             );
-                      //           },
-                      //         );
-                      //       },
-                      //       child: CircleAvatar(
-                      //         backgroundColor: backgroundColor,
-                      //         radius: 25,
-                      //         child: Icon(
-                      //           Icons.add,
-                      //           color: primaryColorLT,
-                      //         ),
-                      //       ),
-                      //     )),
-
                       Expanded(
                         flex: 10,
                         child: BottomTabButton(
@@ -263,7 +149,6 @@ class BottomBar extends StatelessWidget {
                           isActive: activeIndex == 3,
                         ),
                       ),
-
                       Expanded(
                         flex: 10,
                         child: BottomTabButton(

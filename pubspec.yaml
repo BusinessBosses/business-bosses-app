@@ -102,6 +102,7 @@ dependencies:
   internet_file: ^1.2.0
   carousel_slider: ^5.0.0
   fl_chart: ^0.36.0
+  flutter_advanced_drawer: ^1.4.0
 
 dev_dependencies:
   flutter_launcher_icons: ^0.13.1

@@ -2,7 +2,6 @@ import 'package:business_bosses_v2/bbpro/controllers/shop_controller.dart';
 import 'package:business_bosses_v2/bbpro/widgets/button.dart';
 import 'package:business_bosses_v2/common/widgets/safety_model.dart';
 import 'package:business_bosses_v2/features/home/widgets/bottom_bar.dart';
-import 'package:business_bosses_v2/features/live_event/presentation/live_event.dart';
 import 'package:business_bosses_v2/features/posts/presentation/create_post_screen.dart';
 import 'package:business_bosses_v2/features/premium/profeatures.dart';
 import 'package:business_bosses_v2/features/premium/unlockedfeatures.dart';
@@ -299,7 +298,7 @@ class _ProSubscribeSectionState extends State<ProSubscribeSection> {
                       SizedBox(
                         height: 25,
                       ),
-                      Text('Your Business Simplified',
+                      Text('Set Up Your Biz-Centre & Start Selling',
                           style: TextStyle(
                             fontSize: 20,
                             fontWeight: FontWeight.bold,

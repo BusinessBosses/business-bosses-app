@@ -81,6 +81,20 @@ class _UpdateProfileScreenState extends State<UpdateProfileScreen> {
   final List<String> _usersToCompareUsername = [''];
 
   List<String> achievements = <String>[];
+  final List<String> categories = <String>[
+    'Agriculture, Food & Beverage',
+    'Books & Education',
+    'Construction & Real Estate',
+    'Fashion & Beauty',
+    'Finance & Legal',
+    'Healthcare & Wellness',
+    'Home, Gardens & Outdoors',
+    'Jewellery & Timepieces',
+    'Media & Entertainment',
+    'Security, Safety & Equipment',
+    'Technology, Games & Electronic',
+    'Vehicle & Transportation'
+  ];
 
   TextEditingController achievementController = TextEditingController();
   TextEditingController productsController = TextEditingController();
@@ -146,7 +160,13 @@ class _UpdateProfileScreenState extends State<UpdateProfileScreen> {
     _email = user.email;
     _location = user.location;
     _category = user.category;
-    _industry = user.industry;
+    String? existingCategory = user.industry;
+    if (categories.contains(existingCategory)) {
+      _industry = existingCategory;
+    } else {
+      _industry =
+          'Vehicle & Transportation'; // Default to "Other" if the category is invalid
+    }
     _photoUrl = user.photoUrl;
     _companyName = user.companyName;
     _username = user.username;
@@ -626,36 +646,36 @@ class _UpdateProfileScreenState extends State<UpdateProfileScreen> {
                                                         fontWeight:
                                                             FontWeight.w700)),
                                                 const SizedBox(height: 10.0),
-                                                GestureDetector(
-                                                  onTap: () => onDataPicker(
-                                                    analyser: Analyser.industry,
-                                                    title: 'Industries',
-                                                    list:
-                                                        AnalyserData.industries,
+                                                DropdownButton<String>(
+                                                  value: _industry,
+                                                  borderRadius:
+                                                      BorderRadius.circular(
+                                                          radius),
+                                                  isExpanded: true,
+                                                  icon: const Icon(Icons
+                                                      .keyboard_arrow_down_sharp),
+                                                  iconSize: 24,
+                                                  elevation: 16,
+                                                  underline: Container(
+                                                    height: 1,
+                                                    color: hintColor,
                                                   ),
-                                                  child: Container(
-                                                    width: double.infinity,
-                                                    decoration: BoxDecoration(
-                                                      color:
-                                                          backgroundcolorinterface,
-                                                      borderRadius:
-                                                          BorderRadius.circular(
-                                                              radiusValue),
-                                                    ),
-                                                    child: ListTile(
-                                                      leading: _industry != null
-                                                          ? Text(_industry!)
-                                                          : Text(
-                                                              'select a industry',
-                                                              style: bodyText2
-                                                                  .copyWith(
-                                                                      color:
-                                                                          hintColor),
-                                                            ),
-                                                      trailing: const Icon(Icons
-                                                          .keyboard_arrow_right),
-                                                    ),
-                                                  ),
+                                                  onChanged:
+                                                      (String? newValue) {
+                                                    setState(() {
+                                                      _industry = newValue;
+                                                    });
+                                                  },
+                                                  items: categories.map<
+                                                          DropdownMenuItem<
+                                                              String>>(
+                                                      (String value) {
+                                                    return DropdownMenuItem<
+                                                        String>(
+                                                      value: value,
+                                                      child: Text(value),
+                                                    );
+                                                  }).toList(),
                                                 ),
                                                 const SizedBox(
                                                   height: 20,

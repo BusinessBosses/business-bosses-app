@@ -78,27 +78,50 @@ class _ShopScreenState extends State<ShopScreen> {
                     const SizedBox(
                       height: 10.0,
                     ),
-                  SizedBox(
-                    height: 100,
-                    width: 100,
-                    child: SizedBox(
-                      height: 80.0,
-                      width: 80.0,
-                      child: Align(
-                        alignment: Alignment.topLeft,
-                        child: ClipRRect(
-                          borderRadius: BorderRadius.circular(1000),
-                          child: NetworkImageWithPlaceHolder(
-                            imageUrl: shopController.shop!.image ?? '',
-                            radius: radius,
-                            placeHolder: Icons.person,
-                            iconSize: 22.0,
-                            fit: BoxFit.cover,
+                  if (shopController.shop!.imageType == 'circle')
+                    SizedBox(
+                      height: 100,
+                      width: 100,
+                      child: SizedBox(
+                        height: 80.0,
+                        width: 80.0,
+                        child: Align(
+                          alignment: Alignment.topLeft,
+                          child: ClipRRect(
+                            borderRadius: BorderRadius.circular(1000),
+                            child: NetworkImageWithPlaceHolder(
+                              imageUrl: shopController.shop!.image ?? '',
+                              radius: radius,
+                              placeHolder: Icons.person,
+                              iconSize: 22.0,
+                              fit: BoxFit.cover,
+                            ),
                           ),
                         ),
                       ),
                     ),
-                  ),
+                  if (shopController.shop!.imageType == 'banner')
+                    ClipRect(
+                      child: Align(
+                        alignment:
+                            Alignment.topCenter, // Keeps the top part visible
+                        heightFactor: 0.7, // Shows only 30% of the image height
+                        child: SizedBox(
+                          width: double.infinity, // Stretches to full width
+                          child: ClipRRect(
+                            borderRadius: BorderRadius.circular(
+                                0), // Optional: Adjust corner radius
+                            child: NetworkImageWithPlaceHolder(
+                              imageUrl: shopController.shop?.image ?? '',
+                              radius: 0,
+                              placeHolder: Icons.person,
+                              iconSize: 22.0,
+                              fit: BoxFit.cover, // Ensures it stretches
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
                   const SizedBox(height: 10),
                   Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 15.0),
@@ -114,11 +137,18 @@ class _ShopScreenState extends State<ShopScreen> {
                           detectionRegExp: detectionRegExp(hashtag: false)!,
                           detectedStyle: bodyText2.copyWith(color: Colors.blue),
                           textAlign: TextAlign.center,
-                          moreStyle: bodyText2.copyWith(color: Colors.black),
-                          lessStyle: bodyText2.copyWith(color: Colors.black),
-                          trimLength: 40,
+                          moreStyle: bodyText2.copyWith(
+                              fontSize: 12,
+                              fontWeight: FontWeight.w700,
+                              color: proprimaryColor),
+                          lessStyle: bodyText2.copyWith(
+                              fontSize: 12,
+                              fontWeight: FontWeight.w700,
+                              color: proprimaryColor),
+                          trimLength: 100,
                           trimExpandedText: '  show less',
-                          basicStyle: bodyText2.copyWith(color: textColor),
+                          basicStyle: bodyText2.copyWith(
+                              color: textColor, fontSize: 12),
                           onTap: (String text) async {
                             final Uri url = Uri.parse(text);
                             if ((url.scheme == 'http' ||
@@ -216,7 +246,8 @@ class _ShopScreenState extends State<ShopScreen> {
                       children: <Widget>[
                         const Padding(
                           padding: EdgeInsets.symmetric(
-                              horizontal: 15.0, vertical: 10),
+                            horizontal: 15.0,
+                          ),
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: <Widget>[],
@@ -238,6 +269,8 @@ class _ShopScreenState extends State<ShopScreen> {
                                       children: <Widget>[
                                         Expanded(
                                           child: StaggeredGridView.countBuilder(
+                                            padding: const EdgeInsets.only(
+                                                top: 15, bottom: 100),
                                             crossAxisCount: 2,
                                             staggeredTileBuilder: (int index) =>
                                                 const StaggeredTile.fit(1),
@@ -329,6 +362,8 @@ class _ShopScreenState extends State<ShopScreen> {
                   itemBuilder: (BuildContext context, int index) {
                     if (index == 0) {
                       return ListTile(
+                        subtitle: const Text(
+                            'To showcase your products in biz-centre & marketplace'),
                         leading: SvgPicture.asset(
                           'assets/svgs/addproduct.svg',
                           colorFilter: const ColorFilter.mode(
@@ -349,6 +384,8 @@ class _ShopScreenState extends State<ShopScreen> {
                       );
                     } else if (index == 1) {
                       return ListTile(
+                        subtitle: const Text(
+                            'To showcase your services in biz-centre & marketplace'),
                         leading: SvgPicture.asset(
                           'assets/svgs/addservice.svg',
                           colorFilter: const ColorFilter.mode(
@@ -374,6 +411,8 @@ class _ShopScreenState extends State<ShopScreen> {
                           color: Colors.black,
                           size: 24,
                         ),
+                        subtitle: const Text(
+                            'To showcase your portfolio, demo or affiliate links '),
                         title: const Text(
                           'Add Custom Item',
                           style: TextStyle(fontSize: 14),
@@ -431,7 +470,7 @@ class _ShopScreenState extends State<ShopScreen> {
           ),
           _buildDivider(),
           if (shopController.shop!.appId.isNotEmpty) const SizedBox(height: 10),
-          if (shopController.shop?.email.isNotEmpty ?? false)
+          if (shopController.shop?.email?.isNotEmpty ?? false)
             _buildContactRow(
               'assets/svgs/email.svg',
               'Email',
@@ -445,10 +484,10 @@ class _ShopScreenState extends State<ShopScreen> {
                 }
               },
             ),
-          if (shopController.shop?.email.isNotEmpty ?? false) _buildDivider(),
-          if (shopController.shop?.email.isNotEmpty ?? false)
+          if (shopController.shop?.email?.isNotEmpty ?? false) _buildDivider(),
+          if (shopController.shop?.email?.isNotEmpty ?? false)
             const SizedBox(height: 10),
-          if (shopController.shop?.phone.isNotEmpty ?? false)
+          if (shopController.shop?.phone?.isNotEmpty ?? false)
             _buildContactRow(
               'assets/svgs/phone.svg',
               'Phone',

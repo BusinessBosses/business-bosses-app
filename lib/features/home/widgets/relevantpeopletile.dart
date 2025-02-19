@@ -3,9 +3,7 @@ import 'package:business_bosses_v2/features/connects/widgets/connection_grid_til
 import 'package:business_bosses_v2/features/profile/controller/profile_controller.dart';
 import 'package:business_bosses_v2/features/search/controller/search_controller.dart';
 import 'package:business_bosses_v2/navigation/routes.dart';
-import 'package:business_bosses_v2/utils/theme/theme.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 
 class RelevantPeopleTile extends StatefulWidget {
@@ -58,36 +56,37 @@ class _RelevantPeopleTileState extends State<RelevantPeopleTile> {
           crossAxisAlignment: CrossAxisAlignment.center,
           mainAxisSize: MainAxisSize.max,
           children: <Widget>[
+            const SizedBox(
+              height: 2,
+            ),
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 15.0),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: <Widget>[
-                  const Text(
-                    'Find Collaborators',
-                    style: TextStyle(fontWeight: FontWeight.w700, fontSize: 14),
-                  ),
-                  GestureDetector(
-                    onTap: () {
-                      Get.toNamed(Routes.relevantusersscreen);
-                    },
-                    child: const Wrap(
+              child: GestureDetector(
+                onTap: () {
+                  Get.toNamed(Routes.relevantusersscreen);
+                },
+                child: const Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: <Widget>[
+                    Text(
+                      'Find Collaborators',
+                      style:
+                          TextStyle(fontWeight: FontWeight.w700, fontSize: 14),
+                    ),
+                    Wrap(
                         crossAxisAlignment: WrapCrossAlignment.center,
                         children: <Widget>[
-                          Text(
-                            'View all',
-                            style: TextStyle(fontSize: 11),
-                          ),
-                          Icon(
-                            Icons.chevron_right,
-                            size: 15,
-                          )
+                          // Text(
+                          //   'View all',
+                          //   style: TextStyle(fontSize: 11),
+                          // ),
+                          Icon(Icons.chevron_right, color: textColor, size: 16),
                         ]),
-                  ),
-                ],
+                  ],
+                ),
               ),
             ),
-            const SizedBox(height: 8),
+            const SizedBox(height: 10),
             controller.loading.value
                 ? const Center(child: CircularProgressIndicator())
                 : Padding(

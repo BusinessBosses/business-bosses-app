@@ -1,7 +1,5 @@
 import 'package:business_bosses_v2/common/models/user_model.dart';
 import 'package:business_bosses_v2/common/widgets/tiles/custom_tileinterests.dart';
-import 'package:business_bosses_v2/features/profile/controller/profile_controller.dart';
-import 'package:business_bosses_v2/features/profile/widgets/productandserviceschip.dart';
 import 'package:business_bosses_v2/functions/my_native_functions.dart';
 import 'package:business_bosses_v2/navigation/routes.dart';
 import 'package:business_bosses_v2/utils/constants/constants.dart';
@@ -15,7 +13,6 @@ import 'package:business_bosses_v2/features/home/all_communities_screen.dart';
 import '../../../utils/theme/theme.dart';
 
 Widget profileinfodisplay(BuildContext context, UserModel publicUser) {
-  final ProfileController profileController = Get.find();
   return Column(
       mainAxisAlignment: MainAxisAlignment.start,
       crossAxisAlignment: CrossAxisAlignment.start,
