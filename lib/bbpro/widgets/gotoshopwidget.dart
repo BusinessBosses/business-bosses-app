@@ -1,6 +1,7 @@
 import 'package:business_bosses_v2/bbpro/controllers/shop_controller.dart';
 import 'package:business_bosses_v2/bbpro/presentation/shop_screen.dart';
 import 'package:business_bosses_v2/common/widgets/network_image_with_placeholder.dart';
+import 'package:business_bosses_v2/utils/theme/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -63,12 +64,28 @@ class _GotoshopWidgetState extends State<GotoshopWidget> {
                               style: const TextStyle(
                                   fontSize: 14, fontWeight: FontWeight.w700),
                             ),
-                            const Text(
-                              'View Biz-Center',
-                              style: TextStyle(
-                                fontSize: 12,
-                                fontWeight: FontWeight.w500,
-                                decoration: TextDecoration.underline,
+                            Container(
+                              decoration: BoxDecoration(
+                                  color: probackgroundColor,
+                                  borderRadius: BorderRadius.circular(5)),
+                              padding: const EdgeInsets.symmetric(
+                                  horizontal: 10.0, vertical: 3),
+                              child: const Row(
+                                mainAxisSize: MainAxisSize.min,
+                                children: <Widget>[
+                                  Text(
+                                    'View Biz-Center',
+                                    style: TextStyle(
+                                      fontSize: 10,
+                                      color: proprimaryColor,
+                                    ),
+                                  ),
+                                  Icon(
+                                    Icons.chevron_right,
+                                    color: textColor,
+                                    size: 10,
+                                  ),
+                                ],
                               ),
                             ),
                           ],

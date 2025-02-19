@@ -105,7 +105,7 @@ class _ShopScreenState extends State<ShopScreen> {
                       child: Align(
                         alignment:
                             Alignment.topCenter, // Keeps the top part visible
-                        heightFactor: 0.8, // Shows only 30% of the image height
+                        heightFactor: 0.7, // Shows only 30% of the image height
                         child: SizedBox(
                           width: double.infinity, // Stretches to full width
                           child: ClipRRect(
@@ -137,11 +137,18 @@ class _ShopScreenState extends State<ShopScreen> {
                           detectionRegExp: detectionRegExp(hashtag: false)!,
                           detectedStyle: bodyText2.copyWith(color: Colors.blue),
                           textAlign: TextAlign.center,
-                          moreStyle: bodyText2.copyWith(color: Colors.black),
-                          lessStyle: bodyText2.copyWith(color: Colors.black),
-                          trimLength: 40,
+                          moreStyle: bodyText2.copyWith(
+                              fontSize: 12,
+                              fontWeight: FontWeight.w700,
+                              color: proprimaryColor),
+                          lessStyle: bodyText2.copyWith(
+                              fontSize: 12,
+                              fontWeight: FontWeight.w700,
+                              color: proprimaryColor),
+                          trimLength: 100,
                           trimExpandedText: '  show less',
-                          basicStyle: bodyText2.copyWith(color: textColor),
+                          basicStyle: bodyText2.copyWith(
+                              color: textColor, fontSize: 12),
                           onTap: (String text) async {
                             final Uri url = Uri.parse(text);
                             if ((url.scheme == 'http' ||

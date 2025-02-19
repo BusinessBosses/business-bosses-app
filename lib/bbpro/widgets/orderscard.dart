@@ -81,7 +81,7 @@ class _OrdersWidgetState extends State<OrdersWidget> {
                             padding: const EdgeInsets.symmetric(
                                 horizontal: 8, vertical: 8),
                             decoration: BoxDecoration(
-                                color: prosemibackColor,
+                                color: probackgroundColor,
                                 borderRadius: BorderRadius.circular(8)),
                             child: Wrap(
                               crossAxisAlignment: WrapCrossAlignment.center,

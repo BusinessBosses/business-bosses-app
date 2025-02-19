@@ -53,10 +53,10 @@ class LearningSection extends StatelessWidget {
                       onTap!();
                     }
                   },
-                  child: Row(
+                  child: const Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: <Widget>[
-                      const Text(
+                      Text(
                         'Learning',
                         style: TextStyle(
                             fontWeight: FontWeight.w700, fontSize: 14),
@@ -69,12 +69,8 @@ class LearningSection extends StatelessWidget {
                             //   style: TextStyle(fontSize: 11),
                             // ),
                             // const SizedBox(width: 5.0),
-                            SvgPicture.asset(
-                              'assets/svgs/nexticon.svg',
-                              // ignore: deprecated_member_use
-                              color: textColor,
-                              height: 8,
-                            ),
+                            Icon(Icons.chevron_right,
+                                color: textColor, size: 16),
                           ]),
                     ],
                   ),

@@ -13,6 +13,7 @@ import 'package:business_bosses_v2/bbpro/presentation/order_product.dart';
 import 'package:business_bosses_v2/bbpro/widgets/custom_item_card.dart';
 import 'package:business_bosses_v2/bbpro/widgets/inventorycard.dart';
 import 'package:business_bosses_v2/bbpro/widgets/servicecard.dart';
+import 'package:business_bosses_v2/common/models/api_response_model.dart';
 import 'package:business_bosses_v2/common/models/user_model.dart';
 import 'package:business_bosses_v2/common/widgets/network_image_with_placeholder.dart';
 import 'package:business_bosses_v2/common/widgets/safety_model.dart';
@@ -21,6 +22,7 @@ import 'package:business_bosses_v2/features/marketplace/presentation/seller_revi
 import 'package:business_bosses_v2/features/posts/widgets/images_viewer_screen.dart';
 import 'package:business_bosses_v2/features/profile/controller/profile_controller.dart';
 import 'package:business_bosses_v2/navigation/routes.dart';
+import 'package:business_bosses_v2/services/api_service.dart';
 import 'package:business_bosses_v2/utils/theme/theme.dart';
 import 'package:detectable_text_field/detector/sample_regular_expressions.dart';
 import 'package:detectable_text_field/widgets/detectable_text.dart';
@@ -32,9 +34,9 @@ import 'package:get/get.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class UserShopScreen extends StatefulWidget {
-  final UserModel user;
+  UserModel? user;
   final bool? ismyshop;
-  const UserShopScreen({super.key, required this.user, this.ismyshop});
+  UserShopScreen({super.key, this.user, this.ismyshop});
 
   @override
   State<UserShopScreen> createState() => _UserShopScreenState();
@@ -56,11 +58,33 @@ class _UserShopScreenState extends State<UserShopScreen> {
     setState(() {
       loading = true;
     });
-    shopController.initUserShop(widget.user).then((bool value) {
+    shopController.initUserShop(widget.user!).then((bool value) {
       setState(() {
         loading = false;
       });
     });
+  }
+
+  Future<void> connect(String userId) async {
+    // ignore: unused_local_variable
+    final ApiResponseModel res = await ApiService.post(
+        path: '/connection/connect',
+        body: <String, dynamic>{
+          'userId': profileController.myProfile.uid,
+          'connectedId': userId,
+          'timestamp': DateTime.now().millisecondsSinceEpoch
+        });
+  }
+
+  Future<void> disconnect(String userId) async {
+    // ignore: unused_local_variable
+    final ApiResponseModel res = await ApiService.post(
+        path: '/connection/disconnect',
+        body: <String, dynamic>{
+          'userId': profileController.myProfile.uid,
+          'connectedId': userId,
+          'timestamp': DateTime.now().millisecondsSinceEpoch
+        });
   }
 
   void _shareBizCenter() {
@@ -87,8 +111,44 @@ class _UserShopScreenState extends State<UserShopScreen> {
               Get.to(const BizCenterSearch());
             } else if (action['text'] == 'Share') {
               _shareBizCenter();
-            } else if (action['text'] == 'Cart') {
-              Get.to(const MyOrdersScreen());
+            } else if (action['text'] == 'Follow' ||
+                action['text'] == 'Following') {
+              print('Follow');
+
+              Future<void> connectToUser() async {
+                final int checkConnected =
+                    profileController.myProfile.connecteds == null
+                        ? -1
+                        : profileController.myProfile.connecteds!.indexWhere(
+                            (String element) => element == widget.user!.uid);
+
+                if (checkConnected == -1) {
+                  // Add connection
+                  profileController.updateConnections(widget.user!.uid);
+                  setState(() {
+                    widget.user = UserModel.fromMap(<dynamic, dynamic>{
+                      ...widget.user!.toMap(),
+                      'connectionCount':
+                          (widget.user!.connectionCount ?? 0) + 1,
+                    });
+                  });
+                  await connect(widget.user!.uid);
+                } else {
+                  // Remove connection
+                  profileController.updateConnections(widget.user!.uid);
+                  setState(() {
+                    widget.user = UserModel.fromMap(<dynamic, dynamic>{
+                      ...widget.user!.toMap(),
+                      'connectionCount':
+                          (widget.user!.connectionCount ?? 1) - 1,
+                    });
+                  });
+                  await disconnect(widget.user!.uid);
+                }
+              }
+
+              // Call the function
+              connectToUser();
             }
           },
           child: Padding(
@@ -140,7 +200,7 @@ class _UserShopScreenState extends State<UserShopScreen> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: <Widget>[
                     Text(
-                      '@${widget.user.username.toLowerCase()}',
+                      '@${widget.user!.username.toLowerCase()}',
                       style: const TextStyle(
                         color: textColor,
                         fontWeight: FontWeight.bold,
@@ -268,7 +328,7 @@ class _UserShopScreenState extends State<UserShopScreen> {
                                             alignment: Alignment
                                                 .topCenter, // Ensures the top part is visible
                                             heightFactor:
-                                                1, // Clips the height to 30%
+                                                0.7, // Clips the height to 30%
                                             child: SizedBox(
                                               width: double
                                                   .infinity, // Stretches the image to full width
@@ -278,7 +338,7 @@ class _UserShopScreenState extends State<UserShopScreen> {
                                                   imageUrl: shopController
                                                           .userShop?.image ??
                                                       '',
-                                                  radius: radius,
+                                                  radius: 0,
                                                   placeHolder: Icons.person,
                                                   iconSize: 22.0,
                                                   fit: BoxFit
@@ -312,13 +372,17 @@ class _UserShopScreenState extends State<UserShopScreen> {
                                                 color: Colors.blue),
                                             textAlign: TextAlign.center,
                                             moreStyle: bodyText2.copyWith(
-                                                color: Colors.black),
+                                                fontSize: 12,
+                                                fontWeight: FontWeight.w700,
+                                                color: proprimaryColor),
                                             lessStyle: bodyText2.copyWith(
-                                                color: Colors.black),
-                                            trimLength: 40,
+                                                fontSize: 12,
+                                                fontWeight: FontWeight.w700,
+                                                color: proprimaryColor),
+                                            trimLength: 100,
                                             trimExpandedText: '  show less',
                                             basicStyle: bodyText2.copyWith(
-                                                color: textColor),
+                                                fontSize: 12, color: textColor),
                                             onTap: (String text) async {
                                               final Uri url = Uri.parse(text);
                                               if ((url.scheme == 'http' ||
@@ -381,7 +445,7 @@ class _UserShopScreenState extends State<UserShopScreen> {
                                                 onTap: () {
                                                   Get.to(
                                                     SellerReviewScreen(
-                                                      user: widget.user,
+                                                      user: widget.user!,
                                                       refreshCallback: loadData,
                                                     ),
                                                   );
@@ -428,9 +492,28 @@ class _UserShopScreenState extends State<UserShopScreen> {
                                                 'text': 'Share'
                                               },
                                               <String, String>{
-                                                'icon':
-                                                    'assets/svgs/shoppingcart.svg',
-                                                'text': 'Cart'
+                                                'icon': profileController
+                                                                .myProfile
+                                                                .connecteds !=
+                                                            null &&
+                                                        profileController
+                                                            .myProfile
+                                                            .connecteds!
+                                                            .contains(widget
+                                                                .user!.uid)
+                                                    ? 'assets/svgs/following.svg'
+                                                    : 'assets/svgs/addclient.svg',
+                                                'text': profileController
+                                                                .myProfile
+                                                                .connecteds !=
+                                                            null &&
+                                                        profileController
+                                                            .myProfile
+                                                            .connecteds!
+                                                            .contains(widget
+                                                                .user!.uid)
+                                                    ? 'Following'
+                                                    : 'Follow',
                                               },
                                             ]),
                                           )
@@ -611,7 +694,7 @@ class _UserShopScreenState extends State<UserShopScreen> {
                                       ///Tab 2 Content
                                       SellerReviewScreen(
                                         isShop: true,
-                                        user: widget.user,
+                                        user: widget.user!,
                                       ),
 
                                       ///Tab 3 Content

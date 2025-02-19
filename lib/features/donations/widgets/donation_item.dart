@@ -1097,7 +1097,6 @@ class _DonationItemState extends State<DonationItem> {
                         },
                       ),
                       child: Container(
-                        width: double.infinity,
                         padding: const EdgeInsets.symmetric(vertical: 15),
                         child: Row(
                           children: <Widget>[
@@ -1130,7 +1129,6 @@ class _DonationItemState extends State<DonationItem> {
                         socialShare(message);
                       },
                       child: Container(
-                        width: double.infinity,
                         padding: const EdgeInsets.symmetric(vertical: 15),
                         child: Row(
                           children: <Widget>[

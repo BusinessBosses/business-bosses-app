@@ -1,5 +1,6 @@
 import 'package:business_bosses_v2/bbpro/controllers/shop_controller.dart';
 import 'package:business_bosses_v2/bbpro/models/order_model.dart';
+import 'package:business_bosses_v2/bbpro/widgets/myorderwidget.dart';
 import 'package:business_bosses_v2/bbpro/widgets/orderwidget.dart';
 import 'package:business_bosses_v2/bbpro/widgets/proseardwidget.dart';
 import 'package:business_bosses_v2/bbpro/widgets/proshopdeals.dart';
@@ -199,7 +200,7 @@ class _MyOrdersScreenState extends State<MyOrdersScreen> {
                               final Order order = filteredOrders[index];
                               return Padding(
                                 padding: const EdgeInsets.only(bottom: 10.0),
-                                child: OrderWidget(
+                                child: MyOrderWidget(
                                   order: order,
                                   bgcolor: order.status.backgroundColor,
                                   shop: order.shop,

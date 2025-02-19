@@ -1,5 +1,6 @@
 // ignore_for_file: always_specify_types
 
+import 'package:business_bosses_v2/bbpro/presentation/my_orders_screen.dart';
 import 'package:business_bosses_v2/bbpro/widgets/button.dart';
 import 'package:business_bosses_v2/common/models/user_model.dart';
 import 'package:business_bosses_v2/common/widgets/network_image_with_placeholder.dart';
@@ -131,6 +132,23 @@ class DrawerContent extends StatelessWidget {
       },
       {
         'icon': SvgPicture.asset(
+          'assets/svgs/shoppingcart.svg',
+          height: 25,
+          colorFilter: const ColorFilter.mode(
+            textColor,
+            BlendMode.srcIn,
+          ),
+        ),
+        'title': 'My Orders',
+        'description':
+            'Discover and attend events hosted by other users. Find events that match your interests and goals.',
+        'onTileClicked': () {
+          oncloseclick?.call();
+          Get.to(const MyOrdersScreen());
+        },
+      },
+      {
+        'icon': SvgPicture.asset(
           'assets/svgs/supporter.svg',
           height: 25,
           colorFilter: const ColorFilter.mode(
@@ -245,13 +263,14 @@ class DrawerContent extends StatelessWidget {
               ),
               Column(
                 children: [
-                  const SizedBox(height: 30),
+                  const SizedBox(height: 20),
                   ...List.generate(
                       tilesData.length,
                       (index) => Padding(
                             padding:
                                 const EdgeInsets.only(left: 15.0, right: 15),
                             child: ListTile(
+                              minVerticalPadding: 0,
                               shape: RoundedRectangleBorder(
                                   borderRadius: BorderRadius.circular(8)),
                               onTap: tilesData[index]['onTileClicked'] as void
@@ -262,7 +281,7 @@ class DrawerContent extends StatelessWidget {
                                 style: const TextStyle(
                                     color: textColor,
                                     fontWeight: FontWeight.w700,
-                                    fontSize: 16),
+                                    fontSize: 15),
                               ),
                             ),
                           )),

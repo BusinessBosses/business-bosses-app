@@ -106,7 +106,7 @@ class _InventoryCardState extends State<InventoryCard> {
                       Row(
                         children: <Widget>[
                           Text(
-                            '${currencyValues[widget.product!.location.toString()]}${((widget.product!.price * (1 - widget.product!.discount! / 100)) * 100).round() / 100}',
+                            '${currencyValues[widget.product!.location.toString()]}${formatPrice(widget.product!.price * (1 - widget.product!.discount! / 100))}',
                             style: const TextStyle(
                               color: Colors.black,
                               fontWeight: FontWeight.w700,
@@ -115,7 +115,7 @@ class _InventoryCardState extends State<InventoryCard> {
                           ),
                           const SizedBox(width: 5),
                           Text(
-                            '${currencyValues[widget.product!.location.toString()]}${widget.product!.price.toStringAsFixed(2)}',
+                            '${currencyValues[widget.product!.location.toString()]}${formatPrice(widget.product!.price)}',
                             style: const TextStyle(
                               color: primaryColorLT,
                               decoration: TextDecoration.lineThrough,
@@ -126,7 +126,7 @@ class _InventoryCardState extends State<InventoryCard> {
                       )
                     else
                       Text(
-                        '${currencyValues[widget.product!.location.toString()]}${widget.product!.price.toStringAsFixed(2)}',
+                        '${currencyValues[widget.product!.location.toString()]}${formatPrice(widget.product!.price)}',
                         style: const TextStyle(
                           color: Colors.black,
                           fontWeight: FontWeight.w700,
@@ -169,30 +169,6 @@ class _InventoryCardState extends State<InventoryCard> {
                             ),
                         ],
                       ),
-                    // if (widget.myShop == false)
-                    //   Row(
-                    //     mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    //     children: <Widget>[
-                    //       Wrap(
-                    //         crossAxisAlignment: WrapCrossAlignment.center,
-                    //         children: <Widget>[
-                    //           CircleAvatar(
-                    //             radius: 3,
-                    //             backgroundColor: widget.product!.quantity! > 0
-                    //                 ? Colors.green
-                    //                 : Colors.red,
-                    //           ),
-                    //           // const SizedBox(width: 3),
-                    //           // Text(
-                    //           //   widget.product!.quantity! > 0
-                    //           //       ? '${widget.product?.quantity.toString()} in Stock'
-                    //           //       : 'Out of stock',
-                    //           //   style: const TextStyle(fontSize: 10),
-                    //           // ),
-                    //         ],
-                    //       ),
-                    //     ],
-                    //   ),
                   ],
                 ),
               ),
@@ -275,29 +251,6 @@ class _InventoryCardState extends State<InventoryCard> {
                             maxLines: 2,
                             overflow: TextOverflow.ellipsis,
                           ),
-                          // Row(
-                          //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          //   children: <Widget>[
-                          //     Wrap(
-                          //       crossAxisAlignment: WrapCrossAlignment.center,
-                          //       children: <Widget>[
-                          //         CircleAvatar(
-                          //           radius: 3,
-                          //           backgroundColor: widget.product!.quantity! > 0
-                          //               ? Colors.green
-                          //               : Colors.red,
-                          //         ),
-                          //         const SizedBox(width: 3),
-                          //         Text(
-                          //           widget.product!.quantity! > 0
-                          //               ? '${widget.product?.quantity.toString()} in Stock'
-                          //               : 'Out of stock',
-                          //           style: const TextStyle(fontSize: 10),
-                          //         ),
-                          //       ],
-                          //     ),
-                          //   ],
-                          // ),
                         ],
                       ),
                     ),
@@ -321,6 +274,16 @@ class _InventoryCardState extends State<InventoryCard> {
         ],
       ),
     );
+  }
+
+  String formatPrice(double price) {
+    if (price >= 1000000) {
+      return '${(price / 1000000).toStringAsFixed(1)}m';
+    } else if (price >= 1000) {
+      return '${(price / 1000).toStringAsFixed(1)}k';
+    } else {
+      return price.toStringAsFixed(2);
+    }
   }
 
   void onDelete() {

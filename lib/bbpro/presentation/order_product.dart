@@ -312,7 +312,7 @@ class _OrderProductScreenState extends State<OrderProductScreen> {
                 const SizedBox(height: 5),
                 Container(
                   decoration: BoxDecoration(
-                      color: backgroundColor,
+                      color: probackgroundColor,
                       borderRadius: BorderRadius.circular(radius)),
                   padding:
                       const EdgeInsets.symmetric(horizontal: 10.0, vertical: 3),
@@ -323,7 +323,7 @@ class _OrderProductScreenState extends State<OrderProductScreen> {
                         'Visit Biz-Center',
                         style: TextStyle(
                           fontSize: 10,
-                          color: textColor,
+                          color: proprimaryColor,
                         ),
                       ),
                       Icon(
