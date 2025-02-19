@@ -586,6 +586,7 @@ class _MarketplaceScreenState extends State<MarketplaceScreen>
                           Tab(text: 'Products'),
                           Tab(text: 'Services'),
                           Tab(text: 'Suppliers'),
+                          Tab(text: 'BoosUp'),
                         ],
                       )
                     : const PreferredSize(
@@ -995,7 +996,8 @@ class _MarketplaceScreenState extends State<MarketplaceScreen>
       _marketController.proServices.sort(compareItems);
       supplierController.suppliers.sort(compareSuppliers);
     }
-
-    setState(() {}); // Ensure UI updates
+    if (mounted) {
+      setState(() {});
+    } // Ensure UI updates
   }
 }
