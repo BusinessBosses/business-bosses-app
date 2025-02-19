@@ -1,3 +1,4 @@
+import 'package:business_bosses_v2/features/chat/chat_room_screen.dart';
 import 'package:business_bosses_v2/features/marketplace/models/suppliers_model.dart';
 import 'package:business_bosses_v2/features/marketplace/presentation/expandedsupplierspage.dart';
 import 'package:business_bosses_v2/features/profile/controller/profile_controller.dart';
@@ -105,11 +106,19 @@ class _SuppliersGridTileState extends State<SuppliersGridTile> {
             const SizedBox(height: 12.0),
             Container(
               decoration: BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.circular(10)),
+                  color: Colors.white, borderRadius: BorderRadius.circular(10)),
               child: MCustomButton(
                 buttonType: ButtonType.outline,
-                onPressed: widget.onChangeSuppliersStatus,
+                onPressed: widget.supplier.isBiz!
+                    ? () {
+                        Get.to(
+                          () => const ChatRoomScreen(
+                            frommarketplace: false,
+                          ),
+                          arguments: widget.supplier.user,
+                        );
+                      }
+                    : widget.onChangeSuppliersStatus,
                 height: 36.0,
                 width: 120.0,
                 child: const Text(

@@ -246,8 +246,8 @@ class _SetupshopState extends State<Setupshop> with TickerProviderStateMixin {
     if (widget.shop != null) {
       nameController.text = widget.shop!.name;
       descriptionController.text = widget.shop!.description;
-      phoneController.text = widget.shop!.phone;
-      emailController.text = widget.shop!.email;
+      phoneController.text = widget.shop!.phone ?? '';
+      emailController.text = widget.shop!.email ?? '';
       _selectedLocation = widget.shop!.location;
       image = widget.shop!.image;
       imageType = capitalizeFirstLetter(widget.shop!.imageType!);

@@ -38,8 +38,7 @@ void sellProduct(BuildContext context) {
                         Navigator.pop(context);
 
                         if (index == 0 || index == 1) {
-                          if (profileController.myProfile.hasShop.toString() ==
-                              'false') {
+                          if (!profileController.myProfile.hasShop) {
                             Get.bottomSheet(
                               isScrollControlled: true,
                               shape: const RoundedRectangleBorder(

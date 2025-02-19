@@ -80,6 +80,7 @@ class SupplierController extends GetxController {
     searchedSuppliers.addAll(
       suppliers.where((SuppliersModel supplier) {
         String lowerCaseName = supplier.name.toLowerCase();
+        String lowerCaseDescription = supplier.description.toLowerCase();
         String? itemCategory = supplier.category?.toLowerCase().trim();
         String? userName = supplier.user?.name?.toLowerCase();
         String? userUsername = supplier.user?.username.toLowerCase();
@@ -88,6 +89,7 @@ class SupplierController extends GetxController {
             normalizedCategory.isEmpty || itemCategory == normalizedCategory;
         bool matchesQuery = lowerCaseName.isEmpty ||
             lowerCaseName.contains(lowerCaseQuery) ||
+            lowerCaseDescription.contains(lowerCaseQuery) ||
             (userName?.contains(lowerCaseQuery) ?? false) ||
             (userUsername?.contains(lowerCaseQuery) ?? false);
 

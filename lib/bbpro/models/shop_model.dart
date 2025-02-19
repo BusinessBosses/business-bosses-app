@@ -6,8 +6,8 @@ class Shop {
   final String name;
   final String description;
   final String? image;
-  final String email;
-  final String phone;
+  final String? email;
+  final String? phone;
   final String location;
   final int views;
   final DateTime? timestamp;
@@ -33,8 +33,8 @@ class Shop {
     required this.name,
     required this.description,
     this.image,
-    required this.email,
-    required this.phone,
+    this.email = '',
+    this.phone = '',
     required this.location,
     this.views = 0,
     this.timestamp,

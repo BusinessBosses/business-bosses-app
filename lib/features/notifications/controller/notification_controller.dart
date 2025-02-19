@@ -35,9 +35,9 @@ class NotificationController extends GetxController {
             MyNotification.fromMap(response.data['notifications']['rows'][i]);
         if (newNotification.notificationType == 'order') {
           ordersNotification.add(newNotification);
-        } else {
+        } 
           notifications.add(newNotification);
-        }
+        
 
         _page(_page.value + 1);
       }

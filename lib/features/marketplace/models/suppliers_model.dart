@@ -15,6 +15,7 @@ class SuppliersModel {
   bool isApproved;
   String? url;
   List<dynamic>? images;
+  bool? isBiz;
   SuppliersModel({
     required this.id,
     this.category,
@@ -28,6 +29,7 @@ class SuppliersModel {
     this.isApproved = false,
     required this.url,
     this.images,
+    this.isBiz = false,
   });
 
   SuppliersModel copyWith({
@@ -43,6 +45,7 @@ class SuppliersModel {
     String? email,
     String? url,
     List<dynamic>? images,
+    bool? isBiz,
   }) {
     return SuppliersModel(
       description: description ?? this.description,
@@ -57,6 +60,7 @@ class SuppliersModel {
       email: email ?? this.email,
       url: url ?? this.url,
       images: images ?? this.images,
+      isBiz: isBiz ?? this.isBiz,
     );
   }
 
@@ -74,6 +78,7 @@ class SuppliersModel {
       'email': email,
       'url': url,
       'images': images,
+      'isBiz': isBiz,
     };
   }
 
@@ -92,6 +97,7 @@ class SuppliersModel {
       isApproved: map['isApproved'] as bool,
       email: map['email'] != null ? map['email'] as String : null,
       url: map['url'] != null ? map['url'] as String : null,
+      isBiz: map['isBiz'],
       images: map['images'] != null
           ? List<dynamic>.from((map['images'] as List<dynamic>))
           : null,
@@ -105,6 +111,6 @@ class SuppliersModel {
 
   @override
   String toString() {
-    return 'SuppliersModel(description: $description, location: $location, name: $name, user: $user, category: $category, id: $id, phone: $phone, isVerified: $isVerified, isApproved: $isApproved, email: $email, url: $url)';
+    return 'SuppliersModel(description: $description, location: $location, name: $name, user: $user, category: $category, id: $id, phone: $phone, isVerified: $isVerified, isApproved: $isApproved, email: $email, url: $url, isBiz: $isBiz)';
   }
 }
