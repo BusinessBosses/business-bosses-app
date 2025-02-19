@@ -996,5 +996,8 @@ class _MarketplaceScreenState extends State<MarketplaceScreen>
       _marketController.proServices.sort(compareItems);
       supplierController.suppliers.sort(compareSuppliers);
     }
+    if (mounted) {
+      setState(() {});
+    } // Ensure UI updates
   }
 }
