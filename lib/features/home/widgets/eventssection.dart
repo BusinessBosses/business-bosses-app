@@ -46,7 +46,7 @@ class EventsSection extends StatelessWidget {
                                   // ),
                                   // const SizedBox(width: 5.0),
                                   Icon(Icons.chevron_right,
-                                      color: textColor, size: 16),
+                                      color: textColor, size: 20),
                                 ]),
                           ],
                         ),

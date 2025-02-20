@@ -89,7 +89,7 @@ class _ProshopdealsWidgetState extends State<ProshopdealsWidget> {
                         fontSize: 16, fontWeight: FontWeight.bold),
                   ),
                   const SizedBox(width: 10),
-                  const Icon(Icons.chevron_right, color: textColor, size: 16),
+                  const Icon(Icons.chevron_right, color: textColor, size: 20),
                 ],
               ),
             ),

@@ -50,7 +50,7 @@ class _ChallengesSectionState extends State<ChallengesSection> {
                           //   style: TextStyle(fontSize: 11),
                           // ),
                           // const SizedBox(width: 5.0),
-                          Icon(Icons.chevron_right, color: textColor, size: 16),
+                          Icon(Icons.chevron_right, color: textColor, size: 20),
                         ]),
                   ],
                 ),

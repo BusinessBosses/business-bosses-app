@@ -120,7 +120,7 @@ class _BossOfWeekProfileTileState extends State<BossOfWeekProfileTile> {
                             child: Align(
                               alignment: Alignment.centerRight,
                               child: Icon(Icons.chevron_right,
-                                  color: textColor, size: 16),
+                                  color: textColor, size: 20),
                             ),
                           ),
                       ],
@@ -469,7 +469,7 @@ class _BossOfWeekProfileTileState extends State<BossOfWeekProfileTile> {
                                   crossAxisAlignment: WrapCrossAlignment.center,
                                   children: <Widget>[
                                     Icon(Icons.chevron_right,
-                                        color: textColor, size: 16),
+                                        color: textColor, size: 20),
                                   ]),
                             ],
                           ),

@@ -513,7 +513,7 @@ class _MarketplaceScreenState extends State<MarketplaceScreen>
                                     });
                       },
                       text: _marketplaceTabController.index == 4
-                          ? 'Become a Partner'
+                          ? 'Add Deals'
                           : _marketplaceTabController.index != 3
                               ? 'Sell'
                               : 'Add a Supplier',
