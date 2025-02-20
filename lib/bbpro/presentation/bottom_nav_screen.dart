@@ -74,9 +74,11 @@ class _BottomnavscreenState extends State<Bottomnavscreen> {
       if (value) {
         shopController.loading(false);
       } else {
-        Get.to(() => const Setupshop(
-              backToHome: true,
-            ));
+        if (!profileController.myProfile.hasShop) {
+          Get.to(() => const Setupshop(
+                backToHome: true,
+              ));
+        }
       }
     });
   }
