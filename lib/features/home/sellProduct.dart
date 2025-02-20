@@ -1,6 +1,8 @@
+import 'package:business_bosses_v2/bbpro/controllers/shop_controller.dart';
 import 'package:business_bosses_v2/bbpro/presentation/create_product.dart';
 import 'package:business_bosses_v2/bbpro/presentation/create_service.dart';
 import 'package:business_bosses_v2/features/marketplace/presentation/add_supplier.dart';
+import 'package:business_bosses_v2/features/marketplace/presentation/add_supplier_shop.dart';
 import 'package:business_bosses_v2/features/premium/proscreen.dart';
 import 'package:business_bosses_v2/features/profile/controller/profile_controller.dart';
 import 'package:business_bosses_v2/utils/theme/theme.dart';
@@ -10,6 +12,7 @@ import 'package:get/get.dart';
 
 void sellProduct(BuildContext context) {
   ProfileController profileController = Get.find();
+  ShopController shopController = Get.find();
   showModalBottomSheet(
     context: context,
     shape: const RoundedRectangleBorder(
@@ -75,7 +78,81 @@ void sellProduct(BuildContext context) {
                                     isMarketplace: true));
                           }
                         } else {
-                          Get.to(() => const AddSupplierScreen());
+                          if (profileController.myProfile.hasShop) {
+                            showModalBottomSheet(
+                                context: context,
+                                shape: const RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.vertical(
+                                    top: Radius.circular(25.0),
+                                  ),
+                                ),
+                                builder: (BuildContext context) {
+                                  return SizedBox(
+                                    height: 200,
+                                    child: Padding(
+                                      padding: const EdgeInsets.all(15.0),
+                                      child: Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        mainAxisSize: MainAxisSize.min,
+                                        children: <Widget>[
+                                          Expanded(
+                                            child: ListView.separated(
+                                              itemCount: 2,
+                                              separatorBuilder:
+                                                  (BuildContext context,
+                                                          int index) =>
+                                                      const Divider(),
+                                              itemBuilder:
+                                                  (BuildContext context,
+                                                      int index) {
+                                                return ListTile(
+                                                  onTap: () {
+                                                    Navigator.pop(context);
+                                                    index == 0
+                                                        ? Get.to(() =>
+                                                            AddSupplierShopScreen(
+                                                              shop:
+                                                                  shopController
+                                                                      .shop!,
+                                                            ))
+                                                        : Get.to(() =>
+                                                            const AddSupplierScreen());
+                                                  },
+                                                  minVerticalPadding: 0,
+                                                  contentPadding:
+                                                      const EdgeInsets.only(
+                                                    left: 10,
+                                                  ),
+                                                  leading: SvgPicture.asset(
+                                                    index == 0
+                                                        ? 'assets/svgs/addproduct.svg'
+                                                        : 'assets/svgs/addservice.svg',
+                                                    height: 25,
+                                                    color: textColor
+                                                        .withOpacity(1),
+                                                  ),
+                                                  title: Text(
+                                                    index == 0
+                                                        ? 'Add My Biz-Center To Supplier'
+                                                        : 'Add New Supplier',
+                                                    style: const TextStyle(
+                                                        fontSize: 18,
+                                                        fontWeight:
+                                                            FontWeight.w700),
+                                                  ),
+                                                );
+                                              },
+                                            ),
+                                          )
+                                        ],
+                                      ),
+                                    ),
+                                  );
+                                });
+                          } else {
+                            Get.to(() => const AddSupplierScreen());
+                          }
                         }
                       },
                       minVerticalPadding: 0,

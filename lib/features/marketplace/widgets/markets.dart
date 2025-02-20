@@ -23,7 +23,6 @@ class MarketsPage extends StatefulWidget {
 }
 
 class _MarketsPageState extends State<MarketsPage> {
-  final MarketController _marketController = Get.find();
   final HomeController hmeController = Get.find();
   final ProfileController profileController = Get.find();
   final ShopController shopController = Get.find();
@@ -39,10 +38,9 @@ class _MarketsPageState extends State<MarketsPage> {
           ),
           child: GetBuilder<MarketController>(
               builder: (MarketController controller) {
-            bool isFiltering = _marketController.isfiltered.value;
-            List<Object> markets = isFiltering
-                ? _marketController.allFilteredItems
-                : _marketController.proItems;
+            bool isFiltering = controller.isfiltered.value;
+            List<Object> markets =
+                isFiltering ? controller.allFilteredItems : controller.proItems;
             return Column(
               children: <Widget>[
                 Container(
@@ -50,7 +48,7 @@ class _MarketsPageState extends State<MarketsPage> {
                   child: ProshopdealsWidget(
                     title: 'NEW',
                     combinedList:
-                        _marketController.proItemsWithImages.take(10).toList(),
+                        controller.proItemsWithImages.take(10).toList(),
                   ),
                 ),
                 if (isFiltering && markets.isEmpty)

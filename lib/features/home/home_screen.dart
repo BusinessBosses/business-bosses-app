@@ -172,6 +172,7 @@ class _HomeScreenState extends State<HomeScreen>
     _tabController.addListener(() {
       setState(() {}); // Update the state when the tab is changed
     });
+
     return WillPopScope(
       onWillPop: () async {
         showDialog(
@@ -205,6 +206,11 @@ class _HomeScreenState extends State<HomeScreen>
       child: GetBuilder<HomeController>(
         builder: (HomeController controller) {
           checkOrderVisit();
+          WidgetsBinding.instance.addPostFrameCallback((_) {
+            if (shopController.shop == null) {
+              shopController.initShop();
+            }
+          });
           return UpgradeAlert(
             child: AdvancedDrawer(
               backdrop: Container(

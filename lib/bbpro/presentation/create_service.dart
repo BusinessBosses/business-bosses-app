@@ -144,13 +144,7 @@ class _CreateServiceListingState extends State<CreateServiceListing>
       _priceController.text = widget.service!.price.toString();
       _discountController.text = widget.service!.discount.toString();
       _descriptionController.text = widget.service!.description;
-      String? existingCategory = widget.service!.category;
-      if (categories.contains(existingCategory)) {
-        category = existingCategory;
-      } else {
-        category =
-            'Vehicle & Transportation'; // Default to "Other" if the category is invalid
-      }
+      category = widget.service!.category;
       location = widget.service!.location;
       images = widget.service!.images!;
       updateImages = widget.service!.images;

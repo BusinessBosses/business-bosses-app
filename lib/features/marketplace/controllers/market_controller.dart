@@ -200,6 +200,32 @@ class MarketController extends GetxController {
     update();
   }
 
+  Future<bool> migrateOldMarketplaceData() async {
+    final ApiResponseModel response = await ApiService.post(
+      path: 'cronjob/migrate-marketplace-data',
+      body: <String, dynamic>{'userId': _profileController.myProfile.uid},
+    );
+    if (response.success) {
+      await initMarket();
+      return true;
+    }
+    return false;
+  }
+
+  Future<bool> checkOldMarketplaceData() async {
+    final ApiResponseModel response = await ApiService.get(
+      path: 'markets/user/${_profileController.myProfile.uid}',
+    );
+    if (response.success) {
+      if (response.data['count'] > 0) {
+        return true;
+      } else {
+        return false;
+      }
+    }
+    return false;
+  }
+
   void filterItems(String searchQuery) {
     filteredProducts.clear();
     filteredServices.clear();

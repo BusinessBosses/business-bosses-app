@@ -130,13 +130,7 @@ class _CreateProductListingState extends State<CreateProductListing> {
       images = widget.product!.images;
       deliveryDuration = widget.product!.deliveryDuration;
       sizeController.text = widget.product!.size?.join(', ') ?? '';
-      String? existingCategory = widget.product!.category;
-      if (categories.contains(existingCategory)) {
-        category = existingCategory;
-      } else {
-        category =
-            'Vehicle & Transportation'; // Default to "Other" if the category is invalid
-      }
+      category = widget.product!.category;
 
       country = widget.product!.location != null
           ? widget.product!.location!

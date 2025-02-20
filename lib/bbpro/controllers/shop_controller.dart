@@ -243,6 +243,7 @@ class ShopController extends GetxController {
       marketController.proItems.add(Product.fromJson(response.data));
       marketController.proProducts.add(Product.fromJson(response.data));
       update();
+      marketController.update();
       return ProductAddResult(
           success: true, product: Product.fromJson(response.data));
     } else {
@@ -255,14 +256,18 @@ class ShopController extends GetxController {
     ApiResponseModel response =
         await ApiService.put(path: 'goods/$id', body: data);
     if (response.success) {
-      final int productIndex =
-          products.indexWhere((Product element) => element.id == id);
-      products[productIndex] = Product.fromJson(response.data);
-      final int objectIndex = items.indexWhere((Object element) {
-        if (element is Product) return element.id == id;
-        return false;
-      });
-      items[objectIndex] = Product.fromJson(response.data);
+      if (products.isNotEmpty) {
+        final int productIndex =
+            products.indexWhere((Product element) => element.id == id);
+        products[productIndex] = Product.fromJson(response.data);
+      }
+      if (items.isNotEmpty) {
+        final int objectIndex = items.indexWhere((Object element) {
+          if (element is Product) return element.id == id;
+          return false;
+        });
+        items[objectIndex] = Product.fromJson(response.data);
+      }
       // Update in marketController
       final int proItemIndex = marketController.proItems
           .indexWhere((Object item) => item is Product && item.id == id);
@@ -278,6 +283,7 @@ class ShopController extends GetxController {
             Product.fromJson(response.data);
       }
       update();
+      marketController.update();
       return true;
     } else {
       log(response.toMap().toString());
@@ -294,6 +300,7 @@ class ShopController extends GetxController {
       marketController.proItems.add(Service.fromJson(response.data));
       marketController.proServices.add(Service.fromJson(response.data));
       update();
+      marketController.update();
       return ServiceAddResult(
           success: true, service: Service.fromJson(response.data));
     } else {
@@ -320,15 +327,23 @@ class ShopController extends GetxController {
     ApiResponseModel response =
         await ApiService.put(path: 'custom-items/$id', body: data);
     if (response.success) {
-      final int itemIndex =
-          customItems.indexWhere((Customitem element) => element.id == id);
-      customItems[itemIndex] = Customitem.fromJson(response.data);
-      final int objectIndex = items.indexWhere((Object element) {
-        if (element is Customitem) return element.id == id;
-        return false;
-      });
-      items[objectIndex] = Customitem.fromJson(response.data);
-
+      if (customItems.isNotEmpty) {
+        final int itemIndex =
+            customItems.indexWhere((Customitem element) => element.id == id);
+        if (itemIndex != -1) {
+          customItems[itemIndex] = Customitem.fromJson(response.data);
+        }
+      }
+      // Update items list if not empty and valid index exists
+      if (items.isNotEmpty) {
+        final int objectIndex = items.indexWhere((Object element) {
+          if (element is Customitem) return element.id == id;
+          return false;
+        });
+        if (objectIndex != -1) {
+          items[objectIndex] = Customitem.fromJson(response.data);
+        }
+      }
       final int proItemIndex = marketController.proItems
           .indexWhere((Object item) => item is Customitem && item.id == id);
       if (proItemIndex != -1) {
@@ -337,6 +352,7 @@ class ShopController extends GetxController {
       }
 
       update();
+      marketController.update();
       return true;
     } else {
       log(response.toMap().toString());
@@ -348,15 +364,23 @@ class ShopController extends GetxController {
     ApiResponseModel response =
         await ApiService.put(path: 'services/$id', body: data);
     if (response.success) {
-      final int serviceIndex =
-          services.indexWhere((Service element) => element.id == id);
-      services[serviceIndex] = Service.fromJson(response.data);
-      final int objectIndex = items.indexWhere((Object element) {
-        if (element is Service) return element.id == id;
-        return false;
-      });
-      items[objectIndex] = Service.fromJson(response.data);
-
+      if (services.isNotEmpty) {
+        final int serviceIndex =
+            services.indexWhere((Service element) => element.id == id);
+        if (serviceIndex != -1) {
+          services[serviceIndex] = Service.fromJson(response.data);
+        }
+      }
+      // Update items list if not empty and index exists
+      if (items.isNotEmpty) {
+        final int objectIndex = items.indexWhere((Object element) {
+          if (element is Service) return element.id == id;
+          return false;
+        });
+        if (objectIndex != -1) {
+          items[objectIndex] = Service.fromJson(response.data);
+        }
+      }
       final int proItemIndex = marketController.proItems
           .indexWhere((Object item) => item is Service && item.id == id);
       if (proItemIndex != -1) {
@@ -371,6 +395,7 @@ class ShopController extends GetxController {
             Service.fromJson(response.data);
       }
       update();
+      marketController.update();
       return true;
     } else {
       log(response.toMap().toString());
@@ -419,6 +444,7 @@ class ShopController extends GetxController {
       marketController.proProducts
           .removeWhere((Product product) => product.id == id);
       update(); // Update the UI
+      marketController.update();
       return true;
     } else {
       log(response.toMap().toString());
@@ -439,6 +465,7 @@ class ShopController extends GetxController {
       marketController.proServices
           .removeWhere((Service service) => service.id == id);
       update(); // Update the UI
+      marketController.update();
       return true;
     } else {
       log(response.toMap().toString());

@@ -7,6 +7,7 @@ import 'package:business_bosses_v2/bbpro/presentation/create_service.dart';
 import 'package:business_bosses_v2/bbpro/presentation/my_orders_screen.dart';
 import 'package:business_bosses_v2/bbpro/widgets/button.dart';
 import 'package:business_bosses_v2/bbpro/widgets/proseardwidget.dart';
+import 'package:business_bosses_v2/common/dialogs/snackbar.dart';
 import 'package:business_bosses_v2/features/chat/chat_screen.dart';
 import 'package:business_bosses_v2/features/donations/presentation/filtersuppliers.dart';
 import 'package:business_bosses_v2/features/home/widgets/bottom_bar.dart';
@@ -88,6 +89,7 @@ class _MarketplaceScreenState extends State<MarketplaceScreen>
   final ProfileController _profileController = Get.find();
   // State to manage which filter is currently selected
   String selectedFilter = 'none'; // 'none', 'price', 'category', 'date'
+  bool hasOldData = false;
 
   @override
   void initState() {
@@ -133,6 +135,15 @@ class _MarketplaceScreenState extends State<MarketplaceScreen>
       shopController.initShop();
     }
     supplierController.initSuppliers();
+    _marketController.checkOldMarketplaceData().then((bool value) {
+      if (value) {
+        if (mounted) {
+          setState(() {
+            hasOldData = true;
+          });
+        }
+      }
+    });
   }
 
   void _handleTabSelection() {
@@ -178,6 +189,59 @@ class _MarketplaceScreenState extends State<MarketplaceScreen>
         _profileController.myProfile.location ??
         'Nigeria';
     sortItems();
+    // Show migration dialog after the first frame is rendered.
+    // Inside your initState post-fra me callback:
+    if (hasOldData) {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        Get.dialog(
+          AlertDialog(
+            title: const Text('Migrate Old Marketplace Data'),
+            content: const Text(
+                'Would you like to migrate your old marketplace data?'),
+            actions: <Widget>[
+              TextButton(
+                onPressed: () async {
+                  Navigator.pop(context); // close migration dialog
+                  // Show loader dialog
+                  Get.dialog(
+                    const AlertDialog(
+                      content: Row(
+                        children: <Widget>[
+                          CircularProgressIndicator(),
+                          SizedBox(width: 20),
+                          Text('Migrating data...'),
+                        ],
+                      ),
+                    ),
+                    barrierDismissible: false,
+                  );
+                  // Await migration process from your controller
+                  bool response =
+                      await _marketController.migrateOldMarketplaceData();
+                  if (response) {
+                    showSnackbar(message: 'Migration Successful!');
+                  } else {
+                    showSnackbar(message: 'Error Migrating Data');
+                  }
+                  // Dismiss the loader dialog
+                  if (Get.isDialogOpen ?? false) {
+                    Navigator.pop(context);
+                  }
+                },
+                child: const Text('Migrate'),
+              ),
+              TextButton(
+                onPressed: () {
+                  Navigator.pop(context); // dismiss migration dialog
+                },
+                child: const Text('Close'),
+              ),
+            ],
+          ),
+          barrierDismissible: false,
+        );
+      });
+    }
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: PreferredSize(
@@ -586,7 +650,6 @@ class _MarketplaceScreenState extends State<MarketplaceScreen>
                           Tab(text: 'Products'),
                           Tab(text: 'Services'),
                           Tab(text: 'Suppliers'),
-                          Tab(text: 'BoosUp'),
                         ],
                       )
                     : const PreferredSize(
