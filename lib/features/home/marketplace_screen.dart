@@ -449,7 +449,7 @@ class _MarketplaceScreenState extends State<MarketplaceScreen>
                                     });
                       },
                       text: _marketplaceTabController.index == 4
-                          ? 'Become a Partner'
+                          ? 'Add Deals'
                           : _marketplaceTabController.index != 3
                               ? 'Sell'
                               : 'Add a Supplier',
@@ -586,7 +586,7 @@ class _MarketplaceScreenState extends State<MarketplaceScreen>
                           Tab(text: 'Products'),
                           Tab(text: 'Services'),
                           Tab(text: 'Suppliers'),
-                          Tab(text: 'BoosUp'),
+                          // Tab(text: 'BoosUp'),
                         ],
                       )
                     : const PreferredSize(
