@@ -180,6 +180,12 @@ class _PublicProfileScreenState extends State<PublicProfileScreen> {
         backgroundColor: Colors.white,
         appBar: !hasShop
             ? AppBar(
+                leading: IconButton(
+                  onPressed: () {
+                    Navigator.pop(context);
+                  },
+                  icon: SvgPicture.asset('assets/svgs/backbutton.svg'),
+                ),
                 title: Text(publicUser.name ?? publicUser.username),
               )
             : PreferredSize(
