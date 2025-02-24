@@ -187,6 +187,7 @@ class _LoginFormState extends State<LoginForm> {
             await ApiService.post(path: 'users/add-device-token', body: data);
           });
           if (user['data']['bio'] != null) {
+            // GetStorage().write('isFirstTime', false);
             Get.offAndToNamed(Routes.home);
           } else {
             Get.offAndToNamed(Routes.updateProfile,
@@ -219,7 +220,7 @@ class _LoginFormState extends State<LoginForm> {
     @override
     void initState() {
       super.initState();
-      GetStorage().write('isFirstTime', false);
+      // GetStorage().write('isFirstTime', false);
     }
   }
 
@@ -349,6 +350,7 @@ class _LoginFormState extends State<LoginForm> {
                           path: 'users/add-device-token', body: data);
                     });
                     if (user['data']['bio'] != null) {
+                      // GetStorage().write('isFirstTime', false);
                       Get.offAndToNamed(Routes.home);
                     } else {
                       Get.offAndToNamed(Routes.updateProfile,

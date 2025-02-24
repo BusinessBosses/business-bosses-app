@@ -8,6 +8,7 @@ import 'package:business_bosses_v2/bbpro/presentation/my_orders_screen.dart';
 import 'package:business_bosses_v2/bbpro/widgets/button.dart';
 import 'package:business_bosses_v2/bbpro/widgets/proseardwidget.dart';
 import 'package:business_bosses_v2/common/dialogs/snackbar.dart';
+import 'package:business_bosses_v2/common/models/api_response_model.dart';
 import 'package:business_bosses_v2/features/chat/chat_screen.dart';
 import 'package:business_bosses_v2/features/donations/presentation/filtersuppliers.dart';
 import 'package:business_bosses_v2/features/home/widgets/bottom_bar.dart';
@@ -33,6 +34,7 @@ import 'package:country_list_pick/country_list_pick.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import '../../common/widgets/safety_model.dart';
@@ -146,6 +148,83 @@ class _MarketplaceScreenState extends State<MarketplaceScreen>
     });
   }
 
+  Future<void> _checkMigrationReminder() async {
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+    final String uid = _profileController.myProfile.uid;
+    final int? remindTimestamp = prefs.getInt('migration_remind_$uid');
+    if (remindTimestamp != null) {
+      final DateTime remindDate =
+          DateTime.fromMillisecondsSinceEpoch(remindTimestamp);
+      // If within 30 days, do not show the migration dialog.
+      if (DateTime.now().difference(remindDate) < const Duration(days: 30)) {
+        return;
+      }
+    }
+    // Otherwise, show the migration dialog.
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      _showMigrationDialog();
+    });
+  }
+
+  void _showMigrationDialog() {
+    Get.dialog(
+      AlertDialog(
+        title: const Text('Migrate Old Marketplace Data'),
+        content:
+            const Text('Would you like to migrate your old marketplace data?'),
+        actions: <Widget>[
+          TextButton(
+            onPressed: () async {
+              Navigator.pop(context); // close migration dialog
+              // Show loader dialog
+              Get.dialog(
+                const AlertDialog(
+                  content: Row(
+                    children: <Widget>[
+                      CircularProgressIndicator(),
+                      SizedBox(width: 20),
+                      Text('Migrating data...'),
+                    ],
+                  ),
+                ),
+                barrierDismissible: false,
+              );
+              // Perform migration
+              bool response =
+                  await _marketController.migrateOldMarketplaceData();
+              if (response) {
+                showSnackbar(message: 'Migration Successful!');
+              } else {
+                showSnackbar(
+                  message: 'Error Migrating Data',
+                  error: true,
+                );
+              }
+              // Dismiss the loader dialog
+              if (Get.isDialogOpen ?? false) {
+                Navigator.pop(context);
+              }
+            },
+            child: const Text('Migrate'),
+          ),
+          TextButton(
+            onPressed: () async {
+              // Save the current timestamp for this UID so the dialog won’t show for 30 days
+              final SharedPreferences prefs =
+                  await SharedPreferences.getInstance();
+              final String uid = _profileController.myProfile.uid;
+              final int now = DateTime.now().millisecondsSinceEpoch;
+              await prefs.setInt('migration_remind_$uid', now);
+              Navigator.pop(context); // dismiss migration dialog
+            },
+            child: const Text('Remind Me Later'),
+          ),
+        ],
+      ),
+      barrierDismissible: false,
+    );
+  }
+
   void _handleTabSelection() {
     setState(() {});
   }
@@ -192,55 +271,7 @@ class _MarketplaceScreenState extends State<MarketplaceScreen>
     // Show migration dialog after the first frame is rendered.
     // Inside your initState post-fra me callback:
     if (hasOldData) {
-      WidgetsBinding.instance.addPostFrameCallback((_) {
-        Get.dialog(
-          AlertDialog(
-            title: const Text('Migrate Old Marketplace Data'),
-            content: const Text(
-                'Would you like to migrate your old marketplace data?'),
-            actions: <Widget>[
-              TextButton(
-                onPressed: () async {
-                  Navigator.pop(context); // close migration dialog
-                  // Show loader dialog
-                  Get.dialog(
-                    const AlertDialog(
-                      content: Row(
-                        children: <Widget>[
-                          CircularProgressIndicator(),
-                          SizedBox(width: 20),
-                          Text('Migrating data...'),
-                        ],
-                      ),
-                    ),
-                    barrierDismissible: false,
-                  );
-                  // Await migration process from your controller
-                  bool response =
-                      await _marketController.migrateOldMarketplaceData();
-                  if (response) {
-                    showSnackbar(message: 'Migration Successful!');
-                  } else {
-                    showSnackbar(message: 'Error Migrating Data');
-                  }
-                  // Dismiss the loader dialog
-                  if (Get.isDialogOpen ?? false) {
-                    Navigator.pop(context);
-                  }
-                },
-                child: const Text('Migrate'),
-              ),
-              TextButton(
-                onPressed: () {
-                  Navigator.pop(context); // dismiss migration dialog
-                },
-                child: const Text('Close'),
-              ),
-            ],
-          ),
-          barrierDismissible: false,
-        );
-      });
+      _checkMigrationReminder();
     }
     return Scaffold(
       backgroundColor: Colors.white,
@@ -386,17 +417,114 @@ class _MarketplaceScreenState extends State<MarketplaceScreen>
                                                                       context,
                                                                   int index) {
                                                             return ListTile(
-                                                              onTap: () {
+                                                              onTap: () async {
                                                                 Navigator.pop(
                                                                     context);
-                                                                index == 0
-                                                                    ? Get.to(() =>
-                                                                        AddSupplierShopScreen(
-                                                                          shop:
-                                                                              shopController.shop!,
-                                                                        ))
-                                                                    : Get.to(() =>
-                                                                        const AddSupplierScreen());
+                                                                if (index ==
+                                                                    0) {
+                                                                  // Show loader dialog similar to the migration loader
+                                                                  Get.dialog(
+                                                                    const AlertDialog(
+                                                                      content:
+                                                                          Row(
+                                                                        children: <Widget>[
+                                                                          CircularProgressIndicator(),
+                                                                          SizedBox(
+                                                                              width: 20),
+                                                                          Text(
+                                                                              'Adding Biz-Center to Supplier...'),
+                                                                        ],
+                                                                      ),
+                                                                    ),
+                                                                    barrierDismissible:
+                                                                        false,
+                                                                  );
+
+                                                                  // Execute your async logic (replace with your actual function)
+                                                                  final dynamic
+                                                                      data =
+                                                                      <String,
+                                                                          Object?>{
+                                                                    'category':
+                                                                        shopController
+                                                                            .shop!
+                                                                            .category,
+                                                                    'location':
+                                                                        shopController
+                                                                            .shop!
+                                                                            .location,
+                                                                    'description':
+                                                                        shopController
+                                                                            .shop!
+                                                                            .description,
+                                                                    'userId':
+                                                                        _profileController
+                                                                            .myProfile
+                                                                            .uid,
+                                                                    'name': shopController
+                                                                        .shop!
+                                                                        .name,
+                                                                    'email': shopController
+                                                                        .shop!
+                                                                        .email,
+                                                                    'phone': shopController
+                                                                        .shop!
+                                                                        .phone,
+                                                                    'url': shopController
+                                                                        .shop!
+                                                                        .url,
+                                                                    'images':
+                                                                        <String?>[
+                                                                      shopController
+                                                                          .shop!
+                                                                          .image
+                                                                    ],
+                                                                    'isBiz':
+                                                                        true,
+                                                                    'shopId':
+                                                                        shopController
+                                                                            .shop!
+                                                                            .id,
+                                                                  };
+                                                                  ApiResponseModel
+                                                                      response =
+                                                                      await supplierController
+                                                                          .addSupplier(
+                                                                              data);
+                                                                  Get.back();
+                                                                  // Show a snackbar or perform additional actions based on success/failure
+                                                                  if (response
+                                                                      .success) {
+                                                                    await Get
+                                                                        .dialog(
+                                                                      AlertDialog(
+                                                                        title: const Text(
+                                                                            'Supplier Added Succesfully!'),
+                                                                        content:
+                                                                            const Text('It will show in marketplace when the admin approves it.'),
+                                                                        actions: <Widget>[
+                                                                          TextButton(
+                                                                            onPressed:
+                                                                                () {
+                                                                              Navigator.pop(context); // dismiss migration dialog
+                                                                            },
+                                                                            child:
+                                                                                const Text('Close'),
+                                                                          ),
+                                                                        ],
+                                                                      ),
+                                                                    );
+                                                                  } else {
+                                                                    showSnackbar(
+                                                                        message:
+                                                                            'Error adding Biz-Center to supplier.',
+                                                                        error:
+                                                                            true);
+                                                                  }
+                                                                } else {
+                                                                  Get.to(() =>
+                                                                      const AddSupplierScreen());
+                                                                }
                                                               },
                                                               minVerticalPadding:
                                                                   0,
@@ -1054,7 +1182,6 @@ class _MarketplaceScreenState extends State<MarketplaceScreen>
     } else {
       // Sort all items when no filter is applied
       _marketController.proItems.sort(compareItems);
-      _marketController.proItemsWithImages.sort(compareItems);
       _marketController.proProducts.sort(compareItems);
       _marketController.proServices.sort(compareItems);
       supplierController.suppliers.sort(compareSuppliers);

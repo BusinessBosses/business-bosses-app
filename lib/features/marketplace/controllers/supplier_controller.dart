@@ -24,9 +24,6 @@ class SupplierController extends GetxController {
   }
 
   Future<void> initSuppliers() async {
-    loading(true);
-    error(false);
-
     final ApiResponseModel response =
         await ApiService.get(path: 'suppliers/all');
     if (response.success) {
@@ -39,7 +36,6 @@ class SupplierController extends GetxController {
       error(true);
     }
     loading(false);
-    update();
   }
 
   Future<void> initMySuppliers() async {

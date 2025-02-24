@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:business_bosses_v2/bbpro/models/shop_model.dart';
 import 'package:business_bosses_v2/common/models/user_model.dart';
 
 class SuppliersModel {
@@ -16,6 +17,8 @@ class SuppliersModel {
   String? url;
   List<dynamic>? images;
   bool? isBiz;
+  Shop? shop; // Added shop model field
+
   SuppliersModel({
     required this.id,
     this.category,
@@ -30,6 +33,7 @@ class SuppliersModel {
     required this.url,
     this.images,
     this.isBiz = false,
+    this.shop, // Added parameter in constructor
   });
 
   SuppliersModel copyWith({
@@ -46,6 +50,7 @@ class SuppliersModel {
     String? url,
     List<dynamic>? images,
     bool? isBiz,
+    Shop? shop,
   }) {
     return SuppliersModel(
       description: description ?? this.description,
@@ -61,6 +66,7 @@ class SuppliersModel {
       url: url ?? this.url,
       images: images ?? this.images,
       isBiz: isBiz ?? this.isBiz,
+      shop: shop ?? this.shop, // Added in copyWith
     );
   }
 
@@ -79,6 +85,7 @@ class SuppliersModel {
       'url': url,
       'images': images,
       'isBiz': isBiz,
+      'shop': shop?.toMap(), // Added shop to map
     };
   }
 
@@ -101,6 +108,9 @@ class SuppliersModel {
       images: map['images'] != null
           ? List<dynamic>.from((map['images'] as List<dynamic>))
           : null,
+      shop: map['shop'] != null
+          ? Shop.fromMap(map['shop'] as Map<String, dynamic>)
+          : null, // Deserialize shop if available
     );
   }
 
@@ -111,6 +121,6 @@ class SuppliersModel {
 
   @override
   String toString() {
-    return 'SuppliersModel(description: $description, location: $location, name: $name, user: $user, category: $category, id: $id, phone: $phone, isVerified: $isVerified, isApproved: $isApproved, email: $email, url: $url, isBiz: $isBiz)';
+    return 'SuppliersModel(description: $description, location: $location, name: $name, user: $user, category: $category, id: $id, phone: $phone, isVerified: $isVerified, isApproved: $isApproved, email: $email, url: $url, isBiz: $isBiz, shop: $shop)';
   }
 }

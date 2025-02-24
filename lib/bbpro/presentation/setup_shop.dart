@@ -72,6 +72,7 @@ class _SetupshopState extends State<Setupshop> with TickerProviderStateMixin {
   bool isSubmit = false;
   String? image;
   String? imageType;
+  String? category;
 
   Map<String, bool> selections = <String, bool>{
     'Bank': false,
@@ -86,6 +87,20 @@ class _SetupshopState extends State<Setupshop> with TickerProviderStateMixin {
     'Wallet': false,
     'Cash': false
   };
+  final List<String> categories = <String>[
+    'Agriculture, Food & Beverage',
+    'Books & Education',
+    'Construction & Real Estate',
+    'Fashion & Beauty',
+    'Finance & Legal',
+    'Healthcare & Wellness',
+    'Home, Gardens & Outdoors',
+    'Jewellery & Timepieces',
+    'Media & Entertainment',
+    'Security, Safety & Equipment',
+    'Technology, Games & Electronic',
+    'Vehicle & Transportation'
+  ];
 
   Map<String, dynamic> bankDetails = <String, dynamic>{};
   Map<String, dynamic> paypalDetails = <String, dynamic>{};
@@ -257,6 +272,7 @@ class _SetupshopState extends State<Setupshop> with TickerProviderStateMixin {
       lslController.text = widget.shop!.linkedIn ?? '';
       xslController.text = widget.shop!.twitter ?? '';
       cslController.text = widget.shop!.url ?? '';
+      category = widget.shop!.category;
       _populatePaymentMethods(widget.shop!.payments);
     } else {
       shopController.initShopData().then((bool value) {
@@ -309,6 +325,12 @@ class _SetupshopState extends State<Setupshop> with TickerProviderStateMixin {
     }
     if (selections['Wallet'] == true && walletDetails.isEmpty) {
       showSnackbar(message: 'Wallet payment details are required', error: true);
+      return false;
+    } else if (category == null || (category != null && category!.isEmpty)) {
+      showSnackbar(
+        message: 'Select a category',
+        error: true,
+      );
       return false;
     }
     // if (selections['Cash'] == true && cashController.text.isEmpty) {
@@ -575,6 +597,19 @@ class _SetupshopState extends State<Setupshop> with TickerProviderStateMixin {
                       controller: emailController,
                     ),
                     const SizedBox(height: 8),
+                    CustomDropdownWidget(
+                      initialValue: category,
+                      caption: 'Select Category *',
+                      hintText: 'Choose a category',
+                      items: categories,
+                      iconName: 'assets/svgs/dropdown.svg',
+                      onChanged: (String? newValue) {
+                        setState(() {
+                          category = newValue;
+                        });
+                      },
+                    ),
+                    const SizedBox(height: 8),
                     Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 8.0),
                       child: CountryListPick(
@@ -799,6 +834,7 @@ class _SetupshopState extends State<Setupshop> with TickerProviderStateMixin {
       'linkedIn': lslController.text,
       'url': cslController.text,
       'imageType': imageType,
+      'category': category,
     };
 
     final Map<String, dynamic> dataUpdate = <String, dynamic>{
@@ -818,6 +854,7 @@ class _SetupshopState extends State<Setupshop> with TickerProviderStateMixin {
       'linkedIn': lslController.text,
       'url': cslController.text,
       'imageType': imageType,
+      'category': category,
     };
 
     bool response = false;

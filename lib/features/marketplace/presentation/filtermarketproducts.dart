@@ -32,11 +32,23 @@ class FilterMarketplaceProducts extends StatelessWidget {
         child: GetBuilder<MarketController>(
           builder: (MarketController marketController) =>
               marketController.filteredProducts.isEmpty
-                  ? const SafetyModel(
-                      isLoading: false,
-                      icon: Icon(Icons.warning),
-                      title: 'No Item Found!',
-                    )
+                  ? marketController.searchQuery.isEmpty &&
+                          (marketController.selectedCategory == null ||
+                              (marketController.selectedCategory != null &&
+                                  marketController.selectedCategory!.isEmpty))
+                      ? const SafetyModel(
+                          isLoading: false,
+                          icon: Icon(
+                            Icons.search,
+                            size: 50,
+                          ),
+                          title: 'Search For Products',
+                        )
+                      : const SafetyModel(
+                          isLoading: false,
+                          icon: Icon(Icons.warning),
+                          title: 'No Product Found!',
+                        )
                   : SingleChildScrollView(
                       child: Padding(
                         padding: const EdgeInsets.symmetric(

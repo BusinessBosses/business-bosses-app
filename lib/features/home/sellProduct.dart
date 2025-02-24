@@ -1,8 +1,10 @@
 import 'package:business_bosses_v2/bbpro/controllers/shop_controller.dart';
 import 'package:business_bosses_v2/bbpro/presentation/create_product.dart';
 import 'package:business_bosses_v2/bbpro/presentation/create_service.dart';
+import 'package:business_bosses_v2/common/dialogs/snackbar.dart';
+import 'package:business_bosses_v2/common/models/api_response_model.dart';
+import 'package:business_bosses_v2/features/marketplace/controllers/supplier_controller.dart';
 import 'package:business_bosses_v2/features/marketplace/presentation/add_supplier.dart';
-import 'package:business_bosses_v2/features/marketplace/presentation/add_supplier_shop.dart';
 import 'package:business_bosses_v2/features/premium/proscreen.dart';
 import 'package:business_bosses_v2/features/profile/controller/profile_controller.dart';
 import 'package:business_bosses_v2/utils/theme/theme.dart';
@@ -13,6 +15,7 @@ import 'package:get/get.dart';
 void sellProduct(BuildContext context) {
   ProfileController profileController = Get.find();
   ShopController shopController = Get.find();
+  SupplierController supplierController = Get.put(SupplierController());
   showModalBottomSheet(
     context: context,
     shape: const RoundedRectangleBorder(
@@ -107,17 +110,94 @@ void sellProduct(BuildContext context) {
                                                   (BuildContext context,
                                                       int index) {
                                                 return ListTile(
-                                                  onTap: () {
+                                                  onTap: () async {
                                                     Navigator.pop(context);
-                                                    index == 0
-                                                        ? Get.to(() =>
-                                                            AddSupplierShopScreen(
-                                                              shop:
-                                                                  shopController
-                                                                      .shop!,
-                                                            ))
-                                                        : Get.to(() =>
-                                                            const AddSupplierScreen());
+                                                    if (index == 0) {
+                                                      // Show loader dialog similar to the migration loader
+                                                      Get.dialog(
+                                                        const AlertDialog(
+                                                          content: Row(
+                                                            children: <Widget>[
+                                                              CircularProgressIndicator(),
+                                                              SizedBox(
+                                                                  width: 20),
+                                                              Text(
+                                                                  'Adding Biz-Center to Supplier...'),
+                                                            ],
+                                                          ),
+                                                        ),
+                                                        barrierDismissible:
+                                                            false,
+                                                      );
+
+                                                      // Execute your async logic (replace with your actual function)
+                                                      final dynamic data =
+                                                          <String, Object?>{
+                                                        'category':
+                                                            shopController
+                                                                .shop!.category,
+                                                        'location':
+                                                            shopController
+                                                                .shop!.location,
+                                                        'description':
+                                                            shopController.shop!
+                                                                .description,
+                                                        'userId':
+                                                            profileController
+                                                                .myProfile.uid,
+                                                        'name': shopController
+                                                            .shop!.name,
+                                                        'email': shopController
+                                                            .shop!.email,
+                                                        'phone': shopController
+                                                            .shop!.phone,
+                                                        'url': shopController
+                                                            .shop!.url,
+                                                        'images': <String?>[
+                                                          shopController
+                                                              .shop!.image
+                                                        ],
+                                                        'isBiz': true,
+                                                        'shopId': shopController
+                                                            .shop!.id,
+                                                      };
+                                                      ApiResponseModel
+                                                          response =
+                                                          await supplierController
+                                                              .addSupplier(
+                                                                  data);
+                                                      Get.back();
+                                                      // Show a snackbar or perform additional actions based on success/failure
+                                                      if (response.success) {
+                                                        await Get.dialog(
+                                                          AlertDialog(
+                                                            title: const Text(
+                                                                'Supplier Added Succesfully!'),
+                                                            content: const Text(
+                                                                'It will show in marketplace when the admin approves it.'),
+                                                            actions: <Widget>[
+                                                              TextButton(
+                                                                onPressed: () {
+                                                                  Navigator.pop(
+                                                                      context); // dismiss migration dialog
+                                                                },
+                                                                child:
+                                                                    const Text(
+                                                                        'Close'),
+                                                              ),
+                                                            ],
+                                                          ),
+                                                        );
+                                                      } else {
+                                                        showSnackbar(
+                                                            message:
+                                                                'Error adding Biz-Center to supplier.',
+                                                            error: true);
+                                                      }
+                                                    } else {
+                                                      Get.to(() =>
+                                                          const AddSupplierScreen());
+                                                    }
                                                   },
                                                   minVerticalPadding: 0,
                                                   contentPadding:
