@@ -34,8 +34,6 @@ class _CompleteSearchingScreenState extends State<CompleteSearchingScreen>
   late TabController _tabController;
   String _filtertitle = '';
 
-  final bool _hasFilter = false;
-
   @override
   void initState() {
     super.initState();

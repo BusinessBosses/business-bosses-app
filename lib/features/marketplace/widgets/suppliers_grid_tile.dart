@@ -1,4 +1,4 @@
-import 'package:business_bosses_v2/features/chat/chat_room_screen.dart';
+import 'package:business_bosses_v2/bbpro/presentation/user_shop_screen.dart';
 import 'package:business_bosses_v2/features/marketplace/models/suppliers_model.dart';
 import 'package:business_bosses_v2/features/marketplace/presentation/expandedsupplierspage.dart';
 import 'package:business_bosses_v2/features/profile/controller/profile_controller.dart';
@@ -111,12 +111,10 @@ class _SuppliersGridTileState extends State<SuppliersGridTile> {
                 buttonType: ButtonType.outline,
                 onPressed: widget.supplier.isBiz!
                     ? () {
-                        Get.to(
-                          () => const ChatRoomScreen(
-                            frommarketplace: false,
-                          ),
-                          arguments: widget.supplier.user,
-                        );
+                        Get.to(() => UserShopScreen(
+                              user: widget.supplier.user,
+                              ismyshop: false,
+                            ));
                       }
                     : widget.onChangeSuppliersStatus,
                 height: 36.0,
