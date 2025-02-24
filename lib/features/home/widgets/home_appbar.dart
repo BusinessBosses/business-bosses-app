@@ -193,7 +193,7 @@ class HomeAppBar extends StatelessWidget {
                     //             ),
                     //             const SizedBox(width: 8),
                     //             const Text(
-                    //               'Create a Post',
+                    //               'Start a Discussion',
                     //               style: TextStyle(
                     //                 fontSize: 13,
                     //               ),

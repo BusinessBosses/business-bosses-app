@@ -228,7 +228,7 @@ class _LiveEventState extends State<LiveEvent> {
             //                                   ),
             //                                   title: Text(
             //                                     index == 0
-            //                                         ? 'Create a Post'
+            //                                         ? 'Start a Discussion'
             //                                         : index == 1
             //                                             ? 'Sell your product & service'
             //                                             : 'Create a Live Event',
