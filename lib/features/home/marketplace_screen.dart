@@ -868,18 +868,82 @@ class _MarketplaceScreenState extends State<MarketplaceScreen>
       body: _marketController.isLoading
           ? const CircularProgressIndicator()
           : _ismarketplaceSearching
-              ? TabBarView(
-                  controller: _marketplacesearchTabController,
+              ? Column(
                   children: <Widget>[
-                    const FilterMarketplacePosts(),
-                    const FilterMarketplaceProducts(),
-                    const FilterMarketServices(),
-                    Obx(
-                      () => FilterSuppliers(
-                        members: supplierController.suppliers,
-                        filterItems: supplierController.searchedSuppliers,
-                        isLoading: supplierController.loading.value ||
-                            supplierController.loadingSearch.value,
+                    Container(
+                      height: 50,
+                      decoration: BoxDecoration(
+                        color: Colors.grey[200],
+                        borderRadius: BorderRadius.circular(1),
+                      ),
+                      child: CountryListPick(
+                          appBar: AppBar(
+                            leading: IconButton(
+                              onPressed: () {
+                                Navigator.pop(context);
+                              },
+                              icon: SvgPicture.asset(
+                                  'assets/svgs/backbutton.svg'),
+                            ),
+                            centerTitle: true,
+                            title: const Text(
+                              'Select Location',
+                              textAlign: TextAlign.center,
+                            ),
+                          ),
+                          initialSelection: _marketController.selectedLocation,
+                          onChanged: (CountryCode? code) async {
+                            setState(() {
+                              selectedLocationChanged(code!.name, code.code);
+                            });
+                          },
+                          useSafeArea: false,
+                          pickerBuilder:
+                              (BuildContext context, CountryCode? countryCode) {
+                            return Row(
+                              children: <Widget>[
+                                const Icon(
+                                  Icons.place,
+                                  size: 18,
+                                ),
+                                const SizedBox(
+                                  width: 5,
+                                ),
+                                Text(
+                                  _marketController.selectedLocation!.length >
+                                          20
+                                      ? '${_marketController.selectedLocation!.substring(0, 20)}...'
+                                      : _marketController.selectedLocation!,
+                                  style: const TextStyle(
+                                    color: Colors.black,
+                                    fontWeight: FontWeight.w700,
+                                    fontSize: 16,
+                                  ),
+                                ),
+                                const SizedBox(
+                                  width: 5,
+                                ),
+                                SvgPicture.asset('assets/svgs/dropdown.svg')
+                              ],
+                            );
+                          }),
+                    ),
+                    Expanded(
+                      child: TabBarView(
+                        controller: _marketplacesearchTabController,
+                        children: <Widget>[
+                          const FilterMarketplacePosts(),
+                          const FilterMarketplaceProducts(),
+                          const FilterMarketServices(),
+                          Obx(
+                            () => FilterSuppliers(
+                              members: supplierController.suppliers,
+                              filterItems: supplierController.searchedSuppliers,
+                              isLoading: supplierController.loading.value ||
+                                  supplierController.loadingSearch.value,
+                            ),
+                          ),
+                        ],
                       ),
                     ),
                   ],
@@ -1007,9 +1071,9 @@ class _MarketplaceScreenState extends State<MarketplaceScreen>
                                                   ProductsPage(),
                                                   ServicesPage(),
                                                   SuppliersPage(),
-                                                  Bossuppartner(
-                                                    isMarketplace: true,
-                                                  ),
+                                                  // Bossuppartner(
+                                                  //   isMarketplace: true,
+                                                  // ),
                                                 ],
                                               ),
                                             ),
@@ -1056,9 +1120,18 @@ class _MarketplaceScreenState extends State<MarketplaceScreen>
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[
-                const Text(
-                  'Filter by Category',
-                  style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                const Padding(
+                  padding: EdgeInsets.only(left: 10.0, top: 5),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: <Widget>[
+                      Text(
+                        'Filter results',
+                        style: TextStyle(
+                            fontSize: 18, fontWeight: FontWeight.bold),
+                      ),
+                    ],
+                  ),
                 ),
                 const SizedBox(height: 10),
                 Expanded(
@@ -1073,7 +1146,8 @@ class _MarketplaceScreenState extends State<MarketplaceScreen>
                           });
                         },
                         trailing: _marketController.selectedCategory == category
-                            ? const Icon(Icons.check, color: Colors.blue)
+                            ? const Icon(Icons.check,
+                                size: 20, color: primaryColorLT)
                             : null,
                       );
                     }).toList(),

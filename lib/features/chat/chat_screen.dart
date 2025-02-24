@@ -1,5 +1,7 @@
 import 'dart:async';
 import 'package:business_bosses_v2/bbpro/presentation/campaign_page.dart';
+import 'package:business_bosses_v2/bbpro/widgets/drawercontent.dart';
+import 'package:business_bosses_v2/bbpro/widgets/menubutton.dart';
 import 'package:business_bosses_v2/common/models/user_model.dart';
 import 'package:business_bosses_v2/common/widgets/text_widget.dart';
 import 'package:business_bosses_v2/features/chat/chat_room_screen.dart';
@@ -7,9 +9,11 @@ import 'package:business_bosses_v2/features/chat/controllers/chat_controller.dar
 import 'package:business_bosses_v2/features/chat/models/my_message.dart';
 import 'package:business_bosses_v2/features/home/controller/home_controller.dart';
 import 'package:business_bosses_v2/features/home/widgets/bottom_bar.dart';
+import 'package:business_bosses_v2/features/premium/premiumscreen.dart';
 import 'package:business_bosses_v2/features/profile/controller/profile_controller.dart';
 import 'package:business_bosses_v2/navigation/routes.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_advanced_drawer/flutter_advanced_drawer.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import '../../action/action.dart';
@@ -37,6 +41,8 @@ class ChatScreen extends StatefulWidget {
 class _ChatScreenState extends State<ChatScreen> {
   final ChatController _chatController = Get.find();
   final ProfileController _profileController = Get.find();
+  final AdvancedDrawerController _advancedDrawerController =
+      AdvancedDrawerController();
 
   bool _isSearching = false;
   final List<LastMessage> _myChats = <LastMessage>[];
@@ -55,186 +61,256 @@ class _ChatScreenState extends State<ChatScreen> {
       },
       child: GetBuilder<ChatController>(
         builder: (ChatController controller) {
-          return Scaffold(
-            backgroundColor: Colors.white,
-            appBar: _isSearching
-                ? SearchAppBar(
-                    hintText: 'Search messages',
-                    onClose: _onChangeSearching,
-                    onChange: (String query) {
-                      controller.searchChats(query);
-                    },
-                  )
-                : AppBar(
-                    leading: IconButton(
-                      onPressed: () {
-                        Navigator.pop(context);
+          return AdvancedDrawer(
+            backdrop: Container(
+              width: double.infinity,
+              height: double.infinity,
+              decoration: BoxDecoration(
+                gradient: LinearGradient(
+                  begin: Alignment.topLeft,
+                  end: Alignment.bottomRight,
+                  colors: <Color>[Colors.white, Colors.white.withOpacity(0.2)],
+                ),
+              ),
+            ),
+            controller: _advancedDrawerController,
+            animationCurve: Curves.easeInOut,
+            animationDuration: const Duration(milliseconds: 300),
+            animateChildDecoration: true,
+            rtlOpening: false,
+            // openScale: 1.0,
+            disabledGestures: false,
+            childDecoration: const BoxDecoration(
+              // NOTICE: Uncomment if you want to add shadow behind the page.
+              // Keep in mind that it may cause animation jerks.
+              boxShadow: <BoxShadow>[
+                BoxShadow(
+                  color: Colors.black12,
+                  blurRadius: 3,
+                ),
+              ],
+              borderRadius: BorderRadius.all(Radius.circular(16)),
+            ),
+
+            drawer: DrawerContent(
+              oncloseclick: () {
+                _advancedDrawerController.hideDrawer();
+              },
+              currentuser: _profileController.myProfile,
+            ),
+
+            child: Scaffold(
+              backgroundColor: Colors.white,
+              appBar: _isSearching
+                  ? SearchAppBar(
+                      hintText: 'Search messages',
+                      onClose: _onChangeSearching,
+                      onChange: (String query) {
+                        controller.searchChats(query);
                       },
-                      icon: SvgPicture.asset('assets/svgs/backbutton.svg'),
-                    ),
-                    centerTitle: true,
-                    title: const Text('Inbox'),
-                    actions: <Widget>[
-                      Row(
-                        children: <Widget>[
-                          if (_profileController.myProfile.isSubscribed == true)
+                    )
+                  : AppBar(
+                      automaticallyImplyLeading: false,
+                      centerTitle: false,
+                      title: const Text('Inbox'),
+                      actions: <Widget>[
+                        Row(
+                          children: <Widget>[
                             Padding(
                               padding: const EdgeInsets.only(right: 5.0),
                               child: GestureDetector(
                                 onTap: () {
-                                  Get.to(() => const Campaignpage());
+                                  _profileController.myProfile.isSubscribed ==
+                                          true
+                                      ? Get.to(() => const Campaignpage())
+                                      : Get.bottomSheet(
+                                          isScrollControlled: true,
+                                          shape: const RoundedRectangleBorder(
+                                            borderRadius: BorderRadius.only(
+                                              topLeft: Radius.circular(20.0),
+                                              topRight: Radius.circular(20.0),
+                                            ),
+                                          ),
+                                          Container(
+                                            decoration: const BoxDecoration(
+                                              borderRadius: BorderRadius.only(
+                                                topLeft: Radius.circular(20.0),
+                                                topRight: Radius.circular(20.0),
+                                              ),
+                                            ),
+                                            height: Get.height * 0.9,
+                                            child: const Center(
+                                              child: Column(
+                                                mainAxisAlignment:
+                                                    MainAxisAlignment.start,
+                                                crossAxisAlignment:
+                                                    CrossAxisAlignment.center,
+                                                children: <Widget>[
+                                                  PremiumScreen(),
+                                                ],
+                                              ),
+                                            ),
+                                          ),
+                                          backgroundColor: Colors.white,
+                                        );
                                 },
                                 child: CircleAvatar(
                                     radius: 20,
                                     backgroundColor: backgroundColor,
                                     child: SvgPicture.asset(
-                                      'assets/svgs/megaphone.svg',
+                                      'assets/svgs/campaign.svg',
+                                      height: 23,
+                                    )),
+                              ),
+                            ),
+                            GestureDetector(
+                              onTap: () => Get.toNamed(Routes.notifications),
+                              child: Padding(
+                                padding: const EdgeInsets.only(
+                                  right: 10.0,
+                                ),
+                                child: CircleAvatar(
+                                    radius: 20,
+                                    backgroundColor: backgroundColor,
+                                    child: SvgPicture.asset(
+                                      'assets/svgs/notificationicon.svg',
                                       height: 20,
                                     )),
                               ),
                             ),
-                          GestureDetector(
-                            onTap: () => Get.toNamed(Routes.notifications),
-                            child: Padding(
-                              padding: const EdgeInsets.only(
-                                right: 10.0,
-                              ),
-                              child: CircleAvatar(
-                                  radius: 20,
-                                  backgroundColor: backgroundColor,
-                                  child: SvgPicture.asset(
-                                    'assets/svgs/notificationicon.svg',
-                                    height: 20,
-                                  )),
+                            GestureDetector(
+                                onTap: () {
+                                  _advancedDrawerController.showDrawer();
+                                },
+                                child: const CustomMenuButton())
+                          ],
+                        )
+                      ],
+                    ),
+              body: Stack(
+                children: <Widget>[
+                  controller.chatMessages.isEmpty
+                      ? SafetyModel(
+                          isLoading: false,
+                          icon: SvgPicture.asset(
+                            'assets/svgs/message.svg',
+                            colorFilter: const ColorFilter.mode(
+                              Colors.grey,
+                              BlendMode.srcIn,
                             ),
+                            height: 80,
                           ),
-                        ],
-                      )
-                    ],
-                  ),
-            body: Stack(
-              children: <Widget>[
-                controller.chatMessages.isEmpty
-                    ? SafetyModel(
-                        isLoading: false,
-                        icon: SvgPicture.asset(
-                          'assets/svgs/message.svg',
-                          colorFilter: const ColorFilter.mode(
-                            Colors.grey,
-                            BlendMode.srcIn,
-                          ),
-                          height: 80,
-                        ),
-                        title: 'No chat found',
-                        subTitle:
-                            'Search for friends or connections and chat with them',
-                        clickableText: 'Search connections',
-                        // onTap: () => navigateTo(
-                        //   context,
-                        //   routeName: UsersSearchScreen.routeName,
-                        // ),
-                      )
-                    : Column(
-                        children: <Widget>[
-                          GestureDetector(
-                            onTap: () {
-                              _onChangeSearching();
-                            },
-                            child: Padding(
-                              padding: const EdgeInsets.symmetric(
-                                  horizontal: 15.0, vertical: 5),
-                              child: Container(
-                                padding:
-                                    const EdgeInsets.symmetric(vertical: 3),
-                                decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(8),
-                                  color: backgroundColor,
-                                ),
-                                child: Row(
-                                  children: <Widget>[
-                                    CircleAvatar(
-                                      backgroundColor: backgroundColor,
-                                      child: SvgPicture.asset(
-                                        'assets/svgs/homesearch.svg',
-                                        colorFilter: const ColorFilter.mode(
-                                          textColor,
-                                          BlendMode.srcIn,
+                          title: 'No chat found',
+                          subTitle:
+                              'Search for friends or connections and chat with them',
+                          clickableText: 'Search connections',
+                          // onTap: () => navigateTo(
+                          //   context,
+                          //   routeName: UsersSearchScreen.routeName,
+                          // ),
+                        )
+                      : Column(
+                          children: <Widget>[
+                            GestureDetector(
+                              onTap: () {
+                                _onChangeSearching();
+                              },
+                              child: Padding(
+                                padding: const EdgeInsets.symmetric(
+                                    horizontal: 15.0, vertical: 5),
+                                child: Container(
+                                  padding:
+                                      const EdgeInsets.symmetric(vertical: 3),
+                                  decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(8),
+                                    color: backgroundColor,
+                                  ),
+                                  child: Row(
+                                    children: <Widget>[
+                                      CircleAvatar(
+                                        backgroundColor: backgroundColor,
+                                        child: SvgPicture.asset(
+                                          'assets/svgs/homesearch.svg',
+                                          colorFilter: const ColorFilter.mode(
+                                            textColor,
+                                            BlendMode.srcIn,
+                                          ),
+                                          height: 20,
                                         ),
-                                        height: 20,
                                       ),
-                                    ),
-                                    const Text(
-                                      'Search Chats',
-                                      style: TextStyle(
-                                        color: textColor,
-                                        fontSize: 14.0,
-                                        fontWeight: FontWeight.w700,
+                                      const Text(
+                                        'Search Chats',
+                                        style: TextStyle(
+                                          color: textColor,
+                                          fontSize: 14.0,
+                                          fontWeight: FontWeight.w700,
+                                        ),
                                       ),
-                                    ),
-                                  ],
+                                    ],
+                                  ),
                                 ),
                               ),
                             ),
-                          ),
-                          const SizedBox(
-                            height: 5,
-                          ),
-                          Divider(
-                            height: 0.5,
-                            color: Colors.grey.withOpacity(0.3),
-                          ),
-                          Expanded(
-                            child: ListView.builder(
-                              itemCount: controller.chats.length,
-                              itemBuilder: (BuildContext context, int i) {
-                                return Column(
-                                  children: <Widget>[
-                                    ChatItem(
-                                      myChatUser: controller.chats[i],
-                                      chatController: controller,
-                                      // key: ValueKey(_myChats[i].user?.uid),
-                                    ),
-                                    Padding(
-                                      padding: const EdgeInsets.symmetric(
-                                          horizontal: 15.0),
-                                      child: Divider(
-                                        height: 0.5,
-                                        color: Colors.grey.withOpacity(0.3),
+                            const SizedBox(
+                              height: 5,
+                            ),
+                            Divider(
+                              height: 0.5,
+                              color: Colors.grey.withOpacity(0.3),
+                            ),
+                            Expanded(
+                              child: ListView.builder(
+                                itemCount: controller.chats.length,
+                                itemBuilder: (BuildContext context, int i) {
+                                  return Column(
+                                    children: <Widget>[
+                                      ChatItem(
+                                        myChatUser: controller.chats[i],
+                                        chatController: controller,
+                                        // key: ValueKey(_myChats[i].user?.uid),
                                       ),
-                                    ),
-                                  ],
+                                      Padding(
+                                        padding: const EdgeInsets.symmetric(
+                                            horizontal: 15.0),
+                                        child: Divider(
+                                          height: 0.5,
+                                          color: Colors.grey.withOpacity(0.3),
+                                        ),
+                                      ),
+                                    ],
+                                  );
+                                },
+                              ),
+                            ),
+                          ],
+                        ),
+                  if (_isSearching)
+                    Container(
+                      color: Theme.of(context).scaffoldBackgroundColor,
+                      child: controller.searchedChats.isEmpty
+                          ? SafetyModel(
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              isLoading: false,
+                              icon: SvgPicture.asset('assets/svgs/search.svg',
+                                  color: hintColor, height: 80.0, width: 80.0),
+                              title: 'Search for chats',
+                              subTitle: 'Search with name to find',
+                            )
+                          : ListView.builder(
+                              itemCount: controller.searchedChats.length,
+                              itemBuilder: (BuildContext context, int i) {
+                                return ChatItem(
+                                  myChatUser: controller.searchedChats[i],
+                                  key: ValueKey(
+                                      controller.searchedChats[i].user!.uid),
+                                  chatController: controller,
                                 );
                               },
                             ),
-                          ),
-                        ],
-                      ),
-                if (_isSearching)
-                  Container(
-                    color: Theme.of(context).scaffoldBackgroundColor,
-                    child: controller.searchedChats.isEmpty
-                        ? SafetyModel(
-                            mainAxisAlignment: MainAxisAlignment.start,
-                            isLoading: false,
-                            icon: SvgPicture.asset('assets/svgs/search.svg',
-                                color: hintColor, height: 80.0, width: 80.0),
-                            title: 'Search for chats',
-                            subTitle: 'Search with name to find',
-                          )
-                        : ListView.builder(
-                            itemCount: controller.searchedChats.length,
-                            itemBuilder: (BuildContext context, int i) {
-                              return ChatItem(
-                                myChatUser: controller.searchedChats[i],
-                                key: ValueKey(
-                                    controller.searchedChats[i].user!.uid),
-                                chatController: controller,
-                              );
-                            },
-                          ),
-                  ),
-                const BottomBar(activeIndex: 1),
-              ],
+                    ),
+                  const BottomBar(activeIndex: 1),
+                ],
+              ),
             ),
           );
         },

@@ -53,21 +53,6 @@ class _DonationsPageState extends State<DonationsPage> {
   Widget build(BuildContext context) {
     return Scaffold(
         backgroundColor: Colors.white,
-        // appBar: widget.ishome == false
-        //     ? AppBar(
-        //         leading: IconButton(
-        //           onPressed: () {
-        //             Navigator.pop(context);
-        //           },
-        //           icon: SvgPicture.asset('assets/svgs/backbutton.svg'),
-        //         ),
-        //         centerTitle: true,
-        //         title: const Text(
-        //           'CrowdFund',
-        //           textAlign: TextAlign.center,
-        //         ),
-        //       )
-        //     : null,
         body: donationsController.loading.value
             ? const Expanded(
                 child: Center(
@@ -532,8 +517,10 @@ class _DonationsPageState extends State<DonationsPage> {
                                           child: Container(
                                             color: backgroundColor,
                                             child: ListView.builder(
-                                              padding: const EdgeInsets.only(
-                                                bottom: 100,
+                                              padding: EdgeInsets.only(
+                                                bottom: widget.ishome == false
+                                                    ? 100
+                                                    : 0,
                                               ),
                                               shrinkWrap: true,
                                               scrollDirection:
