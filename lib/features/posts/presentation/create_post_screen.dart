@@ -5,6 +5,7 @@ import 'package:business_bosses_v2/common/widgets/gallery_screen.dart';
 import 'package:business_bosses_v2/common/widgets/text_widget.dart';
 import 'package:business_bosses_v2/features/donations/models/donations_model.dart';
 import 'package:business_bosses_v2/features/forum/models/forum_model.dart';
+import 'package:business_bosses_v2/features/home/marketplace_screen.dart';
 import 'package:business_bosses_v2/features/marketplace/models/market_model.dart';
 import 'package:business_bosses_v2/features/posts/controllers/create_post_controller.dart';
 import 'package:business_bosses_v2/features/posts/widgets/preview.dart';
@@ -143,8 +144,8 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
                     ),
                     centerTitle: true,
                     title: widget.postId == null
-                        ? const Text('Create Post')
-                        : const Text('Update Post'),
+                        ? const Text('Start a Discussion')
+                        : const Text('Update Discussion'),
                   ),
             body: GestureDetector(
               onTap: () => unFocusKeyboard(context),
@@ -481,7 +482,49 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
                       ),
                     const SizedBox(
                       height: 50,
-                    )
+                    ),
+                    Center(
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: <Widget>[
+                          SvgPicture.asset(
+                            'assets/svgs/report.svg',
+                            color: primaryColorLT,
+                            height: 18,
+                          ),
+                          const SizedBox(
+                            width: 5,
+                          ),
+                          GestureDetector(
+                            onTap: () {
+                              Get.to(const MarketplaceScreen());
+                            },
+                            child: const Row(
+                              children: <Widget>[
+                                Text(
+                                  'To sell your products and services, list on',
+                                  style:
+                                      TextStyle(color: textColor, fontSize: 12),
+                                ),
+                                Text(
+                                  ' Marketplace',
+                                  style: TextStyle(
+                                      color: primaryColorLT,
+                                      fontWeight: FontWeight.w700,
+                                      fontSize: 12),
+                                ),
+                                Icon(
+                                  Icons.chevron_right,
+                                  color: primaryColorLT,
+                                  size: 15,
+                                ),
+                              ],
+                            ),
+                          )
+                        ],
+                      ),
+                    ),
                   ],
                 ),
               ),
