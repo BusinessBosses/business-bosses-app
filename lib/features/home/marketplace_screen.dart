@@ -25,6 +25,7 @@ import 'package:business_bosses_v2/features/marketplace/models/suppliers_model.d
 
 import 'package:business_bosses_v2/features/marketplace/widgets/products.dart';
 import 'package:business_bosses_v2/features/marketplace/widgets/services.dart';
+import 'package:business_bosses_v2/features/moreinfoscreens/bossuppartner.dart';
 import 'package:business_bosses_v2/features/premium/proscreen.dart';
 import 'package:business_bosses_v2/features/profile/controller/profile_controller.dart';
 import 'package:business_bosses_v2/features/search/widgets/search_bar.dart';
@@ -134,7 +135,9 @@ class _MarketplaceScreenState extends State<MarketplaceScreen>
     if (shopController.shop == null) {
       shopController.initShop();
     }
-    supplierController.initSuppliers();
+    if (supplierController.suppliers.isEmpty) {
+      supplierController.initSuppliers();
+    }
     _marketController.checkOldMarketplaceData().then((bool value) {
       if (value) {
         if (mounted) {
@@ -1069,9 +1072,9 @@ class _MarketplaceScreenState extends State<MarketplaceScreen>
                                                   ProductsPage(),
                                                   ServicesPage(),
                                                   SuppliersPage(),
-                                                  // Bossuppartner(
-                                                  //   isMarketplace: true,
-                                                  // ),
+                                                  Bossuppartner(
+                                                    isMarketplace: true,
+                                                  ),
                                                 ],
                                               ),
                                             ),
@@ -1256,7 +1259,9 @@ class _MarketplaceScreenState extends State<MarketplaceScreen>
       _marketController.proItems.sort(compareItems);
       _marketController.proProducts.sort(compareItems);
       _marketController.proServices.sort(compareItems);
-      supplierController.suppliers.sort(compareSuppliers);
+      if (mounted) {
+        supplierController.suppliers.sort(compareSuppliers);
+      }
     }
     if (mounted) {
       setState(() {});

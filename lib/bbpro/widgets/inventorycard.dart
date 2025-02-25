@@ -59,7 +59,9 @@ class _InventoryCardState extends State<InventoryCard> {
         mainAxisAlignment: MainAxisAlignment.start,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
-          if (widget.product?.images?[0] != null &&
+          if (widget.product?.images != null &&
+              widget.product!.images!.isNotEmpty &&
+              widget.product?.images?[0] != null &&
               widget.product!.images![0].isNotEmpty)
             SizedBox(
               height: 120.0,
@@ -81,7 +83,9 @@ class _InventoryCardState extends State<InventoryCard> {
           // if (widget.product?.images?[0] != null &&
           //     widget.product!.images![0].isNotEmpty)
           //   const Divider(),
-          if (widget.product?.images?[0] != null &&
+          if (widget.product?.images != null &&
+              widget.product!.images!.isNotEmpty &&
+              widget.product?.images?[0] != null &&
               widget.product!.images![0].isNotEmpty)
             const SizedBox(height: 5),
           Row(

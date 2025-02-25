@@ -38,10 +38,16 @@ class _ProshopdealsWidgetState extends State<ProshopdealsWidget> {
     if (widget.combinedList != null) {
       items = widget.combinedList!.where((Object object) {
         if (object is Product) {
-          if (object.user!.isSubscribed) return true;
+          return object.images != null &&
+              object.images!.isNotEmpty &&
+              object.images!.first.isNotEmpty &&
+              (object).user!.isSubscribed;
         } else if (object is Service) {
           if (object.user!.isSubscribed) {
-            return true;
+            return object.images != null &&
+                object.images!.isNotEmpty &&
+                object.images!.first.isNotEmpty &&
+                (object).user!.isSubscribed;
           }
         }
         return false;
