@@ -1,6 +1,7 @@
 import 'package:business_bosses_v2/analytics/presentation/analysescreen.dart';
 import 'package:business_bosses_v2/common/models/my_response.dart';
 import 'package:business_bosses_v2/common/models/my_title.dart';
+import 'package:business_bosses_v2/common/models/user_model.dart';
 import 'package:business_bosses_v2/common/widgets/data_selection_screen.dart';
 import 'package:business_bosses_v2/common/widgets/safety_model.dart';
 import 'package:business_bosses_v2/common/widgets/text_widget.dart';
@@ -47,6 +48,18 @@ class _CompleteSearchingScreenState extends State<CompleteSearchingScreen>
   Widget build(BuildContext context) {
     return GetBuilder<CompleteSearchController>(
       builder: (CompleteSearchController controller) {
+        // Sort users with profile pictures first
+        final List<UserModel> sortedUsers = controller.isUserSearch.value
+            ? List.from(controller.searchedUsers)
+            : List.from(controller.recommendedConnections);
+        sortedUsers.sort((UserModel a, UserModel b) {
+          if (a.photoUrl != null && a.photoUrl!.isNotEmpty) {
+            return (b.photoUrl != null && b.photoUrl!.isNotEmpty) ? 0 : -1;
+          } else {
+            return (b.photoUrl != null && b.photoUrl!.isNotEmpty) ? 1 : 0;
+          }
+        });
+
         return DefaultTabController(
           length: 2,
           child: Scaffold(
@@ -125,9 +138,7 @@ class _CompleteSearchingScreenState extends State<CompleteSearchingScreen>
                       controller: _tabController,
                       children: <Widget>[
                         FilterUsers(
-                          filterItems: controller.isUserSearch.value
-                              ? controller.searchedUsers
-                              : controller.recommendedConnections,
+                          filterItems: sortedUsers,
                           isLoading: controller.loading.value ||
                               controller.loadingSearch.value,
                           onConnectionChange: controller.connectToUser,
@@ -140,11 +151,6 @@ class _CompleteSearchingScreenState extends State<CompleteSearchingScreen>
                           isLoading: controller.loading.value ||
                               controller.loadingSearch.value,
                         ),
-                        // FilterForum(
-                        //   filterItems: controller.searchedForums,
-                        //   isLoading: controller.loading.value ||
-                        //       controller.loadingSearch.value,
-                        // ),
                       ],
                     ),
                   )

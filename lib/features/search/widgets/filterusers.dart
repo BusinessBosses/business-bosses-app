@@ -35,10 +35,9 @@ class _FilterUsersState extends State<FilterUsers> {
   final ProfileController _profileController = Get.find();
   final HomeController homeController = Get.find();
   final bool loadingNext = false;
+
   @override
-  Widget build(
-    BuildContext context,
-  ) {
+  Widget build(BuildContext context) {
     return Container(
       color: Colors.white,
       height: double.infinity,
@@ -64,22 +63,23 @@ class _FilterUsersState extends State<FilterUsers> {
                       ListView.builder(
                         padding: const EdgeInsets.only(bottom: 48.0),
                         controller: _controller,
-                        itemCount: widget.filterItems.length,
+                        itemCount: widget.filterItems.length +
+                            (widget.isSearch
+                                ? 0
+                                : 1), // Add 1 for bossOfTheWeek
                         itemBuilder: (BuildContext context, int i) {
-                          final int checkConnected =
-                              _profileController.myProfile.connecteds != null
-                                  ? _profileController.myProfile.connecteds!
-                                      .indexWhere(
-                                      (String element) =>
-                                          element ==
-                                          (i == 0 && !widget.isSearch
-                                              ? homeController
-                                                  .bossOfTheWeek?.uid
-                                              : widget.filterItems[i].uid),
-                                    )
-                                  : -1;
-                          // ignore: curly_braces_in_flow_control_structures
-                          if (!widget.isSearch) if (i == 0) {
+                          // Handle bossOfTheWeek at the top if not in search mode
+                          if (!widget.isSearch && i == 0) {
+                            final int checkConnected =
+                                _profileController.myProfile.connecteds != null
+                                    ? _profileController.myProfile.connecteds!
+                                        .indexWhere(
+                                        (String element) =>
+                                            element ==
+                                            homeController.bossOfTheWeek?.uid,
+                                      )
+                                    : -1;
+
                             return Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: <Widget>[
@@ -105,15 +105,7 @@ class _FilterUsersState extends State<FilterUsers> {
                                     margin: const EdgeInsets.symmetric(
                                         horizontal: 4.0),
                                     child: FittedBox(
-                                      child: _profileController
-                                                      .myProfile.connecteds !=
-                                                  null &&
-                                              _profileController
-                                                  .myProfile.connecteds!
-                                                  .contains(
-                                                homeController
-                                                    .bossOfTheWeek?.uid,
-                                              )
+                                      child: checkConnected != -1
                                           ? const Text(
                                               'Following',
                                               style: TextStyle(
@@ -185,17 +177,31 @@ class _FilterUsersState extends State<FilterUsers> {
                               ],
                             );
                           }
-                          return widget.filterItems[i].isRanked == true
+
+                          // Adjust index for the rest of the items
+                          final int adjustedIndex = widget.isSearch ? i : i - 1;
+                          final UserModel user =
+                              widget.filterItems[adjustedIndex];
+
+                          final int checkConnected =
+                              _profileController.myProfile.connecteds != null
+                                  ? _profileController.myProfile.connecteds!
+                                      .indexWhere(
+                                      (String element) => element == user.uid,
+                                    )
+                                  : -1;
+
+                          return user.isRanked == true
                               ? Container()
                               : Column(
                                   children: <Widget>[
                                     ListTile(
                                       onTap: () async {
                                         Get.toNamed(Routes.publicProfile,
-                                            arguments: widget.filterItems[i]);
+                                            arguments: user);
                                       },
                                       leading: UserAvatarWithBadge(
-                                        user: widget.filterItems[i],
+                                        user: user,
                                         height: 48.0,
                                         width: 48.0,
                                         radius: 30.0,
@@ -228,33 +234,20 @@ class _FilterUsersState extends State<FilterUsers> {
                                           onPressed: () async {
                                             if (widget.onConnectionChange !=
                                                 null) {
-                                              widget.onConnectionChange!(
-                                                widget.filterItems[i],
-                                              );
+                                              widget.onConnectionChange!(user);
                                             }
-                                            // onConnect();
                                           },
                                         ),
                                       ),
-                                      title: widget.filterItems[i]
-                                                  .isSubscribed ==
-                                              true
+                                      title: user.isSubscribed == true
                                           ? Row(
                                               children: <Widget>[
-                                                Text(widget.filterItems[i]
-                                                                .name !=
-                                                            null &&
-                                                        widget.filterItems[i]
-                                                                .name!.length <=
-                                                            20
-                                                    ? widget
-                                                        .filterItems[i].name!
-                                                    : widget.filterItems[i]
-                                                                .name !=
-                                                            null
-                                                        ? '${widget.filterItems[i].name!.substring(0, 15)}...'
-                                                        : widget.filterItems[i]
-                                                            .username),
+                                                Text(user.name != null &&
+                                                        user.name!.length <= 20
+                                                    ? user.name!
+                                                    : user.name != null
+                                                        ? '${user.name!.substring(0, 15)}...'
+                                                        : user.username),
                                                 const SizedBox(width: 5),
                                                 SvgPicture.asset(
                                                   'assets/svgs/premiumbadge.svg',
@@ -263,21 +256,14 @@ class _FilterUsersState extends State<FilterUsers> {
                                                 )
                                               ],
                                             )
-                                          : Text(widget.filterItems[i].name !=
-                                                      null &&
-                                                  widget.filterItems[i].name!
-                                                          .length <=
-                                                      20
-                                              ? widget.filterItems[i].name!
-                                              : widget.filterItems[i].name !=
-                                                      null
-                                                  ? '${widget.filterItems[i].name!.substring(0, 15)}...'
-                                                  : widget
-                                                      .filterItems[i].username),
+                                          : Text(user.name != null &&
+                                                  user.name!.length <= 20
+                                              ? user.name!
+                                              : user.name != null
+                                                  ? '${user.name!.substring(0, 15)}...'
+                                                  : user.username),
                                       subtitle: Text(
-                                        widget.filterItems[i].bio ??
-                                            widget.filterItems[i].category ??
-                                            '',
+                                        user.bio ?? user.category ?? '',
                                         maxLines: 1,
                                       ),
                                     ),
