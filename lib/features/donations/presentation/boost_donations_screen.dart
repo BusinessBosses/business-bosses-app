@@ -255,16 +255,41 @@ class _BoostDonationState extends State<BoostDonation> {
       backgroundColor: const Color(0xFFFFFFFF),
       appBar: AppBar(
         backgroundColor: const Color(0xFFFFFFFF),
-        leading: IconButton(
-          onPressed: () {
-            Navigator.pop(context);
-          },
-          icon: SvgPicture.asset('assets/svgs/backbutton.svg'),
-        ),
-        centerTitle: true,
-        title: const TextWidget(
-          text: 'Boost Post',
-        ),
+        automaticallyImplyLeading: false,
+        // leading: IconButton(
+        //   onPressed: () {
+        //     Navigator.pop(context);
+        //   },
+        //   icon: SvgPicture.asset('assets/svgs/backbutton.svg'),
+        // ),
+        actions: <Widget>[
+          GestureDetector(
+            onTap: () {
+              Get.back();
+            },
+            child: const Padding(
+              padding: EdgeInsets.only(right: 10.0),
+              child: Row(
+                children: <Widget>[
+                  Icon(
+                    Icons.clear_outlined,
+                    color: primaryColorLT,
+                    size: 14,
+                  ),
+                  SizedBox(width: 2),
+                  Text('Cancel',
+                      style: TextStyle(
+                          color: primaryColorLT,
+                          fontSize: 15,
+                          fontWeight: FontWeight.w700)),
+                ],
+              ),
+            ),
+          ),
+        ],
+
+        centerTitle: false,
+        title: const Text('Boost Post'),
       ),
       body: SingleChildScrollView(
         child: Column(
