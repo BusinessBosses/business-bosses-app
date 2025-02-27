@@ -489,7 +489,8 @@ class _OrderProductScreenState extends State<OrderProductScreen> {
                         },
                       ),
                       if (widget.product.color != null &&
-                          widget.product.color!.isNotEmpty)
+                          widget.product.color!.isNotEmpty &&
+                          widget.product.color!.first.isNotEmpty)
                         CustomDropdownWidget(
                           padding: 0,
                           isorder: true,
@@ -504,7 +505,8 @@ class _OrderProductScreenState extends State<OrderProductScreen> {
                           }),
                         ),
                       if (widget.product.size != null &&
-                          widget.product.size!.isNotEmpty)
+                          widget.product.size!.isNotEmpty &&
+                          widget.product.size!.first.isNotEmpty)
                         CustomDropdownWidget(
                           padding: 0,
                           iconcolor: textColor,
@@ -519,7 +521,8 @@ class _OrderProductScreenState extends State<OrderProductScreen> {
                           }),
                         ),
                       if (widget.product.size != null &&
-                          widget.product.size!.isNotEmpty)
+                          widget.product.size!.isNotEmpty &&
+                          widget.product.size!.first.isNotEmpty)
                         const SizedBox(
                           height: 15,
                         ),
