@@ -959,6 +959,7 @@ class _CreateProductListingState extends State<CreateProductListing> {
                             showSnackbar(
                               message: 'Product Updated Successfully!',
                             );
+                            Get.back();
                           } else {
                             showSnackbar(
                               message: 'Error While Updating Product',
