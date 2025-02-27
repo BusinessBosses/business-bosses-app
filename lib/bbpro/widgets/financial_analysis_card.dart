@@ -101,7 +101,7 @@ class _FinancialanalysisWidgetState extends State<FinancialanalysisWidget> {
                           padding: EdgeInsets.all(8.0),
                           child: Center(
                             child: Text(
-                              'Sales',
+                              'Sales from Orders',
                               style: TextStyle(fontWeight: FontWeight.bold),
                             ),
                           ),
@@ -110,16 +110,7 @@ class _FinancialanalysisWidgetState extends State<FinancialanalysisWidget> {
                           padding: EdgeInsets.all(8.0),
                           child: Center(
                             child: Text(
-                              'Expenses',
-                              style: TextStyle(fontWeight: FontWeight.bold),
-                            ),
-                          ),
-                        ),
-                        Padding(
-                          padding: EdgeInsets.all(8.0),
-                          child: Center(
-                            child: Text(
-                              'Balance',
+                              'Expenses from Tasks',
                               style: TextStyle(fontWeight: FontWeight.bold),
                             ),
                           ),
@@ -169,35 +160,6 @@ class _FinancialanalysisWidgetState extends State<FinancialanalysisWidget> {
                                               ? '${(shopController.shopStats!.totalExpenses / 1000).toStringAsFixed(1)}K'
                                               : shopController
                                                   .shopStats!.totalExpenses
-                                                  .toStringAsFixed(1))
-                                  : '0',
-                              style: const TextStyle(
-                                fontWeight: FontWeight.bold,
-                                fontSize: 14,
-                                color: proprimaryColor,
-                              ),
-                            ),
-                          ),
-                        ),
-                        Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: Center(
-                            child: Text(
-                              shopController.shopStats != null
-                                  ? shopController.shop!.currency +
-                                      ((shopController.shopStats!.totalAmount -
-                                                  shopController.shopStats!
-                                                      .totalExpenses) >=
-                                              1000000
-                                          ? '${((shopController.shopStats!.totalAmount - shopController.shopStats!.totalExpenses) / 1000000).toStringAsFixed(1)}M'
-                                          : (shopController.shopStats!
-                                                          .totalAmount -
-                                                      shopController.shopStats!
-                                                          .totalExpenses) >=
-                                                  1000
-                                              ? '${((shopController.shopStats!.totalAmount - shopController.shopStats!.totalExpenses) / 1000).toStringAsFixed(1)}K'
-                                              : shopController
-                                                  .shopStats!.totalAmount
                                                   .toStringAsFixed(1))
                                   : '0',
                               style: const TextStyle(

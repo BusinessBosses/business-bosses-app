@@ -1742,11 +1742,10 @@ class _CreateServiceListingState extends State<CreateServiceListing>
                             final ServiceAddResult result =
                                 await shopController.addService(serviceData);
                             if (result.success) {
+                              Get.back();
                               showSnackbar(
                                   message: 'Service Added Successfully!');
-                              Get.back();
 
-                              
                               return;
                             } else {
                               String errorMessage = 'Failed to add service';
@@ -1756,9 +1755,9 @@ class _CreateServiceListingState extends State<CreateServiceListing>
                             final bool result = await shopController
                                 .updateService(widget.service!.id, serviceData);
                             if (result) {
+                              Get.back();
                               showSnackbar(
                                   message: 'Service Updated Successfully!');
-                              Get.back();
 
                               return;
                             } else {

@@ -942,10 +942,10 @@ class _CreateProductListingState extends State<CreateProductListing> {
                           ProductAddResult response =
                               await shopController.addProducts(productListing);
                           if (response.success) {
+                            Get.back();
                             showSnackbar(
                               message: 'Product Added Successfully!',
                             );
-                            Get.back();
                           } else {
                             showSnackbar(
                               message: 'Error While Adding Product',
@@ -956,10 +956,10 @@ class _CreateProductListingState extends State<CreateProductListing> {
                           bool response = await shopController.updateProduct(
                               widget.product!.id, productListing);
                           if (response) {
+                            Get.back();
                             showSnackbar(
                               message: 'Product Updated Successfully!',
                             );
-                            Get.back();
                           } else {
                             showSnackbar(
                               message: 'Error While Updating Product',
