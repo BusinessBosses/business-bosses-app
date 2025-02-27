@@ -137,7 +137,7 @@ class _MyProfileScreenState extends State<MyProfileScreen> {
                       Align(
                         alignment: Alignment.bottomCenter,
                         child: CupertinoSlidingSegmentedControl<int>(
-                          backgroundColor: Colors.grey[200]!,
+                          backgroundColor: backgroundColor,
                           padding: const EdgeInsets.all(5),
                           children: <int, Widget>{
                             0: Padding(
@@ -153,7 +153,7 @@ class _MyProfileScreenState extends State<MyProfileScreen> {
                                     : const TextStyle(
                                         fontWeight: FontWeight.bold,
                                         fontSize: 14,
-                                        color: Colors.grey,
+                                        color: textColor,
                                       ),
                               ),
                             ),
@@ -165,7 +165,7 @@ class _MyProfileScreenState extends State<MyProfileScreen> {
                                   : const TextStyle(
                                       fontWeight: FontWeight.bold,
                                       fontSize: 14,
-                                      color: Colors.grey,
+                                      color: textColor,
                                     ),
                             ),
                           },
@@ -281,10 +281,26 @@ class _MyProfileScreenState extends State<MyProfileScreen> {
                                           labelColor: Colors.black,
                                           tabs: <Widget>[
                                             const Tab(
-                                              text: 'About',
+                                              child: FittedBox(
+                                                child: Text(
+                                                  'About',
+                                                  style: TextStyle(
+                                                      fontWeight:
+                                                          FontWeight.w700,
+                                                      fontSize: 14),
+                                                ),
+                                              ),
                                             ),
                                             const Tab(
-                                              text: 'Posts',
+                                              child: FittedBox(
+                                                child: Text(
+                                                  'Posts',
+                                                  style: TextStyle(
+                                                      fontWeight:
+                                                          FontWeight.w700,
+                                                      fontSize: 14),
+                                                ),
+                                              ),
                                             ),
                                             if (!profileController
                                                 .myProfile.isSubscribed)
@@ -294,16 +310,56 @@ class _MyProfileScreenState extends State<MyProfileScreen> {
                                                       profileController
                                                           .myProfile.uid)
                                                   .isNotEmpty)
-                                                const Tab(text: 'Listings'),
+                                                const Tab(
+                                                  child: FittedBox(
+                                                    child: Text(
+                                                      'Listings',
+                                                      style: TextStyle(
+                                                          fontWeight:
+                                                              FontWeight.w700,
+                                                          fontSize: 14),
+                                                    ),
+                                                  ),
+                                                ),
                                             if (homeController
                                                 .userresources.isNotEmpty)
-                                              const Tab(text: 'Resources'),
+                                              const Tab(
+                                                child: FittedBox(
+                                                  child: Text(
+                                                    'Resources',
+                                                    style: TextStyle(
+                                                        fontWeight:
+                                                            FontWeight.w700,
+                                                        fontSize: 14),
+                                                  ),
+                                                ),
+                                              ),
                                             if (homeController
                                                 .userdonations.isNotEmpty)
-                                              const Tab(text: 'Donations'),
+                                              const Tab(
+                                                child: FittedBox(
+                                                  child: Text(
+                                                    'Donations',
+                                                    style: TextStyle(
+                                                        fontWeight:
+                                                            FontWeight.w700,
+                                                        fontSize: 14),
+                                                  ),
+                                                ),
+                                              ),
                                             if (homeController
                                                 .usercourses.isNotEmpty)
-                                              const Tab(text: 'Courses'),
+                                              const Tab(
+                                                child: FittedBox(
+                                                  child: Text(
+                                                    'Courses',
+                                                    style: TextStyle(
+                                                        fontWeight:
+                                                            FontWeight.w700,
+                                                        fontSize: 14),
+                                                  ),
+                                                ),
+                                              ),
                                           ],
                                         ),
                                       ),

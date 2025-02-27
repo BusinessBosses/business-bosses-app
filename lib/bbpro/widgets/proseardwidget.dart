@@ -52,6 +52,11 @@ class ProSearchbar extends StatelessWidget {
         autofocus: autofocus,
         onChanged: onChange,
         onFieldSubmitted: onSubmit,
+        style: const TextStyle(
+          color: textColor,
+          fontSize: 15.0,
+          fontWeight: FontWeight.w700,
+        ),
         textInputAction: TextInputAction.search,
         decoration: inputDecoration.copyWith(
           fillColor: backgroundColor ?? Colors.white,
@@ -59,32 +64,29 @@ class ProSearchbar extends StatelessWidget {
               horizontal: contentPadding ?? 0.0,
               vertical: contentPadding ?? 0.0),
           hintText: hintText,
+          hintStyle: const TextStyle(
+            color: textColor,
+            fontSize: 15.0,
+            fontWeight: FontWeight.w700,
+          ),
           prefixIcon: hasSearchIcon == false
               ? null
               : Container(
                   padding: const EdgeInsets.symmetric(
                       vertical: 12.0, horizontal: 0.0),
                   child: SvgPicture.asset(
-                    'assets/svgs/search.svg',
+                    'assets/svgs/homesearch.svg',
+                    colorFilter: const ColorFilter.mode(
+                      textColor,
+                      BlendMode.srcIn,
+                    ),
                     height: 20,
-                    color: hintColor,
                   ),
                 ),
           border: OutlineInputBorder(
             borderRadius: BorderRadius.circular(radius ?? 100.0),
             borderSide: BorderSide.none,
           ),
-          // enabledBorder: OutlineInputBorder(
-          //   borderRadius:
-          //       BorderRadius.circular(10.0), // Add BorderRadius for enabled state
-          //   borderSide: BorderSide.none,
-          // ),
-          // focusedBorder: OutlineInputBorder(
-          //   borderRadius:
-          //       BorderRadius.circular(10.0), // Add BorderRadius for focused state
-          //   borderSide: BorderSide(
-          //       color: proprimaryColor), // Customize border color when focused
-          // ),
         ),
       ),
       if (ismarketplace != null)

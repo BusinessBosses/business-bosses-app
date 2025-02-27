@@ -333,9 +333,31 @@ class _MarketplaceScreenState extends State<MarketplaceScreen>
                       );
                     }),
                 actions: <Widget>[
+                  GestureDetector(
+                    onTap: () {
+                      Get.to(() => const MyOrdersScreen());
+                    },
+                    child: Padding(
+                      padding: const EdgeInsets.only(
+                        left: 10,
+                        right: 10.0,
+                      ),
+                      child: CircleAvatar(
+                        radius: 20,
+                        backgroundColor: backgroundColor,
+                        child: SvgPicture.asset(
+                          'assets/svgs/shoppingcart.svg',
+                          height: 22,
+                        ),
+                      ),
+                    ),
+                  ),
                   Padding(
-                    padding:
-                        const EdgeInsets.only(top: 8.0, bottom: 8, right: 10),
+                    padding: const EdgeInsets.only(
+                      top: 8.0,
+                      bottom: 8,
+                      right: 15,
+                    ),
                     child: ProCustomButton(
                       padding: 0.0,
                       icon: SvgPicture.asset('assets/svgs/startatopic.svg'),
@@ -651,7 +673,7 @@ class _MarketplaceScreenState extends State<MarketplaceScreen>
                 ],
               ),
               Container(
-                padding: const EdgeInsets.only(left: 15),
+                padding: const EdgeInsets.only(left: 15, right: 15),
                 color: Colors.white,
                 child: Row(
                   children: <Widget>[
@@ -683,25 +705,6 @@ class _MarketplaceScreenState extends State<MarketplaceScreen>
                         backgroundColor: backgroundColor,
                         hintText: 'Search Marketplace',
                         autofocus: false,
-                      ),
-                    ),
-                    GestureDetector(
-                      onTap: () {
-                        Get.to(() => const MyOrdersScreen());
-                      },
-                      child: Padding(
-                        padding: const EdgeInsets.only(
-                          left: 10,
-                          right: 10.0,
-                        ),
-                        child: CircleAvatar(
-                          radius: 20,
-                          backgroundColor: backgroundColor,
-                          child: SvgPicture.asset(
-                            'assets/svgs/shoppingcart.svg',
-                            height: 19,
-                          ),
-                        ),
                       ),
                     ),
                   ],

@@ -112,7 +112,13 @@ class _ChatScreenState extends State<ChatScreen> {
                   : AppBar(
                       automaticallyImplyLeading: false,
                       centerTitle: false,
-                      title: const Text('Inbox'),
+                      title: const Text(
+                        'Inbox',
+                        style: TextStyle(
+                            color: textColor,
+                            fontWeight: FontWeight.w900,
+                            fontSize: 20),
+                      ),
                       actions: <Widget>[
                         Row(
                           children: <Widget>[
