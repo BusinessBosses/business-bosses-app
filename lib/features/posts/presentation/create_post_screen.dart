@@ -556,6 +556,7 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
                   OutlinedButton(
                     onPressed: () async {
                       Navigator.pop(context);
+                      _createPostController.shouldPromote.value = false;
                       if (widget.postId == null) {
                         await controller.createPost(<String, dynamic>{
                           'livedata': livedata,
