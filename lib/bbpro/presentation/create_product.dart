@@ -772,9 +772,11 @@ class _CreateProductListingState extends State<CreateProductListing> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: <Widget>[
                   ElevatedButton(
-                    style: const ButtonStyle(
-                        backgroundColor:
-                            MaterialStatePropertyAll(proprimaryColor)),
+                    style: ButtonStyle(
+                        backgroundColor: MaterialStatePropertyAll(
+                            widget.isMarketplace == true
+                                ? primaryColorLT
+                                : proprimaryColor)),
                     onPressed: () async {
                       Navigator.pop(context);
                       if (_formKey.currentState?.validate() ?? false) {
@@ -874,8 +876,14 @@ class _CreateProductListingState extends State<CreateProductListing> {
                   ),
                   OutlinedButton(
                     style: OutlinedButton.styleFrom(
-                      foregroundColor: proprimaryColor,
-                      side: const BorderSide(color: proprimaryColor, width: 1),
+                      foregroundColor: widget.isMarketplace == true
+                          ? primaryColorLT
+                          : proprimaryColor,
+                      side: BorderSide(
+                          color: widget.isMarketplace == true
+                              ? primaryColorLT
+                              : proprimaryColor,
+                          width: 1),
                     ),
                     onPressed: () async {
                       Navigator.pop(context);
@@ -937,6 +945,7 @@ class _CreateProductListingState extends State<CreateProductListing> {
                             showSnackbar(
                               message: 'Product Added Successfully!',
                             );
+                            Get.back();
                           } else {
                             showSnackbar(
                               message: 'Error While Adding Product',
