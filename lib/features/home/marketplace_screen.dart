@@ -688,10 +688,10 @@ class _MarketplaceScreenState extends State<MarketplaceScreen>
                                             });
                       },
                       text: _marketplaceTabController.index == 4
-                          ? 'Add Deals'
+                          ? 'Add'
                           : _marketplaceTabController.index != 3
                               ? 'Sell'
-                              : 'Add a Supplier',
+                              : 'Add',
                     ),
                   )
                 ],
@@ -1015,7 +1015,7 @@ class _MarketplaceScreenState extends State<MarketplaceScreen>
                               return RefreshIndicator(
                                 onRefresh: refreshData,
                                 child: DefaultTabController(
-                                  length: 4, // Number of tabs
+                                  length: 5, // Number of tabs
                                   child: Column(
                                     children: <Widget>[
                                       Container(
@@ -1023,16 +1023,17 @@ class _MarketplaceScreenState extends State<MarketplaceScreen>
                                             const BoxConstraints.expand(
                                                 height: 45),
                                         child: TabBar(
+                                          padding: EdgeInsets.zero,
                                           labelStyle: const TextStyle(
                                               fontWeight: FontWeight.w400),
                                           controller: _marketplaceTabController,
-                                          isScrollable: true,
+                                          isScrollable: false,
                                           onTap: (int index) {
                                             setState(() {});
                                           },
                                           labelPadding:
                                               const EdgeInsets.symmetric(
-                                                  horizontal: 20.0),
+                                                  horizontal: 10.0),
                                           tabs: const <Widget>[
                                             Tab(
                                               icon: Icon(
@@ -1041,47 +1042,35 @@ class _MarketplaceScreenState extends State<MarketplaceScreen>
                                               ),
                                             ),
                                             Tab(
-                                              child: FittedBox(
-                                                child: Text(
-                                                  'Products',
-                                                  style: TextStyle(
-                                                      fontWeight:
-                                                          FontWeight.w700,
-                                                      fontSize: 14),
-                                                ),
+                                              child: Text(
+                                                'Products',
+                                                style: TextStyle(
+                                                    fontWeight: FontWeight.w700,
+                                                    fontSize: 14),
                                               ),
                                             ),
                                             Tab(
-                                              child: FittedBox(
-                                                child: Text(
-                                                  'Services',
-                                                  style: TextStyle(
-                                                      fontWeight:
-                                                          FontWeight.w700,
-                                                      fontSize: 14),
-                                                ),
+                                              child: Text(
+                                                'Services',
+                                                style: TextStyle(
+                                                    fontWeight: FontWeight.w700,
+                                                    fontSize: 14),
                                               ),
                                             ),
                                             Tab(
-                                              child: FittedBox(
-                                                child: Text(
-                                                  'Suppliers',
-                                                  style: TextStyle(
-                                                      fontWeight:
-                                                          FontWeight.w700,
-                                                      fontSize: 14),
-                                                ),
+                                              child: Text(
+                                                'Suppliers',
+                                                style: TextStyle(
+                                                    fontWeight: FontWeight.w700,
+                                                    fontSize: 14),
                                               ),
                                             ),
                                             Tab(
-                                              child: FittedBox(
-                                                child: Text(
-                                                  'Deals',
-                                                  style: TextStyle(
-                                                      fontWeight:
-                                                          FontWeight.w700,
-                                                      fontSize: 14),
-                                                ),
+                                              child: Text(
+                                                'Deals',
+                                                style: TextStyle(
+                                                    fontWeight: FontWeight.w700,
+                                                    fontSize: 14),
                                               ),
                                             ),
                                           ],

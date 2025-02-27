@@ -374,7 +374,8 @@ class _ShopScreenState extends State<ShopScreen> {
                         ),
                         title: const Text(
                           'Add Product',
-                          style: TextStyle(fontSize: 14),
+                          style: TextStyle(
+                              fontSize: 14, fontWeight: FontWeight.w700),
                         ),
                         horizontalTitleGap: 0.0,
                         onTap: () {
@@ -396,7 +397,8 @@ class _ShopScreenState extends State<ShopScreen> {
                         ),
                         title: const Text(
                           'Add Service',
-                          style: TextStyle(fontSize: 14),
+                          style: TextStyle(
+                              fontSize: 14, fontWeight: FontWeight.w700),
                         ),
                         horizontalTitleGap: 0.0,
                         onTap: () {
@@ -415,7 +417,8 @@ class _ShopScreenState extends State<ShopScreen> {
                             'To showcase your portfolio, demo or affiliate links '),
                         title: const Text(
                           'Add Custom Item',
-                          style: TextStyle(fontSize: 14),
+                          style: TextStyle(
+                              fontSize: 14, fontWeight: FontWeight.w700),
                         ),
                         horizontalTitleGap: 0.0,
                         onTap: () {

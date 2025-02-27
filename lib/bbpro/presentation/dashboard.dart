@@ -352,7 +352,10 @@ class _DashboardState extends State<Dashboard> {
                                               ),
                                               title: const Text(
                                                 'Add Product',
-                                                style: TextStyle(fontSize: 14),
+                                                style: TextStyle(
+                                                    fontSize: 14,
+                                                    fontWeight:
+                                                        FontWeight.w700),
                                               ),
                                               subtitle: const Text(
                                                   'To showcase your products in biz-centre & marketplace'),
@@ -378,7 +381,10 @@ class _DashboardState extends State<Dashboard> {
                                                   'To showcase your services in biz-centre & marketplace'),
                                               title: const Text(
                                                 'Add Service',
-                                                style: TextStyle(fontSize: 14),
+                                                style: TextStyle(
+                                                    fontSize: 14,
+                                                    fontWeight:
+                                                        FontWeight.w700),
                                               ),
                                               horizontalTitleGap: 0.0,
                                               onTap: () {
@@ -398,7 +404,10 @@ class _DashboardState extends State<Dashboard> {
                                               ),
                                               title: const Text(
                                                 'Add Custom Item',
-                                                style: TextStyle(fontSize: 14),
+                                                style: TextStyle(
+                                                    fontSize: 14,
+                                                    fontWeight:
+                                                        FontWeight.w700),
                                               ),
                                               horizontalTitleGap: 0.0,
                                               onTap: () {
