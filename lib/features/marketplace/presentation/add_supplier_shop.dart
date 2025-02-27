@@ -8,7 +8,6 @@ import 'package:business_bosses_v2/common/dialogs/snackbar.dart';
 import 'package:business_bosses_v2/common/models/api_response_model.dart';
 import 'package:business_bosses_v2/features/home/widgets/sellingpopup.dart';
 import 'package:business_bosses_v2/features/marketplace/controllers/supplier_controller.dart';
-import 'package:business_bosses_v2/features/marketplace/models/suppliers_model.dart';
 import 'package:country_list_pick/country_list_pick.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
@@ -506,6 +505,21 @@ class _AddSupplierShopScreenState extends State<AddSupplierShopScreen> {
       'isBiz': true,
     });
     if (response.success) {
+      await Get.dialog(
+        AlertDialog(
+          title: const Text('Supplier Added Succesfully!'),
+          content: const Text(
+              'It will show in marketplace when the admin approves it.'),
+          actions: <Widget>[
+            TextButton(
+              onPressed: () {
+                Navigator.pop(context); // dismiss migration dialog
+              },
+              child: const Text('Close'),
+            ),
+          ],
+        ),
+      );
       Get.back();
     } else {
       showSnackbar(

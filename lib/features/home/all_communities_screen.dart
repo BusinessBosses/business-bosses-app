@@ -205,7 +205,13 @@ class _AllCommunitiesScreenState extends State<AllCommunitiesScreen>
                             setState(() {});
                           },
                         )
-                      : const Text('Boss Up'),
+                      : const Text(
+                          'Boss Up',
+                          style: TextStyle(
+                              color: textColor,
+                              fontWeight: FontWeight.w900,
+                              fontSize: 20),
+                        ),
               actions: mActions,
             ),
             body: SizedBox(
@@ -355,11 +361,49 @@ class _AllCommunitiesScreenState extends State<AllCommunitiesScreen>
                                                     horizontal: 0.0),
                                             tabs: const <Widget>[
                                               Tab(
-                                                text: 'All',
+                                                child: FittedBox(
+                                                  child: Text(
+                                                    'All',
+                                                    style: TextStyle(
+                                                        fontWeight:
+                                                            FontWeight.w700,
+                                                        fontSize: 14),
+                                                  ),
+                                                ),
                                               ),
-                                              Tab(text: 'Challenges'),
-                                              Tab(text: 'Learning'),
-                                              Tab(text: 'Crowdfund'),
+                                              Tab(
+                                                child: FittedBox(
+                                                  child: Text(
+                                                    'Challenges',
+                                                    style: TextStyle(
+                                                        fontWeight:
+                                                            FontWeight.w700,
+                                                        fontSize: 14),
+                                                  ),
+                                                ),
+                                              ),
+                                              Tab(
+                                                child: FittedBox(
+                                                  child: Text(
+                                                    'Learning',
+                                                    style: TextStyle(
+                                                        fontWeight:
+                                                            FontWeight.w700,
+                                                        fontSize: 14),
+                                                  ),
+                                                ),
+                                              ),
+                                              Tab(
+                                                child: FittedBox(
+                                                  child: Text(
+                                                    'Crowdfund',
+                                                    style: TextStyle(
+                                                        fontWeight:
+                                                            FontWeight.w700,
+                                                        fontSize: 14),
+                                                  ),
+                                                ),
+                                              ),
                                             ],
                                           ),
                                         ),

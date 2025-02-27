@@ -154,6 +154,7 @@ class _FilterUsersState extends State<ExpandedSuppliersPage> {
                 cacheHeight: 300,
                 cacheWidth: 300,
                 placeHolder: Icons.person,
+                iconSize: 90,
               ),
         const SizedBox(height: 20),
       ],

@@ -36,11 +36,6 @@ class _FilterUsersState extends State<SuppliersPage> {
   String? filterCode;
 
   @override
-  void initState() {
-    super.initState();
-  }
-
-  @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: backgroundColor,

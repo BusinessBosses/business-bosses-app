@@ -1,10 +1,12 @@
 import 'package:business_bosses_v2/bbpro/controllers/shop_controller.dart';
 import 'package:business_bosses_v2/bbpro/models/order_model.dart';
+import 'package:business_bosses_v2/bbpro/models/product_model.dart';
+import 'package:business_bosses_v2/bbpro/models/service_model.dart';
 import 'package:business_bosses_v2/bbpro/widgets/myorderwidget.dart';
-import 'package:business_bosses_v2/bbpro/widgets/orderwidget.dart';
 import 'package:business_bosses_v2/bbpro/widgets/proseardwidget.dart';
 import 'package:business_bosses_v2/bbpro/widgets/proshopdeals.dart';
 import 'package:business_bosses_v2/common/widgets/safety_model.dart';
+import 'package:business_bosses_v2/features/home/marketplace_screen.dart';
 import 'package:business_bosses_v2/features/marketplace/controllers/market_controller.dart';
 import 'package:business_bosses_v2/utils/theme/theme.dart';
 import 'package:flutter/material.dart';
@@ -66,6 +68,24 @@ class _MyOrdersScreenState extends State<MyOrdersScreen> {
     return Scaffold(
       backgroundColor: probackgroundColor,
       appBar: AppBar(
+        actions: <Widget>[
+          Padding(
+            padding: const EdgeInsets.only(right: 10.0),
+            child: GestureDetector(
+              onTap: () {
+                Get.to(const MarketplaceScreen());
+              },
+              child: CircleAvatar(
+                backgroundColor: backgroundColor,
+                child: SvgPicture.asset(
+                  'assets/svgs/cartu.svg',
+                  height: 20,
+                  color: textColor,
+                ),
+              ),
+            ),
+          ),
+        ],
         leading: IconButton(
           onPressed: () {
             Navigator.pop(context);
@@ -144,46 +164,6 @@ class _MyOrdersScreenState extends State<MyOrdersScreen> {
                                 ),
                               ),
                             ),
-                            // Positioned(
-                            //   right: 10,
-                            //   top: 0,
-                            //   bottom: 10,
-                            //   child: Padding(
-                            //     padding: const EdgeInsets.all(5.0),
-                            //     child: GestureDetector(
-                            //       onTap: () {
-                            //         _showFilterMenu(
-                            //           context,
-                            //           Offset(
-                            //             MediaQuery.of(context).size.width,
-                            //             120,
-                            //           ),
-                            //         );
-                            //       },
-                            //       child: DecoratedBox(
-                            //         decoration: BoxDecoration(
-                            //           color: backgroundColor,
-                            //           borderRadius: BorderRadius.circular(7),
-                            //           boxShadow: <BoxShadow>[
-                            //             BoxShadow(
-                            //               color:
-                            //                   backgroundColor.withOpacity(0.6),
-                            //               offset: const Offset(-5, 0),
-                            //               blurRadius: 10,
-                            //               spreadRadius: 2,
-                            //             ),
-                            //           ],
-                            //         ),
-                            //         child: Padding(
-                            //           padding: const EdgeInsets.symmetric(
-                            //               horizontal: 10),
-                            //           child: SvgPicture.asset(
-                            //               'assets/svgs/filterprosections.svg'),
-                            //         ),
-                            //       ),
-                            //     ),
-                            //   ),
-                            // ),
                           ],
                         ),
                       ),
@@ -232,10 +212,21 @@ class _MyOrdersScreenState extends State<MyOrdersScreen> {
                                 children: <Widget>[
                                   ProshopdealsWidget(
                                     caption: 'Recommended',
-                                    combinedList: _marketController
-                                        .proItemsWithImages
-                                        .take(10)
-                                        .toList(),
+                                    combinedList: _marketController.proItems
+                                      ..where((Object item) {
+                                        if (item is Product) {
+                                          return item.images != null &&
+                                              item.images!.isNotEmpty &&
+                                              item.images!.first.isNotEmpty &&
+                                              (item).user!.isSubscribed;
+                                        } else {
+                                          return (item as Service).images !=
+                                                  null &&
+                                              (item).images!.isNotEmpty &&
+                                              (item).images![0].isNotEmpty &&
+                                              (item).user!.isSubscribed;
+                                        }
+                                      }).take(10).toList(),
                                   ),
                                 ],
                               )

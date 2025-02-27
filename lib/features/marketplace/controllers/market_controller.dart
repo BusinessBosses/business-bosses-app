@@ -19,7 +19,6 @@ class MarketController extends GetxController {
   RxList<Product> proProducts = RxList<Product>(<Product>[]);
   RxList<Service> proServices = RxList<Service>(<Service>[]);
   RxList<Object> proItems = RxList<Object>(<Object>[]);
-  RxList<Object> proItemsWithImages = RxList<Object>(<Object>[]);
   RxList<MarketModel> products = RxList<MarketModel>(<MarketModel>[]);
   RxList<Order> orders = RxList<Order>(<Order>[]);
   RxList<MarketModel> services = RxList<MarketModel>(<MarketModel>[]);
@@ -198,6 +197,32 @@ class MarketController extends GetxController {
     allFilteredItems.clear();
     isfiltered(false);
     update();
+  }
+
+  Future<bool> migrateOldMarketplaceData() async {
+    final ApiResponseModel response = await ApiService.post(
+      path: 'cronjob/migrate-marketplace-data',
+      body: <String, dynamic>{'userId': _profileController.myProfile.uid},
+    );
+    if (response.success) {
+      await initMarket();
+      return true;
+    }
+    return false;
+  }
+
+  Future<bool> checkOldMarketplaceData() async {
+    final ApiResponseModel response = await ApiService.get(
+      path: 'markets/user/${_profileController.myProfile.uid}',
+    );
+    if (response.success) {
+      if (response.data['count'] > 0) {
+        return true;
+      } else {
+        return false;
+      }
+    }
+    return false;
   }
 
   void filterItems(String searchQuery) {
@@ -523,7 +548,6 @@ class MarketController extends GetxController {
     proProducts.clear();
     proServices.clear();
     proItems.clear();
-    proItemsWithImages.clear();
 
     try {
       // Fetch data
@@ -558,22 +582,6 @@ class MarketController extends GetxController {
 
       // Combine items
       proItems.addAll(<Object>[...proProducts, ...proServices]);
-
-      // Filter items with images
-      proItemsWithImages.addAll(
-        proItems.where((Object item) {
-          if (item is Product) {
-            return item.images != null &&
-                item.images!.isNotEmpty &&
-                item.images!.first.isNotEmpty;
-          } else if (item is Service) {
-            return item.images != null &&
-                item.images!.isNotEmpty &&
-                item.images!.first.isNotEmpty;
-          }
-          return false;
-        }).toList(),
-      );
     } catch (e) {
       error(true);
     } finally {

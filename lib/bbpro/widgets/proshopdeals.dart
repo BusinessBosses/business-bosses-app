@@ -38,10 +38,16 @@ class _ProshopdealsWidgetState extends State<ProshopdealsWidget> {
     if (widget.combinedList != null) {
       items = widget.combinedList!.where((Object object) {
         if (object is Product) {
-          if (object.user!.isSubscribed) return true;
+          return object.images != null &&
+              object.images!.isNotEmpty &&
+              object.images!.first.isNotEmpty &&
+              (object).user!.isSubscribed;
         } else if (object is Service) {
           if (object.user!.isSubscribed) {
-            return true;
+            return object.images != null &&
+                object.images!.isNotEmpty &&
+                object.images!.first.isNotEmpty &&
+                (object).user!.isSubscribed;
           }
         }
         return false;
@@ -89,7 +95,7 @@ class _ProshopdealsWidgetState extends State<ProshopdealsWidget> {
                         fontSize: 16, fontWeight: FontWeight.bold),
                   ),
                   const SizedBox(width: 10),
-                  const Icon(Icons.chevron_right, color: textColor, size: 16),
+                  const Icon(Icons.chevron_right, color: textColor, size: 20),
                 ],
               ),
             ),

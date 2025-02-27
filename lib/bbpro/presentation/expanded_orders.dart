@@ -74,14 +74,16 @@ class _ExpandedOrdersState extends State<ExpandedOrders> {
                 const Padding(
                   padding: EdgeInsets.symmetric(horizontal: 15.0),
                   child: Text(
-                    'Buyer Note',
+                    'My note to Seller',
                     style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
                   ),
                 ),
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 15.0),
                   child: Text(
-                    widget.order.notes!,
+                    widget.order.notes!.isNotEmpty
+                        ? widget.order.notes!
+                        : 'N/A',
                     style: const TextStyle(fontSize: 16),
                   ),
                 ),

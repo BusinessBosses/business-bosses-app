@@ -237,7 +237,7 @@ class _HowToUseAppScreenState extends State<HowToUseAppScreen> {
                                       ),
                                 title: Text(
                                   index == 0
-                                      ? 'Create a Post'
+                                      ? 'Start a Discussion'
                                       : index == 1
                                           ? 'Sell your product & service'
                                           : index == 2

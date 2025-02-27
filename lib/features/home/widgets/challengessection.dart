@@ -1,7 +1,6 @@
 import 'package:business_bosses_v2/features/forum/presentation/bossup_challenge.dart';
 import 'package:business_bosses_v2/utils/theme/theme.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 
 class ChallengesSection extends StatefulWidget {
@@ -50,7 +49,7 @@ class _ChallengesSectionState extends State<ChallengesSection> {
                           //   style: TextStyle(fontSize: 11),
                           // ),
                           // const SizedBox(width: 5.0),
-                          Icon(Icons.chevron_right, color: textColor, size: 16),
+                          Icon(Icons.chevron_right, color: textColor, size: 20),
                         ]),
                   ],
                 ),

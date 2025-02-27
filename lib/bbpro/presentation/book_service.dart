@@ -365,6 +365,7 @@ class _BookServiceScreenState extends State<BookServiceScreen> {
                         style: TextStyle(
                           fontSize: 10,
                           color: proprimaryColor,
+                          fontWeight: FontWeight.w700,
                         ),
                       ),
                       Icon(

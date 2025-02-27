@@ -326,28 +326,32 @@ class BottomTabButton extends StatelessWidget {
                 children: <Widget>[
                   icon.isNotEmpty
                       ? SizedBox(
-                          height: 30.0,
+                          height: 32.0,
                           child: SvgPicture.asset(
                             icon,
-                            height: 23,
-                            width: 23,
-                            color: isActive ? primaryColorLT : iconColor,
+                            height: 25,
+                            width: 25,
+                            color: isActive ? primaryColorLT : textColor,
                           ),
                         )
-                      : SizedBox(
-                          height: 30.0,
-                          width: 30.0,
-                          child: Align(
-                            alignment: Alignment.topLeft,
-                            child: ClipRRect(
-                              borderRadius: BorderRadius.circular(1000),
-                              child: NetworkImageWithPlaceHolder(
-                                imageUrl:
-                                    profileController.myProfile.photoUrl ?? '',
-                                radius: radius,
-                                placeHolder: Icons.person,
-                                iconSize: 22.0,
-                                fit: BoxFit.cover,
+                      : Padding(
+                          padding: const EdgeInsets.only(bottom: 2.0, top: 3),
+                          child: SizedBox(
+                            height: 28.0,
+                            width: 28.0,
+                            child: Align(
+                              alignment: Alignment.topLeft,
+                              child: ClipRRect(
+                                borderRadius: BorderRadius.circular(1000),
+                                child: NetworkImageWithPlaceHolder(
+                                  imageUrl:
+                                      profileController.myProfile.photoUrl ??
+                                          '',
+                                  radius: radius,
+                                  placeHolder: Icons.person,
+                                  iconSize: 22.0,
+                                  fit: BoxFit.cover,
+                                ),
                               ),
                             ),
                           ),
@@ -358,9 +362,9 @@ class BottomTabButton extends StatelessWidget {
                         label,
                         maxLines: 1,
                         style: TextStyle(
-                          fontSize: 13.0,
+                          fontSize: 14.0,
                           fontWeight: FontWeight.w700,
-                          color: isActive ? primaryColorLT : iconColor,
+                          color: isActive ? primaryColorLT : textColor,
                         ),
                       ),
                     ),

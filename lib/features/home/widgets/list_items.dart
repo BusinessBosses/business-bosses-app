@@ -154,19 +154,20 @@ class _PostsWidgetState extends State<PostsWidget> {
             isHome: true,
             caption: 'Featured Listing',
             combinedList: <Object>[
-              ...marketController.proItemsWithImages
-                  .where((Object object) {
-                    if (object is Product) {
-                      if (object.user!.isSubscribed) return true;
-                    } else if (object is Service) {
-                      if (object.user!.isSubscribed) {
-                        return true;
-                      }
-                    }
-                    return false;
-                  })
-                  .take(10)
-                  .toList(),
+              ...marketController.proItems
+                ..where((Object item) {
+                  if (item is Product) {
+                    return item.images != null &&
+                        item.images!.isNotEmpty &&
+                        item.images!.first.isNotEmpty &&
+                        (item).user!.isSubscribed;
+                  } else {
+                    return (item as Service).images != null &&
+                        (item).images!.isNotEmpty &&
+                        (item).images![0].isNotEmpty &&
+                        (item).user!.isSubscribed;
+                  }
+                }).take(10).toList(),
             ],
           ),
         ],

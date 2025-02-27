@@ -7,6 +7,8 @@ import 'package:business_bosses_v2/bbpro/presentation/create_service.dart';
 import 'package:business_bosses_v2/bbpro/presentation/my_orders_screen.dart';
 import 'package:business_bosses_v2/bbpro/widgets/button.dart';
 import 'package:business_bosses_v2/bbpro/widgets/proseardwidget.dart';
+import 'package:business_bosses_v2/common/dialogs/snackbar.dart';
+import 'package:business_bosses_v2/common/models/api_response_model.dart';
 import 'package:business_bosses_v2/features/chat/chat_screen.dart';
 import 'package:business_bosses_v2/features/donations/presentation/filtersuppliers.dart';
 import 'package:business_bosses_v2/features/home/widgets/bottom_bar.dart';
@@ -14,7 +16,6 @@ import 'package:business_bosses_v2/features/home/widgets/floatingbutton.dart';
 
 import 'package:business_bosses_v2/features/marketplace/controllers/supplier_controller.dart';
 import 'package:business_bosses_v2/features/marketplace/presentation/add_supplier.dart';
-import 'package:business_bosses_v2/features/marketplace/presentation/add_supplier_shop.dart';
 import 'package:business_bosses_v2/features/marketplace/presentation/filtermarketplaceposts.dart';
 import 'package:business_bosses_v2/features/marketplace/presentation/filtermarketproducts.dart';
 import 'package:business_bosses_v2/features/marketplace/presentation/filtermarketservices.dart';
@@ -32,6 +33,7 @@ import 'package:country_list_pick/country_list_pick.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import '../../common/widgets/safety_model.dart';
@@ -88,6 +90,7 @@ class _MarketplaceScreenState extends State<MarketplaceScreen>
   final ProfileController _profileController = Get.find();
   // State to manage which filter is currently selected
   String selectedFilter = 'none'; // 'none', 'price', 'category', 'date'
+  bool hasOldData = false;
 
   @override
   void initState() {
@@ -132,7 +135,95 @@ class _MarketplaceScreenState extends State<MarketplaceScreen>
     if (shopController.shop == null) {
       shopController.initShop();
     }
-    supplierController.initSuppliers();
+    if (supplierController.suppliers.isEmpty) {
+      supplierController.initSuppliers();
+    }
+    _marketController.checkOldMarketplaceData().then((bool value) {
+      if (value) {
+        if (mounted) {
+          setState(() {
+            hasOldData = true;
+          });
+        }
+      }
+    });
+  }
+
+  Future<void> _checkMigrationReminder() async {
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+    final String uid = _profileController.myProfile.uid;
+    final int? remindTimestamp = prefs.getInt('migration_remind_$uid');
+    if (remindTimestamp != null) {
+      final DateTime remindDate =
+          DateTime.fromMillisecondsSinceEpoch(remindTimestamp);
+      // If within 30 days, do not show the migration dialog.
+      if (DateTime.now().difference(remindDate) < const Duration(days: 30)) {
+        return;
+      }
+    }
+    // Otherwise, show the migration dialog.
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      _showMigrationDialog();
+    });
+  }
+
+  void _showMigrationDialog() {
+    Get.dialog(
+      AlertDialog(
+        title: const Text('Migrate Old Marketplace Data'),
+        content:
+            const Text('Would you like to migrate your old marketplace data?'),
+        actions: <Widget>[
+          TextButton(
+            onPressed: () async {
+              Navigator.pop(context); // close migration dialog
+              // Show loader dialog
+              Get.dialog(
+                const AlertDialog(
+                  content: Row(
+                    children: <Widget>[
+                      CircularProgressIndicator(),
+                      SizedBox(width: 20),
+                      Text('Migrating data...'),
+                    ],
+                  ),
+                ),
+                barrierDismissible: false,
+              );
+              // Perform migration
+              bool response =
+                  await _marketController.migrateOldMarketplaceData();
+              if (response) {
+                showSnackbar(message: 'Migration Successful!');
+              } else {
+                showSnackbar(
+                  message: 'Error Migrating Data',
+                  error: true,
+                );
+              }
+              // Dismiss the loader dialog
+              if (Get.isDialogOpen ?? false) {
+                Navigator.pop(context);
+              }
+            },
+            child: const Text('Migrate'),
+          ),
+          TextButton(
+            onPressed: () async {
+              // Save the current timestamp for this UID so the dialog won’t show for 30 days
+              final SharedPreferences prefs =
+                  await SharedPreferences.getInstance();
+              final String uid = _profileController.myProfile.uid;
+              final int now = DateTime.now().millisecondsSinceEpoch;
+              await prefs.setInt('migration_remind_$uid', now);
+              Navigator.pop(context); // dismiss migration dialog
+            },
+            child: const Text('Remind Me Later'),
+          ),
+        ],
+      ),
+      barrierDismissible: false,
+    );
   }
 
   void _handleTabSelection() {
@@ -178,6 +269,11 @@ class _MarketplaceScreenState extends State<MarketplaceScreen>
         _profileController.myProfile.location ??
         'Nigeria';
     sortItems();
+    // Show migration dialog after the first frame is rendered.
+    // Inside your initState post-fra me callback:
+    if (hasOldData) {
+      _checkMigrationReminder();
+    }
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: PreferredSize(
@@ -237,9 +333,31 @@ class _MarketplaceScreenState extends State<MarketplaceScreen>
                       );
                     }),
                 actions: <Widget>[
+                  GestureDetector(
+                    onTap: () {
+                      Get.to(() => const MyOrdersScreen());
+                    },
+                    child: Padding(
+                      padding: const EdgeInsets.only(
+                        left: 10,
+                        right: 10.0,
+                      ),
+                      child: CircleAvatar(
+                        radius: 20,
+                        backgroundColor: backgroundColor,
+                        child: SvgPicture.asset(
+                          'assets/svgs/shoppingcart.svg',
+                          height: 22,
+                        ),
+                      ),
+                    ),
+                  ),
                   Padding(
-                    padding:
-                        const EdgeInsets.only(top: 8.0, bottom: 8, right: 10),
+                    padding: const EdgeInsets.only(
+                      top: 8.0,
+                      bottom: 8,
+                      right: 15,
+                    ),
                     child: ProCustomButton(
                       padding: 0.0,
                       icon: SvgPicture.asset('assets/svgs/startatopic.svg'),
@@ -322,17 +440,213 @@ class _MarketplaceScreenState extends State<MarketplaceScreen>
                                                                       context,
                                                                   int index) {
                                                             return ListTile(
+                                                              horizontalTitleGap:
+                                                                  0,
+                                                              onTap: () async {
+                                                                Navigator.pop(
+                                                                    context);
+                                                                if (index ==
+                                                                    0) {
+                                                                  // Show loader dialog similar to the migration loader
+                                                                  Get.dialog(
+                                                                    const AlertDialog(
+                                                                      content:
+                                                                          Row(
+                                                                        children: <Widget>[
+                                                                          CircularProgressIndicator(),
+                                                                          SizedBox(
+                                                                              width: 20),
+                                                                          Text(
+                                                                              'Adding Biz-Center to Supplier...'),
+                                                                        ],
+                                                                      ),
+                                                                    ),
+                                                                    barrierDismissible:
+                                                                        false,
+                                                                  );
+
+                                                                  // Execute your async logic (replace with your actual function)
+                                                                  final dynamic
+                                                                      data =
+                                                                      <String,
+                                                                          Object?>{
+                                                                    'category':
+                                                                        shopController
+                                                                            .shop!
+                                                                            .category,
+                                                                    'location':
+                                                                        shopController
+                                                                            .shop!
+                                                                            .location,
+                                                                    'description':
+                                                                        shopController
+                                                                            .shop!
+                                                                            .description,
+                                                                    'userId':
+                                                                        _profileController
+                                                                            .myProfile
+                                                                            .uid,
+                                                                    'name': shopController
+                                                                        .shop!
+                                                                        .name,
+                                                                    'email': shopController
+                                                                        .shop!
+                                                                        .email,
+                                                                    'phone': shopController
+                                                                        .shop!
+                                                                        .phone,
+                                                                    'url': shopController
+                                                                        .shop!
+                                                                        .url,
+                                                                    'images':
+                                                                        <String?>[
+                                                                      shopController
+                                                                          .shop!
+                                                                          .image
+                                                                    ],
+                                                                    'isBiz':
+                                                                        true,
+                                                                    'shopId':
+                                                                        shopController
+                                                                            .shop!
+                                                                            .id,
+                                                                  };
+                                                                  ApiResponseModel
+                                                                      response =
+                                                                      await supplierController
+                                                                          .addSupplier(
+                                                                              data);
+                                                                  Get.back();
+                                                                  // Show a snackbar or perform additional actions based on success/failure
+                                                                  if (response
+                                                                      .success) {
+                                                                    await Get
+                                                                        .dialog(
+                                                                      AlertDialog(
+                                                                        title: const Text(
+                                                                            'Supplier Added Succesfully!'),
+                                                                        content:
+                                                                            const Text('It will show in marketplace when the admin approves it.'),
+                                                                        actions: <Widget>[
+                                                                          TextButton(
+                                                                            onPressed:
+                                                                                () {
+                                                                              Navigator.pop(context); // dismiss migration dialog
+                                                                            },
+                                                                            child:
+                                                                                const Text('Close'),
+                                                                          ),
+                                                                        ],
+                                                                      ),
+                                                                    );
+                                                                  } else {
+                                                                    showSnackbar(
+                                                                        message:
+                                                                            'Error adding Biz-Center to supplier.',
+                                                                        error:
+                                                                            true);
+                                                                  }
+                                                                } else {
+                                                                  Get.to(() =>
+                                                                      const AddSupplierScreen());
+                                                                }
+                                                              },
+                                                              minVerticalPadding:
+                                                                  0,
+                                                              contentPadding:
+                                                                  const EdgeInsets
+                                                                      .only(
+                                                                left: 10,
+                                                              ),
+                                                              leading:
+                                                                  SvgPicture
+                                                                      .asset(
+                                                                index == 0
+                                                                    ? 'assets/svgs/addclient.svg'
+                                                                    : 'assets/svgs/addclient.svg',
+                                                                height: 25,
+                                                                color: textColor
+                                                                    .withOpacity(
+                                                                        1),
+                                                              ),
+                                                              title: Text(
+                                                                index == 0
+                                                                    ? 'Add My Biz-Center To Supplier List'
+                                                                    : 'Add a New Supplier',
+                                                                style: const TextStyle(
+                                                                    fontSize:
+                                                                        18,
+                                                                    fontWeight:
+                                                                        FontWeight
+                                                                            .w700),
+                                                              ),
+                                                            );
+                                                          },
+                                                        ),
+                                                      )
+                                                    ],
+                                                  ),
+                                                ),
+                                              );
+                                            })
+                                    : Get.to(() => const AddSupplierScreen())
+                                : _marketplaceTabController.index == 1
+                                    ? Get.to(const CreateProductListing(
+                                        isMarketplace: true,
+                                      ))
+                                    : _marketplaceTabController.index == 2
+                                        ? Get.to(const CreateServiceListing(
+                                            isMarketplace: true,
+                                          ))
+                                        : showModalBottomSheet(
+                                            context: context,
+                                            shape: const RoundedRectangleBorder(
+                                              borderRadius:
+                                                  BorderRadius.vertical(
+                                                top: Radius.circular(25.0),
+                                              ),
+                                            ),
+                                            builder: (BuildContext context) {
+                                              return SizedBox(
+                                                height: 200,
+                                                child: Padding(
+                                                  padding: const EdgeInsets.all(
+                                                      15.0),
+                                                  child: Column(
+                                                    crossAxisAlignment:
+                                                        CrossAxisAlignment
+                                                            .start,
+                                                    mainAxisSize:
+                                                        MainAxisSize.min,
+                                                    children: <Widget>[
+                                                      Expanded(
+                                                        child:
+                                                            ListView.separated(
+                                                          itemCount: 2,
+                                                          separatorBuilder:
+                                                              (BuildContext
+                                                                          context,
+                                                                      int index) =>
+                                                                  const Divider(),
+                                                          itemBuilder:
+                                                              (BuildContext
+                                                                      context,
+                                                                  int index) {
+                                                            return ListTile(
                                                               onTap: () {
                                                                 Navigator.pop(
                                                                     context);
                                                                 index == 0
                                                                     ? Get.to(() =>
-                                                                        AddSupplierShopScreen(
-                                                                          shop:
-                                                                              shopController.shop!,
+                                                                        const CreateProductListing(
+                                                                          isMarketplace:
+                                                                              true,
                                                                         ))
                                                                     : Get.to(() =>
-                                                                        const AddSupplierScreen());
+                                                                        const CreateServiceListing(
+                                                                          isMarketplace:
+                                                                              true,
+                                                                        ));
                                                               },
                                                               minVerticalPadding:
                                                                   0,
@@ -354,8 +668,8 @@ class _MarketplaceScreenState extends State<MarketplaceScreen>
                                                               ),
                                                               title: Text(
                                                                 index == 0
-                                                                    ? 'Add My Biz-Center To Supplier'
-                                                                    : 'Add New Supplier',
+                                                                    ? 'Sell your product'
+                                                                    : 'Sell your service',
                                                                 style: const TextStyle(
                                                                     fontSize:
                                                                         18,
@@ -371,85 +685,10 @@ class _MarketplaceScreenState extends State<MarketplaceScreen>
                                                   ),
                                                 ),
                                               );
-                                            })
-                                    : Get.to(() => const AddSupplierScreen())
-                                : showModalBottomSheet(
-                                    context: context,
-                                    shape: const RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.vertical(
-                                        top: Radius.circular(25.0),
-                                      ),
-                                    ),
-                                    builder: (BuildContext context) {
-                                      return SizedBox(
-                                        height: 200,
-                                        child: Padding(
-                                          padding: const EdgeInsets.all(15.0),
-                                          child: Column(
-                                            crossAxisAlignment:
-                                                CrossAxisAlignment.start,
-                                            mainAxisSize: MainAxisSize.min,
-                                            children: <Widget>[
-                                              Expanded(
-                                                child: ListView.separated(
-                                                  itemCount: 2,
-                                                  separatorBuilder:
-                                                      (BuildContext context,
-                                                              int index) =>
-                                                          const Divider(),
-                                                  itemBuilder:
-                                                      (BuildContext context,
-                                                          int index) {
-                                                    return ListTile(
-                                                      onTap: () {
-                                                        Navigator.pop(context);
-                                                        index == 0
-                                                            ? Get.to(() =>
-                                                                const CreateProductListing(
-                                                                  isMarketplace:
-                                                                      true,
-                                                                ))
-                                                            : Get.to(() =>
-                                                                const CreateServiceListing(
-                                                                  isMarketplace:
-                                                                      true,
-                                                                ));
-                                                      },
-                                                      minVerticalPadding: 0,
-                                                      contentPadding:
-                                                          const EdgeInsets.only(
-                                                        left: 10,
-                                                      ),
-                                                      leading: SvgPicture.asset(
-                                                        index == 0
-                                                            ? 'assets/svgs/addproduct.svg'
-                                                            : 'assets/svgs/addservice.svg',
-                                                        height: 25,
-                                                        color: textColor
-                                                            .withOpacity(1),
-                                                      ),
-                                                      title: Text(
-                                                        index == 0
-                                                            ? 'Sell your product'
-                                                            : 'Sell your service',
-                                                        style: const TextStyle(
-                                                            fontSize: 18,
-                                                            fontWeight:
-                                                                FontWeight
-                                                                    .w700),
-                                                      ),
-                                                    );
-                                                  },
-                                                ),
-                                              )
-                                            ],
-                                          ),
-                                        ),
-                                      );
-                                    });
+                                            });
                       },
                       text: _marketplaceTabController.index == 4
-                          ? 'Become a Partner'
+                          ? 'Add Deals'
                           : _marketplaceTabController.index != 3
                               ? 'Sell'
                               : 'Add a Supplier',
@@ -458,7 +697,7 @@ class _MarketplaceScreenState extends State<MarketplaceScreen>
                 ],
               ),
               Container(
-                padding: const EdgeInsets.only(left: 15),
+                padding: const EdgeInsets.only(left: 15, right: 15),
                 color: Colors.white,
                 child: Row(
                   children: <Widget>[
@@ -492,25 +731,6 @@ class _MarketplaceScreenState extends State<MarketplaceScreen>
                         autofocus: false,
                       ),
                     ),
-                    GestureDetector(
-                      onTap: () {
-                        Get.to(() => const MyOrdersScreen());
-                      },
-                      child: Padding(
-                        padding: const EdgeInsets.only(
-                          left: 10,
-                          right: 10.0,
-                        ),
-                        child: CircleAvatar(
-                          radius: 20,
-                          backgroundColor: backgroundColor,
-                          child: SvgPicture.asset(
-                            'assets/svgs/shoppingcart.svg',
-                            height: 19,
-                          ),
-                        ),
-                      ),
-                    ),
                   ],
                 ),
               ),
@@ -524,7 +744,7 @@ class _MarketplaceScreenState extends State<MarketplaceScreen>
                         height: 42,
                         child: Searchbar(
                           hintText: _marketplacesearchTabController.index == 0
-                              ? 'Search'
+                              ? 'Search Marketplace'
                               : _marketplacesearchTabController.index == 1
                                   ? 'Search Products'
                                   : _marketplacesearchTabController.index == 2
@@ -586,7 +806,6 @@ class _MarketplaceScreenState extends State<MarketplaceScreen>
                           Tab(text: 'Products'),
                           Tab(text: 'Services'),
                           Tab(text: 'Suppliers'),
-                          Tab(text: 'BoosUp'),
                         ],
                       )
                     : const PreferredSize(
@@ -677,18 +896,82 @@ class _MarketplaceScreenState extends State<MarketplaceScreen>
       body: _marketController.isLoading
           ? const CircularProgressIndicator()
           : _ismarketplaceSearching
-              ? TabBarView(
-                  controller: _marketplacesearchTabController,
+              ? Column(
                   children: <Widget>[
-                    const FilterMarketplacePosts(),
-                    const FilterMarketplaceProducts(),
-                    const FilterMarketServices(),
-                    Obx(
-                      () => FilterSuppliers(
-                        members: supplierController.suppliers,
-                        filterItems: supplierController.searchedSuppliers,
-                        isLoading: supplierController.loading.value ||
-                            supplierController.loadingSearch.value,
+                    Container(
+                      height: 50,
+                      decoration: BoxDecoration(
+                        color: Colors.grey[200],
+                        borderRadius: BorderRadius.circular(1),
+                      ),
+                      child: CountryListPick(
+                          appBar: AppBar(
+                            leading: IconButton(
+                              onPressed: () {
+                                Navigator.pop(context);
+                              },
+                              icon: SvgPicture.asset(
+                                  'assets/svgs/backbutton.svg'),
+                            ),
+                            centerTitle: true,
+                            title: const Text(
+                              'Select Location',
+                              textAlign: TextAlign.center,
+                            ),
+                          ),
+                          initialSelection: _marketController.selectedLocation,
+                          onChanged: (CountryCode? code) async {
+                            setState(() {
+                              selectedLocationChanged(code!.name, code.code);
+                            });
+                          },
+                          useSafeArea: false,
+                          pickerBuilder:
+                              (BuildContext context, CountryCode? countryCode) {
+                            return Row(
+                              children: <Widget>[
+                                const Icon(
+                                  Icons.place,
+                                  size: 18,
+                                ),
+                                const SizedBox(
+                                  width: 5,
+                                ),
+                                Text(
+                                  _marketController.selectedLocation!.length >
+                                          20
+                                      ? '${_marketController.selectedLocation!.substring(0, 20)}...'
+                                      : _marketController.selectedLocation!,
+                                  style: const TextStyle(
+                                    color: Colors.black,
+                                    fontWeight: FontWeight.w700,
+                                    fontSize: 16,
+                                  ),
+                                ),
+                                const SizedBox(
+                                  width: 5,
+                                ),
+                                SvgPicture.asset('assets/svgs/dropdown.svg')
+                              ],
+                            );
+                          }),
+                    ),
+                    Expanded(
+                      child: TabBarView(
+                        controller: _marketplacesearchTabController,
+                        children: <Widget>[
+                          const FilterMarketplacePosts(),
+                          const FilterMarketplaceProducts(),
+                          const FilterMarketServices(),
+                          Obx(
+                            () => FilterSuppliers(
+                              members: supplierController.suppliers,
+                              filterItems: supplierController.searchedSuppliers,
+                              isLoading: supplierController.loading.value ||
+                                  supplierController.loadingSearch.value,
+                            ),
+                          ),
+                        ],
                       ),
                     ),
                   ],
@@ -865,9 +1148,18 @@ class _MarketplaceScreenState extends State<MarketplaceScreen>
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[
-                const Text(
-                  'Filter by Category',
-                  style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                const Padding(
+                  padding: EdgeInsets.only(left: 10.0, top: 5),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: <Widget>[
+                      Text(
+                        'Filter results',
+                        style: TextStyle(
+                            fontSize: 18, fontWeight: FontWeight.bold),
+                      ),
+                    ],
+                  ),
                 ),
                 const SizedBox(height: 10),
                 Expanded(
@@ -882,7 +1174,8 @@ class _MarketplaceScreenState extends State<MarketplaceScreen>
                           });
                         },
                         trailing: _marketController.selectedCategory == category
-                            ? const Icon(Icons.check, color: Colors.blue)
+                            ? const Icon(Icons.check,
+                                size: 20, color: primaryColorLT)
                             : null,
                       );
                     }).toList(),
@@ -991,13 +1284,13 @@ class _MarketplaceScreenState extends State<MarketplaceScreen>
     } else {
       // Sort all items when no filter is applied
       _marketController.proItems.sort(compareItems);
-      _marketController.proItemsWithImages.sort(compareItems);
       _marketController.proProducts.sort(compareItems);
       _marketController.proServices.sort(compareItems);
-      supplierController.suppliers.sort(compareSuppliers);
-    }
-    if (mounted) {
-      setState(() {});
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        if (supplierController.suppliers.isNotEmpty) {
+          supplierController.suppliers.sort(compareSuppliers);
+        }
+      });
     } // Ensure UI updates
   }
 }

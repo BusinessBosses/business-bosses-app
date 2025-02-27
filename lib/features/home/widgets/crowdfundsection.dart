@@ -2,7 +2,6 @@ import 'package:business_bosses_v2/features/donations/controller/donations_contr
 import 'package:business_bosses_v2/features/donations/presentation/donations.dart';
 import 'package:business_bosses_v2/utils/theme/theme.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 
 class CrowdfundSection extends StatefulWidget {
@@ -51,7 +50,7 @@ class _CrowdfundSectionState extends State<CrowdfundSection> {
                           //   style: TextStyle(fontSize: 11),
                           // ),
                           // const SizedBox(width: 5.0),
-                          Icon(Icons.chevron_right, color: textColor, size: 16),
+                          Icon(Icons.chevron_right, color: textColor, size: 20),
                         ]),
                   ],
                 ),

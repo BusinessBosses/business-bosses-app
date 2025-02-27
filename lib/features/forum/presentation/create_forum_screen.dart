@@ -1,4 +1,5 @@
 import 'package:business_bosses_v2/common/widgets/typography/text_widget.dart';
+import 'package:business_bosses_v2/features/home/marketplace_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
@@ -427,34 +428,31 @@ class _CreateForumScreenState extends State<CreateForumScreen> {
                       ),
                     ),
                   ),
-                  Center(
-                    child: Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 16.0),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        children: <Widget>[
-                          SvgPicture.asset(
-                            'assets/svgs/report.svg',
-                            height: 18,
-                          ),
-                          const SizedBox(width: 2),
-                          Text(
-                            textAlign: TextAlign.left,
-                            overflow: TextOverflow.visible,
-                            maxLines: null,
-                            style: const TextStyle(
-                                fontSize: 13, color: primaryColorLT),
-                            isbossup == true
-                                ? 'To sell your products and services, list on Marketplace'
-                                : categoryId == Constants.LEARNINGID
-                                    ? 'To sell your products and services, list on Marketplace'
-                                    : 'To sell your products and services, list on Marketplace',
-                          ),
-                        ],
-                      ),
+                  GestureDetector(
+                    onTap: () {
+                      Get.to(const MarketplaceScreen());
+                    },
+                    child: const Row(
+                      children: <Widget>[
+                        Text(
+                          'To sell your products and services, list on',
+                          style: TextStyle(color: textColor, fontSize: 12),
+                        ),
+                        Text(
+                          ' Marketplace',
+                          style: TextStyle(
+                              color: primaryColorLT,
+                              fontWeight: FontWeight.w700,
+                              fontSize: 12),
+                        ),
+                        Icon(
+                          Icons.chevron_right,
+                          color: primaryColorLT,
+                          size: 15,
+                        ),
+                      ],
                     ),
-                  ),
+                  )
                 ],
               ),
             ),

@@ -66,7 +66,7 @@ class _GotoshopWidgetState extends State<GotoshopWidget> {
                             ),
                             Container(
                               decoration: BoxDecoration(
-                                  color: probackgroundColor,
+                                  color: backgroundColor,
                                   borderRadius: BorderRadius.circular(5)),
                               padding: const EdgeInsets.symmetric(
                                   horizontal: 10.0, vertical: 3),
@@ -77,12 +77,13 @@ class _GotoshopWidgetState extends State<GotoshopWidget> {
                                     'View Biz-Center',
                                     style: TextStyle(
                                       fontSize: 10,
-                                      color: proprimaryColor,
+                                      fontWeight: FontWeight.w700,
+                                      color: textColor,
                                     ),
                                   ),
                                   Icon(
                                     Icons.chevron_right,
-                                    color: textColor,
+                                    color: Colors.black,
                                     size: 10,
                                   ),
                                 ],

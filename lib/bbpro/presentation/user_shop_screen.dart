@@ -8,7 +8,6 @@ import 'package:business_bosses_v2/bbpro/models/product_model.dart';
 import 'package:business_bosses_v2/bbpro/presentation/bizcentersearch.dart';
 import 'package:business_bosses_v2/bbpro/presentation/book_service.dart';
 import 'package:business_bosses_v2/bbpro/presentation/expandedcustomitemscreen.dart';
-import 'package:business_bosses_v2/bbpro/presentation/my_orders_screen.dart';
 import 'package:business_bosses_v2/bbpro/presentation/order_product.dart';
 import 'package:business_bosses_v2/bbpro/widgets/custom_item_card.dart';
 import 'package:business_bosses_v2/bbpro/widgets/inventorycard.dart';
@@ -34,9 +33,9 @@ import 'package:get/get.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class UserShopScreen extends StatefulWidget {
-  UserModel? user;
+  final UserModel? user;
   final bool? ismyshop;
-  UserShopScreen({super.key, this.user, this.ismyshop});
+  const UserShopScreen({super.key, this.user, this.ismyshop});
 
   @override
   State<UserShopScreen> createState() => _UserShopScreenState();
@@ -47,7 +46,6 @@ class _UserShopScreenState extends State<UserShopScreen> {
   final ProfileController profileController = Get.find();
 
   bool loading = true;
-
   @override
   void initState() {
     super.initState();
@@ -125,24 +123,24 @@ class _UserShopScreenState extends State<UserShopScreen> {
                 if (checkConnected == -1) {
                   // Add connection
                   profileController.updateConnections(widget.user!.uid);
-                  setState(() {
-                    widget.user = UserModel.fromMap(<dynamic, dynamic>{
-                      ...widget.user!.toMap(),
-                      'connectionCount':
-                          (widget.user!.connectionCount ?? 0) + 1,
-                    });
-                  });
+                  // setState(() {
+                  //   _user = UserModel.fromMap(<dynamic, dynamic>{
+                  //     ...widget.user!.toMap(),
+                  //     'connectionCount':
+                  //         (widget.user!.connectionCount ?? 0) + 1,
+                  //   });
+                  // });
                   await connect(widget.user!.uid);
                 } else {
                   // Remove connection
                   profileController.updateConnections(widget.user!.uid);
-                  setState(() {
-                    widget.user = UserModel.fromMap(<dynamic, dynamic>{
-                      ...widget.user!.toMap(),
-                      'connectionCount':
-                          (widget.user!.connectionCount ?? 1) - 1,
-                    });
-                  });
+                  // setState(() {
+                  //   _user = UserModel.fromMap(<dynamic, dynamic>{
+                  //     ...widget.user!.toMap(),
+                  //     'connectionCount':
+                  //         (widget.user!.connectionCount ?? 1) - 1,
+                  //   });
+                  // });
                   await disconnect(widget.user!.uid);
                 }
               }
@@ -186,10 +184,11 @@ class _UserShopScreenState extends State<UserShopScreen> {
               leading: CircleAvatar(
                 backgroundColor: Colors.transparent,
                 child: IconButton(
-                    onPressed: () {
-                      Get.back();
-                    },
-                    icon: SvgPicture.asset('assets/svgs/backbutton.svg')),
+                  onPressed: () {
+                    Get.back();
+                  },
+                  icon: SvgPicture.asset('assets/svgs/backbutton.svg'),
+                ),
               ),
               title: GestureDetector(
                 onTap: () {
@@ -209,10 +208,13 @@ class _UserShopScreenState extends State<UserShopScreen> {
                     ),
                     Container(
                       decoration: BoxDecoration(
-                          color: backgroundColor,
-                          borderRadius: BorderRadius.circular(radius)),
+                        color: backgroundColor,
+                        borderRadius: BorderRadius.circular(radius),
+                      ),
                       padding: const EdgeInsets.symmetric(
-                          horizontal: 10.0, vertical: 3),
+                        horizontal: 10.0,
+                        vertical: 3,
+                      ),
                       child: const Row(
                         mainAxisSize: MainAxisSize.min,
                         children: <Widget>[

@@ -143,7 +143,7 @@ class HomeAppBar extends StatelessWidget {
                           'Search',
                           style: TextStyle(
                             color: textColor,
-                            fontSize: 14.0,
+                            fontSize: 15.0,
                             fontWeight: FontWeight.w700,
                           ),
                         ),
@@ -193,7 +193,7 @@ class HomeAppBar extends StatelessWidget {
                     //             ),
                     //             const SizedBox(width: 8),
                     //             const Text(
-                    //               'Create a Post',
+                    //               'Start a Discussion',
                     //               style: TextStyle(
                     //                 fontSize: 13,
                     //               ),

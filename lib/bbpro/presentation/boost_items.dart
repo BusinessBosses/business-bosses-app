@@ -6,6 +6,7 @@ import 'package:business_bosses_v2/bbpro/models/service_model.dart';
 import 'package:business_bosses_v2/common/dialogs/snackbar.dart';
 import 'package:business_bosses_v2/features/premium/reviewpayment.dart';
 import 'package:business_bosses_v2/features/profile/controller/profile_controller.dart';
+import 'package:business_bosses_v2/navigation/routes.dart';
 import 'package:business_bosses_v2/services/api_service.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
@@ -286,13 +287,33 @@ class _BoostItemState extends State<BoostItem> {
       backgroundColor: const Color(0xFFFFFFFF),
       appBar: AppBar(
         backgroundColor: const Color(0xFFFFFFFF),
-        leading: IconButton(
-          onPressed: () {
-            Navigator.pop(context);
-          },
-          icon: SvgPicture.asset('assets/svgs/backbutton.svg'),
-        ),
-        centerTitle: true,
+        automaticallyImplyLeading: false,
+        actions: <Widget>[
+          GestureDetector(
+            onTap: () {
+              Get.offNamed(Routes.marketPlace);
+            },
+            child: const Padding(
+              padding: EdgeInsets.only(right: 10.0),
+              child: Row(
+                children: <Widget>[
+                  Icon(
+                    Icons.clear_outlined,
+                    color: primaryColorLT,
+                    size: 14,
+                  ),
+                  SizedBox(width: 2),
+                  Text('Cancel boost',
+                      style: TextStyle(
+                          color: primaryColorLT,
+                          fontSize: 15,
+                          fontWeight: FontWeight.w700)),
+                ],
+              ),
+            ),
+          ),
+        ],
+        centerTitle: false,
         title: TextWidget(
           text: 'Boost ${widget.service != null ? 'Service' : 'Product'}',
         ),
@@ -301,9 +322,6 @@ class _BoostItemState extends State<BoostItem> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
-            const SizedBox(
-              height: 15,
-            ),
             Stack(
               children: <Widget>[
                 Image.asset(

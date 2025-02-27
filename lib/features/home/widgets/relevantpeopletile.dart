@@ -81,7 +81,7 @@ class _RelevantPeopleTileState extends State<RelevantPeopleTile> {
                           //   'View all',
                           //   style: TextStyle(fontSize: 11),
                           // ),
-                          Icon(Icons.chevron_right, color: textColor, size: 16),
+                          Icon(Icons.chevron_right, color: textColor, size: 20),
                         ]),
                   ],
                 ),

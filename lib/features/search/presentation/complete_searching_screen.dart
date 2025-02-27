@@ -1,3 +1,8 @@
+import 'package:business_bosses_v2/analytics/presentation/analysescreen.dart';
+import 'package:business_bosses_v2/common/models/my_response.dart';
+import 'package:business_bosses_v2/common/models/my_title.dart';
+import 'package:business_bosses_v2/common/models/user_model.dart';
+import 'package:business_bosses_v2/common/widgets/data_selection_screen.dart';
 import 'package:business_bosses_v2/common/widgets/safety_model.dart';
 import 'package:business_bosses_v2/common/widgets/text_widget.dart';
 import 'package:business_bosses_v2/features/forum/models/forum_model.dart';
@@ -28,19 +33,33 @@ class CompleteSearchingScreen extends StatefulWidget {
 class _CompleteSearchingScreenState extends State<CompleteSearchingScreen>
     with TickerProviderStateMixin {
   late TabController _tabController;
-
-  final bool _hasFilter = false;
+  String _filtertitle = '';
 
   @override
   void initState() {
     super.initState();
     _tabController = TabController(vsync: this, length: 2);
+    _tabController.addListener(() {
+      setState(() {});
+    });
   }
 
   @override
   Widget build(BuildContext context) {
     return GetBuilder<CompleteSearchController>(
       builder: (CompleteSearchController controller) {
+        // Sort users with profile pictures first
+        final List<UserModel> sortedUsers = controller.isUserSearch.value
+            ? List.from(controller.searchedUsers)
+            : List.from(controller.recommendedConnections);
+        sortedUsers.sort((UserModel a, UserModel b) {
+          if (a.photoUrl != null && a.photoUrl!.isNotEmpty) {
+            return (b.photoUrl != null && b.photoUrl!.isNotEmpty) ? 0 : -1;
+          } else {
+            return (b.photoUrl != null && b.photoUrl!.isNotEmpty) ? 1 : 0;
+          }
+        });
+
         return DefaultTabController(
           length: 2,
           child: Scaffold(
@@ -96,10 +115,12 @@ class _CompleteSearchingScreenState extends State<CompleteSearchingScreen>
                     ],
                   )),
               actions: <Widget>[
-                if (_hasFilter)
+                if (_tabController.index == 0)
                   IconButton(
-                    icon: SvgPicture.asset('assets/svgs/filter.svg'),
-                    onPressed: () {},
+                    onPressed: () {
+                      _showFilterModal(controller);
+                    },
+                    icon: SvgPicture.asset('assets/svgs/filternoback.svg'),
                   ),
               ],
             ),
@@ -117,9 +138,7 @@ class _CompleteSearchingScreenState extends State<CompleteSearchingScreen>
                       controller: _tabController,
                       children: <Widget>[
                         FilterUsers(
-                          filterItems: controller.isUserSearch.value
-                              ? controller.searchedUsers
-                              : controller.recommendedConnections,
+                          filterItems: sortedUsers,
                           isLoading: controller.loading.value ||
                               controller.loadingSearch.value,
                           onConnectionChange: controller.connectToUser,
@@ -132,11 +151,6 @@ class _CompleteSearchingScreenState extends State<CompleteSearchingScreen>
                           isLoading: controller.loading.value ||
                               controller.loadingSearch.value,
                         ),
-                        // FilterForum(
-                        //   filterItems: controller.searchedForums,
-                        //   isLoading: controller.loading.value ||
-                        //       controller.loadingSearch.value,
-                        // ),
                       ],
                     ),
                   )
@@ -148,48 +162,93 @@ class _CompleteSearchingScreenState extends State<CompleteSearchingScreen>
       },
     );
   }
+
+  void _showFilterModal(CompleteSearchController controller) {
+    showModalBottomSheet(
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(20),
+        ),
+        context: context,
+        builder: (BuildContext context) {
+          return StatefulBuilder(
+              builder: (BuildContext context, StateSetter setState) {
+            return Container(
+                height: 300,
+                padding: const EdgeInsets.all(16.0),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: <Widget>[
+                    const Text('Filter by Category or Profession',
+                        style: TextStyle(
+                            fontSize: 18, fontWeight: FontWeight.bold)),
+                    const SizedBox(height: 15),
+                    GestureDetector(
+                      onTap: () => _selectCategory(controller, setState),
+                      child: Container(
+                        width: double.infinity,
+                        decoration: BoxDecoration(
+                          color: Colors.grey[200],
+                          borderRadius: BorderRadius.circular(8),
+                        ),
+                        padding: const EdgeInsets.symmetric(
+                            vertical: 12, horizontal: 16),
+                        child: Text(
+                          _filtertitle.isNotEmpty
+                              ? _filtertitle
+                              : 'Select Category',
+                          style: const TextStyle(fontSize: 16),
+                        ),
+                      ),
+                    ),
+                    const SizedBox(height: 20),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      children: <Widget>[
+                        OutlinedButton(
+                          onPressed: () {
+                            setState(() {
+                              _filtertitle = '';
+                            });
+                            controller.resetData('');
+                            Get.back();
+                          },
+                          child: const Text('Clear'),
+                        ),
+                        const SizedBox(width: 10),
+                        ElevatedButton(
+                          onPressed: () {
+                            Get.back();
+                            controller.resetData(_filtertitle);
+                          },
+                          child: const Text('Apply'),
+                        ),
+                      ],
+                    ),
+                  ],
+                ));
+          });
+        });
+  }
+
+  void _selectCategory(
+      CompleteSearchController controller, StateSetter setState) async {
+    final MyResponse? res = await Navigator.of(context).push(
+      MaterialPageRoute(
+        builder: (BuildContext context) =>
+            const DataSelectionScreen(analyser: Analyser.category),
+      ),
+    );
+
+    if (res != null && res.success) {
+      MyTitle category = res.data;
+      controller.selectedFilter.value = category.title ?? '';
+      setState(() {
+        _filtertitle = category.title ?? '';
+      });
+      controller.update();
+    }
+  }
 }
-
-/// FILTER POSTS
-// class FilterPosts extends StatelessWidget {
-//   final List<PostModel> filterItems;
-//   final bool isLoading;
-
-//   /// CONSTRUCTOR
-//   const FilterPosts({
-//     Key? key,
-//     this.filterItems = const <PostModel>[],
-//     this.isLoading = false,
-//   }) : super(key: key);
-
-//   @override
-//   Widget build(BuildContext context) {
-//     final HomeController homeController = Get.find();
-//     return filterItems.isEmpty
-//         ? SafetyModel(
-//             icon: const Icon(
-//               Icons.edit,
-//               size: 80.0,
-//               color: hintColor,
-//             ),
-//             title: 'No post found',
-//             subTitle: 'Your search posts will be displayed here!',
-//             isLoading: isLoading,
-//           )
-//         : ListView.separated(
-//             key: key,
-//             separatorBuilder: (_, __) => const SizedBox(height: 8.0),
-//             padding: const EdgeInsets.all(16.0),
-//             itemCount: filterItems.length ?? 0,
-//             itemBuilder: (BuildContext context, int i) {
-//               return PostTile(
-//                 post: filterItems[i],
-//                 controller: homeController,
-//               );
-//             },
-//           );
-//   }
-// }
 
 /// FILTER FORUMS
 class FilterForum extends StatelessWidget {

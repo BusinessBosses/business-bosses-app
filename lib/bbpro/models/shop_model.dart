@@ -26,6 +26,7 @@ class Shop {
   final String appId;
   final UserModel? user;
   final String? imageType;
+  final String category; // Added category field
 
   Shop({
     required this.id,
@@ -53,6 +54,7 @@ class Shop {
     this.instagram,
     this.url,
     this.imageType = 'circle',
+    required this.category, // Added parameter in constructor
   });
 
   factory Shop.fromMap(Map<String, dynamic> json) {
@@ -83,6 +85,7 @@ class Shop {
       createdAt: DateTime.parse(json['createdAt']),
       user: json['user'] != null ? UserModel.fromMap(json['user']) : null,
       imageType: json['imageType'] ?? 'circle',
+      category: json['category'] ?? '', // Added fromMap mapping
     );
   }
 
@@ -113,6 +116,7 @@ class Shop {
       'createdAt': createdAt.toIso8601String(),
       'user': user?.toMap(),
       'imageType': imageType,
+      'category': category, // Added toMap mapping
     };
   }
 }

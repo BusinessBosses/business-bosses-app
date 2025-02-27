@@ -23,7 +23,6 @@ class MarketsPage extends StatefulWidget {
 }
 
 class _MarketsPageState extends State<MarketsPage> {
-  final MarketController _marketController = Get.find();
   final HomeController hmeController = Get.find();
   final ProfileController profileController = Get.find();
   final ShopController shopController = Get.find();
@@ -39,18 +38,31 @@ class _MarketsPageState extends State<MarketsPage> {
           ),
           child: GetBuilder<MarketController>(
               builder: (MarketController controller) {
-            bool isFiltering = _marketController.isfiltered.value;
-            List<Object> markets = isFiltering
-                ? _marketController.allFilteredItems
-                : _marketController.proItems;
+            bool isFiltering = controller.isfiltered.value;
+            List<Object> markets =
+                isFiltering ? controller.allFilteredItems : controller.proItems;
             return Column(
               children: <Widget>[
                 Container(
                   margin: const EdgeInsets.only(top: 10),
                   child: ProshopdealsWidget(
                     title: 'NEW',
-                    combinedList:
-                        _marketController.proItemsWithImages.take(10).toList(),
+                    combinedList: controller.proItems
+                        .where((Object item) {
+                          if (item is Product) {
+                            return item.images != null &&
+                                item.images!.isNotEmpty &&
+                                item.images!.first.isNotEmpty &&
+                                (item).user!.isSubscribed;
+                          } else {
+                            return (item as Service).images != null &&
+                                (item).images!.isNotEmpty &&
+                                (item).images![0].isNotEmpty &&
+                                (item).user!.isSubscribed;
+                          }
+                        })
+                        .take(10)
+                        .toList(),
                   ),
                 ),
                 if (isFiltering && markets.isEmpty)

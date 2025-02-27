@@ -90,9 +90,9 @@ class _OrdersWidgetState extends State<OrdersWidget> {
                                   text: TextSpan(
                                     text: 'View All Orders ',
                                     style: const TextStyle(
-                                      color: proprimaryColor,
-                                      fontSize: 12,
-                                    ),
+                                        color: proprimaryColor,
+                                        fontSize: 12,
+                                        fontWeight: FontWeight.bold),
                                     children: <TextSpan>[
                                       TextSpan(
                                         text:

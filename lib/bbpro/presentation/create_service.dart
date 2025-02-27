@@ -103,7 +103,7 @@ class _CreateServiceListingState extends State<CreateServiceListing>
   String? servicePeriodnumber;
   String? calendarType = 'Single day';
   bool? isAppointment = false;
-  bool _shouldPromote = true;
+  final bool _shouldPromote = true;
   final List<String> categories = <String>[
     'Agriculture, Food & Beverage',
     'Books & Education',
@@ -144,13 +144,7 @@ class _CreateServiceListingState extends State<CreateServiceListing>
       _priceController.text = widget.service!.price.toString();
       _discountController.text = widget.service!.discount.toString();
       _descriptionController.text = widget.service!.description;
-      String? existingCategory = widget.service!.category;
-      if (categories.contains(existingCategory)) {
-        category = existingCategory;
-      } else {
-        category =
-            'Vehicle & Transportation'; // Default to "Other" if the category is invalid
-      }
+      category = widget.service!.category;
       location = widget.service!.location;
       images = widget.service!.images!;
       updateImages = widget.service!.images;
@@ -871,23 +865,23 @@ class _CreateServiceListingState extends State<CreateServiceListing>
 
             const SizedBox(height: 16),
 
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 15.0),
-              child: SwitchWidget(
-                value: _shouldPromote,
-                onChanged: (bool value) {
-                  setState(() {
-                    _shouldPromote = value;
-                  });
-                },
-                icon: 'assets/svgs/rocketblack.svg',
-                caption: 'Boost this listing',
-                subtext: 'Reach a wider audience and get more views',
-                activeColor: primaryColorLT,
-                inactiveColor: Colors.grey,
-              ),
-            ),
-            const SizedBox(height: 16),
+            // Padding(
+            //   padding: const EdgeInsets.symmetric(horizontal: 15.0),
+            //   child: SwitchWidget(
+            //     value: _shouldPromote,
+            //     onChanged: (bool value) {
+            //       setState(() {
+            //         _shouldPromote = value;
+            //       });
+            //     },
+            //     icon: 'assets/svgs/rocketblack.svg',
+            //     caption: 'Boost this listing',
+            //     subtext: 'Reach a wider audience and get more views',
+            //     activeColor: primaryColorLT,
+            //     inactiveColor: Colors.grey,
+            //   ),
+            // ),
+            // const SizedBox(height: 16),
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 15.0),
               child: SwitchWidget(
@@ -1040,136 +1034,7 @@ class _CreateServiceListingState extends State<CreateServiceListing>
       return;
     }
 
-    if (_formKey.currentState?.validate() ?? false) {
-      _formKey.currentState?.save();
-      setState(() {
-        isSubmitted = true;
-      });
-      // 1. Clear the final images list
-      List<String> finalImages = <String>[];
-
-// 2. Add back any *retained* old images
-//    (i.e., those still in updateImages)
-      for (String oldImageUrl in updateImages!) {
-        finalImages.add(oldImageUrl);
-      }
-
-// 3. Upload and add newly selected images
-      for (File image in _selectedImages) {
-        final dynamic response = await ApiService.uploadFile(image);
-        if (response['success']) {
-          finalImages.add(response['fileUrl']);
-        }
-      }
-      // Create a map to hold form data
-      try {
-        // First validate required fields
-        if (_serviceNameController.text.isEmpty ||
-            _priceController.text.isEmpty ||
-            _descriptionController.text.isEmpty) {
-          showSnackbar(
-              message: 'Please fill in all required fields', error: true);
-          return;
-        }
-
-        final Map<String, dynamic> serviceData = <String, dynamic>{
-          'userId': profileController.myProfile.uid,
-          'shopId': shopController.shop?.id,
-          'name': _serviceNameController.text.trim(),
-          'price': _priceController.text.trim(),
-          'description': _descriptionController.text.trim(),
-          'discount': _discountController.text.isEmpty
-              ? '0'
-              : _discountController.text.trim(),
-          'category': category,
-          'serviceDuration': duration,
-          'isAppointment': isAppointment,
-          'location':
-              location.isEmpty ? shopController.shop!.location : location,
-          'participants': groupmembersController.text,
-          'repeat': frequency,
-          'images': finalImages.isEmpty ? null : finalImages,
-          'paymentMethod': '',
-          'deliveryMethod': deliveryMethod ?? '',
-          'availableTime': availableTime.toIso8601String(),
-          'serviceType': serviceType ?? '1:1',
-          'itemType': 'service',
-          'isActive': _isSwitched,
-          'deliveryTime': _isAlwaysAvailable.toString(),
-          'serviceAvailability': <String, dynamic>{
-            'dayOfWeek': selectedSubmitWeekdays.isEmpty
-                ? <String>[
-                    'Mon',
-                    'Tue',
-                    'Wed',
-                    'Thu',
-                    'Fri',
-                  ]
-                : selectedSubmitWeekdays,
-            'startTime':
-                '${_startTime?.hour.toString().padLeft(2, '0')}:${_startTime?.minute.toString().padLeft(2, '0')}:00',
-            'endTime':
-                '${_endTime?.hour.toString().padLeft(2, '0')}:${_endTime?.minute.toString().padLeft(2, '0')}:00',
-            'startDate': _startDate?.toIso8601String(),
-            'endDate': _endDate?.toIso8601String(),
-          },
-          'servicePackages': packages,
-          'url': addressorlinkController.text,
-          'notes': notesController.text.trim().isEmpty
-              ? null
-              : notesController.text.trim(),
-          'selectedDates': _selectedDates.isEmpty ||
-                  (_selectedDates.length == 1 &&
-                      _selectedDates.first.toString() == '')
-              ? null
-              : _selectedDates.map((DateTime date) => date.toString()).toList(),
-        };
-
-        // Log the cleaned data
-
-        if (widget.service == null) {
-          final ServiceAddResult result =
-              await shopController.addService(serviceData);
-          if (result.success) {
-            showSnackbar(message: 'Service Added Successfully!');
-            if (_shouldPromote) {
-              Get.off(() => BoostItem(
-                    service: result.service,
-                  ));
-              return;
-            }
-            Navigator.pop(context);
-          } else {
-            String errorMessage = 'Failed to add service';
-            showSnackbar(message: errorMessage, error: true);
-          }
-        } else {
-          final bool result = await shopController.updateService(
-              widget.service!.id, serviceData);
-          if (result) {
-            showSnackbar(message: 'Service Updated Successfully!');
-            if (_shouldPromote) {
-              Get.off(() => BoostItem(
-                    service: widget.service,
-                  ));
-              return;
-            }
-            Navigator.pop(context);
-          } else {
-            String errorMessage = 'Failed to edit service';
-            showSnackbar(message: errorMessage, error: true);
-          }
-        }
-      } catch (e) {
-        print(e);
-        String errorMessage = 'Failed to add service';
-        showSnackbar(message: errorMessage, error: true);
-      } finally {
-        setState(() {
-          isSubmitted = false;
-        });
-      }
-    }
+    _showBoostBottomSheet();
   }
 
   Widget availabilityWidget({required bool isRecurring}) {
@@ -1566,6 +1431,361 @@ class _CreateServiceListingState extends State<CreateServiceListing>
       }
     }
     return slots;
+  }
+
+  void _showBoostBottomSheet() {
+    showModalBottomSheet(
+      shape: const RoundedRectangleBorder(
+          borderRadius: BorderRadius.only(
+              topLeft: Radius.circular(15), topRight: Radius.circular(15))),
+      context: context,
+      builder: (BuildContext context) {
+        return Padding(
+          padding: const EdgeInsets.all(20.0),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: <Widget>[
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: <Widget>[
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: <Widget>[
+                      SvgPicture.asset(
+                        'assets/svgs/rocket.svg',
+                        color: textColor,
+                      ),
+                      const SizedBox(width: 5),
+                      const Text(
+                        'Boost Post',
+                        style: TextStyle(
+                          fontWeight: FontWeight.w700,
+                          fontSize: 18,
+                        ),
+                      ),
+                    ],
+                  ),
+                  const Text(
+                    'Reach a wider audience and get more views',
+                    style: TextStyle(
+                      fontWeight: FontWeight.w600,
+                      fontSize: 11,
+                      color: Color(0xFF777777),
+                    ),
+                  ),
+                ],
+              ),
+              const SizedBox(height: 10),
+              const Text(
+                'Do you want to boost this post/listing?',
+                style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+              ),
+              const SizedBox(height: 20),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: <Widget>[
+                  ElevatedButton(
+                    style: ButtonStyle(
+                        backgroundColor: MaterialStatePropertyAll(
+                            widget.isMarketplace == true
+                                ? primaryColorLT
+                                : proprimaryColor)),
+                    onPressed: () async {
+                      Navigator.pop(context);
+                      if (_formKey.currentState?.validate() ?? false) {
+                        _formKey.currentState?.save();
+                        setState(() {
+                          isSubmitted = true;
+                        });
+                        // 1. Clear the final images list
+                        List<String> finalImages = <String>[];
+
+// 2. Add back any *retained* old images
+//    (i.e., those still in updateImages)
+                        for (String oldImageUrl in updateImages!) {
+                          finalImages.add(oldImageUrl);
+                        }
+
+// 3. Upload and add newly selected images
+                        for (File image in _selectedImages) {
+                          final dynamic response =
+                              await ApiService.uploadFile(image);
+                          if (response['success']) {
+                            finalImages.add(response['fileUrl']);
+                          }
+                        }
+                        // Create a map to hold form data
+                        try {
+                          // First validate required fields
+                          if (_serviceNameController.text.isEmpty ||
+                              _priceController.text.isEmpty ||
+                              _descriptionController.text.isEmpty) {
+                            showSnackbar(
+                                message: 'Please fill in all required fields',
+                                error: true);
+                            return;
+                          }
+
+                          final Map<String, dynamic> serviceData =
+                              <String, dynamic>{
+                            'userId': profileController.myProfile.uid,
+                            'shopId': shopController.shop?.id,
+                            'name': _serviceNameController.text.trim(),
+                            'price': _priceController.text.trim(),
+                            'description': _descriptionController.text.trim(),
+                            'discount': _discountController.text.isEmpty
+                                ? '0'
+                                : _discountController.text.trim(),
+                            'category': category,
+                            'serviceDuration': duration,
+                            'isAppointment': isAppointment,
+                            'location': location.isEmpty
+                                ? shopController.shop!.location
+                                : location,
+                            'participants': groupmembersController.text,
+                            'repeat': frequency,
+                            'images': finalImages.isEmpty ? null : finalImages,
+                            'paymentMethod': '',
+                            'deliveryMethod': deliveryMethod ?? '',
+                            'availableTime': availableTime.toIso8601String(),
+                            'serviceType': serviceType ?? '1:1',
+                            'itemType': 'service',
+                            'isActive': _isSwitched,
+                            'deliveryTime': _isAlwaysAvailable.toString(),
+                            'serviceAvailability': <String, dynamic>{
+                              'dayOfWeek': selectedSubmitWeekdays.isEmpty
+                                  ? <String>[
+                                      'Mon',
+                                      'Tue',
+                                      'Wed',
+                                      'Thu',
+                                      'Fri',
+                                    ]
+                                  : selectedSubmitWeekdays,
+                              'startTime':
+                                  '${_startTime?.hour.toString().padLeft(2, '0')}:${_startTime?.minute.toString().padLeft(2, '0')}:00',
+                              'endTime':
+                                  '${_endTime?.hour.toString().padLeft(2, '0')}:${_endTime?.minute.toString().padLeft(2, '0')}:00',
+                              'startDate': _startDate?.toIso8601String(),
+                              'endDate': _endDate?.toIso8601String(),
+                            },
+                            'servicePackages': packages,
+                            'url': addressorlinkController.text,
+                            'notes': notesController.text.trim().isEmpty
+                                ? null
+                                : notesController.text.trim(),
+                            'selectedDates': _selectedDates.isEmpty ||
+                                    (_selectedDates.length == 1 &&
+                                        _selectedDates.first.toString() == '')
+                                ? null
+                                : _selectedDates
+                                    .map((DateTime date) => date.toString())
+                                    .toList(),
+                          };
+
+                          // Log the cleaned data
+
+                          if (widget.service == null) {
+                            final ServiceAddResult result =
+                                await shopController.addService(serviceData);
+                            if (result.success) {
+                              showSnackbar(
+                                  message: 'Service Added Successfully!');
+
+                              Get.off(() => BoostItem(
+                                    service: result.service,
+                                  ));
+                              return;
+                            } else {
+                              String errorMessage = 'Failed to add service';
+                              showSnackbar(message: errorMessage, error: true);
+                            }
+                          } else {
+                            final bool result = await shopController
+                                .updateService(widget.service!.id, serviceData);
+                            if (result) {
+                              showSnackbar(
+                                  message: 'Service Updated Successfully!');
+
+                              Get.off(() => BoostItem(
+                                    service: widget.service,
+                                  ));
+                              return;
+                            } else {
+                              String errorMessage = 'Failed to edit service';
+                              showSnackbar(message: errorMessage, error: true);
+                            }
+                          }
+                        } catch (e) {
+                          print(e);
+                          String errorMessage = 'Failed to add service';
+                          showSnackbar(message: errorMessage, error: true);
+                        } finally {
+                          setState(() {
+                            isSubmitted = false;
+                          });
+                        }
+                      }
+                    },
+                    child: const Text('Yes'),
+                  ),
+                  const SizedBox(
+                    width: 10,
+                  ),
+                  OutlinedButton(
+                    style: OutlinedButton.styleFrom(
+                      foregroundColor: widget.isMarketplace == true
+                          ? primaryColorLT
+                          : proprimaryColor,
+                      side: BorderSide(
+                          color: widget.isMarketplace == true
+                              ? primaryColorLT
+                              : proprimaryColor,
+                          width: 1),
+                    ),
+                    onPressed: () async {
+                      Navigator.pop(context);
+                      if (_formKey.currentState?.validate() ?? false) {
+                        _formKey.currentState?.save();
+                        setState(() {
+                          isSubmitted = true;
+                        });
+                        // 1. Clear the final images list
+                        List<String> finalImages = <String>[];
+
+// 2. Add back any *retained* old images
+//    (i.e., those still in updateImages)
+                        for (String oldImageUrl in updateImages!) {
+                          finalImages.add(oldImageUrl);
+                        }
+
+// 3. Upload and add newly selected images
+                        for (File image in _selectedImages) {
+                          final dynamic response =
+                              await ApiService.uploadFile(image);
+                          if (response['success']) {
+                            finalImages.add(response['fileUrl']);
+                          }
+                        }
+                        // Create a map to hold form data
+                        try {
+                          // First validate required fields
+                          if (_serviceNameController.text.isEmpty ||
+                              _priceController.text.isEmpty ||
+                              _descriptionController.text.isEmpty) {
+                            showSnackbar(
+                                message: 'Please fill in all required fields',
+                                error: true);
+                            return;
+                          }
+
+                          final Map<String, dynamic> serviceData =
+                              <String, dynamic>{
+                            'userId': profileController.myProfile.uid,
+                            'shopId': shopController.shop?.id,
+                            'name': _serviceNameController.text.trim(),
+                            'price': _priceController.text.trim(),
+                            'description': _descriptionController.text.trim(),
+                            'discount': _discountController.text.isEmpty
+                                ? '0'
+                                : _discountController.text.trim(),
+                            'category': category,
+                            'serviceDuration': duration,
+                            'isAppointment': isAppointment,
+                            'location': location.isEmpty
+                                ? shopController.shop!.location
+                                : location,
+                            'participants': groupmembersController.text,
+                            'repeat': frequency,
+                            'images': finalImages.isEmpty ? null : finalImages,
+                            'paymentMethod': '',
+                            'deliveryMethod': deliveryMethod ?? '',
+                            'availableTime': availableTime.toIso8601String(),
+                            'serviceType': serviceType ?? '1:1',
+                            'itemType': 'service',
+                            'isActive': _isSwitched,
+                            'deliveryTime': _isAlwaysAvailable.toString(),
+                            'serviceAvailability': <String, dynamic>{
+                              'dayOfWeek': selectedSubmitWeekdays.isEmpty
+                                  ? <String>[
+                                      'Mon',
+                                      'Tue',
+                                      'Wed',
+                                      'Thu',
+                                      'Fri',
+                                    ]
+                                  : selectedSubmitWeekdays,
+                              'startTime':
+                                  '${_startTime?.hour.toString().padLeft(2, '0')}:${_startTime?.minute.toString().padLeft(2, '0')}:00',
+                              'endTime':
+                                  '${_endTime?.hour.toString().padLeft(2, '0')}:${_endTime?.minute.toString().padLeft(2, '0')}:00',
+                              'startDate': _startDate?.toIso8601String(),
+                              'endDate': _endDate?.toIso8601String(),
+                            },
+                            'servicePackages': packages,
+                            'url': addressorlinkController.text,
+                            'notes': notesController.text.trim().isEmpty
+                                ? null
+                                : notesController.text.trim(),
+                            'selectedDates': _selectedDates.isEmpty ||
+                                    (_selectedDates.length == 1 &&
+                                        _selectedDates.first.toString() == '')
+                                ? null
+                                : _selectedDates
+                                    .map((DateTime date) => date.toString())
+                                    .toList(),
+                          };
+
+                          // Log the cleaned data
+
+                          if (widget.service == null) {
+                            final ServiceAddResult result =
+                                await shopController.addService(serviceData);
+                            if (result.success) {
+                              showSnackbar(
+                                  message: 'Service Added Successfully!');
+                              Get.back();
+
+                              
+                              return;
+                            } else {
+                              String errorMessage = 'Failed to add service';
+                              showSnackbar(message: errorMessage, error: true);
+                            }
+                          } else {
+                            final bool result = await shopController
+                                .updateService(widget.service!.id, serviceData);
+                            if (result) {
+                              showSnackbar(
+                                  message: 'Service Updated Successfully!');
+                              Get.back();
+
+                              return;
+                            } else {
+                              String errorMessage = 'Failed to edit service';
+                              showSnackbar(message: errorMessage, error: true);
+                            }
+                          }
+                        } catch (e) {
+                          print(e);
+                          String errorMessage = 'Failed to add service';
+                          showSnackbar(message: errorMessage, error: true);
+                        } finally {
+                          setState(() {
+                            isSubmitted = false;
+                          });
+                        }
+                      }
+                    },
+                    child: const Text('No'),
+                  ),
+                ],
+              ),
+            ],
+          ),
+        );
+      },
+    );
   }
 }
 
