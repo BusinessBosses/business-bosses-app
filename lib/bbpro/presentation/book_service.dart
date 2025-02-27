@@ -380,784 +380,906 @@ class _BookServiceScreenState extends State<BookServiceScreen> {
             ),
           ),
         ),
-        body: ListView(
+        body: Column(
           children: <Widget>[
-            // Service Image Section
-            if (widget.service.images != null &&
-                widget.service.images!.isNotEmpty)
-              SizedBox(
-                height: 250,
-                child: GenericSlider(
-                  radius: 0,
-                  images: widget.service.images ?? <String>[],
-                ),
-              ),
-
-            // Service Details Section
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 15.0),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
+            Expanded(
+              child: Stack(
                 children: <Widget>[
-                  const SizedBox(height: 15),
-                  Text(
-                    widget.service.name,
-                    style: const TextStyle(
-                      fontSize: 16,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  ListView(
                     children: <Widget>[
-                      if (widget.service.discount > 0)
-                        Row(
-                          children: <Widget>[
-                            Text(
-                              '${formatServiceDuration(widget.service.serviceDuration)}${widget.shop.currency}${((widget.service.price * (1 - widget.service.discount / 100)) * 100).round() / 100}',
-                              style: const TextStyle(
-                                color: Colors.black,
-                                fontWeight: FontWeight.bold,
-                                fontSize: 18,
-                              ),
-                            ),
-                            const SizedBox(width: 5),
-                            Text(
-                              '${widget.shop.currency}${widget.service.price.toStringAsFixed(2)}',
-                              style: const TextStyle(
-                                color: Colors.red,
-                                decoration: TextDecoration.lineThrough,
-                                fontSize: 14,
-                              ),
-                            ),
-                          ],
-                        )
-                      else
-                        Text(
-                          '${formatServiceDuration(widget.service.serviceDuration)}${widget.shop.currency}${widget.service.price.toStringAsFixed(2)}',
-                          style: const TextStyle(
-                            color: Colors.black,
-                            fontWeight: FontWeight.bold,
-                            fontSize: 16,
+                      // Service Image Section
+                      if (widget.service.images != null &&
+                          widget.service.images!.isNotEmpty)
+                        SizedBox(
+                          height: 250,
+                          child: GenericSlider(
+                            radius: 0,
+                            images: widget.service.images ?? <String>[],
                           ),
                         ),
-                    ],
-                  ),
-                  Text('Category: ${widget.service.category}'),
-                  const SizedBox(height: 15),
-                  DetectableText(
-                    text: widget.service.description,
-                    detectionRegExp: detectionRegExp(hashtag: false)!,
-                    detectedStyle: bodyText2.copyWith(color: Colors.blue),
-                    moreStyle: bodyText2.copyWith(
-                        color: Colors.black, fontWeight: FontWeight.bold),
-                    lessStyle: bodyText2.copyWith(
-                        color: Colors.black, fontWeight: FontWeight.bold),
-                    trimLength: 100,
-                    trimExpandedText: '  show less',
-                    basicStyle: bodyText2.copyWith(color: textColor),
-                    onTap: (_) {},
-                  ),
-                  const SizedBox(height: 15),
-                ],
-              ),
-            ),
 
-            // Calendar Section
-            if (widget.service.isAppointment == true)
-              if (widget.service.availability!['startDate'] != null)
-                Container(
-                  decoration: BoxDecoration(
-                    color: Colors.white,
-                    borderRadius: BorderRadius.circular(radius),
-                  ),
-                  padding: const EdgeInsets.all(15),
-                  margin: const EdgeInsets.symmetric(horizontal: 15),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: <Widget>[
-                      const Text('Select a Date and Time',
-                          style: TextStyle(
-                              fontSize: 16, fontWeight: FontWeight.bold)),
-                      if (widget.service.deliveryTime == 'true')
-                        Column(children: <Widget>[
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.start,
-                            children: <Widget>[
-                              SvgPicture.asset(
-                                'assets/svgs/checkfilled.svg',
-                                height: 13,
+                      // Service Details Section
+                      Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 15.0),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: <Widget>[
+                            const SizedBox(height: 15),
+                            Text(
+                              widget.service.name,
+                              style: const TextStyle(
+                                fontSize: 16,
+                                fontWeight: FontWeight.bold,
                               ),
-                              const SizedBox(
-                                width: 5,
-                              ),
-                              const Text(
-                                'This service is always available',
-                                style: TextStyle(
-                                  fontSize: 13,
-                                  color: Colors.grey,
+                            ),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: <Widget>[
+                                if (widget.service.discount > 0)
+                                  Row(
+                                    children: <Widget>[
+                                      Text(
+                                        '${formatServiceDuration(widget.service.serviceDuration)}${widget.shop.currency}${((widget.service.price * (1 - widget.service.discount / 100)) * 100).round() / 100}',
+                                        style: const TextStyle(
+                                          color: Colors.black,
+                                          fontWeight: FontWeight.bold,
+                                          fontSize: 18,
+                                        ),
+                                      ),
+                                      const SizedBox(width: 5),
+                                      Text(
+                                        '${widget.shop.currency}${widget.service.price.toStringAsFixed(2)}',
+                                        style: const TextStyle(
+                                          color: Colors.red,
+                                          decoration:
+                                              TextDecoration.lineThrough,
+                                          fontSize: 14,
+                                        ),
+                                      ),
+                                    ],
+                                  )
+                                else
+                                  Text(
+                                    '${formatServiceDuration(widget.service.serviceDuration)}${widget.shop.currency}${widget.service.price.toStringAsFixed(2)}',
+                                    style: const TextStyle(
+                                      color: Colors.black,
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: 16,
+                                    ),
+                                  ),
+                              ],
+                            ),
+                            Text('Category: ${widget.service.category}'),
+                            const SizedBox(height: 15),
+                            DetectableText(
+                              text: widget.service.description,
+                              detectionRegExp: detectionRegExp(hashtag: false)!,
+                              detectedStyle:
+                                  bodyText2.copyWith(color: Colors.blue),
+                              moreStyle: bodyText2.copyWith(
+                                  color: Colors.black,
+                                  fontWeight: FontWeight.bold),
+                              lessStyle: bodyText2.copyWith(
+                                  color: Colors.black,
+                                  fontWeight: FontWeight.bold),
+                              trimLength: 100,
+                              trimExpandedText: '  show less',
+                              basicStyle: bodyText2.copyWith(color: textColor),
+                              onTap: (_) {},
+                            ),
+                            const SizedBox(height: 15),
+                          ],
+                        ),
+                      ),
+
+                      // Calendar Section
+                      if (widget.service.isAppointment == true)
+                        if (widget.service.availability!['startDate'] != null)
+                          Container(
+                            decoration: BoxDecoration(
+                              color: Colors.white,
+                              borderRadius: BorderRadius.circular(radius),
+                            ),
+                            padding: const EdgeInsets.all(15),
+                            margin: const EdgeInsets.symmetric(horizontal: 15),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: <Widget>[
+                                const Text('Select a Date and Time',
+                                    style: TextStyle(
+                                        fontSize: 16,
+                                        fontWeight: FontWeight.bold)),
+                                if (widget.service.deliveryTime == 'true')
+                                  Column(children: <Widget>[
+                                    Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.start,
+                                      children: <Widget>[
+                                        SvgPicture.asset(
+                                          'assets/svgs/checkfilled.svg',
+                                          height: 13,
+                                        ),
+                                        const SizedBox(
+                                          width: 5,
+                                        ),
+                                        const Text(
+                                          'This service is always available',
+                                          style: TextStyle(
+                                            fontSize: 13,
+                                            color: Colors.grey,
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                    const SizedBox(height: 10),
+                                    SizedBox(
+                                      height:
+                                          MediaQuery.of(context).size.height /
+                                              3,
+                                      child: SfCalendar(
+                                        showNavigationArrow: true,
+                                        initialSelectedDate: _startDate ??
+                                            (_selectedDates.isNotEmpty
+                                                ? _selectedDates[0]
+                                                : DateTime.now()),
+                                        selectionDecoration: BoxDecoration(
+                                          borderRadius:
+                                              BorderRadius.circular(0),
+                                          color: Colors.black.withOpacity(0.5),
+                                        ),
+                                        todayTextStyle: const TextStyle(
+                                            color: Colors.black),
+                                        todayHighlightColor: Colors.transparent,
+                                        view: CalendarView.month,
+                                        initialDisplayDate: _startDate ??
+                                            (_selectedDates.isNotEmpty
+                                                ? _selectedDates[0]
+                                                : DateTime.now()),
+                                        minDate: DateTime.now(),
+                                        monthViewSettings:
+                                            const MonthViewSettings(
+                                          appointmentDisplayMode:
+                                              MonthAppointmentDisplayMode
+                                                  .indicator,
+                                          showAgenda:
+                                              false, // Enable agenda view to select dates
+                                        ),
+                                        onTap: (CalendarTapDetails details) {
+                                          if (widget.service.deliveryTime ==
+                                                  'false' &&
+                                              details.targetElement ==
+                                                  CalendarElement
+                                                      .calendarCell) {
+                                            setState(() {
+                                              DateTime selectedDate = DateTime(
+                                                  details.date!.year,
+                                                  details.date!.month,
+                                                  details.date!.day);
+
+                                              // Check if the selected date is in the allowed days
+                                              if (widget.service
+                                                  .availability!['dayOfWeek']
+                                                  .contains(_getWeekdayName(
+                                                      selectedDate.weekday))) {
+                                                // Clear previously selected dates and weekdays
+                                                _selectedDates.clear();
+
+                                                // Add the newly selected date and update weekdays
+                                                _selectedDates
+                                                    .add(selectedDate);
+
+                                                // Set _startDate to the selected date
+                                                _startDate = selectedDate;
+                                              } else {
+                                                showSnackbar(
+                                                  message:
+                                                      'Please select a valid day.',
+                                                  error: true,
+                                                );
+                                              }
+                                            });
+                                          }
+                                        },
+                                      ),
+                                    ),
+                                  ]),
+                                if (widget.service.repeat ==
+                                    'Yes (Regular Service)')
+                                  SizedBox(
+                                    height:
+                                        MediaQuery.of(context).size.height / 3,
+                                    child: SfCalendar(
+                                      showNavigationArrow: true,
+                                      monthCellBuilder: (BuildContext context,
+                                          MonthCellDetails details) {
+                                        DateTime minDate = DateTime
+                                            .now(); // Define your minimum date here
+                                        List<DateTime> blackoutDates =
+                                            _getNonAvailableDates();
+
+                                        // Combine blackoutDates with days before the minDate
+                                        bool isBlackoutDate = blackoutDates.any(
+                                                (DateTime date) =>
+                                                    date.year ==
+                                                        details.date.year &&
+                                                    date.month ==
+                                                        details.date.month &&
+                                                    date.day ==
+                                                        details.date.day) ||
+                                            details.date.isBefore(minDate);
+
+                                        // Define the text style based on the date condition
+                                        TextStyle textStyle;
+                                        if (isBlackoutDate) {
+                                          textStyle = TextStyle(
+                                            color: Colors.grey.withOpacity(0.2),
+                                            decoration:
+                                                TextDecoration.lineThrough,
+                                            fontStyle: FontStyle.italic,
+                                          );
+                                        } else {
+                                          textStyle = const TextStyle(
+                                              color: Colors.black,
+                                              fontWeight: FontWeight.bold);
+                                        }
+
+                                        // Return the styled container
+                                        return Container(
+                                          alignment: Alignment.center,
+                                          decoration: BoxDecoration(
+                                            borderRadius:
+                                                BorderRadius.circular(4),
+                                          ),
+                                          child: Text(
+                                            details.date.day.toString(),
+                                            style: textStyle,
+                                          ),
+                                        );
+                                      },
+                                      view: CalendarView.month,
+                                      initialSelectedDate: _startDate ??
+                                          (_selectedDates.isNotEmpty
+                                              ? _selectedDates[0]
+                                              : DateTime.now()),
+                                      initialDisplayDate: _startDate ??
+                                          (_selectedDates.isNotEmpty
+                                              ? _selectedDates[0]
+                                              : DateTime.now()),
+                                      minDate: DateTime.now(),
+                                      monthViewSettings:
+                                          const MonthViewSettings(
+                                        appointmentDisplayMode:
+                                            MonthAppointmentDisplayMode
+                                                .indicator,
+                                        showAgenda: false,
+                                      ),
+                                      selectionDecoration: BoxDecoration(
+                                        borderRadius: BorderRadius.circular(0),
+                                        color: Colors.black.withOpacity(0.5),
+                                      ),
+                                      todayTextStyle:
+                                          const TextStyle(color: Colors.black),
+                                      todayHighlightColor: Colors.transparent,
+                                      cellBorderColor: Colors.transparent,
+                                      blackoutDates: _getNonAvailableDates(),
+                                      blackoutDatesTextStyle: TextStyle(
+                                        color: Colors.black12.withOpacity(0.08),
+                                        decoration: TextDecoration.lineThrough,
+                                      ),
+                                      onTap: (CalendarTapDetails details) {
+                                        if (details.targetElement ==
+                                            CalendarElement.calendarCell) {
+                                          setState(() {
+                                            DateTime selectedDate = DateTime(
+                                                details.date!.year,
+                                                details.date!.month,
+                                                details.date!.day);
+
+                                            if (widget.service
+                                                .availability!['dayOfWeek']
+                                                .contains(_getWeekdayName(
+                                                    selectedDate.weekday))) {
+                                              _selectedDates.clear();
+                                              _selectedDates.add(selectedDate);
+                                              _startDate = selectedDate;
+                                            } else {
+                                              showSnackbar(
+                                                message:
+                                                    'Please select a valid day.',
+                                                error: true,
+                                              );
+                                            }
+                                          });
+                                        }
+                                      },
+                                    ),
+                                  ),
+                                if (widget.service.repeat ==
+                                    'No (One-time Service)')
+                                  SizedBox(
+                                      height:
+                                          MediaQuery.of(context).size.height /
+                                              3,
+                                      child: SfCalendar(
+                                        showNavigationArrow: true,
+                                        monthCellBuilder: (BuildContext context,
+                                            MonthCellDetails details) {
+                                          DateTime minDate = DateTime
+                                              .now(); // Define your minimum date here
+                                          List<DateTime> blackoutDates =
+                                              _getAllDatesExceptStart();
+
+                                          // Combine blackoutDates with days before the minDate
+                                          bool isBlackoutDate = blackoutDates
+                                                  .any((DateTime date) =>
+                                                      date.year ==
+                                                          details.date.year &&
+                                                      date.month ==
+                                                          details.date.month &&
+                                                      date.day ==
+                                                          details.date.day) ||
+                                              details.date.isBefore(minDate);
+
+                                          // Define the text style based on the date condition
+                                          TextStyle textStyle;
+                                          if (isBlackoutDate) {
+                                            textStyle = TextStyle(
+                                              color:
+                                                  Colors.grey.withOpacity(0.2),
+                                              decoration:
+                                                  TextDecoration.lineThrough,
+                                              fontStyle: FontStyle.italic,
+                                            );
+                                          } else {
+                                            textStyle = const TextStyle(
+                                                color: Colors.black,
+                                                fontWeight: FontWeight.bold);
+                                          }
+
+                                          // Return the styled container
+                                          return Container(
+                                            alignment: Alignment.center,
+                                            decoration: BoxDecoration(
+                                              borderRadius:
+                                                  BorderRadius.circular(4),
+                                            ),
+                                            child: Text(
+                                              details.date.day.toString(),
+                                              style: textStyle,
+                                            ),
+                                          );
+                                        },
+                                        view: CalendarView.month,
+                                        initialSelectedDate: _startDate ??
+                                            (_selectedDates.isNotEmpty
+                                                ? _selectedDates[0]
+                                                : DateTime.now()),
+                                        initialDisplayDate: _startDate ??
+                                            (_selectedDates.isNotEmpty
+                                                ? _selectedDates[0]
+                                                : DateTime.now()),
+                                        minDate: DateTime.now(),
+                                        monthViewSettings:
+                                            const MonthViewSettings(
+                                          appointmentDisplayMode:
+                                              MonthAppointmentDisplayMode
+                                                  .indicator,
+                                          showAgenda: false,
+                                        ),
+                                        selectionDecoration: BoxDecoration(
+                                          borderRadius:
+                                              BorderRadius.circular(10),
+                                          color: Colors.green.withOpacity(0.2),
+                                        ),
+                                        todayTextStyle: const TextStyle(
+                                            color: Colors.black),
+                                        todayHighlightColor: Colors.transparent,
+                                        cellBorderColor: Colors.transparent,
+                                        blackoutDates:
+                                            _getAllDatesExceptStart(),
+                                        blackoutDatesTextStyle: TextStyle(
+                                          color:
+                                              Colors.black12.withOpacity(0.08),
+                                          decoration:
+                                              TextDecoration.lineThrough,
+                                        ),
+                                        onTap: (CalendarTapDetails details) {
+                                          if (details.targetElement ==
+                                              CalendarElement.calendarCell) {
+                                            setState(() {
+                                              DateTime selectedDate = DateTime(
+                                                  details.date!.year,
+                                                  details.date!.month,
+                                                  details.date!.day);
+
+                                              DateTime startDate =
+                                                  DateTime.parse(widget.service
+                                                          .availability![
+                                                      'startDate']);
+
+                                              if (selectedDate.year ==
+                                                      startDate.year &&
+                                                  selectedDate.month ==
+                                                      startDate.month &&
+                                                  selectedDate.day ==
+                                                      startDate.day) {
+                                                _selectedDates.clear();
+                                                _selectedDates
+                                                    .add(selectedDate);
+                                                _startDate = selectedDate;
+                                              } else {
+                                                showSnackbar(
+                                                  message:
+                                                      'Please select the specific start date.',
+                                                  error: true,
+                                                );
+                                              }
+                                            });
+                                          }
+                                        },
+                                      )),
+                                const SizedBox(height: 10),
+                                if (_startDate != null)
+                                  const Text(
+                                    'Time slots',
+                                    style: TextStyle(fontSize: 13),
+                                  ),
+                                if (_startDate != null)
+                                  Wrap(
+                                    spacing: 8.0,
+                                    children:
+                                        _generateTimeSlots().map((String slot) {
+                                      return ChoiceChip(
+                                        label: Text(
+                                          slot,
+                                          style: TextStyle(
+                                              fontSize: 12,
+                                              color: selectedSlot == slot
+                                                  ? Colors.white
+                                                  : Colors.black),
+                                        ),
+                                        selected: selectedSlot == slot,
+                                        selectedColor: Colors.black,
+                                        onSelected: (bool selected) {
+                                          setState(() {
+                                            selectedSlot =
+                                                selected ? slot : null;
+                                          });
+                                        },
+                                      );
+                                    }).toList(),
+                                  ),
+                                const SizedBox(height: 10),
+                              ],
+                            ),
+                          ),
+
+                      if (widget.shop.payments.isNotEmpty)
+                        const SizedBox(
+                          height: 15,
+                        ),
+                      if (widget.service.packages.isNotEmpty)
+                        const SizedBox(
+                          height: 15,
+                        ),
+
+                      if (widget.service.packages.isNotEmpty)
+                        Padding(
+                          padding: const EdgeInsets.symmetric(
+                            horizontal: 15.0,
+                          ),
+                          child: Container(
+                            decoration: BoxDecoration(
+                                color: Colors.white,
+                                borderRadius: BorderRadius.circular(10)),
+                            padding: const EdgeInsets.symmetric(
+                                horizontal: 15, vertical: 15),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: <Widget>[
+                                const Text(
+                                  'Additional Packages',
+                                  style: TextStyle(
+                                    fontSize: 16,
+                                    fontWeight: FontWeight.bold,
+                                  ),
                                 ),
+                                const SizedBox(height: 5),
+                                Column(
+                                  children: widget.service.packages
+                                      .map((dynamic package) =>
+                                          CheckboxListTile(
+                                            activeColor: Colors.black,
+                                            title: Text(package['name']),
+                                            subtitle: Text(
+                                                '${widget.shop.currency}${package['price']}'),
+                                            value: selectedItems.any(
+                                                (Map<String, dynamic> item) =>
+                                                    item['id'] ==
+                                                    package['id']),
+                                            onChanged: (bool? value) {
+                                              setState(() {
+                                                if (value!) {
+                                                  selectedItems.add(package);
+                                                  selectedpackagesprice +=
+                                                      (package['price'] as num)
+                                                          .toDouble();
+                                                } else {
+                                                  selectedItems.removeWhere(
+                                                      (Map<String, dynamic>
+                                                              item) =>
+                                                          item['id'] ==
+                                                          package['id']);
+                                                  selectedpackagesprice -=
+                                                      (package['price'] as num)
+                                                          .toDouble();
+                                                }
+                                              });
+                                            },
+                                          ))
+                                      .toList(),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
+                      if (widget.service.packages.isNotEmpty)
+                        const SizedBox(height: 15),
+
+                      if (widget.service.deliveryMethod != null &&
+                          widget.service.deliveryMethod != '')
+                        ServicetypeSectionWidget(
+                          isOnline: widget.service.deliveryMethod == 'Online'
+                              ? true
+                              : false,
+                          service: widget.service,
+                        ),
+
+                      if (widget.service.deliveryMethod != null &&
+                          widget.service.deliveryMethod != '')
+                        const SizedBox(height: 15),
+
+                      OrderSummaryWidget(
+                        serviceDuration: widget.service.serviceDuration,
+                        quantity: int.parse(quantityController.text),
+                        price: widget.service.price,
+                        discount: widget.service.discount,
+                        total: (int.parse(quantityController.text) *
+                                    widget.service.price) *
+                                (1 - (widget.service.discount / 100)) +
+                            selectedpackagesprice,
+                        currency: widget.shop.currency,
+                        isservice: true,
+                        packagesprice: selectedpackagesprice,
+                        timeofservice: _startDate != null &&
+                                selectedSlot != null
+                            ? '${DateFormat('d MMMM yyyy').format(_startDate!)} ${selectedSlot!}'
+                            : null,
+                      ),
+                      const SizedBox(
+                        height: 16,
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 15.0),
+                        child: Container(
+                          decoration: BoxDecoration(
+                              color: Colors.white,
+                              borderRadius: BorderRadius.circular(15)),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: <Widget>[
+                              const SizedBox(
+                                height: 15,
+                              ),
+                              const Padding(
+                                padding: EdgeInsets.only(left: 20.0),
+                                child: Text(
+                                  'Select a Payment Option',
+                                  style: TextStyle(
+                                      fontSize: 16,
+                                      fontWeight: FontWeight.w700),
+                                ),
+                              ),
+                              widget.shop.payments.isNotEmpty
+                                  ? Padding(
+                                      padding: const EdgeInsets.all(15),
+                                      child: Column(
+                                        children: paymentMethods!
+                                            .map((dynamic payment) =>
+                                                ProPaymentOptionCard(
+                                                  option: payment[
+                                                          'paymentMethod'] ??
+                                                      '',
+                                                  subtext:
+                                                      'Details: ${payment['details'].toString()}',
+                                                  activeoption:
+                                                      activePaymentMethod,
+                                                  onTap: (String newOption) {
+                                                    setState(() {
+                                                      if (activePaymentMethod !=
+                                                          newOption) {
+                                                        activePaymentMethod =
+                                                            newOption;
+                                                      } else {
+                                                        activePaymentMethod =
+                                                            '';
+                                                      }
+                                                    });
+                                                  },
+                                                ))
+                                            .toList(),
+                                      ),
+                                    )
+                                  : const Padding(
+                                      padding: EdgeInsets.all(15.0),
+                                      child: Center(
+                                        child: Text(
+                                          'User has not added a payment method yet',
+                                          style: TextStyle(
+                                              color: Colors.grey, fontSize: 14),
+                                        ),
+                                      ),
+                                    ),
+                            ],
+                          ),
+                        ),
+                      ),
+                      const SizedBox(
+                        height: 16,
+                      ),
+                      if (widget.service.notes != null)
+                        Container(
+                          margin: const EdgeInsets.only(left: 15, right: 15),
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(10),
+                            color: Colors.white,
+                          ),
+                          width: double.infinity,
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: <Widget>[
+                              const Padding(
+                                padding: EdgeInsets.symmetric(
+                                    horizontal: 15.0, vertical: 15),
+                                child: Text(
+                                  'Seller\'s Note',
+                                  style: TextStyle(
+                                    fontWeight: FontWeight.w700,
+                                    fontSize: 16,
+                                    color: textColor,
+                                  ),
+                                ),
+                              ),
+                              Padding(
+                                padding: const EdgeInsets.symmetric(
+                                    horizontal: 15.0),
+                                child: Text(
+                                  widget.service.notes!,
+                                  style: const TextStyle(
+                                    fontSize: 14,
+                                  ),
+                                ),
+                              ),
+                              CustomEditText(
+                                padding: 0,
+                                hintText: 'Enter Note to Seller here',
+                                controller: noteController,
+                                caption: '',
                               ),
                             ],
                           ),
-                          const SizedBox(height: 10),
-                          SizedBox(
-                            height: MediaQuery.of(context).size.height / 3,
-                            child: SfCalendar(
-                              initialSelectedDate: _startDate ??
-                                  (_selectedDates.isNotEmpty
-                                      ? _selectedDates[0]
-                                      : DateTime.now()),
-                              selectionDecoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(0),
-                                color: Colors.black.withOpacity(0.5),
-                              ),
-                              todayTextStyle:
-                                  const TextStyle(color: Colors.black),
-                              todayHighlightColor: Colors.transparent,
-                              view: CalendarView.month,
-                              initialDisplayDate: _startDate ??
-                                  (_selectedDates.isNotEmpty
-                                      ? _selectedDates[0]
-                                      : DateTime.now()),
-                              minDate: DateTime.now(),
-                              monthViewSettings: const MonthViewSettings(
-                                appointmentDisplayMode:
-                                    MonthAppointmentDisplayMode.indicator,
-                                showAgenda:
-                                    false, // Enable agenda view to select dates
-                              ),
-                              onTap: (CalendarTapDetails details) {
-                                if (widget.service.deliveryTime == 'false' &&
-                                    details.targetElement ==
-                                        CalendarElement.calendarCell) {
-                                  setState(() {
-                                    DateTime selectedDate = DateTime(
-                                        details.date!.year,
-                                        details.date!.month,
-                                        details.date!.day);
+                        ),
+                      if (widget.service.notes != null)
+                        const SizedBox(
+                          height: 16,
+                        ),
 
-                                    // Check if the selected date is in the allowed days
-                                    if (widget
-                                        .service.availability!['dayOfWeek']
-                                        .contains(_getWeekdayName(
-                                            selectedDate.weekday))) {
-                                      // Clear previously selected dates and weekdays
-                                      _selectedDates.clear();
+                      // Customer Details Section
+                      const SizedBox(
+                        height: 25,
+                      ),
+                      // Submit Button
+                      Center(
+                        child: SizedBox(
+                          width: double.infinity,
+                          child: ProCustomButton(
+                            color: Colors.black,
+                            loading: isSubmit,
+                            onPressed: () async {
+                              if (widget.service.availability!['startDate'] ==
+                                  null) {
+                                _startDate = DateTime.now();
+                              }
+                              if (_startDate == null) {
+                                showSnackbar(
+                                  message: 'Please select a date!',
+                                  error: true,
+                                );
+                                return;
+                              }
+                              if (widget.service.availability!['startDate'] !=
+                                      null &&
+                                  selectedSlot == null) {
+                                showSnackbar(
+                                  message: 'Please select a time slot!',
+                                  error: true,
+                                );
+                                return;
+                              }
+                              if (activePaymentMethod.isEmpty) {
+                                showSnackbar(
+                                  message: 'Please select a payment method',
+                                  error: true,
+                                );
+                                return;
+                              }
 
-                                      // Add the newly selected date and update weekdays
-                                      _selectedDates.add(selectedDate);
+                              setState(() {
+                                isSubmit = true;
+                              });
 
-                                      // Set _startDate to the selected date
-                                      _startDate = selectedDate;
-                                    } else {
-                                      showSnackbar(
-                                        message: 'Please select a valid day.',
-                                        error: true,
-                                      );
-                                    }
-                                  });
-                                }
-                              },
-                            ),
-                          ),
-                        ]),
-                      if (widget.service.repeat == 'Yes (Regular Service)')
-                        SizedBox(
-                          height: MediaQuery.of(context).size.height / 3,
-                          child: SfCalendar(
-                            monthCellBuilder: (BuildContext context,
-                                MonthCellDetails details) {
-                              DateTime minDate = DateTime
-                                  .now(); // Define your minimum date here
-                              List<DateTime> blackoutDates =
-                                  _getNonAvailableDates();
+                              selectedSlot ??= '9:00 AM - 5:00 PM';
 
-                              // Combine blackoutDates with days before the minDate
-                              bool isBlackoutDate = blackoutDates.any(
-                                      (DateTime date) =>
-                                          date.year == details.date.year &&
-                                          date.month == details.date.month &&
-                                          date.day == details.date.day) ||
-                                  details.date.isBefore(minDate);
+                              List<String> times =
+                                  selectedSlot.toString().split(' - ');
+                              String startTimeString = times[0];
+                              String endTimeString = times[1];
 
-                              // Define the text style based on the date condition
-                              TextStyle textStyle;
-                              if (isBlackoutDate) {
-                                textStyle = TextStyle(
-                                  color: Colors.grey.withOpacity(0.2),
-                                  decoration: TextDecoration.lineThrough,
-                                  fontStyle: FontStyle.italic,
+                              DateFormat timeFormat = DateFormat('hh:mm a');
+                              DateTime parsedStartTime =
+                                  timeFormat.parse(startTimeString);
+                              DateTime parsedEndTime =
+                                  timeFormat.parse(endTimeString);
+
+                              String startFormattedTime =
+                                  DateFormat('yyyy-MM-dd HH:mm:ss.SSS').format(
+                                      DateTime(
+                                          0000,
+                                          00,
+                                          00,
+                                          parsedStartTime.hour,
+                                          parsedStartTime.minute,
+                                          parsedStartTime.second));
+                              String endFormattedTime =
+                                  DateFormat('yyyy-MM-dd HH:mm:ss.SSS').format(
+                                      DateTime(
+                                          0000,
+                                          00,
+                                          00,
+                                          parsedEndTime.hour,
+                                          parsedEndTime.minute,
+                                          parsedEndTime.second));
+
+                              final Map<String, dynamic> orderData =
+                                  <String, dynamic>{
+                                'userId': profileController.myProfile.uid,
+                                'shopId': widget.shop.id,
+                                'items': selectedItems,
+                                'deliveryMethod':
+                                    widget.service.deliveryMethod != null &&
+                                            widget.service.deliveryMethod!
+                                                .isNotEmpty
+                                        ? widget.service.deliveryMethod!
+                                            .toLowerCase()
+                                        : 'online',
+                                'deliveryDate': '$_startDate',
+                                'startTime': startFormattedTime,
+                                'endTime': endFormattedTime,
+                                'paymentMethod': activePaymentMethod,
+                                'orderDetails': '',
+                                'invoiceOption': 'send_with_payment_link',
+                                'status': 'pending',
+                                'notes': noteController.text,
+                              };
+                              print(orderData);
+                              bool response =
+                                  await orderController.addOrder(orderData);
+                              if (response) {
+                                setState(() {
+                                  isSubmit = false;
+                                });
+                                Get.defaultDialog(
+                                  title: '',
+                                  barrierDismissible: false,
+                                  content: Column(
+                                    children: <Widget>[
+                                      const Text(
+                                        'Service booked successfully',
+                                        style: TextStyle(fontSize: 16),
+                                      ),
+                                      const SizedBox(
+                                        height: 30,
+                                      ),
+                                      LottieBuilder.asset(
+                                        'assets/anim/done.json',
+                                        width: 100,
+                                        height: 100,
+                                      ),
+                                      const SizedBox(
+                                        height: 30,
+                                      ),
+                                      SizedBox(
+                                        width: double.infinity,
+                                        child: ProCustomButton(
+                                            text: 'Done',
+                                            onPressed: () {
+                                              Navigator.pop(context);
+                                              Get.back();
+                                            }),
+                                      ),
+                                    ],
+                                  ),
                                 );
                               } else {
-                                textStyle = const TextStyle(
-                                    color: Colors.black,
-                                    fontWeight: FontWeight.bold);
-                              }
-
-                              // Return the styled container
-                              return Container(
-                                alignment: Alignment.center,
-                                decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(4),
-                                ),
-                                child: Text(
-                                  details.date.day.toString(),
-                                  style: textStyle,
-                                ),
-                              );
-                            },
-                            view: CalendarView.month,
-                            initialSelectedDate: _startDate ??
-                                (_selectedDates.isNotEmpty
-                                    ? _selectedDates[0]
-                                    : DateTime.now()),
-                            initialDisplayDate: _startDate ??
-                                (_selectedDates.isNotEmpty
-                                    ? _selectedDates[0]
-                                    : DateTime.now()),
-                            minDate: DateTime.now(),
-                            monthViewSettings: const MonthViewSettings(
-                              appointmentDisplayMode:
-                                  MonthAppointmentDisplayMode.indicator,
-                              showAgenda: false,
-                            ),
-                            selectionDecoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(0),
-                              color: Colors.black.withOpacity(0.5),
-                            ),
-                            todayTextStyle:
-                                const TextStyle(color: Colors.black),
-                            todayHighlightColor: Colors.transparent,
-                            cellBorderColor: Colors.transparent,
-                            blackoutDates: _getNonAvailableDates(),
-                            blackoutDatesTextStyle: TextStyle(
-                              color: Colors.black12.withOpacity(0.08),
-                              decoration: TextDecoration.lineThrough,
-                            ),
-                            onTap: (CalendarTapDetails details) {
-                              if (details.targetElement ==
-                                  CalendarElement.calendarCell) {
-                                setState(() {
-                                  DateTime selectedDate = DateTime(
-                                      details.date!.year,
-                                      details.date!.month,
-                                      details.date!.day);
-
-                                  if (widget.service.availability!['dayOfWeek']
-                                      .contains(_getWeekdayName(
-                                          selectedDate.weekday))) {
-                                    _selectedDates.clear();
-                                    _selectedDates.add(selectedDate);
-                                    _startDate = selectedDate;
-                                  } else {
-                                    showSnackbar(
-                                      message: 'Please select a valid day.',
-                                      error: true,
-                                    );
-                                  }
-                                });
-                              }
-                            },
-                          ),
-                        ),
-                      if (widget.service.repeat == 'No (One-time Service)')
-                        SizedBox(
-                            height: MediaQuery.of(context).size.height / 3,
-                            child: SfCalendar(
-                              monthCellBuilder: (BuildContext context,
-                                  MonthCellDetails details) {
-                                DateTime minDate = DateTime
-                                    .now(); // Define your minimum date here
-                                List<DateTime> blackoutDates =
-                                    _getAllDatesExceptStart();
-
-                                // Combine blackoutDates with days before the minDate
-                                bool isBlackoutDate = blackoutDates.any(
-                                        (DateTime date) =>
-                                            date.year == details.date.year &&
-                                            date.month == details.date.month &&
-                                            date.day == details.date.day) ||
-                                    details.date.isBefore(minDate);
-
-                                // Define the text style based on the date condition
-                                TextStyle textStyle;
-                                if (isBlackoutDate) {
-                                  textStyle = TextStyle(
-                                    color: Colors.grey.withOpacity(0.2),
-                                    decoration: TextDecoration.lineThrough,
-                                    fontStyle: FontStyle.italic,
-                                  );
-                                } else {
-                                  textStyle = const TextStyle(
-                                      color: Colors.black,
-                                      fontWeight: FontWeight.bold);
-                                }
-
-                                // Return the styled container
-                                return Container(
-                                  alignment: Alignment.center,
-                                  decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(4),
-                                  ),
-                                  child: Text(
-                                    details.date.day.toString(),
-                                    style: textStyle,
-                                  ),
+                                showSnackbar(
+                                  message: 'Error creating order!',
+                                  error: true,
                                 );
-                              },
-                              view: CalendarView.month,
-                              initialSelectedDate: _startDate ??
-                                  (_selectedDates.isNotEmpty
-                                      ? _selectedDates[0]
-                                      : DateTime.now()),
-                              initialDisplayDate: _startDate ??
-                                  (_selectedDates.isNotEmpty
-                                      ? _selectedDates[0]
-                                      : DateTime.now()),
-                              minDate: DateTime.now(),
-                              monthViewSettings: const MonthViewSettings(
-                                appointmentDisplayMode:
-                                    MonthAppointmentDisplayMode.indicator,
-                                showAgenda: false,
-                              ),
-                              selectionDecoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(10),
-                                color: Colors.green.withOpacity(0.2),
-                              ),
-                              todayTextStyle:
-                                  const TextStyle(color: Colors.black),
-                              todayHighlightColor: Colors.transparent,
-                              cellBorderColor: Colors.transparent,
-                              blackoutDates: _getAllDatesExceptStart(),
-                              blackoutDatesTextStyle: TextStyle(
-                                color: Colors.black12.withOpacity(0.08),
-                                decoration: TextDecoration.lineThrough,
-                              ),
-                              onTap: (CalendarTapDetails details) {
-                                if (details.targetElement ==
-                                    CalendarElement.calendarCell) {
-                                  setState(() {
-                                    DateTime selectedDate = DateTime(
-                                        details.date!.year,
-                                        details.date!.month,
-                                        details.date!.day);
-
-                                    DateTime startDate = DateTime.parse(widget
-                                        .service.availability!['startDate']);
-
-                                    if (selectedDate.year == startDate.year &&
-                                        selectedDate.month == startDate.month &&
-                                        selectedDate.day == startDate.day) {
-                                      _selectedDates.clear();
-                                      _selectedDates.add(selectedDate);
-                                      _startDate = selectedDate;
-                                    } else {
-                                      showSnackbar(
-                                        message:
-                                            'Please select the specific start date.',
-                                        error: true,
-                                      );
-                                    }
-                                  });
-                                }
-                              },
-                            )),
-                      const SizedBox(height: 10),
-                      if (_startDate != null)
-                        const Text(
-                          'Time slots',
-                          style: TextStyle(fontSize: 13),
-                        ),
-                      if (_startDate != null)
-                        Wrap(
-                          spacing: 8.0,
-                          children: _generateTimeSlots().map((String slot) {
-                            return ChoiceChip(
-                              label: Text(
-                                slot,
-                                style: TextStyle(
-                                    fontSize: 12,
-                                    color: selectedSlot == slot
-                                        ? Colors.white
-                                        : Colors.black),
-                              ),
-                              selected: selectedSlot == slot,
-                              selectedColor: Colors.black,
-                              onSelected: (bool selected) {
                                 setState(() {
-                                  selectedSlot = selected ? slot : null;
+                                  isSubmit = false;
                                 });
-                              },
-                            );
-                          }).toList(),
-                        ),
-                      const SizedBox(height: 10),
-                    ],
-                  ),
-                ),
-
-            if (widget.shop.payments.isNotEmpty)
-              const SizedBox(
-                height: 15,
-              ),
-            if (widget.service.packages.isNotEmpty)
-              const SizedBox(
-                height: 15,
-              ),
-
-            if (widget.service.packages.isNotEmpty)
-              Padding(
-                padding: const EdgeInsets.symmetric(
-                  horizontal: 15.0,
-                ),
-                child: Container(
-                  decoration: BoxDecoration(
-                      color: Colors.white,
-                      borderRadius: BorderRadius.circular(10)),
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: 15, vertical: 15),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: <Widget>[
-                      const Text(
-                        'Additional Packages',
-                        style: TextStyle(
-                          fontSize: 16,
-                          fontWeight: FontWeight.bold,
+                              }
+                            },
+                            text: 'Book Service',
+                          ),
                         ),
                       ),
-                      const SizedBox(height: 5),
-                      Column(
-                        children: widget.service.packages
-                            .map((dynamic package) => CheckboxListTile(
-                                  activeColor: Colors.black,
-                                  title: Text(package['name']),
-                                  subtitle: Text(
-                                      '${widget.shop.currency}${package['price']}'),
-                                  value: selectedItems.any(
-                                      (Map<String, dynamic> item) =>
-                                          item['id'] == package['id']),
-                                  onChanged: (bool? value) {
-                                    setState(() {
-                                      if (value!) {
-                                        selectedItems.add(package);
-                                        selectedpackagesprice +=
-                                            (package['price'] as num)
-                                                .toDouble();
-                                      } else {
-                                        selectedItems.removeWhere(
-                                            (Map<String, dynamic> item) =>
-                                                item['id'] == package['id']);
-                                        selectedpackagesprice -=
-                                            (package['price'] as num)
-                                                .toDouble();
-                                      }
-                                    });
-                                  },
-                                ))
-                            .toList(),
-                      ),
-                    ],
-                  ),
-                ),
-              ),
-            if (widget.service.packages.isNotEmpty) const SizedBox(height: 15),
 
-            if (widget.service.deliveryMethod != null &&
-                widget.service.deliveryMethod != '')
-              ServicetypeSectionWidget(
-                isOnline:
-                    widget.service.deliveryMethod == 'Online' ? true : false,
-                service: widget.service,
-              ),
-
-            if (widget.service.deliveryMethod != null &&
-                widget.service.deliveryMethod != '')
-              const SizedBox(height: 15),
-
-            OrderSummaryWidget(
-              serviceDuration: widget.service.serviceDuration,
-              quantity: int.parse(quantityController.text),
-              price: widget.service.price,
-              discount: widget.service.discount,
-              total:
-                  (int.parse(quantityController.text) * widget.service.price) *
-                          (1 - (widget.service.discount / 100)) +
-                      selectedpackagesprice,
-              currency: widget.shop.currency,
-              isservice: true,
-              packagesprice: selectedpackagesprice,
-              timeofservice: _startDate != null && selectedSlot != null
-                  ? '${DateFormat('d MMMM yyyy').format(_startDate!)} ${selectedSlot!}'
-                  : null,
-            ),
-            const SizedBox(
-              height: 16,
-            ),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 15.0),
-              child: Container(
-                decoration: BoxDecoration(
-                    color: Colors.white,
-                    borderRadius: BorderRadius.circular(15)),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: <Widget>[
-                    const SizedBox(
-                      height: 15,
-                    ),
-                    const Padding(
-                      padding: EdgeInsets.only(left: 20.0),
-                      child: Text(
-                        'Select a Payment Option',
-                        style: TextStyle(
-                            fontSize: 16, fontWeight: FontWeight.w700),
-                      ),
-                    ),
-                    widget.shop.payments.isNotEmpty
-                        ? Padding(
-                            padding: const EdgeInsets.all(15),
-                            child: Column(
-                              children: paymentMethods!
-                                  .map((dynamic payment) =>
-                                      ProPaymentOptionCard(
-                                        option: payment['paymentMethod'] ?? '',
-                                        subtext:
-                                            'Details: ${payment['details'].toString()}',
-                                        activeoption: activePaymentMethod,
-                                        onTap: (String newOption) {
-                                          setState(() {
-                                            if (activePaymentMethod !=
-                                                newOption) {
-                                              activePaymentMethod = newOption;
-                                            } else {
-                                              activePaymentMethod = '';
-                                            }
-                                          });
-                                        },
-                                      ))
-                                  .toList(),
-                            ),
-                          )
-                        : const Padding(
-                            padding: EdgeInsets.all(15.0),
-                            child: Center(
+                      const SizedBox(height: 15),
+                      Padding(
+                        padding: const EdgeInsets.only(
+                            left: 20.0, bottom: 200, right: 20, top: 20),
+                        child: ClipRRect(
+                          borderRadius: BorderRadius.circular(10),
+                          child: Container(
+                            color: Colors.grey.shade200,
+                            child: const Padding(
+                              padding: EdgeInsets.all(15.0),
                               child: Text(
-                                'User has not added a payment method yet',
-                                style:
-                                    TextStyle(color: Colors.grey, fontSize: 14),
+                                'Safety tips \n\n• Check seller offers buyer protection before making payment \n• On delivery, check that the item delivered is what you ordered \n• Report any seller you have any concerns about',
                               ),
                             ),
                           ),
-                  ],
-                ),
-              ),
-            ),
-            const SizedBox(
-              height: 16,
-            ),
-            if (widget.service.notes != null)
-              Container(
-                margin: const EdgeInsets.only(left: 15, right: 15),
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(10),
-                  color: Colors.white,
-                ),
-                width: double.infinity,
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: <Widget>[
-                    const Padding(
-                      padding:
-                          EdgeInsets.symmetric(horizontal: 15.0, vertical: 15),
-                      child: Text(
-                        'Seller\'s Note',
-                        style: TextStyle(
-                          fontWeight: FontWeight.w700,
-                          fontSize: 16,
-                          color: textColor,
                         ),
                       ),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 15.0),
-                      child: Text(
-                        widget.service.notes!,
-                        style: const TextStyle(
-                          fontSize: 14,
-                        ),
-                      ),
-                    ),
-                    CustomEditText(
-                      padding: 0,
-                      hintText: 'Enter Note to Seller here',
-                      controller: noteController,
-                      caption: '',
-                    ),
-                  ],
-                ),
-              ),
-            if (widget.service.notes != null)
-              const SizedBox(
-                height: 16,
-              ),
-
-            // Customer Details Section
-            const SizedBox(
-              height: 25,
-            ),
-            // Submit Button
-            Center(
-              child: SizedBox(
-                width: double.infinity,
-                child: ProCustomButton(
-                  color: Colors.black,
-                  loading: isSubmit,
-                  onPressed: () async {
-                    if (widget.service.availability!['startDate'] == null) {
-                      _startDate = DateTime.now();
-                    }
-                    if (_startDate == null) {
-                      showSnackbar(
-                        message: 'Please select a date!',
-                        error: true,
-                      );
-                      return;
-                    }
-                    if (widget.service.availability!['startDate'] != null &&
-                        selectedSlot == null) {
-                      showSnackbar(
-                        message: 'Please select a time slot!',
-                        error: true,
-                      );
-                      return;
-                    }
-                    if (activePaymentMethod.isEmpty) {
-                      showSnackbar(
-                        message: 'Please select a payment method',
-                        error: true,
-                      );
-                      return;
-                    }
-
-                    setState(() {
-                      isSubmit = true;
-                    });
-
-                    selectedSlot ??= '9:00 AM - 5:00 PM';
-
-                    List<String> times = selectedSlot.toString().split(' - ');
-                    String startTimeString = times[0];
-                    String endTimeString = times[1];
-
-                    DateFormat timeFormat = DateFormat('hh:mm a');
-                    DateTime parsedStartTime =
-                        timeFormat.parse(startTimeString);
-                    DateTime parsedEndTime = timeFormat.parse(endTimeString);
-
-                    String startFormattedTime =
-                        DateFormat('yyyy-MM-dd HH:mm:ss.SSS').format(DateTime(
-                            0000,
-                            00,
-                            00,
-                            parsedStartTime.hour,
-                            parsedStartTime.minute,
-                            parsedStartTime.second));
-                    String endFormattedTime =
-                        DateFormat('yyyy-MM-dd HH:mm:ss.SSS').format(DateTime(
-                            0000,
-                            00,
-                            00,
-                            parsedEndTime.hour,
-                            parsedEndTime.minute,
-                            parsedEndTime.second));
-
-                    final Map<String, dynamic> orderData = <String, dynamic>{
-                      'userId': profileController.myProfile.uid,
-                      'shopId': widget.shop.id,
-                      'items': selectedItems,
-                      'deliveryMethod': widget.service.deliveryMethod != null &&
-                              widget.service.deliveryMethod!.isNotEmpty
-                          ? widget.service.deliveryMethod!.toLowerCase()
-                          : 'online',
-                      'deliveryDate': '$_startDate',
-                      'startTime': startFormattedTime,
-                      'endTime': endFormattedTime,
-                      'paymentMethod': activePaymentMethod,
-                      'orderDetails': '',
-                      'invoiceOption': 'send_with_payment_link',
-                      'status': 'pending',
-                      'notes': noteController.text,
-                    };
-                    print(orderData);
-                    bool response = await orderController.addOrder(orderData);
-                    if (response) {
-                      setState(() {
-                        isSubmit = false;
-                      });
-                      Get.defaultDialog(
-                        title: '',
-                        barrierDismissible: false,
-                        content: Column(
-                          children: <Widget>[
-                            const Text(
-                              'Service booked successfully',
-                              style: TextStyle(fontSize: 16),
-                            ),
-                            const SizedBox(
-                              height: 30,
-                            ),
-                            LottieBuilder.asset(
-                              'assets/anim/done.json',
-                              width: 100,
-                              height: 100,
-                            ),
-                            const SizedBox(
-                              height: 30,
-                            ),
-                            SizedBox(
-                              width: double.infinity,
-                              child: ProCustomButton(
-                                  text: 'Done',
-                                  onPressed: () {
-                                    Navigator.pop(context);
-                                    Get.back();
-                                  }),
-                            ),
-                          ],
-                        ),
-                      );
-                    } else {
-                      showSnackbar(
-                        message: 'Error creating order!',
-                        error: true,
-                      );
-                      setState(() {
-                        isSubmit = false;
-                      });
-                    }
-                  },
-                  text: 'Book Service',
-                ),
-              ),
-            ),
-
-            const SizedBox(height: 15),
-            Padding(
-              padding: const EdgeInsets.only(
-                  left: 20.0, bottom: 200, right: 20, top: 20),
-              child: ClipRRect(
-                borderRadius: BorderRadius.circular(10),
-                child: Container(
-                  color: Colors.grey.shade200,
-                  child: const Padding(
-                    padding: EdgeInsets.all(15.0),
-                    child: Text(
-                      'Safety tips \n\n• Check seller offers buyer protection before making payment \n• On delivery, check that the item delivered is what you ordered \n• Report any seller you have any concerns about',
-                    ),
+                    ],
                   ),
-                ),
+                  if (widget.service.repeat == 'No (One-time Service)' &&
+                      DateTime.now().isAfter(DateTime.parse(
+                          widget.service.availability!['endDate'])))
+                    Container(
+                      decoration: const BoxDecoration(color: Colors.black87),
+                      width: double.infinity,
+                      height: double.infinity,
+                      child: const Center(
+                        child: Padding(
+                          padding: EdgeInsets.all(20.0),
+                          child: Center(
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: <Widget>[
+                                Text(
+                                  'Service Unavailable',
+                                  style: TextStyle(
+                                    color: Colors.red,
+                                    fontSize: 20,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
+                                SizedBox(height: 10),
+                                Text(
+                                  'Sorry, this service is no longer available for bookings!',
+                                  style: TextStyle(
+                                      color: Colors.white, fontSize: 16),
+                                  textAlign: TextAlign.center,
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
+                ],
               ),
             ),
           ],

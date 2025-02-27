@@ -168,9 +168,8 @@ class _ProshopdealsWidgetState extends State<ProshopdealsWidget> {
     String? currency,
   ) {
     return Container(
-      width: 100, // Fixed width for each item
-      margin:
-          const EdgeInsets.symmetric(horizontal: 8.0), // Add margin for spacing
+      // width: 90, // Fixed width for each item
+      margin: const EdgeInsets.only(left: 15.0), // Add margin for spacing
       child: Column(
         crossAxisAlignment:
             CrossAxisAlignment.center, // Center content horizontally
