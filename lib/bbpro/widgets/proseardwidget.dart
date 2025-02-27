@@ -87,6 +87,17 @@ class ProSearchbar extends StatelessWidget {
             borderRadius: BorderRadius.circular(radius ?? 100.0),
             borderSide: BorderSide.none,
           ),
+          // enabledBorder: OutlineInputBorder(
+          //   borderRadius:
+          //       BorderRadius.circular(10.0), // Add BorderRadius for enabled state
+          //   borderSide: BorderSide.none,
+          // ),
+          // focusedBorder: OutlineInputBorder(
+          //   borderRadius:
+          //       BorderRadius.circular(10.0), // Add BorderRadius for focused state
+          //   borderSide: BorderSide(
+          //       color: proprimaryColor), // Customize border color when focused
+          // ),
         ),
       ),
       if (ismarketplace != null)

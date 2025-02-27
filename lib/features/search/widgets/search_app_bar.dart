@@ -27,12 +27,22 @@ PreferredSizeWidget SearchAppBar({
     ],
     title: TextFormField(
       autofocus: autoFocus,
+      style: const TextStyle(
+        color: textColor,
+        fontSize: 15.0,
+        fontWeight: FontWeight.w700,
+      ),
       onChanged: onChange,
       onFieldSubmitted: onSubmit,
       textInputAction: TextInputAction.search,
       decoration: inputDecoration.copyWith(
         contentPadding: const EdgeInsets.all(0.0),
         hintText: hintText,
+        hintStyle: const TextStyle(
+          color: Colors.grey,
+          fontSize: 15.0,
+          fontWeight: FontWeight.w700,
+        ),
       ),
     ),
   );

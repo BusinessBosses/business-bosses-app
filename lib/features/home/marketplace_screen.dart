@@ -720,7 +720,7 @@ class _MarketplaceScreenState extends State<MarketplaceScreen>
                         height: 42,
                         child: Searchbar(
                           hintText: _marketplacesearchTabController.index == 0
-                              ? 'Search'
+                              ? 'Search Marketplace'
                               : _marketplacesearchTabController.index == 1
                                   ? 'Search Products'
                                   : _marketplacesearchTabController.index == 2
