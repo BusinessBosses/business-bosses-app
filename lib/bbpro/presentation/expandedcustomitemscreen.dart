@@ -254,6 +254,7 @@ class _ExpandedCustomItemScreenState extends State<ExpandedCustomItemScreen> {
                       style: TextStyle(
                         fontSize: 10,
                         color: proprimaryColor,
+                        fontWeight: FontWeight.w700,
                       ),
                     ),
                     Icon(

@@ -324,6 +324,7 @@ class _OrderProductScreenState extends State<OrderProductScreen> {
                         style: TextStyle(
                           fontSize: 10,
                           color: proprimaryColor,
+                          fontWeight: FontWeight.w700,
                         ),
                       ),
                       Icon(

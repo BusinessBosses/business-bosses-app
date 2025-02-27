@@ -1,5 +1,7 @@
 import 'dart:convert';
 import 'dart:developer';
+import 'package:business_bosses_v2/features/home/marketplace_screen.dart';
+import 'package:business_bosses_v2/navigation/routes.dart';
 import 'package:business_bosses_v2/services/api_service.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
@@ -210,7 +212,7 @@ class _BoostMarketState extends State<BoostMarket> {
         actions: <Widget>[
           GestureDetector(
             onTap: () {
-              Get.back();
+              Get.offNamed(Routes.marketPlace);
             },
             child: const Padding(
               padding: EdgeInsets.only(right: 10.0),
@@ -222,7 +224,7 @@ class _BoostMarketState extends State<BoostMarket> {
                     size: 14,
                   ),
                   SizedBox(width: 2),
-                  Text('Cancel',
+                  Text('Cancel boost',
                       style: TextStyle(
                           color: primaryColorLT,
                           fontSize: 15,

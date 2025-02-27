@@ -97,13 +97,37 @@ class _ClientsScreenState extends State<ClientsScreen>
     final Size screenSize = MediaQuery.of(context).size;
     // Dynamically build the children map based on the condition
     Map<int, Widget> segments = <int, Widget>{
-      0: const Padding(
-        padding: EdgeInsets.symmetric(horizontal: 0, vertical: 10),
-        child: Text('Customers', style: TextStyle(fontSize: 14)),
+      0: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 0, vertical: 10),
+        child: Text(
+          'Customers',
+          style: _tabController.index == 0
+              ? const TextStyle(
+                  fontWeight: FontWeight.bold,
+                  fontSize: 14,
+                )
+              : const TextStyle(
+                  fontWeight: FontWeight.bold,
+                  fontSize: 14,
+                  color: textColor,
+                ),
+        ),
       ),
-      1: const Padding(
-        padding: EdgeInsets.symmetric(horizontal: 5, vertical: 10),
-        child: Text('Campaign', style: TextStyle(fontSize: 14)),
+      1: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 5, vertical: 10),
+        child: Text(
+          'Campaign',
+          style: _tabController.index == 1
+              ? const TextStyle(
+                  fontWeight: FontWeight.bold,
+                  fontSize: 14,
+                )
+              : const TextStyle(
+                  fontWeight: FontWeight.bold,
+                  fontSize: 14,
+                  color: textColor,
+                ),
+        ),
       ),
     };
 

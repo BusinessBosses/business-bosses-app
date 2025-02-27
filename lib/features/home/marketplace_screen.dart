@@ -333,9 +333,31 @@ class _MarketplaceScreenState extends State<MarketplaceScreen>
                       );
                     }),
                 actions: <Widget>[
+                  GestureDetector(
+                    onTap: () {
+                      Get.to(() => const MyOrdersScreen());
+                    },
+                    child: Padding(
+                      padding: const EdgeInsets.only(
+                        left: 10,
+                        right: 10.0,
+                      ),
+                      child: CircleAvatar(
+                        radius: 20,
+                        backgroundColor: backgroundColor,
+                        child: SvgPicture.asset(
+                          'assets/svgs/shoppingcart.svg',
+                          height: 22,
+                        ),
+                      ),
+                    ),
+                  ),
                   Padding(
-                    padding:
-                        const EdgeInsets.only(top: 8.0, bottom: 8, right: 10),
+                    padding: const EdgeInsets.only(
+                      top: 8.0,
+                      bottom: 8,
+                      right: 15,
+                    ),
                     child: ProCustomButton(
                       padding: 0.0,
                       icon: SvgPicture.asset('assets/svgs/startatopic.svg'),
@@ -418,6 +440,8 @@ class _MarketplaceScreenState extends State<MarketplaceScreen>
                                                                       context,
                                                                   int index) {
                                                             return ListTile(
+                                                              horizontalTitleGap:
+                                                                  0,
                                                               onTap: () async {
                                                                 Navigator.pop(
                                                                     context);
@@ -538,8 +562,8 @@ class _MarketplaceScreenState extends State<MarketplaceScreen>
                                                                   SvgPicture
                                                                       .asset(
                                                                 index == 0
-                                                                    ? 'assets/svgs/addproduct.svg'
-                                                                    : 'assets/svgs/addservice.svg',
+                                                                    ? 'assets/svgs/addclient.svg'
+                                                                    : 'assets/svgs/addclient.svg',
                                                                 height: 25,
                                                                 color: textColor
                                                                     .withOpacity(
@@ -547,8 +571,8 @@ class _MarketplaceScreenState extends State<MarketplaceScreen>
                                                               ),
                                                               title: Text(
                                                                 index == 0
-                                                                    ? 'Add My Biz-Center To Supplier'
-                                                                    : 'Add New Supplier',
+                                                                    ? 'Add My Biz-Center To Supplier List'
+                                                                    : 'Add a New Supplier',
                                                                 style: const TextStyle(
                                                                     fontSize:
                                                                         18,
@@ -566,80 +590,102 @@ class _MarketplaceScreenState extends State<MarketplaceScreen>
                                               );
                                             })
                                     : Get.to(() => const AddSupplierScreen())
-                                : showModalBottomSheet(
-                                    context: context,
-                                    shape: const RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.vertical(
-                                        top: Radius.circular(25.0),
-                                      ),
-                                    ),
-                                    builder: (BuildContext context) {
-                                      return SizedBox(
-                                        height: 200,
-                                        child: Padding(
-                                          padding: const EdgeInsets.all(15.0),
-                                          child: Column(
-                                            crossAxisAlignment:
-                                                CrossAxisAlignment.start,
-                                            mainAxisSize: MainAxisSize.min,
-                                            children: <Widget>[
-                                              Expanded(
-                                                child: ListView.separated(
-                                                  itemCount: 2,
-                                                  separatorBuilder:
-                                                      (BuildContext context,
-                                                              int index) =>
-                                                          const Divider(),
-                                                  itemBuilder:
-                                                      (BuildContext context,
-                                                          int index) {
-                                                    return ListTile(
-                                                      onTap: () {
-                                                        Navigator.pop(context);
-                                                        index == 0
-                                                            ? Get.to(() =>
-                                                                const CreateProductListing(
-                                                                  isMarketplace:
-                                                                      true,
-                                                                ))
-                                                            : Get.to(() =>
-                                                                const CreateServiceListing(
-                                                                  isMarketplace:
-                                                                      true,
-                                                                ));
-                                                      },
-                                                      minVerticalPadding: 0,
-                                                      contentPadding:
-                                                          const EdgeInsets.only(
-                                                        left: 10,
-                                                      ),
-                                                      leading: SvgPicture.asset(
-                                                        index == 0
-                                                            ? 'assets/svgs/addproduct.svg'
-                                                            : 'assets/svgs/addservice.svg',
-                                                        height: 25,
-                                                        color: textColor
-                                                            .withOpacity(1),
-                                                      ),
-                                                      title: Text(
-                                                        index == 0
-                                                            ? 'Sell your product'
-                                                            : 'Sell your service',
-                                                        style: const TextStyle(
-                                                            fontSize: 18,
-                                                            fontWeight:
-                                                                FontWeight
-                                                                    .w700),
-                                                      ),
-                                                    );
-                                                  },
+                                : _marketplaceTabController.index == 1
+                                    ? Get.to(const CreateProductListing(
+                                        isMarketplace: true,
+                                      ))
+                                    : _marketplaceTabController.index == 2
+                                        ? Get.to(const CreateServiceListing(
+                                            isMarketplace: true,
+                                          ))
+                                        : showModalBottomSheet(
+                                            context: context,
+                                            shape: const RoundedRectangleBorder(
+                                              borderRadius:
+                                                  BorderRadius.vertical(
+                                                top: Radius.circular(25.0),
+                                              ),
+                                            ),
+                                            builder: (BuildContext context) {
+                                              return SizedBox(
+                                                height: 200,
+                                                child: Padding(
+                                                  padding: const EdgeInsets.all(
+                                                      15.0),
+                                                  child: Column(
+                                                    crossAxisAlignment:
+                                                        CrossAxisAlignment
+                                                            .start,
+                                                    mainAxisSize:
+                                                        MainAxisSize.min,
+                                                    children: <Widget>[
+                                                      Expanded(
+                                                        child:
+                                                            ListView.separated(
+                                                          itemCount: 2,
+                                                          separatorBuilder:
+                                                              (BuildContext
+                                                                          context,
+                                                                      int index) =>
+                                                                  const Divider(),
+                                                          itemBuilder:
+                                                              (BuildContext
+                                                                      context,
+                                                                  int index) {
+                                                            return ListTile(
+                                                              onTap: () {
+                                                                Navigator.pop(
+                                                                    context);
+                                                                index == 0
+                                                                    ? Get.to(() =>
+                                                                        const CreateProductListing(
+                                                                          isMarketplace:
+                                                                              true,
+                                                                        ))
+                                                                    : Get.to(() =>
+                                                                        const CreateServiceListing(
+                                                                          isMarketplace:
+                                                                              true,
+                                                                        ));
+                                                              },
+                                                              minVerticalPadding:
+                                                                  0,
+                                                              contentPadding:
+                                                                  const EdgeInsets
+                                                                      .only(
+                                                                left: 10,
+                                                              ),
+                                                              leading:
+                                                                  SvgPicture
+                                                                      .asset(
+                                                                index == 0
+                                                                    ? 'assets/svgs/addproduct.svg'
+                                                                    : 'assets/svgs/addservice.svg',
+                                                                height: 25,
+                                                                color: textColor
+                                                                    .withOpacity(
+                                                                        1),
+                                                              ),
+                                                              title: Text(
+                                                                index == 0
+                                                                    ? 'Sell your product'
+                                                                    : 'Sell your service',
+                                                                style: const TextStyle(
+                                                                    fontSize:
+                                                                        18,
+                                                                    fontWeight:
+                                                                        FontWeight
+                                                                            .w700),
+                                                              ),
+                                                            );
+                                                          },
+                                                        ),
+                                                      )
+                                                    ],
+                                                  ),
                                                 ),
-                                              )
-                                            ],
-                                          ),
-                                        ),
-                                      );
-                                    });
+                                              );
+                                            });
                       },
                       text: _marketplaceTabController.index == 4
                           ? 'Add Deals'
@@ -651,7 +697,7 @@ class _MarketplaceScreenState extends State<MarketplaceScreen>
                 ],
               ),
               Container(
-                padding: const EdgeInsets.only(left: 15),
+                padding: const EdgeInsets.only(left: 15, right: 15),
                 color: Colors.white,
                 child: Row(
                   children: <Widget>[
@@ -685,25 +731,6 @@ class _MarketplaceScreenState extends State<MarketplaceScreen>
                         autofocus: false,
                       ),
                     ),
-                    GestureDetector(
-                      onTap: () {
-                        Get.to(() => const MyOrdersScreen());
-                      },
-                      child: Padding(
-                        padding: const EdgeInsets.only(
-                          left: 10,
-                          right: 10.0,
-                        ),
-                        child: CircleAvatar(
-                          radius: 20,
-                          backgroundColor: backgroundColor,
-                          child: SvgPicture.asset(
-                            'assets/svgs/shoppingcart.svg',
-                            height: 19,
-                          ),
-                        ),
-                      ),
-                    ),
                   ],
                 ),
               ),
@@ -717,7 +744,7 @@ class _MarketplaceScreenState extends State<MarketplaceScreen>
                         height: 42,
                         child: Searchbar(
                           hintText: _marketplacesearchTabController.index == 0
-                              ? 'Search'
+                              ? 'Search Marketplace'
                               : _marketplacesearchTabController.index == 1
                                   ? 'Search Products'
                                   : _marketplacesearchTabController.index == 2

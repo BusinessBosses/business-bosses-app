@@ -289,7 +289,7 @@ class _BoostCourseState extends State<BoostCourse> {
                     size: 14,
                   ),
                   SizedBox(width: 2),
-                  Text('Cancel',
+                  Text('Cancel Boost',
                       style: TextStyle(
                           color: primaryColorLT,
                           fontSize: 15,

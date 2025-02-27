@@ -155,6 +155,7 @@ class _BizCenterSearchState extends State<BizCenterSearch>
                         'Visit Biz-Center',
                         style: TextStyle(
                           fontSize: 10,
+                          fontWeight: FontWeight.w700,
                           color: proprimaryColor,
                         ),
                       ),

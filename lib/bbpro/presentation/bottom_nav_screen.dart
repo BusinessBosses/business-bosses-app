@@ -123,29 +123,30 @@ class _BottomnavscreenState extends State<Bottomnavscreen> {
                     ),
                     BottomNavigationBar(
                       unselectedLabelStyle: const TextStyle(
-                        fontSize: 13.0,
+                        fontSize: 14.0,
                         fontWeight: FontWeight.w700,
-                        color: iconColor,
+                        color: textColor,
                       ),
                       selectedLabelStyle: const TextStyle(
-                        fontSize: 13.0,
+                        fontSize: 14.0,
                         fontWeight: FontWeight.w700,
                         color: proprimaryColor,
                       ),
                       elevation: 0,
                       backgroundColor: Colors.white,
                       type: BottomNavigationBarType.fixed,
+                      unselectedItemColor: textColor,
                       items: <BottomNavigationBarItem>[
                         BottomNavigationBarItem(
                           icon: Padding(
                             padding: const EdgeInsets.only(bottom: 3.0),
                             child: SvgPicture.asset(
                               'assets/svgs/dashboard.svg',
-                              height: 20,
+                              height: 25,
                               colorFilter: ColorFilter.mode(
                                 _selectedIndex == 0
                                     ? proprimaryColor
-                                    : const Color(0xffBDBEC0),
+                                    : textColor,
                                 BlendMode.srcIn,
                               ),
                             ),
@@ -157,11 +158,11 @@ class _BottomnavscreenState extends State<Bottomnavscreen> {
                             padding: const EdgeInsets.only(bottom: 3.0),
                             child: SvgPicture.asset(
                               'assets/svgs/projects.svg',
-                              height: 20,
+                              height: 23,
                               colorFilter: ColorFilter.mode(
                                 _selectedIndex == 1
                                     ? proprimaryColor
-                                    : const Color(0xffBDBEC0),
+                                    : textColor,
                                 BlendMode.srcIn,
                               ),
                             ),
@@ -173,11 +174,11 @@ class _BottomnavscreenState extends State<Bottomnavscreen> {
                             padding: const EdgeInsets.only(bottom: 3.0),
                             child: SvgPicture.asset(
                               'assets/svgs/ordersinvoices.svg',
-                              height: 20,
+                              height: 25,
                               colorFilter: ColorFilter.mode(
                                 _selectedIndex == 2
                                     ? proprimaryColor
-                                    : const Color(0xffBDBEC0),
+                                    : textColor,
                                 BlendMode.srcIn,
                               ),
                             ),
@@ -189,11 +190,11 @@ class _BottomnavscreenState extends State<Bottomnavscreen> {
                             padding: const EdgeInsets.only(bottom: 3.0),
                             child: SvgPicture.asset(
                               'assets/svgs/clients.svg',
-                              height: 20,
+                              height: 25,
                               colorFilter: ColorFilter.mode(
                                 _selectedIndex == 3
                                     ? proprimaryColor
-                                    : const Color(0xffBDBEC0),
+                                    : textColor,
                                 BlendMode.srcIn,
                               ),
                             ),
@@ -205,11 +206,11 @@ class _BottomnavscreenState extends State<Bottomnavscreen> {
                             padding: const EdgeInsets.only(bottom: 3.0),
                             child: SvgPicture.asset(
                               'assets/svgs/setupshop.svg',
-                              height: 20,
+                              height: 25,
                               colorFilter: ColorFilter.mode(
                                 _selectedIndex == 4
                                     ? proprimaryColor
-                                    : const Color(0xffBDBEC0),
+                                    : textColor,
                                 BlendMode.srcIn,
                               ),
                             ),
@@ -219,11 +220,10 @@ class _BottomnavscreenState extends State<Bottomnavscreen> {
                       ],
                       currentIndex: _selectedIndex,
                       selectedItemColor: proprimaryColor,
-                      unselectedItemColor: Colors.grey,
                       onTap: _onItemTapped,
                     ),
                     Container(
-                      height: 20,
+                      height: 18,
                       color: Colors.white,
                     )
                   ],

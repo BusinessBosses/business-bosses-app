@@ -64,7 +64,7 @@ class _CustomTabBarWidgetState<T> extends State<CustomTabBarWidget<T>> {
               controller: widget._tabController,
               onTap: widget._scrollToSection,
               labelStyle: const TextStyle(
-                fontWeight: FontWeight.w400,
+                fontWeight: FontWeight.w700,
                 fontSize: 14,
               ),
               indicatorColor: Colors.white,

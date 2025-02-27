@@ -1,7 +1,9 @@
 import 'dart:convert';
 import 'dart:math';
 import 'package:business_bosses_v2/common/dialogs/snackbar.dart';
+import 'package:business_bosses_v2/features/home/home_screen.dart';
 import 'package:business_bosses_v2/features/premium/reviewpayment.dart';
+import 'package:business_bosses_v2/navigation/routes.dart';
 import 'package:business_bosses_v2/services/api_service.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
@@ -277,7 +279,7 @@ class _BoostPostState extends State<BoostPost> {
         actions: <Widget>[
           GestureDetector(
             onTap: () {
-              Get.back();
+              Get.offNamed(Routes.home);
             },
             child: const Padding(
               padding: EdgeInsets.only(right: 10.0),
@@ -289,7 +291,7 @@ class _BoostPostState extends State<BoostPost> {
                     size: 14,
                   ),
                   SizedBox(width: 2),
-                  Text('Cancel',
+                  Text('Cancel Boost',
                       style: TextStyle(
                           color: primaryColorLT,
                           fontSize: 15,

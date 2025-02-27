@@ -356,76 +356,37 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
                         isUpdating: widget.postDetail != null,
                       ),
                     ),
-                    if (widget.isGrow != true)
-                      widget.postId == null
-                          ? PromoteSection(controller: controller)
-                          : Container(),
-                    if (widget.isGrow != true)
-                      const SizedBox(
-                        height: 20,
-                      ),
+
                     if (widget.isGrow == true)
                       Padding(
-                          padding: const EdgeInsets.only(
-                              left: 0.0, top: 10, bottom: 10),
-                          child: Container(
-                              width: double.infinity,
-                              padding:
-                                  const EdgeInsets.symmetric(horizontal: 30),
-                              child: ProCustomButton(
-                                color: primaryColorLT,
-                                text: 'Post',
-                                onPressed: () async {
-                                  _formKey.currentState!.save();
-                                  if (!_formKey.currentState!.validate()) {
-                                    return;
-                                  }
+                        padding: const EdgeInsets.only(
+                            left: 0.0, top: 10, bottom: 10),
+                        child: Container(
+                          width: double.infinity,
+                          padding: const EdgeInsets.symmetric(horizontal: 30),
+                          child: ProCustomButton(
+                            color: primaryColorLT,
+                            text: 'Post',
+                            onPressed: () async {
+                              _formKey.currentState!.save();
+                              if (!_formKey.currentState!.validate()) {
+                                return;
+                              }
 
-                                  if (controller.imageFileList.length > 5) {
-                                    /// If the user has selected more than five images, show an error message
-                                    Get.snackbar('Error',
-                                        'You can select up to five images.');
-                                  } else {
-                                    /// Otherwise, create the post
-                                    if (widget.postId == null) {
-                                      await controller
-                                          .createPost(<String, dynamic>{
-                                        'livedata': livedata,
-                                        'donationId': donationModel != null
-                                            ? donationModel!.id
-                                            : null,
-                                        'donation': donationModel != null
-                                            ? donationModel!.toMap()
-                                            : null,
-                                        'forumId': forumModel != null
-                                            ? forumModel!.forumId
-                                            : null,
-                                        'forum': forumModel != null
-                                            ? forumModel!.toMap()
-                                            : null,
-                                        'marketId': marketModel != null
-                                            ? marketModel!.marketId
-                                            : null,
-                                        'market': marketModel != null
-                                            ? marketModel!.toMap()
-                                            : null,
-                                        'title': _titleCtrl.text.trim(),
-                                        'ytUrl': _ytUrl,
-                                        'images': _ytUrl != null && _ytUrl != ''
-                                            ? 'https://api.businessbosses.co.uk/appfiles/1698854755_13_download_(1).png'
-                                            : null, // Set images to null if _ytUrl is null or empty
-                                        'timestamp': DateTime.now()
-                                            .millisecondsSinceEpoch,
-                                      }, _profileController);
-                                    } else {
-                                      await controller.onEditPost(
-                                          widget.postDetail,
-                                          _titleCtrl.text.trim());
-                                    }
-                                  }
-                                },
-                                loading: controller.loading.value,
-                              ))),
+                              if (controller.imageFileList.length > 5) {
+                                /// If the user has selected more than five images, show an error message
+                                Get.snackbar('Error',
+                                    'You can select up to five images.');
+                              } else {
+                                /// Show bottom sheet for boost option
+                                _showBoostBottomSheet(controller);
+                              }
+                            },
+                            loading: controller.loading.value,
+                          ),
+                        ),
+                      ),
+
                     if (widget.isGrow != true)
                       Padding(
                         padding: const EdgeInsets.only(left: 15, right: 15),
@@ -441,47 +402,15 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
                               Get.snackbar(
                                   'Error', 'You can select up to five images.');
                             } else {
-                              /// Otherwise, create the post
-                              if (widget.postId == null) {
-                                await controller.createPost(<String, dynamic>{
-                                  'livedata': livedata,
-                                  'donationId': donationModel != null
-                                      ? donationModel!.id
-                                      : null,
-                                  'donation': donationModel != null
-                                      ? donationModel!.toMap()
-                                      : null,
-                                  'forumId': forumModel != null
-                                      ? forumModel!.forumId
-                                      : null,
-                                  'forum': forumModel != null
-                                      ? forumModel!.toMap()
-                                      : null,
-                                  'marketId': marketModel != null
-                                      ? marketModel!.marketId
-                                      : null,
-                                  'market': marketModel != null
-                                      ? marketModel!.toMap()
-                                      : null,
-                                  'title': _titleCtrl.text.trim(),
-                                  'ytUrl': _ytUrl,
-                                  'images': _ytUrl != null && _ytUrl != ''
-                                      ? 'https://api.businessbosses.co.uk/appfiles/1698854755_13_download_(1).png'
-                                      : null, // Set images to null if _ytUrl is null or empty
-                                  'timestamp':
-                                      DateTime.now().millisecondsSinceEpoch,
-                                }, _profileController);
-                              } else {
-                                await controller.onEditPost(
-                                    widget.postDetail, _titleCtrl.text.trim());
-                              }
+                              /// Show bottom sheet for boost option
+                              _showBoostBottomSheet(controller);
                             }
                           },
                           isProcessing: controller.loading.value,
                         ),
                       ),
                     const SizedBox(
-                      height: 50,
+                      height: 20,
                     ),
                     Center(
                       child: Row(
@@ -532,6 +461,139 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
           ),
         ),
       ),
+    );
+  }
+
+  void _showBoostBottomSheet(CreatePostController controller) {
+    showModalBottomSheet(
+      shape: const RoundedRectangleBorder(
+          borderRadius: BorderRadius.only(
+              topLeft: Radius.circular(15), topRight: Radius.circular(15))),
+      context: context,
+      builder: (BuildContext context) {
+        return Padding(
+          padding: const EdgeInsets.all(20.0),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: <Widget>[
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: <Widget>[
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: <Widget>[
+                      SvgPicture.asset(
+                        'assets/svgs/rocket.svg',
+                        color: textColor,
+                      ),
+                      const SizedBox(width: 5),
+                      const Text(
+                        'Boost Post',
+                        style: TextStyle(
+                          fontWeight: FontWeight.w700,
+                          fontSize: 18,
+                        ),
+                      ),
+                    ],
+                  ),
+                  const Text(
+                    'Reach a wider audience and get more views',
+                    style: TextStyle(
+                      fontWeight: FontWeight.w600,
+                      fontSize: 11,
+                      color: Color(0xFF777777),
+                    ),
+                  ),
+                ],
+              ),
+              const SizedBox(height: 10),
+              const Text(
+                'Do you want to boost this post/listing?',
+                style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+              ),
+              const SizedBox(height: 20),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: <Widget>[
+                  ElevatedButton(
+                    onPressed: () async {
+                      Navigator.pop(context);
+                      _createPostController.shouldPromote.value = true;
+                      if (widget.postId == null) {
+                        await controller.createPost(<String, dynamic>{
+                          'livedata': livedata,
+                          'donationId':
+                              donationModel != null ? donationModel!.id : null,
+                          'donation': donationModel != null
+                              ? donationModel!.toMap()
+                              : null,
+                          'forumId':
+                              forumModel != null ? forumModel!.forumId : null,
+                          'forum':
+                              forumModel != null ? forumModel!.toMap() : null,
+                          'marketId': marketModel != null
+                              ? marketModel!.marketId
+                              : null,
+                          'market':
+                              marketModel != null ? marketModel!.toMap() : null,
+                          'title': _titleCtrl.text.trim(),
+                          'ytUrl': _ytUrl,
+                          'images': _ytUrl != null && _ytUrl != ''
+                              ? 'https://api.businessbosses.co.uk/appfiles/1698854755_13_download_(1).png'
+                              : null, // Set images to null if _ytUrl is null or empty
+                          'timestamp': DateTime.now().millisecondsSinceEpoch,
+                        }, _profileController);
+                      } else {
+                        await controller.onEditPost(
+                            widget.postDetail, _titleCtrl.text.trim());
+                      }
+                    },
+                    child: const Text('Yes'),
+                  ),
+                  const SizedBox(
+                    width: 10,
+                  ),
+                  OutlinedButton(
+                    onPressed: () async {
+                      Navigator.pop(context);
+                      _createPostController.shouldPromote.value = false;
+                      if (widget.postId == null) {
+                        await controller.createPost(<String, dynamic>{
+                          'livedata': livedata,
+                          'donationId':
+                              donationModel != null ? donationModel!.id : null,
+                          'donation': donationModel != null
+                              ? donationModel!.toMap()
+                              : null,
+                          'forumId':
+                              forumModel != null ? forumModel!.forumId : null,
+                          'forum':
+                              forumModel != null ? forumModel!.toMap() : null,
+                          'marketId': marketModel != null
+                              ? marketModel!.marketId
+                              : null,
+                          'market':
+                              marketModel != null ? marketModel!.toMap() : null,
+                          'title': _titleCtrl.text.trim(),
+                          'ytUrl': _ytUrl,
+                          'images': _ytUrl != null && _ytUrl != ''
+                              ? 'https://api.businessbosses.co.uk/appfiles/1698854755_13_download_(1).png'
+                              : null, // Set images to null if _ytUrl is null or empty
+                          'timestamp': DateTime.now().millisecondsSinceEpoch,
+                        }, _profileController);
+                      } else {
+                        await controller.onEditPost(
+                            widget.postDetail, _titleCtrl.text.trim());
+                      }
+                    },
+                    child: const Text('No'),
+                  ),
+                ],
+              ),
+            ],
+          ),
+        );
+      },
     );
   }
 }

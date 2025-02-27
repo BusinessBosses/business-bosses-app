@@ -95,7 +95,7 @@ class _CreateProductListingState extends State<CreateProductListing> {
   List<String> paymentMethods = <String>[];
   List<String> colors = <String>[];
   List<String> sizes = <String>[];
-  bool _shouldPromote = true;
+  final bool _shouldPromote = true;
 
   @override
   void initState() {
@@ -583,25 +583,25 @@ class _CreateProductListingState extends State<CreateProductListing> {
                         ),
                       ]),
                   const SizedBox(height: 16),
-                  Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 15.0),
-                    child: SwitchWidget(
-                      value: _shouldPromote,
-                      onChanged: (bool value) {
-                        setState(() {
-                          _shouldPromote = value;
-                        });
-                      },
-                      icon: 'assets/svgs/rocket.svg',
-                      caption: 'Boost this listing',
-                      subtext: 'Reach a wider audience and get more views',
-                      activeColor: widget.isMarketplace != null
-                          ? primaryColorLT
-                          : proprimaryColor,
-                      inactiveColor: Colors.grey,
-                    ),
-                  ),
-                  const SizedBox(height: 16),
+                  // Padding(
+                  //   padding: const EdgeInsets.symmetric(horizontal: 15.0),
+                  //   child: SwitchWidget(
+                  //     value: _shouldPromote,
+                  //     onChanged: (bool value) {
+                  //       setState(() {
+                  //         _shouldPromote = value;
+                  //       });
+                  //     },
+                  //     icon: 'assets/svgs/rocket.svg',
+                  //     caption: 'Boost this listing',
+                  //     subtext: 'Reach a wider audience and get more views',
+                  //     activeColor: widget.isMarketplace != null
+                  //         ? primaryColorLT
+                  //         : proprimaryColor,
+                  //     inactiveColor: Colors.grey,
+                  //   ),
+                  // ),
+                  // const SizedBox(height: 16),
                   Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 15.0),
                     child: SwitchWidget(
@@ -657,103 +657,7 @@ class _CreateProductListingState extends State<CreateProductListing> {
                         showSnackbar(message: 'Enter quantity', error: true);
                         return;
                       }
-                      if (_formKey.currentState?.validate() ?? false) {
-                        _formKey.currentState?.save();
-
-                        setState(() {
-                          isSubmitted = true;
-                        });
-                        List<String> finalImages =
-                            List<String>.from(updateImages ?? <String>[]);
-
-// Step 2: Upload newly picked images, adding them to finalImages
-                        for (File image in _selectedImages) {
-                          final dynamic response =
-                              await ApiService.uploadFile(image);
-                          if (response['success']) {
-                            finalImages.add(response['fileUrl']);
-                          }
-                        }
-                        final Map<String, dynamic> productListing =
-                            <String, dynamic>{
-                          'userId': profileController.myProfile.uid,
-                          'shopId': shopController.shop?.id,
-                          'name': _productNameController.text,
-                          'price': _priceController.text,
-                          'discount': _discountController.text.isEmpty
-                              ? 0
-                              : _discountController.text,
-                          'description': _descriptionController.text,
-                          'category': category,
-                          'location': country.isEmpty
-                              ? shopController.shop!.location
-                              : country,
-                          'images': finalImages,
-                          'paymentMethod': paymentMethod,
-                          'deliveryMethod': deliveryMethod,
-                          'url': 'http://example.com/product',
-                          'notes': notesController.text.trim().isEmpty
-                              ? null
-                              : notesController.text.trim(),
-                          'deliveryDuration': deliverydayscontroller.text,
-                          'itemType': 'product',
-                          'isActive': _isSwitched,
-                          'supplierId': null,
-                          'storageLocation': storageLocationController.text,
-                          'productNumber': productNumberController.text,
-                          'quantity': quantityController.text.isEmpty
-                              ? 0
-                              : quantityController.text,
-                          'startAt': startDate?.toIso8601String(),
-                          'endAt': endDate?.toIso8601String(),
-                          'color': colors,
-                          'size': sizes,
-                        };
-                        if (widget.product == null) {
-                          ProductAddResult response =
-                              await shopController.addProducts(productListing);
-                          if (response.success) {
-                            showSnackbar(
-                              message: 'Product Added Successfully!',
-                            );
-                            if (_shouldPromote) {
-                              Get.off(() => BoostItem(
-                                    product: response.product,
-                                  ));
-                              return;
-                            }
-                            Navigator.pop(context);
-                          } else {
-                            showSnackbar(
-                              message: 'Error While Adding Product',
-                              error: true,
-                            );
-                          }
-                        } else {
-                          bool response = await shopController.updateProduct(
-                              widget.product!.id, productListing);
-                          if (response) {
-                            showSnackbar(
-                              message: 'Product Updated Successfully!',
-                            );
-                            if (_shouldPromote) {
-                              Get.off(() => BoostItem(
-                                    product: widget.product,
-                                  ));
-                              return;
-                            }
-                            Navigator.pop(context);
-                          } else {
-                            showSnackbar(
-                              message: 'Error While Updating Product',
-                              error: true,
-                            );
-                          }
-                        }
-                        setState(() {
-                          isSubmitted = false;
-                        });
-                      }
+                      _showBoostBottomSheet();
                     },
                   ),
                   const SizedBox(height: 16),
@@ -813,6 +717,269 @@ class _CreateProductListingState extends State<CreateProductListing> {
                 ],
               ),
             ),
+    );
+  }
+
+  void _showBoostBottomSheet() {
+    showModalBottomSheet(
+      shape: const RoundedRectangleBorder(
+          borderRadius: BorderRadius.only(
+              topLeft: Radius.circular(15), topRight: Radius.circular(15))),
+      context: context,
+      builder: (BuildContext context) {
+        return Padding(
+          padding: const EdgeInsets.all(20.0),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: <Widget>[
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: <Widget>[
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: <Widget>[
+                      SvgPicture.asset(
+                        'assets/svgs/rocket.svg',
+                        color: textColor,
+                      ),
+                      const SizedBox(width: 5),
+                      const Text(
+                        'Boost Post',
+                        style: TextStyle(
+                          fontWeight: FontWeight.w700,
+                          fontSize: 18,
+                        ),
+                      ),
+                    ],
+                  ),
+                  const Text(
+                    'Reach a wider audience and get more views',
+                    style: TextStyle(
+                      fontWeight: FontWeight.w600,
+                      fontSize: 11,
+                      color: Color(0xFF777777),
+                    ),
+                  ),
+                ],
+              ),
+              const SizedBox(height: 10),
+              const Text(
+                'Do you want to boost this post/listing?',
+                style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+              ),
+              const SizedBox(height: 20),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: <Widget>[
+                  ElevatedButton(
+                    style: ButtonStyle(
+                        backgroundColor: MaterialStatePropertyAll(
+                            widget.isMarketplace == true
+                                ? primaryColorLT
+                                : proprimaryColor)),
+                    onPressed: () async {
+                      Navigator.pop(context);
+                      if (_formKey.currentState?.validate() ?? false) {
+                        _formKey.currentState?.save();
+
+                        setState(() {
+                          isSubmitted = true;
+                        });
+                        List<String> finalImages =
+                            List<String>.from(updateImages ?? <String>[]);
+
+                        for (File image in _selectedImages) {
+                          final dynamic response =
+                              await ApiService.uploadFile(image);
+                          if (response['success']) {
+                            finalImages.add(response['fileUrl']);
+                          }
+                        }
+                        final Map<String, dynamic> productListing =
+                            <String, dynamic>{
+                          'userId': profileController.myProfile.uid,
+                          'shopId': shopController.shop?.id,
+                          'name': _productNameController.text,
+                          'price': _priceController.text,
+                          'discount': _discountController.text.isEmpty
+                              ? 0
+                              : _discountController.text,
+                          'description': _descriptionController.text,
+                          'category': category,
+                          'location': country.isEmpty
+                              ? shopController.shop!.location
+                              : country,
+                          'images': finalImages,
+                          'paymentMethod': paymentMethod,
+                          'deliveryMethod': deliveryMethod,
+                          'url': 'http://example.com/product',
+                          'notes': notesController.text.trim().isEmpty
+                              ? null
+                              : notesController.text.trim(),
+                          'deliveryDuration': deliverydayscontroller.text,
+                          'itemType': 'product',
+                          'isActive': _isSwitched,
+                          'supplierId': null,
+                          'storageLocation': storageLocationController.text,
+                          'productNumber': productNumberController.text,
+                          'quantity': quantityController.text.isEmpty
+                              ? 0
+                              : quantityController.text,
+                          'startAt': startDate?.toIso8601String(),
+                          'endAt': endDate?.toIso8601String(),
+                          'color': colors,
+                          'size': sizes,
+                        };
+                        if (widget.product == null) {
+                          ProductAddResult response =
+                              await shopController.addProducts(productListing);
+                          if (response.success) {
+                            showSnackbar(
+                              message: 'Product Added Successfully!',
+                            );
+                            Get.off(() => BoostItem(
+                                  product: response.product,
+                                ));
+                          } else {
+                            showSnackbar(
+                              message: 'Error While Adding Product',
+                              error: true,
+                            );
+                          }
+                        } else {
+                          bool response = await shopController.updateProduct(
+                              widget.product!.id, productListing);
+                          if (response) {
+                            showSnackbar(
+                              message: 'Product Updated Successfully!',
+                            );
+                            Get.off(() => BoostItem(
+                                  product: widget.product,
+                                ));
+                            return;
+                          } else {
+                            showSnackbar(
+                              message: 'Error While Updating Product',
+                              error: true,
+                            );
+                          }
+                        }
+                        setState(() {
+                          isSubmitted = false;
+                        });
+                      }
+                    },
+                    child: const Text('Yes'),
+                  ),
+                  const SizedBox(
+                    width: 10,
+                  ),
+                  OutlinedButton(
+                    style: OutlinedButton.styleFrom(
+                      foregroundColor: widget.isMarketplace == true
+                          ? primaryColorLT
+                          : proprimaryColor,
+                      side: BorderSide(
+                          color: widget.isMarketplace == true
+                              ? primaryColorLT
+                              : proprimaryColor,
+                          width: 1),
+                    ),
+                    onPressed: () async {
+                      Navigator.pop(context);
+                      if (_formKey.currentState?.validate() ?? false) {
+                        _formKey.currentState?.save();
+
+                        setState(() {
+                          isSubmitted = true;
+                        });
+                        List<String> finalImages =
+                            List<String>.from(updateImages ?? <String>[]);
+
+                        for (File image in _selectedImages) {
+                          final dynamic response =
+                              await ApiService.uploadFile(image);
+                          if (response['success']) {
+                            finalImages.add(response['fileUrl']);
+                          }
+                        }
+                        final Map<String, dynamic> productListing =
+                            <String, dynamic>{
+                          'userId': profileController.myProfile.uid,
+                          'shopId': shopController.shop?.id,
+                          'name': _productNameController.text,
+                          'price': _priceController.text,
+                          'discount': _discountController.text.isEmpty
+                              ? 0
+                              : _discountController.text,
+                          'description': _descriptionController.text,
+                          'category': category,
+                          'location': country.isEmpty
+                              ? shopController.shop!.location
+                              : country,
+                          'images': finalImages,
+                          'paymentMethod': paymentMethod,
+                          'deliveryMethod': deliveryMethod,
+                          'url': 'http://example.com/product',
+                          'notes': notesController.text.trim().isEmpty
+                              ? null
+                              : notesController.text.trim(),
+                          'deliveryDuration': deliverydayscontroller.text,
+                          'itemType': 'product',
+                          'isActive': _isSwitched,
+                          'supplierId': null,
+                          'storageLocation': storageLocationController.text,
+                          'productNumber': productNumberController.text,
+                          'quantity': quantityController.text.isEmpty
+                              ? 0
+                              : quantityController.text,
+                          'startAt': startDate?.toIso8601String(),
+                          'endAt': endDate?.toIso8601String(),
+                          'color': colors,
+                          'size': sizes,
+                        };
+                        if (widget.product == null) {
+                          ProductAddResult response =
+                              await shopController.addProducts(productListing);
+                          if (response.success) {
+                            showSnackbar(
+                              message: 'Product Added Successfully!',
+                            );
+                            Get.back();
+                          } else {
+                            showSnackbar(
+                              message: 'Error While Adding Product',
+                              error: true,
+                            );
+                          }
+                        } else {
+                          bool response = await shopController.updateProduct(
+                              widget.product!.id, productListing);
+                          if (response) {
+                            showSnackbar(
+                              message: 'Product Updated Successfully!',
+                            );
+                            Get.back();
+                          } else {
+                            showSnackbar(
+                              message: 'Error While Updating Product',
+                              error: true,
+                            );
+                          }
+                        }
+                        setState(() {
+                          isSubmitted = false;
+                        });
+                      }
+                    },
+                    child: const Text('No'),
+                  ),
+                ],
+              ),
+            ],
+          ),
+        );
+      },
     );
   }
 }

@@ -202,7 +202,7 @@ class _PublicProfileScreenState extends State<PublicProfileScreen> {
                           Align(
                             alignment: Alignment.bottomCenter,
                             child: CupertinoSlidingSegmentedControl<int>(
-                              backgroundColor: Colors.grey[200]!,
+                              backgroundColor: backgroundColor,
                               padding: const EdgeInsets.all(5),
                               children: <int, Widget>{
                                 0: Padding(
@@ -217,7 +217,7 @@ class _PublicProfileScreenState extends State<PublicProfileScreen> {
                                           : const TextStyle(
                                               fontWeight: FontWeight.bold,
                                               fontSize: 14,
-                                              color: Colors.grey)),
+                                              color: textColor)),
                                 ),
                                 1: Text(
                                   'Biz-Center',
@@ -228,7 +228,7 @@ class _PublicProfileScreenState extends State<PublicProfileScreen> {
                                       : const TextStyle(
                                           fontWeight: FontWeight.bold,
                                           fontSize: 14,
-                                          color: Colors.grey,
+                                          color: textColor,
                                         ),
                                 ),
                               },
