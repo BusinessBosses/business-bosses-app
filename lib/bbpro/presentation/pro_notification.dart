@@ -31,7 +31,7 @@ class _ProNotificationsState extends State<ProNotifications> {
         title: const Text(
           'Notifications',
           style: TextStyle(
-            color: proprimaryColor,
+            color: textColor,
             fontWeight: FontWeight.bold,
           ),
         ),

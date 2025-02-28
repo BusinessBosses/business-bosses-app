@@ -58,7 +58,7 @@ class _AddclientState extends State<Addclient> {
         title: Text(
           widget.client != null ? 'Edit Customers' : 'Add a Customer',
           style: const TextStyle(
-            color: proprimaryColor,
+            color: textColor,
             fontWeight: FontWeight.bold,
           ),
         ),

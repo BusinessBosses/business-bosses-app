@@ -85,7 +85,7 @@ class _FinancialanalysisWidgetState extends State<FinancialanalysisWidget> {
                 Table(
                   border: TableBorder.all(
                     borderRadius: BorderRadius.circular(10.0),
-                    color: proprimaryColor,
+                    color: textColor,
                   ),
                   children: <TableRow>[
                     const TableRow(
@@ -139,7 +139,7 @@ class _FinancialanalysisWidgetState extends State<FinancialanalysisWidget> {
                               style: const TextStyle(
                                 fontWeight: FontWeight.bold,
                                 fontSize: 14,
-                                color: proprimaryColor,
+                                color: textColor,
                               ),
                             ),
                           ),
@@ -165,7 +165,7 @@ class _FinancialanalysisWidgetState extends State<FinancialanalysisWidget> {
                               style: const TextStyle(
                                 fontWeight: FontWeight.bold,
                                 fontSize: 14,
-                                color: proprimaryColor,
+                                color: textColor,
                               ),
                             ),
                           ),

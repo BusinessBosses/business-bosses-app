@@ -69,7 +69,7 @@ class _InventoryState extends State<Inventory> {
         title: Text(
           'Inventory (${filteredProducts.length})',
           style: const TextStyle(
-            color: proprimaryColor,
+            color: textColor,
             fontWeight: FontWeight.bold,
           ),
         ),

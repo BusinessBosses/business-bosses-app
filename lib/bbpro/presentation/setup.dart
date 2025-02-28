@@ -48,7 +48,7 @@ class _SetupState extends State<Setup> {
         title: const Text(
           'Set Up',
           style: TextStyle(
-            color: proprimaryColor,
+            color: textColor,
             fontWeight: FontWeight.bold,
           ),
         ),
@@ -139,7 +139,7 @@ class _SetupState extends State<Setup> {
                                     height: 10,
                                   ),
                                   backgroundColor: Colors.white,
-                                  textColor: proprimaryColor,
+                                  textColor: textColor,
                                   text: 'View Biz-Center',
                                   onPressed: () {
                                     Get.to(() => const ShopScreen());
@@ -157,7 +157,7 @@ class _SetupState extends State<Setup> {
                                     size: 10,
                                     color: Colors.black,
                                   ),
-                                  textColor: proprimaryColor,
+                                  textColor: textColor,
                                   backgroundColor: Colors.white,
                                   text: 'Share my link',
                                   onPressed: () {
@@ -248,7 +248,7 @@ class _SetupState extends State<Setup> {
                                   },
                                   trailing: const Icon(
                                     Icons.chevron_right,
-                                    color: proprimaryColor,
+                                    color: textColor,
                                     size: 20,
                                   )),
                             ),

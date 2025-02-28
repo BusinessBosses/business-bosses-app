@@ -38,9 +38,7 @@ class _InfoCardState extends State<InfoCard> {
           Text(
             widget.value,
             style: const TextStyle(
-                color: proprimaryColor,
-                fontWeight: FontWeight.bold,
-                fontSize: 14),
+                color: textColor, fontWeight: FontWeight.bold, fontSize: 14),
           ),
         ],
       ),

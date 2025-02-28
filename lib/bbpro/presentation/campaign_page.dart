@@ -69,7 +69,7 @@ class _CampaignpageState extends State<Campaignpage> {
         title: const Text(
           'Create New Campaign',
           style: TextStyle(
-            color: proprimaryColor,
+            color: textColor,
             fontWeight: FontWeight.bold,
           ),
         ),

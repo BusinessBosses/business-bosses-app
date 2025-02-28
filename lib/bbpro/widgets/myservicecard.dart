@@ -173,7 +173,7 @@ class _MyServiceCardState extends State<MyServiceCard> {
                             ),
                             const SizedBox(width: 5),
                             Text(
-                              '${currencyValues[widget.service.location.toString()]}${(widget.service.price).toStringAsFixed(2)}',
+                              '${currencyValues[widget.service.location.toString()]}${widget.service.price.toStringAsFixed(2)}',
                               style: const TextStyle(
                                 color: Colors.grey,
                                 decoration: TextDecoration.lineThrough,
@@ -184,7 +184,7 @@ class _MyServiceCardState extends State<MyServiceCard> {
                         )
                       else
                         Text(
-                          '${formatServiceDuration(widget.service.serviceDuration)}${currencyValues[widget.service.location.toString()]}(widget.service.price).toStringAsFixed(2)}',
+                          '${formatServiceDuration(widget.service.serviceDuration)}${currencyValues[widget.service.location.toString()]}${(widget.service.price).toStringAsFixed(2)}',
                           style: const TextStyle(
                             color: proprimaryColor,
                             fontWeight: FontWeight.bold,

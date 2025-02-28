@@ -187,7 +187,7 @@ class _AddprojectState extends State<Addproject> {
         title: Text(
           widget.project == null ? 'Add Task' : 'Edit Task',
           style: const TextStyle(
-            color: proprimaryColor,
+            color: textColor,
             fontWeight: FontWeight.bold,
           ),
         ),

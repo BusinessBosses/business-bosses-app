@@ -148,7 +148,7 @@ class _AddSupplierState extends State<AddSupplier> {
         title: const Text(
           'Add Supplier',
           style: TextStyle(
-            color: proprimaryColor,
+            color: textColor,
             fontWeight: FontWeight.bold,
           ),
         ),

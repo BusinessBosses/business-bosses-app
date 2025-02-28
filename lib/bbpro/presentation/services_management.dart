@@ -65,7 +65,7 @@ class _ManageServicesState extends State<ManageServices> {
         title: Text(
           'My Services (${filteredServices.length})',
           style: const TextStyle(
-            color: proprimaryColor,
+            color: textColor,
             fontWeight: FontWeight.bold,
           ),
         ),

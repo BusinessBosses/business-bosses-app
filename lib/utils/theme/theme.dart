@@ -49,9 +49,9 @@ const int hex = 0xffF21C29;
 
 const Color primaryColorLT = Color(hex);
 const Color primaryotherColorLT = Color(0xffF7C844);
-const Color proprimaryColor = Color(0xff4680A6);
-const Color probackgroundColor = Color(0xffEFF7FB);
-const Color prosemibackColor = Color(0xffD1E2EB);
+const Color proprimaryColor = Color(hex);
+const Color probackgroundColor = Color(0xfff4f4f4);
+const Color prosemibackColor = Color(0xfff4f4f4);
 
 // ignore: always_specify_types
 const MaterialColor primarySwatch = MaterialColor(hex, {

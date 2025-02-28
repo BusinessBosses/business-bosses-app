@@ -63,7 +63,7 @@ class _OrdersWidgetState extends State<OrdersWidget> {
                         style: TextStyle(
                           fontSize: 15,
                           fontWeight: FontWeight.w700,
-                          color: proprimaryColor,
+                          color: textColor,
                         ),
                       ),
                     ],
@@ -90,7 +90,7 @@ class _OrdersWidgetState extends State<OrdersWidget> {
                                   text: TextSpan(
                                     text: 'View All Orders ',
                                     style: const TextStyle(
-                                        color: proprimaryColor,
+                                        color: textColor,
                                         fontSize: 12,
                                         fontWeight: FontWeight.bold),
                                     children: <TextSpan>[
@@ -108,7 +108,7 @@ class _OrdersWidgetState extends State<OrdersWidget> {
                                 SvgPicture.asset(
                                   'assets/svgs/nexticon.svg',
                                   colorFilter: const ColorFilter.mode(
-                                    proprimaryColor,
+                                    textColor,
                                     BlendMode.srcIn,
                                   ),
                                 ),

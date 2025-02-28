@@ -332,7 +332,7 @@ class _CreateOrderState extends State<CreateOrder> {
         title: Text(
           widget.order != null ? 'Update Order' : 'Create New Order',
           style: const TextStyle(
-            color: proprimaryColor,
+            color: textColor,
             fontWeight: FontWeight.bold,
           ),
         ),

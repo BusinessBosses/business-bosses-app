@@ -71,7 +71,7 @@ class _OrdersScreenState extends State<OrdersScreen>
           title: const Text(
             'Orders',
             style: TextStyle(
-              color: proprimaryColor,
+              color: textColor,
               fontWeight: FontWeight.bold,
             ),
           ),

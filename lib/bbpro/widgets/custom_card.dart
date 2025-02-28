@@ -72,15 +72,21 @@ class CustomCard extends StatelessWidget {
                     if (buttonvisible == true)
                       ElevatedButton.icon(
                         onPressed: onPressed,
-                        icon: SvgPicture.asset(iconpath!),
-                        label: Text(buttonText),
+                        icon: SvgPicture.asset(
+                          iconpath!,
+                          color: primaryColorLT,
+                        ),
+                        label: Text(
+                          buttonText,
+                          style: const TextStyle(color: primaryColorLT),
+                        ),
                         style: ElevatedButton.styleFrom(
                           padding: const EdgeInsets.symmetric(
                             horizontal: 16,
                             vertical: 12,
                           ),
                           backgroundColor:
-                              proprimaryColor, // Button background color
+                              Colors.white, // Button background color
                         ),
                       ),
                   ],

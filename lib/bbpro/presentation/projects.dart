@@ -89,7 +89,7 @@ class _ProjectsState extends State<Projects>
         title: const Text(
           'Tasks',
           style: TextStyle(
-            color: proprimaryColor,
+            color: textColor,
             fontWeight: FontWeight.bold,
           ),
         ),

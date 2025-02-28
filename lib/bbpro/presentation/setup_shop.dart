@@ -465,7 +465,7 @@ class _SetupshopState extends State<Setupshop> with TickerProviderStateMixin {
         title: Text(
           widget.shop != null ? 'Edit' : 'Set Up Shop',
           style: const TextStyle(
-            color: proprimaryColor,
+            color: textColor,
             fontWeight: FontWeight.bold,
           ),
         ),
