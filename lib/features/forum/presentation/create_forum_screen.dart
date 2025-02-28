@@ -411,47 +411,36 @@ class _CreateForumScreenState extends State<CreateForumScreen> {
                     ),
                   ),
                   const SizedBox(height: 30),
-                  Center(
-                    child: Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 16.0),
-                      child: Text(
-                        textAlign: TextAlign.center,
-                        overflow: TextOverflow.visible,
-                        maxLines: null,
-                        style: const TextStyle(
-                          fontSize: 13,
-                          color: subtextColor,
-                        ),
-                        categoryId == Constants.LEARNINGID
-                            ? 'Only post articles, insights, and resources others can learn from.'
-                            : 'Only post opportunities that will help you and others grow their businesses.',
-                      ),
-                    ),
-                  ),
-                  GestureDetector(
-                    onTap: () {
-                      Get.to(const MarketplaceScreen());
-                    },
-                    child: const Row(
-                      children: <Widget>[
-                        Text(
-                          'To sell your products and services, list on',
-                          style: TextStyle(color: textColor, fontSize: 12),
-                        ),
-                        Text(
-                          ' Marketplace',
-                          style: TextStyle(
+
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: <Widget>[
+                      GestureDetector(
+                        onTap: () {
+                          Get.to(const MarketplaceScreen());
+                        },
+                        child: const Row(
+                          children: <Widget>[
+                            Text(
+                              'To sell your products and services, list on',
+                              style: TextStyle(color: textColor, fontSize: 12),
+                            ),
+                            Text(
+                              ' Marketplace',
+                              style: TextStyle(
+                                  color: primaryColorLT,
+                                  fontWeight: FontWeight.w700,
+                                  fontSize: 12),
+                            ),
+                            Icon(
+                              Icons.chevron_right,
                               color: primaryColorLT,
-                              fontWeight: FontWeight.w700,
-                              fontSize: 12),
+                              size: 15,
+                            ),
+                          ],
                         ),
-                        Icon(
-                          Icons.chevron_right,
-                          color: primaryColorLT,
-                          size: 15,
-                        ),
-                      ],
-                    ),
+                      ),
+                    ],
                   )
                 ],
               ),
