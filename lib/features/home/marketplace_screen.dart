@@ -723,7 +723,7 @@ class _MarketplaceScreenState extends State<MarketplaceScreen>
                             },
                           );
                         },
-                        radius: 8,
+                        radius: 10,
                         contentPadding: 10,
                         hasSearchIcon: true,
                         backgroundColor: backgroundColor,
@@ -1024,16 +1024,18 @@ class _MarketplaceScreenState extends State<MarketplaceScreen>
                                                 height: 45),
                                         child: TabBar(
                                           padding: EdgeInsets.zero,
+                                          unselectedLabelColor:
+                                              textColor.withOpacity(0.8),
                                           labelStyle: const TextStyle(
                                               fontWeight: FontWeight.w400),
                                           controller: _marketplaceTabController,
-                                          isScrollable: false,
+                                          isScrollable: true,
                                           onTap: (int index) {
                                             setState(() {});
                                           },
                                           labelPadding:
                                               const EdgeInsets.symmetric(
-                                                  horizontal: 10.0),
+                                                  horizontal: 15.0),
                                           tabs: const <Widget>[
                                             Tab(
                                               icon: Icon(

@@ -1684,7 +1684,7 @@ class _CreateServiceListingState extends State<CreateServiceListing>
                             'userId': profileController.myProfile.uid,
                             'shopId': shopController.shop?.id,
                             'name': _serviceNameController.text.trim(),
-                            'price': _priceController.text.trim(),
+                            'price': double.parse(_priceController.text.trim()),
                             'description': _descriptionController.text.trim(),
                             'discount': _discountController.text.isEmpty
                                 ? '0'

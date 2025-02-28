@@ -612,7 +612,7 @@ class _BookServiceScreenState extends State<BookServiceScreen> {
                                         TextStyle textStyle;
                                         if (isBlackoutDate) {
                                           textStyle = TextStyle(
-                                            color: Colors.grey.withOpacity(0.2),
+                                            color: Colors.grey.withOpacity(0.5),
                                             decoration:
                                                 TextDecoration.lineThrough,
                                             fontStyle: FontStyle.italic,
@@ -663,7 +663,7 @@ class _BookServiceScreenState extends State<BookServiceScreen> {
                                       cellBorderColor: Colors.transparent,
                                       blackoutDates: _getNonAvailableDates(),
                                       blackoutDatesTextStyle: TextStyle(
-                                        color: Colors.black12.withOpacity(0.08),
+                                        color: Colors.grey.withOpacity(0.5),
                                         decoration: TextDecoration.lineThrough,
                                       ),
                                       onTap: (CalendarTapDetails details) {
@@ -725,7 +725,7 @@ class _BookServiceScreenState extends State<BookServiceScreen> {
                                           if (isBlackoutDate) {
                                             textStyle = TextStyle(
                                               color:
-                                                  Colors.grey.withOpacity(0.2),
+                                                  Colors.grey.withOpacity(0.5),
                                               decoration:
                                                   TextDecoration.lineThrough,
                                               fontStyle: FontStyle.italic,
