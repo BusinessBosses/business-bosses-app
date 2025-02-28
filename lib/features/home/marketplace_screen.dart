@@ -531,7 +531,7 @@ class _MarketplaceScreenState extends State<MarketplaceScreen>
                                                                           TextButton(
                                                                             onPressed:
                                                                                 () {
-                                                                              Navigator.pop(context); // dismiss migration dialog
+                                                                              Get.back(); // Use Get.back() instead of Navigator.pop(context)
                                                                             },
                                                                             child:
                                                                                 const Text('Close'),
