@@ -1159,9 +1159,9 @@ class _BookServiceScreenState extends State<BookServiceScreen> {
                                     widget.service.deliveryMethod != null &&
                                             widget.service.deliveryMethod!
                                                 .isNotEmpty
-                                        ? widget.service.deliveryMethod!
-                                            .toLowerCase()
-                                        : 'online',
+                                        ? getDeliveryMethod(
+                                            widget.service.deliveryMethod!)
+                                        : 'in_person',
                                 'deliveryDate': '$_startDate',
                                 'startTime': startFormattedTime,
                                 'endTime': endFormattedTime,
@@ -1171,7 +1171,6 @@ class _BookServiceScreenState extends State<BookServiceScreen> {
                                 'status': 'pending',
                                 'notes': noteController.text,
                               };
-                              print(orderData);
                               bool response =
                                   await orderController.addOrder(orderData);
                               if (response) {
@@ -1245,8 +1244,9 @@ class _BookServiceScreenState extends State<BookServiceScreen> {
                     ],
                   ),
                   if (widget.service.repeat == 'No (One-time Service)' &&
+                      widget.service.availability!['endDate'] != null &&
                       DateTime.now().isAfter(DateTime.parse(
-                          widget.service.availability!['endDate'])))
+                          widget.service.availability!['endDate']!)))
                     Container(
                       decoration: const BoxDecoration(color: Colors.black87),
                       width: double.infinity,
