@@ -57,7 +57,7 @@ class _CreateCustomListingState extends State<CreateCustomListing> {
               ? 'Create Custom Listing'
               : 'Edit Custom Listing',
           style: const TextStyle(
-            color: proprimaryColor,
+            color: textColor,
             fontWeight: FontWeight.bold,
           ),
         ),
