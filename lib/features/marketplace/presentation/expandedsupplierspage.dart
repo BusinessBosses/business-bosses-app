@@ -275,8 +275,9 @@ class _FilterUsersState extends State<ExpandedSuppliersPage> {
         const SizedBox(height: 5),
         GestureDetector(
           onTap: () async {
-            if (url.isNotEmpty && await canLaunchUrl(Uri.parse(url))) {
-              await _launchURL(url);
+            final Uri uri = Uri.parse('tel:${widget.supplier.phone}');
+            if (await canLaunchUrl(uri)) {
+              await launchUrl(uri, mode: LaunchMode.externalApplication);
             }
           },
           child: Text(
