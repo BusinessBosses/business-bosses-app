@@ -8,6 +8,7 @@ import 'package:business_bosses_v2/bbpro/models/product_model.dart';
 import 'package:business_bosses_v2/bbpro/presentation/create_product.dart';
 import 'package:business_bosses_v2/bbpro/presentation/create_service.dart';
 import 'package:business_bosses_v2/bbpro/presentation/create_custom_listing.dart';
+import 'package:business_bosses_v2/bbpro/presentation/setup_shop.dart';
 import 'package:business_bosses_v2/bbpro/widgets/custom_item_card.dart';
 import 'package:business_bosses_v2/bbpro/widgets/inventorycard.dart';
 import 'package:business_bosses_v2/bbpro/widgets/servicecard.dart';
@@ -57,14 +58,40 @@ class _ShopScreenState extends State<ShopScreen> {
                 ),
               ),
               actions: <Widget>[
-                CircleAvatar(
-                  backgroundColor: Colors.transparent,
-                  child: IconButton(
-                      onPressed: () {
-                        _sharePost();
-                      },
-                      icon: SvgPicture.asset('assets/svgs/shopshare.svg')),
-                )
+                Padding(
+                  padding: const EdgeInsets.only(right: 15.0),
+                  child: Row(
+                    children: <Widget>[
+                      CircleAvatar(
+                        backgroundColor: backgroundColor,
+                        child: IconButton(
+                            onPressed: () {
+                              Get.to(() => Setupshop(
+                                    shop: shopController.shop,
+                                  ));
+                            },
+                            icon: SvgPicture.asset(
+                              'assets/svgs/editshop.svg',
+                              height: 18,
+                            )),
+                      ),
+                      const SizedBox(
+                        width: 8,
+                      ),
+                      CircleAvatar(
+                        backgroundColor: backgroundColor,
+                        child: IconButton(
+                            onPressed: () {
+                              _sharePost();
+                            },
+                            icon: SvgPicture.asset(
+                              'assets/svgs/shopshare.svg',
+                              height: 20,
+                            )),
+                      )
+                    ],
+                  ),
+                ),
               ],
             )
           : null,

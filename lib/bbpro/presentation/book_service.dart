@@ -485,7 +485,7 @@ class _BookServiceScreenState extends State<BookServiceScreen> {
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: <Widget>[
-                                const Text('Select a Date and Time',
+                                const Text('Select Date',
                                     style: TextStyle(
                                         fontSize: 16,
                                         fontWeight: FontWeight.bold)),
@@ -524,8 +524,8 @@ class _BookServiceScreenState extends State<BookServiceScreen> {
                                                 : DateTime.now()),
                                         selectionDecoration: BoxDecoration(
                                           borderRadius:
-                                              BorderRadius.circular(0),
-                                          color: Colors.black.withOpacity(0.5),
+                                              BorderRadius.circular(10),
+                                          color: Colors.green.withOpacity(0.7),
                                         ),
                                         todayTextStyle: const TextStyle(
                                             color: Colors.black),
@@ -608,8 +608,18 @@ class _BookServiceScreenState extends State<BookServiceScreen> {
                                                         details.date.day) ||
                                             details.date.isBefore(minDate);
 
+                                        // Check if the date is selected
+                                        bool isSelected = _selectedDates.any(
+                                            (DateTime date) =>
+                                                date.year ==
+                                                    details.date.year &&
+                                                date.month ==
+                                                    details.date.month &&
+                                                date.day == details.date.day);
+
                                         // Define the text style based on the date condition
                                         TextStyle textStyle;
+                                        BoxDecoration decoration;
                                         if (isBlackoutDate) {
                                           textStyle = TextStyle(
                                             color: Colors.grey.withOpacity(0.5),
@@ -617,19 +627,40 @@ class _BookServiceScreenState extends State<BookServiceScreen> {
                                                 TextDecoration.lineThrough,
                                             fontStyle: FontStyle.italic,
                                           );
+                                          decoration = BoxDecoration(
+                                            color: Colors.white,
+                                            borderRadius:
+                                                BorderRadius.circular(4),
+                                          );
+                                        } else if (isSelected) {
+                                          textStyle = const TextStyle(
+                                            color: Colors
+                                                .white, // White text for selected dates
+                                            fontWeight: FontWeight.bold,
+                                          );
+                                          decoration = BoxDecoration(
+                                            color: Colors
+                                                .green, // Green background for selected dates
+                                            borderRadius:
+                                                BorderRadius.circular(10),
+                                          );
                                         } else {
                                           textStyle = const TextStyle(
-                                              color: Colors.black,
-                                              fontWeight: FontWeight.bold);
+                                            color: Colors.black,
+                                            fontWeight: FontWeight.bold,
+                                          );
+                                          decoration = BoxDecoration(
+                                            color:
+                                                Colors.green.withOpacity(0.1),
+                                            borderRadius:
+                                                BorderRadius.circular(10),
+                                          );
                                         }
 
                                         // Return the styled container
                                         return Container(
                                           alignment: Alignment.center,
-                                          decoration: BoxDecoration(
-                                            borderRadius:
-                                                BorderRadius.circular(4),
-                                          ),
+                                          decoration: decoration,
                                           child: Text(
                                             details.date.day.toString(),
                                             style: textStyle,
@@ -654,8 +685,8 @@ class _BookServiceScreenState extends State<BookServiceScreen> {
                                         showAgenda: false,
                                       ),
                                       selectionDecoration: BoxDecoration(
-                                        borderRadius: BorderRadius.circular(0),
-                                        color: Colors.black.withOpacity(0.5),
+                                        borderRadius: BorderRadius.circular(10),
+                                        color: Colors.transparent,
                                       ),
                                       todayTextStyle:
                                           const TextStyle(color: Colors.black),
@@ -697,133 +728,157 @@ class _BookServiceScreenState extends State<BookServiceScreen> {
                                 if (widget.service.repeat ==
                                     'No (One-time Service)')
                                   SizedBox(
-                                      height:
-                                          MediaQuery.of(context).size.height /
-                                              3,
-                                      child: SfCalendar(
-                                        showNavigationArrow: true,
-                                        monthCellBuilder: (BuildContext context,
-                                            MonthCellDetails details) {
-                                          DateTime minDate = DateTime
-                                              .now(); // Define your minimum date here
-                                          List<DateTime> blackoutDates =
-                                              _getAllDatesExceptStart();
+                                    height:
+                                        MediaQuery.of(context).size.height / 3,
+                                    child: SfCalendar(
+                                      showNavigationArrow: true,
+                                      monthCellBuilder: (BuildContext context,
+                                          MonthCellDetails details) {
+                                        DateTime minDate = DateTime
+                                            .now(); // Define your minimum date here
+                                        List<DateTime> blackoutDates =
+                                            _getAllDatesExceptStart();
 
-                                          // Combine blackoutDates with days before the minDate
-                                          bool isBlackoutDate = blackoutDates
-                                                  .any((DateTime date) =>
-                                                      date.year ==
-                                                          details.date.year &&
-                                                      date.month ==
-                                                          details.date.month &&
-                                                      date.day ==
-                                                          details.date.day) ||
-                                              details.date.isBefore(minDate);
+                                        // Combine blackoutDates with days before the minDate
+                                        bool isBlackoutDate = blackoutDates.any(
+                                                (DateTime date) =>
+                                                    date.year ==
+                                                        details.date.year &&
+                                                    date.month ==
+                                                        details.date.month &&
+                                                    date.day ==
+                                                        details.date.day) ||
+                                            details.date.isBefore(minDate);
 
-                                          // Define the text style based on the date condition
-                                          TextStyle textStyle;
-                                          if (isBlackoutDate) {
-                                            textStyle = TextStyle(
-                                              color:
-                                                  Colors.grey.withOpacity(0.5),
-                                              decoration:
-                                                  TextDecoration.lineThrough,
-                                              fontStyle: FontStyle.italic,
-                                            );
-                                          } else {
-                                            textStyle = const TextStyle(
-                                                color: Colors.black,
-                                                fontWeight: FontWeight.bold);
-                                          }
+                                        // Check if the date is selected
+                                        bool isSelected = _selectedDates.any(
+                                            (DateTime date) =>
+                                                date.year ==
+                                                    details.date.year &&
+                                                date.month ==
+                                                    details.date.month &&
+                                                date.day == details.date.day);
 
-                                          // Return the styled container
-                                          return Container(
-                                            alignment: Alignment.center,
-                                            decoration: BoxDecoration(
-                                              borderRadius:
-                                                  BorderRadius.circular(4),
-                                            ),
-                                            child: Text(
-                                              details.date.day.toString(),
-                                              style: textStyle,
-                                            ),
+                                        // Define the text style based on the date condition
+                                        TextStyle textStyle;
+                                        BoxDecoration decoration;
+                                        if (isBlackoutDate) {
+                                          textStyle = TextStyle(
+                                            color: Colors.grey.withOpacity(0.5),
+                                            decoration:
+                                                TextDecoration.lineThrough,
+                                            fontStyle: FontStyle.italic,
                                           );
-                                        },
-                                        view: CalendarView.month,
-                                        initialSelectedDate: _startDate ??
-                                            (_selectedDates.isNotEmpty
-                                                ? _selectedDates[0]
-                                                : DateTime.now()),
-                                        initialDisplayDate: _startDate ??
-                                            (_selectedDates.isNotEmpty
-                                                ? _selectedDates[0]
-                                                : DateTime.now()),
-                                        minDate: DateTime.now(),
-                                        monthViewSettings:
-                                            const MonthViewSettings(
-                                          appointmentDisplayMode:
-                                              MonthAppointmentDisplayMode
-                                                  .indicator,
-                                          showAgenda: false,
-                                        ),
-                                        selectionDecoration: BoxDecoration(
-                                          borderRadius:
-                                              BorderRadius.circular(10),
-                                          color: Colors.green.withOpacity(0.2),
-                                        ),
-                                        todayTextStyle: const TextStyle(
-                                            color: Colors.black),
-                                        todayHighlightColor: Colors.transparent,
-                                        cellBorderColor: Colors.transparent,
-                                        blackoutDates:
-                                            _getAllDatesExceptStart(),
-                                        blackoutDatesTextStyle: TextStyle(
-                                          color:
-                                              Colors.black12.withOpacity(0.08),
-                                          decoration:
-                                              TextDecoration.lineThrough,
-                                        ),
-                                        onTap: (CalendarTapDetails details) {
-                                          if (details.targetElement ==
-                                              CalendarElement.calendarCell) {
-                                            setState(() {
-                                              DateTime selectedDate = DateTime(
-                                                  details.date!.year,
-                                                  details.date!.month,
-                                                  details.date!.day);
+                                          decoration = BoxDecoration(
+                                            color: Colors.white,
+                                            borderRadius:
+                                                BorderRadius.circular(4),
+                                          );
+                                        } else if (isSelected) {
+                                          textStyle = const TextStyle(
+                                            color: Colors
+                                                .white, // White text for selected dates
+                                            fontWeight: FontWeight.bold,
+                                          );
+                                          decoration = BoxDecoration(
+                                            color: Colors
+                                                .green, // Green background for selected dates
+                                            borderRadius:
+                                                BorderRadius.circular(10),
+                                          );
+                                        } else {
+                                          textStyle = const TextStyle(
+                                            color: Colors.black,
+                                            fontWeight: FontWeight.bold,
+                                          );
+                                          decoration = BoxDecoration(
+                                            color:
+                                                Colors.green.withOpacity(0.1),
+                                            borderRadius:
+                                                BorderRadius.circular(10),
+                                          );
+                                        }
 
-                                              DateTime startDate =
-                                                  DateTime.parse(widget.service
-                                                          .availability![
-                                                      'startDate']);
+                                        // Return the styled container
+                                        return Container(
+                                          alignment: Alignment.center,
+                                          decoration: decoration,
+                                          child: Text(
+                                            details.date.day.toString(),
+                                            style: textStyle,
+                                          ),
+                                        );
+                                      },
+                                      view: CalendarView.month,
+                                      initialSelectedDate: _startDate ??
+                                          (_selectedDates.isNotEmpty
+                                              ? _selectedDates[0]
+                                              : DateTime.now()),
+                                      initialDisplayDate: _startDate ??
+                                          (_selectedDates.isNotEmpty
+                                              ? _selectedDates[0]
+                                              : DateTime.now()),
+                                      minDate: DateTime.now(),
+                                      monthViewSettings:
+                                          const MonthViewSettings(
+                                        appointmentDisplayMode:
+                                            MonthAppointmentDisplayMode
+                                                .indicator,
+                                        showAgenda: false,
+                                      ),
+                                      selectionDecoration: BoxDecoration(
+                                        borderRadius: BorderRadius.circular(10),
+                                        color: Colors.transparent,
+                                      ),
+                                      todayTextStyle:
+                                          const TextStyle(color: Colors.black),
+                                      todayHighlightColor: Colors.transparent,
+                                      cellBorderColor: Colors.transparent,
+                                      blackoutDates: _getAllDatesExceptStart(),
+                                      blackoutDatesTextStyle: TextStyle(
+                                        color: Colors.black12.withOpacity(0.08),
+                                        decoration: TextDecoration.lineThrough,
+                                      ),
+                                      onTap: (CalendarTapDetails details) {
+                                        if (details.targetElement ==
+                                            CalendarElement.calendarCell) {
+                                          setState(() {
+                                            DateTime selectedDate = DateTime(
+                                                details.date!.year,
+                                                details.date!.month,
+                                                details.date!.day);
 
-                                              if (selectedDate.year ==
-                                                      startDate.year &&
-                                                  selectedDate.month ==
-                                                      startDate.month &&
-                                                  selectedDate.day ==
-                                                      startDate.day) {
-                                                _selectedDates.clear();
-                                                _selectedDates
-                                                    .add(selectedDate);
-                                                _startDate = selectedDate;
-                                              } else {
-                                                showSnackbar(
-                                                  message:
-                                                      'Please select the specific start date.',
-                                                  error: true,
-                                                );
-                                              }
-                                            });
-                                          }
-                                        },
-                                      )),
+                                            DateTime startDate = DateTime.parse(
+                                                widget.service.availability![
+                                                    'startDate']);
+
+                                            if (selectedDate.year ==
+                                                    startDate.year &&
+                                                selectedDate.month ==
+                                                    startDate.month &&
+                                                selectedDate.day ==
+                                                    startDate.day) {
+                                              _selectedDates.clear();
+                                              _selectedDates.add(selectedDate);
+                                              _startDate = selectedDate;
+                                            } else {
+                                              showSnackbar(
+                                                message:
+                                                    'Please select the specific start date.',
+                                                error: true,
+                                              );
+                                            }
+                                          });
+                                        }
+                                      },
+                                    ),
+                                  ),
                                 const SizedBox(height: 10),
                                 if (_startDate != null)
-                                  const Text(
-                                    'Time slots',
-                                    style: TextStyle(fontSize: 13),
-                                  ),
+                                  const Text('Select TIme',
+                                      style: TextStyle(
+                                          fontSize: 16,
+                                          fontWeight: FontWeight.bold)),
                                 if (_startDate != null)
                                   Wrap(
                                     spacing: 8.0,
@@ -839,7 +894,7 @@ class _BookServiceScreenState extends State<BookServiceScreen> {
                                                   : Colors.black),
                                         ),
                                         selected: selectedSlot == slot,
-                                        selectedColor: Colors.black,
+                                        selectedColor: Colors.green,
                                         onSelected: (bool selected) {
                                           setState(() {
                                             selectedSlot =
