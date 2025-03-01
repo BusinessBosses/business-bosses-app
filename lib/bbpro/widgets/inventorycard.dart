@@ -244,18 +244,11 @@ class _InventoryCardState extends State<InventoryCard> {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: <Widget>[
                     Expanded(
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: <Widget>[
-                          Text(
-                            widget.product?.description ??
-                                'Product description',
-                            style: const TextStyle(fontSize: 11),
-                            maxLines: 2,
-                            overflow: TextOverflow.ellipsis,
-                          ),
-                        ],
+                      child: Text(
+                        widget.product?.description ?? 'Product description',
+                        style: const TextStyle(fontSize: 11),
+                        maxLines: 2,
+                        overflow: TextOverflow.ellipsis,
                       ),
                     ),
                     OptionsButton(

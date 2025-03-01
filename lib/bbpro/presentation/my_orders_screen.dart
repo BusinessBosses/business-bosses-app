@@ -95,7 +95,7 @@ class _MyOrdersScreenState extends State<MyOrdersScreen> {
         title: Text(
           'My Orders (${filteredOrders.length})',
           style: const TextStyle(
-            color: proprimaryColor,
+            color: textColor,
             fontWeight: FontWeight.bold,
           ),
         ),

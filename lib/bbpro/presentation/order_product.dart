@@ -415,13 +415,13 @@ class _OrderProductScreenState extends State<OrderProductScreen> {
                                 ),
                             ],
                           ),
-                          Text(
-                            'Category: ${widget.product.category}',
-                            textAlign: TextAlign.start,
-                          ),
-                          const SizedBox(
-                            height: 15,
-                          ),
+                          // Text(
+                          //   'Category: ${widget.product.category}',
+                          //   textAlign: TextAlign.start,
+                          // ),
+                          // const SizedBox(
+                          //   height: 15,
+                          // ),
                           Align(
                             alignment: Alignment.centerLeft,
                             child: DetectableText(

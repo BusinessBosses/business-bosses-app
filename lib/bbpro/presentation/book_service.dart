@@ -449,8 +449,8 @@ class _BookServiceScreenState extends State<BookServiceScreen> {
                                   ),
                               ],
                             ),
-                            Text('Category: ${widget.service.category}'),
-                            const SizedBox(height: 15),
+                            // Text('Category: ${widget.service.category}'),
+                            // const SizedBox(height: 15),
                             DetectableText(
                               text: widget.service.description,
                               detectionRegExp: detectionRegExp(hashtag: false)!,

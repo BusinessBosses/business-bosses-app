@@ -376,11 +376,11 @@ class _UserShopScreenState extends State<UserShopScreen> {
                                             moreStyle: bodyText2.copyWith(
                                                 fontSize: 12,
                                                 fontWeight: FontWeight.w700,
-                                                color: proprimaryColor),
+                                                color: Colors.black),
                                             lessStyle: bodyText2.copyWith(
                                                 fontSize: 12,
                                                 fontWeight: FontWeight.w700,
-                                                color: proprimaryColor),
+                                                color: Colors.black),
                                             trimLength: 100,
                                             trimExpandedText: '  show less',
                                             basicStyle: bodyText2.copyWith(
