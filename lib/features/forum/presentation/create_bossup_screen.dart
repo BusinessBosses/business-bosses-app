@@ -2,6 +2,7 @@ import 'package:business_bosses_v2/common/dialogs/snackbar.dart';
 import 'package:business_bosses_v2/common/widgets/typography/text_widget.dart';
 import 'package:business_bosses_v2/features/forum/models/forum_model.dart';
 import 'package:business_bosses_v2/features/forum/models/industry.dart';
+import 'package:business_bosses_v2/features/home/marketplace_screen.dart';
 import 'package:business_bosses_v2/features/posts/widgets/preview.dart';
 import 'package:business_bosses_v2/features/profile/controller/profile_controller.dart';
 import 'package:detectable_text_field/detector/sample_regular_expressions.dart';
@@ -329,9 +330,31 @@ class _CreateBossUpScreenState extends State<CreateBossUpScreen> {
                         const SizedBox(
                           width: 5,
                         ),
-                        const Text(
-                          'To sell your products and services, list on Marketplace',
-                          style: TextStyle(color: primaryColorLT),
+                        GestureDetector(
+                          onTap: () {
+                            Get.to(const MarketplaceScreen());
+                          },
+                          child: const Row(
+                            children: <Widget>[
+                              Text(
+                                'To sell your products and services, list on',
+                                style:
+                                    TextStyle(color: textColor, fontSize: 12),
+                              ),
+                              Text(
+                                ' Marketplace',
+                                style: TextStyle(
+                                    color: primaryColorLT,
+                                    fontWeight: FontWeight.w700,
+                                    fontSize: 12),
+                              ),
+                              Icon(
+                                Icons.chevron_right,
+                                color: primaryColorLT,
+                                size: 15,
+                              ),
+                            ],
+                          ),
                         )
                       ],
                     ),

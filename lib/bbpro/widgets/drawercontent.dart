@@ -147,26 +147,26 @@ class DrawerContent extends StatelessWidget {
           Get.to(const MyOrdersScreen());
         },
       },
-      {
-        'icon': SvgPicture.asset(
-          'assets/svgs/supporter.svg',
-          height: 25,
-          colorFilter: const ColorFilter.mode(
-            textColor,
-            BlendMode.srcIn,
-          ),
-        ),
-        'title': 'Crowdfund',
-        'description':
-            'Support and invest in projects you believe in. Discover opportunities to back innovative ideas and businesses.',
-        'onTileClicked': () {
-          oncloseclick?.call();
-          Get.to(() => const AllCommunitiesScreen(
-                initialBossupTabIndex: 3,
-              ));
-          oncrowfundclick?.call();
-        },
-      },
+      // {
+      //   'icon': SvgPicture.asset(
+      //     'assets/svgs/supporter.svg',
+      //     height: 25,
+      //     colorFilter: const ColorFilter.mode(
+      //       textColor,
+      //       BlendMode.srcIn,
+      //     ),
+      //   ),
+      //   'title': 'Crowdfund',
+      //   'description':
+      //       'Support and invest in projects you believe in. Discover opportunities to back innovative ideas and businesses.',
+      //   'onTileClicked': () {
+      //     oncloseclick?.call();
+      //     Get.to(() => const AllCommunitiesScreen(
+      //           initialBossupTabIndex: 3,
+      //         ));
+      //     oncrowfundclick?.call();
+      //   },
+      // },
       {
         'icon': SvgPicture.asset(
           'assets/svgs/partner.svg',
