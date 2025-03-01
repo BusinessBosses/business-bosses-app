@@ -1211,12 +1211,13 @@ class _CreateServiceListingState extends State<CreateServiceListing>
               SizedBox(
                   height: MediaQuery.of(context).size.height / 3,
                   child: SfCalendar(
+                    showNavigationArrow: true,
                     initialSelectedDate: _selectedDates.isNotEmpty
                         ? _selectedDates[0]
                         : DateTime.now(),
                     selectionDecoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(0),
-                      color: proprimaryColor.withOpacity(0.5),
+                      borderRadius: BorderRadius.circular(10),
+                      color: primaryColorLT.withOpacity(0.5),
                     ),
                     todayTextStyle: const TextStyle(color: Colors.black),
                     todayHighlightColor: Colors.transparent,
