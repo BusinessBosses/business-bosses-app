@@ -31,6 +31,16 @@ class ProshopdealsWidget extends StatefulWidget {
   State<ProshopdealsWidget> createState() => _ProshopdealsWidgetState();
 }
 
+String formatPrice(double price) {
+  if (price >= 1000000) {
+    return '${(price / 1000000).toStringAsFixed(1)}m';
+  } else if (price >= 1000) {
+    return '${(price / 1000).toStringAsFixed(1)}k';
+  } else {
+    return price.toStringAsFixed(2);
+  }
+}
+
 class _ProshopdealsWidgetState extends State<ProshopdealsWidget> {
   @override
   Widget build(BuildContext context) {
@@ -199,7 +209,7 @@ class _ProshopdealsWidgetState extends State<ProshopdealsWidget> {
           const SizedBox(height: 3.0),
           // Price
           Text(
-            '$currency${(double.parse(originalPrice))}',
+            '$currency${formatPrice(double.parse(originalPrice))}',
             style: const TextStyle(
               color: Colors.black,
               fontWeight: FontWeight.bold,
