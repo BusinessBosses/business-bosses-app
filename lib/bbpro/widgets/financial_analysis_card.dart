@@ -101,7 +101,7 @@ class _FinancialanalysisWidgetState extends State<FinancialanalysisWidget> {
                           padding: EdgeInsets.all(8.0),
                           child: Center(
                             child: Text(
-                              'Sales fromAll Orders',
+                              'Sales from All Orders',
                               style: TextStyle(fontWeight: FontWeight.bold),
                             ),
                           ),
