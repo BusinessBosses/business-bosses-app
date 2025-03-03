@@ -904,7 +904,7 @@ class _BookServiceScreenState extends State<BookServiceScreen> {
                                   ),
                                 const SizedBox(height: 10),
                                 if (_startDate != null)
-                                  const Text('Select TIme',
+                                  const Text('Select Time',
                                       style: TextStyle(
                                           fontSize: 16,
                                           fontWeight: FontWeight.bold)),

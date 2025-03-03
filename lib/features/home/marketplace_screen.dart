@@ -898,64 +898,64 @@ class _MarketplaceScreenState extends State<MarketplaceScreen>
           : _ismarketplaceSearching
               ? Column(
                   children: <Widget>[
-                    Container(
-                      height: 50,
-                      decoration: BoxDecoration(
-                        color: Colors.grey[200],
-                        borderRadius: BorderRadius.circular(1),
-                      ),
-                      child: CountryListPick(
-                          appBar: AppBar(
-                            leading: IconButton(
-                              onPressed: () {
-                                Navigator.pop(context);
-                              },
-                              icon: SvgPicture.asset(
-                                  'assets/svgs/backbutton.svg'),
-                            ),
-                            centerTitle: true,
-                            title: const Text(
-                              'Select Location',
-                              textAlign: TextAlign.center,
-                            ),
-                          ),
-                          initialSelection: _marketController.selectedLocation,
-                          onChanged: (CountryCode? code) async {
-                            setState(() {
-                              selectedLocationChanged(code!.name, code.code);
-                            });
-                          },
-                          useSafeArea: false,
-                          pickerBuilder:
-                              (BuildContext context, CountryCode? countryCode) {
-                            return Row(
-                              children: <Widget>[
-                                const Icon(
-                                  Icons.place,
-                                  size: 18,
-                                ),
-                                const SizedBox(
-                                  width: 5,
-                                ),
-                                Text(
-                                  _marketController.selectedLocation!.length >
-                                          20
-                                      ? '${_marketController.selectedLocation!.substring(0, 20)}...'
-                                      : _marketController.selectedLocation!,
-                                  style: const TextStyle(
-                                    color: Colors.black,
-                                    fontWeight: FontWeight.w700,
-                                    fontSize: 16,
-                                  ),
-                                ),
-                                const SizedBox(
-                                  width: 5,
-                                ),
-                                SvgPicture.asset('assets/svgs/dropdown.svg')
-                              ],
-                            );
-                          }),
-                    ),
+                    // Container(
+                    //   height: 50,
+                    //   decoration: BoxDecoration(
+                    //     color: Colors.grey[200],
+                    //     borderRadius: BorderRadius.circular(1),
+                    //   ),
+                    //   child: CountryListPick(
+                    //       appBar: AppBar(
+                    //         leading: IconButton(
+                    //           onPressed: () {
+                    //             Navigator.pop(context);
+                    //           },
+                    //           icon: SvgPicture.asset(
+                    //               'assets/svgs/backbutton.svg'),
+                    //         ),
+                    //         centerTitle: true,
+                    //         title: const Text(
+                    //           'Select Location',
+                    //           textAlign: TextAlign.center,
+                    //         ),
+                    //       ),
+                    //       initialSelection: _marketController.selectedLocation,
+                    //       onChanged: (CountryCode? code) async {
+                    //         setState(() {
+                    //           selectedLocationChanged(code!.name, code.code);
+                    //         });
+                    //       },
+                    //       useSafeArea: false,
+                    //       pickerBuilder:
+                    //           (BuildContext context, CountryCode? countryCode) {
+                    //         return Row(
+                    //           children: <Widget>[
+                    //             const Icon(
+                    //               Icons.place,
+                    //               size: 18,
+                    //             ),
+                    //             const SizedBox(
+                    //               width: 5,
+                    //             ),
+                    //             Text(
+                    //               _marketController.selectedLocation!.length >
+                    //                       20
+                    //                   ? '${_marketController.selectedLocation!.substring(0, 20)}...'
+                    //                   : _marketController.selectedLocation!,
+                    //               style: const TextStyle(
+                    //                 color: Colors.black,
+                    //                 fontWeight: FontWeight.w700,
+                    //                 fontSize: 16,
+                    //               ),
+                    //             ),
+                    //             const SizedBox(
+                    //               width: 5,
+                    //             ),
+                    //             SvgPicture.asset('assets/svgs/dropdown.svg')
+                    //           ],
+                    //         );
+                    //       }),
+                    // ),
                     Expanded(
                       child: TabBarView(
                         controller: _marketplacesearchTabController,

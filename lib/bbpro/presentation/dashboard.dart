@@ -36,9 +36,8 @@ class Dashboard extends StatefulWidget {
 class _DashboardState extends State<Dashboard> {
   final List<String> titles = <String>[
     'Customers',
-    'Visits',
+    'Visitors',
     'To-do tasks',
-    // 'Shop Visits'
   ];
 
   final List<String> quickactions = <String>[
