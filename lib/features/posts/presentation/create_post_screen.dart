@@ -350,7 +350,7 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
 
                     // if (controller.imageFileList.isNotEmpty)
                     Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 20),
+                      padding: const EdgeInsets.only(left: 20, right: 20, bottom :10),
                       child: Preview(
                         controller: controller,
                         isUpdating: widget.postDetail != null,

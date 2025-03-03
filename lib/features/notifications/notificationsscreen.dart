@@ -179,26 +179,19 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
                                                               .dataId!));
                                                   return;
                                                 }
-                                                controller
-                                                        .notifications[i].title
-                                                        .contains('New Message')
-                                                    ? Get.to(
-                                                        () =>
-                                                            const ChatRoomScreen(
-                                                              frommarketplace:
-                                                                  false,
-                                                            ),
-                                                        arguments: controller
-                                                            .notifications[i]
-                                                            .user!)
-                                                    : Get.toNamed(
-                                                        Routes.publicProfile,
-                                                        arguments: controller
-                                                            .notifications[i]
-                                                            .user!);
                                                 if (controller
                                                     .notifications[i].title
-                                                    .contains('New Referral')) {
+                                                    .contains('New Message')) {
+                                                  Get.to(
+                                                      () =>
+                                                          const ChatRoomScreen(
+                                                            frommarketplace:
+                                                                false,
+                                                          ),
+                                                      arguments: controller
+                                                          .notifications[i]
+                                                          .user!);
+                                                } else {
                                                   Get.toNamed(
                                                       Routes.publicProfile,
                                                       arguments: controller

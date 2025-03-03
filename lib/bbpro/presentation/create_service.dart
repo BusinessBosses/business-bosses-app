@@ -208,7 +208,7 @@ class _CreateServiceListingState extends State<CreateServiceListing>
   }
 
   Future<void> _pickImage() async {
-    if (_selectedImages.length >= 5) {
+    if (_selectedImages.length >= 10) {
       showSnackbar(message: 'Maximum of 5 images allowed', error: true);
       return;
     }
@@ -217,9 +217,9 @@ class _CreateServiceListingState extends State<CreateServiceListing>
       setState(() {
         _selectedImages.addAll(images
             .map((XFile image) => File(image.path))
-            .take(5 - _selectedImages.length)); // Limit to 5 images
-        if (_selectedImages.length > 5) {
-          _selectedImages.removeRange(5, _selectedImages.length);
+            .take(10 - _selectedImages.length)); // Limit to 5 images
+        if (_selectedImages.length > 10) {
+          _selectedImages.removeRange(10, _selectedImages.length);
         }
       });
     }

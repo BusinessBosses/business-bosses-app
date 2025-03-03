@@ -9,9 +9,13 @@ import 'package:get/get.dart';
 class NotificationButton extends StatelessWidget {
   final double? padding;
   final double? toppadding;
-  final bool? hasUnreadNotification;
+  final bool hasUnreadNotification;
   const NotificationButton(
-      {super.key, this.padding, this.toppadding, this.hasUnreadNotification});
+      {Key? key,
+      this.padding,
+      this.toppadding,
+      this.hasUnreadNotification = false})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -32,7 +36,7 @@ class NotificationButton extends StatelessWidget {
                   height: 20,
                 )),
           ),
-          if (hasUnreadNotification != null)
+          if (hasUnreadNotification)
             Positioned(
               right: 19,
               top: 7,

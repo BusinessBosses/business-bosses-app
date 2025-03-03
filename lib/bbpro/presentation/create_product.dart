@@ -153,10 +153,19 @@ class _CreateProductListingState extends State<CreateProductListing> {
   }
 
   Future<void> _pickImage() async {
-    final XFile? image = await _picker.pickImage(source: ImageSource.gallery);
-    if (image != null) {
+    if (_selectedImages.length >= 10) {
+      showSnackbar(message: 'Maximum of 10 images allowed', error: true);
+      return;
+    }
+    final List<XFile> images = await _picker.pickMultiImage();
+    if (images.isNotEmpty) {
       setState(() {
-        _selectedImages.add(File(image.path));
+        _selectedImages.addAll(images
+            .map((XFile image) => File(image.path))
+            .take(10 - _selectedImages.length)); // Limit to 10 images
+        if (_selectedImages.length > 10) {
+          _selectedImages.removeRange(10, _selectedImages.length);
+        }
       });
     }
   }
