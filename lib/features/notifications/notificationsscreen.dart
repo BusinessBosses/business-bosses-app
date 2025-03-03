@@ -10,7 +10,8 @@ import 'package:business_bosses_v2/utils/theme/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_sticky_header/flutter_sticky_header.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:get/get.dart';import 'package:business_bosses_v2/bbpro/presentation/expanded_order_load.dart';
+import 'package:get/get.dart';
+import 'package:business_bosses_v2/bbpro/presentation/expanded_order_load.dart';
 import '../../utils/time_format.dart';
 
 class NotificationsScreen extends StatefulWidget {
@@ -170,8 +171,12 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
                                               onTap: () {
                                                 if (controller.notifications[i]
                                                         .notificationType ==
-                                                    'order') {Get.to(() => ExpandedOrdersView(
-                                      order: controller.notifications[i].dataId!));
+                                                    'order') {
+                                                  Get.to(() =>
+                                                      ExpandedOrdersView(
+                                                          order: controller
+                                                              .notifications[i]
+                                                              .dataId!));
                                                   return;
                                                 }
                                                 controller
@@ -191,6 +196,15 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
                                                         arguments: controller
                                                             .notifications[i]
                                                             .user!);
+                                                if (controller
+                                                    .notifications[i].title
+                                                    .contains('New Referral')) {
+                                                  Get.toNamed(
+                                                      Routes.publicProfile,
+                                                      arguments: controller
+                                                          .notifications[i]
+                                                          .user!);
+                                                }
                                               },
                                             )
                                           ],
