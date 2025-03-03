@@ -266,7 +266,36 @@ class _OrderProductScreenState extends State<OrderProductScreen> {
                                 text: 'Report this user',
                                 color: Colors.red,
                               ),
-                            )
+                            ),
+                            ListTile(
+                              onTap: () {
+                                _sharePost();
+                              },
+                              contentPadding: EdgeInsets.zero,
+                              title: const TextWidget(
+                                text: 'Share this post',
+                                color: Colors.blue,
+                              ),
+                            ),
+                            ListTile(
+                              onTap: () {
+                                if (Get.previousRoute == Routes.publicProfile) {
+                                  Get.back();
+                                } else {
+                                  Get.to(
+                                    () => PublicProfileScreen(
+                                      currentIndex: 1,
+                                    ),
+                                    arguments: widget.product.user,
+                                  );
+                                }
+                              },
+                              contentPadding: EdgeInsets.zero,
+                              title: const TextWidget(
+                                text: 'View Biz-Center',
+                                color: Colors.blue,
+                              ),
+                            ),
                           ],
                         ),
                       ),
@@ -803,4 +832,11 @@ class _OrderProductScreenState extends State<OrderProductScreen> {
 
   Future<void> _reportUser(BuildContext context, String reportType,
       String userId, String username) async {}
+
+  void _sharePost() {
+    String message =
+        'Have a look at ${shopController.shop!.user?.username}\'s biz-center on Business Bosses\n'
+        'https://my-biz.io/${shopController.shop?.name.toLowerCase().replaceAll(' ', '-')}';
+    socialShare(message);
+  }
 }
