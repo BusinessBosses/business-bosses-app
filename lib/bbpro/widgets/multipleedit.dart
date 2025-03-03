@@ -29,7 +29,7 @@ class MultipleEditTextWidget extends StatefulWidget {
 class _MultipleEditTextWidgetState extends State<MultipleEditTextWidget> {
   final List<TextEditingController> _controllers = <TextEditingController>[];
   final List<Widget> _textFields = <Widget>[];
-  final int _maxFields = 3;
+  final int _maxFields = 10;
 
   @override
   void initState() {
