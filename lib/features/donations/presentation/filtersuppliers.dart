@@ -64,85 +64,6 @@ class _FilterUsersState extends State<FilterSuppliers> {
             body: SingleChildScrollView(
               child: Column(
                 children: <Widget>[
-                  SingleChildScrollView(
-                    scrollDirection: Axis.horizontal,
-                    child: Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 15.0),
-                      child: Row(
-                        children: <Widget>[
-                          SizedBox(
-                            width: 250,
-                            child: CountryListPick(
-                              appBar: AppBar(
-                                leading: IconButton(
-                                  onPressed: () {
-                                    Navigator.pop(context);
-                                  },
-                                  icon: SvgPicture.asset(
-                                      'assets/svgs/backbutton.svg'),
-                                ),
-                                centerTitle: true,
-                                // ignore: prefer_const_constructors
-                                title: Text(
-                                  'Select Location',
-                                  textAlign: TextAlign.center,
-                                ),
-                              ),
-                              initialSelection: filterCode ?? 'GB',
-                              pickerBuilder: (BuildContext context,
-                                  CountryCode? countryCode) {
-                                return Container(
-                                    decoration: BoxDecoration(
-                                      color: Colors.white,
-                                      borderRadius:
-                                          BorderRadius.circular(radiusValue),
-                                    ),
-                                    child: DropdownMenuItem<String>(
-                                      value: _selectedLocation,
-                                      child: _selectedLocation != null
-                                          ? Padding(
-                                              padding:
-                                                  const EdgeInsets.symmetric(
-                                                      horizontal: 15.0),
-                                              child: Text(
-                                                _selectedLocation!,
-                                                style: bodyText2.copyWith(
-                                                    color: textColor,
-                                                    fontSize: 16),
-                                                overflow: TextOverflow.ellipsis,
-                                                maxLines: 1,
-                                              ),
-                                            )
-                                          : Padding(
-                                              padding:
-                                                  const EdgeInsets.symmetric(
-                                                      horizontal: 15),
-                                              child: Text(
-                                                'Select Location',
-                                                overflow: TextOverflow.ellipsis,
-                                                maxLines: 1,
-                                                style: bodyText2.copyWith(
-                                                  color: hintColor,
-                                                ),
-                                              ),
-                                            ),
-                                    ));
-                              },
-                              onChanged: (CountryCode? code) {
-                                setState(
-                                  () {
-                                    _selectedLocation = code?.name;
-                                    filterCode = code?.code;
-                                  },
-                                );
-                              },
-                              useSafeArea: false,
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
                   NotificationListener<ScrollNotification>(
                     onNotification: (ScrollNotification scrollNotification) {
                       FocusScope.of(context).unfocus();
@@ -152,8 +73,7 @@ class _FilterUsersState extends State<FilterSuppliers> {
                       staggeredTileBuilder: (int index) =>
                           const StaggeredTile.fit(1),
                       padding: const EdgeInsets.symmetric(
-                        horizontal: 15.0,
-                      ),
+                          horizontal: 15.0, vertical: 10),
                       crossAxisCount: 2,
                       crossAxisSpacing: 8.0,
                       mainAxisSpacing: 8.0,
