@@ -835,8 +835,8 @@ class _OrderProductScreenState extends State<OrderProductScreen> {
 
   void _sharePost() {
     String message =
-        'Have a look at ${shopController.shop!.user?.username}\'s biz-center on Business Bosses\n'
-        'https://my-biz.io/${shopController.shop?.name.toLowerCase().replaceAll(' ', '-')}';
+        'Have a look at ${shopController.userShop!.user?.username}\'s biz-center on Business Bosses\n'
+        'https://my-biz.io/${shopController.userShop?.name.toLowerCase().replaceAll(' ', '-')}';
     socialShare(message);
   }
 }
