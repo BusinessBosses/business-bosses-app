@@ -17,6 +17,14 @@ class ProNotifications extends StatefulWidget {
 class _ProNotificationsState extends State<ProNotifications> {
   final NotificationController notificationController =
       Get.put(NotificationController());
+
+  @override
+  void initState() {
+    super.initState();
+
+    notificationController.loadNotifications();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
