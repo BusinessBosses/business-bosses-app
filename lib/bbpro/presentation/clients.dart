@@ -456,7 +456,11 @@ class _ClientsScreenState extends State<ClientsScreen>
                       )),
                 ),
               ),
-              const NotificationButton(),
+              NotificationButton(
+                hasUnreadNotification:
+                    profileController.myProfile.unReadCount != null &&
+                        profileController.myProfile.unReadCount! > 0,
+              ),
             ],
           )
         ],

@@ -96,7 +96,11 @@ class _DashboardState extends State<Dashboard> {
                               )),
                         ),
                       ),
-                      const NotificationButton(),
+                      NotificationButton(
+                        hasUnreadNotification:
+                            shopController.shop!.user!.unReadCount != null &&
+                                shopController.shop!.user!.unReadCount! > 0,
+                      ),
                     ],
                   )
                 ],

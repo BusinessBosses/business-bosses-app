@@ -9,6 +9,7 @@ import 'package:business_bosses_v2/bbpro/controllers/project_controller.dart';
 import 'package:business_bosses_v2/bbpro/presentation/add_project.dart';
 import 'package:business_bosses_v2/common/widgets/safety_model.dart';
 import 'package:business_bosses_v2/features/chat/chat_screen.dart';
+import 'package:business_bosses_v2/features/profile/controller/profile_controller.dart';
 import 'package:business_bosses_v2/utils/theme/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -29,6 +30,7 @@ class _ProjectsState extends State<Projects>
     with SingleTickerProviderStateMixin {
   final ProjectController projectController = Get.put(ProjectController());
   final ScrollController _mainListScrollController = ScrollController();
+  final ProfileController profileController = Get.find<ProfileController>();
   Timer? _timer;
   bool loading = true;
   bool? _lastMoveRight;
@@ -126,7 +128,11 @@ class _ProjectsState extends State<Projects>
                       )),
                 ),
               ),
-              const NotificationButton(),
+              NotificationButton(
+                hasUnreadNotification:
+                    profileController.myProfile.unReadCount != null &&
+                        profileController.myProfile.unReadCount! > 0,
+              ),
             ],
           )
         ],

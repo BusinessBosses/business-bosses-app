@@ -73,7 +73,11 @@ class _SetupState extends State<Setup> {
                       )),
                 ),
               ),
-              const NotificationButton(),
+              NotificationButton(
+                hasUnreadNotification:
+                    shopController.shop!.user!.unReadCount != null &&
+                        shopController.shop!.user!.unReadCount! > 0,
+              ),
             ],
           )
         ],
