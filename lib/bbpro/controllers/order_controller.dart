@@ -27,9 +27,9 @@ class OrderController extends GetxController {
       // Map and sort orders by createdAt
       orders.addAll((response.data['rows'] as List<dynamic>)
           .map((dynamic order) => Order.fromJson(order))
-          .toList()
-        ..sort((Order a, Order b) =>
-            a.createdAt.compareTo(b.createdAt))); // Newest at the top
+          .toList());
+      // ..sort((Order a, Order b) =>
+      //     a.createdAt.compareTo(b.createdAt))); // Newest at the top
     }
 
     // Initialize ordersStatus map
