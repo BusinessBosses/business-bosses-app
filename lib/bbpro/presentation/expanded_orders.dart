@@ -103,8 +103,8 @@ class _ExpandedOrdersState extends State<ExpandedOrders> {
           ...widget.order.products!.map<Widget>((Product product) {
             return GestureDetector(
               onTap: () {
-                Get.to(
-                    OrderProductScreen(product: product, shop: product.shop!));
+                // Get.to(
+                //     OrderProductScreen(product: product, shop: product.shop!));
               },
               child: ListTile(
                 title: Text(
@@ -141,8 +141,8 @@ class _ExpandedOrdersState extends State<ExpandedOrders> {
           ...widget.order.services!.map<Widget>((Service service) {
             return GestureDetector(
               onTap: () {
-                Get.to(
-                    BookServiceScreen(service: service, shop: service.shop!));
+                // Get.to(
+                //     BookServiceScreen(service: service, shop: service.shop!));
               },
               child: ListTile(
                 title: Text(
