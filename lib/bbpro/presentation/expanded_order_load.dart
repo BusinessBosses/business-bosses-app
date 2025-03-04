@@ -54,7 +54,7 @@ class _ExpandedOrdersViewState extends State<ExpandedOrdersView> {
         title: const Text(
           'Order Details',
           style: TextStyle(
-            color: proprimaryColor,
+            color: textColor,
             fontWeight: FontWeight.bold,
           ),
         ),

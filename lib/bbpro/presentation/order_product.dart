@@ -58,6 +58,8 @@ class _OrderProductScreenState extends State<OrderProductScreen> {
   List<dynamic>? paymentMethods;
   String paymentMethod = '';
   String activePaymentMethod = '';
+  String? selectedColor;
+  String? selectedSize;
 
   bool isSubmit = false;
 
@@ -531,7 +533,7 @@ class _OrderProductScreenState extends State<OrderProductScreen> {
                               .toList(),
                           iconName: 'assets/svgs/dropdown.svg',
                           onChanged: (String? value) => setState(() {
-                            // category = value!;
+                            selectedColor = value!;
                           }),
                         ),
                       if (widget.product.size != null &&
@@ -547,7 +549,7 @@ class _OrderProductScreenState extends State<OrderProductScreen> {
                               .toList(),
                           iconName: 'assets/svgs/dropdown.svg',
                           onChanged: (String? value) => setState(() {
-                            // category = value!;
+                            selectedSize = value!;
                           }),
                         ),
                       if (widget.product.size != null &&
@@ -721,7 +723,8 @@ class _OrderProductScreenState extends State<OrderProductScreen> {
                             : 'online',
                         'deliveryDate': DateTime.now().toString(),
                         'paymentMethod': activePaymentMethod,
-                        'orderDetails': '',
+                        'orderDetails':
+                            'Color: $selectedColor, Size: $selectedSize',
                         'invoiceOption': 'send_with_payment_link',
                         'status': 'pending',
                         'notes': noteController.text,

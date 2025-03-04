@@ -3,6 +3,8 @@ import 'package:business_bosses_v2/bbpro/models/order_model.dart';
 import 'package:business_bosses_v2/bbpro/models/product_model.dart';
 import 'package:business_bosses_v2/bbpro/models/service_model.dart';
 import 'package:business_bosses_v2/bbpro/models/shop_model.dart';
+import 'package:business_bosses_v2/bbpro/presentation/book_service.dart';
+import 'package:business_bosses_v2/bbpro/presentation/order_product.dart';
 import 'package:business_bosses_v2/bbpro/widgets/myorderwidget.dart';
 import 'package:business_bosses_v2/bbpro/widgets/orderwidget.dart';
 import 'package:business_bosses_v2/common/widgets/network_image_with_placeholder.dart';
@@ -44,7 +46,7 @@ class _ExpandedOrdersState extends State<ExpandedOrders> {
         title: const Text(
           'Order Details',
           style: TextStyle(
-            color: proprimaryColor,
+            color: textColor,
             fontWeight: FontWeight.bold,
           ),
         ),
@@ -58,6 +60,7 @@ class _ExpandedOrdersState extends State<ExpandedOrders> {
               bgcolor: widget.order.status.backgroundColor,
               isExpanded: true,
               shop: widget.shop,
+              ismyorderspage: true,
             ),
           if (widget.ismyorder == null)
             OrderWidget(
@@ -98,63 +101,89 @@ class _ExpandedOrdersState extends State<ExpandedOrders> {
             ),
           ),
           ...widget.order.products!.map<Widget>((Product product) {
-            return ListTile(
-              title: Text(
-                product.name,
-                style:
-                    const TextStyle(fontWeight: FontWeight.w600, fontSize: 14),
-              ),
-              leading: _buildProductImage(product),
-              subtitle: Text(
-                '${widget.shop != null ? widget.shop!.currency : widget.order.shop.currency} ${product.price.toString()}',
-                style: const TextStyle(
-                  fontSize: 13,
+            return GestureDetector(
+              onTap: () {
+                Get.to(
+                    OrderProductScreen(product: product, shop: product.shop!));
+              },
+              child: ListTile(
+                title: Text(
+                  product.name,
+                  style: const TextStyle(
+                      fontWeight: FontWeight.w600, fontSize: 14),
                 ),
-              ),
-              contentPadding: const EdgeInsets.symmetric(
-                horizontal: 16,
-                vertical: 8,
+                leading: _buildProductImage(product),
+                subtitle: Column(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: <Widget>[
+                    Text(
+                      '${widget.shop != null ? widget.shop!.currency : widget.order.shop.currency} ${product.price.toString()}',
+                      style: const TextStyle(
+                        fontSize: 13,
+                      ),
+                    ),
+                    Text(
+                      widget.order.orderDetails ?? '',
+                      style: const TextStyle(
+                        fontSize: 13,
+                      ),
+                    ),
+                  ],
+                ),
+                contentPadding: const EdgeInsets.symmetric(
+                  horizontal: 16,
+                  vertical: 8,
+                ),
               ),
             );
           }).toList(),
           ...widget.order.services!.map<Widget>((Service service) {
-            return ListTile(
-              title: Text(
-                service.name,
-                style: const TextStyle(
-                  fontWeight: FontWeight.w500,
+            return GestureDetector(
+              onTap: () {
+                Get.to(
+                    BookServiceScreen(service: service, shop: service.shop!));
+              },
+              child: ListTile(
+                title: Text(
+                  service.name,
+                  style: const TextStyle(
+                    fontWeight: FontWeight.w500,
+                  ),
                 ),
-              ),
-              leading: _buildServiceImage(service),
-              subtitle: Text(
-                '${widget.shop != null ? widget.shop!.currency : widget.order.shop.currency} ${service.price.toString()}',
-                style: const TextStyle(
-                  fontSize: 14,
+                leading: _buildServiceImage(service),
+                subtitle: Text(
+                  '${widget.shop != null ? widget.shop!.currency : widget.order.shop.currency} ${service.price.toString()}',
+                  style: const TextStyle(
+                    fontSize: 14,
+                  ),
                 ),
-              ),
-              contentPadding: const EdgeInsets.symmetric(
-                horizontal: 16,
-                vertical: 8,
+                contentPadding: const EdgeInsets.symmetric(
+                  horizontal: 16,
+                  vertical: 8,
+                ),
               ),
             );
           }).toList(),
           ...widget.order.customItems!.map<Widget>((dynamic custom) {
-            return ListTile(
-              title: Text(
-                custom['name'],
-                style: const TextStyle(
-                  fontWeight: FontWeight.w500,
+            return GestureDetector(
+              child: ListTile(
+                title: Text(
+                  custom['name'],
+                  style: const TextStyle(
+                    fontWeight: FontWeight.w500,
+                  ),
                 ),
-              ),
-              subtitle: Text(
-                '${widget.shop != null ? widget.shop!.currency : widget.order.shop.currency} ${custom['amount'].toString()}',
-                style: const TextStyle(
-                  fontSize: 14,
+                subtitle: Text(
+                  '${widget.shop != null ? widget.shop!.currency : widget.order.shop.currency} ${custom['amount'].toString()}',
+                  style: const TextStyle(
+                    fontSize: 14,
+                  ),
                 ),
-              ),
-              contentPadding: const EdgeInsets.symmetric(
-                horizontal: 16,
-                vertical: 8,
+                contentPadding: const EdgeInsets.symmetric(
+                  horizontal: 16,
+                  vertical: 8,
+                ),
               ),
             );
           }).toList(),
@@ -166,7 +195,18 @@ class _ExpandedOrdersState extends State<ExpandedOrders> {
   Widget? _buildProductImage(Product product) {
     final List<String>? images = product.images;
     if (images == null || images.isEmpty) {
-      return null;
+      return Container(
+        width: 50,
+        height: 50,
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(8),
+          color: Colors.grey[200],
+        ),
+        child: Icon(
+          Icons.image,
+          color: Colors.grey[400],
+        ),
+      );
     }
 
     return Container(
@@ -179,6 +219,7 @@ class _ExpandedOrdersState extends State<ExpandedOrders> {
         borderRadius: BorderRadius.circular(8),
         child: NetworkImageWithPlaceHolder(
           imageUrl: images.first,
+          placeHolder: Icons.image,
         ),
       ),
     );
@@ -187,7 +228,18 @@ class _ExpandedOrdersState extends State<ExpandedOrders> {
   Widget? _buildServiceImage(Service service) {
     final List<String>? images = service.images;
     if (images == null || images.isEmpty) {
-      return null;
+      return Container(
+        width: 50,
+        height: 50,
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(8),
+          color: Colors.grey[200],
+        ),
+        child: Icon(
+          Icons.image,
+          color: Colors.grey[400],
+        ),
+      );
     }
 
     return Container(
@@ -200,6 +252,7 @@ class _ExpandedOrdersState extends State<ExpandedOrders> {
         borderRadius: BorderRadius.circular(8),
         child: NetworkImageWithPlaceHolder(
           imageUrl: images.first,
+          placeHolder: Icons.image,
         ),
       ),
     );
