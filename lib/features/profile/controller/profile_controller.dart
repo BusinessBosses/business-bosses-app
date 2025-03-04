@@ -19,11 +19,11 @@ class ProfileController extends GetxController {
 
   ///MODELIZE RAW DATA AND PUSH TO STATE
   void processDataToState(
-      dynamic userData, List interests, dynamic userRanking) {
+      dynamic userData, List<dynamic > interests, dynamic userRanking) {
     final UserModel modelizedData = UserModel.fromMap(<dynamic, dynamic>{
       ...userData,
       'connections':
-          userData['connections'].map((mp) => mp['connect']).toList(),
+          userData['connections'].map((dynamic mp) => mp['connect']).toList(),
       'connecteds': userData['connecteds'],
       'interests': interests,
       'weeklyRank': userRanking['rankWeekly'],
@@ -90,18 +90,18 @@ class ProfileController extends GetxController {
         // ProfileRepos
         await ProfileRepository.fetchData(0, 50, userId);
     if (response.success) {
-      final List psts = response.data['posts']['rows'];
+      final List<dynamic > psts = response.data['posts']['rows'];
       for (int i = 0; i < psts.length; i++) {
         posts.add(PostModel.fromMap(<String, dynamic>{
           ...psts[i],
           'likes': psts[i]['likes']
-              .map((like) => like['userId'].toString())
+              .map((dynamic like) => like['userId'].toString())
               .toList(),
           'reposts': psts[i]['reposts']
-              ?.map((repost) => repost['userId'].toString())
+              ?.map((dynamic repost) => repost['userId'].toString())
               .toList(),
           'coins':
-              psts[i]['coins'].map((coin) => coin['userId'].toString()).toList()
+              psts[i]['coins'].map((dynamic coin) => coin['userId'].toString()).toList()
         }));
       }
 
@@ -110,7 +110,7 @@ class ProfileController extends GetxController {
         'user': <dynamic, dynamic>{
           ...response.data['user']['data'],
           'connections': response.data['user']['data']['connections']
-              .map((mp) => mp['connect'])
+              .map((dynamic mp) => mp['connect'])
               .toList()
         },
         'industries': response.data['industries']
@@ -121,7 +121,7 @@ class ProfileController extends GetxController {
         'user': <dynamic, dynamic>{
           ...response.data['user']['data'],
           'connections': response.data['user']['data']['connections']
-              .map((mp) => mp['connect'])
+              .map((dynamic mp) => mp['connect'])
               .toList()
         },
         'industries': response.data['industries']
@@ -135,18 +135,18 @@ class ProfileController extends GetxController {
         // ProfileRepos
         await ProfileRepository.fetchData(0, 50, userId);
     if (response.success) {
-      final List psts = response.data['posts']['rows'];
+      final List<dynamic > psts = response.data['posts']['rows'];
       for (int i = 0; i < psts.length; i++) {
         posts.add(PostModel.fromMap(<String, dynamic>{
           ...psts[i],
           'likes': psts[i]['likes']
-              .map((like) => like['userId'].toString())
+              .map((dynamic like) => like['userId'].toString())
               .toList(),
           'reposts': psts[i]['reposts']
-              ?.map((repost) => repost['userId'].toString())
+              ?.map((dynamic repost) => repost['userId'].toString())
               .toList(),
           'coins':
-              psts[i]['coins'].map((coin) => coin['userId'].toString()).toList()
+              psts[i]['coins'].map((dynamic coin) => coin['userId'].toString()).toList()
         }));
       }
 
@@ -155,7 +155,7 @@ class ProfileController extends GetxController {
         'user': <dynamic, dynamic>{
           ...response.data['user']['data'],
           'connections': response.data['user']['data']['connections']
-              .map((mp) => mp['connect'])
+              .map((dynamic mp) => mp['connect'])
               .toList()
         },
         'industries': response.data['industries']
@@ -166,7 +166,7 @@ class ProfileController extends GetxController {
         'user': <dynamic, dynamic>{
           ...response.data['user']['data'],
           'connections': response.data['user']['data']['connections']
-              .map((mp) => mp['connect'])
+              .map((dynamic mp) => mp['connect'])
               .toList()
         },
         'industries': response.data['industries']
@@ -239,7 +239,6 @@ class ProfileController extends GetxController {
 
   @override
   void onInit() {
-    // TODO: implement onInit
     fetchData();
     super.onInit();
   }
