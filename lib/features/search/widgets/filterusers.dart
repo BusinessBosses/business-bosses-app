@@ -1,7 +1,9 @@
+import 'package:business_bosses_v2/features/connects/widgets/connection_grid_tile.dart';
 import 'package:business_bosses_v2/features/home/controller/home_controller.dart';
 import 'package:business_bosses_v2/features/profile/controller/profile_controller.dart';
 import 'package:business_bosses_v2/navigation/routes.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart'; // Import StaggeredGridView
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 
@@ -17,14 +19,13 @@ class FilterUsers extends StatefulWidget {
   final bool isSearch;
   final Function(UserModel)? onConnectionChange;
 
-  // ignore: public_member_api_docs
-  const FilterUsers(
-      {Key? key,
-      this.filterItems = const <UserModel>[],
-      this.isLoading = false,
-      this.isSearch = false,
-      this.onConnectionChange})
-      : super(key: key);
+  const FilterUsers({
+    Key? key,
+    this.filterItems = const <UserModel>[],
+    this.isLoading = false,
+    this.isSearch = false,
+    this.onConnectionChange,
+  }) : super(key: key);
 
   @override
   State<FilterUsers> createState() => _FilterUsersState();
@@ -39,7 +40,7 @@ class _FilterUsersState extends State<FilterUsers> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      color: Colors.white,
+      color: backgroundColor,
       height: double.infinity,
       width: double.infinity,
       child: Column(
@@ -60,220 +61,63 @@ class _FilterUsersState extends State<FilterUsers> {
               : Expanded(
                   child: Stack(
                     children: <Widget>[
-                      ListView.builder(
-                        padding: const EdgeInsets.only(bottom: 48.0),
+                      StaggeredGridView.countBuilder(
                         controller: _controller,
+                        padding: const EdgeInsets.all(8.0),
+                        crossAxisCount: 2, // Number of columns
+                        crossAxisSpacing: 8.0, // Spacing between columns
+                        mainAxisSpacing: 8.0, // Spacing between rows
                         itemCount: widget.filterItems.length +
-                            (widget.isSearch
-                                ? 0
-                                : 1), // Add 1 for bossOfTheWeek
-                        itemBuilder: (BuildContext context, int i) {
+                            (widget.isSearch ? 0 : 1), // +1 for bossOfTheWeek
+                        itemBuilder: (BuildContext context, int index) {
                           // Handle bossOfTheWeek at the top if not in search mode
-                          if (!widget.isSearch && i == 0) {
-                            final int checkConnected =
-                                _profileController.myProfile.connecteds != null
-                                    ? _profileController.myProfile.connecteds!
-                                        .indexWhere(
-                                        (String element) =>
-                                            element ==
-                                            homeController.bossOfTheWeek?.uid,
-                                      )
-                                    : -1;
+                          if (!widget.isSearch && index == 0) {
+                            final bool checkConnected = _profileController
+                                        .myProfile.connecteds !=
+                                    null
+                                ? _profileController.myProfile.connecteds!
+                                    .contains(homeController.bossOfTheWeek?.uid)
+                                : false;
 
-                            return Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: <Widget>[
-                                ListTile(
-                                  onTap: () async {
-                                    Get.toNamed(Routes.publicProfile,
-                                        arguments:
-                                            homeController.bossOfTheWeek);
-                                  },
-                                  leading: UserAvatarWithBadge(
-                                    user: homeController.bossOfTheWeek,
-                                    height: 48.0,
-                                    width: 48.0,
-                                    radius: 30.0,
-                                    placeHolder: Icons.person,
-                                  ),
-                                  trailing: MCustomButton(
-                                    width: 120,
-                                    height: 40,
-                                    buttonType: checkConnected != -1
-                                        ? ButtonType.outline
-                                        : ButtonType.elevated,
-                                    margin: const EdgeInsets.symmetric(
-                                        horizontal: 4.0),
-                                    child: FittedBox(
-                                      child: checkConnected != -1
-                                          ? const Text(
-                                              'Following',
-                                              style: TextStyle(
-                                                  color: primaryColorLT),
-                                            )
-                                          : const Text(
-                                              'Follow',
-                                              style: TextStyle(
-                                                  color: Colors.white),
-                                            ),
-                                    ),
-                                    onPressed: () async {
-                                      if (widget.onConnectionChange != null) {
-                                        widget.onConnectionChange!(
-                                          homeController.bossOfTheWeek!,
-                                        );
-                                      }
-                                    },
-                                  ),
-                                  title: homeController
-                                              .bossOfTheWeek?.isSubscribed ==
-                                          true
-                                      ? Row(
-                                          children: <Widget>[
-                                            Text(homeController.bossOfTheWeek!
-                                                        .name!.length <=
-                                                    20
-                                                ? homeController
-                                                        .bossOfTheWeek?.name ??
-                                                    homeController.bossOfTheWeek
-                                                        ?.username ??
-                                                    ''
-                                                : homeController.bossOfTheWeek!
-                                                            .name !=
-                                                        null
-                                                    ? '${homeController.bossOfTheWeek!.name!.substring(0, 12)}...}'
-                                                    : '${homeController.bossOfTheWeek!.username.substring(0, 12)}...)}'),
-                                            const SizedBox(width: 5),
-                                            SvgPicture.asset(
-                                              'assets/svgs/premiumbadge.svg',
-                                              height: 9,
-                                              color: primaryColorLT,
-                                            )
-                                          ],
-                                        )
-                                      : Text(homeController.bossOfTheWeek!.name!
-                                                  .length <=
-                                              20
-                                          ? homeController
-                                                  .bossOfTheWeek?.name ??
-                                              homeController
-                                                  .bossOfTheWeek?.username ??
-                                              ''
-                                          : homeController
-                                                      .bossOfTheWeek!.name !=
-                                                  null
-                                              ? '${homeController.bossOfTheWeek!.name!.substring(0, 12)}...}'
-                                              : '${homeController.bossOfTheWeek!.username.substring(0, 12)}...)}'),
-                                  subtitle: Text(
-                                    homeController.bossOfTheWeek?.bio ??
-                                        homeController
-                                            .bossOfTheWeek?.category ??
-                                        '',
-                                    maxLines: 1,
-                                  ),
-                                ),
-                                const Divider(
-                                    height: 0.0, indent: 16.0, endIndent: 16.0),
-                              ],
+                            return ConnectionGridTile(
+                              user: homeController.bossOfTheWeek!,
+                              status: checkConnected,
+                              onChangeConnectionStatus: () {
+                                if (widget.onConnectionChange != null) {
+                                  widget.onConnectionChange!(
+                                    homeController.bossOfTheWeek!,
+                                  );
+                                }
+                              },
                             );
                           }
 
                           // Adjust index for the rest of the items
-                          final int adjustedIndex = widget.isSearch ? i : i - 1;
+                          final int adjustedIndex =
+                              widget.isSearch ? index : index - 1;
                           final UserModel user =
                               widget.filterItems[adjustedIndex];
 
-                          final int checkConnected =
+                          final bool checkConnected =
                               _profileController.myProfile.connecteds != null
                                   ? _profileController.myProfile.connecteds!
-                                      .indexWhere(
-                                      (String element) => element == user.uid,
-                                    )
-                                  : -1;
+                                      .contains(user.uid)
+                                  : false;
 
                           return user.isRanked == true
                               ? Container()
-                              : Column(
-                                  children: <Widget>[
-                                    ListTile(
-                                      onTap: () async {
-                                        Get.toNamed(Routes.publicProfile,
-                                            arguments: user);
-                                      },
-                                      leading: UserAvatarWithBadge(
-                                        user: user,
-                                        height: 48.0,
-                                        width: 48.0,
-                                        radius: 30.0,
-                                        placeHolder: Icons.person,
-                                      ),
-                                      trailing: SizedBox(
-                                        height: 40,
-                                        width: 120,
-                                        child: MCustomButton(
-                                          buttonType: checkConnected != -1
-                                              ? ButtonType.outline
-                                              : ButtonType.elevated,
-                                          margin: const EdgeInsets.symmetric(
-                                              horizontal: 4.0),
-                                          child: FittedBox(
-                                            child: checkConnected != -1
-                                                ? const Text(
-                                                    'Following',
-                                                    style: TextStyle(
-                                                      color: primaryColorLT,
-                                                    ),
-                                                  )
-                                                : const Text(
-                                                    'Follow',
-                                                    style: TextStyle(
-                                                      color: Colors.white,
-                                                    ),
-                                                  ),
-                                          ),
-                                          onPressed: () async {
-                                            if (widget.onConnectionChange !=
-                                                null) {
-                                              widget.onConnectionChange!(user);
-                                            }
-                                          },
-                                        ),
-                                      ),
-                                      title: user.isSubscribed == true
-                                          ? Row(
-                                              children: <Widget>[
-                                                Text(user.name != null &&
-                                                        user.name!.length <= 20
-                                                    ? user.name!
-                                                    : user.name != null
-                                                        ? '${user.name!.substring(0, 15)}...'
-                                                        : user.username),
-                                                const SizedBox(width: 5),
-                                                SvgPicture.asset(
-                                                  'assets/svgs/premiumbadge.svg',
-                                                  height: 9,
-                                                  color: primaryColorLT,
-                                                )
-                                              ],
-                                            )
-                                          : Text(user.name != null &&
-                                                  user.name!.length <= 20
-                                              ? user.name!
-                                              : user.name != null
-                                                  ? '${user.name!.substring(0, 15)}...'
-                                                  : user.username),
-                                      subtitle: Text(
-                                        user.bio ?? user.category ?? '',
-                                        maxLines: 1,
-                                      ),
-                                    ),
-                                    const Divider(
-                                        height: 0.0,
-                                        indent: 16.0,
-                                        endIndent: 16.0),
-                                  ],
+                              : ConnectionGridTile(
+                                  user: user,
+                                  status: checkConnected,
+                                  onChangeConnectionStatus: () {
+                                    if (widget.onConnectionChange != null) {
+                                      widget.onConnectionChange!(user);
+                                    }
+                                  },
                                 );
                         },
+                        staggeredTileBuilder: (int index) =>
+                            const StaggeredTile.fit(1),
                       ),
                       if (loadingNext)
                         const Positioned(

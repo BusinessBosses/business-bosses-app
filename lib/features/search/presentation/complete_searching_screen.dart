@@ -178,9 +178,24 @@ class _CompleteSearchingScreenState extends State<CompleteSearchingScreen>
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: <Widget>[
-                    const Text('Filter by Category or Profession',
+                    Row(
+                      children: <Widget>[
+                        SvgPicture.asset('assets/svgs/filternoback.svg'),
+                        const SizedBox(
+                          width: 8,
+                        ),
+                        const Text(
+                          'Filter',
+                          style: TextStyle(
+                              fontSize: 20, fontWeight: FontWeight.bold),
+                        ),
+                      ],
+                    ),
+                    const SizedBox(height: 15),
+                    const Text(
+                        'Select a category or profession to filter results',
                         style: TextStyle(
-                            fontSize: 18, fontWeight: FontWeight.bold)),
+                            fontSize: 16, fontWeight: FontWeight.w600)),
                     const SizedBox(height: 15),
                     GestureDetector(
                       onTap: () => _selectCategory(controller, setState),
@@ -192,11 +207,17 @@ class _CompleteSearchingScreenState extends State<CompleteSearchingScreen>
                         ),
                         padding: const EdgeInsets.symmetric(
                             vertical: 12, horizontal: 16),
-                        child: Text(
-                          _filtertitle.isNotEmpty
-                              ? _filtertitle
-                              : 'Select Category',
-                          style: const TextStyle(fontSize: 16),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: <Widget>[
+                            Text(
+                              _filtertitle.isNotEmpty
+                                  ? _filtertitle
+                                  : 'Select Category',
+                              style: const TextStyle(fontSize: 16),
+                            ),
+                            const Icon(Icons.chevron_right)
+                          ],
                         ),
                       ),
                     ),
