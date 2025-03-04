@@ -1,10 +1,13 @@
 import 'package:business_bosses_v2/common/widgets/safety_model.dart';
 import 'package:business_bosses_v2/features/chat/chat_room_screen.dart';
 import 'package:business_bosses_v2/features/chat/chat_screen.dart';
+import 'package:business_bosses_v2/features/connects/presentation/referals_screen.dart';
 import 'package:business_bosses_v2/features/notifications/controller/notification_controller.dart';
 import 'package:business_bosses_v2/features/notifications/widgets/nonotificationfoundwidget.dart';
 import 'package:business_bosses_v2/features/notifications/widgets/notification_item.dart';
 import 'package:business_bosses_v2/features/notifications/widgets/quotewidget.dart';
+import 'package:business_bosses_v2/features/profile/controller/profile_controller.dart';
+import 'package:business_bosses_v2/features/promotions/referrals.dart';
 import 'package:business_bosses_v2/navigation/routes.dart';
 import 'package:business_bosses_v2/utils/theme/theme.dart';
 import 'package:flutter/material.dart';
@@ -27,6 +30,7 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
   int notificationTS = DateTime.now().millisecondsSinceEpoch;
   late ScrollController _scrollController;
   final bool isLoad = false;
+  ProfileController profileController = Get.find();
 
   @override
   void initState() {
@@ -191,6 +195,14 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
                                                       arguments: controller
                                                           .notifications[i]
                                                           .user!);
+                                                } else if (controller
+                                                    .notifications[i].title
+                                                    .contains('New Referral')) {
+                                                  Get.toNamed(
+                                                      Routes.referalsscreen,
+                                                      arguments:
+                                                          profileController
+                                                              .myProfile.uid);
                                                 } else {
                                                   Get.toNamed(
                                                       Routes.publicProfile,
