@@ -104,6 +104,7 @@ class _BottomnavscreenState extends State<Bottomnavscreen> {
                 child: _widgetOptions.elementAt(_selectedIndex),
               ),
               bottomNavigationBar: Container(
+                height: 83.0,
                 decoration: BoxDecoration(
                   boxShadow: <BoxShadow>[
                     BoxShadow(
@@ -115,117 +116,70 @@ class _BottomnavscreenState extends State<Bottomnavscreen> {
                   ],
                 ),
                 child: Column(
-                  mainAxisSize: MainAxisSize.min,
                   children: <Widget>[
                     Container(
-                      height: 5,
+                      height: 83.0,
+                      padding: const EdgeInsets.only(bottom: 20),
                       color: Colors.white,
-                    ),
-                    BottomNavigationBar(
-                      unselectedLabelStyle: const TextStyle(
-                        fontSize: 14.0,
-                        fontWeight: FontWeight.w700,
-                        color: textColor,
+                      child: Row(
+                        children: <Widget>[
+                          Expanded(
+                              flex: 10,
+                              child: BottomTabButton(
+                                icon: _selectedIndex == 0
+                                    ? 'assets/svgs/dashboard.svg'
+                                    : 'assets/svgs/dashboard.svg',
+                                label: 'Dashboard',
+                                onTap: () => _onItemTapped(0),
+                                isActive: _selectedIndex == 0,
+                              )),
+                          Expanded(
+                            flex: 10,
+                            child: BottomTabButton(
+                              icon: _selectedIndex == 1
+                                  ? 'assets/svgs/projects.svg'
+                                  : 'assets/svgs/projects.svg',
+                              label: 'Tasks',
+                              onTap: () => _onItemTapped(1),
+                              isActive: _selectedIndex == 1,
+                            ),
+                          ),
+                          Expanded(
+                            flex: 10,
+                            child: BottomTabButton(
+                              icon: _selectedIndex == 2
+                                  ? 'assets/svgs/ordersinvoices.svg'
+                                  : 'assets/svgs/ordersinvoices.svg',
+                              label: 'Orders',
+                              onTap: () => _onItemTapped(2),
+                              isActive: _selectedIndex == 2,
+                            ),
+                          ),
+                          Expanded(
+                            flex: 10,
+                            child: BottomTabButton(
+                              icon: _selectedIndex == 3
+                                  ? 'assets/svgs/clients.svg'
+                                  : 'assets/svgs/clients.svg',
+                              label: 'Customers',
+                              onTap: () => _onItemTapped(3),
+                              isActive: _selectedIndex == 3,
+                            ),
+                          ),
+                          Expanded(
+                            flex: 10,
+                            child: BottomTabButton(
+                              icon: _selectedIndex == 4
+                                  ? 'assets/svgs/setupshop.svg'
+                                  : 'assets/svgs/setupshop.svg',
+                              label: 'Set Up',
+                              onTap: () => _onItemTapped(4),
+                              isActive: _selectedIndex == 4,
+                            ),
+                          ),
+                        ],
                       ),
-                      selectedLabelStyle: const TextStyle(
-                        fontSize: 14.0,
-                        fontWeight: FontWeight.w700,
-                        color: proprimaryColor,
-                      ),
-                      elevation: 0,
-                      backgroundColor: Colors.white,
-                      type: BottomNavigationBarType.fixed,
-                      unselectedItemColor: textColor,
-                      items: <BottomNavigationBarItem>[
-                        BottomNavigationBarItem(
-                          icon: Padding(
-                            padding: const EdgeInsets.only(bottom: 3.0),
-                            child: SvgPicture.asset(
-                              'assets/svgs/dashboard.svg',
-                              height: 25,
-                              colorFilter: ColorFilter.mode(
-                                _selectedIndex == 0
-                                    ? proprimaryColor
-                                    : textColor,
-                                BlendMode.srcIn,
-                              ),
-                            ),
-                          ),
-                          label: 'Dashboard',
-                        ),
-                        BottomNavigationBarItem(
-                          icon: Padding(
-                            padding: const EdgeInsets.only(bottom: 3.0),
-                            child: SvgPicture.asset(
-                              'assets/svgs/projects.svg',
-                              height: 23,
-                              colorFilter: ColorFilter.mode(
-                                _selectedIndex == 1
-                                    ? proprimaryColor
-                                    : textColor,
-                                BlendMode.srcIn,
-                              ),
-                            ),
-                          ),
-                          label: 'Tasks',
-                        ),
-                        BottomNavigationBarItem(
-                          icon: Padding(
-                            padding: const EdgeInsets.only(bottom: 3.0),
-                            child: SvgPicture.asset(
-                              'assets/svgs/ordersinvoices.svg',
-                              height: 25,
-                              colorFilter: ColorFilter.mode(
-                                _selectedIndex == 2
-                                    ? proprimaryColor
-                                    : textColor,
-                                BlendMode.srcIn,
-                              ),
-                            ),
-                          ),
-                          label: 'Orders',
-                        ),
-                        BottomNavigationBarItem(
-                          icon: Padding(
-                            padding: const EdgeInsets.only(bottom: 3.0),
-                            child: SvgPicture.asset(
-                              'assets/svgs/clients.svg',
-                              height: 25,
-                              colorFilter: ColorFilter.mode(
-                                _selectedIndex == 3
-                                    ? proprimaryColor
-                                    : textColor,
-                                BlendMode.srcIn,
-                              ),
-                            ),
-                          ),
-                          label: 'Customers',
-                        ),
-                        BottomNavigationBarItem(
-                          icon: Padding(
-                            padding: const EdgeInsets.only(bottom: 3.0),
-                            child: SvgPicture.asset(
-                              'assets/svgs/setupshop.svg',
-                              height: 25,
-                              colorFilter: ColorFilter.mode(
-                                _selectedIndex == 4
-                                    ? proprimaryColor
-                                    : textColor,
-                                BlendMode.srcIn,
-                              ),
-                            ),
-                          ),
-                          label: 'Set Up',
-                        ),
-                      ],
-                      currentIndex: _selectedIndex,
-                      selectedItemColor: proprimaryColor,
-                      onTap: _onItemTapped,
                     ),
-                    Container(
-                      height: 18,
-                      color: Colors.white,
-                    )
                   ],
                 ),
               ),
@@ -236,5 +190,49 @@ class _BottomnavscreenState extends State<Bottomnavscreen> {
   @override
   void dispose() {
     super.dispose();
+  }
+}
+
+class BottomTabButton extends StatelessWidget {
+  const BottomTabButton({
+    Key? key,
+    required this.icon,
+    required this.label,
+    required this.onTap,
+    required this.isActive,
+  }) : super(key: key);
+
+  final String icon;
+  final String label;
+  final VoidCallback onTap;
+  final bool isActive;
+
+  @override
+  Widget build(BuildContext context) {
+    return InkWell(
+      onTap: onTap,
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: <Widget>[
+          SvgPicture.asset(
+            icon,
+            height: 25,
+            colorFilter: ColorFilter.mode(
+              isActive ? proprimaryColor : textColor,
+              BlendMode.srcIn,
+            ),
+          ),
+          const SizedBox(height: 4),
+          Text(
+            label,
+            style: TextStyle(
+              fontSize: 14.0,
+              fontWeight: FontWeight.w700,
+              color: isActive ? proprimaryColor : textColor,
+            ),
+          ),
+        ],
+      ),
+    );
   }
 }

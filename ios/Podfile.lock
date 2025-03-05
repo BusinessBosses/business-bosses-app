@@ -1,9 +1,9 @@
 PODS:
-  - AppAuth (1.7.5):
-    - AppAuth/Core (= 1.7.5)
-    - AppAuth/ExternalUserAgent (= 1.7.5)
-  - AppAuth/Core (1.7.5)
-  - AppAuth/ExternalUserAgent (1.7.5):
+  - AppAuth (1.7.6):
+    - AppAuth/Core (= 1.7.6)
+    - AppAuth/ExternalUserAgent (= 1.7.6)
+  - AppAuth/Core (1.7.6)
+  - AppAuth/ExternalUserAgent (1.7.6):
     - AppAuth/Core
   - device_info_plus (0.0.1):
     - Flutter
@@ -39,16 +39,16 @@ PODS:
     - SDWebImage
     - SwiftyGif
   - facebook_app_events (0.0.1):
-    - FBAudienceNetwork (~> 6.12)
-    - FBSDKCoreKit (~> 16.0)
+    - FBAudienceNetwork (= 6.16)
+    - FBSDKCoreKit (~> 17.0)
     - Flutter
-  - FBAEMKit (16.3.1):
-    - FBSDKCoreKit_Basics (= 16.3.1)
-  - FBAudienceNetwork (6.15.2)
-  - FBSDKCoreKit (16.3.1):
-    - FBAEMKit (= 16.3.1)
-    - FBSDKCoreKit_Basics (= 16.3.1)
-  - FBSDKCoreKit_Basics (16.3.1)
+  - FBAEMKit (17.4.0):
+    - FBSDKCoreKit_Basics (= 17.4.0)
+  - FBAudienceNetwork (6.16.0)
+  - FBSDKCoreKit (17.4.0):
+    - FBAEMKit (= 17.4.0)
+    - FBSDKCoreKit_Basics (= 17.4.0)
+  - FBSDKCoreKit_Basics (17.4.0)
   - file_picker (0.0.1):
     - DKImagePickerController/PhotoGallery
     - Flutter
@@ -195,17 +195,17 @@ PODS:
   - GTMSessionFetcher/Core (3.5.0)
   - image_picker_ios (0.0.1):
     - Flutter
-  - libwebp (1.3.2):
-    - libwebp/demux (= 1.3.2)
-    - libwebp/mux (= 1.3.2)
-    - libwebp/sharpyuv (= 1.3.2)
-    - libwebp/webp (= 1.3.2)
-  - libwebp/demux (1.3.2):
+  - libwebp (1.5.0):
+    - libwebp/demux (= 1.5.0)
+    - libwebp/mux (= 1.5.0)
+    - libwebp/sharpyuv (= 1.5.0)
+    - libwebp/webp (= 1.5.0)
+  - libwebp/demux (1.5.0):
     - libwebp/webp
-  - libwebp/mux (1.3.2):
+  - libwebp/mux (1.5.0):
     - libwebp/demux
-  - libwebp/sharpyuv (1.3.2)
-  - libwebp/webp (1.3.2):
+  - libwebp/sharpyuv (1.5.0)
+  - libwebp/webp (1.5.0):
     - libwebp/sharpyuv
   - nanopb (2.30909.1):
     - nanopb/decode (= 2.30909.1)
@@ -226,15 +226,15 @@ PODS:
     - Flutter
     - FlutterMacOS
   - PromisesObjC (2.4.0)
-  - purchases_flutter (6.18.0):
+  - purchases_flutter (6.30.2):
     - Flutter
-    - PurchasesHybridCommon (= 9.2.0)
-  - PurchasesHybridCommon (9.2.0):
-    - RevenueCat (= 4.32.2)
-  - RevenueCat (4.32.2)
-  - SDWebImage (5.19.7):
-    - SDWebImage/Core (= 5.19.7)
-  - SDWebImage/Core (5.19.7)
+    - PurchasesHybridCommon (= 11.1.0)
+  - PurchasesHybridCommon (11.1.0):
+    - RevenueCat (= 4.43.2)
+  - RevenueCat (4.43.2)
+  - SDWebImage (5.21.0):
+    - SDWebImage/Core (= 5.21.0)
+  - SDWebImage/Core (5.21.0)
   - shared_preferences_foundation (0.0.1):
     - Flutter
     - FlutterMacOS
@@ -438,16 +438,16 @@ EXTERNAL SOURCES:
     :path: ".symlinks/plugins/webview_flutter_wkwebview/ios"
 
 SPEC CHECKSUMS:
-  AppAuth: 501c04eda8a8d11f179dbe8637b7a91bb7e5d2fa
+  AppAuth: d4f13a8fe0baf391b2108511793e4b479691fb73
   device_info_plus: c6fb39579d0f423935b0c9ce7ee2f44b71b9fce6
   DKImagePickerController: 946cec48c7873164274ecc4624d19e3da4c1ef3c
   DKPhotoGallery: b3834fecb755ee09a593d7c9e389d8b5d6deed60
-  facebook_app_events: deb163f1f7fa13213192532bbc84ff0b0d798bc2
-  FBAEMKit: 6c7b5eb77c96861bb59e040842c6e55bf39512ce
-  FBAudienceNetwork: 2457a89b45e2596241fd81b0c2fd8cb6f6053869
-  FBSDKCoreKit: 5e4dd478947ab1bcc887e8cfadeae0727af1a942
-  FBSDKCoreKit_Basics: cd7b5f5d1e8868c26706917919d058999ca672c3
-  file_picker: 15fd9539e4eb735dc54bae8c0534a7a9511a03de
+  facebook_app_events: d791f99d78f74cde976edd378678566cb7bb4ab0
+  FBAEMKit: 58cb5f302cdd715a56d4c1d0dfdd2e423ac1421a
+  FBAudienceNetwork: d1670939884e3a2e0ad98dca98d7e0c841417228
+  FBSDKCoreKit: 94d7461d0cecf441b1ba7c41acfff41daa8ccd41
+  FBSDKCoreKit_Basics: 151b43db8b834d3f0e02f95d36a44ffd36265e45
+  file_picker: 09aa5ec1ab24135ccd7a1621c46c84134bfd6655
   Firebase: 414ad272f8d02dfbf12662a9d43f4bba9bec2a06
   firebase_analytics: b3d6dd14c61549a29abb10e9843446a4d8bb53eb
   firebase_core: 0af4a2b24f62071f9bf283691c0ee41556dcb3f5
@@ -462,8 +462,8 @@ SPEC CHECKSUMS:
   flutter_inappwebview: 3d32228f1304635e7c028b0d4252937730bbc6cf
   flutter_native_splash: 52501b97d1c0a5f898d687f1646226c1f93c56ef
   flutter_paystack: 50021637b71e7712780744f69d2843e71b65175d
-  flutter_secure_storage: 23fc622d89d073675f2eaa109381aefbcf5a49be
-  fluttertoast: 31b00dabfa7fb7bacd9e7dbee580d7a2ff4bf265
+  flutter_secure_storage: d33dac7ae2ea08509be337e775f6b59f1ff45f12
+  fluttertoast: 9f2f8e81bb5ce18facb9748d7855bf5a756fe3db
   google_sign_in_ios: 8115e3fbe097e6509beb819ed602d47369d9011f
   GoogleAppMeasurement: 70ce9aa438cff1cfb31ea3e660bcc67734cb716e
   GoogleDataTransport: 6c09b596d841063d76d4288cc2d2f42cc36e1e2a
@@ -472,7 +472,7 @@ SPEC CHECKSUMS:
   GTMAppAuth: f69bd07d68cd3b766125f7e072c45d7340dea0de
   GTMSessionFetcher: 5aea5ba6bd522a239e236100971f10cb71b96ab6
   image_picker_ios: 99dfe1854b4fa34d0364e74a78448a0151025425
-  libwebp: 1786c9f4ff8a279e4dac1e8f385004d5fc253009
+  libwebp: 02b23773aedb6ff1fd38cec7a77b81414c6842a8
   nanopb: d4d75c12cd1316f4a64e3c6963f879ecd4b5e0d5
   OrderedSet: aaeb196f7fef5a9edf55d89760da9176ad40b93c
   package_info_plus: 115f4ad11e0698c8c1c5d8a689390df880f47e85
@@ -481,10 +481,10 @@ SPEC CHECKSUMS:
   pdfx: 7b876b09de8b7a0bf444a4f82b439ffcff4ee1ec
   photo_manager: ff695c7a1dd5bc379974953a2b5c0a293f7c4c8a
   PromisesObjC: f5707f49cb48b9636751c5b2e7d227e43fba9f47
-  purchases_flutter: d72ff299589418cddae4ccac2d2ce55e0fbd1eba
-  PurchasesHybridCommon: e6c4550d06ecdfc61a228a0e17b2f125b3bd14c2
-  RevenueCat: 298f40f434e6675ea51744cfca5945f09f7c5a07
-  SDWebImage: 8a6b7b160b4d710e2a22b6900e25301075c34cb3
+  purchases_flutter: 42d5544e7730ea89a88cc2f008b7c700fd147052
+  PurchasesHybridCommon: 4022d5944cb30ec44ba5159e42aa161fe0e30175
+  RevenueCat: 3d934653b7e8b09af88fd47e9e84cfaf5d0a89ba
+  SDWebImage: f84b0feeb08d2d11e6a9b843cb06d75ebf5b8868
   shared_preferences_foundation: b4c3b4cddf1c21f02770737f147a3f5da9d39695
   sign_in_with_apple: f3bf75217ea4c2c8b91823f225d70230119b8440
   social_share: 702a5e3842addd22db515aa9e1e00a4b80a0296d
@@ -509,4 +509,4 @@ SPEC CHECKSUMS:
 
 PODFILE CHECKSUM: f70a285fd8b33776a553c75657fa301fe0b21452
 
-COCOAPODS: 1.15.0
+COCOAPODS: 1.16.2
