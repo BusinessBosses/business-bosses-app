@@ -274,6 +274,7 @@ class _ProshopdealsScreenState extends State<ProshopdealsScreen>
                       }
                     },
                     child: InventoryCard(
+                      marketplace: true,
                       product: product,
                       shop: product.shop!,
                       myShop:
@@ -303,6 +304,7 @@ class _ProshopdealsScreenState extends State<ProshopdealsScreen>
                     child: ServiceCard(
                       shop: service.shop!,
                       service: service,
+                      marketplace: true,
                       myShop:
                           service.user!.uid == profileController.myProfile.uid
                               ? true
@@ -349,6 +351,7 @@ class _ProshopdealsScreenState extends State<ProshopdealsScreen>
                     },
                     child: InventoryCard(
                       product: product,
+                      marketplace: true,
                       shop: product.shop!,
                       myShop:
                           product.user!.uid == profileController.myProfile.uid
@@ -396,6 +399,7 @@ class _ProshopdealsScreenState extends State<ProshopdealsScreen>
                     },
                     child: ServiceCard(
                       shop: service.shop!,
+                      marketplace: true,
                       service: service,
                       myShop:
                           service.user!.uid == profileController.myProfile.uid
