@@ -490,6 +490,8 @@ class _MyOrderWidgetState extends State<MyOrderWidget> {
                                                     BorderRadius.circular(100),
                                                 child:
                                                     NetworkImageWithPlaceHolder(
+                                                        placeHolder:
+                                                            Icons.person,
                                                         imageUrl: widget.shop!
                                                             .user!.photoUrl)),
                                           ),

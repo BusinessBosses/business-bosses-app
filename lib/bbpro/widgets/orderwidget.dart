@@ -25,6 +25,7 @@ class OrderWidget extends StatefulWidget {
   final bool? myShop;
   final Shop? shop;
   final bool showChange;
+  final String? buyernotes;
 
   const OrderWidget({
     required this.order,
@@ -34,6 +35,7 @@ class OrderWidget extends StatefulWidget {
     this.isExpanded,
     this.shop,
     this.showChange = true,
+    this.buyernotes,
   });
 
   @override
@@ -204,6 +206,8 @@ class _OrderWidgetState extends State<OrderWidget> {
                                                     BorderRadius.circular(100),
                                                 child:
                                                     NetworkImageWithPlaceHolder(
+                                                        placeHolder:
+                                                            Icons.person,
                                                         imageUrl: widget.order
                                                             .user!.photoUrl)),
                                           ),
@@ -419,14 +423,14 @@ class _OrderWidgetState extends State<OrderWidget> {
                             Row(
                               children: <Widget>[
                                 const Text(
-                                  'Notes: ',
+                                  'Buyer Notes: ',
                                   style: TextStyle(
                                     fontWeight: FontWeight.normal,
                                     fontSize: 13,
                                   ),
                                 ),
                                 Text(
-                                  widget.order.notes ?? 'N/A',
+                                  widget.buyernotes ?? 'N/A',
                                   style: const TextStyle(
                                     fontWeight: FontWeight.bold,
                                     fontSize: 13,

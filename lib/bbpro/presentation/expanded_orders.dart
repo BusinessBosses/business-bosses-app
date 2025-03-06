@@ -90,9 +90,30 @@ class _ExpandedOrdersState extends State<ExpandedOrders> {
               bgcolor: widget.order.status.backgroundColor,
               isExpanded: true,
               shop: widget.shop,
+              buyernotes: widget.order.notes,
             ),
           const SizedBox(height: 30),
-          if (widget.order.notes != null)
+          if (widget.ismyorder == null)
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: <Widget>[
+                const Padding(
+                  padding: EdgeInsets.symmetric(horizontal: 15.0),
+                  child: Text(
+                    'My note to Buyer',
+                    style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 15.0),
+                  child: Text(
+                    sellernotes ?? 'N/A',
+                    style: const TextStyle(fontSize: 16),
+                  ),
+                ),
+              ],
+            ),
+          if (widget.ismyorder != null)
             Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[
@@ -106,9 +127,7 @@ class _ExpandedOrdersState extends State<ExpandedOrders> {
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 15.0),
                   child: Text(
-                    widget.order.notes!.isNotEmpty
-                        ? widget.order.notes!
-                        : 'N/A',
+                    widget.order.notes ?? 'N/A',
                     style: const TextStyle(fontSize: 16),
                   ),
                 ),
