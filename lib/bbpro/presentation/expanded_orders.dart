@@ -33,6 +33,27 @@ class _ExpandedOrdersState extends State<ExpandedOrders> {
   final ShopController shopController = Get.find();
   @override
   Widget build(BuildContext context) {
+    String? productNotes = widget.order.products!
+        .map((Product product) =>
+            product.notes) // Assuming `notes` is a field in `Product`
+        .where((String? note) => note != null && note.isNotEmpty)
+        .join(', '); // Combine notes into a single string
+
+    String? serviceNotes = widget.order.services!
+        .map((Service service) =>
+            service.notes) // Assuming `notes` is a field in `Service`
+        .where((String? note) => note != null && note.isNotEmpty)
+        .join(', '); // Combine notes into a single string
+
+    // Combine product and service notes
+    String? sellernotes;
+    if (productNotes.isNotEmpty) {
+      sellernotes = productNotes;
+    }
+    if (serviceNotes.isNotEmpty) {
+      sellernotes =
+          sellernotes != null ? '$sellernotes, $serviceNotes' : serviceNotes;
+    }
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
@@ -61,6 +82,7 @@ class _ExpandedOrdersState extends State<ExpandedOrders> {
               isExpanded: true,
               shop: widget.shop,
               ismyorderspage: true,
+              sellernotes: sellernotes,
             ),
           if (widget.ismyorder == null)
             OrderWidget(
@@ -95,14 +117,24 @@ class _ExpandedOrdersState extends State<ExpandedOrders> {
           const SizedBox(height: 30),
           const Padding(
             padding: EdgeInsets.symmetric(horizontal: 15.0),
-            child: Text(
-              'Listings',
-              style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: <Widget>[
+                Text(
+                  'Listings',
+                  style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+                ),
+                // Text(
+                //   'Quantity: ${widget.order.}',
+                //   style: const TextStyle(fontSize: 16),
+                // )
+              ],
             ),
           ),
           ...widget.order.products!.map<Widget>((Product product) {
             return GestureDetector(
               onTap: () {
+                print(product.notes);
                 // Get.to(
                 //     OrderProductScreen(product: product, shop: product.shop!));
               },
@@ -124,7 +156,9 @@ class _ExpandedOrdersState extends State<ExpandedOrders> {
                       ),
                     ),
                     Text(
-                      widget.order.orderDetails ?? '',
+                      widget.order.orderDetails != null
+                          ? widget.order.orderDetails!
+                          : '',
                       style: const TextStyle(
                         fontSize: 13,
                       ),

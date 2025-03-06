@@ -49,6 +49,7 @@ class _OrderProductScreenState extends State<OrderProductScreen> {
   final TextEditingController deliveryController = TextEditingController();
   final TextEditingController noteController = TextEditingController();
   List<Map<String, dynamic>> selectedItems = <Map<String, dynamic>>[];
+  List<Map<String, dynamic>> selectedDetails = <Map<String, dynamic>>[];
 
   List<String> clientsName = <String>[];
   List<Map<String, dynamic>> clients = <Map<String, dynamic>>[];
@@ -86,6 +87,14 @@ class _OrderProductScreenState extends State<OrderProductScreen> {
         'name': widget.product.name
       },
     );
+    if ((widget.product.color != null &&
+            widget.product.color!.isNotEmpty &&
+            widget.product.color!.first.isNotEmpty) ||
+        (widget.product.size != null &&
+            widget.product.size!.isNotEmpty &&
+            widget.product.size!.first.isNotEmpty)) {
+      selectedDetails.add(<String, dynamic>{'color': '', 'size': ''});
+    }
   }
 
   @override
@@ -516,48 +525,87 @@ class _OrderProductScreenState extends State<OrderProductScreen> {
                         controller: quantityController,
                         inputType: TextInputType.number,
                         onChanged: (String value) {
-                          quantityController.text = value;
-                          setState(() {});
+                          setState(() {
+                            selectedDetails
+                                .clear(); // Clear previous selections
+                            int quantity = int.tryParse(value) ?? 1;
+
+                            selectedDetails = List.generate(
+                                quantity,
+                                (int index) =>
+                                    <String, dynamic>{'color': '', 'size': ''});
+                          });
                         },
                       ),
-                      if (widget.product.color != null &&
-                          widget.product.color!.isNotEmpty &&
-                          widget.product.color!.first.isNotEmpty)
-                        CustomDropdownWidget(
+                      if (widget.product.notes == null)
+                        CustomEditText(
                           padding: 0,
-                          isorder: true,
-                          iconcolor: textColor,
-                          caption: 'Choose Color',
-                          items: widget.product.color!
-                              .map((String e) => e)
-                              .toList(),
-                          iconName: 'assets/svgs/dropdown.svg',
-                          onChanged: (String? value) => setState(() {
-                            selectedColor = value!;
-                          }),
+                          hintText: 'Enter Note to Seller here',
+                          controller: noteController,
+                          caption: '',
                         ),
-                      if (widget.product.size != null &&
-                          widget.product.size!.isNotEmpty &&
-                          widget.product.size!.first.isNotEmpty)
-                        CustomDropdownWidget(
-                          padding: 0,
-                          iconcolor: textColor,
-                          isorder: true,
-                          caption: 'Choose Size',
-                          items: widget.product.size!
-                              .map((String e) => e)
-                              .toList(),
-                          iconName: 'assets/svgs/dropdown.svg',
-                          onChanged: (String? value) => setState(() {
-                            selectedSize = value!;
-                          }),
-                        ),
-                      if (widget.product.size != null &&
-                          widget.product.size!.isNotEmpty &&
-                          widget.product.size!.first.isNotEmpty)
-                        const SizedBox(
-                          height: 15,
-                        ),
+
+                      Column(
+                        children: selectedDetails
+                            .asMap()
+                            .entries
+                            .map((MapEntry<int, Map<String, dynamic>> entry) {
+                          int index = entry.key;
+                          Map<String, dynamic> item = entry.value;
+                          return Column(
+                            children: <Widget>[
+                              if (widget.product.color != null &&
+                                  widget.product.color!.isNotEmpty &&
+                                  widget.product.color!.first.isNotEmpty)
+                                CustomDropdownWidget(
+                                  padding: 0,
+                                  isorder: true,
+                                  iconcolor: textColor,
+                                  caption: 'Choose Color ${index + 1}',
+                                  items: widget.product.color!
+                                      .map((String e) => e)
+                                      .toList(),
+                                  iconName: 'assets/svgs/dropdown.svg',
+                                  onChanged: (String? value) {
+                                    setState(() {
+                                      selectedDetails[index]['color'] = value!;
+                                    });
+                                  },
+                                ),
+                              if (widget.product.size != null &&
+                                  widget.product.size!.isNotEmpty &&
+                                  widget.product.size!.first.isNotEmpty)
+                                CustomDropdownWidget(
+                                  padding: 0,
+                                  iconcolor: textColor,
+                                  isorder: true,
+                                  caption: 'Choose Size ${index + 1}',
+                                  items: widget.product.size!
+                                      .map((String e) => e)
+                                      .toList(),
+                                  iconName: 'assets/svgs/dropdown.svg',
+                                  onChanged: (String? value) {
+                                    setState(() {
+                                      selectedDetails[index]['size'] = value!;
+                                    });
+                                  },
+                                ),
+                            ],
+                          );
+                        }).toList(),
+                      ),
+                      // if (selectedItems.isNotEmpty)
+                      //   Padding(
+                      //     padding: const EdgeInsets.only(
+                      //         bottom: 15.0, left: 15, right: 15),
+                      //     child: Text(
+                      //       selectedItems
+                      //           .map((Map<String, dynamic> item) =>
+                      //               '${item['color']} - ${item['size']}')
+                      //           .join(', '),
+                      //       style: const TextStyle(fontSize: 12),
+                      //     ),
+                      //   ),
                     ],
                   ),
                 ),
@@ -723,8 +771,9 @@ class _OrderProductScreenState extends State<OrderProductScreen> {
                             : 'online',
                         'deliveryDate': DateTime.now().toString(),
                         'paymentMethod': activePaymentMethod,
-                        'orderDetails':
-                            'Color: $selectedColor, Size: $selectedSize',
+                        'orderDetails': selectedDetails.isNotEmpty
+                            ? selectedDetails.toString()
+                            : '',
                         'invoiceOption': 'send_with_payment_link',
                         'status': 'pending',
                         'notes': noteController.text,

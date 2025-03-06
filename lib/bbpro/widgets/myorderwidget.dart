@@ -29,6 +29,7 @@ class MyOrderWidget extends StatefulWidget {
   final Shop? shop;
   final bool? ismyorderspage;
   final bool showChange;
+  final String? sellernotes;
 
   const MyOrderWidget({
     required this.order,
@@ -39,6 +40,7 @@ class MyOrderWidget extends StatefulWidget {
     this.shop,
     this.showChange = true,
     this.ismyorderspage,
+    this.sellernotes,
   });
 
   @override
@@ -703,14 +705,14 @@ class _MyOrderWidgetState extends State<MyOrderWidget> {
                             Row(
                               children: <Widget>[
                                 const Text(
-                                  'Notes: ',
+                                  'Seller Notes: ',
                                   style: TextStyle(
                                     fontWeight: FontWeight.normal,
                                     fontSize: 13,
                                   ),
                                 ),
                                 Text(
-                                  widget.order.notes ?? 'N/A',
+                                  widget.sellernotes ?? 'N/A',
                                   style: const TextStyle(
                                     fontWeight: FontWeight.bold,
                                     fontSize: 13,
