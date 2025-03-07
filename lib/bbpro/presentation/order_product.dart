@@ -551,6 +551,7 @@ class _OrderProductScreenState extends State<OrderProductScreen> {
                             .entries
                             .map((MapEntry<int, Map<String, dynamic>> entry) {
                           int index = entry.key;
+                          // ignore: unused_local_variable
                           Map<String, dynamic> item = entry.value;
                           return Column(
                             children: <Widget>[

@@ -3,8 +3,6 @@ import 'package:business_bosses_v2/bbpro/models/order_model.dart';
 import 'package:business_bosses_v2/bbpro/models/product_model.dart';
 import 'package:business_bosses_v2/bbpro/models/service_model.dart';
 import 'package:business_bosses_v2/bbpro/models/shop_model.dart';
-import 'package:business_bosses_v2/bbpro/presentation/book_service.dart';
-import 'package:business_bosses_v2/bbpro/presentation/order_product.dart';
 import 'package:business_bosses_v2/bbpro/widgets/myorderwidget.dart';
 import 'package:business_bosses_v2/bbpro/widgets/orderwidget.dart';
 import 'package:business_bosses_v2/common/widgets/network_image_with_placeholder.dart';

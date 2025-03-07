@@ -9,7 +9,6 @@ import 'package:business_bosses_v2/features/home/marketplace_screen.dart';
 import 'package:business_bosses_v2/features/marketplace/models/market_model.dart';
 import 'package:business_bosses_v2/features/posts/controllers/create_post_controller.dart';
 import 'package:business_bosses_v2/features/posts/widgets/preview.dart';
-import 'package:business_bosses_v2/features/posts/widgets/promote_section.dart';
 import 'package:business_bosses_v2/features/posts/widgets/text_input.dart';
 import 'package:business_bosses_v2/features/posts/widgets/user_details_widget.dart';
 import 'package:business_bosses_v2/features/premium/unlockedfeatures.dart';
@@ -350,7 +349,8 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
 
                     // if (controller.imageFileList.isNotEmpty)
                     Padding(
-                      padding: const EdgeInsets.only(left: 20, right: 20, bottom :10),
+                      padding: const EdgeInsets.only(
+                          left: 20, right: 20, bottom: 10),
                       child: Preview(
                         controller: controller,
                         isUpdating: widget.postDetail != null,
