@@ -81,7 +81,7 @@ class _ProshopdealsWidgetState extends State<ProshopdealsWidget> {
       child: Container(
         decoration: BoxDecoration(
           color: widget.isHome != null && widget.isHome == true
-              ? backgroundColor
+              ? Colors.white
               : Colors.white,
           borderRadius: BorderRadius.circular(
               widget.isHome != null && widget.isHome! ? 0 : 15),
@@ -91,6 +91,8 @@ class _ProshopdealsWidgetState extends State<ProshopdealsWidget> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
+            if (widget.isHome != null && widget.isHome == true)
+              const SizedBox(height: 10.0),
             Padding(
               padding: EdgeInsets.symmetric(
                   horizontal: 10.0,
@@ -99,10 +101,19 @@ class _ProshopdealsWidgetState extends State<ProshopdealsWidget> {
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: <Widget>[
-                  Text(
-                    widget.caption ?? 'Featured Listing',
-                    style: const TextStyle(
-                        fontSize: 16, fontWeight: FontWeight.bold),
+                  Row(
+                    children: <Widget>[
+                      Text(
+                        widget.caption ?? 'Featured Listing',
+                        style: const TextStyle(
+                            fontSize: 16, fontWeight: FontWeight.bold),
+                      ),
+                      const Text(
+                        ' - Share and Earn',
+                        style: TextStyle(
+                            fontSize: 13, fontWeight: FontWeight.w600),
+                      ),
+                    ],
                   ),
                   const SizedBox(width: 10),
                   const Icon(Icons.chevron_right, color: textColor, size: 20),

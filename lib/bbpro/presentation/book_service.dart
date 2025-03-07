@@ -11,6 +11,7 @@ import 'package:business_bosses_v2/bbpro/widgets/servicetypesection.dart';
 import 'package:business_bosses_v2/common/dialogs/snackbar.dart';
 import 'package:business_bosses_v2/common/generic_slider.dart';
 import 'package:business_bosses_v2/common/widgets/text_widget.dart';
+import 'package:business_bosses_v2/features/marketplace/controllers/market_controller.dart';
 import 'package:business_bosses_v2/features/profile/controller/profile_controller.dart';
 import 'package:business_bosses_v2/features/profile/presentation/public_profile_screen.dart';
 import 'package:business_bosses_v2/navigation/routes.dart';
@@ -69,6 +70,7 @@ class _BookServiceScreenState extends State<BookServiceScreen> {
   final ProfileController profileController = Get.find();
   final OrderController orderController = Get.put(OrderController());
   final ShopController shopController = Get.find();
+  final MarketController marketController = Get.find();
   final TextEditingController quantityController = TextEditingController();
   final TextEditingController deliveryController = TextEditingController();
   final TextEditingController fullNameController = TextEditingController();
@@ -101,6 +103,7 @@ class _BookServiceScreenState extends State<BookServiceScreen> {
   String activePaymentMethod = '';
   bool isAppointment = false;
   bool blocked = false;
+  bool isProService = false;
 
   @override
   void initState() {
@@ -114,6 +117,8 @@ class _BookServiceScreenState extends State<BookServiceScreen> {
     emailController.text = profileController.myProfile.email;
     _focusNode = FocusNode();
     quantityController.text = '1';
+    isProService = marketController.proServices.any((Service service) =>
+        service.id == widget.service.id && service.user!.isSubscribed);
     duration = widget.service.serviceDuration ?? 60;
     selectedItems.add(
       <String, dynamic>{
@@ -141,6 +146,39 @@ class _BookServiceScreenState extends State<BookServiceScreen> {
         appBar: AppBar(
           titleSpacing: 0,
           actions: <Widget>[
+            // Assuming widget.service is of type Service
+
+            if (isProService)
+              GestureDetector(
+                onTap: () {
+                  // Handle the tap event
+                },
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 10.0),
+                  child: Container(
+                    padding: const EdgeInsets.symmetric(horizontal: 5),
+                    decoration: BoxDecoration(
+                      color: backgroundColor,
+                      borderRadius: BorderRadius.circular(50),
+                    ),
+                    child: Row(
+                      children: <Widget>[
+                        SvgPicture.asset(
+                          'assets/svgs/coin.svg',
+                          height: 18,
+                        ),
+                        const SizedBox(width: 2),
+                        const Text('Share and Earn',
+                            style: TextStyle(
+                                fontSize: 13,
+                                fontWeight: FontWeight.w700,
+                                color: textColor))
+                      ],
+                    ),
+                  ),
+                ),
+              ),
+            const SizedBox(width: 5),
             Padding(
               padding: const EdgeInsets.only(right: 15.0),
               child: InkWell(

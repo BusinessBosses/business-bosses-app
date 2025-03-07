@@ -27,7 +27,38 @@ class RegisterScreen extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[
-                const SizedBox(height: 69.0),
+                const SizedBox(height: 30.0),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: <Widget>[
+                    Container(
+                      width: 35.0,
+                      height: 35.0,
+                      clipBehavior: Clip.antiAlias,
+                      decoration: const BoxDecoration(
+                        color: Colors.transparent,
+                        shape: BoxShape.circle,
+                      ),
+                      child: Image.asset(
+                        'assets/images/app_logo_2.png',
+                        height: 40,
+                      ),
+                    ),
+                    const SizedBox(
+                      width: 10,
+                    ),
+                    Flexible(
+                      child: Text(
+                          '#1 App to promote your business across multiple channels & earn more',
+                          style: TextStyle(
+                              fontSize: 15,
+                              color: textColor.withOpacity(0.8),
+                              fontWeight: FontWeight.w700)),
+                    )
+                  ],
+                ),
+                const SizedBox(height: 30.0),
                 Row(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: <Widget>[
@@ -67,9 +98,6 @@ class RegisterScreen extends StatelessWidget {
                   ],
                 ),
 
-                const SizedBox(
-                  height: 29,
-                ),
                 //field user name or email
                 // SizedBox(height: 24.0),
                 const SignUpForm(),

@@ -30,6 +30,7 @@ class MyOrderWidget extends StatefulWidget {
   final bool? ismyorderspage;
   final bool showChange;
   final String? sellernotes;
+  final int? quantity;
 
   const MyOrderWidget({
     required this.order,
@@ -41,6 +42,7 @@ class MyOrderWidget extends StatefulWidget {
     this.showChange = true,
     this.ismyorderspage,
     this.sellernotes,
+    this.quantity,
   });
 
   @override
@@ -108,13 +110,22 @@ class _MyOrderWidgetState extends State<MyOrderWidget> {
                                 const SizedBox(
                                   width: 5,
                                 ),
-                                Text(
-                                  '${calculateTotalItems().toInt()} ${calculateTotalItems().toInt() > 1 ? 'items' : 'item'} - ${widget.shop == null ? shopController.shop!.currency : widget.shop!.currency} ${calculateTotalPrice().toStringAsFixed(2)}',
-                                  style: const TextStyle(
-                                    fontWeight: FontWeight.bold,
-                                    fontSize: 13,
+                                if (widget.quantity != null)
+                                  Text(
+                                    '${widget.quantity!.toInt()} ${widget.quantity!.toInt() > 1 ? 'items' : 'item'} - ${widget.shop == null ? shopController.shop!.currency : widget.shop!.currency} ${(calculateTotalPrice() * widget.quantity!).toStringAsFixed(2)}',
+                                    style: const TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: 13,
+                                    ),
                                   ),
-                                ),
+                                if (widget.quantity == null)
+                                  Text(
+                                    '${calculateTotalItems().toInt()} ${calculateTotalItems().toInt() > 1 ? 'items' : 'item'} - ${widget.shop == null ? shopController.shop!.currency : widget.shop!.currency} ${calculateTotalPrice().toStringAsFixed(2)}',
+                                    style: const TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: 13,
+                                    ),
+                                  ),
                               ]),
                         ),
                         if (widget.myShop!)
