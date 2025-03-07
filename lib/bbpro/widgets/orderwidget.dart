@@ -26,6 +26,7 @@ class OrderWidget extends StatefulWidget {
   final Shop? shop;
   final bool showChange;
   final String? buyernotes;
+  final int? quantity;
 
   const OrderWidget({
     required this.order,
@@ -36,6 +37,7 @@ class OrderWidget extends StatefulWidget {
     this.shop,
     this.showChange = true,
     this.buyernotes,
+    this.quantity,
   });
 
   @override
@@ -101,13 +103,22 @@ class _OrderWidgetState extends State<OrderWidget> {
                                 const SizedBox(
                                   width: 5,
                                 ),
-                                Text(
-                                  '${calculateTotalItems().toInt()} ${calculateTotalItems().toInt() > 1 ? 'items' : 'item'} - ${widget.shop == null ? shopController.shop!.currency : widget.shop!.currency} ${calculateTotalPrice().toStringAsFixed(2)}',
-                                  style: const TextStyle(
-                                    fontWeight: FontWeight.bold,
-                                    fontSize: 13,
+                                if (widget.quantity != null)
+                                  Text(
+                                    '${widget.quantity!.toInt()} ${widget.quantity!.toInt() > 1 ? 'items' : 'item'} - ${widget.shop == null ? shopController.shop!.currency : widget.shop!.currency} ${(calculateTotalPrice() * widget.quantity!).toStringAsFixed(2)}',
+                                    style: const TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: 13,
+                                    ),
                                   ),
-                                ),
+                                if (widget.quantity == null)
+                                  Text(
+                                    '${calculateTotalItems().toInt()} ${calculateTotalItems().toInt() > 1 ? 'items' : 'item'} - ${widget.shop == null ? shopController.shop!.currency : widget.shop!.currency} ${calculateTotalPrice().toStringAsFixed(2)}',
+                                    style: const TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: 13,
+                                    ),
+                                  ),
                               ]),
                         ),
                         if (widget.myShop!)

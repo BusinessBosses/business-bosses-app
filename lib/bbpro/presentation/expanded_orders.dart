@@ -54,6 +54,21 @@ class _ExpandedOrdersState extends State<ExpandedOrders> {
       sellernotes =
           sellernotes != null ? '$sellernotes, $serviceNotes' : serviceNotes;
     }
+    List<String> _parseOrderDetails(String orderDetails) {
+      // Remove the square brackets and split the string by commas
+      final String cleanedString =
+          orderDetails.replaceAll('[', '').replaceAll(']', '');
+      final List<String> details = cleanedString.split('},');
+
+      // Add the missing closing brace for each item except the last one, then remove { and }
+      return details.map((String detail) {
+        if (!detail.endsWith('}')) {
+          detail = '$detail}';
+        }
+        return detail.replaceAll('{', '').replaceAll('}', '');
+      }).toList();
+    }
+
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
@@ -83,9 +98,11 @@ class _ExpandedOrdersState extends State<ExpandedOrders> {
               shop: widget.shop,
               ismyorderspage: true,
               sellernotes: sellernotes,
+              quantity: widget.order.quantity ?? 1,
             ),
           if (widget.ismyorder == null)
             OrderWidget(
+              quantity: widget.order.quantity ?? 1,
               order: widget.order,
               bgcolor: widget.order.status.backgroundColor,
               isExpanded: true,
@@ -134,62 +151,73 @@ class _ExpandedOrdersState extends State<ExpandedOrders> {
               ],
             ),
           const SizedBox(height: 30),
-          const Padding(
-            padding: EdgeInsets.symmetric(horizontal: 15.0),
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 15.0),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: <Widget>[
-                Text(
+                const Text(
                   'Listings',
                   style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
                 ),
-                // Text(
-                //   'Quantity: ${widget.order.}',
-                //   style: const TextStyle(fontSize: 16),
-                // )
+                if (widget.order.products!.isNotEmpty)
+                  Text(
+                    'Quantity: ${widget.order.quantity}',
+                    style: const TextStyle(fontSize: 16),
+                  )
               ],
             ),
           ),
-          ...widget.order.products!.map<Widget>((Product product) {
-            return GestureDetector(
-              onTap: () {
-                print(product.notes);
-                // Get.to(
-                //     OrderProductScreen(product: product, shop: product.shop!));
-              },
-              child: ListTile(
-                title: Text(
-                  product.name,
-                  style: const TextStyle(
-                      fontWeight: FontWeight.w600, fontSize: 14),
-                ),
-                leading: _buildProductImage(product),
-                subtitle: Column(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: <Widget>[
-                    Text(
-                      '${widget.shop != null ? widget.shop!.currency : widget.order.shop.currency} ${product.price.toString()}',
-                      style: const TextStyle(
-                        fontSize: 13,
+          ...widget.order.products!.expand<Widget>((Product product) {
+            // Parse the orderDetails string into a list of strings
+            final List<String> orderDetailsList =
+                widget.order.orderDetails != null
+                    ? _parseOrderDetails(widget.order.orderDetails!)
+                    : <String>[];
+
+            // Generate a list of ListTiles based on the ORDER quantity
+            return List.generate(widget.order.quantity!, (int index) {
+              // Get the order detail for the current index
+              final String orderDetail = orderDetailsList.length > index
+                  ? orderDetailsList[index]
+                  : '';
+
+              return GestureDetector(
+                onTap: () {
+                  // Handle product tap
+                },
+                child: ListTile(
+                  title: Text(
+                    product.name,
+                    style: const TextStyle(
+                        fontWeight: FontWeight.w600, fontSize: 14),
+                  ),
+                  leading: _buildProductImage(product),
+                  subtitle: Column(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: <Widget>[
+                      Text(
+                        '${widget.shop != null ? widget.shop!.currency : widget.order.shop.currency} ${product.price.toString()}',
+                        style: const TextStyle(
+                          fontSize: 13,
+                        ),
                       ),
-                    ),
-                    Text(
-                      widget.order.orderDetails != null
-                          ? widget.order.orderDetails!
-                          : '',
-                      style: const TextStyle(
-                        fontSize: 13,
+                      Text(
+                        orderDetail,
+                        style: const TextStyle(
+                          fontSize: 13,
+                        ),
                       ),
-                    ),
-                  ],
+                    ],
+                  ),
+                  contentPadding: const EdgeInsets.symmetric(
+                    horizontal: 16,
+                    vertical: 8,
+                  ),
                 ),
-                contentPadding: const EdgeInsets.symmetric(
-                  horizontal: 16,
-                  vertical: 8,
-                ),
-              ),
-            );
+              );
+            });
           }).toList(),
           ...widget.order.services!.map<Widget>((Service service) {
             return GestureDetector(

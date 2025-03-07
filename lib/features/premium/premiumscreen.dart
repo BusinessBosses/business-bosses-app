@@ -266,11 +266,11 @@ class _PremiumScreenState extends State<PremiumScreen> {
                                     Row(
                                       children: <Widget>[
                                         SvgPicture.asset(
-                                            'assets/svgs/rankingicon.svg',
-                                            height: 23),
+                                            'assets/svgs/addtolist.svg',
+                                            height: 25),
                                         const SizedBox(width: 15),
                                         const Text(
-                                          'Recognition on posts search',
+                                          'Get listing featured on marketplace',
                                           style: TextStyle(
                                               fontSize: 14,
                                               fontWeight: FontWeight.w600),
@@ -282,10 +282,10 @@ class _PremiumScreenState extends State<PremiumScreen> {
                                       children: <Widget>[
                                         SvgPicture.asset(
                                             'assets/svgs/handshake.svg',
-                                            height: 20),
+                                            height: 16),
                                         const SizedBox(width: 18),
                                         const Text(
-                                          'Exclusive Partner Offers',
+                                          'Access to Exclusive Partner Offers',
                                           style: TextStyle(
                                               fontSize: 14,
                                               fontWeight: FontWeight.w600),
@@ -295,7 +295,8 @@ class _PremiumScreenState extends State<PremiumScreen> {
                                     const SizedBox(height: 15),
                                     Row(
                                       children: <Widget>[
-                                        SvgPicture.asset('assets/svgs/grow.svg',
+                                        SvgPicture.asset(
+                                            'assets/svgs/campaign.svg',
                                             height: 20),
                                         const SizedBox(width: 18),
                                         const Text(

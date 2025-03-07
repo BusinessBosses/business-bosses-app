@@ -13,6 +13,7 @@ import 'package:business_bosses_v2/bbpro/widgets/paymentoptioncard.dart';
 import 'package:business_bosses_v2/common/dialogs/snackbar.dart';
 import 'package:business_bosses_v2/common/generic_slider.dart';
 import 'package:business_bosses_v2/common/widgets/text_widget.dart';
+import 'package:business_bosses_v2/features/marketplace/controllers/market_controller.dart';
 import 'package:business_bosses_v2/features/profile/controller/profile_controller.dart';
 import 'package:business_bosses_v2/features/profile/presentation/public_profile_screen.dart';
 import 'package:business_bosses_v2/navigation/routes.dart';
@@ -50,6 +51,7 @@ class _OrderProductScreenState extends State<OrderProductScreen> {
   final TextEditingController noteController = TextEditingController();
   List<Map<String, dynamic>> selectedItems = <Map<String, dynamic>>[];
   List<Map<String, dynamic>> selectedDetails = <Map<String, dynamic>>[];
+  final MarketController marketController = Get.find();
 
   List<String> clientsName = <String>[];
   List<Map<String, dynamic>> clients = <Map<String, dynamic>>[];
@@ -66,6 +68,7 @@ class _OrderProductScreenState extends State<OrderProductScreen> {
 
   late FocusNode _focusNode;
   bool blocked = false;
+  bool isProProduct = false;
 
   @override
   void initState() {
@@ -87,6 +90,8 @@ class _OrderProductScreenState extends State<OrderProductScreen> {
         'name': widget.product.name
       },
     );
+    isProProduct = marketController.proProducts.any((Product product) =>
+        product.id == widget.product.id && product.user!.isSubscribed);
     if ((widget.product.color != null &&
             widget.product.color!.isNotEmpty &&
             widget.product.color!.first.isNotEmpty) ||
@@ -113,6 +118,35 @@ class _OrderProductScreenState extends State<OrderProductScreen> {
         backgroundColor: backgroundColor,
         appBar: AppBar(
           actions: <Widget>[
+            if (isProProduct)
+              GestureDetector(
+                onTap: () {},
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 10.0),
+                  child: Container(
+                    padding: const EdgeInsets.symmetric(horizontal: 5),
+                    decoration: BoxDecoration(
+                      color: backgroundColor,
+                      borderRadius: BorderRadius.circular(50),
+                    ),
+                    child: Row(
+                      children: <Widget>[
+                        SvgPicture.asset(
+                          'assets/svgs/coin.svg',
+                          height: 18,
+                        ),
+                        const SizedBox(width: 2),
+                        const Text('Share and Earn',
+                            style: TextStyle(
+                                fontSize: 13,
+                                fontWeight: FontWeight.w700,
+                                color: textColor))
+                      ],
+                    ),
+                  ),
+                ),
+              ),
+            const SizedBox(width: 5),
             Padding(
               padding: const EdgeInsets.only(right: 15.0),
               child: InkWell(
@@ -777,6 +811,7 @@ class _OrderProductScreenState extends State<OrderProductScreen> {
                         'invoiceOption': 'send_with_payment_link',
                         'status': 'pending',
                         'notes': noteController.text,
+                        'quantity': int.tryParse(quantityController.text) ?? 1,
                       };
                       bool response = await orderController.addOrder(orderData);
                       if (response) {

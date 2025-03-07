@@ -27,8 +27,10 @@ class Order {
   final Shop shop;
   final DateTime? startTime;
   final DateTime? endTime;
+  final int? quantity;
 
   Order({
+    this.quantity,
     required this.id,
     required this.userId,
     required this.shopId,
@@ -54,6 +56,7 @@ class Order {
 
   factory Order.fromJson(Map<String, dynamic> json) {
     return Order(
+      quantity: json['quantity'],
       id: json['id'],
       userId: json['userId'],
       shopId: json['shopId'],
@@ -94,6 +97,7 @@ class Order {
 
   Map<String, dynamic> toJson() {
     return <String, dynamic>{
+      'quantity': quantity,
       'id': id,
       'userId': userId,
       'shopId': shopId,

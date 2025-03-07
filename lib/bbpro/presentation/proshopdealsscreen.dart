@@ -74,13 +74,25 @@ class _ProshopdealsScreenState extends State<ProshopdealsScreen>
     return Scaffold(
       backgroundColor: backgroundColor,
       appBar: AppBar(
+        titleSpacing: 0,
         leading: IconButton(
           onPressed: () {
             Get.back();
           },
           icon: SvgPicture.asset('assets/svgs/backbutton.svg'),
         ),
-        title: const Text('Featured Listing'),
+        title: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          mainAxisAlignment: MainAxisAlignment.start,
+          children: <Widget>[
+            const Text('Featured Listing'),
+            const SizedBox(height: 3),
+            Text(
+              'Select a listing to share',
+              style: TextStyle(fontSize: 12, color: textColor.withOpacity(0.6)),
+            ),
+          ],
+        ),
         bottom: TabBar(
           controller: _tabController,
           labelStyle: const TextStyle(fontWeight: FontWeight.w500),
@@ -170,7 +182,7 @@ class _ProshopdealsScreenState extends State<ProshopdealsScreen>
                       child: Row(
                         children: <Widget>[
                           SvgPicture.asset('assets/svgs/addtolist.svg',
-                              height: 16),
+                              height: 20),
                           const SizedBox(width: 3),
                           const Text(
                             'Get listing featured',

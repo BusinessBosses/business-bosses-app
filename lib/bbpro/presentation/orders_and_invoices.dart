@@ -438,6 +438,7 @@ class _RowStatusCardState extends State<RowStatusCard> {
                           return Padding(
                             padding: const EdgeInsets.only(bottom: 12),
                             child: OrderWidget(
+                              quantity: filteredOrders[index].quantity,
                               order: filteredOrders[index],
                               bgcolor:
                                   filteredOrders[index].status.backgroundColor,
