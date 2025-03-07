@@ -1,6 +1,3 @@
-import 'package:business_bosses_v2/bbpro/models/product_model.dart';
-import 'package:business_bosses_v2/bbpro/models/service_model.dart';
-import 'package:business_bosses_v2/bbpro/widgets/proshopdeals.dart';
 import 'package:business_bosses_v2/common/widgets/network_image_with_placeholder.dart';
 import 'package:business_bosses_v2/common/widgets/text_widget.dart';
 import 'package:business_bosses_v2/features/courses/controller/course_controller.dart';

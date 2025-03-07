@@ -150,8 +150,29 @@ class _BookServiceScreenState extends State<BookServiceScreen> {
 
             if (isProService)
               GestureDetector(
-                onTap: () {
+                onTap: () async {
                   // Handle the tap event
+                  Get.dialog(
+                    const AlertDialog(
+                      content: Row(
+                        children: <Widget>[
+                          CircularProgressIndicator(),
+                          SizedBox(width: 20),
+                          Text('Sharing...'),
+                        ],
+                      ),
+                    ),
+                    barrierDismissible: false,
+                  );
+                  await shopController
+                      .shareEarn(widget.service.id, 'services')
+                      .then((bool value) {
+                    if (value) {
+                      profileController.updateCoinCount(1);
+                    }
+                  });
+                  Get.back();
+                  _shareProduct();
                 },
                 child: Padding(
                   padding: const EdgeInsets.symmetric(vertical: 10.0),
@@ -1608,5 +1629,11 @@ class _BookServiceScreenState extends State<BookServiceScreen> {
     }
 
     return blockedDates;
+  }
+
+  void _shareProduct() {
+    String message = 'Have a look at this product on business bosses\n'
+        'https://vm.businessbosses.co.uk/share/product';
+    socialShare(message);
   }
 }

@@ -120,7 +120,29 @@ class _OrderProductScreenState extends State<OrderProductScreen> {
           actions: <Widget>[
             if (isProProduct)
               GestureDetector(
-                onTap: () {},
+                onTap: () async {
+                  Get.dialog(
+                    const AlertDialog(
+                      content: Row(
+                        children: <Widget>[
+                          CircularProgressIndicator(),
+                          SizedBox(width: 20),
+                          Text('Sharing...'),
+                        ],
+                      ),
+                    ),
+                    barrierDismissible: false,
+                  );
+                  await shopController
+                      .shareEarn(widget.product.id, 'goods')
+                      .then((bool value) {
+                    if (value) {
+                      profileController.updateCoinCount(1);
+                    }
+                  });
+                  Get.back();
+                  _shareProduct();
+                },
                 child: Padding(
                   padding: const EdgeInsets.symmetric(vertical: 10.0),
                   child: Container(
@@ -136,11 +158,14 @@ class _OrderProductScreenState extends State<OrderProductScreen> {
                           height: 18,
                         ),
                         const SizedBox(width: 2),
-                        const Text('Share and Earn',
-                            style: TextStyle(
-                                fontSize: 13,
-                                fontWeight: FontWeight.w700,
-                                color: textColor))
+                        const Text(
+                          'Share and Earn',
+                          style: TextStyle(
+                            fontSize: 13,
+                            fontWeight: FontWeight.w700,
+                            color: textColor,
+                          ),
+                        )
                       ],
                     ),
                   ),
@@ -314,7 +339,7 @@ class _OrderProductScreenState extends State<OrderProductScreen> {
                             ),
                             ListTile(
                               onTap: () {
-                                _sharePost();
+                                _shareProduct();
                               },
                               contentPadding: EdgeInsets.zero,
                               title: const TextWidget(
@@ -925,6 +950,12 @@ class _OrderProductScreenState extends State<OrderProductScreen> {
     String message =
         'Have a look at ${shopController.userShop!.user?.username}\'s biz-center on Business Bosses\n'
         'https://my-biz.io/${shopController.userShop?.name.toLowerCase().replaceAll(' ', '-')}';
+    socialShare(message);
+  }
+
+  void _shareProduct() {
+    String message = 'Have a look at this product on business bosses\n'
+        'https://vm.businessbosses.co.uk/share/product';
     socialShare(message);
   }
 }
