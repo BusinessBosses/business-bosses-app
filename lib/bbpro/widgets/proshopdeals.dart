@@ -115,8 +115,8 @@ class _ProshopdealsWidgetState extends State<ProshopdealsWidget> {
                     children: <Widget>[
                       Text(
                         'Share & Earn ',
-                        style:
-                            TextStyle(fontSize: 1, fontWeight: FontWeight.w600),
+                        style: TextStyle(
+                            fontSize: 12, fontWeight: FontWeight.w600),
                       ),
                       Icon(Icons.chevron_right, color: textColor, size: 20),
                     ],
