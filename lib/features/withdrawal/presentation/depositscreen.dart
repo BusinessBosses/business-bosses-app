@@ -363,7 +363,7 @@ class _DepositsScreenState extends State<DepositsScreen> {
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: <Widget>[
                                   Text(
-                                    'Share and Earn',
+                                    'Share & Earn',
                                     style: TextStyle(
                                         fontWeight: FontWeight.w700,
                                         fontSize: 16),

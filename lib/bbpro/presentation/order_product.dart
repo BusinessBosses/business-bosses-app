@@ -159,7 +159,7 @@ class _OrderProductScreenState extends State<OrderProductScreen> {
                         ),
                         const SizedBox(width: 2),
                         const Text(
-                          'Share and Earn',
+                          'Share & Earn',
                           style: TextStyle(
                             fontSize: 13,
                             fontWeight: FontWeight.w700,
@@ -409,30 +409,24 @@ class _OrderProductScreenState extends State<OrderProductScreen> {
                   ),
                 ),
                 const SizedBox(height: 5),
-                Container(
-                  decoration: BoxDecoration(
-                      color: probackgroundColor,
-                      borderRadius: BorderRadius.circular(radius)),
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: 10.0, vertical: 3),
-                  child: const Row(
-                    mainAxisSize: MainAxisSize.min,
-                    children: <Widget>[
-                      Text(
-                        'Visit Biz-Center',
-                        style: TextStyle(
-                          fontSize: 10,
-                          color: proprimaryColor,
-                          fontWeight: FontWeight.w700,
-                        ),
+                const Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: <Widget>[
+                    Text(
+                      'Visit Biz-Center',
+                      style: TextStyle(
+                        fontSize: 10,
+                        color: Colors.blue,
+                        fontWeight: FontWeight.w700,
+                        decoration: TextDecoration.underline,
                       ),
-                      Icon(
-                        Icons.chevron_right,
-                        color: textColor,
-                        size: 10,
-                      ),
-                    ],
-                  ),
+                    ),
+                    // Icon(
+                    //   Icons.chevron_right,
+                    //   color: textColor,
+                    //   size: 10,
+                    // ),
+                  ],
                 ),
               ],
             ),
@@ -955,7 +949,7 @@ class _OrderProductScreenState extends State<OrderProductScreen> {
 
   void _shareProduct() {
     String message = '${widget.product.name}\n'
-    'Check this listing on Business Bosses\n'
+        'Check this listing on Business Bosses\n'
         'https://my-biz.io/${shopController.shop?.name.toLowerCase().replaceAll(' ', '-')}';
     socialShare(message);
   }
