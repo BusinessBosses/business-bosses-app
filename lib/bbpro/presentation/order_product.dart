@@ -33,7 +33,7 @@ class OrderProductScreen extends StatefulWidget {
       {super.key,
       required this.product,
       required this.shop,
-      this.ismarketplace});
+      this.ismarketplace,});
 
   @override
   State<OrderProductScreen> createState() => _OrderProductScreenState();
