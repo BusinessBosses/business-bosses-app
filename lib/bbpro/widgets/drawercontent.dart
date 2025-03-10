@@ -431,7 +431,9 @@ class DrawerContent extends StatelessWidget {
                           Row(
                             children: [
                               Text(
-                                currentuser!.connectionCount.toString(),
+                                currentuser != null
+                                    ? currentuser!.connectionCount.toString()
+                                    : '0',
                                 style: const TextStyle(
                                   color: primaryColorLT,
                                   fontWeight: FontWeight.bold,
@@ -444,7 +446,10 @@ class DrawerContent extends StatelessWidget {
                                 ),
                               ),
                               Text(
-                                currentuser!.connections!.length.toString(),
+                                currentuser != null &&
+                                        currentuser?.connecteds != null
+                                    ? currentuser!.connecteds!.length.toString()
+                                    : '0',
                                 style: const TextStyle(
                                   color: primaryColorLT,
                                   fontWeight: FontWeight.bold,

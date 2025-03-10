@@ -648,10 +648,13 @@ class _OrderProductScreenState extends State<OrderProductScreen>
                                 .clear(); // Clear previous selections
                             int quantity = int.tryParse(value) ?? 1;
 
-                            selectedDetails = List.generate(
-                                quantity,
-                                (int index) =>
-                                    <String, dynamic>{'color': '', 'size': ''});
+                            selectedDetails =
+                                List<Map<String, dynamic>>.generate(
+                                    quantity,
+                                    (int index) => <String, dynamic>{
+                                          'color': '',
+                                          'size': ''
+                                        });
                           });
                         },
                       ),
@@ -774,7 +777,8 @@ class _OrderProductScreenState extends State<OrderProductScreen>
                                 padding: const EdgeInsets.all(15),
                                 child: Column(
                                   children: paymentMethods!
-                                      .map((payment) => ProPaymentOptionCard(
+                                      .map((dynamic payment) =>
+                                          ProPaymentOptionCard(
                                             option:
                                                 payment['paymentMethod'] ?? '',
                                             subtext:
