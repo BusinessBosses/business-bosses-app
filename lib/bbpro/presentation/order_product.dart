@@ -948,9 +948,8 @@ class _OrderProductScreenState extends State<OrderProductScreen> {
   }
 
   void _shareProduct() {
-    String message = '${widget.product.name}\n'
-        'Check this listing on Business Bosses\n'
-        'https://my-biz.io/${shopController.shop?.name.toLowerCase().replaceAll(' ', '-')}';
+    String message = '${widget.product.name} - Check this listing!\n'
+        'https://my-biz.io/${widget.shop.name.toLowerCase().replaceAll(' ', '-')}';
     socialShare(message);
   }
 }

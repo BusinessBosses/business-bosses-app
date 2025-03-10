@@ -1626,9 +1626,8 @@ class _BookServiceScreenState extends State<BookServiceScreen> {
   }
 
   void _shareProduct() {
-    String message = '${widget.service.name}\n'
-        'Check this listing on Business Bosses\n'
-        'https://my-biz.io/${shopController.shop?.name.toLowerCase().replaceAll(' ', '-')}';
+    String message = '${widget.service.name} - Check this listing!\n'
+        'https://my-biz.io/${widget.shop.name.toLowerCase().replaceAll(' ', '-')}';
     socialShare(message);
   }
 }
