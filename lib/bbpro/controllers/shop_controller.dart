@@ -323,7 +323,7 @@ class ShopController extends GetxController {
     }
   }
 
-  Future<bool> shareEarn(dynamic postId, String type) async {
+  Future<ApiResponseModel> shareEarn(dynamic postId, String type) async {
     Map<String, dynamic> data = <String, dynamic>{
       'postId': postId,
       'userId': profileController.myProfile.uid,
@@ -332,10 +332,7 @@ class ShopController extends GetxController {
     };
     ApiResponseModel response =
         await ApiService.post(path: 'coins/listing', body: data);
-    if (response.success) {
-      return true;
-    }
-    return false;
+    return response;
   }
 
   Future<bool> updateCustomItem(int id, Map<String, dynamic> data) async {

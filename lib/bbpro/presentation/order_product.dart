@@ -12,6 +12,7 @@ import 'package:business_bosses_v2/bbpro/widgets/ordersummarycard.dart';
 import 'package:business_bosses_v2/bbpro/widgets/paymentoptioncard.dart';
 import 'package:business_bosses_v2/common/dialogs/snackbar.dart';
 import 'package:business_bosses_v2/common/generic_slider.dart';
+import 'package:business_bosses_v2/common/models/api_response_model.dart';
 import 'package:business_bosses_v2/common/widgets/text_widget.dart';
 import 'package:business_bosses_v2/features/marketplace/controllers/market_controller.dart';
 import 'package:business_bosses_v2/features/profile/controller/profile_controller.dart';
@@ -73,6 +74,7 @@ class _OrderProductScreenState extends State<OrderProductScreen>
   bool isProProduct = false;
   bool earn = false;
 
+  String shareErrorMessage = '';
   @override
   void initState() {
     super.initState();
@@ -165,16 +167,55 @@ class _OrderProductScreenState extends State<OrderProductScreen>
                   );
                   await shopController
                       .shareEarn(widget.product.id, 'goods')
-                      .then((bool value) {
-                    if (value) {
+                      .then((ApiResponseModel value) {
+                    if (value.success) {
                       profileController.updateCoinCount(1);
                       setState(() {
                         earn = true;
+                      });
+                    } else {
+                      setState(() {
+                        shareErrorMessage = value.message;
                       });
                     }
                   });
                   Get.back();
                   await _shareProduct();
+                  if (shareErrorMessage ==
+                      'User has gained coin from sharing the listings') {
+                    Get.dialog(
+                      AlertDialog(
+                        title: const Text('Shared Successfully!'),
+                        content: const Text(
+                            'You have already earned from sharing this listing'),
+                        actions: <Widget>[
+                          TextButton(
+                            onPressed: () {
+                              Get.back(); // Dismiss dialog
+                            },
+                            child: const Text('Close'),
+                          ),
+                        ],
+                      ),
+                    );
+                  } else if (shareErrorMessage ==
+                      'Post owner does not have enough listing coins') {
+                    Get.dialog(
+                      AlertDialog(
+                        title: const Text('Shared Successfully!'),
+                        content: const Text(
+                            'All Coins for this listings have been claimed'),
+                        actions: <Widget>[
+                          TextButton(
+                            onPressed: () {
+                              Get.back(); // Dismiss dialog
+                            },
+                            child: const Text('Close'),
+                          ),
+                        ],
+                      ),
+                    );
+                  }
                 },
                 child: Padding(
                   padding: const EdgeInsets.symmetric(vertical: 10.0),
