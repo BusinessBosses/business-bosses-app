@@ -104,6 +104,7 @@ class _BookServiceScreenState extends State<BookServiceScreen> {
   bool isAppointment = false;
   bool blocked = false;
   bool isProService = false;
+  bool earn = false;
 
   @override
   void initState() {
@@ -170,9 +171,32 @@ class _BookServiceScreenState extends State<BookServiceScreen> {
                     if (value) {
                       profileController.updateCoinCount(1);
                     }
+                    setState(() {
+                      earn = true;
+                    });
                   });
                   Get.back();
-                  _shareProduct();
+                  await _shareProduct();
+                  if (earn) {
+                    Get.dialog(
+                      AlertDialog(
+                        title: const Text('Shared Successfully!'),
+                        content: const Text(
+                            'You have earned a coin for sharing this listing'),
+                        actions: <Widget>[
+                          TextButton(
+                            onPressed: () async {
+                              Get.back();
+                            },
+                            child: const Text('Close'),
+                          ),
+                        ],
+                      ),
+                    );
+                    setState(() {
+                      earn = false;
+                    });
+                  }
                 },
                 child: Padding(
                   padding: const EdgeInsets.symmetric(vertical: 10.0),
@@ -363,16 +387,6 @@ class _BookServiceScreenState extends State<BookServiceScreen> {
                               title: const TextWidget(
                                 text: 'Report this user',
                                 color: Colors.red,
-                              ),
-                            ),
-                            ListTile(
-                              onTap: () {
-                                _sharePost();
-                              },
-                              contentPadding: EdgeInsets.zero,
-                              title: const TextWidget(
-                                text: 'Share this post',
-                                color: Colors.blue,
                               ),
                             ),
                             ListTile(
@@ -1428,13 +1442,6 @@ class _BookServiceScreenState extends State<BookServiceScreen> {
   Future<void> _reportUser(BuildContext context, String reportType,
       String userId, String username) async {}
 
-  void _sharePost() {
-    String message =
-        'Have a look at ${shopController.userShop!.user?.username}\'s biz-center on Business Bosses\n'
-        'https://my-biz.io/${shopController.userShop?.name.toLowerCase().replaceAll(' ', '-')}';
-    socialShare(message);
-  }
-
   List<String> _generateTimeSlots() {
     // Default time values if data is invalid or null
     TimeOfDay defaultStartTime = const TimeOfDay(hour: 9, minute: 0); // 9:00 AM
@@ -1625,7 +1632,7 @@ class _BookServiceScreenState extends State<BookServiceScreen> {
     return blockedDates;
   }
 
-  void _shareProduct() {
+  Future<void> _shareProduct() async {
     String message = '${widget.service.name} - Check this listing!\n'
         'https://my-biz.io/${widget.shop.name.toLowerCase().replaceAll(' ', '-')}';
     socialShare(message);

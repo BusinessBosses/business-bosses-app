@@ -69,6 +69,7 @@ class _OrderProductScreenState extends State<OrderProductScreen> {
   late FocusNode _focusNode;
   bool blocked = false;
   bool isProProduct = false;
+  bool earn = false;
 
   @override
   void initState() {
@@ -139,9 +140,32 @@ class _OrderProductScreenState extends State<OrderProductScreen> {
                     if (value) {
                       profileController.updateCoinCount(1);
                     }
+                    setState(() {
+                      earn = true;
+                    });
                   });
                   Get.back();
-                  _shareProduct();
+                  await _shareProduct();
+                  if (earn) {
+                    Get.dialog(
+                      AlertDialog(
+                        title: const Text('Shared Successfully!'),
+                        content: const Text(
+                            'You have earned a coin for sharing this listing'),
+                        actions: <Widget>[
+                          TextButton(
+                            onPressed: () async {
+                              Get.back();
+                            },
+                            child: const Text('Close'),
+                          ),
+                        ],
+                      ),
+                    );
+                    setState(() {
+                      earn = false;
+                    });
+                  }
                 },
                 child: Padding(
                   padding: const EdgeInsets.symmetric(vertical: 10.0),
@@ -335,16 +359,6 @@ class _OrderProductScreenState extends State<OrderProductScreen> {
                               title: const TextWidget(
                                 text: 'Report this user',
                                 color: Colors.red,
-                              ),
-                            ),
-                            ListTile(
-                              onTap: () {
-                                _shareProduct();
-                              },
-                              contentPadding: EdgeInsets.zero,
-                              title: const TextWidget(
-                                text: 'Share this post',
-                                color: Colors.blue,
                               ),
                             ),
                             ListTile(
@@ -940,14 +954,7 @@ class _OrderProductScreenState extends State<OrderProductScreen> {
   Future<void> _reportUser(BuildContext context, String reportType,
       String userId, String username) async {}
 
-  void _sharePost() {
-    String message =
-        'Have a look at ${shopController.userShop!.user?.username}\'s biz-center on Business Bosses\n'
-        'https://my-biz.io/${shopController.userShop?.name.toLowerCase().replaceAll(' ', '-')}';
-    socialShare(message);
-  }
-
-  void _shareProduct() {
+  Future<void> _shareProduct() async {
     String message = '${widget.product.name} - Check this listing!\n'
         'https://my-biz.io/${widget.shop.name.toLowerCase().replaceAll(' ', '-')}';
     socialShare(message);
