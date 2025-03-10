@@ -66,7 +66,8 @@ class BookServiceScreen extends StatefulWidget {
   State<BookServiceScreen> createState() => _BookServiceScreenState();
 }
 
-class _BookServiceScreenState extends State<BookServiceScreen> {
+class _BookServiceScreenState extends State<BookServiceScreen>
+    with WidgetsBindingObserver {
   final ProfileController profileController = Get.find();
   final OrderController orderController = Get.put(OrderController());
   final ShopController shopController = Get.find();
@@ -109,7 +110,7 @@ class _BookServiceScreenState extends State<BookServiceScreen> {
   @override
   void initState() {
     super.initState();
-
+    WidgetsBinding.instance.addObserver(this);
     paymentMethods = widget.shop.payments;
     if (paymentMethods!.isNotEmpty) {
       activePaymentMethod = paymentMethods![0]['paymentMethod'] ?? '';
@@ -133,7 +134,33 @@ class _BookServiceScreenState extends State<BookServiceScreen> {
   @override
   void dispose() {
     _focusNode.dispose();
+    WidgetsBinding.instance.removeObserver(this);
     super.dispose();
+  }
+
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    if (state == AppLifecycleState.resumed && earn) {
+      // Show the coin earned dialog when the app resumes
+      Get.dialog(
+        AlertDialog(
+          title: const Text('Shared Successfully!'),
+          content:
+              const Text('You have earned a coin for sharing this listing'),
+          actions: <Widget>[
+            TextButton(
+              onPressed: () {
+                Get.back(); // Dismiss dialog
+              },
+              child: const Text('Close'),
+            ),
+          ],
+        ),
+      );
+      setState(() {
+        earn = false; // Reset the flag after showing the dialog
+      });
+    }
   }
 
   @override
@@ -170,33 +197,13 @@ class _BookServiceScreenState extends State<BookServiceScreen> {
                       .then((bool value) {
                     if (value) {
                       profileController.updateCoinCount(1);
+                      setState(() {
+                        earn = true;
+                      });
                     }
-                    setState(() {
-                      earn = true;
-                    });
                   });
                   Get.back();
                   await _shareProduct();
-                  if (earn) {
-                    Get.dialog(
-                      AlertDialog(
-                        title: const Text('Shared Successfully!'),
-                        content: const Text(
-                            'You have earned a coin for sharing this listing'),
-                        actions: <Widget>[
-                          TextButton(
-                            onPressed: () async {
-                              Get.back();
-                            },
-                            child: const Text('Close'),
-                          ),
-                        ],
-                      ),
-                    );
-                    setState(() {
-                      earn = false;
-                    });
-                  }
                 },
                 child: Padding(
                   padding: const EdgeInsets.symmetric(vertical: 10.0),
