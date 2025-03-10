@@ -169,7 +169,7 @@ class _OrderProductScreenState extends State<OrderProductScreen>
                       .shareEarn(widget.product.id, 'goods')
                       .then((ApiResponseModel value) {
                     if (value.success) {
-                      profileController.updateCoinCount(1);
+                      profileController.updateCoinCount(2);
                       setState(() {
                         earn = true;
                       });
@@ -187,7 +187,7 @@ class _OrderProductScreenState extends State<OrderProductScreen>
                       AlertDialog(
                         title: const Text('Shared Successfully!'),
                         content: const Text(
-                            'You have already earned from sharing this listing'),
+                            'You have already earned from sharing this listing before!'),
                         actions: <Widget>[
                           TextButton(
                             onPressed: () {
@@ -204,7 +204,7 @@ class _OrderProductScreenState extends State<OrderProductScreen>
                       AlertDialog(
                         title: const Text('Shared Successfully!'),
                         content: const Text(
-                            'All Coins for this listings have been claimed'),
+                            'All Coins for this listings have been claimed!'),
                         actions: <Widget>[
                           TextButton(
                             onPressed: () {
@@ -346,6 +346,16 @@ class _OrderProductScreenState extends State<OrderProductScreen>
                                           : 'Block @${widget.product.user!.name ?? widget.product.user!.username}',
                                       color: Colors.blue,
                                     ),
+                            ),
+                            ListTile(
+                              onTap: () {
+                                _shareProduct();
+                              },
+                              contentPadding: EdgeInsets.zero,
+                              title: const TextWidget(
+                                text: 'Share this listing',
+                                color: Colors.blue,
+                              ),
                             ),
                             ListTile(
                               onTap: () {
