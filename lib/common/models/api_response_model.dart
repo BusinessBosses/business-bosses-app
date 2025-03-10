@@ -5,21 +5,25 @@ class ApiResponseModel {
   final bool success;
   final String message;
   final dynamic data;
+  final String? errorMessage;
   ApiResponseModel({
     required this.success,
     required this.message,
     required this.data,
+    this.errorMessage,
   });
 
   ApiResponseModel copyWith({
     bool? success,
     String? message,
     dynamic data,
+    String? errorMessage,
   }) {
     return ApiResponseModel(
       success: success ?? this.success,
       message: message ?? this.message,
       data: data ?? this.data,
+      errorMessage: errorMessage ?? this.errorMessage,
     );
   }
 
@@ -28,6 +32,7 @@ class ApiResponseModel {
       'success': success,
       'message': message,
       'data': data,
+      'errorMessage': errorMessage,
     };
   }
 
@@ -38,6 +43,7 @@ class ApiResponseModel {
           ? map['error'] as String
           : map['message'] as String,
       data: map['data'] as dynamic,
+      errorMessage: map['message'],
     );
   }
 

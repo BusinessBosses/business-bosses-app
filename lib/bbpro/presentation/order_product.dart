@@ -175,7 +175,7 @@ class _OrderProductScreenState extends State<OrderProductScreen>
                       });
                     } else {
                       setState(() {
-                        shareErrorMessage = value.message;
+                        shareErrorMessage = value.errorMessage ?? '';
                       });
                     }
                   });

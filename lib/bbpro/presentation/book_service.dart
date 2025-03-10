@@ -204,7 +204,7 @@ class _BookServiceScreenState extends State<BookServiceScreen>
                       });
                     } else {
                       setState(() {
-                        shareErrorMessage = value.message;
+                        shareErrorMessage = value.errorMessage ?? '';
                       });
                     }
                   });
