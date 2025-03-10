@@ -92,8 +92,8 @@ class _CreatePollScreenState extends State<CreatePollScreen> {
       children: <Widget>[
         Expanded(
           child: Container(
-            margin: const EdgeInsets.only(bottom: 9),
-            padding: const EdgeInsets.symmetric(horizontal: 9),
+            margin: const EdgeInsets.only(bottom: 10),
+            padding: const EdgeInsets.symmetric(horizontal: 9, vertical: 9),
             decoration: const BoxDecoration(
               color: backgroundColor,
               borderRadius: BorderRadius.all(
@@ -186,7 +186,7 @@ class _CreatePollScreenState extends State<CreatePollScreen> {
                               _addOption();
                             },
                             child: Container(
-                              height: 40,
+                              height: 50,
                               padding:
                                   const EdgeInsets.symmetric(horizontal: 9),
                               decoration: BoxDecoration(
@@ -200,8 +200,8 @@ class _CreatePollScreenState extends State<CreatePollScreen> {
                                     const Text(
                                       'Add Options',
                                       style: TextStyle(
-                                        fontWeight: FontWeight.bold,
-                                      ),
+                                          fontWeight: FontWeight.bold,
+                                          fontSize: 14),
                                     ),
                                     Container(
                                       alignment: Alignment.center,
@@ -227,9 +227,9 @@ class _CreatePollScreenState extends State<CreatePollScreen> {
                         isUpdating: widget.postDetail != null,
                       ),
                     ),
-                    widget.postDetail == null
-                        ? PromoteSection(controller: controller)
-                        : Container(),
+                    // widget.postDetail == null
+                    //     ? PromoteSection(controller: controller)
+                    //     : Container(),
                     const SizedBox(
                       height: 20,
                     ),
@@ -252,18 +252,7 @@ class _CreatePollScreenState extends State<CreatePollScreen> {
                                 'You must add atleast 2 options to create a poll!');
                             return;
                           }
-                          if (widget.postDetail == null) {
-                            await controller.createPost(<String, dynamic>{
-                              'isPolled': true,
-                              'options': nonEmptyOptions,
-                              'title': _titleCtrl.text.trim(),
-                              'timestamp':
-                                  DateTime.now().millisecondsSinceEpoch,
-                            }, _profileController);
-                          } else {
-                            await controller.onEditPoll(widget.postDetail,
-                                _titleCtrl.text.trim(), nonEmptyOptions);
-                          }
+                          _showBoostBottomSheet(controller, nonEmptyOptions);
                         },
                         isProcessing: controller.loading.value,
                       ),
@@ -278,6 +267,106 @@ class _CreatePollScreenState extends State<CreatePollScreen> {
           ),
         ),
       ),
+    );
+  }
+
+  void _showBoostBottomSheet(
+      CreatePostController controller, List<String> nonEmptyOptions) {
+    showModalBottomSheet(
+      shape: const RoundedRectangleBorder(
+          borderRadius: BorderRadius.only(
+              topLeft: Radius.circular(15), topRight: Radius.circular(15))),
+      context: context,
+      builder: (BuildContext context) {
+        return Padding(
+          padding: const EdgeInsets.all(20.0),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: <Widget>[
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: <Widget>[
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: <Widget>[
+                      SvgPicture.asset(
+                        'assets/svgs/rocket.svg',
+                        color: textColor,
+                      ),
+                      const SizedBox(width: 5),
+                      const Text(
+                        'Boost Post',
+                        style: TextStyle(
+                          fontWeight: FontWeight.w700,
+                          fontSize: 18,
+                        ),
+                      ),
+                    ],
+                  ),
+                  const Text(
+                    'Reach a wider audience and get more views',
+                    style: TextStyle(
+                      fontWeight: FontWeight.w600,
+                      fontSize: 11,
+                      color: Color(0xFF777777),
+                    ),
+                  ),
+                ],
+              ),
+              const SizedBox(height: 10),
+              const Text(
+                'Do you want to boost this post/listing?',
+                style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+              ),
+              const SizedBox(height: 20),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: <Widget>[
+                  ElevatedButton(
+                    onPressed: () async {
+                      Navigator.pop(context);
+                      _createPostController.shouldPromote.value = true;
+                      if (widget.postDetail == null) {
+                        await controller.createPost(<String, dynamic>{
+                          'isPolled': true,
+                          'options': nonEmptyOptions,
+                          'title': _titleCtrl.text.trim(),
+                          'timestamp': DateTime.now().millisecondsSinceEpoch,
+                        }, _profileController);
+                      } else {
+                        await controller.onEditPoll(widget.postDetail,
+                            _titleCtrl.text.trim(), nonEmptyOptions);
+                      }
+                    },
+                    child: const Text('Yes'),
+                  ),
+                  const SizedBox(
+                    width: 10,
+                  ),
+                  OutlinedButton(
+                    onPressed: () async {
+                      Navigator.pop(context);
+                      _createPostController.shouldPromote.value = false;
+                      if (widget.postDetail == null) {
+                        await controller.createPost(<String, dynamic>{
+                          'isPolled': true,
+                          'options': nonEmptyOptions,
+                          'title': _titleCtrl.text.trim(),
+                          'timestamp': DateTime.now().millisecondsSinceEpoch,
+                        }, _profileController);
+                      } else {
+                        await controller.onEditPoll(widget.postDetail,
+                            _titleCtrl.text.trim(), nonEmptyOptions);
+                      }
+                    },
+                    child: const Text('No'),
+                  ),
+                ],
+              ),
+            ],
+          ),
+        );
+      },
     );
   }
 
