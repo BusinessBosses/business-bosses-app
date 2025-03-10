@@ -146,7 +146,7 @@ class _BookServiceScreenState extends State<BookServiceScreen>
         AlertDialog(
           title: const Text('Shared Successfully!'),
           content:
-              const Text('You have earned a coin for sharing this listing'),
+              const Text('You have earned 2 coins for sharing this listing'),
           actions: <Widget>[
             TextButton(
               onPressed: () {
@@ -319,8 +319,9 @@ class _BookServiceScreenState extends State<BookServiceScreen>
                                       SvgPicture.asset(
                                         'assets/svgs/premiumbadge.svg',
                                         height: 9,
-                                        color: primaryColorLT,
-                                      )
+                                        colorFilter: const ColorFilter.mode(
+                                            primaryColorLT, BlendMode.srcIn),
+                                      ),
                                     ],
                                   )
                                 : TextWidget(
@@ -1553,33 +1554,33 @@ class _BookServiceScreenState extends State<BookServiceScreen>
     }
   }
 
-  String _formatTime(String? time) {
-    if (time == null) return '';
+  // String _formatTime(String? time) {
+  //   if (time == null) return '';
 
-    // Split the time into hours and minutes
-    List<String> timeParts = time.split(':');
-    if (timeParts.length < 2) return time;
+  //   // Split the time into hours and minutes
+  //   List<String> timeParts = time.split(':');
+  //   if (timeParts.length < 2) return time;
 
-    int hour = int.parse(timeParts[0]);
-    String minute = timeParts[1];
-    String period = 'AM';
+  //   int hour = int.parse(timeParts[0]);
+  //   String minute = timeParts[1];
+  //   String period = 'AM';
 
-    // Convert to 12-hour format
-    if (hour >= 12) {
-      period = 'PM';
-      if (hour > 12) {
-        hour -= 12;
-      }
-    }
+  //   // Convert to 12-hour format
+  //   if (hour >= 12) {
+  //     period = 'PM';
+  //     if (hour > 12) {
+  //       hour -= 12;
+  //     }
+  //   }
 
-    // Handle midnight (0:00)
-    if (hour == 0) {
-      hour = 12;
-    }
+  //   // Handle midnight (0:00)
+  //   if (hour == 0) {
+  //     hour = 12;
+  //   }
 
-    // Format as 12-hour time with AM/PM
-    return '$hour:$minute $period';
-  }
+  //   // Format as 12-hour time with AM/PM
+  //   return '$hour:$minute $period';
+  // }
 
   String _getWeekdayName(int weekday) {
     switch (weekday) {

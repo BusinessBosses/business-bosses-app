@@ -52,7 +52,7 @@ class _ExpandedOrdersState extends State<ExpandedOrders> {
       sellernotes =
           sellernotes != null ? '$sellernotes, $serviceNotes' : serviceNotes;
     }
-    List<String> _parseOrderDetails(String orderDetails) {
+    List<String> parseOrderDetails(String orderDetails) {
       // Remove the square brackets and split the string by commas
       final String cleanedString =
           orderDetails.replaceAll('[', '').replaceAll(']', '');
@@ -170,7 +170,7 @@ class _ExpandedOrdersState extends State<ExpandedOrders> {
             // Parse the orderDetails string into a list of strings
             final List<String> orderDetailsList =
                 widget.order.orderDetails != null
-                    ? _parseOrderDetails(widget.order.orderDetails!)
+                    ? parseOrderDetails(widget.order.orderDetails!)
                     : <String>[];
 
             // Generate a list of ListTiles based on the ORDER quantity

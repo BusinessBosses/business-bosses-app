@@ -307,7 +307,7 @@ class _ChatScreenState extends State<ChatScreen> {
                               itemBuilder: (BuildContext context, int i) {
                                 return ChatItem(
                                   myChatUser: controller.searchedChats[i],
-                                  key: ValueKey(
+                                  key: ValueKey<String>(
                                       controller.searchedChats[i].user!.uid),
                                   chatController: controller,
                                 );
@@ -332,16 +332,16 @@ class _ChatScreenState extends State<ChatScreen> {
     });
   }
 
-  void _onSearch(String val) {
-    if (val.trim().isEmpty) return;
-    // ignore: unused_local_variable
-    final List<LastMessage> data = _myChats.where((LastMessage e) {
-      return e.user!.name!.toLowerCase().contains(val.trim().toLowerCase());
-    }).toList();
-    setState(() {
-      // _searchedChats = data;
-    });
-  }
+  // void _onSearch(String val) {
+  //   if (val.trim().isEmpty) return;
+  //   // ignore: unused_local_variable
+  //   final List<LastMessage> data = _myChats.where((LastMessage e) {
+  //     return e.user!.name!.toLowerCase().contains(val.trim().toLowerCase());
+  //   }).toList();
+  //   setState(() {
+  //     // _searchedChats = data;
+  //   });
+  // }
 
   void _onCloseSearching() {
     setState(() {
@@ -503,6 +503,7 @@ class _ChatItemState extends State<ChatItem> {
                         Row(
                           children: <Widget>[
                             Expanded(
+                              // ignore: unrelated_type_equality_checks
                               child: widget.myChatUser.deleted == true
                                   ? Text(
                                       'This message was deleted.',

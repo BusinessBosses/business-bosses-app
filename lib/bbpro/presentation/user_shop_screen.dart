@@ -94,7 +94,7 @@ class _UserShopScreenState extends State<UserShopScreen> {
 
   @override
   Widget build(BuildContext context) {
-    List<Widget> _buildActionButtons(List<Map<String, String>> actions) {
+    List<Widget> buildActionButtons(List<Map<String, String>> actions) {
       return actions.map((Map<String, String> action) {
         return GestureDetector(
           onTap: () {
@@ -476,7 +476,7 @@ class _UserShopScreenState extends State<UserShopScreen> {
                                           Row(
                                             mainAxisAlignment:
                                                 MainAxisAlignment.center,
-                                            children: _buildActionButtons(<Map<
+                                            children: buildActionButtons(<Map<
                                                 String, String>>[
                                               <String, String>{
                                                 'icon':
@@ -891,7 +891,8 @@ class _UserShopScreenState extends State<UserShopScreen> {
                                 backgroundColor: backgroundColor,
                                 child: SvgPicture.asset(
                                   'assets/svgs/lsl.svg',
-                                  color: Colors.black,
+                                  colorFilter: const ColorFilter.mode(
+                                      Colors.black, BlendMode.srcIn),
                                 ),
                               ),
                             ),

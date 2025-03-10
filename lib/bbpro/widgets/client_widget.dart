@@ -73,7 +73,8 @@ class _ClientWidgetState extends State<ClientWidget> {
                             : SvgPicture.asset(
                                 'assets/svgs/client.svg',
                                 height: 10,
-                                color: textColor,
+                                colorFilter: const ColorFilter.mode(
+                                    textColor, BlendMode.srcIn),
                               ),
                         const SizedBox(
                           width: 5,

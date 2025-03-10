@@ -304,7 +304,8 @@ class _AnalyserScreenState extends State<AnalyserScreen> {
                           ),
                           SvgPicture.asset(
                             'assets/svgs/invite.svg',
-                            color: primaryColorLT,
+                            colorFilter: const ColorFilter.mode(
+                                primaryColorLT, BlendMode.srcIn),
                             height: 13,
                           )
                         ],

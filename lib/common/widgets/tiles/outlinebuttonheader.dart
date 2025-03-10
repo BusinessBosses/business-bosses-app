@@ -34,7 +34,8 @@ Container OutlineButtonHeader(BuildContext context, UserModel myProfile) {
                 SvgPicture.asset(
                   'assets/svgs/edit.svg',
                   height: 17,
-                  color: primaryColorLT,
+                  colorFilter:
+                      const ColorFilter.mode(primaryColorLT, BlendMode.srcIn),
                 ),
                 const SizedBox(
                   width: 5,

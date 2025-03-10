@@ -135,33 +135,38 @@ class _BottomNavigationExampleState extends State<BottomNavigationScreen> {
               activeIcon: SvgPicture.asset(
                 'assets/svgs/hom.svg',
                 height: 21,
-                color: primaryColorLT,
+                colorFilter:
+                    const ColorFilter.mode(primaryColorLT, BlendMode.srcIn),
               ),
             ),
             BottomNavigationBarItem(
               icon: SvgPicture.asset(
                 'assets/svgs/bossup.svg',
                 height: 22,
-                color: Colors.grey,
+                colorFilter:
+                    const ColorFilter.mode(Colors.grey, BlendMode.srcIn),
               ),
               label: 'Boss Up',
               activeIcon: SvgPicture.asset(
                 'assets/svgs/bossup.svg',
                 height: 22,
-                color: primaryColorLT,
+                colorFilter:
+                    const ColorFilter.mode(primaryColorLT, BlendMode.srcIn),
               ),
             ),
             BottomNavigationBarItem(
               icon: SvgPicture.asset(
                 'assets/svgs/liveevent.svg',
                 height: 23,
-                color: Colors.grey,
+                colorFilter:
+                    const ColorFilter.mode(Colors.grey, BlendMode.srcIn),
               ),
               label: 'Events',
               activeIcon: SvgPicture.asset(
                 'assets/svgs/liveevent.svg',
                 height: 23,
-                color: primaryColorLT,
+                colorFilter:
+                    const ColorFilter.mode(primaryColorLT, BlendMode.srcIn),
               ),
             ),
             BottomNavigationBarItem(
@@ -172,7 +177,8 @@ class _BottomNavigationExampleState extends State<BottomNavigationScreen> {
               label: 'Marketplace',
               activeIcon: SvgPicture.asset(
                 'assets/svgs/marketplace.svg',
-                color: primaryColorLT,
+                colorFilter:
+                    const ColorFilter.mode(primaryColorLT, BlendMode.srcIn),
                 height: 23,
               ),
             ),

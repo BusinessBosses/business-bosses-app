@@ -105,7 +105,8 @@ class _MyOrderWidgetState extends State<MyOrderWidget> {
                                 SvgPicture.asset(
                                   'assets/svgs/ordersinvoices.svg',
                                   height: 13,
-                                  color: textColor,
+                                  colorFilter: const ColorFilter.mode(
+                                      textColor, BlendMode.srcIn),
                                 ),
                                 const SizedBox(
                                   width: 5,
@@ -235,7 +236,12 @@ class _MyOrderWidgetState extends State<MyOrderWidget> {
                                                         SvgPicture.asset(
                                                           'assets/svgs/premiumbadge.svg',
                                                           height: 9,
-                                                          color: primaryColorLT,
+                                                          colorFilter:
+                                                              const ColorFilter
+                                                                  .mode(
+                                                                  primaryColorLT,
+                                                                  BlendMode
+                                                                      .srcIn),
                                                         )
                                                       ],
                                                     )
@@ -915,9 +921,10 @@ class _MyOrderWidgetState extends State<MyOrderWidget> {
                                       ),
                                       SvgPicture.asset(
                                         'assets/svgs/dropdown.svg',
-                                        color: widget
-                                            .order.status.backgroundColor
-                                            .withOpacity(1.0),
+                                        colorFilter: ColorFilter.mode(
+                                            widget.order.status.backgroundColor
+                                                .withOpacity(1.0),
+                                            BlendMode.srcIn),
                                       )
                                     ]),
                               ),

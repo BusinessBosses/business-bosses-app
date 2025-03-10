@@ -74,7 +74,8 @@ class CustomCard extends StatelessWidget {
                         onPressed: onPressed,
                         icon: SvgPicture.asset(
                           iconpath!,
-                          color: primaryColorLT,
+                          colorFilter: const ColorFilter.mode(
+                              primaryColorLT, BlendMode.srcIn),
                         ),
                         label: Text(
                           buttonText,

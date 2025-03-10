@@ -1,3 +1,8 @@
+// ignore_for_file: public_member_api_docs, sort_constructors_first
+import 'package:flutter/material.dart';
+import 'package:flutter_svg/svg.dart';
+import 'package:get/get.dart';
+
 import 'package:business_bosses_v2/bbpro/controllers/clients_controller.dart';
 import 'package:business_bosses_v2/bbpro/controllers/shop_controller.dart';
 import 'package:business_bosses_v2/bbpro/presentation/clients.dart';
@@ -9,22 +14,19 @@ import 'package:business_bosses_v2/bbpro/presentation/setup_shop.dart';
 import 'package:business_bosses_v2/common/widgets/safety_model.dart';
 import 'package:business_bosses_v2/features/profile/controller/profile_controller.dart';
 import 'package:business_bosses_v2/utils/theme/theme.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter_svg/svg.dart';
-import 'package:get/get.dart';
 
 class Bottomnavscreen extends StatefulWidget {
   final int? initialindex;
   final void Function(int)? onTabChanged;
   final bool noBack;
   const Bottomnavscreen({
-    super.key,
-    bottomNavScreenKey,
+    Key? key,
     this.initialindex,
     this.onTabChanged,
     this.noBack = true,
-  });
+  }) : super(key: key);
 
+  // ignore: library_private_types_in_public_api
   static _BottomnavscreenState? of(BuildContext context) =>
       context.findAncestorStateOfType<_BottomnavscreenState>();
 

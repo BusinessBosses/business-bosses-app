@@ -98,7 +98,8 @@ class _OrderWidgetState extends State<OrderWidget> {
                                 SvgPicture.asset(
                                   'assets/svgs/ordersinvoices.svg',
                                   height: 13,
-                                  color: textColor,
+                                  colorFilter: const ColorFilter.mode(
+                                      textColor, BlendMode.srcIn),
                                 ),
                                 const SizedBox(
                                   width: 5,
@@ -630,9 +631,10 @@ class _OrderWidgetState extends State<OrderWidget> {
                                       ),
                                       SvgPicture.asset(
                                         'assets/svgs/dropdown.svg',
-                                        color: widget
-                                            .order.status.backgroundColor
-                                            .withOpacity(1.0),
+                                        colorFilter: ColorFilter.mode(
+                                            widget.order.status.backgroundColor
+                                                .withOpacity(1.0),
+                                            BlendMode.srcIn),
                                       )
                                     ]),
                               ),

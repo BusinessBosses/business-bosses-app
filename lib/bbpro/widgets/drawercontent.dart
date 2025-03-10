@@ -358,8 +358,13 @@ class DrawerContent extends StatelessWidget {
                                                               : index == 1
                                                                   ? 30
                                                                   : 22,
-                                                          color: textColor
-                                                              .withOpacity(1),
+                                                          colorFilter:
+                                                              ColorFilter.mode(
+                                                                  textColor
+                                                                      .withOpacity(
+                                                                          1),
+                                                                  BlendMode
+                                                                      .srcIn),
                                                         ),
                                                   title: Text(
                                                     index == 0

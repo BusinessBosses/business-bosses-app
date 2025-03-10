@@ -213,7 +213,10 @@ class _CustomItemCardState extends State<CustomItemCard> {
                           padding: const EdgeInsets.all(4),
                           child: SvgPicture.asset(
                             'assets/svgs/upicon.svg',
-                            color: const Color(0xFF0F132D),
+                            colorFilter: const ColorFilter.mode(
+                              Color(0xFF0F132D),
+                              BlendMode.srcIn,
+                            ),
                             height: 8,
                           ),
                         ),

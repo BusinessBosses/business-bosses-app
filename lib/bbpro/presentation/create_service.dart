@@ -517,9 +517,11 @@ class _CreateServiceListingState extends State<CreateServiceListing>
                               },
                               icon: SvgPicture.asset(
                                 'assets/svgs/dropdown.svg',
-                                color: widget.isMarketplace != null
-                                    ? primaryColorLT
-                                    : proprimaryColor,
+                                colorFilter: ColorFilter.mode(
+                                    widget.isMarketplace != null
+                                        ? primaryColorLT
+                                        : proprimaryColor,
+                                    BlendMode.srcIn),
                               ),
                               items: const <String>[
                                 'minute(s)',
@@ -1080,9 +1082,11 @@ class _CreateServiceListingState extends State<CreateServiceListing>
                       },
                       icon: SvgPicture.asset(
                         'assets/svgs/dropdown.svg',
-                        color: widget.isMarketplace != null
-                            ? primaryColorLT
-                            : proprimaryColor,
+                        colorFilter: ColorFilter.mode(
+                            widget.isMarketplace != null
+                                ? primaryColorLT
+                                : proprimaryColor,
+                            BlendMode.srcIn),
                       ),
                       items: const <String>[
                         'Single day',
@@ -1454,7 +1458,8 @@ class _CreateServiceListingState extends State<CreateServiceListing>
                     children: <Widget>[
                       SvgPicture.asset(
                         'assets/svgs/rocket.svg',
-                        color: textColor,
+                        colorFilter:
+                            const ColorFilter.mode(textColor, BlendMode.srcIn),
                       ),
                       const SizedBox(width: 5),
                       const Text(

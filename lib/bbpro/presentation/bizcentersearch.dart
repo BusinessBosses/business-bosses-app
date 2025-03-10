@@ -15,6 +15,7 @@ class BizCenterSearch extends StatefulWidget {
   const BizCenterSearch({super.key});
 
   @override
+  // ignore: library_private_types_in_public_api
   _BizCenterSearchState createState() => _BizCenterSearchState();
 }
 
@@ -42,7 +43,7 @@ class _BizCenterSearchState extends State<BizCenterSearch>
 
   void _initializeData() {
     // Initialize with some dummy data
-    _allProducts = List.generate(
+    _allProducts = List<Product>.generate(
         10,
         (int index) => Product(
               id: index,
@@ -54,9 +55,9 @@ class _BizCenterSearchState extends State<BizCenterSearch>
               isActive: true,
               createdAt: DateTime.now(),
             ));
-    _filteredProducts = List.from(_allProducts);
+    _filteredProducts = List<Product>.from(_allProducts);
 
-    _allServices = List.generate(
+    _allServices = List<Service>.generate(
         10,
         (int index) => Service(
               id: index,
@@ -69,9 +70,9 @@ class _BizCenterSearchState extends State<BizCenterSearch>
               isActive: true,
               createdAt: DateTime.now(),
             ));
-    _filteredServices = List.from(_allServices);
+    _filteredServices = List<Service>.from(_allServices);
 
-    _allCustomItems = List.generate(
+    _allCustomItems = List<Customitem>.generate(
         10,
         (int index) => Customitem(
               images: <String>[''],
@@ -80,7 +81,7 @@ class _BizCenterSearchState extends State<BizCenterSearch>
               description: 'Description for custom item $index',
               createdAt: DateTime.now(),
             ));
-    _filteredCustomItems = List.from(_allCustomItems);
+    _filteredCustomItems = List<Customitem>.from(_allCustomItems);
   }
 
   @override

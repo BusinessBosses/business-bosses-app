@@ -692,7 +692,8 @@ class _ClientsScreenState extends State<ClientsScreen>
                           icon: SvgPicture.asset(
                             'assets/svgs/campaign.svg',
                             height: 50,
-                            color: Colors.black12,
+                            colorFilter: const ColorFilter.mode(
+                                Colors.black12, BlendMode.srcIn),
                           ),
                           title: 'No Campaigns Yet!',
                         )
@@ -723,7 +724,10 @@ class _ClientsScreenState extends State<ClientsScreen>
                                                 SvgPicture.asset(
                                                   'assets/svgs/search.svg',
                                                   height: 20,
-                                                  color: hintColor,
+                                                  colorFilter:
+                                                      const ColorFilter.mode(
+                                                          hintColor,
+                                                          BlendMode.srcIn),
                                                 ),
                                                 Expanded(
                                                   child: ProSearchbar(

@@ -104,7 +104,9 @@ class _CustomTextWidgetState extends State<CustomTextWidget> {
                       )
                     : SvgPicture.asset(
                         widget.iconName,
-                        color: widget.iconcolor ?? proprimaryColor,
+                        colorFilter: ColorFilter.mode(
+                            widget.iconcolor ?? proprimaryColor,
+                            BlendMode.srcIn),
                       ),
               ],
             ),

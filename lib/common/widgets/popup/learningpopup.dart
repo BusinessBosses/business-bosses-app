@@ -67,7 +67,8 @@ class LearningPopUp extends StatelessWidget {
                 children: <Widget>[
                   SvgPicture.asset(
                     'assets/svgs/report.svg',
-                    color: primaryColorLT,
+                    colorFilter:
+                        const ColorFilter.mode(primaryColorLT, BlendMode.srcIn),
                     height: 20,
                   ),
                   const SizedBox(

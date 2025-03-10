@@ -124,7 +124,8 @@ class _InventoryState extends State<Inventory> {
                                   SvgPicture.asset(
                                     'assets/svgs/search.svg',
                                     height: 20,
-                                    color: hintColor,
+                                    colorFilter: const ColorFilter.mode(
+                                        hintColor, BlendMode.srcIn),
                                   ),
                                   Expanded(
                                     child: ProSearchbar(

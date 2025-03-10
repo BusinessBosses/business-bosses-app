@@ -29,11 +29,12 @@ class OrderProductScreen extends StatefulWidget {
   final bool? ismarketplace;
   final Product product;
   final Shop shop;
-  const OrderProductScreen(
-      {super.key,
-      required this.product,
-      required this.shop,
-      this.ismarketplace,});
+  const OrderProductScreen({
+    super.key,
+    required this.product,
+    required this.shop,
+    this.ismarketplace,
+  });
 
   @override
   State<OrderProductScreen> createState() => _OrderProductScreenState();
@@ -120,7 +121,7 @@ class _OrderProductScreenState extends State<OrderProductScreen>
         AlertDialog(
           title: const Text('Shared Successfully!'),
           content:
-              const Text('You have earned a coin for sharing this listing'),
+              const Text('You have earned 2 coins for sharing this listing'),
           actions: <Widget>[
             TextButton(
               onPressed: () {
@@ -293,7 +294,8 @@ class _OrderProductScreenState extends State<OrderProductScreen>
                                         SvgPicture.asset(
                                           'assets/svgs/premiumbadge.svg',
                                           height: 9,
-                                          color: primaryColorLT,
+                                          colorFilter: const ColorFilter.mode(
+                                              primaryColorLT, BlendMode.srcIn),
                                         )
                                       ],
                                     )

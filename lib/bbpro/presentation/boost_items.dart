@@ -200,7 +200,6 @@ class _BoostItemState extends State<BoostItem> {
       setState(() {
         _isProcessing = false;
       });
-      print('Coin Payment Error: ${e.toString()}');
       showSnackbar(title: 'Error', message: 'Payment failed. Try again.');
     }
   }
@@ -239,7 +238,6 @@ class _BoostItemState extends State<BoostItem> {
       setState(() {
         _isProcessing = false;
       });
-      print('Stripe Payment Error: ${e.toString()}');
       showSnackbar(title: 'Error', message: 'Payment failed. Try again.');
     }
   }

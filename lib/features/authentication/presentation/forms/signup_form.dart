@@ -594,7 +594,7 @@ class _SignUpFormState extends State<SignUpForm> {
               : !_invisibleCPassword
                   ? 'assets/svgs/eye.svg'
                   : 'assets/svgs/private.svg',
-          color: hintColor,
+          colorFilter: const ColorFilter.mode(hintColor, BlendMode.srcIn),
         ),
       ),
     );

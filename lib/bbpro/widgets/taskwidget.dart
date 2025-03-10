@@ -66,7 +66,8 @@ class _TaskWidgetState extends State<TaskWidget> {
                           SvgPicture.asset(
                             'assets/svgs/projects.svg',
                             height: 10,
-                            color: textColor,
+                            colorFilter: const ColorFilter.mode(
+                                textColor, BlendMode.srcIn),
                           ),
                           const SizedBox(
                             width: 5,
@@ -343,8 +344,10 @@ class _TaskWidgetState extends State<TaskWidget> {
                                   ),
                                   SvgPicture.asset(
                                     'assets/svgs/dropdown.svg',
-                                    color: widget.project.status.backgroundColor
-                                        .withOpacity(1.0),
+                                    colorFilter: ColorFilter.mode(
+                                        widget.project.status.backgroundColor
+                                            .withOpacity(1.0),
+                                        BlendMode.srcIn),
                                   )
                                 ]),
                           ),

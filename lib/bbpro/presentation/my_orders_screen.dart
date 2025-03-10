@@ -80,7 +80,8 @@ class _MyOrdersScreenState extends State<MyOrdersScreen> {
                 child: SvgPicture.asset(
                   'assets/svgs/cartu.svg',
                   height: 20,
-                  color: textColor,
+                  colorFilter:
+                      const ColorFilter.mode(textColor, BlendMode.srcIn),
                 ),
               ),
             ),
@@ -133,7 +134,8 @@ class _MyOrdersScreenState extends State<MyOrdersScreen> {
                                       SvgPicture.asset(
                                         'assets/svgs/search.svg',
                                         height: 20,
-                                        color: hintColor,
+                                        colorFilter: const ColorFilter.mode(
+                                            hintColor, BlendMode.srcIn),
                                       ),
                                       Expanded(
                                         child: ProSearchbar(
@@ -199,7 +201,8 @@ class _MyOrdersScreenState extends State<MyOrdersScreen> {
                             SvgPicture.asset(
                               'assets/svgs/ordersinvoices.svg',
                               height: 50,
-                              color: Colors.black12,
+                              colorFilter: const ColorFilter.mode(
+                                  Colors.black12, BlendMode.srcIn),
                             ),
                             const SizedBox(
                               height: 10,

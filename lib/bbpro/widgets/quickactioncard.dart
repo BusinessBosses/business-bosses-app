@@ -33,7 +33,8 @@ class _QuickActionCardState extends State<QuickActionCard> {
                 : prosemibackColor,
             child: SvgPicture.asset(
               widget.assetlocation!,
-              color: widget.color ?? Colors.black,
+              colorFilter: ColorFilter.mode(
+                  widget.color ?? Colors.black, BlendMode.srcIn),
               height: 25,
             )),
         const SizedBox(

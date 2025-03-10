@@ -77,7 +77,8 @@ class _SwitchWidgetState extends State<SwitchWidget>
               if (widget.icon != null)
                 SvgPicture.asset(
                   widget.icon!,
-                  color: Colors.black,
+                  colorFilter:
+                      const ColorFilter.mode(Colors.black, BlendMode.srcIn),
                   width: 25,
                   height: 25,
                 ),

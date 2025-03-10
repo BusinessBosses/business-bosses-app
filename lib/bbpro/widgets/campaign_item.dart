@@ -51,7 +51,8 @@ class _CampaignItemState extends State<CampaignItem> {
                       SvgPicture.asset(
                         'assets/svgs/campaign.svg',
                         height: 10,
-                        color: textColor,
+                        colorFilter:
+                            const ColorFilter.mode(textColor, BlendMode.srcIn),
                       ),
                       const SizedBox(
                         width: 5,

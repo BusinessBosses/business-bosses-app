@@ -28,14 +28,14 @@ class _FilterForumState extends State<FilterForum> {
             icon: SvgPicture.asset(
               'assets/svgs/group.svg',
               height: 80.0,
-              color: hintColor,
+              colorFilter: const ColorFilter.mode(hintColor, BlendMode.srcIn),
             ),
             title: 'No forum to show you',
             subTitle: 'Your search forums will be displayed here!',
             isLoading: widget.isLoading,
           )
         : ListView.separated(
-            key: ValueKey(widget.filterItems),
+            key: ValueKey<List<ForumModel>>(widget.filterItems),
             separatorBuilder: (_, __) => const SizedBox(height: 8.0),
             itemCount: widget.filterItems.length,
             itemBuilder: (BuildContext context, int i) {

@@ -13,7 +13,7 @@ class CustomMenuButton extends StatelessWidget {
       child: SvgPicture.asset(
         'assets/svgs/menu.svg',
         height: 25,
-        color: Colors.black,
+        colorFilter: const ColorFilter.mode(Colors.black, BlendMode.srcIn),
       ),
     );
   }

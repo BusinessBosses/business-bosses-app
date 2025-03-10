@@ -749,7 +749,8 @@ class _CreateProductListingState extends State<CreateProductListing> {
                     children: <Widget>[
                       SvgPicture.asset(
                         'assets/svgs/rocket.svg',
-                        color: textColor,
+                        colorFilter:
+                            const ColorFilter.mode(textColor, BlendMode.srcIn),
                       ),
                       const SizedBox(width: 5),
                       const Text(

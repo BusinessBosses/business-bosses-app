@@ -93,7 +93,8 @@ class _MyServiceCardState extends State<MyServiceCard> {
                       SvgPicture.asset(
                         'assets/svgs/myservices.svg',
                         height: 10,
-                        color: textColor,
+                        colorFilter:
+                            const ColorFilter.mode(textColor, BlendMode.srcIn),
                       ),
                       const SizedBox(
                         width: 5,

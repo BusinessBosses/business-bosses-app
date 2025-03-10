@@ -23,7 +23,7 @@ Widget profilerepostsdisplay(
             SvgPicture.asset(
               'assets/svgs/repost.svg',
               height: 40,
-              color: Colors.grey,
+              colorFilter: const ColorFilter.mode(Colors.grey, BlendMode.srcIn),
             ),
             const SizedBox(
               height: 10,
@@ -36,8 +36,8 @@ Widget profilerepostsdisplay(
               ),
             ),
             const SizedBox(
-                                                height: 50,
-                                              ),
+              height: 50,
+            ),
           ],
         )
       // ? SafetyModel(

@@ -17,6 +17,7 @@ class WithdrawalScreen extends StatefulWidget {
   const WithdrawalScreen({Key? key}) : super(key: key);
 
   @override
+  // ignore: library_private_types_in_public_api
   _WithdrawalScreenState createState() => _WithdrawalScreenState();
 }
 
@@ -391,7 +392,8 @@ class _WithdrawalScreenState extends State<WithdrawalScreen> {
                                         SvgPicture.asset(
                                           'assets/svgs/coinnn.svg',
                                           height: 40,
-                                          color: Colors.grey,
+                                          colorFilter: const ColorFilter.mode(
+                                              Colors.grey, BlendMode.srcIn),
                                         ),
                                         const SizedBox(
                                           height: 10,
@@ -419,7 +421,7 @@ class _WithdrawalScreenState extends State<WithdrawalScreen> {
                                           // Sort the list based on the 'date' key in each map in descending order
                                           coinHistoryController
                                               .coinwithdrawalHistory
-                                              .sort((a, b) =>
+                                              .sort((dynamic a, dynamic b) =>
                                                   DateTime.parse(b['date'])
                                                       .compareTo(DateTime.parse(
                                                           a['date'])));

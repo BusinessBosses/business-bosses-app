@@ -36,7 +36,8 @@ class SearchBarWidget extends StatelessWidget {
                     const EdgeInsets.symmetric(vertical: 12.0, horizontal: 0.0),
                 child: SvgPicture.asset(
                   'assets/svgs/search.svg',
-                  color: hintColor,
+                  colorFilter:
+                      const ColorFilter.mode(hintColor, BlendMode.srcIn),
                 ),
               ),
       ),

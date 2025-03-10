@@ -181,8 +181,12 @@ class _ProshopdealsScreenState extends State<ProshopdealsScreen>
                       ),
                       child: Row(
                         children: <Widget>[
-                          SvgPicture.asset('assets/svgs/addtolist.svg',
-                              color: primaryColorLT, height: 20),
+                          SvgPicture.asset(
+                            'assets/svgs/addtolist.svg',
+                            height: 20,
+                            colorFilter: const ColorFilter.mode(
+                                primaryColorLT, BlendMode.srcIn),
+                          ),
                           const SizedBox(width: 3),
                           const Text(
                             'Get listing featured',

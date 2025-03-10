@@ -65,7 +65,8 @@ class _MyInventoryCardState extends State<MyInventoryCard> {
                       SvgPicture.asset(
                         'assets/svgs/product.svg',
                         height: 10,
-                        color: textColor,
+                        colorFilter:
+                            const ColorFilter.mode(textColor, BlendMode.srcIn),
                       ),
                       const SizedBox(
                         width: 5,
