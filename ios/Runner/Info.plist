@@ -9,10 +9,10 @@
 		<key>NSAppTransportSecurity</key>
 		<dict>
 			<key>NSAllowsArbitraryLoads</key>
-			<true />
+			<true/>
 		</dict>
 		<key>CADisableMinimumFrameDurationOnPhone</key>
-		<true />
+		<true/>
 		<key>CFBundleDevelopmentRegion</key>
 		<string>xyz.codexia.businessbosses</string>
 		<key>CFBundleDisplayName</key>
@@ -73,11 +73,11 @@
 		<key>CFBundleVersion</key>
 		<string>1</string>
 		<key>FacebookAdvertiserIDCollectionEnabled</key>
-		<true />
+		<true/>
 		<key>FacebookAppID</key>
 		<string>598076672175742</string>
 		<key>FacebookAutoLogAppEventsEnabled</key>
-		<true />
+		<true/>
 		<key>FacebookClientToken</key>
 		<string>4f489613093b285e5118251cb52c13cf</string>
 		<key>FacebookDisplayName</key>
@@ -101,15 +101,15 @@
 		<key>NSCalendarsUsageDescription</key>
 		<string>Calendar-usage</string>
 		<key>LSRequiresIPhoneOS</key>
-		<true />
+		<true/>
 		<key>LSSupportsOpeningDocumentsInPlace</key>
-		<true />
+		<true/>
 		<key>NSAppTransportSecurity</key>
 		<dict>
 			<key>NSAllowsArbitraryLoads</key>
-			<true />
+			<true/>
 			<key>NSAllowsArbitraryLoadsInWebContent</key>
-			<true />
+			<true/>
 		</dict>
 		<key>NSCameraUsageDescription</key>
 		<string>In order to select profile picture</string>
@@ -120,12 +120,12 @@
 		<key>UIApplicationSceneManifest</key>
 		<dict>
 			<key>UIApplicationSupportsMultipleScenes</key>
-			<false />
+			<false/>
 			<key>UISceneConfigurations</key>
-			<dict />
+			<dict/>
 		</dict>
 		<key>UIApplicationSupportsIndirectInputEvents</key>
-		<true />
+		<true/>
 		<key>UIBackgroundModes</key>
 		<array>
 			<string>fetch</string>
@@ -137,7 +137,7 @@
 		<key>UIMainStoryboardFile</key>
 		<string>Main</string>
 		<key>UIStatusBarHidden</key>
-		<false />
+		<false/>
 		<key>UISupportedInterfaceOrientations</key>
 		<array>
 			<string>UIInterfaceOrientationPortrait</string>
@@ -153,8 +153,8 @@
 			<string>UIInterfaceOrientationPortraitUpsideDown</string>
 		</array>
 		<key>UISupportsDocumentBrowser</key>
-		<true />
+		<true/>
 		<key>UIViewControllerBasedStatusBarAppearance</key>
-		<false />
+		<false/>
 	</dict>
 </plist>
