@@ -1,7 +1,6 @@
 import 'package:business_bosses_v2/common/widgets/buttons/custom_button.dart';
 import 'package:business_bosses_v2/features/posts/controllers/create_post_controller.dart';
 import 'package:business_bosses_v2/features/posts/widgets/preview.dart';
-import 'package:business_bosses_v2/features/posts/widgets/promote_section.dart';
 import 'package:business_bosses_v2/features/posts/widgets/text_input.dart';
 import 'package:business_bosses_v2/features/posts/widgets/user_details_widget.dart';
 import 'package:business_bosses_v2/functions/unfocus_keyboard.dart';
@@ -291,7 +290,8 @@ class _CreatePollScreenState extends State<CreatePollScreen> {
                     children: <Widget>[
                       SvgPicture.asset(
                         'assets/svgs/rocket.svg',
-                        color: textColor,
+                        colorFilter:
+                            const ColorFilter.mode(textColor, BlendMode.srcIn),
                       ),
                       const SizedBox(width: 5),
                       const Text(

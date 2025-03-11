@@ -24,7 +24,7 @@ import '../../common/widgets/user_avatar_with_badge.dart';
 import '../../utils/theme/theme.dart';
 import '../../utils/time_format.dart';
 import '../search/widgets/search_app_bar.dart';
-import 'models/last_message.dart';
+// import 'models/last_message.dart';
 
 // ignore: public_member_api_docs
 class ChatScreen extends StatefulWidget {
@@ -45,7 +45,7 @@ class _ChatScreenState extends State<ChatScreen> {
       AdvancedDrawerController();
 
   bool _isSearching = false;
-  final List<LastMessage> _myChats = <LastMessage>[];
+  // final List<LastMessage> _myChats = <LastMessage>[];
 
   @override
   Widget build(BuildContext context) {
@@ -297,8 +297,13 @@ class _ChatScreenState extends State<ChatScreen> {
                           ? SafetyModel(
                               mainAxisAlignment: MainAxisAlignment.start,
                               isLoading: false,
-                              icon: SvgPicture.asset('assets/svgs/search.svg',
-                                  color: hintColor, height: 80.0, width: 80.0),
+                              icon: SvgPicture.asset(
+                                'assets/svgs/search.svg',
+                                colorFilter: const ColorFilter.mode(
+                                    hintColor, BlendMode.srcIn),
+                                height: 80.0,
+                                width: 80.0,
+                              ),
                               title: 'Search for chats',
                               subTitle: 'Search with name to find',
                             )
