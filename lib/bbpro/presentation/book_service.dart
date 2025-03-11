@@ -1692,8 +1692,8 @@ class _BookServiceScreenState extends State<BookServiceScreen>
   }
 
   Future<void> _shareProduct() async {
-    String message = '${widget.service.name}:!\n\n'
-        '${widget.service.description}\n\n'
+    String message = '${widget.service.name}:\n'
+        '${widget.service.description}\n'
         'https://my-biz.io/${widget.shop.name.toLowerCase().replaceAll(' ', '-')}';
     socialShare(message);
   }
