@@ -372,16 +372,16 @@ class _BookServiceScreenState extends State<BookServiceScreen>
                                     color: Colors.blue,
                                   ),
                           ),
-                            ListTile(
-                              onTap: () {
-                                _shareProduct();
-                              },
-                              contentPadding: EdgeInsets.zero,
-                              title: const TextWidget(
-                                text: 'Share this listing',
-                                color: Colors.blue,
-                              ),
+                          ListTile(
+                            onTap: () {
+                              _shareProduct();
+                            },
+                            contentPadding: EdgeInsets.zero,
+                            title: const TextWidget(
+                              text: 'Share this listing',
+                              color: Colors.blue,
                             ),
+                          ),
                           ListTile(
                             onTap: () {
                               navigateTo(context);
@@ -1692,7 +1692,8 @@ class _BookServiceScreenState extends State<BookServiceScreen>
   }
 
   Future<void> _shareProduct() async {
-    String message = '${widget.service.name} - Check this listing!\n'
+    String message = '${widget.service.name} - Check this listing!\n\n'
+        '${widget.service.description}\n\n'
         'https://my-biz.io/${widget.shop.name.toLowerCase().replaceAll(' ', '-')}';
     socialShare(message);
   }
