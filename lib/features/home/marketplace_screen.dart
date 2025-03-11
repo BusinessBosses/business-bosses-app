@@ -170,11 +170,26 @@ class _MarketplaceScreenState extends State<MarketplaceScreen>
   void _showMigrationDialog() {
     Get.dialog(
       AlertDialog(
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(15.0),
+        ),
         title: const Text('Migrate Old Marketplace Data'),
         content:
             const Text('Would you like to migrate your old marketplace data?'),
         actions: <Widget>[
           TextButton(
+            onPressed: () async {
+              // Save the current timestamp for this UID so the dialog won’t show for 30 days
+              final SharedPreferences prefs =
+                  await SharedPreferences.getInstance();
+              final String uid = _profileController.myProfile.uid;
+              final int now = DateTime.now().millisecondsSinceEpoch;
+              await prefs.setInt('migration_remind_$uid', now);
+              Navigator.pop(context); // dismiss migration dialog
+            },
+            child: const Text('Remind Me Later'),
+          ),
+          ElevatedButton(
             onPressed: () async {
               Navigator.pop(context); // close migration dialog
               // Show loader dialog
@@ -207,18 +222,6 @@ class _MarketplaceScreenState extends State<MarketplaceScreen>
               }
             },
             child: const Text('Migrate'),
-          ),
-          TextButton(
-            onPressed: () async {
-              // Save the current timestamp for this UID so the dialog won’t show for 30 days
-              final SharedPreferences prefs =
-                  await SharedPreferences.getInstance();
-              final String uid = _profileController.myProfile.uid;
-              final int now = DateTime.now().millisecondsSinceEpoch;
-              await prefs.setInt('migration_remind_$uid', now);
-              Navigator.pop(context); // dismiss migration dialog
-            },
-            child: const Text('Remind Me Later'),
           ),
         ],
       ),
