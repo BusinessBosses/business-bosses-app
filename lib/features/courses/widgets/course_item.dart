@@ -831,6 +831,7 @@ class _CourseItemState extends State<CourseItem> {
               height: 5,
             ),
             Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: <Widget>[
                 TextButton.icon(
                   onPressed: () async {
@@ -939,16 +940,19 @@ class _CourseItemState extends State<CourseItem> {
                 //           ),
                 //     )),
                 const SizedBox(width: 8.0),
-                GestureDetector(
-                  onTap: () => _sharePost(),
-                  child: SvgPicture.asset(
-                    'assets/svgs/share.svg',
-                    height: 15.0,
-                    width: 15.0,
-                    color: textColor.withOpacity(1.0),
+                Padding(
+                  padding: const EdgeInsets.only(right: 15.0),
+                  child: GestureDetector(
+                    onTap: () => _sharePost(),
+                    child: SvgPicture.asset(
+                      'assets/svgs/share.svg',
+                      height: 15.0,
+                      width: 15.0,
+                      color: textColor.withOpacity(1.0),
+                    ),
                   ),
                 ),
-                const Spacer(),
+
                 // Padding(
                 //   padding: const EdgeInsets.only(right: 15),
                 //   child: Text(
