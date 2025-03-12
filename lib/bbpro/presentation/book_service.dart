@@ -1020,6 +1020,7 @@ class _BookServiceScreenState extends State<BookServiceScreen>
                                               // Clear the selected dates list and add the new selected date
                                               _selectedDates.clear();
                                               _selectedDates.add(selectedDate);
+                                              _startDate = selectedDate;
                                             } else {
                                               showSnackbar(
                                                 message:
