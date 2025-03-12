@@ -1237,29 +1237,30 @@ class _BookServiceScreenState extends State<BookServiceScreen>
                       const SizedBox(
                         height: 16,
                       ),
-                      if (widget.service.notes != null)
-                        Container(
-                          margin: const EdgeInsets.only(left: 15, right: 15),
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(10),
-                            color: Colors.white,
-                          ),
-                          width: double.infinity,
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: <Widget>[
-                              const Padding(
-                                padding: EdgeInsets.symmetric(
-                                    horizontal: 15.0, vertical: 15),
-                                child: Text(
-                                  'Seller\'s Note',
-                                  style: TextStyle(
-                                    fontWeight: FontWeight.w700,
-                                    fontSize: 16,
-                                    color: textColor,
-                                  ),
+
+                      Container(
+                        margin: const EdgeInsets.only(left: 15, right: 15),
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(10),
+                          color: Colors.white,
+                        ),
+                        width: double.infinity,
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: <Widget>[
+                            const Padding(
+                              padding: EdgeInsets.symmetric(
+                                  horizontal: 15.0, vertical: 15),
+                              child: Text(
+                                'Seller\'s Note',
+                                style: TextStyle(
+                                  fontWeight: FontWeight.w700,
+                                  fontSize: 16,
+                                  color: textColor,
                                 ),
                               ),
+                            ),
+                            if (widget.service.notes != null)
                               Padding(
                                 padding: const EdgeInsets.symmetric(
                                     horizontal: 15.0),
@@ -1270,15 +1271,15 @@ class _BookServiceScreenState extends State<BookServiceScreen>
                                   ),
                                 ),
                               ),
-                              CustomEditText(
-                                padding: 0,
-                                hintText: 'Enter Note to Seller here',
-                                controller: noteController,
-                                caption: '',
-                              ),
-                            ],
-                          ),
+                            CustomEditText(
+                              padding: 0,
+                              hintText: 'Enter Note to Seller here',
+                              controller: noteController,
+                              caption: '',
+                            ),
+                          ],
                         ),
+                      ),
                       if (widget.service.notes != null)
                         const SizedBox(
                           height: 16,
