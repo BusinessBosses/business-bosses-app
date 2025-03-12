@@ -999,27 +999,31 @@ class _BookServiceScreenState extends State<BookServiceScreen>
                                             CalendarElement.calendarCell) {
                                           setState(() {
                                             DateTime selectedDate = DateTime(
-                                                details.date!.year,
-                                                details.date!.month,
-                                                details.date!.day);
+                                              details.date!.year,
+                                              details.date!.month,
+                                              details.date!.day,
+                                            );
 
-                                            DateTime startDate = DateTime.parse(
-                                                widget.service.availability![
-                                                    'startDate']);
+                                            // Check if the selected date is a blackout date
+                                            bool isBlackoutDate =
+                                                _getAllDatesExceptStart().any(
+                                                    (DateTime date) =>
+                                                        date.year ==
+                                                            selectedDate.year &&
+                                                        date.month ==
+                                                            selectedDate
+                                                                .month &&
+                                                        date.day ==
+                                                            selectedDate.day);
 
-                                            if (selectedDate.year ==
-                                                    startDate.year &&
-                                                selectedDate.month ==
-                                                    startDate.month &&
-                                                selectedDate.day ==
-                                                    startDate.day) {
+                                            if (!isBlackoutDate) {
+                                              // Clear the selected dates list and add the new selected date
                                               _selectedDates.clear();
                                               _selectedDates.add(selectedDate);
-                                              _startDate = selectedDate;
                                             } else {
                                               showSnackbar(
                                                 message:
-                                                    'Please select the specific start date.',
+                                                    'This date is not available for selection.',
                                                 error: true,
                                               );
                                             }
@@ -1342,24 +1346,32 @@ class _BookServiceScreenState extends State<BookServiceScreen>
                               DateTime parsedEndTime =
                                   timeFormat.parse(endTimeString);
 
+// Use _startDate's year, month, and day for the formatted time
                               String startFormattedTime =
                                   DateFormat('yyyy-MM-dd HH:mm:ss.SSS').format(
-                                      DateTime(
-                                          0000,
-                                          00,
-                                          00,
-                                          parsedStartTime.hour,
-                                          parsedStartTime.minute,
-                                          parsedStartTime.second));
+                                DateTime(
+                                  _startDate!.year, // Use year from _startDate
+                                  _startDate!
+                                      .month, // Use month from _startDate
+                                  _startDate!.day, // Use day from _startDate
+                                  parsedStartTime.hour,
+                                  parsedStartTime.minute,
+                                  parsedStartTime.second,
+                                ),
+                              );
+
                               String endFormattedTime =
                                   DateFormat('yyyy-MM-dd HH:mm:ss.SSS').format(
-                                      DateTime(
-                                          0000,
-                                          00,
-                                          00,
-                                          parsedEndTime.hour,
-                                          parsedEndTime.minute,
-                                          parsedEndTime.second));
+                                DateTime(
+                                  _startDate!.year, // Use year from _startDate
+                                  _startDate!
+                                      .month, // Use month from _startDate
+                                  _startDate!.day, // Use day from _startDate
+                                  parsedEndTime.hour,
+                                  parsedEndTime.minute,
+                                  parsedEndTime.second,
+                                ),
+                              );
 
                               final Map<String, dynamic> orderData =
                                   <String, dynamic>{
@@ -1675,16 +1687,29 @@ class _BookServiceScreenState extends State<BookServiceScreen>
   List<DateTime> _getAllDatesExceptStart() {
     final List<DateTime> blockedDates = <DateTime>[];
     final DateTime now = DateTime.now();
-    final DateTime endDate = DateTime(now.year + 1);
+    final DateTime endDate =
+        DateTime(now.year + 1, now.month, now.day); // Corrected endDate
     final DateTime startDate =
         DateTime.parse(widget.service.availability!['startDate']);
+
+    // Convert selectedDates to DateTime objects for easier comparison
+    final List<DateTime> selectedDates =
+        widget.service.selectedDates.map((dateString) {
+      return DateTime.parse(
+          dateString.split(' ')[0]); // Extract only the date part
+    }).toList();
 
     for (DateTime date = now;
         date.isBefore(endDate);
         date = date.add(const Duration(days: 1))) {
-      if (date.year != startDate.year ||
-          date.month != startDate.month ||
-          date.day != startDate.day) {
+      // Exclude the startDate and any date in selectedDates
+      if (!(date.year == startDate.year &&
+              date.month == startDate.month &&
+              date.day == startDate.day) &&
+          !selectedDates.any((DateTime selectedDate) =>
+              selectedDate.year == date.year &&
+              selectedDate.month == date.month &&
+              selectedDate.day == date.day)) {
         blockedDates.add(date);
       }
     }

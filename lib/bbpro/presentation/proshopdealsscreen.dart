@@ -277,11 +277,11 @@ class _ProshopdealsScreenState extends State<ProshopdealsScreen>
                     onTap: () {
                       if (product.user!.uid ==
                           profileController.myProfile.uid) {
-                        // Get.to(
-                        //   () => CreateProductListing(
-                        //     product: product,
-                        //   ),
-                        // );
+                        Get.to(
+                          () => CreateProductListing(
+                            product: product,
+                          ),
+                        );
                       } else {
                         Get.to(() => OrderProductScreen(
                               product: product,
@@ -305,16 +305,16 @@ class _ProshopdealsScreenState extends State<ProshopdealsScreen>
                     onTap: () {
                       if (service.user!.uid ==
                           profileController.myProfile.uid) {
-                        // Get.to(
-                        //   () => CreateServiceListing(
-                        //     service: service,
-                        //   ),
-                        // );
-                      } else {
-                        BookServiceScreen(
-                          service: service,
-                          shop: service.shop!,
+                        Get.to(
+                          () => CreateServiceListing(
+                            service: service,
+                          ),
                         );
+                      } else {
+                        Get.to(() => BookServiceScreen(
+                              service: service,
+                              shop: service.shop!,
+                            ));
                       }
                     },
                     child: ServiceCard(
@@ -353,11 +353,11 @@ class _ProshopdealsScreenState extends State<ProshopdealsScreen>
                     onTap: () {
                       if (product.user!.uid ==
                           profileController.myProfile.uid) {
-                        // Get.to(
-                        //   () => CreateProductListing(
-                        //     product: product,
-                        //   ),
-                        // );
+                        Get.to(
+                          () => CreateProductListing(
+                            product: product,
+                          ),
+                        );
                       } else {
                         Get.to(() => OrderProductScreen(
                               product: product,
@@ -401,16 +401,16 @@ class _ProshopdealsScreenState extends State<ProshopdealsScreen>
                     onTap: () {
                       if (service.user!.uid ==
                           profileController.myProfile.uid) {
-                        // Get.to(
-                        //   () => CreateServiceListing(
-                        //     service: service,
-                        //   ),
-                        // );
-                      } else {
-                        BookServiceScreen(
-                          service: service,
-                          shop: service.shop!,
+                        Get.to(
+                          () => CreateServiceListing(
+                            service: service,
+                          ),
                         );
+                      } else {
+                        Get.to(() => BookServiceScreen(
+                              service: service,
+                              shop: service.shop!,
+                            ));
                       }
                     },
                     child: ServiceCard(
