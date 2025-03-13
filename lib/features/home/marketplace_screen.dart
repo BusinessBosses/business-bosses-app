@@ -402,7 +402,7 @@ class _MarketplaceScreenState extends State<MarketplaceScreen>
                                 'https://businessbosses.co.uk/landingpageforpartners'))
                             : _marketplaceTabController.index == 3
                                 ? _profileController.myProfile.hasShop
-                                    ? supplierController.suppliers.any(
+                                    ? supplierController.allSuppliers.any(
                                             (SuppliersModel supplier) =>
                                                 supplier.name ==
                                                 shopController.shop?.name)

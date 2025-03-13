@@ -26,6 +26,7 @@ import '../posts/models/post_model.dart';
 import '../profile/controller/profile_controller.dart';
 import 'package:socket_io_client/socket_io_client.dart' as io;
 import 'package:flutter_advanced_drawer/flutter_advanced_drawer.dart';
+import 'package:business_bosses_v2/features/marketplace/controllers/supplier_controller.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key, this.onPageChange});
@@ -49,6 +50,7 @@ class _HomeScreenState extends State<HomeScreen>
       Get.put(ChallengeController());
   final DonationsController donationsController =
       Get.put(DonationsController());
+  final SupplierController supplierController = Get.put(SupplierController());
   late io.Socket socket;
   bool isScrolled = true;
   bool isTabVisible = false;

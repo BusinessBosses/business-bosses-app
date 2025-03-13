@@ -4,6 +4,7 @@ import 'package:business_bosses_v2/bbpro/presentation/create_service.dart';
 import 'package:business_bosses_v2/common/dialogs/snackbar.dart';
 import 'package:business_bosses_v2/common/models/api_response_model.dart';
 import 'package:business_bosses_v2/features/marketplace/controllers/supplier_controller.dart';
+import 'package:business_bosses_v2/features/marketplace/models/suppliers_model.dart';
 import 'package:business_bosses_v2/features/marketplace/presentation/add_supplier.dart';
 import 'package:business_bosses_v2/features/premium/proscreen.dart';
 import 'package:business_bosses_v2/features/profile/controller/profile_controller.dart';
@@ -45,34 +46,42 @@ void sellProduct(BuildContext context) {
 
                         if (index == 0 || index == 1) {
                           if (!profileController.myProfile.hasShop) {
-                            Get.bottomSheet(
-                              isScrollControlled: true,
-                              shape: const RoundedRectangleBorder(
-                                borderRadius: BorderRadius.only(
-                                  topLeft: Radius.circular(20.0),
-                                  topRight: Radius.circular(20.0),
-                                ),
-                              ),
-                              SizedBox(
-                                height: Get.height * 0.9,
-                                child: const Center(
-                                  child: Column(
-                                    mainAxisAlignment: MainAxisAlignment.start,
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.center,
-                                    children: <Widget>[
-                                      Padding(
-                                          padding: EdgeInsets.only(
-                                              left: 0.0, top: 0, bottom: 10),
-                                          child: ProSubscribeSection(
-                                            isGrow: true,
-                                          )),
-                                    ],
-                                  ),
-                                ),
-                              ),
-                              backgroundColor: Colors.white,
-                            );
+                            supplierController.allSuppliers.any(
+                                    (SuppliersModel supplier) =>
+                                        supplier.name ==
+                                        shopController.shop?.name)
+                                ? Get.to(() => const AddSupplierScreen())
+                                : Get.bottomSheet(
+                                    isScrollControlled: true,
+                                    shape: const RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.only(
+                                        topLeft: Radius.circular(20.0),
+                                        topRight: Radius.circular(20.0),
+                                      ),
+                                    ),
+                                    SizedBox(
+                                      height: Get.height * 0.9,
+                                      child: const Center(
+                                        child: Column(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.start,
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.center,
+                                          children: <Widget>[
+                                            Padding(
+                                                padding: EdgeInsets.only(
+                                                    left: 0.0,
+                                                    top: 0,
+                                                    bottom: 10),
+                                                child: ProSubscribeSection(
+                                                  isGrow: true,
+                                                )),
+                                          ],
+                                        ),
+                                      ),
+                                    ),
+                                    backgroundColor: Colors.white,
+                                  );
                           } else {
                             Get.to(() => index == 0
                                 ? const CreateProductListing(

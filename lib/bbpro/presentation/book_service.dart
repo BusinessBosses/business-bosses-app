@@ -214,7 +214,6 @@ class _BookServiceScreenState extends State<BookServiceScreen>
                       'User has gained coin from sharing the listings') {
                     Get.dialog(
                       AlertDialog(
-                        title: const Text('Shared Successfully!'),
                         content: const Text(
                             'You have already earned from sharing this listing before!'),
                         actions: <Widget>[
@@ -231,7 +230,6 @@ class _BookServiceScreenState extends State<BookServiceScreen>
                       'Post owner does not have enough listing coins') {
                     Get.dialog(
                       AlertDialog(
-                        title: const Text('Shared Successfully!'),
                         content: const Text(
                             'All Coins for this listings have been claimed!'),
                         actions: <Widget>[

@@ -6,6 +6,8 @@ import 'package:get/get.dart';
 
 class SupplierController extends GetxController {
   RxList<SuppliersModel> suppliers = RxList<SuppliersModel>(<SuppliersModel>[]);
+  RxList<SuppliersModel> allSuppliers =
+      RxList<SuppliersModel>(<SuppliersModel>[]);
   RxList<SuppliersModel> mySuppliers =
       RxList<SuppliersModel>(<SuppliersModel>[]);
   RxList<SuppliersModel> searchedSuppliers =
@@ -31,6 +33,21 @@ class SupplierController extends GetxController {
       suppliers.clear();
       for (int i = 0; i < psts.length; i++) {
         suppliers.add(SuppliersModel.fromMap(psts[i]));
+      }
+    } else {
+      error(true);
+    }
+    loading(false);
+  }
+
+  Future<void> initAllSuppliers() async {
+    final ApiResponseModel response =
+        await ApiService.get(path: 'suppliers/query?isDeleted=false');
+    if (response.success) {
+      final List<dynamic> psts = response.data['rows'];
+      allSuppliers.clear();
+      for (int i = 0; i < psts.length; i++) {
+        allSuppliers.add(SuppliersModel.fromMap(psts[i]));
       }
     } else {
       error(true);
@@ -101,6 +118,14 @@ class SupplierController extends GetxController {
   Future<ApiResponseModel> addSupplier(Map<String, dynamic> data) async {
     final ApiResponseModel response =
         await ApiService.post(path: 'suppliers', body: data);
+    suppliers.add(SuppliersModel.fromJson(response.data));
+    allSuppliers.add(SuppliersModel.fromJson(response.data));
     return response;
+  }
+
+  @override
+  void onInit() {
+    super.onInit();
+    initAllSuppliers();
   }
 }
