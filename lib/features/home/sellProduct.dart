@@ -198,8 +198,7 @@ void sellProduct(BuildContext context) {
                                                                   TextButton(
                                                                     onPressed:
                                                                         () {
-                                                                      Navigator.pop(
-                                                                          context); // dismiss migration dialog
+                                                                      Get.back();
                                                                     },
                                                                     child: const Text(
                                                                         'Close'),
