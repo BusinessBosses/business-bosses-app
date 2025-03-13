@@ -118,8 +118,14 @@ class SupplierController extends GetxController {
   Future<ApiResponseModel> addSupplier(Map<String, dynamic> data) async {
     final ApiResponseModel response =
         await ApiService.post(path: 'suppliers', body: data);
-    suppliers.add(SuppliersModel.fromJson(response.data));
-    allSuppliers.add(SuppliersModel.fromJson(response.data));
+    suppliers.add(SuppliersModel.fromMap(<String, dynamic>{
+      ...response.data,
+      'user': profileController.myProfile.toMap()
+    }));
+    allSuppliers.add(SuppliersModel.fromMap(<String, dynamic>{
+      ...response.data,
+      'user': profileController.myProfile.toMap()
+    }));
     return response;
   }
 

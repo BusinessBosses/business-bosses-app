@@ -104,7 +104,7 @@ class SuppliersModel {
       isApproved: map['isApproved'] as bool,
       email: map['email'] != null ? map['email'] as String : null,
       url: map['url'] != null ? map['url'] as String : null,
-      isBiz: map['isBiz'],
+      isBiz: map['isBiz'] ?? false,
       images: map['images'] != null
           ? List<dynamic>.from((map['images'] as List<dynamic>))
           : null,
