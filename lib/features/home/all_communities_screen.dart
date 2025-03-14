@@ -14,6 +14,8 @@ import 'package:business_bosses_v2/features/home/widgets/eventssection.dart';
 import 'package:business_bosses_v2/features/home/widgets/industriessearch.dart';
 import 'package:business_bosses_v2/features/home/widgets/learningpage.dart';
 import 'package:business_bosses_v2/features/home/widgets/learningsection.dart';
+import 'package:business_bosses_v2/features/premium/premiumscreen.dart';
+import 'package:business_bosses_v2/features/premium/proscreen.dart';
 import 'package:business_bosses_v2/features/profile/controller/profile_controller.dart';
 import 'package:business_bosses_v2/navigation/routes.dart';
 import 'package:flutter/material.dart';
@@ -64,11 +66,49 @@ class _AllCommunitiesScreenState extends State<AllCommunitiesScreen>
 
   List<Widget> get mActions {
     return <Widget>[
-      if (!_isSearching)
+      Padding(
+        padding: const EdgeInsets.only(right: 8.0, bottom: 8, top: 8),
+        child: GestureDetector(
+          onTap: () => Get.toNamed(Routes.relevantusersscreen),
+          child: CircleAvatar(
+              backgroundColor: backgroundColor,
+              child:
+                  SvgPicture.asset('assets/svgs/collaborator.svg', height: 15)),
+        ),
+      ),
+      if (!profileController.myProfile.hasShop)
         Padding(
           padding: const EdgeInsets.only(right: 8.0, bottom: 8, top: 8),
           child: GestureDetector(
-            onTap: () => Get.toNamed(Routes.relevantusersscreen),
+            onTap: () {
+              Get.bottomSheet(
+                isScrollControlled: true,
+                shape: const RoundedRectangleBorder(
+                  borderRadius: BorderRadius.only(
+                    topLeft: Radius.circular(20.0),
+                    topRight: Radius.circular(20.0),
+                  ),
+                ),
+                SizedBox(
+                  height: Get.height * 0.9,
+                  child: const Center(
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: <Widget>[
+                        Padding(
+                            padding:
+                                EdgeInsets.only(left: 0.0, top: 0, bottom: 10),
+                            child: ProSubscribeSection(
+                              isGrow: true,
+                            )),
+                      ],
+                    ),
+                  ),
+                ),
+                backgroundColor: Colors.white,
+              );
+            },
             child: Container(
               padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
               decoration: BoxDecoration(
@@ -77,10 +117,10 @@ class _AllCommunitiesScreenState extends State<AllCommunitiesScreen>
               ),
               child: Row(
                 children: <Widget>[
-                  SvgPicture.asset('assets/svgs/collaborator.svg', height: 15),
+                  SvgPicture.asset('assets/svgs/grow.svg', height: 15),
                   const SizedBox(width: 5),
                   const Text(
-                    'Find Collaborators',
+                    'Grow',
                     style: TextStyle(
                       color: textColor,
                       fontSize: 15,

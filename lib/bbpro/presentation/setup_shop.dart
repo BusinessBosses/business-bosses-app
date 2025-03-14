@@ -506,6 +506,37 @@ class _SetupshopState extends State<Setupshop> with TickerProviderStateMixin {
                 padding: const EdgeInsets.only(top: 15.0),
                 child: Column(
                   children: <Widget>[
+                    if (widget.shop == null)
+                      const Text('Set Up Your Biz-Centre & Start Selling',
+                          style: TextStyle(
+                            fontSize: 20,
+                            fontWeight: FontWeight.bold,
+                          )),
+                    if (widget.shop == null)
+                      const Padding(
+                        padding:
+                            EdgeInsets.only(left: 15.0, right: 15, bottom: 15),
+                        child: Text.rich(
+                          textAlign: TextAlign.center,
+                          TextSpan(
+                            children: <InlineSpan>[
+                              TextSpan(
+                                text:
+                                    'Smart way to Sell and Manage your Business, All in One Place. ',
+                                style: TextStyle(
+                                    fontSize: 14, fontWeight: FontWeight.w600),
+                              ),
+                              TextSpan(
+                                text: 'Free and Easy to Setup.',
+                                style: TextStyle(
+                                    fontSize: 15,
+                                    fontWeight: FontWeight.w800,
+                                    color: Colors.blueGrey),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
                     CustomCard(
                       buttonvisible: true,
                       caption: 'Customise your Biz-Center',

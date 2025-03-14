@@ -55,14 +55,6 @@ Widget subscribetopremiumbutton() {
                   color: Colors.white,
                 ),
               ),
-              // SizedBox(
-              //   width: 5,
-              // ),
-              // Icon(
-              //   Icons.add,
-              //   color: Colors.white,
-              //   size: 15,
-              // )
             ],
           ),
         ),
