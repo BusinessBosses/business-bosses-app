@@ -367,7 +367,8 @@ class _MarketplaceScreenState extends State<MarketplaceScreen>
                       color: primaryColorLT,
                       onPressed: () {
                         setState(() {});
-                        if (!_profileController.myProfile.hasShop) {
+                        if (!_profileController.myProfile.hasShop &&
+                            _marketplaceTabController.index < 3) {
                           Get.bottomSheet(
                             isScrollControlled: true,
                             shape: const RoundedRectangleBorder(
@@ -401,198 +402,235 @@ class _MarketplaceScreenState extends State<MarketplaceScreen>
                             ? launchUrl(Uri.parse(
                                 'https://businessbosses.co.uk/landingpageforpartners'))
                             : _marketplaceTabController.index == 3
-                                ? _profileController.myProfile.hasShop
-                                    ? supplierController.allSuppliers.any(
-                                            (SuppliersModel supplier) =>
-                                                supplier.name ==
-                                                shopController.shop?.name)
-                                        ? Get.to(
-                                            () => const AddSupplierScreen())
-                                        : showModalBottomSheet(
-                                            context: context,
-                                            shape: const RoundedRectangleBorder(
-                                              borderRadius:
-                                                  BorderRadius.vertical(
-                                                top: Radius.circular(25.0),
-                                              ),
-                                            ),
-                                            builder: (BuildContext context) {
-                                              return SizedBox(
-                                                height: 200,
-                                                child: Padding(
-                                                  padding: const EdgeInsets.all(
-                                                      15.0),
-                                                  child: Column(
-                                                    crossAxisAlignment:
-                                                        CrossAxisAlignment
-                                                            .start,
-                                                    mainAxisSize:
-                                                        MainAxisSize.min,
-                                                    children: <Widget>[
-                                                      Expanded(
-                                                        child:
-                                                            ListView.separated(
-                                                          itemCount: 2,
-                                                          separatorBuilder:
-                                                              (BuildContext
-                                                                          context,
-                                                                      int index) =>
-                                                                  const Divider(),
-                                                          itemBuilder:
-                                                              (BuildContext
-                                                                      context,
-                                                                  int index) {
-                                                            return ListTile(
-                                                              horizontalTitleGap:
-                                                                  0,
-                                                              onTap: () async {
-                                                                Navigator.pop(
-                                                                    context);
-                                                                if (index ==
-                                                                    0) {
-                                                                  // Show loader dialog similar to the migration loader
-                                                                  Get.dialog(
-                                                                    const AlertDialog(
-                                                                      content:
-                                                                          Row(
+                                ? supplierController.allSuppliers.any(
+                                        (SuppliersModel supplier) =>
+                                            supplier.name ==
+                                            shopController.shop?.name)
+                                    ? Get.to(() => const AddSupplierScreen())
+                                    : showModalBottomSheet(
+                                        context: context,
+                                        shape: const RoundedRectangleBorder(
+                                          borderRadius: BorderRadius.vertical(
+                                            top: Radius.circular(25.0),
+                                          ),
+                                        ),
+                                        builder: (BuildContext context) {
+                                          return SizedBox(
+                                            height: 200,
+                                            child: Padding(
+                                              padding:
+                                                  const EdgeInsets.all(15.0),
+                                              child: Column(
+                                                crossAxisAlignment:
+                                                    CrossAxisAlignment.start,
+                                                mainAxisSize: MainAxisSize.min,
+                                                children: <Widget>[
+                                                  Expanded(
+                                                    child: ListView.separated(
+                                                      itemCount: 2,
+                                                      separatorBuilder:
+                                                          (BuildContext context,
+                                                                  int index) =>
+                                                              const Divider(),
+                                                      itemBuilder:
+                                                          (BuildContext context,
+                                                              int index) {
+                                                        return ListTile(
+                                                          horizontalTitleGap: 0,
+                                                          onTap: () async {
+                                                            Navigator.pop(
+                                                                context);
+                                                            if (index == 0) {
+                                                              if (!_profileController
+                                                                  .myProfile
+                                                                  .hasShop) {
+                                                                Get.bottomSheet(
+                                                                  isScrollControlled:
+                                                                      true,
+                                                                  shape:
+                                                                      const RoundedRectangleBorder(
+                                                                    borderRadius:
+                                                                        BorderRadius
+                                                                            .only(
+                                                                      topLeft: Radius
+                                                                          .circular(
+                                                                              20.0),
+                                                                      topRight:
+                                                                          Radius.circular(
+                                                                              20.0),
+                                                                    ),
+                                                                  ),
+                                                                  SizedBox(
+                                                                    height:
+                                                                        Get.height *
+                                                                            0.9,
+                                                                    child:
+                                                                        const Center(
+                                                                      child:
+                                                                          Column(
+                                                                        mainAxisAlignment:
+                                                                            MainAxisAlignment.start,
+                                                                        crossAxisAlignment:
+                                                                            CrossAxisAlignment.center,
                                                                         children: <Widget>[
-                                                                          CircularProgressIndicator(),
-                                                                          SizedBox(
-                                                                              width: 20),
-                                                                          Text(
-                                                                              'Adding Biz-Center to Supplier...'),
+                                                                          Padding(
+                                                                              padding: EdgeInsets.only(left: 0.0, top: 0, bottom: 10),
+                                                                              child: ProSubscribeSection(
+                                                                                isGrow: true,
+                                                                              )),
                                                                         ],
                                                                       ),
                                                                     ),
-                                                                    barrierDismissible:
-                                                                        false,
-                                                                  );
+                                                                  ),
+                                                                  backgroundColor:
+                                                                      Colors
+                                                                          .white,
+                                                                );
+                                                                return;
+                                                              }
+                                                              // Show loader dialog similar to the migration loader
+                                                              Get.dialog(
+                                                                const AlertDialog(
+                                                                  content: Row(
+                                                                    children: <Widget>[
+                                                                      CircularProgressIndicator(),
+                                                                      SizedBox(
+                                                                          width:
+                                                                              20),
+                                                                      Text(
+                                                                          'Adding Biz-Center to Supplier...'),
+                                                                    ],
+                                                                  ),
+                                                                ),
+                                                                barrierDismissible:
+                                                                    false,
+                                                              );
 
-                                                                  // Execute your async logic (replace with your actual function)
-                                                                  final dynamic
-                                                                      data =
-                                                                      <String,
-                                                                          Object?>{
-                                                                    'category':
-                                                                        shopController
-                                                                            .shop!
-                                                                            .category,
-                                                                    'location':
-                                                                        shopController
-                                                                            .shop!
-                                                                            .location,
-                                                                    'description':
-                                                                        shopController
-                                                                            .shop!
-                                                                            .description,
-                                                                    'userId':
-                                                                        _profileController
-                                                                            .myProfile
-                                                                            .uid,
-                                                                    'name': shopController
+                                                              // Execute your async logic (replace with your actual function)
+                                                              final dynamic
+                                                                  data =
+                                                                  <String,
+                                                                      Object?>{
+                                                                'category':
+                                                                    shopController
+                                                                        .shop!
+                                                                        .category,
+                                                                'location':
+                                                                    shopController
+                                                                        .shop!
+                                                                        .location,
+                                                                'description':
+                                                                    shopController
+                                                                        .shop!
+                                                                        .description,
+                                                                'userId':
+                                                                    _profileController
+                                                                        .myProfile
+                                                                        .uid,
+                                                                'name':
+                                                                    shopController
                                                                         .shop!
                                                                         .name,
-                                                                    'email': shopController
+                                                                'email':
+                                                                    shopController
                                                                         .shop!
                                                                         .email,
-                                                                    'phone': shopController
+                                                                'phone':
+                                                                    shopController
                                                                         .shop!
                                                                         .phone,
-                                                                    'url': shopController
+                                                                'url':
+                                                                    shopController
                                                                         .shop!
                                                                         .url,
-                                                                    'images':
-                                                                        <String?>[
-                                                                      shopController
-                                                                          .shop!
-                                                                          .image
-                                                                    ],
-                                                                    'isBiz':
-                                                                        true,
-                                                                    'shopId':
-                                                                        shopController
-                                                                            .shop!
-                                                                            .id,
-                                                                  };
-                                                                  ApiResponseModel
-                                                                      response =
-                                                                      await supplierController
-                                                                          .addSupplier(
-                                                                              data);
-                                                                  Get.back();
-                                                                  // Show a snackbar or perform additional actions based on success/failure
-                                                                  if (response
-                                                                      .success) {
-                                                                    await Get
-                                                                        .dialog(
-                                                                      AlertDialog(
-                                                                        title: const Text(
-                                                                            'Supplier Added Succesfully!'),
-                                                                        content:
-                                                                            const Text('It will show in marketplace when the admin approves it.'),
-                                                                        actions: <Widget>[
-                                                                          TextButton(
-                                                                            onPressed:
-                                                                                () {
-                                                                              Get.back(); // Use Get.back() instead of Navigator.pop(context)
-                                                                            },
-                                                                            child:
-                                                                                const Text('Close'),
-                                                                          ),
-                                                                        ],
+                                                                'images':
+                                                                    <String?>[
+                                                                  shopController
+                                                                      .shop!
+                                                                      .image
+                                                                ],
+                                                                'isBiz': true,
+                                                                'shopId':
+                                                                    shopController
+                                                                        .shop!
+                                                                        .id,
+                                                              };
+                                                              ApiResponseModel
+                                                                  response =
+                                                                  await supplierController
+                                                                      .addSupplier(
+                                                                          data);
+                                                              Get.back();
+                                                              // Show a snackbar or perform additional actions based on success/failure
+                                                              if (response
+                                                                  .success) {
+                                                                await Get
+                                                                    .dialog(
+                                                                  AlertDialog(
+                                                                    title: const Text(
+                                                                        'Supplier Added Succesfully!'),
+                                                                    content:
+                                                                        const Text(
+                                                                            'It will show in marketplace when the admin approves it.'),
+                                                                    actions: <Widget>[
+                                                                      TextButton(
+                                                                        onPressed:
+                                                                            () {
+                                                                          Get.back(); // Use Get.back() instead of Navigator.pop(context)
+                                                                        },
+                                                                        child: const Text(
+                                                                            'Close'),
                                                                       ),
-                                                                    );
-                                                                  } else {
-                                                                    showSnackbar(
-                                                                        message:
-                                                                            'Error adding Biz-Center to supplier.',
-                                                                        error:
-                                                                            true);
-                                                                  }
-                                                                } else {
-                                                                  Get.to(() =>
-                                                                      const AddSupplierScreen());
-                                                                }
-                                                              },
-                                                              minVerticalPadding:
-                                                                  0,
-                                                              contentPadding:
-                                                                  const EdgeInsets
-                                                                      .only(
-                                                                left: 10,
-                                                              ),
-                                                              leading:
-                                                                  SvgPicture
-                                                                      .asset(
-                                                                index == 0
-                                                                    ? 'assets/svgs/addclient.svg'
-                                                                    : 'assets/svgs/addclient.svg',
-                                                                height: 25,
-                                                                color: textColor
-                                                                    .withOpacity(
-                                                                        1),
-                                                              ),
-                                                              title: Text(
-                                                                index == 0
-                                                                    ? 'Add My Biz-Center To Supplier List'
-                                                                    : 'Add a New Supplier',
-                                                                style: const TextStyle(
-                                                                    fontSize:
-                                                                        18,
-                                                                    fontWeight:
-                                                                        FontWeight
-                                                                            .w700),
-                                                              ),
-                                                            );
+                                                                    ],
+                                                                  ),
+                                                                );
+                                                              } else {
+                                                                showSnackbar(
+                                                                    message:
+                                                                        'Error adding Biz-Center to supplier.',
+                                                                    error:
+                                                                        true);
+                                                              }
+                                                            } else {
+                                                              Get.to(() =>
+                                                                  const AddSupplierScreen());
+                                                            }
                                                           },
-                                                        ),
-                                                      )
-                                                    ],
-                                                  ),
-                                                ),
-                                              );
-                                            })
-                                    : Get.to(() => const AddSupplierScreen())
+                                                          minVerticalPadding: 0,
+                                                          contentPadding:
+                                                              const EdgeInsets
+                                                                  .only(
+                                                            left: 10,
+                                                          ),
+                                                          leading:
+                                                              SvgPicture.asset(
+                                                            index == 0
+                                                                ? 'assets/svgs/addclient.svg'
+                                                                : 'assets/svgs/addclient.svg',
+                                                            height: 25,
+                                                            color: textColor
+                                                                .withOpacity(1),
+                                                          ),
+                                                          title: Text(
+                                                            index == 0
+                                                                ? 'Add My Biz-Center To Supplier List'
+                                                                : 'Add a New Supplier',
+                                                            style: const TextStyle(
+                                                                fontSize: 18,
+                                                                fontWeight:
+                                                                    FontWeight
+                                                                        .w700),
+                                                          ),
+                                                        );
+                                                      },
+                                                    ),
+                                                  )
+                                                ],
+                                              ),
+                                            ),
+                                          );
+                                        },
+                                      )
                                 : _marketplaceTabController.index == 1
                                     ? Get.to(const CreateProductListing(
                                         isMarketplace: true,
