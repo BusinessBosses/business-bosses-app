@@ -250,7 +250,34 @@ void sellProduct(BuildContext context) {
                                       );
                                     });
                           } else {
-                            Get.to(() => const AddSupplierScreen());
+                            Get.bottomSheet(
+                              isScrollControlled: true,
+                              shape: const RoundedRectangleBorder(
+                                borderRadius: BorderRadius.only(
+                                  topLeft: Radius.circular(20.0),
+                                  topRight: Radius.circular(20.0),
+                                ),
+                              ),
+                              SizedBox(
+                                height: Get.height * 0.9,
+                                child: const Center(
+                                  child: Column(
+                                    mainAxisAlignment: MainAxisAlignment.start,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.center,
+                                    children: <Widget>[
+                                      Padding(
+                                          padding: EdgeInsets.only(
+                                              left: 0.0, top: 0, bottom: 10),
+                                          child: ProSubscribeSection(
+                                            isGrow: true,
+                                          )),
+                                    ],
+                                  ),
+                                ),
+                              ),
+                              backgroundColor: Colors.white,
+                            );
                           }
                         }
                       },
