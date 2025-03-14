@@ -6,6 +6,7 @@ import 'package:business_bosses_v2/bbpro/presentation/create_custom_listing.dart
 import 'package:business_bosses_v2/bbpro/presentation/create_product.dart';
 import 'package:business_bosses_v2/bbpro/presentation/create_service.dart';
 import 'package:business_bosses_v2/bbpro/presentation/create_order.dart';
+import 'package:business_bosses_v2/bbpro/presentation/setup_shop.dart';
 import 'package:business_bosses_v2/bbpro/presentation/todo_tasks_view.dart';
 import 'package:business_bosses_v2/bbpro/widgets/financial_analysis_card.dart';
 import 'package:business_bosses_v2/bbpro/widgets/gotoshopwidget.dart';
@@ -16,6 +17,7 @@ import 'package:business_bosses_v2/bbpro/widgets/quickactioncard.dart';
 import 'package:business_bosses_v2/common/widgets/safety_model.dart';
 import 'package:business_bosses_v2/features/chat/chat_screen.dart';
 import 'package:business_bosses_v2/features/home/home_screen.dart';
+import 'package:business_bosses_v2/features/profile/controller/profile_controller.dart';
 import 'package:business_bosses_v2/utils/theme/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
@@ -48,11 +50,17 @@ class _DashboardState extends State<Dashboard> {
   final ShopController shopController =
       Get.put(ShopController(), permanent: true);
   final ClientsController clientsController = Get.put(ClientsController());
+  final ProfileController profileController = Get.find();
   String _selectedfilteritem = 'All Time';
   String _selectedDateFilter = 'all_time';
 
   @override
   void initState() {
+    if (!profileController.myProfile.hasShop) {
+      Get.to(() => const Setupshop(
+            backToHome: true,
+          ));
+    }
     shopController.loadStatistics();
     super.initState();
   }
