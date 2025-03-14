@@ -76,7 +76,7 @@ class _AllCommunitiesScreenState extends State<AllCommunitiesScreen>
                   SvgPicture.asset('assets/svgs/collaborator.svg', height: 15)),
         ),
       ),
-      if (!profileController.myProfile.hasShop)
+      if (!profileController.myProfile.isSubscribed)
         Padding(
           padding: const EdgeInsets.only(right: 8.0, bottom: 8, top: 8),
           child: GestureDetector(
@@ -99,9 +99,7 @@ class _AllCommunitiesScreenState extends State<AllCommunitiesScreen>
                         Padding(
                             padding:
                                 EdgeInsets.only(left: 0.0, top: 0, bottom: 10),
-                            child: ProSubscribeSection(
-                              isGrow: true,
-                            )),
+                            child: PremiumScreen()),
                       ],
                     ),
                   ),
@@ -117,12 +115,16 @@ class _AllCommunitiesScreenState extends State<AllCommunitiesScreen>
               ),
               child: Row(
                 children: <Widget>[
-                  SvgPicture.asset('assets/svgs/grow.svg', height: 15),
+                  SvgPicture.asset(
+                    'assets/svgs/grow.svg',
+                    height: 15,
+                    color: primaryColorLT,
+                  ),
                   const SizedBox(width: 5),
                   const Text(
                     'Grow',
                     style: TextStyle(
-                      color: textColor,
+                      color: primaryColorLT,
                       fontSize: 15,
                       fontWeight: FontWeight.w700,
                     ),
