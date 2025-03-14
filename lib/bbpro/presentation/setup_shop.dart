@@ -865,6 +865,7 @@ class _SetupshopState extends State<Setupshop> with TickerProviderStateMixin {
       response = await shopController.addShop(data);
       if (response) {
         profileController.updateProfile(<String, dynamic>{
+          ...profileController.myProfile.toMap(),
           'hasShop': true,
         });
       }
