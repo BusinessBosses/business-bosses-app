@@ -557,7 +557,7 @@ class _SetupshopState extends State<Setupshop> with TickerProviderStateMixin {
                       items: const <String>['Circle', 'Banner'],
                       iconName: 'assets/svgs/dropdown.svg',
                       onChanged: (String? value) => setState(() {
-                        imageType = value!.toLowerCase();
+                        imageType = value;
                       }),
                     ),
                     const SizedBox(height: 15),
@@ -864,7 +864,7 @@ class _SetupshopState extends State<Setupshop> with TickerProviderStateMixin {
       'facebook': fbslController.text,
       'linkedIn': lslController.text,
       'url': cslController.text,
-      'imageType': imageType,
+      'imageType': imageType?.toLowerCase(),
       'category': category,
     };
 
