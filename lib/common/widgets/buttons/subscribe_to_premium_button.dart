@@ -34,23 +34,6 @@ Widget subscribetopremiumbutton() {
                   mainAxisAlignment: MainAxisAlignment.start,
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: <Widget>[
-                    // Padding(
-                    //   padding: EdgeInsets.symmetric(horizontal: 15.0),
-                    //   child: Text(
-                    //     'Upgrade now to get your listing featured',
-                    //     style: TextStyle(
-                    //       fontSize: 18,
-                    //       fontWeight: FontWeight.w700,
-                    //     ),
-                    //     textAlign: TextAlign.center,
-                    //   ),
-                    // ),
-                    // Lottie.asset(
-                    //   'assets/anim/listing.json',
-                    //   fit: BoxFit.cover,
-                    //   height: 90,
-                    //   width: 90,
-                    // ),
                     PremiumScreen(),
                   ],
                 ),

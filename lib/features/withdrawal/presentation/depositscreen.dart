@@ -3,6 +3,7 @@
 import 'package:business_bosses_v2/bbpro/presentation/proshopdealsscreen.dart';
 import 'package:business_bosses_v2/common/dialogs/snackbar.dart';
 import 'package:business_bosses_v2/features/home/widgets/all_learning_posts.dart';
+import 'package:business_bosses_v2/features/premium/premiumscreen.dart';
 import 'package:business_bosses_v2/features/profile/controller/profile_controller.dart';
 import 'package:business_bosses_v2/features/promotions/widgets/buycoinslist_item.dart';
 import 'package:business_bosses_v2/features/withdrawal/controller/coinhistorycontroller.dart';
@@ -243,7 +244,36 @@ class _DepositsScreenState extends State<DepositsScreen> {
                               GestureDetector(
                                 onTap: () {
                                   !profileController.myProfile.isSubscribed
-                                      ? Get.toNamed(Routes.premiumscreen)
+                                      ? Get.bottomSheet(
+                                          isScrollControlled: true,
+                                          shape: const RoundedRectangleBorder(
+                                            borderRadius: BorderRadius.only(
+                                              topLeft: Radius.circular(20.0),
+                                              topRight: Radius.circular(20.0),
+                                            ),
+                                          ),
+                                          Container(
+                                            decoration: const BoxDecoration(
+                                              borderRadius: BorderRadius.only(
+                                                topLeft: Radius.circular(20.0),
+                                                topRight: Radius.circular(20.0),
+                                              ),
+                                            ),
+                                            height: Get.height * 0.9,
+                                            child: const Center(
+                                              child: Column(
+                                                mainAxisAlignment:
+                                                    MainAxisAlignment.start,
+                                                crossAxisAlignment:
+                                                    CrossAxisAlignment.center,
+                                                children: <Widget>[
+                                                  PremiumScreen(),
+                                                ],
+                                              ),
+                                            ),
+                                          ),
+                                          backgroundColor: Colors.white,
+                                        )
                                       : null;
                                 },
                                 child: Container(
