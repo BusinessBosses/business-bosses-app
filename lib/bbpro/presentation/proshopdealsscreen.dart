@@ -191,7 +191,7 @@ class _ProshopdealsScreenState extends State<ProshopdealsScreen>
                           const Text(
                             'Get listing featured',
                             style: TextStyle(
-                              color: primaryColorLT,
+                              color: textColor,
                               fontSize: 14,
                               fontWeight: FontWeight.w700,
                             ),
@@ -246,7 +246,7 @@ class _ProshopdealsScreenState extends State<ProshopdealsScreen>
                           const Text(
                             'Get listing featured',
                             style: TextStyle(
-                              color: primaryColorLT,
+                              color: textColor,
                               fontSize: 14,
                               fontWeight: FontWeight.w700,
                             ),
