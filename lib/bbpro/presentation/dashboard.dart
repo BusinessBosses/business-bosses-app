@@ -269,7 +269,8 @@ class _DashboardState extends State<Dashboard> {
                                       width: 10,
                                     ),
                                     SvgPicture.asset(
-                                        'assets/svgs/dropdown.svg'),
+                                      'assets/svgs/dropdown.svg',
+                                    ),
                                   ],
                                 ),
                               ),
