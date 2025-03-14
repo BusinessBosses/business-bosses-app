@@ -26,8 +26,8 @@ class PremiumScreen extends StatefulWidget {
 }
 
 class _PremiumScreenState extends State<PremiumScreen> {
-  int _currentIndex = 0;
-  String paymentMethodId = '';
+  final int _currentIndex = 0;
+  String paymentMethodId = 'Promonth';
   final Map<int, Widget> _segments = <int, Widget>{
     0: const Padding(
       padding: EdgeInsets.all(8),
@@ -127,51 +127,86 @@ class _PremiumScreenState extends State<PremiumScreen> {
               ),
               Column(
                 children: <Widget>[
-                  Padding(
-                    padding:
-                        const EdgeInsets.only(left: 50.0, right: 50, top: 50),
-                    child: RichText(
-                      textAlign: TextAlign.center,
-                      text: TextSpan(
-                        children: <InlineSpan>[
-                          const TextSpan(
-                            text: 'Upgrade to a pro boss experience at only, ',
-                            style: TextStyle(
-                                color: Colors.black,
-                                fontSize: 15,
-                                fontWeight: FontWeight.w500),
-                          ),
+                  const Column(
+                    children: <Widget>[
+                      SizedBox(
+                        height: 25,
+                      ),
+                      Text('Upgrade to a Pro Boss Experience',
+                          style: TextStyle(
+                            fontSize: 20,
+                            fontWeight: FontWeight.bold,
+                          )),
+                      Padding(
+                        padding: EdgeInsets.symmetric(horizontal: 15.0),
+                        child: Text.rich(
+                          textAlign: TextAlign.center,
                           TextSpan(
-                            text: _currentIndex == 0
-                                ? '\$9.99/month'
-                                : '\$99.99/year',
-                            style: const TextStyle(
-                                color: primaryColorLT,
-                                fontSize: 16,
-                                fontWeight: FontWeight.bold),
+                            children: <InlineSpan>[
+                              TextSpan(
+                                text:
+                                    'Everything You Need to boost and grow your business 10X faster, ',
+                                style: TextStyle(
+                                    fontSize: 14, fontWeight: FontWeight.w600),
+                              ),
+                              TextSpan(
+                                text: 'all in one place',
+                                style: TextStyle(
+                                    fontSize: 15,
+                                    fontWeight: FontWeight.w800,
+                                    color: primaryColorLT),
+                              ),
+                            ],
                           ),
-                        ],
+                        ),
                       ),
-                    ),
+                    ],
                   ),
-                  Padding(
-                    padding: const EdgeInsets.only(top: 20.0),
-                    child: Align(
-                      alignment: Alignment.topCenter,
-                      child: CupertinoSlidingSegmentedControl<int>(
-                        padding: const EdgeInsets.all(5),
-                        children: _segments,
-                        onValueChanged: (int? value) {
-                          setState(() {
-                            _currentIndex = value!;
-                            paymentMethodId =
-                                _currentIndex == 0 ? 'Promonth' : 'Proyear';
-                          });
-                        },
-                        groupValue: _currentIndex,
-                      ),
-                    ),
-                  ),
+                  // Padding(
+                  //   padding:
+                  //       const EdgeInsets.only(left: 50.0, right: 50, top: 50),
+                  //   child: RichText(
+                  //     textAlign: TextAlign.center,
+                  //     text: TextSpan(
+                  //       children: <InlineSpan>[
+                  //         const TextSpan(
+                  //           text: 'Upgrade to a pro boss experience at only, ',
+                  //           style: TextStyle(
+                  //               color: Colors.black,
+                  //               fontSize: 15,
+                  //               fontWeight: FontWeight.w500),
+                  //         ),
+                  //         TextSpan(
+                  //           text: _currentIndex == 0
+                  //               ? '\$9.99/month'
+                  //               : '\$99.99/year',
+                  //           style: const TextStyle(
+                  //               color: primaryColorLT,
+                  //               fontSize: 16,
+                  //               fontWeight: FontWeight.bold),
+                  //         ),
+                  //       ],
+                  //     ),
+                  //   ),
+                  // ),
+                  // Padding(
+                  //   padding: const EdgeInsets.only(top: 20.0),
+                  //   child: Align(
+                  //     alignment: Alignment.topCenter,
+                  //     child: CupertinoSlidingSegmentedControl<int>(
+                  //       padding: const EdgeInsets.all(5),
+                  //       children: _segments,
+                  //       onValueChanged: (int? value) {
+                  //         setState(() {
+                  //           _currentIndex = value!;
+                  //           paymentMethodId =
+                  //               _currentIndex == 0 ? 'Promonth' : 'Proyear';
+                  //         });
+                  //       },
+                  //       groupValue: _currentIndex,
+                  //     ),
+                  //   ),
+                  // ),
                   const SizedBox(height: 30),
                   Padding(
                     padding: const EdgeInsets.only(left: 20.0, right: 20),
@@ -320,69 +355,259 @@ class _PremiumScreenState extends State<PremiumScreen> {
                         SizedBox(
                           width: double.infinity,
                           child: ProCustomButton(
-                            color: primaryColorLT,
-                            text: _currentIndex == 0
-                                ? 'Subscribe at \$9.99'
-                                : 'Subscribe at \$99.99',
-                            onPressed: () async {
-                              setState(() {
-                                loading = true;
-                              });
-                              if (paymentMethodId == 'Proyear') {
-                                try {
-                                  final List<StoreProduct> product =
-                                      await Purchases.getProducts(<String>[
-                                    'xyz.codexia.businessbosses.proyear'
-                                  ]);
-                                  final CustomerInfo customerInfo =
-                                      await Purchases.purchaseStoreProduct(
-                                          product[0]);
-                                  if (customerInfo
-                                          .entitlements
-                                          .all[
-                                              'xyz.codexia.businessbosses.proyear']
-                                          ?.isActive ??
-                                      false) {
-                                    // Grant access to premium features
-                                    print('User subscribed!');
-                                  }
-                                } catch (e) {
-                                  // Handle error
-                                  print('Error purchasing product: $e');
-                                } finally {
-                                  setState(() {
-                                    loading = false;
-                                  });
-                                }
-                              } else {
-                                try {
-                                  final List<StoreProduct> product =
-                                      await Purchases.getProducts(<String>[
-                                    'xyz.codexia.businessbosses.promonth'
-                                  ]);
-                                  final CustomerInfo customerInfo =
-                                      await Purchases.purchaseStoreProduct(
-                                          product[0]);
-                                  if (customerInfo
-                                          .entitlements
-                                          .all[
-                                              'xyz.codexia.businessbosses.promonth']
-                                          ?.isActive ??
-                                      false) {
-                                    // Grant access to premium features
-                                    print('User subscribed!');
-                                  }
-                                } catch (e) {
-                                  // Handle error
-                                  print('Error purchasing product: $e');
-                                } finally {
-                                  setState(() {
-                                    loading = false;
-                                  });
-                                }
+                              color: primaryColorLT,
+                              text: 'Start your \$1/Month Trial',
+                              onPressed: () async {
+                                // setState(() {
+                                //   loading = true;
+                                // });
+                                showModalBottomSheet<void>(
+                                  context: context,
+                                  shape: const RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.vertical(
+                                      top: Radius.circular(25.0),
+                                    ),
+                                  ),
+                                  builder: (BuildContext context) {
+                                    return StatefulBuilder(
+                                      // Wrap the entire bottom sheet content with StatefulBuilder
+                                      builder: (BuildContext context,
+                                          StateSetter setState) {
+                                        return Container(
+                                          padding: const EdgeInsets.symmetric(
+                                              horizontal: 20, vertical: 20),
+                                          child: Column(
+                                            mainAxisSize: MainAxisSize.min,
+                                            children: <Widget>[
+                                              Row(
+                                                mainAxisAlignment:
+                                                    MainAxisAlignment
+                                                        .spaceBetween,
+                                                children: <Widget>[
+                                                  const Text(
+                                                    'Choose your plan',
+                                                    style: TextStyle(
+                                                      fontSize: 16,
+                                                      fontWeight:
+                                                          FontWeight.bold,
+                                                    ),
+                                                  ),
+                                                  IconButton(
+                                                    icon: const Icon(
+                                                      Icons.close,
+                                                      color: Colors.black54,
+                                                    ),
+                                                    onPressed: () {
+                                                      Navigator.pop(context);
+                                                    },
+                                                  ),
+                                                ],
+                                              ),
+                                              const SizedBox(
+                                                height: 20,
+                                              ),
+                                              InkWell(
+                                                onTap: () {
+                                                  setState(() {
+                                                    paymentMethodId =
+                                                        'Promonth';
+                                                  });
+                                                },
+                                                child: Container(
+                                                  decoration: BoxDecoration(
+                                                    border: Border.all(
+                                                      color: paymentMethodId ==
+                                                              'Promonth'
+                                                          ? primaryColorLT
+                                                          : Colors.transparent,
+                                                      width: 2,
+                                                    ),
+                                                    borderRadius:
+                                                        BorderRadius.circular(
+                                                            15),
+                                                  ),
+                                                  child: RadioListTile<String>(
+                                                    contentPadding:
+                                                        const EdgeInsets.only(
+                                                            right: 10),
+                                                    title: const Row(
+                                                      mainAxisAlignment:
+                                                          MainAxisAlignment
+                                                              .spaceBetween,
+                                                      children: <Widget>[
+                                                        Text(
+                                                          'Pro Monthly',
+                                                          style: TextStyle(
+                                                              fontWeight:
+                                                                  FontWeight
+                                                                      .w600,
+                                                              fontSize: 16),
+                                                        ),
+                                                        Text('\$14.99/month',
+                                                            style: TextStyle(
+                                                                fontWeight:
+                                                                    FontWeight
+                                                                        .w200,
+                                                                fontSize: 16)),
+                                                      ],
+                                                    ),
+                                                    value: 'Promonth',
+                                                    groupValue: paymentMethodId,
+                                                    onChanged: (String? value) {
+                                                      setState(() {
+                                                        paymentMethodId =
+                                                            value!;
+                                                      });
+                                                    },
+                                                  ),
+                                                ),
+                                              ),
+                                              Container(
+                                                decoration: BoxDecoration(
+                                                  border: Border.all(
+                                                    color: paymentMethodId ==
+                                                            'Proyear'
+                                                        ? primaryColorLT
+                                                        : Colors.transparent,
+                                                    width: 2,
+                                                  ),
+                                                  borderRadius:
+                                                      BorderRadius.circular(15),
+                                                ),
+                                                child: RadioListTile<String>(
+                                                  contentPadding:
+                                                      const EdgeInsets.only(
+                                                          right: 10),
+                                                  title: const Row(
+                                                    mainAxisAlignment:
+                                                        MainAxisAlignment
+                                                            .spaceBetween,
+                                                    children: <Widget>[
+                                                      Text(
+                                                        'Pro Yearly',
+                                                        style: TextStyle(
+                                                            fontWeight:
+                                                                FontWeight.w600,
+                                                            fontSize: 16),
+                                                      ),
+                                                      Text(
+                                                          '\$9.99/month ( 33% off )',
+                                                          style: TextStyle(
+                                                              fontWeight:
+                                                                  FontWeight
+                                                                      .w200,
+                                                              fontSize: 16)),
+                                                    ],
+                                                  ),
+                                                  value: 'Proyear',
+                                                  groupValue: paymentMethodId,
+                                                  onChanged: (String? value) {
+                                                    setState(() {
+                                                      paymentMethodId = value!;
+                                                    });
+                                                  },
+                                                ),
+                                              ),
+                                              const SizedBox(
+                                                height: 20,
+                                              ),
+                                              SizedBox(
+                                                  width: double.infinity,
+                                                  child: ProCustomButton(
+                                                    padding: 0,
+                                                    color: primaryColorLT,
+                                                    text:
+                                                        'Start your \$1/month trial',
+                                                    loading: loading,
+                                                    onPressed: () async {
+                                                      setState(() {
+                                                        loading = true;
+                                                      });
+                                                      if (paymentMethodId ==
+                                                          'Proyear') {
+                                                        try {
+                                                          final List<
+                                                                  StoreProduct>
+                                                              product =
+                                                              await Purchases
+                                                                  .getProducts(<String>[
+                                                            'xyz.codexia.businessbosses.proyear'
+                                                          ]);
+                                                          final CustomerInfo
+                                                              customerInfo =
+                                                              await Purchases
+                                                                  .purchaseStoreProduct(
+                                                                      product[
+                                                                          0]);
+                                                          if (customerInfo
+                                                                  .entitlements
+                                                                  .all[
+                                                                      'xyz.codexia.businessbosses.proyear']
+                                                                  ?.isActive ??
+                                                              false) {
+                                                            // Grant access to premium features
+                                                            print(
+                                                                'User subscribed!');
+                                                          }
+                                                        } catch (e) {
+                                                          // Handle error
+                                                          print(
+                                                              'Error purchasing product: $e');
+                                                        } finally {
+                                                          setState(() {
+                                                            loading = false;
+                                                          });
+                                                        }
+                                                      } else {
+                                                        try {
+                                                          final List<
+                                                                  StoreProduct>
+                                                              product =
+                                                              await Purchases
+                                                                  .getProducts(<String>[
+                                                            'xyz.codexia.businessbosses.promonth'
+                                                          ]);
+                                                          final CustomerInfo
+                                                              customerInfo =
+                                                              await Purchases
+                                                                  .purchaseStoreProduct(
+                                                                      product[
+                                                                          0]);
+                                                          if (customerInfo
+                                                                  .entitlements
+                                                                  .all[
+                                                                      'xyz.codexia.businessbosses.promonth']
+                                                                  ?.isActive ??
+                                                              false) {
+                                                            // Grant access to premium features
+                                                            print(
+                                                                'User subscribed!');
+                                                          }
+                                                        } catch (e) {
+                                                          // Handle error
+                                                          print(
+                                                              'Error purchasing product: $e');
+                                                        } finally {
+                                                          setState(() {
+                                                            loading = false;
+                                                          });
+                                                        }
+                                                      }
+                                                    },
+                                                  )),
+                                              const SizedBox(
+                                                height: 50,
+                                              ),
+                                            ],
+                                          ),
+                                        );
+                                      },
+                                    );
+                                  },
+                                );
                               }
-                            },
-                          ),
+                              // },
+                              ),
                         ),
                         const SizedBox(height: 8),
                         const SizedBox(
