@@ -1,3 +1,4 @@
+import 'package:business_bosses_v2/features/profile/presentation/my_profile_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
@@ -245,13 +246,24 @@ void sellProduct(BuildContext context) {
                     }
 
                     return ListTile(
-                      onTap: () => handleSellOptionTap(
-                        context: context,
-                        index: index,
-                        profileController: profileController,
-                        shopController: shopController,
-                        supplierController: supplierController,
-                      ),
+                      onTap: () => <void>{
+                        if (!profileController.myProfile.hasShop)
+                          <Future?>{
+                            Get.to(() => const MyProfileScreen(
+                                  currentIndex: 1,
+                                ))
+                          }
+                        else
+                          <void>{
+                            handleSellOptionTap(
+                              context: context,
+                              index: index,
+                              profileController: profileController,
+                              shopController: shopController,
+                              supplierController: supplierController,
+                            )
+                          },
+                      },
                       minVerticalPadding: 0,
                       contentPadding: const EdgeInsets.only(left: 10),
                       leading: SvgPicture.asset(

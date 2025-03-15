@@ -372,7 +372,7 @@ class _MarketplaceScreenState extends State<MarketplaceScreen>
                       onPressed: () {
                         setState(() {});
                         if (!_profileController.myProfile.hasShop &&
-                            _marketplaceTabController.index < 3) {
+                            _marketplaceTabController.index < 4) {
                           Get.to(() => const MyProfileScreen(
                                 currentIndex: 1,
                               ));
