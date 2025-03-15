@@ -269,8 +269,7 @@ class _MarketplaceScreenState extends State<MarketplaceScreen>
   @override
   Widget build(BuildContext context) {
     _marketController.selectedLocation = _marketController.selectedLocation ??
-        _profileController.myProfile.location ??
-        'Nigeria';
+        _profileController.myProfile.location;
     sortItems();
     // Show migration dialog after the first frame is rendered.
     // Inside your initState post-fra me callback:

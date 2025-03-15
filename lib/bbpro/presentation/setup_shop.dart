@@ -21,6 +21,7 @@ import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:business_bosses_v2/features/profile/presentation/my_profile_screen.dart';
 
 class Setupshop extends StatefulWidget {
   final Shop? shop;
@@ -424,8 +425,7 @@ class _SetupshopState extends State<Setupshop> with TickerProviderStateMixin {
                   const SizedBox(height: 20),
                   ProCustomButton(
                     onPressed: () {
-                      Get.back();
-                      Get.back();
+                      Get.off(() => const MyProfileScreen(currentIndex: 1));
                       setState(() {});
                     },
                     text: 'My Dashboard',
