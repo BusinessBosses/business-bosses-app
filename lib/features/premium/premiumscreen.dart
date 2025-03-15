@@ -58,6 +58,7 @@ class _PremiumScreenState extends State<PremiumScreen> {
     try {
       await addSubscription();
       // Navigate to SubscriptionConfirmation page
+      // ignore: use_build_context_synchronously, always_specify_types
       Navigator.of(context).push(MaterialPageRoute(
         builder: (BuildContext context) => const SubscriptionConfirmation(),
       ));
@@ -67,9 +68,10 @@ class _PremiumScreenState extends State<PremiumScreen> {
       log('Here ->>>>>> $e');
 
       showSnackbar(
-          title: 'OOPS!',
-          message: 'An error occurred, please try again!',
-          error: true);
+        title: 'OOPS!',
+        message: 'An error occurred, please try again!',
+        error: true,
+      );
     }
   }
 
@@ -88,9 +90,10 @@ class _PremiumScreenState extends State<PremiumScreen> {
       }
     } else {
       showSnackbar(
-          title: 'OOPS!',
-          message: 'An error occurred, please try again!',
-          error: true);
+        title: 'OOPS!',
+        message: 'An error occurred, please try again!',
+        error: true,
+      );
     }
     setState(() {});
   }
@@ -198,144 +201,144 @@ class _PremiumScreenState extends State<PremiumScreen> {
                     padding: const EdgeInsets.only(left: 20.0, right: 20),
                     child: Column(
                       children: <Widget>[
-                        Container(
-                          child: Column(
-                            children: <Widget>[
-                              Container(
-                                decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(15),
-                                  color: Colors.white,
-                                  border: Border.all(
-                                    color: Colors.grey.withOpacity(0.12),
-                                    width: 2,
-                                  ),
-                                ),
-                                padding: const EdgeInsets.symmetric(
-                                    horizontal: 15, vertical: 10),
-                                child: Column(
-                                  mainAxisAlignment: MainAxisAlignment.start,
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: <Widget>[
-                                    const Text(
-                                      'Whats included:',
-                                      style: TextStyle(
-                                          fontSize: 16,
-                                          fontWeight: FontWeight.bold),
-                                    ),
-                                    const SizedBox(height: 20),
-                                    Row(
-                                      children: <Widget>[
-                                        SvgPicture.asset(
-                                          'assets/svgs/goldcheckmark.svg',
-                                          height: 25,
-                                          color: primaryColorLT,
-                                        ),
-                                        const SizedBox(width: 15),
-                                        const Text(
-                                          'Premium Badge',
-                                          style: TextStyle(
-                                              fontSize: 14,
-                                              fontWeight: FontWeight.w600),
-                                        )
-                                      ],
-                                    ),
-                                    const SizedBox(height: 10),
-                                    Row(
-                                      children: <Widget>[
-                                        SvgPicture.asset('assets/svgs/coin.svg',
-                                            height: 30),
-                                        const SizedBox(width: 10),
-                                        const Text(
-                                          'Earn 100 coins per month',
-                                          style: TextStyle(
-                                              fontSize: 14,
-                                              fontWeight: FontWeight.w600),
-                                        )
-                                      ],
-                                    ),
-                                    const SizedBox(height: 10),
-                                    Row(
-                                      children: <Widget>[
-                                        SvgPicture.asset(
-                                            'assets/svgs/rocket.svg',
-                                            height: 25),
-                                        const SizedBox(width: 15),
-                                        const Text(
-                                          'Boost post FREE with coins',
-                                          style: TextStyle(
-                                              fontSize: 14,
-                                              fontWeight: FontWeight.w600),
-                                        )
-                                      ],
-                                    ),
-                                    const SizedBox(height: 15),
-                                    Row(
-                                      children: <Widget>[
-                                        SvgPicture.asset(
-                                            'assets/svgs/moreconnections.svg',
-                                            height: 20),
-                                        const SizedBox(width: 15),
-                                        const Text(
-                                          'More connections & referrals',
-                                          style: TextStyle(
-                                              fontSize: 14,
-                                              fontWeight: FontWeight.w600),
-                                        )
-                                      ],
-                                    ),
-                                    const SizedBox(height: 15),
-                                    Row(
-                                      children: <Widget>[
-                                        SvgPicture.asset(
-                                            'assets/svgs/addtolist.svg',
-                                            height: 25),
-                                        const SizedBox(width: 15),
-                                        const Text(
-                                          'Get listing featured on marketplace',
-                                          style: TextStyle(
-                                              fontSize: 14,
-                                              fontWeight: FontWeight.w600),
-                                        )
-                                      ],
-                                    ),
-                                    const SizedBox(height: 15),
-                                    Row(
-                                      children: <Widget>[
-                                        SvgPicture.asset(
-                                            'assets/svgs/handshake.svg',
-                                            height: 16),
-                                        const SizedBox(width: 18),
-                                        const Text(
-                                          'Access to Exclusive Partner Offers',
-                                          style: TextStyle(
-                                              fontSize: 14,
-                                              fontWeight: FontWeight.w600),
-                                        )
-                                      ],
-                                    ),
-                                    const SizedBox(height: 15),
-                                    Row(
-                                      children: <Widget>[
-                                        SvgPicture.asset(
-                                            'assets/svgs/campaign.svg',
-                                            height: 20),
-                                        const SizedBox(width: 18),
-                                        const Text(
-                                          'Grow business with marketing campaigns',
-                                          style: TextStyle(
-                                              fontSize: 14,
-                                              fontWeight: FontWeight.w600),
-                                        )
-                                      ],
-                                    ),
-                                  ],
+                        Column(
+                          children: <Widget>[
+                            Container(
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(15),
+                                color: Colors.white,
+                                border: Border.all(
+                                  color: Colors.grey.withOpacity(0.12),
+                                  width: 2,
                                 ),
                               ),
-                              const SizedBox(
-                                height: 30,
-                              )
-                            ],
-                          ),
+                              padding: const EdgeInsets.symmetric(
+                                  horizontal: 15, vertical: 10),
+                              child: Column(
+                                mainAxisAlignment: MainAxisAlignment.start,
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: <Widget>[
+                                  const Text(
+                                    'Whats included:',
+                                    style: TextStyle(
+                                        fontSize: 16,
+                                        fontWeight: FontWeight.bold),
+                                  ),
+                                  const SizedBox(height: 20),
+                                  Row(
+                                    children: <Widget>[
+                                      SvgPicture.asset(
+                                        'assets/svgs/goldcheckmark.svg',
+                                        height: 25,
+                                        colorFilter: const ColorFilter.mode(
+                                          primaryColorLT,
+                                          BlendMode.srcIn,
+                                        ),
+                                      ),
+                                      const SizedBox(width: 15),
+                                      const Text(
+                                        'Premium Badge',
+                                        style: TextStyle(
+                                            fontSize: 14,
+                                            fontWeight: FontWeight.w600),
+                                      )
+                                    ],
+                                  ),
+                                  const SizedBox(height: 10),
+                                  Row(
+                                    children: <Widget>[
+                                      SvgPicture.asset('assets/svgs/coin.svg',
+                                          height: 30),
+                                      const SizedBox(width: 10),
+                                      const Text(
+                                        'Earn 100 coins per month',
+                                        style: TextStyle(
+                                            fontSize: 14,
+                                            fontWeight: FontWeight.w600),
+                                      )
+                                    ],
+                                  ),
+                                  const SizedBox(height: 10),
+                                  Row(
+                                    children: <Widget>[
+                                      SvgPicture.asset('assets/svgs/rocket.svg',
+                                          height: 25),
+                                      const SizedBox(width: 15),
+                                      const Text(
+                                        'Boost post FREE with coins',
+                                        style: TextStyle(
+                                            fontSize: 14,
+                                            fontWeight: FontWeight.w600),
+                                      )
+                                    ],
+                                  ),
+                                  const SizedBox(height: 15),
+                                  Row(
+                                    children: <Widget>[
+                                      SvgPicture.asset(
+                                          'assets/svgs/moreconnections.svg',
+                                          height: 20),
+                                      const SizedBox(width: 15),
+                                      const Text(
+                                        'More connections & referrals',
+                                        style: TextStyle(
+                                            fontSize: 14,
+                                            fontWeight: FontWeight.w600),
+                                      )
+                                    ],
+                                  ),
+                                  const SizedBox(height: 15),
+                                  Row(
+                                    children: <Widget>[
+                                      SvgPicture.asset(
+                                          'assets/svgs/addtolist.svg',
+                                          height: 25),
+                                      const SizedBox(width: 15),
+                                      const Text(
+                                        'Get listing featured on marketplace',
+                                        style: TextStyle(
+                                            fontSize: 14,
+                                            fontWeight: FontWeight.w600),
+                                      )
+                                    ],
+                                  ),
+                                  const SizedBox(height: 15),
+                                  Row(
+                                    children: <Widget>[
+                                      SvgPicture.asset(
+                                          'assets/svgs/handshake.svg',
+                                          height: 16),
+                                      const SizedBox(width: 18),
+                                      const Text(
+                                        'Access to Exclusive Partner Offers',
+                                        style: TextStyle(
+                                            fontSize: 14,
+                                            fontWeight: FontWeight.w600),
+                                      )
+                                    ],
+                                  ),
+                                  const SizedBox(height: 15),
+                                  Row(
+                                    children: <Widget>[
+                                      SvgPicture.asset(
+                                          'assets/svgs/campaign.svg',
+                                          height: 20),
+                                      const SizedBox(width: 18),
+                                      const Text(
+                                        'Grow business with marketing campaigns',
+                                        style: TextStyle(
+                                            fontSize: 14,
+                                            fontWeight: FontWeight.w600),
+                                      )
+                                    ],
+                                  ),
+                                ],
+                              ),
+                            ),
+                            const SizedBox(
+                              height: 30,
+                            )
+                          ],
                         ),
                         const SizedBox(height: 7),
                         SizedBox(
@@ -595,7 +598,9 @@ class _PremiumScreenState extends State<PremiumScreen> {
                               // },
                               ),
                         ),
-                        const SizedBox(height: 8),
+                        const SizedBox(
+                          height: 8,
+                        ),
                         const SizedBox(
                           height: 50,
                         )
