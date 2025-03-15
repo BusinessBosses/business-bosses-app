@@ -2,7 +2,6 @@ import 'dart:developer';
 
 import 'package:business_bosses_v2/bbpro/widgets/button.dart';
 import 'package:business_bosses_v2/features/marketplace/presentation/subscription_confirmation.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_svg/svg.dart';
@@ -28,19 +27,6 @@ class PremiumScreen extends StatefulWidget {
 class _PremiumScreenState extends State<PremiumScreen> {
   final int _currentIndex = 0;
   String paymentMethodId = 'Promonth';
-  final Map<int, Widget> _segments = <int, Widget>{
-    0: const Padding(
-      padding: EdgeInsets.all(8),
-      child: Text(
-        'Monthly',
-        style: TextStyle(fontWeight: FontWeight.bold),
-      ),
-    ),
-    1: const Padding(
-      padding: EdgeInsets.all(8),
-      child: Text('Annually', style: TextStyle(fontWeight: FontWeight.bold)),
-    )
-  };
 
   bool isCoin = false;
   bool loading = false;
