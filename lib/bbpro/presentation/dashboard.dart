@@ -57,7 +57,7 @@ class _DashboardState extends State<Dashboard> {
   @override
   void initState() {
     if (!profileController.myProfile.hasShop) {
-      Get.to(() => const Setupshop(
+      Get.off(() => const Setupshop(
             backToHome: true,
           ));
     } else {
