@@ -58,7 +58,9 @@ class _GotoshopWidgetState extends State<GotoshopWidget> {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: <Widget>[
                             Text(
-                              shopController.shop!.name,
+                              shopController.shop != null
+                                  ? shopController.shop!.name
+                                  : '',
                               overflow: TextOverflow.ellipsis,
                               maxLines: 1,
                               style: const TextStyle(

@@ -60,8 +60,9 @@ class _DashboardState extends State<Dashboard> {
       Get.to(() => const Setupshop(
             backToHome: true,
           ));
+    } else {
+      shopController.loadStatistics();
     }
-    shopController.loadStatistics();
     super.initState();
   }
 
@@ -106,8 +107,8 @@ class _DashboardState extends State<Dashboard> {
                       ),
                       NotificationButton(
                         hasUnreadNotification:
-                            shopController.shop!.user!.unReadCount != null &&
-                                shopController.shop!.user!.unReadCount! > 0,
+                            profileController.myProfile.unReadCount != null &&
+                                profileController.myProfile.unReadCount! > 0,
                       ),
                     ],
                   )
@@ -309,15 +310,21 @@ class _DashboardState extends State<Dashboard> {
                               child: InfoCard(
                                 cardName: titles[index],
                                 value: index == 0
-                                    ? shopController.shopStats!.clientCount
-                                        .toString()
-                                    : index == 1
-                                        ? shopController.shopStats!.views
+                                    ? shopController.shopStats != null
+                                        ? shopController.shopStats!.clientCount
                                             .toString()
-                                        : index == 2
-                                            ? shopController
-                                                .shopStats!.projectCount
+                                        : '0'
+                                    : index == 1
+                                        ? shopController.shopStats != null
+                                            ? shopController.shopStats!.views
                                                 .toString()
+                                            : '0'
+                                        : index == 2
+                                            ? shopController.shopStats != null
+                                                ? shopController
+                                                    .shopStats!.projectCount
+                                                    .toString()
+                                                : '0'
                                             : '0',
                               ));
                         },
