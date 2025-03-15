@@ -282,7 +282,6 @@ class _SetupshopState extends State<Setupshop> with TickerProviderStateMixin {
         } else {
           if (mounted) {
             loading = false;
-            shopController.loading(false);
             setState(() {});
           }
         }

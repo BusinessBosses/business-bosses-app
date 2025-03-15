@@ -299,7 +299,8 @@ class _MarketplaceScreenState extends State<MarketplaceScreen>
                         textAlign: TextAlign.center,
                       ),
                     ),
-                    initialSelection: _marketController.selectedLocation,
+                    initialSelection:
+                        _marketController.selectedLocation ?? 'United Kingdom',
                     onChanged: (CountryCode? code) async {
                       setState(() {
                         selectedLocationChanged(code!.name, code.code);
@@ -318,9 +319,12 @@ class _MarketplaceScreenState extends State<MarketplaceScreen>
                             width: 5,
                           ),
                           Text(
-                            _marketController.selectedLocation!.length > 20
-                                ? '${_marketController.selectedLocation!.substring(0, 20)}...'
-                                : _marketController.selectedLocation!,
+                            _marketController.selectedLocation != null
+                                ? _marketController.selectedLocation!.length >
+                                        20
+                                    ? '${_marketController.selectedLocation!.substring(0, 20)}...'
+                                    : _marketController.selectedLocation ?? ''
+                                : '',
                             style: const TextStyle(
                               color: Colors.black,
                               fontWeight: FontWeight.w700,
