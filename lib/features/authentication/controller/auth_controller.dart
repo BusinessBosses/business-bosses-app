@@ -139,6 +139,7 @@ class AuthController extends GetxController {
         onError();
         print(result.asError?.error);
       } else {
+        print(result);
         Get.to(() => ForgotPasswordVerificationScreen(
               otp: code.toString(),
               emailAddress: emailAddress,
@@ -182,7 +183,6 @@ class AuthController extends GetxController {
   //       nonce: nonce,
   //     );
 
-
   //     _authCred = appleCredential.email;
   //     _authusername =
   //         '${appleCredential.givenName} ${appleCredential.familyName}';
@@ -212,15 +212,12 @@ class AuthController extends GetxController {
 
   //     print(_authCred! + ' ' + _authusername!);
 
-   
   //   } catch (error) {
   //     // Error occurred during sign in
   //     // log('Here ->>>>>> $error');
 
-      
   //   }
 
-  
   // }
 
   /// VALIDATE LOGIN INPUT

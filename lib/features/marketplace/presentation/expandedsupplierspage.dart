@@ -275,9 +275,18 @@ class _FilterUsersState extends State<ExpandedSuppliersPage> {
         const SizedBox(height: 5),
         GestureDetector(
           onTap: () async {
-            final Uri uri = Uri.parse('tel:${widget.supplier.phone}');
+            String processedUrl = url;
+            if (!(url.startsWith('http://') ||
+                url.startsWith('https://') ||
+                url.startsWith('mailto:') ||
+                url.startsWith('tel:'))) {
+              processedUrl = 'https://$url';
+            }
+            final Uri uri = Uri.parse(processedUrl);
             if (await canLaunchUrl(uri)) {
               await launchUrl(uri, mode: LaunchMode.externalApplication);
+            } else {
+              throw 'Could not launch $processedUrl';
             }
           },
           child: Text(
