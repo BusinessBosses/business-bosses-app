@@ -733,6 +733,8 @@ class _UserShopScreenState extends State<UserShopScreen> {
           if (shopController.userShop?.user?.website?.isNotEmpty ?? false)
             const SizedBox(height: 10),
           if (shopController.userShop?.email?.isNotEmpty ?? false)
+            const SizedBox(height: 10),
+          if (shopController.userShop?.email?.isNotEmpty ?? false)
             _buildContactRow(
               'assets/svgs/email.svg',
               'Email',

@@ -92,6 +92,7 @@
 			<string>whatsapp</string>
 			<string>tg</string>
 			<string>mailto</string>
+			<string>sms</string>
 			<string>tel</string>
 			<string>http</string>
 			<string>https</string>

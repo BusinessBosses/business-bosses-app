@@ -486,20 +486,21 @@ class _SetupshopState extends State<Setupshop> with TickerProviderStateMixin {
               ),
               child: Row(
                 children: <Widget>[
-                  const Text(
-                    'Benefits',
-                    style: TextStyle(
-                        fontSize: 15,
-                        fontWeight: FontWeight.bold,
-                        color: textColor),
+                  SvgPicture.asset(
+                    'assets/svgs/info.svg',
+                    color: primaryColorLT,
+                    height: 18,
                   ),
                   const SizedBox(
                     width: 5,
                   ),
-                  SvgPicture.asset(
-                    'assets/svgs/info.svg',
-                    height: 18,
-                  )
+                  const Text(
+                    'Benefits',
+                    style: TextStyle(
+                        fontSize: 14,
+                        fontWeight: FontWeight.bold,
+                        color: primaryColorLT),
+                  ),
                 ],
               ),
             ),
