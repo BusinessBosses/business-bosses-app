@@ -12,6 +12,7 @@ import 'package:business_bosses_v2/bbpro/controllers/shop_controller.dart';
 import 'package:business_bosses_v2/common/dialogs/snackbar.dart';
 import 'package:business_bosses_v2/features/home/home_screen.dart';
 import 'package:business_bosses_v2/features/marketplace/widgets/currency.dart';
+import 'package:business_bosses_v2/features/premium/proscreen.dart';
 import 'package:business_bosses_v2/features/profile/controller/profile_controller.dart';
 import 'package:business_bosses_v2/services/api_service.dart';
 import 'package:business_bosses_v2/utils/theme/theme.dart';
@@ -447,6 +448,63 @@ class _SetupshopState extends State<Setupshop> with TickerProviderStateMixin {
     return Scaffold(
       backgroundColor: probackgroundColor,
       appBar: AppBar(
+        actions: <Widget>[
+          GestureDetector(
+            onTap: () {
+              Get.bottomSheet(
+                isScrollControlled: true,
+                shape: const RoundedRectangleBorder(
+                  borderRadius: BorderRadius.only(
+                    topLeft: Radius.circular(20.0),
+                    topRight: Radius.circular(20.0),
+                  ),
+                ),
+                SizedBox(
+                  height: Get.height * 0.9,
+                  child: const Center(
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: <Widget>[
+                        Padding(
+                            padding:
+                                EdgeInsets.only(left: 0.0, top: 0, bottom: 10),
+                            child: ProSubscribeSection()),
+                      ],
+                    ),
+                  ),
+                ),
+                backgroundColor: Colors.white,
+              );
+            },
+            child: Container(
+              margin: const EdgeInsets.symmetric(vertical: 10, horizontal: 10),
+              padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 0),
+              decoration: BoxDecoration(
+                color: backgroundColor,
+                borderRadius: BorderRadius.circular(30),
+              ),
+              child: Row(
+                children: <Widget>[
+                  const Text(
+                    'Benefits',
+                    style: TextStyle(
+                        fontSize: 15,
+                        fontWeight: FontWeight.bold,
+                        color: textColor),
+                  ),
+                  const SizedBox(
+                    width: 5,
+                  ),
+                  SvgPicture.asset(
+                    'assets/svgs/info.svg',
+                    height: 18,
+                  )
+                ],
+              ),
+            ),
+          ),
+        ],
         // backgroundColor: probackgroundColor,
         leading: widget.shop != null || widget.backToHome
             ? IconButton(
