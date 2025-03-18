@@ -5,6 +5,7 @@ import 'package:business_bosses_v2/features/posts/widgets/images_viewer_screen.d
 import 'package:detectable_text_field/detector/sample_regular_expressions.dart';
 import 'package:detectable_text_field/widgets/detectable_text.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -238,27 +239,88 @@ class _FilterUsersState extends State<ExpandedSuppliersPage> {
             ),
           ),
           const SizedBox(height: 20),
-          _buildContactRow('assets/svgs/website.svg', 'Website',
-              widget.supplier.url, 'https://${widget.supplier.url}', 12),
+          _buildContactRow(
+              'assets/svgs/website.svg',
+              'Website',
+              widget.supplier.url,
+              'https://${widget.supplier.url}',
+              12, () async {
+            await Clipboard.setData(
+              ClipboardData(text: widget.supplier.url!),
+            );
+
+            // Show toast
+            ScaffoldMessenger.of(context).showSnackBar(
+              const SnackBar(content: Text('Website Url copied to clipboard')),
+            );
+
+            _launchURL(widget.supplier.url!);
+          }),
           _buildDivider(),
           const SizedBox(height: 10),
-          _buildContactRow('assets/svgs/email.svg', 'Email',
-              widget.supplier.email, 'mailto:${widget.supplier.email}', 9),
+          _buildContactRow(
+              'assets/svgs/email.svg',
+              'Email',
+              widget.supplier.email,
+              'mailto:${widget.supplier.email}',
+              9, () async {
+            await Clipboard.setData(
+              ClipboardData(text: widget.supplier.email!),
+            );
+
+            // Show toast
+            ScaffoldMessenger.of(context).showSnackBar(
+              const SnackBar(content: Text('Email copied to clipboard')),
+            );
+
+            _launchURL('mailto:${widget.supplier.email}');
+          }),
           _buildDivider(),
           const SizedBox(height: 10),
-          _buildContactRow('assets/svgs/phone.svg', 'Phone',
-              widget.supplier.phone, 'tel:${widget.supplier.phone}', 11),
+          _buildContactRow(
+              'assets/svgs/phone.svg',
+              'Phone',
+              widget.supplier.phone,
+              'tel:${widget.supplier.phone}',
+              11, () async {
+            await Clipboard.setData(
+              ClipboardData(text: widget.supplier.phone),
+            );
+
+            // Show toast
+            ScaffoldMessenger.of(context).showSnackBar(
+              const SnackBar(content: Text('Phone copied to clipboard')),
+            );
+
+            _launchURL('tel:${widget.supplier.phone}');
+          }),
           _buildDivider(),
           const SizedBox(height: 10),
-          _buildContactRow('assets/svgs/locationicon.svg', 'Location',
-              widget.supplier.location, '', 13),
+          _buildContactRow(
+            'assets/svgs/locationicon.svg',
+            'Location',
+            widget.supplier.location,
+            '',
+            13,
+            () async {
+              // Copy to clipboard
+              await Clipboard.setData(
+                ClipboardData(text: widget.supplier.location!),
+              );
+
+              // Show toast
+              ScaffoldMessenger.of(context).showSnackBar(
+                const SnackBar(content: Text('Location copied to clipboard')),
+              );
+            },
+          )
         ],
       ),
     );
   }
 
-  Widget _buildContactRow(
-      String iconPath, String label, String? value, String url, double height) {
+  Widget _buildContactRow(String iconPath, String label, String? value,
+      String url, double height, Function()? ontap) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: <Widget>[
@@ -274,21 +336,7 @@ class _FilterUsersState extends State<ExpandedSuppliersPage> {
         ),
         const SizedBox(height: 5),
         GestureDetector(
-          onTap: () async {
-            String processedUrl = url;
-            if (!(url.startsWith('http://') ||
-                url.startsWith('https://') ||
-                url.startsWith('mailto:') ||
-                url.startsWith('tel:'))) {
-              processedUrl = 'https://$url';
-            }
-            final Uri uri = Uri.parse(processedUrl);
-            if (await canLaunchUrl(uri)) {
-              await launchUrl(uri, mode: LaunchMode.externalApplication);
-            } else {
-              throw 'Could not launch $processedUrl';
-            }
-          },
+          onTap: ontap,
           child: Text(
             value!,
             style: TextStyle(

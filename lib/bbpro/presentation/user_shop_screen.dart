@@ -26,6 +26,7 @@ import 'package:business_bosses_v2/utils/theme/theme.dart';
 import 'package:detectable_text_field/detector/sample_regular_expressions.dart';
 import 'package:detectable_text_field/widgets/detectable_text.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:flutter_sticky_header/flutter_sticky_header.dart';
 import 'package:flutter_svg/svg.dart';
@@ -727,7 +728,21 @@ class _UserShopScreenState extends State<UserShopScreen> {
             'Virtual Address',
             '#${shopController.userShop!.appId} Biz-Centre,\nBusiness Bosses, ${shopController.userShop!.location}',
             12,
-            null,
+            () async {
+              await Clipboard.setData(
+                ClipboardData(
+                  text:
+                      '#${shopController.userShop!.appId} Biz-Centre, Business Bosses, ${shopController.userShop!.location}',
+                ),
+              );
+
+              // Show toast
+              ScaffoldMessenger.of(context).showSnackBar(
+                const SnackBar(
+                  content: Text('Virtual Address copied to clipboard'),
+                ),
+              );
+            },
           ),
           _buildDivider(),
           if (shopController.userShop?.user?.website?.isNotEmpty ?? false)
@@ -741,6 +756,14 @@ class _UserShopScreenState extends State<UserShopScreen> {
               shopController.userShop!.email,
               9,
               () async {
+                await Clipboard.setData(
+                  ClipboardData(text: shopController.userShop!.email!),
+                );
+
+                // Show toast
+                ScaffoldMessenger.of(context).showSnackBar(
+                  const SnackBar(content: Text('Email copied to clipboard')),
+                );
                 final Uri uri =
                     Uri.parse('mailto:${shopController.userShop!.email}');
                 if (await canLaunchUrl(uri)) {
@@ -759,7 +782,17 @@ class _UserShopScreenState extends State<UserShopScreen> {
               shopController.userShop!.phone,
               11,
               () async {
-                print('${shopController.userShop!.phone}');
+                // Copy to clipboard
+                await Clipboard.setData(
+                  ClipboardData(text: shopController.userShop!.phone!),
+                );
+
+                // Show toast
+                ScaffoldMessenger.of(context).showSnackBar(
+                  const SnackBar(
+                      content: Text('Phone number copied to clipboard')),
+                );
+
                 final Uri uri =
                     Uri.parse('tel:${shopController.userShop!.phone}');
 
