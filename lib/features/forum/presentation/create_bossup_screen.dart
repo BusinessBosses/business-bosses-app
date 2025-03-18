@@ -332,7 +332,7 @@ class _CreateBossUpScreenState extends State<CreateBossUpScreen> {
                         ),
                         GestureDetector(
                           onTap: () {
-                            Get.to(const MarketplaceScreen());
+                            Get.to(() => const MarketplaceScreen());
                           },
                           child: const Row(
                             children: <Widget>[

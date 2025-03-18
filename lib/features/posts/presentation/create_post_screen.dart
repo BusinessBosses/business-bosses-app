@@ -427,7 +427,7 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
                           ),
                           GestureDetector(
                             onTap: () {
-                              Get.to(const MarketplaceScreen());
+                              Get.to(() => const MarketplaceScreen());
                             },
                             child: const Row(
                               children: <Widget>[

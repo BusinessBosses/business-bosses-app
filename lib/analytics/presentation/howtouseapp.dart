@@ -41,7 +41,7 @@ class _HowToUseAppScreenState extends State<HowToUseAppScreen> {
         'title': 'Marketplace',
         'description':
             'Browse and purchase items from other users. You can find a wide variety of items here.',
-        'onTileClicked': () => Get.to(const MarketplaceScreen()),
+        'onTileClicked': () => Get.to(() => const MarketplaceScreen()),
       },
       {
         'icon': SvgPicture.asset(
@@ -87,7 +87,7 @@ class _HowToUseAppScreenState extends State<HowToUseAppScreen> {
         'title': 'Boss Up',
         'description':
             'Connect with other users and build your network. Find connections who share your interests.',
-        'onTileClicked': () => Get.to(const AllCommunitiesScreen()),
+        'onTileClicked': () => Get.to(() => const AllCommunitiesScreen()),
       },
       {
         'icon': SvgPicture.asset(
@@ -101,7 +101,7 @@ class _HowToUseAppScreenState extends State<HowToUseAppScreen> {
         'title': 'Messages',
         'description':
             'Communicate with other users through private messages. Stay connected with your connections and customers',
-        'onTileClicked': () => Get.to(const ChatScreen()),
+        'onTileClicked': () => Get.to(() => const ChatScreen()),
       },
       {
         'icon': SvgPicture.asset(
@@ -145,7 +145,7 @@ class _HowToUseAppScreenState extends State<HowToUseAppScreen> {
         'title': 'Partnership',
         'description':
             'Support and invest in projects you believe in. Discover opportunities to back innovative ideas and businesses.',
-        'onTileClicked': () => Get.to(const Bossuppartner())
+        'onTileClicked': () => Get.to(() => const Bossuppartner())
       },
       {
         'icon': SvgPicture.asset(
@@ -159,7 +159,7 @@ class _HowToUseAppScreenState extends State<HowToUseAppScreen> {
         'title': 'Settings',
         'description':
             'Customize your app preferences and manage your account settings. ',
-        'onTileClicked': () => Get.to(const SettingsScreen()),
+        'onTileClicked': () => Get.to(() => const SettingsScreen()),
       },
       {
         'icon': const Icon(

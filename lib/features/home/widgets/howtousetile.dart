@@ -11,7 +11,7 @@ class HowtouseTile extends StatelessWidget {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
-        Get.to(const HowToUseAppScreen());
+        Get.to(() => const HowToUseAppScreen());
       },
       child: Center(
         child: Padding(

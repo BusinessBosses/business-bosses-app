@@ -73,7 +73,7 @@ class _MyOrdersScreenState extends State<MyOrdersScreen> {
             padding: const EdgeInsets.only(right: 10.0),
             child: GestureDetector(
               onTap: () {
-                Get.to(const MarketplaceScreen());
+                Get.to(() => const MarketplaceScreen());
               },
               child: CircleAvatar(
                 backgroundColor: backgroundColor,

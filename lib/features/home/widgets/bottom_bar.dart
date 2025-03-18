@@ -75,8 +75,8 @@ class BottomBar extends StatelessWidget {
 
                               if (activeIndex == 0) {
                                 //   profileController.myProfile.isSubscribed
-                                //       ? Get.to(const Bottomnavscreen(noBack: false))
-                                Get.to(const ChatScreen());
+                                //       ? Get.to(() =>const Bottomnavscreen(noBack: false))
+                                Get.to(() => const ChatScreen());
                               } else {
                                 // profileController.myProfile.isSubscribed
                                 //     ? Get.to(const Bottomnavscreen(noBack: false))
