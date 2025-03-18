@@ -759,11 +759,11 @@ class _UserShopScreenState extends State<UserShopScreen> {
               shopController.userShop!.phone,
               11,
               () async {
+                print('${shopController.userShop!.phone}');
                 final Uri uri =
                     Uri.parse('tel:${shopController.userShop!.phone}');
-                if (await canLaunchUrl(uri)) {
-                  await launchUrl(uri, mode: LaunchMode.externalApplication);
-                }
+
+                await launchUrl(uri, mode: LaunchMode.externalApplication);
               },
             ),
           if (shopController.userShop!.facebook != null ||
