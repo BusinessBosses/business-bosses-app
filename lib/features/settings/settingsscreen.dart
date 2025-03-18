@@ -558,8 +558,28 @@ class _SettingsScreenState extends State<SettingsScreen> {
   ];
 
   void logout() async {
-    await _apiService.logout();
-    Get.delete<ShopController>(force: true);
+    // Show loading dialog
+    Get.dialog(
+      const Center(child: CircularProgressIndicator()),
+      barrierDismissible:
+          false, // Prevent dialog from closing when tapping outside
+    );
+
+    try {
+      // Await logout response
+      await _apiService.logout();
+
+      // Delete ShopController after successful logout
+      Get.delete<ShopController>(force: true);
+    } catch (error) {
+      // Handle error if needed
+      // Optionally, show an error message here
+    } finally {
+      // Remove the loading dialog if it's still open
+      if (Get.isDialogOpen ?? false) {
+        Get.back();
+      }
+    }
   }
 
   Future<void> getVersionNumber() async {
