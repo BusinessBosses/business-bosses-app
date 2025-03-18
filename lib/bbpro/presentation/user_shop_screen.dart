@@ -107,7 +107,7 @@ class _UserShopScreenState extends State<UserShopScreen> {
                 arguments: shopController.userShop!.user,
               );
             } else if (action['text'] == 'Search') {
-              Get.to(const BizCenterSearch());
+              Get.to(() => const BizCenterSearch());
             } else if (action['text'] == 'Share') {
               _shareBizCenter();
             } else if (action['text'] == 'Follow' ||

@@ -408,7 +408,7 @@ class _DepositsScreenState extends State<DepositsScreen> {
                               ),
                               GestureDetector(
                                 onTap: () {
-                                  Get.to(const ProshopdealsScreen());
+                                  Get.to(() => const ProshopdealsScreen());
                                 },
                                 child: Container(
                                   padding: const EdgeInsets.symmetric(

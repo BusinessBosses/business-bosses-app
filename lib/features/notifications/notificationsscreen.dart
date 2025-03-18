@@ -59,7 +59,7 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
               ),
               actions: <Widget>[
                 GestureDetector(
-                  onTap: () => Get.to(const ChatScreen()),
+                  onTap: () => Get.to(() => const ChatScreen()),
                   child: Padding(
                     padding: const EdgeInsets.only(
                       right: 10.0,

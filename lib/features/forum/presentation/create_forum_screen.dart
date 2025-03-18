@@ -417,7 +417,7 @@ class _CreateForumScreenState extends State<CreateForumScreen> {
                     children: <Widget>[
                       GestureDetector(
                         onTap: () {
-                          Get.to(const MarketplaceScreen());
+                          Get.to(() => const MarketplaceScreen());
                         },
                         child: const Row(
                           children: <Widget>[

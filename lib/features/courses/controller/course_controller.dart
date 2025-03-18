@@ -11,6 +11,7 @@ import 'package:business_bosses_v2/features/home/controller/home_controller.dart
 import 'package:business_bosses_v2/features/profile/controller/profile_controller.dart';
 import 'package:business_bosses_v2/services/api_service.dart';
 import 'package:business_bosses_v2/utils/constants/constants.dart';
+import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
@@ -52,15 +53,17 @@ class CourseController extends GetxController {
   void onInit() async {
     initSocket();
     super.onInit();
-    if (Get.arguments == null) {
-      Get.back();
-      return;
-    } else {
-      if (Get.arguments.runtimeType == Industry) {
-        industry.value = Get.arguments;
-        initCourses();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (Get.arguments == null) {
+        Get.back();
+        return;
+      } else {
+        if (Get.arguments.runtimeType == Industry) {
+          industry.value = Get.arguments;
+          initCourses();
+        }
       }
-    }
+    });
   }
 
   void clearUserSearch() {
@@ -201,7 +204,8 @@ class CourseController extends GetxController {
     update();
 
     final ApiResponseModel response = await ApiService.get(
-        path: '/courses/get-industry-courses/${industry.value!.industryId}?size=1000');
+        path:
+            '/courses/get-industry-courses/${industry.value!.industryId}?size=1000');
     if (response.success) {
       for (int i = 0; i < response.data['rows'].length; i++) {
         if (response.data['rows'][i]['user'] != null) {

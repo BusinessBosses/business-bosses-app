@@ -47,7 +47,7 @@ class DrawerContent extends StatelessWidget {
             'Browse and purchase items from other users. You can find a wide variety of items here.',
         'onTileClicked': () {
           oncloseclick?.call();
-          Get.to(const MarketplaceScreen());
+          Get.to(() => const MarketplaceScreen());
         },
       },
       {
@@ -96,7 +96,7 @@ class DrawerContent extends StatelessWidget {
             'Connect with other users and build your network. Find connections who share your interests.',
         'onTileClicked': () {
           oncloseclick?.call();
-          Get.to(const AllCommunitiesScreen());
+          Get.to(() => const AllCommunitiesScreen());
         },
       },
       !profileController.myProfile.isSubscribed
@@ -154,7 +154,7 @@ class DrawerContent extends StatelessWidget {
                   'Communicate with other users through private messages. Stay connected with your connections and customers',
               'onTileClicked': () {
                 oncloseclick?.call();
-                Get.to(const ChatScreen());
+                Get.to(() =>const ChatScreen());
               },
             },
       {
@@ -188,7 +188,7 @@ class DrawerContent extends StatelessWidget {
             'Discover and attend events hosted by other users. Find events that match your interests and goals.',
         'onTileClicked': () {
           oncloseclick?.call();
-          Get.to(const MyOrdersScreen());
+          Get.to(() => const MyOrdersScreen());
         },
       },
       // {
@@ -225,7 +225,7 @@ class DrawerContent extends StatelessWidget {
             'Support and invest in projects you believe in. Discover opportunities to back innovative ideas and businesses.',
         'onTileClicked': () {
           oncloseclick?.call();
-          Get.to(const Bossuppartner());
+          Get.to(() => const Bossuppartner());
         }
       },
       {
@@ -242,7 +242,7 @@ class DrawerContent extends StatelessWidget {
             'Customize your app preferences and manage your account settings. ',
         'onTileClicked': () {
           oncloseclick?.call();
-          Get.to(const SettingsScreen());
+          Get.to(() => const SettingsScreen());
         },
       },
     ];
@@ -262,7 +262,7 @@ class DrawerContent extends StatelessWidget {
                   children: [
                     GestureDetector(
                       onTap: () {
-                        Get.to(const HomeScreen());
+                        Get.to(() => const HomeScreen());
                       },
                       child: Row(
                         children: [
@@ -442,7 +442,7 @@ class DrawerContent extends StatelessWidget {
               Padding(
                 padding: const EdgeInsets.all(15.0),
                 child: GestureDetector(
-                  onTap: () => Get.to(const MyProfileScreen()),
+                  onTap: () => Get.to(() => const MyProfileScreen()),
                   child: Row(
                     children: [
                       SizedBox(

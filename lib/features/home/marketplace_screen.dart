@@ -612,13 +612,14 @@ class _MarketplaceScreenState extends State<MarketplaceScreen>
                                         },
                                       )
                                 : _marketplaceTabController.index == 1
-                                    ? Get.to(const CreateProductListing(
-                                        isMarketplace: true,
-                                      ))
+                                    ? Get.to(() => const CreateProductListing(
+                                          isMarketplace: true,
+                                        ))
                                     : _marketplaceTabController.index == 2
-                                        ? Get.to(const CreateServiceListing(
-                                            isMarketplace: true,
-                                          ))
+                                        ? Get.to(
+                                            () => const CreateServiceListing(
+                                                  isMarketplace: true,
+                                                ))
                                         : showModalBottomSheet(
                                             context: context,
                                             shape: const RoundedRectangleBorder(

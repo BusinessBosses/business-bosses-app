@@ -21,6 +21,7 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
   AutovalidateMode _autovalidateMode = AutovalidateMode.disabled;
+  final AuthController authController = Get.put(AuthController());
 
   String? _email;
   // ignore: unused_field
@@ -119,7 +120,7 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
                         //   _isUniqueEmail = result != null;
                         // });
                         if (result != null) {
-                          AuthController().sendOtpPassword(
+                          authController.sendOtpPassword(
                               emailAddress: _email!,
                               username: result,
                               onError: () {
