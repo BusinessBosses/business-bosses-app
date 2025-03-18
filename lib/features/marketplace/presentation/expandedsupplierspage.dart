@@ -410,11 +410,14 @@ class _FilterUsersState extends State<ExpandedSuppliersPage> {
   }
 
   Future<void> _launchURL(String urlString) async {
-    if (!urlString.startsWith('http://') && !urlString.startsWith('https://')) {
+    // Ensure the URL has a valid scheme
+    if (!urlString.startsWith(RegExp(r'^(http|https|tel|mailto):'))) {
       urlString = 'https://$urlString';
     }
+
     final Uri url = Uri.parse(urlString);
-    if (!await launchUrl(url, mode: LaunchMode.inAppBrowserView)) {
+
+    if (!await launchUrl(url, mode: LaunchMode.platformDefault)) {
       throw Exception('Could not launch $urlString');
     }
   }
