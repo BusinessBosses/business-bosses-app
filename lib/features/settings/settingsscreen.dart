@@ -559,7 +559,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
 
   void logout() async {
     await _apiService.logout();
-    Get.delete<ShopController>;
+    Get.delete<ShopController>();
   }
 
   Future<void> getVersionNumber() async {

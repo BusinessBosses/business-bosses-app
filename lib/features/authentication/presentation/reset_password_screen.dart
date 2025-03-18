@@ -1,3 +1,4 @@
+import 'package:business_bosses_v2/features/authentication/presentation/login_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
@@ -5,7 +6,6 @@ import 'package:get/get.dart';
 import '../../../action/action.dart';
 import '../../../common/widgets/buttons/custom_button.dart';
 import '../../../functions/validators/validator.dart';
-import '../../../navigation/routes.dart';
 import '../../../services/api_service.dart';
 import '../../../utils/theme/theme.dart';
 
@@ -151,7 +151,7 @@ class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
                         } else {
                           Get.snackbar('Success',
                               'Password reset completed succesfully!');
-                          Get.toNamed(Routes.login);
+                          Get.offAll(() => const LoginScreen());
                         }
                       },
                       isProcessing: _isProcessing,

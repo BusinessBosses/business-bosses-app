@@ -239,7 +239,7 @@ class _FilterUsersState extends State<ExpandedSuppliersPage> {
           ),
           const SizedBox(height: 20),
           _buildContactRow('assets/svgs/website.svg', 'Website',
-              widget.supplier.url, 'https://${widget.supplier.url}', 12),
+              widget.supplier.url, '${widget.supplier.url}', 12),
           _buildDivider(),
           const SizedBox(height: 10),
           _buildContactRow('assets/svgs/email.svg', 'Email',
@@ -284,7 +284,7 @@ class _FilterUsersState extends State<ExpandedSuppliersPage> {
             }
             final Uri uri = Uri.parse(processedUrl);
             if (await canLaunchUrl(uri)) {
-              await launchUrl(uri, mode: LaunchMode.externalApplication);
+              await launchUrl(uri, mode: LaunchMode.inAppBrowserView);
             } else {
               throw 'Could not launch $processedUrl';
             }
