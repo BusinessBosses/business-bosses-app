@@ -115,7 +115,7 @@ class _AllCommunitiesScreenState extends State<AllCommunitiesScreen>
               child: Row(
                 children: <Widget>[
                   SvgPicture.asset(
-                    'assets/svgs/grow.svg',
+                    'assets/svgs/growfilled.svg',
                     height: 15,
                     color: primaryColorLT,
                   ),

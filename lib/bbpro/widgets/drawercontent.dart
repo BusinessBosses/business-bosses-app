@@ -11,6 +11,8 @@ import 'package:business_bosses_v2/features/home/marketplace_screen.dart';
 import 'package:business_bosses_v2/features/home/sellProduct.dart';
 import 'package:business_bosses_v2/features/moreinfoscreens/bossuppartner.dart';
 import 'package:business_bosses_v2/features/posts/presentation/create_poll_screen.dart';
+import 'package:business_bosses_v2/features/premium/premiumscreen.dart';
+import 'package:business_bosses_v2/features/profile/controller/profile_controller.dart';
 import 'package:business_bosses_v2/features/profile/presentation/my_profile_screen.dart';
 import 'package:business_bosses_v2/features/settings/settingsscreen.dart';
 import 'package:business_bosses_v2/navigation/routes.dart';
@@ -29,6 +31,7 @@ class DrawerContent extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    ProfileController profileController = Get.find();
     List<Map<String, dynamic>> tilesData = <Map<String, dynamic>>[
       {
         'icon': SvgPicture.asset(
@@ -96,23 +99,64 @@ class DrawerContent extends StatelessWidget {
           Get.to(const AllCommunitiesScreen());
         },
       },
-      {
-        'icon': SvgPicture.asset(
-          'assets/svgs/messages.svg',
-          height: 25,
-          colorFilter: const ColorFilter.mode(
-            textColor,
-            BlendMode.srcIn,
-          ),
-        ),
-        'title': 'Messages',
-        'description':
-            'Communicate with other users through private messages. Stay connected with your connections and customers',
-        'onTileClicked': () {
-          oncloseclick?.call();
-          Get.to(const ChatScreen());
-        },
-      },
+      !profileController.myProfile.isSubscribed
+          ? {
+              'icon': SvgPicture.asset(
+                'assets/svgs/growfilled.svg',
+                height: 22,
+                colorFilter: const ColorFilter.mode(
+                  textColor,
+                  BlendMode.srcIn,
+                ),
+              ),
+              'title': 'Grow',
+              'description':
+                  'Access tools and resources to grow your business and reach new heights.',
+              'onTileClicked': () {
+                Get.bottomSheet(
+                  isScrollControlled: true,
+                  shape: const RoundedRectangleBorder(
+                    borderRadius: BorderRadius.only(
+                      topLeft: Radius.circular(20.0),
+                      topRight: Radius.circular(20.0),
+                    ),
+                  ),
+                  SizedBox(
+                    height: Get.height * 0.9,
+                    child: const Center(
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: <Widget>[
+                          Padding(
+                              padding: EdgeInsets.only(
+                                  left: 0.0, top: 0, bottom: 10),
+                              child: PremiumScreen()),
+                        ],
+                      ),
+                    ),
+                  ),
+                  backgroundColor: Colors.white,
+                );
+              }
+            }
+          : {
+              'icon': SvgPicture.asset(
+                'assets/svgs/messages.svg',
+                height: 25,
+                colorFilter: const ColorFilter.mode(
+                  textColor,
+                  BlendMode.srcIn,
+                ),
+              ),
+              'title': 'Messages',
+              'description':
+                  'Communicate with other users through private messages. Stay connected with your connections and customers',
+              'onTileClicked': () {
+                oncloseclick?.call();
+                Get.to(const ChatScreen());
+              },
+            },
       {
         'icon': SvgPicture.asset(
           'assets/svgs/calendar.svg',
