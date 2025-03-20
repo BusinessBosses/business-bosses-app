@@ -13,6 +13,7 @@ import 'package:business_bosses_v2/features/courses/presentation/create_course.d
 import 'package:business_bosses_v2/features/courses/presentation/pdfscreen.dart';
 import 'package:business_bosses_v2/features/courses/widgets/course_comment_bottomsheet.dart';
 import 'package:business_bosses_v2/features/courses/widgets/unpaidcoursepopup.dart';
+import 'package:business_bosses_v2/features/forum/models/industry.dart';
 import 'package:business_bosses_v2/features/posts/presentation/boost_post_screen.dart';
 import 'package:business_bosses_v2/features/posts/widgets/youtube_display.dart';
 import 'package:business_bosses_v2/features/posts/widgets/youtube_display_item.dart';
@@ -110,6 +111,17 @@ class _ExpandedCourseScreenState extends State<ExpandedCourseScreen> {
   @override
   void initState() {
     super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (Get.arguments == null) {
+        Get.back();
+        return;
+      } else {
+        if (Get.arguments.runtimeType == Industry) {
+          courseController.industry.value = Get.arguments;
+          courseController.initCourses();
+        }
+      }
+    });
     // Initialize data or perform any other necessary setup
     if (widget.course.courseType == 'paid' &&
         widget.course.userId != profileController.myProfile.uid) {
