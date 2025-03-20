@@ -8,6 +8,7 @@ import 'package:business_bosses_v2/action/action.dart';
 import 'package:business_bosses_v2/common/models/user_model.dart';
 import 'package:business_bosses_v2/features/authentication/controller/auth_controller.dart';
 import 'package:business_bosses_v2/navigation/routes.dart';
+import 'package:business_bosses_v2/features/profile/presentation/update_profile_screen.dart';
 
 import 'package:country_picker/country_picker.dart';
 import 'package:crypto/crypto.dart';
@@ -160,13 +161,12 @@ class _SignUpFormState extends State<SignUpForm> {
                           } else {
                             Get.snackbar(
                                 'Success', 'You have registered succesfully!');
-                            Get.toNamed(
-                              Routes.updateProfile,
-                              arguments: UserModel(
-                                username: _username!,
-                                email: _authCred!,
-                              ),
-                            );
+
+                            Get.off(() => UpdateProfileScreen(
+                                    user: UserModel(
+                                  username: _username!,
+                                  email: _authCred!,
+                                )));
                           }
                         } else {
                           Get.snackbar('Error',
@@ -225,13 +225,12 @@ class _SignUpFormState extends State<SignUpForm> {
         await _handleRegister();
         Get.snackbar('Success', 'Authentication completed');
         await logEvents('signup', 'email');
-        Get.toNamed(
-          Routes.updateProfile,
-          arguments: UserModel(
-            username: _authusername!,
-            email: _authCred!,
-          ),
-        );
+        Get.off(() => UpdateProfileScreen(
+                user: UserModel(
+              name: _username!,
+              username: _username!,
+              email: _authCred!,
+            )));
       }
     } catch (error) {
       // Error oc'${_authCred!} ${_authusername!}'og('Here ->>>>>> $error');
@@ -268,14 +267,12 @@ class _SignUpFormState extends State<SignUpForm> {
         Get.snackbar('Error', user['error']);
       } else {
         Get.snackbar('Success', 'You have registered succesfully!');
-        Get.toNamed(
-          Routes.updateProfile,
-          arguments: UserModel(
-            name: _username!,
-            username: _username!,
-            email: _authCred!,
-          ),
-        );
+        Get.off(() => UpdateProfileScreen(
+                user: UserModel(
+              name: _username!,
+              username: _username!,
+              email: _authCred!,
+            )));
       }
       await _googleSignIn.disconnect();
     } else {

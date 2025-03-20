@@ -1,4 +1,6 @@
 import 'package:business_bosses_v2/common/models/api_response_model.dart';
+import 'package:business_bosses_v2/common/models/user_model.dart';
+import 'package:business_bosses_v2/features/profile/presentation/update_profile_screen.dart';
 import 'package:business_bosses_v2/navigation/routes.dart';
 import 'package:business_bosses_v2/services/api_service.dart';
 import 'package:business_bosses_v2/utils/constants/constants.dart';
@@ -16,7 +18,8 @@ class AuthRepository {
       if (response.data['hasUpdatedProfile']) {
         Get.toNamed(Routes.home);
       } else {
-        Get.toNamed(Routes.updateProfile, arguments: response.data);
+        Get.off(
+            () => UpdateProfileScreen(user: UserModel.fromMap(response.data)));
       }
     } else {
       throw 'Check login repository';

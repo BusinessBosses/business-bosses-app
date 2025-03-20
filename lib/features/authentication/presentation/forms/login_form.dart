@@ -6,6 +6,7 @@ import 'package:business_bosses_v2/common/widgets/buttons/custom_button.dart';
 
 import 'package:business_bosses_v2/common/widgets/text_widget.dart'
     show TextWidget;
+import 'package:business_bosses_v2/features/profile/presentation/update_profile_screen.dart';
 import 'package:country_picker/country_picker.dart';
 import 'package:crypto/crypto.dart';
 import 'package:firebase_analytics/firebase_analytics.dart';
@@ -140,13 +141,12 @@ class _LoginFormState extends State<LoginForm> {
         await _handleRegister();
         Get.snackbar('Success', 'Authentication completed');
         await logEvents('signup', 'email');
-        Get.toNamed(
-          Routes.updateProfile,
-          arguments: UserModel(
-            username: _authusername!,
-            email: _authCred!,
-          ),
-        );
+
+        Get.off(() => UpdateProfileScreen(
+                user: UserModel(
+              username: _authusername!,
+              email: _authCred!,
+            )));
       }
     } catch (error) {
       // Error occurred during sign in
@@ -189,8 +189,8 @@ class _LoginFormState extends State<LoginForm> {
             // GetStorage().write('isFirstTime', false);
             Get.offAndToNamed(Routes.home);
           } else {
-            Get.offAndToNamed(Routes.updateProfile,
-                arguments: UserModel.fromMap(user['data']));
+            Get.off(() =>
+                UpdateProfileScreen(user: UserModel.fromMap(user['data'])));
           }
         }
 
@@ -352,8 +352,8 @@ class _LoginFormState extends State<LoginForm> {
                       // GetStorage().write('isFirstTime', false);
                       Get.offAndToNamed(Routes.home);
                     } else {
-                      Get.offAndToNamed(Routes.updateProfile,
-                          arguments: UserModel.fromMap(user['data']));
+                      Get.off(() => UpdateProfileScreen(
+                          user: UserModel.fromMap(user['data'])));
                     }
                   }
                 }
