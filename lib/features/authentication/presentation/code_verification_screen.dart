@@ -1,4 +1,5 @@
 import 'package:business_bosses_v2/common/models/user_model.dart';
+import 'package:business_bosses_v2/features/profile/presentation/update_profile_screen.dart';
 import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
@@ -138,13 +139,11 @@ class _CodeVerificationScreenState extends State<CodeVerificationScreen> {
                       Get.snackbar(
                           'Success', 'You have registered succesfully!');
                       await logEvents('signup', 'email');
-                      Get.toNamed(
-                        Routes.updateProfile,
-                        arguments: UserModel(
-                          username: widget.userName,
-                          email: widget.emailAddress,
-                        ),
-                      );
+                      Get.off(() => UpdateProfileScreen(
+                              user: UserModel(
+                            username: widget.userName,
+                            email: widget.emailAddress,
+                          )));
                     }
                     // } else {
                     //   Get.snackbar('Error', 'Incorrect OTP');

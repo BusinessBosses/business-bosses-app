@@ -1408,7 +1408,9 @@ class _UpdateProfileScreenState extends State<UpdateProfileScreen> {
     }
     final SharedPreferences prefs = await SharedPreferences.getInstance();
 
+    final String? userId = prefs.getString(Constants.USER_ID);
     Map<String, dynamic> updateData = <String, dynamic>{
+      'uid': userId,
       'name': _name,
       'bio': _bio,
       'username': _username,
@@ -1427,7 +1429,6 @@ class _UpdateProfileScreenState extends State<UpdateProfileScreen> {
       'gender': _gender,
       'photoUrl': _photoUrl,
     };
-    final String? userId = prefs.getString(Constants.USER_ID);
     // print('$userId token $updateData');
     // return;
     ApiResponseModel response =
