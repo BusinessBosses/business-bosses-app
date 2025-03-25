@@ -119,13 +119,8 @@ class ProfileController extends GetxController {
     } else {
       return <String, dynamic>{
         'posts': <PostModel>[],
-        'user': <dynamic, dynamic>{
-          ...response.data['user']['data'],
-          'connections': response.data['user']['data']['connections']
-              .map((dynamic mp) => mp['connect'])
-              .toList()
-        },
-        'industries': response.data['industries']
+        'user': <String, dynamic>{},
+        'industries': <Industry>[]
       };
     }
   }
@@ -235,7 +230,7 @@ class ProfileController extends GetxController {
     final Map<String, dynamic> res =
         await ProfileController.loadData(prefs.getString(Constants.USER_ID)!);
 
-    posts = res['posts'];
+    posts = res['posts'] ?? <PostModel>[];
     isLoading(false);
   }
 

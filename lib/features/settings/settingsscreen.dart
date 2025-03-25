@@ -4,7 +4,6 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:business_bosses_v2/action/action.dart';
-import 'package:business_bosses_v2/bbpro/controllers/shop_controller.dart';
 import 'package:business_bosses_v2/common/widgets/buttons/my_outlined_button.dart';
 import 'package:business_bosses_v2/features/profile/controller/profile_controller.dart';
 import 'package:business_bosses_v2/features/settings/settingsItemModal.dart';
@@ -570,7 +569,6 @@ class _SettingsScreenState extends State<SettingsScreen> {
       await _apiService.logout();
 
       // Delete ShopController after successful logout
-      Get.delete<ShopController>(force: true);
     } catch (error) {
       // Handle error if needed
       // Optionally, show an error message here

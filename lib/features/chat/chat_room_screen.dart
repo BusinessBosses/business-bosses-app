@@ -8,13 +8,13 @@ import 'package:business_bosses_v2/features/home/controller/home_controller.dart
 import 'package:business_bosses_v2/features/marketplace/presentation/seller_reviews.dart';
 import 'package:business_bosses_v2/features/profile/controller/profile_controller.dart';
 import 'package:business_bosses_v2/navigation/routes.dart';
-import 'package:business_bosses_v2/services/api_service.dart';
 import 'package:detectable_text_field/detector/sample_regular_expressions.dart';
 import 'package:detectable_text_field/widgets/detectable_text.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import '../../action/action.dart';
 import '../../common/widgets/buttons/button.dart';
 import '../../common/widgets/chat_box.dart';
@@ -1228,7 +1228,8 @@ class StartCallDialog extends StatelessWidget {
   }
 
   Future<String> startCall(Map<String, dynamic> data) async {
-    final String? token = sandBox.read(Constants.ACCESS_TOKEN);
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+    final String token = prefs.getString(Constants.ACCESS_TOKEN) ?? '';
     // Call your backend API to start the call
     final http.Response response = await http.post(
       Uri.parse(

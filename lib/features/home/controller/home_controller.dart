@@ -23,9 +23,8 @@ import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:business_bosses_v2/utils/theme/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:get_storage/get_storage.dart';
 import 'package:socket_io_client/socket_io_client.dart' as IO;
-
-import '../../../navigation/routes.dart';
 
 class HomeController extends GetxController {
   late IO.Socket socket;
@@ -37,7 +36,7 @@ class HomeController extends GetxController {
   // final MarketController _marketController = Get.put(MarketController());
   // final CommunitiesController _communitiesController =
   //     Get.put(CommunitiesController());
-
+  final GetStorage sandBox = GetStorage();
   RxBool error = RxBool(false);
   RxBool noConnection = RxBool(false);
   List<Industry> industries = [];
@@ -791,8 +790,12 @@ class HomeController extends GetxController {
           actions: [
             TextButton(
               onPressed: () {
+                Get.dialog(
+                  const Center(child: CircularProgressIndicator()),
+                  barrierDismissible:
+                      false, // Prevent dialog from closing when tapping outside
+                );
                 ApiService().logout();
-                Navigator.of(context).pop(context);
               },
               child: const TextWidget(
                 text: 'Login',
@@ -1007,9 +1010,9 @@ class HomeController extends GetxController {
     error(false);
     update();
     final ApiResponseModel response = await HomeRepository.fetchData();
-    final ApiResponseModel partner = await HomeRepository.fetchPartner();
-    final ApiResponseModel promoted = await HomeRepository.fetchPromoted();
     if (response.success) {
+      final ApiResponseModel partner = await HomeRepository.fetchPartner();
+      final ApiResponseModel promoted = await HomeRepository.fetchPromoted();
       profileController.processDataToState(
           {...response.data['user'], 'connecteds': response.data['connecteds']},
           response.data['interests'],
@@ -1077,25 +1080,27 @@ class HomeController extends GetxController {
         }
       }
       processBossToState(response.data['bossOfTheWeek']);
+      loading(false);
+      update();
+      addCoinDaily();
+      _showMyDialog();
+      FirebaseMessaging.instance.getToken().then((String? value) {
+        Map<String, dynamic> data = <String, dynamic>{
+          'deviceToken': value,
+        };
+        ApiService.post(path: 'users/add-device-token', body: data);
+      });
     } else {
+      ApiService().logout();
       error(true);
       cError(true);
+      loading(false);
       update();
       socket.disconnect();
       if (response.message == 'send a valid token') {
         showAccessTokenDialog();
       }
     }
-    loading(false);
-    update();
-    addCoinDaily();
-    _showMyDialog();
-    FirebaseMessaging.instance.getToken().then((String? value) {
-      Map<String, dynamic> data = <String, dynamic>{
-        'deviceToken': value,
-      };
-      ApiService.post(path: 'users/add-device-token', body: data);
-    });
   }
 
   Future<void> updateCourse(Map<String, dynamic> course, String id) async {

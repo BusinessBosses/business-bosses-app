@@ -214,6 +214,10 @@ class _HomeScreenState extends State<HomeScreen>
             }
           });
           return UpgradeAlert(
+            upgrader: Upgrader(
+              durationUntilAlertAgain: const Duration(minutes: 1),
+              showIgnore: false,
+            ),
             child: AdvancedDrawer(
               backdrop: Container(
                 width: double.infinity,
@@ -285,7 +289,7 @@ class _HomeScreenState extends State<HomeScreen>
                               hasBadge: hasBadge,
                               coinsCount: profileController.myProfile.coinscount
                                       ?.toString() ??
-                                  '',
+                                  '0',
                               hasUnreadNotification: profileController
                                           .myProfile.unReadCount !=
                                       null &&
