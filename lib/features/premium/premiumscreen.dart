@@ -1,4 +1,5 @@
 import 'dart:developer';
+import 'dart:io';
 
 import 'package:business_bosses_v2/bbpro/widgets/button.dart';
 import 'package:business_bosses_v2/features/marketplace/presentation/subscription_confirmation.dart';
@@ -417,9 +418,11 @@ class _PremiumScreenState extends State<PremiumScreen> {
                                               ),
                                               const SizedBox(height: 20),
                                               // Additional compliance text
-                                              const Text(
-                                                'Your subscription automatically renews unless canceled at least 24 hours before the end of the current period. Payment will be charged to your Google Play account at confirmation of purchase. You can manage or cancel your subscription anytime in your Play Store account settings. The subscription is optional and you can continue using the free version of the app without subscribing.',
-                                                style: TextStyle(
+                                              Text(
+                                                Platform.isIOS
+                                                    ? 'Your subscription automatically renews unless auto-renew is turned off at least 24 hours before the end of the current period. Your Apple ID account will be charged at confirmation of purchase. You can manage or cancel your subscription in your App Store account settings. The subscription is optional and you can continue using the free version of the app without subscribing.'
+                                                    : 'Your subscription automatically renews unless canceled at least 24 hours before the end of the current period. Payment will be charged to your Google Play account at confirmation of purchase. You can manage or cancel your subscription anytime in your Play Store account settings. The subscription is optional and you can continue using the free version of the app without subscribing.',
+                                                style: const TextStyle(
                                                   fontSize: 12,
                                                   color: Colors.black54,
                                                 ),
