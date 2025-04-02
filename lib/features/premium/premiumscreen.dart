@@ -99,8 +99,13 @@ class _PremiumScreenState extends State<PremiumScreen> {
   }
 
   @override
-  Widget build(BuildContext context) {
+  void initState() {
+    super.initState();
     Purchases.logIn(profileController.myProfile.uid.toString());
+  }
+
+  @override
+  Widget build(BuildContext context) {
     return Column(
       mainAxisAlignment: MainAxisAlignment.start,
       crossAxisAlignment: CrossAxisAlignment.start,
