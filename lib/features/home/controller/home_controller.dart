@@ -1091,15 +1091,15 @@ class HomeController extends GetxController {
         ApiService.post(path: 'users/add-device-token', body: data);
       });
     } else {
-      ApiService().logout();
+      if (response.message == 'send a valid token') {
+        ApiService().logout();
+        showAccessTokenDialog();
+      }
       error(true);
       cError(true);
       loading(false);
       update();
       socket.disconnect();
-      if (response.message == 'send a valid token') {
-        showAccessTokenDialog();
-      }
     }
   }
 

@@ -7,7 +7,6 @@ import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 import 'package:purchases_flutter/purchases_flutter.dart';
-import 'package:url_launcher/url_launcher_string.dart';
 
 import '../../../utils/theme/theme.dart';
 import '../../common/dialogs/snackbar.dart';
@@ -76,26 +75,23 @@ class _PremiumScreenState extends State<PremiumScreen> {
   }
 
   ///intialize the payment
-  Future<void> makePayment() async {
-    setState(() {});
+  Future<bool> makePayment() async {
     final ApiResponseModel res =
-        await ApiService.post(path: 'subscription', body: <String, dynamic>{
+        await ApiService.post(path: 'apple-sub', body: <String, dynamic>{
       'price': plans[_currentIndex]['price'],
       'plan': plans[_currentIndex]['plan'],
     });
 
     if (res.success) {
-      if (await canLaunchUrlString(res.data)) {
-        await launchUrlString(res.data, mode: LaunchMode.externalApplication);
-      }
+      return true;
     } else {
       showSnackbar(
         title: 'OOPS!',
         message: 'An error occurred, please try again!',
         error: true,
       );
+      return false;
     }
-    setState(() {});
   }
 
   @override
@@ -244,8 +240,9 @@ class _PremiumScreenState extends State<PremiumScreen> {
                                       const Text(
                                         'Premium Badge',
                                         style: TextStyle(
-                                            fontSize: 14,
-                                            fontWeight: FontWeight.w600),
+                                          fontSize: 14,
+                                          fontWeight: FontWeight.w600,
+                                        ),
                                       )
                                     ],
                                   ),
@@ -520,33 +517,59 @@ class _PremiumScreenState extends State<PremiumScreen> {
                                                       if (paymentMethodId ==
                                                           'Proyear') {
                                                         try {
-                                                          final List<
-                                                                  StoreProduct>
-                                                              product =
-                                                              await Purchases
-                                                                  .getProducts(<String>[
-                                                            'xyz.codexia.businessbosses.proyear'
-                                                          ]);
-                                                          final CustomerInfo
-                                                              customerInfo =
-                                                              await Purchases
-                                                                  .purchaseStoreProduct(
-                                                                      product[
-                                                                          0]);
-                                                          if (customerInfo
-                                                                  .entitlements
-                                                                  .all[
-                                                                      'xyz.codexia.businessbosses.proyear']
-                                                                  ?.isActive ??
-                                                              false) {
-                                                            // Grant access to premium features
-                                                            print(
-                                                                'User subscribed!');
+                                                          final bool response =
+                                                              await makePayment();
+                                                          if (response) {
+                                                            final List<
+                                                                    StoreProduct>
+                                                                product =
+                                                                await Purchases
+                                                                    .getProducts(<String>[
+                                                              'xyz.codexia.businessbosses.proyear'
+                                                            ]);
+                                                            final CustomerInfo
+                                                                customerInfo =
+                                                                await Purchases
+                                                                    .purchaseStoreProduct(
+                                                                        product[
+                                                                            0]);
+                                                            if (customerInfo
+                                                                    .entitlements
+                                                                    .all[
+                                                                        'xyz.codexia.businessbosses.proyear']
+                                                                    ?.isActive ??
+                                                                false) {
+                                                              // Grant access to premium features
+                                                              print(
+                                                                  'User subscribed!');
+                                                              profileController
+                                                                  .updateProfile(<String,
+                                                                      dynamic>{
+                                                                ...profileController
+                                                                    .myProfile
+                                                                    .toMap(),
+                                                                'isSubscribed':
+                                                                    true
+                                                              });
+                                                              Get.off(() =>
+                                                                  const SubscriptionConfirmation());
+                                                            }
+                                                          } else {
+                                                            showSnackbar(
+                                                              title: 'OOPS!',
+                                                              message:
+                                                                  'An error occurred, please try again!',
+                                                              error: true,
+                                                            );
                                                           }
                                                         } catch (e) {
                                                           // Handle error
-                                                          print(
-                                                              'Error purchasing product: $e');
+                                                          showSnackbar(
+                                                            title: 'OOPS!',
+                                                            message:
+                                                                'An error occurred, please try again!',
+                                                            error: true,
+                                                          );
                                                         } finally {
                                                           setState(() {
                                                             loading = false;
@@ -554,28 +577,50 @@ class _PremiumScreenState extends State<PremiumScreen> {
                                                         }
                                                       } else {
                                                         try {
-                                                          final List<
-                                                                  StoreProduct>
-                                                              product =
-                                                              await Purchases
-                                                                  .getProducts(<String>[
-                                                            'xyz.codexia.businessbosses.promonth'
-                                                          ]);
-                                                          final CustomerInfo
-                                                              customerInfo =
-                                                              await Purchases
-                                                                  .purchaseStoreProduct(
-                                                                      product[
-                                                                          0]);
-                                                          if (customerInfo
-                                                                  .entitlements
-                                                                  .all[
-                                                                      'xyz.codexia.businessbosses.promonth']
-                                                                  ?.isActive ??
-                                                              false) {
-                                                            // Grant access to premium features
-                                                            print(
-                                                                'User subscribed!');
+                                                          final bool response =
+                                                              await makePayment();
+                                                          if (response) {
+                                                            final List<
+                                                                    StoreProduct>
+                                                                product =
+                                                                await Purchases
+                                                                    .getProducts(<String>[
+                                                              'xyz.codexia.businessbosses.promonth'
+                                                            ]);
+                                                            final CustomerInfo
+                                                                customerInfo =
+                                                                await Purchases
+                                                                    .purchaseStoreProduct(
+                                                                        product[
+                                                                            0]);
+                                                            if (customerInfo
+                                                                    .entitlements
+                                                                    .all[
+                                                                        'xyz.codexia.businessbosses.promonth']
+                                                                    ?.isActive ??
+                                                                false) {
+                                                              // Grant access to premium features
+                                                              print(
+                                                                  'User subscribed!');
+                                                              profileController
+                                                                  .updateProfile(<String,
+                                                                      dynamic>{
+                                                                ...profileController
+                                                                    .myProfile
+                                                                    .toMap(),
+                                                                'isSubscribed':
+                                                                    true
+                                                              });
+                                                              Get.off(() =>
+                                                                  const SubscriptionConfirmation());
+                                                            }
+                                                          } else {
+                                                            showSnackbar(
+                                                              title: 'OOPS!',
+                                                              message:
+                                                                  'An error occurred, please try again!',
+                                                              error: true,
+                                                            );
                                                           }
                                                         } catch (e) {
                                                           // Handle error
