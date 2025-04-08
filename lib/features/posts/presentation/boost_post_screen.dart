@@ -132,22 +132,21 @@ class _BoostPostState extends State<BoostPost> {
         'currency': currency,
         'payment_method_types[]': 'card',
         'receipt_email': profileController.myProfile.email, // Add user email
-        'metadata': <String, dynamic>{
-          'user_id': profileController.myProfile.uid, // Store user ID
-          'user_name': profileController.myProfile.name, // Store user name
-          'post_id': widget.postId,
-        }
+        'description': widget.postId.toString(),
+        // 'metadata': <String, dynamic>{
+        //   'user_id': profileController.myProfile.uid.toString(),
+        //   'user_name': profileController.myProfile.name.toString(),
+        //   'post_id': widget.postId.toString(),
+        // },
       };
-
       http.Response res = await http.post(
           Uri.parse('https://api.stripe.com/v1/payment_intents'),
           body: body,
           headers: <String, String>{
             'Authorization': 'Bearer ${dotenv.env['STRIPE_SEC_KEY']}',
+            'Accept': 'application/json',
             'Content-Type': 'application/x-www-form-urlencoded'
           });
-
-      // print(res.body);
 
       return jsonDecode(res.body);
     } catch (e) {
@@ -199,6 +198,7 @@ class _BoostPostState extends State<BoostPost> {
           _isProcessing = true;
         });
         paymantIntent = await createPaymentIntent(initPlan, 'USD');
+        print('Stripe PaymentIntent response: $paymantIntent');
         await Stripe.instance
             .initPaymentSheet(
           paymentSheetParameters: SetupPaymentSheetParameters(
