@@ -405,8 +405,10 @@ class DrawerContent extends StatelessWidget {
                                                           color: textColor,
                                                         )
                                                       : index == 0
-                                                          ? SvgPicture.asset(
-                                                              'assets/svgs/promote.svg')
+                                                          ? const Icon(
+                                                              Icons.star,
+                                                              color: textColor,
+                                                            )
                                                           : SvgPicture.asset(
                                                               index == 1
                                                                   ? 'assets/svgs/text.svg'
@@ -424,14 +426,14 @@ class DrawerContent extends StatelessWidget {
                                                             ),
                                                   title: Text(
                                                     index == 0
-                                                        ? 'Enter Free Business Promotion'
+                                                        ? 'Enter free business promotion'
                                                         : index == 1
                                                             ? 'Post content, discussion, etc'
                                                             : index == 2
                                                                 ? 'Sell your product & service'
                                                                 : index == 3
-                                                                    ? 'Create an Event'
-                                                                    : 'Create Polls & Surveys',
+                                                                    ? 'Create an event'
+                                                                    : 'Create polls & surveys',
                                                     style: const TextStyle(
                                                       fontSize: 18,
                                                       fontWeight:

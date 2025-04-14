@@ -323,7 +323,7 @@ class _LiveEventState extends State<LiveEvent> {
                                           ),
                                         ),
                                         child: const Text(
-                                          'Create an Event',
+                                          'Create an event',
                                           style: TextStyle(
                                             color: Colors.red,
                                             fontWeight: FontWeight.bold,

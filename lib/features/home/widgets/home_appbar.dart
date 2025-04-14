@@ -26,17 +26,6 @@ class HomeAppBar extends StatelessWidget {
   final TabController controller;
   final bool? hasevent;
 
-  String getGreeting() {
-    final int hour = DateTime.now().hour;
-    if (hour < 12) {
-      return 'Good morning';
-    } else if (hour < 17) {
-      return 'Good afternoon';
-    } else {
-      return 'Good evening';
-    }
-  }
-
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -46,76 +35,11 @@ class HomeAppBar extends StatelessWidget {
           preferredSize: const Size.fromHeight(50.0),
           child: Container(
             color: Colors.white,
-            padding: const EdgeInsets.only(top: 10.0, bottom: 10.0, left: 10),
+            padding: const EdgeInsets.only(
+                top: 10.0, bottom: 10.0, left: 10, right: 10),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: <Widget>[
-                // controller.index == 0
-                //     ? Row(
-                //         children: [
-                //           GestureDetector(
-                //             onTap: () {
-                //               // Get.toNamed(Routes.myProfile);
-                //             },
-                //             child: SizedBox(
-                //               height: 40.0,
-                //               width: 40.0,
-                //               child: ClipRRect(
-                //                 borderRadius: BorderRadius.circular(10),
-                //                 child: NetworkImageWithPlaceHolder(
-                //                   imageUrl:
-                //                       profileController.myProfile.photoUrl ??
-                //                           '',
-                //                   radius: 10,
-                //                   placeHolder: Icons.person,
-                //                   iconSize: 22.0,
-                //                   fit: BoxFit.cover,
-                //                 ),
-                //               ),
-                //             ),
-                //           ),
-                //           const SizedBox(width: 10),
-                //           Column(
-                //             crossAxisAlignment: CrossAxisAlignment.start,
-                //             children: [
-                //               Text(
-                //                 profileName.length > 12
-                //                     ? '${profileName.substring(0, 12)}...'
-                //                     : profileName,
-                //                 overflow: TextOverflow.ellipsis,
-                //                 maxLines: 1,
-                //                 style: const TextStyle(
-                //                   fontSize: 14,
-                //                   fontWeight: FontWeight.bold,
-                //                 ),
-                //               ),
-                //               Text(
-                //                 '👋' + getGreeting(),
-                //                 style: const TextStyle(
-                //                   fontSize: 12,
-                //                   color: Colors.grey,
-                //                 ),
-                //               ),
-                //             ],
-                //           ),
-                //         ],
-                //       )
-                //     :
-                // GestureDetector(
-                //   onTap: () {
-                //     Get.to(const HowToUseAppScreen());
-                //   },
-                //   child: Padding(
-                //     padding: const EdgeInsets.only(right: 10.0),
-                //     child: CircleAvatar(
-                //       radius: 48 / 3,
-                //       backgroundColor: primaryColorLT.withOpacity(0.1),
-                //       child: SvgPicture.asset(
-                //         'assets/app/app_icon_only.svg',
-                //       ),
-                //     ),
-                //   ),
-                // ),
                 GestureDetector(
                   onTap: () {
                     Get.toNamed(Routes.completesearchingscreen);
@@ -145,219 +69,105 @@ class HomeAppBar extends StatelessWidget {
                 const SizedBox(
                   width: 15,
                 ),
-
-                Row(
-                  children: <Widget>[
-                    const SizedBox(
-                      width: 5,
-                    ),
-                    Stack(
-                      children: <Widget>[
-                        GestureDetector(
-                          onTap: () => Get.toNamed(Routes.allCommunitiesScreen),
-                          child: Container(
-                            padding: const EdgeInsets.symmetric(
-                                horizontal: 10, vertical: 5),
-                            decoration: BoxDecoration(
-                              color: backgroundcolorinterface,
-                              borderRadius: BorderRadius.circular(20),
-                            ),
-                            child: Row(
-                              children: <Widget>[
-                                Padding(
-                                  padding: const EdgeInsets.all(3.0),
-                                  child: SvgPicture.asset(
-                                      'assets/svgs/bossupu.svg',
-                                      height: 16),
-                                ),
-                                const SizedBox(width: 5),
-                                const Text(
-                                  'Boss Up',
-                                  style: TextStyle(
-                                    color: textColor,
-                                    fontSize: 14,
-                                    fontWeight: FontWeight.w700,
-                                  ),
-                                ),
-                              ],
-                            ),
+                Expanded(
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: <Widget>[
+                      GestureDetector(
+                        onTap: () => Get.toNamed(Routes.allCommunitiesScreen),
+                        child: Container(
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: 10, vertical: 5),
+                          decoration: BoxDecoration(
+                            color: backgroundcolorinterface,
+                            borderRadius: BorderRadius.circular(20),
                           ),
-                        ),
-                      ],
-                    ),
-                    const SizedBox(width: 5),
-                    Stack(
-                      children: <Widget>[
-                        GestureDetector(
-                          onTap: () => Get.toNamed(Routes.liveEvents),
-                          child: Container(
-                            padding: const EdgeInsets.symmetric(
-                                horizontal: 10, vertical: 5),
-                            decoration: BoxDecoration(
-                              color: backgroundcolorinterface,
-                              borderRadius: BorderRadius.circular(20),
-                            ),
-                            child: Row(
-                              children: <Widget>[
-                                Padding(
-                                  padding: const EdgeInsets.all(3.0),
-                                  child: SvgPicture.asset(
-                                      'assets/svgs/eventu.svg',
-                                      height: 16),
-                                ),
-                                const SizedBox(width: 5),
-                                const Text(
-                                  'Events',
-                                  style: TextStyle(
-                                    color: textColor,
-                                    fontSize: 14,
-                                    fontWeight: FontWeight.w700,
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-                    const SizedBox(width: 5),
-                    GestureDetector(
-                      onTap: () => Get.toNamed(Routes.promotionscreen),
-                      child: Container(
-                        padding: const EdgeInsets.symmetric(
-                            horizontal: 8, vertical: 5),
-                        decoration: BoxDecoration(
-                          color: backgroundcolorinterface,
-                          borderRadius: BorderRadius.circular(20),
-                        ),
-                        child: Row(
-                          children: <Widget>[
-                            SvgPicture.asset('assets/svgs/coin.svg',
-                                height: 22),
-                            const SizedBox(width: 5),
-                            Text(
-                              formatCount(int.parse(coinsCount)),
-                              style: const TextStyle(
-                                color: textColor,
-                                fontSize: 14,
-                                fontWeight: FontWeight.w700,
+                          child: Row(
+                            children: <Widget>[
+                              Padding(
+                                padding: const EdgeInsets.all(3.0),
+                                child: SvgPicture.asset(
+                                    'assets/svgs/bossupu.svg',
+                                    height: 16),
                               ),
-                            ),
-                          ],
+                              const SizedBox(width: 5),
+                              const Text(
+                                'Boss Up',
+                                style: TextStyle(
+                                  color: textColor,
+                                  fontSize: 14,
+                                  fontWeight: FontWeight.w700,
+                                ),
+                              ),
+                            ],
+                          ),
                         ),
                       ),
-                    ),
-                    // Stack(
-                    //   children: <Widget>[
-                    //     GestureDetector(
-                    //       onTap: () => Get.toNamed(Routes.notifications),
-                    //       child: CircleAvatar(
-                    //         backgroundColor: Colors.transparent,
-                    //         child: SvgPicture.asset(
-                    //           'assets/svgs/notificationicon.svg',
-                    //           height: 20,
-                    //           colorFilter: const ColorFilter.mode(
-                    //             Colors.black,
-                    //             BlendMode.srcIn,
-                    //           ),
-                    //         ),
-                    //       ),
-                    //     ),
-                    //     if (hasUnreadNotification)
-                    //       Positioned(
-                    //         top: 5,
-                    //         right: 6,
-                    //         child: Container(
-                    //           decoration: BoxDecoration(
-                    //             shape: BoxShape.circle,
-                    //             border: Border.all(
-                    //               color: Colors.white, // Border color
-                    //               width: 2.0, // Border width
-                    //             ),
-                    //           ),
-                    //           child: const CircleAvatar(
-                    //             backgroundColor: primaryColorLT,
-                    //             radius: 5,
-                    //           ),
-                    //         ),
-                    //       )
-                    //   ],
-                    // ),
-                    GestureDetector(
-                        onTap: onMenuClick, child: const CustomMenuButton())
-                  ],
+                      GestureDetector(
+                        onTap: () => Get.toNamed(Routes.liveEvents),
+                        child: Container(
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: 10, vertical: 5),
+                          decoration: BoxDecoration(
+                            color: backgroundcolorinterface,
+                            borderRadius: BorderRadius.circular(20),
+                          ),
+                          child: Row(
+                            children: <Widget>[
+                              Padding(
+                                padding: const EdgeInsets.all(3.0),
+                                child: SvgPicture.asset(
+                                    'assets/svgs/eventu.svg',
+                                    height: 16),
+                              ),
+                              const SizedBox(width: 5),
+                              const Text(
+                                'Events',
+                                style: TextStyle(
+                                  color: textColor,
+                                  fontSize: 14,
+                                  fontWeight: FontWeight.w700,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                      GestureDetector(
+                        onTap: () => Get.toNamed(Routes.promotionscreen),
+                        child: Container(
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: 8, vertical: 5),
+                          decoration: BoxDecoration(
+                            color: backgroundcolorinterface,
+                            borderRadius: BorderRadius.circular(20),
+                          ),
+                          child: Row(
+                            children: <Widget>[
+                              SvgPicture.asset('assets/svgs/coin.svg',
+                                  height: 22),
+                              const SizedBox(width: 5),
+                              Text(
+                                formatCount(int.parse(coinsCount)),
+                                style: const TextStyle(
+                                  color: textColor,
+                                  fontSize: 14,
+                                  fontWeight: FontWeight.w700,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
                 ),
+                GestureDetector(
+                    onTap: onMenuClick, child: const CustomMenuButton())
               ],
             ),
           ),
         ),
-        if (isTabVisible)
-          Container(
-            color: Colors.white,
-            child: TabBar(
-              controller: controller,
-              indicatorColor: Colors.transparent,
-              tabs: <Widget>[
-                Tab(
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: <Widget>[
-                      if (controller.index == 0)
-                        Container(
-                          margin: const EdgeInsets.only(right: 8.0),
-                          width: 8.0,
-                          height: 8.0,
-                          decoration: const BoxDecoration(
-                            color: Colors.red,
-                            shape: BoxShape.circle,
-                          ),
-                        ),
-                      Text(
-                        'For you',
-                        style: TextStyle(
-                          color: controller.index == 0
-                              ? primaryColorLT
-                              : Colors.grey,
-                          fontWeight: FontWeight.w700,
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-                Tab(
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: <Widget>[
-                      if (controller.index == 1)
-                        Container(
-                          margin: const EdgeInsets.only(right: 8.0),
-                          width: 8.0,
-                          height: 8.0,
-                          decoration: const BoxDecoration(
-                            color: Colors.red,
-                            shape: BoxShape.circle,
-                          ),
-                        ),
-                      Text(
-                        'Following',
-                        style: TextStyle(
-                          color: controller.index == 1
-                              ? primaryColorLT
-                              : Colors.grey,
-                          fontWeight: FontWeight.w700,
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-              ],
-            ),
-          ),
-        if (isTabVisible)
-          const Divider(
-            height: 0.5,
-            color: Colors.black12,
-          ),
         Container(
           height: 1,
           color: backgroundColor,

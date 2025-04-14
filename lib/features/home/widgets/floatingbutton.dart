@@ -73,7 +73,10 @@ class Floatingbutton extends StatelessWidget {
                             minVerticalPadding: 0,
                             contentPadding: const EdgeInsets.only(left: 10),
                             leading: index == 4
-                                ? SvgPicture.asset('assets/svgs/promote.svg')
+                                ? const Icon(
+                                    Icons.star,
+                                    color: textColor,
+                                  )
                                 : index == 0
                                     ? const Icon(
                                         Icons.star,
@@ -94,14 +97,14 @@ class Floatingbutton extends StatelessWidget {
                                       ),
                             title: Text(
                               index == 0
-                                  ? 'Enter Free Business Promotion'
+                                  ? 'Enter free business promotion'
                                   : index == 1
                                       ? 'Post content, discussion, etc'
                                       : index == 2
                                           ? 'Sell your product & service'
                                           : index == 3
-                                              ? 'Create an Event'
-                                              : 'Create Polls & Surveys',
+                                              ? 'Create an event'
+                                              : 'Create polls & surveys',
                               style: const TextStyle(
                                 fontSize: 18,
                                 fontWeight: FontWeight.w700,
