@@ -36,11 +36,11 @@ class HomeAppBar extends StatelessWidget {
           child: Container(
             color: Colors.white,
             padding: const EdgeInsets.only(
-                top: 10.0, bottom: 10.0, left: 10, right: 5),
+                top: 10.0, bottom: 10.0, left: 10, right: 10),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: <Widget>[
-                // Search button at the far left
+                // Search button
                 GestureDetector(
                   onTap: () {
                     Get.toNamed(Routes.completesearchingscreen);
@@ -64,100 +64,96 @@ class HomeAppBar extends StatelessWidget {
                   ),
                 ),
 
-                // Center buttons in the middle
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: <Widget>[
-                    GestureDetector(
-                      onTap: () => Get.toNamed(Routes.allCommunitiesScreen),
-                      child: Container(
-                        padding: const EdgeInsets.symmetric(
-                            horizontal: 10, vertical: 5),
-                        decoration: BoxDecoration(
-                          color: backgroundcolorinterface,
-                          borderRadius: BorderRadius.circular(20),
-                        ),
-                        child: Row(
-                          children: <Widget>[
-                            Padding(
-                              padding: const EdgeInsets.all(3.0),
-                              child: SvgPicture.asset('assets/svgs/bossupu.svg',
-                                  height: 16),
-                            ),
-                            const SizedBox(width: 5),
-                            const Text(
-                              'Boss Up',
-                              style: TextStyle(
-                                color: textColor,
-                                fontSize: 14,
-                                fontWeight: FontWeight.w700,
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
+                // Boss Up button
+                GestureDetector(
+                  onTap: () => Get.toNamed(Routes.allCommunitiesScreen),
+                  child: Container(
+                    padding:
+                        const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+                    decoration: BoxDecoration(
+                      color: backgroundcolorinterface,
+                      borderRadius: BorderRadius.circular(20),
                     ),
-                    const SizedBox(width: 5),
-                    GestureDetector(
-                      onTap: () => Get.toNamed(Routes.liveEvents),
-                      child: Container(
-                        padding: const EdgeInsets.symmetric(
-                            horizontal: 10, vertical: 5),
-                        decoration: BoxDecoration(
-                          color: backgroundcolorinterface,
-                          borderRadius: BorderRadius.circular(20),
+                    child: Row(
+                      children: <Widget>[
+                        Padding(
+                          padding: const EdgeInsets.all(3.0),
+                          child: SvgPicture.asset('assets/svgs/bossupu.svg',
+                              height: 16),
                         ),
-                        child: Row(
-                          children: <Widget>[
-                            Padding(
-                              padding: const EdgeInsets.all(3.0),
-                              child: SvgPicture.asset('assets/svgs/eventu.svg',
-                                  height: 16),
-                            ),
-                            const SizedBox(width: 5),
-                            const Text(
-                              'Events',
-                              style: TextStyle(
-                                color: textColor,
-                                fontSize: 14,
-                                fontWeight: FontWeight.w700,
-                              ),
-                            ),
-                          ],
+                        const SizedBox(width: 5),
+                        const Text(
+                          'Boss Up',
+                          style: TextStyle(
+                            color: textColor,
+                            fontSize: 14,
+                            fontWeight: FontWeight.w700,
+                          ),
                         ),
-                      ),
+                      ],
                     ),
-                    const SizedBox(width: 5),
-                    GestureDetector(
-                      onTap: () => Get.toNamed(Routes.promotionscreen),
-                      child: Container(
-                        padding: const EdgeInsets.symmetric(
-                            horizontal: 8, vertical: 5),
-                        decoration: BoxDecoration(
-                          color: backgroundcolorinterface,
-                          borderRadius: BorderRadius.circular(20),
-                        ),
-                        child: Row(
-                          children: <Widget>[
-                            SvgPicture.asset('assets/svgs/coin.svg',
-                                height: 22),
-                            const SizedBox(width: 5),
-                            Text(
-                              formatCount(int.parse(coinsCount)),
-                              style: const TextStyle(
-                                color: textColor,
-                                fontSize: 14,
-                                fontWeight: FontWeight.w700,
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                    ),
-                  ],
+                  ),
                 ),
 
-                // Menu button at the far right
+                // Events button
+                GestureDetector(
+                  onTap: () => Get.toNamed(Routes.liveEvents),
+                  child: Container(
+                    padding:
+                        const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+                    decoration: BoxDecoration(
+                      color: backgroundcolorinterface,
+                      borderRadius: BorderRadius.circular(20),
+                    ),
+                    child: Row(
+                      children: <Widget>[
+                        Padding(
+                          padding: const EdgeInsets.all(3.0),
+                          child: SvgPicture.asset('assets/svgs/eventu.svg',
+                              height: 16),
+                        ),
+                        const SizedBox(width: 5),
+                        const Text(
+                          'Events',
+                          style: TextStyle(
+                            color: textColor,
+                            fontSize: 14,
+                            fontWeight: FontWeight.w700,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+
+                // Coins button
+                GestureDetector(
+                  onTap: () => Get.toNamed(Routes.promotionscreen),
+                  child: Container(
+                    padding:
+                        const EdgeInsets.symmetric(horizontal: 8, vertical: 5),
+                    decoration: BoxDecoration(
+                      color: backgroundcolorinterface,
+                      borderRadius: BorderRadius.circular(20),
+                    ),
+                    child: Row(
+                      children: <Widget>[
+                        SvgPicture.asset('assets/svgs/coin.svg', height: 22),
+                        const SizedBox(width: 5),
+                        Text(
+                          formatCount(int.parse(coinsCount)),
+                          style: const TextStyle(
+                            color: textColor,
+                            fontSize: 14,
+                            fontWeight: FontWeight.w700,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+
+                // Menu button
                 GestureDetector(
                     onTap: onMenuClick, child: const CustomMenuButton())
               ],
