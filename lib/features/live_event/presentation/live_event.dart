@@ -228,7 +228,7 @@ class _LiveEventState extends State<LiveEvent> {
             //                                   ),
             //                                   title: Text(
             //                                     index == 0
-            //                                         ? 'Start a Discussion'
+            //                                         ? 'Post content, discussion, etc'
             //                                         : index == 1
             //                                             ? 'Sell your product & service'
             //                                             : 'Create a Live Event',
@@ -384,9 +384,6 @@ class _LiveEventState extends State<LiveEvent> {
                         ),
                       ),
                     ),
-              const Floatingbutton(
-                isEvent: true,
-              ),
             ]));
       },
     );

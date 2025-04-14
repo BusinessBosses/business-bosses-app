@@ -1132,7 +1132,6 @@ class _MarketplaceScreenState extends State<MarketplaceScreen>
                       BottomBar(
                         activeIndex: 3,
                       ),
-                      showFloatingButton ? const Floatingbutton() : Container(),
                     ],
                   ),
                 ),

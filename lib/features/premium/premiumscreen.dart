@@ -347,7 +347,7 @@ class _PremiumScreenState extends State<PremiumScreen> {
                           width: double.infinity,
                           child: ProCustomButton(
                               color: primaryColorLT,
-                              text: 'Start your \$1/Month Trial',
+                              text: 'Start your free trial',
                               onPressed: () async {
                                 // setState(() {
                                 //   loading = true;
@@ -508,7 +508,7 @@ class _PremiumScreenState extends State<PremiumScreen> {
                                                     padding: 0,
                                                     color: primaryColorLT,
                                                     text:
-                                                        'Start your \$1/month trial',
+                                                        'Start your free trial',
                                                     loading: loading,
                                                     onPressed: () async {
                                                       setState(() {

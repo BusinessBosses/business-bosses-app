@@ -5,6 +5,9 @@ import 'package:business_bosses_v2/bbpro/widgets/button.dart';
 import 'package:business_bosses_v2/common/models/user_model.dart';
 import 'package:business_bosses_v2/common/widgets/network_image_with_placeholder.dart';
 import 'package:business_bosses_v2/features/chat/chat_screen.dart';
+import 'package:business_bosses_v2/features/forum/controller/challenge_controller.dart';
+import 'package:business_bosses_v2/features/forum/models/industry.dart';
+import 'package:business_bosses_v2/features/forum/presentation/bossup_screen.dart';
 import 'package:business_bosses_v2/features/home/all_communities_screen.dart';
 import 'package:business_bosses_v2/features/home/home_screen.dart';
 import 'package:business_bosses_v2/features/home/marketplace_screen.dart';
@@ -32,6 +35,8 @@ class DrawerContent extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     ProfileController profileController = Get.find();
+    ChallengeController controller = Get.put(ChallengeController());
+    final Industry category = controller.categories[0];
     List<Map<String, dynamic>> tilesData = <Map<String, dynamic>>[
       {
         'icon': SvgPicture.asset(
@@ -154,7 +159,7 @@ class DrawerContent extends StatelessWidget {
                   'Communicate with other users through private messages. Stay connected with your connections and customers',
               'onTileClicked': () {
                 oncloseclick?.call();
-                Get.to(() =>const ChatScreen());
+                Get.to(() => const ChatScreen());
               },
             },
       {
@@ -347,7 +352,8 @@ class DrawerContent extends StatelessWidget {
                                 ),
                                 builder: (BuildContext context) {
                                   return SizedBox(
-                                    height: 310,
+                                    height:
+                                        380, // Increased height to accommodate the new item
                                     child: Padding(
                                       padding: const EdgeInsets.all(15.0),
                                       child: Column(
@@ -357,7 +363,8 @@ class DrawerContent extends StatelessWidget {
                                         children: <Widget>[
                                           Expanded(
                                             child: ListView.separated(
-                                              itemCount: 4,
+                                              itemCount:
+                                                  5, // Changed to 5 items
                                               separatorBuilder:
                                                   (BuildContext context,
                                                           int index) =>
@@ -367,17 +374,23 @@ class DrawerContent extends StatelessWidget {
                                                       int index) {
                                                 return ListTile(
                                                   onTap: () {
-                                                    Navigator.pop(
-                                                        context); // Close the modal sheet
+                                                    Navigator.pop(context);
                                                     if (index == 0) {
+                                                      Get.to(() =>
+                                                          BossUpSection(
+                                                            industry: category,
+                                                            bossUp: controller
+                                                                .categories[0],
+                                                          ));
+                                                    } else if (index == 1) {
                                                       Get.toNamed(
                                                           Routes.createPost);
-                                                    } else if (index == 1) {
-                                                      sellProduct(context);
                                                     } else if (index == 2) {
+                                                      sellProduct(context);
+                                                    } else if (index == 3) {
                                                       Get.toNamed(
                                                           Routes.createevent);
-                                                    } else if (index == 3) {
+                                                    } else if (index == 4) {
                                                       Get.to(() =>
                                                           const CreatePollScreen());
                                                     }
@@ -386,38 +399,39 @@ class DrawerContent extends StatelessWidget {
                                                   contentPadding:
                                                       const EdgeInsets.only(
                                                           left: 10),
-                                                  leading: index == 3
+                                                  leading: index == 4
                                                       ? const Icon(
                                                           Icons.poll,
                                                           color: textColor,
                                                         )
-                                                      : SvgPicture.asset(
-                                                          index == 0
-                                                              ? 'assets/svgs/text.svg'
-                                                              : index == 1
-                                                                  ? 'assets/svgs/sellicon.svg'
-                                                                  : 'assets/svgs/eventu.svg',
-                                                          height: index == 0
-                                                              ? 25
-                                                              : index == 1
-                                                                  ? 30
-                                                                  : 22,
-                                                          colorFilter:
-                                                              ColorFilter.mode(
-                                                                  textColor
-                                                                      .withOpacity(
-                                                                          1),
-                                                                  BlendMode
-                                                                      .srcIn),
-                                                        ),
+                                                      : index == 0
+                                                          ? SvgPicture.asset(
+                                                              'assets/svgs/promote.svg')
+                                                          : SvgPicture.asset(
+                                                              index == 1
+                                                                  ? 'assets/svgs/text.svg'
+                                                                  : index == 2
+                                                                      ? 'assets/svgs/sellicon.svg'
+                                                                      : 'assets/svgs/eventu.svg',
+                                                              height: index == 1
+                                                                  ? 25
+                                                                  : index == 2
+                                                                      ? 30
+                                                                      : 22,
+                                                              color: textColor
+                                                                  .withOpacity(
+                                                                      1),
+                                                            ),
                                                   title: Text(
                                                     index == 0
-                                                        ? 'Start a Discussion'
+                                                        ? 'Enter Free Business Promotion'
                                                         : index == 1
-                                                            ? 'Sell your product & service'
+                                                            ? 'Post content, discussion, etc'
                                                             : index == 2
-                                                                ? 'Create an Event'
-                                                                : 'Create Polls & Surveys',
+                                                                ? 'Sell your product & service'
+                                                                : index == 3
+                                                                    ? 'Create an Event'
+                                                                    : 'Create Polls & Surveys',
                                                     style: const TextStyle(
                                                       fontSize: 18,
                                                       fontWeight:
@@ -427,7 +441,7 @@ class DrawerContent extends StatelessWidget {
                                                 );
                                               },
                                             ),
-                                          ),
+                                          )
                                         ],
                                       ),
                                     ),

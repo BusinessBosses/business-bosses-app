@@ -1,4 +1,7 @@
+import 'package:business_bosses_v2/features/forum/controller/challenge_controller.dart';
+import 'package:business_bosses_v2/features/forum/models/industry.dart';
 import 'package:business_bosses_v2/features/forum/presentation/bossup_challenge.dart';
+import 'package:business_bosses_v2/features/forum/presentation/bossup_screen.dart';
 import 'package:business_bosses_v2/features/home/sellProduct.dart';
 import 'package:business_bosses_v2/features/posts/presentation/create_poll_screen.dart';
 import 'package:business_bosses_v2/features/profile/controller/profile_controller.dart';
@@ -10,14 +13,17 @@ import '../../../utils/theme/theme.dart';
 
 class Floatingbutton extends StatelessWidget {
   final bool? isEvent;
-  const Floatingbutton({
+  Floatingbutton({
     Key? key,
     this.isEvent,
   }) : super(key: key);
 
+  ChallengeController controller = Get.put(ChallengeController());
+
   @override
   Widget build(BuildContext context) {
     final ProfileController myProfile = Get.find();
+    final Industry category = controller.categories[0];
     // ignore: unused_local_variable
     int now = DateTime.now().millisecondsSinceEpoch;
     // ignore: unused_local_variable
@@ -50,9 +56,9 @@ class Floatingbutton extends StatelessWidget {
                             onTap: () {
                               Navigator.pop(context);
                               if (index == 0) {
-                                Get.to(() => const BossupChallenge(
-                                      backgroundColor: Colors.white,
-                                      ishome: false,
+                                Get.to(() => BossUpSection(
+                                      industry: category,
+                                      bossUp: controller.categories[0],
                                     ));
                               } else if (index == 1) {
                                 Get.toNamed(Routes.createPost);
@@ -67,10 +73,7 @@ class Floatingbutton extends StatelessWidget {
                             minVerticalPadding: 0,
                             contentPadding: const EdgeInsets.only(left: 10),
                             leading: index == 4
-                                ? const Icon(
-                                    Icons.poll,
-                                    color: Colors.black,
-                                  )
+                                ? SvgPicture.asset('assets/svgs/promote.svg')
                                 : index == 0
                                     ? const Icon(
                                         Icons.star,
@@ -93,7 +96,7 @@ class Floatingbutton extends StatelessWidget {
                               index == 0
                                   ? 'Enter Free Business Promotion'
                                   : index == 1
-                                      ? 'Start a Discussion'
+                                      ? 'Post content, discussion, etc'
                                       : index == 2
                                           ? 'Sell your product & service'
                                           : index == 3

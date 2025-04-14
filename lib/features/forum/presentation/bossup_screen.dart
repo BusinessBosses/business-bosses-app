@@ -752,12 +752,12 @@ class _BossUpSectionState extends State<BossUpSection>
                                         }),
                                   ),
                   ),
-                  Positioned(
-                      right: 0,
-                      bottom: -70,
-                      child: showFloatingButton
-                          ? const Floatingbutton()
-                          : Container())
+                  // Positioned(
+                  //     right: 0,
+                  //     bottom: -70,
+                  //     child: showFloatingButton
+                  //         ?  Floatingbutton()
+                  //         : Container())
                 ]);
               }
             }),

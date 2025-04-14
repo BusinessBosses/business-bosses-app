@@ -189,13 +189,13 @@ class BottomBar extends StatelessWidget {
                                                     const EdgeInsets.only(
                                                         left: 10),
                                                 leading: index == 4
-                                                    ? SvgPicture.asset(
-                                                             'assets/svgs/promote.svg')
+                                                    ? const Icon(
+                                                        Icons.poll,
+                                                        color: textColor,
+                                                      )
                                                     : index == 0
-                                                        ? const Icon(
-                                                            Icons.star,
-                                                            color: Colors.black,
-                                                          )
+                                                        ? SvgPicture.asset(
+                                                            'assets/svgs/promote.svg')
                                                         : SvgPicture.asset(
                                                             index == 1
                                                                 ? 'assets/svgs/text.svg'
@@ -214,7 +214,7 @@ class BottomBar extends StatelessWidget {
                                                   index == 0
                                                       ? 'Enter Free Business Promotion'
                                                       : index == 1
-                                                          ? 'Start a Discussion'
+                                                          ? 'Post content, discussion, etc'
                                                           : index == 2
                                                               ? 'Sell your product & service'
                                                               : index == 3
