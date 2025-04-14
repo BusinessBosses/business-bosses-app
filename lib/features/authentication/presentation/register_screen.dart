@@ -50,7 +50,7 @@ class RegisterScreen extends StatelessWidget {
                     ),
                     Flexible(
                       child: Text(
-                          'Free Promotion App - Sell, Earn & Grow Globally',
+                          'Free Promotion App - Sell, Network & Grow Globally',
                           style: TextStyle(
                               fontSize: 14,
                               color: textColor.withOpacity(0.8),

@@ -1,23 +1,31 @@
 import 'package:business_bosses_v2/features/chat/chat_screen.dart';
 import 'package:business_bosses_v2/features/chat/controllers/chat_controller.dart';
 import 'package:business_bosses_v2/features/chat/models/my_message.dart';
+import 'package:business_bosses_v2/features/forum/controller/challenge_controller.dart';
+import 'package:business_bosses_v2/features/forum/models/industry.dart';
+import 'package:business_bosses_v2/features/forum/presentation/bossup_screen.dart';
 import 'package:business_bosses_v2/features/home/bottom_nav.dart';
 import 'package:business_bosses_v2/features/home/marketplace_screen.dart';
+import 'package:business_bosses_v2/features/home/sellProduct.dart';
+import 'package:business_bosses_v2/features/posts/presentation/create_poll_screen.dart';
 import 'package:business_bosses_v2/features/profile/controller/profile_controller.dart';
 import 'package:business_bosses_v2/navigation/routes.dart';
 import 'package:business_bosses_v2/utils/theme/theme.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 
 class BottomBar extends StatelessWidget {
-  const BottomBar({
+  BottomBar({
     Key? key,
     required this.activeIndex,
   }) : super(key: key);
   final int activeIndex;
+  ChallengeController controller = Get.put(ChallengeController());
 
   @override
   Widget build(BuildContext context) {
+    final Industry category = controller.categories[0];
     ProfileController profileController = Get.find();
     ChatController chatController = Get.find();
     return Align(
@@ -115,18 +123,122 @@ class BottomBar extends StatelessWidget {
                       Expanded(
                         flex: 10,
                         child: BottomTabButton(
-                          icon: activeIndex == 2
-                              ? 'assets/svgs/bossupufilled.svg'
-                              : 'assets/svgs/bossupu.svg',
+                          widget: const CircleAvatar(
+                            radius: 18,
+                            backgroundColor: primaryColorLT,
+                            child: Icon(
+                              Icons.add,
+                              color: Colors.white,
+                            ),
+                          ),
+                          // icon: activeIndex == 2
+                          //     ? 'assets/svgs/bossupufilled.svg'
+                          //     : 'assets/svgs/bossupu.svg',
                           onTap: () {
-                            if (activeIndex == 2) return;
-                            if (activeIndex == 0) {
-                              Get.toNamed(Routes.allCommunitiesScreen);
-                            } else {
-                              Get.offAndToNamed(Routes.allCommunitiesScreen);
-                            }
+                            showModalBottomSheet(
+                              context: context,
+                              shape: const RoundedRectangleBorder(
+                                borderRadius: BorderRadius.vertical(
+                                  top: Radius.circular(25.0),
+                                ),
+                              ),
+                              builder: (BuildContext context) {
+                                return SizedBox(
+                                  height:
+                                      380, // Increased height to accommodate the new item
+                                  child: Padding(
+                                    padding: const EdgeInsets.all(15.0),
+                                    child: Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      mainAxisSize: MainAxisSize.min,
+                                      children: <Widget>[
+                                        Expanded(
+                                          child: ListView.separated(
+                                            itemCount: 5, // Changed to 5 items
+                                            separatorBuilder:
+                                                (BuildContext context,
+                                                        int index) =>
+                                                    const Divider(),
+                                            itemBuilder: (BuildContext context,
+                                                int index) {
+                                              return ListTile(
+                                                onTap: () {
+                                                  Navigator.pop(context);
+                                                  if (index == 0) {
+                                                    Get.to(() => BossUpSection(
+                                                          industry: category,
+                                                          bossUp: controller
+                                                              .categories[0],
+                                                        ));
+                                                  } else if (index == 1) {
+                                                    Get.toNamed(
+                                                        Routes.createPost);
+                                                  } else if (index == 2) {
+                                                    sellProduct(context);
+                                                  } else if (index == 3) {
+                                                    Get.toNamed(
+                                                        Routes.createevent);
+                                                  } else if (index == 4) {
+                                                    Get.to(() =>
+                                                        const CreatePollScreen());
+                                                  }
+                                                },
+                                                minVerticalPadding: 0,
+                                                contentPadding:
+                                                    const EdgeInsets.only(
+                                                        left: 10),
+                                                leading: index == 4
+                                                    ? const Icon(
+                                                        Icons.poll,
+                                                        color: Colors.black,
+                                                      )
+                                                    : index == 0
+                                                        ? const Icon(
+                                                            Icons.star,
+                                                            color: Colors.black,
+                                                          )
+                                                        : SvgPicture.asset(
+                                                            index == 1
+                                                                ? 'assets/svgs/text.svg'
+                                                                : index == 2
+                                                                    ? 'assets/svgs/sellicon.svg'
+                                                                    : 'assets/svgs/eventu.svg',
+                                                            height: index == 1
+                                                                ? 25
+                                                                : index == 2
+                                                                    ? 30
+                                                                    : 22,
+                                                            color: textColor
+                                                                .withOpacity(1),
+                                                          ),
+                                                title: Text(
+                                                  index == 0
+                                                      ? 'Enter Free Business Promotion'
+                                                      : index == 1
+                                                          ? 'Start a Discussion'
+                                                          : index == 2
+                                                              ? 'Sell your product & service'
+                                                              : index == 3
+                                                                  ? 'Create an Event'
+                                                                  : 'Create Polls & Surveys',
+                                                  style: const TextStyle(
+                                                    fontSize: 18,
+                                                    fontWeight: FontWeight.w700,
+                                                  ),
+                                                ),
+                                              );
+                                            },
+                                          ),
+                                        )
+                                      ],
+                                    ),
+                                  ),
+                                );
+                              },
+                            );
                           },
-                          label: 'Boss Up',
+                          label: 'Post',
                           isActive: activeIndex == 2,
                         ),
                       ),

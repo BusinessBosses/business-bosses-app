@@ -229,7 +229,7 @@ class _ProScreenState extends State<ProScreen> with TickerProviderStateMixin {
                       ])),
                 ],
               ),
-              const BottomBar(activeIndex: 2),
+              BottomBar(activeIndex: 2),
             ]),
           );
   }

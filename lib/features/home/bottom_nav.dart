@@ -284,25 +284,18 @@ class _BottomNavScreenState extends State<BottomNavScreen> {
 
 /// Bottom Tab Button click
 class BottomTabButton extends StatelessWidget {
-  // ignore: public_member_api_docs
   final bool isActive;
-  // ignore: public_member_api_docs
-  final String icon;
-
-  // ignore: public_member_api_docs
+  final String? icon;
   final void Function()? onTap;
-  // ignore: public_member_api_docs
   final String label;
-  // ignore: public_member_api_docs
   final int count;
-
   final Widget? widget;
 
   /// Bottom Tab Button click
   const BottomTabButton({
     super.key,
     required this.isActive,
-    required this.icon,
+    this.icon,
     required this.onTap,
     this.label = '',
     this.count = 0,
@@ -324,38 +317,40 @@ class BottomTabButton extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.center,
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: <Widget>[
-                  icon.isNotEmpty
-                      ? SizedBox(
-                          height: 32.0,
-                          child: SvgPicture.asset(
-                            icon,
-                            height: 25,
-                            width: 25,
-                            color: isActive ? primaryColorLT : textColor,
-                          ),
-                        )
-                      : Padding(
-                          padding: const EdgeInsets.only(bottom: 2.0, top: 3),
-                          child: SizedBox(
-                            height: 28.0,
-                            width: 28.0,
-                            child: Align(
-                              alignment: Alignment.topLeft,
-                              child: ClipRRect(
-                                borderRadius: BorderRadius.circular(1000),
-                                child: NetworkImageWithPlaceHolder(
-                                  imageUrl:
-                                      profileController.myProfile.photoUrl ??
-                                          '',
-                                  radius: radius,
-                                  placeHolder: Icons.person,
-                                  iconSize: 22.0,
-                                  fit: BoxFit.cover,
-                                ),
-                              ),
+                  if (icon != null && icon!.isNotEmpty)
+                    SizedBox(
+                      height: 32.0,
+                      child: SvgPicture.asset(
+                        icon!,
+                        height: 25,
+                        width: 25,
+                        color: isActive ? primaryColorLT : textColor,
+                      ),
+                    )
+                  else if (widget != null)
+                    widget!
+                  else
+                    Padding(
+                      padding: const EdgeInsets.only(bottom: 2.0, top: 3),
+                      child: SizedBox(
+                        height: 28.0,
+                        width: 28.0,
+                        child: Align(
+                          alignment: Alignment.topLeft,
+                          child: ClipRRect(
+                            borderRadius: BorderRadius.circular(1000),
+                            child: NetworkImageWithPlaceHolder(
+                              imageUrl:
+                                  profileController.myProfile.photoUrl ?? '',
+                              radius: radius,
+                              placeHolder: Icons.person,
+                              iconSize: 22.0,
+                              fit: BoxFit.cover,
                             ),
                           ),
                         ),
+                      ),
+                    ),
                   if (label.isNotEmpty)
                     FittedBox(
                       child: Text(

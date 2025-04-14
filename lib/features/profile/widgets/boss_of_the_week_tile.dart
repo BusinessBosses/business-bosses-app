@@ -108,12 +108,32 @@ class _BossOfWeekProfileTileState extends State<BossOfWeekProfileTile> {
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: <Widget>[
-                        if (widget.isForyou == true)
-                          const Text(
+                        Row(
+                          children: <Widget>[
+                          Container(
+                            width: 25.0,
+                            height: 25.0,
+                            clipBehavior: Clip.antiAlias,
+                            decoration: const BoxDecoration(
+                            color: Colors.transparent,
+                            shape: BoxShape.circle,
+                            ),
+                            child: Image.asset(
+                            'assets/images/app_logo_2.png',
+                            height: 40,
+                            ),
+                          ),
+                          const SizedBox(
+                            width: 5,
+                          ),
+                          if (widget.isForyou == true)
+                            const Text(
                             'Boss of the week',
                             style: TextStyle(
-                                fontWeight: FontWeight.w900, fontSize: 20),
-                          ),
+                              fontWeight: FontWeight.w900, fontSize: 20),
+                            ),
+                          ],
+                        ),
                         if (widget.isForyou == true)
                           const CircleAvatar(
                             backgroundColor: Colors.transparent,
@@ -459,7 +479,7 @@ class _BossOfWeekProfileTileState extends State<BossOfWeekProfileTile> {
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: <Widget>[
                               Text(
-                                'Deals',
+                                'Partners\' Deals',
                                 style: TextStyle(
                                     fontWeight: FontWeight.w700,
                                     color: textColor,

@@ -326,7 +326,7 @@ class _HomeScreenState extends State<HomeScreen>
                             const Padding(
                               padding: EdgeInsets.only(top: 20.0),
                               child: Text(
-                                'Promote your Business, Earn & Grow globally',
+                                'Promote your Business, Network & Grow globally',
                                 style: TextStyle(fontSize: 16),
                               ),
                             )
@@ -442,10 +442,10 @@ class _HomeScreenState extends State<HomeScreen>
                                         ),
                                       ),
                                     ),
-                                    const BottomBar(
+                                    BottomBar(
                                       activeIndex: 0,
                                     ),
-                                    const Floatingbutton(),
+                                    // const Floatingbutton(),
                                   ],
                                 ),
                               ),

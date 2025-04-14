@@ -319,7 +319,7 @@ class _ChatScreenState extends State<ChatScreen> {
                               },
                             ),
                     ),
-                  const BottomBar(activeIndex: 1),
+                  BottomBar(activeIndex: 1),
                 ],
               ),
             ),

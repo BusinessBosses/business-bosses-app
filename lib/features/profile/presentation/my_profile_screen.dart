@@ -835,7 +835,7 @@ class _MyProfileScreenState extends State<MyProfileScreen> {
                                 ),
                               ),
                             ),
-                            const BottomBar(
+                            BottomBar(
                               activeIndex: 4,
                             )
                           ],

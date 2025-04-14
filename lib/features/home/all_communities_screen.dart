@@ -214,7 +214,13 @@ class _AllCommunitiesScreenState extends State<AllCommunitiesScreen>
 
           child: Scaffold(
             appBar: AppBar(
-              automaticallyImplyLeading: false,
+              automaticallyImplyLeading: true,
+              leading: IconButton(
+                onPressed: () {
+                  Navigator.pop(context);
+                },
+                icon: SvgPicture.asset('assets/svgs/backbutton.svg'),
+              ),
               title: _isSearching
                   ? Searchbar(
                       hintText: 'Search',
@@ -532,7 +538,7 @@ class _AllCommunitiesScreenState extends State<AllCommunitiesScreen>
                       ),
                     ),
                   ),
-                  const BottomBar(activeIndex: 2),
+                  BottomBar(activeIndex: 2),
                 ],
               ),
             ),

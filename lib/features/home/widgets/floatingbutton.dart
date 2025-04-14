@@ -1,3 +1,4 @@
+import 'package:business_bosses_v2/features/forum/presentation/bossup_challenge.dart';
 import 'package:business_bosses_v2/features/home/sellProduct.dart';
 import 'package:business_bosses_v2/features/posts/presentation/create_poll_screen.dart';
 import 'package:business_bosses_v2/features/profile/controller/profile_controller.dart';
@@ -32,7 +33,7 @@ class Floatingbutton extends StatelessWidget {
           ),
           builder: (BuildContext context) {
             return SizedBox(
-              height: 310,
+              height: 380, // Increased height to accommodate the new item
               child: Padding(
                 padding: const EdgeInsets.all(15.0),
                 child: Column(
@@ -40,61 +41,64 @@ class Floatingbutton extends StatelessWidget {
                   mainAxisSize: MainAxisSize.min,
                   children: <Widget>[
                     Expanded(
-                      // Set a specific height
                       child: ListView.separated(
-                        itemCount: 4,
+                        itemCount: 5, // Changed to 5 items
                         separatorBuilder: (BuildContext context, int index) =>
                             const Divider(),
                         itemBuilder: (BuildContext context, int index) {
                           return ListTile(
                             onTap: () {
-                              Navigator.pop(
-                                  context); // Close the drawer or navigate back
+                              Navigator.pop(context);
                               if (index == 0) {
-                                Get.toNamed(Routes
-                                    .createPost); // Navigate to "createPost" route
+                                Get.to(() => const BossupChallenge(
+                                      backgroundColor: Colors.white,
+                                      ishome: false,
+                                    ));
                               } else if (index == 1) {
-                                sellProduct(
-                                    context); // Call sellProduct function
+                                Get.toNamed(Routes.createPost);
                               } else if (index == 2) {
-                                Get.toNamed(Routes
-                                    .createevent); // Navigate to "createevent" route
+                                sellProduct(context);
                               } else if (index == 3) {
-                                Get.to(() =>
-                                    const CreatePollScreen()); // Navigate to "createPollSurvey" route
+                                Get.toNamed(Routes.createevent);
+                              } else if (index == 4) {
+                                Get.to(() => const CreatePollScreen());
                               }
                             },
                             minVerticalPadding: 0,
                             contentPadding: const EdgeInsets.only(left: 10),
-                            leading: index == 3
+                            leading: index == 4
                                 ? const Icon(
                                     Icons.poll,
                                     color: Colors.black,
                                   )
-                                : SvgPicture.asset(
-                                    index == 0
-                                        ? 'assets/svgs/text.svg'
-                                        : index == 1
-                                            ? 'assets/svgs/sellicon.svg'
-                                            : 'assets/svgs/eventu.svg', // Assuming you have a "polls.svg" asset
-                                    height: index == 0
-                                        ? 25
-                                        : index == 1
-                                            ? 30
+                                : index == 0
+                                    ? const Icon(
+                                        Icons.star,
+                                        color: Colors.black,
+                                      )
+                                    : SvgPicture.asset(
+                                        index == 1
+                                            ? 'assets/svgs/text.svg'
                                             : index == 2
-                                                ? 22
-                                                : 22, // Adjust the height as needed
-                                    // ignore: deprecated_member_use
-                                    color: textColor.withOpacity(1),
-                                  ),
+                                                ? 'assets/svgs/sellicon.svg'
+                                                : 'assets/svgs/eventu.svg',
+                                        height: index == 1
+                                            ? 25
+                                            : index == 2
+                                                ? 30
+                                                : 22,
+                                        color: textColor.withOpacity(1),
+                                      ),
                             title: Text(
                               index == 0
-                                  ? 'Start a Discussion'
+                                  ? 'Enter Free Business Promotion'
                                   : index == 1
-                                      ? 'Sell your product & service'
+                                      ? 'Start a Discussion'
                                       : index == 2
-                                          ? 'Create an Event'
-                                          : 'Create Polls & Surveys',
+                                          ? 'Sell your product & service'
+                                          : index == 3
+                                              ? 'Create an Event'
+                                              : 'Create Polls & Surveys',
                               style: const TextStyle(
                                 fontSize: 18,
                                 fontWeight: FontWeight.w700,
