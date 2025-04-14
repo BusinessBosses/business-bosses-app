@@ -189,10 +189,8 @@ class BottomBar extends StatelessWidget {
                                                     const EdgeInsets.only(
                                                         left: 10),
                                                 leading: index == 4
-                                                    ? const Icon(
-                                                        Icons.poll,
-                                                        color: Colors.black,
-                                                      )
+                                                    ? SvgPicture.asset(
+                                                             'assets/svgs/promote.svg')
                                                     : index == 0
                                                         ? const Icon(
                                                             Icons.star,
