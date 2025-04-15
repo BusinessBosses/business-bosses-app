@@ -210,6 +210,9 @@ class _AllCommunitiesScreenState extends State<AllCommunitiesScreen>
               _advancedDrawerController.hideDrawer();
             },
             currentuser: profileController.myProfile,
+            hasUnreadNotification:
+                profileController.myProfile.unReadCount != null &&
+                    profileController.myProfile.unReadCount! > 0,
           ),
 
           child: Scaffold(

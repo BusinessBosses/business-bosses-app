@@ -97,6 +97,9 @@ class _ChatScreenState extends State<ChatScreen> {
                 _advancedDrawerController.hideDrawer();
               },
               currentuser: _profileController.myProfile,
+              hasUnreadNotification:
+                  _profileController.myProfile.unReadCount != null &&
+                      _profileController.myProfile.unReadCount! > 0,
             ),
 
             child: Scaffold(

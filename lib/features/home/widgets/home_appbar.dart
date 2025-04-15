@@ -154,8 +154,25 @@ class HomeAppBar extends StatelessWidget {
                 ),
 
                 // Menu button
-                GestureDetector(
-                    onTap: onMenuClick, child: const CustomMenuButton())
+                Stack(
+                  children: <Widget>[
+                    GestureDetector(
+                        onTap: onMenuClick, child: const CustomMenuButton()),
+                    if (hasUnreadNotification)
+                      Positioned(
+                        right: 0,
+                        top: 2,
+                        child: Container(
+                          width: 10,
+                          height: 10,
+                          decoration: const BoxDecoration(
+                            color: Colors.red,
+                            shape: BoxShape.circle,
+                          ),
+                        ),
+                      ),
+                  ],
+                )
               ],
             ),
           ),

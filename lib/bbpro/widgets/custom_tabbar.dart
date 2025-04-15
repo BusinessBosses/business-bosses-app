@@ -120,60 +120,6 @@ class _CustomTabBarWidgetState<T> extends State<CustomTabBarWidget<T>> {
             ),
           ),
         ),
-        // Positioned(
-        //   right: 10,
-        //   top: 0,
-        //   bottom: 10,
-        //   child: Padding(
-        //     padding: const EdgeInsets.all(5.0),
-        //     child: GestureDetector(
-        //       onTap: () {
-        //         showMenu(
-        //           shape: RoundedRectangleBorder(
-        //             borderRadius: BorderRadius.circular(10),
-        //           ),
-        //           context: context,
-        //           shadowColor: Colors.black,
-        //           position:
-        //               const RelativeRect.fromLTRB(double.infinity, 220, 15, 0),
-        //           items: widget.filterOptions!.map((String option) {
-        //             return PopupMenuItem<String>(
-        //               value: option,
-        //               child: Text(option),
-        //             );
-        //           }).toList(),
-        //         ).then((String? selected) {
-        //           if (selected != null) {
-        //             setState(() {
-        //               selectedFilter = selected;
-        //             });
-        //             widget.onFilterSelected?.call(selected);
-
-        //             if (widget.filterontap != null) {
-        //               widget.filterontap!();
-        //             }
-        //           }
-        //         });
-        //       },
-        //       child: Container(
-        //         padding: const EdgeInsets.symmetric(horizontal: 10),
-        //         decoration: BoxDecoration(
-        //           color: backgroundColor,
-        //           borderRadius: BorderRadius.circular(7),
-        //           boxShadow: <BoxShadow>[
-        //             BoxShadow(
-        //               color: backgroundColor.withOpacity(0.6),
-        //               offset: const Offset(-5, 0),
-        //               blurRadius: 10,
-        //               spreadRadius: 2,
-        //             ),
-        //           ],
-        //         ),
-        //         child: SvgPicture.asset('assets/svgs/filterprosections.svg'),
-        //       ),
-        //     ),
-        //   ),
-        // ),
       ],
     );
   }

@@ -257,6 +257,9 @@ class _HomeScreenState extends State<HomeScreen>
                   _advancedDrawerController.hideDrawer();
                 },
                 currentuser: homeController.profileController.myProfile,
+                hasUnreadNotification:
+                    _profileController.myProfile.unReadCount != null &&
+                        _profileController.myProfile.unReadCount! > 0,
               ),
 
               child: Scaffold(
