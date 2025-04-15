@@ -28,8 +28,13 @@ class DrawerContent extends StatelessWidget {
   final UserModel? currentuser;
   final VoidCallback? oncloseclick;
   final VoidCallback? oncrowfundclick;
+  final bool hasUnreadNotification;
   const DrawerContent(
-      {Key? key, this.currentuser, this.oncloseclick, this.oncrowfundclick})
+      {Key? key,
+      this.currentuser,
+      this.oncloseclick,
+      this.oncrowfundclick,
+      required this.hasUnreadNotification})
       : super(key: key);
 
   @override
@@ -272,8 +277,8 @@ class DrawerContent extends StatelessWidget {
                       child: Row(
                         children: [
                           Container(
-                            width: 40.0,
-                            height: 40.0,
+                            width: 35.0,
+                            height: 35.0,
                             clipBehavior: Clip.antiAlias,
                             decoration: const BoxDecoration(
                               color: Colors.transparent,
@@ -281,32 +286,74 @@ class DrawerContent extends StatelessWidget {
                             ),
                             child: Image.asset(
                               'assets/images/app_logo_2.png',
-                              height: 40,
                             ),
                           ),
                           const SizedBox(
-                            width: 10,
+                            width: 6,
                           ),
                           const Text(
                             'Business Bosses',
                             style: TextStyle(
-                                fontSize: 18,
+                                fontSize: 16,
                                 color: primaryColorLT,
                                 fontWeight: FontWeight.w700),
                           )
                         ],
                       ),
                     ),
-                    GestureDetector(
-                      onTap: oncloseclick,
-                      child: const CircleAvatar(
-                        backgroundColor: Colors.transparent,
-                        child: Icon(
-                          Icons.close,
-                          color: textColor,
+
+                    Row(
+                      children: [
+                        Stack(
+                          children: <Widget>[
+                            GestureDetector(
+                              onTap: () => Get.toNamed(Routes.notifications),
+                              child: CircleAvatar(
+                                backgroundColor: backgroundColor,
+                                child: SvgPicture.asset(
+                                  'assets/svgs/notificationicon.svg',
+                                  height: 20,
+                                  colorFilter: const ColorFilter.mode(
+                                    Colors.black,
+                                    BlendMode.srcIn,
+                                  ),
+                                ),
+                              ),
+                            ),
+                            if (hasUnreadNotification)
+                              Positioned(
+                                top: 5,
+                                right: 6,
+                                child: Container(
+                                  decoration: BoxDecoration(
+                                    shape: BoxShape.circle,
+                                    border: Border.all(
+                                      color: Colors.white, // Border color
+                                      width: 2.0, // Border width
+                                    ),
+                                  ),
+                                  child: const CircleAvatar(
+                                    backgroundColor: primaryColorLT,
+                                    radius: 5,
+                                  ),
+                                ),
+                              )
+                          ],
                         ),
-                      ),
-                    )
+                        GestureDetector(
+                          onTap: oncloseclick,
+                          child: const CircleAvatar(
+                            backgroundColor: Colors.transparent,
+                            child: Icon(
+                              Icons.close,
+                              color: textColor,
+                            ),
+                          ),
+                        )
+                      ],
+                    ),
+                    
+                    
                   ],
                 ),
               ),
