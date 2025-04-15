@@ -301,7 +301,6 @@ class DrawerContent extends StatelessWidget {
                         ],
                       ),
                     ),
-
                     Row(
                       children: [
                         Stack(
@@ -322,8 +321,8 @@ class DrawerContent extends StatelessWidget {
                             ),
                             if (hasUnreadNotification)
                               Positioned(
-                                top: 5,
-                                right: 6,
+                                top: 0,
+                                right: 0,
                                 child: Container(
                                   decoration: BoxDecoration(
                                     shape: BoxShape.circle,
@@ -352,8 +351,6 @@ class DrawerContent extends StatelessWidget {
                         )
                       ],
                     ),
-                    
-                    
                   ],
                 ),
               ),
