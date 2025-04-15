@@ -300,16 +300,18 @@ class _SignUpFormState extends State<SignUpForm> {
             children: <Widget>[
               TextFormField(
                 onChanged: (String val) async {
-                  _username = val;
-                  bool? result = await _verifyUnique(val, '');
+                  // Process the value by removing spaces and converting to lowercase
+                  final String processedVal =
+                      val.replaceAll(' ', '').toLowerCase();
+                  _username = processedVal;
+                  bool? result = await _verifyUnique(processedVal, '');
                   setState(() {
                     _isUniqueName = result;
                   });
-                  // _autoValidateMode = AutovalidateMode.always;
                 },
                 validator: (String? val) => Validator.usernameValidator(
                   val!,
-                  isUnique: true,
+                  isUnique: _isUniqueName ?? false,
                 ),
                 keyboardType: TextInputType.name,
                 textInputAction: TextInputAction.next,
@@ -430,29 +432,6 @@ class _SignUpFormState extends State<SignUpForm> {
               ),
             ],
           ),
-          // Column(
-          //   crossAxisAlignment: CrossAxisAlignment.start,
-          //   children: [
-          //     TextFormField(
-          //       onChanged: (String val) {
-          //         _inviteId = val;
-          //         setState(() {});
-          //       },
-          //       textInputAction: TextInputAction.done,
-          //       keyboardType: TextInputType.visiblePassword,
-          //       decoration: inputDecoration.copyWith(
-          //         hintText: 'Invite Id (Optional)',
-          //         hintStyle: const TextStyle(
-          //           color: iconColor,
-          //           fontSize: 14,
-          //           fontWeight: FontWeight.w600,
-          //         ),
-          //         filled: true,
-          //         fillColor: const Color(0xffF4F4F4),
-          //       ),
-          //     ),
-          //   ],
-          // ),
 
           const SizedBox(height: 24.0),
 
@@ -466,12 +445,7 @@ class _SignUpFormState extends State<SignUpForm> {
                 _autoValidateMode = AutovalidateMode.always;
               });
               if (!_formKey.currentState!.validate()) return;
-              // if (Validator.emailValidatorSignUp(_authCred,
-              //             isUnique: _isUniqueEmail!) ==
-              //         '' &&
-              //     Validator.usernameValidator(_username!,
-              //             isUnique: _isUniqueName!) ==
-              //         '') {
+
               if (agreedToTerms) {
                 setState(() {
                   _autoValidateMode = AutovalidateMode.always;
@@ -645,16 +619,6 @@ class _SignUpFormState extends State<SignUpForm> {
       },
     );
   }
-
-  // void showSnackBar(BuildContext context, {String message = Constants.STGW}) {
-  //   ScaffoldMessenger.of(context).hideCurrentSnackBar();
-  //   ScaffoldMessenger.of(context).showSnackBar(
-  //     SnackBar(
-  //       content: Text(message),
-  //       behavior: SnackBarBehavior.floating,
-  //     ),
-  //   );
-  // }
 
   Future<bool?> _verifyUnique(String username, String email) async {
     bool? user = await _apiService.verifyUnique(

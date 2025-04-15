@@ -101,12 +101,14 @@ class Validator {
 
   /// Validate if username
   static String? usernameValidator(String val, {required bool isUnique}) {
+    // First, remove all spaces and convert to lowercase
+    final String processedVal = val.replaceAll(' ', '').toLowerCase();
+
     if (val == '') return 'Username cannot be empty';
-    if (val.length < 3) return 'Username is too short';
-    if (val.contains(' ')) return 'You can\'t enter space';
+    if (processedVal.length < 3) return 'Username is too short';
     if (isUnique == false) return 'Enter a unique username';
-    if (!isUnique) if (val.length < 2) return 'username is too short';
-    if (!isUnique) return 'User name already exist';
+    if (!isUnique) if (processedVal.length < 2) return 'Username is too short';
+    if (!isUnique) return 'Username already exists';
 
     return null;
   }
