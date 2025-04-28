@@ -70,7 +70,8 @@ class _CreateSellingitemScreenState extends State<CreateSellingitemScreen> {
   bool _isProcessing = false;
   bool? _isUpdating;
   bool _shouldPromote = false;
-  final DetectableTextEditingController descriptionController = DetectableTextEditingController();
+  final DetectableTextEditingController descriptionController =
+      DetectableTextEditingController();
   final TextEditingController _priceController = TextEditingController();
   final TextEditingController _productnameController = TextEditingController();
   final TextEditingController _currencyController = TextEditingController();
@@ -237,15 +238,12 @@ class _CreateSellingitemScreenState extends State<CreateSellingitemScreen> {
                   padding: const EdgeInsets.only(left: 16.0, right: 16),
                   child: DetectableTextField(
                     controller: descriptionController,
-
-                    detectionRegExp: detectionRegExp(hashtag: false)!,
-                    onDetectionTyped: (String text) {},
-                    onDetectionFinished: () {},
+                    regExp: detectionRegExp(hashtag: false)!,
                     keyboardType: TextInputType.multiline,
                     // minLines: 5,
                     maxLength: 300,
                     maxLines: 5,
-                    basicStyle: Theme.of(context).textTheme.bodyMedium,
+                    style: Theme.of(context).textTheme.bodyMedium,
                     onChanged: (String val) => description = val,
 
                     decoration: inputDecoration.copyWith(

@@ -13,13 +13,12 @@ import '../../../utils/theme/theme.dart';
 class CodeVerificationScreen extends StatefulWidget {
   /// KEY CONSTRUCTOR
   const CodeVerificationScreen(
-      {Key? key,
+      {super.key,
       required this.otp,
       required this.userName,
       required this.emailAddress,
       required this.password,
-      this.inviteId})
-      : super(key: key);
+      this.inviteId});
   // ignore: public_member_api_docs
   final String otp;
   // ignore: public_member_api_docs
@@ -175,10 +174,10 @@ class _CodeVerificationScreenState extends State<CodeVerificationScreen> {
     return user;
   }
 
-  logEvents(dynamic event, dynamic method) async {
+  Future<void> logEvents(dynamic event, dynamic method) async {
     await FirebaseAnalytics.instance.logEvent(
       name: event,
-      parameters: <String, dynamic>{'method': method},
+      parameters: <String, Object>{'method': method},
     );
   }
 }

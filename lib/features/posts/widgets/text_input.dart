@@ -37,15 +37,12 @@ class TextInput extends StatelessWidget {
                 padding: const EdgeInsets.only(left: 15, right: 15, bottom: 15),
                 child: DetectableTextField(
                   controller: titleController,
-                  detectionRegExp: detectionRegExp(hashtag: false)!,
-                  onDetectionTyped: onDetectionTyped,
-                  onDetectionFinished: onDetectionFinished,
+                  regExp: detectionRegExp(hashtag: false)!,
                   keyboardType: TextInputType.multiline,
                   maxLines: 6,
                   textInputAction: TextInputAction.newline,
                   maxLength: 300,
-                  basicStyle:
-                      Theme.of(context).textTheme.bodyMedium!.copyWith(),
+                  style: Theme.of(context).textTheme.bodyMedium!.copyWith(),
                   // onChanged: (String val) {
                   //   _postTitle = val;
                   // },

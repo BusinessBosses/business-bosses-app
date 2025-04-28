@@ -236,14 +236,12 @@ class _CreateServiceScreenState extends State<CreateServiceScreen> {
                   child: DetectableTextField(
                     controller: descriptionController,
 
-                    detectionRegExp: detectionRegExp(hashtag: false)!,
-                    onDetectionTyped: (String text) {},
-                    onDetectionFinished: () {},
+                    regExp: detectionRegExp(hashtag: false)!,
                     keyboardType: TextInputType.multiline,
                     // minLines: 5,
                     maxLength: 300,
                     maxLines: 5,
-                    basicStyle: Theme.of(context).textTheme.bodyMedium,
+                    style: Theme.of(context).textTheme.bodyMedium,
                     onChanged: (String val) => description = val,
 
                     decoration: inputDecoration.copyWith(

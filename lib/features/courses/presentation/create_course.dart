@@ -8,6 +8,7 @@ import 'package:business_bosses_v2/features/courses/models/video_link_data.dart'
 import 'package:business_bosses_v2/features/posts/widgets/image_item.dart';
 import 'package:business_bosses_v2/features/profile/controller/profile_controller.dart';
 import 'package:business_bosses_v2/services/api_service.dart';
+import 'package:detectable_text_field/detectable_text_field.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -25,11 +26,11 @@ class CreateCourseScreen extends StatefulWidget {
   final CourseModel? course;
 
   const CreateCourseScreen({
-    Key? key,
+    super.key,
     required this.industryId,
     this.courseId,
     this.course,
-  }) : super(key: key);
+  });
 
   @override
   State<CreateCourseScreen> createState() => _CreateCourseScreenState();
@@ -44,7 +45,8 @@ class _CreateCourseScreenState extends State<CreateCourseScreen> {
   bool isProcessing = false;
   final CourseController courseController = Get.put(CourseController());
   final ProfileController profileController = Get.find();
-  TextEditingController? desccontroller = TextEditingController();
+  DetectableTextEditingController? desccontroller =
+      DetectableTextEditingController();
   ContentType _selectedContentType = ContentType.videos;
   File? _selectedImage;
   String? photo;
@@ -66,7 +68,7 @@ class _CreateCourseScreenState extends State<CreateCourseScreen> {
 
   @override
   void initState() {
-    desccontroller = TextEditingController(
+    desccontroller = DetectableTextEditingController(
         text: widget.course != null ? widget.course!.description : '');
     if (widget.course != null) {
       videoLinks.clear();
@@ -160,13 +162,11 @@ class _CreateCourseScreenState extends State<CreateCourseScreen> {
                   const SizedBox(height: 24.0),
                   DetectableTextField(
                     controller: desccontroller,
-                    detectionRegExp: detectionRegExp(hashtag: false)!,
-                    onDetectionTyped: (String text) {},
-                    onDetectionFinished: () {},
+                    regExp: detectionRegExp(hashtag: false)!,
                     keyboardType: TextInputType.multiline,
                     maxLength: 1000,
                     maxLines: 5,
-                    basicStyle: Theme.of(context).textTheme.bodyMedium,
+                    style: Theme.of(context).textTheme.bodyMedium,
                     onChanged: (String val) {
                       setState(() {
                         description = val;
@@ -599,7 +599,7 @@ class _CreateCourseScreenState extends State<CreateCourseScreen> {
                                     child:
                                         Text('$value Coins (\$$dollarValue)'),
                                   );
-                                }).toList(),
+                                }),
                                 const DropdownMenuItem<int>(
                                   value: -1,
                                   child: Text('Enter Custom Price'),
