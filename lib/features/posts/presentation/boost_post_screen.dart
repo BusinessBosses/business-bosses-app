@@ -105,22 +105,25 @@ class _BoostPostState extends State<BoostPost> {
         setState(() {
           _isProcessing = false;
         });
+        print('❌ StripeException: code=$error}');
         showSnackBar(context,
             message: 'Opps!! Something went wrong. Try again');
       });
-    } on StripeException {
+    } on StripeException catch (e) {
       setState(() {
         _isProcessing = false;
       });
+      print(
+          '❌ StripeException: code=${e.error.code}, message=${e.error.localizedMessage}');
       // ignore: use_build_context_synchronously
       showSnackBar(context, message: 'Opps!! Something went wrong. Try again');
       // print('Here ->>>>>> $e');
-    } catch (e) {
+    } catch (e, st) {
       setState(() {
         _isProcessing = false;
       });
       print('Here ->>>>>> $e');
-
+      print('❌ Unknown error in presentPaymentSheet: $e\n$st');
       showSnackBar(context, message: 'Opps!! Something went wrong. Try again');
     }
   }
@@ -147,7 +150,7 @@ class _BoostPostState extends State<BoostPost> {
             'Accept': 'application/json',
             'Content-Type': 'application/x-www-form-urlencoded'
           });
-
+      print('Stripe key: ${dotenv.env['STRIPE_SEC_KEY']}');
       return jsonDecode(res.body);
     } catch (e) {
       setState(() {

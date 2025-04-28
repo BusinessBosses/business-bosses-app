@@ -39,12 +39,11 @@ void main() async {
 
   // await firebaseInitUniLinks();
   AnalyticsServices();
-  Stripe.publishableKey =
-      'pk_live_51MAcspEGsMsi6baUVnDR3Vlfh14vm73Oz9Z4LwYcvzOTdd6AvRRHrGCkpIoYmTfe2iSXm7ju2RQtO4UYJTvodFPR008RO7V1j3';
+  Stripe.publishableKey = dotenv.env['STRIPE_PUB_KEY']!;
   Stripe.merchantIdentifier = 'merchant.businessbosses';
 
-  Stripe.publishableKey =
-      'pk_live_51MAcspEGsMsi6baUVnDR3Vlfh14vm73Oz9Z4LwYcvzOTdd6AvRRHrGCkpIoYmTfe2iSXm7ju2RQtO4UYJTvodFPR008RO7V1j3';
+  // Stripe.publishableKey =
+  //     'pk_live_51MAcspEGsMsi6baUVnDR3Vlfh14vm73Oz9Z4LwYcvzOTdd6AvRRHrGCkpIoYmTfe2iSXm7ju2RQtO4UYJTvodFPR008RO7V1j3';
 
   FirebaseMessaging.instance.getToken().then((String? value) {
     // print(value);
