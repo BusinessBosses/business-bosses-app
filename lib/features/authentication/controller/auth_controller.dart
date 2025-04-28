@@ -270,10 +270,10 @@ class AuthController extends GetxController {
     }
   }
 
-  logEvents(dynamic event, dynamic method) async {
+  Future<void> logEvents(dynamic event, dynamic method) async {
     await FirebaseAnalytics.instance.logEvent(
       name: event,
-      parameters: <String, dynamic>{'method': method},
+      parameters: <String, Object>{'method': method},
     );
   }
 }

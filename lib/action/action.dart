@@ -96,7 +96,7 @@ Future<void> socialShare(String message) async {
 void logEvent(dynamic id, dynamic type) async {
   await FirebaseAnalytics.instance.logEvent(
     name: 'share',
-    parameters: <String, dynamic>{
+    parameters: <String, Object>{
       'content_id': id,
       'content_type': type,
     },

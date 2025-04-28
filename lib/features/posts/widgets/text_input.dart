@@ -1,20 +1,19 @@
 // ignore_for_file: public_member_api_docs
 
 import 'package:business_bosses_v2/utils/theme/theme.dart';
-import 'package:detectable_text_field/detector/sample_regular_expressions.dart';
+import 'package:detectable_text_field/detectable_text_field.dart';
 import 'package:detectable_text_field/widgets/detectable_text_field.dart';
 import 'package:flutter/material.dart';
 
 class TextInput extends StatelessWidget {
   const TextInput(
-      {Key? key,
+      {super.key,
       required this.onDetectionTyped,
       required this.titleController,
       required this.onDetectionFinished,
-      this.isPost = true})
-      : super(key: key);
+      this.isPost = true});
   final Function(String) onDetectionTyped;
-  final TextEditingController titleController;
+  final DetectableTextEditingController titleController;
   final VoidCallback onDetectionFinished;
   final bool isPost;
 
