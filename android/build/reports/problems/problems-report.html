@@ -11,6 +11,7 @@
 html {
     line-height: 1.15;
     -ms-text-size-adjust: 100%;
+    text-size-adjust: 100%;
     -webkit-text-size-adjust: 100%
 }
 
@@ -294,6 +295,7 @@ ul .tree-btn {
 }
 
 .invisible-text {
+    -webkit-user-select: all; /* Allow the text to be selectable on Safari */
     user-select: all; /* Allow the text to be selectable */
     color: transparent; /* Hide the text */
     text-indent: -9999px; /* Move the text out of view */
@@ -493,6 +495,7 @@ body {
     color: #02303A;
     background-color: #ffffff;
     -webkit-text-size-adjust: 100%;
+    text-size-adjust: 100%;
     -ms-text-size-adjust: 100%;
     -webkit-font-smoothing: antialiased;
 }
@@ -625,6 +628,7 @@ code + .copy-button {
 }
 
 .java-exception-part-toggle {
+    -webkit-user-select: none; /* For Safari */
     user-select: none;
     cursor: pointer;
     border-radius: 2px;
