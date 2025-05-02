@@ -9,13 +9,13 @@ import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:get/get.dart';
-import 'package:sendgrid_mailer/sendgrid_mailer.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:http/http.dart' as http;
 
 import '../../../navigation/routes.dart';
 import '../../../services/api_service.dart';
 
-/// Initalize Auth controller
+/// Initialize Auth controller
 class AuthController extends GetxController {
   /// AUTH LOADING STATE
   RxBool isLoading = RxBool(false);
@@ -50,105 +50,104 @@ class AuthController extends GetxController {
   }
 
   /// SEND OTP TO USER EMAIL FOR VERIFICATION
-  void sendOtp({
+  Future<void> sendOtp({
     required String emailAddress,
     required String userName,
     required String password,
     String? inviteId,
     required VoidCallback onError,
-  }) {
-    Random rng = Random();
-    int code = rng.nextInt(900000) + 100000;
-    Mailer mailer = Mailer(dotenv.env['SENDGRILL_API_KEY']!);
-    Address toAddress = Address(emailAddress.trim());
-    Address fromAddress = Address(dotenv.env['SENDGRID_EMAIL_ADDRESS']!);
-    Content content = Content('text/plain', code.toString());
-    String subject = 'OTP Verification Code';
-    final Personalization personalization = Personalization(
-      <Address>[toAddress],
-      dynamicTemplateData: <String, dynamic>{
-        'username': userName,
-        'otp': code.toString()
+  }) async {
+    final int code = Random().nextInt(900000) + 100000;
+    final String apiKey = dotenv.env['SENDGRILL_API_KEY']!;
+    final String fromEmail = dotenv.env['SENDGRID_EMAIL_ADDRESS']!;
+    final String templateId = dotenv.env['SENDGRID_TEMPLATE_ID']!;
+    final String subject = 'OTP Verification Code';
+
+    final Uri uri = Uri.parse('https://api.sendgrid.com/v3/mail/send');
+    final http.Response response = await http.post(
+      uri,
+      headers: <String, String>{
+        'Authorization': 'Bearer $apiKey',
+        'Content-Type': 'application/json',
       },
-      subject: subject,
+      body: jsonEncode(<String, Object>{
+        'personalizations': <Map<String, Object>>[
+          <String, Object>{
+            'to': <Map<String, String>>[
+              <String, String>{'email': emailAddress.trim()}
+            ],
+            'dynamic_template_data': <String, String>{
+              'username': userName,
+              'otp': code.toString(),
+            }
+          }
+        ],
+        'from': <String, String>{'email': fromEmail},
+        'template_id': templateId,
+        'subject': subject,
+      }),
     );
 
-    Email email = Email(
-      <Personalization>[personalization],
-      fromAddress,
-      subject,
-      content: <Content>[content],
-      templateId: dotenv.env['SENDGRID_TEMPLATE_ID'],
-      customArgs: <String, String>{
-        'username': userName,
-        'otp': code.toString()
-      },
-    );
-    mailer.send(email).then((Result<void> result) {
-      if (result.isError) {
-        onError();
-      } else {
-        Get.to(() => CodeVerificationScreen(
-              otp: code.toString(),
-              userName: userName,
-              emailAddress: emailAddress,
-              password: password,
-              inviteId: inviteId,
-            ));
-      }
-    }).catchError((dynamic e) {
+    if (response.statusCode >= 200 && response.statusCode < 300) {
+      Get.to(() => CodeVerificationScreen(
+            otp: code.toString(),
+            userName: userName,
+            emailAddress: emailAddress,
+            password: password,
+            inviteId: inviteId,
+          ));
+    } else {
+      debugPrint('SendGrid error ${response.statusCode}: ${response.body}');
       onError();
-    });
+    }
   }
 
   /// SEND OTP TO USER EMAIL FOR FORGOT PASSWORD
-  void sendOtpPassword({
+  Future<void> sendOtpPassword({
     required String emailAddress,
     required String username,
     required VoidCallback onError,
-  }) {
-    Random rng = Random();
-    int code = rng.nextInt(900000) + 100000;
-    Mailer mailer = Mailer(dotenv.env['SENDGRILL_API_KEY']!);
-    Address toAddress = Address(emailAddress.trim());
-    Address fromAddress = Address(dotenv.env['SENDGRID_EMAIL_ADDRESS']!);
-    Content content = Content('text/plain', code.toString());
-    String subject = 'OTP Verification Code';
-    final Personalization personalization = Personalization(
-      <Address>[toAddress],
-      dynamicTemplateData: <String, dynamic>{
-        'username': username,
-        'otp': code.toString()
+  }) async {
+    final int code = Random().nextInt(900000) + 100000;
+    final String apiKey = dotenv.env['SENDGRILL_API_KEY']!;
+    final String fromEmail = dotenv.env['SENDGRID_EMAIL_ADDRESS']!;
+    final String templateId = dotenv.env['SENDGRID_FORGOT_TEMPLATE_ID']!;
+    final String subject = 'OTP Verification Code';
+
+    final Uri uri = Uri.parse('https://api.sendgrid.com/v3/mail/send');
+    final http.Response response = await http.post(
+      uri,
+      headers: <String, String>{
+        'Authorization': 'Bearer $apiKey',
+        'Content-Type': 'application/json',
       },
-      subject: subject,
+      body: jsonEncode(<String, Object>{
+        'personalizations': <Map<String, Object>>[
+          <String, Object>{
+            'to': <Map<String, String>>[
+              <String, String>{'email': emailAddress.trim()}
+            ],
+            'dynamic_template_data': <String, String>{
+              'username': username,
+              'otp': code.toString(),
+            }
+          }
+        ],
+        'from': <String, String>{'email': fromEmail},
+        'template_id': templateId,
+        'subject': subject,
+      }),
     );
 
-    Email email = Email(
-      <Personalization>[personalization],
-      fromAddress,
-      subject,
-      content: <Content>[content],
-      templateId: dotenv.env['SENDGRID_FORGOT_TEMPLATE_ID'],
-      customArgs: <String, String>{
-        'username': username,
-        'otp': code.toString()
-      },
-    );
-    mailer.send(email).then((Result<void> result) {
-      if (result.isError) {
-        onError();
-        print(result.asError?.error);
-      } else {
-        print(result);
-        Get.to(() => ForgotPasswordVerificationScreen(
-              otp: code.toString(),
-              emailAddress: emailAddress,
-            ));
-      }
-    }).catchError((dynamic e) {
-      print(e);
+    if (response.statusCode >= 200 && response.statusCode < 300) {
+      Get.to(() => ForgotPasswordVerificationScreen(
+            otp: code.toString(),
+            emailAddress: emailAddress,
+          ));
+    } else {
+      debugPrint('SendGrid error ${response.statusCode}: ${response.body}');
       onError();
-    });
+    }
   }
 
   /// CREATE NONCE
@@ -169,55 +168,7 @@ class AuthController extends GetxController {
 
   /// SIGNING WITH APPLE
   // void _handleAppleSignIn() async {
-  //   final String rawNonce = generateNonce();
-  //   final String nonce = sha256ofString(rawNonce);
-  //   SharedPreferences prefs = await SharedPreferences.getInstance();
-
-  //   try {
-  //     final AuthorizationCredentialAppleID appleCredential =
-  //         await SignInWithApple.getAppleIDCredential(
-  //       scopes: <AppleIDAuthorizationScopes>[
-  //         AppleIDAuthorizationScopes.email,
-  //         AppleIDAuthorizationScopes.fullName,
-  //       ],
-  //       nonce: nonce,
-  //     );
-
-  //     _authCred = appleCredential.email;
-  //     _authusername =
-  //         '${appleCredential.givenName} ${appleCredential.familyName}';
-  //     if (_authCred == null) {
-  //       _authCred = prefs.getString('_authCred');
-  //       _authusername = prefs.getString('_authusername');
-  //       await logEvents('login', 'Apple SignIn');
-  //       dynamic user = await _handleLogin();
-  //       Get.offAndToNamed(Routes.home);
-  //       if (user['success'] == false) {
-  //         Get.snackbar('Error', user['error']);
-  //       } else {}
-  //     } else {
-  //       saveToSharedPreferences(_authCred!, '_authCred');
-  //       saveToSharedPreferences(_authusername!, '_authusername');
-  //       dynamic user = await _handleRegister();
-  //       Get.snackbar('Success', 'Authentication completed');
-  //       await logEvents('signup', 'email');
-  //       Get.toNamed(
-  //         Routes.updateProfile,
-  //         arguments: UserModel(
-  //           username: _authusername!,
-  //           email: _authCred!,
-  //         ),
-  //       );
-  //     }
-
-  //     print(_authCred! + ' ' + _authusername!);
-
-  //   } catch (error) {
-  //     // Error occurred during sign in
-  //     // log('Here ->>>>>> $error');
-
-  //   }
-
+  //   … (unchanged) …
   // }
 
   /// VALIDATE LOGIN INPUT
@@ -266,7 +217,6 @@ class AuthController extends GetxController {
           _authusername!,
           '');
       return user;
-      // }
     }
   }
 
