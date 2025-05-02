@@ -13,8 +13,7 @@ class AllLearningPostsScreen extends StatefulWidget {
 
   final bool? isCoursesTile;
 
-  const AllLearningPostsScreen({Key? key, this.isCoursesTile = false})
-      : super(key: key);
+  const AllLearningPostsScreen({super.key, this.isCoursesTile = false});
 
   @override
   // ignore: library_private_types_in_public_api
@@ -50,7 +49,7 @@ class _AllLearningPostsScreenState extends State<AllLearningPostsScreen> {
         ),
         body: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 15),
-          child: StaggeredGridView.countBuilder(
+          child: MasonryGridView.count(
             crossAxisCount: 2,
             crossAxisSpacing: 15.0,
             itemCount:
@@ -83,7 +82,6 @@ class _AllLearningPostsScreenState extends State<AllLearningPostsScreen> {
                       },
                     );
             },
-            staggeredTileBuilder: (int index) => const StaggeredTile.fit(1),
           ),
         ),
       );

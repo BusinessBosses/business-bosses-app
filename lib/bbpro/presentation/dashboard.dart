@@ -227,7 +227,7 @@ class _DashboardState extends State<Dashboard> {
                                               fontWeight: FontWeight.w700),
                                         ),
                                       );
-                                    }).toList(),
+                                    }),
                                   ],
                                 ).then((String? selected) async {
                                   if (selected != null) {
@@ -281,10 +281,9 @@ class _DashboardState extends State<Dashboard> {
                       ),
                       const OrdersWidget(),
                       const FinancialanalysisWidget(),
-                      StaggeredGridView.countBuilder(
+                      MasonryGridView.count(
                         physics: const NeverScrollableScrollPhysics(),
-                        staggeredTileBuilder: (int index) =>
-                            const StaggeredTile.fit(1),
+
                         padding: const EdgeInsets.symmetric(
                           horizontal: 15.0,
                         ),
@@ -329,10 +328,8 @@ class _DashboardState extends State<Dashboard> {
                               ));
                         },
                       ),
-                      StaggeredGridView.countBuilder(
+                      MasonryGridView.count(
                         physics: const NeverScrollableScrollPhysics(),
-                        staggeredTileBuilder: (int index) =>
-                            const StaggeredTile.fit(1),
                         padding: const EdgeInsets.symmetric(
                           horizontal: 15.0,
                         ),

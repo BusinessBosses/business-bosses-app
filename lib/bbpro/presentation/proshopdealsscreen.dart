@@ -264,9 +264,8 @@ class _ProshopdealsScreenState extends State<ProshopdealsScreen>
           Padding(
             padding:
                 const EdgeInsets.symmetric(horizontal: 10.0, vertical: 10.0),
-            child: StaggeredGridView.countBuilder(
+            child: MasonryGridView.count(
               crossAxisCount: 2,
-              staggeredTileBuilder: (int index) => const StaggeredTile.fit(1),
               mainAxisSpacing: 10.0,
               crossAxisSpacing: 10.0,
               itemCount: proItems.length,
@@ -341,9 +340,8 @@ class _ProshopdealsScreenState extends State<ProshopdealsScreen>
             Padding(
               padding:
                   const EdgeInsets.symmetric(horizontal: 10.0, vertical: 10.0),
-              child: StaggeredGridView.countBuilder(
+              child: MasonryGridView.count(
                 crossAxisCount: 2,
-                staggeredTileBuilder: (int index) => const StaggeredTile.fit(1),
                 mainAxisSpacing: 10.0,
                 crossAxisSpacing: 10.0,
                 itemCount: proProducts.length,
@@ -389,9 +387,8 @@ class _ProshopdealsScreenState extends State<ProshopdealsScreen>
             Padding(
               padding:
                   const EdgeInsets.symmetric(horizontal: 10.0, vertical: 10.0),
-              child: StaggeredGridView.countBuilder(
+              child: MasonryGridView.count(
                 crossAxisCount: 2,
-                staggeredTileBuilder: (int index) => const StaggeredTile.fit(1),
                 mainAxisSpacing: 10.0,
                 crossAxisSpacing: 10.0,
                 itemCount: proServices.length,

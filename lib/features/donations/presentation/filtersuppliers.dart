@@ -68,9 +68,7 @@ class _FilterUsersState extends State<FilterSuppliers> {
                       FocusScope.of(context).unfocus();
                       return false;
                     },
-                    child: StaggeredGridView.countBuilder(
-                      staggeredTileBuilder: (int index) =>
-                          const StaggeredTile.fit(1),
+                    child: MasonryGridView.count(
                       padding: const EdgeInsets.symmetric(
                           horizontal: 15.0, vertical: 10),
                       crossAxisCount: 2,

@@ -16,7 +16,7 @@ import 'analysescreen.dart';
 class RelevantUsersScreen extends StatefulWidget {
   static const String routeName = '/relevant-users-screen';
 
-  const RelevantUsersScreen({Key? key}) : super(key: key);
+  const RelevantUsersScreen({super.key});
 
   @override
   // ignore: library_private_types_in_public_api
@@ -82,7 +82,7 @@ class _RelevantUsersScreenState extends State<RelevantUsersScreen> {
                   ? const Center(child: CircularProgressIndicator())
                   : filteredConnections.isEmpty
                       ? _safetyModal()
-                      : StaggeredGridView.countBuilder(
+                      : MasonryGridView.count(
                           controller: _scrollController,
                           padding: const EdgeInsets.all(8.0),
                           crossAxisCount: 2,
@@ -112,8 +112,6 @@ class _RelevantUsersScreenState extends State<RelevantUsersScreen> {
                                   : const SizedBox.shrink();
                             }
                           },
-                          staggeredTileBuilder: (int index) =>
-                              const StaggeredTile.fit(1),
                         ),
             ),
           ],
