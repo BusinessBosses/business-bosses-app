@@ -6,7 +6,7 @@ import 'package:business_bosses_v2/services/api_service.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_stripe/flutter_stripe.dart';
-import 'package:flutter_paystack/flutter_paystack.dart';
+// import 'package:flutter_paystack/flutter_paystack.dart';
 
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
@@ -40,7 +40,7 @@ class _BoostCourseState extends State<BoostCourse> {
   bool isCoin = false;
   late Map<String, dynamic>? paymantIntent;
   final ProfileController profileController = Get.find();
-  final PaystackPlugin payStackClient = PaystackPlugin();
+  // final PaystackPlugin payStackClient = PaystackPlugin();
 
   late String duration;
   List<Map<String, dynamic>> plans = <Map<String, dynamic>>[
@@ -231,21 +231,21 @@ class _BoostCourseState extends State<BoostCourse> {
       'unique_transaction_ref_${Random().nextInt(1000000)}';
 
   void _makePayment() async {
-    final Charge charge = Charge()
-      ..email = profileController.myProfile.email
-      ..amount = (int.parse(initPlan) * 100000)
-      // ..amount = 10000
-      ..reference = reference;
+    // final Charge charge = Charge()
+    //   ..email = profileController.myProfile.email
+    //   ..amount = (int.parse(initPlan) * 100000)
+    //   // ..amount = 10000
+    //   ..reference = reference;
 
-    final CheckoutResponse response = await payStackClient.checkout(context,
-        charge: charge, method: CheckoutMethod.card);
+    // final CheckoutResponse response = await payStackClient.checkout(context,
+    //     charge: charge, method: CheckoutMethod.card);
 
-    if (response.status && response.reference == reference) {
-      showSnackBar(context,
-          message: 'Payment Successful, Thanks for your patronage !');
-    } else {
-      showSnackBar(context, message: 'Opps!! Something went wrong. Try again');
-    }
+    // if (response.status && response.reference == reference) {
+    //   showSnackBar(context,
+    //       message: 'Payment Successful, Thanks for your patronage !');
+    // } else {
+    //   showSnackBar(context, message: 'Opps!! Something went wrong. Try again');
+    // }
   }
 
   @override
