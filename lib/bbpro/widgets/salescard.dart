@@ -189,7 +189,7 @@ class _SalesWidgetState extends State<SalesWidget> {
                             bottomTitles: SideTitles(
                               showTitles: shopController.shopGraph!.totalSales >
                                   0, // Only show if totalSales > 0
-                              getTitles: (double value) {
+                              showTitles: (double value) {
                                 // Ensure value index is within bounds and map date label to the X-axis
                                 int index = value.toInt();
                                 if (index >= 0 &&
