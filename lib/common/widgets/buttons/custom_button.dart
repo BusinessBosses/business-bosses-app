@@ -65,6 +65,7 @@ class CustomButton extends StatelessWidget {
             child: ElevatedButton(
               style: ElevatedButton.styleFrom(
                 elevation: 0.0,
+                backgroundColor: primaryColorLT,
               ),
               onPressed: isProcessing ? null : onPressed,
               child: isProcessing

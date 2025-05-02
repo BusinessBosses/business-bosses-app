@@ -70,8 +70,7 @@ class LoginScreen extends StatelessWidget {
                           height: 6,
                         ),
                         CircleAvatar(
-                          backgroundColor: primaryColorLT,
-                          radius: 3,
+                          backgroundColor: primaryColorLT,                         radius: 3,
                         )
                       ],
                     ),
