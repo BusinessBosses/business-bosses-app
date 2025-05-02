@@ -24,10 +24,10 @@ class BoostDonation extends StatefulWidget {
   final String donationTitle;
   final String donationId;
   const BoostDonation({
-    Key? key,
+    super.key,
     required this.donationId,
     this.donationTitle = '',
-  }) : super(key: key);
+  });
   @override
   State<BoostDonation> createState() => _BoostDonationState();
 }
@@ -211,8 +211,8 @@ class _BoostDonationState extends State<BoostDonation> {
   }
 
   void _startPaystack() async {
-    String? publicKey = dotenv.env['PAYSTACK_PUBLIC_KEY'];
-    await payStackClient.initialize(publicKey: publicKey!);
+    // String? publicKey = dotenv.env['PAYSTACK_PUBLIC_KEY'];
+    // await payStackClient.initialize(publicKey: publicKey!);
   }
 
   final String reference =
@@ -552,11 +552,11 @@ class _BoostDonationState extends State<BoostDonation> {
 class BoostPlanCard extends StatelessWidget {
   /// CONSTRUCTOR
   const BoostPlanCard({
-    Key? key,
+    super.key,
     required this.plan,
     required this.activePlan,
     required this.onTap,
-  }) : super(key: key);
+  });
   final Map<String, dynamic> plan;
   final String activePlan;
   final Function(String) onTap;
