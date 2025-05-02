@@ -180,29 +180,42 @@ class _SalesWidgetState extends State<SalesWidget> {
                           maxY: shopController.shopGraph!.totalSales
                               .toDouble(), // Dynamically set maxY based on totalSales
                           titlesData: FlTitlesData(
-                            leftTitles: SideTitles(
-                              showTitles: true,
-                              interval: shopController.shopGraph!.totalSales > 0
-                                  ? shopController.shopGraph!.totalSales / 5
-                                  : 100,
+                            leftTitles: AxisTitles(
+                              sideTitles: SideTitles(
+                                showTitles: true,
+                                interval: shopController.shopGraph!.totalSales >
+                                        0
+                                    ? shopController.shopGraph!.totalSales / 5
+                                    : 100,
+                                getTitlesWidget:
+                                    defaultGetTitle, // Use the default or provide your own function
+                              ),
                             ),
-                            bottomTitles: SideTitles(
-                              showTitles: shopController.shopGraph!.totalSales >
-                                  0, // Only show if totalSales > 0
-                              showTitles: (double value) {
-                                // Ensure value index is within bounds and map date label to the X-axis
-                                int index = value.toInt();
-                                if (index >= 0 &&
-                                    index <
+                            bottomTitles: AxisTitles(
+                              sideTitles: SideTitles(
+                                showTitles:
+                                    shopController.shopGraph!.totalSales > 0,
+                                getTitlesWidget:
+                                    (double value, TitleMeta meta) {
+                                  // Ensure value index is within bounds and map date label to the X-axis
+                                  int index = value.toInt();
+                                  if (index >= 0 &&
+                                      index <
+                                          shopController
+                                              .shopGraph!.graphData!.length) {
+                                    DateTime date = DateTime.parse(
                                         shopController
-                                            .shopGraph!.graphData!.length) {
-                                  DateTime date = DateTime.parse(shopController
-                                      .shopGraph!.graphData![index].date);
-                                  return date.day.toString();
-                                }
-                                return '';
-                              },
+                                            .shopGraph!.graphData![index].date);
+                                    return Text(date.day.toString());
+                                  }
+                                  return const Text('');
+                                },
+                              ),
                             ),
+                            rightTitles: AxisTitles(
+                                sideTitles: SideTitles(showTitles: false)),
+                            topTitles: AxisTitles(
+                                sideTitles: SideTitles(showTitles: false)),
                           ),
                           gridData: FlGridData(show: false),
                           borderData: FlBorderData(show: false),
@@ -217,17 +230,13 @@ class _SalesWidgetState extends State<SalesWidget> {
                                           entry.value.totalAmount.toDouble()))
                                   .toList(),
                               isCurved: true,
-                              colors: <Color>[
-                                proprimaryColor
-                              ], // Use your custom colors
+                              color: proprimaryColor,
                               barWidth: 4,
                               belowBarData: BarAreaData(
                                 show: true,
-                                colors: <Color>[
-                                  proprimaryColor.withAlpha(100)
-                                ], // Use your custom colors
+                                color: proprimaryColor.withAlpha(100),
                               ),
-                              dotData: FlDotData(show: false),
+                              dotData: const FlDotData(show: false),
                             ),
                           ],
                         ),
