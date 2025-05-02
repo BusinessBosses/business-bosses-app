@@ -19,7 +19,7 @@ import '../../utils/theme/theme.dart';
 class AnalyserScreen extends StatefulWidget {
   static const String routeName = '/analyser-screen';
 
-  const AnalyserScreen({Key? key}) : super(key: key);
+  const AnalyserScreen({super.key});
 
   @override
   // ignore: library_private_types_in_public_api
