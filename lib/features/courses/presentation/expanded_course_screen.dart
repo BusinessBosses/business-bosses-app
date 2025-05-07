@@ -33,8 +33,7 @@ class ExpandedCourseScreen extends StatefulWidget {
   static const String routeName = '/expandedcoursescreen';
   final CourseModel course;
 
-  const ExpandedCourseScreen({Key? key, required this.course})
-      : super(key: key);
+  const ExpandedCourseScreen({super.key, required this.course});
 
   @override
   _ExpandedCourseScreenState createState() => _ExpandedCourseScreenState();

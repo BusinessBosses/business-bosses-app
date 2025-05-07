@@ -12,8 +12,7 @@ class PostImages extends StatelessWidget {
   final bool isVideo;
   final bool isYt;
   const PostImages(
-      {Key? key, required this.post, this.isVideo = false, this.isYt = false})
-      : super(key: key);
+      {super.key, required this.post, this.isVideo = false, this.isYt = false});
 
   @override
   Widget build(BuildContext context) {
@@ -599,7 +598,7 @@ class PostImages extends StatelessWidget {
                                                                 : Container(),
                                                           ),
                                                         )
-                                                        .toList()
+                                                        
                                                   ],
                                                 ),
                                               ),

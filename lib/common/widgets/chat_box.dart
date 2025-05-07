@@ -19,12 +19,12 @@ class ChatBox extends StatelessWidget {
   // ignore: public_member_api_docs
   const ChatBox(
     this.message, {
-    Key? key,
+    super.key,
     this.chatTextSize,
     required this.myUid,
     this.onTap,
     this.post,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

@@ -34,8 +34,7 @@ class AllCommunitiesScreen extends StatefulWidget {
   final int? initialBossupTabIndex;
 
   const AllCommunitiesScreen(
-      {Key? key, this.initialTabIndex, this.initialBossupTabIndex})
-      : super(key: key);
+      {super.key, this.initialTabIndex, this.initialBossupTabIndex});
 
   @override
   // ignore: library_private_types_in_public_api

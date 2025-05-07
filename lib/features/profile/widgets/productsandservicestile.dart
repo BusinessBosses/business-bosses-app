@@ -4,7 +4,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import '../presentation/my_profile_screen.dart';
 
 class ProductsandServicesExpansionTile extends StatefulWidget {
-  const ProductsandServicesExpansionTile({Key? key}) : super(key: key);
+  const ProductsandServicesExpansionTile({super.key});
 
   @override
   _ProductsandServicessExpansionTileState createState() =>

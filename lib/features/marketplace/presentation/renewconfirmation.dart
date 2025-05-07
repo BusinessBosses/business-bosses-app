@@ -10,7 +10,7 @@ import '../../../utils/theme/theme.dart';
 // ignore: public_member_api_docs
 class Renewconfirmation extends StatelessWidget {
   // ignore: public_member_api_docs
-  const Renewconfirmation({Key? key}) : super(key: key);
+  const Renewconfirmation({super.key});
 
   @override
   Widget build(BuildContext context) {

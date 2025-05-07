@@ -61,6 +61,7 @@ class _CustomTabBarWidgetState<T> extends State<CustomTabBarWidget<T>> {
               borderRadius: BorderRadius.circular(10),
             ),
             child: TabBar(
+              tabAlignment: TabAlignment.start,
               controller: widget._tabController,
               onTap: widget._scrollToSection,
               labelStyle: const TextStyle(

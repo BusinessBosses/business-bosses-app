@@ -19,10 +19,10 @@ import '../../profile/controller/profile_controller.dart';
 class BoostForumScreen extends StatefulWidget {
   // ignore: public_member_api_docs
   const BoostForumScreen({
-    Key? key,
+    super.key,
     required this.postId,
     this.postTitle = '',
-  }) : super(key: key);
+  });
   // ignore: public_member_api_docs
   final String postTitle;
   // ignore: public_member_api_docs
@@ -411,11 +411,11 @@ class _BoostForumScreenState extends State<BoostForumScreen> {
 class BoostPlanCard extends StatelessWidget {
   /// CONSTRUCTOR
   const BoostPlanCard({
-    Key? key,
+    super.key,
     required this.plan,
     required this.activePlan,
     required this.onTap,
-  }) : super(key: key);
+  });
   final Map<String, dynamic> plan;
   final String activePlan;
   final Function(String) onTap;

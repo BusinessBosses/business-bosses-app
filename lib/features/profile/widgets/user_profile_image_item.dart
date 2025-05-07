@@ -19,7 +19,7 @@ class UserProfileImageItem extends StatelessWidget {
 
   /// USER PROFILE IMAGE
   const UserProfileImageItem({
-    Key? key,
+    super.key,
     required this.imageUrl,
     required this.imageFile,
     required this.onImagePicker,
@@ -28,7 +28,7 @@ class UserProfileImageItem extends StatelessWidget {
     this.height = 86.0,
     this.width = 86.0,
     this.isPickerRequired = true,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

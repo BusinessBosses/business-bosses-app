@@ -16,7 +16,7 @@ class IconTextButton extends StatelessWidget {
 
   /// Icon text button
   const IconTextButton({
-    Key? key,
+    super.key,
     required this.onPressed,
     this.width = double.infinity,
     this.height = 57.0,
@@ -26,7 +26,7 @@ class IconTextButton extends StatelessWidget {
     this.labelColor = Colors.black,
     this.icon,
     this.padding = const EdgeInsets.symmetric(horizontal: 16.0),
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

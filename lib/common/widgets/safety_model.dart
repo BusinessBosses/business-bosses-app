@@ -13,7 +13,7 @@ class SafetyModel extends StatelessWidget {
   final MainAxisAlignment mainAxisAlignment;
 
   const SafetyModel({
-    Key? key,
+    super.key,
     this.isLoading = true,
     this.icon = const Icon(
       Icons.warning,
@@ -25,7 +25,7 @@ class SafetyModel extends StatelessWidget {
     this.clickableText = '',
     this.mainAxisAlignment = MainAxisAlignment.center,
     this.onTap,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

@@ -11,7 +11,7 @@ import '../../search/widgets/search_app_bar.dart';
 import '../widgets/connection_user_tile.dart';
 
 class ReferalsScreen extends StatelessWidget {
-  const ReferalsScreen({Key? key}) : super(key: key);
+  const ReferalsScreen({super.key});
 
   @override
   Widget build(BuildContext context) {

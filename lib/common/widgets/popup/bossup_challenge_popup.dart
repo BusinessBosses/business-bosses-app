@@ -9,7 +9,7 @@ class BossUpChallangePopUp extends StatelessWidget {
   final Industry? industry;
 
   /// Boss Up Challenge Pop Up
-  const BossUpChallangePopUp({Key? key, this.industry}) : super(key: key);
+  const BossUpChallangePopUp({super.key, this.industry});
 
   @override
   Widget build(BuildContext context) {

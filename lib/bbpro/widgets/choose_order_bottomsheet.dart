@@ -18,12 +18,12 @@ class ChooseOrderBottomSheet extends StatefulWidget {
   final List<Map<String, dynamic>> selectedItems;
   final ValueChanged<bool> onCanAddChange;
   const ChooseOrderBottomSheet({
-    Key? key,
+    super.key,
     required this.products,
     required this.services,
     required this.selectedItems,
     required this.onCanAddChange,
-  }) : super(key: key);
+  });
 
   @override
   State<ChooseOrderBottomSheet> createState() => _ChooseOrderBottomSheetState();
@@ -93,7 +93,10 @@ class _ChooseOrderBottomSheetState extends State<ChooseOrderBottomSheet>
               ),
               _selectedIndex == 0
                   ? ProIconButton(
-                      icon: const Icon(Icons.add),
+                      icon: const Icon(
+                        Icons.add,
+                        color: Colors.white,
+                      ),
                       onPressed: () {
                         Get.to(() => const CreateProductListing());
                       },
@@ -102,7 +105,10 @@ class _ChooseOrderBottomSheetState extends State<ChooseOrderBottomSheet>
                     )
                   : _selectedIndex == 1
                       ? ProIconButton(
-                          icon: const Icon(Icons.add),
+                          icon: const Icon(
+                            Icons.add,
+                            color: Colors.white,
+                          ),
                           onPressed: () {
                             Get.to(() => const CreateServiceListing());
                           },

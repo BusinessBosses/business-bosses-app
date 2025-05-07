@@ -12,9 +12,9 @@ import '../../../../utils/theme/theme.dart';
 class SupporterItem extends StatefulWidget {
   final DonationModel donation;
   const SupporterItem({
-    Key? key,
+    super.key,
     required this.donation,
-  }) : super(key: key);
+  });
 
   @override
   _SupporterItemState createState() => _SupporterItemState();

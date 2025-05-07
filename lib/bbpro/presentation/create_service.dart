@@ -254,7 +254,7 @@ class _CreateServiceListingState extends State<CreateServiceListing>
     );
   }
 
-  _editPackageSheet(BuildContext context, int index) {
+  void _editPackageSheet(BuildContext context, int index) {
     Map<String, dynamic> packageToEdit = packages[index];
 
     packageNameController.text = packageToEdit['name'];
@@ -799,7 +799,7 @@ class _CreateServiceListingState extends State<CreateServiceListing>
                                 });
                               },
                             );
-                          }).toList(),
+                          }),
                           const SizedBox(height: 10),
                           if (packages.isNotEmpty)
                             Row(
@@ -1492,7 +1492,7 @@ class _CreateServiceListingState extends State<CreateServiceListing>
                 children: <Widget>[
                   ElevatedButton(
                     style: ButtonStyle(
-                        backgroundColor: MaterialStatePropertyAll(
+                        backgroundColor: WidgetStatePropertyAll(
                             widget.isMarketplace == true
                                 ? primaryColorLT
                                 : proprimaryColor)),

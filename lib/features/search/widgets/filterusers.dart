@@ -16,12 +16,12 @@ class FilterUsers extends StatefulWidget {
   final Function(UserModel)? onConnectionChange;
 
   const FilterUsers({
-    Key? key,
+    super.key,
     this.filterItems = const <UserModel>[],
     this.isLoading = false,
     this.isSearch = false,
     this.onConnectionChange,
-  }) : super(key: key);
+  });
 
   @override
   State<FilterUsers> createState() => _FilterUsersState();
@@ -57,7 +57,7 @@ class _FilterUsersState extends State<FilterUsers> {
               : Expanded(
                   child: Stack(
                     children: <Widget>[
-                      StaggeredGridView.countBuilder(
+                      MasonryGridView.count(
                         controller: _controller,
                         padding: const EdgeInsets.all(8.0),
                         crossAxisCount: 2, // Number of columns
@@ -112,8 +112,6 @@ class _FilterUsersState extends State<FilterUsers> {
                                   },
                                 );
                         },
-                        staggeredTileBuilder: (int index) =>
-                            const StaggeredTile.fit(1),
                       ),
                       if (loadingNext)
                         const Positioned(

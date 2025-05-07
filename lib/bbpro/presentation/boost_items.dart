@@ -11,7 +11,7 @@ import 'package:business_bosses_v2/services/api_service.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_stripe/flutter_stripe.dart';
-import 'package:flutter_paystack/flutter_paystack.dart';
+// import 'package:flutter_paystack/flutter_paystack.dart';
 
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
@@ -24,10 +24,10 @@ import 'confirmation.dart';
 /// BOOST POST SCREEN
 class BoostItem extends StatefulWidget {
   const BoostItem({
-    Key? key,
+    super.key,
     this.product,
     this.service,
-  }) : super(key: key);
+  });
   final Product? product;
   final Service? service;
   @override
@@ -40,7 +40,7 @@ class _BoostItemState extends State<BoostItem> {
   bool isCoin = false;
   late Map<String, dynamic>? paymantIntent;
   final ProfileController profileController = Get.find();
-  final PaystackPlugin payStackClient = PaystackPlugin();
+  // final PaystackPlugin payStackClient = PaystackPlugin();
 
   late String duration;
   List<Map<String, dynamic>> plans = <Map<String, dynamic>>[
@@ -243,28 +243,28 @@ class _BoostItemState extends State<BoostItem> {
   }
 
   void _startPaystack() async {
-    String? publicKey = dotenv.env['PAYSTACK_PUBLIC_KEY'];
-    await payStackClient.initialize(publicKey: publicKey!);
+    // String? publicKey = dotenv.env['PAYSTACK_PUBLIC_KEY'];
+    // await payStackClient.initialize(publicKey: publicKey!);
   }
 
   final String reference =
       'unique_transaction_ref_${Random().nextInt(1000000)}';
 
   void _makePayment() async {
-    final Charge charge = Charge()
-      ..email = profileController.myProfile.email
-      ..amount = (int.parse(initPlan) * 100000)
-      // ..amount = 10000
-      ..reference = reference;
+    // final Charge charge = Charge()
+    //   ..email = profileController.myProfile.email
+    //   ..amount = (int.parse(initPlan) * 100000)
+    //   // ..amount = 10000
+    //   ..reference = reference;
 
-    final CheckoutResponse response = await payStackClient.checkout(context,
-        charge: charge, method: CheckoutMethod.card);
+    // final CheckoutResponse response = await payStackClient.checkout(context,
+    //     charge: charge, method: CheckoutMethod.card);
 
-    if (response.status && response.reference == reference) {
-      showSnackbar(message: 'Payment Successful, Thanks for your patronage !');
-    } else {
-      showSnackbar(title: 'Oops!', message: 'Something went wrong. Try again');
-    }
+    // if (response.status && response.reference == reference) {
+    //   showSnackbar(message: 'Payment Successful, Thanks for your patronage !');
+    // } else {
+    //   showSnackbar(title: 'Oops!', message: 'Something went wrong. Try again');
+    // }
   }
 
   @override
@@ -571,11 +571,11 @@ class _BoostItemState extends State<BoostItem> {
 class BoostPlanCard extends StatelessWidget {
   /// CONSTRUCTOR
   const BoostPlanCard({
-    Key? key,
+    super.key,
     required this.plan,
     required this.activePlan,
     required this.onTap,
-  }) : super(key: key);
+  });
   final Map<String, dynamic> plan;
   final String activePlan;
   final Function(String) onTap;

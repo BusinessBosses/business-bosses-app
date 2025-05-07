@@ -25,7 +25,7 @@ import 'boost_post_screen.dart';
 // ignore: public_member_api_docs
 class PostDetailsScreen extends StatefulWidget {
   final PostModel post;
-  const PostDetailsScreen({Key? key, required this.post}) : super(key: key);
+  const PostDetailsScreen({super.key, required this.post});
 
   @override
   State<PostDetailsScreen> createState() => _PostDetailsScreenState();

@@ -6,13 +6,13 @@ import '../../utils/theme/theme.dart';
 class TextWidget extends StatelessWidget {
   /// Text Widget
   const TextWidget({
-    Key? key,
+    super.key,
     this.color = textColor,
     this.fontWeight = FontWeight.w600,
     this.size = 15,
     this.centralize = false,
     required this.text,
-  }) : super(key: key);
+  });
   final String text;
   final FontWeight fontWeight;
   final Color color;

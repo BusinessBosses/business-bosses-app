@@ -17,12 +17,12 @@ class PostInteractions extends StatefulWidget {
   final Function() repost;
 
   const PostInteractions({
-    Key? key,
+    super.key,
     required this.post,
     required this.profileController,
     required this.sharePost,
     required this.repost,
-  }) : super(key: key);
+  });
 
   @override
   State<PostInteractions> createState() => _PostInteractionsState();

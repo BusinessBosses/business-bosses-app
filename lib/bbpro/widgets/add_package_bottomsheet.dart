@@ -10,12 +10,12 @@ class AddPackageBottomSheet extends StatefulWidget {
   final TextEditingController? currencyController;
   final VoidCallback onPressed;
   const AddPackageBottomSheet({
-    Key? key,
+    super.key,
     required this.packageNameController,
     required this.expenseController,
     required this.onPressed,
     this.currencyController,
-  }) : super(key: key);
+  });
 
   @override
   // ignore: library_private_types_in_public_api

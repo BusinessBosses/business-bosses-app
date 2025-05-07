@@ -38,7 +38,7 @@ class _RelevantPeopleTileState extends State<RelevantPeopleTile> {
                 element.category?.toString() == _filtertitle)
             .toList();
 
-        void _refreshScreen() {
+        void refreshScreen() {
           setState(() {
             _filtertitle = '';
           });

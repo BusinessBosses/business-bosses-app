@@ -12,11 +12,10 @@ class PhoneNumberInput extends StatelessWidget {
 
   /// CONSTRUCTOR
   const PhoneNumberInput(
-      {Key? key,
+      {super.key,
       required this.onChangeCountry,
       required this.countryCode,
-      required this.onChangeText})
-      : super(key: key);
+      required this.onChangeText});
 
   @override
   Widget build(BuildContext context) {

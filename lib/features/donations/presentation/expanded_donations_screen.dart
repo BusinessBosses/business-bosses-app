@@ -20,9 +20,9 @@ class ExpandedDonationScreen extends StatefulWidget {
   static const String routeName = '/expandedDonationscreen';
 
   const ExpandedDonationScreen({
-    Key? key,
+    super.key,
     required this.donation,
-  }) : super(key: key);
+  });
 
   @override
   _ExpandedDonationScreenState createState() => _ExpandedDonationScreenState();

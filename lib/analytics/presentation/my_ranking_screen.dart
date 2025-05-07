@@ -14,7 +14,7 @@ import '../models/ranking.dart';
 class MyRankingScreen extends StatefulWidget {
   static const String routeName = '/my-ranking-screen';
 
-  const MyRankingScreen({Key? key}) : super(key: key);
+  const MyRankingScreen({super.key});
 
   @override
   State<MyRankingScreen> createState() => _MyRankingScreenState();

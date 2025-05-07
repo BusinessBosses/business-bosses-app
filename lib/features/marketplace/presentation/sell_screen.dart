@@ -4,8 +4,7 @@ import 'package:business_bosses_v2/features/home/widgets/sellingpopup.dart';
 import 'package:business_bosses_v2/features/marketplace/widgets/currency.dart';
 import 'package:business_bosses_v2/services/api_service.dart';
 import 'package:country_list_pick/country_list_pick.dart';
-import 'package:detectable_text_field/detector/sample_regular_expressions.dart';
-import 'package:detectable_text_field/widgets/detectable_text_field.dart';
+import 'package:detectable_text_field/detectable_text_field.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -28,8 +27,7 @@ import '../models/market_model.dart';
 /// SELLING SCREEN MARKETPLACE
 class CreateSellingitemScreen extends StatefulWidget {
   /// SELLING SCREEN MARKETPLACE
-  const CreateSellingitemScreen({Key? key, this.market, required this.isUpd})
-      : super(key: key);
+  const CreateSellingitemScreen({super.key, this.market, required this.isUpd});
 
   /// String if to update;
   final MarketModel? market;
@@ -70,7 +68,8 @@ class _CreateSellingitemScreenState extends State<CreateSellingitemScreen> {
   bool _isProcessing = false;
   bool? _isUpdating;
   bool _shouldPromote = false;
-  final TextEditingController descriptionController = TextEditingController();
+  final DetectableTextEditingController descriptionController =
+      DetectableTextEditingController();
   final TextEditingController _priceController = TextEditingController();
   final TextEditingController _productnameController = TextEditingController();
   final TextEditingController _currencyController = TextEditingController();
@@ -237,15 +236,12 @@ class _CreateSellingitemScreenState extends State<CreateSellingitemScreen> {
                   padding: const EdgeInsets.only(left: 16.0, right: 16),
                   child: DetectableTextField(
                     controller: descriptionController,
-
-                    detectionRegExp: detectionRegExp(hashtag: false)!,
-                    onDetectionTyped: (String text) {},
-                    onDetectionFinished: () {},
+                    regExp: detectionRegExp(hashtag: false)!,
                     keyboardType: TextInputType.multiline,
                     // minLines: 5,
                     maxLength: 300,
                     maxLines: 5,
-                    basicStyle: Theme.of(context).textTheme.bodyMedium,
+                    style: Theme.of(context).textTheme.bodyMedium,
                     onChanged: (String val) => description = val,
 
                     decoration: inputDecoration.copyWith(

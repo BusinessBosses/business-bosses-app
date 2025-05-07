@@ -3,7 +3,7 @@
 import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:social_share/social_share.dart';
+import 'package:share_plus/share_plus.dart';
 
 import '../common/models/my_response.dart';
 import '../functions/my_native_functions.dart';
@@ -78,25 +78,30 @@ Future<void> onDetectableTextTap(
 }
 
 Future<void> socialShare(String message) async {
-  // debugPrint('socialShare: $message');
   try {
-    await SocialShare.shareOptions(message);
-    // debugPrint('socialShare: $data');
-    // if (data == null || !data) {
-    //   return MyResponse(success: false);
-    // } else {
-    //   return MyResponse(success: true);
-    // }
+    // grab the nearest context via GetX
+    final BuildContext? ctx = Get.context;
+    // on iPads (large screens) Share.share requires an origin rect, so we derive it if we can
+    final RenderBox? box = ctx?.findRenderObject() as RenderBox?;
+
+    await Share.share(
+      message,
+      sharePositionOrigin:
+          box != null ? box.localToGlobal(Offset.zero) & box.size : null,
+    );
   } catch (e) {
-    // debugPrint('socialShare: $e');
-    // return MyResponse(success: false, message: e.toString());
+    debugPrint('Error sharing content: $e');
+    // optional: surface an error to the user
+    if (Get.context != null) {
+      showSnackBar(Get.context!, message: 'Couldn’t share content');
+    }
   }
 }
 
 void logEvent(dynamic id, dynamic type) async {
   await FirebaseAnalytics.instance.logEvent(
     name: 'share',
-    parameters: <String, dynamic>{
+    parameters: <String, Object>{
       'content_id': id,
       'content_type': type,
     },

@@ -21,8 +21,7 @@ class CourseReviewTile extends StatefulWidget {
 
   ///
   const CourseReviewTile(
-      {Key? key, required this.post, required this.process, required this.edit})
-      : super(key: key);
+      {super.key, required this.post, required this.process, required this.edit});
 
   @override
   State<CourseReviewTile> createState() => _CourseReviewTileState();

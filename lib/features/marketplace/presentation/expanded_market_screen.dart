@@ -26,9 +26,9 @@ class ExpandedMarketplaceScreen extends StatefulWidget {
   static const String routeName = '/expandedMarketplacescreen';
 
   const ExpandedMarketplaceScreen({
-    Key? key,
+    super.key,
     required this.market,
-  }) : super(key: key);
+  });
 
   @override
   _ExpandedMarketplaceScreenState createState() =>

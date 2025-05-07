@@ -6,10 +6,10 @@ class ProgressTabBar extends StatelessWidget {
   final int currentIndex;
 
   const ProgressTabBar({
-    Key? key,
+    super.key,
     required this.tabs,
     required this.currentIndex,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

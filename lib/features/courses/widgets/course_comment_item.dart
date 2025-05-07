@@ -20,8 +20,7 @@ class CourseCommentItem extends StatefulWidget {
   final Function(int)? onPageChange;
 
   ///
-  const CourseCommentItem(this.comment, {Key? key, this.onPageChange})
-      : super(key: key);
+  const CourseCommentItem(this.comment, {super.key, this.onPageChange});
 
   @override
   State<CourseCommentItem> createState() => _CommentItemState();

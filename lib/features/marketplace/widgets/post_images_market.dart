@@ -7,7 +7,7 @@ import '../../posts/widgets/images_viewer_screen.dart';
 
 class PostImagesMarket extends StatelessWidget {
   final MarketModel post;
-  const PostImagesMarket({Key? key, required this.post}) : super(key: key);
+  const PostImagesMarket({super.key, required this.post});
 
   @override
   Widget build(BuildContext context) {
@@ -251,7 +251,7 @@ class PostImagesMarket extends StatelessWidget {
                                                 : Container(),
                                           ),
                                         )
-                                        .toList()
+                                        
                                   ],
                                 ),
                               ),

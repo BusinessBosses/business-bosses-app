@@ -39,7 +39,7 @@ class OrderSummaryWidget extends StatefulWidget {
   final int? serviceDuration;
   final String? timeofservice;
   const OrderSummaryWidget(
-      {Key? key,
+      {super.key,
       required this.quantity,
       required this.price,
       required this.discount,
@@ -48,8 +48,7 @@ class OrderSummaryWidget extends StatefulWidget {
       this.serviceDuration,
       this.isservice,
       this.packagesprice,
-      this.timeofservice})
-      : super(key: key);
+      this.timeofservice});
 
   @override
   State<OrderSummaryWidget> createState() => _OrderSummaryWidgetState();

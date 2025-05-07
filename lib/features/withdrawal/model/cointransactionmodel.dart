@@ -45,5 +45,5 @@ class CoinTransaction {
     );
   }
 
-  toMap() {}
+  void toMap() {}
 }

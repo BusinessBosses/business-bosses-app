@@ -15,9 +15,9 @@ class NotificationItem extends StatelessWidget {
   // ignore: public_member_api_docs
   const NotificationItem(
     this.myNotification, {
-    Key? key,
+    super.key,
     this.onTap,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

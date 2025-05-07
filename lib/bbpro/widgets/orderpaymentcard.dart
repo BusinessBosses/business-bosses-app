@@ -3,8 +3,7 @@ import 'package:flutter/material.dart';
 
 class OrderPaymentMethodsWidget extends StatefulWidget {
   final List<dynamic>? paymentMethods;
-  const OrderPaymentMethodsWidget({Key? key, this.paymentMethods})
-      : super(key: key);
+  const OrderPaymentMethodsWidget({super.key, this.paymentMethods});
 
   @override
   State<OrderPaymentMethodsWidget> createState() =>
@@ -35,7 +34,7 @@ class _OrderPaymentMethodsWidgetState extends State<OrderPaymentMethodsWidget> {
                         title: payment['paymentMethod'],
                         details: 'Details: ' + payment['details'],
                       ))
-                  .toList(),
+                  ,
           ],
         ),
       ),

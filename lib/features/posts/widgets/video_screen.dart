@@ -65,7 +65,7 @@ class _VideoScreenState extends State<VideoScreen> {
     );
   }
 
-  initializeVideo() {
+  void initializeVideo() {
     // videoPlayerController = VideoPlayerController.network(_post.videoUrl);
     // await videoPlayerController.initialize();
 

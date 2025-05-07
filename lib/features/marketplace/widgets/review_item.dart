@@ -21,8 +21,7 @@ class ReviewTile extends StatefulWidget {
 
   ///
   const ReviewTile(
-      {Key? key, required this.post, required this.process, required this.edit})
-      : super(key: key);
+      {super.key, required this.post, required this.process, required this.edit});
 
   @override
   State<ReviewTile> createState() => _ReviewTileState();

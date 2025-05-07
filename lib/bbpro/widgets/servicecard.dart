@@ -46,12 +46,12 @@ class ServiceCard extends StatefulWidget {
   final bool? marketplace;
 
   const ServiceCard({
-    Key? key,
+    super.key,
     this.service,
     this.myShop,
     this.shop,
     this.marketplace,
-  }) : super(key: key);
+  });
 
   @override
   // ignore: library_private_types_in_public_api

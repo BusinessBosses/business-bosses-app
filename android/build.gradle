@@ -1,36 +1,38 @@
-buildscript {
-    ext.kotlin_version = '2.0.20'
-    // ext.kotlin_version = '1.8.21'
+// File: android/build.gradle
 
-    repositories {
-        google()
-        mavenCentral()
-    }
-
-    dependencies {
-        classpath 'com.android.tools.build:gradle:7.2.0'
-        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
-        // Add the dependency for the Google services Gradle plugin
-        classpath 'com.google.gms:google-services:4.3.15'
-
-    }
-}
+// plugins {
+//     // Android Gradle Plugin — available to subprojects only
+//     id "com.android.application"      version "7.2.0" apply false
+//     // Kotlin Android plugin
+//     id "org.jetbrains.kotlin.android" version "2.0.20" apply false
+//     // Google Services (Firebase) plugin
+//     id "com.google.gms.google-services" version "4.3.15" apply false
+// }
 
 allprojects {
-    repositories {
-        google()
-        mavenCentral()
-    }
+   
 }
 
-rootProject.buildDir = '../build'
+rootProject.buildDir = "../build"
 subprojects {
     project.buildDir = "${rootProject.buildDir}/${project.name}"
-}
-subprojects {
-    project.evaluationDependsOn(':app')
+    project.evaluationDependsOn(":app")
 }
 
 tasks.register("clean", Delete) {
     delete rootProject.buildDir
+}
+
+subprojects { project ->
+  // only apply to Android‐Kotlin modules
+  project.plugins.withId("org.jetbrains.kotlin.android") {
+    project.tasks.withType(org.jetbrains.kotlin.gradle.tasks.KotlinCompile).configureEach {
+      kotlinOptions {
+        // make this match your compileOptions targetCompatibility
+        jvmTarget = "17"
+      }
+    }
+  }
+
+
 }

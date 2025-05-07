@@ -23,11 +23,11 @@ class DonationCommentItem extends StatefulWidget {
   final String? type;
 
   const DonationCommentItem({
-    Key? key,
+    super.key,
     required this.onComment,
     required this.donation,
     this.type,
-  }) : super(key: key);
+  });
 
   @override
   _DonationCommentItemState createState() => _DonationCommentItemState();

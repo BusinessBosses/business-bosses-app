@@ -6,10 +6,10 @@ class AttendeesCountWidget extends StatefulWidget {
   final int currentEventId;
 
   const AttendeesCountWidget({
-    Key? key,
+    super.key,
     required this.events,
     required this.currentEventId,
-  }) : super(key: key);
+  });
 
   @override
   _AttendeesCountWidgetState createState() => _AttendeesCountWidgetState();

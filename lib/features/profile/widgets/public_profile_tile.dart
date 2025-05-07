@@ -12,8 +12,7 @@ import '../../../common/widgets/network_image_with_placeholder.dart';
 class PublicProfileTile extends StatefulWidget {
   final UserModel myProfile;
 
-  const PublicProfileTile({Key? key, required this.myProfile})
-      : super(key: key);
+  const PublicProfileTile({super.key, required this.myProfile});
   @override
   State<PublicProfileTile> createState() => _PublicProfileTileState();
 }

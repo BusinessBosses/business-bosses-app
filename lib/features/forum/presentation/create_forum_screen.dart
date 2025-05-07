@@ -1,5 +1,6 @@
 import 'package:business_bosses_v2/common/widgets/typography/text_widget.dart';
 import 'package:business_bosses_v2/features/home/marketplace_screen.dart';
+import 'package:detectable_text_field/detectable_text_field.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
@@ -8,8 +9,6 @@ import 'package:business_bosses_v2/features/forum/controller/create_forum_contro
 import 'package:business_bosses_v2/features/forum/models/forum_model.dart';
 import 'package:business_bosses_v2/features/posts/widgets/preview.dart';
 import 'package:business_bosses_v2/utils/constants/constants.dart';
-import 'package:detectable_text_field/detector/sample_regular_expressions.dart';
-import 'package:detectable_text_field/widgets/detectable_text_field.dart';
 
 import '../../../action/action.dart';
 import '../../../common/dialogs/snackbar.dart';
@@ -19,7 +18,7 @@ import '../../../utils/theme/theme.dart';
 class CreateForumScreen extends StatefulWidget {
   static const String routeName = '/create-forum-screen';
 
-  const CreateForumScreen({Key? key}) : super(key: key);
+  const CreateForumScreen({super.key});
 
   @override
   State<CreateForumScreen> createState() => _CreateForumScreenState();
@@ -40,7 +39,8 @@ class _CreateForumScreenState extends State<CreateForumScreen> {
   String? _ytUrl;
   bool isImageSelected = false;
   bool isYoutubeSelected = false;
-  final TextEditingController descriptionController = TextEditingController();
+  final DetectableTextEditingController descriptionController =
+      DetectableTextEditingController();
 
   @override
   void initState() {
@@ -122,13 +122,11 @@ class _CreateForumScreenState extends State<CreateForumScreen> {
                     padding: const EdgeInsets.symmetric(horizontal: 16.0),
                     child: DetectableTextField(
                       controller: descriptionController,
-                      detectionRegExp: detectionRegExp(hashtag: false)!,
-                      onDetectionTyped: (String text) {},
-                      onDetectionFinished: () {},
+                      regExp: detectionRegExp(hashtag: false)!,
                       keyboardType: TextInputType.multiline,
                       maxLength: 1000,
                       maxLines: 5,
-                      basicStyle: Theme.of(context).textTheme.bodyMedium,
+                      style: Theme.of(context).textTheme.bodyMedium,
                       onChanged: (String val) {
                         description = val;
                       },

@@ -13,7 +13,7 @@ class AppChats with ChangeNotifier {
     return <LastMessage>[..._myChats];
   }
 
-  read(String uid) {
+  void read(String uid) {
     _myChats = _myChats.map((LastMessage element) {
       if (element.user?.uid == uid) {
         element.isRead = false;

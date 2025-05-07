@@ -7,7 +7,7 @@ import 'package:business_bosses_v2/services/api_service.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_stripe/flutter_stripe.dart';
-import 'package:flutter_paystack/flutter_paystack.dart';
+// import 'package:flutter_paystack/flutter_paystack.dart';
 
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
@@ -24,10 +24,10 @@ import 'confirmation.dart';
 class BoostPost extends StatefulWidget {
   // ignore: public_member_api_docs
   const BoostPost({
-    Key? key,
+    super.key,
     required this.postId,
     this.postTitle = '',
-  }) : super(key: key);
+  });
   // ignore: public_member_api_docs
   final String postTitle;
   // ignore: public_member_api_docs
@@ -41,7 +41,7 @@ class _BoostPostState extends State<BoostPost> {
   bool isCoin = false;
   late Map<String, dynamic>? paymantIntent;
   final ProfileController profileController = Get.find();
-  final PaystackPlugin payStackClient = PaystackPlugin();
+  // final PaystackPlugin payStackClient = PaystackPlugin();
 
   late String duration;
   List<Map<String, dynamic>> plans = <Map<String, dynamic>>[
@@ -105,22 +105,25 @@ class _BoostPostState extends State<BoostPost> {
         setState(() {
           _isProcessing = false;
         });
+        print('❌ StripeException: code=$error}');
         showSnackBar(context,
             message: 'Opps!! Something went wrong. Try again');
       });
-    } on StripeException {
+    } on StripeException catch (e) {
       setState(() {
         _isProcessing = false;
       });
+      print(
+          '❌ StripeException: code=${e.error.code}, message=${e.error.localizedMessage}');
       // ignore: use_build_context_synchronously
       showSnackBar(context, message: 'Opps!! Something went wrong. Try again');
       // print('Here ->>>>>> $e');
-    } catch (e) {
+    } catch (e, st) {
       setState(() {
         _isProcessing = false;
       });
       print('Here ->>>>>> $e');
-
+      print('❌ Unknown error in presentPaymentSheet: $e\n$st');
       showSnackBar(context, message: 'Opps!! Something went wrong. Try again');
     }
   }
@@ -147,7 +150,7 @@ class _BoostPostState extends State<BoostPost> {
             'Accept': 'application/json',
             'Content-Type': 'application/x-www-form-urlencoded'
           });
-
+      print('Stripe key: ${dotenv.env['STRIPE_SEC_KEY']}');
       return jsonDecode(res.body);
     } catch (e) {
       setState(() {
@@ -225,28 +228,28 @@ class _BoostPostState extends State<BoostPost> {
 
   void _startPaystack() async {
     String? publicKey = dotenv.env['PAYSTACK_PUBLIC_KEY'];
-    await payStackClient.initialize(publicKey: publicKey!);
+    // await payStackClient.initialize(publicKey: publicKey!);
   }
 
   final String reference =
       'unique_transaction_ref_${Random().nextInt(1000000)}';
 
   void _makePayment() async {
-    final Charge charge = Charge()
-      ..email = profileController.myProfile.email
-      ..amount = (int.parse(initPlan) * 100000)
-      // ..amount = 10000
-      ..reference = reference;
+    // final Charge charge = Charge()
+    //   ..email = profileController.myProfile.email
+    //   ..amount = (int.parse(initPlan) * 100000)
+    //   // ..amount = 10000
+    //   ..reference = reference;
 
-    final CheckoutResponse response = await payStackClient.checkout(context,
-        charge: charge, method: CheckoutMethod.card);
+    // final CheckoutResponse response = await payStackClient.checkout(context,
+    //     charge: charge, method: CheckoutMethod.card);
 
-    if (response.status && response.reference == reference) {
-      showSnackBar(context,
-          message: 'Payment Successful, Thanks for your patronage !');
-    } else {
-      showSnackBar(context, message: 'Opps!! Something went wrong. Try again');
-    }
+    // if (response.status && response.reference == reference) {
+    //   showSnackBar(context,
+    //       message: 'Payment Successful, Thanks for your patronage !');
+    // } else {
+    //   showSnackBar(context, message: 'Opps!! Something went wrong. Try again');
+    // }
   }
 
   @override
@@ -562,11 +565,11 @@ class _BoostPostState extends State<BoostPost> {
 class BoostPlanCard extends StatelessWidget {
   /// CONSTRUCTOR
   const BoostPlanCard({
-    Key? key,
+    super.key,
     required this.plan,
     required this.activePlan,
     required this.onTap,
-  }) : super(key: key);
+  });
   final Map<String, dynamic> plan;
   final String activePlan;
   final Function(String) onTap;

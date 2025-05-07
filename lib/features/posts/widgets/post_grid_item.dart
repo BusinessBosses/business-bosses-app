@@ -28,12 +28,12 @@ class PostGridItem extends StatelessWidget {
   final HomeController _homeController = Get.find();
 
   PostGridItem({
-    Key? key,
+    super.key,
     required this.post,
     // this.onDeletePost,
     this.onTap,
     this.hasMore = true,
-  }) : super(key: key);
+  });
 
   List<PopupMenuEntry<String>> getPopupItems() {
     List<PopupMenuEntry<String>> items = <PopupMenuEntry<String>>[];

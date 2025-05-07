@@ -5,7 +5,7 @@ import 'package:business_bosses_v2/features/home/widgets/relevantpeopletile.dart
 import 'package:flutter/material.dart';
 
 class DiscoverSection extends StatelessWidget {
-  const DiscoverSection({Key? key}) : super(key: key);
+  const DiscoverSection({super.key});
 
   @override
   Widget build(BuildContext context) {

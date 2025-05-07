@@ -52,11 +52,10 @@ class PostTile extends StatefulWidget {
 
   ///
   const PostTile(
-      {Key? key,
+      {super.key,
       required this.post,
       required this.controller,
-      this.onPageChange})
-      : super(key: key);
+      this.onPageChange});
 
   @override
   State<PostTile> createState() => _PostTileState();

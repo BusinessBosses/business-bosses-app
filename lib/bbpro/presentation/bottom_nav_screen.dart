@@ -20,11 +20,11 @@ class Bottomnavscreen extends StatefulWidget {
   final void Function(int)? onTabChanged;
   final bool noBack;
   const Bottomnavscreen({
-    Key? key,
+    super.key,
     this.initialindex,
     this.onTabChanged,
     this.noBack = true,
-  }) : super(key: key);
+  });
 
   // ignore: library_private_types_in_public_api
   static _BottomnavscreenState? of(BuildContext context) =>
@@ -197,12 +197,12 @@ class _BottomnavscreenState extends State<Bottomnavscreen> {
 
 class BottomTabButton extends StatelessWidget {
   const BottomTabButton({
-    Key? key,
+    super.key,
     required this.icon,
     required this.label,
     required this.onTap,
     required this.isActive,
-  }) : super(key: key);
+  });
 
   final String icon;
   final String label;

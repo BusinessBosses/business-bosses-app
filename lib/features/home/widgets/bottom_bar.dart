@@ -17,9 +17,9 @@ import 'package:get/get.dart';
 
 class BottomBar extends StatelessWidget {
   BottomBar({
-    Key? key,
+    super.key,
     required this.activeIndex,
-  }) : super(key: key);
+  });
   final int activeIndex;
   ChallengeController controller = Get.put(ChallengeController());
 

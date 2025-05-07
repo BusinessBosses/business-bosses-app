@@ -10,11 +10,11 @@ class TabsPagesFilterItem extends StatefulWidget {
   final Function(List<MySearchTab> newTabs)? onFilterChange;
 
   const TabsPagesFilterItem({
-    Key? key,
+    super.key,
     this.allTab = const <MySearchTab>[],
     this.selectedTabs = const <MySearchTab>[],
     this.onFilterChange,
-  }) : super(key: key);
+  });
 
   @override
   _TabsPagesFilterItemState createState() => _TabsPagesFilterItemState();
