@@ -117,16 +117,30 @@ class _ConnectionGridTileState extends State<ConnectionGridTile> {
                 ],
               ),
               const SizedBox(height: 12.0),
-              MCustomButton(
-                buttonType:
-                    widget.status ? ButtonType.outline : ButtonType.elevated,
-                onPressed: widget.onChangeConnectionStatus,
-                height: 36.0,
-                width: 120.0,
-                child: Text(
-                  widget.status ? 'Following' : 'Follow',
-                  style: TextStyle(
-                      color: widget.status ? primaryColorLT : Colors.white),
+              SizedBox(
+                width: 120,
+                child: ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor:
+                        widget.status ? Colors.white : primaryColorLT,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(radius),
+                      side: BorderSide(
+                        color: widget.status ? primaryColorLT : Colors.white,
+                        width: 1.0,
+                      ),
+                    ),
+                  ),
+                  // buttonType:
+                  //     widget.status ? ButtonType.outline : ButtonType.elevated,
+                  onPressed: widget.onChangeConnectionStatus,
+                  // height: 36.0,
+
+                  child: Text(
+                    widget.status ? 'Following' : 'Follow',
+                    style: TextStyle(
+                        color: widget.status ? primaryColorLT : Colors.white),
+                  ),
                 ),
               ),
             ],

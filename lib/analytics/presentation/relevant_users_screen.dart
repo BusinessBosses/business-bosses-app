@@ -194,11 +194,17 @@ class _RelevantUsersScreenState extends State<RelevantUsersScreen> {
                         ),
                         const SizedBox(width: 10),
                         ElevatedButton(
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: primaryColorLT,
+                          ),
                           onPressed: () {
                             Get.back();
                             controller.resetData(_filtertitle);
                           },
-                          child: const Text('Apply'),
+                          child: const Text(
+                            'Apply',
+                            style: TextStyle(color: Colors.white),
+                          ),
                         ),
                       ],
                     ),

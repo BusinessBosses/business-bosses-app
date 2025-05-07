@@ -425,8 +425,17 @@ class BottomSheetContent extends StatelessWidget {
           Text(description, style: const TextStyle(fontSize: 15)),
           const SizedBox(height: 16.0),
           ElevatedButton(
+            style: ElevatedButton.styleFrom(
+              backgroundColor: primaryColorLT,
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(10.0),
+              ),
+            ),
             onPressed: onTileClick,
-            child: const Text('Go to Screen'),
+            child: const Text(
+              'Go to Screen',
+              style: TextStyle(color: Colors.white),
+            ),
           ),
         ],
       ),
