@@ -84,7 +84,7 @@ class _OrdersScreenState extends State<OrdersScreen>
                   ),
                   child: ProIconButton(
                     radius: 50,
-                    icon: const Icon(Icons.add),
+                    icon: const Icon(Icons.add, color: Colors.white,),
                     onPressed: () {
                       Get.to(() => const CreateOrder());
                     },

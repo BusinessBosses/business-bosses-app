@@ -104,7 +104,10 @@ class _ProjectsState extends State<Projects>
                 ),
                 child: ProIconButton(
                   radius: 50,
-                  icon: const Icon(Icons.add),
+                  icon: const Icon(
+                    Icons.add,
+                    color: Colors.white,
+                  ),
                   onPressed: () {
                     Get.to(() => const Addproject());
                   },
