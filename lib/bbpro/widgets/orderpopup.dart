@@ -10,9 +10,9 @@ import 'package:get/get.dart';
 class OrderPopUp extends StatefulWidget {
   final Order order;
   const OrderPopUp({
-    Key? key,
+    super.key,
     required this.order,
-  }) : super(key: key);
+  });
 
   @override
   State<OrderPopUp> createState() => _OrderPopUpState();

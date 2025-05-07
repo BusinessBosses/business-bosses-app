@@ -15,10 +15,10 @@ class DataSelectionScreen extends StatefulWidget {
 
   /// DATA SELECTION SCREEN
   const DataSelectionScreen({
-    Key? key,
+    super.key,
     required this.analyser,
     this.hasSearchBar = true,
-  }) : super(key: key);
+  });
 
   @override
   _DataSelectionScreenState createState() => _DataSelectionScreenState();

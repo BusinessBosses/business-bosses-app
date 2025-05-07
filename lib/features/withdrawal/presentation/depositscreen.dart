@@ -24,7 +24,7 @@ bool isExpanded = false;
 class DepositsScreen extends StatefulWidget {
   static const String routeName = '/deposits-screen';
 
-  const DepositsScreen({Key? key}) : super(key: key);
+  const DepositsScreen({super.key});
 
   @override
   // ignore: library_private_types_in_public_api

@@ -7,8 +7,7 @@ class TaskDisplayItem extends StatefulWidget {
   final Task task;
   final ValueChanged<bool?> onChanged;
 
-  const TaskDisplayItem({Key? key, required this.task, required this.onChanged})
-      : super(key: key);
+  const TaskDisplayItem({super.key, required this.task, required this.onChanged});
 
   @override
   State<TaskDisplayItem> createState() => _TaskDisplayItemState();

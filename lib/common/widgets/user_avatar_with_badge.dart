@@ -24,7 +24,7 @@ class UserAvatarWithBadge extends StatelessWidget {
   final double? avatarSize;
 
   const UserAvatarWithBadge({
-    Key? key,
+    super.key,
     this.user,
     this.width,
     this.height,
@@ -41,7 +41,7 @@ class UserAvatarWithBadge extends StatelessWidget {
     this.progressCircleColor,
     this.progressCircleHeight,
     this.avatarSize,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

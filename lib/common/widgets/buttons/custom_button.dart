@@ -13,7 +13,7 @@ class CustomButton extends StatelessWidget {
   final ButtonType buttonType;
 
   const CustomButton({
-    Key? key,
+    super.key,
     this.width = double.infinity,
     this.height = buttonHeight,
     this.radius = radiusValue,
@@ -23,7 +23,7 @@ class CustomButton extends StatelessWidget {
     this.label,
     this.isProcessing = false,
     this.buttonType = ButtonType.outline,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

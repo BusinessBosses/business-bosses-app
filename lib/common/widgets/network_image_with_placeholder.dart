@@ -20,7 +20,7 @@ class NetworkImageWithPlaceHolder extends StatelessWidget {
   final double progressCircleHeight;
 
   const NetworkImageWithPlaceHolder({
-    Key? key,
+    super.key,
     required this.imageUrl,
     this.placeHolder,
     this.width = 120.0,
@@ -35,7 +35,7 @@ class NetworkImageWithPlaceHolder extends StatelessWidget {
     this.placeHolderType = PlaceHolderType.icon,
     this.progressCircleColor,
     this.progressCircleHeight = 20.0,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

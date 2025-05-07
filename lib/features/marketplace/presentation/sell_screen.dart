@@ -5,8 +5,6 @@ import 'package:business_bosses_v2/features/marketplace/widgets/currency.dart';
 import 'package:business_bosses_v2/services/api_service.dart';
 import 'package:country_list_pick/country_list_pick.dart';
 import 'package:detectable_text_field/detectable_text_field.dart';
-import 'package:detectable_text_field/detector/sample_regular_expressions.dart';
-import 'package:detectable_text_field/widgets/detectable_text_field.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';

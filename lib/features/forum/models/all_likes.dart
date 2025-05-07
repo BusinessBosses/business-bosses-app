@@ -8,7 +8,7 @@ import '../../../utils/theme/theme.dart';
 class AllLikes extends StatelessWidget {
   final List<UserModel> postLikedByUser;
 
-  const AllLikes(this.postLikedByUser, {Key? key}) : super(key: key);
+  const AllLikes(this.postLikedByUser, {super.key});
 
   @override
   Widget build(BuildContext context) {

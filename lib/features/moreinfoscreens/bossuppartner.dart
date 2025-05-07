@@ -16,7 +16,7 @@ import '../posts/widgets/images_viewer_screen.dart';
 class Bossuppartner extends StatefulWidget {
   final bool? isMarketplace;
   // ignore: public_member_api_docs
-  const Bossuppartner({Key? key, this.isMarketplace}) : super(key: key);
+  const Bossuppartner({super.key, this.isMarketplace});
 
   @override
   // ignore: library_private_types_in_public_api

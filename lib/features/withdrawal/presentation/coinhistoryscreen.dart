@@ -10,7 +10,7 @@ import 'package:get/get.dart';
 class CoinHistoryScreen extends StatefulWidget {
   static const String routeName = '/withdrawal-screen';
 
-  const CoinHistoryScreen({Key? key}) : super(key: key);
+  const CoinHistoryScreen({super.key});
 
   @override
   // ignore: library_private_types_in_public_api

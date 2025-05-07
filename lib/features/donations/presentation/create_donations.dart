@@ -12,8 +12,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
-import 'package:detectable_text_field/detector/sample_regular_expressions.dart';
-import 'package:detectable_text_field/widgets/detectable_text_field.dart';
 import 'package:image_picker/image_picker.dart';
 import '../../../action/action.dart';
 import '../../../common/widgets/buttons/my_outlined_button.dart';

@@ -19,7 +19,7 @@ import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 
 class HowToUseAppScreen extends StatefulWidget {
-  const HowToUseAppScreen({Key? key}) : super(key: key);
+  const HowToUseAppScreen({super.key});
 
   @override
   State<HowToUseAppScreen> createState() => _HowToUseAppScreenState();
@@ -314,13 +314,13 @@ class TileWidget extends StatelessWidget {
   final int notificationCount;
 
   const TileWidget({
-    Key? key,
+    super.key,
     required this.icon,
     required this.title,
     required this.description,
     required this.onTileClicked,
     this.notificationCount = 0,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -400,11 +400,11 @@ class BottomSheetContent extends StatelessWidget {
   final void Function() onTileClick;
 
   const BottomSheetContent({
-    Key? key,
+    super.key,
     required this.title,
     required this.description,
     required this.onTileClick,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

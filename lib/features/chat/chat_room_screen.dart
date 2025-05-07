@@ -35,10 +35,10 @@ class ChatRoomScreen extends StatefulWidget {
   final bool frommarketplace;
   final MarketModel? market;
   const ChatRoomScreen({
-    Key? key,
+    super.key,
     required this.frommarketplace,
     this.market,
-  }) : super(key: key);
+  });
 
   @override
   _ChatRoomScreenState createState() => _ChatRoomScreenState();
@@ -1029,7 +1029,7 @@ class _ChatRoomScreenState extends State<ChatRoomScreen> {
 
   Future<void> deleteChat() async {}
 
-  showSnackBAr(String message) {
+  void showSnackBAr(String message) {
     Navigator.pop(context);
     SnackBar snackBar = SnackBar(
       content: Text(message),
@@ -1043,11 +1043,11 @@ class SendMessageBox extends StatelessWidget {
   final VoidCallback onPickImage;
   final TextEditingController textEditingController;
   const SendMessageBox({
-    Key? key,
+    super.key,
     required this.onSendMessage,
     required this.onPickImage,
     required this.textEditingController,
-  }) : super(key: key);
+  });
   @override
   Widget build(BuildContext context) {
     // ignore: unused_local_variable

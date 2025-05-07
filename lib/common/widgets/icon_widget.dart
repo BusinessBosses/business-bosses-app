@@ -6,11 +6,11 @@ import '../../utils/theme/theme.dart';
 class IconWidget extends StatelessWidget {
   /// Icon widget
   const IconWidget({
-    Key? key,
+    super.key,
     this.color = iconColor,
     required this.icon,
     this.size = 23,
-  }) : super(key: key);
+  });
   final IconData icon;
   final Color color;
   final double size;

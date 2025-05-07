@@ -12,11 +12,11 @@ class FilterCoursesPosts extends StatelessWidget {
 
   /// CONSTRUCTOR
   const FilterCoursesPosts({
-    Key? key,
+    super.key,
     this.filterItems = const <CourseModel>[],
     this.isLoading = false,
     this.isSearch = false,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

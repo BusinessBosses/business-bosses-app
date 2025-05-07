@@ -505,7 +505,8 @@ class _RowStatusCardState extends State<RowStatusCard> {
                         cancelDrag: widget.cancelDrag,
                       );
                     },
-                    onWillAccept: (Project? details) => true,
+                    onWillAcceptWithDetails:
+                        (DragTargetDetails<Project> details) => true,
                     onAcceptWithDetails: (DragTargetDetails<Project> details) {
                       widget.taskAccepted(details.data, widget.projectStatus);
                     },

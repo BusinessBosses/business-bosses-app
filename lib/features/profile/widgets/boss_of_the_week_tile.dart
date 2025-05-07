@@ -22,7 +22,7 @@ import '../../home/controller/home_controller.dart';
 class BossOfWeekProfileTile extends StatefulWidget {
 // Add this line
   final bool? isForyou;
-  const BossOfWeekProfileTile({Key? key, this.isForyou}) : super(key: key);
+  const BossOfWeekProfileTile({super.key, this.isForyou});
 
   @override
   State<BossOfWeekProfileTile> createState() => _BossOfWeekProfileTileState();

@@ -14,11 +14,11 @@ class FilterChallengePosts extends StatelessWidget {
 
   /// CONSTRUCTOR
   const FilterChallengePosts({
-    Key? key,
+    super.key,
     this.filterItems = const <ForumModel>[],
     this.isLoading = false,
     this.isSearch = false,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

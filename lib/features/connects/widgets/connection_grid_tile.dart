@@ -20,13 +20,13 @@ class ConnectionGridTile extends StatefulWidget {
   State<ConnectionGridTile> createState() => _ConnectionGridTileState();
 
   const ConnectionGridTile({
-    Key? key,
+    super.key,
     required this.user,
     required this.status,
     this.onChangeConnectionStatus,
     this.onTap,
     this.color,
-  }) : super(key: key);
+  });
 }
 
 class _ConnectionGridTileState extends State<ConnectionGridTile> {

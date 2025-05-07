@@ -11,10 +11,10 @@ class QuickActionCard extends StatefulWidget {
   const QuickActionCard({
     required this.cardName,
     required this.value,
-    Key? key,
+    super.key,
     this.assetlocation,
     this.color,
-  }) : super(key: key);
+  });
 
   @override
   // ignore: library_private_types_in_public_api

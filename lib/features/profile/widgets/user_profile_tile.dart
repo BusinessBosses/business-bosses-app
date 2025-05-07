@@ -14,7 +14,7 @@ import '../controller/profile_controller.dart';
 class UserProfileTile extends StatefulWidget {
   final UserModel myProfile;
 
-  const UserProfileTile({Key? key, required this.myProfile}) : super(key: key);
+  const UserProfileTile({super.key, required this.myProfile});
   @override
   State<UserProfileTile> createState() => _UserProfileTileState();
 }

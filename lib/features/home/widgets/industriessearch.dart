@@ -14,10 +14,10 @@ class MySearchIndustries extends StatelessWidget {
   final bool isLoading;
 
   const MySearchIndustries({
-    Key? key,
+    super.key,
     this.searchIndustries = const <Industry>[],
     this.isLoading = false,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

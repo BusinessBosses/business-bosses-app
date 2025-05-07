@@ -22,3 +22,17 @@ subprojects {
 tasks.register("clean", Delete) {
     delete rootProject.buildDir
 }
+
+subprojects { project ->
+  // only apply to Android‐Kotlin modules
+  project.plugins.withId("org.jetbrains.kotlin.android") {
+    project.tasks.withType(org.jetbrains.kotlin.gradle.tasks.KotlinCompile).configureEach {
+      kotlinOptions {
+        // make this match your compileOptions targetCompatibility
+        jvmTarget = "17"
+      }
+    }
+  }
+
+
+}

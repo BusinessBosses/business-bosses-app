@@ -18,12 +18,12 @@ class ChooseOrderBottomSheet extends StatefulWidget {
   final List<Map<String, dynamic>> selectedItems;
   final ValueChanged<bool> onCanAddChange;
   const ChooseOrderBottomSheet({
-    Key? key,
+    super.key,
     required this.products,
     required this.services,
     required this.selectedItems,
     required this.onCanAddChange,
-  }) : super(key: key);
+  });
 
   @override
   State<ChooseOrderBottomSheet> createState() => _ChooseOrderBottomSheetState();

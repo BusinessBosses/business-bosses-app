@@ -22,11 +22,11 @@ class ForumLikeCommentItem extends StatefulWidget {
   final String? type;
 
   const ForumLikeCommentItem({
-    Key? key,
+    super.key,
     required this.onComment,
     required this.forum,
     this.type,
-  }) : super(key: key);
+  });
 
   @override
   _ForumLikeCommentItemState createState() => _ForumLikeCommentItemState();

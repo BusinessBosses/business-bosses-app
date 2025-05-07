@@ -14,7 +14,7 @@ import '../../../utils/theme/theme.dart';
 class WithdrawalScreen extends StatefulWidget {
   static const String routeName = '/withdrawal-screen';
 
-  const WithdrawalScreen({Key? key}) : super(key: key);
+  const WithdrawalScreen({super.key});
 
   @override
   // ignore: library_private_types_in_public_api

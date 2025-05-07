@@ -14,12 +14,12 @@ class OverlayUsersItems extends StatelessWidget {
   final Function(UserModel user)? onTap;
 
   const OverlayUsersItems({
-    Key? key,
+    super.key,
     this.initialText,
     required this.users,
     this.onClose,
     this.onTap,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

@@ -8,7 +8,7 @@ import '../../../navigation/routes.dart';
 import '../../../utils/theme/theme.dart';
 
 class Confirmation extends StatelessWidget {
-  const Confirmation({Key? key}) : super(key: key);
+  const Confirmation({super.key});
 
   @override
   Widget build(BuildContext context) {

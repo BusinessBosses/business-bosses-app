@@ -2,7 +2,6 @@
 
 import 'package:business_bosses_v2/utils/theme/theme.dart';
 import 'package:detectable_text_field/detectable_text_field.dart';
-import 'package:detectable_text_field/widgets/detectable_text_field.dart';
 import 'package:flutter/material.dart';
 
 class TextInput extends StatelessWidget {

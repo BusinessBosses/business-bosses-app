@@ -41,12 +41,12 @@ class ForumItem extends StatefulWidget {
 
   // ignore: public_member_api_docs
   const ForumItem({
-    Key? key,
+    super.key,
     required this.forum,
     this.controller,
     this.isBossUp = false,
     this.isLearningpost,
-  }) : super(key: key);
+  });
 
   @override
   // ignore: library_private_types_in_public_api

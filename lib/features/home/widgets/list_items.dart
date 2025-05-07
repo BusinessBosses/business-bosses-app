@@ -112,7 +112,7 @@ class _PostsWidgetState extends State<PostsWidget> {
                         padding: const EdgeInsets.only(right: 15.0),
                         child: ElevatedButton(
                           style: ButtonStyle(
-                            backgroundColor: MaterialStateProperty.all<Color>(
+                            backgroundColor: WidgetStateProperty.all<Color>(
                                 Colors.grey.shade300),
                           ),
                           onPressed: () => Get.to(() => const LiveEvent()),

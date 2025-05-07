@@ -142,7 +142,7 @@ class MarketModel {
 
   String toJson() => json.encode(toMap());
 
-  setViews(int newViews) {
+  void setViews(int newViews) {
     views = newViews;
   }
 

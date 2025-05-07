@@ -12,7 +12,7 @@ class SwitchWidget extends StatefulWidget {
   final String? icon;
 
   const SwitchWidget({
-    Key? key,
+    super.key,
     required this.value,
     required this.onChanged,
     this.activeColor = primaryColorLT,
@@ -20,7 +20,7 @@ class SwitchWidget extends StatefulWidget {
     this.caption = '',
     this.subtext = '',
     this.icon,
-  }) : super(key: key);
+  });
 
   @override
   // ignore: library_private_types_in_public_api

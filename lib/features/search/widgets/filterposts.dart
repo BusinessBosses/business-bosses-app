@@ -17,11 +17,11 @@ class FilterPosts extends StatelessWidget {
 
   /// CONSTRUCTOR
   const FilterPosts({
-    Key? key,
+    super.key,
     this.filterItems = const <PostModel>[],
     this.isLoading = false,
     this.isSearch = false,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

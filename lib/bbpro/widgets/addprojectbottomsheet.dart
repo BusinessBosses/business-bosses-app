@@ -18,7 +18,7 @@ class AddProjectBottomSheet extends StatefulWidget {
   final Function(DateTime) onEndDateChanged;
 
   AddProjectBottomSheet({
-    Key? key,
+    super.key,
     required this.taskNameController,
     required this.expenseController,
     required this.startDate,
@@ -27,7 +27,7 @@ class AddProjectBottomSheet extends StatefulWidget {
     required this.onStartDateChanged,
     required this.onEndDateChanged,
     this.currencyController,
-  }) : super(key: key);
+  });
 
   @override
   // ignore: library_private_types_in_public_api

@@ -17,7 +17,7 @@ import '../../utils/theme/theme.dart';
 class ReferScreen extends StatefulWidget {
   static const String routeName = '/refer-screen';
 
-  const ReferScreen({Key? key}) : super(key: key);
+  const ReferScreen({super.key});
 
   @override
   _ReferScreenState createState() => _ReferScreenState();

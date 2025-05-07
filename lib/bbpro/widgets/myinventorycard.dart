@@ -19,12 +19,12 @@ class MyInventoryCard extends StatefulWidget {
   final bool? isProduct;
 
   const MyInventoryCard({
-    Key? key,
+    super.key,
     this.product,
     this.isProduct,
     this.myShop,
     this.shop,
-  }) : super(key: key);
+  });
 
   @override
   // ignore: library_private_types_in_public_api

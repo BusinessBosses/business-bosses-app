@@ -19,11 +19,11 @@ class CustomItemCard extends StatefulWidget {
   final Shop? shop;
 
   const CustomItemCard({
-    Key? key,
+    super.key,
     this.customitem,
     this.myShop,
     this.shop,
-  }) : super(key: key);
+  });
 
   @override
   // ignore: library_private_types_in_public_api

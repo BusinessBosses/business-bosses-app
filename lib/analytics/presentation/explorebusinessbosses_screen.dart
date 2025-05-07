@@ -10,7 +10,7 @@ import 'package:business_bosses_v2/features/posts/widgets/yt_player.dart';
 class ExplorebusinessbossesScreen extends StatefulWidget {
   static const String routeName = '/explorebusinessbossesscreen';
 
-  const ExplorebusinessbossesScreen({Key? key}) : super(key: key);
+  const ExplorebusinessbossesScreen({super.key});
 
   @override
   // ignore: library_private_types_in_public_api

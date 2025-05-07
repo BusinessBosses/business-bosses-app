@@ -24,10 +24,7 @@ class ShopGraphData {
   Map<String, dynamic> toJson() {
     return <String, dynamic>{
       'totalSales': totalSales,
-      'graphData': graphData == null
-          ? null
-          : graphData!
-              .map((GraphDataPoint dataPoint) => dataPoint.toJson())
+      'graphData': graphData?.map((GraphDataPoint dataPoint) => dataPoint.toJson())
               .toList(),
       'xAxis': xAxis,
     };

@@ -9,7 +9,7 @@ class MyContainer extends StatelessWidget {
 
   // ignore: public_member_api_docs
   const MyContainer({
-    Key? key,
+    super.key,
     this.height,
     this.width = double.infinity,
     this.radius = 10.0,
@@ -17,7 +17,7 @@ class MyContainer extends StatelessWidget {
     this.padding = const EdgeInsets.symmetric(horizontal: 16.0),
     this.margin = const EdgeInsets.all(0.0),
     required this.child,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

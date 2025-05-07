@@ -14,7 +14,7 @@ import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 
 class BottomNavigationScreen extends StatefulWidget {
-  const BottomNavigationScreen({Key? key}) : super(key: key);
+  const BottomNavigationScreen({super.key});
 
   @override
   // ignore: library_private_types_in_public_api

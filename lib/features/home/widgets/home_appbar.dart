@@ -8,7 +8,7 @@ import 'package:get/get.dart';
 
 class HomeAppBar extends StatelessWidget {
   const HomeAppBar({
-    Key? key,
+    super.key,
     this.hasBadge = false,
     required this.coinsCount,
     this.hasUnreadNotification = false,
@@ -16,7 +16,7 @@ class HomeAppBar extends StatelessWidget {
     required this.controller,
     this.hasevent,
     this.onMenuClick,
-  }) : super(key: key);
+  });
 
   final VoidCallback? onMenuClick;
   final bool hasBadge;

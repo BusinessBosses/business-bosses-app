@@ -20,10 +20,10 @@ class BossUpLikeCommentItem extends StatefulWidget {
   final ForumModel forum;
 
   const BossUpLikeCommentItem({
-    Key? key,
+    super.key,
     required this.onComment,
     required this.forum,
-  }) : super(key: key);
+  });
 
   @override
   _BossUpLikeCommentItemState createState() => _BossUpLikeCommentItemState();

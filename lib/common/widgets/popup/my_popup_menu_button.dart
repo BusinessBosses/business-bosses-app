@@ -10,14 +10,13 @@ class MyPopupMenuButton extends StatelessWidget {
   final double iconSize;
   final EdgeInsets padding;
   const MyPopupMenuButton(
-      {Key? key,
+      {super.key,
       required this.popupItems,
       required this.onSelected,
       this.elevation = 8.0,
       this.icon = const Icon(Icons.keyboard_arrow_down, color: hintColor),
       this.iconSize = 14.0,
-      this.padding = const EdgeInsets.all(0.0)})
-      : super(key: key);
+      this.padding = const EdgeInsets.all(0.0)});
   @override
   Widget build(BuildContext context) {
     return PopupMenuButton<String>(

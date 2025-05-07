@@ -888,7 +888,7 @@ class _MyOrderWidgetState extends State<MyOrderWidget> {
                                                             : widget.shop!.id);
                                               },
                                             );
-                                          }).toList(),
+                                          }),
                                         ],
                                       ),
                                     ),

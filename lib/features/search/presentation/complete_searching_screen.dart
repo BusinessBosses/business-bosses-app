@@ -22,7 +22,7 @@ import '../widgets/filterposts.dart';
 class CompleteSearchingScreen extends StatefulWidget {
   static const String routeName = '/completesearchingScreen';
 
-  const CompleteSearchingScreen({Key? key}) : super(key: key);
+  const CompleteSearchingScreen({super.key});
 
   @override
   // ignore: library_private_types_in_public_api
@@ -278,10 +278,10 @@ class FilterForum extends StatelessWidget {
 
   /// CONSTRUCTOR
   const FilterForum({
-    Key? key,
+    super.key,
     this.filterItems = const <ForumModel>[],
     this.isLoading = false,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

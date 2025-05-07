@@ -11,7 +11,7 @@ import 'package:get/get.dart';
 class PromotionScreen extends StatefulWidget {
   static const String routeName = '/promotion-screen';
 
-  const PromotionScreen({Key? key}) : super(key: key);
+  const PromotionScreen({super.key});
 
   @override
   // ignore: library_private_types_in_public_api

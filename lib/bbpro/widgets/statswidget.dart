@@ -6,11 +6,11 @@ class StatsWidget extends StatelessWidget {
   final double completionRate;
 
   const StatsWidget({
-    Key? key,
+    super.key,
     required this.completedTasks,
     required this.totalTasks,
     required this.completionRate,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

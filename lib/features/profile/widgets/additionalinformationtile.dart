@@ -11,7 +11,7 @@ import '../../../analytics/presentation/analysescreen.dart';
 import '../presentation/my_profile_screen.dart';
 
 class AdditionalInfoTile extends StatefulWidget {
-  const AdditionalInfoTile({Key? key}) : super(key: key);
+  const AdditionalInfoTile({super.key});
 
   @override
   _AdditionalInfoTileState createState() => _AdditionalInfoTileState();

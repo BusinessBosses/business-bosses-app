@@ -11,13 +11,13 @@ class SearchBarWidget extends StatelessWidget {
   final bool autofocus;
 
   const SearchBarWidget({
-    Key? key,
+    super.key,
     this.hintText = 'Search',
     this.onChange,
     this.onSubmit,
     this.hasSearchIcon = true,
     this.autofocus = true,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

@@ -32,8 +32,7 @@ class PublicProfileScreen extends StatefulWidget {
   final int? currentIndex;
   // ignore: public_member_api_docs
   PublicProfileScreen(
-      {Key? key, this.store, this.selectedIndex, this.currentIndex})
-      : super(key: key);
+      {super.key, this.store, this.selectedIndex, this.currentIndex});
 
   @override
   State<PublicProfileScreen> createState() => _PublicProfileScreenState();
