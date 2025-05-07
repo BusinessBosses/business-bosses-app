@@ -383,7 +383,7 @@ class DrawerContent extends StatelessWidget {
                         width: double.infinity,
                         child: ProCustomButton(
                             color: primaryColorLT,
-                            icon: const Icon(Icons.add),
+                            icon: const Icon(Icons.add, color: Colors.white),
                             text: 'Create',
                             onPressed: () {
                               showModalBottomSheet(

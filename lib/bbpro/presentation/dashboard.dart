@@ -328,6 +328,9 @@ class _DashboardState extends State<Dashboard> {
                               ));
                         },
                       ),
+                      SizedBox(
+                        height: 15,
+                      ),
                       MasonryGridView.count(
                         physics: const NeverScrollableScrollPhysics(),
                         padding: const EdgeInsets.symmetric(

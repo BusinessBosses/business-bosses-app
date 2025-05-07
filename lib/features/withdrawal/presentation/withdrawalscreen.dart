@@ -328,7 +328,9 @@ class _WithdrawalScreenState extends State<WithdrawalScreen> {
                         child: const Text(
                           'Make Withdrawal',
                           style: TextStyle(
-                              fontWeight: FontWeight.w500, fontSize: 17),
+                              color: Colors.white,
+                              fontWeight: FontWeight.w500,
+                              fontSize: 17),
                         ),
                       ),
                     ),

@@ -1044,6 +1044,7 @@ class _MarketplaceScreenState extends State<MarketplaceScreen>
                                             const BoxConstraints.expand(
                                                 height: 45),
                                         child: TabBar(
+                                          tabAlignment: TabAlignment.start,
                                           padding: EdgeInsets.zero,
                                           unselectedLabelColor:
                                               textColor.withOpacity(0.8),

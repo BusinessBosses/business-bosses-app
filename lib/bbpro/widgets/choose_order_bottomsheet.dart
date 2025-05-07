@@ -93,7 +93,10 @@ class _ChooseOrderBottomSheetState extends State<ChooseOrderBottomSheet>
               ),
               _selectedIndex == 0
                   ? ProIconButton(
-                      icon: const Icon(Icons.add),
+                      icon: const Icon(
+                        Icons.add,
+                        color: Colors.white,
+                      ),
                       onPressed: () {
                         Get.to(() => const CreateProductListing());
                       },
@@ -102,7 +105,10 @@ class _ChooseOrderBottomSheetState extends State<ChooseOrderBottomSheet>
                     )
                   : _selectedIndex == 1
                       ? ProIconButton(
-                          icon: const Icon(Icons.add),
+                          icon: const Icon(
+                            Icons.add,
+                            color: Colors.white,
+                          ),
                           onPressed: () {
                             Get.to(() => const CreateServiceListing());
                           },
