@@ -227,7 +227,7 @@ class _BoostPostState extends State<BoostPost> {
   }
 
   void _startPaystack() async {
-    String? publicKey = dotenv.env['PAYSTACK_PUBLIC_KEY'];
+    // String? publicKey = dotenv.env['PAYSTACK_PUBLIC_KEY'];
     // await payStackClient.initialize(publicKey: publicKey!);
   }
 
@@ -254,7 +254,6 @@ class _BoostPostState extends State<BoostPost> {
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     initPlan = plans[0]['amount'];
     myPlan = options[0]['optionname'];

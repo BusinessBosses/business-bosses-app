@@ -1,4 +1,10 @@
 {
+  // turn off auto-detection of Gradle projects
+  "gradle.autoDetect": "off",
+
+  // if you have the Java Extension Pack, also stop Java import from Gradle:
+  "java.import.gradle.enabled": "never",
+  "java.import.gradle.offline.enabled": true,
   "java.configuration.updateBuildConfiguration": "interactive",
   "cmake.configureOnOpen": true,
   "editor.inlineSuggest.showToolbar": "always",

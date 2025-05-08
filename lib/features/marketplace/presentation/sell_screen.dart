@@ -9,13 +9,13 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
-import 'package:photo_manager/photo_manager.dart';
+// import 'package:photo_manager/photo_manager.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../../../action/action.dart';
 import '../../../common/dialogs/snackbar.dart';
 import '../../../common/models/comment_model.dart';
 import '../../../common/widgets/buttons/my_outlined_button.dart';
-import '../../../common/widgets/gallery_screen.dart';
+// import '../../../common/widgets/gallery_screen.dart';
 import '../../../utils/theme/theme.dart';
 import '../../forum/widgets/field_container.dart';
 import '../../posts/widgets/preview.dart';
@@ -49,9 +49,9 @@ class _CreateSellingitemScreenState extends State<CreateSellingitemScreen> {
   final MarketController _marketController = Get.put(MarketController());
   final CreateMarketController createMarketController =
       Get.put(CreateMarketController());
-  List<bool>? _fileProcessing;
+  // List<bool>? _fileProcessing;
 
-  List<MyAssetEntity> _myAssetsEntities = <MyAssetEntity>[];
+  // List<MyAssetEntity> _myAssetsEntities = <MyAssetEntity>[];
 
   MarketModel? _market;
 
@@ -97,7 +97,7 @@ class _CreateSellingitemScreenState extends State<CreateSellingitemScreen> {
 
     _discountController.text = _market?.discount.toString() ?? '';
     _selectedCategory = _market?.category;
-    _fileProcessing = <bool>[];
+    // _fileProcessing = <bool>[];
   }
 
   @override
@@ -613,67 +613,67 @@ class _CreateSellingitemScreenState extends State<CreateSellingitemScreen> {
     }
   }
 
-  Future<void> _onImagePicker() async {
-    try {
-      PermissionState permissionState =
-          await PhotoManager.requestPermissionExtend();
+  // Future<void> _onImagePicker() async {
+  //   try {
+  //     PermissionState permissionState =
+  //         await PhotoManager.requestPermissionExtend();
 
-      if (permissionState.isAuth ||
-          permissionState == PermissionState.limited) {
-        var data = await Navigator.of(context).push(
-          MaterialPageRoute(
-            builder: (_) => GalleryPhotosScreen(
-              galleryType: GalleryType.images,
-              selectedMyAssetEntities: _myAssetsEntities,
-            ),
-          ),
-        );
-        if (data == null) return;
-        setState(() {
-          _myAssetsEntities = data;
-          _fileProcessing =
-              List.generate(_myAssetsEntities.length, (int index) => false);
-        });
-      } else if (permissionState == PermissionState.denied) {
-        final PermissionState ps = await PhotoManager.requestPermissionExtend();
-        if (!ps.isAuth) {
-          PhotoManager.openSetting();
-        }
-      }
-    } catch (e) {}
-  }
+  //     if (permissionState.isAuth ||
+  //         permissionState == PermissionState.limited) {
+  //       var data = await Navigator.of(context).push(
+  //         MaterialPageRoute(
+  //           builder: (_) => GalleryPhotosScreen(
+  //             galleryType: GalleryType.images,
+  //             selectedMyAssetEntities: _myAssetsEntities,
+  //           ),
+  //         ),
+  //       );
+  //       if (data == null) return;
+  //       setState(() {
+  //         _myAssetsEntities = data;
+  //         _fileProcessing =
+  //             List.generate(_myAssetsEntities.length, (int index) => false);
+  //       });
+  //     } else if (permissionState == PermissionState.denied) {
+  //       final PermissionState ps = await PhotoManager.requestPermissionExtend();
+  //       if (!ps.isAuth) {
+  //         PhotoManager.openSetting();
+  //       }
+  //     }
+  //   } catch (e) {}
+  // }
 
-  void _removeImage(int index) {
-    List<MyAssetEntity> ae = _myAssetsEntities;
+  // void _removeImage(int index) {
+  //   List<MyAssetEntity> ae = _myAssetsEntities;
 
-    ae.removeAt(index);
-    setState(() {
-      _myAssetsEntities = ae;
-      _fileProcessing?.removeAt(index);
-    });
-  }
+  //   ae.removeAt(index);
+  //   setState(() {
+  //     _myAssetsEntities = ae;
+  //     _fileProcessing?.removeAt(index);
+  //   });
+  // }
 
-  Widget _deleteImage(int index) {
-    return Positioned(
-      right: 5.0,
-      top: 5.0,
-      child: GestureDetector(
-        onTap: _isProcessing ? null : () => _removeImage(index),
-        child: Container(
-          height: 30.0,
-          width: 30.0,
-          alignment: Alignment.center,
-          decoration: BoxDecoration(
-            color: Colors.black54,
-            borderRadius: BorderRadius.circular(40.0),
-          ),
-          child: const Icon(
-            Icons.close,
-            size: 18.0,
-            color: Colors.white,
-          ),
-        ),
-      ),
-    );
-  }
+  // Widget _deleteImage(int index) {
+  //   return Positioned(
+  //     right: 5.0,
+  //     top: 5.0,
+  //     child: GestureDetector(
+  //       onTap: _isProcessing ? null : () => _removeImage(index),
+  //       child: Container(
+  //         height: 30.0,
+  //         width: 30.0,
+  //         alignment: Alignment.center,
+  //         decoration: BoxDecoration(
+  //           color: Colors.black54,
+  //           borderRadius: BorderRadius.circular(40.0),
+  //         ),
+  //         child: const Icon(
+  //           Icons.close,
+  //           size: 18.0,
+  //           color: Colors.white,
+  //         ),
+  //       ),
+  //     ),
+  //   );
+  // }
 }

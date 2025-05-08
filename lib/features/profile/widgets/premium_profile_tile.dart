@@ -89,6 +89,6 @@ Widget premiumButtonHeader(
   );
 }
 
-class _sharePost {
-  _sharePost(String message);
-}
+// class _sharePost {
+//   _sharePost(String message);
+// }

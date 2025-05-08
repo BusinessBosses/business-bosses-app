@@ -11,14 +11,14 @@ import 'package:video_player/video_player.dart';
 
 import '../../../action/action.dart';
 import '../../../common/models/comment_model.dart';
-import '../../../common/models/my_response.dart';
-import '../../../common/params.dart';
-import '../../../functions/my_native_functions.dart';
+// import '../../../common/models/my_response.dart';
+// import '../../../common/params.dart';
+// import '../../../functions/my_native_functions.dart';
 import 'package:business_bosses_v2/features/posts/widgets/post_like_comment.dart';
 import '../../../utils/theme/theme.dart';
 import '../../../utils/time_format.dart';
 import '../../profile/controller/profile_controller.dart';
-import '../../profile/presentation/public_profile_screen.dart';
+// import '../../profile/presentation/public_profile_screen.dart';
 
 class VideoScreen extends StatefulWidget {
   const VideoScreen({
@@ -99,24 +99,24 @@ class _VideoScreenState extends State<VideoScreen> {
         hideControlsTimer: const Duration(seconds: 3));
   }
 
-  Future<void> _onDetectableTextTap(String val) async {
-    if (val.startsWith('#')) {
-      showSnackBar(context, message: val);
-      debugPrint('DetectableText >>>>>>> #');
-    } else if (val.startsWith('@')) {
-      navigateTo(context,
-          routeName: PublicProfileScreen.routeName,
-          arguments: Params(arg2: val));
-    } else if (val.startsWith('http')) {
-      debugPrint('DetectableText >>>>>>> http');
-      MyResponse res = await MyNativeFunctions.onUrlLaunch(val);
-      {
-        if (!res.success) {
-          showSnackBar(context, message: res.message);
-        }
-      }
-    }
-  }
+  // Future<void> _onDetectableTextTap(String val) async {
+  //   if (val.startsWith('#')) {
+  //     showSnackBar(context, message: val);
+  //     debugPrint('DetectableText >>>>>>> #');
+  //   } else if (val.startsWith('@')) {
+  //     navigateTo(context,
+  //         routeName: PublicProfileScreen.routeName,
+  //         arguments: Params(arg2: val));
+  //   } else if (val.startsWith('http')) {
+  //     debugPrint('DetectableText >>>>>>> http');
+  //     MyResponse res = await MyNativeFunctions.onUrlLaunch(val);
+  //     {
+  //       if (!res.success) {
+  //         showSnackBar(context, message: res.message);
+  //       }
+  //     }
+  //   }
+  // }
 
   void _sharePost() {
     String message =

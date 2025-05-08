@@ -549,7 +549,7 @@ class _PublicProfileScreenState extends State<PublicProfileScreen> {
                         initialIndex: widget.store != null ? 2 : 0,
                         child: Column(
                           children: <Widget>[
-                            OutlineButtonHeader(
+                            outlineButtonHeader(
                               publicUser,
                               _profileController.myProfile,
                               connectToUser,
