@@ -1,3 +1,4 @@
+import 'dart:developer';
 import 'dart:io';
 
 import 'package:business_bosses_v2/common/dialogs/snackbar.dart';
@@ -117,7 +118,7 @@ class CreatePostController extends GetxController {
           return null;
         } else {
           final dynamic res = await ApiService.uploadFile(resourceFile[i]);
-
+          log(res.toString());
           if (res == null) {
             return null;
           } else {

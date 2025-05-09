@@ -121,7 +121,6 @@ class _CreateForumScreenState extends State<CreateForumScreen> {
                   Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 16.0),
                     child: DetectableTextField(
-                      controller: descriptionController,
                       regExp: detectionRegExp(hashtag: false)!,
                       keyboardType: TextInputType.multiline,
                       maxLength: 1000,

@@ -107,7 +107,6 @@ class _CreateDonationScreenState extends State<CreateDonationScreen> {
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 16.0),
                 child: DetectableTextField(
-                  controller: descriptionController,
                   regExp: detectionRegExp(hashtag: false)!,
                   keyboardType: TextInputType.multiline,
                   maxLength: 1000,

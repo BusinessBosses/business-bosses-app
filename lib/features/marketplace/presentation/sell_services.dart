@@ -232,7 +232,6 @@ class _CreateServiceScreenState extends State<CreateServiceScreen> {
                 Padding(
                   padding: const EdgeInsets.only(left: 16.0, right: 16),
                   child: DetectableTextField(
-                    controller: descriptionController,
 
                     regExp: detectionRegExp(hashtag: false)!,
                     keyboardType: TextInputType.multiline,
