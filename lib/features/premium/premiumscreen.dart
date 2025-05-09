@@ -17,7 +17,7 @@ import '../../services/api_service.dart';
 class PremiumScreen extends StatefulWidget {
   static const String routeName = '/premiumScreen';
 
-  const PremiumScreen({Key? key}) : super(key: key);
+  const PremiumScreen({super.key});
 
   @override
   State<PremiumScreen> createState() => _PremiumScreenState();

@@ -7,8 +7,8 @@ import '../../../utils/theme/theme.dart';
 class BossUpChallangePopUpHome extends StatelessWidget {
   /// Boss Up Challenge Pop Up
   const BossUpChallangePopUpHome({
-    Key? key,
-  }) : super(key: key);
+    super.key,
+  });
 
   @override
   Widget build(BuildContext context) {

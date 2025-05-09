@@ -11,10 +11,10 @@ class FilterForum extends StatefulWidget {
 
   // ignore: public_member_api_docs
   const FilterForum({
-    Key? key,
+    super.key,
     this.filterItems = const <ForumModel>[],
     this.isLoading = false,
-  }) : super(key: key);
+  });
 
   @override
   State<FilterForum> createState() => _FilterForumState();

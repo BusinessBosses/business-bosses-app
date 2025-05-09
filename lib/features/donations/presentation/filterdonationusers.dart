@@ -19,13 +19,12 @@ class FilterDonationsUsers extends StatefulWidget {
 
   // ignore: public_member_api_docs
   const FilterDonationsUsers(
-      {Key? key,
+      {super.key,
       this.filterItems = const <UserModel>[],
       this.isLoading = false,
       this.isSearch = false,
       this.onConnectionChange,
-      this.members = const <UserModel>[]})
-      : super(key: key);
+      this.members = const <UserModel>[]});
 
   @override
   State<FilterDonationsUsers> createState() => _FilterUsersState();

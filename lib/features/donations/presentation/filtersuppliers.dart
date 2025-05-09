@@ -14,12 +14,11 @@ class FilterSuppliers extends StatefulWidget {
 
   // ignore: public_member_api_docs
   const FilterSuppliers(
-      {Key? key,
+      {super.key,
       this.filterItems = const <SuppliersModel>[],
       this.isLoading = false,
       this.isSearch = false,
-      this.members = const <SuppliersModel>[]})
-      : super(key: key);
+      this.members = const <SuppliersModel>[]});
 
   @override
   State<FilterSuppliers> createState() => _FilterUsersState();
@@ -68,9 +67,7 @@ class _FilterUsersState extends State<FilterSuppliers> {
                       FocusScope.of(context).unfocus();
                       return false;
                     },
-                    child: StaggeredGridView.countBuilder(
-                      staggeredTileBuilder: (int index) =>
-                          const StaggeredTile.fit(1),
+                    child: MasonryGridView.count(
                       padding: const EdgeInsets.symmetric(
                           horizontal: 15.0, vertical: 10),
                       crossAxisCount: 2,

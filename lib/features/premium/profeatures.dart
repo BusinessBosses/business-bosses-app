@@ -6,8 +6,7 @@ class ProfeatureTile extends StatelessWidget {
   final ProFeatureItem feature;
   final Color? backgroundColor;
 
-  const ProfeatureTile({Key? key, required this.feature, this.backgroundColor})
-      : super(key: key);
+  const ProfeatureTile({super.key, required this.feature, this.backgroundColor});
 
   @override
   Widget build(BuildContext context) {

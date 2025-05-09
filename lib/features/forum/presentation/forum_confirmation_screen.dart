@@ -8,7 +8,7 @@ import '../../../navigation/routes.dart';
 import '../../../utils/theme/theme.dart';
 
 class ForumConfirmationScreen extends StatelessWidget {
-  const ForumConfirmationScreen({Key? key}) : super(key: key);
+  const ForumConfirmationScreen({super.key});
 
   @override
   Widget build(BuildContext context) {

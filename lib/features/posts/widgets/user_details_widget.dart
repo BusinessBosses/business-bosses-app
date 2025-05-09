@@ -7,7 +7,7 @@ import 'package:get/get.dart';
 import '../../profile/controller/profile_controller.dart';
 
 class UserDetailsWidget extends StatelessWidget {
-  const UserDetailsWidget({Key? key}) : super(key: key);
+  const UserDetailsWidget({super.key});
 
   @override
   Widget build(BuildContext context) {

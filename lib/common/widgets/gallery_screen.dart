@@ -11,11 +11,11 @@ class GalleryPhotosScreen extends StatefulWidget {
   final List<MyAssetEntity> selectedMyAssetEntities;
 
   const GalleryPhotosScreen({
-    Key? key,
+    super.key,
     this.galleryType = GalleryType.all,
     this.maxLength = 10,
     required this.selectedMyAssetEntities,
-  }) : super(key: key);
+  });
 
   @override
   _GalleryPhotosScreenState createState() => _GalleryPhotosScreenState();
@@ -63,7 +63,7 @@ class _GalleryPhotosScreenState extends State<GalleryPhotosScreen> {
     _permissionState = await PhotoManager.requestPermissionExtend();
   }
 
-  _scrollListenerImg() {
+  void _scrollListenerImg() {
     if (_ctrlImages.position.atEdge) {
       if (_ctrlImages.position.pixels == 0) {
       } else {
@@ -72,7 +72,7 @@ class _GalleryPhotosScreenState extends State<GalleryPhotosScreen> {
     }
   }
 
-  _scrollListenerVid() {
+  void _scrollListenerVid() {
     if (_ctrlVideos.position.atEdge) {
       if (_ctrlVideos.position.pixels == 0) {
       } else {
@@ -446,7 +446,7 @@ class AssetViewer extends StatelessWidget {
   final bool isSelected;
   final File? file;
   const AssetViewer(
-      {Key? key,
+      {super.key,
       // Key key,
       // @required this.assetEntity,
       this.image,
@@ -455,8 +455,7 @@ class AssetViewer extends StatelessWidget {
       this.fit,
       this.isImage = true,
       this.isSelected = false,
-      this.file})
-      : super(key: key);
+      this.file});
 
   // : super(key: key);
 
@@ -539,10 +538,10 @@ class GallerySafety extends StatelessWidget {
   final String? title;
 
   const GallerySafety({
-    Key? key,
+    super.key,
     this.isLoading = false,
     this.title,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

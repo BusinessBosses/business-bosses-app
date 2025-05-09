@@ -38,8 +38,7 @@ class MyProfileScreen extends StatefulWidget {
   static const String routeName = '/my-profile-screen';
 
   // ignore: public_member_api_docs
-  const MyProfileScreen({Key? key, this.selectedIndex, this.currentIndex})
-      : super(key: key);
+  const MyProfileScreen({super.key, this.selectedIndex, this.currentIndex});
 
   @override
   State<MyProfileScreen> createState() => _MyProfileScreenState();
@@ -911,7 +910,9 @@ class _MyProfileScreenState extends State<MyProfileScreen> {
     if (marketController.markets
         .where((MarketModel market) =>
             market.userId == profileController.myProfile.uid)
-        .isNotEmpty) tabLength++;
+        .isNotEmpty) {
+      tabLength++;
+    }
     if (homeController.userresources.isNotEmpty) tabLength++;
     if (homeController.userdonations.isNotEmpty) tabLength++;
     if (homeController.usercourses.isNotEmpty) tabLength++;

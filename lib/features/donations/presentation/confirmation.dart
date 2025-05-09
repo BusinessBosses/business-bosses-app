@@ -6,7 +6,7 @@ import '../../../common/widgets/text_widget.dart';
 import '../../../utils/theme/theme.dart';
 
 class Confirmation extends StatefulWidget {
-  const Confirmation({Key? key}) : super(key: key);
+  const Confirmation({super.key});
 
   @override
   State<Confirmation> createState() => _ConfirmationState();

@@ -7,12 +7,11 @@ import 'package:business_bosses_v2/features/donations/controller/donations_contr
 import 'package:business_bosses_v2/features/donations/models/donations_model.dart';
 import 'package:business_bosses_v2/features/profile/controller/profile_controller.dart';
 import 'package:business_bosses_v2/services/api_service.dart';
+import 'package:detectable_text_field/detectable_text_field.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
-import 'package:detectable_text_field/detector/sample_regular_expressions.dart';
-import 'package:detectable_text_field/widgets/detectable_text_field.dart';
 import 'package:image_picker/image_picker.dart';
 import '../../../action/action.dart';
 import '../../../common/widgets/buttons/my_outlined_button.dart';
@@ -21,7 +20,7 @@ import '../../../utils/theme/theme.dart';
 class CreateDonationScreen extends StatefulWidget {
   static const String routeName = '/create-Donation-screen';
   final DonationModel? donation;
-  const CreateDonationScreen({Key? key, this.donation}) : super(key: key);
+  const CreateDonationScreen({super.key, this.donation});
 
   @override
   State<CreateDonationScreen> createState() => _CreateDonationScreenState();
@@ -43,7 +42,8 @@ class _CreateDonationScreenState extends State<CreateDonationScreen> {
   String? photo;
   bool isImageSelected = false;
   bool isYoutubeSelected = false;
-  final TextEditingController descriptionController = TextEditingController();
+  final DetectableTextEditingController descriptionController =
+      DetectableTextEditingController();
   final TextEditingController titleController = TextEditingController();
   final TextEditingController priceController = TextEditingController();
   bool _shouldPromote = false;
@@ -107,14 +107,11 @@ class _CreateDonationScreenState extends State<CreateDonationScreen> {
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 16.0),
                 child: DetectableTextField(
-                  controller: descriptionController,
-                  detectionRegExp: detectionRegExp(hashtag: false)!,
-                  onDetectionTyped: (String text) {},
-                  onDetectionFinished: () {},
+                  regExp: detectionRegExp(hashtag: false)!,
                   keyboardType: TextInputType.multiline,
                   maxLength: 1000,
                   maxLines: 5,
-                  basicStyle: Theme.of(context).textTheme.bodyMedium,
+                  style: Theme.of(context).textTheme.bodyMedium,
                   onChanged: (String val) {
                     description = val;
                   },

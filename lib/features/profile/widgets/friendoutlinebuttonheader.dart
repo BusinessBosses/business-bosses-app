@@ -10,7 +10,7 @@ import '../../../common/widgets/buttons/my_outlined_button.dart';
 import '../../../utils/theme/theme.dart';
 import '../../chat/chat_room_screen.dart';
 
-Widget OutlineButtonHeader(UserModel publicUser, UserModel myProfile,
+Widget outlineButtonHeader(UserModel publicUser, UserModel myProfile,
     VoidCallback onConnect, BuildContext context) {
   return Container(
     height: 50.0,
@@ -77,6 +77,7 @@ Widget OutlineButtonHeader(UserModel publicUser, UserModel myProfile,
                   final ApiResponseModel res = await ApiService.get(
                       path:
                           '/connection/connecteds/referals/${publicUser.uid}');
+                  // ignore: use_build_context_synchronously
                   Navigator.pop(context);
 
                   if (res.success) {
@@ -111,6 +112,6 @@ Widget OutlineButtonHeader(UserModel publicUser, UserModel myProfile,
   );
 }
 
-class _sharePost {
-  _sharePost(String message);
-}
+// class _sharePost {
+//   _sharePost(String message);
+// }

@@ -15,7 +15,7 @@ import '../../../utils/theme/theme.dart';
 class UnpaidCoursePopUp extends StatefulWidget {
   final CourseModel course;
 
-  const UnpaidCoursePopUp({Key? key, required this.course}) : super(key: key);
+  const UnpaidCoursePopUp({super.key, required this.course});
 
   @override
   State<UnpaidCoursePopUp> createState() => _UnpaidCoursePopUpState();

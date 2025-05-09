@@ -3,8 +3,8 @@ import 'package:flutter_svg/svg.dart';
 
 class CustomMenuButton extends StatelessWidget {
   const CustomMenuButton({
-    Key? key,
-  }) : super(key: key);
+    super.key,
+  });
 
   @override
   Widget build(BuildContext context) {

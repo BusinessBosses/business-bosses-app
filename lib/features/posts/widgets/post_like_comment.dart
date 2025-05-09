@@ -21,10 +21,10 @@ class PostLikeCommentItem extends StatefulWidget {
   final PostModel post;
 
   const PostLikeCommentItem({
-    Key? key,
+    super.key,
     required this.onComment,
     required this.post,
-  }) : super(key: key);
+  });
 
   @override
   _PostLikeCommentItemState createState() => _PostLikeCommentItemState();

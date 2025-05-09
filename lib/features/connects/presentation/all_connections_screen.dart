@@ -18,7 +18,7 @@ class AllConnectionsScreen extends StatelessWidget {
       Get.put(ConnectionController());
   final ProfileController _profileController = Get.find();
 
-  AllConnectionsScreen({Key? key}) : super(key: key);
+  AllConnectionsScreen({super.key});
 
   // int initialIndex = 0;
   @override
@@ -284,5 +284,5 @@ class AllConnectionsScreen extends StatelessWidget {
 
   void _onChangeSearching() {}
 
-  _onChange(String val) {}
+  void _onChange(String val) {}
 }

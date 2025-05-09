@@ -17,13 +17,13 @@ class AllForumsImagesItem extends StatelessWidget {
 
   const AllForumsImagesItem(
     this.fileUrls, {
-    Key? key,
+    super.key,
     this.text,
     this.isYt = false,
     this.i = 0,
     required this.post,
     this.isVideo = false,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -307,7 +307,7 @@ class AllForumsImagesItem extends StatelessWidget {
                                                                 : Container(),
                                                           ),
                                                         )
-                                                        .toList()
+                                                        
                                                   ],
                                                 ),
                                               ),

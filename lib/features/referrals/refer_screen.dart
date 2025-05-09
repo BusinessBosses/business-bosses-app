@@ -1,26 +1,26 @@
+import 'package:flutter/material.dart';
+import 'package:flutter_svg/svg.dart';
+import 'package:get/get.dart';
+
 import 'package:business_bosses_v2/common/dialogs/snackbar.dart';
 import 'package:business_bosses_v2/common/models/api_response_model.dart';
 import 'package:business_bosses_v2/common/models/user_model.dart';
 import 'package:business_bosses_v2/features/profile/controller/profile_controller.dart';
 import 'package:business_bosses_v2/services/api_service.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter_svg/svg.dart';
-import 'package:get/get.dart';
 
 import '../../action/action.dart';
 import '../../common/widgets/network_image_with_placeholder.dart';
 import '../../common/widgets/safety_model.dart';
-import '../../common/widgets/search/search_bar.dart' as searchBar;
-import '../../utils/constants/constants.dart';
+import '../../common/widgets/search/search_bar.dart' as search_bar;
 import '../../utils/theme/theme.dart';
 
 class ReferScreen extends StatefulWidget {
   static const String routeName = '/refer-screen';
 
-  const ReferScreen({Key? key}) : super(key: key);
+  const ReferScreen({super.key});
 
   @override
-  _ReferScreenState createState() => _ReferScreenState();
+  State<ReferScreen> createState() => _ReferScreenState();
 }
 
 class _ReferScreenState extends State<ReferScreen> {
@@ -41,7 +41,7 @@ class _ReferScreenState extends State<ReferScreen> {
         path: '/connection/connecteds/referals/$referredUserUid');
 
     for (int i = 0; i < res.data.length; i++) {
-      final mapData = res.data[i];
+      final dynamic mapData = res.data[i];
       final UserModel modelizedConnection = UserModel.fromMap(mapData);
       // print(_specificUser.connections);
       // _referrableConnections.add(modelizedConnection);
@@ -63,7 +63,6 @@ class _ReferScreenState extends State<ReferScreen> {
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     if (Get.arguments == null) {
       Get.back();
@@ -92,7 +91,7 @@ class _ReferScreenState extends State<ReferScreen> {
           },
           icon: SvgPicture.asset('assets/svgs/backbutton.svg'),
         ),
-        title: searchBar.SearchBarWidget(
+        title: search_bar.SearchBarWidget(
           onChange: _onSearch,
           hasSearchIcon: false,
           autofocus: false,
@@ -171,7 +170,7 @@ class _ReferScreenState extends State<ReferScreen> {
     );
   }
 
-  Future<void> _fetchMyConnections() async {}
+  // Future<void> _fetchMyConnections() async {}
 
   void _onSearch(String val) {}
 
@@ -208,10 +207,10 @@ class _ReferScreenState extends State<ReferScreen> {
   Future<void> _sendNotificationToMainUser(
       List<String> tokens, List<String> receivers) async {}
 
-  Future<void> _createMyReferrals(List<String> referToUsers) async {
-    // ignore: unused_local_variable
-    String path = '${Constants.USERS}/${_specificUser.uid}/${Constants.REFERS}';
-  }
+  // Future<void> _createMyReferrals(List<String> referToUsers) async {
+  //   // ignore: unused_local_variable
+  //   String path = '${Constants.USERS}/${_specificUser.uid}/${Constants.REFERS}';
+  // }
 
   void _addRemoveUser(String uid) {
     int index = _selectedUsers.indexWhere((String u) => u == uid);

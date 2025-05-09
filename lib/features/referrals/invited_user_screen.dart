@@ -10,7 +10,7 @@ import '../promotions/invite.dart';
 class InvitedUsersScreen extends StatefulWidget {
   static const String routeName = '/invited-users-screen';
 
-  const InvitedUsersScreen({Key? key}) : super(key: key);
+  const InvitedUsersScreen({super.key});
 
   @override
   _InvitedUsersScreenState createState() => _InvitedUsersScreenState();

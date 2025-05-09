@@ -32,7 +32,7 @@ class ChatScreen extends StatefulWidget {
   static const String routeName = '/chats-screen';
 
   // ignore: public_member_api_docs
-  const ChatScreen({Key? key}) : super(key: key);
+  const ChatScreen({super.key});
 
   @override
   _ChatScreenState createState() => _ChatScreenState();
@@ -369,10 +369,10 @@ class ChatItem extends StatefulWidget {
   // final Key key;
   // ignore: public_member_api_docs
   const ChatItem({
-    Key? key,
+    super.key,
     required this.myChatUser,
     required this.chatController,
-  }) : super(key: key);
+  });
   @override
   // ignore: library_private_types_in_public_api
   _ChatItemState createState() => _ChatItemState();

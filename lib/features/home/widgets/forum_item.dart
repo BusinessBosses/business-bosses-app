@@ -36,7 +36,7 @@ class ForumItem extends StatefulWidget {
 
   // ignore: public_member_api_docs
   const ForumItem({
-    Key? key,
+    super.key,
     required this.forum,
     // this.commented,
     // this.likeUnlikeForum,
@@ -44,7 +44,7 @@ class ForumItem extends StatefulWidget {
     // this.onUpdateForum,
     required this.controller,
     this.isBossUp = false,
-  }) : super(key: key);
+  });
 
   @override
   // ignore: library_private_types_in_public_api
@@ -843,7 +843,7 @@ class _ForumItemState extends State<ForumItem> {
     socialShare(message);
   }
 
-  leadingWidth(ForumModel? forum) {}
+  void leadingWidth(ForumModel? forum) {}
 
   void _showDialog() {
     showDialog(

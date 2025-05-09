@@ -17,7 +17,7 @@ class ProshopdealsWidget extends StatefulWidget {
   final bool? isHome;
   final int? initialIndex; // Added initialIndex
   const ProshopdealsWidget({
-    Key? key,
+    super.key,
     this.title,
     this.caption,
     this.services,
@@ -25,7 +25,7 @@ class ProshopdealsWidget extends StatefulWidget {
     this.combinedList,
     this.isHome,
     this.initialIndex = 0,
-  }) : super(key: key);
+  });
 
   @override
   State<ProshopdealsWidget> createState() => _ProshopdealsWidgetState();

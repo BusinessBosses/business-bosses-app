@@ -9,7 +9,7 @@ import '../../utils/theme/theme.dart';
 class CommunityRulesScreen extends StatefulWidget {
   static const String routeName = '/communityrulesscreen';
 
-  const CommunityRulesScreen({Key? key}) : super(key: key);
+  const CommunityRulesScreen({super.key});
 
   @override
   _CommunityRulesScreenState createState() => _CommunityRulesScreenState();

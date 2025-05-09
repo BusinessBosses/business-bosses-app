@@ -12,11 +12,11 @@ class FilterDonationPosts extends StatelessWidget {
 
   /// CONSTRUCTOR
   const FilterDonationPosts({
-    Key? key,
+    super.key,
     this.filterItems = const <DonationModel>[],
     this.isLoading = false,
     this.isSearch = false,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

@@ -131,7 +131,7 @@ class _ExpandedOrdersViewState extends State<ExpandedOrdersView> {
                             ),
                           );
                         },
-                      ).toList(),
+                      ),
                       ...orderController.orderView!.services!.map<Widget>(
                         (Service service) {
                           return ListTile(
@@ -154,7 +154,7 @@ class _ExpandedOrdersViewState extends State<ExpandedOrdersView> {
                             ),
                           );
                         },
-                      ).toList(),
+                      ),
                       ...orderController.orderView!.customItems!.map<Widget>(
                         (dynamic custom) {
                           return ListTile(
@@ -176,7 +176,7 @@ class _ExpandedOrdersViewState extends State<ExpandedOrdersView> {
                             ),
                           );
                         },
-                      ).toList(),
+                      ),
                     ],
                   ),
       ),

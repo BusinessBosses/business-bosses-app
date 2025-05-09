@@ -13,8 +13,8 @@ import 'package:get/get.dart';
 class FilterMarketplaceProducts extends StatelessWidget {
   /// CONSTRUCTOR
   const FilterMarketplaceProducts({
-    Key? key,
-  }) : super(key: key);
+    super.key,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -53,10 +53,8 @@ class FilterMarketplaceProducts extends StatelessWidget {
                       child: Padding(
                         padding: const EdgeInsets.symmetric(
                             horizontal: 10.0, vertical: 10.0),
-                        child: StaggeredGridView.countBuilder(
+                        child: MasonryGridView.count(
                           crossAxisCount: 2,
-                          staggeredTileBuilder: (int index) =>
-                              const StaggeredTile.fit(1),
                           mainAxisSpacing: 10.0,
                           crossAxisSpacing: 10.0,
                           itemCount: marketController.filteredProducts.length,

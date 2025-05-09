@@ -14,6 +14,7 @@ import 'package:business_bosses_v2/features/posts/widgets/user_details_widget.da
 import 'package:business_bosses_v2/features/premium/unlockedfeatures.dart';
 import 'package:business_bosses_v2/functions/unfocus_keyboard.dart';
 import 'package:business_bosses_v2/utils/theme/theme.dart';
+import 'package:detectable_text_field/widgets/detectable_text_editing_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
@@ -31,13 +32,12 @@ class CreatePostScreen extends StatefulWidget {
 
   /// SCREEN CONSTRUCTOR
   const CreatePostScreen(
-      {Key? key,
+      {super.key,
       this.postId,
       this.post,
       this.images,
       this.postDetail,
-      this.isGrow})
-      : super(key: key);
+      this.isGrow});
   static const String routeName = '/create-post';
 
   @override
@@ -46,7 +46,8 @@ class CreatePostScreen extends StatefulWidget {
 
 class _CreatePostScreenState extends State<CreatePostScreen> {
   dynamic _overlayEntry;
-  final TextEditingController _titleCtrl = TextEditingController();
+  final DetectableTextEditingController _titleCtrl =
+      DetectableTextEditingController();
   // final TextEditingController _ytCtrl = TextEditingController();
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
@@ -522,20 +523,12 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
                       if (widget.postId == null) {
                         await controller.createPost(<String, dynamic>{
                           'livedata': livedata,
-                          'donationId':
-                              donationModel != null ? donationModel!.id : null,
-                          'donation': donationModel != null
-                              ? donationModel!.toMap()
-                              : null,
-                          'forumId':
-                              forumModel != null ? forumModel!.forumId : null,
-                          'forum':
-                              forumModel != null ? forumModel!.toMap() : null,
-                          'marketId': marketModel != null
-                              ? marketModel!.marketId
-                              : null,
-                          'market':
-                              marketModel != null ? marketModel!.toMap() : null,
+                          'donationId': donationModel?.id,
+                          'donation': donationModel?.toMap(),
+                          'forumId': forumModel?.forumId,
+                          'forum': forumModel?.toMap(),
+                          'marketId': marketModel?.marketId,
+                          'market': marketModel?.toMap(),
                           'title': _titleCtrl.text.trim(),
                           'ytUrl': _ytUrl,
                           'images': _ytUrl != null && _ytUrl != ''
@@ -560,20 +553,12 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
                       if (widget.postId == null) {
                         await controller.createPost(<String, dynamic>{
                           'livedata': livedata,
-                          'donationId':
-                              donationModel != null ? donationModel!.id : null,
-                          'donation': donationModel != null
-                              ? donationModel!.toMap()
-                              : null,
-                          'forumId':
-                              forumModel != null ? forumModel!.forumId : null,
-                          'forum':
-                              forumModel != null ? forumModel!.toMap() : null,
-                          'marketId': marketModel != null
-                              ? marketModel!.marketId
-                              : null,
-                          'market':
-                              marketModel != null ? marketModel!.toMap() : null,
+                          'donationId': donationModel?.id,
+                          'donation': donationModel?.toMap(),
+                          'forumId': forumModel?.forumId,
+                          'forum': forumModel?.toMap(),
+                          'marketId': marketModel?.marketId,
+                          'market': marketModel?.toMap(),
                           'title': _titleCtrl.text.trim(),
                           'ytUrl': _ytUrl,
                           'images': _ytUrl != null && _ytUrl != ''

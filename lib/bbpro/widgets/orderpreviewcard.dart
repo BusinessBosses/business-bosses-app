@@ -17,7 +17,7 @@ class OrderPreviewCard extends StatelessWidget {
   final Shop? shop;
 
   const OrderPreviewCard({
-    Key? key,
+    super.key,
     required this.title,
     this.size,
     this.color,
@@ -27,7 +27,7 @@ class OrderPreviewCard extends StatelessWidget {
     required this.imageUrl,
     this.OnTap,
     this.shop,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

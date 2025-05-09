@@ -13,14 +13,14 @@ class GenericSlider extends StatefulWidget {
   final Color? iconcolor;
 
   const GenericSlider({
-    Key? key,
+    super.key,
     required this.images,
     this.width = double.infinity,
     this.height = double.infinity,
     this.fit = BoxFit.cover,
     this.radius,
     this.iconcolor,
-  }) : super(key: key);
+  });
 
   @override
   _GenericSliderState createState() => _GenericSliderState();

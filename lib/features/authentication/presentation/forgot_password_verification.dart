@@ -10,10 +10,10 @@ import 'reset_password_screen.dart';
 class ForgotPasswordVerificationScreen extends StatefulWidget {
   /// KEY CONSTRUCTOR
   const ForgotPasswordVerificationScreen({
-    Key? key,
+    super.key,
     required this.otp,
     required this.emailAddress,
-  }) : super(key: key);
+  });
   // ignore: public_member_api_docs
   final String otp;
   // ignore: public_member_api_docs

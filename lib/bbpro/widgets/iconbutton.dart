@@ -14,7 +14,7 @@ class ProIconButton extends StatelessWidget {
   final double? textsize;
 
   const ProIconButton({
-    Key? key,
+    super.key,
     required this.text,
     this.icon,
     required this.onPressed,
@@ -25,7 +25,7 @@ class ProIconButton extends StatelessWidget {
     this.shadow,
     this.textsize,
     this.vpadding,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

@@ -7,7 +7,7 @@ import '../../../utils/theme/theme.dart';
 /// Boss Up Challenge Pop Up
 class CoursesPopup extends StatelessWidget {
   /// Boss Up Challenge Pop Up
-  const CoursesPopup({Key? key}) : super(key: key);
+  const CoursesPopup({super.key});
 
   @override
   Widget build(BuildContext context) {

@@ -193,5 +193,5 @@ class DonationTransaction {
     );
   }
 
-  toMap() {}
+  void toMap() {}
 }

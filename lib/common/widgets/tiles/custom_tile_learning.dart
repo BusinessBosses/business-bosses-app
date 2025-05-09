@@ -9,12 +9,12 @@ class CustomTileLearning extends StatelessWidget {
   final bool showBorder;
 
   const CustomTileLearning({
-    Key? key,
+    super.key,
     required this.onTap,
     required this.label,
     this.hideIcon = false,
     this.showBorder = false,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

@@ -5,7 +5,7 @@ import 'package:flutter_svg/svg.dart';
 import '../../../utils/theme/theme.dart';
 
 class PromoteSection extends StatelessWidget {
-  const PromoteSection({Key? key, required this.controller}) : super(key: key);
+  const PromoteSection({super.key, required this.controller});
   final CreatePostController controller;
 
   @override

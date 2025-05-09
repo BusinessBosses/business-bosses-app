@@ -16,8 +16,7 @@ class PostonhomePopUp extends StatelessWidget {
   final bool isBossUp;
 
   /// Boss Up Challenge Pop Up
-  const PostonhomePopUp({Key? key, required this.forum, required this.isBossUp})
-      : super(key: key);
+  const PostonhomePopUp({super.key, required this.forum, required this.isBossUp});
 
   @override
   Widget build(BuildContext context) {

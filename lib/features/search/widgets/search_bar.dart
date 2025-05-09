@@ -23,7 +23,7 @@ class Searchbar extends StatelessWidget {
 
   // ignore: public_member_api_docs
   const Searchbar({
-    Key? key,
+    super.key,
     this.hintText = 'Search',
     this.onChange,
     this.onSubmit,
@@ -32,7 +32,7 @@ class Searchbar extends StatelessWidget {
     this.focusNode,
     this.ismarketplace = false,
     this.onfiltertap,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

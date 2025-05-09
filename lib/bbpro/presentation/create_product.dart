@@ -783,7 +783,7 @@ class _CreateProductListingState extends State<CreateProductListing> {
                 children: <Widget>[
                   ElevatedButton(
                     style: ButtonStyle(
-                        backgroundColor: MaterialStatePropertyAll(
+                        backgroundColor: WidgetStatePropertyAll(
                             widget.isMarketplace == true
                                 ? primaryColorLT
                                 : proprimaryColor)),

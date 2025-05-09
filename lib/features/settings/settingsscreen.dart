@@ -24,7 +24,7 @@ import '../../services/api_service.dart';
 import '../posts/widgets/settings_item.dart';
 
 class SettingsScreen extends StatefulWidget {
-  const SettingsScreen({Key? key}) : super(key: key);
+  const SettingsScreen({super.key});
 
   @override
   _SettingsScreenState createState() => _SettingsScreenState();
@@ -501,35 +501,35 @@ class _SettingsScreenState extends State<SettingsScreen> {
     }
   }
 
-  Future<void> _contactUs() async {
-    String? encodeQueryParameters(Map<String, String> params) {
-      return params.entries
-          .map((MapEntry<String, String> e) =>
-              '${Uri.encodeComponent(e.key)}=${Uri.encodeComponent(e.value)}')
-          .join('&');
-    }
+  // Future<void> _contactUs() async {
+  //   String? encodeQueryParameters(Map<String, String> params) {
+  //     return params.entries
+  //         .map((MapEntry<String, String> e) =>
+  //             '${Uri.encodeComponent(e.key)}=${Uri.encodeComponent(e.value)}')
+  //         .join('&');
+  //   }
 
-    final Uri mailUrl = Uri(
-      scheme: 'mailto',
-      path: 'support@businessbosses.co.uk',
-      query: encodeQueryParameters(<String, String>{
-        'subject': 'Contact Business Bosses',
-      }),
-    );
+  //   final Uri mailUrl = Uri(
+  //     scheme: 'mailto',
+  //     path: 'support@businessbosses.co.uk',
+  //     query: encodeQueryParameters(<String, String>{
+  //       'subject': 'Contact Business Bosses',
+  //     }),
+  //   );
 
-    try {
-      if (await canLaunchUrl(mailUrl)) {
-        await launchUrl(mailUrl);
-      } else {
-        throw 'Could not launch $mailUrl';
-      }
-    } catch (e) {
-      showSnackbar(
-          title: 'OOPS!',
-          message: 'An error occurred, please try again!',
-          error: true);
-    }
-  }
+  //   try {
+  //     if (await canLaunchUrl(mailUrl)) {
+  //       await launchUrl(mailUrl);
+  //     } else {
+  //       throw 'Could not launch $mailUrl';
+  //     }
+  //   } catch (e) {
+  //     showSnackbar(
+  //         title: 'OOPS!',
+  //         message: 'An error occurred, please try again!',
+  //         error: true);
+  //   }
+  // }
 
   static List<MySettingsItem> item = [
     MySettingsItem(

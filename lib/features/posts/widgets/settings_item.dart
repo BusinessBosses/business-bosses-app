@@ -12,13 +12,13 @@ class SettingsItem extends StatefulWidget {
   final Function onTap;
 
   SettingsItem({
-    Key? key,
+    super.key,
     this.isTitle = true,
     this.label = '',
     this.hasSwitch = true,
     this.switchValue = true,
     required this.onTap,
-  }) : super(key: key);
+  });
 
   @override
   _SettingsItemState createState() => _SettingsItemState();

@@ -8,7 +8,7 @@ import '../../../navigation/routes.dart';
 import '../../../utils/theme/theme.dart';
 
 class MyProfileHeader extends StatelessWidget {
-  const MyProfileHeader({Key? key, required this.myProfile}) : super(key: key);
+  const MyProfileHeader({super.key, required this.myProfile});
   final UserModel myProfile;
 
   @override

@@ -1,6 +1,5 @@
 import 'package:business_bosses_v2/features/forum/controller/challenge_controller.dart';
 import 'package:business_bosses_v2/features/forum/models/industry.dart';
-import 'package:business_bosses_v2/features/forum/presentation/bossup_challenge.dart';
 import 'package:business_bosses_v2/features/forum/presentation/bossup_screen.dart';
 import 'package:business_bosses_v2/features/home/sellProduct.dart';
 import 'package:business_bosses_v2/features/posts/presentation/create_poll_screen.dart';
@@ -14,9 +13,9 @@ import '../../../utils/theme/theme.dart';
 class Floatingbutton extends StatelessWidget {
   final bool? isEvent;
   Floatingbutton({
-    Key? key,
+    super.key,
     this.isEvent,
-  }) : super(key: key);
+  });
 
   ChallengeController controller = Get.put(ChallengeController());
 

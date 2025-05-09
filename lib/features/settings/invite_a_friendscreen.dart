@@ -9,7 +9,7 @@ import '../../utils/theme/theme.dart';
 class InviteAFriendTermsAndConditions extends StatefulWidget {
   static const String routeName = '/invite-terms-conditions';
 
-  const InviteAFriendTermsAndConditions({Key? key}) : super(key: key);
+  const InviteAFriendTermsAndConditions({super.key});
 
   @override
   _InviteAFriendTermsAndConditionsState createState() =>

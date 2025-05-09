@@ -20,10 +20,10 @@ class CourseCommentBottomSheet extends StatefulWidget {
   final CourseModel course;
 
   const CourseCommentBottomSheet({
-    Key? key,
+    super.key,
     required this.onComment,
     required this.course,
-  }) : super(key: key);
+  });
 
   @override
   _CourseCommentBottomSheetState createState() =>

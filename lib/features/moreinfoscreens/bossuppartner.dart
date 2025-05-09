@@ -7,8 +7,8 @@ import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 import 'package:url_launcher/url_launcher.dart';
 
-import '../../action/action.dart';
-import '../../utils/constants/constants.dart';
+// import '../../action/action.dart';
+// import '../../utils/constants/constants.dart';
 import '../../utils/theme/theme.dart';
 import '../posts/widgets/images_viewer_screen.dart';
 
@@ -16,7 +16,7 @@ import '../posts/widgets/images_viewer_screen.dart';
 class Bossuppartner extends StatefulWidget {
   final bool? isMarketplace;
   // ignore: public_member_api_docs
-  const Bossuppartner({Key? key, this.isMarketplace}) : super(key: key);
+  const Bossuppartner({super.key, this.isMarketplace});
 
   @override
   // ignore: library_private_types_in_public_api
@@ -263,30 +263,30 @@ class BossuppartnerItem extends StatelessWidget {
     );
   }
 
-  Future<void> _contactUs(BuildContext context) async {
-    String? encodeQueryParameters(Map<String, String> params) {
-      return params.entries
-          .map((MapEntry<String, String> e) =>
-              '${Uri.encodeComponent(e.key)}=${Uri.encodeComponent(e.value)}')
-          .join('&');
-    }
+  // Future<void> _contactUs(BuildContext context) async {
+  //   String? encodeQueryParameters(Map<String, String> params) {
+  //     return params.entries
+  //         .map((MapEntry<String, String> e) =>
+  //             '${Uri.encodeComponent(e.key)}=${Uri.encodeComponent(e.value)}')
+  //         .join('&');
+  //   }
 
-    final Uri mailUrl = Uri(
-      scheme: 'mailto',
-      path: 'support@businessbosses.co.uk',
-      query: encodeQueryParameters(<String, String>{
-        'subject': 'BossUp Partner',
-      }),
-    );
+  //   final Uri mailUrl = Uri(
+  //     scheme: 'mailto',
+  //     path: 'support@businessbosses.co.uk',
+  //     query: encodeQueryParameters(<String, String>{
+  //       'subject': 'BossUp Partner',
+  //     }),
+  //   );
 
-    try {
-      if (await canLaunchUrl(mailUrl)) {
-        await launchUrl(mailUrl);
-      } else {
-        throw 'Could not launch $mailUrl';
-      }
-    } catch (e) {
-      showSnackBar(context, message: '${Constants.STGW}, try again later');
-    }
-  }
+  //   try {
+  //     if (await canLaunchUrl(mailUrl)) {
+  //       await launchUrl(mailUrl);
+  //     } else {
+  //       throw 'Could not launch $mailUrl';
+  //     }
+  //   } catch (e) {
+  //     showSnackBar(context, message: '${Constants.STGW}, try again later');
+  //   }
+  // }
 }

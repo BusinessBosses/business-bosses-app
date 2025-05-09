@@ -28,11 +28,11 @@ class EventItem extends StatefulWidget {
   final bool? ishomeview;
 
   const EventItem({
-    Key? key,
+    super.key,
     required this.event,
     this.ongoing = false,
     this.ishomeview,
-  }) : super(key: key);
+  });
 
   @override
   State<EventItem> createState() => _EventItemState();

@@ -35,11 +35,10 @@ class ServiceTile extends StatefulWidget {
 
   ///
   const ServiceTile(
-      {Key? key,
+      {super.key,
       required this.post,
       required this.controller,
-      this.onPageChange})
-      : super(key: key);
+      this.onPageChange});
 
   @override
   State<ServiceTile> createState() => _ServiceTileState();

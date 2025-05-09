@@ -20,8 +20,7 @@ class SellerReviewScreen extends StatefulWidget {
   final UserModel user;
   final bool? isShop;
   const SellerReviewScreen(
-      {Key? key, required this.user, this.isShop = false, this.refreshCallback})
-      : super(key: key);
+      {super.key, required this.user, this.isShop = false, this.refreshCallback});
 
   @override
   State<SellerReviewScreen> createState() => _SellerReviewScreenState();

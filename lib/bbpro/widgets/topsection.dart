@@ -7,11 +7,11 @@ class TopsectionWidget extends StatelessWidget {
   final VoidCallback onAddProjectPressed;
 
   const TopsectionWidget({
-    Key? key,
+    super.key,
     required this.buttonText,
     required this.onHowItWorksPressed,
     required this.onAddProjectPressed,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

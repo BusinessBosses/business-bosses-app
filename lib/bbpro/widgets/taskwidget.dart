@@ -312,7 +312,7 @@ class _TaskWidgetState extends State<TaskWidget> {
                                                     .myProfile.uid);
                                           },
                                         );
-                                      }).toList(),
+                                      }),
                                     ],
                                   ),
                                 ),

@@ -7,11 +7,11 @@ import 'package:flutter/material.dart';
 
 class Preview extends StatelessWidget {
   const Preview({
-    Key? key,
+    super.key,
     required this.controller,
     this.isUrl = false,
     this.isUpdating = false,
-  }) : super(key: key);
+  });
   final dynamic controller;
   final bool isUpdating;
   final bool isUrl;

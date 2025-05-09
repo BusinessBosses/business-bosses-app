@@ -15,12 +15,12 @@ class SuppliersCard extends StatefulWidget {
   final Function()? onTap;
 
   const SuppliersCard({
-    Key? key,
+    super.key,
     required this.supplier,
     this.status,
     this.onChangeSuppliersStatus,
     this.onTap,
-  }) : super(key: key);
+  });
 
   @override
   State<SuppliersCard> createState() => _SuppliersCardState();

@@ -176,8 +176,8 @@ class ShopController extends GetxController {
       }
       userItems.clear();
       userItems.addAll(<Object>[
-        ...userProducts.where((Product item) => item.isActive).toList(),
-        ...userServices.where((Service item) => item.isActive).toList(),
+        ...userProducts.where((Product item) => item.isActive),
+        ...userServices.where((Service item) => item.isActive),
         ...userCustomItems,
       ]);
       userItems.sort((Object a, Object b) {

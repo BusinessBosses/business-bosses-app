@@ -31,7 +31,7 @@ final ThemeData appTheme = ThemeData(
     titleLarge: headline6,
   ),
   colorScheme: ColorScheme.fromSwatch(primarySwatch: primarySwatch)
-      .copyWith(background: backgroundColor),
+      .copyWith(surface: backgroundColor),
 );
 const double radius = 10.0;
 const double buttonHeight = 57.0;

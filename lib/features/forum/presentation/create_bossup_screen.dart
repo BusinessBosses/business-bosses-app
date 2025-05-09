@@ -5,8 +5,7 @@ import 'package:business_bosses_v2/features/forum/models/industry.dart';
 import 'package:business_bosses_v2/features/home/marketplace_screen.dart';
 import 'package:business_bosses_v2/features/posts/widgets/preview.dart';
 import 'package:business_bosses_v2/features/profile/controller/profile_controller.dart';
-import 'package:detectable_text_field/detector/sample_regular_expressions.dart';
-import 'package:detectable_text_field/widgets/detectable_text_field.dart';
+import 'package:detectable_text_field/detectable_text_field.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
@@ -23,8 +22,7 @@ class CreateBossUpScreen extends StatefulWidget {
   static const String routeName = '/create-bossup-screen';
 
   // ignore: public_member_api_docs
-  const CreateBossUpScreen({Key? key, required this.industryModel})
-      : super(key: key);
+  const CreateBossUpScreen({super.key, required this.industryModel});
 
   @override
   State<CreateBossUpScreen> createState() => _CreateBossUpScreenState();
@@ -43,7 +41,8 @@ class _CreateBossUpScreenState extends State<CreateBossUpScreen> {
   bool isVisible = false;
   String? _ytUrl;
   late String industryId;
-  final TextEditingController descriptionController = TextEditingController();
+  final DetectableTextEditingController descriptionController =
+      DetectableTextEditingController();
   @override
   void initState() {
     // TODO: implement initState
@@ -108,16 +107,13 @@ class _CreateBossUpScreenState extends State<CreateBossUpScreen> {
                   ),
                   const SizedBox(height: 24.0),
                   DetectableTextField(
-                    controller: descriptionController,
 
-                    detectionRegExp: detectionRegExp(hashtag: false)!,
-                    onDetectionTyped: (String text) {},
-                    onDetectionFinished: () {},
+                    regExp: detectionRegExp(hashtag: false)!,
                     keyboardType: TextInputType.multiline,
                     // minLines: 5,
                     maxLength: 1000,
                     maxLines: 5,
-                    basicStyle: Theme.of(context).textTheme.bodyMedium,
+                    style: Theme.of(context).textTheme.bodyMedium,
                     onChanged: (String val) {
                       description = val;
                     },

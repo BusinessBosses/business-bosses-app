@@ -17,13 +17,13 @@ class SuppliersPage extends StatefulWidget {
   final Function(UserModel)? onConnectionChange;
 
   const SuppliersPage({
-    Key? key,
+    super.key,
     this.filterItems = const <UserModel>[],
     this.isLoading = false,
     this.isSearch = false,
     this.onConnectionChange,
     this.members = const <UserModel>[],
-  }) : super(key: key);
+  });
 
   @override
   State<SuppliersPage> createState() => _FilterUsersState();
@@ -130,29 +130,26 @@ class _FilterUsersState extends State<SuppliersPage> {
                         // ),
 
                         NotificationListener<ScrollNotification>(
-                          onNotification:
-                              (ScrollNotification scrollNotification) {
-                            FocusScope.of(context).unfocus();
-                            return false;
-                          },
-                          child: StaggeredGridView.countBuilder(
-                            staggeredTileBuilder: (int index) =>
-                                const StaggeredTile.fit(1),
-                            padding: const EdgeInsets.symmetric(
-                                horizontal: 15.0, vertical: 10),
-                            crossAxisCount: 2,
-                            crossAxisSpacing: 8.0,
-                            mainAxisSpacing: 8.0,
-                            itemCount: supplierController.suppliers.length,
-                            shrinkWrap: true,
-                            physics: const NeverScrollableScrollPhysics(),
-                            itemBuilder: (BuildContext context, int index) {
-                              return SuppliersGridTile(
-                                supplier: supplierController.suppliers[index],
-                              );
+                            onNotification:
+                                (ScrollNotification scrollNotification) {
+                              FocusScope.of(context).unfocus();
+                              return false;
                             },
-                          ),
-                        ),
+                            child: MasonryGridView.count(
+                              padding: const EdgeInsets.symmetric(
+                                  horizontal: 15.0, vertical: 10),
+                              crossAxisCount: 2,
+                              crossAxisSpacing: 8.0,
+                              mainAxisSpacing: 8.0,
+                              itemCount: supplierController.suppliers.length,
+                              shrinkWrap: true,
+                              physics: const NeverScrollableScrollPhysics(),
+                              itemBuilder: (BuildContext context, int index) {
+                                return SuppliersGridTile(
+                                  supplier: supplierController.suppliers[index],
+                                );
+                              },
+                            )),
                         if (loadingNext)
                           const Positioned(
                             bottom: 10.0,

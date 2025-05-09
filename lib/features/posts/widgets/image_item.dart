@@ -9,11 +9,11 @@ class ImageItem extends StatelessWidget {
   final VoidCallback? onRemove;
   final File? file;
   const ImageItem({
-    Key? key,
+    super.key,
     this.imageUrl,
     this.onRemove,
     this.file,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

@@ -6,11 +6,11 @@ class CustomChildButton extends StatelessWidget {
   final String caption;
   final Function onPressed;
   const CustomChildButton({
-    Key? key,
+    super.key,
     required this.value,
     required this.caption,
     required this.onPressed,
-  }) : super(key: key);
+  });
   @override
   Widget build(BuildContext context) {
     return TextButton(
