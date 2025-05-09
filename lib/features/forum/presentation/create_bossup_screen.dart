@@ -107,7 +107,6 @@ class _CreateBossUpScreenState extends State<CreateBossUpScreen> {
                   ),
                   const SizedBox(height: 24.0),
                   DetectableTextField(
-                    controller: descriptionController,
 
                     regExp: detectionRegExp(hashtag: false)!,
                     keyboardType: TextInputType.multiline,

@@ -95,6 +95,7 @@ class ApiService {
         log(result.toString());
         return result;
       } else {
+        print(result.toString());
         showSnackbar(
             title: 'OOPS!',
             message: 'An error occurred, please try again!',
@@ -102,6 +103,7 @@ class ApiService {
         return null;
       }
     } catch (e) {
+      print(e.toString());
       showSnackbar(
           title: 'OOPS!',
           message: 'An error occurred, please try again!',

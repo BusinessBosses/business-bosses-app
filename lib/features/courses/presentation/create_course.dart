@@ -159,7 +159,6 @@ class _CreateCourseScreenState extends State<CreateCourseScreen> {
                       )),
                   const SizedBox(height: 24.0),
                   DetectableTextField(
-                    controller: desccontroller,
                     regExp: detectionRegExp(hashtag: false)!,
                     keyboardType: TextInputType.multiline,
                     maxLength: 1000,
