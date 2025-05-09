@@ -6,7 +6,7 @@ import '../../posts/widgets/comment_item.dart';
 class AllComments extends StatelessWidget {
   final List<CommentModel> comments;
 
-  const AllComments(this.comments, {Key? key}) : super(key: key);
+  const AllComments(this.comments, {super.key});
 
   @override
   Widget build(BuildContext context) {

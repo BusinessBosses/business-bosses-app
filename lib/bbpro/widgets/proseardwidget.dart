@@ -30,7 +30,7 @@ class ProSearchbar extends StatelessWidget {
 
   // ignore: public_member_api_docs
   const ProSearchbar({
-    Key? key,
+    super.key,
     this.hintText = 'Search',
     this.onChange,
     this.onSubmit,
@@ -42,7 +42,7 @@ class ProSearchbar extends StatelessWidget {
     this.radius,
     this.contentPadding,
     this.onTap,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

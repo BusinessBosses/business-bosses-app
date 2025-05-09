@@ -8,8 +8,8 @@ class InfoCard extends StatefulWidget {
   const InfoCard({
     required this.cardName,
     required this.value,
-    Key? key,
-  }) : super(key: key);
+    super.key,
+  });
 
   @override
   _InfoCardState createState() => _InfoCardState();

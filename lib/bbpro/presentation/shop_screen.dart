@@ -295,12 +295,10 @@ class _ShopScreenState extends State<ShopScreen> {
                                           CrossAxisAlignment.start,
                                       children: <Widget>[
                                         Expanded(
-                                          child: StaggeredGridView.countBuilder(
+                                          child: MasonryGridView.count(
                                             padding: const EdgeInsets.only(
                                                 top: 15, bottom: 100),
                                             crossAxisCount: 2,
-                                            staggeredTileBuilder: (int index) =>
-                                                const StaggeredTile.fit(1),
                                             mainAxisSpacing: 10.0,
                                             crossAxisSpacing: 10.0,
                                             itemCount:

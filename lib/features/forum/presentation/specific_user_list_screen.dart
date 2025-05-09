@@ -11,7 +11,7 @@ import '../../../utils/theme/theme.dart';
 class SpecificUserListScreen extends StatefulWidget {
   static const String routeName = '/specificuserlistScreen';
 
-  const SpecificUserListScreen({Key? key}) : super(key: key);
+  const SpecificUserListScreen({super.key});
 
   @override
   _SpecificUserListScreenState createState() => _SpecificUserListScreenState();

@@ -8,7 +8,7 @@ enum BadgeSize { small, medium, large }
 class RankingBadge extends StatelessWidget {
   final double size;
 
-  const RankingBadge({Key? key, this.size = 30.0}) : super(key: key);
+  const RankingBadge({super.key, this.size = 30.0});
 
   @override
   Widget build(BuildContext context) {

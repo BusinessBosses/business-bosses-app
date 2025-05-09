@@ -63,7 +63,7 @@ class Task {
         'status': status.toString(),
         'createdAt': createdAt?.toIso8601String(),
         'clientId': clientId,
-        'project': project == null ? null : project!.toMap(),
+        'project': project?.toMap(),
       };
 }
 

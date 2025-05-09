@@ -18,7 +18,7 @@ import '../profile/controller/profile_controller.dart';
 class ProScreen extends StatefulWidget {
   static const String routeName = '/proScreen';
 
-  const ProScreen({Key? key}) : super(key: key);
+  const ProScreen({super.key});
 
   @override
   State<ProScreen> createState() => _ProScreenState();
@@ -237,7 +237,7 @@ class _ProScreenState extends State<ProScreen> with TickerProviderStateMixin {
 
 class ProSubscribeSection extends StatefulWidget {
   final bool? isGrow;
-  const ProSubscribeSection({Key? key, this.isGrow}) : super(key: key);
+  const ProSubscribeSection({super.key, this.isGrow});
 
   @override
   State<ProSubscribeSection> createState() => _ProSubscribeSectionState();

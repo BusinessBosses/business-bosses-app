@@ -32,8 +32,7 @@ class PublicProfileScreen extends StatefulWidget {
   final int? currentIndex;
   // ignore: public_member_api_docs
   PublicProfileScreen(
-      {Key? key, this.store, this.selectedIndex, this.currentIndex})
-      : super(key: key);
+      {super.key, this.store, this.selectedIndex, this.currentIndex});
 
   @override
   State<PublicProfileScreen> createState() => _PublicProfileScreenState();
@@ -550,7 +549,7 @@ class _PublicProfileScreenState extends State<PublicProfileScreen> {
                         initialIndex: widget.store != null ? 2 : 0,
                         child: Column(
                           children: <Widget>[
-                            OutlineButtonHeader(
+                            outlineButtonHeader(
                               publicUser,
                               _profileController.myProfile,
                               connectToUser,

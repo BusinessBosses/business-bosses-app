@@ -12,10 +12,10 @@ import '../../utils/theme/theme.dart';
 import 'controller/profile_controller.dart';
 
 class ChangePasswordScreen extends StatefulWidget {
-  const ChangePasswordScreen({Key? key}) : super(key: key);
+  const ChangePasswordScreen({super.key});
 
   @override
-  _ChangePasswordScreenState createState() => _ChangePasswordScreenState();
+  State<ChangePasswordScreen> createState() => _ChangePasswordScreenState();
 }
 
 class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
@@ -165,9 +165,9 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
     });
   }
 
-  Future<dynamic> _handleChange() async {
-    // dynamic user = await _apiService.changePassword(
-    //     ProfileController().myProfile.email, _password!);
-    // return user;
-  }
+  // Future<dynamic> _handleChange() async {
+  //   // dynamic user = await _apiService.changePassword(
+  //   //     ProfileController().myProfile.email, _password!);
+  //   // return user;
+  // }
 }

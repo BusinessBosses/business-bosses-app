@@ -2,12 +2,12 @@ import 'package:flutter/material.dart';
 
 class ProPaymentOptionCard extends StatelessWidget {
   const ProPaymentOptionCard({
-    Key? key,
+    super.key,
     required this.option,
     required this.activeoption,
     required this.onTap,
     required this.subtext,
-  }) : super(key: key);
+  });
 
   final String option; // Each option is a String, not a List
   final String activeoption; // The currently active option

@@ -7,7 +7,7 @@ import 'package:youtube_player_flutter/youtube_player_flutter.dart';
 import 'package:visibility_detector/visibility_detector.dart';
 
 class CourseList extends StatefulWidget {
-  const CourseList({Key? key}) : super(key: key);
+  const CourseList({super.key});
 
   @override
   CourseListState createState() => CourseListState();

@@ -10,7 +10,7 @@ import '../profile/presentation/public_profile_screen.dart';
 class ReferralsDetailsScreen extends StatefulWidget {
   static const String routeName = '/referrals-details-screen';
 
-  const ReferralsDetailsScreen({Key? key}) : super(key: key);
+  const ReferralsDetailsScreen({super.key});
 
   @override
   _ReferralsDetailsScreenState createState() => _ReferralsDetailsScreenState();
@@ -38,7 +38,7 @@ class _ReferralsDetailsScreenState extends State<ReferralsDetailsScreen> {
     }
   }
 
-  _scrollListener() {
+  void _scrollListener() {
     if (_controller.position.atEdge) {
       if (_controller.position.pixels == 0) {
       } else {

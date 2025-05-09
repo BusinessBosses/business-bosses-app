@@ -12,7 +12,7 @@ class ProCustomButton extends StatefulWidget {
   final double? padding;
 
   ProCustomButton({
-    Key? key,
+    super.key,
     required this.text,
     this.icon,
     required this.onPressed,
@@ -20,7 +20,7 @@ class ProCustomButton extends StatefulWidget {
     this.loading = false,
     this.color,
     this.padding,
-  }) : super(key: key);
+  });
 
   @override
   State<ProCustomButton> createState() => _ProCustomButtonState();

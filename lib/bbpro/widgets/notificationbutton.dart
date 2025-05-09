@@ -9,11 +9,10 @@ class NotificationButton extends StatelessWidget {
   final double? toppadding;
   final bool hasUnreadNotification;
   const NotificationButton(
-      {Key? key,
+      {super.key,
       this.padding,
       this.toppadding,
-      this.hasUnreadNotification = false})
-      : super(key: key);
+      this.hasUnreadNotification = false});
 
   @override
   Widget build(BuildContext context) {

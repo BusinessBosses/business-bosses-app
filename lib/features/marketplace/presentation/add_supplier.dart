@@ -25,7 +25,7 @@ import '../../profile/controller/profile_controller.dart';
 /// SELLING SCREEN MARKETPLACE
 class AddSupplierScreen extends StatefulWidget {
   /// SELLING SCREEN MARKETPLACE
-  const AddSupplierScreen({Key? key, this.supplier}) : super(key: key);
+  const AddSupplierScreen({super.key, this.supplier});
 
   final SuppliersModel? supplier;
   @override

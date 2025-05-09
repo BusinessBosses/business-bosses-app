@@ -13,7 +13,7 @@ class CustomTile extends StatelessWidget {
   final bool? isbossup;
 
   const CustomTile({
-    Key? key,
+    super.key,
     required this.onTap,
     required this.label,
     required this.photo,
@@ -21,7 +21,7 @@ class CustomTile extends StatelessWidget {
     this.showBorder = false,
     this.ishome,
     this.isbossup,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

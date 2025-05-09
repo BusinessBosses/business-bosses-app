@@ -11,7 +11,7 @@ import 'forms/signup_form.dart';
 class RegisterScreen extends StatelessWidget {
   /// REGISTER SCREEN CONSTRUCTOR
 
-  const RegisterScreen({Key? key}) : super(key: key);
+  const RegisterScreen({super.key});
   // GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
 
   @override

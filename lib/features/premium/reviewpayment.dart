@@ -518,11 +518,11 @@ class _ReviewPaymentState extends State<ReviewPayment> {
 ///Payment option card
 class PaymentOptionCard extends StatelessWidget {
   const PaymentOptionCard({
-    Key? key,
+    super.key,
     required this.option,
     required this.activeoption,
     required this.onTap,
-  }) : super(key: key);
+  });
 
   final Map<String, dynamic> option;
   final String activeoption;

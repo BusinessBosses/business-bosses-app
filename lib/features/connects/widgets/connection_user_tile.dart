@@ -16,14 +16,13 @@ class ConnectionUserItem extends StatelessWidget {
   final bool? isMe;
 
   const ConnectionUserItem(
-      {Key? key,
+      {super.key,
       required this.user,
       this.status = false,
       this.label,
       this.onChangeConnectionStatus,
       this.onTap,
-      this.isMe})
-      : super(key: key);
+      this.isMe});
 
   @override
   Widget build(BuildContext context) {

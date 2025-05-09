@@ -18,7 +18,7 @@ class FieldContainer extends StatelessWidget {
   final bool isError;
 
   const FieldContainer({
-    Key? key,
+    super.key,
     required this.child,
     this.color = Colors.white,
     this.height = fieldHeight,
@@ -30,7 +30,7 @@ class FieldContainer extends StatelessWidget {
     required this.message,
     this.messageStyle = const TextStyle(),
     this.isError = true,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

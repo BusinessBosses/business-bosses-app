@@ -351,7 +351,7 @@ class ChooseClientsBottomSheet extends StatefulWidget {
   final bool? isCampaign;
 
   const ChooseClientsBottomSheet({
-    Key? key,
+    super.key,
     required this.selectedItem,
     required this.selectedName,
     required this.online,
@@ -360,7 +360,7 @@ class ChooseClientsBottomSheet extends StatefulWidget {
     this.onClientAdded,
     required this.all,
     this.isCampaign,
-  }) : super(key: key);
+  });
 
   @override
   State<ChooseClientsBottomSheet> createState() =>

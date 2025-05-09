@@ -19,13 +19,12 @@ class FilterChallengeUsers extends StatefulWidget {
 
   // ignore: public_member_api_docs
   const FilterChallengeUsers(
-      {Key? key,
+      {super.key,
       this.filterItems = const <UserModel>[],
       this.isLoading = false,
       this.isSearch = false,
       this.onConnectionChange,
-      this.members = const <UserModel>[]})
-      : super(key: key);
+      this.members = const <UserModel>[]});
 
   @override
   State<FilterChallengeUsers> createState() => _FilterUsersState();

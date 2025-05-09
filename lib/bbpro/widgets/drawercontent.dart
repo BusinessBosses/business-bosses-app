@@ -30,12 +30,11 @@ class DrawerContent extends StatelessWidget {
   final VoidCallback? oncrowfundclick;
   final bool hasUnreadNotification;
   const DrawerContent(
-      {Key? key,
+      {super.key,
       this.currentuser,
       this.oncloseclick,
       this.oncrowfundclick,
-      required this.hasUnreadNotification})
-      : super(key: key);
+      required this.hasUnreadNotification});
 
   @override
   Widget build(BuildContext context) {
@@ -384,7 +383,7 @@ class DrawerContent extends StatelessWidget {
                         width: double.infinity,
                         child: ProCustomButton(
                             color: primaryColorLT,
-                            icon: const Icon(Icons.add),
+                            icon: const Icon(Icons.add, color: Colors.white),
                             text: 'Create',
                             onPressed: () {
                               showModalBottomSheet(

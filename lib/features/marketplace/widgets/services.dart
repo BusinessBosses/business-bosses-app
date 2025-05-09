@@ -82,10 +82,8 @@ class _ServicesPageState extends State<ServicesPage> {
                   Padding(
                     padding: const EdgeInsets.symmetric(
                         horizontal: 10.0, vertical: 10.0),
-                    child: StaggeredGridView.countBuilder(
+                    child: MasonryGridView.count(
                       crossAxisCount: 2,
-                      staggeredTileBuilder: (int index) =>
-                          const StaggeredTile.fit(1),
                       mainAxisSpacing: 10.0,
                       crossAxisSpacing: 10.0,
                       itemCount: services.length,
@@ -97,7 +95,6 @@ class _ServicesPageState extends State<ServicesPage> {
                           onTap: () {
                             if (service.user!.uid ==
                                 profileController.myProfile.uid) {
-                              // Navigate to edit listing
                             } else {
                               Get.to(() => BookServiceScreen(
                                     service: service,

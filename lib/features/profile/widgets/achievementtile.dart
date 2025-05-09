@@ -4,7 +4,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import '../presentation/my_profile_screen.dart';
 
 class AchievementsExpansionTile extends StatefulWidget {
-  const AchievementsExpansionTile({Key? key}) : super(key: key);
+  const AchievementsExpansionTile({super.key});
 
   @override
   _AchievementsExpansionTileState createState() =>

@@ -14,7 +14,7 @@ class OptionsButton extends StatelessWidget {
   final VoidCallback? onBoost;
 
   const OptionsButton({
-    Key? key,
+    super.key,
     this.padding,
     this.borderColor,
     this.isExpanded = false,
@@ -25,7 +25,7 @@ class OptionsButton extends StatelessWidget {
     this.onView,
     this.onBoost,
     this.isBoost,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

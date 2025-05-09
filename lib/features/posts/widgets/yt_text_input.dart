@@ -5,9 +5,9 @@ import 'package:flutter/material.dart';
 
 class YTTextInput extends StatelessWidget {
   const YTTextInput({
-    Key? key,
+    super.key,
     required this.titleController,
-  }) : super(key: key);
+  });
   final TextEditingController titleController;
 
   @override

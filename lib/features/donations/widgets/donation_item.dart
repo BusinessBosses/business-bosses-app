@@ -24,10 +24,10 @@ class DonationItem extends StatefulWidget {
   final bool? isHome;
   const DonationItem({
     required this.isLastItem,
-    Key? key,
+    super.key,
     required this.donation,
     this.isHome,
-  }) : super(key: key);
+  });
 
   // required this.Donation});
 

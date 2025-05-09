@@ -6,8 +6,7 @@ class ServicetypeSectionWidget extends StatefulWidget {
   final bool? isOnline;
   final Service service;
   const ServicetypeSectionWidget(
-      {Key? key, this.isOnline, required this.service})
-      : super(key: key);
+      {super.key, this.isOnline, required this.service});
 
   @override
   State<ServicetypeSectionWidget> createState() =>

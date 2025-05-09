@@ -578,18 +578,14 @@ class _UserShopScreenState extends State<UserShopScreen> {
                                                           .symmetric(
                                                         horizontal: 15.0,
                                                       ),
-                                                      child: StaggeredGridView
-                                                          .countBuilder(
+                                                      child:
+                                                          MasonryGridView.count(
                                                         padding:
                                                             const EdgeInsets
                                                                 .only(
                                                                 top: 15,
                                                                 bottom: 100),
                                                         crossAxisCount: 2,
-                                                        staggeredTileBuilder: (int
-                                                                index) =>
-                                                            const StaggeredTile
-                                                                .fit(1),
                                                         mainAxisSpacing: 10.0,
                                                         crossAxisSpacing: 10.0,
                                                         itemCount:

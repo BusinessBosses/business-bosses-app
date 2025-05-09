@@ -24,7 +24,7 @@ bool isExpanded = false;
 class DepositsScreen extends StatefulWidget {
   static const String routeName = '/deposits-screen';
 
-  const DepositsScreen({Key? key}) : super(key: key);
+  const DepositsScreen({super.key});
 
   @override
   // ignore: library_private_types_in_public_api
@@ -105,6 +105,12 @@ class _DepositsScreenState extends State<DepositsScreen> {
                                 width: 120,
                                 height: 43,
                                 child: ElevatedButton(
+                                    style: ElevatedButton.styleFrom(
+                                      backgroundColor: primaryColorLT,
+                                      shape: RoundedRectangleBorder(
+                                        borderRadius: BorderRadius.circular(12),
+                                      ),
+                                    ),
                                     onPressed: () {
                                       showModalBottomSheet(
                                           shape: RoundedRectangleBorder(

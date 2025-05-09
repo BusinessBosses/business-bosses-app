@@ -598,7 +598,7 @@ class _OrderWidgetState extends State<OrderWidget> {
                                                             : widget.shop!.id);
                                               },
                                             );
-                                          }).toList(),
+                                          }),
                                         ],
                                       ),
                                     ),

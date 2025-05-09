@@ -324,6 +324,7 @@ class _LoginFormState extends State<LoginForm> {
             const SizedBox(height: 30.0),
 
             CustomButton(
+              
               margin: const EdgeInsets.all(2.0),
               label: 'Login',
               onPressed: () async {
@@ -465,10 +466,10 @@ class _LoginFormState extends State<LoginForm> {
     return user;
   }
 
-  logEvents(dynamic event, dynamic method) async {
+  Future<void> logEvents(dynamic event, dynamic method) async {
     await FirebaseAnalytics.instance.logEvent(
       name: event,
-      parameters: <String, dynamic>{'method': method},
+      parameters: <String, Object>{'method': method},
     );
   }
 }

@@ -14,8 +14,7 @@ class WriteAComment extends StatefulWidget {
   final String? courseId;
     final String? receiverUid;
 
-  const WriteAComment({Key? key, required this.onCommentSend, this.courseId, this.receiverUid,})
-      : super(key: key);
+  const WriteAComment({super.key, required this.onCommentSend, this.courseId, this.receiverUid,});
 
   @override
   _WriteACommentState createState() => _WriteACommentState();

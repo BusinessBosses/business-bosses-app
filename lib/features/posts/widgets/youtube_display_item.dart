@@ -9,8 +9,7 @@ class YoutubeDisplayItem extends StatefulWidget {
   final String youtubeUrl;
   final BorderRadiusGeometry? corner;
 
-  const YoutubeDisplayItem(this.youtubeUrl, {this.corner, Key? key})
-      : super(key: key);
+  const YoutubeDisplayItem(this.youtubeUrl, {this.corner, super.key});
 
   @override
   _YoutubeDisplayState createState() => _YoutubeDisplayState();

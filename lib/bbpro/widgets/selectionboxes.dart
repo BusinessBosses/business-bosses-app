@@ -78,7 +78,7 @@ class _SelectionSectionState extends State<SelectionSection> {
                   ],
                 ),
               );
-            }).toList(),
+            }),
           ],
         ),
       ),

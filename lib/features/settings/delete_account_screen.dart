@@ -12,7 +12,7 @@ import '../../utils/theme/theme.dart';
 import '../profile/controller/profile_controller.dart';
 
 class DeleteAccountScreen extends StatefulWidget {
-  const DeleteAccountScreen({Key? key}) : super(key: key);
+  const DeleteAccountScreen({super.key});
 
   @override
   _DeleteAccountScreenState createState() => _DeleteAccountScreenState();

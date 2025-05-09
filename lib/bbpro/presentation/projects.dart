@@ -104,7 +104,10 @@ class _ProjectsState extends State<Projects>
                 ),
                 child: ProIconButton(
                   radius: 50,
-                  icon: const Icon(Icons.add),
+                  icon: const Icon(
+                    Icons.add,
+                    color: Colors.white,
+                  ),
                   onPressed: () {
                     Get.to(() => const Addproject());
                   },
@@ -505,7 +508,8 @@ class _RowStatusCardState extends State<RowStatusCard> {
                         cancelDrag: widget.cancelDrag,
                       );
                     },
-                    onWillAccept: (Project? details) => true,
+                    onWillAcceptWithDetails:
+                        (DragTargetDetails<Project> details) => true,
                     onAcceptWithDetails: (DragTargetDetails<Project> details) {
                       widget.taskAccepted(details.data, widget.projectStatus);
                     },

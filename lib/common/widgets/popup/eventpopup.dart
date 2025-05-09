@@ -13,7 +13,7 @@ class EventPopUp extends StatelessWidget {
   final EventModel event;
 
   /// Boss Up Challenge Pop Up
-  const EventPopUp({Key? key, required this.event}) : super(key: key);
+  const EventPopUp({super.key, required this.event});
 
   @override
   Widget build(BuildContext context) {

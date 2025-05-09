@@ -14,7 +14,7 @@ class MCustomButton extends StatelessWidget {
   final Color? strokeColor;
 
   const MCustomButton({
-    Key? key,
+    super.key,
     this.width = double.infinity,
     this.height = buttonHeight,
     this.radius = radiusValue,
@@ -25,7 +25,7 @@ class MCustomButton extends StatelessWidget {
     this.isProcessing = false,
     this.buttonType = ButtonType.outline,
     this.strokeColor,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

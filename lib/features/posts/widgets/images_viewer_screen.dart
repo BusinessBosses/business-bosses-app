@@ -13,11 +13,11 @@ class ImagesViewerScreen extends StatefulWidget {
   final String? text;
 
   const ImagesViewerScreen({
-    Key? key,
+    super.key,
     this.urls,
     this.index = 0,
     this.text,
-  }) : super(key: key);
+  });
 
   @override
   // ignore: library_private_types_in_public_api

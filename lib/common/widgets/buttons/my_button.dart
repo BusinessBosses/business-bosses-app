@@ -19,14 +19,14 @@ class MyButton extends StatelessWidget {
 
   /// MyButton Widget
   const MyButton({
-    Key? key,
+    super.key,
     required this.label,
     this.labelStyle = const TextStyle(),
     this.height = buttonHeight,
     this.width = double.infinity,
     required this.onPressed,
     this.isProcessing = false,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

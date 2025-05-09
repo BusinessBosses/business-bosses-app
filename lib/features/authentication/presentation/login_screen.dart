@@ -9,7 +9,7 @@ import 'forms/login_form.dart';
 /// LOGIN SCREEEN
 class LoginScreen extends StatelessWidget {
   /// LOGIN SCREEN CONSTRUCTOR
-  const LoginScreen({Key? key}) : super(key: key);
+  const LoginScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -70,8 +70,7 @@ class LoginScreen extends StatelessWidget {
                           height: 6,
                         ),
                         CircleAvatar(
-                          backgroundColor: primaryColorLT,
-                          radius: 3,
+                          backgroundColor: primaryColorLT,                         radius: 3,
                         )
                       ],
                     ),

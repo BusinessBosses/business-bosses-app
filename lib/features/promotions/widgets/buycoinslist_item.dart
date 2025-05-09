@@ -9,10 +9,10 @@ class BuyCoinsListItem extends StatelessWidget {
   final String? coinprice;
 
   const BuyCoinsListItem({
-    Key? key,
+    super.key,
     this.coinamount,
     this.coinprice,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

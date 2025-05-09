@@ -495,7 +495,7 @@ class _ClientsScreenState extends State<ClientsScreen>
                 primaryColorLT.withOpacity(0.1),
               ],
               listofitems: <String>[
-                ...ClientType.values.map((ClientType e) => e.name).toList(),
+                ...ClientType.values.map((ClientType e) => e.name),
                 'Suppliers',
               ],
               itemToString: (String status) {
@@ -623,12 +623,8 @@ class _ClientsScreenState extends State<ClientsScreen>
                                               return loadingSupplier
                                                   ? const SafetyModel()
                                                   : Expanded(
-                                                      child: StaggeredGridView
-                                                          .countBuilder(
-                                                        staggeredTileBuilder: (int
-                                                                index) =>
-                                                            const StaggeredTile
-                                                                .fit(1),
+                                                      child:
+                                                          MasonryGridView.count(
                                                         padding:
                                                             const EdgeInsets
                                                                 .symmetric(

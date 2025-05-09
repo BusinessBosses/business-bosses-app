@@ -19,7 +19,7 @@ import '../../utils/time_format.dart';
 class ProfileAnalyseScreen extends StatefulWidget {
   static const String routeName = '/profile-analyse-screen';
 
-  const ProfileAnalyseScreen({Key? key}) : super(key: key);
+  const ProfileAnalyseScreen({super.key});
 
   @override
   State<ProfileAnalyseScreen> createState() => _ProfileAnalyseScreenState();

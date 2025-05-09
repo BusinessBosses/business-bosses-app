@@ -216,7 +216,7 @@ class _ExpandedOrdersState extends State<ExpandedOrders> {
                 ),
               );
             });
-          }).toList(),
+          }),
           ...widget.order.services!.map<Widget>((Service service) {
             return GestureDetector(
               onTap: () {
@@ -243,7 +243,7 @@ class _ExpandedOrdersState extends State<ExpandedOrders> {
                 ),
               ),
             );
-          }).toList(),
+          }),
           ...widget.order.customItems!.map<Widget>((dynamic custom) {
             return GestureDetector(
               child: ListTile(
@@ -265,7 +265,7 @@ class _ExpandedOrdersState extends State<ExpandedOrders> {
                 ),
               ),
             );
-          }).toList(),
+          }),
         ],
       ),
     );

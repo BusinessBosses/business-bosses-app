@@ -1,4 +1,5 @@
 /// CONSTANTS
+library;
 // ignore_for_file: constant_identifier_names, public_member_api_docs
 
 class Constants {

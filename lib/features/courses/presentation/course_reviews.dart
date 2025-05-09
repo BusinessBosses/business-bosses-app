@@ -18,7 +18,7 @@ import '../../../utils/theme/theme.dart';
 
 class CourseReviewScreen extends StatefulWidget {
   final CourseModel course;
-  const CourseReviewScreen({Key? key, required this.course}) : super(key: key);
+  const CourseReviewScreen({super.key, required this.course});
 
   @override
   State<CourseReviewScreen> createState() => _CourseReviewScreenState();

@@ -8,7 +8,7 @@ import 'package:flutter_svg/svg.dart';
 import '../../../utils/theme/theme.dart';
 
 class CreatePostUserTile extends StatelessWidget {
-  const CreatePostUserTile({Key? key, this.user}) : super(key: key);
+  const CreatePostUserTile({super.key, this.user});
 
   final UserModel? user;
 

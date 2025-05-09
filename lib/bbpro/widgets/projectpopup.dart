@@ -10,9 +10,9 @@ import 'package:get/get.dart';
 class ProjectPopUp extends StatefulWidget {
   final Project project;
   const ProjectPopUp({
-    Key? key,
+    super.key,
     required this.project,
-  }) : super(key: key);
+  });
 
   @override
   State<ProjectPopUp> createState() => _ProjectPopUpState();

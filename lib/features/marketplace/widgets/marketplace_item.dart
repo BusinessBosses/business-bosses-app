@@ -38,12 +38,11 @@ class MarketTile extends StatefulWidget {
 
   ///
   const MarketTile(
-      {Key? key,
+      {super.key,
       required this.post,
       required this.controller,
       this.onPageChange,
-      this.ishome})
-      : super(key: key);
+      this.ishome});
 
   @override
   State<MarketTile> createState() => _MarketTileState();

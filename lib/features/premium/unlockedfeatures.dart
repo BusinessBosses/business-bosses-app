@@ -4,7 +4,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 class FeatureTile extends StatelessWidget {
   final FeatureItem feature;
 
-  const FeatureTile({Key? key, required this.feature}) : super(key: key);
+  const FeatureTile({super.key, required this.feature});
 
   @override
   Widget build(BuildContext context) {

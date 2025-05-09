@@ -12,9 +12,9 @@ import '../../../../utils/theme/theme.dart';
 class AttendeesItem extends StatefulWidget {
   final EventModel event;
   const AttendeesItem({
-    Key? key,
+    super.key,
     required this.event,
-  }) : super(key: key);
+  });
 
   @override
   // ignore: library_private_types_in_public_api

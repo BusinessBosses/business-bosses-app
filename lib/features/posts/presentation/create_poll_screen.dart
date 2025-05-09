@@ -5,6 +5,7 @@ import 'package:business_bosses_v2/features/posts/widgets/text_input.dart';
 import 'package:business_bosses_v2/features/posts/widgets/user_details_widget.dart';
 import 'package:business_bosses_v2/functions/unfocus_keyboard.dart';
 import 'package:business_bosses_v2/utils/theme/theme.dart';
+import 'package:detectable_text_field/detectable_text_field.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
@@ -17,7 +18,7 @@ class CreatePollScreen extends StatefulWidget {
   final PostModel? postDetail;
 
   /// SCREEN CONSTRUCTOR
-  const CreatePollScreen({Key? key, this.postDetail}) : super(key: key);
+  const CreatePollScreen({super.key, this.postDetail});
   static const String routeName = '/create-poll';
 
   @override
@@ -29,7 +30,8 @@ class _CreatePollScreenState extends State<CreatePollScreen> {
   final CreatePostController _createPostController =
       Get.put(CreatePostController());
   dynamic _overlayEntry;
-  final TextEditingController _titleCtrl = TextEditingController();
+  final DetectableTextEditingController _titleCtrl =
+      DetectableTextEditingController();
   List<Widget> dynamicTextFields = <Widget>[];
   int optionCode = 2;
   // final TextEditingController _ytCtrl = TextEditingController();

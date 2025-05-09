@@ -18,12 +18,12 @@ class SuppliersGridTile extends StatefulWidget {
   State<SuppliersGridTile> createState() => _SuppliersGridTileState();
 
   const SuppliersGridTile({
-    Key? key,
+    super.key,
     required this.supplier,
     this.status,
     this.onChangeSuppliersStatus,
     this.onTap,
-  }) : super(key: key);
+  });
 }
 
 class _SuppliersGridTileState extends State<SuppliersGridTile> {

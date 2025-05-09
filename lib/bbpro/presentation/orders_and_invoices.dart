@@ -84,7 +84,7 @@ class _OrdersScreenState extends State<OrdersScreen>
                   ),
                   child: ProIconButton(
                     radius: 50,
-                    icon: const Icon(Icons.add),
+                    icon: const Icon(Icons.add, color: Colors.white,),
                     onPressed: () {
                       Get.to(() => const CreateOrder());
                     },
@@ -460,7 +460,8 @@ class _RowStatusCardState extends State<RowStatusCard> {
                         cancelDrag: widget.cancelDrag,
                       );
                     },
-                    onWillAccept: (Order? details) => true,
+                    onWillAcceptWithDetails:
+                        (DragTargetDetails<Order> details) => true,
                     onAcceptWithDetails: (DragTargetDetails<Order> details) {
                       widget.orderAccepted(details.data, widget.orderStatus);
                     },

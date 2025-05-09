@@ -36,8 +36,7 @@ bool isExpanded = false;
 class UpdateProfileScreen extends StatefulWidget {
   final UserModel? user;
   final bool? isShopedit;
-  const UpdateProfileScreen({Key? key, this.user, this.isShopedit})
-      : super(key: key);
+  const UpdateProfileScreen({super.key, this.user, this.isShopedit});
 
   @override
   State<UpdateProfileScreen> createState() => _UpdateProfileScreenState();

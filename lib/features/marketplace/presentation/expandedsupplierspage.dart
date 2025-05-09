@@ -19,12 +19,12 @@ class ExpandedSuppliersPage extends StatefulWidget {
   final Function(UserModel)? onConnectionChange;
 
   const ExpandedSuppliersPage({
-    Key? key,
+    super.key,
     this.isLoading = false,
     this.isSearch = false,
     this.onConnectionChange,
     required this.supplier,
-  }) : super(key: key);
+  });
 
   @override
   State<ExpandedSuppliersPage> createState() => _FilterUsersState();

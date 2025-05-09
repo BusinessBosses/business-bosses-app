@@ -5,7 +5,6 @@ import 'package:business_bosses_v2/common/widgets/safety_model.dart';
 import 'package:business_bosses_v2/features/forum/controller/challenge_controller.dart';
 import 'package:business_bosses_v2/features/home/controller/commumities_controller.dart';
 import 'package:business_bosses_v2/features/home/widgets/bottom_bar.dart';
-import 'package:business_bosses_v2/features/home/widgets/floatingbutton.dart';
 import 'package:business_bosses_v2/features/home/widgets/forum_item.dart';
 import 'package:business_bosses_v2/features/home/widgets/list_items.dart';
 import 'package:business_bosses_v2/features/live_event/controller/live_event_controller.dart';
@@ -216,8 +215,8 @@ class _HomeScreenState extends State<HomeScreen>
           return UpgradeAlert(
             upgrader: Upgrader(
               durationUntilAlertAgain: const Duration(minutes: 1),
-              showIgnore: false,
             ),
+            showIgnore: false,
             child: AdvancedDrawer(
               backdrop: Container(
                 width: double.infinity,

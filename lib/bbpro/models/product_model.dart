@@ -111,8 +111,8 @@ class Product {
       'storageLocation': storageLocation,
       'productNumber': productNumber,
       'quantity': quantity ?? 0, // Ensure quantity is not null
-      'startAt': startAt == null ? null : startAt!.toIso8601String(),
-      'endAt': endAt == null ? null : endAt!.toIso8601String(),
+      'startAt': startAt?.toIso8601String(),
+      'endAt': endAt?.toIso8601String(),
       'color': color,
       'size': size,
       // 'createdAt': createdAt.toIso8601String(),
@@ -144,8 +144,8 @@ Product {
   quantity: $quantity,
   color: $color,
   size: $size,
-  startAt: ${startAt == null ? null : startAt!.toIso8601String()},
-  endAt: ${endAt == null ? null : endAt!.toIso8601String()},
+  startAt: ${startAt?.toIso8601String()},
+  endAt: ${endAt?.toIso8601String()},
   
   images: $images
 }
