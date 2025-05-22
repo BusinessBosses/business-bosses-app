@@ -60,7 +60,7 @@ class AuthController extends GetxController {
     final String apiKey = dotenv.env['SENDGRILL_API_KEY']!;
     final String fromEmail = dotenv.env['SENDGRID_EMAIL_ADDRESS']!;
     final String templateId = dotenv.env['SENDGRID_TEMPLATE_ID']!;
-    final String subject = 'OTP Verification Code';
+    const String subject = 'OTP Verification Code';
 
     final Uri uri = Uri.parse('https://api.sendgrid.com/v3/mail/send');
     final http.Response response = await http.post(
@@ -111,7 +111,7 @@ class AuthController extends GetxController {
     final String apiKey = dotenv.env['SENDGRILL_API_KEY']!;
     final String fromEmail = dotenv.env['SENDGRID_EMAIL_ADDRESS']!;
     final String templateId = dotenv.env['SENDGRID_FORGOT_TEMPLATE_ID']!;
-    final String subject = 'OTP Verification Code';
+    const String subject = 'OTP Verification Code';
 
     final Uri uri = Uri.parse('https://api.sendgrid.com/v3/mail/send');
     final http.Response response = await http.post(

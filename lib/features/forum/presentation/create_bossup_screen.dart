@@ -3,7 +3,7 @@ import 'package:business_bosses_v2/common/widgets/typography/text_widget.dart';
 import 'package:business_bosses_v2/features/forum/models/forum_model.dart';
 import 'package:business_bosses_v2/features/forum/models/industry.dart';
 import 'package:business_bosses_v2/features/home/marketplace_screen.dart';
-import 'package:business_bosses_v2/features/posts/widgets/preview.dart';
+import 'package:business_bosses_v2/features/posts/widgets/preview.dart' as custom_preview;
 import 'package:business_bosses_v2/features/profile/controller/profile_controller.dart';
 import 'package:detectable_text_field/detectable_text_field.dart';
 import 'package:flutter/material.dart';
@@ -256,7 +256,7 @@ class _CreateBossUpScreenState extends State<CreateBossUpScreen> {
                   const SizedBox(
                     height: 8,
                   ),
-                  Preview(controller: controller),
+                  custom_preview.Preview(controller: controller),
                   const SizedBox(height: 24.0),
                   MCustomButton(
                     buttonType: ButtonType.elevated,

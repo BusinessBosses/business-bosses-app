@@ -3,7 +3,6 @@ import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 
 import '../../../common/models/user_model.dart';
-import '../../../common/widgets/buttons/my_outlined_button.dart';
 import '../../../common/widgets/user_avatar_with_badge.dart';
 import '../../../navigation/routes.dart';
 import '../../../utils/theme/theme.dart';
