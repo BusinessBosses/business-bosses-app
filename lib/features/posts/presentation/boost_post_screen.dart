@@ -11,6 +11,7 @@ import 'package:flutter_stripe/flutter_stripe.dart';
 
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
+import 'package:paystack_for_flutter/paystack_for_flutter.dart';
 
 import '../../../action/action.dart';
 // import '../../../common/diaprints/snackbar.dart';
@@ -226,40 +227,106 @@ class _BoostPostState extends State<BoostPost> {
     });
   }
 
-  void _startPaystack() async {
-    // String? publicKey = dotenv.env['PAYSTACK_PUBLIC_KEY'];
-    // await payStackClient.initialize(publicKey: publicKey!);
-  }
+  // void _startPaystack() async {
+  //   // String? publicKey = dotenv.env['PAYSTACK_PUBLIC_KEY'];
+  //   // await payStackClient.initialize(publicKey: publicKey!);
+  // }
 
   final String reference =
       'unique_transaction_ref_${Random().nextInt(1000000)}';
 
-  void _makePayment() async {
-    // final Charge charge = Charge()
-    //   ..email = profileController.myProfile.email
-    //   ..amount = (int.parse(initPlan) * 100000)
-    //   // ..amount = 10000
-    //   ..reference = reference;
+  // void _makePayment() async {
+  // final Charge charge = Charge()
+  //   ..email = profileController.myProfile.email
+  //   ..amount = (int.parse(initPlan) * 100000)
+  //   // ..amount = 10000
+  //   ..reference = reference;
 
-    // final CheckoutResponse response = await payStackClient.checkout(context,
-    //     charge: charge, method: CheckoutMethod.card);
+  // final CheckoutResponse response = await payStackClient.checkout(context,
+  //     charge: charge, method: CheckoutMethod.card);
 
-    // if (response.status && response.reference == reference) {
-    //   showSnackBar(context,
-    //       message: 'Payment Successful, Thanks for your patronage !');
-    // } else {
-    //   showSnackBar(context, message: 'Opps!! Something went wrong. Try again');
-    // }
-  }
+  // if (response.status && response.reference == reference) {
+  //   showSnackBar(context,
+  //       message: 'Payment Successful, Thanks for your patronage !');
+  // } else {
+  //   showSnackBar(context, message: 'Opps!! Something went wrong. Try again');
+  // }
+  // }
 
   @override
   void initState() {
     super.initState();
     initPlan = plans[0]['amount'];
     myPlan = options[0]['optionname'];
-    _startPaystack();
+  }
 
-    // print(widget.postId);
+  Future<String> _createPaystackTransaction() async {
+    final http.Response resp = await http.post(
+      Uri.parse('https://api.paystack.co/transaction/initialize'),
+      headers: <String, String>{
+        'Authorization': 'Bearer ${dotenv.env['PAYSTACK_SECRET_KEY']}',
+        'Content-Type': 'application/json',
+      },
+      body: jsonEncode(<String, Object>{
+        'email': profileController.myProfile.email,
+        // Paystack expects amount in kobo (₦) or cents ($), so multiply by 100
+        'amount': int.parse(initPlan) * 100000,
+        // Optional: 'currency': 'NGN' or 'USD'
+      }),
+    );
+    final body = jsonDecode(resp.body);
+    if (body['status'] != true) {
+      throw Exception(body['message']);
+    }
+    return body['data']['access_code'];
+  }
+
+  Future<void> _makePaystackPayment() async {
+    setState(() => _isProcessing = true);
+    await PaystackFlutter().pay(
+      context: context,
+      secretKey: dotenv.env['PAYSTACK_SECRET_KEY']!,
+      amount: int.parse(initPlan) * 100,
+      email: profileController.myProfile.email,
+      onSuccess: (_) async {
+        await updatePost('paystack');
+        Navigator.push(
+            context, MaterialPageRoute(builder: (_) => Confirmation()));
+      },
+      onCancelled: (_) => showSnackBar(context, message: 'Payment cancelled'),
+      callbackUrl: '',
+    );
+    setState(() => _isProcessing = false);
+  }
+
+  Future<void> _makePayment() async {
+    setState(() => _isProcessing = true);
+
+    // try {
+    // 1. Get an access code from your server
+    // final String accessCode = await _createPaystackTransaction();
+
+    // 2. Launch the native Paystack UI
+    //   final TransactionResponse response = await _paystack.launch(accessCode);
+
+    //   // 3. Handle the result
+    //   if (response.status == 'success') {
+    //     await updatePost('paystack');
+    //     showSnackBar(context, message: 'Payment Successful!');
+    //     Navigator.of(context).push(
+    //       MaterialPageRoute(builder: (_) => const Confirmation()),
+    //     );
+    //   } else if (response.status == 'cancelled') {
+    //     showSnackBar(context, message: 'Payment Cancelled');
+    //   } else {
+    //     showSnackBar(context,
+    //         message: 'Error: ${response.message ?? "Unknown error"}');
+    //   }
+    // } catch (e) {
+    //   showSnackBar(context, message: 'Payment failed: ${e.toString()}');
+    // } finally {
+    //   setState(() => _isProcessing = false);
+    // }
   }
 
   @override
@@ -536,7 +603,7 @@ class _BoostPostState extends State<BoostPost> {
                   ] else if (myPlan == 'PayStack') ...<Widget>[
                     MyButton(
                       onPressed: () async {
-                        _makePayment();
+                        _makePaystackPayment();
                       },
                       labelStyle: const TextStyle(
                         color: Colors.white,

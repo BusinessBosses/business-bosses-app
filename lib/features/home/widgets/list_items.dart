@@ -28,7 +28,9 @@ import 'package:visibility_detector/visibility_detector.dart';
 
 class PostsWidget extends StatefulWidget {
   final Function(int)? onPageChange;
-  const PostsWidget({super.key, this.onPageChange});
+  final ScrollController scrollController;
+  const PostsWidget(
+      {super.key, this.onPageChange, required this.scrollController});
 
   @override
   State<PostsWidget> createState() => _PostsWidgetState();
@@ -39,7 +41,6 @@ class _PostsWidgetState extends State<PostsWidget> {
   final MarketController marketController = Get.find();
   final LiveController liveEventController = Get.find();
   final CommunitiesController communitiesController = Get.find();
-  final ScrollController _scrollController = ScrollController();
   final CourseController courseController = Get.put(CourseController());
   late Industry industry;
   final GlobalKey<State<CourseList>> courseListKey =
@@ -52,9 +53,9 @@ class _PostsWidgetState extends State<PostsWidget> {
         communitiesController.getCategoryIndustries(Constants.LEARNINGID)[2];
 
     // Add scroll listener
-    _scrollController.addListener(() {
-      if (_scrollController.position.pixels >=
-              _scrollController.position.maxScrollExtent - 300 &&
+    widget.scrollController.addListener(() {
+      if (widget.scrollController.position.pixels >=
+              widget.scrollController.position.maxScrollExtent - 300 &&
           !controller.loadingMore.value) {
         // Call fetchPosts when near the end of the list
         controller.fetchPosts();
@@ -64,7 +65,6 @@ class _PostsWidgetState extends State<PostsWidget> {
 
   @override
   void dispose() {
-    _scrollController.dispose();
     if (courseListKey.currentState is CourseList) {
       (courseListKey.currentState as dynamic).pauseAllVideos();
     }
@@ -75,7 +75,7 @@ class _PostsWidgetState extends State<PostsWidget> {
   Widget build(BuildContext context) {
     return ListView.builder(
       shrinkWrap: true,
-      controller: _scrollController,
+      controller: widget.scrollController,
       itemCount: controller.mixedPosts.length + 2,
       itemBuilder: (BuildContext context, int index) {
         if (index == 0) {

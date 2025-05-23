@@ -6,7 +6,7 @@ import 'package:business_bosses_v2/features/posts/widgets/user_details_widget.da
 import 'package:business_bosses_v2/functions/unfocus_keyboard.dart';
 import 'package:business_bosses_v2/utils/theme/theme.dart';
 import 'package:detectable_text_field/detectable_text_field.dart';
-import 'package:flutter/material.dart';
+import 'package:flutter/material.dart' hide Preview;
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 

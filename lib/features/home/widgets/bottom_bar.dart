@@ -21,9 +21,11 @@ class BottomBar extends StatelessWidget {
   BottomBar({
     super.key,
     required this.activeIndex,
+    this.scrollControl,
   });
   final int activeIndex;
-  ChallengeController controller = Get.put(ChallengeController());
+  final VoidCallback? scrollControl;
+  final ChallengeController controller = Get.put(ChallengeController());
 
   @override
   Widget build(BuildContext context) {
@@ -66,7 +68,10 @@ class BottomBar extends StatelessWidget {
                               : 'assets/svgs/homeu.svg',
                           label: 'Home',
                           onTap: () {
-                            if (activeIndex == 0) return;
+                            if (activeIndex == 0) {
+                              scrollControl;
+                              return;
+                            }
                             Get.toNamed(Routes.home);
                           },
                           isActive: activeIndex == 0,

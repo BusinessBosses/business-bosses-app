@@ -4,7 +4,7 @@ import 'package:business_bosses_v2/services/api_service.dart';
 import 'package:country_list_pick/country_list_pick.dart';
 import 'package:detectable_text_field/detectable_text_field.dart';
 import 'package:flutter/gestures.dart';
-import 'package:flutter/material.dart';
+import 'package:flutter/material.dart' hide Preview;
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 // import 'package:photo_manager/photo_manager.dart';
@@ -232,7 +232,6 @@ class _CreateServiceScreenState extends State<CreateServiceScreen> {
                 Padding(
                   padding: const EdgeInsets.only(left: 16.0, right: 16),
                   child: DetectableTextField(
-
                     regExp: detectionRegExp(hashtag: false)!,
                     keyboardType: TextInputType.multiline,
                     // minLines: 5,

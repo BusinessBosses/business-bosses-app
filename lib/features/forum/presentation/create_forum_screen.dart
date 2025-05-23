@@ -1,7 +1,7 @@
 import 'package:business_bosses_v2/common/widgets/typography/text_widget.dart';
 import 'package:business_bosses_v2/features/home/marketplace_screen.dart';
 import 'package:detectable_text_field/detectable_text_field.dart';
-import 'package:flutter/material.dart';
+import 'package:flutter/material.dart' hide Preview;
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 

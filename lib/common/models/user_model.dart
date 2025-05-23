@@ -346,8 +346,7 @@ class UserModel {
           map['invitations'] != null ? map['invitations'] as int : null,
       connectedCount:
           map['connectedCount'] != null ? map['connectedCount'] as int : null,
-      unReadCount:
-          map['unReadCount'] != null ? map['unReadCount'] as int : null,
+      unReadCount: map['unReadCount'] != null ? map['unReadCount'] as int : 0,
       isRanked: map['isRanked'] != null ? map['isRanked'] as bool : null,
       isSubscribed:
           map['isSubscribed'] != null ? map['isSubscribed'] as bool : false,

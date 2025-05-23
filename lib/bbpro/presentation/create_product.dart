@@ -95,7 +95,7 @@ class _CreateProductListingState extends State<CreateProductListing> {
   List<String> paymentMethods = <String>[];
   List<String> colors = <String>[];
   List<String> sizes = <String>[];
-  final bool _shouldPromote = true;
+  bool _shouldPromote = true;
 
   @override
   void initState() {
@@ -618,6 +618,9 @@ class _CreateProductListingState extends State<CreateProductListing> {
                       onChanged: (bool value) {
                         setState(() {
                           _isSwitched = value;
+                          if (!_isSwitched) {
+                            _shouldPromote = false;
+                          }
                         });
                       },
                       caption: 'Status',
@@ -732,8 +735,11 @@ class _CreateProductListingState extends State<CreateProductListing> {
   void _showBoostBottomSheet() {
     showModalBottomSheet(
       shape: const RoundedRectangleBorder(
-          borderRadius: BorderRadius.only(
-              topLeft: Radius.circular(15), topRight: Radius.circular(15))),
+        borderRadius: BorderRadius.only(
+          topLeft: Radius.circular(15),
+          topRight: Radius.circular(15),
+        ),
+      ),
       context: context,
       builder: (BuildContext context) {
         return Padding(
@@ -879,7 +885,12 @@ class _CreateProductListingState extends State<CreateProductListing> {
                         });
                       }
                     },
-                    child: const Text('Yes'),
+                    child: const Text(
+                      'Yes',
+                      style: TextStyle(
+                        color: Colors.white,
+                      ),
+                    ),
                   ),
                   const SizedBox(
                     width: 10,

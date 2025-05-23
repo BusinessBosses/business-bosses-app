@@ -4,6 +4,7 @@ import 'package:business_bosses_v2/bbpro/presentation/shop_screen.dart';
 import 'package:business_bosses_v2/bbpro/widgets/drawercontent.dart';
 import 'package:business_bosses_v2/bbpro/widgets/menubutton.dart';
 import 'package:business_bosses_v2/common/widgets/safety_model.dart';
+import 'package:business_bosses_v2/features/chat/ai_chat.dart';
 import 'package:business_bosses_v2/features/forum/widgets/forum_item.dart';
 import 'package:business_bosses_v2/features/home/controller/home_controller.dart';
 import 'package:business_bosses_v2/features/donations/widgets/donation_item.dart';
@@ -206,11 +207,12 @@ class _MyProfileScreenState extends State<MyProfileScreen> {
                       left: 0,
                       child: IconButton(
                         onPressed: () {
-                          Get.to(
-                            () => const MyEvents(
-                              toHome: true,
-                            ),
-                          );
+                          // Get.to(
+                          //   () => const MyEvents(
+                          //     toHome: true,
+                          //   ),
+                          // );
+                          Get.to(() => AiChatScreen());
                         },
                         icon: const Icon(Icons.calendar_month),
                       )),

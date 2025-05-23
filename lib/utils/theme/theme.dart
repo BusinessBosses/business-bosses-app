@@ -15,7 +15,7 @@ final ThemeData appTheme = ThemeData(
     ),
     iconTheme: IconThemeData(color: textColor),
   ),
-  tabBarTheme: const TabBarTheme(
+  tabBarTheme: const TabBarThemeData(
     labelColor: Colors.black,
     unselectedLabelColor: Colors.grey,
     // indicatorSize: TabBarIndicatorSize.label,

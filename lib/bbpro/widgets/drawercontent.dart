@@ -34,7 +34,7 @@ class DrawerContent extends StatelessWidget {
       this.currentuser,
       this.oncloseclick,
       this.oncrowfundclick,
-      required this.hasUnreadNotification});
+      this.hasUnreadNotification = false});
 
   @override
   Widget build(BuildContext context) {

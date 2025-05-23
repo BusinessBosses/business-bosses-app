@@ -2,6 +2,7 @@ import 'package:business_bosses_v2/bbpro/controllers/shop_controller.dart';
 import 'package:business_bosses_v2/bbpro/presentation/expanded_order_load.dart';
 import 'package:business_bosses_v2/bbpro/widgets/drawercontent.dart';
 import 'package:business_bosses_v2/common/widgets/safety_model.dart';
+import 'package:business_bosses_v2/features/chat/controllers/ai_chat_controller.dart';
 import 'package:business_bosses_v2/features/forum/controller/challenge_controller.dart';
 import 'package:business_bosses_v2/features/home/controller/commumities_controller.dart';
 import 'package:business_bosses_v2/features/home/widgets/bottom_bar.dart';
@@ -50,6 +51,7 @@ class _HomeScreenState extends State<HomeScreen>
   final DonationsController donationsController =
       Get.put(DonationsController());
   final SupplierController supplierController = Get.put(SupplierController());
+  final AiChatController ctrl = Get.put(AiChatController());
   late io.Socket socket;
   bool isScrolled = true;
   bool isTabVisible = false;
@@ -99,7 +101,6 @@ class _HomeScreenState extends State<HomeScreen>
     _scrollController.addListener(() {
       checkScrollPosition();
     });
-
     // Function to establish the WebSocket connection
     void connectSocket() {
       socket = io.io(Constants.socketUrl, <String, dynamic>{
@@ -149,6 +150,14 @@ class _HomeScreenState extends State<HomeScreen>
       homeController.fetchPosts(fromBackground: true);
     }
     super.didChangeAppLifecycleState(state);
+  }
+
+  void _scrollToTop() {
+    _scrollController.animateTo(
+      0.0,
+      duration: Duration(milliseconds: 500),
+      curve: Curves.easeInOut,
+    );
   }
 
   @override
@@ -424,6 +433,8 @@ class _HomeScreenState extends State<HomeScreen>
                                                 PostsWidget(
                                                   onPageChange:
                                                       widget.onPageChange,
+                                                  scrollController:
+                                                      _scrollController,
                                                 ),
                                                 ListView.builder(
                                                   shrinkWrap: true,
@@ -446,6 +457,7 @@ class _HomeScreenState extends State<HomeScreen>
                                     ),
                                     BottomBar(
                                       activeIndex: 0,
+                                      scrollControl: _scrollToTop,
                                     ),
                                     // const Floatingbutton(),
                                   ],
