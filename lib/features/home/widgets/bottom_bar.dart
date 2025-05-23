@@ -1,13 +1,10 @@
-<<<<<<< HEAD
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 
-=======
 import 'package:business_bosses_v2/features/aipromote/components/aipromotebutton.dart';
 import 'package:business_bosses_v2/features/aipromote/components/aipromotesheet.dart';
->>>>>>> 1928c19f62d3c31a04ae647e578b1e5bc42c40dd
 import 'package:business_bosses_v2/features/chat/chat_screen.dart';
 import 'package:business_bosses_v2/features/chat/controllers/chat_controller.dart';
 import 'package:business_bosses_v2/features/chat/models/my_message.dart';
