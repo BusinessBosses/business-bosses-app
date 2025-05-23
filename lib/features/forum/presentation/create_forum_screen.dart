@@ -7,7 +7,8 @@ import 'package:get/get.dart';
 
 import 'package:business_bosses_v2/features/forum/controller/create_forum_controller.dart';
 import 'package:business_bosses_v2/features/forum/models/forum_model.dart';
-import 'package:business_bosses_v2/features/posts/widgets/preview.dart';
+import 'package:business_bosses_v2/features/posts/widgets/preview.dart'
+    as custom_preview;
 import 'package:business_bosses_v2/utils/constants/constants.dart';
 
 import '../../../action/action.dart';
@@ -371,7 +372,7 @@ class _CreateForumScreenState extends State<CreateForumScreen> {
 
                   Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 16.0),
-                    child: Preview(
+                    child: custom_preview.Preview(
                       controller: controller,
                       isUpdating: isUpdating,
                     ),

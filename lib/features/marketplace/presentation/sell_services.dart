@@ -16,7 +16,8 @@ import '../../../common/widgets/buttons/my_outlined_button.dart';
 // import '../../../common/widgets/gallery_screen.dart';
 import '../../../utils/theme/theme.dart';
 import '../../forum/widgets/field_container.dart';
-import '../../posts/widgets/preview.dart';
+import 'package:business_bosses_v2/features/posts/widgets/preview.dart'
+    as custom_preview;
 import '../../profile/controller/profile_controller.dart';
 import '../controllers/create_market_controller.dart';
 import '../controllers/market_controller.dart';
@@ -470,7 +471,8 @@ class _CreateServiceScreenState extends State<CreateServiceScreen> {
                   padding: const EdgeInsets.all(12.0),
                   child: widget.isUpd
                       ? Container()
-                      : Preview(controller: createMarketController),
+                      : custom_preview.Preview(
+                          controller: createMarketController),
                 ),
                 // widget.isUpd
                 //     ? Container()

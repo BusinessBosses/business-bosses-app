@@ -1,8 +1,13 @@
+<<<<<<< HEAD
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 
+=======
+import 'package:business_bosses_v2/features/aipromote/components/aipromotebutton.dart';
+import 'package:business_bosses_v2/features/aipromote/components/aipromotesheet.dart';
+>>>>>>> 1928c19f62d3c31a04ae647e578b1e5bc42c40dd
 import 'package:business_bosses_v2/features/chat/chat_screen.dart';
 import 'package:business_bosses_v2/features/chat/controllers/chat_controller.dart';
 import 'package:business_bosses_v2/features/chat/models/my_message.dart';
@@ -29,6 +34,15 @@ class BottomBar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    void showPromoteSheet() {
+      showModalBottomSheet(
+        context: context,
+        isScrollControlled: true,
+        backgroundColor: Colors.transparent,
+        builder: (BuildContext context) => AIPromoteSheet(),
+      );
+    }
+
     final Industry category = controller.categories[0];
     ProfileController profileController = Get.find();
     ChatController chatController = Get.find();
@@ -150,97 +164,151 @@ class BottomBar extends StatelessWidget {
                                 ),
                               ),
                               builder: (BuildContext context) {
-                                return SizedBox(
-                                  height:
-                                      380, // Increased height to accommodate the new item
-                                  child: Padding(
-                                    padding: const EdgeInsets.all(15.0),
-                                    child: Column(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                      mainAxisSize: MainAxisSize.min,
-                                      children: <Widget>[
-                                        Expanded(
-                                          child: ListView.separated(
-                                            itemCount: 5, // Changed to 5 items
-                                            separatorBuilder:
-                                                (BuildContext context,
-                                                        int index) =>
-                                                    const Divider(),
-                                            itemBuilder: (BuildContext context,
-                                                int index) {
-                                              return ListTile(
-                                                onTap: () {
-                                                  Navigator.pop(context);
-                                                  if (index == 0) {
-                                                    Get.to(() => BossUpSection(
-                                                          industry: category,
-                                                          bossUp: controller
-                                                              .categories[0],
-                                                        ));
-                                                  } else if (index == 1) {
-                                                    Get.toNamed(
-                                                        Routes.createPost);
-                                                  } else if (index == 2) {
-                                                    sellProduct(context);
-                                                  } else if (index == 3) {
-                                                    Get.toNamed(
-                                                        Routes.createevent);
-                                                  } else if (index == 4) {
-                                                    Get.to(() =>
-                                                        const CreatePollScreen());
-                                                  }
-                                                },
-                                                minVerticalPadding: 0,
-                                                contentPadding:
-                                                    const EdgeInsets.only(
-                                                        left: 10),
-                                                leading: index == 4
-                                                    ? const Icon(
-                                                        Icons.poll,
-                                                        color: textColor,
-                                                      )
-                                                    : index == 0
+                                return Stack(
+                                  children: <Widget>[
+                                    SizedBox(
+                                      height:
+                                          380, // Increased height to accommodate the new item
+                                      child: Padding(
+                                        padding: const EdgeInsets.all(15.0),
+                                        child: Column(
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
+                                          mainAxisSize: MainAxisSize.min,
+                                          children: <Widget>[
+                                            Expanded(
+                                              child: ListView.separated(
+                                                itemCount:
+                                                    5, // Changed to 5 items
+                                                separatorBuilder:
+                                                    (BuildContext context,
+                                                            int index) =>
+                                                        const Divider(),
+                                                itemBuilder:
+                                                    (BuildContext context,
+                                                        int index) {
+                                                  return ListTile(
+                                                    onTap: () {
+                                                      Navigator.pop(context);
+                                                      if (index == 0) {
+                                                        Get.to(
+                                                            () => BossUpSection(
+                                                                  industry:
+                                                                      category,
+                                                                  bossUp: controller
+                                                                      .categories[0],
+                                                                ));
+                                                      } else if (index == 1) {
+                                                        Get.toNamed(
+                                                            Routes.createPost);
+                                                      } else if (index == 2) {
+                                                        sellProduct(context);
+                                                      } else if (index == 3) {
+                                                        Get.toNamed(
+                                                            Routes.createevent);
+                                                      } else if (index == 4) {
+                                                        Get.to(() =>
+                                                            const CreatePollScreen());
+                                                      }
+                                                    },
+                                                    minVerticalPadding: 0,
+                                                    contentPadding:
+                                                        const EdgeInsets.only(
+                                                            left: 10),
+                                                    leading: index == 4
                                                         ? const Icon(
-                                                            Icons.star,
+                                                            Icons.poll,
                                                             color: textColor,
                                                           )
-                                                        : SvgPicture.asset(
-                                                            index == 1
-                                                                ? 'assets/svgs/text.svg'
-                                                                : index == 2
-                                                                    ? 'assets/svgs/sellicon.svg'
-                                                                    : 'assets/svgs/eventu.svg',
-                                                            height: index == 1
-                                                                ? 25
-                                                                : index == 2
-                                                                    ? 30
-                                                                    : 22,
-                                                            color: textColor
-                                                                .withOpacity(1),
-                                                          ),
-                                                title: Text(
-                                                  index == 0
-                                                      ? 'Enter free business promotion'
-                                                      : index == 1
-                                                          ? 'Post content, discussion, etc'
-                                                          : index == 2
-                                                              ? 'Sell your product & service'
-                                                              : index == 3
-                                                                  ? 'Create an event'
-                                                                  : 'Create polls & surveys',
-                                                  style: const TextStyle(
-                                                    fontSize: 18,
-                                                    fontWeight: FontWeight.w700,
-                                                  ),
-                                                ),
-                                              );
-                                            },
-                                          ),
-                                        )
-                                      ],
+                                                        : index == 0
+                                                            ? const Icon(
+                                                                Icons.star,
+                                                                color:
+                                                                    textColor,
+                                                              )
+                                                            : SvgPicture.asset(
+                                                                index == 1
+                                                                    ? 'assets/svgs/text.svg'
+                                                                    : index == 2
+                                                                        ? 'assets/svgs/sellicon.svg'
+                                                                        : 'assets/svgs/eventu.svg',
+                                                                height: index ==
+                                                                        1
+                                                                    ? 25
+                                                                    : index == 2
+                                                                        ? 30
+                                                                        : 22,
+                                                                color: textColor
+                                                                    .withOpacity(
+                                                                        1),
+                                                              ),
+                                                    title: Text(
+                                                      index == 0
+                                                          ? 'Enter free business promotion'
+                                                          : index == 1
+                                                              ? 'Post content, discussion, etc'
+                                                              : index == 2
+                                                                  ? 'Sell your product & service'
+                                                                  : index == 3
+                                                                      ? 'Create an event'
+                                                                      : 'Create polls & surveys',
+                                                      style: const TextStyle(
+                                                        fontSize: 18,
+                                                        fontWeight:
+                                                            FontWeight.w700,
+                                                      ),
+                                                    ),
+                                                  );
+                                                },
+                                              ),
+                                            )
+                                          ],
+                                        ),
+                                      ),
                                     ),
-                                  ),
+                                    Positioned(
+                                        bottom: 25,
+                                        right: 15,
+                                        child: Container(
+                                          width: 60,
+                                          height: 60,
+                                          decoration: BoxDecoration(
+                                            borderRadius:
+                                                BorderRadius.circular(30),
+                                            gradient: LinearGradient(
+                                              colors: <Color>[
+                                                Color(0xFF6366F1),
+                                                Color(0xFF818CF8)
+                                              ],
+                                              begin: Alignment.topLeft,
+                                              end: Alignment.bottomRight,
+                                            ),
+                                            boxShadow: <BoxShadow>[
+                                              BoxShadow(
+                                                color: Colors.black
+                                                    .withOpacity(0.3),
+                                                offset: Offset(0, 4),
+                                                blurRadius: 8,
+                                              ),
+                                            ],
+                                          ),
+                                          child: Material(
+                                            color: Colors.transparent,
+                                            child: InkWell(
+                                              borderRadius:
+                                                  BorderRadius.circular(30),
+                                              onTap: showPromoteSheet,
+                                              child: Center(
+                                                child: Icon(
+                                                  Icons.auto_fix_high,
+                                                  color: Colors.white,
+                                                  size: 24,
+                                                ),
+                                              ),
+                                            ),
+                                          ),
+                                        )),
+                                  ],
                                 );
                               },
                             );

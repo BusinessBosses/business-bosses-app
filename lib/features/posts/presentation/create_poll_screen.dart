@@ -1,6 +1,7 @@
 import 'package:business_bosses_v2/common/widgets/buttons/custom_button.dart';
 import 'package:business_bosses_v2/features/posts/controllers/create_post_controller.dart';
-import 'package:business_bosses_v2/features/posts/widgets/preview.dart';
+import 'package:business_bosses_v2/features/posts/widgets/preview.dart'
+    as custom_preview;
 import 'package:business_bosses_v2/features/posts/widgets/text_input.dart';
 import 'package:business_bosses_v2/features/posts/widgets/user_details_widget.dart';
 import 'package:business_bosses_v2/functions/unfocus_keyboard.dart';
@@ -223,7 +224,7 @@ class _CreatePollScreenState extends State<CreatePollScreen> {
                     // if (controller.imageFileList.isNotEmpty)
                     Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 20),
-                      child: Preview(
+                      child: custom_preview.Preview(
                         controller: controller,
                         isUpdating: widget.postDetail != null,
                       ),
