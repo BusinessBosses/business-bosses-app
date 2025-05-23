@@ -20,7 +20,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_advanced_drawer/flutter_advanced_drawer.dart';
 import 'package:flutter_sticky_header/flutter_sticky_header.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:business_bosses_v2/features/live_event/widgets/my_events.dart';
 import 'package:get/get.dart';
 import '../../../common/widgets/tiles/outlinebuttonheader.dart';
 import '../../marketplace/controllers/market_controller.dart';
