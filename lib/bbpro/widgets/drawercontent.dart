@@ -40,7 +40,26 @@ class DrawerContent extends StatelessWidget {
   Widget build(BuildContext context) {
     ProfileController profileController = Get.find();
     ChallengeController controller = Get.put(ChallengeController());
-    final Industry category = controller.categories[0];
+    final Industry category = controller.categories.isNotEmpty
+        ? controller.categories[0]
+        : Industry.fromMap({
+            'industryId': '-MsUOGcOT9oRXGakCcJv',
+            'industry': 'Boss Up Challenge ',
+            'categoryId': '-Mos1VMlx3oxZFRaw_BH',
+            'timestamp': 1677956626516,
+            'active': true,
+            'photo': 'https://i.ibb.co/qN7LknF/bossup.jpg',
+            'description':
+                '👆Post Business \n👍Get highest likes\n🌟Win 7days FREE Promotion',
+            'startAt': '1970-01-01T04:00:00.000Z',
+            'endedAt': null,
+            'criteria': null,
+            'award': null,
+            'createTitle': null,
+            'createDescription': null,
+            'createInfo': null,
+            'joinedUsersCount': 41789
+          });
     List<Map<String, dynamic>> tilesData = <Map<String, dynamic>>[
       {
         'icon': SvgPicture.asset(

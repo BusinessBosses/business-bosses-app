@@ -206,12 +206,11 @@ class _MyProfileScreenState extends State<MyProfileScreen> {
                       left: 0,
                       child: IconButton(
                         onPressed: () {
-                          // Get.to(
-                          //   () => const MyEvents(
-                          //     toHome: true,
-                          //   ),
-                          // );
-                          Get.to(() => AiChatScreen());
+                          Get.to(
+                            () => const MyEvents(
+                              toHome: true,
+                            ),
+                          );
                         },
                         icon: const Icon(Icons.calendar_month),
                       )),

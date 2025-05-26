@@ -274,7 +274,7 @@ class _BoostPostState extends State<BoostPost> {
         // Optional: 'currency': 'NGN' or 'USD'
       }),
     );
-    final body = jsonDecode(resp.body);
+    final dynamic body = jsonDecode(resp.body);
     if (body['status'] != true) {
       throw Exception(body['message']);
     }
@@ -286,7 +286,7 @@ class _BoostPostState extends State<BoostPost> {
     await PaystackFlutter().pay(
       context: context,
       secretKey: dotenv.env['PAYSTACK_SECRET_KEY']!,
-      amount: int.parse(initPlan) * 100,
+      amount: int.parse(initPlan) * 100000,
       email: profileController.myProfile.email,
       onSuccess: (_) async {
         await updatePost('paystack');
@@ -294,7 +294,7 @@ class _BoostPostState extends State<BoostPost> {
             context, MaterialPageRoute(builder: (_) => Confirmation()));
       },
       onCancelled: (_) => showSnackBar(context, message: 'Payment cancelled'),
-      callbackUrl: '',
+      callbackUrl: 'https://your-domain.com/callback',
     );
     setState(() => _isProcessing = false);
   }
@@ -358,11 +358,14 @@ class _BoostPostState extends State<BoostPost> {
                     size: 14,
                   ),
                   SizedBox(width: 2),
-                  Text('Cancel Boost',
-                      style: TextStyle(
-                          color: primaryColorLT,
-                          fontSize: 15,
-                          fontWeight: FontWeight.w700)),
+                  Text(
+                    'Cancel Boost',
+                    style: TextStyle(
+                      color: primaryColorLT,
+                      fontSize: 15,
+                      fontWeight: FontWeight.w700,
+                    ),
+                  ),
                 ],
               ),
             ),

@@ -50,6 +50,7 @@ class MyButton extends StatelessWidget {
               ),
             )
           : ElevatedButton(
+              style: ElevatedButton.styleFrom(backgroundColor: primaryColorLT),
               onPressed: () {
                 onPressed();
               },
